@@ -1,0 +1,24 @@
+namespace: Pimcore\Bundle\xTemplateBundlex\Tests
+bootstrap: _bootstrap.php
+
+settings:
+    shuffle: true
+    lint: true
+
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/Support/Data
+    support: tests/Support
+
+coverage:
+    enabled: true
+    show_uncovered: true
+    include:
+        - src/*
+    exclude:
+        - src/Controller/*
+        - src/DependencyInjection/*
+        - src/Repository/*
+        - src/Installer.php
+        - src/PimcorexTemplateBundlex.php

@@ -1,0 +1,74 @@
+name: "Static Analysis"
+
+on:
+  schedule:
+    -   cron: '0 3 * * 1,3,5'
+  pull_request:
+    branches:
+      - "[0-9]+.[0-9]+"
+      - "[0-9]+.x"
+      - "feature-*"
+    paths-ignore:
+      #- 'doc/**'
+      - 'public/**'
+  push:
+    branches:
+      - "[0-9]+.[0-9]+"
+      - "[0-9]+.x"
+      - "*_actions"
+
+jobs:
+  static-analysis-phpstan:
+    name: "Static Analysis with PHPStan"
+    runs-on: "ubuntu-20.04"
+    strategy:
+      matrix:
+        include:
+          - { php-version: "8.1", dependencies: "lowest", experimental: false }
+          - { php-version: "8.2", dependencies: "highest", experimental: false }
+          - { php-version: "8.2", dependencies: "highest", pimcore_version: "11.x-dev as 11.99.9", experimental: true }
+    steps:
+      - name: "Checkout code"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Add authentication for private pimcore packages"
+        run: |
+          composer config repositories.private-packagist composer https://repo.pimcore.com/github-actions/
+          composer config --global --auth http-basic.repo.pimcore.com github-actions ${{ secrets.COMPOSER_PIMCORE_REPO_PACKAGIST_TOKEN }}
+
+      - name: "Setup Pimcore environment"
+        run: |
+          .github/ci/scripts/setup-pimcore-environment.sh
+
+      - name: "Update Pimcore version"
+        env:
+          PIMCORE_VERSION: "${{ matrix.pimcore_version }}"
+        run: |
+          if [ ! -z "$PIMCORE_VERSION" ]; then
+                composer require --no-update pimcore/pimcore:"${PIMCORE_VERSION}"
+          fi
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+
+      - name: "Run a static analysis with phpstan/phpstan"
+        run: "vendor/bin/phpstan analyse --memory-limit=-1"
+
+      - name: "Generate baseline file"
+        if: ${{ failure() }}
+        run: "vendor/bin/phpstan analyse --memory-limit=-1 --generate-baseline"
+
+      - name: "Upload baseline file"
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: phpstan-baseline.neon
+          path: phpstan-baseline.neon

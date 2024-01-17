@@ -1,0 +1,43 @@
+version: "1.0"
+linter: jetbrains/qodana-php:latest
+profile:
+  path: .qodana-profile.xml
+php:
+  version: "8.1"
+failThreshold: 0
+exclude:
+  - name: All
+    paths:
+      - vendor
+      - public
+      - tests
+      - var
+      - translations
+      - .php_cs.dist
+      - doc
+      - .github
+      - .php-cs-fixer.dist.php
+      - .qodana-profile.xml
+      - config
+      - .editorconfig
+      - composer.json
+      - composer.lock
+      - docker-compose.yml
+      - README.md
+      - SECURITY.md
+      - codeception.dist.yml
+      - phpstan-bootstrap.php
+      - phpstan-baseline.neon
+      - phpstan.neon
+      - LICENSE.md
+      - .env
+      - .gitatributes
+      - src/DependencyInjection/Configuration.php
+include:
+  - name: PhpTaintFunctionInspection
+  - name: PhpVulnerablePathsInspection
+plugins:
+  - id: de.espend.idea.php.annotation
+  - id: com.kalessil.phpStorm.phpInspectionsEA
+  - id: de.espend.idea.php.toolbox
+  - id: fr.adrienbrault.idea.symfony2plugin

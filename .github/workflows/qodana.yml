@@ -1,0 +1,61 @@
+name: Qodana
+on:
+  schedule:
+    - cron: '0 01 * * *' # Run once per day
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.php'
+      - '**.yml'
+      - '**.yaml'
+    branches:
+      - '*'
+      - '**'
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**.php'
+      - '**.yml'
+      - '**.yaml'
+    branches:
+      - '*'
+      - '**'
+
+jobs:
+  qodana:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: curl, mbstring, openssl, pdo, pdo_sqlite
+          ini-values: memory_limit=-1, date.timezone='UTC'
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Add authentication for private pimcore packages
+        run: |
+          composer config repositories.private-packagist composer https://repo.pimcore.com/github-actions/
+          composer config --global --auth http-basic.repo.pimcore.com github-actions ${{ secrets.COMPOSER_PIMCORE_REPO_PACKAGIST_TOKEN }}
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@latest
+        with:
+          args: --baseline,qodana.sarif.json
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}

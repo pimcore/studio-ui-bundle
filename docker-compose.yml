@@ -1,0 +1,8 @@
+version: '3.0'
+services:
+    php-x-template-bundle-x:
+        image: pimcore/pimcore:php8.2-debug-latest
+        environment:
+            PHP_IDE_CONFIG: serverName=localhost
+        volumes:
+            - .:/var/cli/
