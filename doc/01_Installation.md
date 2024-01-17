@@ -1,4 +1,4 @@
-# Installation of the xTemplate Bundlex
+# Installation of the Workbench Ui Bundle
 
 :::info
 
@@ -8,21 +8,21 @@
 
  ## Bundle Installation
 
-To install the xTemplate Bundlex, follow the three steps below:
+To install the Workbench Ui Bundle, follow the three steps below:
 
 1) Install the required dependencies:
 
 ```bash
-composer require pimcore/x-template-name-bundle-x
+composer require pimcore/workbench-ui-bundle
 ```
 
 2) Make sure the bundle is enabled in the `config/bundles.php` file. The following lines should be added:
 ```php
-use Pimcore\Bundle\xTemplateBundlex\PimcorexTemplateBundlex;
+use Pimcore\Bundle\WorkbenchUiBundle\PimcoreWorkbenchUiBundle;
 // ...
 return [
     // ...
-    xTemplateBundlex::class => ['all' => true],
+    WorkbenchUiBundle::class => ['all' => true],
     // ...
 ];  
 ```
@@ -30,5 +30,5 @@ return [
 3) Install the bundle:
 
 ```bash
-bin/console pimcore:bundle:install PimcorexTemplateBundlex
+bin/console pimcore:bundle:install PimcoreWorkbenchUiBundle
 ```

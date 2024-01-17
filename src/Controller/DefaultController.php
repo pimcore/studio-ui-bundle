@@ -11,7 +11,7 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\xTemplateBundlex\Controller;
+namespace Pimcore\Bundle\WorkbenchUiBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 

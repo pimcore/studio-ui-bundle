@@ -1,4 +1,4 @@
-namespace: Pimcore\Bundle\xTemplateBundlex\Tests
+namespace: Pimcore\Bundle\WorkbenchUiBundle\Tests
 bootstrap: _bootstrap.php
 
 settings:
@@ -21,4 +21,4 @@ coverage:
         - src/DependencyInjection/*
         - src/Repository/*
         - src/Installer.php
-        - src/PimcorexTemplateBundlex.php
+        - src/PimcoreWorkbenchUiBundle.php

@@ -1,8 +1,8 @@
 {
-  "name": "pimcore/x-template-name-bundle-x",
+  "name": "pimcore/workbench-ui-bundle",
   "license": "Pimcore Enterprise License (PEL)",
   "type": "pimcore-bundle",
-  "description": "Pimcore xTemplate Bundlex",
+  "description": "Pimcore Workbench Ui Bundle",
   "config": {
     "discard-changes": true,
     "sort-packages": true,
@@ -36,19 +36,19 @@
   },
   "autoload": {
     "psr-4": {
-      "Pimcore\\Bundle\\xTemplateBundlex\\": "src/",
+      "Pimcore\\Bundle\\WorkbenchUiBundle\\": "src/",
       "Pimcore\\": "core-extension/Pimcore/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Pimcore\\Bundle\\xTemplateBundlex\\Tests\\": "tests"
+      "Pimcore\\Bundle\\WorkbenchUiBundle\\Tests\\": "tests"
     }
   },
   "extra": {
     "pimcore": {
       "bundles": [
-        "Pimcore\\Bundle\\xTemplateBundlex\\PimcorexTemplateBundlex"
+        "Pimcore\\Bundle\\WorkbenchUiBundle\\PimcoreWorkbenchUiBundle"
       ]
     }
   }
