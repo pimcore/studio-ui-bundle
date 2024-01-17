@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Pimcore
+ *
+ * This source file is available under following license:
+ * - Pimcore Commercial License (PCL)
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     PCL
+ */
+
 define('PIMCORE_PROJECT_ROOT', dirname(__DIR__));
 
 const PROJECT_ROOT = PIMCORE_PROJECT_ROOT;
