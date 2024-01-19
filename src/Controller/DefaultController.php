@@ -13,12 +13,18 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\WorkbenchUiBundle\Controller;
 
+use Pimcore\Controller\FrontendController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-final class DefaultController
+final class DefaultController extends FrontendController
 {
-    public function defaultAction(): Response
+    /**
+     * @Route("/admin/workbench")
+     */
+    public function indexAction(Request $request): Response
     {
-        return new Response('Hello Pimcore Bundle');
+        return $this->render('@PimcoreWorkbenchUi/default/index.html.twig');
     }
 }

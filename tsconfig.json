@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./assets/js",
+    "paths": {
+      "@Pimcore/*": ["./*"]
+    },
+    "strictNullChecks": true,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

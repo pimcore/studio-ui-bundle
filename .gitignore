@@ -30,7 +30,6 @@ Thumbs.db
 /vendor
 
 /node_modules
-package-lock.json
 
 # code style fixer
 .php_cs

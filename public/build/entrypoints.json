@@ -1,0 +1,10 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "/bundles/pimcoreworkbenchui/build/621.aee340e6.js",
+        "/bundles/pimcoreworkbenchui/build/main.ef3751ba.js"
+      ]
+    }
+  }
+}
