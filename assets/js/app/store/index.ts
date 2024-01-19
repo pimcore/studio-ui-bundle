@@ -32,9 +32,9 @@ export const injectSliceWithState = (newSlice: AnySliceLike): CombinedSliceReduc
   return rootReducer
 }
 
+export type AppStore = typeof store
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof rootReducer>
 
-export type AppStore = typeof store
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
