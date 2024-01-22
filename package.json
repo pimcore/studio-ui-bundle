@@ -37,12 +37,14 @@
     "storybook": "^7.6.10",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
+    "webpack-bundle-analyzer": "^4.10.1",
     "webpack-notifier": "^1.15.0"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "antd": "^5.13.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0"

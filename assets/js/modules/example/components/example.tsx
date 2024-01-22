@@ -8,7 +8,7 @@ const Example = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(setValue('test'))
+    dispatch(setValue('test32'))
   }, [])
 
   return (

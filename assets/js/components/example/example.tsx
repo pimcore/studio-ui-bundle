@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import React from 'react'
 
 interface ExampleProps {
@@ -8,7 +9,7 @@ interface ExampleProps {
 export const Example = ({ value, prefix }: ExampleProps): React.JSX.Element => {
   return (
     <div>
-      <h1>Hello, {prefix} {value}!</h1>
+      <Button type="primary">{prefix} {value}</Button>
     </div>
   )
 }

@@ -6,4 +6,4 @@ if (module.hot !== undefined) {
 
 runApp()
 
-export * from '@Pimcore/pimcore'
+export { store, modules } from '@Pimcore/pimcore'

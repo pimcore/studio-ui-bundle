@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "module": "es6",
+    "moduleResolution": "node",
     "baseUrl": "./assets/js",
     "paths": {
       "@Pimcore/*": ["./*"]
@@ -7,6 +9,7 @@
     "strictNullChecks": true,
     "jsx": "react",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   }
 }

@@ -1,6 +1,7 @@
 const Encore = require('@symfony/webpack-encore');
 const path = require('path');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -90,7 +91,11 @@ Encore
 
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
-  Encore.setManifestKeyPrefix('bundles/pimcoreworkbenchui/build');
+  Encore
+    .setManifestKeyPrefix('bundles/pimcoreworkbenchui/build')
+
+    .addPlugin(new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }))
+  ;
 }
 
 if (Encore.isDevServer()) {
@@ -105,9 +110,10 @@ let config = Encore.getWebpackConfig();
 
 config = {
   ...config,
+  
   output: {
     ...config.output,
-    library: 'Pimcore'
+    library: 'Pimcore',
   }
 }
 
