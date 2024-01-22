@@ -2,8 +2,8 @@
   "entrypoints": {
     "main": {
       "js": [
-        "http://localhost:3030/build/vendors-node_modules_pmmmwh_react-refresh-webpack-plugin_lib_runtime_RefreshUtils_js-node_mod-7819ab.js",
-        "http://localhost:3030/build/main.js"
+        "/bundles/pimcoreworkbenchui/build/486.c01141f6.js",
+        "/bundles/pimcoreworkbenchui/build/main.abe332f5.js"
       ]
     }
   }
