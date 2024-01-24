@@ -12,7 +12,7 @@ const Example = (): React.JSX.Element => {
   }, [])
 
   return (
-    <ExampleView value={value} />
+    <ExampleView prefix='custom prefix: ' value={value} />
   )
 }
 

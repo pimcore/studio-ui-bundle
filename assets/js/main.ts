@@ -5,5 +5,3 @@ if (module.hot !== undefined) {
 }
 
 runApp()
-
-export { store, modules } from '@Pimcore/pimcore'

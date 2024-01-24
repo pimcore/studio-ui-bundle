@@ -20,7 +20,10 @@ const slices: AnySliceLike[] = [
 export let rootReducer = combineSlices({}, ...slices).withLazyLoadedSlices<LazyloadedSlices>()
 
 export const store = configureStore({
-  reducer: rootReducer
+  reducer: rootReducer,
+
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(pimcoreApi.middleware)
 })
 
 export const injectSliceWithState = (newSlice: AnySliceLike): CombinedSliceReducer<Record<string, any>, Record<string, any>> => {

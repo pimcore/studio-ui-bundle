@@ -1,6 +1,8 @@
-import { ConfigProvider } from 'antd'
+import { ThemeProvider as AntdThemeProvider, type FullToken } from 'antd-style'
 import React from 'react'
 import Theme from '@Pimcore/assets/theme/default.json'
+
+export interface PimcoreTokens extends FullToken {}
 
 interface ThemeProviderProps {
   children: React.ReactNode
@@ -8,8 +10,8 @@ interface ThemeProviderProps {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps): React.JSX.Element => {
   return (
-    <ConfigProvider theme={{ ...Theme }} >
+    <AntdThemeProvider theme={{ ...Theme }} >
       {children}
-    </ConfigProvider>
+    </AntdThemeProvider>
   )
 }
