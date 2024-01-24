@@ -4,7 +4,7 @@ import { Meta } from '@storybook/react';
 import { Example as ExampleComponent } from './example';
 
 export default {
-  title: 'Pimcore studio/Example',
+  title: 'Pimcore studio/UI/Example',
   component: ExampleComponent,
   parameters: {
     layout: 'centered'
@@ -12,4 +12,9 @@ export default {
   tags: ['autodocs']
 } as Meta;
 
-export const _default = {}
+export const _default = {
+  args: {
+    value: 'Save',
+    prefix: 'Unsaved changes!! '
+  }
+}

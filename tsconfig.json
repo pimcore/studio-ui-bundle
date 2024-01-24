@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "es6",
     "moduleResolution": "node",
-    "baseUrl": "./assets/js",
+    "baseUrl": "./assets/js/",
     "paths": {
       "@Pimcore/*": ["./*"]
     },
