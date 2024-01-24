@@ -13,7 +13,7 @@ Encore
   // directory where compiled assets will be stored
   .setOutputPath(path.resolve(__dirname, 'public', 'build'))
   // public path used by the web server to access the output path
-  .setPublicPath('/bundles/pimcoreworkbenchui/build')
+  .setPublicPath('/bundles/pimcorestudioui/build')
   
   /*
     * ENTRY CONFIG
@@ -92,7 +92,7 @@ Encore
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
-    .setManifestKeyPrefix('bundles/pimcoreworkbenchui/build')
+    .setManifestKeyPrefix('bundles/pimcorestudioui/build')
 
     .addPlugin(new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }))
   ;

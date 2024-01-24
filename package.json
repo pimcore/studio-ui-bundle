@@ -1,5 +1,5 @@
 {
-  "name": "pimcore-workbench-ui-bundle",
+  "name": "pimcore-studio-ui-bundle",
   "scripts": {
     "dev-server": "encore dev-server --port 3030",
     "dev": "encore dev",

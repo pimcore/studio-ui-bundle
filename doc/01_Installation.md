@@ -1,4 +1,4 @@
-# Installation of the Workbench Ui Bundle
+# Installation of the Studio Ui Bundle
 
 :::info
 
@@ -8,21 +8,21 @@
 
  ## Bundle Installation
 
-To install the Workbench Ui Bundle, follow the three steps below:
+To install the Studio Ui Bundle, follow the three steps below:
 
 1) Install the required dependencies:
 
 ```bash
-composer require pimcore/workbench-ui-bundle
+composer require pimcore/studio-ui-bundle
 ```
 
 2) Make sure the bundle is enabled in the `config/bundles.php` file. The following lines should be added:
 ```php
-use Pimcore\Bundle\WorkbenchUiBundle\PimcoreWorkbenchUiBundle;
+use Pimcore\Bundle\StudioUiBundle\PimcoreStudioUiBundle;
 // ...
 return [
     // ...
-    WorkbenchUiBundle::class => ['all' => true],
+    StudioUiBundle::class => ['all' => true],
     // ...
 ];  
 ```
@@ -30,5 +30,5 @@ return [
 3) Install the bundle:
 
 ```bash
-bin/console pimcore:bundle:install PimcoreWorkbenchUiBundle
+bin/console pimcore:bundle:install PimcoreStudioUiBundle
 ```

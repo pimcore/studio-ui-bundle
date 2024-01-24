@@ -11,7 +11,7 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\WorkbenchUiBundle\Controller;
+namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
 final class DefaultController extends FrontendController
 {
     /**
-     * @Route("/admin/workbench")
+     * @Route("/admin/studio")
      */
     public function indexAction(Request $request): Response
     {
-        return $this->render('@PimcoreWorkbenchUi/default/index.html.twig');
+        return $this->render('@PimcoreStudioUi/default/index.html.twig');
     }
 }

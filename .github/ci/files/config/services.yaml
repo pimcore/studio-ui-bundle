@@ -10,14 +10,14 @@ services:
     #
     # INSTALLER
     #
-    Pimcore\Bundle\WorkbenchUiBundle\Installer:
+    Pimcore\Bundle\StudioUiBundle\Installer:
         public: true
         arguments:
-            $bundle: "@=service('kernel').getBundle('PimcoreWorkbenchUiBundle')"
+            $bundle: "@=service('kernel').getBundle('PimcoreStudioUiBundle')"
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
-    Pimcore\Bundle\WorkbenchUiBundle\Controller\:
+    Pimcore\Bundle\StudioUiBundle\Controller\:
         resource: '../src/Controller'
         public: true
         tags: [ 'controller.service_arguments' ]

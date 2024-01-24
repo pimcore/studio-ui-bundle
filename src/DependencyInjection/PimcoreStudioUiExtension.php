@@ -10,7 +10,7 @@
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\WorkbenchUiBundle\DependencyInjection;
+namespace Pimcore\Bundle\StudioUiBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class PimcoreWorkbenchUiExtension extends Extension implements PrependExtensionInterface
+class PimcoreStudioUiExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class PimcoreWorkbenchUiExtension extends Extension implements PrependExtensionI
     public function prepend(ContainerBuilder $container)
     {
         $builds = [
-            'pimcoreWorkbenchUi' => realpath(__DIR__ . '/../../public/build'),
+            'pimcoreStudioUi' => realpath(__DIR__ . '/../../public/build'),
         ];
 
         $container->prependExtensionConfig('webpack_encore', [

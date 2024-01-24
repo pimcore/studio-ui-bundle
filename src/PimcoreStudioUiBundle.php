@@ -12,11 +12,11 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\WorkbenchUiBundle;
+namespace Pimcore\Bundle\StudioUiBundle;
 
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
-class PimcoreWorkbenchUiBundle extends AbstractPimcoreBundle
+class PimcoreStudioUiBundle extends AbstractPimcoreBundle
 {
     public function getPath(): string
     {

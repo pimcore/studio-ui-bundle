@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'Pimcore\\Bundle\\WorkbenchUiBundle\\PimcoreWorkbenchUiBundle' => ['all' => true],
+    'Pimcore\\Bundle\\StudioUiBundle\\PimcoreStudioUiBundle' => ['all' => true],
 ];

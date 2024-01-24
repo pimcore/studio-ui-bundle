@@ -1,5 +1,5 @@
-pimcore_workbench_ui:
-    resource: "@PimcoreWorkbenchUiBundle/src/Controller/"
+pimcore_studio_ui:
+    resource: "@PimcoreStudioUiBundle/src/Controller/"
     type:     annotation
     prefix:   /
 

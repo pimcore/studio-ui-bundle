@@ -10,7 +10,7 @@
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\WorkbenchUiBundle\DependencyInjection;
+namespace Pimcore\Bundle\StudioUiBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('pimcore_workbench_ui');
+        $treeBuilder = new TreeBuilder('pimcore_studio_ui');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

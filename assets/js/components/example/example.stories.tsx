@@ -4,7 +4,7 @@ import { Meta } from '@storybook/react';
 import { Example as ExampleComponent } from './example';
 
 export default {
-  title: 'Pimcore workbench/Example',
+  title: 'Pimcore studio/Example',
   component: ExampleComponent,
   parameters: {
     layout: 'centered'
