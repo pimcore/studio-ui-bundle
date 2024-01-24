@@ -93,7 +93,11 @@ if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
     .setManifestKeyPrefix('bundles/pimcorestudioui/build')
+  ;
+}
 
+if (!Encore.isDevServer() && !Encore.isProduction()) {
+  Encore
     .addPlugin(new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }))
   ;
 }
