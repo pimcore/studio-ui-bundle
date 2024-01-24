@@ -1,16 +1,16 @@
-import React from 'react';
-import { Meta } from '@storybook/react';
+import { type Meta } from '@storybook/react'
+import { Example as ExampleComponent } from './example'
 
-import { Example as ExampleComponent } from './example';
-
-export default {
+const config: Meta = {
   title: 'Pimcore studio/UI/Example',
   component: ExampleComponent,
   parameters: {
     layout: 'centered'
   },
   tags: ['autodocs']
-} as Meta;
+}
+
+export default config
 
 export const _default = {
   args: {

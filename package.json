@@ -6,6 +6,7 @@
     "watch": "encore dev --watch",
     "build": "encore production --progress",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js",
+    "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

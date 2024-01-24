@@ -1,5 +1,5 @@
 module.exports = {
-    "ignorePatterns": ['test.ts'],
+    "ignorePatterns": ['*.gen.ts'],
     "env": {
         "browser": true,
         "es2021": true

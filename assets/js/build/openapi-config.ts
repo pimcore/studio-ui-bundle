@@ -1,13 +1,13 @@
-import { ConfigFile } from '@rtk-query/codegen-openapi';
+import { type ConfigFile } from '@rtk-query/codegen-openapi'
 
 const config: ConfigFile = {
   schemaFile: '../assets/api/docs.jsonopenapi.json',
   apiFile: '../app/api/pimcore/index.ts',
   apiImport: 'api',
-  outputFile: './test.ts',
+  outputFile: './test.gen.ts',
   exportName: 'api',
   hooks: true,
   tag: true
 }
 
-export default config;
+export default config
