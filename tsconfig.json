@@ -4,7 +4,8 @@
     "moduleResolution": "node",
     "baseUrl": "./assets/js/",
     "paths": {
-      "@Pimcore/*": ["./*"]
+      "@Pimcore/*": ["./src/*"],
+      "@test-utils/*": ["./test-utils/*"]
     },
     "strictNullChecks": true,
     "jsx": "react",

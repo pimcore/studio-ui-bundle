@@ -64,7 +64,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Run production build
+      - name: Run code linting
         run: npm run lint-fix
 
       - uses: stefanzweifel/git-auto-commit-action@v4
@@ -101,3 +101,27 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
             commit_message: Automatic frontend build
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Run tests
+        run: npm run test

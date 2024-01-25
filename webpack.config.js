@@ -21,7 +21,7 @@ Encore
     * Each entry will result in one JavaScript file (e.g. app.js)
     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
     */
-  .addEntry('main', path.resolve(__dirname, 'assets', 'js', 'main.ts'))
+  .addEntry('main', path.resolve(__dirname, 'assets', 'js', 'src', 'main.ts'))
 
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   // .enableStimulusBridge('./assets/controllers.json')
@@ -85,7 +85,8 @@ Encore
   })
 
   .addAliases({
-    '@Pimcore': path.resolve(__dirname, 'assets', 'js')
+    '@Pimcore': path.resolve(__dirname, 'assets', 'js', 'src'),
+    '@test-utils': path.resolve(__dirname, 'assets', 'js', 'test-utils'),
   })
 ;
 
