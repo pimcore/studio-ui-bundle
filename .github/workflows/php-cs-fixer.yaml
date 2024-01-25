@@ -22,7 +22,7 @@ jobs:
             contents: write  # for stefanzweifel/git-auto-commit-action to push code in repo
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
               with:
                   ref: ${{ github.head_ref }}
 
