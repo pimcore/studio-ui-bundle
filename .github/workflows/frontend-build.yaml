@@ -67,7 +67,7 @@ jobs:
       - name: Run code linting
         run: npm run lint-fix
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
             commit_message: Apply eslint-fixer changes
 
@@ -98,7 +98,7 @@ jobs:
       - name: Run production build
         run: npm run build
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
             commit_message: Automatic frontend build
 
