@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Button, Space } from 'antd'
 import React from 'react'
 import { useStyle } from './example.styles'
 
@@ -12,9 +12,11 @@ export const Example = ({ value, prefix }: ExampleProps): React.JSX.Element => {
 
   return (
     <div>
-      <label className={styles.example}>{prefix}</label>
+      <Space>
+        <label className={styles.example}>{prefix}</label>
 
-      <Button type="primary">{value}</Button>
+        <Button type="primary">{value}</Button>
+      </Space>
     </div>
   )
 }

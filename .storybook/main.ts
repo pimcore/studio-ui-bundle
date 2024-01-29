@@ -26,7 +26,7 @@ const config: StorybookConfig = {
   webpackFinal: async (config) => {
     config.resolve!.alias = {
       ...config.resolve!.alias,
-      "@Pimcore": path.resolve(__dirname, "../assets/js"),
+      "@Pimcore": path.resolve(__dirname, "../assets/js/src"),
     };
 
     return config;

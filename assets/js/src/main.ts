@@ -1,3 +1,4 @@
+import '@Pimcore/app/i18n'
 import { runApp } from './modules/app/utils/app-runner'
 
 if (module.hot !== undefined) {

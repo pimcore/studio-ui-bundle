@@ -1,6 +1,6 @@
 import React from "react";
 import type { Preview } from "@storybook/react";
-import { ThemeProvider } from "../assets/js/modules/theme/components/ThemeProvider"
+import { GlobalProvider } from "../assets/js/src/modules/app/components/global-provider";
 
 const preview: Preview = {
   parameters: {
@@ -15,9 +15,9 @@ const preview: Preview = {
 
   decorators: [
     (Story) => (
-      <ThemeProvider>
+      <GlobalProvider>
         <Story />
-      </ThemeProvider>
+      </GlobalProvider>
     ),
   ],
 };

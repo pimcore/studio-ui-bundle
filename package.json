@@ -61,8 +61,10 @@
     "@types/react-dom": "^18.2.18",
     "antd": "^5.13.2",
     "antd-style": "^3.6.1",
+    "i18next": "^23.7.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^14.0.1",
     "react-redux": "^9.1.0"
   }
 }
