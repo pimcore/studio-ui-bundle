@@ -65,6 +65,17 @@ Encore
   // uncomment if you use React
   .enableReactPreset()
 
+  .addRule({
+    test: /\inline\.svg$/i,
+    use: [{ 
+      loader: '@svgr/webpack', 
+      options: { 
+        icon: true,
+        typescript: true
+      } 
+    }],
+  })
+
   // uncomment to get integrity="..." attributes on your script & link tags
   // requires WebpackEncoreBundle 1.4 or higher
   //.enableIntegrityHashes(Encore.isProduction())
@@ -121,5 +132,12 @@ config = {
     library: 'Pimcore',
   }
 }
+
+// Exclude inline SVGs for package "@svgr/webpack" from the default encore rule
+config.module.rules.forEach(rule => {
+  if (rule.test.toString().includes('|svg|')) {
+    rule.exclude = /\.inline\.svg$/
+  }
+})
 
 module.exports = config;

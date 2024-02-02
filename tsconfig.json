@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es6",
+    "module": "ES2020",
     "moduleResolution": "node",
     "baseUrl": "./assets/js/",
     "paths": {
@@ -12,5 +12,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
-  }
+  },
+
+  "include": [
+    "./assets/js/**/*"
+  ],
 }

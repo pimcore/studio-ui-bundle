@@ -1,5 +1,5 @@
 import { injectSliceWithState } from '@Pimcore/app/store'
-import { type PayloadAction, createSlice, type WithSlice } from '@reduxjs/toolkit'
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export interface ExampleState {
   value: string
@@ -11,6 +11,7 @@ const initialState: ExampleState = {
 
 export const exampleSlice = createSlice({
   name: 'example',
+
   initialState,
 
   reducers: {
@@ -29,10 +30,6 @@ export const exampleSlice = createSlice({
     }
   }
 })
-
-declare module '@Pimcore/app/store/index' {
-  export interface LazyLoadedSlices extends WithSlice<typeof exampleSlice> {}
-}
 
 injectSliceWithState(exampleSlice)
 

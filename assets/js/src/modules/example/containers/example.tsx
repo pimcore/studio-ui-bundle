@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store/index'
 import { Example as ExampleView } from '@Pimcore/components/example/example'
 import { useTranslation } from 'react-i18next'
 
-const Example = (): React.JSX.Element => {
+export const Example = (): React.JSX.Element => {
   const value = useAppSelector(selectValue)
   const dispatch = useAppDispatch()
   const { t, i18n } = useTranslation()
@@ -18,5 +18,3 @@ const Example = (): React.JSX.Element => {
     <ExampleView prefix={currentDate + ' - ' + t('example-prefix')} value={t(`example-value.${value}`)} />
   )
 }
-
-export default Example
