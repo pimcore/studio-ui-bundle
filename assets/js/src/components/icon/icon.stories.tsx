@@ -11,14 +11,14 @@ const config: Meta = {
   argTypes: {
     name: {
       options: ['camera', 'folder'],
-      control: { type: 'radio' },
-    },
+      control: { type: 'radio' }
+    }
   },
 
   tags: ['autodocs']
 }
 
-console.log(Icon);
+console.log(Icon)
 
 export default config
 
