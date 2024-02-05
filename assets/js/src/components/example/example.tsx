@@ -1,6 +1,7 @@
 import { Button, Space } from 'antd'
 import React from 'react'
 import { useStyle } from './example.styles'
+import { Icon } from '../icon/icon'
 
 interface ExampleProps {
   value: string
@@ -15,7 +16,7 @@ export const Example = ({ value, prefix }: ExampleProps): React.JSX.Element => {
       <Space>
         <label className={styles.example}>{prefix}</label>
 
-        <Button type="primary">{value}</Button>
+        <Button icon={<Icon name='camera' />} type="primary">{value}</Button>
       </Space>
     </div>
   )

@@ -29,6 +29,29 @@ const config: StorybookConfig = {
       "@Pimcore": path.resolve(__dirname, "../assets/js/src"),
     };
 
+    // disable whatever is already set to load SVGs
+    // Exclude inline SVGs for package "@svgr/webpack" from the default encore rule
+    config?.module?.rules?.forEach(rule => {
+      if (!rule || typeof rule !== 'object') return;
+      if (rule.test instanceof RegExp && rule.test.test('.svg')) {
+        rule.exclude = /\.inline.svg$/;
+      }
+    });
+
+    // add SVGR instead
+    config!.module!.rules!.push({
+      test: /\.inline.svg$/,
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: { 
+            icon: true,
+            typescript: true
+          } 
+        },
+      ],
+    });
+
     return config;
   }
 };
