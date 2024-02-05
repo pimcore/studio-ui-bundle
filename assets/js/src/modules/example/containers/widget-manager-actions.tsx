@@ -9,7 +9,6 @@ export const WidgetManagerActions = (): React.JSX.Element => {
   function onOpenMainWidgetClick (): void {
     openMainWidget({
       component: 'widget-manager-actions',
-      icon: 'folder',
       name: 'Widget Manager Actions'
     })
   }
@@ -17,7 +16,6 @@ export const WidgetManagerActions = (): React.JSX.Element => {
   function onOpenBottomWidgetClick (): void {
     openBottomWidget({
       component: 'widget-manager-actions',
-      icon: 'folder',
       name: 'Widget Manager Actions'
     })
   }
@@ -25,7 +23,6 @@ export const WidgetManagerActions = (): React.JSX.Element => {
   function onOpenLeftWidgetClick (): void {
     openLeftWidget({
       component: 'widget-manager-actions',
-      icon: 'folder',
       name: 'Widget Manager Actions'
     })
   }
@@ -33,7 +30,6 @@ export const WidgetManagerActions = (): React.JSX.Element => {
   function onOpenRightWidgetClick (): void {
     openRightWidget({
       component: 'widget-manager-actions',
-      icon: 'folder',
       name: 'Widget Manager Actions'
     })
   }

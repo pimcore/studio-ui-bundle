@@ -20,11 +20,13 @@ export const slice = createSlice({
 
   reducers: {
     updateModel: (state, action: PayloadAction<IJsonModel>) => {
-      state.model = action.payload
+      state.model = { ...action.payload }
     },
 
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
       const model = Model.fromJson(state.model)
+
+      console.log({ payload: action.payload })
 
       model.doAction(
         Actions.addNode(
@@ -36,7 +38,7 @@ export const slice = createSlice({
         )
       )
 
-      state.model = model.toJson()
+      state.model = { ...model.toJson() }
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -52,7 +54,7 @@ export const slice = createSlice({
         )
       )
 
-      state.model = model.toJson()
+      state.model = { ...model.toJson() }
     },
 
     openLeftWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -68,7 +70,7 @@ export const slice = createSlice({
         )
       )
 
-      state.model = model.toJson()
+      state.model = { ...model.toJson() }
     },
 
     openRightWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -80,11 +82,11 @@ export const slice = createSlice({
           'border_right',
           DockLocation.CENTER,
           -1,
-          false
+          true
         )
       )
 
-      state.model = model.toJson()
+      state.model = { ...model.toJson() }
     }
   },
 

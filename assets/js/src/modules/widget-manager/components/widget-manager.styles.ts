@@ -65,7 +65,7 @@ export const useStlyes = createStyles(({ token, css }) => {
       .flexlayout__tab_button {
         margin: 0;
         padding: ${tabToken.tabsCardPadding};
-        background: rgba(232, 228, 241, 0.45);
+        background: ${token.Tabs.colorBgUnselectedTab};
         transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
         font-size: ${token.fontSize}px;
         color: ${tabToken.itemColor};
@@ -73,7 +73,11 @@ export const useStlyes = createStyles(({ token, css }) => {
         gap: ${token.marginXS}px;
       
         &:hover {
-          color: ${tabToken.itemHoverColor};
+          background: ${token.Tabs.colorBgHoverUnselectedTab};
+        }
+
+        &_trailing {
+          display: none;
         }
 
         &--selected {
@@ -81,10 +85,22 @@ export const useStlyes = createStyles(({ token, css }) => {
           color: ${tabToken.itemActiveColor};
           background: ${token.colorBgContainer};
           border-top: 1px solid ${token.Tabs.colorBorderActiveTab};
+
+          &:hover {
+            background: ${token.colorBgContainer};
+          }
+
+          & .flexlayout__tab_button_trailing {
+            display: flex;
+          }
         }
 
         &:focus:not(:focus-visible), &:active {
           color: ${tabToken.itemActiveColor};
+        }
+
+        &:first-child {
+          border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
         }
       }
 
@@ -118,18 +134,18 @@ export const useStlyes = createStyles(({ token, css }) => {
 
       .flexlayout__tab {
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.02), 0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
-        border-right: 1px solid #DFD7EA66;
-        border-bottom: 1px solid #DFD7EA66;
-        border-left: 1px solid #DFD7EA66;
+        border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
+        border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
+        border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-radius: 0 ${token.borderRadius}px ${token.borderRadius}px ${token.borderRadius}px;
       }
 
       .flexlayout__tab_border {
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.02), 0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
-        border-top: 1px solid #DFD7EA66;
-        border-right: 1px solid #DFD7EA66;
-        border-bottom: 1px solid #DFD7EA66;
-        border-left: 1px solid #DFD7EA66;
+        border-top: 1px solid ${token.Tabs.colorBorderContainer}66;
+        border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
+        border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
+        border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-radius: ${token.borderRadius}px;
       }
 
@@ -153,11 +169,19 @@ export const useStlyes = createStyles(({ token, css }) => {
         width: 40px;
         justify-content: center;
         border-radius: ${token.borderRadiusSM}px;
+        transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
 
         &--selected {
           color: ${tabToken.itemActiveColor};
           border-top: 1.5px solid var(--Colors-Base-Purple-7, #531DAB);
-          background: rgba(77, 65, 105, 0.08);
+          background: ${token.controlItemBgHover};
+        }
+      }
+
+      @media (hover: hover) {
+        .flexlayout__border_button--unselected:hover {
+          color: ${token.colorTextSecondary}; 
+          background: ${token.controlItemBgActiveHover};
         }
       }
 
@@ -187,6 +211,10 @@ export const useStlyes = createStyles(({ token, css }) => {
 
       .flexlayout__tabset_tabbar_inner_tab_container {
         padding-left: 0;
+      }
+
+      .flexlayout__border_toolbar {
+        display: none;
       }
     `
   }

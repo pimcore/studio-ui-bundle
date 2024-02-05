@@ -9,7 +9,7 @@ interface WidgetTabTitleProps {
 
 export const WidgetTabTitle = ({ node }: WidgetTabTitleProps): React.JSX.Element => {
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
-  const [icon] = useState(node.getIcon() ?? 'camera')
+  const [icon] = useState(node.getIcon() ?? 'widget-default')
 
   if (isBorderNode) {
     return <WidgetBorderTitle icon={icon} title={node.getName()} />

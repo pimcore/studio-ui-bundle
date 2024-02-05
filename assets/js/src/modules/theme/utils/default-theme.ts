@@ -16,6 +16,7 @@ const defaultTheme = {
     controlItemBgActive: '#f8eeff',
     colorFill: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.6000000238418579)',
     colorFillQuaternary: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.44999998807907104)',
+    colorBgLayout: '#fcfcfc',
     colorPrimary: '#722ed1',
     fontSize: 12,
     fontSizeHeading1: 35,
@@ -26,6 +27,8 @@ const defaultTheme = {
     colorLogo: '#5520a6',
     colorBorderTertiary: '#dfd7ea',
     colorTextTreeElement: '#404655',
+    colorIconTree: '#404655',
+    colorIconTreeUnpublished: 'rgba(0.250980406999588, 0.27450981736183167, 0.3333333432674408, 0.4000000059604645)',
     ...staticTokens.token
   },
 
@@ -80,7 +83,15 @@ const defaultTheme = {
 type tokens = typeof defaultTheme.token
 type components = typeof defaultTheme.components
 
-const PimcoreDefaultTheme: PimcoreThemeConfig = defaultTheme
+// workaround for invalid rgba values provided by ant theme buddy
+let jsonString = JSON.stringify(defaultTheme)
+const rgbaExtractorRegex = /rgba\((?<red>\d+(\.\d+)?),\s(?<green>\d+(\.\d+)?),\s(?<blue>\d+(\.\d+)?),\s(?<alpha>\d+(\.\d+)?)\)/g
+jsonString = jsonString.replace(rgbaExtractorRegex, (match, r, rFractional, g, gFractional, b, bFractional, a) => {
+  return `rgba(${r * 256}, ${g * 256}, ${b * 256}, ${a})`
+})
+const purifiedTheme = JSON.parse(jsonString)
+
+const PimcoreDefaultTheme: PimcoreThemeConfig = purifiedTheme
 
 export { PimcoreDefaultTheme }
 

@@ -14,8 +14,8 @@ export const WidgetManager = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectModel)
   const dispatch = useAppDispatch()
   const model = Model.fromJson(modelJson)
-  const { token } = useToken()
   const bottomTabset = model.getNodeById('bottom_tabset') as TabSetNode
+  const { token } = useToken()
 
   useEffect(() => {
     const tabToken = getTabTokens(token)
@@ -28,8 +28,8 @@ export const WidgetManager = (): React.JSX.Element => {
   }, [])
 
   if (bottomTabset.getChildren().length === 0) {
-    model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: 0 }))
-  } else if (bottomTabset.getHeight() === 0) {
+    model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: -8 }))
+  } else if (bottomTabset.getHeight() === -8) {
     model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: 200 }))
   }
 
