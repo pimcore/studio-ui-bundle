@@ -1,6 +1,6 @@
 {
   "name": "pimcore/studio-ui-bundle",
-  "license": "Pimcore Enterprise License (PEL)",
+  "license": "proprietary",
   "type": "pimcore-bundle",
   "description": "Pimcore Studio Ui Bundle",
   "config": {
@@ -18,7 +18,6 @@
   "minimum-stability": "dev",
   "require": {
     "php": "~8.1.0 || ~8.2.0",
-    "pimcore/enterprise-subscription-tools": "^1.3",
     "pimcore/pimcore": "^11.0"
   },
   "require-dev": {
