@@ -1,11 +1,19 @@
 {
-  "bundles/pimcorestudioui/build/main.css": "/bundles/pimcorestudioui/build/main.acf05aa8.css",
-  "bundles/pimcorestudioui/build/main.js": "/bundles/pimcorestudioui/build/main.c40a1d13.js",
-  "bundles/pimcorestudioui/build/58.9cf6e23a.js": "/bundles/pimcorestudioui/build/58.9cf6e23a.js",
-  "bundles/pimcorestudioui/build/678.c220b736.js": "/bundles/pimcorestudioui/build/678.c220b736.js",
-  "bundles/pimcorestudioui/build/625.b487b20e.js": "/bundles/pimcorestudioui/build/625.b487b20e.js",
-  "bundles/pimcorestudioui/build/610.3d325b2d.js": "/bundles/pimcorestudioui/build/610.3d325b2d.js",
-  "bundles/pimcorestudioui/build/fonts/Lato-Light.ttf": "/bundles/pimcorestudioui/build/fonts/Lato-Light.c7400fca.ttf",
-  "bundles/pimcorestudioui/build/fonts/Lato-Regular.ttf": "/bundles/pimcorestudioui/build/fonts/Lato-Regular.9d883d54.ttf",
-  "bundles/pimcorestudioui/build/fonts/Lato-Bold.ttf": "/bundles/pimcorestudioui/build/fonts/Lato-Bold.636be8de.ttf"
+  "build/main.css": "http://localhost:3030/build/main.css",
+  "build/main.js": "http://localhost:3030/build/main.js",
+  "build/assets_js_src_assets_icons_core_camera_inline_svg.js": "http://localhost:3030/build/assets_js_src_assets_icons_core_camera_inline_svg.js",
+  "build/assets_js_src_assets_icons_core_folder_inline_svg.js": "http://localhost:3030/build/assets_js_src_assets_icons_core_folder_inline_svg.js",
+  "build/assets_js_src_assets_icons_core_widget-default_inline_svg.js": "http://localhost:3030/build/assets_js_src_assets_icons_core_widget-default_inline_svg.js",
+  "build/assets_js_src_assets_icons_core_chevron-up_inline_svg.js": "http://localhost:3030/build/assets_js_src_assets_icons_core_chevron-up_inline_svg.js",
+  "build/assets_js_src_assets_icons_core_chevron-down_inline_svg.js": "http://localhost:3030/build/assets_js_src_assets_icons_core_chevron-down_inline_svg.js",
+  "build/assets_js_src_assets_icons_core_home_inline_svg.js": "http://localhost:3030/build/assets_js_src_assets_icons_core_home_inline_svg.js",
+  "build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-8de8db.css": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-8de8db.css",
+  "build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-8de8db.js": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-8de8db.js",
+  "build/fonts/Lato-Light.ttf": "http://localhost:3030/build/fonts/Lato-Light.c7400fca.ttf",
+  "build/fonts/Lato-Regular.ttf": "http://localhost:3030/build/fonts/Lato-Regular.9d883d54.ttf",
+  "build/fonts/Lato-Bold.ttf": "http://localhost:3030/build/fonts/Lato-Bold.636be8de.ttf",
+  "build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-1ff7b2.css": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-1ff7b2.css",
+  "build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-1ff7b2.js": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-1ff7b2.js",
+  "build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-0717ba.css": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-0717ba.css",
+  "build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-0717ba.js": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_UserOutlined_js-node_modules_pmmmwh_react-refr-0717ba.js"
 }

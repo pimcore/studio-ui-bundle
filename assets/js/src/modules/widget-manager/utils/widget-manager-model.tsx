@@ -1,3 +1,4 @@
+import i18n from '@Pimcore/app/i18n'
 import { type IJsonModel } from 'flexlayout-react'
 
 export const getInitialModelJson = (): IJsonModel => {
@@ -48,8 +49,8 @@ export const getInitialModelJson = (): IJsonModel => {
           {
             type: 'tab',
             icon: 'camera',
-            name: 'actions',
-            component: 'widget-manager-actions',
+            name: i18n.t('asset.asset-tree.title'),
+            component: 'asset-tree',
             enableClose: false
           }
         ]
