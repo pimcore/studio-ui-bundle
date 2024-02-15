@@ -9,7 +9,8 @@
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js --fix",
     "test": "jest --passWithNoTests",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "build-api-client": "npx @rtk-query/codegen-openapi ./assets/js/build/openapi-config.ts"
   },
   "license": "PEL",
   "private": true,

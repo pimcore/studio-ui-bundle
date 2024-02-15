@@ -18,8 +18,6 @@ const config: Meta = {
   tags: ['autodocs']
 }
 
-console.log(Icon)
-
 export default config
 
 export const _default = {

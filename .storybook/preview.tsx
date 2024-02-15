@@ -1,5 +1,6 @@
 import React from "react";
 import type { Preview } from "@storybook/react";
+import "../assets/css/globals.css";
 import { GlobalProvider } from "../assets/js/src/modules/app/components/global-provider";
 
 const preview: Preview = {

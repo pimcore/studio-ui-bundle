@@ -26,8 +26,6 @@ export const slice = createSlice({
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
       const model = Model.fromJson(state.model)
 
-      console.log({ payload: action.payload })
-
       model.doAction(
         Actions.addNode(
           action.payload,
