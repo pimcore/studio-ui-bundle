@@ -65,6 +65,17 @@ export const getInitialModelJson = (): IJsonModel => {
           {
             type: 'tab',
             icon: 'camera',
+            name: i18n.t('asset.asset-tree.title'),
+            component: 'asset-tree',
+            enableClose: false,
+            config: {
+              id: 288
+            }
+          },
+
+          {
+            type: 'tab',
+            icon: 'widget-default',
             name: 'actions',
             component: 'widget-manager-actions',
             enableClose: false

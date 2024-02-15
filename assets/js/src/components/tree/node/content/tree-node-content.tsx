@@ -1,6 +1,6 @@
 import React from 'react'
 import { type TreeNodeProps } from '../tree-node'
-import { Space } from 'antd'
+import { Flex } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface TreeNodeContentProps {
@@ -11,10 +11,10 @@ const TreeNodeContent = (props: TreeNodeContentProps): React.JSX.Element => {
   const { icon, label } = props.node
 
   return (
-    <Space>
+    <Flex gap={'small'}>
       <Icon name={icon} />
-      <span>{label}</span>
-    </Space>
+      <span className="tree-node-content__label">{label}</span>
+    </Flex>
   )
 }
 

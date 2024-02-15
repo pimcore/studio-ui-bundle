@@ -13,14 +13,14 @@ interface DataTransformerReturnType {
   total: number
 }
 
-export const useNodeApiHook = (nodeId: number): {
+export const useNodeApiHook = (node: TreeNodeProps): {
   apiHookResult: UseQueryHookResult<any>
   dataTransformer: (data: ApiAssetsGetCollectionApiResponse) => DataTransformerReturnType
   setAdditionalQueryParams: Dispatch<SetStateAction<AssetTreeAdditionalTreeProps | undefined>>
 } => {
   const [additionalQueryParams, setAdditionalQueryParams] = useState<AssetTreeAdditionalTreeProps>()
   const { maxItemsPerNode } = useContext(TreeContext)
-  const apiHookResult = useApiAssetsGetCollectionQuery({ parentId: nodeId, itemsPerPage: maxItemsPerNode, page: 1, ...additionalQueryParams })
+  const apiHookResult = useApiAssetsGetCollectionQuery({ parentId: parseInt(node.id), itemsPerPage: maxItemsPerNode, page: 1, ...additionalQueryParams })
 
   function dataTransformer (data: ApiAssetsGetCollectionApiResponse): DataTransformerReturnType {
     const nodes: TreeNodeProps[] = []
@@ -35,7 +35,8 @@ export const useNodeApiHook = (nodeId: number): {
         hasChildren: assetNode.children,
         metaData: {
           asset: assetNode
-        }
+        },
+        level: node.level + 1
       })
     })
 

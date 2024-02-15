@@ -6,7 +6,7 @@ const config: ConfigFile = {
   apiImport: 'api',
   outputFiles: {
     '../src/modules/asset/api/asset.gen.ts': {
-      filterEndpoints: [/apiAsset/i],
+      filterEndpoints: [/apiAsset/i]
     }
   },
   exportName: 'api',

@@ -1,8 +1,18 @@
-import React, { type ElementType, createContext } from 'react'
+import React, { type ElementType, createContext, useState, type Dispatch } from 'react'
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
-import { type TreeSearchProps } from './__stories__/search/tree-search'
-import { type TreePagerProps } from './__stories__/pager/tree-pager'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
+import { useStyles } from './tree.styles'
+
+export interface TreeSearchProps {
+  node: TreeNodeProps
+  setAdditionalQueryParams?: Dispatch<any>
+}
+
+export interface TreePagerProps {
+  node: TreeNodeProps
+  setAdditionalQueryParams: Dispatch<any>
+  total: number
+}
 
 export interface TreeProps {
   nodeId: number
@@ -19,7 +29,7 @@ export interface TreeProps {
 }
 
 export interface ITreeContext extends TreeProps {
-  setInternalItems?: React.Dispatch<React.SetStateAction<TreeNodeProps[]>>
+  selectedIdsState?: [string[], (ids: string[]) => void]
 }
 
 const defaultProps: TreeProps = {
@@ -34,8 +44,13 @@ export const TreeContext = createContext<ITreeContext>({
 })
 
 const Tree = (props: TreeProps): React.JSX.Element => {
+  const selectedIdsState = useState<string[]>([])
+  const { styles } = useStyles()
   const { nodeId, nodeApiHook } = props
-  const { apiHookResult, dataTransformer } = nodeApiHook(nodeId)
+  const { apiHookResult, dataTransformer } = nodeApiHook({
+    id: nodeId,
+    level: -1
+  })
   const { isLoading, isError, data } = apiHookResult
 
   if (isLoading !== false) {
@@ -49,12 +64,10 @@ const Tree = (props: TreeProps): React.JSX.Element => {
   const { nodes: items } = dataTransformer(data)
 
   return (
-    <div>
-      <TreeContext.Provider value={{ ...props }}>
-        {items.map((item, index) => (
-          <div key={item.id}>
-            <TreeNode {...item} />
-          </div>
+    <div className={['tree', styles.tree].join(' ')}>
+      <TreeContext.Provider value={{ ...props, selectedIdsState }}>
+        {items.map((item) => (
+          <TreeNode key={item.id} {...item} />
         ))}
       </TreeContext.Provider>
     </div>

@@ -1,5 +1,4 @@
-import { type TreePagerProps } from '@Pimcore/components/tree/__stories__/pager/tree-pager'
-import { TreeContext } from '@Pimcore/components/tree/tree'
+import { TreeContext, type TreePagerProps } from '@Pimcore/components/tree/tree'
 import { Pagination } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -18,7 +17,14 @@ const AssetTreePager = (props: TreePagerProps): React.JSX.Element => {
   }
 
   return (
-    <Pagination current={page} onChange={onChange} hideOnSinglePage simple pageSize={maxItemsPerNode} total={total} />
+    <Pagination
+      current={page}
+      onChange={onChange}
+      hideOnSinglePage
+      simple
+      pageSize={maxItemsPerNode}
+      total={total}
+    />
   )
 }
 

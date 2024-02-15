@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { type MouseEvent, useContext } from 'react'
 import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../tree'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -13,7 +13,9 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
   const { onLoad } = useContext(TreeContext)
   const [isExapanded, setIsExpanded] = state
 
-  async function onClick (): Promise<void> {
+  async function onClick (event: MouseEvent): Promise<void> {
+    event.stopPropagation()
+
     if (hasChildren === true) {
       const newExpandedValue = !isExapanded
 
@@ -26,7 +28,7 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
   }
 
   return (
-    <div className='tree-expander' style={{ width: 16, height: 16 }}>
+    <div className='tree-expander' style={{ minWidth: 16, width: 16, height: 16 }}>
       {node.hasChildren === true && (
         <span onClick={onClick}>
           {isExapanded ? <Icon name="chevron-up" /> : <Icon name="chevron-down" />}
