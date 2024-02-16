@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Image } from 'antd'
+import { AssetContext } from '@Pimcore/modules/asset/context/asset-context'
 
 export const ViewTab = (): React.JSX.Element => {
+  const asset = useContext(AssetContext)
+
+  if (asset === null) {
+    return <h4>Oh Snap, something went wrong!</h4>
+  }
+
   return (
-      <h4>View TAB</h4>
+      <Image src={asset.fullPath} />
   )
 }

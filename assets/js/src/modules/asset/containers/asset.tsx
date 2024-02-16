@@ -1,6 +1,7 @@
 import React from 'react'
-import { Image } from 'antd'
 import { useAssetDraft } from '../hooks/use-asset-draft'
+import AssetProvider from '@Pimcore/modules/asset/context/asset-context'
+import { Toolbar } from '@Pimcore/modules/asset/toolbar/container/toolbar'
 
 export interface AssetProps {
   id: string
@@ -19,13 +20,14 @@ const Asset = (props: AssetProps): React.JSX.Element => {
   }
 
   return (
-    <div>
-      {asset.filename}
+    <AssetProvider asset={asset}>
+      <Toolbar />
+      {/* {asset.filename}
 
       {asset.type === 'image' && (
         <Image src={asset.fullPath} />
-      )}
-    </div>
+      )} */}
+    </AssetProvider>
   )
 }
 
