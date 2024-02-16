@@ -1,8 +1,8 @@
-import { registerWidget } from '@Pimcore/modules/widget-manager/utils/widget-registry'
-import { Tab as AssetTab } from '@Pimcore/modules/asset/tab/tab'
+import {registerWidget} from '@Pimcore/modules/widget-manager/utils/widget-registry'
 import '@Pimcore/modules/asset/toolbar/index'
+import {Asset} from './containers/asset'
 
 registerWidget({
-  name: 'asset-tab',
-  component: AssetTab
+    name: 'asset',
+    component: Asset
 })

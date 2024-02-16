@@ -14,3 +14,11 @@
   src: url(../fonts/Lato-Bold.ttf);
   font-weight: 700;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Lato, sans-serif;
+}

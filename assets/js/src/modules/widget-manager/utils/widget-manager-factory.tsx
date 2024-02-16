@@ -18,5 +18,5 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
   const { component } = widget
   const Component = component
 
-  return <Component />
+  return <Component {...node.getConfig()} />
 }
