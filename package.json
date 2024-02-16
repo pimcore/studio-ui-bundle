@@ -58,7 +58,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.1.0",
+    "@reduxjs/toolkit": "^2.2.1",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "antd": "^5.13.3",
