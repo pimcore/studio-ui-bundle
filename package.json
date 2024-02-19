@@ -23,10 +23,10 @@
     "@storybook/addon-interactions": "^7.6.10",
     "@storybook/addon-links": "^7.6.10",
     "@storybook/addon-onboarding": "^1.0.11",
-    "@storybook/blocks": "^7.6.10",
+    "@storybook/blocks": "^7.6.16",
     "@storybook/react": "^7.6.10",
     "@storybook/react-webpack5": "^7.6.10",
-    "@storybook/test": "^7.6.10",
+    "@storybook/test": "^7.6.16",
     "@svgr/webpack": "^8.1.0",
     "@symfony/webpack-encore": "^4.6.1",
     "@testing-library/dom": "^9.3.4",
@@ -58,7 +58,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.1.0",
+    "@reduxjs/toolkit": "^2.2.1",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "antd": "^5.13.3",
@@ -67,7 +67,7 @@
     "i18next": "^23.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^14.0.1",
+    "react-i18next": "^14.0.5",
     "react-redux": "^9.1.0"
   }
 }
