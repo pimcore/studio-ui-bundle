@@ -22,11 +22,6 @@ const Asset = (props: AssetProps): React.JSX.Element => {
   return (
     <AssetProvider asset={asset}>
       <Toolbar />
-      {/* {asset.filename}
-
-      {asset.type === 'image' && (
-        <Image src={asset.fullPath} />
-      )} */}
     </AssetProvider>
   )
 }
