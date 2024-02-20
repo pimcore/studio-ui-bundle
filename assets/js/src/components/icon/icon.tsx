@@ -6,7 +6,8 @@ const icons = {
   'widget-default': React.lazy(async () => await import('@Pimcore/assets/icons/core/widget-default.inline.svg')),
   'chevron-up': React.lazy(async () => await import('@Pimcore/assets/icons/core/chevron-up.inline.svg')),
   'chevron-down': React.lazy(async () => await import('@Pimcore/assets/icons/core/chevron-down.inline.svg')),
-  home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg'))
+  home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg')),
+  CloseCircleFilled: React.lazy(async () => await import('@Pimcore/assets/icons/core/CloseCircleFilled.inline.svg'))
 }
 
 export interface IconProps {

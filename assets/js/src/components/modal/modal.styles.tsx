@@ -18,7 +18,7 @@ export const useStyle = createStyles(({ token, css }) => {
                 font-size: 12px;
                 font-weight: 400;
                 line-height: 22px;
-                color: ${token.Ne
+                color: red
             }
         `,
     }
