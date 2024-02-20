@@ -10,6 +10,7 @@ export const useStyles = createStyles(({ token, css }) => {
         width: 100%;
         padding: 2px ${token.paddingSM}px 2px 0;
         white-space: nowrap;
+        align-items: center;
 
         @media (hover: hover) {
           &:hover {
