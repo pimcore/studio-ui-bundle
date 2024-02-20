@@ -16,7 +16,7 @@ registerTab({
   key: 'view',
   label: ('view'),
   children: <ViewTab />,
-  icon: <Icon name={'view'} />
+  icon: <Icon name={'image-05'} />
 })
 
 registerTab({
@@ -30,49 +30,49 @@ registerTab({
   key: 'embedded-metadata',
   label: ('embedded metadata'),
   children: <EmbeddedMetadataTab />,
-  icon: <Icon name={'embedded-metadata'} />
+  icon: <Icon name={'data_sheet'} />
 })
 
 registerTab({
   key: 'custom-metadata',
   label: ('custom metadata'),
   children: <CustomMetadataTab />,
-  icon: <Icon name={'custom-metadata'} />
+  icon: <Icon name={'data-management-2'} />
 })
 
 registerTab({
   key: 'versions',
   label: ('versions'),
   children: <VersionsTab />,
-  icon: <Icon name={'versions'} />
+  icon: <Icon name={'historyOutlined'} />
 })
 
 registerTab({
   key: 'schedule',
   label: ('schedule'),
   children: <ScheduleTab />,
-  icon: <Icon name={'schedule'} />
+  icon: <Icon name={'scheduleOutlined'} />
 })
 
 registerTab({
   key: 'dependencies',
   label: ('dependencies'),
   children: <DependenciesTab />,
-  icon: <Icon name={'dependencies'} />
+  icon: <Icon name={'hierarchy'} />
 })
 
 registerTab({
   key: 'notes-and-events',
   label: ('notes & events'),
   children: <NotesAndEventsTab />,
-  icon: <Icon name={'notes-events'} />
+  icon: <Icon name={'view_details'} />
 })
 
 registerTab({
   key: 'tags',
   label: ('tag'),
   children: <TagsTab />,
-  icon: <Icon name={'tag'} />
+  icon: <Icon name={'tagTwoTone'} />
 })
 
 registerTab({
