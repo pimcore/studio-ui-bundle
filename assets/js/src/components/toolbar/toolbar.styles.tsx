@@ -6,10 +6,6 @@ export const useStyle = createStyles(({ token, css }) => {
       .ant-tabs-tab {
         padding-left: ${token.paddingSM}px;
         
-        &.ant-tabs-tab-active svg path{
-          fill: ${token.Tabs.inkBarColor};
-        }
-        
         .ant-tabs-tab-btn {
           display: flex;
           padding-top: ${token.paddingXS}px;
