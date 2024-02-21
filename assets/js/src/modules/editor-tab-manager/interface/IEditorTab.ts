@@ -1,6 +1,6 @@
 import type React from "react";
 
-export interface ITab {
+export interface IEditorTab {
     key: string
     label: string
     children: React.JSX.Element

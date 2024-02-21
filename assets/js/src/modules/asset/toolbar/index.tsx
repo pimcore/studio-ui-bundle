@@ -10,74 +10,74 @@ import { DependenciesTab } from '@Pimcore/modules/asset/toolbar/tabs/container/d
 import { NotesAndEventsTab } from '@Pimcore/modules/asset/toolbar/tabs/container/notes-and-events'
 import { WorkflowTab } from '@Pimcore/modules/asset/toolbar/tabs/container/workflow'
 import { TagsTab } from '@Pimcore/modules/asset/toolbar/tabs/container/tags'
-import { AssetTabManager } from '@Pimcore/modules/tab-manager/utils/asset-tab-manager'
+import { AssetEditorTabManager } from '@Pimcore/modules/editor-tab-manager/utils/asset-tab-manager'
 
-const assetTabManager = new AssetTabManager()
+export const assetEditorTabManager = new AssetEditorTabManager()
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'view',
   label: ('view'),
   children: <ViewTab />,
   icon: <Icon name={'image-05'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'edit',
   label: ('edit'),
   children: <EditTab />,
   icon: <Icon name={'edit'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'embedded-metadata',
   label: ('embedded metadata'),
   children: <EmbeddedMetadataTab />,
   icon: <Icon name={'data_sheet'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'custom-metadata',
   label: ('custom metadata'),
   children: <CustomMetadataTab />,
   icon: <Icon name={'data-management-2'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'versions',
   label: ('versions'),
   children: <VersionsTab />,
   icon: <Icon name={'historyOutlined'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'schedule',
   label: ('schedule'),
   children: <ScheduleTab />,
   icon: <Icon name={'scheduleOutlined'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'dependencies',
   label: ('dependencies'),
   children: <DependenciesTab />,
   icon: <Icon name={'hierarchy'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'notes-and-events',
   label: ('notes & events'),
   children: <NotesAndEventsTab />,
   icon: <Icon name={'view_details'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'tags',
   label: ('tag'),
   children: <TagsTab />,
   icon: <Icon name={'tagTwoTone'} />
 })
 
-assetTabManager.register({
+assetEditorTabManager.register({
   key: 'workflow',
   label: ('workflow'),
   children: <WorkflowTab />,
