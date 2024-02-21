@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\DependencyInjection;
 
+use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -29,20 +30,18 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
 {
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
-
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
     }
 
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $builds = [
-            'pimcoreStudioUi' => realpath(__DIR__ . '/../../public/build'),
+            'pimcoreStudioUi' => dirname(__DIR__, 2) . '/public/build',
         ];
 
         $container->prependExtensionConfig('webpack_encore', [

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
 use Pimcore\Controller\FrontendController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,7 +22,7 @@ final class DefaultController extends FrontendController
     /**
      * @Route("/admin/studio")
      */
-    public function indexAction(Request $request): Response
+    public function indexAction(): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig');
     }
