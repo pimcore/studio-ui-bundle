@@ -30,6 +30,7 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
 {
     /**
      * {@inheritdoc}
+     *
      * @throws Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
