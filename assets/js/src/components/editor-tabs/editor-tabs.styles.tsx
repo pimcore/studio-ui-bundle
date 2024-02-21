@@ -3,9 +3,16 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     editorTabs: css`
+      &.ant-tabs .ant-tabs-tab+.ant-tabs-tab {
+        margin-left: ${token.paddingSM}px;
+        margin-right: ${token.paddingSM}px;
+      }
+      
       .ant-tabs-tab {
-        margin-left: ${token.paddingSM}px !important;
-        margin-right: ${token.paddingSM}px !important;
+        &:first-of-type {
+            margin-left: ${token.paddingSM}px;
+            margin-right: ${token.paddingSM}px;
+        }
         padding: 0;
         
         .ant-tabs-tab-btn {
