@@ -1,10 +1,10 @@
 import React from 'react'
-import { Toolbar } from '@Pimcore/modules/asset/toolbar/container/toolbar'
+import {EditorTabs} from "@Pimcore/modules/asset/editor-tabs/container/editor-tabs";
 
 export const Tab = (): React.JSX.Element => {
   return (
       <>
-          <Toolbar/>
+          <EditorTabs/>
       </>
   )
 }
