@@ -1,12 +1,12 @@
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { EditorTabs } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { type Meta } from '@storybook/react'
 import { PictureOutlined, TagOutlined } from '@ant-design/icons'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Toolbar',
-  component: Toolbar,
+  title: 'Pimcore studio/UI/Editor Tabs',
+  component: EditorTabs,
   parameters: {
     layout: 'centered'
   },

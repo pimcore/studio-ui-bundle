@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAssetDraft } from '../hooks/use-asset-draft'
 import AssetProvider from '@Pimcore/modules/asset/context/asset-context'
-import { Toolbar } from '@Pimcore/modules/asset/toolbar/container/toolbar'
+import { EditorTabs } from '@Pimcore/modules/asset/editor-tabs/container/editor-tabs'
 
 export interface AssetProps {
   id: string
@@ -21,7 +21,7 @@ const Asset = (props: AssetProps): React.JSX.Element => {
 
   return (
     <AssetProvider asset={asset}>
-      <Toolbar />
+      <EditorTabs />
     </AssetProvider>
   )
 }

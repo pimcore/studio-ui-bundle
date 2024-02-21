@@ -2,7 +2,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    toolbar: css`
+    editorTabs: css`
       .ant-tabs-tab {
         padding-left: ${token.paddingSM}px;
         
