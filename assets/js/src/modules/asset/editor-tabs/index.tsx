@@ -32,7 +32,7 @@ assetEditorTabManager.register({
   key: 'embedded-metadata',
   label: ('embedded metadata'),
   children: <EmbeddedMetadataTab />,
-  icon: <Icon name={'data_sheet'} />
+  icon: <Icon name={'data-sheet'} />
 })
 
 assetEditorTabManager.register({
@@ -46,14 +46,14 @@ assetEditorTabManager.register({
   key: 'versions',
   label: ('versions'),
   children: <VersionsTab />,
-  icon: <Icon name={'historyOutlined'} />
+  icon: <Icon name={'history-outlined'} />
 })
 
 assetEditorTabManager.register({
   key: 'schedule',
   label: ('schedule'),
   children: <ScheduleTab />,
-  icon: <Icon name={'scheduleOutlined'} />
+  icon: <Icon name={'schedule-outlined'} />
 })
 
 assetEditorTabManager.register({
@@ -67,14 +67,14 @@ assetEditorTabManager.register({
   key: 'notes-and-events',
   label: ('notes & events'),
   children: <NotesAndEventsTab />,
-  icon: <Icon name={'view_details'} />
+  icon: <Icon name={'view-details'} />
 })
 
 assetEditorTabManager.register({
   key: 'tags',
   label: ('tag'),
   children: <TagsTab />,
-  icon: <Icon name={'tagTwoTone'} />
+  icon: <Icon name={'tag-two-tone'} />
 })
 
 assetEditorTabManager.register({
