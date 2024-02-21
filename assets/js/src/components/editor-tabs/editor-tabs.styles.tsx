@@ -31,11 +31,18 @@ export const useStyle = createStyles(({ token, css }) => {
             justify-content: center;
             align-content: center;
             margin-inline-end: 0;
+            color: ${token.Tabs.itemUnselectedIconColor};
             
             svg {
               height: 16px;
               width: 16px
             }
+          }
+        }
+        
+        &.ant-tabs-tab-active  {
+          .ant-tabs-tab-icon {
+              color: ${token.colorPrimaryActive}
           }
         }
       }
