@@ -7,6 +7,9 @@ export const useStyle = createStyles(({ token, css }) => {
         margin-left: ${token.paddingSM}px;
         margin-right: ${token.paddingSM}px;
       }
+      &.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: ${token.colorPrimaryActive}
+      }
       
       .ant-tabs-tab {
         &:first-of-type {
@@ -60,7 +63,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
-          border-bottom: 2px solid ${token.Tabs.inkBarColor};
+          border-bottom: 2px solid ${token.colorPrimaryActive};
           animation: fadeIn .2s;
       }
     `
