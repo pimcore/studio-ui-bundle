@@ -4,7 +4,9 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     editorTabs: css`
       .ant-tabs-tab {
-        padding-left: ${token.paddingSM}px;
+        margin-left: ${token.paddingSM}px !important;
+        margin-right: ${token.paddingSM}px !important;
+        padding: 0;
         
         .ant-tabs-tab-btn {
           display: flex;
@@ -19,6 +21,11 @@ export const useStyle = createStyles(({ token, css }) => {
             justify-content: center;
             align-content: center;
             margin-inline-end: 0;
+            
+            svg {
+              height: 16px;
+              width: 16px
+            }
           }
         }
       }
@@ -46,7 +53,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
-          border-bottom: 2px solid ${token.colorPrimary};
+          border-bottom: 2px solid ${token.Tabs.inkBarColor};
           animation: fadeIn .2s;
       }
     `
