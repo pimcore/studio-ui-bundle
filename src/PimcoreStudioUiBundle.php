@@ -14,12 +14,13 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle;
 
+use function dirname;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
 class PimcoreStudioUiBundle extends AbstractPimcoreBundle
 {
     public function getPath(): string
     {
-        return \dirname(__DIR__);
+        return dirname(__DIR__);
     }
 }
