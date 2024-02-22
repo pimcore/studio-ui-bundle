@@ -13,17 +13,21 @@ export const useStyle = createStyles(({ token, css }) => {
                 align-items: start;
                 gap: ${token.marginSM}px;
 
-                .ant-modal-title {
-                    font-size: 16px;
-                    font-weight: 900;
-                    line-height: 24px;
-                    display: flex;
-                    gap: 4px;
+                .ant-modal-header {
+                    margin-bottom: 0;
+                    
+                    .ant-modal-title {
+                        font-size: 16px;
+                        font-weight: 900;
+                        line-height: 24px;
+                        display: flex;
+                        gap: 4px;
 
-                    svg {
-                        height: 24px;
-                        width: 24px;
-                    }
+                        svg {
+                            height: 24px;
+                            width: 24px;
+                        }
+                    }   
                 }
                 
                 .ant-modal-body {
