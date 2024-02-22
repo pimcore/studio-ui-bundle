@@ -14,6 +14,7 @@ const config: Meta = {
                 <Button onClick={() => setIsOpen(true)}>Open modal</Button>
                 <Modal
                     {...args}
+                    icon={<Icon name={'home'} />}
                     open={isOpen}
                     onCancel={() => setIsOpen(false)}
                     onOk={() => console.log('clicked "ok"')}
@@ -37,6 +38,12 @@ const config: Meta = {
             </>
         )
     },
+    argTypes: {
+        footerContent: {
+            options: ['end', 'space-between'],
+            control: { type: 'select' }
+        }
+    },
     parameters: {
         layout: 'centered'
     },
@@ -47,9 +54,9 @@ export default config
 
 export const _default = {
     args: {
-        icon: <Icon name={'home'} />,
         title: 'Error occurred when creating ZIP',
         content: 'The following files failed while creating their ZIPs. Pressing on See details will load additional options helping to resolve the error.',
         files: ['all-catalogue-pictures.zip', 'all-catalogue-pictures-videos-content-materials.zip'],
+        footerContent: 'end'
     }
 }

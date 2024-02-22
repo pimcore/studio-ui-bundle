@@ -32,9 +32,18 @@ export const useStyle = createStyles(({ token, css }) => {
                 
                 .ant-modal-footer {
                     display: flex;
-                    justify-content: flex-end;
-                    gap: 8px;
                     align-self: stretch;
+                    
+                    > .ant-modal-footer-container {
+                        display: flex;
+                        width: 100%;
+                        gap: 8px;
+                        justify-content: flex-end;
+                        
+                        &.space-between {
+                            justify-content: space-between;
+                        }
+                    }
                 }
             }
         `,

@@ -6,12 +6,11 @@ import {useStyle} from "@Pimcore/components/modal/modal.styles";
 export interface ModalProps extends ModalFuncProps {
     content: string; //TODO: do we need that -> default: React.ReactNode
     files?: string[];
+    footerContent?: 'space-between'
 }
 
 export const Modal = (props: ModalProps) => {
     const { styles } = useStyle();
-
-    console.log(props);
 
     const renderFileList = (files: string[] | undefined) => {
         if(files === undefined || files.length === 0) {
@@ -36,7 +35,11 @@ export const Modal = (props: ModalProps) => {
                 </>
             )}
             className={styles.modal}
-            footer={props.footer}
+            footer={(
+                <div className={'ant-modal-footer-container ' + (props.footerContent === 'space-between' ? 'space-between' : '')}>
+                    {props.footer}
+                </div>
+            )}
             open={props.open}
             onCancel={props.onCancel}
             onOk={props.onOk}
