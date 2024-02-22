@@ -39,6 +39,14 @@ export const useStyle = createStyles(({ token, css }) => {
             }
           }
         }
+
+        &:not(.ant-tabs-tab-active) {
+          .ant-tabs-tab-icon {
+            &:hover {
+                color: ${token.colorIconHover};
+            }
+          }
+        }
         
         &.ant-tabs-tab-active  {
           .ant-tabs-tab-icon {
