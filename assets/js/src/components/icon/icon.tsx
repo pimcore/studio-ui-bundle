@@ -7,7 +7,17 @@ const icons = {
   'chevron-up': React.lazy(async () => await import('@Pimcore/assets/icons/core/chevron-up.inline.svg')),
   'chevron-down': React.lazy(async () => await import('@Pimcore/assets/icons/core/chevron-down.inline.svg')),
   home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg')),
-  CloseCircleFilled: React.lazy(async () => await import('@Pimcore/assets/icons/core/CloseCircleFilled.inline.svg'))
+  'image-05': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-05.inline.svg')),
+  edit: React.lazy(async () => await import('@Pimcore/assets/icons/core/edit.inline.svg')),
+  'data-sheet': React.lazy(async () => await import('@Pimcore/assets/icons/core/data-sheet.inline.svg')),
+  'data-management-2': React.lazy(async () => await import('@Pimcore/assets/icons/core/data-management-2.inline.svg')),
+  'history-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/history-outlined.inline.svg')),
+  'schedule-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/schedule-outlined.inline.svg')),
+  hierarchy: React.lazy(async () => await import('@Pimcore/assets/icons/core/hierarchy.inline.svg')),
+  'view-details': React.lazy(async () => await import('@Pimcore/assets/icons/core/view-details.inline.svg')),
+  'tag-two-tone': React.lazy(async () => await import('@Pimcore/assets/icons/core/tag-two-tone.inline.svg')),
+  workflow: React.lazy(async () => await import('@Pimcore/assets/icons/core/workflow.inline.svg')),
+  closeCircleFilled: React.lazy(async () => await import('@Pimcore/assets/icons/core/CloseCircleFilled.inline.svg'))
 }
 
 export interface IconProps {

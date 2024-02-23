@@ -67,7 +67,8 @@ const defaultTheme = {
       colorBorderActiveTab: '#fa8c16',
       colorBgUnselectedTab: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.44999998807907104)',
       colorBgHoverUnselectedTab: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.6000000238418579)',
-      colorBorderContainer: '#dfd7ea'
+      colorBorderContainer: '#dfd7ea',
+      paddingTabs: 8
     },
 
     Avatar: {
