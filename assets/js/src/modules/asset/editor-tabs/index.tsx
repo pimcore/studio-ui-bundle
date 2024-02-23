@@ -11,75 +11,76 @@ import { NotesAndEventsTab } from '@Pimcore/modules/asset/editor-tabs/tabs/conta
 import { WorkflowTab } from '@Pimcore/modules/asset/editor-tabs/tabs/container/workflow'
 import { TagsTab } from '@Pimcore/modules/asset/editor-tabs/tabs/container/tags'
 import { AssetEditorTabManager } from '@Pimcore/modules/editor-tab-manager/utils/asset-tab-manager'
+import i18n from '@Pimcore/app/i18n'
 
 export const assetEditorTabManager = new AssetEditorTabManager()
 
 assetEditorTabManager.register({
   key: 'view',
-  label: ('view'),
+  label: i18n.t('asset.asset-editor-tabs.view'),
   children: <ViewTab />,
   icon: <Icon name={'image-05'} />
 })
 
 assetEditorTabManager.register({
   key: 'edit',
-  label: ('edit'),
+  label: i18n.t('asset.asset-editor-tabs.edit'),
   children: <EditTab />,
   icon: <Icon name={'edit'} />
 })
 
 assetEditorTabManager.register({
   key: 'embedded-metadata',
-  label: ('embedded metadata'),
+  label: i18n.t('asset.asset-editor-tabs.embedded-metadata'),
   children: <EmbeddedMetadataTab />,
   icon: <Icon name={'data-sheet'} />
 })
 
 assetEditorTabManager.register({
   key: 'custom-metadata',
-  label: ('custom metadata'),
+  label: i18n.t('asset.asset-editor-tabs.custom-metadata'),
   children: <CustomMetadataTab />,
   icon: <Icon name={'data-management-2'} />
 })
 
 assetEditorTabManager.register({
   key: 'versions',
-  label: ('versions'),
+  label: i18n.t('asset.asset-editor-tabs.versions'),
   children: <VersionsTab />,
   icon: <Icon name={'history-outlined'} />
 })
 
 assetEditorTabManager.register({
   key: 'schedule',
-  label: ('schedule'),
+  label: i18n.t('asset.asset-editor-tabs.schedule'),
   children: <ScheduleTab />,
   icon: <Icon name={'schedule-outlined'} />
 })
 
 assetEditorTabManager.register({
   key: 'dependencies',
-  label: ('dependencies'),
+  label: i18n.t('asset.asset-editor-tabs.dependencies'),
   children: <DependenciesTab />,
   icon: <Icon name={'hierarchy'} />
 })
 
 assetEditorTabManager.register({
-  key: 'notes-and-events',
-  label: ('notes & events'),
+  key: 'notes-events',
+  label: i18n.t('asset.asset-editor-tabs.notes-events'),
   children: <NotesAndEventsTab />,
   icon: <Icon name={'view-details'} />
 })
 
 assetEditorTabManager.register({
   key: 'tags',
-  label: ('tag'),
+  label: i18n.t('asset.asset-editor-tabs.tag'),
   children: <TagsTab />,
   icon: <Icon name={'tag-two-tone'} />
 })
 
 assetEditorTabManager.register({
   key: 'workflow',
-  label: ('workflow'),
+  label: i18n.t('asset.asset-editor-tabs.workflow'),
   children: <WorkflowTab />,
   icon: <Icon name={'workflow'} />
 })

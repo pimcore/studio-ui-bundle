@@ -10,6 +10,9 @@ export const useStyle = createStyles(({ token, css }) => {
       &.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
         color: ${token.colorPrimaryActive}
       }
+      &.ant-tabs-top >.ant-tabs-nav {
+        margin-bottom: 0;
+      }
       
       .ant-tabs-tab {
         &:first-of-type {
