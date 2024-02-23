@@ -37,5 +37,8 @@ module.exports = {
         "react"
     ],
     "rules": {
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/unbound-method": "off",
     }
 }

@@ -41,17 +41,9 @@ jobs:
                     ini-values: display_errors=On, display_startup_errors=On, error_reporting=32767
                     php-version: "${{ matrix.php-version }}"
 
-            - name: Install SSH Key # this is necessary for Composer to be able to clone source from pimcore/ee-pimcore
-              uses: shimataro/ssh-key-action@v2
-              with:
-                  key: ${{ secrets.SSH_PRIVATE_KEY_PIMCORE_DEPLOYMENTS_USER }}
-                  known_hosts: ''
-
             - name: "Add authentication for private pimcore packages"
               run: |
-                  composer config repositories.private-packagist composer https://repo.pimcore.com/github-actions/
-                  composer config --global --auth http-basic.repo.pimcore.com github-actions ${{ secrets.COMPOSER_PIMCORE_REPO_PACKAGIST_TOKEN }}
-
+                  composer config --global --auth http-basic.enterprise.repo.pimcore.com token ${{ secrets.COMPOSER_PIMCORE_REPO_TOKEN }}
 
             - name: "Install dependencies with Composer"
               uses: "ramsey/composer-install@v2"

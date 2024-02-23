@@ -6,6 +6,7 @@ export const useStlyes = createStyles(({ token, css }) => {
       position: absolute;
       inset: 0;
       background: #FCFCFC;
+      font-size: ${token.fontSize}
     `
   }
 })
