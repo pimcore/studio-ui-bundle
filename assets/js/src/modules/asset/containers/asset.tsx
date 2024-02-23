@@ -1,6 +1,7 @@
 import React from 'react'
-import { Image } from 'antd'
 import { useAssetDraft } from '../hooks/use-asset-draft'
+import AssetProvider from '@Pimcore/modules/asset/context/asset-context'
+import { EditorTabs } from '@Pimcore/modules/asset/editor-tabs/container/editor-tabs'
 
 export interface AssetProps {
   id: string
@@ -19,13 +20,9 @@ const Asset = (props: AssetProps): React.JSX.Element => {
   }
 
   return (
-    <div>
-      {asset.filename}
-
-      {asset.type === 'image' && (
-        <Image src={asset.fullPath} />
-      )}
-    </div>
+    <AssetProvider asset={asset}>
+      <EditorTabs />
+    </AssetProvider>
   )
 }
 
