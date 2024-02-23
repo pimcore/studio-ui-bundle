@@ -17,7 +17,7 @@ const icons = {
   'view-details': React.lazy(async () => await import('@Pimcore/assets/icons/core/view-details.inline.svg')),
   'tag-two-tone': React.lazy(async () => await import('@Pimcore/assets/icons/core/tag-two-tone.inline.svg')),
   workflow: React.lazy(async () => await import('@Pimcore/assets/icons/core/workflow.inline.svg')),
-  closeCircleFilled: React.lazy(async () => await import('@Pimcore/assets/icons/core/CloseCircleFilled.inline.svg'))
+  'close-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/close-circle-filled.inline.svg'))
 }
 
 export interface IconProps {
