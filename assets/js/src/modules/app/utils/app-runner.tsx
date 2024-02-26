@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { App } from '../components/app'
+import { AppView } from '../app-view'
 
 export function runApp (): void {
   const domElement = document.getElementById('app')
@@ -10,5 +10,5 @@ export function runApp (): void {
   }
 
   const root = createRoot(domElement)
-  root.render(<App />)
+  root.render(<AppView />)
 }

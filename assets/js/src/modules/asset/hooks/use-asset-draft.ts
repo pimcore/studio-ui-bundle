@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { useApiAssetsIdGetQuery } from '../api/asset.gen'
-import { assetReceived, selectAssetById } from '../store/asset-draft-slice'
+import { useApiAssetsIdGetQuery } from '../asset-api-slice.gen'
+import { assetReceived, selectAssetById } from '../asset-draft-slice'
 import { useEffect } from 'react'
 
 interface UseAssetDraftReturn {

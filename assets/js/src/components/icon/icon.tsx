@@ -16,7 +16,8 @@ const icons = {
   hierarchy: React.lazy(async () => await import('@Pimcore/assets/icons/core/hierarchy.inline.svg')),
   'view-details': React.lazy(async () => await import('@Pimcore/assets/icons/core/view-details.inline.svg')),
   'tag-two-tone': React.lazy(async () => await import('@Pimcore/assets/icons/core/tag-two-tone.inline.svg')),
-  workflow: React.lazy(async () => await import('@Pimcore/assets/icons/core/workflow.inline.svg'))
+  workflow: React.lazy(async () => await import('@Pimcore/assets/icons/core/workflow.inline.svg')),
+  'unordered-list-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/unordered-list-outlined.inline.svg'))
 }
 
 export interface IconProps {
@@ -26,11 +27,13 @@ export interface IconProps {
 
 export const Icon = ({ name, options }: IconProps): React.JSX.Element => {
   const SvgIcon = icons[name]
+  const width = options?.width ?? 16
+  const height = options?.height ?? 16
 
   return (
-    <div style={{ width: options?.width, height: options?.height }} className={`pimcore-icon pimcore-icon-${name} anticon`}>
+    <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon`}>
       <Suspense fallback={<div />}>
-        <SvgIcon {...options} />
+        <SvgIcon width={width} height={height} {...options} />
       </Suspense>
     </div>
   )
