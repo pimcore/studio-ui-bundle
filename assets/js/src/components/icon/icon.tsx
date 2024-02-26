@@ -6,19 +6,24 @@ const icons = {
   'widget-default': React.lazy(async () => await import('@Pimcore/assets/icons/core/widget-default.inline.svg')),
   'chevron-up': React.lazy(async () => await import('@Pimcore/assets/icons/core/chevron-up.inline.svg')),
   'chevron-down': React.lazy(async () => await import('@Pimcore/assets/icons/core/chevron-down.inline.svg')),
-  home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg'))
+  home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg')),
+  refresh: React.lazy(async () => await import('@Pimcore/assets/icons/core/refresh.inline.svg')),
+  target: React.lazy(async () => await import('@Pimcore/assets/icons/core/target.inline.svg')),
+  'info-circle-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-outlined.inline.svg')),
+  'icon-tools': React.lazy(async () => await import('@Pimcore/assets/icons/core/icon-tools.inline.svg')),
 }
 
 export interface IconProps {
   name: string
   options?: React.SVGProps<SVGSVGElement>
+  className?: string
 }
 
-export const Icon = ({ name, options }: IconProps): React.JSX.Element => {
+export const Icon = ({ name, options, className }: IconProps): React.JSX.Element => {
   const SvgIcon = icons[name]
 
   return (
-    <div style={{ width: options?.width, height: options?.height }} className={`pimcore-icon pimcore-icon-${name} anticon`}>
+    <div style={{ width: options?.width, height: options?.height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
       <Suspense fallback={<div />}>
         <SvgIcon {...options} />
       </Suspense>
