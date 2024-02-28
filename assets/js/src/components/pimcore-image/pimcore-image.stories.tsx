@@ -1,7 +1,6 @@
 import { type Meta } from '@storybook/react'
 import { PimcoreImage as PimcoreImageComponent } from './pimcore-image'
 
-
 const config: Meta = {
   title: 'Pimcore studio/UI/PimcoreImage',
   component: PimcoreImageComponent,

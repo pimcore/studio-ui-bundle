@@ -1,7 +1,7 @@
 import { type Meta } from '@storybook/react'
 import { PreviewCard as PreviewCardComponent } from './preview-card'
-import {DropdownMenuItemProps} from "@Pimcore/components/dropdown-menu/dropdown-menu";
-import i18n from "@Pimcore/app/i18n";
+import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
+import i18n from '@Pimcore/app/i18n'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/PreviewCard',
@@ -43,6 +43,6 @@ export const _default = {
     name: 'Pimconaout0_123.jpg',
     selected: false,
     imgSrc: 'https://pimcore.com/brand/Website-Banners/image-thumb__23862__header-sujet-img__2019--slider/2024-Pimcore-Home-Main.webp',
-    dropdownItems: dropdownItems
+    dropdownItems
   }
 }
