@@ -1,6 +1,6 @@
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/tree/tree'
-import { type ApiAssetsGetCollectionApiResponse, useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/api/asset.gen'
+import { type ApiAssetsGetCollectionApiResponse, useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 

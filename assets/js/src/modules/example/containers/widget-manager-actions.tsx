@@ -34,12 +34,22 @@ export const WidgetManagerActions = (): React.JSX.Element => {
     })
   }
 
+  function onOpenAssetWidgetClick (): void {
+    openMainWidget({
+      component: 'asset-tab',
+      name: 'Random Asset Tab'
+    })
+  }
+
   return (
-    <Space style={{ padding: '8px' }}>
-      <Button type="primary" icon={<Icon name='folder' options={{ width: 12, height: 12 }}/>} onClick={onOpenMainWidgetClick}>Open Main Widget</Button>
-      <Button type="default" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenBottomWidgetClick}>Open Bottom Widget</Button>
-      <Button type="text" icon={<Icon name='folder' options={{ width: 12, height: 12 }} />} onClick={onOpenLeftWidgetClick}>Open Left Widget</Button>
-      <Button type="dashed" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenRightWidgetClick}>Open Right Widget</Button>
-    </Space>
+    <>
+      <Space style={{ padding: '8px' }}>
+        <Button type="primary" icon={<Icon name='folder' options={{ width: 12, height: 12 }}/>} onClick={onOpenMainWidgetClick}>Open Main Widget</Button>
+        <Button type="default" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenBottomWidgetClick}>Open Bottom Widget</Button>
+        <Button type="text" icon={<Icon name='folder' options={{ width: 12, height: 12 }} />} onClick={onOpenLeftWidgetClick}>Open Left Widget</Button>
+        <Button type="dashed" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenRightWidgetClick}>Open Right Widget</Button>
+        <Button type="dashed" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenAssetWidgetClick}>Open Asset Widget</Button>
+      </Space>
+    </>
   )
 }
