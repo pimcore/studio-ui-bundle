@@ -3,6 +3,13 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     editorTabs: css`
+      height: 100%;
+      overflow: hidden;
+
+      .ant-tabs-content-holder {
+        overflow: auto;
+      }
+
       &.ant-tabs .ant-tabs-tab+.ant-tabs-tab {
         margin-left: ${token.paddingSM}px;
         margin-right: ${token.paddingSM}px;

@@ -4,15 +4,49 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     grid: css`
       table {
-        table-layout: auto;
+        table-layout: fixed;
+        width: auto;
+      }
+
+      th {
+        user-select: none;
+      }
+
+      &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:first-child {
+        border-start-start-radius: 0;
+      }
+
+      &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:last-child {
+        border-start-end-radius: 0;
+      }
+
+      .grid__cell-content {
+        display: block; 
+        width: fit-content;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .ant-table-cell {
+        position: relative;
         border-left: 1px solid #F0F0F0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
 
         &:first-of-type {
           border-left: 0;
         }
+
+        &:last-of-type {
+          border-right: 1px solid #F0F0F0;
+        }
+      }
+
+      .ant-table-thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
       }
     `
   }

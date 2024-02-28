@@ -1,9 +1,10 @@
 import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type AssetJsonldAssetReadDependencyReadPropertyRead, useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetJsonldAssetReadDependencyReadPropertyReadRead, useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-container'
 import { ImageView } from '@Pimcore/modules/asset/grid/columns/views/image-view'
 import { createColumnHelper } from '@tanstack/react-table'
+import { Tag } from 'antd'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -22,12 +23,19 @@ const ListContainer = (): React.JSX.Element => {
   }
 
   const assets = data['hydra:member']
-  const columnHelper = createColumnHelper<AssetJsonldAssetReadDependencyReadPropertyRead>()
+  const columnHelper = createColumnHelper<AssetJsonldAssetReadDependencyReadPropertyReadRead>()
 
   const columns = [
     columnHelper.accessor('fullPath', {
       header: t('asset.asset-editor-tabs.list.columns.preview'),
-      cell: info => <ImageView src={info.getValue() as string} />,
+      cell: info => {
+        if (info.row.original.type !== 'image') {
+          return <></>
+        }
+
+        return <ImageView src={info.getValue()!} />
+      },
+      id: 'preview',
       size: 110
     }),
 
@@ -37,6 +45,13 @@ const ListContainer = (): React.JSX.Element => {
 
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.list.columns.type')
+    }),
+
+    columnHelper.accessor('fullPath', {
+      header: t('asset.asset-editor-tabs.list.columns.fullPath'),
+      cell: info => <Tag bordered={false} color='processing'>{info.getValue()!}</Tag>,
+      id: 'fullPath',
+      size: 300
     }),
 
     columnHelper.accessor('creationDate', {
@@ -51,7 +66,7 @@ const ListContainer = (): React.JSX.Element => {
   ]
 
   return (
-    <Grid data={assets} columns={columns} />
+    <Grid data={assets} columns={columns} resizeable />
   )
 }
 
