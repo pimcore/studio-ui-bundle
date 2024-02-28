@@ -27,6 +27,9 @@ export const useStyle = createStyles(({ token, css }) => {
           background-color: ${token.Button.defaultColor};
           color: white !important;
       `,
+      'dropdown-menu__icon': css`
+          vertical-align: text-bottom;
+      `,
 
       img: css `
         height: 64px !important;

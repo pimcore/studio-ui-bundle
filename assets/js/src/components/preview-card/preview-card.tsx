@@ -14,7 +14,7 @@ export enum SizeTypes {
 interface PreviewCardProps {
   name: string
   selected: boolean
-  dropdownItems: DropdownMenuItemProps
+  dropdownItems: DropdownMenuItemProps[]
   imgSrc?: string
   size?: SizeTypes
 }
@@ -52,7 +52,7 @@ export const PreviewCard = ({
             >
               <Button
                 size="small"
-                icon={<Icon name="dots-horizontal"/>}
+                icon={<Icon name="dots-horizontal" className={styles['dropdown-menu__icon']}/>}
                 className={classDotsButton}
                 />
           </DropdownMenu>
