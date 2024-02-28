@@ -17,21 +17,29 @@ const icons = {
   'view-details': React.lazy(async () => await import('@Pimcore/assets/icons/core/view-details.inline.svg')),
   'tag-two-tone': React.lazy(async () => await import('@Pimcore/assets/icons/core/tag-two-tone.inline.svg')),
   workflow: React.lazy(async () => await import('@Pimcore/assets/icons/core/workflow.inline.svg')),
-  'unordered-list-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/unordered-list-outlined.inline.svg'))
+  'unordered-list-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/unordered-list-outlined.inline.svg')),
+  'dots-horizontal': React.lazy(async () => await import('@Pimcore/assets/icons/core/dots-horizontal.inline.svg')),
+  target: React.lazy(async () => await import('@Pimcore/assets/icons/core/target.inline.svg')),
+  'info-circle-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-outlined.inline.svg')),
+  'right-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/right-outlined.inline.svg')),
+  'rich-edit': React.lazy(async () => await import('@Pimcore/assets/icons/core/rich-edit.inline.svg')),
+  'download-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/download-02.inline.svg')),
+  'delete-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/delete-outlined.inline.svg'))
 }
 
 export interface IconProps {
   name: string
   options?: React.SVGProps<SVGSVGElement>
+  className?: string
 }
 
-export const Icon = ({ name, options }: IconProps): React.JSX.Element => {
+export const Icon = ({ name, options, className }: IconProps): React.JSX.Element => {
   const SvgIcon = icons[name]
   const width = options?.width ?? 16
   const height = options?.height ?? 16
 
   return (
-    <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon`}>
+    <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
       <Suspense fallback={<div />}>
         <SvgIcon width={width} height={height} {...options} />
       </Suspense>
