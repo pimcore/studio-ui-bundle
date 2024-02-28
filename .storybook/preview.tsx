@@ -1,7 +1,7 @@
 import React from "react";
 import type { Preview } from "@storybook/react";
 import "../assets/css/globals.css";
-import { GlobalProvider } from "../assets/js/src/modules/app/components/global-provider";
+import { GlobalProvider } from "../assets/js/src/modules/app/global-provider";
 import { App } from 'antd'
 
 const preview: Preview = {

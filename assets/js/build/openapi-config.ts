@@ -5,7 +5,7 @@ const config: ConfigFile = {
   apiFile: '../src/app/api/pimcore/index.ts',
   apiImport: 'api',
   outputFiles: {
-    '../src/modules/asset/api/asset.gen.ts': {
+    '../src/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: [/apiAsset/i]
     }
   },

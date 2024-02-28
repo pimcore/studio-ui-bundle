@@ -53,24 +53,30 @@ const Tree = (props: TreeProps): React.JSX.Element => {
   })
   const { isLoading, isError, data } = apiHookResult
 
-  if (isLoading !== false) {
-    return <></>
-  }
-
   if (isError !== false) {
     return (<div>{'Error'}</div>)
   }
 
-  const { nodes: items } = dataTransformer(data)
+  let items: any[] = []
+
+  if (isLoading === false && data !== undefined) {
+    const { nodes } = dataTransformer(data)
+    items = nodes
+  }
 
   return (
-    <div className={['tree', styles.tree].join(' ')}>
-      <TreeContext.Provider value={{ ...props, selectedIdsState }}>
-        {items.map((item) => (
-          <TreeNode key={item.id} {...item} />
-        ))}
-      </TreeContext.Provider>
-    </div>
+    <>
+      {isLoading === false && items.length !== 0 && (
+        <div className={['tree', styles.tree].join(' ')}>
+          <TreeContext.Provider value={{ ...props, selectedIdsState }}>
+            {items.map((item) => (
+              <TreeNode key={item.id} {...item} />
+            ))}
+          </TreeContext.Provider>
+        </div>
+      )}
+    </>
+
   )
 }
 

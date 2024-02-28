@@ -5,7 +5,7 @@ import {
   openLeftWidget as openLeftWidgetAction,
   openRightWidget as openRightWidgetAction,
   type WidgetManagerTabConfig
-} from '../store/widget-manager-slice'
+} from '../widget-manager-slice'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
