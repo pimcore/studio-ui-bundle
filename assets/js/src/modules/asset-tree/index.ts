@@ -1,7 +1,7 @@
 import { registerWidget } from '../widget-manager/utils/widget-registry'
-import { AssetTree } from './containers/asset-tree'
+import { AssetTreeContainer } from './asset-tree-container'
 
 registerWidget({
   name: 'asset-tree',
-  component: AssetTree
+  component: AssetTreeContainer
 })

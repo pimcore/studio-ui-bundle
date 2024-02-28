@@ -1,5 +1,5 @@
 import * as testingLibrary from '@testing-library/react'
-import { GlobalProvider } from '@Pimcore/modules/app/components/global-provider'
+import { GlobalProvider } from '@Pimcore/modules/app/global-provider'
 import { type ReactElement } from 'react'
 
 const { render: oldRenderFn, ...testingLibaryProps } = testingLibrary
