@@ -148,6 +148,7 @@ export type PermissionsJsonldAssetReadDependencyReadPropertyReadElementReadRead 
     properties?: boolean;
 };
 export type AssetJsonldAssetReadDependencyReadPropertyReadElementRead = {
+    iconName?: string;
     type?: string;
     filename?: any;
     fullPath?: string;
@@ -171,6 +172,7 @@ export type AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead = {
           };
     "@id"?: string;
     "@type"?: string;
+    iconName?: string;
     type?: string;
     filename?: any;
     fullPath?: string;
@@ -223,6 +225,7 @@ export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadElem
     properties?: boolean;
 };
 export type AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGet = {
+    iconName?: string;
     type?: string;
     filename?: any;
     fullPath?: string;
@@ -246,6 +249,7 @@ export type AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementRea
           };
     "@id"?: string;
     "@type"?: string;
+    iconName?: string;
     type?: string;
     filename?: any;
     fullPath?: string;
