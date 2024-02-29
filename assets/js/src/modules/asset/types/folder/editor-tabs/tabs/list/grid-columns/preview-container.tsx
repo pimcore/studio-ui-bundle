@@ -17,7 +17,7 @@ const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
 
       openAsset({
         name: asset.filename,
-        icon: 'folder',
+        icon: asset.iconName ?? 'file-question-02',
 
         config: {
           id: asset.id!
