@@ -7,6 +7,7 @@ export const useStyles = createStyles(({ token, css }) => {
       justify-content: center;
       align-items: center;
       aspect-ratio: 1;
+      width: 80px;
     `
   }
 })

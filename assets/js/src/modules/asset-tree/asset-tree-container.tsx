@@ -26,7 +26,7 @@ const AssetTreeContainer = (props: AssetTreeContainerProps): React.JSX.Element =
       name: node.label,
       icon: node.icon,
       config: {
-        id: node.id
+        id: parseInt(node.id)
       }
     })
   }

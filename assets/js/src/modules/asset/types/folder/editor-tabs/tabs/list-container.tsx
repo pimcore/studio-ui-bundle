@@ -1,18 +1,18 @@
 import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type AssetJsonldAssetReadDependencyReadPropertyReadRead, useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-container'
-import { ImageView } from '@Pimcore/modules/asset/grid/columns/views/image-view'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Tag } from 'antd'
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PreviewContainer } from './list/grid-columns/preview-container'
 
 const ListContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { t } = useTranslation()
   const assetId = assetContext.id
-  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({ parentId: parseInt(assetId) })
+  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({ parentId: assetId })
 
   if (isLoading || data === undefined) {
     return <div>Loading...</div>
@@ -23,7 +23,7 @@ const ListContainer = (): React.JSX.Element => {
   }
 
   const assets = data['hydra:member']
-  const columnHelper = createColumnHelper<AssetJsonldAssetReadDependencyReadPropertyReadRead>()
+  const columnHelper = createColumnHelper<typeof assets[0]>()
 
   const columns = [
     columnHelper.accessor('fullPath', {
@@ -33,7 +33,7 @@ const ListContainer = (): React.JSX.Element => {
           return <></>
         }
 
-        return <ImageView src={info.getValue()!} />
+        return <PreviewContainer cellInfo={info} />
       },
       id: 'preview',
       size: 110

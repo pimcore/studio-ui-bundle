@@ -28,7 +28,7 @@ export const useNodeApiHook = (node: TreeNodeProps): {
     const assetData = data['hydra:member']
     assetData.forEach((assetNode) => {
       nodes.push({
-        id: assetNode.id,
+        id: assetNode.id!.toString(),
         icon: 'folder',
         label: assetNode.filename,
         children: [],
