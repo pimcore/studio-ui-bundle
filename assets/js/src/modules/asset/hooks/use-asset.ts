@@ -23,6 +23,7 @@ export const useAsset = (): UseAssetReturn => {
     openMainWidget({
       name,
       icon,
+      id: `asset-${config.id}`,
       component: 'asset',
       config
     })
