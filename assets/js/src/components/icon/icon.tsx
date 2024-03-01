@@ -24,7 +24,16 @@ const icons = {
   'right-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/right-outlined.inline.svg')),
   'rich-edit': React.lazy(async () => await import('@Pimcore/assets/icons/core/rich-edit.inline.svg')),
   'download-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/download-02.inline.svg')),
-  'delete-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/delete-outlined.inline.svg'))
+  'delete-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/delete-outlined.inline.svg')),
+  'volume-max': React.lazy(async () => await import('@Pimcore/assets/icons/core/volume-max.inline.svg')),
+  'file-code-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-code-01.inline.svg')),
+  'file-question-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-question-02.inline.svg')),
+  'file-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-02.inline.svg')),
+  'file-check-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-check-02.inline.svg')),
+  'file-x-03': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-x-03.inline.svg')),
+  'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/presentation-chart-01.inline.svg')),
+  'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/core/video-recorder.inline.svg')),
+  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg'))
 }
 
 export interface IconProps {
@@ -37,6 +46,10 @@ export const Icon = ({ name, options, className }: IconProps): React.JSX.Element
   const SvgIcon = icons[name]
   const width = options?.width ?? 16
   const height = options?.height ?? 16
+
+  if (SvgIcon === undefined) {
+    return <div style={{ width, height }} />
+  }
 
   return (
     <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>

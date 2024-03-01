@@ -3,7 +3,7 @@ import { type ApiAssetsIdGetApiResponse } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 
 export interface AssetDraft extends ApiAssetsIdGetApiResponse {
-  id: string
+  id: number
 }
 
 export const assetsAdapter = createEntityAdapter<AssetDraft>({})

@@ -4,16 +4,14 @@ import { FolderContainer } from './types/folder/folder-container'
 import { ImageContainer } from './types/image/image-container'
 
 export interface AssetContainerProps {
-  id: string
+  id: number
 }
 
 export interface IAssetContext {
-  id: string
+  id?: number
 }
 
-export const AssetContext = createContext<IAssetContext>({
-  id: ''
-})
+export const AssetContext = createContext<IAssetContext>({})
 
 const AssetContainer = (props: AssetContainerProps): React.JSX.Element => {
   const { id } = props

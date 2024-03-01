@@ -5,7 +5,7 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 export const ViewTabContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { isError, isLoading, asset } = useAssetDraft(assetContext.id)
+  const { isError, isLoading, asset } = useAssetDraft(assetContext.id!)
 
   if (isLoading || asset === undefined) {
     return <h4>Loading...</h4>

@@ -9,7 +9,12 @@ const injectedRtkApi = api
             apiAssetsGetCollection: build.query<ApiAssetsGetCollectionApiResponse, ApiAssetsGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/api/assets`,
-                    params: { page: queryArg.page, itemsPerPage: queryArg.itemsPerPage, parentId: queryArg.parentId },
+                    params: {
+                        page: queryArg.page,
+                        itemsPerPage: queryArg.itemsPerPage,
+                        parentId: queryArg.parentId,
+                        idSearchTerm: queryArg.idSearchTerm,
+                    },
                 }),
                 providesTags: ["Asset"],
             }),
@@ -46,7 +51,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type ApiAssetsGetCollectionApiResponse = /** status 200 Asset collection */ {
-    "hydra:member": AssetJsonldAssetReadDependencyReadPropertyReadRead[];
+    "hydra:member": AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead[];
     "hydra:totalItems"?: number;
     "hydra:view"?: {
         "@id"?: string;
@@ -74,22 +79,24 @@ export type ApiAssetsGetCollectionApiArg = {
     /** The number of items per page */
     itemsPerPage?: number;
     /** Filters assets by parent id. */
-    parentId: number;
+    parentId?: number;
+    /** Filters assets by matching ids. As a wildcard, you can use *. */
+    idSearchTerm?: string;
 };
 export type ApiAssetsPostApiResponse =
-    /** status 201 Asset resource created */ AssetJsonldAssetReadDependencyReadPropertyReadRead;
+    /** status 201 Asset resource created */ AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead;
 export type ApiAssetsPostApiArg = {
     /** The new Asset resource */
     assetJsonldAssetWrite: AssetJsonldAssetWrite;
 };
 export type ApiAssetsIdGetApiResponse =
-    /** status 200 Asset resource */ AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead;
+    /** status 200 Asset resource */ AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGetRead;
 export type ApiAssetsIdGetApiArg = {
     /** Asset identifier */
     id: string;
 };
 export type ApiAssetsIdPutApiResponse =
-    /** status 200 Asset resource updated */ AssetJsonldAssetReadDependencyReadPropertyReadRead;
+    /** status 200 Asset resource updated */ AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead;
 export type ApiAssetsIdPutApiArg = {
     /** Asset identifier */
     id: string;
@@ -102,14 +109,14 @@ export type ApiAssetsIdDeleteApiArg = {
     id: string;
 };
 export type ApiAssetsIdPatchApiResponse =
-    /** status 200 Asset resource updated */ AssetJsonldAssetReadDependencyReadPropertyReadRead;
+    /** status 200 Asset resource updated */ AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead;
 export type ApiAssetsIdPatchApiArg = {
     /** Asset identifier */
     id: string;
     /** The updated Asset resource */
     assetAssetWrite: AssetAssetWrite;
 };
-export type PermissionsJsonldAssetReadDependencyReadPropertyRead = {
+export type PermissionsJsonldAssetReadDependencyReadPropertyReadElementRead = {
     list?: boolean;
     view?: boolean;
     publish?: boolean;
@@ -120,7 +127,7 @@ export type PermissionsJsonldAssetReadDependencyReadPropertyRead = {
     versions?: boolean;
     properties?: boolean;
 };
-export type PermissionsJsonldAssetReadDependencyReadPropertyReadRead = {
+export type PermissionsJsonldAssetReadDependencyReadPropertyReadElementReadRead = {
     "@context"?:
         | string
         | {
@@ -140,41 +147,53 @@ export type PermissionsJsonldAssetReadDependencyReadPropertyReadRead = {
     versions?: boolean;
     properties?: boolean;
 };
-export type AssetJsonldAssetReadDependencyReadPropertyRead = {
-    permissions?: PermissionsJsonldAssetReadDependencyReadPropertyRead;
-};
-export type AssetJsonldAssetReadDependencyReadPropertyReadRead = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: any;
-          };
-    "@id"?: string;
-    "@type"?: string;
-    permissions?: PermissionsJsonldAssetReadDependencyReadPropertyReadRead;
-    id?: any;
-    parentId?: any;
-    children?: boolean;
+export type AssetJsonldAssetReadDependencyReadPropertyReadElementRead = {
+    iconName?: string;
+    type?: string;
+    filename?: any;
+    fullPath?: string;
+    id?: number;
+    parentId?: number;
+    path?: string;
+    userOwner?: number;
     userModification?: any;
+    locked?: boolean;
     creationDate?: any;
     modificationDate?: any;
-    userOwner?: any;
-    /** enum('self','propagate') nullable */
-    lock?: any;
-    locked?: boolean;
-    filename?: any;
+    permissions?: PermissionsJsonldAssetReadDependencyReadPropertyReadElementRead;
+};
+export type AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead = {
+    "@context"?:
+        | string
+        | {
+              "@vocab": string;
+              hydra: "http://www.w3.org/ns/hydra/core#";
+              [key: string]: any;
+          };
+    "@id"?: string;
+    "@type"?: string;
+    iconName?: string;
     type?: string;
-    versions?: string[];
-    path?: any;
+    filename?: any;
+    fullPath?: string;
+    children?: boolean;
     metadata?: string[];
     hasMetaData?: boolean;
-    fullPath?: string;
     mimetype?: any;
+    id?: number;
+    parentId?: number;
+    path?: string;
+    userOwner?: number;
+    userModification?: any;
+    locked?: boolean;
+    creationDate?: any;
+    modificationDate?: any;
+    permissions?: PermissionsJsonldAssetReadDependencyReadPropertyReadElementReadRead;
+    /** enum('self','propagate') nullable */
+    lock?: any;
 };
 export type AssetJsonldAssetWrite = object;
-export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyRead = {
+export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGet = {
     list?: boolean;
     view?: boolean;
     publish?: boolean;
@@ -185,7 +204,7 @@ export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyRead = {
     versions?: boolean;
     properties?: boolean;
 };
-export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead = {
+export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGetRead = {
     "@context"?:
         | string
         | {
@@ -205,122 +224,50 @@ export type PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead
     versions?: boolean;
     properties?: boolean;
 };
-export type DependencyJsonldAssetReadAssetItemGetDependencyReadPropertyRead = {
-    /** The ID of the object to get dependencies for */
-    sourceId?: number;
-    /** The type of the object to get dependencies for */
-    sourceType?: string;
-    /** Contains the ID/type of objects which are required for the given source object (sourceId/sourceType) */
-    requires?: string[];
-};
-export type DependencyJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: any;
-          };
-    "@id"?: string;
-    "@type"?: string;
-    /** The ID of the object to get dependencies for */
-    sourceId?: number;
-    /** The type of the object to get dependencies for */
-    sourceType?: string;
-    /** Contains the ID/type of objects which are required for the given source object (sourceId/sourceType) */
-    requires?: string[];
-    requiredBy?: string[];
-    requiresTotalCount?: number;
-    requiredByTotalCount?: number;
-    /** Check if the source object is required by an other object (an other object depends on this object) */
-    required?: boolean;
-};
-export type AssetJsonldAssetReadAssetItemGetDependencyReadPropertyRead = {
-    permissions?: PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyRead;
-    dependencies?: DependencyJsonldAssetReadAssetItemGetDependencyReadPropertyRead;
-};
-export type PropertyJsonldAssetReadAssetItemGetDependencyReadPropertyRead = {};
-export type PropertyJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: any;
-          };
-    "@id"?: string;
-    "@type"?: string;
-    cid?: any;
-    /** enum('document','asset','object') */
-    ctype?: any;
-    data?: any;
-    name?: any;
-    /** enum('text','document','asset','object','bool','select') */
-    type?: any;
-    cpath?: any;
-    inherited?: boolean;
-    inheritable?: boolean;
-};
-export type VersionJsonldAssetReadAssetItemGetDependencyReadPropertyRead = {};
-export type VersionJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: any;
-          };
-    "@id"?: string;
-    "@type"?: string;
-    id?: any;
-    cid?: number;
-    ctype?: string;
-    date?: number;
-    note?: string;
-    userId?: number;
-    serialized?: boolean;
-    user?: any;
-    public?: boolean;
-    versionCount?: number;
-    binaryFileHash?: any;
-    binaryFileId?: any;
-    storageType?: any;
-    autosave?: boolean;
-};
-export type AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: any;
-          };
-    "@id"?: string;
-    "@type"?: string;
-    permissions?: PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead;
-    id?: any;
-    parentId?: any;
-    children?: boolean;
+export type AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGet = {
+    iconName?: string;
+    type?: string;
+    filename?: any;
+    fullPath?: string;
+    id?: number;
+    parentId?: number;
+    path?: string;
+    userOwner?: number;
     userModification?: any;
+    locked?: boolean;
     creationDate?: any;
     modificationDate?: any;
-    userOwner?: any;
+    permissions?: PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGet;
+};
+export type AssetJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGetRead = {
+    "@context"?:
+        | string
+        | {
+              "@vocab": string;
+              hydra: "http://www.w3.org/ns/hydra/core#";
+              [key: string]: any;
+          };
+    "@id"?: string;
+    "@type"?: string;
+    iconName?: string;
+    type?: string;
+    filename?: any;
+    fullPath?: string;
+    children?: boolean;
+    metadata?: string[];
+    hasMetaData?: boolean;
+    mimetype?: any;
+    id?: number;
+    parentId?: number;
+    path?: string;
+    userOwner?: number;
+    userModification?: any;
+    locked?: boolean;
+    creationDate?: any;
+    modificationDate?: any;
+    permissions?: PermissionsJsonldAssetReadAssetItemGetDependencyReadPropertyReadElementReadElementItemGetRead;
     /** enum('self','propagate') nullable */
     lock?: any;
-    locked?: boolean;
-    properties?: PropertyJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead[];
-    versionCount?: number;
-    filename?: any;
-    type?: string;
-    versions?: VersionJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead[];
-    customSettings?: string[];
-    scheduledTasks?: string[];
-    path?: any;
-    metadata?: string[];
-    dependencies?: DependencyJsonldAssetReadAssetItemGetDependencyReadPropertyReadRead;
-    hasMetaData?: boolean;
-    fullPath?: string;
-    mimetype?: any;
 };
 export type AssetAssetWrite = object;
 export const {
