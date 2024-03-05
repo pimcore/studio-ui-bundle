@@ -10,7 +10,7 @@ import {useModal} from "@Pimcore/components/modal/useModal";
 const config: Meta = {
     title: 'Pimcore studio/UI/Modal',
     component: (args) => {
-        const {renderModal: RenderModal, showModal, handleOk, handleCancel} = useModal({type: args.type});
+        const {renderModal: RenderModal, showModal} = useModal({type: args.type});
 
         return (
             <>
@@ -25,15 +25,9 @@ const config: Meta = {
         )
     },
     argTypes: {
-        footerContent: {
-            options: ['end', 'space-between'],
-            control: { type: 'select' }
-        },
         type: {
             options: ['error', 'success', 'info', 'warn'],
-            defaultValue: 'error',
-            control: { type: 'select', default: 'error'},
-            description: 'Type of modal',
+            control: { type: 'select'},
         },
         content: {
             table: {
@@ -73,7 +67,6 @@ export const error = {
             <Button
                 key="cancel"
                 danger
-                onClick={handleCancel}
             >
                 Cancel all ZIP actions
             </Button>
@@ -117,6 +110,21 @@ export const info = {
     }
 }
 
+export const warn = {
+    args: {
+        type: 'warn',
+        title: 'Warning',
+        content: 'Your Webhook has been activated.',
+        footer: <ModalFooter>
+            <Button
+                key="cancel"
+            >
+                Close
+            </Button>
+        </ModalFooter>
+    }
+}
+
 const SpaceBetweenFooterButtonsContent = () => {
     return (
         <>
@@ -135,7 +143,7 @@ export const SpaceBetweenFooterButtons = {
         footer: <ModalFooter buttonAlignment={"space-between"}>
             <Button
                 key="cancel"
-                type="text"
+                type="link"
             >
                 Read the technical instructions
             </Button>
@@ -147,25 +155,5 @@ export const SpaceBetweenFooterButtons = {
                 See details
             </Button>
         </ModalFooter>
-
-        //footer: <ModalFooter
-        //    content={[
-        //        <Button
-        //            key="cancel"
-        //            onClick={() => console.log('clicked "Read the technical instructions"')}
-        //            type="text"
-        //        >
-        //            Read the technical instructions
-        //        </Button>,
-        //        <Button
-        //            key="details"
-        //            onClick={() => console.log('clicked "see details"')}
-        //            type={'primary'}
-        //        >
-        //            See details
-        //        </Button>
-        //    ]}
-        //    buttonAlignment={"space-between"}
-        ///>
     }
 }

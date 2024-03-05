@@ -47,6 +47,16 @@ export const useStyle = createStyles(({ token, css }) => {
                         &.space-between {
                             justify-content: space-between;
                         }
+
+                        .ant-btn-link {
+                            color: ${token.colorPrimary};
+                            margin: 0;
+                            padding: 0;
+                            
+                            &:hover {
+                                color: ${token.colorPrimaryHover};
+                            }
+                        }
                     }
                 }
             }

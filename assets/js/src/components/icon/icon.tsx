@@ -20,7 +20,8 @@ const icons = {
   'unordered-list-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/unordered-list-outlined.inline.svg')),
   'close-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/close-circle-filled.inline.svg')),
   'check-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/check-circle-filled.inline.svg')),
-  'info-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-filled.inline.svg'))
+  'info-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-filled.inline.svg')),
+  'exclamation-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/exclamation-circle-filled.inline.svg'))
 }
 
 export interface IconProps {

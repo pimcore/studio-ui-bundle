@@ -112,6 +112,7 @@ export const withWarn = (Component) => {
         return (
             <Component
                 title="Warn"
+                icon={<Icon name={'exclamation-circle-filled'} options={{width: 24, height: 24}}/>}
                 {...inlineProps}
             >
                 {children}
