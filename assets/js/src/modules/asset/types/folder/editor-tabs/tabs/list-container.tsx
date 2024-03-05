@@ -1,18 +1,16 @@
-import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
-import { Grid } from '@Pimcore/components/grid/grid'
 import { useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-container'
-import { createColumnHelper } from '@tanstack/react-table'
-import { Tag } from 'antd'
-import React, { useContext } from 'react'
-import { useTranslation } from 'react-i18next'
-import { PreviewContainer } from './list/grid-columns/preview-container'
+import React, { useContext, useState } from 'react'
+import { GridContainer } from './list/grid-container'
+import { GridToolbarContainer } from './list/grid-toolbar-container'
+import { ListView } from './list-view'
 
 const ListContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { t } = useTranslation()
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(20)
   const assetId = assetContext.id
-  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({ parentId: assetId })
+  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({ parentId: assetId, page: currentPage, itemsPerPage: pageSize })
 
   if (isLoading || data === undefined) {
     return <div>Loading...</div>
@@ -22,51 +20,27 @@ const ListContainer = (): React.JSX.Element => {
     return <div>Error</div>
   }
 
-  const assets = data['hydra:member']
-  const columnHelper = createColumnHelper<typeof assets[0]>()
+  const total = data['hydra:totalItems']!
 
-  const columns = [
-    columnHelper.accessor('fullPath', {
-      header: t('asset.asset-editor-tabs.list.columns.preview'),
-      cell: info => {
-        if (info.row.original.type !== 'image') {
-          return <></>
-        }
-
-        return <PreviewContainer cellInfo={info} />
-      },
-      id: 'preview',
-      size: 110
-    }),
-
-    columnHelper.accessor('id', {
-      header: t('asset.asset-editor-tabs.list.columns.id')
-    }),
-
-    columnHelper.accessor('type', {
-      header: t('asset.asset-editor-tabs.list.columns.type')
-    }),
-
-    columnHelper.accessor('fullPath', {
-      header: t('asset.asset-editor-tabs.list.columns.fullPath'),
-      cell: info => <Tag bordered={false} color='processing'>{info.getValue()!}</Tag>,
-      id: 'fullPath',
-      size: 300
-    }),
-
-    columnHelper.accessor('creationDate', {
-      header: t('asset.asset-editor-tabs.list.columns.creationDate'),
-      cell: info => <FormattedDate timestamp={info.getValue() as number * 1000} />
-    }),
-
-    columnHelper.accessor('modificationDate', {
-      header: t('asset.asset-editor-tabs.list.columns.modificationDate'),
-      cell: info => <FormattedDate timestamp={info.getValue() as number * 1000} />
-    })
-  ]
+  function onPagerChange (page: number, pageSize: number): void {
+    setCurrentPage(page)
+    setPageSize(pageSize)
+  }
 
   return (
-    <Grid data={assets} columns={columns} resizeable />
+    <ListView
+      renderGrid={<GridContainer assets={data['hydra:member']} />}
+      renderToolbar={
+        <GridToolbarContainer
+          pager={{
+            current: currentPage,
+            total,
+            pageSize,
+            onChange: onPagerChange
+          }}
+        />
+      }
+    />
   )
 }
 

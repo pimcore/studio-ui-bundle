@@ -12,6 +12,11 @@ export const useStyles = createStyles(({ token, css }) => {
         user-select: none;
       }
 
+      th, td {
+        line-height: 1.83;
+        padding: ${token.Table.cellPaddingBlockSM}px ${token.Table.cellPaddingInlineSM}px;
+      }
+
       &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:first-child {
         border-start-start-radius: 0;
       }

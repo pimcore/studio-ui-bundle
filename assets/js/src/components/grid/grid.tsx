@@ -1,6 +1,6 @@
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions } from '@tanstack/react-table'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 
@@ -12,10 +12,14 @@ export interface GridProps {
 
 export const Grid = (props: GridProps): React.JSX.Element => {
   const [columns] = useState(props.columns)
-  const [data] = useState(props.data)
+  const [data, setData] = useState(props.data)
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
+
+  useEffect(() => {
+    setData(props.data)
+  }, [props.data])
 
   const tableProps: TableOptions<any> = {
     data,
