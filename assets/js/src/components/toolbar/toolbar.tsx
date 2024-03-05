@@ -1,6 +1,6 @@
 import { Button } from 'antd'
 import React, { useState } from 'react'
-import { useStyle } from './horizontal-toolbar.styles'
+import { useStyle } from './toolbar.styles'
 import { Icon } from '../icon/icon'
 import i18n from '@Pimcore/app/i18n'
 import { DropdownMenu, type DropdownMenuItemProps, type IconProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
@@ -17,21 +17,21 @@ interface InternalToolbarElement extends PinnableToolbarElement {
   iconRight?: IconProps
 }
 
-interface HorizontalToolbarProps {
+interface ToolbarProps {
   pinnableToolbarElements?: PinnableToolbarElement[]
 }
 
-export const HorizontalToolbar = ({
+export const Toolbar = ({
   pinnableToolbarElements
-}: HorizontalToolbarProps): React.JSX.Element => {
+}: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
       <div className={styles.container}>
         <LeftContainer toolbarElements={pinnableToolbarElements}/>
         <div className='container__inline-container'>
-            <Button className='inline-container__btn-workflow'>{i18n.t('horizontal-toolbar.workflow')}</Button>
-            <Button type="primary">{i18n.t('horizontal-toolbar.save-and-publish')}</Button>
+            <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button>
+            <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>
         </div>
       </div>
   )
@@ -76,7 +76,7 @@ const LeftContainer = (prop): React.JSX.Element => {
                                 'inline-container__btn-default-color' + ' ' +
                                 'inline-container__btn-more'
                         }>
-                            {i18n.t('horizontal-toolbar.more')}
+                            {i18n.t('toolbar.more')}
                             <ArrowDown className='inline-container__more-arrow-down' />
                         </Button>
                 </DropdownMenu>
