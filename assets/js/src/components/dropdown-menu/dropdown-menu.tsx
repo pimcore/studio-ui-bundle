@@ -67,7 +67,7 @@ function MenuItemContent (prop): React.JSX.Element {
             >
                 <div>
                     {iconLeft}
-                    <span className={styles['label']}>{item.label}</span>
+                    <span className={styles.label}>{item.label}</span>
                     {
                         (item.iconToLabel as boolean ?? false) && <IconWithProps iconProps={
                             { ...item.iconToLabel, width: '12px', height: '12px' }

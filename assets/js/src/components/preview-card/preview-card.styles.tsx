@@ -57,6 +57,6 @@ export const useStyle = createStyles(({ token, css }) => {
             justify-content: space-between;
         }
     }
-    `,
+    `
   }
-}, {hashPriority: "low"})
+}, { hashPriority: 'low' })
