@@ -4,10 +4,17 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './dropdown-menu.styles'
 
 export interface DropdownMenuItemProps {
-  iconNameLeft: string
+  iconLeft: string
   label: string
-  onClick?: () => void
-  iconNameRight?: string
+  onClick?: (e: any) => void
+  iconToLabel?: IconProps
+  iconRight?: IconProps
+}
+
+export interface IconProps {
+  name: string
+  className?: string
+  onClick?: (e: any) => void
 }
 
 interface DropdownMenuProps extends React.PropsWithChildren {
@@ -26,7 +33,7 @@ export const DropdownMenu = ({
 ): React.JSX.Element => {
   const items: MenuProps['items'] = []
 
-  dropdownItems.forEach((item, index) => {
+  dropdownItems.forEach((item: DropdownMenuItemProps, index: number): void => {
     items.push(
       {
         key: index.toString(),
@@ -38,14 +45,12 @@ export const DropdownMenu = ({
   })
 
   return (
-      <div>
-        <Dropdown menu={{ items }}
-                  placement={placement}
-                  openClassName={openClassName}
-            >
-            {children}
-        </Dropdown>
-      </div>
+    <Dropdown menu={{ items }}
+              placement={placement}
+              openClassName={openClassName}
+        >
+        {children}
+    </Dropdown>
   )
 }
 
@@ -54,17 +59,23 @@ function MenuItemContent (prop): React.JSX.Element {
   const { styles } = useStyle()
   const iconOptions = { width: '16px', height: '16px' }
 
-  if (item.iconNameRight as boolean) {
+  const iconLeft = <Icon name={item.iconLeft} options={iconOptions} className={styles['menu-icon']} />
+  if (item.iconRight !== null && item.iconRight !== undefined) {
     return (
             <div onClick={item.onClick}
                  className={styles['flexbox-start-end']}
             >
                 <div>
-                    <Icon name={item.iconNameLeft} options={iconOptions} className={styles['menu-icon']}/>
-                    {item.label}
+                    {iconLeft}
+                    <span className={styles['label']}>{item.label}</span>
+                    {
+                        (item.iconToLabel as boolean ?? false) && <IconWithProps iconProps={
+                            { ...item.iconToLabel, width: '12px', height: '12px' }
+                        } />
+                    }
                 </div>
-                <div>
-                    <Icon name={item.iconNameRight} options={iconOptions} className={styles['menu-icon']}/>
+                <div onClick={item.iconRight.onClick}>
+                    <IconWithProps iconProps={item.iconRight} />
                 </div>
             </div>
 
@@ -73,8 +84,20 @@ function MenuItemContent (prop): React.JSX.Element {
 
   return (
         <div onClick={item.onClick}>
-            <Icon name={item.iconNameLeft} options={iconOptions} className={styles['menu-icon']} />
+            {iconLeft}
             {item.label}
         </div>
   )
+}
+
+function IconWithProps (prop): React.JSX.Element {
+  const { iconProps } = prop
+  const { styles } = useStyle()
+  const iconOptions = {
+    width: iconProps.width ?? '16px',
+    height: iconProps.height ?? '16px'
+  }
+
+  return <Icon name={iconProps.name} options={iconOptions}
+          className={styles['menu-icon'] + ' ' + (iconProps.className ?? '')}/>
 }

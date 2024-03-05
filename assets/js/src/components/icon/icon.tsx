@@ -9,7 +9,6 @@ const icons = {
   home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg')),
   refresh: React.lazy(async () => await import('@Pimcore/assets/icons/core/refresh.inline.svg')),
   'icon-tools': React.lazy(async () => await import('@Pimcore/assets/icons/core/icon-tools.inline.svg')),
-  home: React.lazy(async () => await import('@Pimcore/assets/icons/core/home.inline.svg')),
   'image-05': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-05.inline.svg')),
   edit: React.lazy(async () => await import('@Pimcore/assets/icons/core/edit.inline.svg')),
   'data-sheet': React.lazy(async () => await import('@Pimcore/assets/icons/core/data-sheet.inline.svg')),
@@ -27,7 +26,13 @@ const icons = {
   'right-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/right-outlined.inline.svg')),
   'rich-edit': React.lazy(async () => await import('@Pimcore/assets/icons/core/rich-edit.inline.svg')),
   'download-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/download-02.inline.svg')),
-  'delete-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/delete-outlined.inline.svg'))
+  'delete-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/delete-outlined.inline.svg')),
+  'pin-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/pin-02.inline.svg')),
+  'edit-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/edit-outlined.inline.svg')),
+  'expand-alt-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/expand-alt-outlined.inline.svg')),
+  'eye-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/eye-outlined.inline.svg')),
+  'share-alt-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/share-alt-outlined.inline.svg')),
+  translation: React.lazy(async () => await import('@Pimcore/assets/icons/core/translation.inline.svg'))
 }
 
 export interface IconProps {
