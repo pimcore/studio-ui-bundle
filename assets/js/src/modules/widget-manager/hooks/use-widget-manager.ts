@@ -4,6 +4,7 @@ import {
   openBottomWidget as openBottomWidgetAction,
   openLeftWidget as openLeftWidgetAction,
   openRightWidget as openRightWidgetAction,
+  setActiveWidgetById,
   type WidgetManagerTabConfig
 } from '../widget-manager-slice'
 
@@ -12,6 +13,8 @@ interface useWidgetManagerReturn {
   openBottomWidget: (tabConfig: WidgetManagerTabConfig) => void
   openLeftWidget: (tabConfig: WidgetManagerTabConfig) => void
   openRightWidget: (tabConfig: WidgetManagerTabConfig) => void
+  switchToWidget: (id: string) => void
+
 }
 
 export const useWidgetManager = (): useWidgetManagerReturn => {
@@ -33,5 +36,9 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     dispatch(openRightWidgetAction(tabConfig))
   }
 
-  return { openMainWidget, openBottomWidget, openLeftWidget, openRightWidget }
+  function switchToWidget (id: string): void {
+    dispatch(setActiveWidgetById(id))
+  }
+
+  return { openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, switchToWidget }
 }
