@@ -22,21 +22,21 @@ export const useStyle = createStyles(({ token, css }) => {
                         line-height: 24px;
                         display: flex;
                         gap: 4px;
-
-                        svg {
-                            height: 24px;
-                            width: 24px;
-                        }
                     }   
                 }
                 
                 .ant-modal-body {
                     line-height: 22px;
+                    
+                    & > p {
+                        margin: 0;
+                    }
                 }
                 
                 .ant-modal-footer {
                     display: flex;
                     align-self: stretch;
+                    margin-top: 0;
                     
                     > .ant-modal-footer-container {
                         display: flex;
@@ -50,18 +50,6 @@ export const useStyle = createStyles(({ token, css }) => {
                     }
                 }
             }
-        `,
-        filesList: css`
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            
-            li {
-                font-size: 12px;
-                font-weight: 400;
-                line-height: 22px;
-                color: ${token.colorTextTertiary}
-            }
-        `,
+        `
     }
 })
