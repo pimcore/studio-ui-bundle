@@ -3,7 +3,7 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-container'
 import React, { useContext, useState } from 'react'
 import { GridContainer } from './list/grid-container'
 import { GridToolbarContainer } from './list/grid-toolbar-container'
-import { ListView } from './list-view'
+import { ContentToolbarSidebarView } from '@Pimcore/modules/element-editor/tab-layouts/content-toolbar-sidebar-view'
 
 const ListContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -28,8 +28,7 @@ const ListContainer = (): React.JSX.Element => {
   }
 
   return (
-    <ListView
-      renderGrid={<GridContainer assets={data['hydra:member']} />}
+    <ContentToolbarSidebarView
       renderToolbar={
         <GridToolbarContainer
           pager={{
@@ -40,7 +39,9 @@ const ListContainer = (): React.JSX.Element => {
           }}
         />
       }
-    />
+    >
+      <GridContainer assets={data['hydra:member']} />
+    </ContentToolbarSidebarView>
   )
 }
 

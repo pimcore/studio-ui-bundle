@@ -4,6 +4,7 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     editorTabs: css`
       height: 100%;
+      width: 100%;
       overflow: hidden;
 
       .ant-tabs-content {

@@ -3,7 +3,7 @@ import { Image } from 'antd'
 import { AssetContext } from '@Pimcore/modules/asset/asset-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
-export const ViewTabContainer = (): React.JSX.Element => {
+const ViewTabContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { isError, isLoading, asset } = useAssetDraft(assetContext.id!)
 
@@ -23,5 +23,11 @@ export const ViewTabContainer = (): React.JSX.Element => {
     )
   }
 
-  return <div>view</div>
+  return (
+    <>
+      <div>view</div>
+    </>
+  )
 }
+
+export { ViewTabContainer }
