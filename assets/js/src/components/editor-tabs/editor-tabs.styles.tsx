@@ -4,7 +4,25 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     editorTabs: css`
       height: 100%;
+      width: 100%;
       overflow: hidden;
+
+      .ant-tabs-content {
+        display: flex;
+        height: 100%;
+      }
+
+      &.ant-tabs .ant-tabs-tab {
+        padding: 0;
+        transition: color .2s;
+      }
+
+      .ant-tabs-tabpane {
+        position: relative;
+        display: flex;
+        height: 100%;
+        width: 100%;
+      }
 
       .ant-tabs-content-holder {
         overflow: auto;
@@ -20,13 +38,18 @@ export const useStyle = createStyles(({ token, css }) => {
       &.ant-tabs-top >.ant-tabs-nav {
         margin-bottom: 0;
       }
+
+      &.ant-tabs .ant-tabs-tab-btn .ant-tabs-tab-icon:not(:last-child) {
+        margin-inline-end: 0;
+      }
       
       .ant-tabs-tab {
+        padding: 0;
+        
         &:first-of-type {
             margin-left: ${token.paddingSM}px;
             margin-right: ${token.paddingSM}px;
         }
-        padding: 0;
         
         .ant-tabs-tab-btn {
           display: flex;
@@ -89,8 +112,7 @@ export const useStyle = createStyles(({ token, css }) => {
 
       .ant-tabs-tab.ant-tabs-tab-active {
           border-bottom: 2px solid ${token.colorPrimaryActive};
-          animation: fadeIn .2s;
       }
     `
   }
-})
+}, { hashPriority: 'low' })
