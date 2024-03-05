@@ -29,6 +29,7 @@ const defaultTheme = {
     colorTextTreeElement: '#404655',
     colorIconTree: '#404655',
     colorIconTreeUnpublished: 'rgba(0.250980406999588, 0.27450981736183167, 0.3333333432674408, 0.4000000059604645)',
+    colorBgToolbar: '#f5f3fa',
     ...staticTokens.token
   },
 

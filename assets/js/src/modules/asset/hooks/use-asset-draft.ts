@@ -9,8 +9,8 @@ interface UseAssetDraftReturn {
   asset: undefined | ReturnType<typeof selectAssetById>
 }
 
-export const useAssetDraft = (id: string): UseAssetDraftReturn => {
-  const { isLoading, isError, data } = useApiAssetsIdGetQuery({ id })
+export const useAssetDraft = (id: number): UseAssetDraftReturn => {
+  const { isLoading, isError, data } = useApiAssetsIdGetQuery({ id: id.toString() })
   const dispatch = useAppDispatch()
   const asset = useAppSelector(state => selectAssetById(state, id))
 

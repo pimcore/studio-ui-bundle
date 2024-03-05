@@ -1,4 +1,4 @@
-import { type ComponentType } from 'react'
+import { type ComponentType, memo } from 'react'
 
 export interface Widget {
   name: string
@@ -8,7 +8,12 @@ export interface Widget {
 export const widgets: Widget[] = []
 
 export const registerWidget = (widget: Widget): void => {
-  widgets.push(widget)
+  const newWidget = {
+    ...widget,
+    component: memo(widget.component)
+  }
+
+  widgets.push(newWidget)
 }
 
 export const getWidget = (name: string): Widget | undefined => {
