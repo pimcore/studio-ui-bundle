@@ -31,8 +31,6 @@ const ListContainer = (): React.JSX.Element => {
 
   const total = data['hydra:totalItems']!
 
-  console.log({ data })
-
   function onPagerChange (page: number, pageSize: number): void {
     setCurrentPage(page)
     setPageSize(pageSize)
