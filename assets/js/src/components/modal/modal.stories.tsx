@@ -46,7 +46,7 @@ const config: Meta = {
 
 export default config
 
-const DefaultContent = () => {
+const DefaultContent = (): React.JSX.Element => {
     return (
         <>
             <p>The following files failed while creating their ZIPs. Pressing on See details will load additional options helping to resolve the error.</p>
@@ -123,7 +123,7 @@ export const warn = {
     }
 }
 
-const SpaceBetweenFooterButtonsContent = () => {
+const SpaceBetweenFooterButtonsContent = (): React.JSX.Element => {
     return (
         <>
             <p>This video format for the following file is not supported. Try converting it in MP4, MOV or AVI.</p>
