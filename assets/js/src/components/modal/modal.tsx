@@ -1,20 +1,20 @@
-import {Modal as AntModal} from 'antd';
-import React from "react";
-import type {ModalFuncProps} from "antd/es/modal/interface";
-import {useStyle} from "@Pimcore/components/modal/modal.styles";
-import useModal from 'antd/es/modal/useModal';
+import { Modal as AntModal } from 'antd'
+import React from 'react'
+import type { ModalFuncProps } from 'antd/es/modal/interface'
+import { useStyle } from '@Pimcore/components/modal/modal.styles'
+import type useModal from 'antd/es/modal/useModal'
 
 export interface ModalProps extends ModalFuncProps {
-    footer?: React.JSX.Element;
-    useModal?: typeof useModal;
-    children: React.ReactNode;
+  footer?: React.JSX.Element
+  useModal?: typeof useModal
+  children: React.ReactNode
 }
 
 export const Modal = (props: ModalProps): React.JSX.Element => {
-    const { styles } = useStyle();
-    const {children} = props;
+  const { styles } = useStyle()
+  const { children } = props
 
-    return (
+  return (
         <AntModal
             title={(
                 <>
@@ -30,5 +30,5 @@ export const Modal = (props: ModalProps): React.JSX.Element => {
         >
             {children}
         </AntModal>
-    )
+  )
 }
