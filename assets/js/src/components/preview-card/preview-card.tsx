@@ -25,41 +25,39 @@ export const PreviewCard = ({
 ): React.JSX.Element => {
   const { styles } = useStyle()
 
-  let classImg: string = styles.img
-  let classCheckbox: string = styles.checkbox
-  let classDotsButton: string = styles['dots-button']
+  let classImg: string = 'img'
+  let classCheckbox: string = 'checkbox'
+  let classDotsButton: string = 'dots-button'
   if (size === SizeTypes.MEDIUM) {
-    classImg = styles['img-medium']
-    classCheckbox = styles['checkbox-medium']
-    classDotsButton = styles['dots-button-medium']
+    classImg = 'img-medium'
+    classCheckbox = 'checkbox-medium'
+    classDotsButton = 'dots-button-medium'
   }
 
   return (
-      <div>
-        <Card className={styles.card}
-          cover={
-            <PimcoreImage src={imgSrc} alt={name} className={classImg}/>
-          }
-        >
-          <Checkbox
-              checked={selected}
-              className={classCheckbox}
-          />
-          <DropdownMenu
-            dropdownItems={dropdownItems}
-            placement='bottomLeft'
-            openClassName={styles['dots-button-open-dropdown']}
-            >
-              <Button
-                size="small"
-                icon={<Icon name="dots-horizontal" className={styles['dropdown-menu__icon']}/>}
-                className={classDotsButton}
-                />
-          </DropdownMenu>
-          <Meta
-            title={name}
-          />
-        </Card>
-      </div>
+      <Card className={styles.card}
+        cover={
+          <PimcoreImage src={imgSrc} alt={name} className={classImg}/>
+        }
+      >
+        <Checkbox
+            checked={selected}
+            className={classCheckbox}
+        />
+        <DropdownMenu
+          dropdownItems={dropdownItems}
+          placement='bottomLeft'
+          openClassName='dots-button-open-dropdown'
+          >
+            <Button
+              size="small"
+              icon={<Icon name="dots-horizontal" className='dropdown-menu__icon'/>}
+              className={classDotsButton}
+              />
+        </DropdownMenu>
+        <Meta
+          title={name}
+        />
+      </Card>
   )
 }
