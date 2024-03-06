@@ -20,6 +20,10 @@ const icons = {
   'tag-two-tone': React.lazy(async () => await import('@Pimcore/assets/icons/core/tag-two-tone.inline.svg')),
   workflow: React.lazy(async () => await import('@Pimcore/assets/icons/core/workflow.inline.svg')),
   'unordered-list-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/unordered-list-outlined.inline.svg')),
+  'close-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/close-circle-filled.inline.svg')),
+  'check-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/check-circle-filled.inline.svg')),
+  'info-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-filled.inline.svg')),
+  'exclamation-circle-filled': React.lazy(async () => await import('@Pimcore/assets/icons/core/exclamation-circle-filled.inline.svg')),
   'dots-horizontal': React.lazy(async () => await import('@Pimcore/assets/icons/core/dots-horizontal.inline.svg')),
   target: React.lazy(async () => await import('@Pimcore/assets/icons/core/target.inline.svg')),
   'info-circle-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-outlined.inline.svg')),
@@ -60,10 +64,10 @@ export const Icon = ({ name, options, className }: IconProps): React.JSX.Element
   }
 
   return (
-    <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
-      <Suspense fallback={<div />}>
-        <SvgIcon width={width} height={height} {...options} />
-      </Suspense>
-    </div>
+      <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
+        <Suspense fallback={<div />}>
+          <SvgIcon width={width} height={height} {...options} />
+        </Suspense>
+      </div>
   )
 }
