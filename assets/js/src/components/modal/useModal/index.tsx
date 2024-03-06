@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ComponentType, useState} from "react";
 import {Modal, ModalProps} from "@Pimcore/components/modal/modal";
 import {Icon} from "@Pimcore/components/icon/icon";
 
@@ -64,9 +64,9 @@ export const useModal = (config = {type: "default"}): useModalReturnType => {
     return { renderModal, showModal, handleOk, handleCancel };
 }
 
-export const withError = (Component: typeof Modal): React.FC => {
+export const withError = (Component: typeof Modal): typeof Modal => {
     const modalWithError = (props: ModalProps): React.JSX.Element => {
-        const { children, ...inlineProps } = props;
+        const {children, ...inlineProps } = props;
 
         return (
             <Component
@@ -82,7 +82,7 @@ export const withError = (Component: typeof Modal): React.FC => {
     return modalWithError;
 };
 
-export const withSuccess = (Component: typeof Modal): React.FC => {
+export const withSuccess = (Component: typeof Modal): typeof Modal => {
     const modalWithSuccess = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
@@ -100,7 +100,7 @@ export const withSuccess = (Component: typeof Modal): React.FC => {
     return modalWithSuccess;
 };
 
-export const withInfo = (Component: typeof Modal): React.FC => {
+export const withInfo = (Component: typeof Modal): typeof Modal => {
     const modalWithInfo = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
@@ -118,7 +118,7 @@ export const withInfo = (Component: typeof Modal): React.FC => {
     return modalWithInfo;
 };
 
-export const withWarn = (Component: typeof Modal): React.FC => {
+export const withWarn = (Component: typeof Modal): typeof Modal => {
     const modalWithWarn = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 

@@ -1,10 +1,10 @@
-import {Modal as AntModal} from 'antd';
+import {Modal as AntModal, ModalProps as AntModalProps} from 'antd';
 import React from "react";
-import type {ModalFuncProps} from "antd/es/modal/interface";
 import {useStyle} from "@Pimcore/components/modal/modal.styles";
 import useModal from 'antd/es/modal/useModal';
 
-export interface ModalProps extends ModalFuncProps {
+export interface ModalProps extends AntModalProps {
+    icon?: React.JSX.Element;
     footer?: React.JSX.Element;
     useModal?: typeof useModal;
     children: React.ReactNode;
