@@ -1,4 +1,4 @@
-import React, {ComponentType, useState} from "react";
+import React, {useState} from "react";
 import {Modal, ModalProps} from "@Pimcore/components/modal/modal";
 import {Icon} from "@Pimcore/components/icon/icon";
 
