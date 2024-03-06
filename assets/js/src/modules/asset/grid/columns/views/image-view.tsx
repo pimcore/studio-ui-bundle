@@ -1,8 +1,9 @@
-import { Image as AntImage } from 'antd'
 import React from 'react'
 import { useStyles } from './image-view.styles'
+import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import { type ImageProps } from 'antd'
 
-interface ImageViewProps {
+interface ImageViewProps extends ImageProps {
   src: string
 }
 
@@ -11,7 +12,7 @@ const ImageView = (props: ImageViewProps): React.JSX.Element => {
 
   return (
     <div className={styles.image}>
-      <AntImage src={props.src} />
+      <PimcoreImage {...props} />
     </div>
   )
 }

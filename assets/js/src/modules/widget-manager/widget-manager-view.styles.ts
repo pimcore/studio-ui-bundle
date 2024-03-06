@@ -86,11 +86,16 @@ export const useStlyes = createStyles(({ token, css }) => {
           background: ${token.colorBgContainer};
           border-top: 1px solid ${token.Tabs.colorBorderActiveTab};
 
+          .widget-manager-tab-title {
+            margin-top: -2px;
+          }
+
           &:hover {
             background: ${token.colorBgContainer};
           }
 
           & .flexlayout__tab_button_trailing {
+            margin-top: -2px;
             display: flex;
           }
         }
