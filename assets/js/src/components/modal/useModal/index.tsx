@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Modal} from "@Pimcore/components/modal/modal";
+import {Modal, ModalProps} from "@Pimcore/components/modal/modal";
 import {Icon} from "@Pimcore/components/icon/icon";
 
 export const useModal = (config = {type: "default"}) => {
@@ -38,7 +38,7 @@ export const useModal = (config = {type: "default"}) => {
         return component;
     }
 
-    function renderModal(props) {
+    function renderModal(props: ModalProps) {
         const { children, ...inlineProps } = props;
         const ModalComponent = getModalComponent(config.type);
 
@@ -57,8 +57,8 @@ export const useModal = (config = {type: "default"}) => {
     return { renderModal, showModal, handleOk, handleCancel };
 }
 
-export const withError = (Component) => {
-    return (props) => {
+export const withError = (Component: typeof Modal) => {
+    return (props: ModalProps) => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -73,8 +73,8 @@ export const withError = (Component) => {
     };
 };
 
-export const withSuccess = (Component) => {
-    return (props) => {
+export const withSuccess = (Component: typeof Modal) => {
+    return (props: ModalProps) => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -89,8 +89,8 @@ export const withSuccess = (Component) => {
     };
 };
 
-export const withInfo = (Component) => {
-    return (props) => {
+export const withInfo = (Component: typeof Modal) => {
+    return (props: ModalProps) => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -105,8 +105,8 @@ export const withInfo = (Component) => {
     };
 };
 
-export const withWarn = (Component) => {
-    return (props) => {
+export const withWarn = (Component: typeof Modal) => {
+    return (props: ModalProps) => {
         const { children, ...inlineProps } = props;
 
         return (

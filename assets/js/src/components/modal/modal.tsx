@@ -6,7 +6,7 @@ import useModal from 'antd/es/modal/useModal';
 
 export interface ModalProps extends ModalFuncProps {
     footer?: React.JSX.Element;
-    useModal: typeof useModal;
+    useModal?: typeof useModal;
     children: React.ReactNode;
 }
 
