@@ -1,8 +1,8 @@
 import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
-    return {
-        filesList: css`
+  return {
+    filesList: css`
             list-style: none;
             padding: 0;
             margin: 10px 0 0;
@@ -13,6 +13,6 @@ export const useStyle = createStyles(({ token, css }) => {
                 line-height: 22px;
                 color: ${token.colorTextTertiary}
             }
-        `,
-    }
+        `
+  }
 })
