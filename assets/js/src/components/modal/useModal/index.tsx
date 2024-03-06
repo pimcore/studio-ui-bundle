@@ -64,8 +64,8 @@ export const useModal = (config = {type: "default"}): useModalReturnType => {
     return { renderModal, showModal, handleOk, handleCancel };
 }
 
-export const withError = (Component: typeof Modal) => {
-    return (props: ModalProps): React.JSX.Element => {
+export const withError = (Component: typeof Modal): React.FC => {
+    const modalWithError = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -78,10 +78,12 @@ export const withError = (Component: typeof Modal) => {
             </Component>
         );
     };
+
+    return modalWithError;
 };
 
-export const withSuccess = (Component: typeof Modal) => {
-    return (props: ModalProps): React.JSX.Element => {
+export const withSuccess = (Component: typeof Modal): React.FC => {
+    const modalWithSuccess = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -94,10 +96,12 @@ export const withSuccess = (Component: typeof Modal) => {
             </Component>
         );
     };
+
+    return modalWithSuccess;
 };
 
-export const withInfo = (Component: typeof Modal) => {
-    return (props: ModalProps): React.JSX.Element => {
+export const withInfo = (Component: typeof Modal): React.FC => {
+    const modalWithInfo = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -110,10 +114,12 @@ export const withInfo = (Component: typeof Modal) => {
             </Component>
         );
     };
+
+    return modalWithInfo;
 };
 
-export const withWarn = (Component: typeof Modal) => {
-    return (props: ModalProps): React.JSX.Element => {
+export const withWarn = (Component: typeof Modal): React.FC => {
+    const modalWithWarn = (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -126,4 +132,6 @@ export const withWarn = (Component: typeof Modal) => {
             </Component>
         );
     };
+
+    return modalWithWarn;
 };
