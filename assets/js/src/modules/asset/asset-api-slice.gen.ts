@@ -14,6 +14,10 @@ const injectedRtkApi = api
                         itemsPerPage: queryArg.itemsPerPage,
                         parentId: queryArg.parentId,
                         idSearchTerm: queryArg.idSearchTerm,
+                        excludeFolders: queryArg.excludeFolders,
+                        assetPath: queryArg.assetPath,
+                        assetPathIncludeParent: queryArg.assetPathIncludeParent,
+                        assetPathIncludeDescendants: queryArg.assetPathIncludeDescendants,
                     },
                 }),
                 providesTags: ["Asset"],
@@ -78,10 +82,18 @@ export type ApiAssetsGetCollectionApiArg = {
     page?: number;
     /** The number of items per page */
     itemsPerPage?: number;
-    /** Filters assets by parent id. */
+    /** Filter assets by parent id. */
     parentId?: number;
-    /** Filters assets by matching ids. As a wildcard, you can use *. */
+    /** Filter assets by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
+    /** Filter folders from result. */
+    excludeFolders?: boolean;
+    /** Filter assets by path. */
+    assetPath?: string;
+    /** Include the parent item in the result. */
+    assetPathIncludeParent?: boolean;
+    /** Include all descendants in the result. */
+    assetPathIncludeDescendants?: boolean;
 };
 export type ApiAssetsPostApiResponse =
     /** status 201 Asset resource created */ AssetJsonldAssetReadDependencyReadPropertyReadElementReadRead;

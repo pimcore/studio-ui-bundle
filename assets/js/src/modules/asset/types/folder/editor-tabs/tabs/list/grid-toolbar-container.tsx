@@ -24,6 +24,7 @@ const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Eleme
           current={pager.current}
           onChange={pager.onChange}
           pageSizeOptions={['10', '20', '50', '100']}
+          showSizeChanger={true}
         />
       }
     />
