@@ -51,18 +51,23 @@ const icons = {
 export interface IconProps {
   name: string
   options?: React.SVGProps<SVGSVGElement>
+  className?: string
 }
 
-export const Icon = ({ name, options }: IconProps): React.JSX.Element => {
+export const Icon = ({ name, options, className }: IconProps): React.JSX.Element => {
   const SvgIcon = icons[name]
   const width = options?.width ?? 16
   const height = options?.height ?? 16
 
+  if (SvgIcon === undefined) {
+    return <div style={{ width, height }} />
+  }
+
   return (
-    <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon`}>
-      <Suspense fallback={<div />}>
-        <SvgIcon width={width} height={height} {...options} />
-      </Suspense>
-    </div>
+      <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
+        <Suspense fallback={<div />}>
+          <SvgIcon width={width} height={height} {...options} />
+        </Suspense>
+      </div>
   )
 }
