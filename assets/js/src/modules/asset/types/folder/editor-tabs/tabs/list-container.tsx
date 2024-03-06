@@ -4,13 +4,22 @@ import React, { useContext, useState } from 'react'
 import { GridContainer } from './list/grid-container'
 import { GridToolbarContainer } from './list/grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element-editor/tab-layouts/content-toolbar-sidebar-view'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 const ListContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const assetId = assetContext.id
-  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({ parentId: assetId, page: currentPage, itemsPerPage: pageSize })
+  const assetId = assetContext.id!
+  const { asset } = useAssetDraft(assetId)
+
+  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({
+    assetPathIncludeDescendants: true,
+    page: currentPage,
+    itemsPerPage: pageSize,
+    excludeFolders: true,
+    assetPath: asset?.fullPath
+  })
 
   if (isLoading || data === undefined) {
     return <div>Loading...</div>
