@@ -1,8 +1,6 @@
 import {type Meta} from '@storybook/react'
-import {Modal} from "@Pimcore/components/modal/modal";
 import {Button} from "antd";
-import React, {useState} from "react";
-import {Icon} from "@Pimcore/components/icon/icon";
+import React from "react";
 import {FileList} from "@Pimcore/components/modal/file-list/file-list";
 import {ModalFooter} from "@Pimcore/components/modal/footer/modal-footer";
 import {useModal} from "@Pimcore/components/modal/useModal";

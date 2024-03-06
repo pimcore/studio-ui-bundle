@@ -2,22 +2,29 @@ import React, {useState} from "react";
 import {Modal, ModalProps} from "@Pimcore/components/modal/modal";
 import {Icon} from "@Pimcore/components/icon/icon";
 
-export const useModal = (config = {type: "default"}) => {
+interface useModalReturnType {
+    renderModal: (props: ModalProps) => React.JSX.Element;
+    showModal: () => void;
+    handleOk: () => void;
+    handleCancel: () => void;
+}
+
+export const useModal = (config = {type: "default"}): useModalReturnType => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const showModal = () => {
+    const showModal = (): void => {
         setIsModalOpen(true);
     };
 
-    const handleOk = () => {
+    const handleOk = (): void => {
         setIsModalOpen(false);
     };
 
-    const handleCancel = () => {
+    const handleCancel = (): void => {
         setIsModalOpen(false);
     };
 
-    function getModalComponent(type: string) {
+    function getModalComponent(type: string): typeof Modal {
         let component = Modal;
 
         switch(type) {
@@ -38,7 +45,7 @@ export const useModal = (config = {type: "default"}) => {
         return component;
     }
 
-    function renderModal(props: ModalProps) {
+    function renderModal(props: ModalProps): React.JSX.Element {
         const { children, ...inlineProps } = props;
         const ModalComponent = getModalComponent(config.type);
 
@@ -58,7 +65,7 @@ export const useModal = (config = {type: "default"}) => {
 }
 
 export const withError = (Component: typeof Modal) => {
-    return (props: ModalProps) => {
+    return (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -74,7 +81,7 @@ export const withError = (Component: typeof Modal) => {
 };
 
 export const withSuccess = (Component: typeof Modal) => {
-    return (props: ModalProps) => {
+    return (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -90,7 +97,7 @@ export const withSuccess = (Component: typeof Modal) => {
 };
 
 export const withInfo = (Component: typeof Modal) => {
-    return (props: ModalProps) => {
+    return (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (
@@ -106,7 +113,7 @@ export const withInfo = (Component: typeof Modal) => {
 };
 
 export const withWarn = (Component: typeof Modal) => {
-    return (props: ModalProps) => {
+    return (props: ModalProps): React.JSX.Element => {
         const { children, ...inlineProps } = props;
 
         return (

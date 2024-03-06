@@ -10,9 +10,9 @@ export interface ModalProps extends ModalFuncProps {
     children: React.ReactNode;
 }
 
-export const Modal = (props: ModalProps) => {
+export const Modal = (props: ModalProps): React.JSX.Element => {
     const { styles } = useStyle();
-    const {children, ...inlineProps} = props;
+    const {children} = props;
 
     return (
         <AntModal
