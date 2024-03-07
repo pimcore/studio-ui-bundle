@@ -1,4 +1,4 @@
-import React, { type ComponentType } from 'react'
+import React, { createContext, type ComponentType, useState, useMemo } from 'react'
 import { BorderNode, type TabNode } from 'flexlayout-react'
 import { WidgetView } from '@Pimcore/modules/widget/widget-view'
 
@@ -7,15 +7,24 @@ interface WidgetContainerProps {
   component: ComponentType
 }
 
+interface IWidgetContext {
+  nodeId: string | null
+}
+
+export const WidgetContext = createContext<IWidgetContext>({ nodeId: null })
+
 const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const { node, component: Component } = props
+  const [nodeId] = useState(node.getId())
   const isBorderNode = node.getParent() instanceof BorderNode
 
-  return (
-    <WidgetView icon={node.getIcon() ?? 'widget-default'} title={node.getName()} showTitle={isBorderNode}>
-      <Component {...node.getConfig()} />
-    </WidgetView>
-  )
+  return useMemo(() => (
+    <WidgetContext.Provider value={{ nodeId }}>
+      <WidgetView icon={node.getIcon() ?? 'widget-default'} title={node.getName()} showTitle={isBorderNode}>
+        <Component {...node.getConfig()} />
+      </WidgetView>
+    </WidgetContext.Provider>
+  ), [nodeId])
 }
 
 export { WidgetContainer }

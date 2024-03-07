@@ -1,7 +1,9 @@
-import React, { createContext } from 'react'
+import React, { createContext, useEffect, useMemo } from 'react'
 import { useAssetDraft } from './hooks/use-asset-draft'
 import { FolderContainer } from './types/folder/folder-container'
 import { ImageContainer } from './types/image/image-container'
+import { useIsAcitveMainWidget } from '../widget-manager/hooks/use-is-active-main-widget'
+import { useGlobalAssetContext } from './hooks/use-global-asset-context'
 
 export interface AssetContainerProps {
   id: number
@@ -16,26 +18,41 @@ export const AssetContext = createContext<IAssetContext>({})
 const AssetContainer = (props: AssetContainerProps): React.JSX.Element => {
   const { id } = props
   const { isLoading, isError, asset } = useAssetDraft(id)
+  const isWidgetActive = useIsAcitveMainWidget()
+  const { setContext, removeContext } = useGlobalAssetContext()
 
-  if (isError) {
-    return <div>Error</div>
-  }
+  useEffect(() => {
+    return () => {
+      removeContext()
+    }
+  }, [])
 
-  if (isLoading || asset === undefined) {
-    return <div>Loading...</div>
-  }
+  useEffect(() => {
+    if (isWidgetActive) {
+      setContext({ id })
+    }
 
-  return (
+    return () => {
+      if (!isWidgetActive) {
+        removeContext()
+      }
+    }
+  }, [isWidgetActive])
+
+  return useMemo(() => (
     <AssetContext.Provider value={{ id }}>
-        {asset.type === 'image' && (
-          <ImageContainer />
-        )}
+      {isError && <div>Error</div>}
+      {isLoading && <div>Loading...</div>}
 
-        {asset.type === 'folder' && (
-          <FolderContainer />
-        )}
+      {!isError && !isLoading && asset !== undefined && asset.type === 'image' && (
+        <ImageContainer />
+      )}
+
+      {!isError && !isLoading && asset !== undefined && asset.type === 'folder' && (
+        <FolderContainer />
+      )}
     </AssetContext.Provider>
-  )
+  ), [id, isLoading, isError, asset?.type])
 }
 
 export { AssetContainer }

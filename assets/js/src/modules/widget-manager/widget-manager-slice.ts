@@ -1,16 +1,27 @@
 import { injectSliceWithState } from '@Pimcore/app/store/index'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node } from 'flexlayout-react'
-import { getInitialModelJson } from './utils/widget-manager-model'
+import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
+import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
+
+export interface IMainWidgetContext {
+  nodeId: string
+}
+
+export type MainWidgetContext = IMainWidgetContext | null
 
 export interface WidgetManagerState {
-  model: IJsonModel
+  outerModel: IJsonModel
+  innerModel: IJsonModel
+  mainWidgetContext: MainWidgetContext
 }
 
 export interface WidgetManagerTabConfig extends IJsonTabNode {}
 
 export const initialState: WidgetManagerState = {
-  model: getInitialModelJson()
+  outerModel: getInitialOuterModelJson(),
+  innerModel: getInitialInnerModelJson(),
+  mainWidgetContext: null
 }
 
 export const slice = createSlice({
@@ -19,23 +30,45 @@ export const slice = createSlice({
   initialState,
 
   reducers: {
-    updateModel: (state, action: PayloadAction<IJsonModel>) => {
-      state.model = { ...action.payload }
+    updateOuterModel: (state, action: PayloadAction<IJsonModel>) => {
+      state.outerModel = { ...action.payload }
+    },
+
+    updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
+      state.innerModel = { ...action.payload }
+    },
+
+    updateMainWidgetContext: (state, action: PayloadAction<MainWidgetContext>) => {
+      state.mainWidgetContext = action.payload
     },
 
     setActiveWidgetById: (state, action: PayloadAction<string>) => {
-      const model = Model.fromJson(state.model)
-      const node = model.getNodeById(action.payload)
+      const outerModel = Model.fromJson(state.outerModel)
+      const innerModel = Model.fromJson(state.innerModel)
+
+      let node = outerModel.getNodeById(action.payload)
+      let model = outerModel
+      let isOuterModelNode = true
+
+      if (node === undefined) {
+        node = innerModel.getNodeById(action.payload)
+        model = innerModel
+        isOuterModelNode = false
+      }
 
       if (node !== undefined) {
         model.doAction(Actions.selectTab(node.getId()))
       }
 
-      state.model = { ...model.toJson() }
+      if (isOuterModelNode) {
+        state.outerModel = { ...model.toJson() }
+      } else {
+        state.innerModel = { ...model.toJson() }
+      }
     },
 
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.model)
+      const model = Model.fromJson(state.innerModel)
       let node: Node | undefined
 
       if (action.payload.id !== undefined) {
@@ -56,11 +89,11 @@ export const slice = createSlice({
         )
       }
 
-      state.model = { ...model.toJson() }
+      state.innerModel = { ...model.toJson() }
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.model)
+      const model = Model.fromJson(state.outerModel)
       let node: Node | undefined
 
       if (action.payload.id !== undefined) {
@@ -81,11 +114,11 @@ export const slice = createSlice({
         )
       }
 
-      state.model = { ...model.toJson() }
+      state.outerModel = { ...model.toJson() }
     },
 
     openLeftWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.model)
+      const model = Model.fromJson(state.outerModel)
       let node: Node | undefined
 
       if (action.payload.id !== undefined) {
@@ -106,11 +139,11 @@ export const slice = createSlice({
         )
       }
 
-      state.model = { ...model.toJson() }
+      state.outerModel = { ...model.toJson() }
     },
 
     openRightWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.model)
+      const model = Model.fromJson(state.outerModel)
       let node: Node | undefined
 
       if (action.payload.id !== undefined) {
@@ -131,18 +164,26 @@ export const slice = createSlice({
         )
       }
 
-      state.model = { ...model.toJson() }
+      state.outerModel = { ...model.toJson() }
     }
   },
 
   selectors: {
-    selectModel: (state) => {
-      return state.model
+    selectOuterModel: (state) => {
+      return state.outerModel
+    },
+
+    selectInnerModel: (state) => {
+      return state.innerModel
+    },
+
+    selectMainWidgetContext: (state) => {
+      return state.mainWidgetContext
     }
   }
 })
 
 injectSliceWithState(slice)
 
-export const { updateModel, openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById } = slice.actions
-export const { selectModel } = slice.selectors
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById } = slice.actions
+export const { selectInnerModel, selectOuterModel, selectMainWidgetContext } = slice.selectors

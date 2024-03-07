@@ -2,8 +2,13 @@ import React, { type ReactNode } from 'react'
 import { type TabNode } from 'flexlayout-react'
 import { getWidget } from './widget-registry'
 import { WidgetContainer } from '@Pimcore/modules/widget/widget-container'
+import { WidgetManagerInnerContainer } from '../widget-manager-inner-container'
 
 export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
+  if (node.getComponent() === 'inner-widget-manager') {
+    return <WidgetManagerInnerContainer />
+  }
+
   const widgetName = node.getComponent()
 
   if (widgetName === undefined) {
