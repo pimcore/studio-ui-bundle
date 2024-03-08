@@ -7,7 +7,10 @@ const config: ConfigFile = {
   outputFiles: {
     '../src/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: [/assets/i]
-    }
+    },
+    '../src/modules/asset/translations-api-slice.gen.ts': {
+      filterEndpoints: [/translations/i]
+    },
   },
   exportName: 'api',
   hooks: true,
