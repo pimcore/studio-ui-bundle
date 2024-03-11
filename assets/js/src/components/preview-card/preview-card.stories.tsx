@@ -17,26 +17,26 @@ export default config
 const dropdownItems: DropdownMenuItemProps[] = [
   {
     iconLeft: 'target',
-    label: i18n.t('preview-card.locate-in-tree')
+    label: 'preview-card.locate-in-tree'
   },
   {
     iconLeft: 'info-circle-outlined',
-    label: i18n.t('preview-card.info'),
+    label: 'preview-card.info',
     iconRight: {
       name: 'right-outlined'
     }
   },
   {
     iconLeft: 'rich-edit',
-    label: i18n.t('preview-card.rename')
+    label: 'preview-card.rename'
   },
   {
     iconLeft: 'download-02',
-    label: i18n.t('preview-card.download-zip')
+    label: 'preview-card.download-zip'
   },
   {
     iconLeft: 'delete-outlined',
-    label: i18n.t('preview-card.delete')
+    label: 'preview-card.delete'
   }
 ]
 

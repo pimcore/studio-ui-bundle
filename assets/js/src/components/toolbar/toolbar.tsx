@@ -30,8 +30,8 @@ export const Toolbar = ({
       <div className={styles.container}>
         <LeftContainer toolbarElements={pinnableToolbarElements}/>
         <div className='container__inline-container'>
-            <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button>
-            <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>
+            <Button className='inline-container__btn-workflow'>{'toolbar.workflow'}</Button>
+            <Button type="primary">{'toolbar.save-and-publish'}</Button>
         </div>
       </div>
   )
@@ -76,7 +76,7 @@ const LeftContainer = (prop): React.JSX.Element => {
                                 'inline-container__btn-default-color' + ' ' +
                                 'inline-container__btn-more'
                         }>
-                            {i18n.t('toolbar.more')}
+                            {'toolbar.more'}
                             <ArrowDown className='inline-container__more-arrow-down' />
                         </Button>
                 </DropdownMenu>

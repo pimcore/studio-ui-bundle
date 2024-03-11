@@ -1,15 +1,12 @@
-import { api } from '@Pimcore/modules/asset/translations-api-slice.gen'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import { store } from '@Pimcore/app/store'
 
 i18n
   .use(initReactI18next)
 
   .init({
     fallbackLng: 'en',
-    partialBundledLanguages: true,
-    ns: [],
+    ns: ['translation'],
     resources: {},
     saveMissing: true
   })
