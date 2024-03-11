@@ -3,10 +3,15 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
+        &.ant-card {
+            height: 103px;
+        }
+        
         &.ant-card .ant-card-body {
             padding: ${token.paddingXXS}px ${token.paddingXS}px;
             margin-top: 7px;
             margin-bottom: 7px;
+            width: 166px;
         }
 
         .checkbox, .checkbox-medium {

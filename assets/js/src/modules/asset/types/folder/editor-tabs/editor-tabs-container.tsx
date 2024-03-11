@@ -5,7 +5,7 @@ import { EditorTabs as EditorTabsView } from '@Pimcore/components/editor-tabs/ed
 const tabs = folderEditorTabManager.getTabs()
 
 const EditorTabsContainer = (): React.JSX.Element => {
-  return <EditorTabsView defaultActiveKey='list' items={tabs} showLabelIfActive />
+  return <EditorTabsView defaultActiveKey='preview' items={tabs} showLabelIfActive />
 }
 
 export { EditorTabsContainer }
