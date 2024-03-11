@@ -37,7 +37,7 @@ export const getInitialModelJson = (): IJsonModel => {
           id: 'bottom_tabset',
           enableDeleteWhenEmpty: false,
           weight: 50,
-          height: 200,
+          height: 40,
           selected: 0,
           children: [
             {

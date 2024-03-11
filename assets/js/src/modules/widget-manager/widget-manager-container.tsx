@@ -30,7 +30,7 @@ export const WidgetManagerContainer = (): React.JSX.Element => {
   if (bottomTabset.getChildren().length === 0) {
     model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: -8 }))
   } else if (bottomTabset.getHeight() === -8) {
-    model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: 200 }))
+    model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: 40 }))
   }
 
   function onModelChange (model: Model): void {
