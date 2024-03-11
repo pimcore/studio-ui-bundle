@@ -1,6 +1,5 @@
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { ViewTabContainer } from '@Pimcore/modules/asset/editor-tabs/tabs/view-container'
 import { EditTabContainer } from '@Pimcore/modules/asset/editor-tabs/tabs/edit-container'
 import { EmbeddedMetadataTabContainer } from '@Pimcore/modules/asset/editor-tabs/tabs/embedded-metadata-container'
 import { CustomMetadataTabContainer } from '@Pimcore/modules/asset/editor-tabs/tabs/custom-metadata-container'
@@ -12,13 +11,14 @@ import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor-tabs/tabs/wo
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor-tabs/tabs/tags-container'
 import { AssetEditorTabManager } from '@Pimcore/modules/editor-tab-manager/utils/asset-tab-manager'
 import i18n from '@Pimcore/app/i18n'
+import { PreviewContainer } from '../types/image/tabs/preview-container'
 
 export const assetEditorTabManager = new AssetEditorTabManager()
 
 assetEditorTabManager.register({
   key: 'view',
   label: i18n.t('asset.asset-editor-tabs.view'),
-  children: <ViewTabContainer />,
+  children: <PreviewContainer />,
   icon: <Icon name={'image-05'} />
 })
 
