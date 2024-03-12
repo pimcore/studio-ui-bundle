@@ -10,7 +10,7 @@ const config: ConfigFile = {
     },
     '../src/modules/asset/translations-api-slice.gen.ts': {
       filterEndpoints: [/translations/i]
-    },
+    }
   },
   exportName: 'api',
   hooks: true,

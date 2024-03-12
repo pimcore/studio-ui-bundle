@@ -1,5 +1,5 @@
-import {type Meta} from '@storybook/react'
-import {type PinnableToolbarElement, Toolbar as ToolbarComponent} from './toolbar'
+import { type Meta } from '@storybook/react'
+import { type PinnableToolbarElement, Toolbar as ToolbarComponent } from './toolbar'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Toolbar',

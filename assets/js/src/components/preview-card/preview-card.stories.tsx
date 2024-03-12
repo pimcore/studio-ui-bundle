@@ -1,6 +1,6 @@
-import {type Meta} from '@storybook/react'
-import {PreviewCard as PreviewCardComponent} from './preview-card'
-import {type DropdownMenuItemProps} from '@Pimcore/components/dropdown-menu/dropdown-menu'
+import { type Meta } from '@storybook/react'
+import { PreviewCard as PreviewCardComponent } from './preview-card'
+import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/PreviewCard',
