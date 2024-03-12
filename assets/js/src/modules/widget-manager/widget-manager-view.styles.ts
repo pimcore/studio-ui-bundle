@@ -57,6 +57,10 @@ export const useStlyes = createStyles(({ token, css }) => {
       position: absolute;
       inset: 8px 6px 4px 6px;
 
+      &.widget-manager--inner {
+        inset: 0;
+      }
+
       .flexlayout__tab_button_leading,
       .flexlayout__border_button_leading {
         display: none;
@@ -124,8 +128,6 @@ export const useStlyes = createStyles(({ token, css }) => {
       }
 
       .flexlayout__border_inner_tab_container_left, .flexlayout__border_inner_tab_container_right {
-        alignItems: end;
-
         .flexlayout__border_tab_divider {
           width: 0;
         }
@@ -138,6 +140,7 @@ export const useStlyes = createStyles(({ token, css }) => {
       }
 
       .flexlayout__tab {
+        background: ${token.colorBgContainer};
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.02), 0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
         border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
@@ -152,6 +155,12 @@ export const useStlyes = createStyles(({ token, css }) => {
         border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-radius: ${token.borderRadius}px;
+      }
+
+      .widget-manager-inner-container {
+        background: transparent;
+        box-shadow: none;
+        border: 0;
       }
 
       .flexlayout__tabset {

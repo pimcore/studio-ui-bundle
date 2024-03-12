@@ -4,34 +4,46 @@ export const getInitialModelJson = (): IJsonModel => {
   return {
     global: {
       tabEnableRename: false,
-      tabSetEnableMaximize: false
+      tabSetEnableMaximize: false,
+      rootOrientationVertical: true
     },
 
     layout: {
+      id: 'main',
       type: 'row',
-      weight: 100,
       children: [
         {
-          id: 'main',
-          type: 'row',
+          type: 'tabset',
+          id: 'main_tabset',
+          enableDeleteWhenEmpty: false,
+          weight: 50,
+          selected: 0,
           children: [
             {
-              type: 'tabset',
-              id: 'main_tabset',
-              enableDeleteWhenEmpty: false,
-              weight: 50,
-              selected: 0,
-              children: []
-            },
+              type: 'tab',
+              component: 'inner-widget-manager',
+              contentClassName: 'widget-manager-inner-container',
+              enableClose: false
+            }
+          ],
+          enableDrag: false,
+          enableDrop: false,
+          enableTabStrip: false
+        },
 
+        {
+          type: 'tabset',
+          id: 'bottom_tabset',
+          enableDeleteWhenEmpty: false,
+          weight: 50,
+          height: 40,
+          selected: 0,
+          children: [
             {
-              type: 'tabset',
-              id: 'bottom_tabset',
-              enableDeleteWhenEmpty: false,
-              weight: 50,
-              height: 200,
-              selected: 0,
-              children: []
+              type: 'tab',
+              name: 'Interconnected widget',
+              component: 'example',
+              enableClose: false
             }
           ]
         }
@@ -70,14 +82,6 @@ export const getInitialModelJson = (): IJsonModel => {
             config: {
               id: 288
             }
-          },
-
-          {
-            type: 'tab',
-            icon: 'widget-default',
-            name: 'actions',
-            component: 'widget-manager-actions',
-            enableClose: false
           }
         ]
       }
