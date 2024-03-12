@@ -11,8 +11,6 @@ export const TranslationsLoaderContainer = (props: TranslationsLoaderContainerPr
   const [translations] = useApiTranslationsPostMutation()
   const { i18n } = useTranslation()
 
-  console.log(i18n.getResourceBundle('en', 'translation'))
-
   useEffect(() => {
     translations({ translationJsonld: { locale: 'en' } })
       .unwrap()

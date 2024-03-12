@@ -10,7 +10,7 @@ export const EditorTabsContainer = (): React.JSX.Element => {
   const preparedTabs = tabs.map((tab, index) => {
     return {
       ...tabs[index],
-      title: t(tab.label)
+      label: t(tab.label)
     }
   })
 
