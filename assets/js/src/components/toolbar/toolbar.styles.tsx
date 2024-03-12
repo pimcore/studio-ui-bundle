@@ -3,16 +3,13 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     container: css`
-      border-radius: ${token.paddingContentVerticalSM}px ${token.borderRadius}px ${token.borderRadius}px;
       border-top: 0.5px solid #DFD7EA;
-      border-right: 0.3px solid #DFD7EA;
-      border-bottom: 0.3px solid #DFD7EA;
-      border-left: 0.3px solid #DFD7EA;
+      background-color: ${token.colorBgToolbar};
 
       display: flex;
       justify-content: space-between;
       
-      padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px 0;
+      padding: ${token.paddingXS}px ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px;
       
       width: 100%;
       
