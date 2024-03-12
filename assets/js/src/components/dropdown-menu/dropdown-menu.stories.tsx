@@ -1,9 +1,8 @@
-import { type Meta } from '@storybook/react'
-import { DropdownMenu as DropdownMenuComponent, type DropdownMenuItemProps } from './dropdown-menu'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
+import {type Meta} from '@storybook/react'
+import {DropdownMenu as DropdownMenuComponent, type DropdownMenuItemProps} from './dropdown-menu'
+import {Button} from 'antd'
+import {Icon} from '@Pimcore/components/icon/icon'
 import React from 'react'
-import i18n from '@Pimcore/app/i18n'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/DropdownMenu',
