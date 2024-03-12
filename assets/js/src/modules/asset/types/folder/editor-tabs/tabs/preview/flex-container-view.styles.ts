@@ -8,6 +8,7 @@ export const useStyles = createStyles(({ css, token }) => {
       gap: ${token.marginXS}px;
       padding-right: ${token.paddingSM}px;
       padding-left: ${token.paddingXS}px;
+      align-self: baseline;
     `
   }
 })

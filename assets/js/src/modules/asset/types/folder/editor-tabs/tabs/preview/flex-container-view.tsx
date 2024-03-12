@@ -3,12 +3,13 @@ import { useStyles } from '@Pimcore/modules/asset/types/folder/editor-tabs/tabs/
 
 interface FlexContainerProps {
   renderElements: ReactNode[]
+  className?: string
 }
 
 const FlexContainerView = (props: FlexContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
   return (
-        <div className={styles.flexContainer}>
+        <div className={styles.flexContainer + ' ' + props.className}>
             {props.renderElements}
         </div>
   )

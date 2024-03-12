@@ -42,15 +42,31 @@ export const useStyle = createStyles(({ token, css }) => {
             background-color: ${token.Button.defaultColor};
             color: white;
         }
+
+        .ant-card-cover .img-container, .ant-card-cover .img-container-medium {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
       
-        .ant-image .ant-image-img.img {
+        .ant-card-cover .img-container {
             height: 64px;
             width: 170px;
         }
-      
-        .ant-image .ant-image-img.img-medium {
+
+        .ant-image .ant-image-img.img {
+            max-height: 64px;
+            max-width: 170px;
+        }
+
+        .ant-card-cover .img-container-medium {
             height: 109px;
             width: 236px;
+        }
+
+        .ant-image .ant-image-img.img-medium {
+            max-height: 109px;
+            max-width: 236px;
         }
 
         .menu-icon {

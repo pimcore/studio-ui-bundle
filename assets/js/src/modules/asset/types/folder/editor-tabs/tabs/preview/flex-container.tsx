@@ -44,7 +44,6 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
     cards.push(
         <PreviewCard key={asset.id}
                      name={asset.filename}
-                     selected={false}
                      dropdownItems={dropdownItems}
                      imgSrc={asset.fullPath}
         />
