@@ -3,6 +3,7 @@ import { GlobalProvider } from './global-provider'
 import { BaseLayoutView } from '@Pimcore/modules/base-layout/base-layout-view'
 import { App as AntApp } from 'antd'
 import { TranslationsLoaderContainer } from '@Pimcore/modules/translations/translations-loader-container'
+import { Background } from '@Pimcore/components/background/background'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -10,6 +11,7 @@ export const AppView = (): React.JSX.Element => {
       <StrictMode>
         <GlobalProvider>
           <AntApp>
+            <Background />
             <TranslationsLoaderContainer>
               <BaseLayoutView />
             </TranslationsLoaderContainer>

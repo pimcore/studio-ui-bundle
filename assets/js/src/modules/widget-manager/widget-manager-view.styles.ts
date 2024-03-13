@@ -55,7 +55,11 @@ export const useStlyes = createStyles(({ token, css }) => {
   return {
     widgetManager: css`
       position: absolute;
-      inset: 8px 6px 4px 6px;
+      inset: 8px 6px 12px 6px;
+
+      .flexlayout__layout {
+        overflow: visible;
+      }
 
       &.widget-manager--inner {
         inset: 0;
@@ -140,21 +144,22 @@ export const useStlyes = createStyles(({ token, css }) => {
       }
 
       .flexlayout__tab {
+        overflow: visible;
         background: ${token.colorBgContainer};
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.02), 0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
+        box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
         border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
-        border-radius: 0 ${token.borderRadius}px ${token.borderRadius}px ${token.borderRadius}px;
+        border-radius: 0 8px 8px 8px;
       }
 
       .flexlayout__tab_border {
-        box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.02), 0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 1px 2px 0px rgba(0, 0, 0, 0.03);
+        box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
         border-top: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-bottom: 1px solid ${token.Tabs.colorBorderContainer}66;
         border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
-        border-radius: ${token.borderRadius}px;
+        border-radius: 8px;
       }
 
       .widget-manager-inner-container {
