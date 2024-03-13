@@ -44,6 +44,9 @@ export const _default = {
   args: {
     name: 'Pimconaout0_123.jpg',
     imgSrc: 'https://pimcore.com/brand/Website-Banners/image-thumb__23862__header-sujet-img__2019--slider/2024-Pimcore-Home-Main.webp',
-    dropdownItems
+    dropdownItems,
+    onClick: (e) => {
+      console.log('Card clicked')
+    }
   }
 }

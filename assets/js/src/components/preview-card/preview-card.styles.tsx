@@ -5,6 +5,7 @@ export const useStyle = createStyles(({ token, css }) => {
     card: css`
         &.ant-card {
             height: 103px;
+            cursor: pointer;
         }
         
         &.ant-card .ant-card-body {
@@ -12,6 +13,10 @@ export const useStyle = createStyles(({ token, css }) => {
             margin-top: 7px;
             margin-bottom: 7px;
             width: 166px;
+        }
+        
+        &.ant-card .ant-card-meta-title {
+              font-weight: normal;
         }
 
         .checkbox, .checkbox-medium {
@@ -54,9 +59,14 @@ export const useStyle = createStyles(({ token, css }) => {
             width: 170px;
         }
 
+        .ant-image .ant-image-img.img, .ant-image .ant-image-img.img-medium {
+            border-radius: unset;
+            margin-top: 3px;
+        }
+        
         .ant-image .ant-image-img.img {
-            max-height: 64px;
-            max-width: 170px;
+            max-height: 61px;
+            max-width: 168px;
         }
 
         .ant-card-cover .img-container-medium {
@@ -65,8 +75,8 @@ export const useStyle = createStyles(({ token, css }) => {
         }
 
         .ant-image .ant-image-img.img-medium {
-            max-height: 109px;
-            max-width: 236px;
+            max-height: 106px;
+            max-width: 234px;
         }
 
         .menu-icon {

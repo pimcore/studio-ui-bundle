@@ -6,8 +6,7 @@ export const useStyles = createStyles(({ css, token }) => {
       display: flex;
       flex-wrap: wrap;
       gap: ${token.marginXS}px;
-      padding-right: ${token.paddingSM}px;
-      padding-left: ${token.paddingXS}px;
+      padding: ${token.marginXS}px ${token.paddingSM}px ${token.marginXS}px ${token.paddingXS}px;
       align-self: baseline;
     `
   }

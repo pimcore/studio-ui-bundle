@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { FlexContainerView } from '@Pimcore/modules/asset/types/folder/editor-tabs/tabs/preview/flex-container-view'
 import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
 import type { DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 interface FlexContainerProps {
   assets: ApiAssetsGetCollection
@@ -12,6 +13,7 @@ interface FlexContainerProps {
 const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
+  const { openAsset } = useAsset()
 
   const dropdownItems: DropdownMenuItemProps[] = [
     {
@@ -41,11 +43,23 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
 
   const cards: ReactNode[] = []
   assets.forEach((asset) => {
+    const onClickCard = (e): void => {
+      openAsset({
+        name: asset.filename,
+        icon: asset.iconName ?? 'file-question-02',
+
+        config: {
+          id: asset.id!
+        }
+      })
+    }
+
     cards.push(
         <PreviewCard key={asset.id}
                      name={asset.filename}
                      dropdownItems={dropdownItems}
                      imgSrc={asset.fullPath}
+                     onClick={onClickCard}
         />
     )
   })

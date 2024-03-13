@@ -16,10 +16,11 @@ interface PreviewCardProps {
   dropdownItems: DropdownMenuItemProps[]
   imgSrc?: string
   size?: SizeTypes
+  onClick?: (e) => void
 }
 
 export const PreviewCard = ({
-  name, dropdownItems, imgSrc, size = SizeTypes.SMALL
+  name, dropdownItems, imgSrc, size = SizeTypes.SMALL, onClick
 }: PreviewCardProps
 ): React.JSX.Element => {
   const { styles } = useStyle()
@@ -42,6 +43,7 @@ export const PreviewCard = ({
 
   return (
       <Card className={styles.card}
+        onClick={onClick}
         cover={
           <div className={classImgDiv}>
             <PimcoreImage src={imgSrc} alt={name} className={classImg}/>
@@ -52,6 +54,7 @@ export const PreviewCard = ({
             checked={selected}
             className={classCheckbox}
             onChange={onChangeSelection}
+            onClick={(e) => { e.stopPropagation() }}
         />
         <DropdownMenu
           dropdownItems={dropdownItems}
@@ -62,6 +65,7 @@ export const PreviewCard = ({
               size="small"
               icon={<Icon name="dots-horizontal" className='dropdown-menu__icon'/>}
               className={classDotsButton}
+              onClick={(e) => { e.stopPropagation() }}
               />
         </DropdownMenu>
         <Meta
