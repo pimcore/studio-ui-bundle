@@ -3,7 +3,6 @@ import { DropdownMenu as DropdownMenuComponent, type DropdownMenuItemProps } fro
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import i18n from '@Pimcore/app/i18n'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/DropdownMenu',
@@ -29,11 +28,11 @@ const dropdownItems: DropdownMenuItemProps[] = [
       console.log('clicked div')
     },
     iconLeft: 'target',
-    label: i18n.t('preview-card.locate-in-tree')
+    label: 'preview-card.locate-in-tree'
   },
   {
     iconLeft: 'info-circle-outlined',
-    label: i18n.t('preview-card.info'),
+    label: 'preview-card.info',
     iconRight: {
       name: 'right-outlined',
       onClick: (e) => {
@@ -44,19 +43,19 @@ const dropdownItems: DropdownMenuItemProps[] = [
   },
   {
     iconLeft: 'rich-edit',
-    label: i18n.t('preview-card.rename')
+    label: 'preview-card.rename'
   },
   {
     iconLeft: 'download-02',
-    label: i18n.t('preview-card.download-zip')
+    label: 'preview-card.download-zip'
   },
   {
     iconLeft: 'delete-outlined',
-    label: i18n.t('preview-card.delete')
+    label: 'preview-card.delete'
   },
   {
     iconLeft: 'info-circle-outlined',
-    label: i18n.t('preview-card.info'),
+    label: 'preview-card.info',
     iconToLabel: { name: 'right-outlined' },
     iconRight: { name: 'pin-02' }
   }

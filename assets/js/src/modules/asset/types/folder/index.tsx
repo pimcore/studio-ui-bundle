@@ -18,5 +18,5 @@ folderEditorTabManager.register({
   children: <ListContainer />,
   icon: <Icon name={'unordered-list-outlined'} />,
   key: 'list',
-  label: i18n.t('folder.folder-editor-tabs.view')
+  label: 'folder.folder-editor-tabs.view'
 })
