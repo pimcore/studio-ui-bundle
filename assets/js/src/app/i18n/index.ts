@@ -6,8 +6,7 @@ i18n
 
   .init({
     fallbackLng: 'en',
-    partialBundledLanguages: true,
-    ns: [],
+    ns: ['translation'],
     resources: {},
     saveMissing: true
   })
@@ -17,7 +16,7 @@ i18n
   })
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
-  // @todo implement handling of missing keys after endpoints are available
+// @todo implement handling of missing keys after endpoints are available
 })
 
 export default i18n
