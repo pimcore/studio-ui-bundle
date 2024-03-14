@@ -15,7 +15,7 @@ asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
-folder.folder-editor-tabs.view: Preview
+folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
 toolbar.reload: Reload
 toolbar.locate-in-tree: Locate in Tree
