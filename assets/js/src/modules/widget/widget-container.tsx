@@ -24,7 +24,7 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
         <Component {...node.getConfig()} />
       </WidgetView>
     </WidgetContext.Provider>
-  ), [nodeId])
+  ), [nodeId, isBorderNode])
 }
 
 export { WidgetContainer }
