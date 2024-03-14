@@ -1,5 +1,5 @@
 import { Button } from 'antd'
-import React, { useState } from 'react'
+import React, { type ReactNode, useState } from 'react'
 import { useStyle } from './toolbar.styles'
 import { Icon } from '../icon/icon'
 import i18n from '@Pimcore/app/i18n'
@@ -18,10 +18,12 @@ interface InternalToolbarElement extends PinnableToolbarElement {
 }
 
 interface ToolbarProps {
+  saveButton: ReactNode
   pinnableToolbarElements?: PinnableToolbarElement[]
 }
 
 export const Toolbar = ({
+  saveButton,
   pinnableToolbarElements
 }: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyle()
@@ -31,7 +33,7 @@ export const Toolbar = ({
         <LeftContainer toolbarElements={pinnableToolbarElements}/>
         <div className='container__inline-container'>
             <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button>
-            <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>
+            { saveButton }
         </div>
       </div>
   )
