@@ -67,6 +67,6 @@ const pinnableToolbarElements: PinnableToolbarElement[] = [
 export const _default = {
   args: {
     pinnableToolbarElements,
-    saveButton: <Button type='primary'>{ i18n.t('toolbar.save-and-publish') }</Button>
+    renderSaveButton: <Button type='primary'>{ i18n.t('toolbar.save-and-publish') }</Button>
   }
 }

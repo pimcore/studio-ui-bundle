@@ -13,7 +13,7 @@ const FolderContainer = (): React.JSX.Element => {
       }
 
       renderToolbar={
-        <Toolbar saveButton={<Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>}
+        <Toolbar renderSaveButton={<Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>}
             pinnableToolbarElements={
               [{
                 iconName: 'refresh',
