@@ -127,7 +127,7 @@ export const useStlyes = createStyles(({ token, css }) => {
       }
 
       .flexlayout__border_inner_tab_container {
-        width: calc(100svh - 12px);
+        width: calc(100svh - 20px);
         justify-content: flex-end;
       }
 

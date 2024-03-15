@@ -45,7 +45,9 @@ const icons = {
   'file-x-03': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-x-03.inline.svg')),
   'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/presentation-chart-01.inline.svg')),
   'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/core/video-recorder.inline.svg')),
-  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg'))
+  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg')),
+  'rocket-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/rocket-02.inline.svg')),
+  'car-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/car-02.inline.svg'))
 }
 
 export interface IconProps {

@@ -5,7 +5,8 @@ export const getInitialModelJson = (): IJsonModel => {
     global: {
       tabEnableRename: false,
       tabSetEnableMaximize: false,
-      rootOrientationVertical: true
+      rootOrientationVertical: true,
+      borderAutoSelectTabWhenClosed: true
     },
 
     layout: {
@@ -41,6 +42,7 @@ export const getInitialModelJson = (): IJsonModel => {
           children: [
             {
               type: 'tab',
+              icon: 'rocket-02',
               name: 'Interconnected widget',
               component: 'example',
               enableClose: false
@@ -63,6 +65,17 @@ export const getInitialModelJson = (): IJsonModel => {
             name: 'asset.asset-tree.title',
             component: 'asset-tree',
             enableClose: false
+          },
+
+          {
+            type: 'tab',
+            icon: 'car-02',
+            name: 'Car images',
+            component: 'asset-tree',
+            enableClose: false,
+            config: {
+              id: 288
+            }
           }
         ]
       },
@@ -71,18 +84,9 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: 0,
+        show: true,
         children: [
-          {
-            type: 'tab',
-            icon: 'camera',
-            name: 'asset.asset-tree.title',
-            component: 'asset-tree',
-            enableClose: false,
-            config: {
-              id: 288
-            }
-          }
+
         ]
       }
     ]
