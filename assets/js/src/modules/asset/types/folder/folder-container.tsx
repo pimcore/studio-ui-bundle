@@ -29,6 +29,16 @@ const FolderContainer = (): React.JSX.Element => {
                 iconName: 'info-circle-outlined',
                 label: i18n.t('toolbar.copy-id'),
                 pinning: true
+              },
+
+              {
+                iconName: 'edit-outlined',
+                label: 'Rename'
+              },
+
+              {
+                iconName: 'delete-outlined',
+                label: 'Delete'
               }]
             }
         />

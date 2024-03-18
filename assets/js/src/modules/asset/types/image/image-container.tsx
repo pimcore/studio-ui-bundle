@@ -30,6 +30,16 @@ const ImageContainer = (): React.JSX.Element => {
                 iconName: 'info-circle-outlined',
                 label: i18n.t('toolbar.copy-id'),
                 pinning: true
+              },
+
+              {
+                iconName: 'edit-outlined',
+                label: 'rename'
+              },
+
+              {
+                iconName: 'delete-outlined',
+                label: 'delete'
               }
             ]
           }
