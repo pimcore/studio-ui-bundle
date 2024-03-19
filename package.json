@@ -26,7 +26,7 @@
     "@storybook/blocks": "^7.6.16",
     "@storybook/react": "^7.6.10",
     "@storybook/react-webpack5": "^7.6.17",
-    "@storybook/test": "^7.6.16",
+    "@storybook/test": "^8.0.1",
     "@svgr/webpack": "^8.1.0",
     "@symfony/webpack-encore": "^4.6.1",
     "@testing-library/dom": "^9.3.4",
