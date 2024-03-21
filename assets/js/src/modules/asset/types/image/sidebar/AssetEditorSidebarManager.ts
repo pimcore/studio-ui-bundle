@@ -1,7 +1,3 @@
-import {SidebarManager} from "@Pimcore/modules/sidebar/SidebarManager";
+import { SidebarManager } from '@Pimcore/modules/sidebar/SidebarManager'
 
-export class AssetEditorSidebarManager extends SidebarManager {
-    constructor() {
-        super();
-    }
-}
+export class AssetEditorSidebarManager extends SidebarManager {}

@@ -4,13 +4,21 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     sidebar: css`
       display: flex;
+
+      @-webkit-keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
       
       .sidebar__navigation {
           display: flex;
           width: 45px;
           padding: 4px 8px;
           flex-direction: column;
-          justify-content: space-between;
           align-items: center;
           flex-shrink: 0;
           align-self: stretch;
@@ -46,16 +54,11 @@ export const useStyle = createStyles(({ token, css }) => {
       
       .sidebar__content {
         padding: ${token.paddingXS}px ${token.paddingSM}px;
+        width: 250px;
+        transition: width 0.2s ease-in;
         
-        .sidebar__content-entry {
-            width: 250px;
-          
-          .sidebar__content-label {
-            color: ${token.colorPrimaryActive};
-            line-height: 20px;
-            margin: 0;
-            font-weight: 600;
-          }
+        &:not(.expanded) {
+          display: none;
         }
       }
     `
