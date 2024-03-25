@@ -10,3 +10,9 @@ sidebarManager.registerEntry({
   icon: <Icon name={'view-details'} options={{ width: '16px', height: '16px' }}/>,
   component: <AssetEditorSidebarDetailsTab/>
 })
+
+sidebarManager.registerButton({
+  key: 'focal-point',
+  icon: <Icon name={'focal-point'} options={{ width: '16px', height: '16px' }}/>,
+  onClick: () => { console.log('focal-point button clicked') }
+})

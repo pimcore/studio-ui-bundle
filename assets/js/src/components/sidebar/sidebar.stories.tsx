@@ -6,7 +6,13 @@ import React from 'react'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Sidebar',
-  component: Sidebar,
+  component: (args) => {
+    return (
+        <div style={{ display: 'flex', height: '50vh' }}>
+          <Sidebar entries={args.entries} buttons={args.buttons} />
+        </div>
+    )
+  },
   parameters: {
     layout: 'centered'
   },
@@ -29,6 +35,18 @@ export const _default = {
         key: 'details',
         icon: <Icon name={'view-details'} options={{ width: '16px', height: '16px' }}/>,
         component: <AssetEditorSidebarDetailsTab/>
+      },
+      {
+        key: 'details',
+        icon: <Icon name={'view-details'} options={{ width: '16px', height: '16px' }}/>,
+        component: <AssetEditorSidebarDetailsTab/>
+      }
+    ],
+    buttons: [
+      {
+        key: 'focal-point',
+        icon: <Icon name={'focal-point'} options={{ width: '16px', height: '16px' }}/>,
+        onClick: () => {console.log('focal-point button clicked')}
       }
     ]
   }

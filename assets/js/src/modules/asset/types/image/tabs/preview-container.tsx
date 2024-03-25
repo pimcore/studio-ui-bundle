@@ -9,11 +9,12 @@ const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useApiAssetsIdGetQuery({ id: assetContext.id!.toString() })
   const sidebarEntries = sidebarManager.getEntries()
+  const sidebarButtons = sidebarManager.getButtons()
 
   return (
       <>
         <PreviewView src={data!.fullPath!} />
-        <Sidebar entries={sidebarEntries}/>
+        <Sidebar entries={sidebarEntries} buttons={sidebarButtons} />
       </>
   )
 }

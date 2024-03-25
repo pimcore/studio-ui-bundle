@@ -6,8 +6,15 @@ export interface ISidebarEntry {
   component: React.JSX.Element
 }
 
+export interface ISidebarButton {
+  key: string
+  icon: React.JSX.Element
+  onClick: () => void
+}
+
 export abstract class SidebarManager {
   entries: ISidebarEntry[] = []
+  buttons: ISidebarButton[] = []
 
   getEntries (): ISidebarEntry[] {
     return this.entries
@@ -24,5 +31,22 @@ export abstract class SidebarManager {
     }
 
     this.entries.push(entry)
+  }
+
+  getButtons (): ISidebarButton[] {
+    return this.buttons
+  }
+
+  getButton (key: string): ISidebarButton | undefined {
+    return this.buttons.find((button) => button.key === key)
+  }
+
+  registerButton (button: ISidebarButton): void {
+    if (this.getButton(button.key) !== undefined) {
+      this.buttons.splice(this.buttons.findIndex((e) => e.key === button.key), 1, button)
+      return
+    }
+
+    this.buttons.push(button)
   }
 }
