@@ -1,5 +1,5 @@
 import { Button, Card, Checkbox } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import { useStyle } from './preview-card.styles'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
@@ -13,36 +13,48 @@ export enum SizeTypes {
 
 interface PreviewCardProps {
   name: string
-  selected: boolean
   dropdownItems: DropdownMenuItemProps[]
   imgSrc?: string
   size?: SizeTypes
+  onClick?: (e) => void
 }
 
 export const PreviewCard = ({
-  name, selected, dropdownItems, imgSrc, size = SizeTypes.SMALL
+  name, dropdownItems, imgSrc, size = SizeTypes.SMALL, onClick
 }: PreviewCardProps
 ): React.JSX.Element => {
   const { styles } = useStyle()
+  const [selected, setSelected] = useState(false)
 
   let classImg: string = 'img'
+  let classImgDiv: string = 'img-container'
   let classCheckbox: string = 'checkbox'
   let classDotsButton: string = 'dots-button'
   if (size === SizeTypes.MEDIUM) {
     classImg = 'img-medium'
+    classImgDiv = 'img-container-medium'
     classCheckbox = 'checkbox-medium'
     classDotsButton = 'dots-button-medium'
   }
 
+  const onChangeSelection = (e): void => {
+    setSelected(!selected)
+  }
+
   return (
       <Card className={styles.card}
+        onClick={onClick}
         cover={
-          <PimcoreImage src={imgSrc} alt={name} className={classImg}/>
+          <div className={classImgDiv}>
+            <PimcoreImage src={imgSrc} alt={name} className={classImg}/>
+          </div>
         }
       >
         <Checkbox
             checked={selected}
             className={classCheckbox}
+            onChange={onChangeSelection}
+            onClick={(e) => { e.stopPropagation() }}
         />
         <DropdownMenu
           dropdownItems={dropdownItems}
@@ -53,6 +65,7 @@ export const PreviewCard = ({
               size="small"
               icon={<Icon name="dots-horizontal" className='dropdown-menu__icon'/>}
               className={classDotsButton}
+              onClick={(e) => { e.stopPropagation() }}
               />
         </DropdownMenu>
         <Meta

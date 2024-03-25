@@ -82,6 +82,13 @@ export const getInitialModelJson = (): IJsonModel => {
             config: {
               id: 288
             }
+          },
+
+          {
+            type: 'tab',
+            name: 'actions',
+            component: 'widget-manager-actions',
+            enableClose: false
           }
         ]
       }

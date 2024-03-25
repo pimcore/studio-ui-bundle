@@ -1,5 +1,8 @@
 import { type Meta } from '@storybook/react'
 import { type PinnableToolbarElement, Toolbar as ToolbarComponent } from './toolbar'
+import i18n from '@Pimcore/app/i18n'
+import { Button } from 'antd'
+import React from 'react'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Toolbar',
@@ -63,6 +66,7 @@ const pinnableToolbarElements: PinnableToolbarElement[] = [
 
 export const _default = {
   args: {
-    pinnableToolbarElements
+    pinnableToolbarElements,
+    renderSaveButton: <Button type='primary'>{ i18n.t('toolbar.save-and-publish') }</Button>
   }
 }
