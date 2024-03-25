@@ -35,11 +35,6 @@ export const _default = {
         key: 'details',
         icon: <Icon name={'view-details'} options={{ width: '16px', height: '16px' }}/>,
         component: <AssetEditorSidebarDetailsTab/>
-      },
-      {
-        key: 'details',
-        icon: <Icon name={'view-details'} options={{ width: '16px', height: '16px' }}/>,
-        component: <AssetEditorSidebarDetailsTab/>
       }
     ],
     buttons: [

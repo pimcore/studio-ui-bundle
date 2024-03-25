@@ -52,6 +52,12 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
                             </Form.Item>
                         </div>
                     </div>
+
+                    <div className={'entry-content__download-content-custom__button'}>
+                        <Button>
+                            Download
+                        </Button>
+                    </div>
                 </Form>
       )
     }

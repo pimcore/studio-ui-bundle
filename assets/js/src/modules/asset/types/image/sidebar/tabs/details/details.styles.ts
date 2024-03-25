@@ -78,6 +78,7 @@ export const useStyle = createStyles(({ token, css }) => {
                     display: flex;
                     gap: ${token.paddingXS}px;
                     flex-direction: column;
+                    padding-bottom: ${token.paddingSM}px;
                     
                     > div {
                         display: flex;
@@ -87,6 +88,10 @@ export const useStyle = createStyles(({ token, css }) => {
                             flex: 1
                         }
                     }
+                }
+                
+                .entry-content__download-content-custom__button {
+                    padding: ${token.paddingXS}px 0;
                 }
             }
         `
