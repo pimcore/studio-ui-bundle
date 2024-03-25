@@ -41,7 +41,7 @@ export const _default = {
       {
         key: 'focal-point',
         icon: <Icon name={'focal-point'} options={{ width: '16px', height: '16px' }}/>,
-        onClick: () => {console.log('focal-point button clicked')}
+        onClick: () => { console.log('focal-point button clicked') }
       }
     ]
   }
