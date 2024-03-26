@@ -24,3 +24,6 @@ toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
 example-prefix: Example Prefix
+pagination.prev-pages: Previous {{pages}} Pages
+pagination.next-pages: Next {{pages}} Pages
+pagination.page: Page

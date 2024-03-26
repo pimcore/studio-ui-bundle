@@ -28,6 +28,7 @@ const icons = {
   target: React.lazy(async () => await import('@Pimcore/assets/icons/core/target.inline.svg')),
   'info-circle-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/info-circle-outlined.inline.svg')),
   'right-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/right-outlined.inline.svg')),
+  'left-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/left-outlined.inline.svg')),
   'rich-edit': React.lazy(async () => await import('@Pimcore/assets/icons/core/rich-edit.inline.svg')),
   'download-02': React.lazy(async () => await import('@Pimcore/assets/icons/core/download-02.inline.svg')),
   'delete-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/delete-outlined.inline.svg')),
@@ -45,7 +46,10 @@ const icons = {
   'file-x-03': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-x-03.inline.svg')),
   'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/presentation-chart-01.inline.svg')),
   'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/core/video-recorder.inline.svg')),
-  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg'))
+  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg')),
+  'ellipsis-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/core/ellipsis-outlined.inline.svg')),
+  'double-right': React.lazy(async () => await import('@Pimcore/assets/icons/core/double-right.inline.svg')),
+  'double-left': React.lazy(async () => await import('@Pimcore/assets/icons/core/double-left.inline.svg'))
 }
 
 export interface IconProps {
