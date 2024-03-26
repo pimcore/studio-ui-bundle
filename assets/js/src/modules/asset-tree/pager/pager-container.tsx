@@ -13,7 +13,7 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
 
   function onChange (page: number): void {
     setPage(page)
-    props.setAdditionalQueryParams({ page })
+    props.mergeAdditionalQueryParams({ page })
   }
 
   return (

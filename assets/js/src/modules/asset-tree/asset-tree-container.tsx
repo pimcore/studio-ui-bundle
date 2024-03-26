@@ -6,6 +6,7 @@ import { PagerContainer } from './pager/pager-container'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { api } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { store } from '@Pimcore/app/store'
+import { SearchContainer } from './search/search-container'
 
 export interface AssetTreeContainerProps {
   id: number
@@ -37,6 +38,7 @@ const AssetTreeContainer = (props: AssetTreeContainerProps): React.JSX.Element =
       nodeApiHook={useNodeApiHook}
       maxItemsPerNode={20}
       renderPager={PagerContainer}
+      renderFilter={SearchContainer}
       onSelect={onSelect}
     />
   )
