@@ -22,7 +22,7 @@
     "@storybook/addon-essentials": "^7.6.15",
     "@storybook/addon-interactions": "^8.0.4",
     "@storybook/addon-links": "^7.6.10",
-    "@storybook/addon-onboarding": "^1.0.11",
+    "@storybook/addon-onboarding": "^8.0.4",
     "@storybook/blocks": "^7.6.16",
     "@storybook/react": "^7.6.10",
     "@storybook/react-webpack5": "^8.0.4",
