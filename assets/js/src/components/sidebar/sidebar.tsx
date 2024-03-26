@@ -72,9 +72,12 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
             <div className={'sidebar__content ' + (activeTab !== '' ? 'expanded' : '')}>
                 {preparedEntries.map((entry, index) => {
                   return (
-                        <>
+                        <div
+                            key={entry.key}
+                            className={'tab ' + (entry.key === activeTab ? 'active' : '')}
+                        >
                             {entry.component}
-                        </>
+                        </div>
                   )
                 })}
             </div>

@@ -63,6 +63,14 @@ export const useStyle = createStyles(({ token, css }) => {
       .sidebar__content {
         padding: ${token.paddingXS}px ${token.paddingSM}px;
         width: 250px;
+
+        .tab {
+          display: none;
+          
+            &.active {
+                display: block;
+            }
+        }
         
         &:not(.expanded) {
           display: none;
