@@ -10,15 +10,15 @@ const TabsToolbarView = (props: TabbarToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <div className={['tabs-toolbar-layout', styles.tabbarToolbar].join(' ')}>
-      <div className='tabs-toolbar-layout__tabbar'>
-        {props.renderTabbar}
-      </div>
+      <div className={['tabs-toolbar-layout', styles.tabbarToolbar].join(' ')}>
+          <div className='tabs-toolbar-layout__tabbar'>
+              {props.renderTabbar}
+          </div>
 
-      <div className='tabs-toolbar-layout__toolbar'>
-        {props.renderToolbar}
+          <div className='tabs-toolbar-layout__toolbar'>
+              {props.renderToolbar}
+          </div>
       </div>
-    </div>
   )
 }
 

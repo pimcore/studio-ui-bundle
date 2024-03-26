@@ -14,7 +14,6 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
     <div className={[styles.preview].join(' ')}>
       <PimcoreImage src={src} />
     </div>
-
   )
 }
 
