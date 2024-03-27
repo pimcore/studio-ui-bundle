@@ -1,9 +1,9 @@
 import {message} from "antd";
-import {ArgsProps, ConfigOptions, MessageType, TypeOpen} from "antd/es/message/interface";
+import {ArgsProps, ConfigOptions, MessageInstance, MessageType} from "antd/es/message/interface";
 import {Icon} from "@Pimcore/components/icon/icon";
 import React from "react";
 
-export const useMessage = (messageConfig?: ConfigOptions) => {
+export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInstance, React.ReactElement] => {
     const [messageApi, contextHolder] = message.useMessage(messageConfig);
 
     messageApi.open = (config: ArgsProps): MessageType => {
