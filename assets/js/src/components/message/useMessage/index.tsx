@@ -14,7 +14,7 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
 
   messageApi.info = (content: JointContent, duration?: number | VoidFunction, onClose?: VoidFunction): MessageType => {
     let config: ArgsProps;
-    if (content && typeof content === 'object' && 'content' in content) {
+    if (content !== false && typeof content === 'object' && 'content' in content) {
       config = content;
     } else {
       config = {
