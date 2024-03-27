@@ -22,7 +22,7 @@ const defaultTheme = {
     fontSizeHeading1: 35,
     colorIconSecondary: '#4d4169',
     colorFillNav: 'rgba(0.3019607961177826, 0.2549019753932953, 0.4117647111415863, 0.07999999821186066)',
-    colovIconSidebar: '#22075e',
+    colorIconSidebar: '#22075e',
     colorBorderActive: '#fa8c16',
     colorLogo: '#5520a6',
     colorBorderTertiary: '#dfd7ea',
