@@ -2,7 +2,7 @@ import { message } from 'antd'
 import {
   type ArgsProps,
   type ConfigOptions,
-  JointContent,
+  type JointContent,
   type MessageInstance,
   type MessageType
 } from 'antd/es/message/interface'
@@ -15,12 +15,12 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
   messageApi.info = (content: JointContent, duration?: number | VoidFunction, onClose?: VoidFunction): MessageType => {
     return message.info(
       {
-        content: content,
-        icon: <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />,
+        content,
+        icon: <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />
       },
       duration,
       onClose
-    );
+    )
   }
 
   messageApi.open = (config: ArgsProps): MessageType => {
@@ -31,8 +31,8 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
       })
     }
 
-    return message.open(config);
-  };
+    return message.open(config)
+  }
 
   return [messageApi, contextHolder]
 }
