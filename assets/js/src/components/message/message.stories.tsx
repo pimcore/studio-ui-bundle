@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from 'antd'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
+
 const config: Meta = {
   title: 'Pimcore studio/UI/Message',
   component: (args) => {
@@ -13,7 +14,7 @@ const config: Meta = {
         type: args.type,
         content: args.content,
         duration: args.duration
-      }).then(() => {})
+      })
     }
 
     return (
