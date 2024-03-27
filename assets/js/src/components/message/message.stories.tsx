@@ -9,7 +9,7 @@ const config: Meta = {
         const [messageApi, contextHolder] = useMessage();
 
         const showMessage = (): void => {
-            messageApi.open({
+            void messageApi.open({
                 type: args.type,
                 content: args.content,
                 duration: args.duration
