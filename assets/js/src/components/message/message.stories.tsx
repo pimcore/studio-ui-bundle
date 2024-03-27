@@ -1,19 +1,19 @@
 import {type Meta} from '@storybook/react'
 import React from 'react'
 import {Button} from "antd";
-import useMessage from "@Pimcore/components/message/useMessage";
+import {useMessage} from "@Pimcore/components/message/useMessage";
 
 const config: Meta = {
     title: 'Pimcore studio/UI/Message',
     component: (args) => {
         const [messageApi, contextHolder] = useMessage();
 
-        const showMessage = () => {
+        const showMessage = (): void => {
             messageApi.open({
                 type: args.type,
                 content: args.content,
                 duration: args.duration
-            })
+            }).then(() => {})
         };
 
         return (
