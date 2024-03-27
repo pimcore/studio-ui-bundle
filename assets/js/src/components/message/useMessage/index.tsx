@@ -13,11 +13,19 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
   const [messageApi, contextHolder] = message.useMessage(messageConfig)
 
   messageApi.info = (content: JointContent, duration?: number | VoidFunction, onClose?: VoidFunction): MessageType => {
+    let config: ArgsProps;
+    if (content && typeof content === 'object' && 'content' in content) {
+      config = content;
+    } else {
+      config = {
+        content: content,
+      };
+    }
+
+    config.icon = <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />;
+
     return message.info(
-      {
-        content,
-        icon: <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />
-      },
+      config,
       duration,
       onClose
     )
