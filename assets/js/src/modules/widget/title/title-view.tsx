@@ -13,11 +13,14 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { title, icon } = props
 
   return (
-    <div className={styles.WidgetTitle}>
-      <Icon name={icon} options={{
-        width: 18,
-        height: 18
-      }} />
+    <div className={ styles.WidgetTitle }>
+      <Icon
+        name={ icon }
+        options={ {
+          width: 18,
+          height: 18
+        } }
+      />
 
       <span>{title}</span>
     </div>

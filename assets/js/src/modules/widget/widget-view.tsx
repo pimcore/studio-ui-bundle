@@ -16,9 +16,12 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
-    <div className={['widget', styles.Widget].join(' ')}>
+    <div className={ ['widget', styles.Widget].join(' ') }>
       {showTitle === true && (
-        <TitleView icon={icon} title={t(title)} />
+        <TitleView
+          icon={ icon }
+          title={ t(title) }
+        />
       )}
 
       <div className='widget__content'>

@@ -14,7 +14,13 @@ const EditorTabsContainer = (): React.JSX.Element => {
     }
   })
 
-  return <EditorTabsView defaultActiveKey='preview' items={preparedTabs} showLabelIfActive />
+  return (
+    <EditorTabsView
+      defaultActiveKey='preview'
+      items={ preparedTabs }
+      showLabelIfActive
+    />
+  )
 }
 
 export { EditorTabsContainer }

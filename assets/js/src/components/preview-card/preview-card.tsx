@@ -42,35 +42,43 @@ export const PreviewCard = ({
   }
 
   return (
-      <Card className={styles.card}
-        onClick={onClick}
-        cover={
-          <div className={classImgDiv}>
-            <PimcoreImage src={imgSrc} alt={name} className={classImg}/>
-          </div>
+    <Card
+      className={ styles.card }
+      cover={
+        <div className={ classImgDiv }>
+          <PimcoreImage
+            alt={ name }
+            className={ classImg }
+            src={ imgSrc }
+          />
+        </div>
         }
+      onClick={ onClick }
+    >
+      <Checkbox
+        checked={ selected }
+        className={ classCheckbox }
+        onChange={ onChangeSelection }
+        onClick={ (e) => { e.stopPropagation() } }
+      />
+      <DropdownMenu
+        dropdownItems={ dropdownItems }
+        openClassName='dots-button-open-dropdown'
+        placement='bottomLeft'
       >
-        <Checkbox
-            checked={selected}
-            className={classCheckbox}
-            onChange={onChangeSelection}
-            onClick={(e) => { e.stopPropagation() }}
+        <Button
+          className={ classDotsButton }
+          icon={ <Icon
+            className='dropdown-menu__icon'
+            name="dots-horizontal"
+                 /> }
+          onClick={ (e) => { e.stopPropagation() } }
+          size="small"
         />
-        <DropdownMenu
-          dropdownItems={dropdownItems}
-          placement='bottomLeft'
-          openClassName='dots-button-open-dropdown'
-          >
-            <Button
-              size="small"
-              icon={<Icon name="dots-horizontal" className='dropdown-menu__icon'/>}
-              className={classDotsButton}
-              onClick={(e) => { e.stopPropagation() }}
-              />
-        </DropdownMenu>
-        <Meta
-          title={name}
-        />
-      </Card>
+      </DropdownMenu>
+      <Meta
+        title={ name }
+      />
+    </Card>
   )
 }

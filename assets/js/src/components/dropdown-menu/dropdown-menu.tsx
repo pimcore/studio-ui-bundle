@@ -38,18 +38,19 @@ export const DropdownMenu = ({
       {
         key: index.toString(),
         label: (
-                    <MenuItemContent item={item} />
+          <MenuItemContent item={ item } />
         )
       }
     )
   })
 
   return (
-    <Dropdown menu={{ items }}
-              placement={placement}
-              openClassName={openClassName}
-        >
-        {children}
+    <Dropdown
+      menu={ { items } }
+      openClassName={ openClassName }
+      placement={ placement }
+    >
+      {children}
     </Dropdown>
   )
 }
@@ -59,34 +60,44 @@ function MenuItemContent (prop): React.JSX.Element {
   const { styles } = useStyle()
   const iconOptions = { width: '16px', height: '16px' }
 
-  const iconLeft = <Icon name={item.iconLeft} options={iconOptions} className={styles['menu-icon']} />
+  const iconLeft = (
+    <Icon
+      className={ styles['menu-icon'] }
+      name={ item.iconLeft }
+      options={ iconOptions }
+    />
+  )
   if (item.iconRight !== null && item.iconRight !== undefined) {
     return (
-            <div onClick={item.onClick}
-                 className={styles['flexbox-start-end']}
-            >
-                <div>
-                    {iconLeft}
-                    <span className={styles.label}>{item.label}</span>
-                    {
-                        (item.iconToLabel as boolean ?? false) && <IconWithProps iconProps={
-                            { ...item.iconToLabel, width: '12px', height: '12px' }
-                        } />
-                    }
-                </div>
-                <div onClick={item.iconRight.onClick}>
-                    <IconWithProps iconProps={item.iconRight} />
-                </div>
-            </div>
+      <div
+        className={ styles['flexbox-start-end'] }
+        onClick={ item.onClick }
+      >
+        <div>
+          {iconLeft}
+          <span className={ styles.label }>{item.label}</span>
+          {
+            (item.iconToLabel as boolean ?? false) && (
+              <IconWithProps iconProps={
+                  { ...item.iconToLabel, width: '12px', height: '12px' }
+                }
+              />
+            )
+          }
+        </div>
+        <div onClick={ item.iconRight.onClick }>
+          <IconWithProps iconProps={ item.iconRight } />
+        </div>
+      </div>
 
     )
   }
 
   return (
-        <div onClick={item.onClick}>
-            {iconLeft}
-            {item.label}
-        </div>
+    <div onClick={ item.onClick }>
+      {iconLeft}
+      {item.label}
+    </div>
   )
 }
 
@@ -98,6 +109,11 @@ function IconWithProps (prop): React.JSX.Element {
     height: iconProps.height ?? '16px'
   }
 
-  return <Icon name={iconProps.name} options={iconOptions}
-          className={styles['menu-icon'] + ' ' + (iconProps.className ?? '')}/>
+  return (
+    <Icon
+      className={ styles['menu-icon'] + ' ' + (iconProps.className ?? '') }
+      name={ iconProps.name }
+      options={ iconOptions }
+    />
+  )
 }

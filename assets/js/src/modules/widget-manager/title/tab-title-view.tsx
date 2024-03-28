@@ -12,8 +12,11 @@ export const TabTitleView = ({ icon, title }: TabTitleViewProps): React.JSX.Elem
   const { styles } = useStyles()
 
   return (
-    <Space className={['widget-manager-tab-title', styles.title].join(' ')}>
-      <Icon name={icon} options={{ width: 16, height: 16 }} />
+    <Space className={ ['widget-manager-tab-title', styles.title].join(' ') }>
+      <Icon
+        name={ icon }
+        options={ { width: 16, height: 16 } }
+      />
       <span>{title}</span>
     </Space>
   )

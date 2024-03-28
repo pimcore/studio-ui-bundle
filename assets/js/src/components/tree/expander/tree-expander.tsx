@@ -28,10 +28,25 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
   }
 
   return (
-    <div className='tree-expander' style={{ minWidth: 16, width: 16, height: 16 }}>
+    <div
+      className='tree-expander'
+      style={ { minWidth: 16, width: 16, height: 16 } }
+    >
       {node.hasChildren === true && (
-        <span onClick={onClick}>
-          {isExapanded ? <Icon name="chevron-up" options={{ width: 16, height: 16 }} /> : <Icon name="chevron-down" options={{ width: 16, height: 16 }} />}
+        <span onClick={ onClick }>
+          {isExapanded
+            ? (
+              <Icon
+                name="chevron-up"
+                options={ { width: 16, height: 16 } }
+              />
+              )
+            : (
+              <Icon
+                name="chevron-down"
+                options={ { width: 16, height: 16 } }
+              />
+              )}
         </span>
       )}
     </div>

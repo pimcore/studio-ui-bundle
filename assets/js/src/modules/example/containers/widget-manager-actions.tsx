@@ -36,11 +36,39 @@ export const WidgetManagerActions = (): React.JSX.Element => {
 
   return (
     <>
-      <Space style={{ padding: '8px' }}>
-        <Button type="primary" icon={<Icon name='folder' options={{ width: 12, height: 12 }}/>} onClick={onOpenMainWidgetClick}>Open Main Widget</Button>
-        <Button type="default" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenBottomWidgetClick}>Open Bottom Widget</Button>
-        <Button type="text" icon={<Icon name='folder' options={{ width: 12, height: 12 }} />} onClick={onOpenLeftWidgetClick}>Open Left Widget</Button>
-        <Button type="dashed" icon={<Icon name='camera' options={{ width: 12, height: 12 }} />} onClick={onOpenRightWidgetClick}>Open Right Widget</Button>
+      <Space style={ { padding: '8px' } }>
+        <Button
+          icon={ <Icon
+            name='folder'
+            options={ { width: 12, height: 12 } }
+                 /> }
+          onClick={ onOpenMainWidgetClick }
+          type="primary"
+        >Open Main Widget</Button>
+        <Button
+          icon={ <Icon
+            name='camera'
+            options={ { width: 12, height: 12 } }
+                 /> }
+          onClick={ onOpenBottomWidgetClick }
+          type="default"
+        >Open Bottom Widget</Button>
+        <Button
+          icon={ <Icon
+            name='folder'
+            options={ { width: 12, height: 12 } }
+                 /> }
+          onClick={ onOpenLeftWidgetClick }
+          type="text"
+        >Open Left Widget</Button>
+        <Button
+          icon={ <Icon
+            name='camera'
+            options={ { width: 12, height: 12 } }
+                 /> }
+          onClick={ onOpenRightWidgetClick }
+          type="dashed"
+        >Open Right Widget</Button>
       </Space>
     </>
   )

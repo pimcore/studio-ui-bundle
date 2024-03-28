@@ -29,13 +29,13 @@ export const Toolbar = ({
   const { styles } = useStyle()
 
   return (
-      <div className={styles.container}>
-        <LeftContainer toolbarElements={pinnableToolbarElements}/>
-        <div className='container__inline-container'>
-            <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button>
-            { renderSaveButton }
-        </div>
+    <div className={ styles.container }>
+      <LeftContainer toolbarElements={ pinnableToolbarElements } />
+      <div className='container__inline-container'>
+        <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button>
+        { renderSaveButton }
       </div>
+    </div>
   )
 }
 
@@ -70,19 +70,27 @@ const LeftContainer = (prop): React.JSX.Element => {
     )
   })
 
-  return <div className='container__inline-container'>
-                {renderedItems}
-                <DropdownMenu placement={'topLeft'} dropdownItems={menuItems}>
-                        <Button type='text' className={
+  return (
+    <div className='container__inline-container'>
+      {renderedItems}
+      <DropdownMenu
+        dropdownItems={ menuItems }
+        placement={ 'topLeft' }
+      >
+        <Button
+          className={
                                 'inline-container__btn-info' + ' ' +
                                 'inline-container__btn-default-color' + ' ' +
-                                'inline-container__btn-more'
-                        }>
-                            {i18n.t('toolbar.more')}
-                            <ArrowDown className='inline-container__more-arrow-down' />
-                        </Button>
-                </DropdownMenu>
-            </div>
+          'inline-container__btn-more'
+                        }
+          type='text'
+        >
+          {i18n.t('toolbar.more')}
+          <ArrowDown className='inline-container__more-arrow-down' />
+        </Button>
+      </DropdownMenu>
+    </div>
+  )
 }
 
 const PinnedElement = (
@@ -92,23 +100,36 @@ const PinnedElement = (
 ): React.JSX.Element => {
   const iconOptions = { width: '18px', height: '18px' }
 
-  const toolbarIcon = <Icon name={toolbarElement.iconName}
-                              className='inline-container__btn-default-color'
-                              options={iconOptions}/>
+  const toolbarIcon = (
+    <Icon
+      className='inline-container__btn-default-color'
+      name={ toolbarElement.iconName }
+      options={ iconOptions }
+    />
+  )
 
   let element: React.JSX.Element
   if (toolbarElement.displayingArrowIcon ?? false) {
     element = (
-            <Button key={index} type='text' onClick={toolbarElement.onClick}
-                    className={'inline-container__btn-info' + DisplayNoneClass(display)}>
-                {toolbarIcon}
-                <ArrowDown className='inline-container__info-arrow-down' />
-            </Button>
+      <Button
+        className={ 'inline-container__btn-info' + DisplayNoneClass(display) }
+        key={ index }
+        onClick={ toolbarElement.onClick }
+        type='text'
+      >
+        {toolbarIcon}
+        <ArrowDown className='inline-container__info-arrow-down' />
+      </Button>
     )
   } else {
     element = (
-            <Button key={index} type='text' onClick={toolbarElement.onClick}
-                    className={DisplayNoneClass(display)} icon={toolbarIcon}/>
+      <Button
+        className={ DisplayNoneClass(display) }
+        icon={ toolbarIcon }
+        key={ index }
+        onClick={ toolbarElement.onClick }
+        type='text'
+      />
     )
   }
 
@@ -137,8 +158,11 @@ const MenuItem = (toolbarElement: InternalToolbarElement): DropdownMenuItemProps
 
 const ArrowDown = (arrowProps): React.JSX.Element => {
   return (
-        <Icon name='icon-tools' options={{ width: '10px', height: '5px' }}
-              className={arrowProps.className + ' ' + 'inline-container__btn-default-color'}/>
+    <Icon
+      className={ arrowProps.className + ' ' + 'inline-container__btn-default-color' }
+      name='icon-tools'
+      options={ { width: '10px', height: '5px' } }
+    />
   )
 }
 

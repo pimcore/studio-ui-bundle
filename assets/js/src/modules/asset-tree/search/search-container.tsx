@@ -14,7 +14,10 @@ const SearchContainer = (props: TreeSearchProps): React.JSX.Element => {
   }
 
   return (
-    <Search onSearch={onSearch} size='small' />
+    <Search
+      onSearch={ onSearch }
+      size='small'
+    />
   )
 }
 

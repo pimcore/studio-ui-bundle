@@ -40,16 +40,16 @@ const ListContainer = (): React.JSX.Element => {
     <ContentToolbarSidebarView
       renderToolbar={
         <GridToolbarContainer
-          pager={{
+          pager={ {
             current: currentPage,
             total,
             pageSize,
             onChange: onPagerChange
-          }}
+          } }
         />
       }
     >
-      <GridContainer assets={data['hydra:member']} />
+      <GridContainer assets={ data['hydra:member'] } />
     </ContentToolbarSidebarView>
   )
 }

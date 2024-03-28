@@ -61,14 +61,21 @@ export const Icon = ({ name, options, className }: IconProps): React.JSX.Element
   const height = options?.height ?? 16
 
   if (SvgIcon === undefined) {
-    return <div style={{ width, height }} />
+    return <div style={ { width, height } } />
   }
 
   return (
-      <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
-        <Suspense fallback={<div />}>
-          <SvgIcon width={width} height={height} {...options} />
-        </Suspense>
-      </div>
+    <div
+      className={ `pimcore-icon pimcore-icon-${name} anticon ${className}` }
+      style={ { width, height } }
+    >
+      <Suspense fallback={ <div /> }>
+        <SvgIcon
+          height={ height }
+          width={ width }
+          { ...options }
+        />
+      </Suspense>
+    </div>
   )
 }

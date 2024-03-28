@@ -15,20 +15,20 @@ export const Modal = (props: ModalProps): React.JSX.Element => {
   const { children } = props
 
   return (
-        <AntModal
-            title={(
-                <>
-                    {props.icon}
-                    <span>{props.title}</span>
-                </>
-            )}
-            className={styles.modal}
-            footer={props.footer}
-            open={props.open}
-            onCancel={props.onCancel}
-            onOk={props.onOk}
-        >
-            {children}
-        </AntModal>
+    <AntModal
+      className={ styles.modal }
+      footer={ props.footer }
+      onCancel={ props.onCancel }
+      onOk={ props.onOk }
+      open={ props.open }
+      title={ (
+        <>
+          {props.icon}
+          <span>{props.title}</span>
+        </>
+      ) }
+    >
+      {children}
+    </AntModal>
   )
 }

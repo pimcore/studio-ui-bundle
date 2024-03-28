@@ -34,53 +34,53 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
   }
 
   return (
-        <div className={styles.sidebar}>
-            <div className={'sidebar__navigation'}>
-                <div className={'sidebar__navigation__tabs'}>
-                    {
+    <div className={ styles.sidebar }>
+      <div className={ 'sidebar__navigation' }>
+        <div className={ 'sidebar__navigation__tabs' }>
+          {
                         preparedEntries.map((entry) => {
                           return (
-                                <div
-                                    key={entry.key}
-                                    className={'entry ' + (entry.key === activeTab ? 'active' : '')}
-                                    onClick={() => {
-                                      handleSidebarClick(entry.key)
-                                    }}
-                                >
-                                    {entry.icon}
-                                </div>
+                            <div
+                              className={ 'entry ' + (entry.key === activeTab ? 'active' : '') }
+                              key={ entry.key }
+                              onClick={ () => {
+                                handleSidebarClick(entry.key)
+                              } }
+                            >
+                              {entry.icon}
+                            </div>
                           )
                         })
                     }
-                </div>
-                <div className={'sidebar__navigation__buttons'}>
-                    {
+        </div>
+        <div className={ 'sidebar__navigation__buttons' }>
+          {
                         preparedButtons.map((button) => {
                           return (
-                                <div
-                                    key={button.key}
-                                    onClick={button.onClick}
-                                >
-                                    {button.icon}
-                                </div>
+                            <div
+                              key={ button.key }
+                              onClick={ button.onClick }
+                            >
+                              {button.icon}
+                            </div>
                           )
                         })
                     }
-                </div>
-            </div>
-
-            <div className={'sidebar__content ' + (activeTab !== '' ? 'expanded' : '')}>
-                {preparedEntries.map((entry, index) => {
-                  return (
-                        <div
-                            key={entry.key}
-                            className={'tab ' + (entry.key === activeTab ? 'active' : '')}
-                        >
-                            {entry.component}
-                        </div>
-                  )
-                })}
-            </div>
         </div>
+      </div>
+
+      <div className={ 'sidebar__content ' + (activeTab !== '' ? 'expanded' : '') }>
+        {preparedEntries.map((entry, index) => {
+          return (
+            <div
+              className={ 'tab ' + (entry.key === activeTab ? 'active' : '') }
+              key={ entry.key }
+            >
+              {entry.component}
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }

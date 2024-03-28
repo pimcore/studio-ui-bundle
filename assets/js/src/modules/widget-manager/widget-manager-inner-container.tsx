@@ -43,17 +43,17 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }
 
   function onRenderTab (node: TabNode, renderValues: ITabRenderValues): void {
-    renderValues.content = <TabTitleContainer node={node} />
+    renderValues.content = <TabTitleContainer node={ node } />
     renderValues.leading = <></>
   }
 
   return (
     <WidgetManagerView
       className='widget-manager--inner'
-      model={model}
-      factory={widgetManagerFactory}
-      onModelChange={onModelChange}
-      onRenderTab={onRenderTab}
+      factory={ widgetManagerFactory }
+      model={ model }
+      onModelChange={ onModelChange }
+      onRenderTab={ onRenderTab }
     />
   )
 }
