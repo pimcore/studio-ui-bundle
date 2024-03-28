@@ -6,4 +6,4 @@ export const useStyle = createStyles(({ token, css }) => {
       color: ${token.Example.color};
     `
   }
-})
+}, { hashPriority: 'low' })

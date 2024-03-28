@@ -8,4 +8,4 @@ export const useStlyes = createStyles(({ token, css }) => {
       inset: 0;
     `
   }
-})
+}, { hashPriority: 'low' })

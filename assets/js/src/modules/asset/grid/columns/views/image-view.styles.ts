@@ -10,4 +10,4 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 80px;
     `
   }
-})
+}, { hashPriority: 'low' })

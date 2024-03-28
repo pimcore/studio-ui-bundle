@@ -3,14 +3,14 @@ import React from 'react'
 import { useStyle } from '@Pimcore/components/modal/modal.styles'
 import type useModal from 'antd/es/modal/useModal'
 
-export interface ModalProps extends AntModalProps {
+export interface IModalProps extends AntModalProps {
   icon?: React.JSX.Element
   footer?: React.JSX.Element
   useModal?: typeof useModal
   children: React.ReactNode
 }
 
-export const Modal = (props: ModalProps): React.JSX.Element => {
+export const Modal = (props: IModalProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { children } = props
 

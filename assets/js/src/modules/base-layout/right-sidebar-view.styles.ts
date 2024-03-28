@@ -16,4 +16,4 @@ export const useStlyes = createStyles(({
       .logo 
     `
   }
-})
+}, { hashPriority: 'low' })

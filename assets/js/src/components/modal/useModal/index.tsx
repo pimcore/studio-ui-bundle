@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Modal, type ModalProps } from '@Pimcore/components/modal/modal'
+import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 interface useModalReturnType {
-  renderModal: (props: ModalProps) => React.JSX.Element
+  renderModal: (props: IModalProps) => React.JSX.Element
   showModal: () => void
   handleOk: () => void
   handleCancel: () => void
@@ -45,7 +45,7 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
     return component
   }
 
-  function renderModal (props: ModalProps): React.JSX.Element {
+  function renderModal (props: IModalProps): React.JSX.Element {
     const { children, ...inlineProps } = props
     const ModalComponent = getModalComponent(config.type)
 
@@ -65,7 +65,7 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
 }
 
 export const withError = (Component: typeof Modal): typeof Modal => {
-  const modalWithError = (props: ModalProps): React.JSX.Element => {
+  const modalWithError = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
@@ -83,7 +83,7 @@ export const withError = (Component: typeof Modal): typeof Modal => {
 }
 
 export const withSuccess = (Component: typeof Modal): typeof Modal => {
-  const modalWithSuccess = (props: ModalProps): React.JSX.Element => {
+  const modalWithSuccess = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
@@ -101,7 +101,7 @@ export const withSuccess = (Component: typeof Modal): typeof Modal => {
 }
 
 export const withInfo = (Component: typeof Modal): typeof Modal => {
-  const modalWithInfo = (props: ModalProps): React.JSX.Element => {
+  const modalWithInfo = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
@@ -119,7 +119,7 @@ export const withInfo = (Component: typeof Modal): typeof Modal => {
 }
 
 export const withWarn = (Component: typeof Modal): typeof Modal => {
-  const modalWithWarn = (props: ModalProps): React.JSX.Element => {
+  const modalWithWarn = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (

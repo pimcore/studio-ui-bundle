@@ -237,4 +237,4 @@ export const useStlyes = createStyles(({ token, css }) => {
       }
     `
   }
-})
+}, { hashPriority: 'low' })

@@ -14,4 +14,4 @@ export const useStyles = createStyles(({ css, token }) => {
       justify-content: space-between;
     `
   }
-})
+}, { hashPriority: 'low' })
