@@ -17,12 +17,15 @@ const config: Meta = {
     }
 
     return (
-            <>
-                {contextHolder}
-                <Button type="primary" onClick={showMessage}>
-                    Show Message
-                </Button>
-            </>
+      <>
+        {contextHolder}
+        <Button
+          onClick={ showMessage }
+          type="primary"
+        >
+          Show Message
+        </Button>
+      </>
     )
   },
   parameters: {

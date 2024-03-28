@@ -23,5 +23,10 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
 
   const { component } = widget
 
-  return <WidgetContainer node={node} component={component} />
+  return (
+    <WidgetContainer
+      component={ component }
+      node={ node }
+    />
+  )
 }

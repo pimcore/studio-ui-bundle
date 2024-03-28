@@ -29,7 +29,11 @@ const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
   return (
     <>
       {props.cellInfo?.row.original.type === 'image' && (
-        <ImageView style={{ cursor: 'pointer' }} onClick={openAssetWidget} src={props.cellInfo.getValue()!} />
+        <ImageView
+          onClick={ openAssetWidget }
+          src={ props.cellInfo.getValue()! }
+          style={ { cursor: 'pointer' } }
+        />
       )}
     </>
   )

@@ -11,15 +11,15 @@ const config: Meta = {
     const { renderModal: RenderModal, showModal } = useModal({ type: args.type })
 
     return (
-            <>
-                <Button onClick={showModal}>Open modal</Button>
-                <RenderModal
-                    title={args.title}
-                    footer={args.footer}
-                >
-                    {args.content}
-                </RenderModal>
-            </>
+      <>
+        <Button onClick={ showModal }>Open modal</Button>
+        <RenderModal
+          footer={ args.footer }
+          title={ args.title }
+        >
+          {args.content}
+        </RenderModal>
+      </>
     )
   },
   argTypes: {
@@ -48,11 +48,11 @@ export default config
 
 const DefaultContent = (): React.JSX.Element => {
   return (
-        <>
-            <p>The following files failed while creating their ZIPs. Pressing on See details will load additional options helping to resolve the error.</p>
+    <>
+      <p>The following files failed while creating their ZIPs. Pressing on See details will load additional options helping to resolve the error.</p>
 
-            <FileList files={['all-catalogue-pictures.zip', 'all-catalogue-pictures-videos-content-materials.zip']} />
-        </>
+      <FileList files={ ['all-catalogue-pictures.zip', 'all-catalogue-pictures-videos-content-materials.zip'] } />
+    </>
   )
 }
 
@@ -62,19 +62,19 @@ export const error = {
     title: 'Error occurred when creating ZIP',
     content: <DefaultContent />,
     footer: <ModalFooter>
-            <Button
-                key="cancel"
-                danger
-            >
-                Cancel all ZIP actions
-            </Button>
-            <Button
-                key="details"
-                type={'primary'}
-            >
-                See details
-            </Button>
-        </ModalFooter>
+      <Button
+        danger
+        key="cancel"
+      >
+        Cancel all ZIP actions
+      </Button>
+      <Button
+        key="details"
+        type={ 'primary' }
+      >
+        See details
+      </Button>
+    </ModalFooter>
   }
 }
 
@@ -84,12 +84,12 @@ export const success = {
     title: 'Your file is uploaded!',
     content: '“alfa-romeo-144.jpg” is now uploaded.',
     footer: <ModalFooter>
-            <Button
-                key="cancel"
-            >
-                Close
-            </Button>
-        </ModalFooter>
+      <Button
+        key="cancel"
+      >
+        Close
+      </Button>
+    </ModalFooter>
   }
 }
 
@@ -99,12 +99,12 @@ export const info = {
     title: 'Info',
     content: 'Your Webhook has been activated.',
     footer: <ModalFooter>
-            <Button
-                key="cancel"
-            >
-                Close
-            </Button>
-        </ModalFooter>
+      <Button
+        key="cancel"
+      >
+        Close
+      </Button>
+    </ModalFooter>
   }
 }
 
@@ -114,22 +114,22 @@ export const warn = {
     title: 'Warning',
     content: 'Your Webhook has been activated.',
     footer: <ModalFooter>
-            <Button
-                key="cancel"
-            >
-                Close
-            </Button>
-        </ModalFooter>
+      <Button
+        key="cancel"
+      >
+        Close
+      </Button>
+    </ModalFooter>
   }
 }
 
 const SpaceBetweenFooterButtonsContent = (): React.JSX.Element => {
   return (
-        <>
-            <p>This video format for the following file is not supported. Try converting it in MP4, MOV or AVI.</p>
+    <>
+      <p>This video format for the following file is not supported. Try converting it in MP4, MOV or AVI.</p>
 
-            <FileList files={['all-catalogue-pictures.zip']} />
-        </>
+      <FileList files={ ['all-catalogue-pictures.zip'] } />
+    </>
   )
 }
 
@@ -138,20 +138,20 @@ export const SpaceBetweenFooterButtons = {
     type: 'error',
     title: 'Media Player can’t play this file',
     content: <SpaceBetweenFooterButtonsContent />,
-    footer: <ModalFooter buttonAlignment={'space-between'}>
-            <Button
-                key="cancel"
-                type="link"
-            >
-                Read the technical instructions
-            </Button>
+    footer: <ModalFooter buttonAlignment={ 'space-between' }>
+      <Button
+        key="cancel"
+        type="link"
+      >
+        Read the technical instructions
+      </Button>
 
-            <Button
-                key="details"
-                type={'primary'}
-            >
-                See details
-            </Button>
-        </ModalFooter>
+      <Button
+        key="details"
+        type={ 'primary' }
+      >
+        See details
+      </Button>
+    </ModalFooter>
   }
 }

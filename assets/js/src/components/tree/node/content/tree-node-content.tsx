@@ -11,8 +11,14 @@ const TreeNodeContent = (props: TreeNodeContentProps): React.JSX.Element => {
   const { icon, label } = props.node
 
   return (
-    <Flex align='center' gap={'small'}>
-      <Icon name={icon} options={{ width: 16, height: 16 }}/>
+    <Flex
+      align='center'
+      gap={ 'small' }
+    >
+      <Icon
+        name={ icon }
+        options={ { width: 16, height: 16 } }
+      />
       <span className="tree-node-content__label">{label}</span>
     </Flex>
   )

@@ -7,7 +7,7 @@ import { Resizer } from './resizer/resizer'
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
-  resizeable?: boolean
+  resizable?: boolean
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
@@ -27,25 +27,25 @@ export const Grid = (props: GridProps): React.JSX.Element => {
     getCoreRowModel: getCoreRowModel()
   }
 
-  if (props.resizeable === true) {
+  if (props.resizable === true) {
     tableProps.columnResizeMode = columnResizeMode
   }
 
   const table = useReactTable(tableProps)
 
   return (
-    <div className={['ant-table-wrapper', hashId, styles.grid].join(' ')}>
+    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>
-            <table style={{ width: table.getCenterTotalSize() }}>
+            <table style={ { width: table.getCenterTotalSize() } }>
               <thead className='ant-table-thead'>
                 {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id}>
+                  <tr key={ headerGroup.id }>
                     {headerGroup.headers.map(header => (
                       <th
-                        key={header.id}
                         className='ant-table-cell'
+                        key={ header.id }
                         style={
                           {
                             width: header.column.getSize(),
@@ -54,17 +54,17 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                         }
                       >
                         <div className='grid__cell-content'>
-                         {flexRender(
-                           header.column.columnDef.header,
-                           header.getContext()
-                         )}
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                         </div>
 
-                        {props.resizeable === true && header.column.getCanResize() && (
+                        {props.resizable === true && header.column.getCanResize() && (
                           <Resizer
-                            onMouseDown={header.getResizeHandler()}
-                            isResizing={header.column.getIsResizing()}
-                            table={table}
+                            isResizing={ header.column.getIsResizing() }
+                            onMouseDown={ header.getResizeHandler() }
+                            table={ table }
                           />
                         )}
                       </th>
@@ -74,11 +74,14 @@ export const Grid = (props: GridProps): React.JSX.Element => {
               </thead>
               <tbody className="ant-table-tbody">
                 {table.getRowModel().rows.map(row => (
-                  <tr className='ant-table-row' key={row.id}>
+                  <tr
+                    className='ant-table-row'
+                    key={ row.id }
+                  >
                     {row.getVisibleCells().map(cell => (
                       <td
-                        key={cell.id}
                         className='ant-table-cell'
+                        key={ cell.id }
                         style={
                           {
                             width: cell.column.getSize(),
@@ -90,10 +93,10 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </div>
 
-                        {props.resizeable === true && (
+                        {props.resizable === true && (
                           <Resizer
-                            isResizing={cell.column.getIsResizing()}
-                            table={table}
+                            isResizing={ cell.column.getIsResizing() }
+                            table={ table }
                           />
                         )}
                       </td>

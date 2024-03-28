@@ -13,7 +13,7 @@ const ImageContainer = (): React.JSX.Element => {
       }
 
       renderToolbar={
-        <Toolbar renderSaveButton={<Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>}
+        <Toolbar
           pinnableToolbarElements={
             [
               {
@@ -33,6 +33,7 @@ const ImageContainer = (): React.JSX.Element => {
               }
             ]
           }
+          renderSaveButton={ <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button> }
         />
       }
     />

@@ -12,10 +12,18 @@ export const TabTitleContainer = ({ node }: TabTitleContainerProps): React.JSX.E
   const [icon] = useState(node.getIcon() ?? 'widget-default')
 
   if (isBorderNode) {
-    return <BorderTitleView icon={icon} title={node.getName()} />
+    return (
+      <BorderTitleView
+        icon={ icon }
+        title={ node.getName() }
+      />
+    )
   }
 
   return (
-    <TabTitleView icon={icon} title={node.getName()} />
+    <TabTitleView
+      icon={ icon }
+      title={ node.getName() }
+    />
   )
 }

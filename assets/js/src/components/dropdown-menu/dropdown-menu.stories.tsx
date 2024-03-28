@@ -16,10 +16,12 @@ const config: Meta = {
 export default config
 
 const children: React.JSX.Element =
+  (
     <Button
+      icon={ <Icon name="dots-horizontal" /> }
       size="small"
-      icon={<Icon name="dots-horizontal"/>}
     />
+  )
 
 const dropdownItems: DropdownMenuItemProps[] = [
   {

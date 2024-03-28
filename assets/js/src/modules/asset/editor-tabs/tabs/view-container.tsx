@@ -18,7 +18,7 @@ const ViewTabContainer = (): React.JSX.Element => {
   if (asset.type === 'image') {
     return (
       <>
-        <Image src={asset.fullPath} />
+        <Image src={ asset.fullPath } />
       </>
     )
   }

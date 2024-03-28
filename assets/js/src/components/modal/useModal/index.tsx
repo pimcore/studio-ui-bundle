@@ -50,14 +50,14 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
     const ModalComponent = getModalComponent(config.type)
 
     return (
-            <ModalComponent
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                {...inlineProps}
-            >
-                {children}
-            </ModalComponent>
+      <ModalComponent
+        onCancel={ handleCancel }
+        onOk={ handleOk }
+        open={ isModalOpen }
+        { ...inlineProps }
+      >
+        {children}
+      </ModalComponent>
     )
   }
 
@@ -69,13 +69,16 @@ export const withError = (Component: typeof Modal): typeof Modal => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title={'Error'}
-                icon={<Icon name={'close-circle-filled'} options={{ width: 24, height: 24 }} />}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'close-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title={ 'Error' }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 
@@ -87,13 +90,16 @@ export const withSuccess = (Component: typeof Modal): typeof Modal => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title={'Success'}
-                icon={<Icon name={'check-circle-filled'} options={{ width: 24, height: 24 }}/>}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'check-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title={ 'Success' }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 
@@ -105,13 +111,16 @@ export const withInfo = (Component: typeof Modal): typeof Modal => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title={'Info'}
-                icon={<Icon name={'info-circle-filled'} options={{ width: 24, height: 24 }}/>}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'info-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title={ 'Info' }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 
@@ -123,13 +132,16 @@ export const withWarn = (Component: typeof Modal): typeof Modal => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title="Warn"
-                icon={<Icon name={'exclamation-circle-filled'} options={{ width: 24, height: 24 }}/>}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'exclamation-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title="Warn"
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 

@@ -13,9 +13,9 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: Edito
 
   return (
     <Tabs
-      className={`${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}`}
-      defaultActiveKey={defaultActiveKey}
-      items={items}
+      className={ `${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}` }
+      defaultActiveKey={ defaultActiveKey }
+      items={ items }
     />
   )
 }

@@ -55,17 +55,18 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
     }
 
     cards.push(
-        <PreviewCard key={asset.id}
-                     name={asset.filename}
-                     dropdownItems={dropdownItems}
-                     imgSrc={asset.fullPath}
-                     onClick={onClickCard}
-        />
+      <PreviewCard
+        dropdownItems={ dropdownItems }
+        imgSrc={ asset.fullPath }
+        key={ asset.id }
+        name={ asset.filename }
+        onClick={ onClickCard }
+      />
     )
   })
 
   return (
-        <FlexContainerView renderElements={cards} />
+    <FlexContainerView renderElements={ cards } />
   )
 }
 

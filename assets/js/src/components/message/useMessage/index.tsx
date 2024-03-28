@@ -24,7 +24,12 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
       }
     }
 
-    config.icon = <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />
+    config.icon = (
+      <Icon
+        name={ 'info-circle-filled' }
+        options={ { width: '16px', height: '16px' } }
+      />
+    )
 
     return message.info(
       config,
@@ -36,7 +41,10 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
   messageApi.open = (config: ArgsProps): MessageType => {
     if (config.type === 'info') {
       return message.open({
-        icon: <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />,
+        icon: <Icon
+          name={ 'info-circle-filled' }
+          options={ { width: '16px', height: '16px' } }
+              />,
         className: styles.message,
         ...config
       })

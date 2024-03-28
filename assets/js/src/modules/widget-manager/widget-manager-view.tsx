@@ -10,7 +10,7 @@ export const WidgetManagerView = ({ className, ...props }: WidgetManagerProps): 
   const { styles } = useStlyes()
 
   return (
-    <div className={['widget-manager', className, styles.widgetManager].join(' ')}>
+    <div className={ ['widget-manager', className, styles.widgetManager].join(' ') }>
       <Layout { ...props } />
     </div>
   )

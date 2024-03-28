@@ -24,25 +24,25 @@ export const _default = {
         key: '1',
         label: 'Tab 1',
         children: 'Tab 1',
-        icon: <PictureOutlined/>
+        icon: <PictureOutlined />
       },
       {
         key: '2',
         label: 'Tab 2',
         children: 'Tab 2',
-        icon: <Icon name={'edit'}/>
+        icon: <Icon name={ 'edit' } />
       },
       {
         key: '3',
         label: 'Tab 3',
         children: 'Tab 3',
-        icon: <Icon name={'view-details'}/>
+        icon: <Icon name={ 'view-details' } />
       },
       {
         key: '4',
         label: 'Tab 4',
         children: 'Tab 4',
-        icon: <TagOutlined/>
+        icon: <TagOutlined />
       }
     ]
   }

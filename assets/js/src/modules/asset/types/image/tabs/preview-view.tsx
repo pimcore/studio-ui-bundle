@@ -11,8 +11,8 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   const { src } = props
 
   return (
-    <div className={[styles.preview].join(' ')}>
-      <PimcoreImage src={src} />
+    <div className={ [styles.preview].join(' ') }>
+      <PimcoreImage src={ src } />
     </div>
   )
 }

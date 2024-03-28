@@ -29,17 +29,32 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
 
   return (
     <>
-      {RenderFilter !== undefined && (<RenderFilter node={node} setAdditionalQueryParams={setAdditionalQueryParams} />)}
+      {RenderFilter !== undefined && (
+        <RenderFilter
+          node={ node }
+          setAdditionalQueryParams={ setAdditionalQueryParams }
+        />
+      )}
 
       <div className='tree-list'>
         {children?.map((item) => (
-          <TreeNode key={item.id} {...item} />
+          <TreeNode
+            key={ item.id }
+            { ...item }
+          />
         ))}
       </div>
 
       {RenderPager !== undefined && (
-        <div className={['tree-list__pager', styles['tree-list__pager']].join(' ')} style={{ paddingLeft: token.paddingSM + (node.level + 1) * 24 }}>
-          <RenderPager node={node} total={total} setAdditionalQueryParams={setAdditionalQueryParams} />
+        <div
+          className={ ['tree-list__pager', styles['tree-list__pager']].join(' ') }
+          style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
+        >
+          <RenderPager
+            node={ node }
+            setAdditionalQueryParams={ setAdditionalQueryParams }
+            total={ total }
+          />
         </div>
       )}
     </>

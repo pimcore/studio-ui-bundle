@@ -11,14 +11,14 @@ export const PimcoreImage = (
   const { styles } = useStyle()
 
   return (
-      <Image
-          placeholder={
-            <div className={styles['loading-div']}>
-                <Spin size="small" />
-            </div>
+    <Image
+      placeholder={
+        <div className={ styles['loading-div'] }>
+          <Spin size="small" />
+        </div>
           }
-          preview={false}
-          {...props}
-      />
+      preview={ false }
+      { ...props }
+    />
   )
 }

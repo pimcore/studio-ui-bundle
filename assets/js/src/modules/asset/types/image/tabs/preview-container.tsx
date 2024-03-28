@@ -12,10 +12,13 @@ const PreviewContainer = (): React.JSX.Element => {
   const sidebarButtons = sidebarManager.getButtons()
 
   return (
-      <>
-        <PreviewView src={data!.fullPath!} />
-        <Sidebar entries={sidebarEntries} buttons={sidebarButtons} />
-      </>
+    <>
+      <PreviewView src={ data!.fullPath! } />
+      <Sidebar
+        buttons={ sidebarButtons }
+        entries={ sidebarEntries }
+      />
+    </>
   )
 }
 
