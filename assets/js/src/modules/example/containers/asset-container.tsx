@@ -43,11 +43,19 @@ export const AssetContainer = ({ id }: AssetContainerProps): React.JSX.Element =
     }
   })
 
-  return <>
-    <Breadcrumb style={{ marginTop: 4, marginLeft: 8 }} items={breadcrumbItems} />
-    <Divider style={{ marginTop: 5, marginBottom: 0 }} />
-    <div style={{ marginLeft: 0 }}>
-      <Grid data={assetData} columns={columns} />
-    </div>
-  </>
+  return (
+    <>
+      <Breadcrumb
+        items={ breadcrumbItems }
+        style={ { marginTop: 4, marginLeft: 8 } }
+      />
+      <Divider style={ { marginTop: 5, marginBottom: 0 } } />
+      <div style={ { marginLeft: 0 } }>
+        <Grid
+          columns={ columns }
+          data={ assetData }
+        />
+      </div>
+    </>
+  )
 }

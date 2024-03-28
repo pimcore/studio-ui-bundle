@@ -9,9 +9,9 @@ interface FlexContainerProps {
 const FlexContainerView = (props: FlexContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
   return (
-        <div className={styles.flexContainer + ' ' + props.className ?? ''}>
-            {props.renderElements}
-        </div>
+    <div className={ styles.flexContainer + ' ' + props.className ?? '' }>
+      {props.renderElements}
+    </div>
   )
 }
 

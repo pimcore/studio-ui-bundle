@@ -1,4 +1,4 @@
-import React, { type ElementType, createContext, useState, type Dispatch } from 'react'
+import React, { type ElementType, createContext, useState, type Dispatch, useMemo } from 'react'
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './tree.styles'
@@ -53,6 +53,7 @@ const Tree = (props: TreeProps): React.JSX.Element => {
     level: -1
   })
   const { isLoading, isError, data } = apiHookResult
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState }), [props, selectedIdsState])
 
   if (isError !== false) {
     return (<div>{'Error'}</div>)
@@ -68,16 +69,18 @@ const Tree = (props: TreeProps): React.JSX.Element => {
   return (
     <>
       {isLoading === false && items.length !== 0 && (
-        <div className={['tree', styles.tree].join(' ')}>
-          <TreeContext.Provider value={{ ...props, selectedIdsState }}>
+        <div className={ ['tree', styles.tree].join(' ') }>
+          <TreeContext.Provider value={ treeContextValue }>
             {items.map((item) => (
-              <TreeNode key={item.id} {...item} />
+              <TreeNode
+                key={ item.id }
+                { ...item }
+              />
             ))}
           </TreeContext.Provider>
         </div>
       )}
     </>
-
   )
 }
 

@@ -13,8 +13,8 @@ const FolderContainer = (): React.JSX.Element => {
       }
 
       renderToolbar={
-        <Toolbar renderSaveButton={<Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button>}
-            pinnableToolbarElements={
+        <Toolbar
+          pinnableToolbarElements={
               [{
                 iconName: 'refresh',
                 label: i18n.t('toolbar.reload'),
@@ -31,6 +31,7 @@ const FolderContainer = (): React.JSX.Element => {
                 pinning: true
               }]
             }
+          renderSaveButton={ <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button> }
         />
       }
     />

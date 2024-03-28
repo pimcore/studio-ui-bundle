@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Modal, type ModalProps } from '@Pimcore/components/modal/modal'
+import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 interface useModalReturnType {
-  renderModal: (props: ModalProps) => React.JSX.Element
+  renderModal: (props: IModalProps) => React.JSX.Element
   showModal: () => void
   handleOk: () => void
   handleCancel: () => void
@@ -45,19 +45,19 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
     return component
   }
 
-  function renderModal (props: ModalProps): React.JSX.Element {
+  function renderModal (props: IModalProps): React.JSX.Element {
     const { children, ...inlineProps } = props
     const ModalComponent = getModalComponent(config.type)
 
     return (
-            <ModalComponent
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                {...inlineProps}
-            >
-                {children}
-            </ModalComponent>
+      <ModalComponent
+        onCancel={ handleCancel }
+        onOk={ handleOk }
+        open={ isModalOpen }
+        { ...inlineProps }
+      >
+        {children}
+      </ModalComponent>
     )
   }
 
@@ -65,17 +65,20 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
 }
 
 export const withError = (Component: typeof Modal): typeof Modal => {
-  const modalWithError = (props: ModalProps): React.JSX.Element => {
+  const modalWithError = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title={'Error'}
-                icon={<Icon name={'close-circle-filled'} options={{ width: 24, height: 24 }} />}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'close-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title={ 'Error' }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 
@@ -83,17 +86,20 @@ export const withError = (Component: typeof Modal): typeof Modal => {
 }
 
 export const withSuccess = (Component: typeof Modal): typeof Modal => {
-  const modalWithSuccess = (props: ModalProps): React.JSX.Element => {
+  const modalWithSuccess = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title={'Success'}
-                icon={<Icon name={'check-circle-filled'} options={{ width: 24, height: 24 }}/>}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'check-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title={ 'Success' }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 
@@ -101,17 +107,20 @@ export const withSuccess = (Component: typeof Modal): typeof Modal => {
 }
 
 export const withInfo = (Component: typeof Modal): typeof Modal => {
-  const modalWithInfo = (props: ModalProps): React.JSX.Element => {
+  const modalWithInfo = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title={'Info'}
-                icon={<Icon name={'info-circle-filled'} options={{ width: 24, height: 24 }}/>}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'info-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title={ 'Info' }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 
@@ -119,17 +128,20 @@ export const withInfo = (Component: typeof Modal): typeof Modal => {
 }
 
 export const withWarn = (Component: typeof Modal): typeof Modal => {
-  const modalWithWarn = (props: ModalProps): React.JSX.Element => {
+  const modalWithWarn = (props: IModalProps): React.JSX.Element => {
     const { children, ...inlineProps } = props
 
     return (
-            <Component
-                title="Warn"
-                icon={<Icon name={'exclamation-circle-filled'} options={{ width: 24, height: 24 }}/>}
-                {...inlineProps}
-            >
-                {children}
-            </Component>
+      <Component
+        icon={ <Icon
+          name={ 'exclamation-circle-filled' }
+          options={ { width: 24, height: 24 } }
+               /> }
+        title="Warn"
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
     )
   }
 

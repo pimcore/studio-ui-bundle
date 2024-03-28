@@ -6,4 +6,4 @@ export const useStlyes = createStyles(({ token, css }) => {
       padding: 13px 16px 0 16px;
     `
   }
-})
+}, { hashPriority: 'low' })

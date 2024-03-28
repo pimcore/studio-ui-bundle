@@ -40,7 +40,7 @@ const AssetContainer = (props: AssetContainerProps): React.JSX.Element => {
   }, [isWidgetActive])
 
   return useMemo(() => (
-    <AssetContext.Provider value={{ id }}>
+    <AssetContext.Provider value={ { id } }>
       {isError && <div>Error</div>}
       {isLoading && <div>Loading...</div>}
 

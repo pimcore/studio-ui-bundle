@@ -18,68 +18,68 @@ assetEditorTabManager.register({
   key: 'view',
   label: 'asset.asset-editor-tabs.view',
   children: <PreviewContainer />,
-  icon: <Icon name={'image-05'} />
+  icon: <Icon name={ 'image-05' } />
 })
 
 assetEditorTabManager.register({
   key: 'edit',
   label: 'asset.asset-editor-tabs.edit',
   children: <EditTabContainer />,
-  icon: <Icon name={'edit'} />
+  icon: <Icon name={ 'edit' } />
 })
 
 assetEditorTabManager.register({
   key: 'embedded-metadata',
   label: 'asset.asset-editor-tabs.embedded-metadata',
   children: <EmbeddedMetadataTabContainer />,
-  icon: <Icon name={'data-sheet'} />
+  icon: <Icon name={ 'data-sheet' } />
 })
 
 assetEditorTabManager.register({
   key: 'custom-metadata',
   label: 'asset.asset-editor-tabs.custom-metadata',
   children: <CustomMetadataTabContainer />,
-  icon: <Icon name={'data-management-2'} />
+  icon: <Icon name={ 'data-management-2' } />
 })
 
 assetEditorTabManager.register({
   key: 'versions',
   label: 'asset.asset-editor-tabs.versions',
   children: <VersionsTabContainer />,
-  icon: <Icon name={'history-outlined'} />
+  icon: <Icon name={ 'history-outlined' } />
 })
 
 assetEditorTabManager.register({
   key: 'schedule',
   label: 'asset.asset-editor-tabs.schedule',
   children: <ScheduleTabContainer />,
-  icon: <Icon name={'schedule-outlined'} />
+  icon: <Icon name={ 'schedule-outlined' } />
 })
 
 assetEditorTabManager.register({
   key: 'dependencies',
   label: 'asset.asset-editor-tabs.dependencies',
   children: <DependenciesTabContainer />,
-  icon: <Icon name={'hierarchy'} />
+  icon: <Icon name={ 'hierarchy' } />
 })
 
 assetEditorTabManager.register({
   key: 'notes-events',
   label: 'asset.asset-editor-tabs.notes-events',
   children: <NotesAndEventsTabContainer />,
-  icon: <Icon name={'view-details'} />
+  icon: <Icon name={ 'view-details' } />
 })
 
 assetEditorTabManager.register({
   key: 'tags',
   label: 'asset.asset-editor-tabs.tag',
   children: <TagsTabContainer />,
-  icon: <Icon name={'tag-two-tone'} />
+  icon: <Icon name={ 'tag-two-tone' } />
 })
 
 assetEditorTabManager.register({
   key: 'workflow',
   label: 'asset.asset-editor-tabs.workflow',
   children: <WorkflowTabContainer />,
-  icon: <Icon name={'workflow'} />
+  icon: <Icon name={ 'workflow' } />
 })

@@ -11,8 +11,8 @@ const ImageView = (props: ImageViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <div className={styles.image}>
-      <PimcoreImage {...props} />
+    <div className={ styles.image }>
+      <PimcoreImage { ...props } />
     </div>
   )
 }

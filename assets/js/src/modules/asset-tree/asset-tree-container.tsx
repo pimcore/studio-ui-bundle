@@ -34,12 +34,12 @@ const AssetTreeContainer = (props: AssetTreeContainerProps): React.JSX.Element =
 
   return (
     <Tree
-      nodeId={id}
-      nodeApiHook={useNodeApiHook}
-      maxItemsPerNode={20}
-      renderPager={PagerContainer}
-      renderFilter={SearchContainer}
-      onSelect={onSelect}
+      maxItemsPerNode={ 20 }
+      nodeApiHook={ useNodeApiHook }
+      nodeId={ id }
+      onSelect={ onSelect }
+      renderFilter={ SearchContainer }
+      renderPager={ PagerContainer }
     />
   )
 }

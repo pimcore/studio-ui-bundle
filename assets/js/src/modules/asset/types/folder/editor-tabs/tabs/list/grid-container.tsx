@@ -24,7 +24,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
           return <></>
         }
 
-        return <PreviewContainer cellInfo={info} />
+        return <PreviewContainer cellInfo={ info } />
       },
       id: 'preview',
       size: 110
@@ -40,24 +40,33 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
 
     columnHelper.accessor('fullPath', {
       header: t('asset.asset-editor-tabs.list.columns.fullPath'),
-      cell: info => <Tag bordered={false} color='processing'>{info.getValue()!}</Tag>,
+      cell: info => (
+        <Tag
+          bordered={ false }
+          color='processing'
+        >{info.getValue()!}</Tag>
+      ),
       id: 'fullPath',
       size: 300
     }),
 
     columnHelper.accessor('creationDate', {
       header: t('asset.asset-editor-tabs.list.columns.creationDate'),
-      cell: info => <FormattedDate timestamp={info.getValue() as number * 1000} />
+      cell: info => <FormattedDate timestamp={ info.getValue() as number * 1000 } />
     }),
 
     columnHelper.accessor('modificationDate', {
       header: t('asset.asset-editor-tabs.list.columns.modificationDate'),
-      cell: info => <FormattedDate timestamp={info.getValue() as number * 1000} />
+      cell: info => <FormattedDate timestamp={ info.getValue() as number * 1000 } />
     })
   ]
 
   return (
-    <Grid data={assets} columns={columns} resizeable />
+    <Grid
+      columns={ columns }
+      data={ assets }
+      resizable
+    />
   )
 }
 

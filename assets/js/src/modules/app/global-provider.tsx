@@ -10,7 +10,7 @@ export interface GlobalProviderProps {
 export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Element => {
   return (
     <ThemeProvider>
-      <Provider store={store}>
+      <Provider store={ store }>
         {children}
       </Provider>
     </ThemeProvider>

@@ -31,26 +31,36 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
     <>
       {RenderFilter !== undefined && (
         <div
-          className={['tree-list__search', styles['tree-list__search']].join(' ')}
-          style={{ paddingLeft: token.paddingSM + (node.level + 1) * 24 }}
+          className={ ['tree-list__search', styles['tree-list__search']].join(' ') }
+          style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
         >
           <RenderFilter
-            node={node}
-            mergeAdditionalQueryParams={mergeAdditionalQueryParams}
-            total={total}
+            mergeAdditionalQueryParams={ mergeAdditionalQueryParams }
+            node={ node }
+            total={ total }
           />
         </div>
       )}
 
       <div className='tree-list'>
         {children?.map((item) => (
-          <TreeNode key={item.id} {...item} />
+          <TreeNode
+            key={ item.id }
+            { ...item }
+          />
         ))}
       </div>
 
       {RenderPager !== undefined && (
-        <div className={['tree-list__pager', styles['tree-list__pager']].join(' ')} style={{ paddingLeft: token.paddingSM + (node.level + 1) * 24 }}>
-          <RenderPager node={node} total={total} mergeAdditionalQueryParams={mergeAdditionalQueryParams} />
+        <div
+          className={ ['tree-list__pager', styles['tree-list__pager']].join(' ') }
+          style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
+        >
+          <RenderPager
+            mergeAdditionalQueryParams={ mergeAdditionalQueryParams }
+            node={ node }
+            total={ total }
+          />
         </div>
       )}
     </>

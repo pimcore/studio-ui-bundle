@@ -45,7 +45,8 @@ const icons = {
   'file-x-03': React.lazy(async () => await import('@Pimcore/assets/icons/core/file-x-03.inline.svg')),
   'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/presentation-chart-01.inline.svg')),
   'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/core/video-recorder.inline.svg')),
-  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg'))
+  'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/core/image-01.inline.svg')),
+  'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/core/focal-point.inline.svg'))
 }
 
 export interface IconProps {
@@ -60,14 +61,21 @@ export const Icon = ({ name, options, className }: IconProps): React.JSX.Element
   const height = options?.height ?? 16
 
   if (SvgIcon === undefined) {
-    return <div style={{ width, height }} />
+    return <div style={ { width, height } } />
   }
 
   return (
-      <div style={{ width, height }} className={`pimcore-icon pimcore-icon-${name} anticon ${className}`}>
-        <Suspense fallback={<div />}>
-          <SvgIcon width={width} height={height} {...options} />
-        </Suspense>
-      </div>
+    <div
+      className={ `pimcore-icon pimcore-icon-${name} anticon ${className}` }
+      style={ { width, height } }
+    >
+      <Suspense fallback={ <div /> }>
+        <SvgIcon
+          height={ height }
+          width={ width }
+          { ...options }
+        />
+      </Suspense>
+    </div>
   )
 }

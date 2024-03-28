@@ -9,7 +9,7 @@ const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <div className={styles.GridToolbar}>
+    <div className={ styles.GridToolbar }>
       <div /> {/* @todo tools */}
 
       {props.renderPagination}

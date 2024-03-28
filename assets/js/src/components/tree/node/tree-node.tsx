@@ -52,11 +52,11 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   }
 
   return (
-    <div className={getClasses()}>
+    <div className={ getClasses() }>
       <Flex
-        gap="small"
         className='tree-node__content'
-        onClick={onClick}
+        gap="small"
+        onClick={ onClick }
         style={
           {
             paddingLeft: token.paddingSM + 20 * props.level,
@@ -64,15 +64,18 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
           }
         }
       >
-        <TreeExpander node={props} state={[isExapanded, setIsExpanded]} />
+        <TreeExpander
+          node={ props }
+          state={ [isExapanded, setIsExpanded] }
+        />
 
         <div className="tree-node__content-wrapper">
-          <RenderNodeContent node={props} />
+          <RenderNodeContent node={ props } />
         </div>
       </Flex>
 
       {isExapanded && (
-        <TreeList node={props} />
+        <TreeList node={ props } />
       )}
     </div>
   )

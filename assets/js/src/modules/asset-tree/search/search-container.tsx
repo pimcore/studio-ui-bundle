@@ -28,10 +28,10 @@ const SearchContainer = (props: TreeSearchProps): React.JSX.Element => {
 
   return (
     <Search
-      onSearch={onSearch}
+      aria-label={ `Search in ${node.label}` }
+      onSearch={ onSearch }
+      placeholder={ `Search in ${node.label}` }
       size='small'
-      placeholder={`Search in ${node.label}`}
-      aria-label={`Search in ${node.label}`}
     />
   )
 }

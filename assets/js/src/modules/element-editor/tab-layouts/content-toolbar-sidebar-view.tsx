@@ -15,7 +15,7 @@ const ContentToolbarSidebarView = (props: ContentToolbarViewProps): React.JSX.El
   }
 
   return (
-    <div className={classes.join(' ')}>
+    <div className={ classes.join(' ') }>
       <div className='content-toolbar-sidebar-layout__content'>
         {props.children}
       </div>

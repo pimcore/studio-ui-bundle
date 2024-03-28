@@ -19,9 +19,13 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const isBorderNode = node.getParent() instanceof BorderNode
 
   return useMemo(() => (
-    <WidgetContext.Provider value={{ nodeId }}>
-      <WidgetView icon={node.getIcon() ?? 'widget-default'} title={node.getName()} showTitle={isBorderNode}>
-        <Component {...node.getConfig()} />
+    <WidgetContext.Provider value={ { nodeId } }>
+      <WidgetView
+        icon={ node.getIcon() ?? 'widget-default' }
+        showTitle={ isBorderNode }
+        title={ node.getName() }
+      >
+        <Component { ...node.getConfig() } />
       </WidgetView>
     </WidgetContext.Provider>
   ), [nodeId, isBorderNode])
