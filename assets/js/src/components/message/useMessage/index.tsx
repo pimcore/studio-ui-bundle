@@ -8,9 +8,11 @@ import {
 } from 'antd/es/message/interface'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import {useStyle} from "@Pimcore/components/message/message.style";
 
 export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInstance, React.ReactElement] => {
   const [messageApi, contextHolder] = message.useMessage(messageConfig)
+  const {styles} = useStyle();
 
   messageApi.info = (content: JointContent, duration?: number | VoidFunction, onClose?: VoidFunction): MessageType => {
     let config: ArgsProps
@@ -35,11 +37,15 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
     if (config.type === 'info') {
       return message.open({
         icon: <Icon name={'info-circle-filled'} options={{ width: '16px', height: '16px' }} />,
+        className: styles.message,
         ...config
       })
     }
 
-    return message.open(config)
+    return message.open({
+      className: styles.message,
+      ...config
+    })
   }
 
   return [messageApi, contextHolder]
