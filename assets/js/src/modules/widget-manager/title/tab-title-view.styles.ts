@@ -9,4 +9,4 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `
   }
-})
+}, { hashPriority: 'low' })
