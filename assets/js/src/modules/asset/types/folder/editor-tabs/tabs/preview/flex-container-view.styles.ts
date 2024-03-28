@@ -10,4 +10,4 @@ export const useStyles = createStyles(({ css, token }) => {
       align-self: baseline;
     `
   }
-})
+}, { hashPriority: 'low' })

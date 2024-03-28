@@ -11,4 +11,4 @@ export const useStyles = createStyles(({ token, css }) => {
       font-weight: 600;
     `
   }
-})
+}, { hashPriority: 'low' })
