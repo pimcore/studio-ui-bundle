@@ -14,11 +14,13 @@ export default config
 
 export const _default = {
   args: {
-    total: 184,
-    defaultCurrent: 3,
+    total: 182,
+    current: 3,
     pageSizeOptions: [5, 25, 55, 80],
     defaultPageSize: 25,
-    showPageSizeChanger: true,
-    showTotal: (total: number) => `Total ${total} items`
+    showSizeChanger: true,
+    hideOnSinglePage: true,
+    showTotal: (total: number) => `Total ${total} items`,
+    onChange: (currentPage: number, pageSize: number) => { console.log(`Current page: ${currentPage}, Page size: ${pageSize}`) }
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { GridToolbarView } from './grid-toolbar-view'
-import { Pagination } from 'antd'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
 
 interface GridToolbarContainerProps {
   pager: {

@@ -1,5 +1,5 @@
 import { TreeContext, type TreePagerProps } from '@Pimcore/components/tree/tree'
-import { Pagination } from 'antd'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
 import React, { useContext, useEffect, useState } from 'react'
 
 const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
@@ -21,8 +21,8 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
       current={page}
       onChange={onChange}
       hideOnSinglePage
-      simple
-      pageSize={maxItemsPerNode}
+      // simple
+      defaultPageSize={maxItemsPerNode}
       total={total}
     />
   )

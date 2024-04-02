@@ -1,43 +1,58 @@
-import React, { type ReactNode, useState } from 'react'
+import React, { type ReactNode, useEffect, useState } from 'react'
+import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import { Icon } from '../icon/icon'
-import { Button, Pagination as AntPagination, Select } from 'antd'
+import { Button, Select } from 'antd'
+import type { DefaultOptionType } from 'rc-select/lib/Select'
 import i18n from '@Pimcore/app/i18n'
+import { isSet } from '@Pimcore/utils/helpers'
 
 interface PaginationProps {
   total: number
-  defaultCurrent: number
+  current?: number
+  defaultPageSize?: number
+  pageSizeOptions?: number[] | string[]
+  showSizeChanger?: boolean
+  showPageJumperAtOnce?: number
+  hideOnSinglePage?: boolean
   showTotal?: (total: number) => string
-  defaultPageSize: number
-  pageSizeOptions: number[] | string[]
-  showPageSizeChanger: boolean
-  showPageJumperAtOnce: number
+  onChange?: (page: number, pageSize: number) => void
 }
 
 export const Pagination = ({
   total,
-  defaultCurrent = 1,
-  showTotal,
+  current = 1,
   defaultPageSize = 20,
   pageSizeOptions = [10, 20, 50, 100],
-  showPageSizeChanger = false,
-  showPageJumperAtOnce = 5
-}: PaginationProps): React.JSX.Element => {
-  const [current, setCurrent] = useState(defaultCurrent)
+  showSizeChanger = false,
+  showPageJumperAtOnce = 5,
+  hideOnSinglePage = false,
+  showTotal,
+  onChange
+}: PaginationProps): React.JSX.Element | null => {
+  const hashId = useCssComponentHash('pagination')
+
+  const [currentPage, setCurrentPage] = useState(current)
   const [pageSize, setPageSize] = useState(defaultPageSize)
 
   const iconOptions = { width: 10, height: 10 }
+
   const pages = Math.ceil(total / pageSize)
-  const pageNumberRange = getPageNumberRange(current, showPageJumperAtOnce, pages)
+
+  if (hideOnSinglePage && pages === 1) {
+    return null
+  }
+
+  const pageNumberRange = getPageNumberRange(currentPage, showPageJumperAtOnce, pages)
   const pagesToJump = showPageJumperAtOnce - 2
 
   const onClickPageNumber = (pageNumber: number): void => {
-    setCurrent(pageNumber)
+    setCurrentPage(pageNumber)
   }
 
   const renderPageNumberItems: ReactNode[] = [
     renderPageNumberNode(
       '1',
-      getClassNameForPageNumber(1, current),
+      getClassNameForPageNumber(1, currentPage),
       (e) => { onClickPageNumber(1) }
     )
   ]
@@ -45,7 +60,7 @@ export const Pagination = ({
   if (pageNumberRange.length > 0 && pageNumberRange[0] !== 2) {
     renderPageNumberItems.push(
       renderPageRangeJumperPrevious(
-        (e) => { setCurrent(current - pagesToJump) },
+        (e) => { setCurrentPage(currentPage - pagesToJump) },
         pagesToJump
       )
     )
@@ -55,7 +70,7 @@ export const Pagination = ({
     renderPageNumberItems.push(
       renderPageNumberNode(
         i.toString(),
-        getClassNameForPageNumber(i, current),
+        getClassNameForPageNumber(i, currentPage),
         (e) => { onClickPageNumber(i) }
       )
     )
@@ -64,7 +79,7 @@ export const Pagination = ({
   if (!isLastPageRendered(pageNumberRange, pages)) {
     renderPageNumberItems.push(
       renderPageRangeJumperNext(
-        (e) => { setCurrent(current + pagesToJump) },
+        (e) => { setCurrentPage(currentPage + pagesToJump) },
         pagesToJump
       )
     )
@@ -74,49 +89,56 @@ export const Pagination = ({
     renderPageNumberItems.push(
       renderPageNumberNode(
         pages.toString(),
-        getClassNameForPageNumber(pages, current),
+        getClassNameForPageNumber(pages, currentPage),
         (e) => { onClickPageNumber(pages) }
       )
     )
   }
 
   const onClickPrev = (): void => {
-    setCurrent(current - 1)
+    setCurrentPage(currentPage - 1)
   }
 
   const onClickNext = (): void => {
-    setCurrent(current + 1)
+    setCurrentPage(currentPage + 1)
   }
+
+  useEffect(() => {
+    if (isSet(onChange)) {
+      onChange!(currentPage, pageSize)
+    }
+  }, [currentPage, pageSize])
 
   return (
         <div>
-            <ul className={'ant-pagination css-dev-only-do-not-override-1wllita'}>
-                {showTotal !== undefined ? renderTotal(total, showTotal) : null}
+            <ul className={'ant-pagination ' + hashId}>
+                {isSet(showTotal) ? renderTotal(total, showTotal!) : null}
 
-                <li className={`ant-pagination-prev ${current === 1 ? 'ant-pagination-disabled' : ''}`}>
-                    <Button disabled={current === 1} size={'small'} type={'text'} className={'ant-pagination-item-link'}
+                <li className={`ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}`}>
+                    <Button disabled={currentPage === 1} size={'small'} type={'text'} className={'ant-pagination-item-link'}
                             icon={<Icon options={iconOptions} name='left-outlined'/>} onClick={onClickPrev}
                     />
                 </li>
 
                 {renderPageNumberItems}
 
-                <li className={`ant-pagination-next ${current === pages ? 'ant-pagination-disabled' : ''}`}>
-                    <Button disabled={current === pages} size={'small'} type={'text'} className={'ant-pagination-item-link'}
+                <li className={`ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}`}>
+                    <Button disabled={currentPage === pages} size={'small'} type={'text'} className={'ant-pagination-item-link'}
                             icon={<Icon options={iconOptions} name='right-outlined'/>} onClick={onClickNext}
                     />
 
                 </li>
-                {showPageSizeChanger
+                {showSizeChanger
                   ? renderPageSizeChanger(
                     pageSizeOptions,
                     defaultPageSize,
-                    (pageSize: number) => { setPageSize(pageSize) }
+                    (pageSize: number) => {
+                      setPageSize(pageSize)
+                      setCurrentPage(1)
+                    }
                   )
                   : null}
             </ul>
-
-            <AntPagination showTotal={(total) => `Total ${total} items`} defaultCurrent={1} total={500} />
         </div>
   )
 }
@@ -155,7 +177,7 @@ function getPageNumberRange (
     }
   }
 
-  const numberRange = []
+  const numberRange: number[] = []
   for (let jumper = firstJumper; jumper <= lastJumper; jumper++) {
     numberRange.push(jumper)
   }
@@ -219,10 +241,10 @@ function renderPageRangeJumperNext (
 function renderPageSizeChanger (
   pageSizeOptions: number[] | string [],
   defaultPageSize: number,
-  handleChange: (e) => void
+  handleChange: (pageSize) => void
 ): ReactNode {
   let isDefaultPageSizeOptionValid = false
-  const options = []
+  const options: DefaultOptionType[] = []
 
   for (const pageSizeOption of pageSizeOptions) {
     if (Number(pageSizeOption) === defaultPageSize) {
