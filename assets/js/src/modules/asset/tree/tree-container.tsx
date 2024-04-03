@@ -7,15 +7,15 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { api } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { store } from '@Pimcore/app/store'
 
-export interface AssetTreeContainerProps {
+export interface TreeContainerProps {
   id: number
 }
 
-const defaultProps: AssetTreeContainerProps = {
+const defaultProps: TreeContainerProps = {
   id: 1
 }
 
-const AssetTreeContainer = (props: AssetTreeContainerProps): React.JSX.Element => {
+const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
   const { id } = props
   const { openAsset } = useAsset()
 
@@ -42,6 +42,6 @@ const AssetTreeContainer = (props: AssetTreeContainerProps): React.JSX.Element =
   )
 }
 
-AssetTreeContainer.defaultProps = defaultProps
+TreeContainer.defaultProps = defaultProps
 
-export { AssetTreeContainer }
+export { TreeContainer }
