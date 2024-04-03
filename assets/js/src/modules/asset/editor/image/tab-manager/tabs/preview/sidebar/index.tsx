@@ -1,7 +1,7 @@
-import { AssetEditorSidebarManager } from '@Pimcore/modules/asset/editor/image/sidebar/sidebar-manager'
+import { AssetEditorSidebarManager } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/preview/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { AssetEditorSidebarDetailsTab } from '@Pimcore/modules/asset/editor/image/sidebar/tabs/details/details'
+import { AssetEditorSidebarDetailsTab } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/preview/sidebar/tabs/details/details'
 
 export const sidebarManager = new AssetEditorSidebarManager()
 

@@ -38,34 +38,34 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
       <div className={ 'sidebar__navigation' }>
         <div className={ 'sidebar__navigation__tabs' }>
           {
-                        preparedEntries.map((entry) => {
-                          return (
-                            <div
-                              className={ 'entry ' + (entry.key === activeTab ? 'active' : '') }
-                              key={ entry.key }
-                              onClick={ () => {
-                                handleSidebarClick(entry.key)
-                              } }
-                            >
-                              {entry.icon}
-                            </div>
-                          )
-                        })
-                    }
+            preparedEntries.map((entry) => {
+              return (
+                <div
+                  className={ 'entry ' + (entry.key === activeTab ? 'active' : '') }
+                  key={ entry.key }
+                  onClick={ () => {
+                    handleSidebarClick(entry.key)
+                  } }
+                >
+                  {entry.icon}
+                </div>
+              )
+            })
+          }
         </div>
         <div className={ 'sidebar__navigation__buttons' }>
           {
-                        preparedButtons.map((button) => {
-                          return (
-                            <div
-                              key={ button.key }
-                              onClick={ button.onClick }
-                            >
-                              {button.icon}
-                            </div>
-                          )
-                        })
-                    }
+            preparedButtons.map((button) => {
+              return (
+                <div
+                  key={ button.key }
+                  onClick={ button.onClick }
+                >
+                  {button.icon}
+                </div>
+              )
+            })
+          }
         </div>
       </div>
 
