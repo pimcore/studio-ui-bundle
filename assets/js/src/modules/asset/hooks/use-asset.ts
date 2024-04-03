@@ -1,12 +1,12 @@
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { type AssetContainerProps } from '../asset-container'
 import { api } from '../asset-api-slice.gen'
 import { store } from '@Pimcore/app/store'
+import { type EditorContainerProps } from '../editor/editor-container'
 
 interface OpenAssetWidgetProps {
   name: string
   icon: string
-  config: AssetContainerProps
+  config: EditorContainerProps
 }
 
 interface UseAssetReturn {

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { type GlobalContext, addGlobalContext, selectContextByType, removeGlobalContext } from '@Pimcore/modules/global-context/global-context-slice'
+import { type GlobalContext, addGlobalContext, selectContextByType, removeGlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice'
 
 export interface GlobalAssetContext extends GlobalContext {
   type: 'asset'

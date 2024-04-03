@@ -1,6 +1,6 @@
 import { type Meta } from '@storybook/react'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
-import { AssetEditorSidebarDetailsTab } from '@Pimcore/modules/asset/types/image/sidebar/tabs/details/details'
+import { AssetEditorSidebarDetailsTab } from '@Pimcore/modules/asset/editor/image/sidebar/tabs/details/details'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 
