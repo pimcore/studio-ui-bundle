@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useApiTranslationsPostMutation } from '@Pimcore/modules/asset/translations-api-slice.gen'
+import { useApiTranslationsPostMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 
 interface TranslationsLoaderContainerProps {
