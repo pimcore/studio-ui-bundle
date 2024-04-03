@@ -24,7 +24,7 @@ export const useAsset = (): UseAssetReturn => {
       name,
       icon,
       id: `asset-${config.id}`,
-      component: 'asset',
+      component: 'asset-editor',
       config
     })
   }

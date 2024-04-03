@@ -2,6 +2,6 @@ import { registerWidget } from '@Pimcore/modules/widget-manager/utils/widget-reg
 import { EditorContainer } from './editor/editor-container'
 
 registerWidget({
-  name: 'asset',
+  name: 'asset-editor',
   component: EditorContainer
 })
