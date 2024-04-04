@@ -8,7 +8,7 @@ const config: ConfigFile = {
     '../src/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: [/assets/i]
     },
-    '../src/modules/asset/translations-api-slice.gen.ts': {
+    '../src/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: [/translations/i]
     }
   },
