@@ -1,5 +1,6 @@
 import React, { type ReactNode, useEffect, useState } from 'react'
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
+import { useStyle } from '@Pimcore/components/pagination/pagination.styles'
 import { Icon } from '../icon/icon'
 import { Button, Select } from 'antd'
 import type { DefaultOptionType } from 'rc-select/lib/Select'
@@ -13,6 +14,7 @@ interface PaginationProps {
   pageSizeOptions?: number[] | string[]
   showSizeChanger?: boolean
   showPageJumperAtOnce?: number
+  showJumpToPage?: boolean
   hideOnSinglePage?: boolean
   showTotal?: (total: number) => string
   onChange?: (page: number, pageSize: number) => void
@@ -25,6 +27,7 @@ export const Pagination = ({
   pageSizeOptions = [10, 20, 50, 100],
   showSizeChanger = false,
   showPageJumperAtOnce = 5,
+  showJumpToPage = true,
   hideOnSinglePage = false,
   showTotal,
   onChange
@@ -33,64 +36,112 @@ export const Pagination = ({
 
   const [currentPage, setCurrentPage] = useState(current)
   const [pageSize, setPageSize] = useState(defaultPageSize)
+  const [jumperLabelClassName, setJumperLabelClassName] = useState('')
+
+  useEffect(() => {
+    if (isSet(onChange)) {
+      onChange!(currentPage, pageSize)
+    }
+  }, [currentPage, pageSize])
 
   const iconOptions = { width: 10, height: 10 }
-
   const pages = Math.ceil(total / pageSize)
 
   if (hideOnSinglePage && pages === 1) {
     return null
   }
 
-  const pageNumberRange = getPageNumberRange(currentPage, showPageJumperAtOnce, pages)
+  const { styles } = useStyle()
+
   const pagesToJump = showPageJumperAtOnce - 2
+  const pageNumberRange = getPageNumberRange(currentPage, showPageJumperAtOnce, pages)
 
   const onClickPageNumber = (pageNumber: number): void => {
     setCurrentPage(pageNumber)
   }
 
-  const renderPageNumberItems: ReactNode[] = [
+  const renderPageNumberItemsAndPageRangeJumper: ReactNode[] = [
     renderPageNumberNode(
       '1',
       getClassNameForPageNumber(1, currentPage),
-      (e) => { onClickPageNumber(1) }
+      (e) => {
+        onClickPageNumber(1)
+      }
     )
   ]
 
-  if (pageNumberRange.length > 0 && pageNumberRange[0] !== 2) {
-    renderPageNumberItems.push(
+  if (pageNumberRange.length > 0 && pageNumberRange[0] !== 2 && !showJumpToPage) {
+    renderPageNumberItemsAndPageRangeJumper.push(
       renderPageRangeJumperPrevious(
-        (e) => { setCurrentPage(currentPage - pagesToJump) },
+        (e) => {
+          setCurrentPage(currentPage - pagesToJump)
+        },
         pagesToJump
       )
     )
   }
 
   for (const i of pageNumberRange) {
-    renderPageNumberItems.push(
+    renderPageNumberItemsAndPageRangeJumper.push(
       renderPageNumberNode(
         i.toString(),
         getClassNameForPageNumber(i, currentPage),
-        (e) => { onClickPageNumber(i) }
+        (e) => {
+          onClickPageNumber(i)
+        }
       )
     )
   }
 
-  if (!isLastPageRendered(pageNumberRange, pages)) {
-    renderPageNumberItems.push(
+  if (!showJumpToPage && !isLastPageRendered(pageNumberRange, pages)) {
+    renderPageNumberItemsAndPageRangeJumper.push(
       renderPageRangeJumperNext(
-        (e) => { setCurrentPage(currentPage + pagesToJump) },
+        (e) => {
+          setCurrentPage(currentPage + pagesToJump)
+        },
         pagesToJump
       )
     )
   }
 
+  if (showJumpToPage && pages > 2) {
+    const onKeyDownJumpToPage = (e): void => {
+      if (e.key === 'Enter') {
+        const value = Number(e.target.value)
+        if (value > 0 && value <= pages) {
+          setCurrentPage(value)
+        }
+      }
+    }
+
+    const onClickJumpToPageLabel = (e): void => {
+      setJumperLabelClassName('display-none')
+      e.target.previousElementSibling.focus()
+    }
+
+    const onBlurJumpToPage = (e): void => {
+      setJumperLabelClassName('')
+    }
+
+    renderPageNumberItemsAndPageRangeJumper.push(
+      renderJumpToPage(
+        currentPage,
+        jumperLabelClassName,
+        onKeyDownJumpToPage,
+        onClickJumpToPageLabel,
+        onBlurJumpToPage
+      )
+    )
+  }
+
   if (pages !== 1) {
-    renderPageNumberItems.push(
+    renderPageNumberItemsAndPageRangeJumper.push(
       renderPageNumberNode(
         pages.toString(),
         getClassNameForPageNumber(pages, currentPage),
-        (e) => { onClickPageNumber(pages) }
+        (e) => {
+          onClickPageNumber(pages)
+        }
       )
     )
   }
@@ -103,43 +154,37 @@ export const Pagination = ({
     setCurrentPage(currentPage + 1)
   }
 
-  useEffect(() => {
-    if (isSet(onChange)) {
-      onChange!(currentPage, pageSize)
-    }
-  }, [currentPage, pageSize])
-
   return (
-        <div>
-            <ul className={'ant-pagination ' + hashId}>
-                {isSet(showTotal) ? renderTotal(total, showTotal!) : null}
+    <div className={styles.pagination}>
+      <ul className={'ant-pagination ' + hashId}>
+        {isSet(showTotal) ? renderTotal(total, showTotal!) : null}
 
-                <li className={`ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}`}>
-                    <Button disabled={currentPage === 1} size={'small'} type={'text'} className={'ant-pagination-item-link'}
-                            icon={<Icon options={iconOptions} name='left-outlined'/>} onClick={onClickPrev}
-                    />
-                </li>
+        <li className={`ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}`}>
+          <Button disabled={currentPage === 1} size={'small'} type={'text'} className={'ant-pagination-item-link'}
+                  icon={<Icon options={iconOptions} name='left-outlined'/>} onClick={onClickPrev}
+          />
+        </li>
 
-                {renderPageNumberItems}
+        {renderPageNumberItemsAndPageRangeJumper}
 
-                <li className={`ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}`}>
-                    <Button disabled={currentPage === pages} size={'small'} type={'text'} className={'ant-pagination-item-link'}
-                            icon={<Icon options={iconOptions} name='right-outlined'/>} onClick={onClickNext}
-                    />
+        <li className={`ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}`}>
+          <Button disabled={currentPage === pages} size={'small'} type={'text'} className={'ant-pagination-item-link'}
+                  icon={<Icon options={iconOptions} name='right-outlined'/>} onClick={onClickNext}
+          />
+        </li>
 
-                </li>
-                {showSizeChanger
-                  ? renderPageSizeChanger(
-                    pageSizeOptions,
-                    defaultPageSize,
-                    (pageSize: number) => {
-                      setPageSize(pageSize)
-                      setCurrentPage(1)
-                    }
-                  )
-                  : null}
-            </ul>
-        </div>
+        {showSizeChanger
+          ? renderPageSizeChanger(
+            pageSizeOptions,
+            defaultPageSize,
+            (pageSize: number) => {
+              setPageSize(pageSize)
+              setCurrentPage(1)
+            }
+          )
+          : null}
+      </ul>
+    </div>
   )
 }
 
@@ -159,6 +204,10 @@ function getPageNumberRange (
   showPageJumperAtOnce: number,
   pages: number
 ): number[] {
+  if (showPageJumperAtOnce - 2 <= 0) {
+    return []
+  }
+
   const halfJumper = Math.floor(showPageJumperAtOnce / 2)
 
   let firstJumper = current - halfJumper + 1
@@ -247,7 +296,7 @@ function renderPageSizeChanger (
   const options: DefaultOptionType[] = []
 
   for (const pageSizeOption of pageSizeOptions) {
-    if (Number(pageSizeOption) === defaultPageSize) {
+    if (Number(pageSizeOption) === Number(defaultPageSize)) {
       isDefaultPageSizeOptionValid = true
     }
 
@@ -268,6 +317,27 @@ function renderPageSizeChanger (
                 onChange={handleChange}
                 options={options}
             />
+        </li>
+  )
+}
+
+function renderJumpToPage (
+  currentPage: number,
+  classNameLabel: string,
+  onKeyDown: (e) => void,
+  onClickLabel: (e) => void,
+  onBlurInput: (e) => void
+): ReactNode {
+  const onFocus = (e): void => {
+    e.target.value = currentPage
+    e.target.select()
+  }
+  return (
+        <li className='ant-pagination-item' key='jump-to-range'>
+            <input type='number' min='1' className='jump-to-page'
+                   onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlurInput}
+            />
+            <a className={'jump-to-page-label ' + classNameLabel} onClick={onClickLabel}>{currentPage}</a>
         </li>
   )
 }
