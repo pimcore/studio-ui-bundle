@@ -1,5 +1,5 @@
 import { store } from '@Pimcore/app/store'
-import { ThemeProvider } from '@Pimcore/modules/theme/theme-provider'
+import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
 
@@ -10,7 +10,7 @@ export interface GlobalProviderProps {
 export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Element => {
   return (
     <ThemeProvider>
-      <Provider store={store}>
+      <Provider store={ store }>
         {children}
       </Provider>
     </ThemeProvider>

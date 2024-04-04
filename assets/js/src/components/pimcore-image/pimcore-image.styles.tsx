@@ -8,4 +8,4 @@ export const useStyle = createStyles(({ token, css }) => {
       left: calc(50% - 8px);
     `
   }
-})
+}, { hashPriority: 'low' })

@@ -27,3 +27,8 @@ example-prefix: Example Prefix
 pagination.prev-pages: Previous {{pages}} Pages
 pagination.next-pages: Next {{pages}} Pages
 pagination.page: Page
+preview-card.locate-in-tree: Locate in Tree
+preview-card.info: Info
+preview-card.rename: Rename
+preview-card.download-zip: Download as ZIP
+preview-card.delete: Delete

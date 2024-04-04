@@ -8,4 +8,4 @@ export const useStyles = createStyles(({ token, css }) => {
       color: ${token.colorTextTreeElement}
     `
   }
-})
+}, { hashPriority: 'low' })

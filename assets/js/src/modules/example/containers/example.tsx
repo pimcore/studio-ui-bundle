@@ -11,6 +11,6 @@ export const Example = (): React.JSX.Element => {
   }
 
   return (
-    <AssetContainer id={context.config.id} />
+    <AssetContainer id={ context.config.id } />
   )
 }

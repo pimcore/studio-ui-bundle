@@ -14,9 +14,12 @@ export const Example = ({ value, prefix }: ExampleProps): React.JSX.Element => {
   return (
     <div>
       <Space>
-        <label className={styles.example}>{prefix}</label>
+        <label className={ styles.example }>{prefix}</label>
 
-        <Button icon={<Icon name='camera' />} type="primary">{value}</Button>
+        <Button
+          icon={ <Icon name='camera' /> }
+          type="primary"
+        >{value}</Button>
       </Space>
     </div>
   )

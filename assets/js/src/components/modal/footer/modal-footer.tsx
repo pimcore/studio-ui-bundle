@@ -11,11 +11,11 @@ export const ModalFooter = (props: IModalFooterProps): React.JSX.Element => {
   const { children, ...inlineProps } = props
 
   return (
-        <div
-            className={`ant-modal-footer-container ${props.buttonAlignment} ${styles.footer}`}
-            {...inlineProps}
-        >
-            {children}
-        </div>
+    <div
+      className={ `ant-modal-footer-container ${props.buttonAlignment} ${styles.footer}` }
+      { ...inlineProps }
+    >
+      {children}
+    </div>
   )
 }

@@ -24,9 +24,9 @@ const Resizer = (props: ResizerProps): React.JSX.Element => {
 
   return (
     <div
-      onMouseDown={props.onMouseDown}
-      className={classes.join(' ')}
-      style={{
+      className={ classes.join(' ') }
+      onMouseDown={ props.onMouseDown }
+      style={ {
         transform:
           props.isResizing
             ? `translateX(${
@@ -38,7 +38,7 @@ const Resizer = (props: ResizerProps): React.JSX.Element => {
                   .deltaOffset ?? 0)
               }px)`
             : ''
-      }}
+      } }
     />
   )
 }

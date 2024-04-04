@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react'
 import { type TabNode } from 'flexlayout-react'
 import { getWidget } from './widget-registry'
-import { WidgetContainer } from '@Pimcore/modules/widget/widget-container'
+import { WidgetContainer } from '@Pimcore/modules/widget-manager/widget/widget-container'
 import { WidgetManagerInnerContainer } from '../widget-manager-inner-container'
 
 export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
@@ -23,5 +23,10 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
 
   const { component } = widget
 
-  return <WidgetContainer node={node} component={component} />
+  return (
+    <WidgetContainer
+      component={ component }
+      node={ node }
+    />
+  )
 }
