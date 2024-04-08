@@ -27,7 +27,7 @@ export const Pagination = ({
   pageSizeOptions = [10, 20, 50, 100],
   showSizeChanger = false,
   showPageJumperAtOnce = 5,
-  showJumpToPage = true,
+  showJumpToPage = false,
   hideOnSinglePage = false,
   showTotal,
   onChange
@@ -36,7 +36,7 @@ export const Pagination = ({
 
   const [currentPage, setCurrentPage] = useState(current)
   const [pageSize, setPageSize] = useState(defaultPageSize)
-  const [jumperLabelClassName, setJumperLabelClassName] = useState('')
+  const [jumperLabelClassName, setJumperLabelClassName] = useState(showJumpToPage ? '' : 'display-none')
 
   useEffect(() => {
     if (isSet(onChange)) {
@@ -47,7 +47,7 @@ export const Pagination = ({
   const iconOptions = { width: 10, height: 10 }
   const pages = Math.ceil(total / pageSize)
 
-  if (hideOnSinglePage && pages === 1) {
+  if (total === 0 || (hideOnSinglePage && pages === 1)) {
     return null
   }
 
@@ -155,21 +155,37 @@ export const Pagination = ({
   }
 
   return (
-    <div className={styles.pagination}>
-      <ul className={'ant-pagination ' + hashId}>
+    <div className={ styles.pagination }>
+      <ul className={ 'ant-pagination ' + hashId }>
         {isSet(showTotal) ? renderTotal(total, showTotal!) : null}
 
-        <li className={`ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}`}>
-          <Button disabled={currentPage === 1} size={'small'} type={'text'} className={'ant-pagination-item-link'}
-                  icon={<Icon options={iconOptions} name='left-outlined'/>} onClick={onClickPrev}
+        <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
+          <Button
+            className={ 'ant-pagination-item-link' }
+            disabled={ currentPage === 1 }
+            icon={ <Icon
+              name='left-outlined'
+              options={ iconOptions }
+                   /> }
+            onClick={ onClickPrev }
+            size={ 'small' }
+            type={ 'text' }
           />
         </li>
 
         {renderPageNumberItemsAndPageRangeJumper}
 
-        <li className={`ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}`}>
-          <Button disabled={currentPage === pages} size={'small'} type={'text'} className={'ant-pagination-item-link'}
-                  icon={<Icon options={iconOptions} name='right-outlined'/>} onClick={onClickNext}
+        <li className={ `ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}` }>
+          <Button
+            className={ 'ant-pagination-item-link' }
+            disabled={ currentPage === pages }
+            icon={ <Icon
+              name='right-outlined'
+              options={ iconOptions }
+                   /> }
+            onClick={ onClickNext }
+            size={ 'small' }
+            type={ 'text' }
           />
         </li>
 
@@ -193,9 +209,9 @@ function renderTotal (
   showTotal: (total: number) => string
 ): ReactNode {
   return (
-        <li className="ant-pagination-total-text">
-            {showTotal(total)}
-        </li>
+    <li className="ant-pagination-total-text">
+      {showTotal(total)}
+    </li>
   )
 }
 
@@ -240,10 +256,13 @@ function renderPageNumberNode (
   onClick: (e) => void
 ): ReactNode {
   return (
-        <li title={pageNumber} key={pageNumber}
-            className={`ant-pagination-item ant-pagination-item-${pageNumber} ${className}`}>
-            <a onClick={onClick}>{pageNumber}</a>
-        </li>
+    <li
+      className={ `ant-pagination-item ant-pagination-item-${pageNumber} ${className}` }
+      key={ pageNumber }
+      title={ pageNumber }
+    >
+      <a onClick={ onClick }>{pageNumber}</a>
+    </li>
   )
 }
 
@@ -252,18 +271,30 @@ function renderPageRangeJumperPrevious (
   pagesToJump: number
 ): ReactNode {
   return (
-        <li title={i18n.t('pagination.prev-pages', { pages: pagesToJump })} key='rangeJumperPrev'
-            className='ant-pagination-jump-prev ant-pagination-jump-prev-custom-icon'>
-            <a onClick={onClick} className="ant-pagination-item-link">
-                <div className="ant-pagination-item-container">
-                    <span role="img" aria-label="double-left"
-                          className="anticon anticon-double-left ant-pagination-item-link-icon">
-                        <Icon options={{ width: 10, height: 10 }} name="double-left"/>
-                    </span>
-                    <span className='ant-pagination-item-ellipsis'>•••</span>
-                </div>
-            </a>
-        </li>
+    <li
+      className='ant-pagination-jump-prev ant-pagination-jump-prev-custom-icon'
+      key='rangeJumperPrev'
+      title={ i18n.t('pagination.prev-pages', { pages: pagesToJump }) }
+    >
+      <a
+        className="ant-pagination-item-link"
+        onClick={ onClick }
+      >
+        <div className="ant-pagination-item-container">
+          <span
+            aria-label="double-left"
+            className="anticon anticon-double-left ant-pagination-item-link-icon"
+            role="img"
+          >
+            <Icon
+              name="double-left"
+              options={ { width: 10, height: 10 } }
+            />
+          </span>
+          <span className='ant-pagination-item-ellipsis'>•••</span>
+        </div>
+      </a>
+    </li>
   )
 }
 
@@ -272,18 +303,30 @@ function renderPageRangeJumperNext (
   pagesToJump: number
 ): ReactNode {
   return (
-        <li title={i18n.t('pagination.next-pages', { pages: pagesToJump })} key='rangeJumperNext'
-            className='ant-pagination-jump-next ant-pagination-jump-next-custom-icon'>
-            <a onClick={onClick} className="ant-pagination-item-link">
-                <div className="ant-pagination-item-container">
-                    <span role="img" aria-label="double-right"
-                          className="anticon anticon-double-right ant-pagination-item-link-icon">
-                        <Icon options={{ width: 10, height: 10 }} name="double-right"/>
-                    </span>
-                    <span className='ant-pagination-item-ellipsis'>•••</span>
-                </div>
-            </a>
-        </li>
+    <li
+      className='ant-pagination-jump-next ant-pagination-jump-next-custom-icon'
+      key='rangeJumperNext'
+      title={ i18n.t('pagination.next-pages', { pages: pagesToJump }) }
+    >
+      <a
+        className="ant-pagination-item-link"
+        onClick={ onClick }
+      >
+        <div className="ant-pagination-item-container">
+          <span
+            aria-label="double-right"
+            className="anticon anticon-double-right ant-pagination-item-link-icon"
+            role="img"
+          >
+            <Icon
+              name="double-right"
+              options={ { width: 10, height: 10 } }
+            />
+          </span>
+          <span className='ant-pagination-item-ellipsis'>•••</span>
+        </div>
+      </a>
+    </li>
   )
 }
 
@@ -311,13 +354,13 @@ function renderPageSizeChanger (
   }
 
   return (
-        <li className='ant-pagination-options'>
-            <Select
-                defaultValue={defaultPageSize.toString()}
-                onChange={handleChange}
-                options={options}
-            />
-        </li>
+    <li className='ant-pagination-options'>
+      <Select
+        defaultValue={ defaultPageSize.toString() }
+        onChange={ handleChange }
+        options={ options }
+      />
+    </li>
   )
 }
 
@@ -332,13 +375,27 @@ function renderJumpToPage (
     e.target.value = currentPage
     e.target.select()
   }
+
   return (
-        <li className='ant-pagination-item' key='jump-to-range'>
-            <input type='number' min='1' className='jump-to-page'
-                   onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlurInput}
-            />
-            <a className={'jump-to-page-label ' + classNameLabel} onClick={onClickLabel}>{currentPage}</a>
-        </li>
+    <li
+      className='ant-pagination-item'
+      key='jump-to-range'
+    >
+      <div className="ant-pagination-item-container jump-to-container">
+        <input
+          className='jump-to-page'
+          min='1'
+          onBlur={ onBlurInput }
+          onFocus={ onFocus }
+          onKeyDown={ onKeyDown }
+          type='number'
+        />
+        <a
+          className={ 'jump-to-page-label ' + classNameLabel }
+          onClick={ onClickLabel }
+        >{currentPage}</a>
+      </div>
+    </li>
   )
 }
 

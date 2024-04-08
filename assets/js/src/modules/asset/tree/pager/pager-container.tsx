@@ -19,10 +19,11 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
   return (
     <Pagination
       current={ page }
+      defaultPageSize={ maxItemsPerNode }
       hideOnSinglePage
       onChange={ onChange }
-      pageSize={ maxItemsPerNode }
-      // simple
+      showJumpToPage
+      showPageJumperAtOnce={ 2 }
       total={ total }
     />
   )

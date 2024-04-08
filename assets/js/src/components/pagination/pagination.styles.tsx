@@ -24,14 +24,21 @@ export const useStyle = createStyles(({ token, css }) => {
           margin: 0;
       }
         
+      .jump-to-container {
+        position: relative;
+      }
+        
       .jump-to-page-label, .jump-to-page {
-        display: block;
+        display: block;  
+        position: absolute;
+        top: 0;
+        inset-inline-end: 0;
+        bottom: 0;
+        inset-inline-start: 0;
+        margin: auto;  
+          
         width: 32px;
         height: 32px;
-        position: absolute;
-        top: 2px;
-        bottom: 0;
-        margin: auto;
           
         background-color: white;
         border: 1px solid ${token.colorPrimary};
@@ -42,6 +49,10 @@ export const useStyle = createStyles(({ token, css }) => {
       .ant-pagination .ant-pagination-item a.display-none {
         display: none;
       }
+
+      .ant-pagination .ant-pagination-item {
+          height: unset;
+      }  
     `
   }
 }, { hashPriority: 'low' })

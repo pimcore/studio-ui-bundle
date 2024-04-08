@@ -27,6 +27,7 @@ const icons = {
   'dots-horizontal': React.lazy(async () => await import('@Pimcore/assets/icons/dots-horizontal.inline.svg')),
   target: React.lazy(async () => await import('@Pimcore/assets/icons/target.inline.svg')),
   'info-circle-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/info-circle-outlined.inline.svg')),
+  'left-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/left-outlined.inline.svg')),
   'right-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/right-outlined.inline.svg')),
   'rich-edit': React.lazy(async () => await import('@Pimcore/assets/icons/rich-edit.inline.svg')),
   'download-02': React.lazy(async () => await import('@Pimcore/assets/icons/download-02.inline.svg')),
