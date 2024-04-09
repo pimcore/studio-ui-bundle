@@ -1,11 +1,12 @@
-import React, { type ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import { useStyle } from '@Pimcore/components/pagination/pagination.styles'
 import { Icon } from '../icon/icon'
-import { Button, Select } from 'antd'
-import type { DefaultOptionType } from 'rc-select/lib/Select'
+import { Button } from 'antd'
 import i18n from '@Pimcore/app/i18n'
 import { isSet } from '@Pimcore/utils/helpers'
+import { SizeChanger } from '@Pimcore/components/size-changer/size-changer'
+import { EditableLabel } from '@Pimcore/components/editable-label/editable-label'
 
 interface PaginationProps {
   total: number
@@ -31,12 +32,12 @@ export const Pagination = ({
   hideOnSinglePage = false,
   showTotal,
   onChange
-}: PaginationProps): React.JSX.Element | null => {
+}: PaginationProps): React.JSX.Element => {
   const hashId = useCssComponentHash('pagination')
 
   const [currentPage, setCurrentPage] = useState(current)
   const [pageSize, setPageSize] = useState(defaultPageSize)
-  const [jumperLabelClassName, setJumperLabelClassName] = useState(showJumpToPage ? '' : 'display-none')
+  const jumperLabelClassName = showJumpToPage ? '' : 'display-none'
 
   useEffect(() => {
     if (isSet(onChange)) {
@@ -48,7 +49,7 @@ export const Pagination = ({
   const pages = Math.ceil(total / pageSize)
 
   if (total === 0 || (hideOnSinglePage && pages === 1)) {
-    return null
+    return <></>
   }
 
   const { styles } = useStyle()
@@ -60,8 +61,8 @@ export const Pagination = ({
     setCurrentPage(pageNumber)
   }
 
-  const renderPageNumberItemsAndPageRangeJumper: ReactNode[] = [
-    renderPageNumberNode(
+  const renderPageNumberItemsAndPageRangeJumper: React.JSX.Element[] = [
+    PageNumberNode(
       '1',
       getClassNameForPageNumber(1, currentPage),
       (e) => {
@@ -72,7 +73,7 @@ export const Pagination = ({
 
   if (pageNumberRange.length > 0 && pageNumberRange[0] !== 2 && !showJumpToPage) {
     renderPageNumberItemsAndPageRangeJumper.push(
-      renderPageRangeJumperPrevious(
+      PageRangeJumperPrevious(
         (e) => {
           setCurrentPage(currentPage - pagesToJump)
         },
@@ -83,7 +84,7 @@ export const Pagination = ({
 
   for (const i of pageNumberRange) {
     renderPageNumberItemsAndPageRangeJumper.push(
-      renderPageNumberNode(
+      PageNumberNode(
         i.toString(),
         getClassNameForPageNumber(i, currentPage),
         (e) => {
@@ -95,7 +96,7 @@ export const Pagination = ({
 
   if (!showJumpToPage && !isLastPageRendered(pageNumberRange, pages)) {
     renderPageNumberItemsAndPageRangeJumper.push(
-      renderPageRangeJumperNext(
+      PageRangeJumperNext(
         (e) => {
           setCurrentPage(currentPage + pagesToJump)
         },
@@ -114,29 +115,20 @@ export const Pagination = ({
       }
     }
 
-    const onClickJumpToPageLabel = (e): void => {
-      setJumperLabelClassName('display-none')
-      e.target.previousElementSibling.focus()
-    }
-
-    const onBlurJumpToPage = (e): void => {
-      setJumperLabelClassName('')
-    }
-
     renderPageNumberItemsAndPageRangeJumper.push(
-      renderJumpToPage(
-        currentPage,
-        jumperLabelClassName,
-        onKeyDownJumpToPage,
-        onClickJumpToPageLabel,
-        onBlurJumpToPage
-      )
+      <li className='ant-pagination-item'>
+        <EditableLabel
+          currentPage={ currentPage }
+          defaultClassNameLabel={ jumperLabelClassName }
+          onKeyDown={ onKeyDownJumpToPage }
+        />
+      </li>
     )
   }
 
   if (pages !== 1) {
     renderPageNumberItemsAndPageRangeJumper.push(
-      renderPageNumberNode(
+      PageNumberNode(
         pages.toString(),
         getClassNameForPageNumber(pages, currentPage),
         (e) => {
@@ -154,10 +146,15 @@ export const Pagination = ({
     setCurrentPage(currentPage + 1)
   }
 
+  const changePageSize = (pageSize: number): void => {
+    setPageSize(pageSize)
+    setCurrentPage(1)
+  }
+
   return (
     <div className={ styles.pagination }>
       <ul className={ 'ant-pagination ' + hashId }>
-        {isSet(showTotal) ? renderTotal(total, showTotal!) : null}
+        {isSet(showTotal) ? TotalField(total, showTotal!) : null}
 
         <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
           <Button
@@ -189,25 +186,27 @@ export const Pagination = ({
           />
         </li>
 
-        {showSizeChanger
-          ? renderPageSizeChanger(
-            pageSizeOptions,
-            defaultPageSize,
-            (pageSize: number) => {
-              setPageSize(pageSize)
-              setCurrentPage(1)
-            }
-          )
-          : null}
+        { showSizeChanger
+          ? (
+            <li className='ant-pagination-options'>
+              <SizeChanger
+                defaultSize={ defaultPageSize }
+                handleChange={ changePageSize }
+                label={ i18n.t('pagination.page') }
+                sizeOptions={ pageSizeOptions }
+              />
+            </li>
+            )
+          : null }
       </ul>
     </div>
   )
 }
 
-function renderTotal (
+function TotalField (
   total: number,
   showTotal: (total: number) => string
-): ReactNode {
+): React.JSX.Element {
   return (
     <li className="ant-pagination-total-text">
       {showTotal(total)}
@@ -250,11 +249,11 @@ function getPageNumberRange (
   return numberRange
 }
 
-function renderPageNumberNode (
+function PageNumberNode (
   pageNumber: string,
   className: string,
   onClick: (e) => void
-): ReactNode {
+): React.JSX.Element {
   return (
     <li
       className={ `ant-pagination-item ant-pagination-item-${pageNumber} ${className}` }
@@ -266,10 +265,10 @@ function renderPageNumberNode (
   )
 }
 
-function renderPageRangeJumperPrevious (
+function PageRangeJumperPrevious (
   onClick: (e) => void,
   pagesToJump: number
-): ReactNode {
+): React.JSX.Element {
   return (
     <li
       className='ant-pagination-jump-prev ant-pagination-jump-prev-custom-icon'
@@ -298,10 +297,10 @@ function renderPageRangeJumperPrevious (
   )
 }
 
-function renderPageRangeJumperNext (
+function PageRangeJumperNext (
   onClick: (e) => void,
   pagesToJump: number
-): ReactNode {
+): React.JSX.Element {
   return (
     <li
       className='ant-pagination-jump-next ant-pagination-jump-next-custom-icon'
@@ -326,75 +325,6 @@ function renderPageRangeJumperNext (
           <span className='ant-pagination-item-ellipsis'>•••</span>
         </div>
       </a>
-    </li>
-  )
-}
-
-function renderPageSizeChanger (
-  pageSizeOptions: number[] | string [],
-  defaultPageSize: number,
-  handleChange: (pageSize) => void
-): ReactNode {
-  let isDefaultPageSizeOptionValid = false
-  const options: DefaultOptionType[] = []
-
-  for (const pageSizeOption of pageSizeOptions) {
-    if (Number(pageSizeOption) === Number(defaultPageSize)) {
-      isDefaultPageSizeOptionValid = true
-    }
-
-    options.push({
-      value: pageSizeOption.toString(),
-      label: pageSizeOption.toString() + ' / ' + i18n.t('pagination.page')
-    })
-  }
-
-  if (!isDefaultPageSizeOptionValid) {
-    console.error('Default page size is not a valid option. Default page size: ' + defaultPageSize)
-  }
-
-  return (
-    <li className='ant-pagination-options'>
-      <Select
-        defaultValue={ defaultPageSize.toString() }
-        onChange={ handleChange }
-        options={ options }
-      />
-    </li>
-  )
-}
-
-function renderJumpToPage (
-  currentPage: number,
-  classNameLabel: string,
-  onKeyDown: (e) => void,
-  onClickLabel: (e) => void,
-  onBlurInput: (e) => void
-): ReactNode {
-  const onFocus = (e): void => {
-    e.target.value = currentPage
-    e.target.select()
-  }
-
-  return (
-    <li
-      className='ant-pagination-item'
-      key='jump-to-range'
-    >
-      <div className="ant-pagination-item-container jump-to-container">
-        <input
-          className='jump-to-page'
-          min='1'
-          onBlur={ onBlurInput }
-          onFocus={ onFocus }
-          onKeyDown={ onKeyDown }
-          type='number'
-        />
-        <a
-          className={ 'jump-to-page-label ' + classNameLabel }
-          onClick={ onClickLabel }
-        >{currentPage}</a>
-      </div>
     </li>
   )
 }
