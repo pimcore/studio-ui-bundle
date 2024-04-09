@@ -11,10 +11,14 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     'tree-list__search': css`
-      padding: ${token.paddingXS}px ${token.paddingSM}px ${token.paddingXXS}px 0;
+      padding: ${token.paddingXXS}px ${token.paddingSM}px ${token.paddingXS}px 0;
 
       &:empty {
         padding: 0;
+      }
+
+      .ant-btn-default {
+        border-color: ${token.colorBorder}
       }
     `
   }

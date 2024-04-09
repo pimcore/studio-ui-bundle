@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { TreeContext, type TreeSearchProps } from '@Pimcore/components/tree/tree'
 import { Input } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 const { Search } = Input
 
 const SearchContainer = (props: TreeSearchProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { node, mergeAdditionalQueryParams, total } = props
   const [searchActive, setSearchActive] = useState(false)
   const { maxItemsPerNode } = useContext(TreeContext)
@@ -28,9 +30,9 @@ const SearchContainer = (props: TreeSearchProps): React.JSX.Element => {
 
   return (
     <Search
-      aria-label={ `Search in ${node.label}` }
+      aria-label={ t('asset.asset-tree.search', { folderName: node.label }) }
       onSearch={ onSearch }
-      placeholder={ `Search in ${node.label}` }
+      placeholder={ t('asset.asset-tree.search', { folderName: node.label }) }
       size='small'
     />
   )
