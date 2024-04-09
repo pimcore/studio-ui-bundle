@@ -1,4 +1,5 @@
 asset.asset-tree.title: Asset Tree
+asset.asset-tree.search: Search in {{folderName}}
 asset.asset-editor-tabs.view: View
 asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata

@@ -14,7 +14,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, nodeApiHook } = useContext(TreeContext)
-  const { apiHookResult, dataTransformer, setAdditionalQueryParams } = nodeApiHook(node)
+  const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
   const { isLoading, isError, data } = apiHookResult
 
   if (isLoading === true) {
@@ -30,10 +30,16 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   return (
     <>
       {RenderFilter !== undefined && (
-        <RenderFilter
-          node={ node }
-          setAdditionalQueryParams={ setAdditionalQueryParams }
-        />
+        <div
+          className={ ['tree-list__search', styles['tree-list__search']].join(' ') }
+          style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
+        >
+          <RenderFilter
+            mergeAdditionalQueryParams={ mergeAdditionalQueryParams }
+            node={ node }
+            total={ total }
+          />
+        </div>
       )}
 
       <div className='tree-list'>
@@ -51,8 +57,8 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
           style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
         >
           <RenderPager
+            mergeAdditionalQueryParams={ mergeAdditionalQueryParams }
             node={ node }
-            setAdditionalQueryParams={ setAdditionalQueryParams }
             total={ total }
           />
         </div>
