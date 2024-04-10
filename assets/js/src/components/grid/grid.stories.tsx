@@ -6,9 +6,6 @@ import { createColumnHelper } from '@tanstack/react-table'
 const config: Meta = {
   title: 'Pimcore studio/UI/Grid',
   component: Grid,
-  parameters: {
-    layout: 'centered'
-  },
 
   tags: ['autodocs']
 }
