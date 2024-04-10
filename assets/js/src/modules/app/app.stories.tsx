@@ -1,4 +1,3 @@
-import React from 'react'
 import { type Meta } from '@storybook/react'
 import { AppView } from './app-view'
 
@@ -8,7 +7,7 @@ const config: Meta = {
   parameters: {
     layout: 'fullscreen'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 }
 
 export default config
@@ -18,8 +17,8 @@ export const _default = {
     docs: {
       story: {
         inline: false,
-        height: '600px',
-      },
-    },
-  },
+        height: '600px'
+      }
+    }
+  }
 }

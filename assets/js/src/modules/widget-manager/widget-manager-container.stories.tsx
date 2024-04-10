@@ -1,4 +1,3 @@
-import React from 'react'
 import { type Meta } from '@storybook/react'
 import { WidgetManagerContainer } from './widget-manager-container'
 
@@ -10,12 +9,12 @@ const config: Meta = {
     docs: {
       story: {
         parameters: {
-          height: '555px',
-        },
+          height: '555px'
+        }
       }
     }
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 }
 
 export default config
@@ -25,8 +24,8 @@ export const _default = {
     docs: {
       story: {
         inline: false,
-        height: '600px',
-      },
-    },
-  },
+        height: '600px'
+      }
+    }
+  }
 }

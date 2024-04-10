@@ -1,4 +1,3 @@
-import React from 'react'
 import { type Meta } from '@storybook/react'
 import { TreeContainer } from './tree-container'
 
@@ -8,7 +7,7 @@ const config: Meta = {
   parameters: {
     layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 }
 
 export default config
