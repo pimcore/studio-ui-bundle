@@ -1,8 +1,12 @@
 import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
-    return {
-        imageZoom: css`
+  return {
+    imageZoomContainer: css`
+        display: flex;
+        gap: 5px
+    `,
+    imageZoom: css`
             .ant-btn {
                 border-color: ${token.colorBorder};
                 
@@ -20,5 +24,5 @@ export const useStyle = createStyles(({ token, css }) => {
                 text-align: center;
             }
         `
-    }
+  }
 })
