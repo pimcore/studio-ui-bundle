@@ -20,6 +20,9 @@ export const _default = {
     defaultPageSize: 25,
     showSizeChanger: true,
     hideOnSinglePage: true,
+    showJumpToPage: true,
+    showPageJumperAtOnce: 2,
+    showFirstAndLastPageAsIcon: false,
     showTotal: (total: number) => `Total ${total} items`,
     onChange: (currentPage: number, pageSize: number) => { console.log(`Current page: ${currentPage}, Page size: ${pageSize}`) }
   }

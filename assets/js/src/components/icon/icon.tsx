@@ -50,7 +50,10 @@ const icons = {
   'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/focal-point.inline.svg')),
   'ellipsis-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/ellipsis-outlined.inline.svg')),
   'double-right': React.lazy(async () => await import('@Pimcore/assets/icons/double-right.inline.svg')),
-  'double-left': React.lazy(async () => await import('@Pimcore/assets/icons/double-left.inline.svg'))
+  'double-left': React.lazy(async () => await import('@Pimcore/assets/icons/double-left.inline.svg')),
+  'arrow-first': React.lazy(async () => await import('@Pimcore/assets/icons/arrow-first.inline.svg')),
+  'arrows-pagination': React.lazy(async () => await import('@Pimcore/assets/icons/arrows-pagination.inline.svg'))
+
 }
 
 export interface IconProps {

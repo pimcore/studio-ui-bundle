@@ -1,9 +1,9 @@
 import { type Meta } from '@storybook/react'
-import { EditableLabel as EditableLabelComponent } from './editable-label'
+import { InlineTextfield as InlineTextfieldComponent } from './inline-textfield'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/EditableLabel',
-  component: EditableLabelComponent,
+  title: 'Pimcore studio/UI/InlineTextfield',
+  component: InlineTextfieldComponent,
   parameters: {
     layout: 'centered'
   },
@@ -14,8 +14,8 @@ export default config
 
 export const _default = {
   args: {
-    currentPage: 4,
+    value: '4',
     defaultClassNameLabel: '',
-    onKeyDown: (e) => { console.log(e) }
+    onKeyDown: (e) => { console.log(e.key) }
   }
 }

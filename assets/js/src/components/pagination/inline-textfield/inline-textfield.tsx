@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
-import { useStyle } from './editable-label.styles'
+import { useStyle } from './inline-textfield.styles'
 
-interface EditableLabelProps {
-  currentPage: number
+interface InlineTextfieldProps {
+  value: string
   defaultClassNameLabel: string
   onKeyDown: (e) => void
 }
 
-export const EditableLabel = ({
-  currentPage,
+export const InlineTextfield = ({
+  value = '',
   defaultClassNameLabel = 'display-none',
   onKeyDown
-}: EditableLabelProps): React.JSX.Element => {
+}: InlineTextfieldProps): React.JSX.Element => {
   const { styles } = useStyle()
   const [classNameLabel, setClassNameLabel] = useState(defaultClassNameLabel)
 
@@ -25,8 +25,7 @@ export const EditableLabel = ({
   }
 
   const onFocus = (e): void => {
-    e.target.value = currentPage
-    e.target.select()
+    e.target.value = ''
   }
 
   return (
@@ -40,9 +39,9 @@ export const EditableLabel = ({
         type='number'
       />
       <a
-        className={ 'editable-label ' + classNameLabel }
+        className={ 'inline-label ' + classNameLabel }
         onClick={ onClickLabel }
-      >{currentPage}</a>
+      >{value}</a>
     </div>
   )
 }

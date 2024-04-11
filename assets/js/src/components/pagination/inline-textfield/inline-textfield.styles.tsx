@@ -26,7 +26,7 @@ export const useStyle = createStyles(({ token, css }) => {
           margin: 0;
       }
 
-      .editable-label, .input-field {
+      .inline-label, .input-field {
           display: block;
           position: absolute;
           top: 0;
@@ -44,9 +44,16 @@ export const useStyle = createStyles(({ token, css }) => {
           cursor: text;
       }
 
-      a.display-none {
+      & .input-field + .inline-label.display-none {
           display: none;
       }
+        
+      a {
+          font-family: Lato, sans-serif;
+          line-height: 30px;
+          text-align: center;
+          color: unset;
+      }  
     `
   }
 }, { hashPriority: 'low' })
