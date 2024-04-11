@@ -6,6 +6,7 @@ import { PagerContainer } from './pager/pager-container'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { api } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { store } from '@Pimcore/app/store'
+import { SearchContainer } from './search/search-container'
 
 export interface TreeContainerProps {
   id: number
@@ -37,6 +38,7 @@ const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }
       onSelect={ onSelect }
+      renderFilter={ SearchContainer }
       renderPager={ PagerContainer }
     />
   )

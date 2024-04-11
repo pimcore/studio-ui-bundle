@@ -5,12 +5,13 @@ import { useStyles } from './tree.styles'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
-  setAdditionalQueryParams?: Dispatch<any>
+  mergeAdditionalQueryParams?: Dispatch<unknown>
+  total: number
 }
 
 export interface TreePagerProps {
   node: TreeNodeProps
-  setAdditionalQueryParams: Dispatch<any>
+  mergeAdditionalQueryParams: Dispatch<unknown>
   total: number
 }
 
