@@ -1,18 +1,17 @@
-import {type Meta} from '@storybook/react'
-import {ImageZoom} from "@Pimcore/components/image-zoom/image-zoom";
-import React from 'react';
+import { type Meta } from '@storybook/react'
+import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 
 const config: Meta = {
-    title: 'Pimcore studio/UI/Image Zoom',
-    component: ImageZoom,
-    parameters: {
-        layout: 'centered'
-    },
-    tags: ['autodocs']
+  title: 'Pimcore studio/UI/Image Zoom',
+  component: ImageZoom,
+  parameters: {
+    layout: 'centered'
+  },
+  tags: ['autodocs']
 }
 
 export default config
 
 export const _default = {
-    args: {}
+  args: {}
 }
