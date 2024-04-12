@@ -61,7 +61,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "@tanstack/react-table": "^8.12.0",
-    "@types/react": "^18.2.48",
+    "@types/react": "^18.2.77",
     "@types/react-dom": "^18.2.22",
     "antd": "^5.13.3",
     "antd-style": "^3.6.1",
