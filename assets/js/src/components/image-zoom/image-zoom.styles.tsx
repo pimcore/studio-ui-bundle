@@ -27,9 +27,19 @@ export const useStyle = createStyles(({ token, css }) => {
     imageZoomBtn: css`
         border: 1px solid ${token.Button.defaultBorderColor};
         box-shadow: none !important;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         .pimcore-icon {
             display: flex;
+        }
+
+        &:disabled {
+            background: ${token.colorBgContainer};
         }
     `
   }
