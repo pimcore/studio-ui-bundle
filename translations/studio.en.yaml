@@ -30,3 +30,4 @@ preview-card.info: Info
 preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
+grid.aria.column-resize: Resize column

@@ -62,8 +62,8 @@ export const Grid = (props: GridProps): React.JSX.Element => {
 
                         {props.resizable === true && header.column.getCanResize() && (
                           <Resizer
+                            header={ header }
                             isResizing={ header.column.getIsResizing() }
-                            onMouseDown={ header.getResizeHandler() }
                             table={ table }
                           />
                         )}
