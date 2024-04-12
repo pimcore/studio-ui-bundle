@@ -15,7 +15,7 @@ export const useStyle = createStyles(({ token, css }) => {
     flexContainer: css`
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding-left: 15px;
       padding-right: 15px;
     `
