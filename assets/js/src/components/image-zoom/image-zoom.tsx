@@ -1,5 +1,5 @@
-import { Button, Input, Space } from 'antd'
-import React from 'react'
+import { Button, Select, Space } from 'antd'
+import React, { useEffect } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
 
@@ -14,50 +14,62 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
   const [zoomOutDisabled, setZoomOutDisabled] = React.useState<boolean>(false)
   const { styles } = useStyle({ zoom })
 
-  function zoomIn (): void {
-    setZoom(zoom + zoomSteps)
-
-    if (zoom === 500) {
+  useEffect(() => {
+    // zoomIn Btn
+    if (zoom >= 500) {
       setZoomInDisabled(true)
     }
-
-    if (zoomInDisabled && zoom <= 500) {
+    if (zoomInDisabled && zoom < 500) {
       setZoomInDisabled(false)
     }
-  }
 
-  function zoomOut (): void {
-    setZoom(zoom - zoomSteps)
-
+    // zoomOut Btn
     if (zoom <= 25) {
       setZoomOutDisabled(true)
     }
-
     if (zoomOutDisabled && zoom > 25) {
       setZoomOutDisabled(false)
     }
-  }
+  }, [zoom])
 
   return (
     <div className={ styles.imageZoomContainer }>
       {zoom !== 100 && (
-        <Button onClick={ () => { setZoom(100) } }>Reset</Button>
+        <Button
+          className={ styles.imageZoomBtn }
+          onClick={ () => { setZoom(100) } }
+        >
+          Reset
+        </Button>
       )}
 
       <Space.Compact className={ styles.imageZoom }>
         <Button
+          className={ styles.imageZoomBtn }
           disabled={ zoomOutDisabled }
-          onClick={ zoomOut }
+          onClick={ () => { setZoom(zoom - zoomSteps) } }
         >
           <Icon name={ 'MinusOutlined' } />
         </Button>
-        <Input
-          onChange={ (e) => { setZoom(parseInt(e.target.value.replace('%', ''), 10)) } }
-          value={ `${zoom}%` }
+        <Select
+          defaultActiveFirstOption
+          defaultValue={ '100' }
+          onChange={ (value) => { setZoom(parseInt(value)) } }
+          options={ [
+            { value: '100', label: '100%' },
+            { value: '125', label: '125%' },
+            { value: '150', label: '150%' },
+            { value: '175', label: '175%' },
+            { value: '200', label: '200%' },
+            { value: '225', label: '225%' },
+            { value: '250', label: '250%' }
+          ] }
+          value={ `${zoom.toString()}%` }
         />
         <Button
+          className={ styles.imageZoomBtn }
           disabled={ zoomInDisabled }
-          onClick={ zoomIn }
+          onClick={ () => { setZoom(zoom + zoomSteps) } }
         >
           <Icon name={ 'PlusOutlined' } />
         </Button>
