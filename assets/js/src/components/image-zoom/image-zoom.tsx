@@ -2,6 +2,7 @@ import { Button, Select, Space } from 'antd'
 import React, { useEffect } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
+import { useTranslation } from 'react-i18next'
 
 interface IImageZoom {
   zoom: number
@@ -13,6 +14,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
   const [zoomInDisabled, setZoomInDisabled] = React.useState<boolean>(false)
   const [zoomOutDisabled, setZoomOutDisabled] = React.useState<boolean>(false)
   const { styles } = useStyle({ zoom })
+  const { t } = useTranslation()
 
   useEffect(() => {
     // zoomIn Btn
@@ -36,22 +38,28 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
     <div className={ styles.imageZoomContainer }>
       {zoom !== 100 && (
         <Button
+          aria-label={ t('aria.asset.image.editor.zoom.reset') }
           className={ styles.imageZoomBtn }
           onClick={ () => { setZoom(100) } }
+          onKeyDown={ () => { setZoom(100) } }
         >
-          Reset
+          {t('asset.image.editor.zoom.reset')}
         </Button>
       )}
 
       <Space.Compact className={ styles.imageZoom }>
         <Button
+          aria-disabled={ zoomOutDisabled }
+          aria-label={ t('aria.asset.image.editor.zoom.zoom-out') }
           className={ styles.imageZoomBtn }
           disabled={ zoomOutDisabled }
           onClick={ () => { setZoom(zoom - zoomSteps) } }
+          onKeyDown={ () => { setZoom(zoom - zoomSteps) } }
         >
           <Icon name={ 'MinusOutlined' } />
         </Button>
         <Select
+          aria-label={ t('aria.asset.image.editor.zoom.preconfigured-zoom-levels') }
           defaultActiveFirstOption
           defaultValue={ '100' }
           onChange={ (value) => { setZoom(parseInt(value)) } }
@@ -64,12 +72,15 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
             { value: '225', label: '225%' },
             { value: '250', label: '250%' }
           ] }
-          value={ `${zoom.toString()}%` }
+          value={ `${zoom}%` }
         />
         <Button
+          aria-disabled={ zoomInDisabled }
+          aria-label={ t('aria.asset.image.editor.zoom.zoom-in') }
           className={ styles.imageZoomBtn }
           disabled={ zoomInDisabled }
           onClick={ () => { setZoom(zoom + zoomSteps) } }
+          onKeyDown={ () => { setZoom(zoom + zoomSteps) } }
         >
           <Icon name={ 'PlusOutlined' } />
         </Button>
