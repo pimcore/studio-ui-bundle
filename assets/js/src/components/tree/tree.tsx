@@ -1,4 +1,4 @@
-import React, { type ElementType, createContext, useState, type Dispatch, useMemo } from 'react'
+import React, { type ElementType, createContext, useState, type Dispatch, useMemo, useRef, type MutableRefObject, useCallback } from 'react'
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './tree.styles'
@@ -29,8 +29,15 @@ export interface TreeProps {
   onContextMenu?: (node: TreeNodeProps, event: React.MouseEvent) => void
 }
 
+export interface nodeRef {
+  el: HTMLElement
+  node: TreeNodeProps
+}
+
 export interface ITreeContext extends TreeProps {
   selectedIdsState?: [string[], (ids: string[]) => void]
+  nodesRefs?: MutableRefObject<Record<string, nodeRef>>
+  nodeOrder?: () => string[]
 }
 
 const defaultProps: TreeProps = {
@@ -53,7 +60,26 @@ const Tree = (props: TreeProps): React.JSX.Element => {
     level: -1
   })
   const { isLoading, isError, data } = apiHookResult
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState }), [props, selectedIdsState])
+  const nodesRefs = useRef<Record<string, nodeRef>>({})
+  const nodeOrder = useCallback(() => {
+    return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
+      const nodeA = nodesRefs.current[a].node
+      const nodeB = nodesRefs.current[b].node
+
+      const indexesA = nodeA.internalKey.split('-')
+      const indexesB = nodeB.internalKey.split('-')
+
+      for (let index = 0; index < indexesA.length; index++) {
+        if (indexesA[index] !== indexesB[index]) {
+          return parseInt(indexesA[index]) - parseInt(indexesB[index])
+        }
+      }
+
+      return 0
+    })
+  }, [nodesRefs.current])
+
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder }), [props, selectedIdsState, nodesRefs, nodeOrder])
 
   if (isError !== false) {
     return (<div>{'Error'}</div>)
@@ -71,8 +97,9 @@ const Tree = (props: TreeProps): React.JSX.Element => {
       {isLoading === false && items.length !== 0 && (
         <div className={ ['tree', styles.tree].join(' ') }>
           <TreeContext.Provider value={ treeContextValue }>
-            {items.map((item) => (
+            {items.map((item, index) => (
               <TreeNode
+                internalKey={ `${index}` }
                 key={ item.id }
                 { ...item }
               />

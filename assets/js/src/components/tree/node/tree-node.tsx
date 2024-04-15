@@ -1,5 +1,5 @@
 import { Flex, theme } from 'antd'
-import React, { useContext } from 'react'
+import React, { type KeyboardEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
@@ -9,6 +9,7 @@ export interface TreeNodeProps {
   id: string
   icon: string
   label: string
+  internalKey: string
   children: TreeNodeProps[]
   level: number
   hasChildren?: boolean
@@ -17,6 +18,7 @@ export interface TreeNodeProps {
 
 const defaultProps: TreeNodeProps = {
   id: Math.random().toString(16).slice(2),
+  internalKey: '',
   icon: 'folder',
   label: 'Node',
   children: [],
@@ -29,9 +31,17 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   const { token } = useToken()
   const { children } = props
   const { styles } = useStyles()
-  const { renderNodeContent: RenderNodeContent, onSelect, selectedIdsState } = useContext(TreeContext)
-  const [isExapanded, setIsExpanded] = React.useState(children.length !== 0)
+  const { renderNodeContent: RenderNodeContent, onSelect, selectedIdsState, nodesRefs, nodeOrder } = useContext(TreeContext)
+  const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
+
+  useEffect(() => {
+    return () => {
+      if (nodesRefs !== undefined) {
+        delete nodesRefs.current[props.internalKey]
+      }
+    }
+  }, [])
 
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
@@ -43,11 +53,65 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
     return classes.join(' ')
   }
 
-  function onClick (): void {
+  function selectNode (): void {
     setSelectedIds([props.id])
 
     if (onSelect !== undefined) {
       onSelect({ ...props })
+    }
+  }
+
+  function onClick (): void {
+    selectNode()
+  }
+
+  function onKeyDown (event: React.KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      selectNode()
+    }
+
+    if (event.key === 'ArrowRight') {
+      expandItem()
+    }
+
+    if (event.key === 'ArrowLeft') {
+      collapseItem()
+    }
+
+    if (event.key === 'ArrowDown') {
+      gotoNextNode(event)
+    }
+
+    if (event.key === 'ArrowUp') {
+      gotoPreviousNode(event)
+    }
+  }
+
+  function expandItem (): void {
+    setIsExpanded(true)
+  }
+
+  function collapseItem (): void {
+    setIsExpanded(false)
+  }
+
+  function gotoNextNode (event: KeyboardEvent): void {
+    event.preventDefault()
+
+    const index = nodeOrder!().indexOf(props.internalKey)
+
+    if (index < nodeOrder!().length - 1) {
+      nodesRefs!.current[nodeOrder!()[index + 1]].el.focus()
+    }
+  }
+
+  function gotoPreviousNode (event: KeyboardEvent): void {
+    event.preventDefault()
+
+    const index = nodeOrder!().indexOf(props.internalKey)
+
+    if (index > 0) {
+      nodesRefs!.current[nodeOrder!()[index - 1]].el.focus()
     }
   }
 
@@ -57,16 +121,20 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
         className='tree-node__content'
         gap="small"
         onClick={ onClick }
+        onKeyDown={ onKeyDown }
+        ref={ el => nodesRefs!.current[props.internalKey] = { el: el!, node: props } }
+        role='button'
         style={
           {
             paddingLeft: token.paddingSM + 20 * props.level,
             minWidth: `${20 * props.level + 200}px`
           }
         }
+        tabIndex={ -1 }
       >
         <TreeExpander
           node={ props }
-          state={ [isExapanded, setIsExpanded] }
+          state={ [isExpanded, setIsExpanded] }
         />
 
         <div className="tree-node__content-wrapper">
@@ -74,7 +142,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
         </div>
       </Flex>
 
-      {isExapanded && (
+      {isExpanded && (
         <TreeList node={ props } />
       )}
     </div>
