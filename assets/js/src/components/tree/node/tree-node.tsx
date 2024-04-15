@@ -1,7 +1,7 @@
 import { Flex, theme } from 'antd'
 import React, { type KeyboardEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { TreeContext } from '../tree'
+import { TreeContext, type nodeRef } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 
@@ -38,6 +38,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   useEffect(() => {
     return () => {
       if (nodesRefs !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete nodesRefs.current[props.internalKey]
       }
     }
@@ -115,6 +116,11 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
     }
   }
 
+  function registerNode (el: HTMLElement): void {
+    const nodeRef: nodeRef = { el, node: props }
+    nodesRefs!.current[props.internalKey] = nodeRef
+  }
+
   return (
     <div className={ getClasses() }>
       <Flex
@@ -122,7 +128,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
         gap="small"
         onClick={ onClick }
         onKeyDown={ onKeyDown }
-        ref={ el => nodesRefs!.current[props.internalKey] = { el: el!, node: props } }
+        ref={ registerNode }
         role='button'
         style={
           {
