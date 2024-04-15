@@ -1,6 +1,3 @@
-# build files
-/public/build/
-
 # temp files
 .DS_Store
 Thumbs.db
