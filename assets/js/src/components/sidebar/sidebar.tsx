@@ -36,16 +36,26 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
   return (
     <div className={ styles.sidebar }>
       <div className={ 'sidebar__navigation' }>
-        <div className={ 'sidebar__navigation__tabs' }>
+        <div
+          className={ 'sidebar__navigation__tabs' }
+          role={ 'tablist' }
+        >
           {
-            preparedEntries.map((entry) => {
+            preparedEntries.map((entry, index) => {
               return (
                 <div
+                  aria-controls={ entry.key }
+                  aria-selected={ entry.key === activeTab }
                   className={ 'entry ' + (entry.key === activeTab ? 'active' : '') }
                   key={ entry.key }
                   onClick={ () => {
                     handleSidebarClick(entry.key)
                   } }
+                  onKeyDown={ () => {
+                    handleSidebarClick(entry.key)
+                  } }
+                  role={ 'tab' }
+                  tabIndex={ index }
                 >
                   {entry.icon}
                 </div>
@@ -55,11 +65,15 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
         </div>
         <div className={ 'sidebar__navigation__buttons' }>
           {
-            preparedButtons.map((button) => {
+            preparedButtons.map((button, index) => {
               return (
                 <div
+                  aria-label={ button.key }
                   key={ button.key }
                   onClick={ button.onClick }
+                  onKeyDown={ button.onClick }
+                  role={ 'button' }
+                  tabIndex={ index }
                 >
                   {button.icon}
                 </div>
@@ -73,8 +87,12 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
         {preparedEntries.map((entry, index) => {
           return (
             <div
+              aria-labelledby={ entry.key }
               className={ 'tab ' + (entry.key === activeTab ? 'active' : '') }
+              id={ entry.key }
               key={ entry.key }
+              role="tabpanel"
+              tabIndex={ index }
             >
               {entry.component}
             </div>

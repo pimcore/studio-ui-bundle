@@ -22,6 +22,10 @@ export const useStyles = createStyles(({ token, css }) => {
           cursor: col-resize;
         }
       }
+
+      &:focus {
+        outline: none;
+      }
     `
   }
 }, { hashPriority: 'low' })
