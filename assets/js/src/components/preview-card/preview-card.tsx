@@ -15,12 +15,13 @@ interface PreviewCardProps {
   name: string
   dropdownItems: DropdownMenuItemProps[]
   imgSrc?: string
+  blurBackground?: boolean
   size?: SizeTypes
   onClick?: (e) => void
 }
 
 export const PreviewCard = ({
-  name, dropdownItems, imgSrc, size = SizeTypes.SMALL, onClick
+  name, dropdownItems, imgSrc, blurBackground = false, size = SizeTypes.SMALL, onClick
 }: PreviewCardProps
 ): React.JSX.Element => {
   const { styles } = useStyle()
@@ -46,13 +47,19 @@ export const PreviewCard = ({
       className={ styles.card }
       cover={
         <div className={ classImgDiv }>
+          { blurBackground && (
+            <div
+              className="blur-image__bg"
+              style={ { backgroundImage: `url("${imgSrc}")` } }
+            />
+          )}
           <PimcoreImage
             alt={ name }
             className={ classImg }
             src={ imgSrc }
           />
         </div>
-        }
+      }
       onClick={ onClick }
     >
       <Checkbox

@@ -78,6 +78,24 @@ export const useStyle = createStyles(({ token, css }) => {
             max-height: 106px;
             max-width: 234px;
         }
+        
+        .blur-image__bg {
+            max-height: 61px;
+            max-width: 168px;
+            width: auto;
+            height: auto;   
+            
+            filter: blur(0.68px);
+            -webkit-filter: blur(0.68px);
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-blend-mode: overlay;
+        }
 
         .menu-icon {
             margin-right: ${token.marginXS}px;
