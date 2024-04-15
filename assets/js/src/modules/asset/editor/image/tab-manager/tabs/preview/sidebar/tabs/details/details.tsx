@@ -54,6 +54,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
               <Form.Item name={ 'mode' }>
                 <Select
                   defaultValue="mode"
+                  aria-label="custom thumbnail mode select"
                 >
                   <Select.Option value="mode">Mode</Select.Option>
                   <Select.Option value="sample">Sample</Select.Option>
@@ -63,6 +64,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
               <Form.Item name={ 'format' }>
                 <Select
                   defaultValue="format"
+                  aria-label="custom thumbnail format select"
                 >
                   <Select.Option value="format">Format</Select.Option>
                   <Select.Option value="sample">Sample</Select.Option>
@@ -72,7 +74,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
           </div>
 
           <div className={ 'entry-content__download-content-custom__button' }>
-            <Button>
+            <Button aria-label="Download custom thumbnail">
               Download
             </Button>
           </div>
@@ -104,12 +106,14 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
                 defaultValue="original"
+                aria-label="Select precreated thumbnail to download"
               >
                 <Select.Option value="original">Original File</Select.Option>
                 <Select.Option value="sample">Sample</Select.Option>
               </Select>
 
               <Button
+                aria-label="Download thumbnail"
                 icon={ <Icon name={ 'download-02' } /> }
               />
             </div>

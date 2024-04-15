@@ -36,7 +36,10 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
   return (
     <div className={ styles.sidebar }>
       <div className={ 'sidebar__navigation' }>
-        <div className={ 'sidebar__navigation__tabs' }>
+        <div
+          className={ 'sidebar__navigation__tabs' }
+          role={'tablist'}
+        >
           {
             preparedEntries.map((entry) => {
               return (
@@ -46,6 +49,9 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
                   onClick={ () => {
                     handleSidebarClick(entry.key)
                   } }
+                  role={ 'tab' }
+                  aria-selected={entry.key === activeTab}
+                  aria-controls={entry.key}
                 >
                   {entry.icon}
                 </div>
@@ -60,6 +66,8 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
                 <div
                   key={ button.key }
                   onClick={ button.onClick }
+                  role={ 'button' }
+                  aria-label={ button.key }
                 >
                   {button.icon}
                 </div>
@@ -73,8 +81,11 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
         {preparedEntries.map((entry, index) => {
           return (
             <div
+              id={ entry.key }
               className={ 'tab ' + (entry.key === activeTab ? 'active' : '') }
               key={ entry.key }
+              role="tabpanel"
+              aria-labelledby={ entry.key }
             >
               {entry.component}
             </div>
