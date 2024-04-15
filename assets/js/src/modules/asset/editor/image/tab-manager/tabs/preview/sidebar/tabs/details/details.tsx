@@ -2,9 +2,11 @@ import React from 'react'
 import { useStyle } from './details.styles'
 import { Button, Collapse, type CollapseProps, Form, Input, Select } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
 
 export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
   const { styles } = useStyle()
+  const {t} = useTranslation();
   const customDownloadOptions: CollapseProps['items'] = [
     {
       key: 1,
@@ -54,7 +56,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
               <Form.Item name={ 'mode' }>
                 <Select
                   defaultValue="mode"
-                  aria-label="custom thumbnail mode select"
+                  aria-label={t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode')}
                 >
                   <Select.Option value="mode">Mode</Select.Option>
                   <Select.Option value="sample">Sample</Select.Option>
@@ -64,7 +66,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
               <Form.Item name={ 'format' }>
                 <Select
                   defaultValue="format"
-                  aria-label="custom thumbnail format select"
+                  aria-label={t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format')}
                 >
                   <Select.Option value="format">Format</Select.Option>
                   <Select.Option value="sample">Sample</Select.Option>
@@ -74,7 +76,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
           </div>
 
           <div className={ 'entry-content__download-content-custom__button' }>
-            <Button aria-label="Download custom thumbnail">
+            <Button aria-label={t('aria.asset.image-sidebar.tab.details.download-custom-thumbnail')}>
               Download
             </Button>
           </div>
@@ -106,14 +108,14 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
                 defaultValue="original"
-                aria-label="Select precreated thumbnail to download"
+                aria-label={t('aria.asset.image-sidebar.tab.details.precreated-thumbnail')}
               >
                 <Select.Option value="original">Original File</Select.Option>
                 <Select.Option value="sample">Sample</Select.Option>
               </Select>
 
               <Button
-                aria-label="Download thumbnail"
+                aria-label={t('aria.asset.image-sidebar.tab.details.download-thumbnail')}
                 icon={ <Icon name={ 'download-02' } /> }
               />
             </div>
