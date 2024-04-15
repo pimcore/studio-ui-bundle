@@ -103,6 +103,7 @@ jobs:
             add_options: '-f'
             file_pattern: './public/build/'
             commit_message: Automatic frontend build
+            skip_dirty_check: true
 
   test:
     needs: build
