@@ -100,10 +100,8 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-            add_options: '-f'
-            file_pattern: './public/build/'
-            commit_message: Automatic frontend build
-            skip_dirty_check: true
+          file_pattern: './public/build/'
+          commit_message: Automatic frontend build
 
   test:
     needs: build
