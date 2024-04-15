@@ -39,7 +39,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
       {zoom !== 100 && (
         <Button
           aria-label={ t('aria.asset.image.editor.zoom.reset') }
-          className={ styles.imageZoomBtn }
+          className={ styles.imageZoomResetBtn }
           onClick={ () => { setZoom(100) } }
           onKeyDown={ () => { setZoom(100) } }
         >
