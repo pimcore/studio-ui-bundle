@@ -2,9 +2,11 @@ import React from 'react'
 import { useStyle } from './details.styles'
 import { Button, Collapse, type CollapseProps, Form, Input, Select } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
 
 export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
   const { styles } = useStyle()
+  const { t } = useTranslation()
   const customDownloadOptions: CollapseProps['items'] = [
     {
       key: 1,
@@ -53,6 +55,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
             <div>
               <Form.Item name={ 'mode' }>
                 <Select
+                  aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
                   defaultValue="mode"
                 >
                   <Select.Option value="mode">Mode</Select.Option>
@@ -62,6 +65,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
 
               <Form.Item name={ 'format' }>
                 <Select
+                  aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format') }
                   defaultValue="format"
                 >
                   <Select.Option value="format">Format</Select.Option>
@@ -72,7 +76,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
           </div>
 
           <div className={ 'entry-content__download-content-custom__button' }>
-            <Button>
+            <Button aria-label={ t('aria.asset.image-sidebar.tab.details.download-custom-thumbnail') }>
               Download
             </Button>
           </div>
@@ -103,6 +107,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
           <div className={ 'entry-content__download-content' }>
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
+                aria-label={ t('aria.asset.image-sidebar.tab.details.precreated-thumbnail') }
                 defaultValue="original"
               >
                 <Select.Option value="original">Original File</Select.Option>
@@ -110,6 +115,7 @@ export const AssetEditorSidebarDetailsTab = (): React.JSX.Element => {
               </Select>
 
               <Button
+                aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
                 icon={ <Icon name={ 'download-02' } /> }
               />
             </div>
