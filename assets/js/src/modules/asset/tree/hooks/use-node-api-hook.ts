@@ -38,7 +38,14 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         metaData: {
           asset: assetNode
         },
-        level: node.level + 1
+        level: node.level + 1,
+        ...(() => {
+          if (node.level === -1) {
+            return { internalKey: `${assetNode.id}` }
+          }
+
+          return { internalKey: `${node.internalKey}-${assetNode.id}` }
+        })()
       })
     })
 

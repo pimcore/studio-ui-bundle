@@ -43,8 +43,9 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {children?.map((item) => (
+        {children?.map((item, index) => (
           <TreeNode
+            internalKey={ `${node.internalKey}-${index}` }
             key={ item.id }
             { ...item }
           />
