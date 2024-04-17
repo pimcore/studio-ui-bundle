@@ -11,6 +11,10 @@ export const useStyle = createStyles(({ token, css }) => {
           text-align: center;
           line-height: 32px;
 
+          border-radius: ${token.borderRadius}px;
+          border-color: ${token.colorBorder};
+          background-color: white;
+          
           /* Firefox */
           -moz-appearance: textfield;
       }
@@ -26,7 +30,7 @@ export const useStyle = createStyles(({ token, css }) => {
           margin: 0;
       }
 
-      .inline-label, .input-field {
+      & a, .input-field {
           display: block;
           position: absolute;
           top: 0;
@@ -37,16 +41,22 @@ export const useStyle = createStyles(({ token, css }) => {
 
           width: 32px;
           height: 32px;
-
-          background-color: white;
+      }
+        
+      .inline-label {
           border: 1px solid ${token.colorPrimary};
           border-radius: 6px;
           cursor: text;
       }
-
-      & .input-field + .inline-label.display-none {
-          display: none;
+      
+      .input-field.remove-decoration {
+          border: none;
+          background: none;
       }
+        
+      & a.inline-label.display-none, & a.inline-label-dots.display-none, & input.input-field.display-none {
+          display: none;
+      } 
         
       a {
           font-family: Lato, sans-serif;
