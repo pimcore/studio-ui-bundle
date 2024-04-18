@@ -1,5 +1,5 @@
 import { Grid } from '@Pimcore/components/grid/grid'
-import { useApiAssetsIdGetQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Breadcrumb, Divider, type BreadcrumbProps } from 'antd'
 import React from 'react'
@@ -9,7 +9,7 @@ interface AssetContainerProps {
 }
 
 export const AssetContainer = ({ id }: AssetContainerProps): React.JSX.Element => {
-  const { isLoading, isError, data } = useApiAssetsIdGetQuery({ id: id.toString() })
+  const { isLoading, isError, data } = useGetAssetByIdQuery({ id })
 
   if (isLoading || data === undefined) {
     return <div>Loading...</div>

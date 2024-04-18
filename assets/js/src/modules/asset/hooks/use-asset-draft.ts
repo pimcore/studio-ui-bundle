@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { useApiAssetsIdGetQuery } from '../asset-api-slice.gen'
+import { useGetAssetByIdQuery } from '../asset-api-slice.gen'
 import { assetReceived, selectAssetById } from '../asset-draft-slice'
 import { useEffect } from 'react'
 
@@ -10,7 +10,7 @@ interface UseAssetDraftReturn {
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
-  const { isLoading, isError, data } = useApiAssetsIdGetQuery({ id: id.toString() })
+  const { isLoading, isError, data } = useGetAssetByIdQuery({ id })
   const dispatch = useAppDispatch()
   const asset = useAppSelector(state => selectAssetById(state, id))
 
