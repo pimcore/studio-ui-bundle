@@ -1,7 +1,8 @@
-import { type Meta } from '@storybook/react'
-import { useNotification } from './useNotification'
+import {type Meta} from '@storybook/react'
+import {useNotification} from './useNotification'
 import {Button} from "antd";
-import React from 'react';
+import React, { useMemo } from 'react';
+import {Progressbar} from "@Pimcore/components/progressbar/progressbar";
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Notification',
@@ -10,20 +11,19 @@ const config: Meta = {
 
     const onClick = () => {
       notificationApi.open({
-        collapsable: args.collapsable,
-        title: args.title,
-        summary: args.summary,
-        description: args.description,
-        closeIcon: args.closeIcon,
+        ...args
       })
     }
 
     return (
-      <Button
-        onClick={onClick}
-      >
-        Open Notification
-      </Button>
+      <>
+        {contextHolder}
+        <Button
+          onClick={onClick}
+        >
+          Open Notification
+        </Button>
+      </>
     )
   },
   parameters: {
@@ -48,6 +48,25 @@ export const Collapsable = {
         <Button type={"link"}>Cancel all</Button>
       </>
     ),
+    description: (
+      <>
+        <Progressbar
+          description={'Metadata batch edit in progress'}
+          descriptionAction={(<Button type={"link"}>Cancel</Button>)}
+          progressStatus={'63% completed'}
+        />
+
+        <Progressbar
+          description={'all-catalogue-pictures.zip'}
+          descriptionAction={<Button type={"link"}>Cancel</Button>}
+          progressStatus={'68 / 150 files zipped'}
+        />
+      </>
+    ),
+    completedActions: [
+      {description: 'Metadata batch edit in progress', descriptionAction: (<Button type={"link"}>Download</Button>)},
+    ],
     closeIcon: false
   }
 }
+

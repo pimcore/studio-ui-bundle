@@ -3,11 +3,11 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     notification: css`
-        .ant-notification-notice-content {
-          .ant-notification-notice-message {
-            margin-bottom: 0 !important;
-          }
+      .ant-notification-notice-content {          
+        .ant-notification-notice-message {
+          margin-bottom: 0 !important;
         }
+      }
     `,
     'notification-header': css`
       .notification-header__content {
@@ -55,6 +55,46 @@ export const useStyle = createStyles(({ token, css }) => {
             line-height: 22px;
             margin: 0;
           } 
+        }
+      }
+    `,
+    'notification-description': css`
+      &.collapsed {
+        display: none;
+        transition: all 0.2s ease-in-out;
+      }
+      
+      &.collapse {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        transition: all 0.2s ease-in-out;
+      }
+        
+      .notification-description__completed-actions {
+        .notification-description__completed-actions__headline {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 4px;
+        }
+          
+        .notification-description__completed-actions__actions__action {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            
+            p {
+                margin: 0;
+            }
+            
+            .ant-btn {
+              color ${token.colorPrimary};
+              &:hover {
+                color: ${token.colorPrimaryHover}
+              }
+            }
         }
       }
     `

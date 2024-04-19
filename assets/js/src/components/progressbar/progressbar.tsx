@@ -15,7 +15,7 @@ export const Progressbar = (props: IProgressProps) => {
     <div className={styles.progressbar}>
       <div className={'progressbar-description'}>
         <p id={'progressbarLabel'}>{props.description}</p>
-        <div className={'progressbar-description__actions'}>
+        <div className={'progressbar-description__action'}>
           {props.descriptionAction}
         </div>
       </div>
