@@ -17,7 +17,7 @@ export const _default = {
     value: '2',
     showDotsValues: ['1', '2', '3', '9', '10'],
     onKeyDown: (e) => {
-      if(e.key === 'Enter') {
+      if (e.key === 'Enter') {
         e.target.value = ''
         e.target.blur()
       }
