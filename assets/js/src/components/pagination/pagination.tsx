@@ -251,7 +251,10 @@ function PageNumberNode (
       key={ pageNumber }
       title={ pageNumber }
     >
-      <a onClick={ onClick }>{pageNumber}</a>
+      <Button
+        className={ 'page-number-node' }
+        onClick={ onClick }
+      >{pageNumber}</Button>
     </li>
   )
 }

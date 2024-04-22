@@ -14,8 +14,14 @@ export default config
 
 export const _default = {
   args: {
-    value: '4',
-    defaultClassNameLabel: '',
-    onKeyDown: (e) => { console.log(e.key) }
+    value: '2',
+    showDotsValues: ['1', '2', '3', '9', '10'],
+    onKeyDown: (e) => {
+      if(e.key === 'Enter') {
+        e.target.value = ''
+        e.target.blur()
+      }
+      console.log(e.key)
+    }
   }
 }

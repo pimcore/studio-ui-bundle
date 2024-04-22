@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useStyle } from './inline-textfield.styles'
 import { isSet } from '@Pimcore/utils/helpers'
+import { Button } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface InlineTextfieldProps {
   value: string
@@ -52,7 +54,7 @@ export const InlineTextfield = ({
 
   const onClickLabel = (e): void => {
     setVisibleElement(VisibleElement.input)
-    e.target.previousElementSibling.focus()
+    e.target.previousElementSibling?.focus()
   }
 
   const onBlurInput = (e): void => {
@@ -62,6 +64,9 @@ export const InlineTextfield = ({
   const onMouseOverDots = (e): void => {
     setVisibleElement(VisibleElement.input)
     e.target.focus()
+  }
+  const onFocusDots = (e): void => {
+    setVisibleElement(VisibleElement.input)
   }
 
   const onFocusInput = (e): void => {
@@ -92,16 +97,19 @@ export const InlineTextfield = ({
         onKeyDown={ onKeyDown }
         type='number'
       />
-      <a
+      <Button
         className={ 'inline-label ' + classNameLabel }
         onClick={ onClickLabel }
-      >{value}</a>
-      <a
+      >{value}</Button>
+      <Button
         className={ 'inline-label-dots ' + classNameLabelDots }
+        icon={ <Icon
+          name={ 'ellipsis-outlined' }
+          options={ { width: '32px', height: '32px' } }
+               /> }
+        onFocus={ onFocusDots }
         onMouseOver={ onMouseOverDots }
-      >
-        <span className='ant-pagination-item-ellipsis'>•••</span>
-      </a>
+      />
     </div>
   )
 }
