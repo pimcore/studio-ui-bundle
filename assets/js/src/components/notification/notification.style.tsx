@@ -90,7 +90,7 @@ export const useStyle = createStyles(({ token, css }) => {
             }
             
             .ant-btn {
-              color ${token.colorPrimary};
+              color: ${token.colorPrimary};
               &:hover {
                 color: ${token.colorPrimaryHover}
               }

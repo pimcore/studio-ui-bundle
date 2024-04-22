@@ -1,7 +1,7 @@
 import {type Meta} from '@storybook/react'
 import {useNotification} from './useNotification'
 import {Button} from "antd";
-import React, { useMemo } from 'react';
+import React from 'react';
 import {Progressbar} from "@Pimcore/components/progressbar/progressbar";
 
 const config: Meta = {
