@@ -22,17 +22,17 @@ interface PaginationProps {
 }
 
 export const Pagination = ({
-                             total,
-                             current = 1,
-                             defaultPageSize = 20,
-                             pageSizeOptions = [10, 20, 50, 100],
-                             showSizeChanger = false,
-                             showPageJumperAtOnce = 5,
-                             showJumpToPage = false,
-                             hideOnSinglePage = false,
-                             showTotal,
-                             onChange
-                           }: PaginationProps): React.JSX.Element => {
+  total,
+  current = 1,
+  defaultPageSize = 20,
+  pageSizeOptions = [10, 20, 50, 100],
+  showSizeChanger = false,
+  showPageJumperAtOnce = 5,
+  showJumpToPage = true,
+  hideOnSinglePage = false,
+  showTotal,
+  onChange
+}: PaginationProps): React.JSX.Element => {
   const hashId = useCssComponentHash('pagination')
 
   const [currentPage, setCurrentPage] = useState(current)
@@ -97,8 +97,8 @@ export const Pagination = ({
           key={ 'page-jumper' }
         >
           <InlineTextfield
-            showDotsValues={ [...pageNumberRangeLeft.map(String), ...pageNumberRangeRight.map(String)] }
             onKeyDown={ onKeyDownJumpToPage }
+            showDotsValues={ [...pageNumberRangeLeft.map(String), ...pageNumberRangeRight.map(String)] }
             value={ currentPage?.toString() }
           />
         </li>
@@ -164,8 +164,8 @@ export const Pagination = ({
   )
 }
 
-function PreviousButton (props): React.JSX.Element {
-  const { currentPage, onClickPrev } = props
+function PreviousButton (prop): React.JSX.Element {
+  const { currentPage, onClickPrev } = prop
   const iconOptions = { width: 10, height: 10 }
   return (
     <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
@@ -175,7 +175,7 @@ function PreviousButton (props): React.JSX.Element {
         icon={ <Icon
           name='left-outlined'
           options={ iconOptions }
-        /> }
+               /> }
         onClick={ onClickPrev }
         size={ 'small' }
         type={ 'text' }
@@ -184,8 +184,8 @@ function PreviousButton (props): React.JSX.Element {
   )
 }
 
-function NextButton (props): React.JSX.Element {
-  const { currentPage, pages, onClickNext } = props
+function NextButton (prop): React.JSX.Element {
+  const { currentPage, pages, onClickNext } = prop
   const iconOptions = { width: 10, height: 10 }
   return (
     <li className={ `ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}` }>
@@ -195,7 +195,7 @@ function NextButton (props): React.JSX.Element {
         icon={ <Icon
           name='right-outlined'
           options={ iconOptions }
-        /> }
+               /> }
         onClick={ onClickNext }
         size={ 'small' }
         type={ 'text' }
@@ -204,8 +204,8 @@ function NextButton (props): React.JSX.Element {
   )
 }
 
-function TotalField (props): React.JSX.Element {
-  const { total, showTotal } = props
+function TotalField (prop): React.JSX.Element {
+  const { total, showTotal } = prop
   return (
     <li className="ant-pagination-total-text">
       {showTotal(total)}
@@ -214,7 +214,7 @@ function TotalField (props): React.JSX.Element {
 }
 
 function getLeftPageNumberRange (
-  showPageJumperAtOnce: number,
+  showPageJumperAtOnce: number
 ): number[] {
   if (showPageJumperAtOnce <= 0) {
     return []
@@ -237,7 +237,7 @@ function getRightPageNumberRange (
     middleJumper--
   }
   const firstJumper = pages - middleJumper + 1
-  return [...Array(middleJumper).keys()].map(number => number + firstJumper);
+  return [...Array(middleJumper).keys()].map(number => number + firstJumper)
 }
 
 function PageNumberNode (

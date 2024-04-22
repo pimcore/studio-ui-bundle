@@ -4,6 +4,11 @@ import { Pagination as PaginationComponent } from './pagination'
 const config: Meta = {
   title: 'Pimcore studio/UI/Pagination',
   component: PaginationComponent,
+  argTypes: {
+    total: {
+      control: false
+    }
+  },
   parameters: {
     layout: 'centered'
   },
@@ -15,7 +20,7 @@ export default config
 export const _default = {
   args: {
     total: 182,
-    current: 1,
+    current: 2,
     pageSizeOptions: [5, 25, 55, 80],
     defaultPageSize: 25,
     showSizeChanger: true,

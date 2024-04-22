@@ -23,7 +23,7 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
       hideOnSinglePage
       onChange={ onChange }
       showJumpToPage
-      showPageJumperAtOnce={ 2 }
+      showPageJumperAtOnce={ 3 }
       total={ total }
     />
   )

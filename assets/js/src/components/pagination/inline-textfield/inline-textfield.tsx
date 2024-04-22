@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStyle } from './inline-textfield.styles'
+import { isSet } from '@Pimcore/utils/helpers'
 
 interface InlineTextfieldProps {
   value: string
@@ -22,7 +23,7 @@ export const InlineTextfield = ({
   showDotsValues,
   defaultClassNameInput = 'remove-decoration',
   defaultClassNameLabel = 'display-none',
-  defaultClassNameLabelDots = '',
+  defaultClassNameLabelDots = ''
 }: InlineTextfieldProps): React.JSX.Element => {
   const { styles } = useStyle()
   const [classNameInput, setClassNameInput] = useState(defaultClassNameInput)
@@ -58,16 +59,20 @@ export const InlineTextfield = ({
     setClassNameBasedOnValue()
   }
 
-  const onMouseOver = (e): void => {
+  const onMouseOverDots = (e): void => {
+    setVisibleElement(VisibleElement.input)
+    e.target.focus()
+  }
+
+  const onFocusInput = (e): void => {
     setVisibleElement(VisibleElement.input)
   }
 
   const setClassNameBasedOnValue = (): void => {
-    if (showDotsValues) {
-      if (showDotsValues.includes(value) && classNameLabelDots === 'display-none') {
+    if (isSet(showDotsValues)) {
+      if (showDotsValues!.includes(value) && classNameLabelDots === 'display-none') {
         setVisibleElement(VisibleElement.labelDots)
-      }
-      else if (!showDotsValues.includes(value) && classNameLabel === 'display-none') {
+      } else if (!showDotsValues!.includes(value) && classNameLabel === 'display-none') {
         setVisibleElement(VisibleElement.label)
       }
     }
@@ -78,21 +83,22 @@ export const InlineTextfield = ({
   }, [value])
 
   return (
-    <div className={styles['editable-container']}>
+    <div className={ styles['editable-container'] }>
       <input
-        className={'input-field ' + classNameInput}
+        className={ 'input-field ' + classNameInput }
         min='1'
         onBlur={ onBlurInput }
+        onFocus={ onFocusInput }
         onKeyDown={ onKeyDown }
         type='number'
       />
       <a
-        className={'inline-label ' + classNameLabel}
-        onClick={onClickLabel}
+        className={ 'inline-label ' + classNameLabel }
+        onClick={ onClickLabel }
       >{value}</a>
       <a
-        className={'inline-label-dots ' + classNameLabelDots}
-        onMouseOver={onMouseOver}
+        className={ 'inline-label-dots ' + classNameLabelDots }
+        onMouseOver={ onMouseOverDots }
       >
         <span className='ant-pagination-item-ellipsis'>•••</span>
       </a>

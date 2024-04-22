@@ -47,13 +47,7 @@ const icons = {
   'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/presentation-chart-01.inline.svg')),
   'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/video-recorder.inline.svg')),
   'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/image-01.inline.svg')),
-  'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/focal-point.inline.svg')),
-  'ellipsis-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/ellipsis-outlined.inline.svg')),
-  'double-right': React.lazy(async () => await import('@Pimcore/assets/icons/double-right.inline.svg')),
-  'double-left': React.lazy(async () => await import('@Pimcore/assets/icons/double-left.inline.svg')),
-  'arrow-first': React.lazy(async () => await import('@Pimcore/assets/icons/arrow-first.inline.svg')),
-  'arrows-pagination': React.lazy(async () => await import('@Pimcore/assets/icons/arrows-pagination.inline.svg'))
-
+  'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/focal-point.inline.svg'))
 }
 
 export interface IconProps {
