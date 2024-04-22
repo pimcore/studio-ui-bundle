@@ -48,6 +48,6 @@ export const useStyle = createStyles(({ token, css }) => {
           margin: 0;
         }
       }
-    `,
+    `
   }
 }, { hashPriority: 'low' })
