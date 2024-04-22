@@ -1,4 +1,4 @@
-import { useApiAssetsGetCollectionQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetsQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useState } from 'react'
 import { GridToolbarContainer } from '../list/grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
@@ -13,12 +13,12 @@ const PreviewContainer = (): React.JSX.Element => {
   const assetId = assetContext.id!
   const { asset } = useAssetDraft(assetId)
 
-  const { isLoading, isError, data } = useApiAssetsGetCollectionQuery({
-    assetPathIncludeDescendants: true,
+  const { isLoading, isError, data } = useGetAssetsQuery({
+    pathIncludeDescendants: true,
     page: currentPage,
-    itemsPerPage: pageSize,
+    pageSize,
     excludeFolders: true,
-    assetPath: asset?.fullPath
+    path: asset?.fullPath
   })
 
   if (isLoading || data === undefined) {
@@ -29,7 +29,7 @@ const PreviewContainer = (): React.JSX.Element => {
     return <div>Error</div>
   }
 
-  const total = data['hydra:totalItems']!
+  const total = data.totalItems!
 
   function onPagerChange (page: number, pageSize: number): void {
     setCurrentPage(page)
@@ -49,7 +49,7 @@ const PreviewContainer = (): React.JSX.Element => {
         />
       }
     >
-      <FlexContainer assets={ data['hydra:member'] } />
+      <FlexContainer assets={ data } />
     </ContentToolbarSidebarView>
   )
 }

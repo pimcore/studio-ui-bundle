@@ -12,13 +12,13 @@ const config: Meta = {
 
 export default config
 
-export const folder = {
+export const Folder = {
   args: {
     id: 1
   }
 }
 
-export const image = {
+export const Image = {
   args: {
     id: 20
   }

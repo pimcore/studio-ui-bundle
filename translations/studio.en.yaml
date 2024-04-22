@@ -32,3 +32,10 @@ preview-card.info: Info
 preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
+grid.aria.column-resize: Resize column
+tree.aria.expand-and-collapse: Expand tree item or collapse it
+aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Custom thumbnail mode select
+aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Custom thumbnail format select
+aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Download custom thumbnail
+aria.asset.image-sidebar.tab.details.precreated-thumbnail: Select precreated thumbnail to download
+aria.asset.image-sidebar.tab.details.download-thumbnail: Download thumbnail
