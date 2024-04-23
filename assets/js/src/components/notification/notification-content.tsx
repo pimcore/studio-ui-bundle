@@ -19,9 +19,7 @@ export const NotificationContent = ({actions, completedActions}: INotificationCo
 
   return (
     <div className={styles['notification-content']}>
-      <div
-        className={'notification-content__header'}
-      >
+      <div className={'notification-content__header'}>
         <div className={'notification-content__header__content'}>
           <div className={'notification-content__header__headline'}>
             <div>

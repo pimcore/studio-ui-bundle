@@ -8,6 +8,7 @@ export const useStyle = createStyles(({ token, css }) => {
         box-shadow: none;
         outline: none;
         transition: unset;
+        padding: 0 ${token.paddingXXS}px;
 
         &:hover {
           color: ${token.colorPrimaryHover};
@@ -29,7 +30,6 @@ export const useStyle = createStyles(({ token, css }) => {
             }
           
             p {
-              
               margin: 0; 
             }
 
@@ -50,14 +50,12 @@ export const useStyle = createStyles(({ token, css }) => {
       .notification-content__content {          
         &.collapsed {
           display: none;
-            transition: all 1s;
         }
 
         &.collapse {
           display: flex;
           flex-direction: column;
           gap: 8px;
-          transition: all 1s;
         }
 
         .notification-content__content__completed-actions {
@@ -77,14 +75,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
               p {
                 margin: 0;
-              }
-
-              .ant-btn {
-                color: ${token.colorPrimary};
-
-                &:hover {
-                  color: ${token.colorPrimaryHover}
-                }
               }
             }
           }

@@ -11,7 +11,7 @@ const config: Meta = {
     const [notificationApi] = useNotification()
 
     const onClick = () => {
-      notificationApi.open({
+      notificationApi.success({
         ...args
       })
     }
@@ -29,6 +29,13 @@ const config: Meta = {
   parameters: {
     layout: 'centered'
   },
+  argTypes: {
+    description: {
+      table: {
+        disable: true
+      }
+    }
+  },
   tags: ['autodocs']
 }
 
@@ -40,6 +47,7 @@ export const _default = {
 
 export const Collapsable = {
   args: {
+    duration: 0,
     message: 'Notifications',
     description: (
       <NotificationContent
