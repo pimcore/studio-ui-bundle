@@ -1,14 +1,14 @@
 import { type Meta } from '@storybook/react'
-import React from 'react';
-import {Progressbar} from "@Pimcore/components/progressbar/progressbar";
-import {Button} from "antd";
+import React from 'react'
+import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
+import { Button } from 'antd'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Progressbar',
   component: (args) => {
     return (
-      <div style={{minWidth: '500px'}}>
-        <Progressbar {...args} />
+      <div style={ { minWidth: '500px' } }>
+        <Progressbar { ...args } />
       </div>
     )
   },
@@ -41,7 +41,7 @@ export const _default = {
     description: 'Matadata batch edit in progress',
     descriptionAction: (
       <Button
-        type={'link'}
+        type={ 'link' }
       >
         Cancel
       </Button>
