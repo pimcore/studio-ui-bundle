@@ -8,9 +8,7 @@ interface IProgressProps extends ProgressProps {
   progressStatus: string
 }
 
-/* eslint-disable  */
-
-export const Progressbar = (props: IProgressProps) => {
+export const Progressbar = (props: IProgressProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
