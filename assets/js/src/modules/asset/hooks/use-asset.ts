@@ -18,7 +18,7 @@ export const useAsset = (): UseAssetReturn => {
 
   async function openAsset (props: OpenAssetWidgetProps): Promise<void> {
     const { name, icon, config } = props
-    await store.dispatch(api.endpoints.apiAssetsIdGet.initiate({ id: config.id.toString() }))
+    await store.dispatch(api.endpoints.getAssetById.initiate({ id: config.id }))
 
     openMainWidget({
       name,
