@@ -14,6 +14,7 @@ const defaultTheme = {
     colorLinkHover: '#9254de',
     controlOutline: 'rgba(0.4470588266849518, 0.18039216101169586, 0.8196078538894653, 0.10000000149011612)',
     controlItemBgActive: '#f8eeff',
+    colorTextTertiary: 'rgba(0, 0, 0, 0.6)',
     colorFill: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.6000000238418579)',
     colorFillQuaternary: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.44999998807907104)',
     colorBgLayout: '#fcfcfc',

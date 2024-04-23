@@ -100,7 +100,8 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-            commit_message: Automatic frontend build
+          file_pattern: './public/build/'
+          commit_message: Automatic frontend build
 
   test:
     needs: build

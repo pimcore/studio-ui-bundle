@@ -6,10 +6,10 @@ const config: ConfigFile = {
   apiImport: 'api',
   outputFiles: {
     '../src/modules/asset/asset-api-slice.gen.ts': {
-      filterEndpoints: [/assets/i]
+      filterEndpoints: [/asset/i]
     },
     '../src/modules/app/translations/translations-api-slice.gen.ts': {
-      filterEndpoints: [/translations/i]
+      filterEndpoints: [/translation/i]
     }
   },
   exportName: 'api',

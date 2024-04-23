@@ -2,6 +2,7 @@ import { Dropdown, type DropdownProps, type MenuProps } from 'antd'
 import React, { type ReactElement } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './dropdown-menu.styles'
+import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 
 export interface DropdownMenuItemProps {
   iconLeft: string
@@ -38,7 +39,10 @@ export const DropdownMenu = ({
       {
         key: index.toString(),
         label: (
-          <MenuItemContent item={ item } />
+          <MenuItemContent
+            index={ index }
+            item={ item }
+          />
         )
       }
     )
@@ -57,6 +61,7 @@ export const DropdownMenu = ({
 
 function MenuItemContent (prop): React.JSX.Element {
   const { item } = prop
+  const { index } = prop
   const { styles } = useStyle()
   const iconOptions = { width: '16px', height: '16px' }
 
@@ -72,6 +77,9 @@ function MenuItemContent (prop): React.JSX.Element {
       <div
         className={ styles['flexbox-start-end'] }
         onClick={ item.onClick }
+        onKeyDown={ onKeyEnterExecuteClick }
+        role={ 'menuitem' }
+        tabIndex={ index * 2 }
       >
         <div>
           {iconLeft}
@@ -85,7 +93,12 @@ function MenuItemContent (prop): React.JSX.Element {
             )
           }
         </div>
-        <div onClick={ item.iconRight.onClick }>
+        <div
+          onClick={ item.iconRight.onClick }
+          onKeyDown={ onKeyEnterExecuteClick }
+          role={ 'menuitem' }
+          tabIndex={ index + 1 }
+        >
           <IconWithProps iconProps={ item.iconRight } />
         </div>
       </div>
@@ -94,7 +107,12 @@ function MenuItemContent (prop): React.JSX.Element {
   }
 
   return (
-    <div onClick={ item.onClick }>
+    <div
+      onClick={ item.onClick }
+      onKeyDown={ onKeyEnterExecuteClick }
+      role={ 'menuitem' }
+      tabIndex={ index }
+    >
       {iconLeft}
       {item.label}
     </div>

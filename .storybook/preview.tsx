@@ -1,4 +1,5 @@
 import React from "react";
+import '../assets/js/src/bootstrap';
 import type { Preview } from "@storybook/react";
 import "../assets/css/globals.css";
 import { GlobalProvider } from "../assets/js/src/modules/app/global-provider";

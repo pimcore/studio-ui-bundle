@@ -17,6 +17,11 @@ export const useStyles = createStyles(({ token, css }) => {
             background-color: ${token.controlItemBgActiveHover};
           }
         }
+
+        &:focus {
+          outline: none;
+          background-color: ${token.controlItemBgActiveHover};
+        }
       }
 
       &.tree-node--selected > .tree-node__content {

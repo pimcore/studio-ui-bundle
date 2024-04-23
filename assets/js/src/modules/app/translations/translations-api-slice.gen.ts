@@ -6,39 +6,26 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            apiTranslationsPost: build.mutation<ApiTranslationsPostApiResponse, ApiTranslationsPostApiArg>({
-                query: (queryArg) => ({ url: `/api/translations`, method: "POST", body: queryArg.translationJsonld }),
+            getTranslations: build.mutation<GetTranslationsApiResponse, GetTranslationsApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/translations`, method: "POST", body: queryArg.translation }),
                 invalidatesTags: ["Translation"],
             }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ApiTranslationsPostApiResponse =
-    /** status 201 Translation resource created */ TranslationJsonldTranslationReadRead;
-export type ApiTranslationsPostApiArg = {
-    /** The new Translation resource */
-    translationJsonld: TranslationJsonld;
+export type GetTranslationsApiResponse = /** status 200 Key value pairs for given keys and locale */ Translation;
+export type GetTranslationsApiArg = {
+    translation: Translation;
 };
-export type TranslationJsonldTranslationRead = {
+export type Translation = {
+    /** Locale */
     locale?: string;
+    /** Keys */
     keys?: string[];
 };
-export type TranslationJsonldTranslationReadRead = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: any;
-          };
-    "@id"?: string;
-    "@type"?: string;
-    locale?: string;
-    keys?: string[];
+export type Unauthorized = {
+    /** Message */
+    message?: string;
 };
-export type TranslationJsonld = {
-    locale?: string;
-    keys?: string[];
-};
-export const { useApiTranslationsPostMutation } = injectedRtkApi;
+export const { useGetTranslationsMutation } = injectedRtkApi;

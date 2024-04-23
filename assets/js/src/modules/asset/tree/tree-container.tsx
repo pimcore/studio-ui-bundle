@@ -21,7 +21,7 @@ const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAsset()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
-    await store.dispatch(api.endpoints.apiAssetsIdGet.initiate({ id: node.id }))
+    await store.dispatch(api.endpoints.getAssetById.initiate({ id: parseInt(node.id) }))
 
     openAsset({
       name: node.label,
