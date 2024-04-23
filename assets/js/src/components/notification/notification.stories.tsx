@@ -9,9 +9,12 @@ const config: Meta = {
   title: 'Pimcore studio/UI/Notification',
   component: (args) => {
     const [notificationApi] = useNotification()
+    const notificationType = args.status && args.status !== 'normal'
+      ? args.status :
+      'open'
 
     const onClick = () => {
-      notificationApi.success({
+      notificationApi[notificationType]({
         ...args
       })
     }
@@ -30,6 +33,15 @@ const config: Meta = {
     layout: 'centered'
   },
   argTypes: {
+    status: {
+      options: ['open', 'success', 'error', 'info', 'warning'],
+      control: {
+        type: 'select',
+        labels: {
+          open: 'default'
+        }
+      },
+    },
     description: {
       table: {
         disable: true
@@ -42,12 +54,19 @@ const config: Meta = {
 export default config
 
 export const _default = {
-  args: {}
+  args: {
+    status: 'normal',
+    message: 'Notifications',
+    duration: 4.5,
+    description: (
+      <span>Your bookmark list has been shared.</span>
+    )
+  }
 }
 
 export const Collapsable = {
   args: {
-    duration: 0,
+    duration: 4.5,
     message: 'Notifications',
     description: (
       <NotificationContent
