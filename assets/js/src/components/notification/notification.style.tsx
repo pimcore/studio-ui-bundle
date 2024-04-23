@@ -13,6 +13,6 @@ export const useStyle = createStyles(({ token, css }) => {
             margin-bottom: ${token.marginXS}
         }
       }
-    `,
+    `
   }
 }, { hashPriority: 'low' })

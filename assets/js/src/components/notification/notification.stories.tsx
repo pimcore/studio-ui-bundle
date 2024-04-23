@@ -1,19 +1,19 @@
-import {type Meta} from '@storybook/react'
-import {useNotification} from './useNotification'
-import {Button} from "antd";
-import React from 'react';
-import {Progressbar} from "@Pimcore/components/progressbar/progressbar";
-import {NotificationContent} from "@Pimcore/components/notification/notification-content";
+import { type Meta } from '@storybook/react'
+import { useNotification } from './useNotification'
+import { Button } from 'antd'
+import React from 'react'
+import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
+import { NotificationContent } from '@Pimcore/components/notification/notification-content'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Notification',
   component: (args) => {
     const [notificationApi] = useNotification()
-    const notificationType = args.status && args.status !== 'normal'
-      ? args.status :
-      'open'
+    const notificationType = typeof args.status === 'string' && args.status !== 'normal'
+      ? args.status
+      : 'open'
 
-    const onClick = () => {
+    const onClick = (): void => {
       notificationApi[notificationType]({
         ...args
       })
@@ -22,7 +22,7 @@ const config: Meta = {
     return (
       <>
         <Button
-          onClick={onClick}
+          onClick={ onClick }
         >
           Open Notification
         </Button>
@@ -40,7 +40,7 @@ const config: Meta = {
         labels: {
           open: 'default'
         }
-      },
+      }
     },
     description: {
       table: {
@@ -48,14 +48,16 @@ const config: Meta = {
       }
     }
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
+  args: {
+    status: 'normal'
+  }
 }
 
 export default config
 
 export const _default = {
   args: {
-    status: 'normal',
     message: 'Notifications',
     duration: 4.5,
     description: (
@@ -70,23 +72,24 @@ export const Collapsable = {
     message: 'Notifications',
     description: (
       <NotificationContent
-        completedActions={[
-          {description: 'Metadata batch edit in progress', descriptionAction: (<Button type={"link"}>Download</Button>)}
-        ]}
-        actions={[
+        actions={ [
           <Progressbar
-            description={'Metadata batch edit in progress'}
-            descriptionAction={(<Button type={"link"}>Cancel</Button>)}
-            progressStatus={'63% completed'}
+            description={ 'Metadata batch edit in progress' }
+            descriptionAction={ (<Button type={ 'link' }>Cancel</Button>) }
+            key={ 0 }
+            progressStatus={ '63% completed' }
           />,
           <Progressbar
-            description={'all-catalogue-pictures.zip'}
-            descriptionAction={<Button type={"link"}>Cancel</Button>}
-            progressStatus={'68 / 150 files zipped'}
+            description={ 'all-catalogue-pictures.zip' }
+            descriptionAction={ <Button type={ 'link' }>Cancel</Button> }
+            key={ 1 }
+            progressStatus={ '68 / 150 files zipped' }
           />
-        ]}
+        ] }
+        completedActions={ [
+          { key: 0, description: 'Metadata batch edit in progress', descriptionAction: (<Button type={ 'link' }>Download</Button>) }
+        ] }
       />
     )
   }
 }
-

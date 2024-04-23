@@ -80,6 +80,6 @@ export const useStyle = createStyles(({ token, css }) => {
           }
         }
       }  
-    `,
+    `
   }
 })
