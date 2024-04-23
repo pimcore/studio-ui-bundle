@@ -3,11 +3,12 @@ import {useNotification} from './useNotification'
 import {Button} from "antd";
 import React from 'react';
 import {Progressbar} from "@Pimcore/components/progressbar/progressbar";
+import {NotificationContent} from "@Pimcore/components/notification/notification-content";
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Notification',
   component: (args) => {
-    const [notificationApi, contextHolder] = useNotification()
+    const [notificationApi] = useNotification()
 
     const onClick = () => {
       notificationApi.open({
@@ -17,7 +18,6 @@ const config: Meta = {
 
     return (
       <>
-        {contextHolder}
         <Button
           onClick={onClick}
         >
@@ -40,33 +40,26 @@ export const _default = {
 
 export const Collapsable = {
   args: {
-    collapsable: true,
-    title: 'Creating multiple ZIP',
-    summary: (
-      <>
-        <p>3 actions in progress</p>
-        <Button type={"link"}>Cancel all</Button>
-      </>
-    ),
+    message: 'Notifications',
     description: (
-      <>
-        <Progressbar
-          description={'Metadata batch edit in progress'}
-          descriptionAction={(<Button type={"link"}>Cancel</Button>)}
-          progressStatus={'63% completed'}
-        />
-
-        <Progressbar
-          description={'all-catalogue-pictures.zip'}
-          descriptionAction={<Button type={"link"}>Cancel</Button>}
-          progressStatus={'68 / 150 files zipped'}
-        />
-      </>
-    ),
-    completedActions: [
-      {description: 'Metadata batch edit in progress', descriptionAction: (<Button type={"link"}>Download</Button>)},
-    ],
-    closeIcon: false
+      <NotificationContent
+        completedActions={[
+          {description: 'Metadata batch edit in progress', descriptionAction: (<Button type={"link"}>Download</Button>)}
+        ]}
+        actions={[
+          <Progressbar
+            description={'Metadata batch edit in progress'}
+            descriptionAction={(<Button type={"link"}>Cancel</Button>)}
+            progressStatus={'63% completed'}
+          />,
+          <Progressbar
+            description={'all-catalogue-pictures.zip'}
+            descriptionAction={<Button type={"link"}>Cancel</Button>}
+            progressStatus={'68 / 150 files zipped'}
+          />
+        ]}
+      />
+    )
   }
 }
 
