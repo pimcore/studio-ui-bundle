@@ -27,15 +27,19 @@ export const PreviewCard = ({
   const { styles } = useStyle()
   const [selected, setSelected] = useState(false)
 
+  let classCard: string = ''
   let classImg: string = 'img'
   let classImgDiv: string = 'img-container'
   let classCheckbox: string = 'checkbox'
   let classDotsButton: string = 'dots-button'
+  let classBlurImage: string = 'blur-image__bg'
   if (size === SizeTypes.MEDIUM) {
     classImg = 'img-medium'
     classImgDiv = 'img-container-medium'
     classCheckbox = 'checkbox-medium'
     classDotsButton = 'dots-button-medium'
+    classCard = 'card-medium'
+    classBlurImage = 'blur-image__bg-medium'
   }
 
   const onChangeSelection = (e): void => {
@@ -44,12 +48,12 @@ export const PreviewCard = ({
 
   return (
     <Card
-      className={ styles.card }
+      className={ styles.card + ' ' + classCard }
       cover={
         <div className={ classImgDiv }>
           { blurBackground && (
             <div
-              className="blur-image__bg"
+              className={ classBlurImage }
               style={ { backgroundImage: `url("${imgSrc}")` } }
             />
           )}

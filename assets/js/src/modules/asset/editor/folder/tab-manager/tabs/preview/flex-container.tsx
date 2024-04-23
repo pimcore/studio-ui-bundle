@@ -56,6 +56,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
 
     cards.push(
       <PreviewCard
+        blurBackground
         dropdownItems={ dropdownItems }
         imgSrc={ asset.fullPath }
         key={ asset.id }

@@ -8,6 +8,10 @@ export const useStyle = createStyles(({ token, css }) => {
             cursor: pointer;
         }
         
+        &.card-medium {
+            height: 150px;
+        }
+        
         &.ant-card .ant-card-body {
             padding: ${token.paddingXXS}px ${token.paddingXS}px;
             margin-top: 7px;
@@ -80,21 +84,29 @@ export const useStyle = createStyles(({ token, css }) => {
         }
         
         .blur-image__bg {
-            max-height: 61px;
-            max-width: 168px;
-            width: auto;
-            height: auto;   
-            
-            filter: blur(0.68px);
-            -webkit-filter: blur(0.68px);
-            background-size: cover;
-            background-repeat: no-repeat;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-blend-mode: overlay;
+          max-height: 64px;
+          max-width: 170px;
+        }
+        
+        .blur-image__bg-medium  {
+          max-height: 109px;
+          max-width: 236px;
+        }
+      
+        .blur-image__bg, .blur-image__bg-medium  {
+          width: auto;
+          height: auto;   
+          
+          filter: blur(1.38px);
+          -webkit-filter: blur(1.38px);
+          background-size: cover;
+          background-repeat: no-repeat;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-blend-mode: overlay;
         }
 
         .menu-icon {
