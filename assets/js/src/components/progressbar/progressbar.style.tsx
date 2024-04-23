@@ -25,7 +25,7 @@ export const useStyle = createStyles(({ token, css }) => {
             height: ${token.controlHeight}px;
             display: flex;
             justify-content: center;
-            padding: 0 ${token.paddingXS}px;
+            padding: 0 ${token.paddingXXS}px;
             align-items: flex-end;
 
             &:hover {
