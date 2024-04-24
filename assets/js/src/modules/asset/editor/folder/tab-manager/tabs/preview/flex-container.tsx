@@ -1,13 +1,13 @@
 import React, { type ReactNode } from 'react'
-import { type ApiAssetsGetCollection } from '@Pimcore/modules/asset/asset-api'
 import { useTranslation } from 'react-i18next'
 import { FlexContainerView } from '@Pimcore/modules/asset/editor/folder/tab-manager/tabs/preview/flex-container-view'
 import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
 import type { DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface FlexContainerProps {
-  assets: ApiAssetsGetCollection
+  assets: GetAssetsApiResponse
 }
 
 const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
@@ -42,10 +42,10 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   ]
 
   const cards: ReactNode[] = []
-  assets.forEach((asset) => {
+  assets.items!.forEach((asset) => {
     const onClickCard = (e): void => {
       openAsset({
-        name: asset.filename,
+        name: asset.filename!,
         icon: asset.iconName ?? 'file-question-02',
 
         config: {
@@ -59,7 +59,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
         dropdownItems={ dropdownItems }
         imgSrc={ asset.fullPath }
         key={ asset.id }
-        name={ asset.filename }
+        name={ asset.filename! }
         onClick={ onClickCard }
       />
     )

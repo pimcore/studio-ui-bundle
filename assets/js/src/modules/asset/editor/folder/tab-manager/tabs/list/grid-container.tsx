@@ -4,17 +4,17 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Tag } from 'antd'
 import { PreviewContainer } from './grid-columns/preview-container'
-import { type ApiAssetsGetCollection, type ApiAssetsGetCollectionItem } from '@Pimcore/modules/asset/asset-api'
 import { useTranslation } from 'react-i18next'
+import { type Asset, type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface GridContainerProps {
-  assets: ApiAssetsGetCollection
+  assets: GetAssetsApiResponse
 }
 
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
-  const columnHelper = createColumnHelper<ApiAssetsGetCollectionItem>()
+  const columnHelper = createColumnHelper<Asset>()
 
   const columns = [
     columnHelper.accessor('fullPath', {
@@ -52,19 +52,19 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
 
     columnHelper.accessor('creationDate', {
       header: t('asset.asset-editor-tabs.list.columns.creationDate'),
-      cell: info => <FormattedDate timestamp={ info.getValue() as number * 1000 } />
+      cell: info => <FormattedDate timestamp={ info.getValue()! * 1000 } />
     }),
 
     columnHelper.accessor('modificationDate', {
       header: t('asset.asset-editor-tabs.list.columns.modificationDate'),
-      cell: info => <FormattedDate timestamp={ info.getValue() as number * 1000 } />
+      cell: info => <FormattedDate timestamp={ info.getValue()! * 1000 } />
     })
   ]
 
   return (
     <Grid
       columns={ columns }
-      data={ assets }
+      data={ assets.items! }
       resizable
     />
   )

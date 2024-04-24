@@ -1,11 +1,11 @@
-import { type ApiAssetsGetCollectionItem } from '@Pimcore/modules/asset/asset-api'
 import { ImageView } from '@Pimcore/components/grid/columns/views/image-view'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { type CellContext } from '@tanstack/react-table'
 import React from 'react'
 
 interface PreviewContainerProps {
-  cellInfo: CellContext<ApiAssetsGetCollectionItem, string | undefined> | undefined
+  cellInfo: CellContext<Asset, string | undefined> | undefined
 }
 
 const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
@@ -16,7 +16,7 @@ const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
       const asset = props.cellInfo.row.original
 
       openAsset({
-        name: asset.filename,
+        name: asset.filename!,
         icon: asset.iconName ?? 'file-question-02',
 
         config: {
