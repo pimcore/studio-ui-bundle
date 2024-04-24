@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle;
 
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
 use function dirname;
+use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
 class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface
