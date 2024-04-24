@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
 import { useTranslation } from 'react-i18next'
+import {onKeyEnterExecuteClick} from "@Pimcore/utils/helpers";
 
 interface IImageZoom {
   zoom: number
@@ -41,7 +42,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           aria-label={ t('aria.asset.image.editor.zoom.reset') }
           className={ styles.imageZoomResetBtn }
           onClick={ () => { setZoom(100) } }
-          onKeyDown={ () => { setZoom(100) } }
+          onKeyDown={ onKeyEnterExecuteClick }
         >
           {t('asset.image.editor.zoom.reset')}
         </Button>
@@ -54,7 +55,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           className={ styles.imageZoomBtn }
           disabled={ zoomOutDisabled }
           onClick={ () => { setZoom(zoom - zoomSteps) } }
-          onKeyDown={ () => { setZoom(zoom - zoomSteps) } }
+          onKeyDown={ onKeyEnterExecuteClick }
         >
           <Icon name={ 'MinusOutlined' } />
         </Button>
@@ -80,7 +81,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           className={ styles.imageZoomBtn }
           disabled={ zoomInDisabled }
           onClick={ () => { setZoom(zoom + zoomSteps) } }
-          onKeyDown={ () => { setZoom(zoom + zoomSteps) } }
+          onKeyDown={ onKeyEnterExecuteClick }
         >
           <Icon name={ 'PlusOutlined' } />
         </Button>
