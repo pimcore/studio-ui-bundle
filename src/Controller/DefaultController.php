@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
+use Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle\BundleStaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,8 +23,11 @@ final class DefaultController extends FrontendController
     /**
      * @Route("/admin/studio")
      */
-    public function indexAction(): Response
+    public function indexAction(BundleStaticResourcesResolverInterface $staticResourcesResolver): Response
     {
-        return $this->render('@PimcoreStudioUi/default/index.html.twig');
+        return $this->render('@PimcoreStudioUi/default/index.html.twig', [
+            'bundleCssFiles' => $staticResourcesResolver->getBundleCssFiles(),
+            'bundleJsFiles' => $staticResourcesResolver->getBundleJsFiles(),
+        ]);
     }
 }

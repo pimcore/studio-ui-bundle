@@ -1,14 +1,22 @@
+{# @var bundleCssFiles string[] #}
+{# @var bundleJsFiles string[] #}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         
         {{ encore_entry_link_tags('main', null, 'pimcoreStudioUi') }}
+        {% for cssFile in bundleCssFiles %}
+            <link rel="stylesheet" href="{{ cssFile }}"/>
+        {% endfor %}
     </head>
 
     <body>
         <div id="app"></div>
 
         {{ encore_entry_script_tags('main', null, 'pimcoreStudioUi') }}
+        {% for jsFile in bundleJsFiles %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
     </body>
 </html>
