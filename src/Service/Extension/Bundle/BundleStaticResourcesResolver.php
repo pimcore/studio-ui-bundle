@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle;
 
 use Exception;
+use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
-use Pimcore\Bundle\StudioUiDemoPluginBundle\Exception\InvalidEntrypointsJsonException;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
 
 /**
