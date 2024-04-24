@@ -3,7 +3,7 @@ import { PreviewView } from './preview-view'
 import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/preview/sidebar'
-import { AssetContext } from '@Pimcore/modules/asset/asset-context'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)

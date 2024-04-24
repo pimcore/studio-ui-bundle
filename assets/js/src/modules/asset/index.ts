@@ -1,13 +1,11 @@
-import { registerWidget } from '@Pimcore/modules/widget-manager/utils/widget-registry'
-import { EditorContainer } from './editor/editor-container'
+import { type WidgetRegistry, serviceName } from '@Pimcore/modules/widget-manager/utils/widget-registry'
+import '@Pimcore/modules/asset/editor'
 import { TreeContainer } from './tree/tree-container'
+import { container } from '@Pimcore/app/depency-injection'
 
-registerWidget({
-  name: 'asset-editor',
-  component: EditorContainer
-})
+const widgetRegistryService = container.get<WidgetRegistry>(serviceName)
 
-registerWidget({
+widgetRegistryService.registerWidget({
   name: 'asset-tree',
   component: TreeContainer
 })

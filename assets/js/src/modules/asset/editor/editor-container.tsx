@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { FolderContainer } from './folder/folder-container'
-import { ImageContainer } from './image/image-container'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { AssetContext } from '../asset-context'
+import { AssetProvider } from '../asset-provider'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { type ComponentRegistry, serviceName } from '@Pimcore/modules/asset/editor/services/component-registry'
 
 export interface EditorContainerProps {
   id: number
@@ -15,6 +15,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { isLoading, isError, asset } = useAssetDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
+  const componentRegistryService = useInjection<ComponentRegistry>(serviceName)
 
   useEffect(() => {
     return () => {
@@ -34,20 +35,31 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     }
   }, [isWidgetActive])
 
-  return useMemo(() => (
-    <AssetContext.Provider value={ { id } }>
-      {isError && <div>Error</div>}
-      {isLoading && <div>Loading...</div>}
+  if (isError) {
+    return <div>Error</div>
+  }
 
-      {!isError && !isLoading && asset !== undefined && asset.type === 'image' && (
-        <ImageContainer />
-      )}
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
-      {!isError && !isLoading && asset !== undefined && asset.type === 'folder' && (
-        <FolderContainer />
-      )}
-    </AssetContext.Provider>
-  ), [id, isLoading, isError, asset?.type])
+  if (asset === undefined) {
+    return <></>
+  }
+
+  let definition = componentRegistryService.getComponent(asset.type!)
+
+  if (definition === undefined) {
+    definition = componentRegistryService.getComponent('unknown')!
+  }
+
+  const Component = definition.component
+
+  return (
+    <AssetProvider id={ id }>
+      <Component />
+    </AssetProvider>
+  )
 }
 
 export { EditorContainer }

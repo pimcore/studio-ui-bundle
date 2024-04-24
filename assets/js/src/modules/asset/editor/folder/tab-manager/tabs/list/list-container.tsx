@@ -4,7 +4,7 @@ import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-context'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 const ListContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
