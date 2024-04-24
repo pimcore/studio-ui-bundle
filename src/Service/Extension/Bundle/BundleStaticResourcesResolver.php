@@ -21,10 +21,10 @@ use Pimcore\Extension\Bundle\PimcoreBundleManager;
 /**
  * @internal
  */
-final readonly class BundleStaticResourcesResolver implements BundleStaticResourcesResolverInterface
+final class BundleStaticResourcesResolver implements BundleStaticResourcesResolverInterface
 {
     public function __construct(
-        private PimcoreBundleManager $bundleManager,
+        private readonly PimcoreBundleManager $bundleManager,
     ) {
     }
 
