@@ -11,6 +11,9 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle\BundleStaticResourcesResolverInterface:
+        class: Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle\BundleStaticResourcesResolver
+
 # add more services, or override services that need manual wiring
 #    Pimcore\Bundle\StudioUiBundle\ExampleClass:
 #        arguments:
