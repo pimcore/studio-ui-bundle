@@ -10,7 +10,6 @@ export const useNotification = (): readonly [NotificationInstance] => {
   decoratedNotificationApi.open = (config: ArgsProps) => {
     notificationApi.open({
       ...config,
-      duration: 0,
       className: styles.notification
     })
   }
