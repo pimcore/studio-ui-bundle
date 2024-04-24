@@ -2,17 +2,17 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React, { type ReactNode, useState } from 'react'
 import { Button } from 'antd'
 import { useStyle } from './action-list.style'
-import {Progressbar} from "@Pimcore/components/progressbar/progressbar";
-import { useTranslation } from 'react-i18next';
-import {onKeyEnterExecuteClick} from "@Pimcore/utils/helpers";
+import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
+import { useTranslation } from 'react-i18next'
+import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 
 interface IActions {
-  key: number,
-  description: string,
-  progress: number,
-  progressDetail: string,
-  completed: boolean,
-  completedAction?: ReactNode,
+  key: number
+  description: string
+  progress: number
+  progressDetail: string
+  completed: boolean
+  completedAction?: ReactNode
   cancel: () => void
 }
 
@@ -23,9 +23,9 @@ export interface IActionListProps {
 export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => {
   const { styles } = useStyle()
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
-  const {t} = useTranslation();
+  const { t } = useTranslation()
 
-  const cancelAllActions = () => {
+  const cancelAllActions = (): void => {
     actions.forEach(action => {
       if (!action.completed) {
         action.cancel()
@@ -41,6 +41,7 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
             <div>
               <p>{actions.length} {t('notification.action-list.actions')}</p>
               <Button
+                aria-label={ t('aria.notification.action-list.toggle-collapse') }
                 className={ 'notification-content__header__headline__collapse-btn' }
                 icon={
                   isCollapsed
@@ -49,24 +50,23 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
                         name={ 'chevron-down-wide' }
                         options={ { width: 22, height: 22 } }
                       />
-                    )
+                      )
                     : (
                       <Icon
                         name={ 'chevron-up-wide' }
                         options={ { width: 22, height: 22 } }
                       />
-                    )
+                      )
                 }
                 onClick={ () => { setIsCollapsed(!isCollapsed) } }
-                onKeyDown={onKeyEnterExecuteClick}
-                aria-label={t('aria.notification.action-list.toggle-collapse')}
+                onKeyDown={ onKeyEnterExecuteClick }
               />
             </div>
             <Button
-              type={ 'link' }
+              aria-label={ t('aria.notification.action-list.cancel-all') }
               onClick={ cancelAllActions }
-              onKeyDown={onKeyEnterExecuteClick}
-              aria-label={t('aria.notification.action-list.cancel-all')}
+              onKeyDown={ onKeyEnterExecuteClick }
+              type={ 'link' }
             >
               {t('notification.action-list.cancel-all')}
             </Button>
@@ -80,37 +80,37 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
           isCollapsed ? 'collapsed' : 'collapse'
         ].join(' ') }
       >
-        {actions.filter(action => !action.completed).length > 0 &&
+        {actions.filter(action => !action.completed).length > 0 && (
           <div className={ 'notification-content__content__actions' }>
             <div className={ 'notification-content__content__actions__actions' }>
               {actions.filter(action => !action.completed).map((action) => (
                 <div
+                  aria-label={ action.description }
                   className={ 'notification-content__content__actions__action' }
                   key={ action.key }
-                  aria-label={action.description}
                 >
                   <Progressbar
-                    description={action.description}
-                    descriptionAction={(
+                    description={ action.description }
+                    descriptionAction={ (
                       <Button
-                        type={ 'link' }
+                        aria-label={ `${t('aria.notification.action-list.cancel')} "${action.description}"` }
                         onClick={ action.cancel }
-                        onKeyDown={onKeyEnterExecuteClick}
-                        aria-label={`${t('aria.notification.action-list.cancel')} "${action.description}"`}
+                        onKeyDown={ onKeyEnterExecuteClick }
+                        type={ 'link' }
                       >
                         {t('notification.action-list.cancel')}
                       </Button>
-                    )}
-                    progressStatus={action.progressDetail}
-                    percent={action.progress}
+                    ) }
+                    percent={ action.progress }
+                    progressStatus={ action.progressDetail }
                   />
                 </div>
               ))}
             </div>
           </div>
-        }
+        )}
 
-        {actions.filter(action => action.completed)?.length > 0 &&
+        {actions.filter(action => action.completed)?.length > 0 && (
           <div className={ 'notification-content__content__completed-actions' }>
             <div className={ 'notification-content__content__completed-actions__headline' }>
               <Icon
@@ -123,9 +123,9 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
             <div className={ 'notification-content__content__completed-actions__actions' }>
               {actions.filter(action => action.completed)?.map((action) => (
                 <div
+                  aria-label={ action.description }
                   className={ 'notification-content__content__completed-actions__actions__action' }
                   key={ action.key }
-                  aria-label={action.description}
                 >
                   <p>{action.description}</p>
                   {action.completedAction}
@@ -133,7 +133,7 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
               ))}
             </div>
           </div>
-        }
+        )}
       </div>
     </div>
   )

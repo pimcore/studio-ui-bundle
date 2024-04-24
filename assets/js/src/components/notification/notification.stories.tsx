@@ -1,8 +1,8 @@
-import {type Meta} from '@storybook/react'
-import {useNotification} from './useNotification'
-import {Button} from 'antd'
+import { type Meta } from '@storybook/react'
+import { useNotification } from './useNotification'
+import { Button } from 'antd'
 import React from 'react'
-import {ActionList} from "@Pimcore/components/notification/content/action-list/action-list";
+import { ActionList } from '@Pimcore/components/notification/content/action-list/action-list'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Notification',
@@ -85,7 +85,7 @@ export const Collapsable = {
             progressDetail: '63% completed',
             completed: false,
             completedAction: (<Button type={ 'link' }>Download</Button>),
-            cancel: () => {console.log('canceled "Metadata batch edit in progress"')}
+            cancel: () => { console.log('canceled "Metadata batch edit in progress"') }
           },
           {
             key: 1,
@@ -94,7 +94,7 @@ export const Collapsable = {
             progressDetail: '68 / 150 files zipped',
             completed: false,
             completedAction: (<Button type={ 'link' }>Download</Button>),
-            cancel: () => {console.log('canceled "all-catalogue-pictures.zip"')}
+            cancel: () => { console.log('canceled "all-catalogue-pictures.zip"') }
           },
           {
             key: 2,
@@ -104,13 +104,13 @@ export const Collapsable = {
             completed: true,
             completedAction: (
               <Button
+                onClick={ () => { console.log('download "all-catalogue-pictures-de.zip"') } }
                 type={ 'link' }
-                onClick={() => {console.log('download "all-catalogue-pictures-de.zip"')}}
               >Download</Button>
             ),
-            cancel: () => {console.log('canceled "all-catalogue-pictures-de.zip"')}
+            cancel: () => { console.log('canceled "all-catalogue-pictures-de.zip"') }
           }
-        ]}
+        ] }
       />
     )
   }
