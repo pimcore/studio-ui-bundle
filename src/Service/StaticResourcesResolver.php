@@ -17,7 +17,6 @@ use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
 use Pimcore\Bundle\StudioUiBundle\PimcoreStudioUiBundle;
-use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
 
 /**
