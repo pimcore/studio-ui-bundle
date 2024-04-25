@@ -34,6 +34,10 @@ export const DropdownMenu = ({
 ): React.JSX.Element => {
   const items: MenuProps['items'] = []
 
+  const menuHasAnyIconRight = dropdownItems.find((item: DropdownMenuItemProps): boolean =>
+    item.iconRight !== null && item.iconRight !== undefined
+  ) !== undefined
+
   dropdownItems.forEach((item: DropdownMenuItemProps, index: number): void => {
     items.push(
       {
@@ -42,6 +46,7 @@ export const DropdownMenu = ({
           <MenuItemContent
             index={ index }
             item={ item }
+            menuHasAnyIconRight={ menuHasAnyIconRight }
           />
         )
       }
@@ -60,14 +65,13 @@ export const DropdownMenu = ({
 }
 
 function MenuItemContent (prop): React.JSX.Element {
-  const { item } = prop
-  const { index } = prop
+  const { item, index, menuHasAnyIconRight } = prop
   const { styles } = useStyle()
   const iconOptions = { width: '16px', height: '16px' }
 
   const iconLeft = (
     <Icon
-      className={ styles['menu-icon'] }
+      className={ styles['menu-icon-left'] }
       name={ item.iconLeft }
       options={ iconOptions }
     />
@@ -81,7 +85,7 @@ function MenuItemContent (prop): React.JSX.Element {
         role={ 'menuitem' }
         tabIndex={ index * 2 }
       >
-        <div>
+        <div className={ styles['left-area'] }>
           {iconLeft}
           <span className={ styles.label }>{item.label}</span>
           {
@@ -108,6 +112,7 @@ function MenuItemContent (prop): React.JSX.Element {
 
   return (
     <div
+      className={ styles.flexbox + ' ' + styles['left-area'] }
       onClick={ item.onClick }
       onKeyDown={ onKeyEnterExecuteClick }
       role={ 'menuitem' }
@@ -115,6 +120,7 @@ function MenuItemContent (prop): React.JSX.Element {
     >
       {iconLeft}
       {item.label}
+      {menuHasAnyIconRight as boolean && <div className={ styles['icon-placeholder'] } /> }
     </div>
   )
 }
