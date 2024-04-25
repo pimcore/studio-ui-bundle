@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
 import { useTranslation } from 'react-i18next'
-import {onKeyEnterExecuteClick} from "@Pimcore/utils/helpers";
+import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 
 interface IImageZoom {
   zoom: number

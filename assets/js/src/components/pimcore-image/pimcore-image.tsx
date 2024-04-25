@@ -8,10 +8,11 @@ interface PimcoreImageProps extends ImageProps {
 
 export const PimcoreImage = (props: PimcoreImageProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const zoom = useContext(ZoomContext)
+  const { zoom } = useContext(ZoomContext)
 
   return (
     <Image
+      className={ styles.image }
       placeholder={
         <div className={ styles['loading-div'] }>
           <Spin size="small" />
@@ -19,7 +20,6 @@ export const PimcoreImage = (props: PimcoreImageProps): React.JSX.Element => {
           }
       preview={ false }
       style={ {
-        transition: 'transform .2s',
         transform: `scale(${zoom * 0.01})`
       } }
       { ...props }
