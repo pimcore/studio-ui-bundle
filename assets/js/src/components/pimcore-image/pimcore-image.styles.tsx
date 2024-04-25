@@ -3,7 +3,7 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     image: css`
-      transition: transform 0.2s;
+      transition: transform ${token.motionDurationFast}s;
     `,
     'loading-div': css`
       position: absolute;
