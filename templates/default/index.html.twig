@@ -1,11 +1,11 @@
-{# @var bundleCssFiles string[] #}
-{# @var bundleJsFiles string[] #}
+{# @var cssFiles string[] #}
+{# @var jsFiles string[] #}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
 
-        {% for cssFile in bundleCssFiles %}
+        {% for cssFile in cssFiles %}
             <link rel="stylesheet" href="{{ cssFile }}"/>
         {% endfor %}
     </head>
@@ -13,7 +13,7 @@
     <body>
         <div id="app"></div>
 
-        {% for jsFile in bundleJsFiles %}
+        {% for jsFile in jsFiles %}
             <script src="{{ jsFile }}"></script>
         {% endfor %}
     </body>
