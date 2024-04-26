@@ -1,10 +1,11 @@
 {
-  "name": "pimcore-studio-ui-bundle",
+  "name": "pimcore-studio-ui",
   "scripts": {
     "dev-server": "encore dev-server --port 3030",
     "dev": "encore dev",
     "watch": "encore dev --watch",
     "build": "encore production --progress",
+    "build-types": "tsc -b tsconfig.json --emitDeclarationOnly --module amd",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js",
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js --fix",
     "test": "jest --passWithNoTests",
@@ -12,6 +13,8 @@
     "build-storybook": "storybook build",
     "build-api-client": "npx @rtk-query/codegen-openapi ./assets/js/build/openapi-config.ts"
   },
+  "types": "./public/build/types/src/main.d.ts",
+  "main": "./public/build/main.06439a83.js",
   "license": "PEL",
   "private": true,
   "devDependencies": {
