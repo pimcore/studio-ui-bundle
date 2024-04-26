@@ -46,7 +46,9 @@ const icons = {
   'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/presentation-chart-01.inline.svg')),
   'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/video-recorder.inline.svg')),
   'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/image-01.inline.svg')),
-  'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/focal-point.inline.svg'))
+  'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/focal-point.inline.svg')),
+  MinusOutlined: React.lazy(async () => await import('@Pimcore/assets/icons/MinusOutlined.inline.svg')),
+  PlusOutlined: React.lazy(async () => await import('@Pimcore/assets/icons/PlusOutlined.inline.svg'))
 }
 
 export interface IconProps {
