@@ -1,16 +1,17 @@
 import React, { type ReactNode } from 'react'
 import { type TabNode } from 'flexlayout-react'
-import { type WidgetRegistry, serviceName } from './widget-registry'
 import { WidgetContainer } from '@Pimcore/modules/widget-manager/widget/widget-container'
 import { WidgetManagerInnerContainer } from '../widget-manager-inner-container'
 import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
+import { type WidgetRegistry } from '../services/widget-registry'
 
 export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
   if (node.getComponent() === 'inner-widget-manager') {
     return <WidgetManagerInnerContainer />
   }
 
-  const widgetRegistryService = container.get<WidgetRegistry>(serviceName)
+  const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManagerService)
   const widgetName = node.getComponent()
 
   if (widgetName === undefined) {

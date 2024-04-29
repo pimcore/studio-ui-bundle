@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+import '@Pimcore/app/config/services'
 import '@Pimcore/app/i18n'
 import '@Pimcore/modules/example'
 import '@Pimcore/modules/asset'

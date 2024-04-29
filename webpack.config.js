@@ -129,7 +129,8 @@ config = {
   
   output: {
     ...config.output,
-    library: 'Pimcore'
+    library: 'Pimcore',
+    libraryTarget: 'umd',
   }
 }
 

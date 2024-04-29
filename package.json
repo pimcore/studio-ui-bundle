@@ -14,7 +14,6 @@
     "build-api-client": "npx @rtk-query/codegen-openapi ./assets/js/build/openapi-config.ts"
   },
   "types": "./public/build/types/src/main.d.ts",
-  "main": "./public/build/main.06439a83.js",
   "license": "PEL",
   "private": true,
   "devDependencies": {

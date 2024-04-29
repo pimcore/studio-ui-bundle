@@ -69,10 +69,9 @@ final class BundleStaticResourcesResolver implements BundleStaticResourcesResolv
 
             if (is_array($entryPoint[$type] ?? null)) {
                 foreach ($entryPoint[$type] as $file) {
-                    $files[] = $file;
+                    $files[$bundle::class][] = $file;
                 }
             }
-
         }
 
         return $files;

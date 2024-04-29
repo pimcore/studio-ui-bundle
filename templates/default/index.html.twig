@@ -5,16 +5,24 @@
     <head>
         <meta charset="utf-8">
 
-        {% for cssFile in bundleCssFiles %}
-            <link rel="stylesheet" href="{{ cssFile }}"/>
+        {% for bundle in bundleCssFiles %}
+            {% for cssFile in bundle %}
+                <link rel="stylesheet" href="{{ cssFile }}"/>
+            {% endfor %}
         {% endfor %}
     </head>
 
     <body>
         <div id="app"></div>
 
-        {% for jsFile in bundleJsFiles %}
-            <script src="{{ jsFile }}"></script>
+        {% for bundleName, bundle in bundleJsFiles %}
+            {% for jsFile in bundle %}
+                {% if bundleName == "Pimcore\\Bundle\\StudioUiBundle\\PimcoreStudioUiBundle" %}
+                    <script src="{{ jsFile }}"></script>    
+                {% else %}
+                    <script data-pimcore-studio-plugin="{{ jsFile }}"></script>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     </body>
 </html>

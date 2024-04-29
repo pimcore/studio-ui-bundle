@@ -1,9 +1,14 @@
-import 'reflect-metadata'
 import React, { useContext, createContext } from 'react'
 import { Container } from 'inversify'
 
+export interface IReadonlyContainer {
+  get: Container['get']
+  getAll: Container['getAll']
+}
+
 interface DiInstance {
   container: Container
+  readonlyContainer: IReadonlyContainer
   ContainerContext: React.Context<Container>
   ContainerProvider: React.FC<{ children: React.ReactNode }>
   useInjection: <T>(identifier: symbol) => T
@@ -14,6 +19,10 @@ interface DiInstance {
 export function createDiInstance (): DiInstance {
   const container = new Container()
   const ContainerContext = createContext(container)
+  const readonlyContainer: IReadonlyContainer = {
+    get: container.get,
+    getAll: container.getAll
+  }
 
   const ContainerProvider = ({ children }: { children: React.JSX.Element }): React.JSX.Element => {
     return <ContainerContext.Provider value={ container }>{children}</ContainerContext.Provider>
@@ -36,6 +45,7 @@ export function createDiInstance (): DiInstance {
 
   return {
     container,
+    readonlyContainer,
     ContainerContext,
     ContainerProvider,
     useInjection,

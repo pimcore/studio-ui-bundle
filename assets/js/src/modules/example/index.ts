@@ -1,9 +1,10 @@
 import { container } from '@Pimcore/app/depency-injection'
-import { type WidgetRegistry, serviceName } from '../widget-manager/utils/widget-registry'
+import { type WidgetRegistry } from '../widget-manager/services/widget-registry'
 import { Example } from './containers/example'
 import { WidgetManagerActions } from './containers/widget-manager-actions'
+import { serviceIds } from '@Pimcore/app/config/services'
 
-const widgetRegistryService = container.get<WidgetRegistry>(serviceName)
+const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManagerService)
 
 widgetRegistryService.registerWidget({
   name: 'example',

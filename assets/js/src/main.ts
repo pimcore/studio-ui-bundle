@@ -1,25 +1,10 @@
 import '@Pimcore/bootstrap'
 import { runApp } from './modules/app/utils/app-runner'
-import { store } from './app/store'
-import { container } from './app/depency-injection'
-import { serviceName } from './modules/widget-manager/utils/widget-registry'
+import { pluginSystem } from './app/plugin-system/plugin-system'
+import { type Pimcore } from './app/sdk'
 
 if (module.hot !== undefined) {
   module.hot.accept()
-}
-
-const Pimcore = {
-  log: (): void => {
-    console.log('Hello World')
-  },
-
-  store,
-
-  container,
-
-  serviceIds: {
-    widgetManagerService: serviceName
-  }
 }
 
 declare global {
@@ -28,9 +13,12 @@ declare global {
   }
 }
 
-const { log, serviceIds } = Pimcore
+window.Pimcore = (await import('./app/sdk')).Pimcore
+console.log('Core', 'SDK injected')
 
-export { log, store, container, serviceIds }
-export type * from './modules/widget-manager/utils/widget-registry'
+await pluginSystem.loadPlugins()
+console.log('Core', 'after plugins loaded')
+pluginSystem.initPlugins()
+console.log('Core', 'after init plugins')
 
 runApp()

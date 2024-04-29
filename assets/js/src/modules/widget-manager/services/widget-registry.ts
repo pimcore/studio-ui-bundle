@@ -1,4 +1,3 @@
-import { container } from '@Pimcore/app/depency-injection'
 import { injectable } from 'inversify'
 import { type ComponentType, memo } from 'react'
 
@@ -6,8 +5,6 @@ export interface Widget {
   name: string
   component: ComponentType
 }
-
-export const serviceName = Symbol.for('widget-manager/services/widget-registry')
 
 @injectable()
 export class WidgetRegistry {
@@ -26,5 +23,3 @@ export class WidgetRegistry {
     return this.widgets.find((widget) => widget.name === name)
   }
 }
-
-container.bind(serviceName).to(WidgetRegistry).inSingletonScope()

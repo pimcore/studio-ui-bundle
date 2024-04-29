@@ -1,21 +1,8 @@
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
 /*!
 	Copyright (c) 2018 Jed Watson.
 	Licensed under the MIT License (MIT), see
 	http://jedwatson.github.io/classnames
 */
-
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
 
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -31,8 +18,6 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-
-/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
@@ -116,12 +101,6 @@ and limitations under the License.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */
-
-/**
- * @license qrcode.react
- * Copyright (c) Paul O'Shannessy
- * SPDX-License-Identifier: ISC
  */
 
 /** @license React v16.13.1
