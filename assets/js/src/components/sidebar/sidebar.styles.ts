@@ -17,6 +17,7 @@ export const useStyle = createStyles(({ token, css }) => {
           border-left: 1px solid rgba(0, 0, 0, 0.08);
           justify-content: space-between;
           color: ${token.colorIconSidebar};
+          background: ${token.colorBgToolbar};
 
           .sidebar__navigation__tabs,
           .sidebar__navigation__buttons {
@@ -38,6 +39,7 @@ export const useStyle = createStyles(({ token, css }) => {
                   padding: ${token.paddingXS}px ${token.paddingXXS}px;
                   justify-content: center;
                   align-items: center;
+                  background: ${token.colorFillQuaternary};
 
                   .pimcore-icon {
                       flex-shrink: 0;
