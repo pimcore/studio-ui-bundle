@@ -3,8 +3,8 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     container: css`
-      border-top: 0.5px solid #DFD7EA;
-      background-color: ${token.colorBgToolbar};
+      border-top: 1px solid #DFD7EA;
+      background: ${token.colorBgToolbar};
 
       display: flex;
       justify-content: space-between;
