@@ -44,3 +44,8 @@ notification.action-list.completed-actions: Completed actions
 aria.notification.action-list.toggle-collapse: Toggle list of actions
 aria.notification.action-list.cancel-all: Cancel all currently running action
 aria.notification.action-list.cancel: Cancel action
+asset.image.editor.zoom.reset: Reset
+aria.asset.image.editor.zoom.reset: Reset zoom
+aria.asset.image.editor.zoom.zoom-in: Zoom in
+aria.asset.image.editor.zoom.zoom-out: Zoom out
+aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
