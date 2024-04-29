@@ -37,6 +37,10 @@ export const useStyle = createStyles(({ token, css }) => {
       
       .ant-progress {
         margin-bottom: 0;
+          
+        .ant-progress-bg {
+          background: ${token.colorTextDescription};        
+        }
       }
 
       .progressbar-status {
