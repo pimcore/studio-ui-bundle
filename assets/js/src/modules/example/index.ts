@@ -4,7 +4,7 @@ import { Example } from './containers/example'
 import { WidgetManagerActions } from './containers/widget-manager-actions'
 import { serviceIds } from '@Pimcore/app/config/services'
 
-const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManagerService)
+const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
 widgetRegistryService.registerWidget({
   name: 'example',

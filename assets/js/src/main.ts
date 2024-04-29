@@ -14,11 +14,8 @@ declare global {
 }
 
 window.Pimcore = (await import('./app/sdk')).Pimcore
-console.log('Core', 'SDK injected')
 
 await pluginSystem.loadPlugins()
-console.log('Core', 'after plugins loaded')
 pluginSystem.initPlugins()
-console.log('Core', 'after init plugins')
 
 runApp()

@@ -11,7 +11,7 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
     return <WidgetManagerInnerContainer />
   }
 
-  const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManagerService)
+  const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
   const widgetName = node.getComponent()
 
   if (widgetName === undefined) {

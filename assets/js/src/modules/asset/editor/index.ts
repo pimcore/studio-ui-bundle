@@ -24,7 +24,7 @@ componentRegistryService.registerComponent({
   component: UnknownContainer
 })
 
-const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManagerService)
+const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
 widgetRegistryService.registerWidget({
   name: 'asset-editor',

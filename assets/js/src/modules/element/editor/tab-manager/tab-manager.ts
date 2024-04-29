@@ -1,6 +1,8 @@
 import { type IEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTabManager'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { injectable } from 'inversify'
 
+@injectable()
 export abstract class TabManager implements IEditorTabManager {
   type: string = ''
   tabs: IEditorTab[] = []

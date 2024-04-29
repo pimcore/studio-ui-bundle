@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkPimcore=self.webpackChunkPimcore||[]).push([[606],{6606:(e,c,r)=>{r.r(c),r.d(c,{Pimcore:()=>p});var s=r(9723),i=r(8698),n=r(7924),p={container:s.GT,serviceIds:n.j,pluginSystem:i.p}}}]);

@@ -1,10 +1,12 @@
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { FolderTabManager } from './tab-manager/folder-tab-manager'
+import { type FolderTabManager } from './tab-manager/folder-tab-manager'
 import { ListContainer } from './tab-manager/tabs/list/list-container'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
 
-export const folderEditorTabManager = new FolderTabManager()
+export const folderEditorTabManager = container.get<FolderTabManager>(serviceIds['Asset/Editor/FolderTabManager'])
 
 folderEditorTabManager.register({
   children: <PreviewContainer />,

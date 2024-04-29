@@ -1,4 +1,5 @@
 export declare const serviceIds: {
-    widgetManagerService: symbol;
+    widgetManager: symbol;
+    'Asset/Editor/FolderTabManager': symbol;
 };
 //# sourceMappingURL=index.d.ts.map

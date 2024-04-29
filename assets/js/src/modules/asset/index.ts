@@ -4,7 +4,7 @@ import { TreeContainer } from './tree/tree-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 
-const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManagerService)
+const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
 widgetRegistryService.registerWidget({
   name: 'asset-tree',
