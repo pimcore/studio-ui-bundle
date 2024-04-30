@@ -21,10 +21,19 @@ interface StaticResourcesResolverInterface
     /**
      * @return string[]
      */
-    public function getCssFiles(): array;
+    public function getStudioCssFiles(): array;
 
     /**
      * @return string[]
      */
-    public function getJsFiles(): array;
+    public function getStudioJsFiles(): array;
+    /**
+     * @return string[]
+     */
+    public function getBundleCssFiles(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getBundleJsFiles(): array;
 }

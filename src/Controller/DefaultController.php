@@ -26,8 +26,10 @@ final class DefaultController extends FrontendController
     public function indexAction(StaticResourcesResolverInterface $staticResourcesResolver): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
-            'cssFiles' => $staticResourcesResolver->getCssFiles(),
-            'jsFiles' => $staticResourcesResolver->getJsFiles(),
+            'studioCssFiles' => $staticResourcesResolver->getStudioCssFiles(),
+            'studioJsFiles' => $staticResourcesResolver->getStudioJsFiles(),
+            'bundleCssFiles' => $staticResourcesResolver->getBundleCssFiles(),
+            'bundleJsFiles' => $staticResourcesResolver->getBundleJsFiles(),
         ]);
     }
 }
