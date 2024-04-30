@@ -4,8 +4,10 @@ const icons = {
   camera: React.lazy(async () => await import('@Pimcore/assets/icons/camera.inline.svg')),
   folder: React.lazy(async () => await import('@Pimcore/assets/icons/folder.inline.svg')),
   'widget-default': React.lazy(async () => await import('@Pimcore/assets/icons/widget-default.inline.svg')),
-  'chevron-up': React.lazy(async () => await import('@Pimcore/assets/icons/chevron-up.inline.svg')),
-  'chevron-down': React.lazy(async () => await import('@Pimcore/assets/icons/chevron-down.inline.svg')),
+  'chevron-up-small': React.lazy(async () => await import('@Pimcore/assets/icons/chevron-up-small.inline.svg')),
+  'chevron-down-small': React.lazy(async () => await import('@Pimcore/assets/icons/chevron-down-small.inline.svg')),
+  'chevron-up-wide': React.lazy(async () => await import('@Pimcore/assets/icons/chevron-up-wide.inline.svg')),
+  'chevron-down-wide': React.lazy(async () => await import('@Pimcore/assets/icons/chevron-down-wide.inline.svg')),
   home: React.lazy(async () => await import('@Pimcore/assets/icons/home.inline.svg')),
   refresh: React.lazy(async () => await import('@Pimcore/assets/icons/refresh.inline.svg')),
   'icon-tools': React.lazy(async () => await import('@Pimcore/assets/icons/icon-tools.inline.svg')),
@@ -47,8 +49,10 @@ const icons = {
   'presentation-chart-01': React.lazy(async () => await import('@Pimcore/assets/icons/presentation-chart-01.inline.svg')),
   'video-recorder': React.lazy(async () => await import('@Pimcore/assets/icons/video-recorder.inline.svg')),
   'image-01': React.lazy(async () => await import('@Pimcore/assets/icons/image-01.inline.svg')),
+  'ellipsis-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/ellipsis-outlined.inline.svg')),
   'focal-point': React.lazy(async () => await import('@Pimcore/assets/icons/focal-point.inline.svg')),
-  'ellipsis-outlined': React.lazy(async () => await import('@Pimcore/assets/icons/ellipsis-outlined.inline.svg'))
+  MinusOutlined: React.lazy(async () => await import('@Pimcore/assets/icons/MinusOutlined.inline.svg')),
+  PlusOutlined: React.lazy(async () => await import('@Pimcore/assets/icons/PlusOutlined.inline.svg'))
 }
 
 export interface IconProps {

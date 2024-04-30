@@ -18,3 +18,31 @@
 * {
   box-sizing: border-box;
 }
+
+/** MESSAGE **/
+.ant-message {
+  position: absolute;
+  bottom: 20px !important;
+  top: unset !important;
+}
+
+@keyframes moveUp {
+  0% {
+      transform: translateY(+30%);
+      opacity: 0;
+  }
+  100% {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+.ant-message .ant-message-move-up-appear,
+.ant-message .ant-message-move-up-enter {
+  animation-name: moveUp;
+}
+
+.ant-message .ant-message-move-up-leave {
+  animation-name: moveUp;
+  animation-direction: reverse;
+}
