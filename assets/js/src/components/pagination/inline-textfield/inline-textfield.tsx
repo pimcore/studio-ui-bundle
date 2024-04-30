@@ -73,6 +73,12 @@ export const InlineTextfield = ({
     setVisibleElement(VisibleElement.input)
   }
 
+  const onMouseLeaveInput = (e): void => {
+    if (document.activeElement !== e.target) {
+      setVisibleElement(VisibleElement.labelDots)
+    }
+  }
+
   const setClassNameBasedOnValue = (): void => {
     if (isSet(showDotsValues)) {
       if (showDotsValues!.includes(value) && classNameLabelDots === 'display-none') {
@@ -95,6 +101,7 @@ export const InlineTextfield = ({
         onBlur={ onBlurInput }
         onFocus={ onFocusInput }
         onKeyDown={ onKeyDown }
+        onMouseLeave={ onMouseLeaveInput }
         type='number'
       />
       <Button

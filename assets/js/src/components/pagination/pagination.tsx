@@ -14,8 +14,7 @@ interface PaginationProps {
   defaultPageSize?: number
   pageSizeOptions?: number[] | string[]
   showSizeChanger?: boolean
-  showPageJumperAtOnce?: number
-  showJumpToPage?: boolean
+  amountOfVisiblePages?: number
   hideOnSinglePage?: boolean
   showTotal?: (total: number) => string
   onChange?: (page: number, pageSize: number) => void
@@ -27,8 +26,7 @@ export const Pagination = ({
   defaultPageSize = 20,
   pageSizeOptions = [10, 20, 50, 100],
   showSizeChanger = false,
-  showPageJumperAtOnce = 5,
-  showJumpToPage = true,
+  amountOfVisiblePages = 5,
   hideOnSinglePage = false,
   showTotal,
   onChange
@@ -70,24 +68,28 @@ export const Pagination = ({
     })
   }
 
-  if (showPageJumperAtOnce >= pages) {
+  if (amountOfVisiblePages >= pages) {
     const pageNumberRange = [...Array(pages).keys()].map(number => number + 1)
     renderPageNumberItems.push(...getPageNumberItems(pageNumberRange))
   } else {
-    const pageNumberRangeLeft = getLeftPageNumberRange(showPageJumperAtOnce)
-    const pageNumberRangeRight = getRightPageNumberRange(showPageJumperAtOnce, pages)
+    const pageNumberRangeLeft = getLeftPageNumberRange(amountOfVisiblePages)
+    const pageNumberRangeRight = getRightPageNumberRange(amountOfVisiblePages, pages)
 
     renderPageNumberItems.push(...getPageNumberItems(pageNumberRangeLeft))
 
-    if (showJumpToPage && pages > 2) {
+    if (pages > 3) {
       const onKeyDownJumpToPage = (e): void => {
         if (e.key === 'Enter') {
           const value = Number(e.target.value)
           if (value > 0 && value <= pages) {
             setCurrentPage(value)
-            e.target.value = ''
-            e.target.blur()
+          } else if (value < 1) {
+            setCurrentPage(1)
+          } else if (value > pages) {
+            setCurrentPage(pages)
           }
+          e.target.value = ''
+          e.target.blur()
         }
       }
 
