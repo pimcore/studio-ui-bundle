@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const webpack = require('webpack');
 const path = require('path');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -99,6 +100,13 @@ Encore
     '@Pimcore': path.resolve(__dirname, 'assets', 'js', 'src'),
     '@test-utils': path.resolve(__dirname, 'assets', 'js', 'test-utils'),
   })
+
+  .addPlugin(
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: path.join(__dirname, 'public', 'vendor',  'vendor-manifest.json')
+    }),
+  )
 ;
 
 if (!Encore.isDevServer()) {

@@ -52,24 +52,36 @@ final class BundleStaticResourcesResolver implements BundleStaticResourcesResolv
     {
         $files = [];
         foreach ($this->getStudioUiBundles() as $bundle) {
+            $entryPoints = [];
 
-            $entryPoints = $this->getEntryPointsJsonContent($bundle->getWebpackEntryPointsJsonLocation());
-
-            $entryPoint = $entryPoints['entrypoints'][$bundle->getWebpackEntryPoint()] ?? null;
-
-            if ($entryPoint === null) {
-                throw new InvalidEntrypointsJsonException(
-                    sprintf(
-                        'Entry point "%s" in file "%s" not found',
-                        $bundle->getWebpackEntryPoint(),
-                        $bundle->getWebpackEntryPointsJsonLocation()
-                    )
-                );
+            foreach ($bundle->getWebpackEntryPointsJsonLocations() as $entryPointsJsonLocation) {
+                $entryPoints[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
 
-            if (is_array($entryPoint[$type] ?? null)) {
-                foreach ($entryPoint[$type] as $file) {
-                    $files[$bundle::class][] = $file;
+            foreach ($bundle->getWebpackEntryPoints() as $entryPointName) {
+                $entryPoint = null;
+
+                foreach ($entryPoints as $entryPointJson) {
+                    if (isset($entryPointJson['entrypoints'][$entryPointName])) {
+                        $entryPoint = $entryPointJson['entrypoints'][$entryPointName];
+                        break;
+                    }
+                }
+
+                if ($entryPoint === null) {
+                    throw new InvalidEntrypointsJsonException(
+                        sprintf(
+                            'Entry point "%s" in file "%s" not found',
+                            $entryPointName,
+                            $bundle->getWebpackEntryPointsJsonLocations()
+                        )
+                    );
+                }
+
+                if (is_array($entryPoint[$type] ?? null)) {
+                    foreach ($entryPoint[$type] as $file) {
+                        $files[$bundle::class][] = $file;
+                    }
                 }
             }
         }

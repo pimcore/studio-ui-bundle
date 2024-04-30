@@ -15,7 +15,7 @@ namespace Pimcore\Bundle\StudioUiBundle\Extension\Bundle;
 
 interface PimcoreBundleStudioUiInterface
 {
-    public function getWebpackEntryPointsJsonLocation(): string;
+    public function getWebpackEntryPointsJsonLocations(): array;
 
-    public function getWebpackEntryPoint(): string;
+    public function getWebpackEntryPoints(): array;
 }

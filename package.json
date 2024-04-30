@@ -6,15 +6,15 @@
     "watch": "encore dev --watch",
     "build": "encore production --progress",
     "build-types": "tsc -b tsconfig.json --emitDeclarationOnly --module amd",
+    "build-vendor": "encore production --config webpack.vendor.config",
+    "build-storybook": "storybook build",
+    "build-api-client": "npx @rtk-query/codegen-openapi ./assets/js/build/openapi-config.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js",
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./assets/js --fix",
     "test": "jest --passWithNoTests",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "build-api-client": "npx @rtk-query/codegen-openapi ./assets/js/build/openapi-config.ts"
+    "storybook": "storybook dev -p 6006"
   },
   "types": "./public/build/types/src/main.d.ts",
-  "main": "./public/build/main.js",
   "license": "PEL",
   "private": true,
   "devDependencies": {
@@ -72,8 +72,8 @@
     "flexlayout-react": "^0.7.15",
     "i18next": "^23.8.2",
     "inversify": "^6.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
     "react-i18next": "^14.0.5",
     "react-redux": "^9.1.0",
     "reflect-metadata": "^0.2.2"
