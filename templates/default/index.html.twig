@@ -1,11 +1,11 @@
-{# @var bundleCssFiles string[] #}
-{# @var bundleJsFiles string[] #}
+{# @var cssFiles string[] #}
+{# @var jsFiles string[] #}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
 
-        {% for bundle in bundleCssFiles %}
+        {% for bundle in cssFiles %}
             {% for cssFile in bundle %}
                 <link rel="stylesheet" href="{{ cssFile }}"/>
             {% endfor %}
@@ -15,10 +15,10 @@
     <body>
         <div id="app"></div>
 
-        {% for bundleName, bundle in bundleJsFiles %}
+        {% for bundleName, bundle in jsFiles %}
             {% for jsFile in bundle %}
                 {% if bundleName == "Pimcore\\Bundle\\StudioUiBundle\\PimcoreStudioUiBundle" %}
-                    <script src="{{ jsFile }}"></script>    
+                    <script src="{{ jsFile }}"></script>
                 {% else %}
                     <script data-pimcore-studio-plugin="{{ jsFile }}"></script>
                 {% endif %}

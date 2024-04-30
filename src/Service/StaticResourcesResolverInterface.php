@@ -11,20 +11,20 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle;
+namespace Pimcore\Bundle\StudioUiBundle\Service;
 
 /**
  * @internal
  */
-interface BundleStaticResourcesResolverInterface
+interface StaticResourcesResolverInterface
 {
     /**
      * @return string[]
      */
-    public function getBundleCssFiles(): array;
+    public function getCssFiles(): array;
 
     /**
      * @return string[]
      */
-    public function getBundleJsFiles(): array;
+    public function getJsFiles(): array;
 }

@@ -11,7 +11,7 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle;
+namespace Pimcore\Bundle\StudioUiBundle\Service;
 
 use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
@@ -22,7 +22,7 @@ use Pimcore\Extension\Bundle\PimcoreBundleManager;
 /**
  * @internal
  */
-final class BundleStaticResourcesResolver implements BundleStaticResourcesResolverInterface
+final class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
     public function __construct(
         private readonly PimcoreBundleManager $bundleManager,
@@ -32,7 +32,7 @@ final class BundleStaticResourcesResolver implements BundleStaticResourcesResolv
     /**
      * @throws InvalidEntrypointsJsonException
      */
-    public function getBundleCssFiles(): array
+    public function getCssFiles(): array
     {
         return $this->getFilesFromEntryPointsJson('css');
     }
@@ -40,7 +40,7 @@ final class BundleStaticResourcesResolver implements BundleStaticResourcesResolv
     /**
      * @throws InvalidEntrypointsJsonException
      */
-    public function getBundleJsFiles(): array
+    public function getJsFiles(): array
     {
         return $this->getFilesFromEntryPointsJson('js');
     }
