@@ -1,0 +1,138 @@
+Pimcore Commercial License (PCL)
+
+Copyright (c) 2013 - present Pimcore GmbH
+
+
+1. Subject matter and acceptance
+
+1.1 This open core software license agreement (POCL) is between Pimcore GmbH, registered in the 
+commercial register of the Salzburg Regional Court under no. FN 398049t, with its business 
+address at Söllheimer Straße 16, 5020 Salzburg, Austria, as the sole licensor ("Pimcore"), and 
+the user of the software as the licensee ("Customer").
+
+1.2	Subject of the PCL is the usage of the Pimcore Software (“Software“). The exact products that 
+are available under the PCL are defined in the additional contractual documents or by inclusion 
+of, or referral to, this PCL within the source code or within the source code repositories. 
+The Software is protected by copyright worldwide. 
+
+1.3	By starting to use the Software, the Customer agrees to all terms and conditions of the PCL.
+
+
+2. License
+
+2.1 Pimcore grants the Customer the non-exclusive, non-transferable, non-sublicensable, 
+geographically unlimited right, limited in time to the term of the PCL, to use the Software and
+to modify, adapt and customize it for its own purposes. The Customer is not obliged to share 
+these modifications, adaptations, and customizations (“Derivatives”) with Pimcore or anyone else.   
+
+2.2	The Customer may only use the Software for its own enterprise. The Customer may not use the 
+Software simultaneously in more instances than Customer has acquired usage licences for. The 
+Customer may not offer the Software as a hosted or managed service by granting third parties 
+access to a significant part of the features or functions of the Software. The Customer is 
+only permitted to copy the Software to the extent that this is necessary for the intended use,
+including the correction of errors. The creation of a backup copy is permitted if it is necessary
+to secure the contractual use.
+    
+2.3	If the Customer violates any of the above provisions, all rights of use granted under the PCL 
+shall immediately become invalid and shall automatically revert to Pimcore. In this case, the 
+Customer shall immediately and completely cease using the software, delete all copies of the 
+software installed on its systems and delete any backup copies made or hand them over to Pimcore.
+In addition, Pimcore reserves the right to take all legal steps.
+
+2.4 Sect. 2.3 applies accordingly if Derivatives of the Customer infringe upon patents.
+
+2.5	Upon request, the Customer shall enable Pimcore to verify the proper use of the Software, in 
+particular whether the Customer is using the Software as agreed. For this purpose, the Customer
+shall provide Pimcore with information, grant access to relevant documents and records and enable
+an audit of the hardware and software environment by Pimcore or an auditing company named by
+Pimcore and acceptable to the Customer. Pimcore may carry out the audit on the Customer's premises
+during the Customer's regular business hours or have it carried out by third parties bound to 
+secrecy. Pimcore shall ensure that the Customer's business operations are disturbed as little as 
+possible by the on-site audit. If the inspection reveals a licence violation by the Customer that 
+is not merely minimal, the Customer shall bear the costs of the inspection, otherwise Pimcore 
+shall bear them. Pimcore reserves all other rights.
+
+2.6 The parties may agree on expanded usage rights, arrangements for enterprise customers, and 
+special OEM provisions separately. 
+
+
+3. Contribution of Derivatives
+
+If the Customer wishes to contribute to the Software, the Customer must comply with the Pimcore 
+Contributors License Agreement (“CLA”). The CLA stipulates the terms under which contributions 
+are managed, ensuring that all parties' rights are protected. Acceptance of the CLA is mandatory 
+for all contributors and can be reviewed on the Source-Code Repository. Contributions without 
+adherence to the CLA will not be accepted.
+
+
+4. Collateral obligations of the Customer
+
+4.1 The Customer shall not (a) use GPLv3-licensed Pimcore Community Edition alongside PCL licensed 
+Software, and shall not (b) revert from PCL to GPLv3, to protect the Customer’s rights in 
+Derivatives. 
+
+4.2 The Customer must ensure that the access data to the user accounts is not passed on to 
+unauthorised third parties and is protected against unauthorised access by third parties. The 
+authorised users shall be instructed accordingly. The Customer shall inform Pimcore immediately 
+if there is a suspicion of misuse of the Software.
+
+4.3 The Customer shall not manipulate, in particular modify, move, remove, suppress, switch off 
+or circumvent licence keys and associated protection mechanisms in the Software. 
+
+4.4	The Customer must not alter or obfuscate any of the Pimcore's licensing, copyright, or other
+proprietary notices within the Software. Any use of Pimcore’s trademarks must comply with applicable 
+laws.
+
+4.5	The Customer shall not modify, relocate, disable, or bypass any functionalities associated with 
+the Pimcore Marketplace. 
+
+
+5. Defects
+    
+5.1	The Customer is obliged to notify Pimcore of any defect or error in the Software immediately 
+after its occurrence.    
+
+5.2	Before reporting any defect or error, the Customer must carry out an analysis of the system 
+environment as far as possible to ensure that the defect or error is not due to system components 
+that are not covered by this PCL.
+
+5.3 The Customer shall immediately install or carry out updates or other troubleshooting measures 
+provided by Pimcore.
+    
+5.4 Violations of the obligations to co-operate may result in additional costs for Pimcore. The 
+Customer must reimburse Pimcore for such costs, unless it is not responsible for them.
+
+
+6. Indemnification
+
+The Customer shall indemnify Pimcore against all third-party claims (in particular claims arising 
+from infringement of copyright, patent, competition, trademark or data protection law) asserted 
+against Pimcore in connection with the Customer’s use of the Software, unless these claims are 
+based on intentional or grossly negligent behaviour on the part of Pimcore or Pimcore's legal 
+representatives or vicarious agents.  This indemnification obligation includes the reimbursement 
+of reasonable costs incurred by Pimcore in the assertion or defence of Pimcore’s rights in this 
+context.
+
+
+7. Termination
+
+After termination of this PCL, the Customer must uninstall the Software, including all copies, and 
+delete any remaining recognisable Software residues from its IT system. The Customer must destroy
+any backup copies made. At Pimcore's request, the Customer must confirm that it has fulfilled 
+these obligations. 
+
+
+8. Remuneration
+
+The remuneration for the use of the software shall be agreed separately.  
+
+
+9. Miscellaneous
+
+9.1	In all other respects, the individual agreements concluded with the Customer, and Pimcore's GTC, 
+and, if applicable, Pimcore's PaaS GTC shall apply. 
+
+9.2	Specifications originating from the Customer regarding the service content and legal elements, 
+such as GTC or contractual clauses, do not apply. 
+
+9.3	Support, maintenance and other services remain subject to separate agreements.
