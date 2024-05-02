@@ -15,11 +15,11 @@ const config: JestConfigWithTsJest = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: [
     '@testing-library/jest-dom',
-    './assets/js/test-utils/jest-setup.ts'
+    './js/test-utils/jest-setup.ts'
   ],
   moduleNameMapper: {
-    '^@Pimcore/(.*)$': '<rootDir>/assets/js/src/$1',
-    '^@test-utils/(.*)$': '<rootDir>/assets/js/test-utils/$1'
+    '^@Pimcore/(.*)$': '<rootDir>/js/src/$1',
+    '^@test-utils/(.*)$': '<rootDir>/js/test-utils/$1'
   }
 }
 
