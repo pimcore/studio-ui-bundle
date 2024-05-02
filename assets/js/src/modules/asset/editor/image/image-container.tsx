@@ -1,3 +1,13 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*/
+
 import i18n from '@Pimcore/app/i18n'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { TabsContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs-container'

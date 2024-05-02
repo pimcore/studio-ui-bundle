@@ -1,3 +1,13 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*/
+
 import { Logo } from '@Pimcore/components/logo/logo'
 import React from 'react'
 import { useStlyes } from './right-sidebar-view.styles'

@@ -1,3 +1,13 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*/
+
 import { registerWidget } from '@Pimcore/modules/widget-manager/utils/widget-registry'
 import { EditorContainer } from './editor/editor-container'
 import { TreeContainer } from './tree/tree-container'

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "baseUrl": "./js/",
+    "paths": {
+      "@Pimcore/*": ["./src/*"],
+      "@test-utils/*": ["./test-utils/*"]
+    },
+    "strictNullChecks": true,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
+  },
+  
+  "include": [
+    "./js/**/*"
+  ],
+}

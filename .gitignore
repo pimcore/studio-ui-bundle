@@ -29,7 +29,7 @@ Thumbs.db
 /var
 /vendor
 
-/node_modules
+assets/node_modules
 
 # code style fixer
 .php_cs
