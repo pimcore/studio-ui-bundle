@@ -8,8 +8,10 @@
 * LICENSE.md which is distributed with this source code.
 */
 
+/* eslint-disable  @typescript-eslint/no-var-requires */
 const Encore = require('@symfony/webpack-encore')
 const path = require('path')
+const webpack = require('webpack')
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
@@ -109,6 +111,11 @@ Encore
     '@Pimcore': path.resolve(__dirname, 'js', 'src'),
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
   })
+
+  .addPlugin(new webpack.BannerPlugin({
+    banner: 'Pimcore\n\nThis source file is available under two different licenses:\n- Pimcore Open Core License (POCL)\n- Pimcore Commercial License (PCL)\nFull copyright and license information is available in\nLICENSE.md which is distributed with this source code.'
+    // raw: true
+  }))
 
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
