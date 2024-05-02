@@ -12,7 +12,7 @@ If you decide to choose the Pimcore Community Edition, you must comply with the 
 
 ### Pimcore Open Core License (POCL)
 
-> For All contents inside of `/assets/` and `/public/build`
+> For all contents inside of `/assets/` and `/public/build`
 
 1. Subject matter and acceptance
 
@@ -127,7 +127,7 @@ that it has fulfilled these obligations.
 
 ### GNU General Public License version 3 (GPLv3)
 
-> For All contents outside of `/assets/` and `/public/build`
+> For all contents outside of `/assets/` and `/public/build`
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
