@@ -1,12 +1,15 @@
 /**
-* Pimcore
-*
-* This source file is available under two different licenses:
-* - Pimcore Open Core License (POCL)
-* - Pimcore Commercial License (PCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*/
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ */
 
 /* eslint-disable  @typescript-eslint/no-var-requires */
 const Encore = require('@symfony/webpack-encore')
@@ -113,8 +116,20 @@ Encore
   })
 
   .addPlugin(new webpack.BannerPlugin({
-    banner: 'Pimcore\n\nThis source file is available under two different licenses:\n- Pimcore Open Core License (POCL)\n- Pimcore Commercial License (PCL)\nFull copyright and license information is available in\nLICENSE.md which is distributed with this source code.'
-    // raw: true
+    banner: `
+      /**
+       * Pimcore
+       *
+       * This source file is available under two different licenses:
+       * - Pimcore Open Core License (POCL)
+       * - Pimcore Commercial License (PCL)
+       * Full copyright and license information is available in
+       * LICENSE.md which is distributed with this source code.
+       *
+       *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+       *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+       */
+    `
   }))
 
 if (!Encore.isDevServer()) {
