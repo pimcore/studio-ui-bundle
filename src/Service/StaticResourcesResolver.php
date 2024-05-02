@@ -11,7 +11,7 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     PCL
  */
 
-namespace Pimcore\Bundle\StudioUiBundle\Service\Extension\Bundle;
+namespace Pimcore\Bundle\StudioUiBundle\Service;
 
 use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
@@ -22,11 +22,27 @@ use Pimcore\Extension\Bundle\PimcoreBundleManager;
 /**
  * @internal
  */
-final class BundleStaticResourcesResolver implements BundleStaticResourcesResolverInterface
+final class StaticResourcesResolver implements StaticResourcesResolverInterface
 {
     public function __construct(
         private readonly PimcoreBundleManager $bundleManager,
     ) {
+    }
+
+    /**
+     * @throws InvalidEntrypointsJsonException
+     */
+    public function getStudioCssFiles(): array
+    {
+        return $this->getFilesFromEntryPointsJson('css', [$this->getStudioUiBundle()]);
+    }
+
+    /**
+     * @throws InvalidEntrypointsJsonException
+     */
+    public function getStudioJsFiles(): array
+    {
+        return $this->getFilesFromEntryPointsJson('js', [$this->getStudioUiBundle()]);
     }
 
     /**
@@ -45,43 +61,46 @@ final class BundleStaticResourcesResolver implements BundleStaticResourcesResolv
         return $this->getFilesFromEntryPointsJson('js');
     }
 
+
     /**
      * @throws InvalidEntrypointsJsonException
      */
-    private function getFilesFromEntryPointsJson(string $type): array
+    private function getFilesFromEntryPointsJson(string $type, array $bundles = null): array
     {
+        $bundles = is_array($bundles) ? $bundles : $this->getStudioUiBundles();
+
         $files = [];
-        foreach ($this->getStudioUiBundles() as $bundle) {
-            $entryPoints = [];
+        foreach ($bundles as $bundle) {
+            $entryPointJsonContents = [];
 
             foreach ($bundle->getWebpackEntryPointsJsonLocations() as $entryPointsJsonLocation) {
-                $entryPoints[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
+                $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
 
             foreach ($bundle->getWebpackEntryPoints() as $entryPointName) {
-                $entryPoint = null;
 
-                foreach ($entryPoints as $entryPointJson) {
+                $entryPointFound = false;
+                foreach ($entryPointJsonContents as $entryPointJson) {
                     if (isset($entryPointJson['entrypoints'][$entryPointName])) {
+                        $entryPointFound = true;
                         $entryPoint = $entryPointJson['entrypoints'][$entryPointName];
-                        break;
+
+                        if (is_array($entryPoint[$type] ?? null)) {
+                            foreach ($entryPoint[$type] as $file) {
+                                $files[] = $file;
+                            }
+                        }
                     }
                 }
 
-                if ($entryPoint === null) {
+                if (!$entryPointFound) {
                     throw new InvalidEntrypointsJsonException(
                         sprintf(
-                            'Entry point "%s" in file "%s" not found',
+                            'Entry point "%s" not found in any of the entry points JSON files: %s',
                             $entryPointName,
-                            $bundle->getWebpackEntryPointsJsonLocations()
+                            implode(', ', $bundle->getWebpackEntryPointsJsonLocations())
                         )
                     );
-                }
-
-                if (is_array($entryPoint[$type] ?? null)) {
-                    foreach ($entryPoint[$type] as $file) {
-                        $files[$bundle::class][] = $file;
-                    }
                 }
             }
         }
@@ -134,16 +153,21 @@ final class BundleStaticResourcesResolver implements BundleStaticResourcesResolv
         $bundles = [];
 
         foreach ($this->bundleManager->getActiveBundles() as $bundle) {
+            if ($bundle instanceof PimcoreStudioUiBundle) {
+                continue;
+            }
             if($bundle instanceof PimcoreBundleStudioUiInterface) {
-                if ($bundle instanceof PimcoreStudioUiBundle) {
-                    // put studio UI bundle at the beginning
-                    array_unshift($bundles, $bundle);
-                } else {
-                    $bundles[] = $bundle;
-                }
+                $bundles[] = $bundle;
             }
         }
 
         return $bundles;
+    }
+
+    private function getStudioUiBundle(): PimcoreStudioUiBundle
+    {
+        /** @var PimcoreStudioUiBundle $bundle */
+        $bundle = $this->bundleManager->getActiveBundle(PimcoreStudioUiBundle::class);
+        return $bundle;
     }
 }
