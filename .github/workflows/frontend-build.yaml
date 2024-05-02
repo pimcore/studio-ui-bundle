@@ -65,10 +65,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Add license headers
-        working-directory: ./assets
-        run: npm run lint-license
-
       - name: Run code linting
         working-directory: ./assets
         run: npm run lint-fix
