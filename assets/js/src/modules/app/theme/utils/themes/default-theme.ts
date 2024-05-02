@@ -12,71 +12,108 @@ const staticTokens = {
 const defaultTheme = {
   token: {
     colorLinkHover: '#9254de',
-    controlOutline: 'rgba(0.4470588266849518, 0.18039216101169586, 0.8196078538894653, 0.10000000149011612)',
+    controlOutline: 'rgba(114, 46, 209, 0.1)',
     controlItemBgActive: '#f8eeff',
     colorTextTertiary: 'rgba(0, 0, 0, 0.6)',
-    colorFill: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.6000000238418579)',
-    colorFillQuaternary: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.44999998807907104)',
+    colorFill: 'rgba(215, 199, 236, 0.6)',
+    colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
     colorBgLayout: '#fcfcfc',
     colorPrimary: '#722ed1',
     fontSize: 12,
     fontSizeHeading1: 35,
     colorIconSecondary: '#4d4169',
-    colorFillNav: 'rgba(0.3019607961177826, 0.2549019753932953, 0.4117647111415863, 0.07999999821186066)',
+    colorFillNav: 'rgba(77, 65, 105, 0.08)',
     colorIconSidebar: '#22075e',
-    colorBorderActive: '#fa8c16',
+    colorBorderActive: '#00bab3',
     colorLogo: '#5520a6',
-    colorBorderTertiary: '#dfd7ea',
+    colorBorderTertiary: '#eae8ed',
     colorTextTreeElement: '#404655',
     colorIconTree: '#404655',
-    colorIconTreeUnpublished: 'rgba(0.250980406999588, 0.27450981736183167, 0.3333333432674408, 0.4000000059604645)',
+    colorIconTreeUnpublished: 'rgba(64, 70, 85, 0.4)',
+    paddingTabs: 8,
+    colorTextSidebarTitle: '#531dab',
     colorBgToolbar: '#f5f3fa',
+    colorFillActive: '#d7c7ec',
+    colorFillAdditional: '#f5f3fa',
+    colorBgSidebarOptions: '#f5f3fa',
+    colorBgSelectedTab: '#ffffff',
+    cardGutter: 2,
+    cardHeight: 40,
+    horizontalItemGutter: 32,
+    itemActiveColor: '#531dab',
+    itemColor: 'rgba(0, 0, 0, 0.65)',
+    itemHoverColor: 'rgba(215, 199, 236, 0.6)',
+    itemUnselectedIconColor: '#4d4169',
+    colorBorderContainer: '#eae8ed',
+    colorBorderActiveTab: '#00bab3',
+    colorFillAlter: 'rgba(215, 199, 236, 0.4)',
+    colorTextDescription: 'rgba(0, 0, 0, 0.6)',
+    colorBgUnselectedTab: 'rgba(215, 199, 236, 0.4)',
+    colorBgHoverUnselectedTab: 'rgba(215, 199, 236, 0.6)',
     ...staticTokens.token
   },
-
   components: {
     Pagination: {
       colorPrimary: '#531dab'
     },
-
     Tree: {
-      colorBorderTree: '#dfd7ea',
+      colorBorderTree: '#eae8ed',
       colorTextTree: '#404655',
       colorPrimaryHeading: '#531dab',
       colorTextTreeUnpublished: 'rgba(0, 0, 0, 0.25)'
     },
-
+    Progress: {
+      colorText: 'rgba(0, 0, 0, 0.65)',
+      circleTextColor: 'rgba(0, 0, 0, 0.25)'
+    },
+    Divider: {
+      colorSplit: '#d3adf7'
+    },
     Button: {
       defaultBorderColor: '#d3adf7',
       defaultColor: '#722ed1',
       defaultGhostBorderColor: '#d9d9d9',
-      textGhostColor: 'rgba(0, 0, 0, 0.8799999952316284)'
+      defaultGhostColor: '#722ed1',
+      textGhostColor: 'rgba(0, 0, 0, 0.88)'
     },
-
+    Breadcrumb: {
+      lastItemColor: '#531dab'
+    },
+    Menu: {
+      darkItemColor: 'rgba(255, 255, 255, 0.65)',
+      darkItemDisabledColor: 'rgba(255, 255, 255, 0.25)',
+      darkGroupTitleColor: 'rgba(255, 255, 255, 0.65)'
+    },
+    Collapse: {
+      headerBg: 'rgba(0, 0, 0, 0.04)'
+    },
+    Image: {
+      previewOperationColor: 'rgba(255, 255, 255, 0.65)',
+      previewOperationColorDisabled: 'rgba(255, 255, 255, 0.25)',
+      previewOperationHoverColor: 'rgba(255, 255, 255, 0.85)'
+    },
     Table: {
       cellPaddingBlockSM: 4,
       cellPaddingInlineSM: 4,
       footerBg: '#fafafa',
       headerBg: '#fafafa'
     },
-
     Tabs: {
       colorBgSelectedTab: '#ffffff',
-      inkBarColor: '#531dab',
-      itemColor: 'rgba(0, 0, 0, 0.6499999761581421)',
-      itemHoverColor: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.6000000238418579)',
+      itemColor: 'rgba(0, 0, 0, 0.65)',
+      itemHoverColor: 'rgba(215, 199, 236, 0.6)',
       itemUnselectedIconColor: '#4d4169',
-      colorBorderActiveTab: '#fa8c16',
-      colorBgUnselectedTab: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.44999998807907104)',
-      colorBgHoverUnselectedTab: 'rgba(0.9098039269447327, 0.8941176533699036, 0.9450980424880981, 0.6000000238418579)',
-      colorBorderContainer: '#dfd7ea',
-      paddingTabs: 8
+      colorBorderActiveTab: '#00bab3',
+      colorBgUnselectedTab: 'rgba(215, 199, 236, 0.4)',
+      colorBgHoverUnselectedTab: 'rgba(215, 199, 236, 0.6)',
+      colorBorderContainer: '#eae8ed'
     },
-
     Avatar: {
       colorUserIndicator: '#722ed1'
     },
-
+    Modal: {
+      colorTextSecondary: 'rgba(0, 0, 0, 0.6)'
+    },
     Example: {
       color: '#722ed1'
     }
@@ -86,15 +123,7 @@ const defaultTheme = {
 type tokens = typeof defaultTheme.token
 type components = typeof defaultTheme.components
 
-// workaround for invalid rgba values provided by ant theme buddy
-let jsonString = JSON.stringify(defaultTheme)
-const rgbaExtractorRegex = /rgba\((?<red>\d+(\.\d+)?),\s(?<green>\d+(\.\d+)?),\s(?<blue>\d+(\.\d+)?),\s(?<alpha>\d+(\.\d+)?)\)/g
-jsonString = jsonString.replace(rgbaExtractorRegex, (match, r, rFractional, g, gFractional, b, bFractional, a) => {
-  return `rgba(${r * 256}, ${g * 256}, ${b * 256}, ${a})`
-})
-const purifiedTheme = JSON.parse(jsonString)
-
-const PimcoreDefaultTheme: PimcoreThemeConfig = purifiedTheme
+const PimcoreDefaultTheme: PimcoreThemeConfig = defaultTheme
 
 export { PimcoreDefaultTheme }
 
