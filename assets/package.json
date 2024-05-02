@@ -13,7 +13,7 @@
     "build-storybook": "storybook build",
     "build-api-client": "npx @rtk-query/codegen-openapi ./assets/js/build/openapi-config.ts"
   },
-  "license": "POCL/PCL",
+  "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
@@ -40,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "eslint": "^8.56.0",
     "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-n": "^16.6.2",
@@ -67,7 +68,6 @@
     "@types/react-dom": "^18.2.22",
     "antd": "^5.13.3",
     "antd-style": "^3.6.1",
-    "eslint-plugin-header": "^3.1.1",
     "flexlayout-react": "^0.7.15",
     "i18next": "^23.8.2",
     "react": "^18.2.0",
