@@ -2,7 +2,8 @@ import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
 
 export interface lifeCycleEvents {
-  onInit: (config: { container: Container }) => void
+  onInit?: (config: { container: Container }) => void
+  onStartup?: () => void
 }
 
 export interface abstractPlugin extends lifeCycleEvents {
@@ -39,7 +40,18 @@ export class PluginSystem {
 
   initPlugins (): void {
     Object.values(this.registry).forEach(plugin => {
-      plugin.onInit({ container })
+      if (plugin.onInit !== undefined) {
+        plugin.onInit({ container })
+      }
+    })
+  }
+
+  startupPlugins (): void {
+    Object.values(this.registry).forEach(plugin => {
+      if (plugin.onStartup !== undefined) {
+        console.log('start up')
+        plugin.onStartup()
+      }
     })
   }
 }

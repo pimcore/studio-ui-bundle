@@ -1,4 +1,5 @@
 import { container } from '@Pimcore/app/depency-injection'
+import '@Pimcore/modules/asset/editor/folder'
 import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/image/image-container'
