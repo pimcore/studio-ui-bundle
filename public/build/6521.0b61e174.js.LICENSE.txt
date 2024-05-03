@@ -4,6 +4,16 @@
 	http://jedwatson.github.io/classnames
 */
 
+/*!
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ */
+
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
 /**
