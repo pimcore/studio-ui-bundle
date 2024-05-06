@@ -20,9 +20,17 @@ use Symfony\Component\Routing\Annotation\Route;
 final class DefaultController extends FrontendController
 {
     /**
-     * @Route("/admin/studio")
+     * @Route("/")
      */
     public function indexAction(): Response
+    {
+        return $this->render('@PimcoreStudioUi/default/index.html.twig');
+    }
+
+    /**
+     * @Route("/{any}", requirements={"any"=".+"})
+     */
+    public function catchAllAction(): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig');
     }
