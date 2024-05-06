@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "rootDir": "./js/",
+    "target": "ES2017",
+    "types": ["reflect-metadata", "@types/webpack-env"],
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "baseUrl": "./js/",
+    "paths": {
+      "@Pimcore/*": ["./src/*"],
+      "@test-utils/*": ["./test-utils/*"]
+    },
+    "strictNullChecks": true,
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationMap": true,
+    // "emitDeclarationOnly": true,
+    "outDir": "./dist/build/types",
+    "composite": true
+  },
+  
+  "include": [
+    "./js/**/*"
+  ],
+}

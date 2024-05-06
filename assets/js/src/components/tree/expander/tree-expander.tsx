@@ -1,3 +1,16 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
 import React, { type MouseEvent, useContext } from 'react'
 import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../tree'
@@ -46,13 +59,13 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
           {isExpanded
             ? (
               <Icon
-                name="chevron-up"
+                name="chevron-up-small"
                 options={ { width: 16, height: 16 } }
               />
               )
             : (
               <Icon
-                name="chevron-down"
+                name="chevron-down-small"
                 options={ { width: 16, height: 16 } }
               />
               )}
