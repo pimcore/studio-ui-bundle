@@ -8,6 +8,7 @@ The Studio UI Bundle provides a Backend UI for Pimcore. It is based on the [Reac
 
 ## How to open
 
+- Login via the classic backend UI
 - Access it under `{your-domain}/admin/studio`
 
 ## Development
