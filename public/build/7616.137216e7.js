@@ -1,0 +1,2 @@
+/*! For license information please see 7616.137216e7.js.LICENSE.txt */
+"use strict";(self.webpackChunkPimcore=self.webpackChunkPimcore||[]).push([[7616],{7616:(e,c,r)=>{r.r(c),r.d(c,{Pimcore:()=>p});var s=r(4901),i=r(3279),n=r(7051),p={container:s.nC,serviceIds:n.j,pluginSystem:i.p}}}]);
