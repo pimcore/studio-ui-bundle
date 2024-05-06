@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStyles } from 'antd-style'
-import { type IAdditionalLogins, LoginForm } from '@Pimcore/components/login-form/login-form'
+import { LoginForm } from '@Pimcore/components/login-form/login-form'
 
 const useStyle = createStyles(({ token, css }) => {
   return {
@@ -35,18 +35,6 @@ const useStyle = createStyles(({ token, css }) => {
 
 export default function LoginLayout (): React.JSX.Element {
   const { styles } = useStyle()
-  const additionalLogins: IAdditionalLogins[] = [
-    {
-      key: 'google',
-      name: 'Log in with Google',
-      link: '/admin/login/google'
-    },
-    {
-      key: 'github',
-      name: 'Log in with GitHub',
-      link: '/admin/login/github'
-    }
-  ]
 
   return (
     <div
@@ -57,7 +45,7 @@ export default function LoginLayout (): React.JSX.Element {
           alt={ 'Pimcore Logo' }
           src={ '/bundles/pimcorestudioui/img/logo.png' }
         />
-        <LoginForm additionalLogins={ additionalLogins } />
+        <LoginForm />
       </div>
     </div>
   )

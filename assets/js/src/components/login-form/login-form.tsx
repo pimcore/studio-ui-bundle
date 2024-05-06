@@ -33,7 +33,13 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
     try {
       e.preventDefault()
       const user = await login(formState).unwrap()
-      dispatch(setCredentials(user))
+      console.log(user)
+      dispatch(setCredentials({
+        user: {
+          username: user.username
+        },
+        token: user.token
+      }))
 
       console.log('worked', user)
     } catch (error) {

@@ -2,13 +2,15 @@ import { api } from '@Pimcore/app/api/pimcore'
 
 export interface User {
   username: string
-  // token: string
+  firstname?: string
+  lastname?: string
+  email?: string
 }
 
 export interface UserResponse {
   token: string
   lifetime: number
-  user: User
+  username: string
 }
 
 export interface LoginRequest {
@@ -25,13 +27,10 @@ export const authApi = api
           method: 'POST',
           body: credentials
         })
-      }),
-      protected: builder.mutation<{ message: string }, undefined>({
-        query: () => 'protected'
       })
     }),
     overrideExisting: false
   })
 
 export { authApi as api }
-export const { useLoginMutation, useProtectedMutation } = authApi
+export const { useLoginMutation } = authApi
