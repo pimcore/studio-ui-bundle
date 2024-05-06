@@ -59,6 +59,7 @@ export const InlineTextfield = ({
 
   const onBlurInput = (e): void => {
     setClassNameBasedOnValue()
+    e.target.value = ''
   }
 
   const onMouseOverDots = (e): void => {
