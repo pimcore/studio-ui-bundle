@@ -43,7 +43,8 @@ jobs:
 
             - name: "Add authentication for private pimcore packages"
               run: |
-                  composer config --global --auth http-basic.enterprise.repo.pimcore.com token ${{ secrets.COMPOSER_PIMCORE_REPO_TOKEN }}
+                  composer config repositories.private-packagist composer https://repo.pimcore.com/github-actions/
+                  composer config --global --auth http-basic.repo.pimcore.com github-actions ${{ secrets.COMPOSER_PIMCORE_REPO_PACKAGIST_TOKEN }}
 
             - name: "Install dependencies with Composer"
               uses: "ramsey/composer-install@v3"
