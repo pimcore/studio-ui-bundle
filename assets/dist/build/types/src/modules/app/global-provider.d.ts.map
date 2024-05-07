@@ -1,1 +1,0 @@
-{"version":3,"file":"global-provider.d.ts","sourceRoot":"","sources":["../../../../../../js/src/modules/app/global-provider.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;EAWE;AAKF,OAAO,KAAK,MAAM,OAAO,CAAA;AAGzB,MAAM,WAAW,mBAAmB;IAClC,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAA;CAC1B;AAED,eAAO,MAAM,cAAc,iBAAkB,mBAAmB,KAAG,SAAS,QAU3E,CAAA"}

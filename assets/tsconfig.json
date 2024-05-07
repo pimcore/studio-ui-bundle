@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "rootDir": "./js/",
-    "target": "ES2017",
+    "module": "ESNext",
+    "target": "es2017",
+    "moduleResolution": "Node",
     "types": ["reflect-metadata", "@types/webpack-env"],
-    "module": "ES2022",
-    "moduleResolution": "node",
     "baseUrl": "./js/",
     "paths": {
-      "@Pimcore/*": ["./src/*"],
+      "@Pimcore/*": ["./src/core/*"],
       "@test-utils/*": ["./test-utils/*"]
     },
     "strictNullChecks": true,
@@ -19,8 +19,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "declarationMap": true,
-    // "emitDeclarationOnly": true,
-    "outDir": "./dist/build/types",
+    "declarationDir": "./dist/build/types",
     "composite": true
   },
   
