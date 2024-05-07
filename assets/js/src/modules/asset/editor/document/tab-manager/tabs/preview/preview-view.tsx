@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStyle } from './preview-view.styles'
-import { PimcoreVideo } from '@Pimcore/components/pimcore-video/pimcore-video'
+import { PimcoreDocument } from '@Pimcore/components/pimcore-document/pimcore-document'
 
 interface PreviewViewProps {
   src: string
@@ -12,8 +12,8 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
 
   return (
     <div className={ styles.preview }>
-      <PimcoreVideo
-        sources={ [{ src }] }
+      <PimcoreDocument
+        src={ src }
       />
     </div>
   )

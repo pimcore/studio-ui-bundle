@@ -10,10 +10,10 @@ export const useStyle = createStyles(({ token, css }) => {
       width: 100%;
       object-fit: contain;
 
-      video {
+      iframe {
         display: flex;
-        max-height: 70%;
-        max-width: 70%;
+        height: 100%;
+        width: 100%;
       }
     `
   }

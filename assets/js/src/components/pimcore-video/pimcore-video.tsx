@@ -1,33 +1,61 @@
-import React, { useContext } from 'react'
-import { useStyle } from '@Pimcore/components/pimcore-video/pimcore-video.styles'
-import { ZoomContext } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/preview/preview-container'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface VideoSourceType {
-    src: string
-    type: string
+  src: string
+  type?: string
+}
+
+interface TrackType {
+  kind: string
+  label: string
+  src: string
+  srcLang: string
 }
 
 interface PimcoreVideoProps {
-    src: VideoSourceType[]
-    width?: number
-    height?: number
-    className?: string
+  sources: VideoSourceType[]
+  tracks?: TrackType[]
+  width?: number
+  height?: number
+  className?: string
 }
 
 export const PimcoreVideo = ({
-    src,
-    width,
-    height,
-    className
-  }: PimcoreVideoProps): React.JSX.Element => {
-  const { styles } = useStyle()
+  sources,
+  tracks,
+  width,
+  height,
+  className
+}: PimcoreVideoProps): React.JSX.Element => {
+  const { t } = useTranslation()
 
   return (
-      <video width={width} height={height} controls className={className}>
-        {src.map((source, index) => (
-            <source key={index} src={source.src} type={source.type}/>
-        ))}
-        Your browser does not support the video tag.
-      </video>
+    <video
+      className={ className }
+      controls
+      height={ height }
+      width={ width }
+    >
+      {sources.map((source, index) => (
+        <source
+          key={ index }
+          src={ source.src }
+          type={ source.type }
+        />
+      ))}
+
+      {tracks?.map((track, index) => (
+        <track
+          key={ index }
+          kind={ track.kind }
+          label={ track.label }
+          src={ track.src }
+          srcLang={ track.srcLang }
+        />
+      ))}
+
+      { t('asset.preview.no-video-support') }
+    </video>
   )
 }

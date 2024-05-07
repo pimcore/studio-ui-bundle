@@ -6,6 +6,7 @@ import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetContext } from '../asset-context'
 import { VideoContainer } from './video/video-container'
+import { DocumentContainer } from '@Pimcore/modules/asset/editor/document/document-container'
 
 export interface EditorContainerProps {
   id: number
@@ -46,6 +47,10 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
       {!isError && !isLoading && asset !== undefined && asset.type === 'video' && (
         <VideoContainer />
+      )}
+
+      {!isError && !isLoading && asset !== undefined && asset.type === 'document' && (
+        <DocumentContainer />
       )}
 
       {!isError && !isLoading && asset !== undefined && asset.type === 'folder' && (
