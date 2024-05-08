@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { type User } from '@Pimcore/components/login-form/services/auth'
 import { type RootState } from '@Pimcore/components/login-form/store'
+import { injectSliceWithState } from '@Pimcore/app/store'
 
 interface AuthState {
   user: User | null
@@ -28,6 +29,8 @@ const slice = createSlice({
     }
   }
 })
+
+injectSliceWithState(slice)
 
 export const { setCredentials } = slice.actions
 

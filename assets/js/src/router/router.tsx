@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import DefaultLayout from '@Pimcore/router/layouts/default'
-import LoginLayout from '@Pimcore/router/layouts/login'
+import LoginLayout from '@Pimcore/router/layouts/login/login'
 
 export const router = createBrowserRouter([
   {

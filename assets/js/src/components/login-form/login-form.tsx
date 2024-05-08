@@ -4,7 +4,7 @@ import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icon
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
 import { type LoginRequest, useLoginMutation } from '@Pimcore/components/login-form/services/auth'
 import { useDispatch } from 'react-redux'
-import { setCredentials } from '@Pimcore/app/auth/authSlice'
+import { setCredentials } from '@Pimcore/app/auth/auth-slice'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export interface IAdditionalLogins {
@@ -33,15 +33,12 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
     try {
       e.preventDefault()
       const user = await login(formState).unwrap()
-      console.log(user)
       dispatch(setCredentials({
         user: {
           username: user.username
         },
         token: user.token
       }))
-
-      console.log('worked', user)
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { authReducer } from '@Pimcore/app/auth/authSlice';
+import { authReducer } from '@Pimcore/app/auth/auth-slice';
 import {api} from "@Pimcore/components/login-form/services/auth";
 
 export const store = configureStore({
