@@ -15,22 +15,14 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+
 
 final class DefaultController extends FrontendController
 {
-    /**
-     * @Route("/")
-     */
+    #[Route('/')]
+    #[Route('/login')]
     public function indexAction(): Response
-    {
-        return $this->render('@PimcoreStudioUi/default/index.html.twig');
-    }
-
-    /**
-     * @Route("/{any}", requirements={"any"=".+"})
-     */
-    public function catchAllAction(): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig');
     }
