@@ -14,7 +14,7 @@ export default config
 
 export const _default = {
   args: {
-    src: [{src:"http://localhost/Sample Content/Videos/Volkswagen-Van.mp4"}],
+    src: [{ src: 'http://localhost/Sample Content/Videos/Volkswagen-Van.mp4' }],
     width: 840,
     className: ''
   }

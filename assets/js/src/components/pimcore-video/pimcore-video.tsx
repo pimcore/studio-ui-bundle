@@ -31,6 +31,7 @@ export const PimcoreVideo = ({
   const { t } = useTranslation()
 
   return (
+    // eslint-disable-next-line jsx-a11y/media-has-caption
     <video
       className={ className }
       controls

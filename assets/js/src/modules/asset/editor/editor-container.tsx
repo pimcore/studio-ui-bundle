@@ -7,6 +7,7 @@ import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-a
 import { AssetContext } from '../asset-context'
 import { VideoContainer } from './video/video-container'
 import { DocumentContainer } from '@Pimcore/modules/asset/editor/document/document-container'
+import { TextContainer } from '@Pimcore/modules/asset/editor/text/text-container'
 
 export interface EditorContainerProps {
   id: number
@@ -51,6 +52,10 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
       {!isError && !isLoading && asset !== undefined && asset.type === 'document' && (
         <DocumentContainer />
+      )}
+
+      {!isError && !isLoading && asset !== undefined && asset.type === 'text' && (
+        <TextContainer />
       )}
 
       {!isError && !isLoading && asset !== undefined && asset.type === 'folder' && (

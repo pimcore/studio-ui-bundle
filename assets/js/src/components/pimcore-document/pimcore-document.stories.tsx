@@ -14,6 +14,6 @@ export default config
 
 export const _default = {
   args: {
-    src: 'http://localhost/Sample Content/Documents/classic-car-2016-3857.pdf',
+    src: 'http://localhost/Sample Content/Documents/classic-car-2016-3857.pdf'
   }
 }
