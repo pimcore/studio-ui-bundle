@@ -10,7 +10,7 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen';
+import { type Asset } from '../../../../../../../../modules/asset/asset-api-slice.gen';
 import { type CellContext } from '@tanstack/react-table';
 import React from 'react';
 interface PreviewContainerProps {

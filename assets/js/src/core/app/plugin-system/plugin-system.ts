@@ -13,10 +13,11 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
+import { moduleSystem } from '../module-system/module-system'
 
 export interface lifeCycleEvents {
   onInit?: (config: { container: Container }) => void
-  onStartup?: () => void
+  onStartup?: (config: { moduleSystem: typeof moduleSystem }) => void
 }
 
 export interface abstractPlugin extends lifeCycleEvents {
@@ -44,7 +45,7 @@ export class PluginSystem {
       promises.push(promise)
     })
 
-    await Promise.all(promises)
+    await Promise.allSettled(promises)
   }
 
   registerPlugin (plugin: abstractPlugin): void {
@@ -62,8 +63,7 @@ export class PluginSystem {
   startupPlugins (): void {
     Object.values(this.registry).forEach(plugin => {
       if (plugin.onStartup !== undefined) {
-        console.log('start up')
-        plugin.onStartup()
+        plugin.onStartup({ moduleSystem })
       }
     })
   }

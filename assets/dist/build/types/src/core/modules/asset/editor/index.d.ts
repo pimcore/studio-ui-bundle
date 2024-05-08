@@ -10,5 +10,5 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import '@Pimcore/modules/asset/editor/folder';
+import '../../../modules/asset/editor/folder';
 //# sourceMappingURL=index.d.ts.map

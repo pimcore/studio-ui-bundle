@@ -13,7 +13,7 @@
 import { container } from '../depency-injection';
 import { pluginSystem } from '../plugin-system/plugin-system';
 import { serviceIds } from '../config/services';
-import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager';
+import { useWidgetManager } from '../../modules/widget-manager/hooks/use-widget-manager';
 export interface sdk {
     container: typeof container;
     serviceIds: typeof serviceIds;

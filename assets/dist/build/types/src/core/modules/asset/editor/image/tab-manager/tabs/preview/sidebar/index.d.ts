@@ -10,6 +10,6 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { AssetEditorSidebarManager } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/preview/sidebar/sidebar-manager';
+import { AssetEditorSidebarManager } from '../../../../../../../../modules/asset/editor/image/tab-manager/tabs/preview/sidebar/sidebar-manager';
 export declare const sidebarManager: AssetEditorSidebarManager;
 //# sourceMappingURL=index.d.ts.map

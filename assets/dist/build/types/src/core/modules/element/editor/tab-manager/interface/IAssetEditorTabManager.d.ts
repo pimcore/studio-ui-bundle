@@ -10,8 +10,8 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { type IAssetEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/types/IAssetEditorTab';
-import { type IEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTabManager';
+import { type IAssetEditorTab } from '../../../../../modules/element/editor/tab-manager/interface/types/IAssetEditorTab';
+import { type IEditorTabManager } from '../../../../../modules/element/editor/tab-manager/interface/IEditorTabManager';
 export interface IAssetEditorTabManager extends IEditorTabManager {
     tabs: IAssetEditorTab[];
     getTabs: () => IAssetEditorTab[];

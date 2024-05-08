@@ -67,7 +67,7 @@ const icons = {
 }
 
 export interface IconProps {
-  name: string
+  name: keyof typeof icons | string
   options?: React.SVGProps<SVGSVGElement>
   className?: string
 }

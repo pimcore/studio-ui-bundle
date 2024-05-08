@@ -14,7 +14,7 @@
 import '@Pimcore/bootstrap'
 import { runApp } from './modules/app/utils/app-runner'
 import { pluginSystem } from './app/plugin-system/plugin-system'
-import { type Pimcore } from './app/sdk'
+import { type Pimcore } from './app/public-api'
 import { moduleSystem } from './app/module-system/module-system'
 
 if (module.hot !== undefined) {
@@ -27,11 +27,11 @@ declare global {
   }
 }
 
-window.Pimcore = (await import('./app/sdk')).Pimcore
+window.Pimcore = (await import('./app/public-api')).Pimcore
 
 await pluginSystem.loadPlugins()
 pluginSystem.initPlugins()
-moduleSystem.initModules()
 pluginSystem.startupPlugins()
+moduleSystem.initModules()
 
 runApp()

@@ -22,7 +22,6 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 
 moduleSystem.registerModule({
   onInit: () => {
-    console.log('module')
     const folderEditorTabManager = container.get<FolderTabManager>(serviceIds['Asset/Editor/FolderTabManager'])
 
     folderEditorTabManager.register({

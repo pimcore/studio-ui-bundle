@@ -10,8 +10,8 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node';
-import { type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen';
+import { type TreeNodeProps } from '../../../../components/tree/node/tree-node';
+import { type GetAssetsApiResponse } from '../../../../modules/asset/asset-api-slice.gen';
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { type Dispatch, type SetStateAction } from 'react';
 interface AssetTreeAdditionalTreeProps {

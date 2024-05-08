@@ -10,8 +10,8 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import '@Pimcore/bootstrap';
-import { type Pimcore } from './app/sdk';
+import './bootstrap';
+import { type Pimcore } from './app/public-api';
 declare global {
     interface Window {
         Pimcore: typeof Pimcore;

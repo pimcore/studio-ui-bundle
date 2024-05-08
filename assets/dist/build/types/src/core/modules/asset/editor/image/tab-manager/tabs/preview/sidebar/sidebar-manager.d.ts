@@ -10,7 +10,7 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { SidebarManager } from '@Pimcore/modules/element/sidebar/sidebar-manager';
+import { SidebarManager } from '../../../../../../../../modules/element/sidebar/sidebar-manager';
 export declare class AssetEditorSidebarManager extends SidebarManager {
 }
 //# sourceMappingURL=sidebar-manager.d.ts.map

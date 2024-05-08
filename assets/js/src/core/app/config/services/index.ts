@@ -16,10 +16,10 @@ import { FolderTabManager } from '@Pimcore/modules/asset/editor/folder/tab-manag
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 
 export const serviceIds = {
-  widgetManager: Symbol('widgetManagerService'),
+  widgetManager: 'WidgetManagerService',
 
   // Asset tab managers
-  'Asset/Editor/FolderTabManager': Symbol('Asset/Editor/FolderTabManager')
+  'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager'
 }
 
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()

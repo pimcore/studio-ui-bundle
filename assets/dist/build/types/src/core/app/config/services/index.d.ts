@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 export declare const serviceIds: {
-    widgetManager: symbol;
-    'Asset/Editor/FolderTabManager': symbol;
+    widgetManager: string;
+    'Asset/Editor/FolderTabManager': string;
 };
 //# sourceMappingURL=index.d.ts.map

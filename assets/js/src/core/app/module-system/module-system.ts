@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-interface AbstractModule {
+export interface AbstractModule {
   onInit: () => void
 }
 

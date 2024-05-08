@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 import React from 'react';
-import { type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen';
+import { type GetAssetsApiResponse } from '../../../../../../../modules/asset/asset-api-slice.gen';
 interface FlexContainerProps {
     assets: GetAssetsApiResponse;
 }

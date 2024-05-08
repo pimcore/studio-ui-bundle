@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 import React from 'react';
-import { Modal, type IModalProps } from '@Pimcore/components/modal/modal';
+import { Modal, type IModalProps } from '../../../components/modal/modal';
 interface useModalReturnType {
     renderModal: (props: IModalProps) => React.JSX.Element;
     showModal: () => void;

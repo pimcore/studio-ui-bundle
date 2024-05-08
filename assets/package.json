@@ -1,11 +1,12 @@
 {
   "name": "pimcore-studio-ui",
+  "version": "0.0.1",
   "scripts": {
     "dev-server": "encore dev-server --port 3030",
     "dev": "encore dev",
     "watch": "encore dev --watch",
-    "build": "encore production --progress",
-    "build-sdk": "encore production --config webpack.sdk.config",
+    "build": "encore production --progress && tsc-alias",
+    "build-sdk": "encore production --config webpack.sdk.config && tsc-alias",
     "build-vendor": "encore production --config webpack.vendor.config",
     "build-storybook": "storybook build",
     "build-api-client": "npx @rtk-query/codegen-openapi ./js/build/api/openapi-config.ts",
@@ -16,6 +17,9 @@
   },
   "types": "./dist/build/types/src/sdk/main.d.ts",
   "main": "./dist/sdk/main.js",
+  "files": [
+    "dist"
+  ],
   "license": "SEE LICENSE IN LICENSE.md",
   "private": true,
   "devDependencies": {
@@ -59,6 +63,7 @@
     "ts-jest": "^29.1.2",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.8",
     "typescript": "^5.3.3",
     "webpack-bundle-analyzer": "^4.10.1",
     "webpack-notifier": "^1.15.0",
@@ -69,15 +74,17 @@
     "@tanstack/react-table": "^8.12.0",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.22",
-    "antd": "^5.13.3",
-    "antd-style": "^3.6.1",
     "flexlayout-react": "^0.7.15",
     "i18next": "^23.8.2",
-    "inversify": "^6.0.2",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
     "react-i18next": "^14.0.5",
-    "react-redux": "^9.1.0",
+    "react-redux": "^9.1.0"
+  },
+  "peerDependencies": {
+    "antd": "^5.17.0",
+    "antd-style": "^3.6.2",
+    "inversify": "^6.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "reflect-metadata": "^0.2.2"
   }
 }

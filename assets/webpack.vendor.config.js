@@ -26,7 +26,7 @@ Encore
   .setPublicPath('/bundles/pimcorestudioui/vendor')
   .setManifestKeyPrefix('bundles/pimcorestudioui/vendor')
 
-    .addEntry('vendor', ['react', 'react-dom', 'antd', 'antd-style', 'reflect-metadata'])
+    .addEntry('vendor', ['react', 'react-dom', 'antd', 'antd-style', 'reflect-metadata', 'inversify'])
 
     .disableSingleRuntimeChunk()
 

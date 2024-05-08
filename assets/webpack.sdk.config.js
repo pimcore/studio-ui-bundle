@@ -41,7 +41,7 @@ Encore
 // .enableStimulusBridge('./assets/controllers.json')
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-  .splitEntryChunks()
+  // .splitEntryChunks()
 
   // will require an extra script tag for runtime.js
   // but, you probably want this, unless you're building a single-page app
@@ -102,7 +102,7 @@ Encore
   })
 
   .addAliases({
-    '@Pimcore': path.resolve(__dirname, 'js', 'src'),
+    '@Pimcore': path.resolve(__dirname, 'js', 'src', 'core'),
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
   })
 
@@ -143,5 +143,17 @@ config.module.rules.forEach(rule => {
     rule.exclude = /\.inline\.svg$/
   }
 })
+
+config = {
+  ...config,
+
+  output: {
+    ...config.output,
+    library: 'pimcore_studio_ui_sdk',
+    libraryTarget: 'umd',
+    globalObject: 'this',
+    umdNamedDefine: true
+  }
+}
 
 module.exports = config

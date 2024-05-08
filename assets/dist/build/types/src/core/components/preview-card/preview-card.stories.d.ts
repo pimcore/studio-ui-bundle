@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 import { type Meta } from '@storybook/react';
-import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu';
+import { type DropdownMenuItemProps } from '../../components/dropdown-menu/dropdown-menu';
 declare const config: Meta;
 export default config;
 export declare const _default: {

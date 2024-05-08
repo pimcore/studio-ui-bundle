@@ -10,7 +10,7 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager';
+import { TabManager } from '../../../../../modules/element/editor/tab-manager/tab-manager';
 export declare class FolderTabManager extends TabManager {
     constructor();
 }

@@ -10,7 +10,7 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { type GlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice';
+import { type GlobalContext } from '../../../modules/app/global-context/global-context-slice';
 export interface GlobalAssetContext extends GlobalContext {
     type: 'asset';
     config: {

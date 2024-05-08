@@ -10,8 +10,8 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import { type IEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTabManager';
-import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab';
+import { type IEditorTabManager } from '../../../../modules/element/editor/tab-manager/interface/IEditorTabManager';
+import { type IEditorTab } from '../../../../modules/element/editor/tab-manager/interface/IEditorTab';
 export declare abstract class TabManager implements IEditorTabManager {
     type: string;
     tabs: IEditorTab[];

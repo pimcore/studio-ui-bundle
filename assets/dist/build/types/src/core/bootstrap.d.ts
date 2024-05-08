@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 import 'reflect-metadata';
-import '@Pimcore/app/module-system/module-system';
-import '@Pimcore/app/config/services';
-import '@Pimcore/app/i18n';
-import '@Pimcore/modules/example';
-import '@Pimcore/modules/asset';
+import './app/module-system/module-system';
+import './app/config/services';
+import './app/i18n';
+import './modules/example';
+import './modules/asset';
 import 'flexlayout-react/style/light.css';
 import '../../../css/globals.css';
 //# sourceMappingURL=bootstrap.d.ts.map

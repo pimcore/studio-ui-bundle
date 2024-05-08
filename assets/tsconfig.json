@@ -19,7 +19,7 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "./dist/build/types",
+    "outDir": "./dist/build/types",
     "composite": true
   },
   

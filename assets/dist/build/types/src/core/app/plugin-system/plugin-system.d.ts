@@ -11,11 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 import { type Container } from 'inversify';
+import { moduleSystem } from '../module-system/module-system';
 export interface lifeCycleEvents {
     onInit?: (config: {
         container: Container;
     }) => void;
-    onStartup?: () => void;
+    onStartup?: (config: {
+        moduleSystem: typeof moduleSystem;
+    }) => void;
 }
 export interface abstractPlugin extends lifeCycleEvents {
     name: string;
