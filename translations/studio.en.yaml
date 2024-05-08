@@ -49,3 +49,9 @@ aria.asset.image.editor.zoom.reset: Reset zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom in
 aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
+login-form.remember-me: Remember me
+login-form.forgot-password: Forgot password
+login-form.login: Login
+login-form-additional-logins.or: or
+aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
+aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox

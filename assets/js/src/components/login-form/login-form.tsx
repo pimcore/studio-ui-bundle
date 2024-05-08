@@ -6,6 +6,7 @@ import { type LoginRequest, useLoginMutation } from '@Pimcore/components/login-f
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '@Pimcore/app/auth/auth-slice'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useTranslation } from 'react-i18next'
 
 export interface IAdditionalLogins {
   key: string
@@ -21,6 +22,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
   const dispatch = useDispatch()
   const { styles } = useStyle()
   const [messageApi, contextHolder] = useMessage()
+  const { t } = useTranslation()
 
   const [formState, setFormState] = React.useState<LoginRequest>({
     username: '',
@@ -63,10 +65,12 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
             placeholder="Password"
           />
           <div className={ 'flex-space' }>
-            <Checkbox>
-              Remember me
+            <Checkbox
+              aria-label={ t('aria.login-form-additional-logins.remember-me-checkbox') }
+            >
+              {t('login-form.remember-me')}
             </Checkbox>
-            <Button type={ 'link' }>Forgot password</Button>
+            <Button type={ 'link' }>{t('login-form.forgot-password')}</Button>
           </div>
 
           <Button
@@ -74,16 +78,17 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
             loading={ isLoading }
             type="primary"
           >
-            Log in
+            {t('login-form.login')}
           </Button>
         </form>
 
         {Array.isArray(additionalLogins) && (
           <div className={ 'login__additional-logins' }>
-            <p>or</p>
+            <p>{t('login-form-additional-logins.or')}</p>
 
             {additionalLogins?.map((login) => (
               <Button
+                aria-label={ `${t('aria.login-form-additional-logins.additional-login-provider')} ${login.name}` }
                 href={ login.link }
                 key={ login.key }
                 type={ 'primary' }
