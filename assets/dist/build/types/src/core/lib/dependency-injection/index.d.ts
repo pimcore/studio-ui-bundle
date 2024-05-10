@@ -23,9 +23,9 @@ interface DiInstance {
     ContainerProvider: React.FC<{
         children: React.ReactNode;
     }>;
-    useInjection: <T>(identifier: symbol) => T;
-    useOptionalInjection: <T>(identifier: symbol) => T | null;
-    useMultiInjection: <T>(identifier: symbol) => T[];
+    useInjection: <T>(identifier: string) => T;
+    useOptionalInjection: <T>(identifier: string) => T | null;
+    useMultiInjection: <T>(identifier: string) => T[];
 }
 export declare function createDiInstance(): DiInstance;
 export {};

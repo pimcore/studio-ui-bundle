@@ -11,10 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { container } from '@Pimcore/app/depency-injection'
 import { injectable } from 'inversify'
-
-export const serviceName = Symbol.for('asset/editor/services/component-registry')
 
 interface ComponentDefinition {
   name: string
@@ -47,5 +44,3 @@ export class ComponentRegistryService implements ComponentRegistry {
     return this.registry
   }
 }
-
-container.bind(serviceName).to(ComponentRegistryService).inSingletonScope()

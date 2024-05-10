@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev-server": "encore dev-server --port 3030",
-    "dev": "encore dev",
+    "dev": "encore dev && npm run dev-sdk",
+    "dev-sdk": "encore dev --config webpack.sdk.config && tsc-alias",
     "watch": "encore dev --watch",
-    "build": "encore production --progress && tsc-alias",
+    "build": "encore production && npm run build-sdk",
     "build-sdk": "encore production --config webpack.sdk.config && tsc-alias",
     "build-vendor": "encore production --config webpack.vendor.config",
     "build-storybook": "storybook build",

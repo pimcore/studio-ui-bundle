@@ -12,21 +12,26 @@
 */
 
 // App
-export type * from '@Pimcore/app/module-system/module-system'
-export type * from '@Pimcore/app/plugin-system/plugin-system'
-export * from '@Pimcore/app/config/services'
+export { ModuleSystem, type AbstractModule } from '@Pimcore/app/module-system/module-system'
+export { PluginSystem, type abstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
+export { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 
 // Components
-export * from '@Pimcore/components/background/background'
-export * from '@Pimcore/components/dropdown-menu/dropdown-menu'
-export * from '@Pimcore/components/pimcore-image/pimcore-image'
+export { Background } from '@Pimcore/components/background/background'
+export { type IconProps as DropdownIconProps, DropdownMenu, type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
+export { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+export { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 
 // Modules
-export * from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-export * from '@Pimcore/modules/widget-manager/services/widget-registry'
+export { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+export { type Widget, WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 
-export * from '@Pimcore/modules/asset/asset-api-slice.gen'
-export * from '@Pimcore/modules/asset/editor/folder/tab-manager/folder-tab-manager'
-export * from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+export type * from '@Pimcore/modules/asset/asset-api-slice.gen'
+export { useGetAssetByIdQuery, useGetAssetsQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+export { FolderTabManager } from '@Pimcore/modules/asset/editor/folder/tab-manager/folder-tab-manager'
+export { AssetContext, AssetProvider, type IAssetContext, type IAssetProviderProps } from '@Pimcore/modules/asset/asset-provider'
+export type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 
 export const Pimcore = window.Pimcore
+export const container = window.Pimcore.container
+export const serviceIds = window.Pimcore.serviceIds

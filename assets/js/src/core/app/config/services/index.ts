@@ -13,16 +13,28 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { FolderTabManager } from '@Pimcore/modules/asset/editor/folder/tab-manager/folder-tab-manager'
+import { ComponentRegistryService } from '@Pimcore/modules/asset/editor/services/component-registry'
+import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 
 export const serviceIds = {
+  // Widget manager
   widgetManager: 'WidgetManagerService',
 
-  // Asset tab managers
-  'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager'
+  // Assets
+  'Asset/Editor/ComponentRegistry': 'Asset/Editor/ComponentRegistry',
+  'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
+
+  // icon library
+  iconLibrary: 'IconLibrary'
 }
 
+// Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 
-// Asset tab managers
+// Assets
+container.bind(serviceIds['Asset/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+
+// Icon library
+container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()

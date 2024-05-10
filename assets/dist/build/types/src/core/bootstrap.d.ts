@@ -14,6 +14,7 @@ import 'reflect-metadata';
 import './app/module-system/module-system';
 import './app/config/services';
 import './app/i18n';
+import './modules/icon-library';
 import './modules/example';
 import './modules/asset';
 import 'flexlayout-react/style/light.css';

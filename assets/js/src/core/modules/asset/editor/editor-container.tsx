@@ -17,7 +17,8 @@ import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '../asset-provider'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type ComponentRegistry, serviceName } from '@Pimcore/modules/asset/editor/services/component-registry'
+import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
+import { serviceIds } from '@Pimcore/app/config/services'
 
 export interface EditorContainerProps {
   id: number
@@ -28,7 +29,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { isLoading, isError, asset } = useAssetDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
-  const componentRegistryService = useInjection<ComponentRegistry>(serviceName)
+  const componentRegistryService = useInjection<ComponentRegistry>(serviceIds['Asset/Editor/ComponentRegistry'])
 
   useEffect(() => {
     return () => {

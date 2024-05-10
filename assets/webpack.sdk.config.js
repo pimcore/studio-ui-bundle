@@ -153,7 +153,7 @@ config = {
     libraryTarget: 'umd',
     globalObject: 'this',
     umdNamedDefine: true
-  }
+  },
 }
 
 module.exports = config

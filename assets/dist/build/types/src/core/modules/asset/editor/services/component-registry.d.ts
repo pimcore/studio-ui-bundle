@@ -11,7 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 /// <reference types="react" />
-export declare const serviceName: unique symbol;
 interface ComponentDefinition {
     name: string;
     component: React.ComponentType;

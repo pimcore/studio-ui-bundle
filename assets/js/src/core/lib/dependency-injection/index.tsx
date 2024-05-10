@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, createContext } from 'react'
+import React, { createContext } from 'react'
 import { Container } from 'inversify'
 
 export interface IReadonlyContainer {
@@ -24,9 +24,9 @@ interface DiInstance {
   readonlyContainer: IReadonlyContainer
   ContainerContext: React.Context<Container>
   ContainerProvider: React.FC<{ children: React.ReactNode }>
-  useInjection: <T>(identifier: symbol) => T
-  useOptionalInjection: <T>(identifier: symbol) => T | null
-  useMultiInjection: <T>(identifier: symbol) => T[]
+  useInjection: <T>(identifier: string) => T
+  useOptionalInjection: <T>(identifier: string) => T | null
+  useMultiInjection: <T>(identifier: string) => T[]
 };
 
 export function createDiInstance (): DiInstance {
@@ -41,18 +41,18 @@ export function createDiInstance (): DiInstance {
     return <ContainerContext.Provider value={ container }>{children}</ContainerContext.Provider>
   }
 
-  const useInjection = function<T>(identifier: symbol): T {
-    const container = useContext(ContainerContext)
+  const useInjection = function<T>(identifier: string): T {
+    const container = window.Pimcore.container
     return container.get<T>(identifier)
   }
 
-  const useOptionalInjection = function<T>(identifier: symbol): T | null {
-    const container = useContext(ContainerContext)
+  const useOptionalInjection = function<T>(identifier: string): T | null {
+    const container = window.Pimcore.container
     return container.isBound(identifier) ? container.get<T>(identifier) : null
   }
 
-  const useMultiInjection = function<T>(identifier: symbol): T[] {
-    const container = useContext(ContainerContext)
+  const useMultiInjection = function<T>(identifier: string): T[] {
+    const container = window.Pimcore.container
     return container.getAll<T>(identifier)
   }
 

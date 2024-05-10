@@ -10,10 +10,5 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-export declare const serviceIds: {
-    widgetManager: string;
-    'Asset/Editor/ComponentRegistry': string;
-    'Asset/Editor/FolderTabManager': string;
-    iconLibrary: string;
-};
+export {};
 //# sourceMappingURL=index.d.ts.map
