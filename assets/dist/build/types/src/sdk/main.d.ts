@@ -10,8 +10,8 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-export { ModuleSystem, type AbstractModule } from '../core/app/module-system/module-system';
-export { PluginSystem, type abstractPlugin } from '../core/app/plugin-system/plugin-system';
+export { type ModuleSystem, type AbstractModule } from '../core/app/module-system/module-system';
+export { type PluginSystem, type abstractPlugin } from '../core/app/plugin-system/plugin-system';
 export { IconLibrary } from '../core/modules/icon-library/services/icon-library';
 export { Background } from '../core/components/background/background';
 export { type IconProps as DropdownIconProps, DropdownMenu, type DropdownMenuItemProps } from '../core/components/dropdown-menu/dropdown-menu';

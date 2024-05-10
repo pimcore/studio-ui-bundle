@@ -9,6 +9,7 @@
     "build": "encore production && npm run build-sdk",
     "build-sdk": "encore production --config webpack.sdk.config && tsc-alias",
     "build-vendor": "encore production --config webpack.vendor.config",
+    "build-core-dll": "encore production --config webpack.core-dll.config",
     "build-storybook": "storybook build",
     "build-api-client": "npx @rtk-query/codegen-openapi ./js/build/api/openapi-config.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./js",

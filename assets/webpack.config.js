@@ -122,6 +122,13 @@ Encore
     }),
   )
 
+  .addPlugin(
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
+    }),
+  )
+
   .addPlugin(new webpack.BannerPlugin({
     banner: `
       /**

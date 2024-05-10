@@ -15,7 +15,6 @@
 const Encore = require('@symfony/webpack-encore')
 const path = require('path')
 const webpack = require('webpack')
-const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
@@ -109,7 +108,20 @@ Encore
   .addPlugin(
     new webpack.DllReferencePlugin({
       context: __dirname,
-      manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
+      manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json'),
+    }),
+  )
+
+  .addPlugin(
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json'),
+    }),
+  )
+
+  .addPlugin(
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
     }),
   )
 
@@ -129,6 +141,8 @@ Encore
        */
     `
   }))
+
+  .configureSplitChunks
 
 if (!Encore.isDevServer() && !Encore.isProduction()) {
   Encore

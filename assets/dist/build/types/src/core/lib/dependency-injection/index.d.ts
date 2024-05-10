@@ -12,13 +12,8 @@
 */
 import React from 'react';
 import { Container } from 'inversify';
-export interface IReadonlyContainer {
-    get: Container['get'];
-    getAll: Container['getAll'];
-}
 interface DiInstance {
     container: Container;
-    readonlyContainer: IReadonlyContainer;
     ContainerContext: React.Context<Container>;
     ContainerProvider: React.FC<{
         children: React.ReactNode;

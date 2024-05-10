@@ -12,8 +12,8 @@
 */
 
 // App
-export { ModuleSystem, type AbstractModule } from '@Pimcore/app/module-system/module-system'
-export { PluginSystem, type abstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
+export { type ModuleSystem, type AbstractModule } from '@Pimcore/app/module-system/module-system'
+export { type PluginSystem, type abstractPlugin } from '@Pimcore/app/plugin-system/plugin-system'
 export { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 
 // Components

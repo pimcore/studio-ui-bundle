@@ -32,12 +32,13 @@ class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBund
     {
         return [
             $this->getPath() . '/public/build/entrypoints.json',
-            $this->getPath() . '/public/vendor/entrypoints.json'
+            $this->getPath() . '/public/vendor/entrypoints.json',
+            $this->getPath() . '/public/core-dll/entrypoints.json'
         ];
     }
 
     public function getWebpackEntryPoints(): array
     {
-        return ['vendor', 'main'];
+        return ['vendor', 'core-dll', 'main'];
     }
 }
