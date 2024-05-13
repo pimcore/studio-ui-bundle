@@ -18,3 +18,7 @@ export function onKeyEnterExecuteClick (e: any): void {
     e.currentTarget.click()
   }
 }
+
+export function isSet (par: any): boolean {
+  return par !== null && par !== undefined
+}

@@ -43,6 +43,7 @@ import exclamationCircleFilled from '@Pimcore/assets/icons/exclamation-circle-fi
 import dotsHorizontal from '@Pimcore/assets/icons/dots-horizontal.inline.svg'
 import target from '@Pimcore/assets/icons/target.inline.svg'
 import infoCircleOutlined from '@Pimcore/assets/icons/info-circle-outlined.inline.svg'
+import leftOutlined from '@Pimcore/assets/icons/left-outlined.inline.svg'
 import rightOutlined from '@Pimcore/assets/icons/right-outlined.inline.svg'
 import richEdit from '@Pimcore/assets/icons/rich-edit.inline.svg'
 import download02 from '@Pimcore/assets/icons/download-02.inline.svg'
@@ -62,6 +63,7 @@ import fileX03 from '@Pimcore/assets/icons/file-x-03.inline.svg'
 import presentationChart01 from '@Pimcore/assets/icons/presentation-chart-01.inline.svg'
 import videoRecorder from '@Pimcore/assets/icons/video-recorder.inline.svg'
 import image01 from '@Pimcore/assets/icons/image-01.inline.svg'
+import ellipsisOutlined from '@Pimcore/assets/icons/ellipsis-outlined.inline.svg'
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
@@ -183,6 +185,10 @@ moduleSystem.registerModule({
       component: infoCircleOutlined
     })
     iconLibrary.register({
+      name: 'left-outlined',
+      component: leftOutlined
+    })
+    iconLibrary.register({
       name: 'right-outlined',
       component: rightOutlined
     })
@@ -257,6 +263,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'image-01',
       component: image01
+    })
+    iconLibrary.register({
+      name: 'ellipsis-outlined',
+      component: ellipsisOutlined
     })
     iconLibrary.register({
       name: 'focal-point',
