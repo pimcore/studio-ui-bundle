@@ -26,8 +26,15 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       &.ant-tabs .ant-tabs-tab {
-        padding: 0;
+        padding: 0 ${token.paddingXS}px;
+        margin: 0 !important;
         transition: color .2s;
+
+        display: flex;
+        height: 32px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
 
       .ant-tabs-tabpane {
@@ -39,11 +46,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
       .ant-tabs-content-holder {
         overflow: auto;
-      }
-
-      &.ant-tabs .ant-tabs-tab+.ant-tabs-tab {
-        margin-left: ${token.paddingSM}px;
-        margin-right: ${token.paddingSM}px;
       }
       &.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
         color: ${token.colorPrimaryActive}
@@ -74,6 +76,7 @@ export const useStyle = createStyles(({ token, css }) => {
           
           .ant-tabs-tab-icon {
             height: 16px;
+            display: flex;
             justify-content: center;
             align-content: center;
             margin-inline-end: 0;
