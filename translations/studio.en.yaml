@@ -25,6 +25,8 @@ toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
 example-prefix: Example Prefix
+pagination.show-total: Total {{total}} items
+pagination.page: Page
 preview-card.locate-in-tree: Locate in Tree
 preview-card.info: Info
 preview-card.rename: Rename
@@ -37,3 +39,15 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Custom thumbnail f
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Download custom thumbnail
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Select precreated thumbnail to download
 aria.asset.image-sidebar.tab.details.download-thumbnail: Download thumbnail
+notification.action-list.actions: Actions
+notification.action-list.cancel: Cancel
+notification.action-list.cancel-all: Cancel all
+notification.action-list.completed-actions: Completed actions
+aria.notification.action-list.toggle-collapse: Toggle list of actions
+aria.notification.action-list.cancel-all: Cancel all currently running action
+aria.notification.action-list.cancel: Cancel action
+asset.image.editor.zoom.reset: Reset
+aria.asset.image.editor.zoom.reset: Reset zoom
+aria.asset.image.editor.zoom.zoom-in: Zoom in
+aria.asset.image.editor.zoom.zoom-out: Zoom out
+aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select

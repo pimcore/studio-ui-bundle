@@ -32,12 +32,13 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ./assets/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
+        working-directory: ./assets
         run: npm ci
 
   lint:
@@ -59,12 +60,13 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ./assets/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Run code linting
+        working-directory: ./assets
         run: npm run lint-fix
 
       - uses: stefanzweifel/git-auto-commit-action@v5
@@ -90,12 +92,13 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ./assets/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Run production build
+        working-directory: ./assets
         run: npm run build
 
       - uses: stefanzweifel/git-auto-commit-action@v5
@@ -119,10 +122,11 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: ./assets/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Run tests
+        working-directory: ./assets
         run: npm run test
