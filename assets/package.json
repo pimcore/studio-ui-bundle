@@ -14,7 +14,7 @@
     "build-api-client": "npx @rtk-query/codegen-openapi ./js/build/api/openapi-config.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./js",
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./js --fix",
-    "test": "jest --passWithNoTests",
+    "test": "jest ./js/src --passWithNoTests",
     "storybook": "storybook dev -p 6006"
   },
   "types": "./dist/build/types/src/sdk/main.d.ts",
