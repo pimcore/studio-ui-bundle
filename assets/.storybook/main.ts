@@ -11,11 +11,15 @@
  *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
+import type { Options } from '@swc/core';
 import type { StorybookConfig } from "@storybook/react-webpack5";
 import path from "path";
 
 const config: StorybookConfig = {
   stories: ["../js/**/*.mdx", "../js/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  typescript: {
+
+  },
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
@@ -38,7 +42,7 @@ const config: StorybookConfig = {
   webpackFinal: async (config) => {
     config.resolve!.alias = {
       ...config.resolve!.alias,
-      "@Pimcore": path.resolve(__dirname, "../js/src"),
+      "@Pimcore": path.resolve(__dirname, "../js/src/core"),
     };
 
     // disable whatever is already set to load SVGs
@@ -65,6 +69,22 @@ const config: StorybookConfig = {
     });
 
     return config;
+  },
+
+  // Enable typescript decorators for storybook
+  swc: (config: Options): Options => {
+    return {
+      ...config,
+      jsc: {
+        ...config.jsc,
+        parser: {
+          syntax: "typescript",
+          tsx: true,
+          dynamicImport: true,
+          decorators: true,
+        },
+      },
+    };
   }
 };
 

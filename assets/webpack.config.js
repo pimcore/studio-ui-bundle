@@ -36,7 +36,7 @@ Encore
     * Each entry will result in one JavaScript file (e.g. app.js)
     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
     */
-  .addEntry('main', path.resolve(__dirname, 'js', 'src', 'main.ts'))
+  .addEntry('main', path.resolve(__dirname, 'js', 'src', 'core', 'main.ts'))
 
 // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
 // .enableStimulusBridge('./assets/controllers.json')
@@ -111,9 +111,16 @@ Encore
   })
 
   .addAliases({
-    '@Pimcore': path.resolve(__dirname, 'js', 'src'),
+    '@Pimcore': path.resolve(__dirname, 'js', 'src', 'core'),
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
   })
+
+  .addPlugin(
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
+    }),
+  )
 
   .addPlugin(new webpack.BannerPlugin({
     banner: `
@@ -136,6 +143,13 @@ if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
     .setManifestKeyPrefix('bundles/pimcorestudioui/build')
+
+    .addPlugin(
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
+      }),
+    )
 }
 
 if (!Encore.isDevServer() && !Encore.isProduction()) {
@@ -157,7 +171,7 @@ config = {
 
   output: {
     ...config.output,
-    library: 'Pimcore'
+    library: 'Pimcore',
   }
 }
 

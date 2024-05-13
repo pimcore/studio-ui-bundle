@@ -21,9 +21,9 @@ const config: JestConfigWithTsJest = {
     './js/test-utils/jest-setup.ts'
   ],
   moduleNameMapper: {
-    '^@Pimcore/(.*)$': '<rootDir>/js/src/$1',
+    '^@Pimcore/(.*)$': '<rootDir>/js/src/core/$1',
     '^@test-utils/(.*)$': '<rootDir>/js/test-utils/$1'
-  }
+  },
 }
 
 export default config
