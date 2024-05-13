@@ -1,4 +1,3 @@
 {
-  "build/main.js": "http://localhost:3030/build/main.js",
-  "build/vendors-node_modules_webpack-dev-server_client_index_js_protocol_ws_3A_hostname_0_0_0_0_port_-0102f2.js": "http://localhost:3030/build/vendors-node_modules_webpack-dev-server_client_index_js_protocol_ws_3A_hostname_0_0_0_0_port_-0102f2.js"
+  "bundles/pimcorestudioui/build/main.js": "/bundles/pimcorestudioui/build/main.b7052a54.js"
 }
