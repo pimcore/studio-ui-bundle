@@ -122,13 +122,6 @@ Encore
     }),
   )
 
-  .addPlugin(
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
-    }),
-  )
-
   .addPlugin(new webpack.BannerPlugin({
     banner: `
       /**
@@ -150,6 +143,13 @@ if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
     .setManifestKeyPrefix('bundles/pimcorestudioui/build')
+
+    .addPlugin(
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
+      }),
+    )
 }
 
 if (!Encore.isDevServer() && !Encore.isProduction()) {
