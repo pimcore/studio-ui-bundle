@@ -54,12 +54,12 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       })
     }
 
-    // TODO: cast to new union type and wait vor backend
-    if (asset.type === 'image' || asset.type === 'video' || asset.type === 'document') {
+    // TODO: wait for backend
+    if ('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined) {
       cards.push(
         <PreviewCard
           dropdownItems={ dropdownItems }
-          imgSrc={ asset.imageThumbnailPath ?? asset.fullPath }
+          imgSrc={ asset.imageThumbnailPath }
           key={ asset.id }
           name={ asset.filename! }
           onClick={ onClickCard }
