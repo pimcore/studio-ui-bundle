@@ -26,11 +26,13 @@ export const PreviewCard = ({
   const { styles } = useStyle()
   const [selected, setSelected] = useState(false)
 
+  let classCard: string = ''
   let classImg: string = 'img'
   let classImgDiv: string = 'img-container'
   let classCheckbox: string = 'checkbox'
   let classDotsButton: string = 'dots-button'
   if (size === SizeTypes.MEDIUM) {
+    classCard = 'card-medium'
     classImg = 'img-medium'
     classImgDiv = 'img-container-medium'
     classCheckbox = 'checkbox-medium'
@@ -43,7 +45,7 @@ export const PreviewCard = ({
 
   return (
     <Card
-      className={ styles.card }
+      className={ [styles.card, classCard].join(' ') }
       cover={
         <div className={ classImgDiv }>
           <PimcoreImage

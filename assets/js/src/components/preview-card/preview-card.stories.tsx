@@ -1,5 +1,5 @@
 import { type Meta } from '@storybook/react'
-import { PreviewCard as PreviewCardComponent } from './preview-card'
+import {PreviewCard as PreviewCardComponent, SizeTypes} from './preview-card'
 import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
 
 const config: Meta = {
@@ -44,6 +44,7 @@ export const _default = {
     name: 'Pimconaout0_123.jpg',
     imgSrc: 'https://pimcore.com/brand/Website-Banners/image-thumb__23862__header-sujet-img__2019--slider/2024-Pimcore-Home-Main.webp',
     dropdownItems,
+    size: SizeTypes.MEDIUM,
     onClick: (e) => {
       console.log('Card clicked')
     }

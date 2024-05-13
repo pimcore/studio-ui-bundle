@@ -7,8 +7,12 @@ export const useStyle = createStyles(({ token, css }) => {
             height: 103px;
             cursor: pointer;
         }
-        
-        &.ant-card .ant-card-body {
+
+      &.card-medium {
+        height: 150px;
+      }
+      
+      &.ant-card .ant-card-body {
             padding: ${token.paddingXXS}px ${token.paddingXS}px;
             margin-top: 7px;
             margin-bottom: 7px;
