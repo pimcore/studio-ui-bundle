@@ -29,7 +29,9 @@ Thumbs.db
 /var
 /vendor
 
+# Frontend related files
 assets/node_modules
+assets/dist
 
 # code style fixer
 .php_cs

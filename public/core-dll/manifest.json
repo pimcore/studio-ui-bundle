@@ -1,6 +1,6 @@
 {
   "bundles/pimcorestudioui/core-dll/core-dll.css": "/bundles/pimcorestudioui/core-dll/core-dll.63b795ca.css",
-  "bundles/pimcorestudioui/core-dll/core-dll.js": "/bundles/pimcorestudioui/core-dll/core-dll.ee31f20c.js",
+  "bundles/pimcorestudioui/core-dll/core-dll.js": "/bundles/pimcorestudioui/core-dll/core-dll.208a517d.js",
   "bundles/pimcorestudioui/core-dll/105.b4a62b68.js": "/bundles/pimcorestudioui/core-dll/105.b4a62b68.js",
   "bundles/pimcorestudioui/core-dll/fonts/Lato-Light.ttf": "/bundles/pimcorestudioui/core-dll/fonts/Lato-Light.c7400fca.ttf",
   "bundles/pimcorestudioui/core-dll/fonts/Lato-Regular.ttf": "/bundles/pimcorestudioui/core-dll/fonts/Lato-Regular.9d883d54.ttf",
@@ -217,7 +217,6 @@
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/app/utils/app-runner.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/app/utils/app-runner.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/element/editor/tab-manager/tab-manager.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/element/editor/tab-manager/tab-manager.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/image/tab-manager/tabs/preview/preview-container.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/image/tab-manager/tabs/preview/preview-container.d.ts.map",
-  "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/example/__tests__/example.spec.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/example/__tests__/example.spec.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/modal/modal.stories.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/modal/modal.stories.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/index.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/index.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/grid/resizer/resizer.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/grid/resizer/resizer.d.ts.map",
@@ -364,7 +363,6 @@
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/grid/resizer/resizer.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/grid/resizer/resizer.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/tree/node/tree-node.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/tree/node/tree-node.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/toolbar/toolbar.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/toolbar/toolbar.styles.d.ts.map",
-  "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/example/__tests__/example.spec.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/example/__tests__/example.spec.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/example/example.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/example/example.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/sidebar/sidebar.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/sidebar/sidebar.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/message/message.style.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/message/message.style.d.ts.map",
