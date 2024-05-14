@@ -103,3 +103,8 @@ server {
 
 Now ensure that storybook is running via `npm run storybook`.
 Finally you can access it under `{your-domain/storybook}`
+
+## Documentation Overview
+
+- [Installation](./doc/01_Installation.md)
+- [Getting started with your first plugin](./doc/05_Plugins/README.md)

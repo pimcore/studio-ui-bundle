@@ -6,11 +6,11 @@ Plugins can add new features, modify existing functionality, or integrate with e
 
 ## Getting started
 
-To begin, ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/). We call our Plugin for this guide `PimcoreStudioUiDemoPluginBundle`.
+To begin, ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/). For this guide, let’s call our plugin `PimcoreStudioUiDemoPluginBundle`.
 
-Now we should install the Pimcore Studio UI as one of our frontend dependencies. There is no npm package so far, so please follow the local development guide.
+Since there’s no npm package available yet, follow the local development guide to install the Pimcore Studio UI as one of your frontend dependencies.
 
-With our dependency for Pimcore Studio Ui in place we should now setup our bundling process. We recommend [Symfony Encore](https://symfony.com/doc/current/frontend/encore/installation.html) for bundling. We will need a generated manifest from it later on:
+With our dependency in place we should now setup our bundling process. we recommend using [Symfony Encore](https://symfony.com/doc/current/frontend/encore/installation.html). Later on, you’ll need a generated manifest from it.
 
 ``` javascript
 const Encore = require('@symfony/webpack-encore');
@@ -157,7 +157,7 @@ Pimcore.pluginSystem.registerPlugin({
 
 This will register a simple plugin in our Pimcore Studio UI.
 
-With the main entry point in place we should now bundle our files. Just run:
+Now that the main entry point is in place, it’s time to bundle our files. Simply run:
 
 ```
 npm run build
@@ -195,6 +195,10 @@ class PimcoreStudioUiDemoPluginBundle extends AbstractPimcoreBundle implements P
 Now just ensure that our bundle is installed. And finally we should see our `console.log()` in the browser console when we access our in the browser.
 
 ### Further guides
+
+- [How to register a new tab for a folder asset](./01_Registration_of_an_Tab.md)
+- [How to add a custom icon](./02_Adding_custom_icons.md)
+- [How to add your first widget](03_Add_your_first_widget.md)
 
 ## Local development
 
