@@ -12,7 +12,7 @@
 */
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {RootState} from "@Pimcore/app/store";
+import { type RootState } from '@Pimcore/app/store'
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
