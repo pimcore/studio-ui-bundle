@@ -1,6 +1,7 @@
 import { type IRefreshRequest, useRefreshMutation } from '@Pimcore/components/login-form/services/auth'
 import { setCredentials } from '@Pimcore/app/auth/auth-slice'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 interface IUseRefreshTokenReturn {
   refreshToken: ({ token }: IRefreshRequest) => Promise<void>
@@ -9,6 +10,7 @@ interface IUseRefreshTokenReturn {
 export const useRefreshToken = (): IUseRefreshTokenReturn => {
   const [refresh] = useRefreshMutation()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const refreshToken = async function ({ token }: IRefreshRequest): Promise<void> {
     try {
@@ -27,7 +29,7 @@ export const useRefreshToken = (): IUseRefreshTokenReturn => {
         }))
       }
     } catch (error) {
-      console.log(error)
+      navigate('/admin/studio/login')
     }
   }
 
