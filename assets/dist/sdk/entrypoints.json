@@ -1,0 +1,9 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "/dist/main.js"
+      ]
+    }
+  }
+}

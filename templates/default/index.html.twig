@@ -1,14 +1,31 @@
+{# @var studioCssFiles string[] #}
+{# @var studioJsFiles string[] #}
+{# @var bundleCssFiles string[] #}
+{# @var bundleJsFiles string[] #}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        
-        {{ encore_entry_link_tags('main', null, 'pimcoreStudioUi') }}
+
+        {% for cssFile in studioCssFiles %}
+            <link rel="stylesheet" href="{{ cssFile }}"/>
+        {% endfor %}
+
+        {% for cssFile in bundleCssFiles %}
+            <link rel="stylesheet" href="{{ cssFile }}"/>
+        {% endfor %}
     </head>
 
     <body>
         <div id="app"></div>
 
-        {{ encore_entry_script_tags('main', null, 'pimcoreStudioUi') }}
+        {% for jsFile in studioJsFiles %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+
+        {% for jsFile in bundleJsFiles %}
+            <script data-pimcore-studio-plugin="{{ jsFile }}"></script>
+        {% endfor %}
     </body>
 </html>

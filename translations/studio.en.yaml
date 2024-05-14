@@ -25,6 +25,8 @@ toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
 example-prefix: Example Prefix
+pagination.show-total: Total {{total}} items
+pagination.page: Page
 preview-card.locate-in-tree: Locate in Tree
 preview-card.info: Info
 preview-card.rename: Rename
