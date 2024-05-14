@@ -35,6 +35,10 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
     try {
       e.preventDefault()
       const user = await login(formState).unwrap()
+
+      localStorage.setItem('token', user.token)
+      localStorage.setItem('username', user.username)
+
       dispatch(setCredentials({
         user: {
           username: user.username

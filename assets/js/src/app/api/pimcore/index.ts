@@ -10,8 +10,10 @@ export const api = createApi({
       if (token !== null) {
         headers.set('authorization', `Bearer ${token}`)
       }
+
       return headers
-    }
+    },
+    credentials: 'include'
   }),
   endpoints: () => ({})
 })

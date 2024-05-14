@@ -7,7 +7,7 @@ export interface User {
   email?: string
 }
 
-export interface UserResponse {
+export interface IGenericAuthResponse {
   token: string
   lifetime: number
   username: string
@@ -18,14 +18,25 @@ export interface LoginRequest {
   password: string
 }
 
+export interface IRefreshRequest {
+  token: string
+}
+
 export const authApi = api
   .injectEndpoints({
     endpoints: (builder) => ({
-      login: builder.mutation<UserResponse, LoginRequest>({
+      login: builder.mutation<IGenericAuthResponse, LoginRequest>({
         query: (credentials) => ({
           url: 'studio/api/login',
           method: 'POST',
           body: credentials
+        })
+      }),
+      refresh: builder.mutation<IGenericAuthResponse, IRefreshRequest>({
+        query: (token) => ({
+          url: 'studio/api/refresh',
+          method: 'POST',
+          body: token
         })
       })
     }),
@@ -33,4 +44,4 @@ export const authApi = api
   })
 
 export { authApi as api }
-export const { useLoginMutation } = authApi
+export const { useLoginMutation, useRefreshMutation } = authApi
