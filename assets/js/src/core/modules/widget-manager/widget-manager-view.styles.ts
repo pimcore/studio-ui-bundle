@@ -157,7 +157,7 @@ export const useStlyes = createStyles(({ token, css }) => {
         }
   
         .flexlayout__tab {
-          overflow: hidden;
+          overflow: visible;
           background: ${token.colorBgContainer};
           box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
           border-right: 1px solid ${token.Tabs.colorBorderContainer}66;
@@ -165,7 +165,11 @@ export const useStlyes = createStyles(({ token, css }) => {
           border-left: 1px solid ${token.Tabs.colorBorderContainer}66;
           border-radius: 0 8px 8px 8px;
         }
-  
+
+        .flexlayout__tab:not(.widget-manager-inner-container) {
+          overflow: hidden;
+        }
+      
         .flexlayout__tab_border {
           box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.07), 2px 2px 0px 0px rgba(79, 78, 183, 0.05);
           border-top: 1px solid ${token.Tabs.colorBorderContainer}66;
