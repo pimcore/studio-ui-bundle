@@ -17,8 +17,9 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": "~8.1.0 || ~8.2.0",
-    "pimcore/pimcore": "^11.0"
+    "php": "~8.2.0",
+    "pimcore/pimcore": "^11.0",
+    "pimcore/studio-backend-bundle": "1.x-dev"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
