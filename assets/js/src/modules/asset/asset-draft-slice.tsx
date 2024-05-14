@@ -1,8 +1,8 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { type GetAssetByIdApiResponse } from './asset-api-slice.gen'
+import { type Asset } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 
-export interface AssetDraft extends GetAssetByIdApiResponse {
+export interface AssetDraft extends Asset {
   id: number
 }
 

@@ -1,5 +1,5 @@
 import { type Meta } from '@storybook/react'
-import {PreviewCard as PreviewCardComponent, SizeTypes} from './preview-card'
+import { PreviewCard as PreviewCardComponent, SizeTypes } from './preview-card'
 import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
 
 const config: Meta = {
