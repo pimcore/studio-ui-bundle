@@ -12,8 +12,7 @@ export const api = createApi({
       }
 
       return headers
-    },
-    credentials: 'include'
+    }
   }),
   endpoints: () => ({})
 })
