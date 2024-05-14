@@ -7,7 +7,7 @@ First of all let's create a new module that takes care of the registration of a 
 `./modules/asset/folder-tab-extension.tsx`:
 ``` typescript
 import React from 'react'
-import { type AbstractModule Icon, type FolderTabManager, container, serviceIds } from 'pimcore-studio-ui'
+import { type AbstractModule, Icon, type FolderTabManager, container, serviceIds } from 'pimcore-studio-ui'
 import { MyFirstTabComponent } from './components/my-first-tab-component';
 
 export const FolderTabExtension: AbstractModule = {
@@ -40,7 +40,7 @@ export const MyFirstTabComponent = (): React.JSX.Element => {
 }
 ```
 
-And last but least we have to register our newly created module:
+And last but not least we have to register our newly created module:
 
 `./main.ts`
 ``` typescript

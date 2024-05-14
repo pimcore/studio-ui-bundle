@@ -134,7 +134,7 @@ Update your package.json with the following commands, to run Symfony Encore:
 
 ```
 
-We are now able to bundle files, so let's create our main entry point `main.ts`. 
+We are now able to bundle files. So, let's create our main entry point `main.ts`. 
 
 ``` typescript
 import { Pimcore } from 'pimcore-studio-ui'
@@ -192,11 +192,11 @@ class PimcoreStudioUiDemoPluginBundle extends AbstractPimcoreBundle implements P
     }
 }
 ```
-Now just ensure that our bundle is installed. And finally we should see our `console.log()` in the browser console when we access our in the browser.
+Now just ensure that our bundle is installed. And finally we should see our `console.log()` in the browser console when we access our Pimcore Studio in the browser.
 
 ### Further guides
 
-- [How to register a new tab for a folder asset](./01_Registration_of_an_Tab.md)
+- [How to register a new tab for a folder asset](./01_Register_a_tab_for_a_folder_asset.md)
 - [How to add a custom icon](./02_Adding_custom_icons.md)
 - [How to add your first widget](03_Add_your_first_widget.md)
 
