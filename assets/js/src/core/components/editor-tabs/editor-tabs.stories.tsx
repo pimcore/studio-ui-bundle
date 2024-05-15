@@ -23,6 +23,13 @@ const config: Meta = {
   parameters: {
     layout: 'centered'
   },
+  argTypes: {
+    items: {
+      table: {
+        disable: true
+      }
+    },
+  },
   tags: ['autodocs']
 }
 
