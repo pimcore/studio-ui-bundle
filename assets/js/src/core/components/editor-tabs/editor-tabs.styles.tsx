@@ -89,6 +89,7 @@ export const useStyle = createStyles(({ token, css }) => {
         }
           
         .detachable-button {
+          display: none;
           color: ${token.Tabs.itemUnselectedIconColor};
           height: ${token.controlHeightSM}px;
           width: ${token.controlHeightSM}px;
@@ -108,6 +109,7 @@ export const useStyle = createStyles(({ token, css }) => {
           }
 
           .detachable-button {
+            display: block;
             color: ${token.colorPrimary};
           }
         }
@@ -136,7 +138,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
-          border-bottom: 2px solid ${token.colorPrimaryActive};
+          border-bottom: 3px solid ${token.colorPrimaryActive};
       }
     `
   }

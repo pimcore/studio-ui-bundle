@@ -13,9 +13,9 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
-import {Button, Tabs, type TabsProps } from 'antd'
-import {IEditorTab} from "@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab";
-import {Icon} from "@Pimcore/components/icon/icon";
+import { Button, Tabs } from 'antd'
+import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface EditorTabsProps {
   items: IEditorTab[]
@@ -29,20 +29,23 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: Edito
   items = items?.map((item) => {
     return {
       ...item,
-      label: (item.isDetachable)
+      label: (item.isDetachable === true)
         ? (
           <>
-            { item.label }
+            <span>{ item.label }</span>
             <Button
-              className={'detachable-button'}
+              className={ 'detachable-button' }
               icon={
-                <Icon name={'share-03'} options={{width: 14, height: 14}} />
+                <Icon
+                  name={ 'share-03' }
+                  options={ { width: 14, height: 14 } }
+                />
               }
-              type={'link'}
-              onClick={() => {console.log(`detached ${item.key}!`)}}
+              onClick={ () => { console.log(`detached ${item.key}!`) } }
+              type={ 'link' }
             />
           </>
-        )
+          )
         : item.label
     }
   })
