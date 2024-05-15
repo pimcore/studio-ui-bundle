@@ -15,13 +15,13 @@ import { type ConfigFile } from '@rtk-query/codegen-openapi'
 
 const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
-  apiFile: '../js/src/app/api/pimcore/index.ts',
+  apiFile: '../../js/src/core/app/api/pimcore/index.ts',
   apiImport: 'api',
   outputFiles: {
-    '../js/modules/asset/asset-api-slice.gen.ts': {
+    '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: [/asset/i]
     },
-    '../js/modules/app/translations/translations-api-slice.gen.ts': {
+    '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: [/translation/i]
     }
   },

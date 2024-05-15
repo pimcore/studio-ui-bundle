@@ -21,6 +21,9 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { UnknownContainer } from './unknown/unknown-container'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { VideoContainer } from '@Pimcore/modules/asset/editor/video/video-container'
+import { TextContainer } from '@Pimcore/modules/asset/editor/text/text-container'
+import { DocumentContainer } from '@Pimcore/modules/asset/editor/document/document-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -29,6 +32,21 @@ moduleSystem.registerModule({
     componentRegistryService.registerComponent({
       name: 'image',
       component: ImageContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'video',
+      component: VideoContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'document',
+      component: DocumentContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'text',
+      component: TextContainer
     })
 
     componentRegistryService.registerComponent({
