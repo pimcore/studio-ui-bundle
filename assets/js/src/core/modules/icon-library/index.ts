@@ -67,6 +67,7 @@ import ellipsisOutlined from '@Pimcore/assets/icons/ellipsis-outlined.inline.svg
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
+import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -279,6 +280,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'PlusOutlined',
       component: PlusOutlined
+    })
+    iconLibrary.register({
+      name: 'share-03',
+      component: Share03
     })
   }
 })

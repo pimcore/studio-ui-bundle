@@ -45,7 +45,8 @@ imageTabManager.register({
   key: 'embedded-metadata',
   label: 'asset.asset-editor-tabs.embedded-metadata',
   children: <EmbeddedMetadataTabContainer />,
-  icon: <Icon name={ 'data-sheet' } />
+  icon: <Icon name={ 'data-sheet' } />,
+  isDetachable: true
 })
 
 imageTabManager.register({

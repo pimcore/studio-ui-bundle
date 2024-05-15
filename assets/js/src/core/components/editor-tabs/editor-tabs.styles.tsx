@@ -26,8 +26,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       &.ant-tabs .ant-tabs-tab {
-        padding: 0 ${token.paddingXS}px;
-        margin: 0 !important;
+        margin: 0 ${token.paddingXS}px !important;
         transition: color .2s;
 
         display: flex;
@@ -88,6 +87,12 @@ export const useStyle = createStyles(({ token, css }) => {
             }
           }
         }
+          
+        .detachable-button {
+          color: ${token.Tabs.itemUnselectedIconColor};
+          height: ${token.controlHeightSM}px;
+          width: ${token.controlHeightSM}px;
+        }
 
         &:not(.ant-tabs-tab-active) {
           .ant-tabs-tab-icon {
@@ -100,6 +105,10 @@ export const useStyle = createStyles(({ token, css }) => {
         &.ant-tabs-tab-active  {
           .ant-tabs-tab-icon {
               color: ${token.colorPrimaryActive}
+          }
+
+          .detachable-button {
+            color: ${token.colorPrimary};
           }
         }
       }

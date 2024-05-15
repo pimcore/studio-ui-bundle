@@ -13,16 +13,39 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
-import { Tabs, type TabsProps } from 'antd'
+import {Button, Tabs, type TabsProps } from 'antd'
+import {IEditorTab} from "@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab";
+import {Icon} from "@Pimcore/components/icon/icon";
 
 interface EditorTabsProps {
-  items: TabsProps['items']
+  items: IEditorTab[]
   defaultActiveKey?: string
   showLabelIfActive?: boolean
 }
 
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: EditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
+
+  items = items?.map((item) => {
+    return {
+      ...item,
+      label: (item.isDetachable)
+        ? (
+          <>
+            { item.label }
+            <Button
+              className={'detachable-button'}
+              icon={
+                <Icon name={'share-03'} options={{width: 14, height: 14}} />
+              }
+              type={'link'}
+              onClick={() => {console.log(`detached ${item.key}!`)}}
+            />
+          </>
+        )
+        : item.label
+    }
+  })
 
   return (
     <Tabs
