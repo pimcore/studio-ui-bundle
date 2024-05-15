@@ -28,7 +28,7 @@ const config: Meta = {
       table: {
         disable: true
       }
-    },
+    }
   },
   tags: ['autodocs']
 }
