@@ -37,8 +37,8 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tabpane {
-        position: relative;
         display: flex;
+        flex-direction: column;
         height: 100%;
         width: 100%;
       }
@@ -109,7 +109,7 @@ export const useStyle = createStyles(({ token, css }) => {
           }
 
           .detachable-button {
-            display: block;
+            display: flex;
             color: ${token.colorPrimary};
           }
         }
