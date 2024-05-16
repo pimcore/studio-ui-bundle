@@ -16,7 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { EditTabContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/edit-container'
 import {
   EmbeddedMetadataTabContainer
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/embedded-metadata-container'
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/embedded-metadata/embedded-metadata-container'
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/custom-metadata-container'
@@ -33,6 +33,7 @@ import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
+import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -107,6 +108,12 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
       icon: <Icon name={ 'workflow' } />
+    })
+
+    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
+    widgetRegistryService.registerWidget({
+      name: 'asset-tab-embedded-metadata',
+      component: EmbeddedMetadataTabContainer
     })
   }
 })

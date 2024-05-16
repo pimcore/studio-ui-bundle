@@ -16,38 +16,59 @@ import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Button, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 
-interface EditorTabsProps {
-  items: IEditorTab[]
+export interface IAdvancedEditorTab extends IEditorTab {
+  originalLabel?: string
+}
+
+interface IEditorTabsProps {
+  items: IAdvancedEditorTab[]
   defaultActiveKey?: string
   showLabelIfActive?: boolean
 }
 
-export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: EditorTabsProps): React.JSX.Element => {
+export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const { context: asset } = useGlobalAssetContext()
+  const { detachWidget } = useDetachTab()
+
+  const openDetachedWidget = (item: IEditorTab): void => {
+    detachWidget({
+      item,
+      config: asset?.config
+    })
+  }
 
   items = items?.map((item) => {
-    return {
+    const tmpItem = {
       ...item,
-      label: (item.isDetachable === true)
-        ? (
-          <>
-            <span>{ item.label }</span>
-            <Button
-              className={ 'detachable-button' }
-              icon={
-                <Icon
-                  name={ 'share-03' }
-                  options={ { width: 14, height: 14 } }
-                />
-              }
-              onClick={ () => { console.log(`detached ${item.key}!`) } }
-              type={ 'link' }
-            />
-          </>
-          )
-        : item.label
+      originalLabel: item.label as string
     }
+
+    if (tmpItem.isDetachable === true) {
+      tmpItem.label = (
+        <>
+          <span>{tmpItem.label}</span>
+          <Button
+            className={ 'detachable-button' }
+            icon={
+              <Icon
+                name={ 'share-03' }
+                options={ { width: 14, height: 14 } }
+              />
+            }
+            onClick={ () => {
+              openDetachedWidget(tmpItem)
+            } }
+            type={ 'link' }
+          />
+        </>
+      )
+    }
+
+    return tmpItem
   })
 
   return (
