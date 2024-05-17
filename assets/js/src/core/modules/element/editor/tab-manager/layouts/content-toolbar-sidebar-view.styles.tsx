@@ -33,6 +33,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .content-toolbar-sidebar-layout__toolbar {
+        border-top: 1px solid ${token.colorBorderTertiary};
         position: sticky;
         bottom: 0;
         height: ${token.sizeXXL}px; 
