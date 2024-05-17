@@ -72,7 +72,7 @@ export const useStyle = createStyles(({ token, css }) => {
           padding-bottom: ${token.paddingXS}px;
           justify-content: center;
           align-items: center;
-          gap: ${token.Tabs.paddingTabs}px;
+          gap: ${token.paddingTabs}px;
           
           .ant-tabs-tab-icon {
             height: 16px;
