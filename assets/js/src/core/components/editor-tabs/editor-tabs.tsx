@@ -16,7 +16,6 @@ import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Button, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 
 export interface IAdvancedEditorTab extends IEditorTab {
@@ -31,13 +30,11 @@ interface IEditorTabsProps {
 
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { context: asset } = useGlobalAssetContext()
   const { detachWidget } = useDetachTab()
 
   const openDetachedWidget = (item: IEditorTab): void => {
     detachWidget({
-      item,
-      config: asset?.config
+      item
     })
   }
 

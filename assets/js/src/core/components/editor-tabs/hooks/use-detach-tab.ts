@@ -31,8 +31,11 @@ export const useDetachTab = (): IUseDetachTabReturn => {
       name: item.originalLabel,
       icon: 'share-03',
       id: `${item.key}-detached`,
-      component: 'asset-tab-embedded-metadata',
-      config
+      component: 'detachable-tab',
+      config: {
+        ...config,
+        children: item.children
+      }
     })
   }
 

@@ -34,6 +34,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -112,8 +113,8 @@ moduleSystem.registerModule({
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
-      name: 'asset-tab-embedded-metadata',
-      component: EmbeddedMetadataTabContainer
+      name: 'detachable-tab',
+      component: DetachedTab
     })
   }
 })
