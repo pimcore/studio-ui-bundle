@@ -26,6 +26,10 @@ export const useStyles = createStyles(({ token, css }) => {
         flex: 1;
         overflow: auto;
       }
+
+      .widget__title {
+        padding-top: ${token.paddingSM}px;
+      }
     `
   }
 }, { hashPriority: 'low' })
