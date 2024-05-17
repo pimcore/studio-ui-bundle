@@ -1,7 +1,6 @@
 # SDK Overview 
 
 The Pimcore Studio UI includes an SDK that allows you to extend specific features out of the box.
-
 There are some essential parts that we want to explain in more detail.
 
 ## Concepts
