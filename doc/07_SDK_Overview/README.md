@@ -8,7 +8,7 @@ There are some essential parts that we want to explain in more detail.
 
 ### Plugin Architecture
 
-Overview how a plugin would be integrated in the Pimcore Studio Core lifecycle
+Overview how a plugin would be integrated in the Pimcore Studio Core lifecycle:
 
 ![Plugin architecture](./../img/plugin-architecture.jpg)
 
@@ -38,7 +38,7 @@ onStartup: ({ moduleSystem }): void => {
 
 ### Modules
 
-Modules consist of straightforward code snippets executed immediately after initializing all services from the Studio UI Core and Plugins. They run before the initial app render, enabling you to leverage existing services (such as a tab manager) to provide additional configuration for React components during rendering. For instance, you could register a new tab for a folder asset:
+Modules consist of code snippets executed immediately after initializing all services from the Studio UI Core and Plugins. They run before the initial app render, enabling you to leverage existing services (such as a tab manager) to provide additional configuration for React components during rendering. For instance, you could register a new tab for a folder asset:
 
 ``` typescript
 export const ImageSliderModule: AbstractModule = {
@@ -74,7 +74,7 @@ tabManager.register({
 })
 ```
 
-To maximize the benefits of your services, we’ve introduced a service container using [Inversify](https://github.com/inversify/InversifyJS). This container is created early in the application lifecycle, ensuring accessibility throughout the entire app.
+To maximize the benefits of services, we’ve introduced a service container using [Inversify](https://github.com/inversify/InversifyJS). This container is created early in the application lifecycle, ensuring accessibility throughout the entire app.
 
 #### source
 
