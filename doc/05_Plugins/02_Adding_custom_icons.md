@@ -1,6 +1,6 @@
 # How to add custom icons
 
-In this guide we want add a completely new icon to Pimcore Studio UI. Let's take our [Folder tab plugin](./01_Register_a_tab_for_a_folder_asset.md.md) as starting point. 
+In this guide we want add a completely new icon to Pimcore Studio UI. Let's take our [Folder tab plugin](./01_Register_a_tab_for_a_folder_asset.md) as starting point. 
 
 We could use any kind of icon library like Font Awesome or comparable. But let's assume we want to add a custom one:
 
