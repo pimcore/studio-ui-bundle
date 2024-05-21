@@ -67,15 +67,17 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       })
     }
 
-    cards.push(
-      <PreviewCard
-        dropdownItems={ dropdownItems }
-        imgSrc={ asset.fullPath }
-        key={ asset.id }
-        name={ asset.filename! }
-        onClick={ onClickCard }
-      />
-    )
+    if ('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined && asset.imageThumbnailPath !== null) {
+      cards.push(
+        <PreviewCard
+          dropdownItems={ dropdownItems }
+          imgSrc={ asset.imageThumbnailPath }
+          key={ asset.id }
+          name={ asset.filename! }
+          onClick={ onClickCard }
+        />
+      )
+    }
   })
 
   return (
