@@ -29,7 +29,7 @@ export const useDetachTab = (): IUseDetachTabReturn => {
   const detachWidget = ({ item, config = {} }: IDetachTab): void => {
     openBottomWidget({
       name: item.originalLabel,
-      icon: 'share-03',
+      icon: item.icon.props.name,
       id: `${item.key}-detached`,
       component: 'detachable-tab',
       config: {
