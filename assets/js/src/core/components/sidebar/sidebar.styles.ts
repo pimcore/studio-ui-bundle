@@ -17,6 +17,7 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     sidebar: css`
       display: flex;
+        height: 100%;
       
       .sidebar__navigation {
           display: flex;

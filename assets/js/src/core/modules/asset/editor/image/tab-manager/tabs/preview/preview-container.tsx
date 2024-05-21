@@ -41,16 +41,18 @@ const PreviewContainer = (): React.JSX.Element => {
 
   return (
     <ZoomContext.Provider value={ contextValue }>
-      <div className={ styles.relativeContainer }>
-        <PreviewView
-          src={ data!.fullPath! }
+      <div className={ styles.previewContainer }>
+        <div className={ styles.relativeContainer }>
+          <PreviewView
+            src={ data!.fullPath! }
+          />
+        </div>
+
+        <Sidebar
+          buttons={ sidebarButtons }
+          entries={ sidebarEntries }
         />
       </div>
-
-      <Sidebar
-        buttons={ sidebarButtons }
-        entries={ sidebarEntries }
-      />
     </ZoomContext.Provider>
   )
 }

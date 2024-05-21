@@ -15,14 +15,20 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    previewContainer: css`
+    tab: css`
       display: flex;
-      justify-content: center;
-      align-items: center
+      flex-direction: column;
     `,
-    relativeContainer: css`
-      position: relative;
-      width: 100%;
+    toolbar: css`
+      display: flex;
+      gap: 12px;
+      padding: ${token.paddingXS}px;
+      align-items: center;
+        
+      .ant-btn {
+        display: flex;
+        align-items: center;
+      }
     `
   }
 })

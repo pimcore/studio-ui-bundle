@@ -24,6 +24,9 @@ import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/image/tab-ma
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/tags-container'
 import { ImageTabManager } from './tab-manager/image-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
+import {
+  PropertiesContainer
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container'
 
 export const imageTabManager = new ImageTabManager()
 
@@ -95,4 +98,11 @@ imageTabManager.register({
   label: 'asset.asset-editor-tabs.workflow',
   children: <WorkflowTabContainer />,
   icon: <Icon name={ 'workflow' } />
+})
+
+imageTabManager.register({
+  key: 'properties',
+  label: 'asset.asset-editor-tabs.properties',
+  children: <PropertiesContainer />,
+  icon: <Icon name={ 'settings2' } />
 })

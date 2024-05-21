@@ -32,9 +32,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
         display: flex;
         height: 32px;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
       }
 
       .ant-tabs-tabpane {

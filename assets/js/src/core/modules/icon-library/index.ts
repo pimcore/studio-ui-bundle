@@ -67,6 +67,8 @@ import ellipsisOutlined from '@Pimcore/assets/icons/ellipsis-outlined.inline.svg
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
+import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
+import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -279,6 +281,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'PlusOutlined',
       component: PlusOutlined
+    })
+    iconLibrary.register({
+      name: 'settings2',
+      component: settings2
+    })
+    iconLibrary.register({
+      name: 'PlusCircleOutlined',
+      component: PlusCircleOutlined
     })
   }
 })
