@@ -34,6 +34,7 @@ exclude:
       - .gitatributes
       - src/DependencyInjection/Configuration.php
       - assets/js
+      - assets/dist
 include:
   - name: PhpTaintFunctionInspection
   - name: PhpVulnerablePathsInspection
