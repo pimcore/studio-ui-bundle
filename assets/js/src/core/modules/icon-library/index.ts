@@ -69,6 +69,7 @@ import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
 import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
 import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
+import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -289,6 +290,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'PlusCircleOutlined',
       component: PlusCircleOutlined
+    })
+    iconLibrary.register({
+      name: 'share-03',
+      component: Share03
     })
   }
 })

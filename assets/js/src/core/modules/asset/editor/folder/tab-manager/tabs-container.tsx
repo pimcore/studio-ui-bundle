@@ -26,7 +26,7 @@ const TabsContainer = (): React.JSX.Element => {
   const preparedTabs = tabs.map((tab, index) => {
     return {
       ...tabs[index],
-      label: t(tab.label)
+      label: typeof tab.label === 'string' ? t(tab.label) : tab.label
     }
   })
 

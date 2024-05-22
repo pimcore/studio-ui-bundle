@@ -14,16 +14,19 @@
 import React from 'react'
 import { EditorTabs as EditorTabsView } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { useTranslation } from 'react-i18next'
-import { imageTabManager } from '..'
+import { container } from '@Pimcore/app/depency-injection'
+import { type ImageTabManager } from '@Pimcore/modules/asset/editor/image/tab-manager/image-tab-manager'
+import { serviceIds } from '@Pimcore/app/config/services'
 
 export const TabsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const imageEditorTabManager = container.get<ImageTabManager>(serviceIds['Asset/Editor/ImageTabManager'])
 
-  const tabs = imageTabManager.getTabs()
+  const tabs = imageEditorTabManager.getTabs()
   const preparedTabs = tabs.map((tab, index) => {
     return {
       ...tabs[index],
-      label: t(tab.label)
+      label: typeof tab.label === 'string' ? t(tab.label) : tab.label
     }
   })
 

@@ -22,6 +22,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            getAssetCustomSettingsById: build.query<
+                GetAssetCustomSettingsByIdApiResponse,
+                GetAssetCustomSettingsByIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
+                providesTags: ["Assets"],
+            }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
@@ -52,9 +59,24 @@ export type GetAssetsApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
-export type GetAssetByIdApiResponse = /** status 200 Paginated assets with total count as header param */ Asset;
+export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
+    customSettings?: CustomSettings;
+};
+export type GetAssetCustomSettingsByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
+export type GetAssetByIdApiResponse = /** status 200 One of asset types */
+    | Image
+    | Document
+    | Audio
+    | Video
+    | Archive
+    | Text
+    | Folder
+    | Unknown;
 export type GetAssetByIdApiArg = {
-    /** Id of the asset */
+    /** ID of the asset */
     id: number;
 };
 export type Permissions = {
@@ -128,13 +150,13 @@ export type Image = Asset & {
     /** is animated */
     isAnimated?: boolean;
     /** path to thumbnail */
-    thumbnailPath?: string;
+    imageThumbnailPath?: string;
 };
 export type Document = Asset & {
     /** Page count */
     pageCount?: number | null;
     /** Path to image thumbnail */
-    imageThumbnailPath?: number | null;
+    imageThumbnailPath?: string | null;
 };
 export type Audio = Asset;
 export type Video = Asset & {
@@ -151,8 +173,26 @@ export type Archive = Asset;
 export type Text = Asset;
 export type Folder = Asset;
 export type Unknown = Asset;
-export type Unauthorized = {
+export type Error = {
     /** Message */
     message?: string;
 };
-export const { useGetAssetsQuery, useGetAssetByIdQuery } = injectedRtkApi;
+export type DevError = {
+    /** Message */
+    message?: string;
+    /** Details */
+    details?: string;
+};
+export type FixedCustomSettings = {
+    /** embedded meta data of the asset - array of any key-value pairs */
+    embeddedMetaData?: any[];
+    /** flag to indicate if the embedded meta data has been extracted from the asset */
+    embeddedMetaDataExtracted?: boolean;
+};
+export type CustomSettings = {
+    /** fixed custom settings */
+    fixedCustomSettings?: FixedCustomSettings | null;
+    /** dynamic custom settings - can be any key-value pair */
+    dynamicCustomSettings?: any[];
+};
+export const { useGetAssetsQuery, useGetAssetCustomSettingsByIdQuery, useGetAssetByIdQuery } = injectedRtkApi;

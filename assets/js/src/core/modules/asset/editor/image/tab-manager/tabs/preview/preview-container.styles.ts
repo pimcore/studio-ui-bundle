@@ -15,10 +15,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    previewContainer: css`
+    previewTab: css`
       display: flex;
-      justify-content: center;
-      align-items: center
+      flex-direction: row;
+      flex: auto;
     `,
     relativeContainer: css`
       position: relative;

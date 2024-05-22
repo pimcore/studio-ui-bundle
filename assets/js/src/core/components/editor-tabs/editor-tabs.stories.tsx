@@ -23,6 +23,13 @@ const config: Meta = {
   parameters: {
     layout: 'centered'
   },
+  argTypes: {
+    items: {
+      table: {
+        disable: true
+      }
+    }
+  },
   tags: ['autodocs']
 }
 
@@ -43,7 +50,8 @@ export const _default = {
         key: '2',
         label: 'Tab 2',
         children: 'Tab 2',
-        icon: <Icon name={ 'edit' } />
+        icon: <Icon name={ 'edit' } />,
+        isDetachable: true
       },
       {
         key: '3',
