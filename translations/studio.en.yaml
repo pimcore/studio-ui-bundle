@@ -51,3 +51,10 @@ aria.asset.image.editor.zoom.reset: Reset zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom in
 aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
+version.version: Version
+version.publish: Publish
+version.published: Published
+version.schedule-for: Scheduled for
+version.note: Note
+version.own-draft: Own Draft
+aria.version.delete: Delete version

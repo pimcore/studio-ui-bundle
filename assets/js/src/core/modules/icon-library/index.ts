@@ -18,6 +18,7 @@ import { type IconLibrary } from './services/icon-library'
 import camera from '@Pimcore/assets/icons/camera.inline.svg'
 import folder from '@Pimcore/assets/icons/folder.inline.svg'
 import widgetDefault from '@Pimcore/assets/icons/widget-default.inline.svg'
+import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import chevronUpSmall from '@Pimcore/assets/icons/chevron-up-small.inline.svg'
 import chevronDownSmall from '@Pimcore/assets/icons/chevron-down-small.inline.svg'
 import chevronUpWide from '@Pimcore/assets/icons/chevron-up-wide.inline.svg'
@@ -67,6 +68,10 @@ import ellipsisOutlined from '@Pimcore/assets/icons/ellipsis-outlined.inline.svg
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
+import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
+import calender from '@Pimcore/assets/icons/calender.inline.svg'
+import world from '@Pimcore/assets/icons/world.inline.svg'
+import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -83,6 +88,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'widget-default',
       component: widgetDefault
+    })
+    iconLibrary.register({
+      name: 'chevron-up',
+      component: chevronUp
     })
     iconLibrary.register({
       name: 'chevron-up-small',
@@ -279,6 +288,22 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'PlusOutlined',
       component: PlusOutlined
+    })
+    iconLibrary.register({
+      name: 'lightning-01',
+      component: lightning01
+    })
+    iconLibrary.register({
+      name: 'calender',
+      component: calender
+    })
+    iconLibrary.register({
+      name: 'world',
+      component: world
+    })
+    iconLibrary.register({
+      name: 'user-01',
+      component: user01
     })
   }
 })
