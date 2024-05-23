@@ -12,15 +12,30 @@
 */
 
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions } from '@tanstack/react-table'
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData } from '@tanstack/react-table'
 import React, { useEffect, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
+import { DefaultCell } from './columns/default-cell'
+
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export interface ColumnMeta<TData extends RowData, TValue> {
+    editable?: boolean
+    type?: string
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export interface TableMeta<TData extends RowData> {
+    onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
+  }
+}
 
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
   resizable?: boolean
+  onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
@@ -37,7 +52,13 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   const tableProps: TableOptions<any> = {
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    defaultColumn: {
+      cell: DefaultCell
+    },
+    getCoreRowModel: getCoreRowModel(),
+    meta: {
+      onUpdateCellData: props.onUpdateCellData
+    }
   }
 
   if (props.resizable === true) {
