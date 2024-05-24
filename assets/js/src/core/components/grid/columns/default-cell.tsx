@@ -16,6 +16,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { TextCell } from './types/text/text-cell'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
+import { type TypeRegistry } from '../services/type-registry'
 
 export type DefaultCellProps = CellContext<any, any>
 
@@ -26,6 +29,7 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
   const cellType = column.columnDef.meta?.type ?? 'text'
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
+  const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
 
   useEffect(() => {
     if (!isInEditMode) {
@@ -55,7 +59,7 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
     enableEditMode()
   }
 
-  const Component = cellType === 'text' ? TextCell : TextCell
+  const Component = typeRegistry.getType(cellType) ?? TextCell
 
   return (
     <div
