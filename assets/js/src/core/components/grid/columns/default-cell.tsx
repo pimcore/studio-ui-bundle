@@ -19,17 +19,19 @@ import { useStyle } from './default-cell.styles'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { type TypeRegistry } from '../services/type-registry'
+import { useKeyboardNavigation } from '../keyboard-navigation/use-keyboard-navigation'
 
 export type DefaultCellProps = CellContext<any, any>
 
 export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { column, table } = props
+  const { column, table, row } = props
   const [isEditable] = useState(column.columnDef.meta?.editable ?? false)
   const cellType = column.columnDef.meta?.type ?? 'text'
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
   const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
+  const { handleArrowNavigation } = useKeyboardNavigation(props)
 
   useEffect(() => {
     if (!isInEditMode) {
@@ -53,6 +55,10 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
     if (event.key === 'Enter' && !isInEditMode) {
       enableEditMode()
     }
+
+    if (element.current === document.activeElement) {
+      handleArrowNavigation(event)
+    }
   }
 
   function onDoubleClick (): void {
@@ -64,6 +70,8 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
   return (
     <div
       className={ styles['default-cell'] }
+      data-grid-column={ column.id }
+      data-grid-row={ row.id }
       onDoubleClick={ onDoubleClick }
       onKeyDown={ onKeyDown }
       ref={ element }

@@ -19,9 +19,9 @@ import { TextCell } from './columns/types/text/text-cell'
 
 moduleSystem.registerModule({
   onInit () {
-    const TypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
+    const typeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
 
-    TypeRegistry.registerType({
+    typeRegistry.registerType({
       type: 'text',
       component: TextCell
     })
