@@ -24,10 +24,10 @@ const config: Meta = {
   tags: ['autodocs'],
 
   render: (data: GridProps) => {
-    const ComponentWrapper = () => {
+    const ComponentWrapper = (): React.JSX.Element => {
       const [_data, setData] = useState(data.data);
 
-      function onUpdateCellData({ rowIndex, columnId, value }) {
+      function onUpdateCellData({ rowIndex, columnId, value }): void {
         const updatedData = [..._data];
         updatedData[rowIndex][columnId] = value;
         setData(updatedData);
