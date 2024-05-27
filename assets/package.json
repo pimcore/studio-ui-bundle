@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev-server": "encore dev-server --port 3030",
-    "dev": "encore dev && npm run dev-sdk",
+    "dev": "npm run dev-vendor && npm run dev-core-dll && encore dev && npm run dev-sdk",
     "dev-sdk": "encore dev --config webpack.sdk.config && tsc-alias",
+    "dev-vendor": "encore dev --config webpack.vendor.config",
+    "dev-core-dll": "encore dev --config webpack.core-dll.config",
     "watch": "encore dev --watch",
     "build": "npm run build-vendor && npm run build-core-dll && encore production && npm run build-sdk",
     "build-sdk": "encore production --config webpack.sdk.config && tsc-alias",

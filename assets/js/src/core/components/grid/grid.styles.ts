@@ -16,9 +16,14 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     grid: css`
+      display: flex; 
+      width: 100%;
+      max-width: 100%;
+
       table {
         table-layout: fixed;
         width: auto;
+        height: 0;
       }
 
       th {
@@ -38,12 +43,8 @@ export const useStyles = createStyles(({ token, css }) => {
         border-start-end-radius: 0;
       }
 
-      .grid__cell-content {
-        display: block; 
-        width: fit-content;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      &.ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody>tr>td {
+        padding: 0;
       }
 
       .ant-table-cell {
@@ -65,6 +66,18 @@ export const useStyles = createStyles(({ token, css }) => {
         position: sticky;
         top: 0;
         z-index: 1;
+      }
+
+      .grid__cell-content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+
+      .grid__cell-content > * {
+        display: flex;
+        width: 100%;
+        height: 100%;
       }
     `
   }

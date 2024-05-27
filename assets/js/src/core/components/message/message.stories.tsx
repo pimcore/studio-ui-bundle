@@ -19,10 +19,11 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 const config: Meta = {
   title: 'Pimcore studio/UI/Message',
   component: (args) => {
-    const [messageApi, contextHolder] = useMessage()
+    const messageApi = useMessage()
 
     const showMessage = (): void => {
-      void messageApi.open({
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.open({
         type: args.type,
         content: args.content,
         duration: args.duration
@@ -31,7 +32,6 @@ const config: Meta = {
 
     return (
       <>
-        {contextHolder}
         <Button
           onClick={ showMessage }
           type="primary"
