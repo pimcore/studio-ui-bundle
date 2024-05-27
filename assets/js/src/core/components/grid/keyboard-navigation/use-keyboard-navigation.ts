@@ -27,9 +27,11 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
     let columnId = props.column.id
     const isArrowKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)
 
-    if (isArrowKey) {
-      event.preventDefault()
+    if (!isArrowKey) {
+      return
     }
+
+    event.preventDefault()
 
     if (event.key === 'ArrowDown') {
       rowId++
@@ -49,10 +51,20 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
       }
     }
 
-    if (isArrowKey) {
-      if (tableElement?.current !== null) {
-        tableElement!.current.querySelector<HTMLDivElement>(`[data-grid-row="${rowId}"][data-grid-column="${columnId}"]`)?.focus()
+    if (tableElement?.current !== null) {
+      const cellElement = tableElement!.current.querySelector<HTMLDivElement>(`[data-grid-row="${rowId}"][data-grid-column="${columnId}"]`)
+
+      if (cellElement === null) {
+        return
       }
+      cellElement.focus()
+      // Resposition selection ortherwise the copy event will not fire
+      const range = document.createRange()
+      const selection = window.getSelection()
+
+      range.setStart(cellElement, 0)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
     }
   }
 

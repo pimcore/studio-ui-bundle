@@ -18,23 +18,51 @@ import { injectable } from 'inversify'
 interface ITypeRegistryConfig {
   type: string
   component: ComponentType<DefaultCellProps>
-
+  pasteHandler?: (event: ClipboardEvent, config: DefaultCellProps) => void
+  copyHandler?: (event: ClipboardEvent, config: DefaultCellProps) => boolean
 }
 
 export interface ITypeRegistry {
   registerType: (config: ITypeRegistryConfig) => void
-  getType: (type: string) => ComponentType<DefaultCellProps>
+  getComponentByType: (type: string) => ComponentType<DefaultCellProps>
+  getCopyHandlerByType: (type: string) => ITypeRegistryConfig['copyHandler']
+  getPasteHandlerByType: (type: string) => ITypeRegistryConfig['pasteHandler']
+  getConfigByType: (type: string) => ITypeRegistryConfig
 }
 
 @injectable()
 export class TypeRegistry implements ITypeRegistry {
-  private registry: Record<string, ComponentType<DefaultCellProps>> = {}
+  private readonly types: ITypeRegistryConfig[] = []
 
-  public registerType (config: ITypeRegistryConfig): void {
-    this.registry[config.type] = config.component
+  registerType (config: ITypeRegistryConfig): void {
+    this.types.push(config)
   }
 
-  public getType (type: string): ComponentType<DefaultCellProps> {
-    return this.registry[type]
+  getComponentByType (type: string): ComponentType<DefaultCellProps> {
+    const config = this.getConfigByType(type)
+
+    return config.component
+  }
+
+  getCopyHandlerByType (type: string): ITypeRegistryConfig['copyHandler'] {
+    const config = this.getConfigByType(type)
+
+    return config.copyHandler
+  }
+
+  getPasteHandlerByType (type: string): ITypeRegistryConfig['pasteHandler'] {
+    const config = this.getConfigByType(type)
+
+    return config.pasteHandler
+  }
+
+  getConfigByType (type: string): ITypeRegistryConfig {
+    const config = this.types.find((config) => config.type === type)
+
+    if (config === undefined) {
+      throw new Error(`Type ${type} not found`)
+    }
+
+    return config
   }
 }

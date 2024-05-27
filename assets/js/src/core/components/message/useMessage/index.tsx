@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { message } from 'antd'
+import { App } from 'antd'
 import {
   type ArgsProps,
   type ConfigOptions,
@@ -23,11 +23,12 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useStyle } from '@Pimcore/components/message/message.style'
 
-export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInstance, React.ReactElement] => {
-  const [messageApi, contextHolder] = message.useMessage(messageConfig)
+export const useMessage = (messageConfig?: ConfigOptions): MessageInstance => {
+  const { message } = App.useApp()
+  const decoratedMessage = { ...message }
   const { styles } = useStyle()
 
-  messageApi.info = (content: JointContent, duration?: number | VoidFunction, onClose?: VoidFunction): MessageType => {
+  decoratedMessage.info = (content: JointContent, duration?: number | VoidFunction, onClose?: VoidFunction): MessageType => {
     let config: ArgsProps
     if (content !== null && typeof content === 'object' && 'content' in content) {
       config = content
@@ -51,7 +52,7 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
     )
   }
 
-  messageApi.open = (config: ArgsProps): MessageType => {
+  decoratedMessage.open = (config: ArgsProps): MessageType => {
     if (config.type === 'info') {
       return message.open({
         icon: <Icon
@@ -69,5 +70,5 @@ export const useMessage = (messageConfig?: ConfigOptions): readonly [MessageInst
     })
   }
 
-  return [messageApi, contextHolder]
+  return decoratedMessage
 }

@@ -23,7 +23,25 @@ moduleSystem.registerModule({
 
     typeRegistry.registerType({
       type: 'text',
-      component: TextCell
+      component: TextCell,
+
+      copyHandler: (event, config) => {
+        event.clipboardData!.setData('text/plain', config.getValue<string>())
+
+        return true
+      },
+
+      pasteHandler: (event, config) => {
+        const value = event.clipboardData!.getData('text/plain')
+
+        if (config.table.options.meta?.onUpdateCellData !== undefined) {
+          config.table.options.meta.onUpdateCellData({
+            rowIndex: parseInt(config.row.id),
+            columnId: config.column.id,
+            value
+          })
+        }
+      }
     })
   }
 })
