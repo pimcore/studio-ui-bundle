@@ -13,7 +13,7 @@
 
 import React, { useState } from 'react'
 import { type Meta } from '@storybook/react'
-import { Grid, GridProps } from './grid'
+import { Grid, type GridProps } from './grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from './columns/default-cell'
 
@@ -25,15 +25,21 @@ const config: Meta = {
 
   render: (data: GridProps) => {
     const ComponentWrapper = (): React.JSX.Element => {
-      const [_data, setData] = useState(data.data);
+      const [_data, setData] = useState(data.data)
 
-      function onUpdateCellData({ rowIndex, columnId, value }): void {
-        const updatedData = [..._data];
-        updatedData[rowIndex][columnId] = value;
-        setData(updatedData);
+      function onUpdateCellData ({ rowIndex, columnId, value }): void {
+        const updatedData = [..._data]
+        updatedData[rowIndex][columnId] = value
+        setData(updatedData)
       }
 
-      return <Grid {...data} data={_data} onUpdateCellData={onUpdateCellData} />
+      return (
+        <Grid
+          { ...data }
+          data={ _data }
+          onUpdateCellData={ onUpdateCellData }
+        />
+      )
     }
 
     return <ComponentWrapper />
@@ -58,10 +64,10 @@ const columnHelper = createColumnHelper<User>()
 const columns = [
   columnHelper.accessor('firstname', {}),
   columnHelper.accessor('lastname', {
-    cell: info => <b><DefaultCell {...info} /></b>
+    cell: info => <b><DefaultCell { ...info } /></b>
   }),
   columnHelper.accessor('age', {
-    cell: info => <b><DefaultCell {...info} /></b>
+    cell: info => <b><DefaultCell { ...info } /></b>
   })
 ]
 
@@ -79,14 +85,14 @@ const editableColumns = [
     }
   }),
   columnHelper.accessor('lastname', {
-    cell: info => <b><DefaultCell {...info} /></b>,
+    cell: info => <b><DefaultCell { ...info } /></b>,
     meta: {
       editable: true
     }
   }),
   columnHelper.accessor('age', {
     header: 'Non editable age',
-    cell: info => <b><DefaultCell {...info} /></b>
+    cell: info => <b><DefaultCell { ...info } /></b>
   })
 ]
 
@@ -95,7 +101,7 @@ export const EditableColumns = {
     data,
     columns: editableColumns,
     onUpdateCellData: ({ rowIndex, columnId, value }) => {
-      console.log({ rowIndex, columnId, value});
+      console.log({ rowIndex, columnId, value })
     }
   }
 }
