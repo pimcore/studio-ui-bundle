@@ -48,9 +48,9 @@ export const TextCell = (props: DefaultCellProps): React.JSX.Element => {
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
       return (
-        <div>
+        <>
           { props.getValue() }
-        </div>
+        </>
       )
     }
 
@@ -66,7 +66,7 @@ export const TextCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ styles['text-cell'] }>
+    <div className={ [styles['text-cell'], 'default-cell__content'].join(' ') }>
       { getCellContent() }
     </div>
   )

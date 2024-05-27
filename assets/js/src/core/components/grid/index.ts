@@ -16,6 +16,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type TypeRegistry } from './services/type-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { TextCell } from './columns/types/text/text-cell'
+import { DateCell } from './columns/types/date/date-cell'
 
 moduleSystem.registerModule({
   onInit () {
@@ -42,6 +43,11 @@ moduleSystem.registerModule({
           })
         }
       }
+    })
+
+    typeRegistry.registerType({
+      type: 'date',
+      component: DateCell
     })
   }
 })

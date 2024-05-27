@@ -22,6 +22,7 @@ import { type TypeRegistry } from '../services/type-registry'
 import { useKeyboardNavigation } from '../keyboard-navigation/use-keyboard-navigation'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
+import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 
 export type DefaultCellProps = CellContext<any, any>
 
@@ -36,9 +37,10 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
   const { handleArrowNavigation } = useKeyboardNavigation(props)
   const messageAPi = useMessage()
   const { t } = useTranslation()
+  const oldInEditMode = usePrevious(isInEditMode)
 
   useEffect(() => {
-    if (!isInEditMode) {
+    if (oldInEditMode !== undefined && oldInEditMode !== isInEditMode && !isInEditMode) {
       element.current?.focus()
     }
   }, [isInEditMode])
@@ -71,10 +73,11 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
 
   function onCopy (_event): void {
     const event = _event as ClipboardEvent
-    event.preventDefault()
     const copyHandler = typeRegistry.getCopyHandlerByType(cellType)
 
     if (copyHandler !== undefined && copyHandler(event, props)) {
+      event.preventDefault()
+
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageAPi.success({
         content: t('grid.copy-notice'),

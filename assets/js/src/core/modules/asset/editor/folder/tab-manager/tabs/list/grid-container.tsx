@@ -12,11 +12,8 @@
 */
 
 import React from 'react'
-import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Tag } from 'antd'
-import { PreviewContainer } from './grid-columns/preview-container'
 import { useTranslation } from 'react-i18next'
 import { type Asset, type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
@@ -30,14 +27,10 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<Asset>()
 
   const columns = [
-    columnHelper.accessor('fullPath', {
+    columnHelper.accessor('imageThumbnailPath', {
       header: t('asset.asset-editor-tabs.list.columns.preview'),
-      cell: info => {
-        if (info.row.original.type !== 'image') {
-          return <></>
-        }
-
-        return <PreviewContainer cellInfo={ info } />
+      meta: {
+        type: 'asset-preview'
       },
       id: 'preview',
       size: 110
@@ -53,24 +46,25 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
 
     columnHelper.accessor('fullPath', {
       header: t('asset.asset-editor-tabs.list.columns.fullPath'),
-      cell: info => (
-        <Tag
-          bordered={ false }
-          color='processing'
-        >{info.getValue()!}</Tag>
-      ),
       id: 'fullPath',
+      meta: {
+        type: 'asset-link'
+      },
       size: 300
     }),
 
     columnHelper.accessor('creationDate', {
       header: t('asset.asset-editor-tabs.list.columns.creationDate'),
-      cell: info => <FormattedDate timestamp={ info.getValue()! * 1000 } />
+      meta: {
+        type: 'date'
+      }
     }),
 
     columnHelper.accessor('modificationDate', {
       header: t('asset.asset-editor-tabs.list.columns.modificationDate'),
-      cell: info => <FormattedDate timestamp={ info.getValue()! * 1000 } />
+      meta: {
+        type: 'date'
+      }
     })
   ]
 

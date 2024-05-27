@@ -13,23 +13,14 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyle = createStyles(({ css }) => {
   return {
-    'default-cell': css`
-      display: flex;
-      width: 100%;
-      height: 100%;
-    
-      &:focus {
-        outline: 1px solid ${token.colorPrimaryActive};
-        outline-offset: -1px;
-      }
-
-      .default-cell__content {
-        width: 100%;
-        margin: 4px;
+    link: css`
+      .ant-tag {
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 100%;
+        cursor: pointer;
       }
     `
   }

@@ -20,7 +20,20 @@ export const useStyles = createStyles(({ token, css }) => {
       justify-content: center;
       align-items: center;
       aspect-ratio: 1;
-      width: 80px;
+      width: 100%;
+      height: 100%;
+
+      .ant-image {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
     `
   }
 }, { hashPriority: 'low' })
