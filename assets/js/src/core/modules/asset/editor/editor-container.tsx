@@ -61,10 +61,6 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     return <></>
   }
 
-  if (asset.type === 'image') {
-    console.log(asset)
-  }
-
   let definition = componentRegistryService.getComponent(asset.type!)
 
   if (definition === undefined) {

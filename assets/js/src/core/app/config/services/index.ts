@@ -12,10 +12,15 @@
 */
 
 import { container } from '@Pimcore/app/depency-injection'
-import { FolderTabManager } from '@Pimcore/modules/asset/editor/folder/tab-manager/folder-tab-manager'
+import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
 import { ComponentRegistryService } from '@Pimcore/modules/asset/editor/services/component-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/image-tab-manager'
+import { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
+import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
+import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'
+import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 
 export const serviceIds = {
   // Widget manager
@@ -23,10 +28,17 @@ export const serviceIds = {
 
   // Assets
   'Asset/Editor/ComponentRegistry': 'Asset/Editor/ComponentRegistry',
+  'Asset/Editor/DocumentTabManager': 'Asset/Editor/DocumentTabManager',
   'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
+  'Asset/Editor/ImageTabManager': 'Asset/Editor/ImageTabManager',
+  'Asset/Editor/TextTabManager': 'Asset/Editor/TextTabManager',
+  'Asset/Editor/VideoTabManager': 'Asset/Editor/VideoTabManager',
 
   // icon library
-  iconLibrary: 'IconLibrary'
+  iconLibrary: 'IconLibrary',
+
+  // Grid
+  'Grid/TypeRegistry': 'Grid/TypeRegistry'
 }
 
 // Widget manager
@@ -34,7 +46,15 @@ container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 
 // Assets
 container.bind(serviceIds['Asset/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
+
+container.bind(serviceIds['Asset/Editor/DocumentTabManager']).to(DocumentTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/ImageTabManager']).to(ImageTabManager).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/TextTabManager']).to(TextTabManager).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/VideoTabManager']).to(VideoTabManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
+
+// Grid
+container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScope()

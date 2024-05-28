@@ -68,6 +68,7 @@ import ellipsisOutlined from '@Pimcore/assets/icons/ellipsis-outlined.inline.svg
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
+import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
 import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
@@ -304,6 +305,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'user-01',
       component: user01
+    })
+    iconLibrary.register({
+      name: 'share-03',
+      component: Share03
     })
   }
 })

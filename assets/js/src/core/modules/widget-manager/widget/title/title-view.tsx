@@ -23,10 +23,10 @@ interface TitleViewProps {
 
 const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { title, icon } = props
+  const { title, icon, className } = props
 
   return (
-    <div className={ styles.WidgetTitle }>
+    <div className={ [styles.WidgetTitle, className].join(' ') }>
       <Icon
         name={ icon }
         options={ {

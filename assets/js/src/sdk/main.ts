@@ -28,7 +28,7 @@ export { type Widget, WidgetRegistry } from '@Pimcore/modules/widget-manager/ser
 
 export type * from '@Pimcore/modules/asset/asset-api-slice.gen'
 export { useGetAssetByIdQuery, useGetAssetsQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
-export { FolderTabManager } from '@Pimcore/modules/asset/editor/folder/tab-manager/folder-tab-manager'
+export { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
 export { AssetContext, AssetProvider, type IAssetContext, type IAssetProviderProps } from '@Pimcore/modules/asset/asset-provider'
 export type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 
