@@ -46,6 +46,26 @@ export const useStyles = createStyles(({ token, css }) => {
               width: 100%;
               display: flex;
               justify-content: center;
+                
+              .ant-checkbox-wrapper {
+                justify-content: center;
+              }
+            }
+          }
+            
+          //actions column
+          .ant-table-cell:nth-child(6) {
+            .grid__cell-content {
+              width: 100%;
+              display: flex;
+
+              .ant-btn-icon {
+                color: ${token.colorPrimary};
+                  
+                &:hover {
+                  color: ${token.colorPrimaryHover};
+                }
+              }
             }
           }
         }

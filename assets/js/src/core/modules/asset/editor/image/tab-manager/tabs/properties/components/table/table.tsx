@@ -23,6 +23,7 @@ import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-a
 import { Button, Checkbox, Result } from 'antd'
 import { useStyles } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -72,7 +73,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       cell: (info) => {
         return (
           <>
-            <p>{info.row.original.data}</p>
+            <DefaultCell { ...info } />
             <Button
               icon={ <Icon name={ 'copy-07' } /> }
               onClick={ () => {
@@ -91,7 +92,11 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
       cell: (info) => {
-        return <Checkbox checked={ info.row.original.inheritable } />
+        console.log(info)
+
+        return (
+          <Checkbox checked={ info.row.original.inheritable } />
+        )
       },
       size: 70,
       id: 'properties-table--inheritable-column'
@@ -100,10 +105,16 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
       cell: (info) => {
         return (
-          <div>
-            <button>edit</button>
-            <button>delete</button>
-          </div>
+          <>
+            <Button
+              icon={ <Icon name="group" /> }
+              onClick={ () => {
+                console.log('Clicked on groups icon')
+              } }
+              type="link"
+            />
+
+          </>
         )
       },
       id: 'properties-table--actions-column'

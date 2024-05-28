@@ -71,6 +71,7 @@ import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
 import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
 import Copy07 from '@Pimcore/assets/icons/copy-07.inline.svg'
+import Group from '@Pimcore/assets/icons/group.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -299,6 +300,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'copy-07',
       component: Copy07
+    })
+    iconLibrary.register({
+      name: 'group',
+      component: Group
     })
   }
 })
