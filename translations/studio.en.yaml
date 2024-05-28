@@ -51,6 +51,7 @@ aria.asset.image.editor.zoom.reset: Reset zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom in
 aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
+grid.copy-notice: Copied to clipboard
 asset.asset-editor-tabs.properties.text: Properties
 asset.asset-editor-tabs.properties.edit-own-properties: Editor own properties
 asset.asset-editor-tabs.properties.all-properties: All Properties
