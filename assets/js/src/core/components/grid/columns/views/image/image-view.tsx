@@ -24,7 +24,7 @@ const ImageView = (props: ImageViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
-    <div className={ styles.image }>
+    <div className={ [styles.image, 'default-cell__content'].join(' ') }>
       <PimcoreImage { ...props } />
     </div>
   )

@@ -207,6 +207,7 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: any[];
 };
+
 export const {
     useGetAssetsQuery,
     useGetAssetCustomSettingsByIdQuery,

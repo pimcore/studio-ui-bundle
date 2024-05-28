@@ -16,6 +16,8 @@ import { FolderTabManager } from '@Pimcore/modules/asset/editor/folder/tab-manag
 import { ComponentRegistryService } from '@Pimcore/modules/asset/editor/services/component-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { ImageTabManager } from '@Pimcore/modules/asset/editor/image/tab-manager/image-tab-manager'
+import { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 
 export const serviceIds = {
   // Widget manager
@@ -24,9 +26,13 @@ export const serviceIds = {
   // Assets
   'Asset/Editor/ComponentRegistry': 'Asset/Editor/ComponentRegistry',
   'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
+  'Asset/Editor/ImageTabManager': 'Asset/Editor/ImageTabManager',
 
   // icon library
-  iconLibrary: 'IconLibrary'
+  iconLibrary: 'IconLibrary',
+
+  // Grid
+  'Grid/TypeRegistry': 'Grid/TypeRegistry'
 }
 
 // Widget manager
@@ -35,6 +41,10 @@ container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 // Assets
 container.bind(serviceIds['Asset/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/ImageTabManager']).to(ImageTabManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
+
+// Grid
+container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScope()

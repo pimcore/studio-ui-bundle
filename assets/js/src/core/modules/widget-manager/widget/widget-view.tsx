@@ -32,6 +32,7 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
     <div className={ ['widget', styles.Widget].join(' ') }>
       {showTitle === true && (
         <TitleView
+          className={ 'widget__title' }
           icon={ icon }
           title={ t(title) }
         />

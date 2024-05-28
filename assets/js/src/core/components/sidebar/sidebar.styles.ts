@@ -52,7 +52,6 @@ export const useStyle = createStyles(({ token, css }) => {
                   padding: ${token.paddingXS}px ${token.paddingXXS}px;
                   justify-content: center;
                   align-items: center;
-                  background: ${token.colorFillQuaternary};
 
                   .pimcore-icon {
                       flex-shrink: 0;
@@ -65,6 +64,7 @@ export const useStyle = createStyles(({ token, css }) => {
                   }
 
                   &.active {
+                      background: ${token.colorFillQuaternary};
                       border-right: 2px solid ${token.colorPrimaryActive};
 
                       .pimcore-icon {

@@ -26,8 +26,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       &.ant-tabs .ant-tabs-tab {
-        padding: 0 ${token.paddingXS}px;
-        margin: 0 !important;
+        margin: 0 ${token.paddingXS}px !important;
         transition: color .2s;
 
         display: flex;
@@ -38,8 +37,8 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tabpane {
-        position: relative;
         display: flex;
+        flex-direction: column;
         height: 100%;
         width: 100%;
       }
@@ -72,7 +71,7 @@ export const useStyle = createStyles(({ token, css }) => {
           padding-bottom: ${token.paddingXS}px;
           justify-content: center;
           align-items: center;
-          gap: ${token.Tabs.paddingTabs}px;
+          gap: ${token.paddingTabs}px;
           
           .ant-tabs-tab-icon {
             height: 16px;
@@ -88,6 +87,13 @@ export const useStyle = createStyles(({ token, css }) => {
             }
           }
         }
+          
+        .detachable-button {
+          display: none;
+          color: ${token.Tabs.itemUnselectedIconColor};
+          height: ${token.controlHeightSM}px;
+          width: ${token.controlHeightSM}px;
+        }
 
         &:not(.ant-tabs-tab-active) {
           .ant-tabs-tab-icon {
@@ -100,6 +106,11 @@ export const useStyle = createStyles(({ token, css }) => {
         &.ant-tabs-tab-active  {
           .ant-tabs-tab-icon {
               color: ${token.colorPrimaryActive}
+          }
+
+          .detachable-button {
+            display: flex;
+            color: ${token.colorPrimary};
           }
         }
       }
@@ -127,7 +138,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
-          border-bottom: 2px solid ${token.colorPrimaryActive};
+          border-bottom: 3px solid ${token.colorPrimaryActive};
       }
     `
   }

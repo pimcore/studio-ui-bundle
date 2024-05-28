@@ -11,10 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import { type RefObject, createContext } from 'react'
 
-export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
-  return (
-    <h4>Embedded Metadata TAB</h4>
-  )
+export interface IGridContext {
+  table: RefObject<HTMLTableElement> | null
 }
+
+export const GridContext = createContext<IGridContext>({
+  table: null
+})
+
+export const GridContextProvider = GridContext.Provider
