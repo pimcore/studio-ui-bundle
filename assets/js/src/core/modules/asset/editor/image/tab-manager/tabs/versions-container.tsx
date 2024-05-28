@@ -12,9 +12,18 @@
 */
 
 import React from 'react'
+// import { useGetVersionsQuery } from '@Pimcore/modules/element/editor/tab-manager/tabs/versions-api-slice.gen'
+import { VersionsView } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/versions-view'
 
 export const VersionsTabContainer = (): React.JSX.Element => {
+  // const { data } = useGetVersionsQuery({
+  //   page: 1,
+  //   pageSize: 10,
+  //   elementId: 1,
+  //   elementType: 'asset'
+  // })
+  // console.log(data)
   return (
-    <h4>Versions TAB</h4>
+    <VersionsView />
   )
 }

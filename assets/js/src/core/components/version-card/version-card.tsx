@@ -78,7 +78,7 @@ export const VersionCard = ({
     </div>
   )
 
-  let extra = null
+  let extra
   let classNameByState = isActive ? 'card__is-active' : ''
 
   if (isPublished) {
@@ -131,7 +131,6 @@ export const VersionCard = ({
               <Button
                 className={ 'btn-publish' }
                 icon={ <Icon name="world" /> }
-                size="medium"
               >
                 {t('version.publish')}
               </Button>
@@ -139,7 +138,6 @@ export const VersionCard = ({
             <Button
               aria-label={ t('aria.version.delete') }
               icon={ <Icon name="delete-outlined" /> }
-              size="medium"
             />
           </div>
         </div>
