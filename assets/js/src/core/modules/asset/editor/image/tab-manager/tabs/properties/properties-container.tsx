@@ -13,55 +13,60 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Radio, type RadioChangeEvent, Select } from 'antd'
+import { Button, Divider, Result, Segmented, Select } from 'antd'
 import { useStyle } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { Table } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table'
+import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const [propertiesTab, setPropertiesTab] = React.useState<string>('own')
-  const tabs = [
-    { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
-    { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
-  ]
+  const { context } = useGlobalAssetContext()
+  const [propertiesTableTab, setPropertiesTableTab] = React.useState<string>('own')
 
-  const changePropertiesTab = ({ target: { value } }: RadioChangeEvent): void => {
-    console.log('radio1 checked', value)
-    setPropertiesTab(String(value))
+  if (context === undefined) {
+    return <Result title="No context" />
   }
 
   return (
     <div className={ styles.tab }>
+      <ElementToolbar />
+
       <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
         <p className={ 'pimcore-properties-toolbar__headline' }>
-          { t('asset.asset-editor-tabs.properties') }
+          { t('asset.asset-editor-tabs.properties.text') }
         </p>
 
-        <Radio.Group
-          buttonStyle="solid"
-          onChange={ changePropertiesTab }
-          optionType="button"
-          options={ tabs }
-          value={ propertiesTab }
+        <Segmented<string>
+          onChange={ setPropertiesTableTab }
+          options={ [
+            { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
+            { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
+          ] }
         />
 
-        <Select
-          options={ [
-            { value: 1, label: 'Property 1' },
-            { value: 2, label: 'Property 2' },
-            { value: 3, label: 'Property 3' },
-            { value: 4, label: 'Property 4' }
-          ] }
-          placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
-        />
-        <Button
-          icon={ <Icon name={ 'PlusCircleOutlined' } /> }
-          type="primary"
-        >
-          { t('asset.asset-editor-tabs.properties.add-custom-property') }
-        </Button>
+        <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
+          <Select
+            options={ [
+              { value: 1, label: 'Property 1' },
+              { value: 2, label: 'Property 2' },
+              { value: 3, label: 'Property 3' },
+              { value: 4, label: 'Property 4' }
+            ] }
+            placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
+          />
+
+          <Divider type={ 'vertical' } />
+
+          <Button icon={ <Icon name={ 'PlusCircleOutlined' } /> }>
+            { t('asset.asset-editor-tabs.properties.add-custom-property') }
+          </Button>
+        </div>
       </div>
+
+      <Table propertiesTableTab={ propertiesTableTab } />
     </div>
   )
 }

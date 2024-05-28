@@ -29,6 +29,49 @@ export const useStyle = createStyles(({ token, css }) => {
         display: flex;
         align-items: center;
       }
+        
+      .pimcore-properties-toolbar__headline {
+          font-weight: 600;
+          line-height: 20px;
+          color: ${token.itemActiveColor};
+      }
+        
+      .ant-segmented-group {
+          padding: 2px;
+          border-radius: ${token.borderRadius}px;
+          border: 1px solid ${token.colorBorderSecondary};
+          background: ${token.colorBgLayout};
+          box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.03), 0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 2px 4px 0px rgba(0, 0, 0, 0.02);
+          
+          .ant-segmented-item {
+              color: ${token.itemColor};
+              
+              &.ant-segmented-item-selected {
+                  background: ${token.controlItemBgActive};
+                  border-color: ${token.controlItemBgActive};
+                  color: rgba(0, 0, 0, 0.88); //TODO: replace with token
+              }
+          }
+      }
+
+      .pimcore-properties-toolbar__predefined-properties {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          .ant-select {
+              .ant-select-selection-placeholder,
+              .ant-select-arrow {
+                  color: rgba(0, 0, 0, 0.88) //TODO: replace with token   
+              }
+          }
+          
+          .ant-divider {
+              border-color: ${token.Divider.colorSplit};
+              height: 24px;
+              margin: 0;
+          }
+      }
     `
   }
 })

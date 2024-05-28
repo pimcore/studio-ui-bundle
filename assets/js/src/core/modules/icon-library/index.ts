@@ -70,6 +70,7 @@ import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
 import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
 import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
+import Copy07 from '@Pimcore/assets/icons/copy-07.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -294,6 +295,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'share-03',
       component: Share03
+    })
+    iconLibrary.register({
+      name: 'copy-07',
+      component: Copy07
     })
   }
 })
