@@ -19,12 +19,17 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Table } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
+import { useGetPropertiesQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const { context } = useGlobalAssetContext()
   const [propertiesTableTab, setPropertiesTableTab] = React.useState<string>('own')
+
+  const { data, isLoading } = useGetPropertiesQuery({
+    elementType: 'asset'
+  })
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -49,14 +54,18 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
         <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
           <Select
-            options={ [
-              { value: 1, label: 'Property 1' },
-              { value: 2, label: 'Property 2' },
-              { value: 3, label: 'Property 3' },
-              { value: 4, label: 'Property 4' }
-            ] }
+            loading={ isLoading }
             placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
-          />
+          >
+            {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
+              <Select.Option
+                key={ item.id }
+                value={ item.id }
+              >
+                { item.name }
+              </Select.Option>
+            )) }
+          </Select>
 
           <Divider type={ 'vertical' } />
 
