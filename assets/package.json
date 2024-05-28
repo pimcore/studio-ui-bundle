@@ -13,7 +13,7 @@
     "build-vendor": "encore production --config webpack.vendor.config",
     "build-core-dll": "encore production --config webpack.core-dll.config",
     "build-storybook": "storybook build",
-    "build-api-client": "npx @rtk-query/codegen-openapi ./js/build/api/openapi-config.ts",
+    "build-api-client": "npx @rtk-query/codegen-openapi ./build/api/openapi-config.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./js",
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./js --fix",
     "test": "jest ./js/src --passWithNoTests",
@@ -81,7 +81,9 @@
     "flexlayout-react": "^0.7.15",
     "i18next": "^23.8.2",
     "react-i18next": "^14.0.5",
-    "react-redux": "^9.1.0"
+    "react-redux": "^9.1.0",
+    "codemirror": "^5.56.0",
+    "react-codemirror2": "^8.0.0"
   },
   "peerDependencies": {
     "antd": "^5.17.0",

@@ -29,6 +29,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
                 providesTags: ["Assets"],
             }),
+            getAssetDataTextById: build.query<GetAssetDataTextByIdApiResponse, GetAssetDataTextByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
+                providesTags: ["Assets"],
+            }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
@@ -63,6 +67,14 @@ export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of cust
     customSettings?: CustomSettings;
 };
 export type GetAssetCustomSettingsByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
+export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text data */ {
+    /** UTF 8 encoded text data */
+    data?: string;
+};
+export type GetAssetDataTextByIdApiArg = {
     /** ID of the asset */
     id: number;
 };
@@ -195,4 +207,10 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: any[];
 };
-export const { useGetAssetsQuery, useGetAssetCustomSettingsByIdQuery, useGetAssetByIdQuery } = injectedRtkApi;
+
+export const {
+    useGetAssetsQuery,
+    useGetAssetCustomSettingsByIdQuery,
+    useGetAssetDataTextByIdQuery,
+    useGetAssetByIdQuery,
+} = injectedRtkApi;
