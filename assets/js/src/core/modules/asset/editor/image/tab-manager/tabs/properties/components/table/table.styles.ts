@@ -16,19 +16,45 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     table: css`
-        .ant-table {
-            .ant-table-tbody {
-                .ant-table-cell:nth-child(5) {
-                    display: flex;
-                    justify-content: center;
-                }
+      .ant-table {
+        .ant-table-tbody {
+          //value (data) column
+          .ant-table-cell:nth-child(4) {
+            .grid__cell-content {
+              width: 100%;
+              display: flex;
+              align-items: center;
             }
+              
+            p {
+              margin: 0;
+              flex-grow: 1;
+            }
+              
+            .ant-btn {
+              color: ${token.colorIcon};
+              
+              &:hover {
+                color: ${token.colorPrimaryHover}
+              }
+            }
+          }
+            
+          //inherited properties
+          .ant-table-cell:nth-child(5) {
+            .grid__cell-content {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+            }
+          }
         }
+      }
         
-        .headline {
-            padding: ${token.paddingXS}px;
-            margin: 0;
-        }
+      .headline {
+        padding: ${token.paddingXS}px;
+        margin: 0;
+      }
     `
   }
 })

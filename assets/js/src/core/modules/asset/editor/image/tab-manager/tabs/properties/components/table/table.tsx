@@ -20,8 +20,9 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Checkbox, Result } from 'antd'
+import { Button, Checkbox, Result } from 'antd'
 import { useStyles } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table.styles'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -42,18 +43,18 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   })
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
-  const [gridDataAll, setGridDataAll] = useState<DataProperty[]>([])
+  const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
-      if (propertiesTableTab === 'own') {
-        setGridDataOwn(data?.items.filter((item) => {
-          return item.inherited === false
-        }))
-      }
+      setGridDataOwn(data?.items.filter((item) => {
+        return item.inherited === false
+      }))
 
-      setGridDataAll(data.items)
+      setGridDataInherited(data?.items.filter((item) => {
+        return item.inherited === true
+      }))
     }
-  }, [propertiesTableTab, data])
+  }, [data])
 
   const columnHelper = createColumnHelper<DataProperty>()
   const columns = [
@@ -67,7 +68,25 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.description')
     }),
     columnHelper.accessor('data', {
-      header: t('asset.asset-editor-tabs.properties.columns.data')
+      header: t('asset.asset-editor-tabs.properties.columns.data'),
+      cell: (info) => {
+        return (
+          <>
+            <p>{info.row.original.data}</p>
+            <Button
+              icon={ <Icon name={ 'copy-07' } /> }
+              onClick={ () => {
+                navigator.clipboard.writeText(info.row.original.data as string)
+                  .catch((e) => {
+                    console.error('Failed to copy data to clipboard', e)
+                  })
+              } }
+              type={ 'link' }
+            />
+          </>
+        )
+      },
+      id: 'properties-table--data-column'
     }),
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
@@ -111,7 +130,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
               </p>
               <Grid
                 columns={ columns }
-                data={ gridDataAll }
+                data={ gridDataInherited }
               />
             </>
           )}
