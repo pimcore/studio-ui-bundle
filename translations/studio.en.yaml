@@ -64,3 +64,7 @@ asset.asset-editor-tabs.properties.columns.data: Value
 asset.asset-editor-tabs.properties.columns.inheritable: Inheritable
 asset.asset-editor-tabs.properties.columns.actions: Actions
 asset.asset-editor-tabs.properties.inherited.properties: Inherited Properties
+asset.asset-editor-tabs.properties.add-custom-property.cancel: Cancel
+asset.asset-editor-tabs.properties.add-custom-property.key: Key
+asset.asset-editor-tabs.properties.add-custom-property.add: Add
+asset.asset-editor-tabs.properties.add-custom-property.type: Type
