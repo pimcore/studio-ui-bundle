@@ -35,9 +35,14 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
+import { PropertiesContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container'
+import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import {
-  PropertiesContainer
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container'
+  ValueCell
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
+import {
+  TypeIconCell
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -116,7 +121,7 @@ moduleSystem.registerModule({
 
     imageEditorTabManager.register({
       key: 'properties',
-      label: 'asset.asset-editor-tabs.properties',
+      label: 'asset.asset-editor-tabs.properties.text',
       children: <PropertiesContainer />,
       icon: <Icon name={ 'settings2' } />
     })
@@ -125,6 +130,16 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'detachable-tab',
       component: DetachedTab
+    })
+
+    const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
+    gridTypeRegistry.registerType({
+      component: ValueCell,
+      type: 'asset-property-value'
+    })
+    gridTypeRegistry.registerType({
+      component: TypeIconCell,
+      type: 'asset-property-icon'
     })
   }
 })
