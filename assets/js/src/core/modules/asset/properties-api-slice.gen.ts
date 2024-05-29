@@ -20,17 +20,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Properties for Element"],
             }),
-            updatePropertiesForElementByTypeAndId: build.mutation<
-                UpdatePropertiesForElementByTypeAndIdApiResponse,
-                UpdatePropertiesForElementByTypeAndIdApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Properties for Element"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -53,18 +42,6 @@ export type GetPropertiesForElementByTypeAndIdApiArg = {
     elementType: "asset" | "document" | "dataObject";
     /** ID of the element */
     id: number;
-};
-export type UpdatePropertiesForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
-    items?: DataProperty[];
-};
-export type UpdatePropertiesForElementByTypeAndIdApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
-    /** ID of the element */
-    id: number;
-    body: {
-        items?: UpdateDataProperty[];
-    };
 };
 export type PredefinedProperty = {
     /** AdditionalAttributes */
@@ -126,18 +103,4 @@ export type DataProperty = {
     /** description */
     description?: string | null;
 };
-export type UpdateDataProperty = {
-    /** key */
-    key?: string;
-    /** data */
-    data?: any | null;
-    /** type */
-    type?: string;
-    /** inheritable */
-    inheritable?: boolean;
-};
-export const {
-    useGetPropertiesQuery,
-    useGetPropertiesForElementByTypeAndIdQuery,
-    useUpdatePropertiesForElementByTypeAndIdMutation,
-} = injectedRtkApi;
+export const { useGetPropertiesQuery, useGetPropertiesForElementByTypeAndIdQuery } = injectedRtkApi;
