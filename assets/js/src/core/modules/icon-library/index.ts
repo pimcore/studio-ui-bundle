@@ -72,6 +72,11 @@ import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
 import Copy07 from '@Pimcore/assets/icons/copy-07.inline.svg'
 import Group from '@Pimcore/assets/icons/group.inline.svg'
+import Note from '@Pimcore/assets/icons/note.inline.svg'
+import MainDocument from '@Pimcore/assets/icons/pimcore-main-icon-document.inline.svg'
+import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
+import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
+import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -304,6 +309,26 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'group',
       component: Group
+    })
+    iconLibrary.register({
+      name: 'note',
+      component: Note
+    })
+    iconLibrary.register({
+      name: 'mainDocument',
+      component: MainDocument
+    })
+    iconLibrary.register({
+      name: 'mainAsset',
+      component: MainAsset
+    })
+    iconLibrary.register({
+      name: 'mainObject',
+      component: MainObject
+    })
+    iconLibrary.register({
+      name: 'check-done-02',
+      component: CheckDone02
     })
   }
 })
