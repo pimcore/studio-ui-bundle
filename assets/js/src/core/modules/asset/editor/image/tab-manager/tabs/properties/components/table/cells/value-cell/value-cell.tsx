@@ -21,8 +21,8 @@ import {
   SelectCell
 } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/select-cell/select-cell'
 import {
-  DocumentCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/document-cell/document-cell'
+  ElementCell
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/element-cell/element-cell'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type
@@ -36,7 +36,9 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
       case 'text':
         return <TextCell { ...props } />
       case 'document':
-        return <DocumentCell { ...props } />
+      case 'asset':
+      case 'object':
+        return <ElementCell { ...props } />
       default:
         return <div>{ 'cell type not supported' }</div>
     }

@@ -16,7 +16,7 @@ import React from 'react'
 import { Tag } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-export const DocumentCell = (props: DefaultCellProps): React.JSX.Element => {
+export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyData = props.row.original
 
   return (
