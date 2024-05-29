@@ -18,28 +18,28 @@ export const useStyles = createStyles(({ token, css }) => {
     table: css`
       .ant-table {
         .ant-table-tbody {
-          //value (data) column
-            div[data-grid-column="properties-table--data-column"] {
-              width: 100%;
-              display: flex;
-              align-items: center;
-              gap: 4px;
-              padding: ${token.paddingXS}px ${token.paddingXXS}px ${token.paddingXS}px ${token.paddingXXS}px;
+          div[data-grid-column="properties-table--data-column"] {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: ${token.paddingXS}px ${token.paddingXXS}px ${token.paddingXS}px ${token.paddingXXS}px;
 
-              > :first-child {
-                margin: 0;
+            > :first-child {
+              margin: 0;
+              padding: 0;
+              flex-grow: 1;
+              
+              > * {
                 flex-grow: 1;
-                
-                > * {
-                  flex-grow: 1;
-                  width: 100%;
-                }
-              }
-
-              .pimcore-icon {
-                color: ${token.colorIcon};
+                width: 100%;
               }
             }
+
+            .pimcore-icon {
+              color: ${token.colorIcon};
+            }
+          }
             
           //inherited properties
           .ant-table-cell:nth-child(5) {
