@@ -126,6 +126,13 @@ moduleSystem.registerModule({
       icon: <Icon name={ 'settings2' } />
     })
 
+    imageEditorTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />
+    })
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
       name: 'detachable-tab',
