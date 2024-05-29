@@ -20,12 +20,14 @@ import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-a
 import { Table } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { useGetPropertiesQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import Input from 'antd/es/input/Input'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const { context } = useGlobalAssetContext()
   const [propertiesTableTab, setPropertiesTableTab] = React.useState<string>('own')
+  const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
 
   const { data, isLoading } = useGetPropertiesQuery({
     elementType: 'asset'
@@ -53,25 +55,65 @@ export const PropertiesContainer = (): React.JSX.Element => {
         />
 
         <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
-          <Select
-            loading={ isLoading }
-            placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
-          >
-            {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
-              <Select.Option
-                key={ item.id }
-                value={ item.id }
+          {createManualPropertyMode && (
+            <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
+              <Button
+                onClick={ () => { setCreateManualPropertyMode(false) } }
+                type={ 'link' }
               >
-                { item.name }
-              </Select.Option>
-            )) }
-          </Select>
+                { t('asset.asset-editor-tabs.properties.add-custom-property.cancel') }
+              </Button>
 
-          <Divider type={ 'vertical' } />
+              <Input
+                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
+              />
 
-          <Button icon={ <Icon name={ 'PlusCircleOutlined' } /> }>
-            { t('asset.asset-editor-tabs.properties.add-custom-property') }
-          </Button>
+              <Select
+                options={ [
+                  { value: 'text', label: 'Text' },
+                  { value: 'number', label: 'Number' },
+                  { value: 'date', label: 'Date' },
+                  { value: 'select', label: 'Select' },
+                  { value: 'bool', label: 'Bool' }
+                ] }
+                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
+              />
+
+              <Button
+                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                onClick={ () => { console.log('added custom property - in theorie :P') } }
+              >
+                {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
+              </Button>
+            </div>
+          )}
+
+          {!createManualPropertyMode && (
+            <>
+              <Select
+                loading={ isLoading }
+                placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
+              >
+                {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
+                  <Select.Option
+                    key={ item.id }
+                    value={ item.id }
+                  >
+                    { item.name }
+                  </Select.Option>
+                )) }
+              </Select>
+
+              <Divider type={ 'vertical' } />
+
+              <Button
+                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                onClick={ () => { setCreateManualPropertyMode(true) } }
+              >
+                { t('asset.asset-editor-tabs.properties.add-custom-property') }
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

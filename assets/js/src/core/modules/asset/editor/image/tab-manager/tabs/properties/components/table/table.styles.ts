@@ -19,26 +19,27 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-table {
         .ant-table-tbody {
           //value (data) column
-          .ant-table-cell:nth-child(4) {
-            .grid__cell-content {
+            div[data-grid-column="properties-table--data-column"] {
               width: 100%;
               display: flex;
               align-items: center;
-            }
-              
-            p {
-              margin: 0;
-              flex-grow: 1;
-            }
-              
-            .ant-btn {
-              color: ${token.colorIcon};
-              
-              &:hover {
-                color: ${token.colorPrimaryHover}
+              gap: 4px;
+              padding: ${token.paddingXS}px ${token.paddingXXS}px ${token.paddingXS}px ${token.paddingXXS}px;
+
+              > :first-child {
+                margin: 0;
+                flex-grow: 1;
+                
+                > * {
+                  flex-grow: 1;
+                  width: 100%;
+                }
+              }
+
+              .pimcore-icon {
+                color: ${token.colorIcon};
               }
             }
-          }
             
           //inherited properties
           .ant-table-cell:nth-child(5) {

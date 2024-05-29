@@ -23,7 +23,6 @@ import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-a
 import { Button, Checkbox, Result } from 'antd'
 import { useStyles } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -60,66 +59,70 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const columnHelper = createColumnHelper<DataProperty>()
   const columns = [
     columnHelper.accessor('type', {
-      header: t('asset.asset-editor-tabs.properties.columns.type')
+      header: t('asset.asset-editor-tabs.properties.columns.type'),
+      meta: {
+        type: 'asset-property-icon'
+      },
+      size: 40
     }),
     columnHelper.accessor('key', {
       header: t('asset.asset-editor-tabs.properties.columns.key')
     }),
     columnHelper.accessor('description', {
-      header: t('asset.asset-editor-tabs.properties.columns.description')
+      header: t('asset.asset-editor-tabs.properties.columns.description'),
+      meta: {
+        editable: true
+      }
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.properties.columns.data'),
-      cell: (info) => {
-        return (
-          <>
-            <DefaultCell { ...info } />
-            <Button
-              icon={ <Icon name={ 'copy-07' } /> }
-              onClick={ () => {
-                navigator.clipboard.writeText(info.row.original.data as string)
-                  .catch((e) => {
-                    console.error('Failed to copy data to clipboard', e)
-                  })
-              } }
-              type={ 'link' }
-            />
-          </>
-        )
-      },
-      id: 'properties-table--data-column'
+      id: 'properties-table--data-column',
+      meta: {
+        type: 'asset-property-value',
+        editable: true
+      }
     }),
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
       cell: (info) => {
-        console.log(info)
-
         return (
           <Checkbox checked={ info.row.original.inheritable } />
         )
       },
       size: 70,
-      id: 'properties-table--inheritable-column'
+      id: 'properties-table--inheritable-column',
+      meta: {
+        editable: true
+      }
     }),
     columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
+      header: t('asset.asset-editor-tabs.properties.columns.actions'),
       cell: (info) => {
         return (
           <>
-            <Button
-              icon={ <Icon name="group" /> }
-              onClick={ () => {
-                console.log('Clicked on groups icon')
-              } }
-              type="link"
-            />
-
+            {
+              info.row.original.type === 'document' &&
+              info.row.original.data !== null &&
+              (
+                <Button
+                  icon={ <Icon name="group" /> }
+                  onClick={ () => {
+                    console.log('open document with ID: ' + info.row.original.data.id)
+                  } }
+                  type="link"
+                />
+              )
+            }
           </>
         )
       },
       id: 'properties-table--actions-column'
     })
   ]
+
+  function onUpdateCellData ({ rowIndex, columnId, value }): void {
+    console.log('triggered onUpdateCellData!')
+  }
 
   return (
     <div className={ styles.table }>
@@ -132,6 +135,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
           <Grid
             columns={ columns }
             data={ gridDataOwn }
+            onUpdateCellData={ onUpdateCellData }
           />
 
           {propertiesTableTab === 'all' && (
@@ -142,6 +146,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
               <Grid
                 columns={ columns }
                 data={ gridDataInherited }
+                onUpdateCellData={ onUpdateCellData }
               />
             </>
           )}
