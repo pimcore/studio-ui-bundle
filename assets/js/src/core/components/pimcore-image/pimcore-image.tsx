@@ -14,7 +14,7 @@
 import { Image, type ImageProps, Spin } from 'antd'
 import React, { useContext } from 'react'
 import { useStyle } from '@Pimcore/components/pimcore-image/pimcore-image.styles'
-import { ZoomContext } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/preview/preview-container'
+import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
 
 interface PimcoreImageProps extends ImageProps {
 }

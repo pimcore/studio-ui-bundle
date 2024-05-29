@@ -51,6 +51,7 @@ aria.asset.image.editor.zoom.reset: Reset zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom in
 aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
+asset.preview.no-video-support: Your browser does not support the video tag.
 grid.copy-notice: Copied to clipboard
 asset.asset-editor-tabs.properties.text: Properties
 asset.asset-editor-tabs.properties.edit-own-properties: Editor own properties
