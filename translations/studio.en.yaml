@@ -53,3 +53,6 @@ aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
 asset.preview.no-video-support: Your browser does not support the video tag.
 grid.copy-notice: Copied to clipboard
+asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
+asset.asset-editor-tabs.embedded-metadata.columns.name: Name
+asset.asset-editor-tabs.embedded-metadata.columns.value: Value
