@@ -69,10 +69,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.key')
     }),
     columnHelper.accessor('description', {
-      header: t('asset.asset-editor-tabs.properties.columns.description'),
-      meta: {
-        editable: true
-      }
+      header: t('asset.asset-editor-tabs.properties.columns.description')
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.properties.columns.data'),
