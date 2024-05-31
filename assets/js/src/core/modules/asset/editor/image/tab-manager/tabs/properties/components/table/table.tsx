@@ -57,7 +57,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   }, [data])
 
   const columnHelper = createColumnHelper<DataProperty>()
-  const columns = [
+  const baseColumns = [
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.properties.columns.type'),
       meta: {
@@ -113,11 +113,25 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
                 />
               )
             }
+
+            <Button
+              icon={ <Icon name="deleteOutlined" /> }
+              onClick={ () => {
+                console.log('delete property with ID: ' + info.row.original.data.id)
+              } }
+              type="link"
+            />
           </>
         )
       },
       id: 'properties-table--actions-column'
     })
+  ]
+  const ownTableColumns = [
+    ...baseColumns
+  ]
+  const allTableColumns = [
+    ...baseColumns
   ]
 
   function onUpdateCellData ({ rowIndex, columnId, value }): void {
@@ -132,19 +146,21 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
 
       {!isLoading && (
         <>
-          <Grid
-            columns={ columns }
-            data={ gridDataOwn }
-            onUpdateCellData={ onUpdateCellData }
-          />
+          {gridDataOwn.length > 0 && (
+            <Grid
+              columns={ ownTableColumns }
+              data={ gridDataOwn }
+              onUpdateCellData={ onUpdateCellData }
+            />
+          )}
 
-          {propertiesTableTab === 'all' && (
+          {propertiesTableTab === 'all' && gridDataInherited.length > 0 && (
             <>
               <p className={ 'headline' }>
                 {t('asset.asset-editor-tabs.properties.inherited.properties')}
               </p>
               <Grid
-                columns={ columns }
+                columns={ allTableColumns }
                 data={ gridDataInherited }
                 onUpdateCellData={ onUpdateCellData }
               />
