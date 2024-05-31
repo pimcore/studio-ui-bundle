@@ -52,6 +52,11 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
       }
     }
 
+    const selectOptions = props.row.original.config ?? ''
+    const formattedSelectOptions = selectOptions.split(',').map((value: string) => {
+      return { value, label: value }
+    })
+
     return (
       <Select
         defaultValue={ props.getValue() }
@@ -59,11 +64,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
         onChange={ saveValue }
         onKeyDown={ onKeyDown }
         open={ open }
-        options={ [
-          { value: 'jack', label: 'Jack' },
-          { value: 'lucy', label: 'Lucy' },
-          { value: 'Yiminghe', label: 'yiminghe' }
-        ] }
+        options={ formattedSelectOptions }
         ref={ selectRef }
       />
     )
