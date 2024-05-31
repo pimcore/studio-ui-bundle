@@ -47,7 +47,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' || e.key === 'Enter') {
         disableEditMode()
       }
     }
