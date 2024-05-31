@@ -13,16 +13,12 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import {
-  BooleanCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/boolean-cell/boolean-cell'
 import { TextCell } from '@Pimcore/components/grid/columns/types/text/text-cell'
-import {
-  SelectCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/select-cell/select-cell'
 import {
   ElementCell
 } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/element-cell/element-cell'
+import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { BooleanCell } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type
