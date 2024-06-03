@@ -34,6 +34,8 @@ export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
         return <Icon name={ 'mainObject' } />
       case 'bool':
         return <Icon name={ 'check-done-02' } />
+      case 'select':
+        return <Icon name={ 'chevron-selector-vertical' } />
       default:
         return <span></span>
     }
