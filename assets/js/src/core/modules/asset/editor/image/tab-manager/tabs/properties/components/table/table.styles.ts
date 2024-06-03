@@ -40,32 +40,20 @@ export const useStyles = createStyles(({ token, css }) => {
               color: ${token.colorIcon};
             }
           }
-            
-          //inherited properties
-          .ant-table-cell:nth-child(5) {
-            .grid__cell-content {
+
+          .properties-table--inheritable-column {
               width: 100%;
               display: flex;
               justify-content: center;
-                
-              .ant-checkbox-wrapper {
-                justify-content: center;
-              }
             }
           }
-            
-          //actions column
-          .ant-table-cell:nth-child(6) {
-            .grid__cell-content {
-              width: 100%;
-              display: flex;
 
-              .ant-btn-icon {
-                color: ${token.colorPrimary};
-                  
-                &:hover {
-                  color: ${token.colorPrimaryHover};
-                }
+          .properties-table--actions-column {
+            .ant-btn-icon {
+              color: ${token.colorPrimary};
+                
+              &:hover {
+                color: ${token.colorPrimaryHover};
               }
             }
           }

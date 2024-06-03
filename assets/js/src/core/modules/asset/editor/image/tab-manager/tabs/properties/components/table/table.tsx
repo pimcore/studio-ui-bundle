@@ -86,11 +86,12 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
       cell: (info) => {
         return (
-          <Checkbox checked={ info.row.original.inheritable } />
+          <div className={ 'properties-table--inheritable-column' }>
+            <Checkbox checked={ info.row.original.inheritable } />
+          </div>
         )
       },
       size: 70,
-      id: 'properties-table--inheritable-column',
       meta: {
         editable: true
       }
@@ -99,7 +100,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.actions'),
       cell: (info) => {
         return (
-          <>
+          <div className={ 'properties-table--actions-column' }>
             {
               info.row.original.type === 'document' &&
               info.row.original.data !== null &&
@@ -121,10 +122,9 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
               } }
               type="link"
             />
-          </>
+          </div>
         )
-      },
-      id: 'properties-table--actions-column'
+      }
     })
   ]
   const ownTableColumns = [
