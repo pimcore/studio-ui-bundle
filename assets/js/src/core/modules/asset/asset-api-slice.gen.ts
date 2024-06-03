@@ -37,6 +37,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
             }),
+            updateAssetById: build.mutation<UpdateAssetByIdApiResponse, UpdateAssetByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
+                invalidatesTags: ["Assets"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -52,7 +56,7 @@ export type GetAssetsApiArg = {
     pageSize: number;
     /** Filter assets by parent id. */
     parentId?: number;
-    /** Filter assets by matching ids. As a wildcard * can be used */
+    /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
@@ -64,7 +68,7 @@ export type GetAssetsApiArg = {
     pathIncludeDescendants?: boolean;
 };
 export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
-    customSettings?: CustomSettings;
+    items?: CustomSettings;
 };
 export type GetAssetCustomSettingsByIdApiArg = {
     /** ID of the asset */
@@ -90,6 +94,25 @@ export type GetAssetByIdApiResponse = /** status 200 One of asset types */
 export type GetAssetByIdApiArg = {
     /** ID of the asset */
     id: number;
+};
+export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
+    | Image
+    | Document
+    | Audio
+    | Video
+    | Archive
+    | Text
+    | Folder
+    | Unknown;
+export type UpdateAssetByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+    body: {
+        data?: {
+            properties?: UpdateDataProperty[] | null;
+            image?: ImageData | null;
+        };
+    };
 };
 export type Permissions = {
     /** List */
@@ -133,6 +156,10 @@ export type Element = {
     permissions?: Permissions;
 };
 export type Asset = Element & {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** IconName */
     iconName?: string;
     /** Has children */
@@ -202,14 +229,38 @@ export type FixedCustomSettings = {
     embeddedMetaDataExtracted?: boolean;
 };
 export type CustomSettings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** fixed custom settings */
     fixedCustomSettings?: FixedCustomSettings | null;
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: any[];
+};
+export type UpdateDataProperty = {
+    /** key */
+    key?: string;
+    /** data */
+    data?: any | null;
+    /** type */
+    type?: string;
+    /** inheritable */
+    inheritable?: boolean;
+};
+export type FocalPoint = {
+    /** x */
+    x?: number;
+    /** y */
+    y?: number;
+};
+export type ImageData = {
+    focalPoint?: FocalPoint;
 };
 export const {
     useGetAssetsQuery,
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,
     useGetAssetByIdQuery,
+    useUpdateAssetByIdMutation,
 } = injectedRtkApi;
