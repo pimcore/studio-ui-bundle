@@ -68,6 +68,9 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     columnHelper.accessor('key', {
       header: t('asset.asset-editor-tabs.properties.columns.key')
     }),
+    columnHelper.accessor('predefinedName', {
+      header: t('asset.asset-editor-tabs.properties.columns.name')
+    }),
     columnHelper.accessor('description', {
       header: t('asset.asset-editor-tabs.properties.columns.description')
     }),
