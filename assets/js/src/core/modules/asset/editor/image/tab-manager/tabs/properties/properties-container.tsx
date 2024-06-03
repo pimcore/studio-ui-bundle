@@ -112,7 +112,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 <Divider type={ 'vertical' } />
 
                 <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                  icon={ <Icon name={ 'trash' } /> }
                   onClick={ () => {
                     setCreateManualPropertyMode(true)
                   } }
