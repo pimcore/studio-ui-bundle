@@ -53,7 +53,7 @@ const pinnableToolbarElements: PinnableToolbarElement[] = [
     label: 'toolbar.rename'
   },
   {
-    iconName: 'delete-outlined',
+    iconName: 'trash',
     label: 'toolbar.delete'
   },
   {
