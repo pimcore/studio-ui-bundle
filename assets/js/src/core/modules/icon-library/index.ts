@@ -77,6 +77,7 @@ import MainDocument from '@Pimcore/assets/icons/pimcore-main-icon-document.inlin
 import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
+import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -329,6 +330,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'check-done-02',
       component: CheckDone02
+    })
+    iconLibrary.register({
+      name: 'chevron-selector-vertical',
+      component: ChevronSelectorVertical
     })
   }
 })
