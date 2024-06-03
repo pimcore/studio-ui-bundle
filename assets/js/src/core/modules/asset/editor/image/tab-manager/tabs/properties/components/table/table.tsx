@@ -116,7 +116,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
             }
 
             <Button
-              icon={ <Icon name="deleteOutlined" /> }
+              icon={ <Icon name="delete-outlined" /> }
               onClick={ () => {
                 console.log('delete property with ID: ' + info.row.original.data.id)
               } }
