@@ -58,9 +58,6 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   assets.items!.forEach((asset) => {
     const onClickCard = (e): void => {
       openAsset({
-        name: asset.filename!,
-        icon: asset.iconName ?? 'file-question-02',
-
         config: {
           id: asset.id!
         }
