@@ -43,7 +43,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
             bordered={ false }
             color='processing'
             onClick={ openAssetWidget }
-            title={ props.getValue() }
+            title={ propertyData.data.path + propertyData.data.key }
           >
             {propertyData.data.path}{propertyData.data.key}
           </Tag>
