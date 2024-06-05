@@ -49,7 +49,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       label: t('preview-card.download-zip')
     },
     {
-      iconLeft: 'delete-outlined',
+      iconLeft: 'trash',
       label: t('preview-card.delete')
     }
   ]

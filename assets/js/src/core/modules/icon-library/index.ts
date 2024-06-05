@@ -47,7 +47,6 @@ import leftOutlined from '@Pimcore/assets/icons/left-outlined.inline.svg'
 import rightOutlined from '@Pimcore/assets/icons/right-outlined.inline.svg'
 import richEdit from '@Pimcore/assets/icons/rich-edit.inline.svg'
 import download02 from '@Pimcore/assets/icons/download-02.inline.svg'
-import deleteOutlined from '@Pimcore/assets/icons/delete-outlined.inline.svg'
 import pin02 from '@Pimcore/assets/icons/pin-02.inline.svg'
 import editOutlined from '@Pimcore/assets/icons/edit-outlined.inline.svg'
 import expandAltOutlined from '@Pimcore/assets/icons/expand-alt-outlined.inline.svg'
@@ -78,6 +77,7 @@ import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
+import Trash from '@Pimcore/assets/icons/trash.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -212,10 +212,6 @@ moduleSystem.registerModule({
       component: download02
     })
     iconLibrary.register({
-      name: 'delete-outlined',
-      component: deleteOutlined
-    })
-    iconLibrary.register({
       name: 'pin-02',
       component: pin02
     })
@@ -334,6 +330,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'chevron-selector-vertical',
       component: ChevronSelectorVertical
+    })
+    iconLibrary.register({
+      name: 'trash',
+      component: Trash
     })
   }
 })
