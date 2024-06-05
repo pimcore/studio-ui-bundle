@@ -47,7 +47,6 @@ import leftOutlined from '@Pimcore/assets/icons/left-outlined.inline.svg'
 import rightOutlined from '@Pimcore/assets/icons/right-outlined.inline.svg'
 import richEdit from '@Pimcore/assets/icons/rich-edit.inline.svg'
 import download02 from '@Pimcore/assets/icons/download-02.inline.svg'
-import deleteOutlined from '@Pimcore/assets/icons/delete-outlined.inline.svg'
 import pin02 from '@Pimcore/assets/icons/pin-02.inline.svg'
 import editOutlined from '@Pimcore/assets/icons/edit-outlined.inline.svg'
 import expandAltOutlined from '@Pimcore/assets/icons/expand-alt-outlined.inline.svg'
@@ -68,6 +67,7 @@ import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
+import Trash from '@Pimcore/assets/icons/trash.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -202,10 +202,6 @@ moduleSystem.registerModule({
       component: download02
     })
     iconLibrary.register({
-      name: 'delete-outlined',
-      component: deleteOutlined
-    })
-    iconLibrary.register({
       name: 'pin-02',
       component: pin02
     })
@@ -284,6 +280,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'share-03',
       component: Share03
+    })
+    iconLibrary.register({
+      name: 'trash',
+      component: Trash
     })
   }
 })
