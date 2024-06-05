@@ -23,6 +23,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: [/translation/i]
+    },
+    '../../js/src/core/modules/asset/properties-api-slice.gen.ts': {
+      filterEndpoints: [/properties/i]
     }
   },
   exportName: 'api',

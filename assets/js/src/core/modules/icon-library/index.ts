@@ -66,7 +66,17 @@ import ellipsisOutlined from '@Pimcore/assets/icons/ellipsis-outlined.inline.svg
 import focalPoint from '@Pimcore/assets/icons/focal-point.inline.svg'
 import MinusOutlined from '@Pimcore/assets/icons/MinusOutlined.inline.svg'
 import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
+import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
+import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
+import Copy07 from '@Pimcore/assets/icons/copy-07.inline.svg'
+import Group from '@Pimcore/assets/icons/group.inline.svg'
+import Note from '@Pimcore/assets/icons/note.inline.svg'
+import MainDocument from '@Pimcore/assets/icons/pimcore-main-icon-document.inline.svg'
+import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
+import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
+import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
+import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
 
 moduleSystem.registerModule({
@@ -278,8 +288,48 @@ moduleSystem.registerModule({
       component: PlusOutlined
     })
     iconLibrary.register({
+      name: 'settings2',
+      component: settings2
+    })
+    iconLibrary.register({
+      name: 'PlusCircleOutlined',
+      component: PlusCircleOutlined
+    })
+    iconLibrary.register({
       name: 'share-03',
       component: Share03
+    })
+    iconLibrary.register({
+      name: 'copy-07',
+      component: Copy07
+    })
+    iconLibrary.register({
+      name: 'group',
+      component: Group
+    })
+    iconLibrary.register({
+      name: 'note',
+      component: Note
+    })
+    iconLibrary.register({
+      name: 'mainDocument',
+      component: MainDocument
+    })
+    iconLibrary.register({
+      name: 'mainAsset',
+      component: MainAsset
+    })
+    iconLibrary.register({
+      name: 'mainObject',
+      component: MainObject
+    })
+    iconLibrary.register({
+      name: 'check-done-02',
+      component: CheckDone02
+    })
+    iconLibrary.register({
+      name: 'chevron-selector-vertical',
+      component: ChevronSelectorVertical
     })
     iconLibrary.register({
       name: 'trash',
