@@ -87,7 +87,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       cell: (info) => {
         return (
           <div className={ 'properties-table--inheritable-column' }>
-            <Checkbox checked={ info.row.original.inheritable } />
+            <Checkbox defaultChecked={ info.row.original.inheritable } />
           </div>
         )
       },
