@@ -24,8 +24,14 @@ export type Translation = {
     /** Keys */
     keys?: string[];
 };
-export type Unauthorized = {
+export type Error = {
     /** Message */
     message?: string;
+};
+export type DevError = {
+    /** Message */
+    message?: string;
+    /** Details */
+    details?: string;
 };
 export const { useGetTranslationsMutation } = injectedRtkApi;

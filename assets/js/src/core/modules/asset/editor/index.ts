@@ -12,15 +12,22 @@
 */
 
 import { container } from '@Pimcore/app/depency-injection'
-import '@Pimcore/modules/asset/editor/folder'
+import '@Pimcore/modules/asset/editor/types/document'
+import '@Pimcore/modules/asset/editor/types/folder'
+import '@Pimcore/modules/asset/editor/types/image'
+import '@Pimcore/modules/asset/editor/types/text'
+import '@Pimcore/modules/asset/editor/types/video'
 import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
-import { FolderContainer } from '@Pimcore/modules/asset/editor/folder/folder-container'
-import { ImageContainer } from '@Pimcore/modules/asset/editor/image/image-container'
+import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
+import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
 import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { UnknownContainer } from './unknown/unknown-container'
+import { UnknownContainer } from './types/unknown/unknown-container'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { VideoContainer } from '@Pimcore/modules/asset/editor/types/video/video-container'
+import { TextContainer } from '@Pimcore/modules/asset/editor/types/text/text-container'
+import { DocumentContainer } from '@Pimcore/modules/asset/editor/types/document/document-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -29,6 +36,21 @@ moduleSystem.registerModule({
     componentRegistryService.registerComponent({
       name: 'image',
       component: ImageContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'video',
+      component: VideoContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'document',
+      component: DocumentContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'text',
+      component: TextContainer
     })
 
     componentRegistryService.registerComponent({

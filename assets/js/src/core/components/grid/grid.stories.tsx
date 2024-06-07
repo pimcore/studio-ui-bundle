@@ -11,16 +11,39 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { type Meta } from '@storybook/react'
-import { Grid } from './grid'
+import { Grid, type GridProps } from './grid'
 import { createColumnHelper } from '@tanstack/react-table'
+import { DefaultCell } from './columns/default-cell'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Grid',
   component: Grid,
 
-  tags: ['autodocs']
+  tags: ['autodocs'],
+
+  render: (data: GridProps) => {
+    const ComponentWrapper = (): React.JSX.Element => {
+      const [_data, setData] = useState(data.data)
+
+      function onUpdateCellData ({ rowIndex, columnId, value }): void {
+        const updatedData = [..._data]
+        updatedData[rowIndex][columnId] = value
+        setData(updatedData)
+      }
+
+      return (
+        <Grid
+          { ...data }
+          data={ _data }
+          onUpdateCellData={ onUpdateCellData }
+        />
+      )
+    }
+
+    return <ComponentWrapper />
+  }
 }
 
 export default config
@@ -41,10 +64,10 @@ const columnHelper = createColumnHelper<User>()
 const columns = [
   columnHelper.accessor('firstname', {}),
   columnHelper.accessor('lastname', {
-    cell: info => <b>{info.getValue()}</b>
+    cell: info => <b><DefaultCell { ...info } /></b>
   }),
   columnHelper.accessor('age', {
-    cell: info => <b>{info.getValue()}</b>
+    cell: info => <b><DefaultCell { ...info } /></b>
   })
 ]
 
@@ -52,5 +75,33 @@ export const _default = {
   args: {
     data,
     columns
+  }
+}
+
+const editableColumns = [
+  columnHelper.accessor('firstname', {
+    meta: {
+      editable: true
+    }
+  }),
+  columnHelper.accessor('lastname', {
+    cell: info => <b><DefaultCell { ...info } /></b>,
+    meta: {
+      editable: true
+    }
+  }),
+  columnHelper.accessor('age', {
+    header: 'Non editable age',
+    cell: info => <b><DefaultCell { ...info } /></b>
+  })
+]
+
+export const EditableColumns = {
+  args: {
+    data,
+    columns: editableColumns,
+    onUpdateCellData: ({ rowIndex, columnId, value }) => {
+      console.log({ rowIndex, columnId, value })
+    }
   }
 }

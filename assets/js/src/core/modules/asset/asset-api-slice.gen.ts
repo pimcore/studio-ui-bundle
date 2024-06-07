@@ -22,9 +22,24 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            getAssetCustomSettingsById: build.query<
+                GetAssetCustomSettingsByIdApiResponse,
+                GetAssetCustomSettingsByIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
+                providesTags: ["Assets"],
+            }),
+            getAssetDataTextById: build.query<GetAssetDataTextByIdApiResponse, GetAssetDataTextByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
+                providesTags: ["Assets"],
+            }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
+            }),
+            updateAssetById: build.mutation<UpdateAssetByIdApiResponse, UpdateAssetByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
+                invalidatesTags: ["Assets"],
             }),
         }),
         overrideExisting: false,
@@ -41,7 +56,7 @@ export type GetAssetsApiArg = {
     pageSize: number;
     /** Filter assets by parent id. */
     parentId?: number;
-    /** Filter assets by matching ids. As a wildcard * can be used */
+    /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
@@ -52,10 +67,52 @@ export type GetAssetsApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
-export type GetAssetByIdApiResponse = /** status 200 Paginated assets with total count as header param */ Asset;
-export type GetAssetByIdApiArg = {
-    /** Id of the asset */
+export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
+    customSettings?: CustomSettings;
+};
+export type GetAssetCustomSettingsByIdApiArg = {
+    /** ID of the asset */
     id: number;
+};
+export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text data */ {
+    /** UTF 8 encoded text data */
+    data?: string;
+};
+export type GetAssetDataTextByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
+export type GetAssetByIdApiResponse = /** status 200 One of asset types */
+    | Image
+    | Document
+    | Audio
+    | Video
+    | Archive
+    | Text
+    | Folder
+    | Unknown;
+export type GetAssetByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
+export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
+    | Image
+    | Document
+    | Audio
+    | Video
+    | Archive
+    | Text
+    | Folder
+    | Unknown;
+export type UpdateAssetByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+    body: {
+        data?: {
+            properties?: UpdateDataProperty[] | null;
+            image?: ImageData | null;
+        };
+    };
 };
 export type Permissions = {
     /** List */
@@ -99,6 +156,10 @@ export type Element = {
     permissions?: Permissions;
 };
 export type Asset = Element & {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** IconName */
     iconName?: string;
     /** Has children */
@@ -128,13 +189,13 @@ export type Image = Asset & {
     /** is animated */
     isAnimated?: boolean;
     /** path to thumbnail */
-    thumbnailPath?: string;
+    imageThumbnailPath?: string;
 };
 export type Document = Asset & {
     /** Page count */
     pageCount?: number | null;
     /** Path to image thumbnail */
-    imageThumbnailPath?: number | null;
+    imageThumbnailPath?: string | null;
 };
 export type Audio = Asset;
 export type Video = Asset & {
@@ -151,8 +212,55 @@ export type Archive = Asset;
 export type Text = Asset;
 export type Folder = Asset;
 export type Unknown = Asset;
-export type Unauthorized = {
+export type Error = {
     /** Message */
     message?: string;
 };
-export const { useGetAssetsQuery, useGetAssetByIdQuery } = injectedRtkApi;
+export type DevError = {
+    /** Message */
+    message?: string;
+    /** Details */
+    details?: string;
+};
+export type FixedCustomSettings = {
+    /** embedded meta data of the asset - array of any key-value pairs */
+    embeddedMetaData?: any[];
+    /** flag to indicate if the embedded meta data has been extracted from the asset */
+    embeddedMetaDataExtracted?: boolean;
+};
+export type CustomSettings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** fixed custom settings */
+    fixedCustomSettings?: FixedCustomSettings | null;
+    /** dynamic custom settings - can be any key-value pair */
+    dynamicCustomSettings?: any[];
+};
+export type UpdateDataProperty = {
+    /** key */
+    key?: string;
+    /** data */
+    data?: any | null;
+    /** type */
+    type?: string;
+    /** inheritable */
+    inheritable?: boolean;
+};
+export type FocalPoint = {
+    /** x */
+    x?: number;
+    /** y */
+    y?: number;
+};
+export type ImageData = {
+    focalPoint?: FocalPoint;
+};
+export const {
+    useGetAssetsQuery,
+    useGetAssetCustomSettingsByIdQuery,
+    useGetAssetDataTextByIdQuery,
+    useGetAssetByIdQuery,
+    useUpdateAssetByIdMutation,
+} = injectedRtkApi;
