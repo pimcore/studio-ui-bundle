@@ -27,12 +27,13 @@ export const useStyles = createStyles(({ token, css }) => {
           }
 
         .ant-tag {
+          cursor: pointer;
           height: 22px;
           display: flex;
           align-items: center;
           gap: 8px;
             
-          .ant-badge {
+          .ant-badge {              
             .ant-badge-status-dot {
               width: 6px;
               height: 6px;
