@@ -105,7 +105,8 @@ moduleSystem.registerModule({
       key: 'workflow',
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
-      icon: <Icon name={ 'workflow' } />
+      icon: <Icon name={ 'workflow' } />,
+      isDetachable: true
     })
   }
 })
