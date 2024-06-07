@@ -15,6 +15,7 @@ import React from 'react'
 import { LoginForm } from '@Pimcore/components/login-form/login-form'
 import { useStyle } from '@Pimcore/router/layouts/login/login.styles'
 import { useMiddleware } from '@Pimcore/components/login-form/hooks/use-middleware'
+import { TranslationsLoaderContainer } from '@Pimcore/modules/app/translations/translations-loader-container'
 
 export default function LoginLayout (): React.JSX.Element {
   const { styles } = useStyle()
@@ -22,10 +23,8 @@ export default function LoginLayout (): React.JSX.Element {
   useMiddleware()
 
   return (
-    <>
-      <div
-        className={ styles.loginPage }
-      >
+    <TranslationsLoaderContainer>
+      <div className={ styles.loginPage }>
         <div className={ styles.loginWidget }>
           <img
             alt={ 'Pimcore Logo' }
@@ -34,6 +33,6 @@ export default function LoginLayout (): React.JSX.Element {
           <LoginForm />
         </div>
       </div>
-    </>
+    </TranslationsLoaderContainer>
   )
 }
