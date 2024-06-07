@@ -13,43 +13,24 @@
 
 import { api } from '@Pimcore/app/api/pimcore'
 
-export interface User {
+export interface IUser {
   username: string
-  firstname?: string
-  lastname?: string
-  email?: string
+  roles: string[]
 }
 
-export interface IGenericAuthResponse {
-  token: string
-  lifetime: number
-  username: string
-}
-
-export interface LoginRequest {
+export interface ILoginRequest {
   username: string
   password: string
-}
-
-export interface IRefreshRequest {
-  token: string
 }
 
 export const authApi = api
   .injectEndpoints({
     endpoints: (builder) => ({
-      login: builder.mutation<IGenericAuthResponse, LoginRequest>({
+      login: builder.mutation<IUser, ILoginRequest>({
         query: (credentials) => ({
           url: 'studio/api/login',
           method: 'POST',
           body: credentials
-        })
-      }),
-      refresh: builder.mutation<IGenericAuthResponse, IRefreshRequest>({
-        query: (token) => ({
-          url: 'studio/api/refresh',
-          method: 'POST',
-          body: token
         })
       })
     }),
@@ -57,4 +38,5 @@ export const authApi = api
   })
 
 export { authApi as api }
-export const { useLoginMutation, useRefreshMutation } = authApi
+
+export const { useLoginMutation } = authApi

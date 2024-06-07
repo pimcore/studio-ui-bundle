@@ -13,18 +13,17 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { type User } from '@Pimcore/components/login-form/services/auth'
-import { type RootState } from '@Pimcore/components/login-form/store'
-import { injectSliceWithState } from '@Pimcore/app/store'
+import { type IUser } from '@Pimcore/components/login-form/services/auth'
+import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
 
 interface AuthState {
-  user: User | null
-  token: string | null
+  username: string | null
+  roles: string[] | []
 }
 
 const initialState: AuthState = {
-  user: null,
-  token: null
+  username: null,
+  roles: []
 }
 
 const slice = createSlice({
@@ -34,11 +33,11 @@ const slice = createSlice({
     setCredentials: (
       state,
       {
-        payload: { user, token }
-      }: PayloadAction<{ user: User, token: string }>
+        payload: { username, roles }
+      }: PayloadAction<IUser>
     ) => {
-      state.user = user
-      state.token = token
+      state.username = username
+      state.roles = roles
     }
   }
 })
@@ -47,6 +46,6 @@ injectSliceWithState(slice)
 
 export const { setCredentials } = slice.actions
 
-export const authReducer = slice.reducer
+// export const authReducer = slice.reducer
 
-export const selectCurrentUser = (state: RootState): User | null => state.auth.user
+export const selectCurrentUser = (state: RootState): IUser | null => state.auth

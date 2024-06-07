@@ -17,5 +17,5 @@ import { useMemo } from 'react'
 export const useIsAuthenticated = (): boolean => {
   const user = useUser()
 
-  return useMemo(() => (user !== null), [user])
+  return useMemo(() => (user?.username !== null), [user])
 }
