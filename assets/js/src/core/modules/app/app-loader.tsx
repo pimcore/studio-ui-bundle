@@ -12,33 +12,60 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { api } from '@Pimcore/app/user/user-api-slice.gen'
+
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setCredentials } from '@Pimcore/app/auth/auth-slice'
 import { useGetTranslationsMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 
-interface TranslationsLoaderContainerProps {
+export interface IAppLoaderProps {
   children: React.ReactNode
 }
 
-export const TranslationsLoaderContainer = (props: TranslationsLoaderContainerProps): React.JSX.Element => {
-  const [isLoading, setIsLoading] = useState(true)
+export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
+  const dispatch = useAppDispatch()
   const [translations] = useGetTranslationsMutation()
   const { i18n } = useTranslation()
+  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    translations({ translation: { locale: 'en', keys: [] } })
+  async function initLoadUser (): Promise<any> {
+    const promiseTest = dispatch(api.endpoints.getStudioApiUserCurrentUserInformation.initiate())
+
+    promiseTest
+      .then(({ data, isSuccess }) => {
+        if (isSuccess && data !== undefined) {
+          dispatch(setCredentials(data))
+        }
+      })
+      .catch(() => {})
+
+    return await promiseTest
+  }
+
+  async function loadTranslations (): Promise<any> {
+    await translations({ translation: { locale: 'en', keys: [] } })
       .unwrap()
       .then(response => {
         i18n.addResourceBundle('en', 'translation', response.keys ?? [], true, true)
-        setIsLoading(false)
       })
       .catch((error) => {
         console.error('rejected', error)
       })
+  }
+
+  useEffect(() => {
+    Promise.all([
+      initLoadUser(),
+      loadTranslations()
+    ]).then(() => {
+      setIsLoading(false)
+    }).catch(() => {})
   }, [])
 
   if (isLoading) {
     return (
-      <div>Loading...</div>
+      <div>Loading ...</div>
     )
   }
 

@@ -14,8 +14,9 @@
 import React, { StrictMode } from 'react'
 import { GlobalProvider } from './global-provider'
 import { App as AntApp } from 'antd'
-import { router } from '@Pimcore/router/router'
 import { RouterProvider } from 'react-router-dom'
+import { router } from '@Pimcore/app/router/router'
+import { AppLoader } from '@Pimcore/modules/app/app-loader'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -23,7 +24,9 @@ export const AppView = (): React.JSX.Element => {
       <StrictMode>
         <GlobalProvider>
           <AntApp>
-            <RouterProvider router={ router } />
+            <AppLoader>
+              <RouterProvider router={ router } />
+            </AppLoader>
           </AntApp>
         </GlobalProvider>
       </StrictMode>

@@ -12,20 +12,24 @@
 */
 
 import React from 'react'
-import { Background } from '@Pimcore/components/background/background'
-import { TranslationsLoaderContainer } from '@Pimcore/modules/app/translations/translations-loader-container'
-import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
+import { LoginForm } from '@Pimcore/components/login-form/login-form'
+import { useStyle } from './login-page.styles'
 import { useMiddleware } from '@Pimcore/components/login-form/hooks/use-middleware'
 
-export default function DefaultLayout (): React.JSX.Element {
+export default function LoginLayout (): React.JSX.Element {
+  const { styles } = useStyle()
+
   useMiddleware()
 
   return (
-    <>
-      <Background />
-      <TranslationsLoaderContainer>
-        <BaseLayoutView />
-      </TranslationsLoaderContainer>
-    </>
+    <div className={ styles.loginPage }>
+      <div className={ styles.loginWidget }>
+        <img
+          alt={ 'Pimcore Logo' }
+          src={ '/bundles/pimcorestudioui/img/logo.png' }
+        />
+        <LoginForm />
+      </div>
+    </div>
   )
 }

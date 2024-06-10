@@ -11,11 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useUser } from '@Pimcore/components/login-form/hooks/use-user'
-import { useMemo } from 'react'
+import React from 'react'
+import { Background } from '@Pimcore/components/background/background'
+import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
+import { useMiddleware } from '@Pimcore/components/login-form/hooks/use-middleware'
 
-export const useIsAuthenticated = (): boolean => {
-  const user = useUser()
+export default function DefaultPage (): React.JSX.Element {
+  useMiddleware()
 
-  return useMemo(() => (user?.username !== null), [user])
+  return (
+    <>
+      <Background />
+      <BaseLayoutView />
+    </>
+  )
 }
