@@ -20,11 +20,6 @@ export const useMiddleware = (): void => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log('--------------------------')
-    console.log('auth check - middleware')
-    console.log('isAuthenticated', isAuthenticated)
-    console.log('--------------------------')
-
     if (isAuthenticated) {
       navigate('/admin/studio')
     }

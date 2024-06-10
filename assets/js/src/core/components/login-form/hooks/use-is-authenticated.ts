@@ -13,8 +13,10 @@
 
 import { useUser } from '@Pimcore/components/login-form/hooks/use-user'
 import { useMemo } from 'react'
+import { useBeacon } from '@Pimcore/components/login-form/hooks/use-beacon'
 
 export const useIsAuthenticated = (): boolean => {
+  useBeacon()
   const user = useUser()
 
   return useMemo(() => (user?.username !== null), [user])

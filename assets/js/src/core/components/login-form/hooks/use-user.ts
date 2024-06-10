@@ -19,7 +19,5 @@ import { type IUser } from '@Pimcore/components/login-form/services/auth'
 export const useUser = (): IUser | null => {
   const user = useSelector(selectCurrentUser)
 
-  console.log(user)
-
   return useMemo(() => (user), [user])
 }
