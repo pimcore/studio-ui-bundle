@@ -13,8 +13,8 @@
 
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { selectCurrentUser } from '@Pimcore/modules/app/auth/user-slice'
-import { type IUser } from '@Pimcore/modules/app/auth/auth-slice'
+import { type IUser } from '@Pimcore/modules/auth/auth-api-slice'
+import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 
 export const useUser = (): IUser | null => {
   const user = useSelector(selectCurrentUser)

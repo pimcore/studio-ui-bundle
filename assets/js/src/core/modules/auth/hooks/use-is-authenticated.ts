@@ -12,7 +12,7 @@
 */
 
 import { useMemo } from 'react'
-import { useUser } from '@Pimcore/modules/app/auth/hooks/use-user'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 export const useIsAuthenticated = (): boolean => {
   const user = useUser()

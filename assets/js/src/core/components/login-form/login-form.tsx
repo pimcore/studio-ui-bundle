@@ -15,11 +15,11 @@ import { Button, Checkbox, Input } from 'antd'
 import React from 'react'
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
-import { type ILoginRequest, useLoginMutation } from '@Pimcore/modules/app/auth/auth-slice'
+import { type ILoginRequest, useLoginMutation } from '@Pimcore/modules/auth/auth-api-slice'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
-import { setUser } from '@Pimcore/modules/app/auth/user-slice'
+import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 
 export interface IAdditionalLogins {
   key: string

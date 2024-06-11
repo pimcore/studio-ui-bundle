@@ -14,7 +14,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { type IUser } from '@Pimcore/modules/app/auth/auth-slice'
+import { type IUser } from '@Pimcore/modules/auth/auth-api-slice'
 
 interface AuthState {
   username: string | null

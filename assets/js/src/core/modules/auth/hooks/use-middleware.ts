@@ -13,7 +13,7 @@
 
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useIsAuthenticated } from '@Pimcore/modules/app/auth/hooks/use-is-authenticated'
+import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 
 export const useMiddleware = (): void => {
   const isAuthenticated = useIsAuthenticated()
