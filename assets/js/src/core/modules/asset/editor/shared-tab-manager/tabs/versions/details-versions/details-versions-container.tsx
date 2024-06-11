@@ -30,6 +30,12 @@ export const DetailsVersionsContainer = ({
   versionIds
 }: DetailsVersionsContainerProps): React.JSX.Element => {
   const [versionData, setVersionData] = useState([{}])
+  const test = store.dispatch(api.endpoints.streamImageVersionById.initiate({ id: 25 }))
+
+  Promise.all([test]).then((responses): void => {
+    console.log('res', responses)
+  })
+    .catch(err => { console.log(err) })
 
   const formatMap: any = {
     dimensions: (data: any): string => {
@@ -64,6 +70,10 @@ export const DetailsVersionsContainer = ({
             [i18n.t('field')]: i18n.t(`version.${key}`)
           })
         }
+
+        tempVersionData.push({
+          [i18n.t('field')]: i18n.t('version.image')
+        })
 
         responses.forEach((response, versionIndex): void => {
           const data = response.data

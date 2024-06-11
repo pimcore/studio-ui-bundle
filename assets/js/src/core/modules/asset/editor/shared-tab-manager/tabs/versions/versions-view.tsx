@@ -26,7 +26,7 @@ import {
 
 interface VersionsViewProps {
   versions: Version[]
-  onClickClearAll: (elementType: 'asset' | 'document' | 'dataObject', id: number, elementModificationDate: number) => void
+  onClickClearAll: (elementType: 'asset' | 'document' | 'dataObject', id: number) => void
   onClickPublish: (id: number) => void
   onClickDelete: (id: number) => void
 }
@@ -80,9 +80,7 @@ export const VersionsView = ({
               }
               onClickClearAll(
                 versions[0].ctype as 'asset' | 'document' | 'dataObject',
-                versions[0].cid,
-                1
-                // versions[0].elementModificationDate
+                versions[0].cid
               )
             } }
           >

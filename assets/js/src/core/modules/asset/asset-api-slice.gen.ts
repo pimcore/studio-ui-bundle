@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets"] as const;
+export const addTagTypes = ["Assets", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -40,6 +40,10 @@ const injectedRtkApi = api
             updateAssetById: build.mutation<UpdateAssetByIdApiResponse, UpdateAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
+            }),
+            downloadAssetVersionById: build.query<DownloadAssetVersionByIdApiResponse, DownloadAssetVersionByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
+                providesTags: ["Versions"],
             }),
         }),
         overrideExisting: false,
@@ -113,6 +117,11 @@ export type UpdateAssetByIdApiArg = {
             image?: ImageData | null;
         };
     };
+};
+export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
+export type DownloadAssetVersionByIdApiArg = {
+    /** ID of the version */
+    id: number;
 };
 export type Permissions = {
     /** List */
@@ -263,4 +272,5 @@ export const {
     useGetAssetDataTextByIdQuery,
     useGetAssetByIdQuery,
     useUpdateAssetByIdMutation,
+    useDownloadAssetVersionByIdQuery,
 } = injectedRtkApi;

@@ -62,13 +62,13 @@ version.note: Note
 version.own-draft: Own Draft
 version.compare-versions: Compare Versions
 version.fileName: Name
-version.temporaryFile: Temporary File
 version.dimensions: Dimensions
 version.creationDate: Creation Date
 version.modificationDate: Modification Date
 version.fileSize: File Size
 version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
+version.image: Image
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all

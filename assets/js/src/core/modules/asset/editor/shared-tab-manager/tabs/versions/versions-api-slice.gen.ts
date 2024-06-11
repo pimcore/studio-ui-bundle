@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            downloadAssetVersionById: build.query<DownloadAssetVersionByIdApiResponse, DownloadAssetVersionByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
+                providesTags: ["Versions"],
+            }),
+            streamImageVersionById: build.query<StreamImageVersionByIdApiResponse, StreamImageVersionByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/image/stream` }),
+                providesTags: ["Versions"],
+            }),
             getVersionById: build.query<GetVersionByIdApiResponse, GetVersionByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}` }),
                 providesTags: ["Versions"],
@@ -29,7 +37,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
                     method: "DELETE",
-                    params: { elementModificationDate: queryArg.elementModificationDate },
                 }),
                 invalidatesTags: ["Versions"],
             }),
@@ -37,6 +44,16 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
+export type DownloadAssetVersionByIdApiArg = {
+    /** ID of the version */
+    id: number;
+};
+export type StreamImageVersionByIdApiResponse = /** status 200 Image version stream */ Blob;
+export type StreamImageVersionByIdApiArg = {
+    /** ID of the version */
+    id: number;
+};
 export type GetVersionByIdApiResponse = /** status 200 Version data as json */
     | AssetVersion
     | ImageVersion
@@ -46,7 +63,7 @@ export type GetVersionByIdApiArg = {
     /** ID of the version */
     id: number;
 };
-export type PublishVersionApiResponse = /** status 200 ID of published version */ {
+export type PublishVersionApiResponse = /** status 200 ID of latest published version */ {
     /** ID of published version */
     id?: number;
 };
@@ -85,8 +102,16 @@ export type CleanupVersionApiArg = {
     elementType: "asset" | "document" | "dataObject";
     /** ID of the ID of the element */
     id: number;
-    /** Modification timestamp of the element */
-    elementModificationDate: number;
+};
+export type Error = {
+    /** Message */
+    message?: string;
+};
+export type DevError = {
+    /** Message */
+    message?: string;
+    /** Details */
+    details?: string;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
@@ -95,8 +120,6 @@ export type AssetVersion = {
     };
     /** file name */
     fileName: string;
-    /** temporary file */
-    temporaryFile?: string | null;
 };
 export type VersionUser = {
     /** width */
@@ -111,8 +134,6 @@ export type ImageVersion = {
     };
     /** file name */
     fileName: string;
-    /** temporary file */
-    temporaryFile?: string | null;
     /** creation date */
     creationDate: number;
     /** modification date */
@@ -148,16 +169,6 @@ export type DocumentVersion = {
     /** published */
     published: boolean;
 };
-export type Error = {
-    /** Message */
-    message?: string;
-};
-export type DevError = {
-    /** Message */
-    message?: string;
-    /** Details */
-    details?: string;
-};
 export type VersionUser2 = {
     /** ID */
     id?: number | null;
@@ -190,6 +201,8 @@ export type Version = {
     scheduled?: number | null;
 };
 export const {
+    useDownloadAssetVersionByIdQuery,
+    useStreamImageVersionByIdQuery,
     useGetVersionByIdQuery,
     usePublishVersionMutation,
     useDeleteVersionMutation,
