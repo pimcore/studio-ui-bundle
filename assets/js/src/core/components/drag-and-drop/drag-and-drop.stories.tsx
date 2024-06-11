@@ -12,21 +12,79 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Draggable } from './draggable'
+import { DNDDemoDroppableContent } from './__STORIES__/dnd-demo-droppable-content'
+import { Button } from 'antd'
 import { Droppable } from './droppable'
+import { DragAndDropInfo } from './context-provider'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/DragAndDrop',
   component: () => {
+    const [valueDemo1, setValueDemo1] = useState<string>('');
+    const [valueDemo2, setValueDemo2] = useState<string>('');
+    const [valueDemo3, setValueDemo3] = useState<string>('');
+
     return (
-      <>
-        <Draggable>
-          <div>Drag me</div>
-        </Draggable>
-        <Droppable id="test" />
-        <Droppable id="test2" />
-      </>
+      <div style={ { display: 'flex', flexDirection: 'column', gap: 10 } }>
+        <h3>Drag context 1</h3>
+        <div style={ { display: 'flex', gap: 5 } }>
+          <Draggable id="draggable-1" info={ { type: 'dnd-demo-1', title: 'Button 1', icon: 'widget-default', data: { value: 'Button 1' } } }>
+            <Button>Button 1</Button>
+          </Draggable>
+
+          <Draggable id="draggable-2" info={ { type: 'dnd-demo-1', title: 'Button 2', icon: 'widget-default', data: { value: 'Button 2' } } }>
+            <Button>Button 2</Button>
+          </Draggable>
+
+          <Draggable id="draggable-3" info={ { type: 'dnd-demo-1', title: 'Button 3', icon: 'widget-default', data: { value: 'Button 3' } } }>
+            <Button>Button 3</Button>
+          </Draggable>
+        </div>
+
+        <Droppable id="droppable-1" isValidContext={(info: DragAndDropInfo) => info.type === 'dnd-demo-1'} onDrop={(info: DragAndDropInfo) => setValueDemo1(info.data.value)}>
+          <DNDDemoDroppableContent title="Only draggable items from context 1 allowed" value={valueDemo1} />
+        </Droppable>
+
+        <h3>Drag context 2</h3>
+        <div style={ { display: 'flex', gap: 5 } }>
+          <Draggable id="draggable-demo-2-1" info={ { type: 'dnd-demo-2', title: 'Button 1', icon: 'widget-default', data: { value: 'Button 1' } } }>
+            <Button>Button 1</Button>
+          </Draggable>
+
+          <Draggable id="draggable-demo-2-2" info={ { type: 'dnd-demo-2', title: 'Button 2', icon: 'widget-default', data: { value: 'Button 2' } } }>
+            <Button>Button 2</Button>
+          </Draggable>
+
+          <Draggable id="draggable-demo-2-3" info={ { type: 'dnd-demo-2', title: 'Button 3', icon: 'widget-default', data: { value: 'Button 3' } } }>
+            <Button>Button 3</Button>
+          </Draggable>
+        </div>
+
+        <Droppable id="droppable-2" isValidContext={(info: DragAndDropInfo) => info.type === 'dnd-demo-2'} onDrop={(info: DragAndDropInfo) => setValueDemo2(info.data.value)}>
+          <DNDDemoDroppableContent title="Only draggable items from context 2 allowed" value={valueDemo2} />
+        </Droppable>
+
+        <h3>Drag context 3</h3>
+        <div style={ { display: 'flex', gap: 5 } }>
+          <Draggable id="draggable-demo-3-1" info={ { type: 'dnd-demo-3', title: 'Button 1', icon: 'widget-default', data: { value: 'Button 1' } } }>
+            <Button>Button 1</Button>
+          </Draggable>
+
+          <Draggable id="draggable-demo-3-2" info={ { type: 'dnd-demo-3', title: 'Button 2', icon: 'widget-default', data: { value: 'Button 2' } } }>
+            <Button>Button 2</Button>
+          </Draggable>
+
+          <Draggable id="draggable-demo-3-3" info={ { type: 'dnd-demo-3', title: 'Button 3', icon: 'widget-default', data: { value: 'Button 3' } } }>
+            <Button>Button 3</Button>
+          </Draggable>
+        </div>
+
+        <Droppable id="droppable-3" isValidData={(info: DragAndDropInfo) => info.data?.value === 'Button 3'} isValidContext={(info: DragAndDropInfo) => info.type === 'dnd-demo-3'} onDrop={(info: DragAndDropInfo) => setValueDemo3(info.data.value)}>
+          <DNDDemoDroppableContent title="Validates data and only accepts button 3" value={valueDemo3} />
+        </Droppable>
+      </div>
     )
   },
   parameters: {

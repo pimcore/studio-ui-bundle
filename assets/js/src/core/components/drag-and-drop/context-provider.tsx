@@ -11,14 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type MutableRefObject, createContext, useRef, type ReactNode } from 'react'
-import { DndContext, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
+import React, { type MutableRefObject, createContext, useRef, type ReactNode, useMemo } from 'react'
+import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
 import { type Callback, CallbackRegistry, type ICallbackRegistry } from './callback-registry'
+import { DragOverlay as StyledDragOverlay } from './drag-overlay';
 
-interface DragAndDropInfo {
+export interface DragAndDropInfo {
   type: string
+  icon: string
+  title: string
   data: any
 }
+
+const defaultInfo: DragAndDropInfo = { type: 'unknown', data: null, title: '', icon: 'widget-default' }
 
 interface IDragAndDropInfoContext extends DragAndDropInfo {
   setInfo: (info: DragAndDropInfo) => void
@@ -28,23 +33,24 @@ interface IDragAndDropInfoContext extends DragAndDropInfo {
 }
 
 export const DragAndDropInfoContext = createContext<IDragAndDropInfoContext>({
-  type: 'unknown',
-  data: {},
+  ...defaultInfo,
   setInfo: (info: DragAndDropInfo): void => {},
-  getInfo: (): DragAndDropInfo => ({ type: 'unknown', data: null }),
+  getInfo: (): DragAndDropInfo => (defaultInfo),
   removeInfo: (): void => {}
 })
 
 export const DragAndDropContextProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
-  const [info, setInfo] = React.useState<DragAndDropInfo>({ type: 'unknown', data: null })
+  const [info, setInfo] = React.useState<DragAndDropInfo>(defaultInfo)
   const callbackRegistry = useRef<ICallbackRegistry>(new CallbackRegistry())
 
   function setContext (info: DragAndDropInfo): void {
     setInfo(info)
+    document.body.classList.add('dnd--dragging');
   }
 
   function removeContext (): void {
-    setInfo({ type: 'unknown', data: null })
+    setInfo(defaultInfo)
+    document.body.classList.remove('dnd--dragging');
   }
 
   function getContext (): DragAndDropInfo {
@@ -61,22 +67,27 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
   }
 
   function onDragEnd (event: DragEndEvent): void {
-    console.log(callbackRegistry.current.getCallbacks())
     // @ts-expect-error - TS doesn't like the type of the event
     Object.entries(callbackRegistry.current.getCallbacks()).forEach((callback: Callback) => {
       callback[1](event)
     })
+
+    removeContext();
   }
 
-  return (
+  return useMemo(() => (
     <DndContext
       onDragCancel={ onDragCancel }
       onDragEnd={ onDragEnd }
       onDragStart={ onDragStart }
     >
-      <DragAndDropInfoContext.Provider value={ { type: info.type, data: info.data, setInfo: setContext, removeInfo: removeContext, getInfo: getContext, callbackRegistry } }>
+      <DragOverlay>
+        <StyledDragOverlay info={ info } />
+      </DragOverlay>
+
+      <DragAndDropInfoContext.Provider value={ { type: info.type, data: info.data, icon: info.icon, title: info.title, setInfo: setContext, removeInfo: removeContext, getInfo: getContext, callbackRegistry } }>
         {children}
       </DragAndDropInfoContext.Provider>
     </DndContext>
-  )
+  ), [info, children])
 }

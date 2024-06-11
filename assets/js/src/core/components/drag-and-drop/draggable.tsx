@@ -1,24 +1,26 @@
-import React from 'react';
+import React, { Children, forwardRef, isValidElement } from 'react';
 import {useDraggable} from '@dnd-kit/core';
+import { DragAndDropInfo } from './context-provider';
 
 interface DraggableProps {
+  id: string;
   children: React.ReactNode;
+  info: DragAndDropInfo
 }
 
-export function Draggable(props) {
-  const {attributes, listeners, setNodeRef, transform} = useDraggable({
-    id: 'draggable',
-    data: {foo: 'bar'},
+export function Draggable(props: DraggableProps) {
+  const {attributes, listeners, setNodeRef} = useDraggable({
+    id: props.id,
+    data: props.info,
   });
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined;
+  const Child = Children.only(props.children);
 
+  if (!isValidElement(Child)) {
+    throw new Error('Children must be a valid react component');
+  }
   
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
-      {props.children}
-    </button>
+    <Child.type {...Child.props} ref={setNodeRef} {...listeners} {...attributes} />
   );
 }
