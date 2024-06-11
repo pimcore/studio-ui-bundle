@@ -11,10 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import LoginPage from '@Pimcore/modules/app/auth/login-page'
-import DefaultPage from '@Pimcore/modules/app/default-page'
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
+import { DefaultPage } from '@Pimcore/modules/app/default-page'
+import { LoginPage } from '@Pimcore/modules/auth/login-page'
 
 export const router = createBrowserRouter([
   {
