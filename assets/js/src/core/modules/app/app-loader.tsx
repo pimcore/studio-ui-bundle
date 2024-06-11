@@ -12,11 +12,11 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { api } from '@Pimcore/modules/app/auth/user/user-api-slice.gen'
+import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useGetTranslationsMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
-import { setUser } from '@Pimcore/modules/app/auth/user-slice'
+import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -29,9 +29,9 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(true)
 
   async function initLoadUser (): Promise<any> {
-    const promiseTest = dispatch(api.endpoints.getStudioApiUserCurrentUserInformation.initiate())
+    const userFetcher = dispatch(api.endpoints.getStudioApiUserCurrentUserInformation.initiate())
 
-    promiseTest
+    userFetcher
       .then(({ data, isSuccess }) => {
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
@@ -39,7 +39,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       })
       .catch(() => {})
 
-    return await promiseTest
+    return await userFetcher
   }
 
   async function loadTranslations (): Promise<any> {
