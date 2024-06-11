@@ -14,7 +14,7 @@
 import React from 'react'
 import { Background } from '@Pimcore/components/background/background'
 import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
-import { useMiddleware } from '@Pimcore/components/login-form/hooks/use-middleware'
+import { useMiddleware } from '@Pimcore/modules/app/auth/hooks/use-middleware'
 
 export default function DefaultPage (): React.JSX.Element {
   useMiddleware()

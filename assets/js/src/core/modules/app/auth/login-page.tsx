@@ -14,7 +14,7 @@
 import React from 'react'
 import { LoginForm } from '@Pimcore/components/login-form/login-form'
 import { useStyle } from './login-page.styles'
-import { useMiddleware } from '@Pimcore/components/login-form/hooks/use-middleware'
+import { useMiddleware } from '@Pimcore/modules/app/auth/hooks/use-middleware'
 
 export default function LoginLayout (): React.JSX.Element {
   const { styles } = useStyle()

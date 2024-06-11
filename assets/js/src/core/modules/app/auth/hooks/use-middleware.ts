@@ -11,9 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useIsAuthenticated } from '@Pimcore/components/login-form/hooks/use-is-authenticated'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useIsAuthenticated } from '@Pimcore/modules/app/auth/hooks/use-is-authenticated'
 
 export const useMiddleware = (): void => {
   const isAuthenticated = useIsAuthenticated()

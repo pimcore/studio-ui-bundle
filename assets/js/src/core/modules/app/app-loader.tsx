@@ -13,11 +13,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { api } from '@Pimcore/app/user/user-api-slice.gen'
-
 import { useAppDispatch } from '@Pimcore/app/store'
-import { setCredentials } from '@Pimcore/app/auth/auth-slice'
 import { useGetTranslationsMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
+import { setUser } from '@Pimcore/modules/app/auth/user-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -35,7 +34,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     promiseTest
       .then(({ data, isSuccess }) => {
         if (isSuccess && data !== undefined) {
-          dispatch(setCredentials(data))
+          dispatch(setUser(data))
         }
       })
       .catch(() => {})

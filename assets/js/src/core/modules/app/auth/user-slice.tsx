@@ -13,8 +13,8 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { type IUser } from '@Pimcore/components/login-form/services/auth'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
+import { type IUser } from '@Pimcore/modules/app/auth/auth-slice'
 
 interface AuthState {
   username: string | null
@@ -30,7 +30,7 @@ const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (
+    setUser: (
       state,
       {
         payload: { username, roles }
@@ -44,7 +44,7 @@ const slice = createSlice({
 
 injectSliceWithState(slice)
 
-export const { setCredentials } = slice.actions
+export const { setUser } = slice.actions
 
 // export const authReducer = slice.reducer
 

@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useUser } from '@Pimcore/components/login-form/hooks/use-user'
 import { useMemo } from 'react'
+import { useUser } from '@Pimcore/modules/app/auth/hooks/use-user'
 
 export const useIsAuthenticated = (): boolean => {
   const user = useUser()
