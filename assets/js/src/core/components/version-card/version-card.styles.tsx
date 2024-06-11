@@ -77,6 +77,10 @@ export const useStyle = createStyles(({ token, css }) => {
       & input.ant-input {
         margin-top: 5px;
       }
+      
+      & .ant-checkbox-wrapper {
+        margin-right: 6px;
+      }
 
       .ant-card-extra {
         height: 44px;
@@ -141,6 +145,10 @@ export const useStyle = createStyles(({ token, css }) => {
       .btn-publish {
         margin-right: ${token.marginXXS}px;
         padding-top: ${token.paddingXXS}px;
+      }
+
+      .btn-publish > .ant-btn-icon {
+        vertical-align: middle;
       }
       
       .row-margin {

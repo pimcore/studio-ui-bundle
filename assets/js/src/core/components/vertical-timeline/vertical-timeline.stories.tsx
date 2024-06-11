@@ -31,29 +31,50 @@ export const _default = {
   args: {
     timeStamps: [
       <VersionCard
+        activeDefault
+        autosaved={ false }
         className={ 'is-active' }
         date={ '2020-05-12' }
         id={ 112 }
-        isActiveDefault
-        isPublished={ false }
         key={ 1 }
+        onClickDelete={ () => {
+          console.log('Delete')
+        } }
+        onClickPublish={ () => {
+          console.log('Publish')
+        } }
+        published={ false }
         savedBy={ 'admin' }
         version={ 1 }
       />,
       <VersionCard
+        autosaved
         date={ '2020-07-12' }
         id={ 112 }
-        isPublished={ false }
         key={ 2 }
+        onClickDelete={ () => {
+          console.log('Delete')
+        } }
+        onClickPublish={ () => {
+          console.log('Publish')
+        } }
+        published={ false }
         savedBy={ 'auto saved' }
         version={ 2 }
       />,
       <VersionCard
+        autosaved={ false }
         className={ 'is-published' }
         date={ '2020-10-12' }
         id={ 112 }
-        isPublished
         key={ 3 }
+        onClickDelete={ () => {
+          console.log('Delete')
+        } }
+        onClickPublish={ () => {
+          console.log('Publish')
+        } }
+        published
         savedBy={ 'admin' }
         version={ 3 }
       />

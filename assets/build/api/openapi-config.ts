@@ -24,8 +24,8 @@ const config: ConfigFile = {
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: [/translation/i]
     },
-    '../../js/src/core/modules/element/editor/tab-manager/tabs/versions-api-slice.gen.ts': {
-      filterEndpoints: [/versions/i]
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen.ts': {
+      filterEndpoints: [/version/i]
     }
   },
   exportName: 'api',

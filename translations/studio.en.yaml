@@ -53,10 +53,24 @@ aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
 asset.preview.no-video-support: Your browser does not support the video tag.
 grid.copy-notice: Copied to clipboard
+version.versions: Versions
 version.version: Version
 version.publish: Publish
 version.published: Published
 version.schedule-for: Scheduled for
 version.note: Note
 version.own-draft: Own Draft
+version.compare-versions: Compare Versions
+version.fileName: Name
+version.temporaryFile: Temporary File
+version.dimensions: Dimensions
+version.creationDate: Creation Date
+version.modificationDate: Modification Date
+version.fileSize: File Size
+version.mimeType: Mime Type
+version.additionalAttributes: Additional Attributes
 aria.version.delete: Delete version
+aria.version.expand: Expand version
+clear-all: Clear all
+by: By
+field: Field

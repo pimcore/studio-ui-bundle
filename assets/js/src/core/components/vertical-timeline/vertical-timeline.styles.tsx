@@ -16,14 +16,14 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     timeline: css`
+      padding-left: ${token.paddingXS}px;
+    
       & > * {
         position: relative;
         margin: 0;
         
-        //only for testing
-        padding: 3px 0 7px 9px;
-
-
+        padding: 3px 0 7px 21px;
+        
         border-left: 2px solid rgba(0,0,0,6%);
       }
 
@@ -43,14 +43,14 @@ export const useStyle = createStyles(({ token, css }) => {
         border: 2px solid ${token.colorTextDisabled};
       }
 
-      & > *.is-active:before {
+      & > .is-active:before {
         height: 10px;
         width: 10px;
         margin-right: -6px;
         border-color: ${token.colorPrimary};
       }
 
-      & > *.is-published:before {
+      & > .is-published:before {
         border-color: ${token.colorSuccess};
     `
   }

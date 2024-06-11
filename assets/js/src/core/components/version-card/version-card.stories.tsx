@@ -34,7 +34,13 @@ export const _default = {
     isOwnDraft: false,
     id: 112,
     scheduledDate: '2023.02.19',
-    note: 'This is a note'
+    note: 'This is a note',
+    onClickDelete: () => {
+      console.log('Delete')
+    },
+    onClickPublish: () => {
+      console.log('Publish')
+    }
   }
 }
 
@@ -43,11 +49,17 @@ export const _active = {
     version: 1,
     date: '2021.09.10',
     savedBy: 'John Doe',
-    isActiveDefault: true,
-    isPublished: false,
-    isOwnDraft: false,
+    activeDefault: true,
+    published: false,
+    ownDraft: false,
     id: 112,
-    note: 'This is a note'
+    note: 'This is a note',
+    onClickDelete: () => {
+      console.log('Delete')
+    },
+    onClickPublish: () => {
+      console.log('Publish')
+    }
   }
 }
 
@@ -56,11 +68,17 @@ export const _published = {
     version: 1,
     date: '2021.09.10',
     savedBy: 'John Doe',
-    isPublished: true,
-    isAutosaved: true,
-    isOwnDraft: false,
+    published: true,
+    autosaved: true,
+    ownDraft: false,
     id: 112,
-    scheduledDate: '2023.02.19'
+    scheduledDate: '2023.02.19',
+    onClickDelete: () => {
+      console.log('Delete')
+    },
+    onClickPublish: () => {
+      console.log('Publish')
+    }
   }
 }
 
@@ -69,11 +87,17 @@ export const _ownDraft = {
     version: 1,
     date: '2021.09.10',
     savedBy: 'John Doe',
-    isActiveDefault: true,
-    isPublished: false,
-    isAutosaved: true,
-    isOwnDraft: true,
+    activeDefault: true,
+    published: false,
+    autosaved: true,
+    ownDraft: true,
     id: 112,
-    scheduledDate: '2023.02.19'
+    scheduledDate: '2023.02.19',
+    onClickDelete: () => {
+      console.log('Delete')
+    },
+    onClickPublish: () => {
+      console.log('Publish')
+    }
   }
 }

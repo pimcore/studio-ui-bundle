@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Input, Tag } from 'antd'
-import React, { useEffect } from 'react'
+import { Button, Card, Checkbox, Input, Tag } from 'antd'
+import React, { useState } from 'react'
 import { useStyle } from './version-card.styles'
 import { Icon } from '../icon/icon'
 import { isSet } from '@Pimcore/utils/helpers'
@@ -22,14 +22,19 @@ interface VersionCardProps {
   version: number
   date: string
   savedBy: string
-  isPublished: boolean
+  published: boolean
   id: number
-  isAutosaved?: boolean
-  isActiveDefault?: boolean
-  isOwnDraft?: boolean
+  selectable?: boolean
+  selected?: boolean
+  autosaved: boolean
+  activeDefault?: boolean
+  ownDraft?: boolean
   scheduledDate?: string
   note?: string
-  onActiveStateChanged?: (isActive: boolean) => void
+  onClick?: () => void
+  onClickPublish: () => void
+  onClickDelete: () => void
+  onChangeCheckbox?: (e) => void
   className?: string
 }
 
@@ -37,21 +42,25 @@ export const VersionCard = ({
   version,
   date,
   savedBy,
-  isPublished,
+  published,
   id,
-  isAutosaved,
-  isActiveDefault = false,
-  isOwnDraft,
+  selectable = false,
+  selected = false,
+  autosaved,
+  activeDefault = false,
+  ownDraft,
   scheduledDate,
   note = '',
-  onActiveStateChanged,
+  onClick,
+  onClickPublish,
+  onClickDelete,
+  onChangeCheckbox,
   className
 }: VersionCardProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
 
-  const [isExpanded, setIsExpanded] = React.useState(false)
-  const [isActive, setIsActive] = React.useState(isActiveDefault)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const chevronOnClick = (e: any): void => {
     setIsExpanded(!isExpanded)
@@ -60,28 +69,36 @@ export const VersionCard = ({
   const title = (
     <div>
       <div>
-        <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
+        { selectable && (
+        <Checkbox
+          checked={ selected }
+          onChange={ onChangeCheckbox }
+        />
+        ) }
+        <span className={ 'title' }>{`${t('version.version')} ${id} | ${date} `}</span>
         <Button
+          aria-label={ t('aria.version.expand') }
           icon={ <Icon
             className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
             name="chevron-up"
                  /> }
           onClick={ chevronOnClick }
+          role={ 'button' }
           size="small"
           type="text"
         />
       </div>
       <div>
-        <span className={ 'sub-title' } >{`By ${savedBy}`}</span>
-        {isSet(isAutosaved) && <Icon name="lightning-01" /> }
+        <span className={ 'sub-title' } >{`${t('by')} ${savedBy}`}</span>
+        {isSet(autosaved) && <Icon name="lightning-01" /> }
       </div>
     </div>
   )
 
   let extra
-  let classNameByState = isActive ? 'card__is-active' : ''
+  let classNameByState = activeDefault ? 'card__is-active' : ''
 
-  if (isPublished) {
+  if (published) {
     classNameByState = 'card__is-published'
     extra = (
       <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
@@ -93,7 +110,7 @@ export const VersionCard = ({
         {t('version.published')}
       </Tag>
     )
-  } else if (isSet(isOwnDraft) && isOwnDraft!) {
+  } else if (isSet(ownDraft) && ownDraft!) {
     extra = (
       <Tag className={ ['title-tag', 'title-tag__own-draft'].join(' ') }>
         <Icon
@@ -106,20 +123,12 @@ export const VersionCard = ({
     )
   }
 
-  const onClickCard = (): void => {
-    setIsActive(true)
-  }
-
-  useEffect(() => {
-    isSet(onActiveStateChanged) && onActiveStateChanged!(isActive ?? false)
-  }, [isActive])
-
   return (
     <div className={ [styles.card, className].join(' ') }>
       <Card
         className={ [classNameByState, isExpanded ? 'card-body__expand' : 'card-body__hide'].join(' ') }
         extra={ extra }
-        onClick={ onClickCard }
+        onClick={ onClick }
         size="small"
         style={ { width: 300 } }
         title={ title }
@@ -127,10 +136,11 @@ export const VersionCard = ({
         <div className={ 'flexbox-start-end' }>
           <Tag className={ 'id-tag' }>ID: {id}</Tag>
           <div>
-            {!isPublished && (
+            {!published && (
               <Button
                 className={ 'btn-publish' }
                 icon={ <Icon name="world" /> }
+                onClick={ onClickPublish }
               >
                 {t('version.publish')}
               </Button>
@@ -138,6 +148,7 @@ export const VersionCard = ({
             <Button
               aria-label={ t('aria.version.delete') }
               icon={ <Icon name="delete-outlined" /> }
+              onClick={ onClickDelete }
             />
           </div>
         </div>
