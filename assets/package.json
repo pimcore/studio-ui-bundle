@@ -83,7 +83,8 @@
     "react-i18next": "^14.0.5",
     "react-redux": "^9.1.0",
     "codemirror": "^5.56.0",
-    "react-codemirror2": "^8.0.0"
+    "react-codemirror2": "^8.0.0",
+    "react-router-dom": "^6.23.0"
   },
   "peerDependencies": {
     "antd": "^5.17.0",

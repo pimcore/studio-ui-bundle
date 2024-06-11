@@ -26,6 +26,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/asset/properties-api-slice.gen.ts': {
       filterEndpoints: [/properties/i]
+    },
+    '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
+      filterEndpoints: [/user/i]
     }
   },
   exportName: 'api',
