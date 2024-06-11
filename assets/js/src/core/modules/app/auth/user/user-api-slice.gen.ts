@@ -1,4 +1,4 @@
-import { api } from "../api/pimcore/index";
+import { api } from "../../../../app/api/pimcore/index";
 export const addTagTypes = ["User Management"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({

@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { api } from '@Pimcore/app/user/user-api-slice.gen'
+import { api } from '@Pimcore/modules/app/auth/user/user-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useGetTranslationsMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
