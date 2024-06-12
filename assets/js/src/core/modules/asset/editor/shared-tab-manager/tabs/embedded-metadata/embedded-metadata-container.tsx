@@ -50,13 +50,20 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   ]
 
   const embeddedMetaData = data.items?.fixedCustomSettings?.embeddedMetaData ?? []
+
+  /* eslint-disable @typescript-eslint/no-unsafe-argument */
   const reformattedEmbeddedMetaData = Object.entries(embeddedMetaData).map(([key, value]) => {
-    return { name: key, value }
+    return {
+      name: String(key).toString(),
+      value: String(value).toString()
+    }
   })
 
   return (
     <div className={ styles.tab }>
-      <p>{t('asset.asset-editor-tabs.embedded-metadata.headline')}</p>
+      <div className={ 'tabHeadline' }>
+        <p>{t('asset.asset-editor-tabs.embedded-metadata.headline')}</p>
+      </div>
       <div style={ { marginLeft: 0 } }>
         <Grid
           columns={ columns }

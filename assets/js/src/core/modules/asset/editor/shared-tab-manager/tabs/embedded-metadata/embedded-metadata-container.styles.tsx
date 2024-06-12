@@ -16,12 +16,12 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tab: css`
-        p:first-of-type {
-            color: ${token.itemActiveColor};
-            margin: 0;
-            padding: ${token.paddingXS}px;
-            font-weight: 600;
-        }
+      .tabHeadline p {
+        color: ${token.itemActiveColor};
+        margin: 0;
+        padding: ${token.paddingXS}px;
+        font-weight: 600;
+      }
     `
   }
 })
