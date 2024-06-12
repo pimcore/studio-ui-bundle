@@ -32,6 +32,13 @@ export const useStyle = createStyles(({ token, css }) => {
           }
         }
       }
+        
+      .pimcore-workflow-workflows {
+          padding: 0 ${token.paddingXS}px;
+          display: flex;
+          gap: 10px;
+          flex-direction: column;
+      }
     `
   }
 })

@@ -70,7 +70,10 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
             workflow.workflowStatus.map((status, index) => (
               <Tag
                 icon={
-                  <Badge color={ status.backgroundColor } />
+                  <Badge
+                    color={ status.backgroundColor }
+                    styles={ { indicator: { outline: `1px solid ${status.backgroundColor}33` } } }
+                  />
                 }
                 key={ index }
                 title={ status.title }

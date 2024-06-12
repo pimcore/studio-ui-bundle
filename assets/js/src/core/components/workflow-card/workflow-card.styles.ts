@@ -37,6 +37,7 @@ export const useStyles = createStyles(({ token, css }) => {
             .ant-badge-status-dot {
               width: 6px;
               height: 6px;
+              top: unset;
             }
           }
         }
