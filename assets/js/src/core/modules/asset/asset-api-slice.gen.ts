@@ -46,8 +46,8 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type GetAssetsApiResponse = /** status 200 Paginated assets with total count as header param */ {
-    totalItems?: number;
-    items?: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
+    totalItems: number;
+    items: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
 };
 export type GetAssetsApiArg = {
     /** Page number */
@@ -68,7 +68,7 @@ export type GetAssetsApiArg = {
     pathIncludeDescendants?: boolean;
 };
 export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
-    customSettings?: CustomSettings;
+    items?: CustomSettings;
 };
 export type GetAssetCustomSettingsByIdApiArg = {
     /** ID of the asset */

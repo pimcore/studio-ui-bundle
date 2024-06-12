@@ -71,7 +71,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   return (
     <Grid
       columns={ columns }
-      data={ assets.items! }
+      data={ assets.items }
       resizable
     />
   )

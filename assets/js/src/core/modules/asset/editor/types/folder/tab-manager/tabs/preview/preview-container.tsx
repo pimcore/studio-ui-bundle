@@ -42,7 +42,7 @@ const PreviewContainer = (): React.JSX.Element => {
     return <div>Error</div>
   }
 
-  const total = data.totalItems!
+  const total = data.totalItems
 
   function onPagerChange (page: number, pageSize: number): void {
     setCurrentPage(page)
