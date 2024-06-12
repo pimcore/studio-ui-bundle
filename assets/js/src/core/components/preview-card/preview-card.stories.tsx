@@ -47,7 +47,7 @@ const dropdownItems: DropdownMenuItemProps[] = [
     label: 'preview-card.download-zip'
   },
   {
-    iconLeft: 'delete-outlined',
+    iconLeft: 'trash',
     label: 'preview-card.delete'
   }
 ]

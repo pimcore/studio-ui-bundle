@@ -19,13 +19,12 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class DefaultController extends FrontendController
 {
-    /**
-     * @Route("/admin/studio")
-     */
+    #[Route('/')]
+    #[Route('/login')]
     public function indexAction(StaticResourcesResolverInterface $staticResourcesResolver): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [

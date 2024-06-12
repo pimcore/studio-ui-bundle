@@ -49,7 +49,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       label: t('preview-card.download-zip')
     },
     {
-      iconLeft: 'delete-outlined',
+      iconLeft: 'trash',
       label: t('preview-card.delete')
     }
   ]
@@ -58,9 +58,6 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   assets.items!.forEach((asset) => {
     const onClickCard = (e): void => {
       openAsset({
-        name: asset.filename!,
-        icon: asset.iconName ?? 'file-question-02',
-
         config: {
           id: asset.id!
         }
