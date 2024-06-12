@@ -27,6 +27,8 @@ export const useStyles = createStyles(({ token, css }) => {
           }
 
         .ant-tag {
+          background: ${token.colorFillSecondary};
+          border: 1px solid ${token.colorBorder};
           cursor: pointer;
           height: 22px;
           display: flex;
