@@ -37,8 +37,6 @@ const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
     await store.dispatch(api.endpoints.getAssetById.initiate({ id: parseInt(node.id) }))
 
     openAsset({
-      name: node.label,
-      icon: node.icon,
       config: {
         id: parseInt(node.id)
       }

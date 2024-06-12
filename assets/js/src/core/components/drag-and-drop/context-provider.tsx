@@ -14,7 +14,7 @@
 import React, { type MutableRefObject, createContext, useRef, type ReactNode, useMemo } from 'react'
 import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
 import { type Callback, CallbackRegistry, type ICallbackRegistry } from './callback-registry'
-import { DragOverlay as StyledDragOverlay } from './drag-overlay';
+import { DragOverlay as StyledDragOverlay } from './drag-overlay'
 
 export interface DragAndDropInfo {
   type: string
@@ -45,12 +45,12 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
 
   function setContext (info: DragAndDropInfo): void {
     setInfo(info)
-    document.body.classList.add('dnd--dragging');
+    document.body.classList.add('dnd--dragging')
   }
 
   function removeContext (): void {
     setInfo(defaultInfo)
-    document.body.classList.remove('dnd--dragging');
+    document.body.classList.remove('dnd--dragging')
   }
 
   function getContext (): DragAndDropInfo {
@@ -72,7 +72,7 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
       callback[1](event)
     })
 
-    removeContext();
+    removeContext()
   }
 
   return useMemo(() => (

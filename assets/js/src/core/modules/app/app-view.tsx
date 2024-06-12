@@ -13,10 +13,10 @@
 
 import React, { StrictMode } from 'react'
 import { GlobalProvider } from './global-provider'
-import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
 import { App as AntApp } from 'antd'
-import { TranslationsLoaderContainer } from '@Pimcore/modules/app/translations/translations-loader-container'
-import { Background } from '@Pimcore/components/background/background'
+import { RouterProvider } from 'react-router-dom'
+import { router } from '@Pimcore/app/router/router'
+import { AppLoader } from '@Pimcore/modules/app/app-loader'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -24,10 +24,9 @@ export const AppView = (): React.JSX.Element => {
       <StrictMode>
         <GlobalProvider>
           <AntApp>
-            <Background />
-            <TranslationsLoaderContainer>
-              <BaseLayoutView />
-            </TranslationsLoaderContainer>
+            <AppLoader>
+              <RouterProvider router={ router } />
+            </AppLoader>
           </AntApp>
         </GlobalProvider>
       </StrictMode>

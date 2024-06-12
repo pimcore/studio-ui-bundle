@@ -25,11 +25,12 @@ export interface ICallbackRegistry {
 export class CallbackRegistry implements ICallbackRegistry {
   private callbacks: Record<string, Callback> = {}
 
-  register (key: string, callback: Callback) {
+  register (key: string, callback: Callback): void {
     this.callbacks[key] = callback
   }
 
   unregister (key: string): void {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this.callbacks[key]
   }
 
