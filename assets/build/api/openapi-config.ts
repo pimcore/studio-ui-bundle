@@ -30,6 +30,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/element/editor/workflow-api-slice.gen.ts': {
       filterEndpoints: [/workflow/i]
     },
+    '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
+      filterEndpoints: [/user/i]
+    }
   },
   exportName: 'api',
   hooks: true,

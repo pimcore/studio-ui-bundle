@@ -72,3 +72,9 @@ asset.asset-editor-tabs.properties.add-custom-property.add: Add
 asset.asset-editor-tabs.properties.add-custom-property.type: Type
 asset.asset-editor-tabs.workflow.text: Workflow Details
 component.workflow-card.action-btn: Workflow Actions
+login-form.remember-me: Remember me
+login-form.forgot-password: Forgot password
+login-form.login: Login
+login-form-additional-logins.or: or
+aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
+aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox

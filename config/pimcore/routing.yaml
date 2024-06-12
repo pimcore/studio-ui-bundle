@@ -1,5 +1,5 @@
 pimcore_studio_ui:
     resource: "@PimcoreStudioUiBundle/src/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /admin/studio
 
