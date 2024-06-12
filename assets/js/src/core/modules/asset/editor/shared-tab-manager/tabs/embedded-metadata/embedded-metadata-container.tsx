@@ -19,6 +19,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './embedded-metadata-container.styles'
+import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -42,10 +43,12 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const columnHelper = createColumnHelper()
   const columns = [
     columnHelper.accessor('name', {
-      header: t('asset.asset-editor-tabs.embedded-metadata.columns.name')
+      header: t('asset.asset-editor-tabs.embedded-metadata.columns.name'),
+      size: 400
     }),
     columnHelper.accessor('value', {
-      header: t('asset.asset-editor-tabs.embedded-metadata.columns.value')
+      header: t('asset.asset-editor-tabs.embedded-metadata.columns.value'),
+      size: 400
     })
   ]
 
@@ -61,10 +64,18 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ 'tabHeadline' }>
-        <p>{t('asset.asset-editor-tabs.embedded-metadata.headline')}</p>
+      <ElementToolbar />
+
+      <div className={ 'pimcore-embedded-metadata-toolbar' }>
+        <p className={ 'pimcore-embedded-metadata-toolbar__headline' }>
+          {t('asset.asset-editor-tabs.embedded-metadata.headline')}
+        </p>
       </div>
-      <div style={ { marginLeft: 0 } }>
+
+      <div
+        className={ 'pimcore-embedded-metadata-content' }
+        style={ { marginLeft: 0 } }
+      >
         <Grid
           columns={ columns }
           data={ reformattedEmbeddedMetaData }
