@@ -40,7 +40,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
   function dataTransformer (data: GetAssetsApiResponse): DataTransformerReturnType {
     const nodes: TreeNodeProps[] = []
 
-    const assetData = data.items!
+    const assetData = data.items
     assetData.forEach((assetNode) => {
       nodes.push({
         id: assetNode.id!.toString(),
