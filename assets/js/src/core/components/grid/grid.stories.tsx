@@ -26,7 +26,6 @@ const config: Meta = {
   render: (data: GridProps) => {
     const ComponentWrapper = (): React.JSX.Element => {
       const [_data, setData] = useState(data.data)
-      const [ columns, setColumns ] = useState(data.columns);
 
       function onUpdateCellData ({ rowIndex, columnId, value }): void {
         const updatedData = [..._data]
@@ -34,35 +33,12 @@ const config: Meta = {
         setData(updatedData)
       }
 
-      function onButtonClick (): void {
-        setColumns(columns.map(column => {
-          if (column.meta && column.meta.editable) {
-            return {
-              ...column,
-              meta: {
-                ...column.meta,
-                editable: !column.meta.editable
-              }
-            }
-          }
-
-          return column
-        }))
-      }
-
       return (
-        <>
-          <button onClick={ onButtonClick }>
-            toogle editable
-          </button>
-
-          <Grid
-            { ...data }
-            data={ _data }
-            columns={ columns }
-            onUpdateCellData={ onUpdateCellData }
-          />
-        </>
+        <Grid
+          { ...data }
+          data={ _data }
+          onUpdateCellData={ onUpdateCellData }
+        />
       )
     }
 
