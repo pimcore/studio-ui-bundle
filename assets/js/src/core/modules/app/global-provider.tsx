@@ -13,6 +13,7 @@
 
 import { ContainerProvider } from '@Pimcore/app/depency-injection'
 import { store } from '@Pimcore/app/store'
+import { DragAndDropContextProvider } from '@Pimcore/components/drag-and-drop/context-provider'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
@@ -26,7 +27,9 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
     <ContainerProvider>
       <ThemeProvider>
         <Provider store={ store }>
-          {children}
+          <DragAndDropContextProvider>
+            {children}
+          </DragAndDropContextProvider>
         </Provider>
       </ThemeProvider>
     </ContainerProvider>

@@ -139,7 +139,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   ]
 
   function onUpdateCellData ({ rowIndex, columnId, value }): void {
-    console.log('triggered onUpdateCellData!')
+    console.log('triggered onUpdateCellData!', value)
   }
 
   return (

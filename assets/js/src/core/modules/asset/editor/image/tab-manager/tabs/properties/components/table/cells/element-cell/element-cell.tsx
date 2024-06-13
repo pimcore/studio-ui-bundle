@@ -13,44 +13,43 @@
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { Tag } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
-import {
-  useStyle
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/element-cell/element-cell.styles'
+import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { ElementCellContent } from './element-cell-content'
+import { type Asset } from 'src/sdk/main'
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { styles } = useStyle()
-  const { openAsset } = useAsset()
-  const propertyData = props.row.original
+  function isValidContext (info: DragAndDropInfo): boolean {
+    return info.type === 'asset'
+  }
 
-  function openAssetWidget (): void {
-    if (props !== undefined) {
-      openAsset({
-        config: {
-          id: propertyData.data.id
-        }
+  function onDrop (info: DragAndDropInfo): void {
+    const asset = info.data as Asset
+    const propertyUpdate = {
+      path: asset.path,
+      id: asset.id,
+      type: asset.type,
+      filename: asset.filename
+    }
+
+    if (props.column.columnDef.meta?.editable !== undefined && props.table.options.meta?.onUpdateCellData !== undefined) {
+      props.table.options.meta?.onUpdateCellData({
+        rowIndex: props.row.index,
+        columnId: props.column.id,
+        value: propertyUpdate
       })
     }
   }
 
   return (
     <>
-      <div className={ [styles.link, 'default-cell__content'].join(' ') }>
-        {propertyData.data !== null && (
-          <Tag
-            bordered={ false }
-            color='processing'
-            onClick={ openAssetWidget }
-            title={ propertyData.data.path + propertyData.data.key }
-          >
-            {propertyData.data.path}{propertyData.data.key}
-          </Tag>
-        )}
-      </div>
-
-      <Icon name={ 'copy-07' } />
+      <Droppable
+        className='default-cell__content'
+        isValidContext={ isValidContext }
+        onDrop={ onDrop }
+      >
+        <ElementCellContent { ...props } />
+      </Droppable>
     </>
   )
 }
