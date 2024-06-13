@@ -12,20 +12,25 @@
 */
 
 import React from 'react'
-import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetCustomSettingsByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Result } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
+import { useTranslation } from 'react-i18next'
+import { useStyles } from './embedded-metadata-container.styles'
+import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { styles } = useStyles()
   const { context } = useGlobalAssetContext()
 
   if (context === undefined) {
     return <Result title="No context" />
   }
 
-  const { data, isLoading, isError } = useGetAssetByIdQuery({ id: context?.config?.id })
+  const { data, isLoading, isError } = useGetAssetCustomSettingsByIdQuery({ id: context?.config?.id })
 
   if (isLoading || data === undefined) {
     return <div>Loading...</div>
@@ -35,26 +40,47 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
     return <div>Error</div>
   }
 
-  const sampleEmbeddedMetadata = [
-    { key: 'id', value: data.id },
-    { key: 'filename', value: data.filename }
-  ]
-
   const columnHelper = createColumnHelper()
   const columns = [
-    columnHelper.accessor('key', {}),
-    columnHelper.accessor('value', {})
+    columnHelper.accessor('name', {
+      header: t('asset.asset-editor-tabs.embedded-metadata.columns.name'),
+      size: 400
+    }),
+    columnHelper.accessor('value', {
+      header: t('asset.asset-editor-tabs.embedded-metadata.columns.value'),
+      size: 400
+    })
   ]
 
+  const embeddedMetaData = data.items?.fixedCustomSettings?.embeddedMetaData ?? []
+
+  /* eslint-disable @typescript-eslint/no-unsafe-argument */
+  const reformattedEmbeddedMetaData = Object.entries(embeddedMetaData).map(([key, value]) => {
+    return {
+      name: String(key).toString(),
+      value: String(value).toString()
+    }
+  })
+
   return (
-    <>
-      <h4>Embedded Metadata TAB</h4>
-      <div style={ { marginLeft: 0 } }>
+    <div className={ styles.tab }>
+      <ElementToolbar />
+
+      <div className={ 'pimcore-embedded-metadata-toolbar' }>
+        <p className={ 'pimcore-embedded-metadata-toolbar__headline' }>
+          {t('asset.asset-editor-tabs.embedded-metadata.headline')}
+        </p>
+      </div>
+
+      <div
+        className={ 'pimcore-embedded-metadata-content' }
+        style={ { marginLeft: 0 } }
+      >
         <Grid
           columns={ columns }
-          data={ sampleEmbeddedMetadata }
+          data={ reformattedEmbeddedMetaData }
         />
       </div>
-    </>
+    </div>
   )
 }

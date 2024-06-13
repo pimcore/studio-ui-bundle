@@ -68,7 +68,7 @@ export type GetAssetsApiArg = {
     pathIncludeDescendants?: boolean;
 };
 export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
-    customSettings?: CustomSettings;
+    items?: CustomSettings;
 };
 export type GetAssetCustomSettingsByIdApiArg = {
     /** ID of the asset */
