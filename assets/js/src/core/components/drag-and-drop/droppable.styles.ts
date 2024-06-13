@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createGlobalStyle, createStyles } from 'antd-style'
+import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
@@ -34,20 +34,5 @@ export const useStyle = createStyles(({ token, css }) => {
         border-radius: ${token.borderRadius}px;
       }
     `
-  }
-})
-
-export const GlobalStyle = createGlobalStyle(({ theme: token }) => {
-  return {
-    '.dnd--dragging': {
-      cursor: 'move'
-    },
-
-    '.dnd--invalid': {
-      '.dnd__overlay': {
-        background: token.colorErrorBg,
-        color: token.colorErrorActive
-      }
-    }
   }
 })

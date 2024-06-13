@@ -14,7 +14,7 @@
 import React, { Children, type ReactNode, isValidElement, useContext, useEffect, useState } from 'react'
 import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider'
 import { useDroppable } from '@dnd-kit/core'
-import { GlobalStyle, useStyle } from './droppable.styles'
+import { useStyle } from './droppable.styles'
 import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
 
@@ -81,7 +81,6 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
 
   return (
     <div className={ [props.className, styles.droppable].join(' ') }>
-      <GlobalStyle />
       <DroppableContextProvider value={ { isDragActive: isValidContext, isOver: isOver && isValidContext, isValid: isValidData && isValidContext } }>
         <Component
           { ...Child.props }

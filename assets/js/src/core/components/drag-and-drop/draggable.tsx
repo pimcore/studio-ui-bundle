@@ -15,6 +15,7 @@ import React, { Children, isValidElement, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { type DragAndDropInfo } from './context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
+import { GlobalStyle } from './draggable.styles'
 
 interface DraggableProps {
   children: React.ReactNode
@@ -42,6 +43,7 @@ export function Draggable (props: DraggableProps): React.JSX.Element {
       { ...listeners }
       { ...attributes }
     >
+      <GlobalStyle />
       <Component
         { ...Child.props }
       />
