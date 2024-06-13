@@ -44,6 +44,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
+            downloadAssetById: build.query<DownloadAssetByIdApiResponse, DownloadAssetByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
+                providesTags: ["Assets"],
+            }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
@@ -117,6 +121,11 @@ export type GetAssetDataTextByIdApiArg = {
     /** ID of the asset */
     id: number;
 };
+export type DownloadAssetByIdApiResponse = /** status 200 Original asset */ Blob;
+export type DownloadAssetByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
 export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Image
     | Document
@@ -146,6 +155,7 @@ export type UpdateAssetByIdApiArg = {
         data: {
             parentId?: number | null;
             metadata?: UpdateCustomMetadata[] | null;
+            customSettings?: UpdateCustomSettings[] | null;
             properties?: UpdateDataProperty[] | null;
             image?: ImageData | null;
         };
@@ -316,7 +326,13 @@ export type UpdateCustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: string | null;
+    data: any | null;
+};
+export type UpdateCustomSettings = {
+    /** Key */
+    key: string;
+    /** Value */
+    value: any | null;
 };
 export type UpdateDataProperty = {
     /** key */
@@ -343,6 +359,7 @@ export const {
     useGetAssetCustomMetadataByIdQuery,
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,
+    useDownloadAssetByIdQuery,
     useGetAssetByIdQuery,
     useUpdateAssetByIdMutation,
     useDownloadAssetVersionByIdQuery,
