@@ -15,7 +15,7 @@ import React from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type Asset, type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface GridContainerProps {
   assets: GetAssetsApiResponse
@@ -24,7 +24,7 @@ interface GridContainerProps {
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
-  const columnHelper = createColumnHelper<Asset>()
+  const columnHelper = createColumnHelper<GetAssetsApiResponse['items']>()
 
   const columns = [
     columnHelper.accessor('imageThumbnailPath', {

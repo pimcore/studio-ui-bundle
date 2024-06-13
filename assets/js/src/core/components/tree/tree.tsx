@@ -33,6 +33,7 @@ export interface TreeProps {
   nodeApiHook: any
   maxItemsPerNode: number
 
+  renderNode: ElementType<TreeNodeProps>
   renderNodeContent: ElementType<TreeNodeContentProps>
   renderFilter?: ElementType<TreeSearchProps>
   renderPager?: ElementType<TreePagerProps>
@@ -57,7 +58,8 @@ const defaultProps: TreeProps = {
   nodeId: 1,
   nodeApiHook: () => {},
   maxItemsPerNode: 30,
-  renderNodeContent: TreeNodeContent
+  renderNodeContent: TreeNodeContent,
+  renderNode: TreeNode
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -104,6 +106,8 @@ const Tree = (props: TreeProps): React.JSX.Element => {
     const { nodes } = dataTransformer(data)
     items = nodes
   }
+
+  const TreeNode = props.renderNode
 
   return (
     <>

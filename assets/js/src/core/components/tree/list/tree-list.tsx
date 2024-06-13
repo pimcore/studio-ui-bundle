@@ -12,7 +12,7 @@
 */
 
 import React, { useContext } from 'react'
-import { TreeNode, type TreeNodeProps } from '../node/tree-node'
+import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
@@ -26,7 +26,7 @@ const { useToken } = theme
 export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
-  const { renderFilter: RenderFilter, renderPager: RenderPager, nodeApiHook } = useContext(TreeContext)
+  const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode, nodeApiHook } = useContext(TreeContext)
   const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
   const { isLoading, isError, data } = apiHookResult
 
@@ -57,7 +57,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
 
       <div className='tree-list'>
         {children?.map((item, index) => (
-          <TreeNode
+          <RenderNode
             internalKey={ `${node.internalKey}-${index}` }
             key={ item.id }
             { ...item }

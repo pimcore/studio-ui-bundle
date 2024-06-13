@@ -53,6 +53,34 @@ aria.asset.image.editor.zoom.zoom-out: Zoom out
 aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels select
 asset.preview.no-video-support: Your browser does not support the video tag.
 grid.copy-notice: Copied to clipboard
+asset.asset-editor-tabs.properties.text: Properties
+asset.asset-editor-tabs.properties.edit-own-properties: Editor own properties
+asset.asset-editor-tabs.properties.all-properties: All Properties
+asset.asset-editor-tabs.properties.predefined-properties: Predefined Properties
+asset.asset-editor-tabs.properties.add-custom-property: Add a custom property
+asset.asset-editor-tabs.properties.columns.type: Type
+asset.asset-editor-tabs.properties.columns.key: Key
+asset.asset-editor-tabs.properties.columns.name: Name
+asset.asset-editor-tabs.properties.columns.description: Description
+asset.asset-editor-tabs.properties.columns.data: Value
+asset.asset-editor-tabs.properties.columns.inheritable: Inheritable
+asset.asset-editor-tabs.properties.columns.actions: Actions
+asset.asset-editor-tabs.properties.inherited.properties: Inherited Properties
+asset.asset-editor-tabs.properties.add-custom-property.cancel: Cancel
+asset.asset-editor-tabs.properties.add-custom-property.key: Key
+asset.asset-editor-tabs.properties.add-custom-property.add: Add
+asset.asset-editor-tabs.properties.add-custom-property.type: Type
+asset.asset-editor-tabs.workflow.text: Workflow Details
+component.workflow-card.action-btn: Workflow Actions
+asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
+asset.asset-editor-tabs.embedded-metadata.columns.name: Name
+asset.asset-editor-tabs.embedded-metadata.columns.value: Value
+login-form.remember-me: Remember me
+login-form.forgot-password: Forgot password
+login-form.login: Login
+login-form-additional-logins.or: or
+aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
+aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 version.versions: Versions
 version.version: Version
 version.publish: Publish

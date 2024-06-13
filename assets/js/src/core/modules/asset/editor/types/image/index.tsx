@@ -26,7 +26,7 @@ import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-t
 import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events-container'
-import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow-container'
+import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
 import { type ImageTabManager } from './tab-manager/image-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
@@ -35,6 +35,14 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
+import { PropertiesContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container'
+import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
+import {
+  ValueCell
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
+import {
+  TypeIconCell
+} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -108,13 +116,32 @@ moduleSystem.registerModule({
       key: 'workflow',
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
-      icon: <Icon name={ 'workflow' } />
+      icon: <Icon name={ 'workflow' } />,
+      isDetachable: true
+    })
+
+    imageEditorTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
       name: 'detachable-tab',
       component: DetachedTab
+    })
+
+    const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
+    gridTypeRegistry.registerType({
+      component: ValueCell,
+      type: 'asset-property-value'
+    })
+    gridTypeRegistry.registerType({
+      component: TypeIconCell,
+      type: 'asset-property-icon'
     })
   }
 })
