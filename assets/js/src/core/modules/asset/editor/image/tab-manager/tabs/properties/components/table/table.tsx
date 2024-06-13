@@ -28,6 +28,10 @@ interface ITableProps {
   propertiesTableTab: string
 }
 
+type DataPropertyWithActions = DataProperty & {
+  actions: React.ReactNode
+}
+
 export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { context } = useGlobalAssetContext()
@@ -47,16 +51,16 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
       setGridDataOwn(data?.items.filter((item) => {
-        return item.inherited === false
+        return !item.inherited
       }))
 
       setGridDataInherited(data?.items.filter((item) => {
-        return item.inherited === true
+        return item.inherited
       }))
     }
   }, [data])
 
-  const columnHelper = createColumnHelper<DataProperty>()
+  const columnHelper = createColumnHelper<DataPropertyWithActions>()
   const baseColumns = [
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.properties.columns.type'),

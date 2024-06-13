@@ -28,7 +28,7 @@ const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
 
       openAsset({
         config: {
-          id: asset.id!
+          id: asset.id
         }
       })
     }
