@@ -47,11 +47,11 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
       setGridDataOwn(data?.items.filter((item) => {
-        return item.inherited === false
+        return !item.inherited
       }))
 
       setGridDataInherited(data?.items.filter((item) => {
-        return item.inherited === true
+        return item.inherited
       }))
     }
   }, [data])

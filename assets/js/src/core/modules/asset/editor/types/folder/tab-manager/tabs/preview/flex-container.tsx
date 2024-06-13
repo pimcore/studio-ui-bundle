@@ -59,7 +59,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
     const onClickCard = (e): void => {
       openAsset({
         config: {
-          id: asset.id!
+          id: asset.id
         }
       })
     }
