@@ -31,7 +31,7 @@ const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
         icon: asset.iconName ?? 'file-question-02',
 
         config: {
-          id: asset.id!
+          id: asset.id
         }
       })
     }

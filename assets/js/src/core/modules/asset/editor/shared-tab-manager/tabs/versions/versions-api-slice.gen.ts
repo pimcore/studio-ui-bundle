@@ -65,16 +65,13 @@ export type GetVersionByIdApiArg = {
 };
 export type PublishVersionApiResponse = /** status 200 ID of latest published version */ {
     /** ID of published version */
-    id?: number;
+    id: number;
 };
 export type PublishVersionApiArg = {
     /** ID of the version */
     id: number;
 };
-export type DeleteVersionApiResponse = /** status 200 ID of deleted version */ {
-    /** ID of deleted version */
-    id?: number;
-};
+export type DeleteVersionApiResponse = /** status 200 Successfully deleted version */ void;
 export type DeleteVersionApiArg = {
     /** ID of the version */
     id: number;
@@ -95,7 +92,7 @@ export type GetVersionsApiArg = {
 };
 export type CleanupVersionApiResponse = /** status 200 IDs of deleted versions */ {
     /** IDs of deleted versions */
-    ids?: number[];
+    ids: number[];
 };
 export type CleanupVersionApiArg = {
     /** Filter elements by matching element type. */
@@ -105,13 +102,13 @@ export type CleanupVersionApiArg = {
 };
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
@@ -121,7 +118,7 @@ export type AssetVersion = {
     /** file name */
     fileName: string;
 };
-export type VersionUser = {
+export type VersionDimensions = {
     /** width */
     width?: number | null;
     /** height */
@@ -143,7 +140,7 @@ export type ImageVersion = {
     /** mime type */
     mimeType: string;
     /** dimensions */
-    dimensions?: VersionUser | null;
+    dimensions?: VersionDimensions | null;
 };
 export type DataObjectVersion = {
     /** AdditionalAttributes */
@@ -169,7 +166,7 @@ export type DocumentVersion = {
     /** published */
     published: boolean;
 };
-export type VersionUser2 = {
+export type VersionUser = {
     /** ID */
     id?: number | null;
     /** name */
@@ -192,11 +189,13 @@ export type Version = {
     date: number;
     /** public */
     public: boolean;
+    /** isPublished */
+    isPublished?: boolean;
     /** version count */
     versionCount: number;
     /** autosave */
     autosave: boolean;
-    user: VersionUser2;
+    user: VersionUser;
     /** scheduled */
     scheduled?: number | null;
 };

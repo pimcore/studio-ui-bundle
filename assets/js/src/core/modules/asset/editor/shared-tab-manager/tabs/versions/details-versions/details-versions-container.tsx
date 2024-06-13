@@ -21,6 +21,7 @@ import {
 import i18n from '@Pimcore/app/i18n'
 import { store } from '@Pimcore/app/store'
 import { formatDateTime } from '@Pimcore/utils/helpers'
+import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 
 export interface DetailsVersionsContainerProps {
   versionIds: number[]
@@ -30,12 +31,7 @@ export const DetailsVersionsContainer = ({
   versionIds
 }: DetailsVersionsContainerProps): React.JSX.Element => {
   const [versionData, setVersionData] = useState([{}])
-  const test = store.dispatch(api.endpoints.streamImageVersionById.initiate({ id: 25 }))
-
-  Promise.all([test]).then((responses): void => {
-    console.log('res', responses)
-  })
-    .catch(err => { console.log(err) })
+  const [imageUrls, setImageUrls] = useState({})
 
   const formatMap: any = {
     dimensions: (data: any): string => {
@@ -59,6 +55,18 @@ export const DetailsVersionsContainer = ({
     const versionPromises: Array<Promise<any>> = []
     versionIds.forEach(async id => {
       versionPromises.push(store.dispatch(api.endpoints.getVersionById.initiate({ id })))
+
+      if (!Object.keys(imageUrls).includes(id.toString())) {
+        fetch(`http://localhost/studio/api/versions/${id}/image/stream`)
+          .then(async (response) => await response.blob())
+          .then((imageBlob) => {
+            const imageURL = URL.createObjectURL(imageBlob)
+            setImageUrls({ [id]: imageURL, ...imageUrls })
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      }
     })
 
     Promise.all(versionPromises)
@@ -82,6 +90,13 @@ export const DetailsVersionsContainer = ({
             tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex]}`] =
               formatData(key, data[key])
           }
+
+          tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex]}`] = (
+            <PimcoreImage
+              key={ 'image' }
+              src={ imageUrls[versionIds[versionIndex]] ?? '' }
+            />
+          )
         })
 
         if (JSON.stringify(tempVersionData) !== JSON.stringify(versionData)) {

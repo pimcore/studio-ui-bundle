@@ -107,7 +107,7 @@ export const VersionsView = ({
             } }
             onClickDelete={ (): void => { onClickDelete(version.id) } }
             onClickPublish={ (): void => { onClickPublish(version.id) } }
-            published={ version.public }
+            published={ version.isPublished ?? false }
             savedBy={ version.user?.name ?? '' }
             scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
             selectable={ comparingActive }
