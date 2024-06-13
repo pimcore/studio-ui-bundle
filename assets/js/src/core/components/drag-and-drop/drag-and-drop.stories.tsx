@@ -17,15 +17,16 @@ import { Draggable } from './draggable'
 import { DNDDemoDroppableContent } from './__STORIES__/dnd-demo-droppable-content'
 import { Button } from 'antd'
 import { Droppable } from './droppable'
-import { DragAndDropInfo } from './context-provider'
+import { type DragAndDropInfo } from './context-provider'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/DragAndDrop',
   component: () => {
-    const [valueDemo1, setValueDemo1] = useState<string>('');
-    const [valueDemo2, setValueDemo2] = useState<string>('');
-    const [valueDemo3, setValueDemo3] = useState<string>('');
+    const [valueDemo1, setValueDemo1] = useState<string>('')
+    const [valueDemo2, setValueDemo2] = useState<string>('')
+    const [valueDemo3, setValueDemo3] = useState<string>('')
 
+    /* eslint-disable @typescript-eslint/no-unsafe-argument */
     return (
       <div style={ { display: 'flex', flexDirection: 'column', gap: 10 } }>
         <h3>Drag context 1</h3>
@@ -43,8 +44,14 @@ const config: Meta = {
           </Draggable>
         </div>
 
-        <Droppable isValidContext={(info: DragAndDropInfo) => info.type === 'dnd-demo-1'} onDrop={(info: DragAndDropInfo) => setValueDemo1(info.data.value)}>
-          <DNDDemoDroppableContent title="Only draggable items from context 1 allowed" value={valueDemo1} />
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => info.type === 'dnd-demo-1' }
+          onDrop={ (info: DragAndDropInfo) => { setValueDemo1(info.data.value) } }
+        >
+          <DNDDemoDroppableContent
+            title="Only draggable items from context 1 allowed"
+            value={ valueDemo1 }
+          />
         </Droppable>
 
         <h3>Drag context 2</h3>
@@ -62,8 +69,14 @@ const config: Meta = {
           </Draggable>
         </div>
 
-        <Droppable isValidContext={(info: DragAndDropInfo) => info.type === 'dnd-demo-2'} onDrop={(info: DragAndDropInfo) => setValueDemo2(info.data.value)}>
-          <DNDDemoDroppableContent title="Only draggable items from context 2 allowed" value={valueDemo2} />
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => info.type === 'dnd-demo-2' }
+          onDrop={ (info: DragAndDropInfo) => { setValueDemo2(info.data.value) } }
+        >
+          <DNDDemoDroppableContent
+            title="Only draggable items from context 2 allowed"
+            value={ valueDemo2 }
+          />
         </Droppable>
 
         <h3>Drag context 3</h3>
@@ -81,8 +94,15 @@ const config: Meta = {
           </Draggable>
         </div>
 
-        <Droppable isValidData={(info: DragAndDropInfo) => info.data?.value === 'Button 3'} isValidContext={(info: DragAndDropInfo) => info.type === 'dnd-demo-3'} onDrop={(info: DragAndDropInfo) => setValueDemo3(info.data.value)}>
-          <DNDDemoDroppableContent title="Validates data and only accepts button 3" value={valueDemo3} />
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => info.type === 'dnd-demo-3' }
+          isValidData={ (info: DragAndDropInfo) => info.data?.value === 'Button 3' }
+          onDrop={ (info: DragAndDropInfo) => { setValueDemo3(info.data.value) } }
+        >
+          <DNDDemoDroppableContent
+            title="Validates data and only accepts button 3"
+            value={ valueDemo3 }
+          />
         </Droppable>
       </div>
     )
