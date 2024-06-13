@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            cloneUser: build.mutation<CloneUserApiResponse, CloneUserApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/user/clone/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             getUsers: build.query<GetUsersApiResponse, GetUsersApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/users`, params: { parentId: queryArg.parentId } }),
                 providesTags: ["User Management"],
@@ -32,6 +40,14 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ UserTreeNode;
+export type CloneUserApiArg = {
+    /** ID of the user */
+    id: number;
+    body: {
+        name?: string;
+    };
+};
 export type GetUsersApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
     items: UserTreeNode[];
@@ -48,6 +64,10 @@ export type PostStudioApiUserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
 export type UserTreeNode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** Unique Identifier */
     id?: number;
     /** Name of Folder or User */
@@ -59,13 +79,13 @@ export type UserTreeNode = {
 };
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
 };
 export type UserInformations = {
     /** Username */
@@ -75,9 +95,10 @@ export type UserInformations = {
 };
 export type ResetPassword = {
     /** Username */
-    username?: string;
+    username: string;
 };
 export const {
+    useCloneUserMutation,
     useGetUsersQuery,
     useGetStudioApiUserCurrentUserInformationQuery,
     usePostStudioApiUserResetPasswordMutation,

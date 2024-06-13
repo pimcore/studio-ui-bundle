@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Properties", "Properties for Element"] as const;
+export const addTagTypes = ["Properties"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -18,7 +18,7 @@ const injectedRtkApi = api
                 GetPropertiesForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
-                providesTags: ["Properties for Element"],
+                providesTags: ["Properties"],
             }),
         }),
         overrideExisting: false,
@@ -49,37 +49,37 @@ export type PredefinedProperty = {
         [key: string]: string | number | boolean | object | any[];
     };
     /** id */
-    id?: string;
+    id: string;
     /** name */
-    name?: string;
+    name: string;
     /** description */
     description?: string | null;
     /** key */
-    key?: string;
+    key: string;
     /** type */
-    type?: string;
+    type: string;
     /** data */
     data?: string | null;
     /** config */
     config?: string | null;
     /** ctype */
-    ctype?: string;
+    ctype: string;
     /** inheritable */
-    inheritable?: boolean;
+    inheritable: boolean;
     /** Creation date */
-    creationDate?: number;
+    creationDate: number;
     /** Modification date */
-    modificationDate?: number;
+    modificationDate: number;
 };
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
 };
 export type DataProperty = {
     /** AdditionalAttributes */
@@ -87,15 +87,15 @@ export type DataProperty = {
         [key: string]: string | number | boolean | object | any[];
     };
     /** key */
-    key?: string;
+    key: string;
     /** data */
-    data?: any | null;
+    data: any | null;
     /** type */
-    type?: string;
+    type: string;
     /** inheritable */
-    inheritable?: boolean;
+    inheritable: boolean;
     /** inherited */
-    inherited?: boolean;
+    inherited: boolean;
     /** config */
     config?: string | null;
     /** predefinedName */
