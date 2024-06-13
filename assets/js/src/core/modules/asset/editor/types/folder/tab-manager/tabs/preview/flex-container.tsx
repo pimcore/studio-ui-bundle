@@ -55,11 +55,11 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   ]
 
   const cards: ReactNode[] = []
-  assets.items!.forEach((asset) => {
+  assets.items.forEach((asset) => {
     const onClickCard = (e): void => {
       openAsset({
         config: {
-          id: asset.id!
+          id: asset.id
         }
       })
     }

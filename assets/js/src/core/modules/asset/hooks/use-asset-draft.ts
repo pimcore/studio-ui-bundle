@@ -29,7 +29,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   useEffect(() => {
     if (data !== undefined) {
-      dispatch(assetReceived({ id, ...data }))
+      dispatch(assetReceived({ ...data, id }))
     }
   }, [data])
 

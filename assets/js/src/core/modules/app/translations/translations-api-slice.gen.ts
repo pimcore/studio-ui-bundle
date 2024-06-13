@@ -20,18 +20,18 @@ export type GetTranslationsApiArg = {
 };
 export type Translation = {
     /** Locale */
-    locale?: string;
+    locale: string;
     /** Keys */
-    keys?: string[];
+    keys: string[];
 };
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
 };
 export const { useGetTranslationsMutation } = injectedRtkApi;
