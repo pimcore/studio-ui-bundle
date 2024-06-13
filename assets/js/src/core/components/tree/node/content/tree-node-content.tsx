@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type MutableRefObject, forwardRef } from 'react'
 import { type TreeNodeProps } from '../tree-node'
 import { Flex } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -20,13 +20,14 @@ export interface TreeNodeContentProps {
   node: TreeNodeProps
 }
 
-const TreeNodeContent = (props: TreeNodeContentProps): React.JSX.Element => {
+const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { icon, label } = props.node
 
   return (
     <Flex
       align='center'
       gap={ 'small' }
+      ref={ ref }
     >
       <Icon
         name={ icon }
@@ -35,6 +36,6 @@ const TreeNodeContent = (props: TreeNodeContentProps): React.JSX.Element => {
       <span className="tree-node-content__label">{label}</span>
     </Flex>
   )
-}
+})
 
 export { TreeNodeContent }

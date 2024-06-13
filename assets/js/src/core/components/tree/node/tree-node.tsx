@@ -12,7 +12,7 @@
 */
 
 import { Flex, theme } from 'antd'
-import React, { type KeyboardEvent, useContext, useEffect } from 'react'
+import React, { type KeyboardEvent, useContext, useEffect, type MouseEvent } from 'react'
 import { useStyles } from './tree-node.styles'
 import { TreeContext, type nodeRef } from '../tree'
 import { TreeList } from '../list/tree-list'
@@ -75,7 +75,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
     }
   }
 
-  function onClick (): void {
+  function onClick (event: MouseEvent): void {
     selectNode()
   }
 
@@ -129,6 +129,10 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
     }
   }
 
+  function setRef (el: HTMLElement): void {
+    registerNode(el)
+  }
+
   function registerNode (el: HTMLElement): void {
     const nodeRef: nodeRef = { el, node: props }
     nodesRefs!.current[props.internalKey] = nodeRef
@@ -141,7 +145,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
         gap="small"
         onClick={ onClick }
         onKeyDown={ onKeyDown }
-        ref={ registerNode }
+        ref={ setRef }
         role='button'
         style={
           {

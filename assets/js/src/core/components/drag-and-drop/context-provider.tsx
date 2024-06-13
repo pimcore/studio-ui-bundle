@@ -12,7 +12,7 @@
 */
 
 import React, { type MutableRefObject, createContext, useRef, type ReactNode, useMemo } from 'react'
-import { DndContext, DragOverlay, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
+import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
 import { type Callback, CallbackRegistry, type ICallbackRegistry } from './callback-registry'
 import { DragOverlay as StyledDragOverlay } from './drag-overlay'
 
@@ -42,6 +42,11 @@ export const DragAndDropInfoContext = createContext<IDragAndDropInfoContext>({
 export const DragAndDropContextProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
   const [info, setInfo] = React.useState<DragAndDropInfo>(defaultInfo)
   const callbackRegistry = useRef<ICallbackRegistry>(new CallbackRegistry())
+
+  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
+  const touchSensor = useSensor(TouchSensor, { activationConstraint: { distance: 10 } })
+
+  const sensors = useSensors(mouseSensor, touchSensor)
 
   function setContext (info: DragAndDropInfo): void {
     setInfo(info)
@@ -80,6 +85,7 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
       onDragCancel={ onDragCancel }
       onDragEnd={ onDragEnd }
       onDragStart={ onDragStart }
+      sensors={ sensors }
     >
       <DragOverlay>
         <StyledDragOverlay info={ info } />

@@ -14,12 +14,13 @@
 import { Tree } from '@Pimcore/components/tree/tree'
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
-import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
+import { TreeNode, type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { PagerContainer } from './pager/pager-container'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { api } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { store } from '@Pimcore/app/store'
 import { SearchContainer } from './search/search-container'
+import { withDraggable } from './node/with-draggable'
 
 export interface TreeContainerProps {
   id: number
@@ -50,6 +51,7 @@ const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
+      renderNode={ withDraggable(TreeNode) }
       renderPager={ PagerContainer }
     />
   )
