@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            cloneUser: build.mutation<CloneUserApiResponse, CloneUserApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/user/clone/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             getUsers: build.query<GetUsersApiResponse, GetUsersApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/users`, params: { parentId: queryArg.parentId } }),
                 providesTags: ["User Management"],
@@ -16,6 +24,14 @@ const injectedRtkApi = api
             >({
                 query: () => ({ url: `/studio/api/user/current-user-information` }),
                 providesTags: ["User Management"],
+            }),
+            deleteUser: build.mutation<DeleteUserApiResponse, DeleteUserApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/user/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
+            deleteUserFolder: build.mutation<DeleteUserFolderApiResponse, DeleteUserFolderApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
             }),
             postStudioApiUserResetPassword: build.mutation<
                 PostStudioApiUserResetPasswordApiResponse,
@@ -32,6 +48,14 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ UserTreeNode;
+export type CloneUserApiArg = {
+    /** ID of the user */
+    id: number;
+    body: {
+        name?: string;
+    };
+};
 export type GetUsersApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
     items: UserTreeNode[];
@@ -43,11 +67,25 @@ export type GetUsersApiArg = {
 export type GetStudioApiUserCurrentUserInformationApiResponse =
     /** status 200 Current user informations. */ UserInformations;
 export type GetStudioApiUserCurrentUserInformationApiArg = void;
+export type DeleteUserApiResponse = /** status 200 Success */ void;
+export type DeleteUserApiArg = {
+    /** ID of the user */
+    id: number;
+};
+export type DeleteUserFolderApiResponse = /** status 200 Success */ void;
+export type DeleteUserFolderApiArg = {
+    /** ID of the user-folder */
+    id: number;
+};
 export type PostStudioApiUserResetPasswordApiResponse = /** status 200 Success */ void;
 export type PostStudioApiUserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
 export type UserTreeNode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** Unique Identifier */
     id?: number;
     /** Name of Folder or User */
@@ -59,13 +97,13 @@ export type UserTreeNode = {
 };
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
 };
 export type UserInformations = {
     /** Username */
@@ -75,10 +113,13 @@ export type UserInformations = {
 };
 export type ResetPassword = {
     /** Username */
-    username?: string;
+    username: string;
 };
 export const {
+    useCloneUserMutation,
     useGetUsersQuery,
     useGetStudioApiUserCurrentUserInformationQuery,
+    useDeleteUserMutation,
+    useDeleteUserFolderMutation,
     usePostStudioApiUserResetPasswordMutation,
 } = injectedRtkApi;

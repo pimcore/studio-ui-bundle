@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets"] as const;
+export const addTagTypes = ["Assets", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -22,6 +22,17 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            patchAssetById: build.mutation<PatchAssetByIdApiResponse, PatchAssetByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets`, method: "PATCH", body: queryArg.body }),
+                invalidatesTags: ["Assets"],
+            }),
+            getAssetCustomMetadataById: build.query<
+                GetAssetCustomMetadataByIdApiResponse,
+                GetAssetCustomMetadataByIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-metadata` }),
+                providesTags: ["Assets"],
+            }),
             getAssetCustomSettingsById: build.query<
                 GetAssetCustomSettingsByIdApiResponse,
                 GetAssetCustomSettingsByIdApiArg
@@ -33,6 +44,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
+            downloadAssetById: build.query<DownloadAssetByIdApiResponse, DownloadAssetByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
+                providesTags: ["Assets"],
+            }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
@@ -41,13 +56,17 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
+            downloadAssetVersionById: build.query<DownloadAssetVersionByIdApiResponse, DownloadAssetVersionByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
+                providesTags: ["Versions"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
 export type GetAssetsApiResponse = /** status 200 Paginated assets with total count as header param */ {
-    totalItems?: number;
-    items?: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
+    totalItems: number;
+    items: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
 };
 export type GetAssetsApiArg = {
     /** Page number */
@@ -67,6 +86,26 @@ export type GetAssetsApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
+export type PatchAssetByIdApiResponse = /** status 200 Success */
+    | void
+    | /** status 207 Partial success with errors */ PatchError[];
+export type PatchAssetByIdApiArg = {
+    body: {
+        data: {
+            /** Asset ID */
+            id: number;
+            parentId?: number | null;
+            metadata?: PatchCustomMetadata[] | null;
+        }[];
+    };
+};
+export type GetAssetCustomMetadataByIdApiResponse = /** status 200 Array of custom metadata */ {
+    items?: CustomMetadata[];
+};
+export type GetAssetCustomMetadataByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
 export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
     items?: CustomSettings;
 };
@@ -76,9 +115,14 @@ export type GetAssetCustomSettingsByIdApiArg = {
 };
 export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text data */ {
     /** UTF 8 encoded text data */
-    data?: string;
+    data: string;
 };
 export type GetAssetDataTextByIdApiArg = {
+    /** ID of the asset */
+    id: number;
+};
+export type DownloadAssetByIdApiResponse = /** status 200 Original asset */ Blob;
+export type DownloadAssetByIdApiArg = {
     /** ID of the asset */
     id: number;
 };
@@ -108,11 +152,19 @@ export type UpdateAssetByIdApiArg = {
     /** ID of the asset */
     id: number;
     body: {
-        data?: {
+        data: {
+            parentId?: number | null;
+            metadata?: UpdateCustomMetadata[] | null;
+            customSettings?: UpdateCustomSettings[] | null;
             properties?: UpdateDataProperty[] | null;
             image?: ImageData | null;
         };
     };
+};
+export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
+export type DownloadAssetVersionByIdApiArg = {
+    /** ID of the version */
+    id: number;
 };
 export type Permissions = {
     /** List */
@@ -136,24 +188,24 @@ export type Permissions = {
 };
 export type Element = {
     /** ID */
-    id?: number;
+    id: number;
     /** ID of parent */
-    parentId?: number;
+    parentId: number;
     /** path */
-    path?: string;
+    path: string;
     /** ID of owner */
-    userOwner?: number;
+    userOwner: number;
     /** User that modified the element */
-    userModification?: number;
+    userModification: number;
     /** Locked */
-    locked?: string | null;
+    locked: string | null;
     /** Is locked */
-    isLocked?: boolean;
+    isLocked: boolean;
     /** Creation date */
-    creationDate?: number | null;
+    creationDate: number | null;
     /** Modification date */
-    modificationDate?: number | null;
-    permissions?: Permissions;
+    modificationDate: number | null;
+    permissions: Permissions;
 };
 export type Asset = Element & {
     /** AdditionalAttributes */
@@ -170,8 +222,8 @@ export type Asset = Element & {
     filename?: string;
     /** Mimetype */
     mimeType?: string | null;
-    /** Metadata */
-    metaData?: string[];
+    /** Has metadata */
+    hasMetaData?: boolean;
     /** Workflow permissions */
     hasWorkflowWithPermissions?: boolean;
     /** Full path */
@@ -214,19 +266,47 @@ export type Folder = Asset;
 export type Unknown = Asset;
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
+};
+export type PatchError = {
+    /** ID */
+    id?: number;
+    /** Message */
+    message?: string;
+};
+export type PatchCustomMetadata = {
+    /** Name */
+    name: string;
+    /** Language */
+    language?: string | null;
+    /** Data */
+    data?: string | null;
+};
+export type CustomMetadata = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: string | null;
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetaData?: any[];
+    embeddedMetaData: any[];
     /** flag to indicate if the embedded meta data has been extracted from the asset */
-    embeddedMetaDataExtracted?: boolean;
+    embeddedMetaDataExtracted: boolean;
 };
 export type CustomSettings = {
     /** AdditionalAttributes */
@@ -238,30 +318,49 @@ export type CustomSettings = {
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: any[];
 };
-
+export type UpdateCustomMetadata = {
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: any | null;
+};
+export type UpdateCustomSettings = {
+    /** Key */
+    key: string;
+    /** Value */
+    value: any | null;
+};
 export type UpdateDataProperty = {
     /** key */
-    key?: string;
+    key: string;
     /** data */
-    data?: any | null;
+    data: any | null;
     /** type */
-    type?: string;
+    type: string;
     /** inheritable */
-    inheritable?: boolean;
+    inheritable: boolean;
 };
 export type FocalPoint = {
     /** x */
-    x?: number;
+    x: number;
     /** y */
-    y?: number;
+    y: number;
 };
 export type ImageData = {
     focalPoint?: FocalPoint;
 };
 export const {
     useGetAssetsQuery,
+    usePatchAssetByIdMutation,
+    useGetAssetCustomMetadataByIdQuery,
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,
+    useDownloadAssetByIdQuery,
     useGetAssetByIdQuery,
     useUpdateAssetByIdMutation,
+    useDownloadAssetVersionByIdQuery,
 } = injectedRtkApi;

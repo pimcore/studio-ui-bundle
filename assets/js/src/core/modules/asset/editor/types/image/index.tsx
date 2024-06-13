@@ -26,7 +26,7 @@ import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-t
 import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events-container'
-import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow-container'
+import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
 import { type ImageTabManager } from './tab-manager/image-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
@@ -116,21 +116,16 @@ moduleSystem.registerModule({
       key: 'workflow',
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
-      icon: <Icon name={ 'workflow' } />
+      icon: <Icon name={ 'workflow' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
       key: 'properties',
       label: 'asset.asset-editor-tabs.properties.text',
       children: <PropertiesContainer />,
-      icon: <Icon name={ 'settings2' } />
-    })
-
-    imageEditorTabManager.register({
-      key: 'properties',
-      label: 'asset.asset-editor-tabs.properties.text',
-      children: <PropertiesContainer />,
-      icon: <Icon name={ 'settings2' } />
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
