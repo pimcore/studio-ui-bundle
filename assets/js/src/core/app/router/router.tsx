@@ -15,14 +15,21 @@ import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import { DefaultPage } from '@Pimcore/modules/app/default-page'
 import { LoginPage } from '@Pimcore/modules/auth/login-page'
+import { appConfig } from '../config/app-config'
+
+let baseUrl = appConfig.baseUrl
+
+if (baseUrl.endsWith('/')) {
+  baseUrl = baseUrl.slice(0, -1)
+}
 
 export const router = createBrowserRouter([
   {
-    path: '/admin/studio',
+    path: baseUrl,
     element: <DefaultPage />
   },
   {
-    path: '/admin/studio/login',
+    path: `${baseUrl}/login`,
     element: <LoginPage />
   }
 ])

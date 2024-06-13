@@ -18,7 +18,9 @@
     </head>
 
     <body>
-        <div id="app"></div>
+        <div id="app" data-app-config="{{ {
+            baseUrl: '/admin/studio/'
+        }|json_encode }}"></div>
 
         {% for jsFile in studioJsFiles %}
             <script src="{{ jsFile }}"></script>
