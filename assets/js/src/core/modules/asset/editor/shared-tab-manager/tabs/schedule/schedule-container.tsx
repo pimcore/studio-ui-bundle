@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Button, Result, Segmented, Switch } from 'antd'
 import {
-  type Schedule,
+  type Schedule, useDeleteScheduleMutation,
   useGetSchedulesForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -35,6 +35,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { context } = useGlobalAssetContext()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(true)
+  const [deleteSchedule] = useDeleteScheduleMutation()
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -102,8 +103,12 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           <div className={ 'schedule-table--actions-column' }>
             <Button
               icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                console.log('delete schedule with ID: ' + info.row.original.id)
+              onClick={ (): void => {
+                deleteSchedule({ id: info.row.original.id })
+                  .unwrap()
+                  .catch((error) => {
+                    console.error(error)
+                  })
               } }
               type="link"
             />

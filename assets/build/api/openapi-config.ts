@@ -32,6 +32,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
       filterEndpoints: [/user/i]
+    },
+    '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
+      filterEndpoints: [/schedule/i]
     }
   },
   exportName: 'api',
