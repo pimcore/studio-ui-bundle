@@ -73,7 +73,7 @@ export const VersionsView = ({
             >{i18n.t('version.compare-versions')}</Button>
           </div>
           <Button
-            icon={ <Icon name={ 'delete-outlined' } /> }
+            icon={ <Icon name={ 'trash' } /> }
             onClick={ () => {
               if (versions.length === 0) {
                 return
@@ -105,9 +105,12 @@ export const VersionsView = ({
                 setDetailedVersions([version.id])
               }
             } }
-            onClickDelete={ (): void => { onClickDelete(version.id) } }
+            onClickDelete={ (): void => {
+              setDetailedVersions([])
+              onClickDelete(version.id)
+            } }
             onClickPublish={ (): void => { onClickPublish(version.id) } }
-            published={ version.isPublished ?? false }
+            published={ version.published ?? false }
             savedBy={ version.user?.name ?? '' }
             scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
             selectable={ comparingActive }

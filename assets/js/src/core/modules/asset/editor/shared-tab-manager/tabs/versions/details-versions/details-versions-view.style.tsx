@@ -30,6 +30,7 @@ export const useStyles = createStyles(({ token, css }) => {
       
       & .highlight-cell {
         background-color: ${token.colorWarningBg};
+        font-weight: bold;
       }
     `
   }

@@ -189,8 +189,8 @@ export type Version = {
     date: number;
     /** public */
     public: boolean;
-    /** isPublished */
-    isPublished?: boolean;
+    /** published */
+    published: boolean;
     /** version count */
     versionCount: number;
     /** autosave */

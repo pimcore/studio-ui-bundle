@@ -90,7 +90,7 @@ export const VersionCard = ({
       </div>
       <div>
         <span className={ 'sub-title' } >{`${t('by')} ${savedBy}`}</span>
-        {isSet(autosaved) && <Icon name="lightning-01" /> }
+        {isSet(autosaved) && autosaved && <Icon name="lightning-01" /> }
       </div>
     </div>
   )
@@ -147,7 +147,7 @@ export const VersionCard = ({
             )}
             <Button
               aria-label={ t('aria.version.delete') }
-              icon={ <Icon name="delete-outlined" /> }
+              icon={ <Icon name="trash" /> }
               onClick={ onClickDelete }
             />
           </div>
