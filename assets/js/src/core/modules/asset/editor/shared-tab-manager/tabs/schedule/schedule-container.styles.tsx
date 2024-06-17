@@ -83,26 +83,6 @@ export const useStyles = createStyles(({ css, token }) => {
 
       .pimcore-schedule-content {
         padding: 0 ${token.paddingSM}px;
-          
-        .ant-table-content {
-          div[data-grid-column="schedule-table--active-column"]{
-            display: flex;
-            justify-content: center;
-          }
-
-          .schedule-table--actions-column {
-            display: flex;
-            align-items: center;
-
-            .ant-btn-icon {
-              color: ${token.colorPrimary};
-
-              &:hover {
-                color: ${token.colorPrimaryHover};
-              }
-            }
-          }
-        }
       }
     `
   }

@@ -13,21 +13,16 @@
 
 import React, { useEffect, useState } from 'react'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
-import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Button, Result, Segmented, Switch } from 'antd'
 import {
-  type Schedule, useDeleteScheduleMutation,
+  type Schedule,
   useGetSchedulesForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
-import { createColumnHelper } from '@tanstack/react-table'
 import { Icon } from '@Pimcore/components/icon/icon'
-
-type ScheduleTable = Schedule & {
-  actions: React.ReactNode
-}
+import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -35,7 +30,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { context } = useGlobalAssetContext()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(true)
-  const [deleteSchedule] = useDeleteScheduleMutation()
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -64,60 +58,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   if (isError) {
     return <div>Error</div>
   }
-
-  const columnHelper = createColumnHelper<ScheduleTable>()
-  const columns = [
-    columnHelper.accessor('date', {
-      header: t('asset.asset-editor-tabs.schedule.columns.date'),
-      id: 'schedule-table--date-column',
-      meta: {
-        type: 'date'
-      }
-    }),
-    columnHelper.accessor('date', {
-      header: t('asset.asset-editor-tabs.schedule.columns.time'),
-      id: 'schedule-table--time-column',
-      meta: {
-        type: 'time'
-      }
-    }),
-    columnHelper.accessor('action', {
-      header: t('asset.asset-editor-tabs.schedule.columns.action')
-    }),
-    columnHelper.accessor('version', {
-      header: t('asset.asset-editor-tabs.schedule.columns.version')
-    }),
-    columnHelper.accessor('active', {
-      header: t('asset.asset-editor-tabs.schedule.columns.active'),
-      id: 'schedule-table--active-column',
-      size: 60,
-      meta: {
-        type: 'checkbox',
-        editable: true
-      }
-    }),
-    columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.schedule.columns.actions'),
-      cell: (info) => {
-        return (
-          <div className={ 'schedule-table--actions-column' }>
-            <Button
-              icon={ <Icon name="trash" /> }
-              onClick={ (): void => {
-                deleteSchedule({ id: info.row.original.id })
-                  .unwrap()
-                  .catch((error) => {
-                    console.error(error)
-                  })
-              } }
-              type="link"
-            />
-          </div>
-        )
-      },
-      size: 70
-    })
-  ]
 
   function filterSchedules (schedules: Schedule[]): Schedule[] {
     if (schedules !== undefined) {
@@ -183,17 +123,11 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         style={ { marginLeft: 0 } }
       >
         {scheduleTab === 'upcoming' && (
-          <Grid
-            columns={ columns }
-            data={ filterSchedules(gridDataUpcoming ?? []) }
-          />
+          <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
         )}
 
         {scheduleTab === 'all' && (
-          <Grid
-            columns={ columns }
-            data={ filterSchedules(data.items ?? []) }
-          />
+          <Table data={ filterSchedules(data.items ?? []) } />
         )}
       </div>
     </div>

@@ -35,6 +35,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
       filterEndpoints: [/schedule/i]
+    },
+    '../../js/src/core/modules/element/editor/version-api-slice.gen.ts': {
+      filterEndpoints: [/version/i]
     }
   },
   exportName: 'api',
