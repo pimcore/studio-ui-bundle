@@ -83,7 +83,7 @@ export const useStyles = createStyles(({ css, token }) => {
         padding: 0 ${token.paddingSM}px;
           
         .ant-table-content {
-          .schedule-table--active-column {
+          div[data-grid-column="schedule-table--active-column"] {
             display: flex;
             justify-content: center;
           }

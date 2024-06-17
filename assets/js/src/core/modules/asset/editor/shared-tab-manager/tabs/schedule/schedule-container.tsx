@@ -17,7 +17,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Button, Checkbox, Result, Segmented, Switch } from 'antd'
+import { Button, Result, Segmented, Switch } from 'antd'
 import {
   type Schedule,
   useGetSchedulesForElementByTypeAndIdQuery
@@ -68,14 +68,16 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('date', {
       header: t('asset.asset-editor-tabs.schedule.columns.date'),
-      cell: (info) => {
-        return new Date(info.getValue() * 1000).toLocaleDateString()
+      id: 'schedule-table--date-column',
+      meta: {
+        type: 'date'
       }
     }),
     columnHelper.accessor('date', {
       header: t('asset.asset-editor-tabs.schedule.columns.time'),
-      cell: (info) => {
-        return new Date(info.getValue() * 1000).toLocaleTimeString()
+      id: 'schedule-table--time-column',
+      meta: {
+        type: 'time'
       }
     }),
     columnHelper.accessor('action', {
@@ -86,25 +88,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     }),
     columnHelper.accessor('active', {
       header: t('asset.asset-editor-tabs.schedule.columns.active'),
-      cell: (info) => {
-        const [boolean, setBoolean] = useState<boolean>(info.getValue())
-
-        useEffect(() => {
-          setBoolean(info.getValue())
-        }, [info.getValue()])
-
-        return (
-          <div className={ 'schedule-table--active-column' }>
-            <Checkbox
-              checked={ boolean }
-              key={ info.row.id }
-              onChange={ (e) => { setBoolean(Boolean(e.target.checked)) } }
-            />
-          </div>
-        )
-      },
+      id: 'schedule-table--active-column',
       size: 60,
       meta: {
+        type: 'checkbox',
         editable: true
       }
     }),
@@ -127,25 +114,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     })
   ]
 
-  /* function renderTable (): React.JSX.Element {
-    let schedulesToDisplay = data?.items ?? []
-
-    if (scheduleTab === 'upcoming') {
-      schedulesToDisplay = gridDataUpcoming
-    }
-
-    schedulesToDisplay = filterSchedules(schedulesToDisplay)
-
-    console.log(schedulesToDisplay)
-
-    return (
-      <Grid
-        columns={ columns }
-        data={ schedulesToDisplay }
-      />
-    )
-  } */
-
   function filterSchedules (schedules: Schedule[]): Schedule[] {
     if (schedules !== undefined) {
       return schedules.filter((item) => {
@@ -159,11 +127,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
     return []
   }
-
-  /* let tableToDisplay = <></>
-  useEffect(() => {
-    tableToDisplay = renderTable()
-  }, [activeOnly, scheduleTab]) */
 
   return (
     <div className={ styles.tab }>
