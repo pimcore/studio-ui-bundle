@@ -13,16 +13,17 @@
 
 import { createStyles } from 'antd-style'
 
-const cardToken = {
-  highlightBackgroundColor: '#F6FFED',
-  highlightBorderColor: '#B7EB8F',
-  highlightColor: '#52C41A',
-  signalBackgroundColor: '#E6F4FF',
-  signalBorderColor: '#91CAFF',
-  signalColor: '#1677FF'
-}
-
 export const useStyle = createStyles(({ token, css }) => {
+  const cardToken = {
+    highlightBackgroundColor: '#F6FFED',
+    highlightBorderColor: '#B7EB8F',
+    highlightColor: '#52C41A',
+    signalBackgroundColor: '#E6F4FF',
+    signalBorderColor: '#91CAFF',
+    signalColor: '#1677FF',
+    ...token
+  }
+
   return {
     card: css`
       & .ant-card {
@@ -31,11 +32,11 @@ export const useStyle = createStyles(({ token, css }) => {
       
       & .ant-card > .ant-card-head {
         border: none;
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        padding: ${cardToken.paddingXS}px ${cardToken.paddingSM}px;
       }
 
       & .ant-card > .ant-card-body {
-        padding: ${token.paddingSM}px;
+        padding: ${cardToken.paddingSM}px;
       }
       
       & .ant-card.card-body__expand > .ant-card-body {
@@ -57,12 +58,12 @@ export const useStyle = createStyles(({ token, css }) => {
 
       & .ant-card:is(.card__is-active, .card__is-published) > :where(.ant-card-head, .ant-card-body) {
         display: block;
-        border-radius: ${token.borderRadiusLG}px;
+        border-radius: ${cardToken.borderRadiusLG}px;
       }
       
       & .ant-card.card__is-active > :where(.ant-card-head, .ant-card-body) {
-        border: 1px solid ${token.colorBorder};
-        background-color: ${token.colorFillAlter};
+        border: 1px solid ${cardToken.colorBorder};
+        background-color: ${cardToken.colorFillAlter};
       }
       
       & .ant-card.card__is-published > :where(.ant-card-head, .ant-card-body) {
@@ -89,7 +90,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .sub-title {
         font-weight: normal;
         margin-right: 4px;
-        color: ${token.colorTextDescription};
+        color: ${cardToken.colorTextDescription};
       }
       
       .chevron {
@@ -143,8 +144,8 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       
       .btn-publish {
-        margin-right: ${token.marginXXS}px;
-        padding-top: ${token.paddingXXS}px;
+        margin-right: ${cardToken.marginXXS}px;
+        padding-top: ${cardToken.paddingXXS}px;
       }
 
       .btn-publish > .ant-btn-icon {
@@ -152,7 +153,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       
       .row-margin {
-        margin-top: ${token.marginXS}px;
+        margin-top: ${cardToken.marginXS}px;
       }
       
       .date-container {
@@ -160,8 +161,8 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       
       .scheduled-date {
-        margin-left: ${token.marginXXS}px;
-        color: ${token.colorTextDescription};
+        margin-left: ${cardToken.marginXXS}px;
+        color: ${cardToken.colorTextDescription};
       }
     `
   }

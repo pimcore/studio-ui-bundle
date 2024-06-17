@@ -14,9 +14,11 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
+  const versionToken = { versionsLeftSideWidth: '369', ...token }
+
   return {
     'right-side': css`
-      width: calc(100% - 369px);
+      width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
       padding: ${token.paddingSM}px;
 
       & > div {
@@ -29,7 +31,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       
       & .highlight-cell {
-        background-color: ${token.colorWarningBg};
+        background-color: ${versionToken.colorWarningBg};
         font-weight: bold;
       }
     `

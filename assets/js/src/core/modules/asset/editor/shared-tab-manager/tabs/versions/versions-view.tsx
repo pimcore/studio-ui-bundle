@@ -39,7 +39,7 @@ export const VersionsView = ({
 }: VersionsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
-  const [detailedVersions, setDetailedVersions] = useState([-1])
+  const [detailedVersions, setDetailedVersions] = useState([] as number[])
 
   const onClickCompareVersion = (): void => {
     setDetailedVersions([])

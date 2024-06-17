@@ -14,6 +14,8 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
+  const versionToken = { versionsLeftSideWidth: '369', ...token }
+
   return {
     versions: css`
       display: flex;
@@ -29,18 +31,18 @@ export const useStyles = createStyles(({ token, css }) => {
         gap: 4px;
         
         height: 100%;
-        width: 369px;
+        width: ${versionToken.versionsLeftSideWidth}px;
       }
 
       & .left-side > .flexbox-start-end {
         width: 100%;
         display: flex;
         justify-content: space-between;
-        padding: ${token.paddingSM}px;
+        padding: ${versionToken.paddingSM}px;
       }
 
       .version-label {
-        margin-right: ${token.marginXS}px;
+        margin-right: ${versionToken.marginXS}px;
       }
 
 
@@ -49,7 +51,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       
       & .compare-button {
-        background-color: ${token.colorFillAlter};
+        background-color: ${versionToken.colorFillAlter};
       }
     `
   }
