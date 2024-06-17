@@ -40,10 +40,12 @@ export const useStyles = createStyles(({ css, token }) => {
             display: flex;
             justify-content: space-between;
             flex-grow: 1;
-              
-            .pimcore-schedule-toolbar__headline__buttons__add {
+
+            .pimcore-schedule-toolbar__headline__buttons__add,
+            .pimcore-schedule-toolbar__headline__buttons__save {
               display: flex;
               align-items: center;
+              line-height: 22px;
             }
           }
         }
@@ -83,12 +85,15 @@ export const useStyles = createStyles(({ css, token }) => {
         padding: 0 ${token.paddingSM}px;
           
         .ant-table-content {
-          div[data-grid-column="schedule-table--active-column"] {
+          div[data-grid-column="schedule-table--active-column"]{
             display: flex;
             justify-content: center;
           }
-            
+
           .schedule-table--actions-column {
+            display: flex;
+            align-items: center;
+
             .ant-btn-icon {
               color: ${token.colorPrimary};
 

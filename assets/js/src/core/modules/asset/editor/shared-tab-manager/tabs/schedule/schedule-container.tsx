@@ -144,12 +144,15 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           </p>
 
           <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
-            <Button icon={ <Icon name={ 'PlusOutlined' } /> }>
+            <Button
+              className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
+              icon={ <Icon name={ 'PlusOutlined' } /> }
+            >
               {t('asset.asset-editor-tabs.schedule.toolbar.add')}
             </Button>
 
             <Button
-              className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
+              className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
               type={ 'primary' }
             >
               {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
