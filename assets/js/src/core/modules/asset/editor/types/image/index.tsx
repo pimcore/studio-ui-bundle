@@ -81,7 +81,8 @@ moduleSystem.registerModule({
       key: 'versions',
       label: 'asset.asset-editor-tabs.versions',
       children: <VersionsTabContainer />,
-      icon: <Icon name={ 'history-outlined' } />
+      icon: <Icon name={ 'history-outlined' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({

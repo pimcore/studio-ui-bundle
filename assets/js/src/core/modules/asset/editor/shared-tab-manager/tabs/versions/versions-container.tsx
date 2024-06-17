@@ -11,23 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React from 'react'
 import {
   useCleanupVersionMutation,
   useDeleteVersionMutation,
   useGetVersionsQuery, usePublishVersionMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { Result } from 'antd'
 
 export const VersionsTabContainer = (): React.JSX.Element => {
+  const { context } = useGlobalAssetContext()
+
+  if (context === undefined) {
+    return <Result title="No context" />
+  }
+
   const [deleteVersion] = useDeleteVersionMutation()
   const [publishVersion] = usePublishVersionMutation()
   const [cleanupVersion] = useCleanupVersionMutation()
 
-  const assetContext = useContext(AssetContext)
   const { isLoading, data } = useGetVersionsQuery({
-    id: assetContext.id!,
+    id: context?.config?.id,
     elementType: 'asset',
     page: 1,
     pageSize: 9999
