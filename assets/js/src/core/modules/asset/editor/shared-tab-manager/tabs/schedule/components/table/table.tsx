@@ -41,14 +41,16 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       header: t('asset.asset-editor-tabs.schedule.columns.date'),
       id: 'schedule-table--date-column',
       meta: {
-        type: 'date'
+        type: 'date',
+        editable: true
       }
     }),
     columnHelper.accessor('date', {
       header: t('asset.asset-editor-tabs.schedule.columns.time'),
       id: 'schedule-table--time-column',
       meta: {
-        type: 'time'
+        type: 'time',
+        editable: true
       }
     }),
     columnHelper.accessor('action', {
