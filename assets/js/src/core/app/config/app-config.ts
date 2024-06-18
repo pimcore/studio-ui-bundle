@@ -18,10 +18,10 @@ interface AppConfig {
 const appElement = document.querySelector('#app')
 
 if (appElement === null) {
-  throw new Error('App element not found')
+  console.warn('App element not found')
 }
 
-const appConfigJSON = appElement.getAttribute('data-app-config')
+const appConfigJSON = appElement?.getAttribute('data-app-config') ?? null
 let appConfigData: AppConfig | null = null
 
 if (appConfigJSON !== null) {
