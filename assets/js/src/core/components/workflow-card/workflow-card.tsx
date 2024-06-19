@@ -71,11 +71,12 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
               <Tag
                 icon={
                   <Badge
-                    color={ status.backgroundColor }
-                    styles={ { indicator: { outline: `1px solid ${status.backgroundColor}33` } } }
+                    color={ status.color }
+                    styles={ status.colorInverted ? { indicator: { outline: `1px solid ${status.color}4D` } } : {} }
                   />
                 }
                 key={ index }
+                style={ status.colorInverted ? { backgroundColor: `${status.color}33` } : {} }
                 title={ status.title }
               >
                 {status.label}
