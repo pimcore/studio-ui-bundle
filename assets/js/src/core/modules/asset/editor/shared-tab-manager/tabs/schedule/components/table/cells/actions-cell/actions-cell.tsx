@@ -15,11 +15,14 @@ import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import React, { useEffect, useRef, useState } from 'react'
 import { type RefSelectProps, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { useTranslation } from 'react-i18next'
+import { DownOutlined } from '@ant-design/icons'
 
 export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
   const selectRef = useRef<RefSelectProps>(null)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (isInEditMode) {
@@ -34,11 +37,26 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   function getCellContent (): React.JSX.Element {
+    const selectOptions = [
+      {
+        value: 'delete',
+        label: t('asset.asset-editor-tabs.schedule.delete-version')
+      },
+      {
+        value: 'publish',
+        label: t('asset.asset-editor-tabs.schedule.publish-version')
+      }
+    ]
+
     if (!isInEditMode) {
       return (
-        <>
-          { props.getValue() }
-        </>
+        <div className={ 'pseudo-select' }>
+          { props.getValue() !== ''
+            ? t(`asset.asset-editor-tabs.schedule.${props.getValue()}`)
+            : t('asset.asset-editor-tabs.schedule.select-an-action')
+          }
+          <DownOutlined />
+        </div>
       )
     }
 
@@ -52,17 +70,6 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
       }
     }
 
-    const formattedSelectOptions = [
-      {
-        value: 'delete',
-        label: 'Delete version'
-      },
-      {
-        value: 'publish',
-        label: 'Publish version'
-      }
-    ]
-
     return (
       <Select
         defaultValue={ props.getValue() }
@@ -70,7 +77,7 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
         onChange={ saveValue }
         onKeyDown={ onKeyDown }
         open={ open }
-        options={ formattedSelectOptions }
+        options={ selectOptions }
         ref={ selectRef }
       />
     )

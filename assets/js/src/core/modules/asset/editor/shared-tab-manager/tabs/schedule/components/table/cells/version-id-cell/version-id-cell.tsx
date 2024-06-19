@@ -17,6 +17,7 @@ import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/edit
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { type RefSelectProps, Result, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { DownOutlined } from '@ant-design/icons'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
@@ -50,9 +51,10 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
       return (
-        <>
+        <div className={ 'pseudo-select' }>
           { props.getValue() }
-        </>
+          <DownOutlined />
+        </div>
       )
     }
 
