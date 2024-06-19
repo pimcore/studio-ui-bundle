@@ -81,3 +81,16 @@ login-form.login: Login
 login-form-additional-logins.or: or
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
+asset.asset-editor-tabs.schedule.headline: Schedule
+asset.asset-editor-tabs.schedule.columns.date: Date
+asset.asset-editor-tabs.schedule.columns.time: Time
+asset.asset-editor-tabs.schedule.columns.action: Action
+asset.asset-editor-tabs.schedule.columns.version: Version ID
+asset.asset-editor-tabs.schedule.columns.active: Active
+asset.asset-editor-tabs.schedule.columns.actions: Delete
+asset.asset-editor-tabs.schedule.upcoming: Upcoming
+asset.asset-editor-tabs.schedule.all: All scheduled (upcoming & archive)
+asset.asset-editor-tabs.schedule.toolbar.filters.active-switch: Active only
+asset.asset-editor-tabs.schedule.toolbar.add: Add
+asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
+
