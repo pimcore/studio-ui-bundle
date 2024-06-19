@@ -69,13 +69,21 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           {workflow.workflowStatus !== undefined && workflow.workflowStatus?.length > 0 && (
             workflow.workflowStatus.map((status, index) => (
               <Tag
+                className={ status.colorInverted ? 'color-inverted' : '' }
                 icon={
                   <Badge
-                    color={ status.backgroundColor }
-                    styles={ { indicator: { outline: `1px solid ${status.backgroundColor}33` } } }
+                    color={ status.color }
+                    styles={ status.colorInverted
+                      ? { indicator: { outline: `1px solid ${status.color}4D` } }
+                      : {}
+                    }
                   />
                 }
                 key={ index }
+                style={ status.colorInverted
+                  ? { backgroundColor: `${status.color}33` }
+                  : {}
+                }
                 title={ status.title }
               >
                 {status.label}

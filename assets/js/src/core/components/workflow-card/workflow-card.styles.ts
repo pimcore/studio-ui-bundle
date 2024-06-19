@@ -35,6 +35,10 @@ export const useStyles = createStyles(({ token, css }) => {
           align-items: center;
           gap: 8px;
             
+          &.color-inverted {
+            border: transparent;
+          }
+            
           .ant-badge {              
             .ant-badge-status-dot {
               width: 6px;

@@ -44,77 +44,75 @@ export type SubmitWorkflowActionApiArg = {
     submitAction: SubmitAction;
 };
 export type WorkflowStatus = {
-    /** backgroundColor */
-    backgroundColor?: string;
-    /** fontColor */
-    fontColor?: string;
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
     /** borderColor */
-    borderColor?: string;
-    /** title */
-    title?: string;
+    title: string;
     /** label */
-    label?: string;
+    label: string;
 };
 export type AllowedTransition = {
     /** name */
-    name?: string;
+    name: string;
     /** label */
-    label?: string;
+    label: string;
     /** iconCls */
-    iconCls?: string;
+    iconCls: string;
     /** objectLayout */
-    objectLayout?: boolean;
+    objectLayout: boolean;
     /** unsavedChangesBehaviour */
-    unsavedChangesBehaviour?: string;
+    unsavedChangesBehaviour: string;
     /** notes */
-    notes?: any[];
+    notes: any[];
 };
 export type GlobalAction = {
     /** name */
-    name?: string;
+    name: string;
     /** label */
-    label?: string;
+    label: string;
     /** iconCls */
-    iconCls?: string;
+    iconCls: string;
     /** objectLayout */
-    objectLayout?: boolean;
+    objectLayout: boolean;
     /** notes */
-    notes?: any[];
+    notes: any[];
 };
 export type WorkflowDetails = {
     /** workflowName */
-    workflowName?: string;
+    workflowName: string;
     /** workflowStatus */
-    workflowStatus?: WorkflowStatus[];
+    workflowStatus: WorkflowStatus[];
     /** graph */
-    graph?: string;
+    graph: string;
     /** allowedTransitions */
-    allowedTransitions?: AllowedTransition[];
+    allowedTransitions: AllowedTransition[];
     /** globalActions */
-    globalActions?: GlobalAction[];
+    globalActions: GlobalAction[];
 };
 export type Error = {
     /** Message */
-    message?: string;
+    message: string;
 };
 export type DevError = {
     /** Message */
-    message?: string;
+    message: string;
     /** Details */
-    details?: string;
+    details: string;
 };
 export type SubmitAction = {
     /** type of the action */
-    actionType?: string;
+    actionType: string;
     /** id of the element */
-    elementId?: number;
+    elementId: number;
     /** type of the element */
-    elementType?: string;
+    elementType: string;
     /** name of the workflow */
-    workflowName?: string;
+    workflowName: string;
     /** transition */
-    transition?: string;
+    transition: string;
     /** workflowOptions */
-    workflowOptions?: any[];
+    workflowOptions: any[];
 };
 export const { useGetWorkflowsDetailsQuery, useSubmitWorkflowActionMutation } = injectedRtkApi;
