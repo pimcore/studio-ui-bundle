@@ -12,9 +12,23 @@
 */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from 'antd'
 
-export const NotesAndEventsTabContainer = (): React.JSX.Element => {
+export const NotesAndEventsTabView = (): React.JSX.Element => {
+  const { t } = useTranslation()
   return (
-    <h4>Notes & Events TAB</h4>
+    <div>
+      <div>
+        <span>{t('notes-and-events.notes-and-events')}</span>
+        <Button title={ t('add') } />
+      </div>
+      <div>
+
+      </div>
+      <div>
+
+      </div>
+    </div>
   )
 }
