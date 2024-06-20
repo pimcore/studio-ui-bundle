@@ -93,4 +93,7 @@ asset.asset-editor-tabs.schedule.all: All scheduled (upcoming & archive)
 asset.asset-editor-tabs.schedule.toolbar.filters.active-switch: Active only
 asset.asset-editor-tabs.schedule.toolbar.add: Add
 asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
+asset.asset-editor-tabs.schedule.version.delete: Delete version
+asset.asset-editor-tabs.schedule.version.publish: Publish version
+asset.asset-editor-tabs.schedule.select-an-action: Select an action
 

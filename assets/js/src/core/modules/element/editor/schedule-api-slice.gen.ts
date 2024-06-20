@@ -49,7 +49,7 @@ export type GetSchedulesForElementByTypeAndIdApiResponse = /** status 200 List o
 };
 export type GetSchedulesForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
+    elementType: "asset" | "document" | "data-object";
     /** ID of the element */
     id: number;
 };
@@ -58,7 +58,7 @@ export type UpdateSchedulesForElementByTypeAndIdApiResponse = /** status 200 Lis
 };
 export type UpdateSchedulesForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
+    elementType: "asset" | "document" | "data-object";
     /** ID of the element */
     id: number;
     body: {
@@ -68,7 +68,7 @@ export type UpdateSchedulesForElementByTypeAndIdApiArg = {
 export type CreateScheduleApiResponse = /** status 200 Created schedule */ Schedule;
 export type CreateScheduleApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
+    elementType: "asset" | "document" | "data-object";
     /** ID of the element */
     id: number;
 };
@@ -94,7 +94,7 @@ export type Schedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?: ("publish-version" | "delete") | null;
+    action?: ("publish" | "delete") | null;
     /** Version ID */
     version?: number | null;
     /** Active */
@@ -108,7 +108,7 @@ export type UpdateSchedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?: ("publish-version" | "delete") | null;
+    action?: ("publish" | "delete") | null;
     /** Version ID */
     version?: number | null;
     /** Active */
