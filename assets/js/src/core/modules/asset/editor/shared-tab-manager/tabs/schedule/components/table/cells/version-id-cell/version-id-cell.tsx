@@ -18,12 +18,14 @@ import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-a
 import { type RefSelectProps, Result, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { DownOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
   const selectRef = useRef<RefSelectProps>(null)
   const { context } = useGlobalAssetContext()
+  const { t } = useTranslation()
 
   if (context === undefined) {
     return <Result title="Missing context" />
@@ -52,7 +54,10 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     if (!isInEditMode) {
       return (
         <div className={ 'pseudo-select' }>
-          { props.getValue() }
+          { props.getValue() !== null
+            ? props.getValue()
+            : t('asset.asset-editor-tabs.schedule.select-a-version')
+          }
           <DownOutlined />
         </div>
       )
@@ -93,8 +98,8 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div>
+    <>
       {getCellContent()}
-    </div>
+    </>
   )
 }
