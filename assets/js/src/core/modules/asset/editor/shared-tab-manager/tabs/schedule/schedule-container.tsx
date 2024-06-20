@@ -52,7 +52,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
       }))
 
       setGridDataArchive(data.items.filter((item) => {
-        return item.date > currentDate
+        return item.date < currentDate
       }))
     }
   }, [data])
