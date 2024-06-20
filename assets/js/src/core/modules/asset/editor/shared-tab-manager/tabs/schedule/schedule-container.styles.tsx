@@ -63,16 +63,16 @@ export const useStyles = createStyles(({ css, token }) => {
         }
       }
           
-        .ant-segmented-group {
-          padding: 0px;
-          border-radius: ${token.borderRadius}px;
-          border: 1px solid ${token.colorBorderSecondary};
-          background: ${token.colorBgLayout};
-          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-          
-          .ant-segmented-item {
-            color: ${token.itemColor};
-          
+      .ant-segmented-group {
+        padding: 0;
+        border-radius: ${token.borderRadius}px;
+        border: 1px solid ${token.colorBorderSecondary};
+        background: ${token.colorBgLayout};
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+        
+        .ant-segmented-item {
+          color: ${token.itemColor};
+        
           &.ant-segmented-item-selected {
             background: ${token.controlItemBgActive};
             border-color: ${token.controlItemBgActive};
@@ -83,6 +83,17 @@ export const useStyles = createStyles(({ css, token }) => {
 
       .pimcore-schedule-content {
         padding: 0 ${token.paddingSM}px;
+          
+        .pimcore-schedule-content__archive__toolbar {
+          padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px 0;
+          display: flex;
+          gap: 12px;
+          align-items: center;
+            
+          .pimcore-schedule-content__archive__toolbar__headline {
+            margin: 0
+          }
+        }
       }
     `
   }

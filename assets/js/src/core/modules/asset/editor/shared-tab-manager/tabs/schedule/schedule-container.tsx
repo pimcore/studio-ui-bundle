@@ -23,6 +23,7 @@ import {
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
+import { DeleteOutlined } from '@ant-design/icons'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -41,11 +42,16 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   })
 
   const [gridDataUpcoming, setGridDataUpcoming] = useState<Schedule[]>([])
+  const [gridDataArchive, setGridDataArchive] = useState<Schedule[]>([])
   useEffect(() => {
     const currentDate = Math.floor(Date.now() / 1000)
 
     if (data !== undefined && Array.isArray(data.items)) {
       setGridDataUpcoming(data.items.filter((item) => {
+        return item.date > currentDate
+      }))
+
+      setGridDataArchive(data.items.filter((item) => {
         return item.date > currentDate
       }))
     }
@@ -122,12 +128,20 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         className={ 'pimcore-schedule-content' }
         style={ { marginLeft: 0 } }
       >
-        {scheduleTab === 'upcoming' && (
-          <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
-        )}
+        <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
 
         {scheduleTab === 'all' && (
-          <Table data={ filterSchedules(data.items ?? []) } />
+          <>
+            <div className={ 'pimcore-schedule-content__archive__toolbar' }>
+              <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
+                {t('asset.asset-editor-tabs.schedule.archived')}
+              </p>
+              <Button icon={ <DeleteOutlined /> }>
+                {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
+              </Button>
+            </div>
+            <Table data={ filterSchedules(gridDataArchive ?? []) } />
+          </>
         )}
       </div>
     </div>

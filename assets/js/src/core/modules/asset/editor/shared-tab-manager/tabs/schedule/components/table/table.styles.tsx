@@ -26,6 +26,7 @@ export const useStyles = createStyles(({ css, token }) => {
         div[data-grid-column="schedule-table--action-column"],
         div[data-grid-column="schedule-table--version-column"]{
             padding: 6px;
+            flex-grow: 1;
             
             .pseudo-select {
                 display: flex;
