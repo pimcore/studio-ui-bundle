@@ -40,19 +40,19 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
     const selectOptions = [
       {
         value: 'delete',
-        label: t('asset.asset-editor-tabs.schedule.delete-version')
+        label: t('asset.asset-editor-tabs.schedule.version.delete')
       },
       {
         value: 'publish',
-        label: t('asset.asset-editor-tabs.schedule.publish-version')
+        label: t('asset.asset-editor-tabs.schedule.version.publish')
       }
     ]
 
     if (!isInEditMode) {
       return (
         <div className={ 'pseudo-select' }>
-          { props.getValue() !== ''
-            ? t(`asset.asset-editor-tabs.schedule.${props.getValue()}`)
+          { props.getValue() !== null
+            ? t(`asset.asset-editor-tabs.schedule.version.${props.getValue()}`)
             : t('asset.asset-editor-tabs.schedule.select-an-action')
           }
           <DownOutlined />
@@ -84,8 +84,8 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div>
+    <>
       {getCellContent()}
-    </div>
+    </>
   )
 }

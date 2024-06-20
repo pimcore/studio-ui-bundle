@@ -33,6 +33,10 @@ export const useStyles = createStyles(({ css, token }) => {
                 gap: ${token.marginXS}px;
                 color: ${token.colorPrimary};
             }
+            
+            .ant-select {
+                width: 100%;
+            }
         }
 
         .schedule-table--actions-column {
