@@ -12,7 +12,7 @@
 */
 
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData } from '@tanstack/react-table'
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData, type CellContext } from '@tanstack/react-table'
 import React, { useEffect, useRef, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
@@ -32,11 +32,16 @@ declare module '@tanstack/react-table' {
   }
 }
 
+export interface ExtendedCellContext extends CellContext<any, any> {
+  modified?: boolean
+}
+
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
   resizable?: boolean
   onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
+  modifiedCells?: Array<{ rowIndex: number, columnId: string }>
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
@@ -68,6 +73,15 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   }
 
   const table = useReactTable(tableProps)
+
+  function getExtendedCellContext (context: CellContext<any, any>): ExtendedCellContext {
+    return {
+      ...context,
+      modified: props.modifiedCells?.some(({ rowIndex, columnId }) => {
+        return rowIndex === context.row.index && columnId === context.column.id
+      })
+    }
+  }
 
   return (
     <GridContextProvider value={ { table: tableElement } }>
@@ -130,7 +144,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                           }
                         >
                           <div className='grid__cell-content'>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            {flexRender(cell.column.columnDef.cell, getExtendedCellContext(cell.getContext()))}
                           </div>
 
                           {props.resizable === true && (

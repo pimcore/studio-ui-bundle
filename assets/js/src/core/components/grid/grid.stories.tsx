@@ -78,6 +78,17 @@ export const _default = {
   }
 }
 
+export const ModifiedColumns = {
+  args: {
+    data,
+    columns,
+    modifiedCells: [
+      { rowIndex: 0, columnId: 'firstname' },
+      { rowIndex: 1, columnId: 'lastname' }
+    ]
+  }
+}
+
 const editableColumns = [
   columnHelper.accessor('firstname', {
     meta: {

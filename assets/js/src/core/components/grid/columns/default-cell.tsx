@@ -11,7 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type CellContext } from '@tanstack/react-table'
 import React, { useEffect, useRef, useState } from 'react'
 import { TextCell } from './types/text/text-cell'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
@@ -23,8 +22,10 @@ import { useKeyboardNavigation } from '../keyboard-navigation/use-keyboard-navig
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
+import { type ExtendedCellContext } from '../grid'
+import { Tooltip } from 'antd'
 
-export type DefaultCellProps = CellContext<any, any>
+export type DefaultCellProps = ExtendedCellContext
 
 export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
@@ -38,12 +39,26 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
   const messageAPi = useMessage()
   const { t } = useTranslation()
   const oldInEditMode = usePrevious(isInEditMode)
+  const [hasLongerFocus, setHasLongerFocus] = useState(false)
+  const userDelayTimer = useRef<number | null>(null)
 
   useEffect(() => {
     if (oldInEditMode !== undefined && oldInEditMode !== isInEditMode && !isInEditMode) {
       element.current?.focus()
     }
   }, [isInEditMode])
+
+  const Component = typeRegistry.getComponentByType(cellType) ?? TextCell
+
+  function getCssClasses (): string[] {
+    const classes: string[] = []
+
+    if (props.modified === true) {
+      classes.push('default-cell--modified')
+    }
+
+    return classes
+  }
 
   function enableEditMode (): void {
     if (!isEditable) {
@@ -97,23 +112,46 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
     }
   }
 
-  const Component = typeRegistry.getComponentByType(cellType) ?? TextCell
+  function runModifiedTimer (): void {
+    if (props.modified === true) {
+      userDelayTimer.current = window.setTimeout(() => {
+        setHasLongerFocus(true)
+      }, 300)
+    }
+  }
+
+  function clearModifiedTimer (): void {
+    if (userDelayTimer.current !== null) {
+      clearTimeout(userDelayTimer.current)
+      setHasLongerFocus(false)
+    }
+  }
 
   return (
     <div
-      className={ styles['default-cell'] }
+      className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
       data-grid-column={ column.id }
       data-grid-row={ row.id }
+      onBlur={ clearModifiedTimer }
       onCopy={ onCopy }
       onDoubleClick={ onDoubleClick }
+      onFocus={ runModifiedTimer }
       onKeyDown={ onKeyDown }
+      onMouseEnter={ runModifiedTimer }
+      onMouseLeave={ clearModifiedTimer }
       onPaste={ onPaste }
       ref={ element }
       role='button'
       tabIndex={ 0 }
     >
       <EditableCellContextProvider value={ { isInEditMode, setIsInEditMode } }>
-        <Component { ...props } />
+        <Tooltip
+          open={ hasLongerFocus }
+          placement='top'
+          title={ t('unsaved-notice') }
+        >
+          <Component { ...props } />
+        </Tooltip>
       </EditableCellContextProvider>
     </div>
   )
