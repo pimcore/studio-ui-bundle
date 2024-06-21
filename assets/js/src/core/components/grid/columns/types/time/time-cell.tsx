@@ -16,14 +16,19 @@ import { type DefaultCellProps } from '../../default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { TimePicker } from 'antd'
 import type { Dayjs } from 'dayjs'
-import type { PickerRef } from 'rc-picker'
 import dayjs from 'dayjs'
+import type { PickerRef } from 'rc-picker'
 import { FormattedTime } from '@Pimcore/components/formatted-time/formatted-time'
+import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
 
 export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
   const timePickerRef = useRef<PickerRef>(null)
+
+  useClickOutside(timePickerRef, () => {
+    disableEditMode()
+  }, '.ant-picker-dropdown')
 
   useEffect(() => {
     if (isInEditMode) {
@@ -33,8 +38,8 @@ export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
   }, [isInEditMode])
 
   function saveValue (value: string): void {
-    fireOnUpdateCellDataEvent(value)
-    disableEditMode()
+   fireOnUpdateCellDataEvent(value)
+   disableEditMode()
   }
 
   function getCellContent (): React.JSX.Element {
@@ -44,10 +49,6 @@ export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
       )
     }
 
-    function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      saveValue(e.target.value)
-    }
-
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
       if (e.key === 'Escape' || e.key === 'Enter') {
         disableEditMode()
@@ -55,22 +56,25 @@ export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     return (
-      <TimePicker
-        defaultValue={ dayjs.unix(Number(props.getValue())) }
-        format="HH:mm"
-        needConfirm
-        onBlur={ onBlur }
-        onChange={ (time: Dayjs) => { console.log(time) } }
-        onKeyDown={ onKeyDown }
-        open={ open }
-        ref={ timePickerRef }
-      />
+      <>
+        <TimePicker
+          defaultValue={dayjs.unix(Number(props.getValue()))}
+          format="HH:mm"
+          needConfirm
+          onChange={(time: Dayjs) => {
+            saveValue(time.toString())
+          }}
+          onKeyDown={onKeyDown}
+          open={open}
+          ref={timePickerRef}
+        />
+      </>
     )
   }
 
   return (
-    <div className={ ['default-cell__content'].join(' ') }>
-      {getCellContent()}
+    <div className={['default-cell__content'].join(' ')}>
+    {getCellContent()}
     </div>
   )
 }
