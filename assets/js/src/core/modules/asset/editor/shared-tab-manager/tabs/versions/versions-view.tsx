@@ -18,7 +18,10 @@ import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { formatDate, isSet } from '@Pimcore/utils/helpers'
 import { VersionCard } from '@Pimcore/components/version-card/version-card'
-import { type Version } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
+import {
+  type GetVersionsApiArg,
+  type Version
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import {
   DetailsVersionsContainer
@@ -26,7 +29,7 @@ import {
 
 interface VersionsViewProps {
   versions: Version[]
-  onClickClearAll: (elementType: 'asset' | 'document' | 'dataObject', id: number) => void
+  onClickClearAll: (elementType: GetVersionsApiArg['elementType'], id: number) => void
   onClickPublish: (id: number) => void
   onClickDelete: (id: number) => void
 }
@@ -79,7 +82,7 @@ export const VersionsView = ({
                 return
               }
               onClickClearAll(
-                versions[0].ctype as 'asset' | 'document' | 'dataObject',
+                versions[0].ctype as GetVersionsApiArg['elementType'],
                 versions[0].cid
               )
             } }

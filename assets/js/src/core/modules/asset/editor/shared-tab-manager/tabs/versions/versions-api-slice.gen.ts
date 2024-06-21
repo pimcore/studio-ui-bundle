@@ -46,12 +46,12 @@ const injectedRtkApi = api
 export { injectedRtkApi as api };
 export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
 export type DownloadAssetVersionByIdApiArg = {
-    /** ID of the version */
+    /** Id of the version */
     id: number;
 };
 export type StreamImageVersionByIdApiResponse = /** status 200 Image version stream */ Blob;
 export type StreamImageVersionByIdApiArg = {
-    /** ID of the version */
+    /** Id of the version */
     id: number;
 };
 export type GetVersionByIdApiResponse = /** status 200 Version data as json */
@@ -60,7 +60,7 @@ export type GetVersionByIdApiResponse = /** status 200 Version data as json */
     | DataObjectVersion
     | DocumentVersion;
 export type GetVersionByIdApiArg = {
-    /** ID of the version */
+    /** Id of the version */
     id: number;
 };
 export type PublishVersionApiResponse = /** status 200 ID of latest published version */ {
@@ -68,12 +68,12 @@ export type PublishVersionApiResponse = /** status 200 ID of latest published ve
     id: number;
 };
 export type PublishVersionApiArg = {
-    /** ID of the version */
+    /** Id of the version */
     id: number;
 };
 export type DeleteVersionApiResponse = /** status 200 Successfully deleted version */ void;
 export type DeleteVersionApiArg = {
-    /** ID of the version */
+    /** Id of the version */
     id: number;
 };
 export type GetVersionsApiResponse = /** status 200 Paginated versions with total count as header param */ {
@@ -82,8 +82,8 @@ export type GetVersionsApiResponse = /** status 200 Paginated versions with tota
 };
 export type GetVersionsApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
-    /** ID of the element */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the element */
     id: number;
     /** Page number */
     page: number;
@@ -96,8 +96,8 @@ export type CleanupVersionApiResponse = /** status 200 IDs of deleted versions *
 };
 export type CleanupVersionApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
-    /** ID of the ID of the element */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the ID of the element */
     id: number;
 };
 export type Error = {

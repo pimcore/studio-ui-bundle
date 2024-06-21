@@ -41,7 +41,7 @@ const injectedRtkApi = api
 export { injectedRtkApi as api };
 export type DeleteScheduleApiResponse = /** status 200 Successfully deleted schedule */ void;
 export type DeleteScheduleApiArg = {
-    /** ID of the schedule */
+    /** Id of the schedule */
     id: number;
 };
 export type GetSchedulesForElementByTypeAndIdApiResponse = /** status 200 List of schedules */ {
@@ -50,7 +50,7 @@ export type GetSchedulesForElementByTypeAndIdApiResponse = /** status 200 List o
 export type GetSchedulesForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
-    /** ID of the element */
+    /** Id of the element */
     id: number;
 };
 export type UpdateSchedulesForElementByTypeAndIdApiResponse = /** status 200 List of schedules */ {
@@ -59,7 +59,7 @@ export type UpdateSchedulesForElementByTypeAndIdApiResponse = /** status 200 Lis
 export type UpdateSchedulesForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
-    /** ID of the element */
+    /** Id of the element */
     id: number;
     body: {
         items?: UpdateSchedule[];
@@ -69,7 +69,7 @@ export type CreateScheduleApiResponse = /** status 200 Created schedule */ Sched
 export type CreateScheduleApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
-    /** ID of the element */
+    /** Id of the element */
     id: number;
 };
 export type Error = {
