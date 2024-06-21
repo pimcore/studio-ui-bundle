@@ -44,13 +44,11 @@ export type SubmitWorkflowActionApiArg = {
     submitAction: SubmitAction;
 };
 export type WorkflowStatus = {
-    /** backgroundColor */
-    backgroundColor: string;
-    /** fontColor */
-    fontColor: string;
+    /** color */
+    color: string;
+    /** colorInverted */
+    colorInverted: boolean;
     /** borderColor */
-    borderColor: string;
-    /** title */
     title: string;
     /** label */
     label: string;
