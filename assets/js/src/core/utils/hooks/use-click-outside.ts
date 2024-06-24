@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {DOMElement, type MutableRefObject, useEffect} from 'react'
+import {type MutableRefObject, useEffect} from 'react'
 
 export const useClickOutside = (
   ref: MutableRefObject<any>,
