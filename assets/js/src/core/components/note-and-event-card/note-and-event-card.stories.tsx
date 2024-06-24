@@ -13,6 +13,8 @@
 
 import { type Meta } from '@storybook/react'
 import { NoteAndEventCard as NoteAndEventCardComponent } from './note-and-event-card'
+import i18n from '@Pimcore/app/i18n'
+
 
 const config: Meta = {
   title: 'Pimcore studio/UI/NoteAndEventCard',
@@ -32,8 +34,15 @@ export const _default = {
     date: '2021-08-02 12:43',
     type: 'Note',
     data: [
-      { name: 'myAsset', type: 'Asset', value: '/Brand Logos/Porsche_logo.svg' },
-      { name: 'yourAsset', type: 'Asset', value: '/Brand Logos/BMW.png' },
+      {
+        [i18n.t('notes-and-events.name')]: 'myAsset',
+        [i18n.t('notes-and-events.type')]: 'Asset',
+        [i18n.t('notes-and-events.value')]: '/Brand Logos/Porsche_logo.svg'
+      }, {
+        [i18n.t('notes-and-events.name')]: 'yourAsset',
+        [i18n.t('notes-and-events.type')]: 'Asset',
+        [i18n.t('notes-and-events.value')]: '/Brand Logos/BMW.png'
+      },
     ]
   }
 }

@@ -81,3 +81,6 @@ login-form.login: Login
 login-form-additional-logins.or: or
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
+notes-and-events.name: name
+notes-and-events.type: type
+notes-and-events.value: value

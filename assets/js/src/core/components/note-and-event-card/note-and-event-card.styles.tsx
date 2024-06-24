@@ -59,14 +59,26 @@ export const useStyle = createStyles(({ token, css }) => {
         font-weight: 600;
       }
 
-      .chevron {
+      & .card-title__chevron-btn {
+        vertical-align: top;
+      }
+      
+      & .chevron {
         rotate: 180deg;
         transition-duration: 0.6s;
         transition-property: transform;
       }
 
-      .chevron-up {
+      & .chevron-up {
         transform: rotate(-180deg);
+      }
+      
+      & .card-extra__trash-icon {
+        color: ${cardToken.colorPrimary};
+      }
+      
+      & .card-body__description, & .card-body__details {
+        padding-bottom: ${cardToken.paddingSM}px;
       }
     `
   }

@@ -28,7 +28,9 @@ interface NoteAndEventCardProps {
   data: any
 }
 
-export const NoteAndEventCard = ({ title, type, date, description, data }: NoteAndEventCardProps): React.JSX.Element => {
+export const NoteAndEventCard = ({
+  title, type, date, description, data
+}: NoteAndEventCardProps): React.JSX.Element => {
   const {styles} = useStyle()
   const {i18n} = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
@@ -36,9 +38,9 @@ export const NoteAndEventCard = ({ title, type, date, description, data }: NoteA
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
-    columnHelper.accessor('name', {}),
-    columnHelper.accessor('type', {}),
-    columnHelper.accessor('value', {})
+    columnHelper.accessor(i18n.t('notes-and-events.name'), {}),
+    columnHelper.accessor(i18n.t('notes-and-events.type'), {}),
+    columnHelper.accessor(i18n.t('notes-and-events.value'), {})
   ]
 
   const onClickChevron = () => {
@@ -58,6 +60,7 @@ export const NoteAndEventCard = ({ title, type, date, description, data }: NoteA
           />}
         role={ 'button' }
         size="small"
+        className={'card-title__chevron-btn'}
       />
     </div>
 
@@ -68,15 +71,15 @@ export const NoteAndEventCard = ({ title, type, date, description, data }: NoteA
       <Button
         type={'text'}
         aria-label={i18n.t('aria.notes-and-events.delete')}
-        icon={<Icon name={'trash'}/>}
+        icon={<Icon name={'trash'} className={'card-extra__trash-icon'}/>}
       />
     </div>
 
   return (
     <div className={styles.card}>
       <Card title={titleElement} extra={extra} className={isExpanded ? 'card-body__expand' : 'card-body__hide'}>
-        <div>{description}</div>
-        <div>{i18n.t('notes-and-events.details')}</div>
+        <div className={'card-body__description'}>{description}</div>
+        <div className={'card-body__details'}>{i18n.t('notes-and-events.details')}</div>
         <Grid data={data} columns={columns}/>
       </Card>
     </div>

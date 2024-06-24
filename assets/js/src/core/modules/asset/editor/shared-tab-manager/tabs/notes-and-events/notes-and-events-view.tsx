@@ -14,6 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
+import {NoteAndEventCard} from "@Pimcore/components/note-and-event-card/note-and-event-card";
 
 export const NotesAndEventsTabView = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -23,9 +24,7 @@ export const NotesAndEventsTabView = (): React.JSX.Element => {
         <span>{t('notes-and-events.notes-and-events')}</span>
         <Button title={ t('add') } />
       </div>
-      <div>
-
-      </div>
+      {/*<NoteAndEventCard title={} type={} date={} description={} data={} />*/}
       <div>
 
       </div>
