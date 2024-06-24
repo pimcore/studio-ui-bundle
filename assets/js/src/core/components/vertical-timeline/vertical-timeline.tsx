@@ -12,9 +12,18 @@
 */
 
 import React from 'react'
+import { useStyle } from './vertical-timeline.styles'
 
-export const VersionsTabContainer = (): React.JSX.Element => {
+interface VerticalTimelineProps {
+  timeStamps: React.ReactNode[]
+}
+
+export const VerticalTimeline = ({ timeStamps }: VerticalTimelineProps): React.JSX.Element => {
+  const { styles } = useStyle()
+
   return (
-    <h4>Versions TAB</h4>
+    <div className={ styles.timeline }>
+      { timeStamps }
+    </div>
   )
 }

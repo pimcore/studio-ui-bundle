@@ -20,8 +20,8 @@ import {
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
-import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions-container'
-import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule-container'
+import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
+import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
 import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies-container'
 import {
   NotesAndEventsTabContainer
@@ -77,7 +77,8 @@ moduleSystem.registerModule({
       key: 'schedule',
       label: 'asset.asset-editor-tabs.schedule',
       children: <ScheduleTabContainer />,
-      icon: <Icon name={ 'schedule-outlined' } />
+      icon: <Icon name={ 'schedule-outlined' } />,
+      isDetachable: true
     })
 
     documentTabManager.register({
