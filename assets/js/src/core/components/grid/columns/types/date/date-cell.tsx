@@ -17,12 +17,16 @@ import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import type { PickerRef } from 'rc-picker'
 import { DatePicker } from 'antd'
-import dayjs, { type Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
+
+import dayjs from 'dayjs'
 
 export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
+  const [value, setValue] = useState<number>(Number(props.getValue()))
   const datePickerRef = useRef<PickerRef>(null)
+  const dateFormat = 'YYYY-MM-DD'
 
   useEffect(() => {
     if (isInEditMode) {
@@ -31,20 +35,21 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
     }
   }, [isInEditMode])
 
-  function saveValue (value: string): void {
-    fireOnUpdateCellDataEvent(value)
+  function saveValue (value: number): void {
+    setValue(value)
+    fireOnUpdateCellDataEvent(String(value))
     disableEditMode()
   }
 
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
       return (
-        <FormattedDate timestamp={ props.getValue() * 1000 } />
+        <FormattedDate timestamp={ value } />
       )
     }
 
     function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      saveValue(e.target.value)
+      // saveValue(e.target.value)
     }
 
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
@@ -55,11 +60,16 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
 
     return (
       <DatePicker
-        defaultValue={ dayjs.unix(Number(props.getValue())) }
-        format="DD/MM/YYYY"
+        defaultValue={ dayjs.unix(value) }
+        disabledDate={ (current: Dayjs) => {
+          return current < dayjs().subtract(1, 'day')
+        } }
+        format={ dateFormat }
         needConfirm
         onBlur={ onBlur }
-        onChange={ (date: Dayjs) => { console.log(date) } }
+        onChange={ (date: Dayjs) => {
+          saveValue(date.unix())
+        } }
         onKeyDown={ onKeyDown }
         open={ open }
         ref={ datePickerRef }
