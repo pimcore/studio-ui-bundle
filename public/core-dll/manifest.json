@@ -1,6 +1,6 @@
 {
   "bundles/pimcorestudioui/core-dll/core-dll.css": "/bundles/pimcorestudioui/core-dll/core-dll.d9260c35.css",
-  "bundles/pimcorestudioui/core-dll/core-dll.js": "/bundles/pimcorestudioui/core-dll/core-dll.ec57407d.js",
+  "bundles/pimcorestudioui/core-dll/core-dll.js": "/bundles/pimcorestudioui/core-dll/core-dll.30fe48c0.js",
   "bundles/pimcorestudioui/core-dll/105.b4a62b68.js": "/bundles/pimcorestudioui/core-dll/105.b4a62b68.js",
   "bundles/pimcorestudioui/core-dll/fonts/Lato-Light.ttf": "/bundles/pimcorestudioui/core-dll/fonts/Lato-Light.c7400fca.ttf",
   "bundles/pimcorestudioui/core-dll/fonts/Lato-Regular.ttf": "/bundles/pimcorestudioui/core-dll/fonts/Lato-Regular.9d883d54.ttf",
@@ -289,6 +289,7 @@
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/logo/logo.styles.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/logo/logo.styles.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/tree/tree.styles.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/tree/tree.styles.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/document/index.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/document/index.d.ts",
+  "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/widget-manager/utils/widget-manager-inner-model.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/widget-manager/utils/widget-manager-inner-model.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/widget-manager/utils/widget-manager-outer-model.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/widget-manager/utils/widget-manager-outer-model.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/notification/content/action-list/action-list.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/notification/content/action-list/action-list.d.ts.map",
@@ -545,6 +546,7 @@
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-view.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-view.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/background/background.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/background/background.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/text/tab-manager/tabs/preview/preview-view.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/text/tab-manager/tabs/preview/preview-view.styles.d.ts.map",
+  "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/document/index.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/editor/types/document/index.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/drag-and-drop/__STORIES__/dnd-demo-droppable-content.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/drag-and-drop/__STORIES__/dnd-demo-droppable-content.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/app/base-layout/right-sidebar-view.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/app/base-layout/right-sidebar-view.d.ts.map",
@@ -557,7 +559,6 @@
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/element-toolbar/element-toolbar.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/element-toolbar/element-toolbar.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/depency-injection/index.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/depency-injection/index.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/asset-context.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/asset/asset-context.d.ts.map",
-  "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/ant-design/hooks/use-css-component-hash.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/ant-design/hooks/use-css-component-hash.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/pagination/inline-textfield/inline-textfield.styles.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/pagination/inline-textfield/inline-textfield.styles.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/widget-manager/hooks/use-is-active-main-widget.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/widget-manager/hooks/use-is-active-main-widget.d.ts.map",
@@ -626,7 +627,6 @@
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/utils/uuid.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/utils/uuid.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/test-utils/jest-setup.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/test-utils/jest-setup.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/icon-library/index.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/icon-library/index.d.ts.map",
-  "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/app/config/date-time.d.ts",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/grid/index.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/components/grid/index.d.ts.map",
   "bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/example/index.d.ts.map": "/bundles/pimcorestudioui/core-dll/../../assets/dist/build/types/src/core/modules/example/index.d.ts.map"
 }
