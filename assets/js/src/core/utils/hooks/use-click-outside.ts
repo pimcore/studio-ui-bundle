@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {type MutableRefObject, useEffect} from 'react'
+import { type MutableRefObject, useEffect } from 'react'
 
 export const useClickOutside = (
   ref: MutableRefObject<any>,
@@ -20,19 +20,19 @@ export const useClickOutside = (
 ): void => {
   useEffect(() => {
     const listener = (event: MouseEvent): void => {
-        const domElements = document.querySelectorAll(selectors)
+      const domElements = document.querySelectorAll(selectors)
 
-        for (let item of domElements) {
-          if (item.contains(event.target as HTMLElement)) {
-            return
-          }
-        }
-
-        if (ref.current === null || ref.current.nativeElement.contains(event.target) === true) {
+      for (const item of domElements) {
+        if (item.contains(event.target as HTMLElement)) {
           return
         }
+      }
 
-        handler(event)
+      if (ref.current === null || ref.current.nativeElement.contains(event.target) === true) {
+        return
+      }
+
+      handler(event)
     }
     document.addEventListener('mousedown', listener)
     return () => {
