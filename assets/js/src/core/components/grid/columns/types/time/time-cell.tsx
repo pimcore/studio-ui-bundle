@@ -24,7 +24,7 @@ import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
 export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
-  const [value, setValue] = useState<number>(props.getValue())
+  const [value, setValue] = useState<number>(Number(props.getValue()))
   const timePickerRef = useRef<PickerRef>(null)
 
   useClickOutside(timePickerRef, () => {
@@ -60,23 +60,23 @@ export const TimeCell = (props: DefaultCellProps): React.JSX.Element => {
     return (
       <>
         <TimePicker
-          defaultValue={dayjs.unix(value)}
+          defaultValue={ dayjs.unix(value) }
           format="HH:mm"
           needConfirm
-          onChange={(time: Dayjs) => {
+          onChange={ (time: Dayjs) => {
             saveValue(time.unix())
-          }}
-          onKeyDown={onKeyDown}
-          open={open}
-          ref={timePickerRef}
+          } }
+          onKeyDown={ onKeyDown }
+          open={ open }
+          ref={ timePickerRef }
         />
       </>
     )
   }
 
   return (
-    <div className={['default-cell__content'].join(' ')}>
-    {getCellContent()}
+    <div className={ ['default-cell__content'].join(' ') }>
+      {getCellContent()}
     </div>
   )
 }

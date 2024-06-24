@@ -24,7 +24,7 @@ import dayjs from 'dayjs'
 export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
-  const [value, setValue] = useState<number>(props.getValue())
+  const [value, setValue] = useState<number>(Number(props.getValue()))
   const datePickerRef = useRef<PickerRef>(null)
   const dateFormat = 'YYYY-MM-DD'
 
@@ -49,7 +49,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      //saveValue(e.target.value)
+      // saveValue(e.target.value)
     }
 
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
@@ -66,7 +66,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
         onBlur={ onBlur }
         onChange={ (date: Dayjs) => {
           saveValue(date.unix())
-        }}
+        } }
         onKeyDown={ onKeyDown }
         open={ open }
         ref={ datePickerRef }
