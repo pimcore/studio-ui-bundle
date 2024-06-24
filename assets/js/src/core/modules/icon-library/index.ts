@@ -18,6 +18,7 @@ import { type IconLibrary } from './services/icon-library'
 import camera from '@Pimcore/assets/icons/camera.inline.svg'
 import folder from '@Pimcore/assets/icons/folder.inline.svg'
 import widgetDefault from '@Pimcore/assets/icons/widget-default.inline.svg'
+import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import chevronUpSmall from '@Pimcore/assets/icons/chevron-up-small.inline.svg'
 import chevronDownSmall from '@Pimcore/assets/icons/chevron-down-small.inline.svg'
 import chevronUpWide from '@Pimcore/assets/icons/chevron-up-wide.inline.svg'
@@ -78,6 +79,10 @@ import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.sv
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
+import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
+import calender from '@Pimcore/assets/icons/calender.inline.svg'
+import world from '@Pimcore/assets/icons/world.inline.svg'
+import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -94,6 +99,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'widget-default',
       component: widgetDefault
+    })
+    iconLibrary.register({
+      name: 'chevron-up',
+      component: chevronUp
     })
     iconLibrary.register({
       name: 'chevron-up-small',
@@ -294,6 +303,22 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'PlusCircleOutlined',
       component: PlusCircleOutlined
+    })
+    iconLibrary.register({
+      name: 'lightning-01',
+      component: lightning01
+    })
+    iconLibrary.register({
+      name: 'calender',
+      component: calender
+    })
+    iconLibrary.register({
+      name: 'world',
+      component: world
+    })
+    iconLibrary.register({
+      name: 'user-01',
+      component: user01
     })
     iconLibrary.register({
       name: 'share-03',
