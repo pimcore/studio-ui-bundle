@@ -40,7 +40,7 @@ export interface GridProps {
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
-  const [columns] = useState(props.columns)
+  const [columns, setColumns] = useState(props.columns)
   const [data, setData] = useState(props.data)
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
@@ -50,6 +50,10 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   useEffect(() => {
     setData(props.data)
   }, [props.data])
+
+  useEffect(() => {
+    setColumns(props.columns)
+  }, [props.columns])
 
   const tableProps: TableOptions<any> = {
     data,

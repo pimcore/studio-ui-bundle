@@ -32,7 +32,7 @@ export type GetWorkflowsDetailsApiArg = {
     /** ID of the element */
     elementId: number;
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
+    elementType: "asset" | "document" | "data-object";
 };
 export type SubmitWorkflowActionApiResponse =
     /** status 200 Json encoded name of workflow, name and type of submitted action */ {

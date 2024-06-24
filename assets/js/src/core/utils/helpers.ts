@@ -22,3 +22,13 @@ export function onKeyEnterExecuteClick (e: any): void {
 export function isSet (par: any): boolean {
   return par !== null && par !== undefined
 }
+
+export function formatDate (unix: number): string {
+  const date = new Date(unix * 1000)
+  return date.toISOString().slice(0, 10)
+}
+
+export function formatDateTime (unix: number): string {
+  const date = new Date(unix * 1000)
+  return date.toISOString().slice(0, 10) + ' ' + date.toTimeString().slice(0, 5)
+}

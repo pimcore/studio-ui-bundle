@@ -81,6 +81,27 @@ login-form.login: Login
 login-form-additional-logins.or: or
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
+version.versions: Versions
+version.version: Version
+version.publish: Publish
+version.published: Published
+version.schedule-for: Scheduled for
+version.note: Note
+version.own-draft: Own Draft
+version.compare-versions: Compare Versions
+version.fileName: Name
+version.dimensions: Dimensions
+version.creationDate: Creation Date
+version.modificationDate: Modification Date
+version.fileSize: File Size
+version.mimeType: Mime Type
+version.additionalAttributes: Additional Attributes
+version.image: Image
+aria.version.delete: Delete version
+aria.version.expand: Expand version
+clear-all: Clear all
+by: By
+field: Field
 asset.asset-editor-tabs.schedule.headline: Schedule
 asset.asset-editor-tabs.schedule.columns.date: Date
 asset.asset-editor-tabs.schedule.columns.time: Time
