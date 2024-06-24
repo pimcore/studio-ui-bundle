@@ -68,7 +68,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
         type: 'version-id-select',
         editable: true
       },
-      size: 80
+      size: 220
     }),
     columnHelper.accessor('active', {
       header: t('asset.asset-editor-tabs.schedule.columns.active'),

@@ -19,6 +19,7 @@ import { type RefSelectProps, Result, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { DownOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
@@ -55,7 +56,9 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
       return (
         <div className={ 'pseudo-select' }>
           { props.getValue() !== null
-            ? props.getValue()
+            ? `${props.row.original.id} | 
+               ${formatDate(props.row.original.date as number)} 
+               (${props.row.original?.username ?? 'not found'})`
             : t('asset.asset-editor-tabs.schedule.select-a-version')
           }
           <DownOutlined />
@@ -73,6 +76,18 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
       }
     }
 
+    function formatDate (timestamp: number): string {
+      return i18n.format(
+        new Date(timestamp * 1000),
+        'datetime',
+        i18n.language,
+        {
+          dateStyle: 'short',
+          timeStyle: 'short'
+        }
+      )
+    }
+
     let selectOptions: Version[] = []
     if (!isLoading && data !== undefined) {
       selectOptions = data.items
@@ -80,7 +95,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     const formattedSelectOptions = selectOptions.map((value: Version) => {
       return {
         value: String(value.id),
-        label: value.id
+        label: `${value.id} | ${formatDate(value.date)} (${value.user.name ?? 'not found'})`
       }
     })
 
