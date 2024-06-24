@@ -67,6 +67,9 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
         onChange={ (date: Dayjs) => {
           saveValue(date.unix())
         } }
+        disabledDate={ (current: Dayjs) => {
+          return current < dayjs().subtract(1, 'day')
+        }}
         onKeyDown={ onKeyDown }
         open={ open }
         ref={ datePickerRef }
