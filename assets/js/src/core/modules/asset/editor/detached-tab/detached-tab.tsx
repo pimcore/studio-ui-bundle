@@ -12,15 +12,23 @@
 */
 
 import React from 'react'
+import { useGlobalAssetContext } from '../../hooks/use-global-asset-context'
+import { AssetProvider } from '../../asset-provider'
 
 interface IDetachedTabProps {
   children: React.ReactNode
 }
 
 export const DetachedTab = ({ children }: IDetachedTabProps): React.JSX.Element => {
+  const { context } = useGlobalAssetContext()
+
+  if (context === undefined) {
+    return <div>Missing context</div>
+  }
+
   return (
-    <>
+    <AssetProvider id={ context.config.id }>
       {children}
-    </>
+    </AssetProvider>
   )
 }

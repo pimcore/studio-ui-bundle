@@ -39,7 +39,8 @@ moduleSystem.registerModule({
           config.table.options.meta.onUpdateCellData({
             rowIndex: parseInt(config.row.id),
             columnId: config.column.id,
-            value
+            value,
+            rowData: config.row.original
           })
         }
       }

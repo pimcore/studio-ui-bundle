@@ -69,6 +69,8 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   const Component = definition.component
 
+  console.log({ id })
+
   return (
     <AssetProvider id={ id }>
       <Component />

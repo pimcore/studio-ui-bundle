@@ -15,14 +15,15 @@ import {
   type DataProperty,
   useGetPropertiesForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/properties-api-slice.gen'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Button, Checkbox, Result } from 'antd'
+import { Button, Checkbox } from 'antd'
 import { useStyles } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -34,31 +35,35 @@ type DataPropertyWithActions = DataProperty & {
 
 export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { context } = useGlobalAssetContext()
   const { styles } = useStyles()
-
-  if (context === undefined) {
-    return <Result title="Missing context" />
-  }
+  const { id } = useContext(AssetContext)
+  const { properties, setProperties, updateProperty } = useAssetDraft(id!)
 
   const { data, isLoading } = useGetPropertiesForElementByTypeAndIdQuery({
     elementType: 'asset',
-    id: context?.config.id
+    id: id!
   })
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
+
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items)) {
-      setGridDataOwn(data?.items.filter((item) => {
+    if (data !== undefined && Array.isArray(data.items) && properties === undefined) {
+      setProperties(data?.items)
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (properties !== undefined) {
+      setGridDataOwn(properties.filter((item) => {
         return !item.inherited
       }))
 
-      setGridDataInherited(data?.items.filter((item) => {
+      setGridDataInherited(properties.filter((item) => {
         return item.inherited
       }))
     }
-  }, [data])
+  }, [properties])
 
   const columnHelper = createColumnHelper<DataPropertyWithActions>()
   const baseColumns = [
@@ -138,8 +143,32 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     ...baseColumns
   ]
 
-  function onUpdateCellData ({ rowIndex, columnId, value }): void {
-    console.log('triggered onUpdateCellData!', value)
+  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+    if (columnId === 'properties-table--data-column') {
+      const updatedProperties = [...(properties ?? [])]
+      const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
+
+      propertyToUpdate.data = value
+
+      updateProperty(propertyToUpdate)
+    };
+  }
+
+  function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
+    const modifiedCells: Array<{ rowIndex: number, columnId: string }> = []
+
+    data?.items!.forEach((item, index) => {
+      gridDataOwn.forEach((property, propertyIndex) => {
+        if (property.key === item.key && property.data !== item.data) {
+          modifiedCells.push({
+            rowIndex: propertyIndex,
+            columnId: 'properties-table--data-column'
+          })
+        }
+      })
+    })
+
+    return modifiedCells
   }
 
   return (
@@ -154,6 +183,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
             <Grid
               columns={ ownTableColumns }
               data={ gridDataOwn }
+              modifiedCells={ getModifiedCells() }
               onUpdateCellData={ onUpdateCellData }
             />
           )}

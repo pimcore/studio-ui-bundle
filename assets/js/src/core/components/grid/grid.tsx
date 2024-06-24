@@ -28,7 +28,7 @@ declare module '@tanstack/react-table' {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface TableMeta<TData extends RowData> {
-    onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
+    onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData }) => void
   }
 }
 
