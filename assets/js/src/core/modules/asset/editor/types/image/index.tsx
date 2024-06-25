@@ -80,6 +80,14 @@ moduleSystem.registerModule({
     })
 
     imageEditorTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
+    })
+
+    imageEditorTabManager.register({
       key: 'versions',
       label: 'asset.asset-editor-tabs.versions',
       children: <VersionsTabContainer />,
@@ -121,14 +129,6 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
       icon: <Icon name={ 'workflow' } />,
-      isDetachable: true
-    })
-
-    imageEditorTabManager.register({
-      key: 'properties',
-      label: 'asset.asset-editor-tabs.properties.text',
-      children: <PropertiesContainer />,
-      icon: <Icon name={ 'settings2' } />,
       isDetachable: true
     })
 
