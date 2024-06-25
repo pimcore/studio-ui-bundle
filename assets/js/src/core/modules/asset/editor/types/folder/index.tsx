@@ -22,6 +22,9 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import { LinkContainer } from './tab-manager/tabs/list/grid-columns/link/link-container'
+import {
+  PropertiesContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -39,6 +42,14 @@ moduleSystem.registerModule({
       icon: <Icon name={ 'unordered-list-outlined' } />,
       key: 'list',
       label: 'folder.folder-editor-tabs.view'
+    })
+
+    folderEditorTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
     })
 
     const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
