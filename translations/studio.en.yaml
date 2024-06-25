@@ -97,6 +97,7 @@ version.fileSize: File Size
 version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
 version.image: Image
+version.no-versions-available: No versions available
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
