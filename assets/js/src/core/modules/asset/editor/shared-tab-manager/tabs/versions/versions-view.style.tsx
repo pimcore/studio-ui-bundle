@@ -18,47 +18,54 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     versions: css`
-      display: flex;
-      flex-direction: row;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
- 
-      & .left-side {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-        
+        flex-direction: row;
         height: 100%;
-        width: ${versionToken.versionsLeftSideWidth}px;
-      }
-
-      & .left-side > .flexbox-start-end {
         width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: ${versionToken.paddingSM}px;
-      }
+        overflow: hidden;
 
-      .version-label {
-        margin-right: ${versionToken.marginXS}px;
-      }
+        & .left-side {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+
+            height: 100%;
+            width: ${versionToken.versionsLeftSideWidth}px;
+        }
+
+        & .left-side > .flexbox-start-end {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: ${versionToken.paddingSM}px;
+        }
+
+        .version-label {
+
+            font-weight: 600;
+            color: ${token.colorPrimary};
+            margin: 0 8px 0 0;
+
+            &:hover {
+                color: ${token.colorPrimaryHover};
+            }
+        }
 
 
-      & .ant-btn-icon {
-        vertical-align: text-bottom;
-      }
-      
-      & .compare-button {
-        background-color: ${versionToken.colorFillAlter};
-      }
+        & .ant-btn-icon {
+            vertical-align: text-bottom;
+        }
 
-      .version__no-version-found {
-        display: flex;
-        padding: ${versionToken.paddingSM}px;
-        margin: 0;
-      }
+        & .compare-button {
+            background-color: ${versionToken.colorFillAlter};
+        }
+
+        .version__no-version-found {
+            display: flex;
+            padding: ${versionToken.paddingSM}px;
+            margin: 0;
+        }
     `
   }
 }, { hashPriority: 'low' })
