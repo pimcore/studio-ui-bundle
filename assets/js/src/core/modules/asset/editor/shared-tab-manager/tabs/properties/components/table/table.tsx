@@ -21,7 +21,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Button, Checkbox, Result } from 'antd'
-import { useStyles } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table.styles'
+import { useStyles } from './table.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 interface ITableProps {

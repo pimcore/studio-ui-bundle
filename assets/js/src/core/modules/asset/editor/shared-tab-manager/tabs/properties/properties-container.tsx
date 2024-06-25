@@ -14,13 +14,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Divider, Result, Segmented, Select } from 'antd'
-import { useStyle } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container.styles'
+import { useStyle } from './properties-container.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Table } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { useGetPropertiesQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import Input from 'antd/es/input/Input'
+import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()

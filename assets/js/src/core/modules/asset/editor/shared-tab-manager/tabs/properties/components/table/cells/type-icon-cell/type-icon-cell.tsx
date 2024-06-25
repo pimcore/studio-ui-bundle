@@ -14,9 +14,7 @@
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  useStyles
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell.styles'
+import { useStyles } from './type-icon-cell.styles'
 
 export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyles()
