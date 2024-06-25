@@ -56,9 +56,12 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
       return (
         <div className={ 'pseudo-select' }>
           { props.getValue() !== null
-            ? `${props.row.original.id} | 
-               ${formatDate(props.row.original.date as number)} 
-               (${props.row.original?.username ?? 'not found'})`
+            ? (
+              <div className={ 'pseudo-select__content' }>
+                <p>{formatDate(props.row.original.date as number)}</p>
+                <p>{props.row.original.id} | ({props.row.original.username ?? 'not found'})</p>
+              </div>
+              )
             : t('asset.asset-editor-tabs.schedule.select-a-version')
           }
           <DownOutlined />
@@ -95,7 +98,12 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     const formattedSelectOptions = selectOptions.map((value: Version) => {
       return {
         value: String(value.id),
-        label: `${value.id} | ${formatDate(value.date)} (${value.user.name ?? 'not found'})`
+        label: (
+          <div className={ 'version-id__select__label' }>
+            <p>{formatDate(value.date)}</p>
+            <p>{value.id} | ({value.user.name ?? 'not found'})</p>
+          </div>
+        )
       }
     })
 
