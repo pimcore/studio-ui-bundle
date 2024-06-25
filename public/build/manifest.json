@@ -626,5 +626,11 @@
   "build/../../assets/dist/build/types/test-utils/jest-setup.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/test-utils/jest-setup.d.ts.map",
   "build/../../assets/dist/build/types/src/core/modules/icon-library/index.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/src/core/modules/icon-library/index.d.ts.map",
   "build/../../assets/dist/build/types/src/core/components/grid/index.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/src/core/components/grid/index.d.ts.map",
-  "build/../../assets/dist/build/types/src/core/modules/example/index.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/src/core/modules/example/index.d.ts.map"
+  "build/../../assets/dist/build/types/src/core/modules/example/index.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/src/core/modules/example/index.d.ts.map",
+  "build/vendors-node_modules_ant-design_icons_es_icons_DeleteOutlined_js-node_modules_ant-design_icon-85cde3.css": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_DeleteOutlined_js-node_modules_ant-design_icon-85cde3.css",
+  "build/vendors-node_modules_ant-design_icons_es_icons_DeleteOutlined_js-node_modules_ant-design_icon-85cde3.js": "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_DeleteOutlined_js-node_modules_ant-design_icon-85cde3.js",
+  "build/../../assets/dist/build/types/src/core/utils/hooks/use-click-outside.d.ts": "http://localhost:3030/build/../../assets/dist/build/types/src/core/utils/hooks/use-click-outside.d.ts",
+  "build/../../assets/dist/build/types/src/core/app/config/date-time.d.ts": "http://localhost:3030/build/../../assets/dist/build/types/src/core/app/config/date-time.d.ts",
+  "build/../../assets/dist/build/types/src/core/utils/hooks/use-click-outside.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/src/core/utils/hooks/use-click-outside.d.ts.map",
+  "build/../../assets/dist/build/types/src/core/app/config/date-time.d.ts.map": "http://localhost:3030/build/../../assets/dist/build/types/src/core/app/config/date-time.d.ts.map"
 }
