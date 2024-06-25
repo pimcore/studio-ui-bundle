@@ -13,7 +13,7 @@
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { useGetAssetByIdQuery } from '../asset-api-slice.gen'
-import { addPropertyToAsset, assetReceived, removePropertyFromAsset, selectAssetById, setPropertiesForAsset, updatePropertyForAsset } from '../asset-draft-slice'
+import { addPropertyToAsset, assetReceived, removeAsset, removePropertyFromAsset, selectAssetById, setPropertiesForAsset, updatePropertyForAsset } from '../asset-draft-slice'
 import { useEffect } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
 
@@ -26,6 +26,7 @@ interface UseAssetDraftReturn {
   addProperty: (property: DataProperty) => void
   removeProperty: (property: DataProperty) => void
   setProperties: (properties: DataProperty[]) => void
+  removeAssetFromState: () => void
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
@@ -34,13 +35,17 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const asset = useAppSelector(state => selectAssetById(state, id))
   const properties = asset?.properties
 
-  console.log({ asset, properties })
-
   useEffect(() => {
     if (data !== undefined && asset === undefined) {
-      dispatch(assetReceived({ ...data, id }))
+      dispatch(assetReceived({ ...data, id, modified: false, properties: [], changes: {} }))
     }
   }, [data])
+
+  function removeAssetFromState (): void {
+    if (asset === undefined) return
+
+    dispatch(removeAsset(asset.id))
+  }
 
   function updateProperty (property): void {
     dispatch(updatePropertyForAsset({ assetId: id, property }))
@@ -58,5 +63,5 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setPropertiesForAsset({ assetId: id, properties }))
   };
 
-  return { isLoading, isError, asset, properties, updateProperty, addProperty, removeProperty, setProperties }
+  return { isLoading, isError, asset, properties, updateProperty, addProperty, removeProperty, setProperties, removeAssetFromState }
 }

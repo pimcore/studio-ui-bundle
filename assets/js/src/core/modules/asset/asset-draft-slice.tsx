@@ -22,14 +22,16 @@ interface propertyAction {
 }
 
 export interface AssetDraft extends Asset {
-  properties?: DataProperty[]
+  properties: DataProperty[]
+  modified: boolean
+  changes: Record<string, any>
 }
 
 export const assetsAdapter = createEntityAdapter<AssetDraft>({})
 
 export const slice = createSlice({
   name: 'asset-draft',
-  initialState: assetsAdapter.getInitialState(),
+  initialState: assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }),
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
 
@@ -38,6 +40,13 @@ export const slice = createSlice({
 
       if (asset !== undefined) {
         asset.properties = [...(asset.properties ?? []), action.payload.property]
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          properties: true
+        }
       }
 
       state.entities[action.payload.assetId] = asset
@@ -49,6 +58,13 @@ export const slice = createSlice({
       if (asset !== undefined) {
         asset.properties = (asset.properties ?? []).filter(property => property.key !== action
           .payload.property.key)
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          properties: true
+        }
       }
 
       state.entities[action.payload.assetId] = asset
@@ -57,11 +73,16 @@ export const slice = createSlice({
     updatePropertyForAsset: (state, action: PayloadAction<propertyAction>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
-      console.log({ asset, action })
-
       if (asset !== undefined) {
         asset.properties = (asset.properties ?? []).map(property => {
           if (property.key === action.payload.property.key) {
+            asset.modified = true
+
+            asset.changes = {
+              ...asset.changes,
+              properties: true
+            }
+
             return action.payload.property
           }
 
@@ -80,11 +101,51 @@ export const slice = createSlice({
       }
 
       state.entities[action.payload.assetId] = asset
+    },
+
+    setChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.changes = action.payload.changes
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    resetChanges (state, action: PayloadAction<number>): void {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload) }
+
+      if (asset !== undefined) {
+        asset.changes = {}
+      }
+
+      state.entities[action.payload] = asset
+    },
+
+    removeAsset (state, action: PayloadAction<number>): void {
+      assetsAdapter.removeOne(state, action.payload)
+    },
+
+    resetAsset (state, action: PayloadAction<number>): void {
+      if (state.entities[action.payload] !== undefined) {
+        state.entities[action.payload] = assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }).entities[action.payload]
+      }
+    },
+
+    addChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.changes = { ...asset.changes, ...action.payload.changes }
+      }
+
+      state.entities[action.payload.assetId] = asset
     }
   }
 })
 
 injectSliceWithState(slice)
 
-export const { assetReceived, addPropertyToAsset, removePropertyFromAsset, setPropertiesForAsset, updatePropertyForAsset } = slice.actions
+export const { assetReceived, addPropertyToAsset, removePropertyFromAsset, setPropertiesForAsset, updatePropertyForAsset, addChanges, removeAsset, resetAsset, resetChanges, setChanges } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])

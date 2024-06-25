@@ -26,7 +26,7 @@ export interface EditorContainerProps {
 
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, asset } = useAssetDraft(id)
+  const { isLoading, isError, asset, removeAssetFromState } = useAssetDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
   const componentRegistryService = useInjection<ComponentRegistry>(serviceIds['Asset/Editor/ComponentRegistry'])
@@ -34,6 +34,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   useEffect(() => {
     return () => {
       removeContext()
+      removeAssetFromState()
     }
   }, [])
 
@@ -68,8 +69,6 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   }
 
   const Component = definition.component
-
-  console.log({ id })
 
   return (
     <AssetProvider id={ id }>

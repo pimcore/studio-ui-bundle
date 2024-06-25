@@ -38,6 +38,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
   const { properties, setProperties, updateProperty } = useAssetDraft(id!)
+  const arePropertiesAvailable = properties !== undefined && properties.length > 0
 
   const { data, isLoading } = useGetPropertiesForElementByTypeAndIdQuery({
     elementType: 'asset',
@@ -48,13 +49,13 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
 
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items) && properties === undefined) {
+    if (data !== undefined && Array.isArray(data.items) && !arePropertiesAvailable) {
       setProperties(data?.items)
     }
   }, [data])
 
   useEffect(() => {
-    if (properties !== undefined) {
+    if (arePropertiesAvailable) {
       setGridDataOwn(properties.filter((item) => {
         return !item.inherited
       }))

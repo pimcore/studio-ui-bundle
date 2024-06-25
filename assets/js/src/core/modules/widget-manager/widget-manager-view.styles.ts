@@ -106,6 +106,10 @@ export const useStlyes = createStyles(({ token, css }) => {
             color: ${tabToken.itemActiveColor};
             background: ${token.colorBgContainer};
             border-top: 2px solid ${token.Tabs.colorBorderActiveTab};
+
+            .widget-manager__tab-title-close-button {
+              display: block;
+            }
   
             .widget-manager-tab-title {
               margin-top: -2px;
@@ -114,11 +118,11 @@ export const useStlyes = createStyles(({ token, css }) => {
             &:hover {
               background: ${token.colorBgContainer};
             }
-  
-            & .flexlayout__tab_button_trailing {
-              margin-top: -2px;
-              display: flex;
-            }
+          }
+
+          .flexlayout__tab_button_trailing {
+            margin-top: -2px;
+            display: none;
           }
   
           &:focus:not(:focus-visible), &:active {
@@ -256,6 +260,16 @@ export const useStlyes = createStyles(({ token, css }) => {
   
         .flexlayout__border_toolbar {
           display: none;
+        }
+
+        .widget-manager__tab-title-close-button {
+          display: none;
+          width: 12px;
+          height: 12px;
+          padding: 4px;
+          line-height: 0;
+          margin-top: -8px;
+          color: ${token.colorIcon};
         }
       `
   }
