@@ -53,6 +53,12 @@ export const useStyles = createStyles(({ token, css }) => {
       & .compare-button {
         background-color: ${versionToken.colorFillAlter};
       }
+
+      .version__no-version-found {
+        display: flex;
+        padding: ${versionToken.paddingSM}px;
+        margin: 0;
+      }
     `
   }
 }, { hashPriority: 'low' })
