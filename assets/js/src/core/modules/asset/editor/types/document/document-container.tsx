@@ -38,16 +38,6 @@ const DocumentContainer = (): React.JSX.Element => {
                 iconName: 'refresh',
                 label: i18n.t('toolbar.reload'),
                 pinning: true
-              },
-              {
-                iconName: 'target',
-                label: i18n.t('toolbar.locate-in-tree'),
-                pinning: true
-              },
-              {
-                iconName: 'info-circle-outlined',
-                label: i18n.t('toolbar.copy-id'),
-                pinning: true
               }
             ]
           }

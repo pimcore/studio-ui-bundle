@@ -19,8 +19,6 @@ asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
 toolbar.reload: Reload
-toolbar.locate-in-tree: Locate in Tree
-toolbar.copy-id: Copy ID
 toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
