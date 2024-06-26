@@ -19,7 +19,7 @@
 
     <body>
         <div id="app" data-app-config="{{ {
-            baseUrl: '/admin/studio/'
+            baseUrl: baseUrl ~ '/'
         }|json_encode }}"></div>
 
         {% for jsFile in studioJsFiles %}

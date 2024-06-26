@@ -36,6 +36,13 @@ class Configuration implements ConfigurationInterface
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
 
+        $treeBuilder
+            ->getRootNode()
+            ->children()
+                ->scalarNode('url_path')
+                ->defaultValue('/pimcore-studio')
+            ->end();
+
         return $treeBuilder;
     }
 }
