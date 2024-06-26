@@ -38,6 +38,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
       filterEndpoints: [/schedule/i]
+    },
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
+      filterEndpoints: [/note/i]
     }
   },
   exportName: 'api',

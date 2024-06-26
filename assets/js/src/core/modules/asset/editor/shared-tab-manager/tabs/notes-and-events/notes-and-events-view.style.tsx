@@ -1,0 +1,70 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import { createStyles } from 'antd-style'
+
+export const useStyles = createStyles(({ token, css }) => {
+  const notesAndEventsToken = { notesContainerWidth: '637', ...token }
+
+  return {
+    'notes-and-events': css`
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+ 
+      & .notes-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        
+        height: 100%;
+        width: ${notesAndEventsToken.notesContainerWidth}px;
+      }
+      
+      & .notes-container__header {
+        padding: ${token.paddingXS}px ${notesAndEventsToken.paddingSM}px;
+
+        display: flex;
+        align-items: center;
+        gap: ${notesAndEventsToken.paddingSM}px;
+      }
+      
+      & .notes-container__text {
+        color: ${token.colorPrimary};
+        margin: 0;
+      }
+      
+      & .notes-container__details {
+        width: 100%;
+        padding: 0 ${token.paddingXS}px;
+      }
+      
+      & .notes-card {
+        margin-bottom: ${token.marginXS}px;
+      }
+
+      & .notes-container > .notes-container__text {
+        color: ${token.colorText};
+      }
+
+      .notes-container__header > button {
+        display: flex;
+        align-items: center;
+        line-height: 24px;
+      }
+      
+    `
+  }
+}, { hashPriority: 'low' })

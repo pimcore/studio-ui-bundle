@@ -77,8 +77,12 @@ export const useStyle = createStyles(({ token, css }) => {
         color: ${cardToken.colorPrimary};
       }
       
-      & .card-body__description, & .card-body__details {
+      & .card-body__description {
         padding-bottom: ${cardToken.paddingSM}px;
+      }
+
+      & .card-body__details {
+        padding-bottom: ${cardToken.paddingXS}px;
       }
     `
   }

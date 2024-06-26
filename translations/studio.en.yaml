@@ -120,6 +120,9 @@ asset.asset-editor-tabs.schedule.select-an-action: Action
 asset.asset-editor-tabs.schedule.select-a-version: Version
 asset.asset-editor-tabs.schedule.archived: Archived
 asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
+notes-and-events.notes-and-events: Notes & Events
+notes-and-events.details: Details
 notes-and-events.name: name
 notes-and-events.type: type
 notes-and-events.value: value
+add: Add
