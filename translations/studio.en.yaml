@@ -84,3 +84,42 @@ aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 save-success: Successfully saved
+version.versions: Versions
+version.version: Version
+version.publish: Publish
+version.published: Published
+version.schedule-for: Scheduled for
+version.note: Note
+version.own-draft: Own Draft
+version.compare-versions: Compare Versions
+version.fileName: Name
+version.dimensions: Dimensions
+version.creationDate: Creation Date
+version.modificationDate: Modification Date
+version.fileSize: File Size
+version.mimeType: Mime Type
+version.additionalAttributes: Additional Attributes
+version.image: Image
+aria.version.delete: Delete version
+aria.version.expand: Expand version
+clear-all: Clear all
+by: By
+field: Field
+asset.asset-editor-tabs.schedule.headline: Schedule
+asset.asset-editor-tabs.schedule.columns.date: Date
+asset.asset-editor-tabs.schedule.columns.time: Time
+asset.asset-editor-tabs.schedule.columns.action: Action
+asset.asset-editor-tabs.schedule.columns.version: Version
+asset.asset-editor-tabs.schedule.columns.active: Active
+asset.asset-editor-tabs.schedule.columns.actions: Delete
+asset.asset-editor-tabs.schedule.upcoming: Upcoming
+asset.asset-editor-tabs.schedule.all: All scheduled (upcoming & archive)
+asset.asset-editor-tabs.schedule.toolbar.filters.active-switch: Active only
+asset.asset-editor-tabs.schedule.toolbar.add: Add
+asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
+asset.asset-editor-tabs.schedule.version.delete: Delete version
+asset.asset-editor-tabs.schedule.version.publish: Publish version
+asset.asset-editor-tabs.schedule.select-an-action: Action
+asset.asset-editor-tabs.schedule.select-a-version: Version
+asset.asset-editor-tabs.schedule.archived: Archived
+asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all

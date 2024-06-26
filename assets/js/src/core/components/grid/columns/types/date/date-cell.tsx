@@ -11,14 +11,75 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { type DefaultCellProps } from '../../default-cell'
 import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
+import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import type { PickerRef } from 'rc-picker'
+import { DatePicker } from 'antd'
+import type { Dayjs } from 'dayjs'
+
+import dayjs from 'dayjs'
 
 export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
+  const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
+  const [open, setOpen] = useState<boolean>(false)
+  const [value, setValue] = useState<number>(Number(props.getValue()))
+  const datePickerRef = useRef<PickerRef>(null)
+  const dateFormat = 'YYYY-MM-DD'
+
+  useEffect(() => {
+    if (isInEditMode) {
+      setOpen(true)
+      datePickerRef.current?.focus()
+    }
+  }, [isInEditMode])
+
+  function saveValue (value: number): void {
+    setValue(value)
+    fireOnUpdateCellDataEvent(String(value))
+    disableEditMode()
+  }
+
+  function getCellContent (): React.JSX.Element {
+    if (!isInEditMode) {
+      return (
+        <FormattedDate timestamp={ value } />
+      )
+    }
+
+    function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
+      // saveValue(e.target.value)
+    }
+
+    function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        disableEditMode()
+      }
+    }
+
+    return (
+      <DatePicker
+        defaultValue={ dayjs.unix(value) }
+        disabledDate={ (current: Dayjs) => {
+          return current < dayjs().subtract(1, 'day')
+        } }
+        format={ dateFormat }
+        needConfirm
+        onBlur={ onBlur }
+        onChange={ (date: Dayjs) => {
+          saveValue(date.unix())
+        } }
+        onKeyDown={ onKeyDown }
+        open={ open }
+        ref={ datePickerRef }
+      />
+    )
+  }
+
   return (
     <div className={ ['default-cell__content'].join(' ') }>
-      <FormattedDate timestamp={ props.getValue() * 1000 } />
+      {getCellContent()}
     </div>
   )
 }

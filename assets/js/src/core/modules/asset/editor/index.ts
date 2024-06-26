@@ -29,6 +29,13 @@ import { VideoContainer } from '@Pimcore/modules/asset/editor/types/video/video-
 import { TextContainer } from '@Pimcore/modules/asset/editor/types/text/text-container'
 import { DocumentContainer } from '@Pimcore/modules/asset/editor/types/document/document-container'
 import { TitleContainer } from './title/title-container'
+import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
+import {
+  VersionIdCell
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/version-id-cell/version-id-cell'
+import {
+  ActionsCell
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/actions-cell/actions-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -70,6 +77,18 @@ moduleSystem.registerModule({
       name: 'asset-editor',
       component: EditorContainer,
       titleComponent: TitleContainer
+    })
+
+    const typeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
+
+    typeRegistry.registerType({
+      type: 'version-id-select',
+      component: VersionIdCell
+    })
+
+    typeRegistry.registerType({
+      type: 'schedule-actions-select',
+      component: ActionsCell
     })
   }
 })

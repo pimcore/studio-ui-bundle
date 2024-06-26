@@ -20,8 +20,8 @@ import {
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
-import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions-container'
-import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule-container'
+import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
+import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
 import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies-container'
 import {
   NotesAndEventsTabContainer
@@ -35,14 +35,16 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
-import { PropertiesContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container'
 import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import {
+  PropertiesContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
+import {
   ValueCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
 import {
   TypeIconCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -78,17 +80,27 @@ moduleSystem.registerModule({
     })
 
     imageEditorTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
+    })
+
+    imageEditorTabManager.register({
       key: 'versions',
       label: 'asset.asset-editor-tabs.versions',
       children: <VersionsTabContainer />,
-      icon: <Icon name={ 'history-outlined' } />
+      icon: <Icon name={ 'history-outlined' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
       key: 'schedule',
       label: 'asset.asset-editor-tabs.schedule',
       children: <ScheduleTabContainer />,
-      icon: <Icon name={ 'schedule-outlined' } />
+      icon: <Icon name={ 'schedule-outlined' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
@@ -117,14 +129,6 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
       icon: <Icon name={ 'workflow' } />,
-      isDetachable: true
-    })
-
-    imageEditorTabManager.register({
-      key: 'properties',
-      label: 'asset.asset-editor-tabs.properties.text',
-      children: <PropertiesContainer />,
-      icon: <Icon name={ 'settings2' } />,
       isDetachable: true
     })
 
