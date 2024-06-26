@@ -67,7 +67,7 @@ export const ElementToolbar = (): React.JSX.Element => {
 
   return (
     <div className={ styles.toolbar }>
-      <Breadcrumb path={ '/Car Images/mercedes/m600/blue/red/1961_Mercedes_Benz_190_SL_-_silver_-_rvr.jpg' } />
+      <Breadcrumb path={ data.fullPath! } />
 
       <div className={ 'element-toolbar__info-dropdown' }>
         <Dropdown menu={ { items } }>
