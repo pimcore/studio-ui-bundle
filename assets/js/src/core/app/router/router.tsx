@@ -20,12 +20,12 @@ import { appConfig } from '../config/app-config'
 let baseUrl = appConfig.baseUrl
 
 if (baseUrl.endsWith('/')) {
-  baseUrl = baseUrl.slice(0, -1)
+  baseUrl = baseUrl.slice(0, -1) + '/'
 }
 
 export const routes = {
   root: baseUrl,
-  login: `${baseUrl}/login`
+  login: `${baseUrl}/login/`
 }
 
 export const router = createBrowserRouter([
