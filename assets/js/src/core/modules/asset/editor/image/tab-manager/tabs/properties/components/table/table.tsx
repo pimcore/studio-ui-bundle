@@ -49,7 +49,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
 
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items) && !arePropertiesAvailable) {
+    if (data !== undefined && Array.isArray(data.items)) {
       setProperties(data?.items)
     }
   }, [data])

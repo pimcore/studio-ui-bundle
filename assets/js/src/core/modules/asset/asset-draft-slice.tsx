@@ -118,6 +118,7 @@ export const slice = createSlice({
 
       if (asset !== undefined) {
         asset.changes = {}
+        asset.modified = false
       }
 
       state.entities[action.payload] = asset

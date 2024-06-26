@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Properties"] as const;
+export const addTagTypes = ["Assets"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -11,14 +11,14 @@ const injectedRtkApi = api
                     url: `/studio/api/properties`,
                     params: { elementType: queryArg.elementType, filter: queryArg.filter },
                 }),
-                providesTags: ["Properties"],
+                providesTags: ["Assets"],
             }),
             getPropertiesForElementByTypeAndId: build.query<
                 GetPropertiesForElementByTypeAndIdApiResponse,
                 GetPropertiesForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
-                providesTags: ["Properties"],
+                providesTags: ["Assets"],
             }),
         }),
         overrideExisting: false,
@@ -30,7 +30,7 @@ export type GetPropertiesApiResponse =
     };
 export type GetPropertiesApiArg = {
     /** Filter elements by matching element type. */
-    elementType?: "asset" | "document" | "dataObject";
+    elementType?: "asset" | "document" | "data-object";
     /** Filter for properties */
     filter?: string;
 };
@@ -39,8 +39,8 @@ export type GetPropertiesForElementByTypeAndIdApiResponse = /** status 200 Eleme
 };
 export type GetPropertiesForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
-    /** ID of the element */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the element */
     id: number;
 };
 export type PredefinedProperty = {

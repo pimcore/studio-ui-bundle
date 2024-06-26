@@ -13,7 +13,7 @@
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { useGetAssetByIdQuery } from '../asset-api-slice.gen'
-import { addPropertyToAsset, assetReceived, removeAsset, removePropertyFromAsset, selectAssetById, setPropertiesForAsset, updatePropertyForAsset } from '../asset-draft-slice'
+import { addPropertyToAsset, assetReceived, removeAsset, resetChanges, removePropertyFromAsset, selectAssetById, setPropertiesForAsset, updatePropertyForAsset } from '../asset-draft-slice'
 import { useEffect } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
 
@@ -27,6 +27,7 @@ interface UseAssetDraftReturn {
   removeProperty: (property: DataProperty) => void
   setProperties: (properties: DataProperty[]) => void
   removeAssetFromState: () => void
+  removeTrackedChanges: () => void
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
@@ -63,5 +64,9 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setPropertiesForAsset({ assetId: id, properties }))
   };
 
-  return { isLoading, isError, asset, properties, updateProperty, addProperty, removeProperty, setProperties, removeAssetFromState }
+  function removeTrackedChanges (): void {
+    dispatch(resetChanges(id))
+  }
+
+  return { isLoading, isError, asset, properties, updateProperty, addProperty, removeProperty, setProperties, removeAssetFromState, removeTrackedChanges }
 }

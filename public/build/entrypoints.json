@@ -1,13 +1,8 @@
 {
   "entrypoints": {
     "main": {
-      "css": [
-        "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_EyeInvisibleOutlined_js-node_modules_ant-desig-1e018a.css",
-        "http://localhost:3030/build/main.css"
-      ],
       "js": [
-        "http://localhost:3030/build/vendors-node_modules_ant-design_icons_es_icons_EyeInvisibleOutlined_js-node_modules_ant-desig-1e018a.js",
-        "http://localhost:3030/build/main.js"
+        "/bundles/pimcorestudioui/build/main.b7052a54.js"
       ]
     }
   }

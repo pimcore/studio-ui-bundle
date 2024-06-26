@@ -11,20 +11,30 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
 import { type UpdateAssetByIdApiArg, useUpdateAssetByIdMutation } from '../../asset-api-slice.gen'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, properties } = useAssetDraft(id!)
+  const { asset, properties, removeTrackedChanges } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
-  const [saveAsset, { isLoading }] = useUpdateAssetByIdMutation()
+  const [saveAsset, { isLoading, isSuccess }] = useUpdateAssetByIdMutation()
+  const messageApi = useMessage()
+
+  useEffect(() => {
+    if (isSuccess) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success(t('save-success'))
+      removeTrackedChanges()
+    }
+  }, [isSuccess])
 
   return (
     <ToolbarView
@@ -56,10 +66,19 @@ export const Toolbar = (): React.JSX.Element => {
 
     const update: UpdateAssetByIdApiArg['body']['data'] = {}
     if (asset.changes.properties === true) {
-      update.properties = properties
-    }
+      const propertyUpdate = properties?.map((property) => {
+        if (typeof property.data === 'object') {
+          return {
+            ...property,
+            data: property.data.id
+          }
+        }
 
-    update.parentId = asset.parentId
+        return property
+      })
+
+      update.properties = propertyUpdate
+    }
 
     const savePromise = saveAsset({
       id: id!,
