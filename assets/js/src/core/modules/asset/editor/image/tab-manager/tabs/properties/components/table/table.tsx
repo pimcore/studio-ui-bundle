@@ -12,8 +12,7 @@
 */
 
 import {
-  type DataProperty,
-  useGetPropertiesForElementByTypeAndIdQuery
+  type DataProperty
 } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -24,6 +23,7 @@ import { useStyles } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { useGetPropertiesForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
 
 interface ITableProps {
   propertiesTableTab: string

@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets"] as const;
+export const addTagTypes = ["Properties"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -11,14 +11,14 @@ const injectedRtkApi = api
                     url: `/studio/api/properties`,
                     params: { elementType: queryArg.elementType, filter: queryArg.filter },
                 }),
-                providesTags: ["Assets"],
+                providesTags: ["Properties"],
             }),
             getPropertiesForElementByTypeAndId: build.query<
                 GetPropertiesForElementByTypeAndIdApiResponse,
                 GetPropertiesForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
-                providesTags: ["Assets"],
+                providesTags: ["Properties"],
             }),
         }),
         overrideExisting: false,
