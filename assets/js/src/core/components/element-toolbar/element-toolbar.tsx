@@ -79,7 +79,11 @@ export const ElementToolbar = (): React.JSX.Element => {
               />
             }
             iconPosition="end"
-            onClick={ () => { console.log('click') } }
+            onClick={ () => {
+              void navigator.clipboard.writeText(
+                data.id.toString()
+              )
+            } }
             size="small"
           >
             <Space>
