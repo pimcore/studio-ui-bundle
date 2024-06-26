@@ -25,7 +25,7 @@ if (baseUrl.endsWith('/')) {
 
 export const routes = {
   root: baseUrl,
-  login: `${baseUrl}/login/`
+  login: `${baseUrl}login/`
 }
 
 export const router = createBrowserRouter([
