@@ -32,7 +32,8 @@ export const useEditMode = (props: DefaultCellProps): EditModeHookReturnType => 
     props.table.options.meta?.onUpdateCellData!({
       rowIndex: props.row.index,
       columnId: props.column.id,
-      value
+      value,
+      rowData: props.row.original
     })
   }
 

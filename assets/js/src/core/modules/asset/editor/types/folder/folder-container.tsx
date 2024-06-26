@@ -13,13 +13,11 @@
 
 import React from 'react'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import i18n from '@Pimcore/app/i18n'
-import { Button } from 'antd'
 import { TabsContainer } from '../../shared-tab-manager/tabs-container'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { type FolderTabManager } from './tab-manager/folder-tab-manager'
+import { Toolbar } from '../../toolbar/toolbar'
 
 const FolderContainer = (): React.JSX.Element => {
   const folderTabManager = useInjection<FolderTabManager>(serviceIds['Asset/Editor/FolderTabManager'])
@@ -31,16 +29,7 @@ const FolderContainer = (): React.JSX.Element => {
       }
 
       renderToolbar={
-        <Toolbar
-          pinnableToolbarElements={
-              [{
-                iconName: 'refresh',
-                label: i18n.t('toolbar.reload'),
-                pinning: true
-              }]
-            }
-          renderSaveButton={ <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button> }
-        />
+        <Toolbar />
       }
     />
   )

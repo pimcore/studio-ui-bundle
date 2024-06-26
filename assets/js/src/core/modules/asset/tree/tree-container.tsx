@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Tree } from '@Pimcore/components/tree/tree'
+import { Tree, defaultProps } from '@Pimcore/components/tree/tree'
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
@@ -26,12 +26,7 @@ export interface TreeContainerProps {
   id: number
 }
 
-const defaultProps: TreeContainerProps = {
-  id: 1
-}
-
-const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
-  const { id } = props
+const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAsset()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
@@ -52,11 +47,10 @@ const TreeContainer = (props: TreeContainerProps): React.JSX.Element => {
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
       renderNode={ withDraggable(TreeNode) }
+      renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
     />
   )
 }
-
-TreeContainer.defaultProps = defaultProps
 
 export { TreeContainer }

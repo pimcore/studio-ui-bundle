@@ -11,15 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import i18n from '@Pimcore/app/i18n'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { Button } from 'antd'
 import { TabsContainer } from '../../shared-tab-manager/tabs-container'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DocumentTabManager } from './tab-manager/document-tab-manager'
 import { serviceIds } from '@Pimcore/app/config/services'
+import { Toolbar } from '../../toolbar/toolbar'
 
 const DocumentContainer = (): React.JSX.Element => {
   const documentTabManager = useInjection<DocumentTabManager>(serviceIds['Asset/Editor/DocumentTabManager'])
@@ -31,18 +29,7 @@ const DocumentContainer = (): React.JSX.Element => {
       }
 
       renderToolbar={
-        <Toolbar
-          pinnableToolbarElements={
-            [
-              {
-                iconName: 'refresh',
-                label: i18n.t('toolbar.reload'),
-                pinning: true
-              }
-            ]
-          }
-          renderSaveButton={ <Button type="primary">{i18n.t('toolbar.save-and-publish')}</Button> }
-        />
+        <Toolbar />
       }
     />
   )
