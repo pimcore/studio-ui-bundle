@@ -9,7 +9,18 @@ The Studio UI Bundle provides a Backend UI for Pimcore. It is based on the [Reac
 ## How to open
 
 - Login via the classic backend UI
-- Access it under `{your-domain}/admin/studio`
+- Access it under `{your-domain}/pimcore-studio`
+
+#### Run the UI under a different URL
+
+To change the URL you can add the following configuration:
+
+´´´yaml
+pimcore_studio_ui:
+    url_path: '/my-backend'
+´´´
+
+Studio will be now accessible under `{your-domain}/my-backend`.
 
 ## Development
 
