@@ -18,6 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
+import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar-skeleton'
 
 export const ElementToolbar = (): React.JSX.Element => {
   const { styles } = useStyle()
@@ -32,7 +33,7 @@ export const ElementToolbar = (): React.JSX.Element => {
   })
 
   if (isLoading || data === undefined) {
-    return <Result title="Loading..." />
+    return <ElementToolbarSkeleton />
   }
 
   const items: MenuProps['items'] = [
@@ -67,6 +68,7 @@ export const ElementToolbar = (): React.JSX.Element => {
 
   return (
     <div className={ styles.toolbar }>
+
       <Breadcrumb path={ data.fullPath! } />
 
       <div className={ 'element-toolbar__info-dropdown' }>
