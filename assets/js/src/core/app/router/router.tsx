@@ -23,13 +23,18 @@ if (baseUrl.endsWith('/')) {
   baseUrl = baseUrl.slice(0, -1)
 }
 
+export const routes = {
+  root: baseUrl,
+  login: `${baseUrl}/login`
+}
+
 export const router = createBrowserRouter([
   {
-    path: baseUrl,
+    path: routes.root,
     element: <DefaultPage />
   },
   {
-    path: `${baseUrl}/login`,
+    path: routes.login,
     element: <LoginPage />
   }
 ])

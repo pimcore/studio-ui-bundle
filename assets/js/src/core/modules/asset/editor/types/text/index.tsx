@@ -20,8 +20,8 @@ import {
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
-import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions-container'
-import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule-container'
+import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
+import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
 import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies-container'
 import {
   NotesAndEventsTabContainer
@@ -33,6 +33,9 @@ import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
+import {
+  PropertiesContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 
 export const textTabManager = container.get<TextTabManager>(serviceIds['Asset/Editor/TextTabManager'])
 
@@ -67,6 +70,14 @@ moduleSystem.registerModule({
     })
 
     textTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
+    })
+
+    textTabManager.register({
       key: 'versions',
       label: 'asset.asset-editor-tabs.versions',
       children: <VersionsTabContainer />,
@@ -77,7 +88,8 @@ moduleSystem.registerModule({
       key: 'schedule',
       label: 'asset.asset-editor-tabs.schedule',
       children: <ScheduleTabContainer />,
-      icon: <Icon name={ 'schedule-outlined' } />
+      icon: <Icon name={ 'schedule-outlined' } />,
+      isDetachable: true
     })
 
     textTabManager.register({

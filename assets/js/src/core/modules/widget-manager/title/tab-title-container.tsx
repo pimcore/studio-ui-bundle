@@ -15,14 +15,28 @@ import { BorderNode, type TabNode } from 'flexlayout-react'
 import React, { useState } from 'react'
 import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
+import { useWidgetManager } from '../hooks/use-widget-manager'
 
-interface TabTitleContainerProps {
+export interface TabTitleContainerProps {
   node: TabNode
+  modified?: boolean
 }
 
-export const TabTitleContainer = ({ node }: TabTitleContainerProps): React.JSX.Element => {
+export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): React.JSX.Element => {
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
   const [icon] = useState(node.getIcon() ?? 'widget-default')
+  const { closeWidget } = useWidgetManager()
+  const isCloseable = node.isEnableClose()
+
+  const onClose = (): void => {
+    if (modified === false || modified === undefined) {
+      closeWidget(node.getId())
+    }
+  }
+
+  const onConfirm = (): void => {
+    closeWidget(node.getId())
+  }
 
   if (isBorderNode) {
     return (
@@ -36,7 +50,13 @@ export const TabTitleContainer = ({ node }: TabTitleContainerProps): React.JSX.E
   return (
     <TabTitleView
       icon={ icon }
-      title={ node.getName() }
+      onClose={ isCloseable ? onClose : undefined }
+      onConfirm={ modified === true ? onConfirm : undefined }
+      title={ getTitle() }
     />
   )
+
+  function getTitle (): string {
+    return node.getName() + (modified === true ? '*' : '')
+  }
 }

@@ -17,6 +17,8 @@ import { type TypeRegistry } from './services/type-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { TextCell } from './columns/types/text/text-cell'
 import { DateCell } from './columns/types/date/date-cell'
+import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
+import { TimeCell } from '@Pimcore/components/grid/columns/types/time/time-cell'
 
 moduleSystem.registerModule({
   onInit () {
@@ -39,7 +41,8 @@ moduleSystem.registerModule({
           config.table.options.meta.onUpdateCellData({
             rowIndex: parseInt(config.row.id),
             columnId: config.column.id,
-            value
+            value,
+            rowData: config.row.original
           })
         }
       }
@@ -48,6 +51,16 @@ moduleSystem.registerModule({
     typeRegistry.registerType({
       type: 'date',
       component: DateCell
+    })
+
+    typeRegistry.registerType({
+      type: 'time',
+      component: TimeCell
+    })
+
+    typeRegistry.registerType({
+      type: 'checkbox',
+      component: CheckboxCell
     })
   }
 })

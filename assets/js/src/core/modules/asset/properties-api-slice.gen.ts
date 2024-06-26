@@ -30,7 +30,7 @@ export type GetPropertiesApiResponse =
     };
 export type GetPropertiesApiArg = {
     /** Filter elements by matching element type. */
-    elementType?: "asset" | "document" | "dataObject";
+    elementType?: "asset" | "document" | "data-object";
     /** Filter for properties */
     filter?: string;
 };
@@ -39,8 +39,8 @@ export type GetPropertiesForElementByTypeAndIdApiResponse = /** status 200 Eleme
 };
 export type GetPropertiesForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "dataObject";
-    /** ID of the element */
+    elementType: "asset" | "document" | "data-object";
+    /** Id of the element */
     id: number;
 };
 export type PredefinedProperty = {

@@ -26,6 +26,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
+            createZipAssets: build.mutation<CreateZipAssetsApiResponse, CreateZipAssetsApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/zip/create`, method: "POST", body: queryArg.body }),
+                invalidatesTags: ["Assets"],
+            }),
             getAssetCustomMetadataById: build.query<
                 GetAssetCustomMetadataByIdApiResponse,
                 GetAssetCustomMetadataByIdApiArg
@@ -44,8 +48,16 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
+            deleteAsset: build.mutation<DeleteAssetApiResponse, DeleteAssetApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/delete`, method: "DELETE" }),
+                invalidatesTags: ["Assets"],
+            }),
             downloadAssetById: build.query<DownloadAssetByIdApiResponse, DownloadAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
+                providesTags: ["Assets"],
+            }),
+            downloadZippedAssets: build.query<DownloadZippedAssetsApiResponse, DownloadZippedAssetsApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/download/zip`, params: { path: queryArg.path } }),
                 providesTags: ["Assets"],
             }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
@@ -99,18 +111,27 @@ export type PatchAssetByIdApiArg = {
         }[];
     };
 };
+export type CreateZipAssetsApiResponse = /** status 200 Success */ {
+    /** Path to the zip file */
+    path?: string;
+};
+export type CreateZipAssetsApiArg = {
+    body: {
+        items?: number[];
+    };
+};
 export type GetAssetCustomMetadataByIdApiResponse = /** status 200 Array of custom metadata */ {
     items?: CustomMetadata[];
 };
 export type GetAssetCustomMetadataByIdApiArg = {
-    /** ID of the asset */
+    /** Id of the asset */
     id: number;
 };
 export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
     items?: CustomSettings;
 };
 export type GetAssetCustomSettingsByIdApiArg = {
-    /** ID of the asset */
+    /** Id of the asset */
     id: number;
 };
 export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text data */ {
@@ -118,13 +139,27 @@ export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text d
     data: string;
 };
 export type GetAssetDataTextByIdApiArg = {
-    /** ID of the asset */
+    /** Id of the asset */
+    id: number;
+};
+export type DeleteAssetApiResponse =
+    /** status 200 Successfully deleted asset */ void | /** status 201 Successfully created jobRun for deleting assets */ {
+        /** ID of created jobRun */
+        id: number;
+    };
+export type DeleteAssetApiArg = {
+    /** Id of the asset */
     id: number;
 };
 export type DownloadAssetByIdApiResponse = /** status 200 Original asset */ Blob;
 export type DownloadAssetByIdApiArg = {
-    /** ID of the asset */
+    /** Id of the asset */
     id: number;
+};
+export type DownloadZippedAssetsApiResponse = /** status 200 Zip archive */ Blob;
+export type DownloadZippedAssetsApiArg = {
+    /** Filter by path. */
+    path?: string;
 };
 export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Image
@@ -136,7 +171,7 @@ export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Folder
     | Unknown;
 export type GetAssetByIdApiArg = {
-    /** ID of the asset */
+    /** Id of the asset */
     id: number;
 };
 export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
@@ -149,11 +184,14 @@ export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
     | Folder
     | Unknown;
 export type UpdateAssetByIdApiArg = {
-    /** ID of the asset */
+    /** Id of the asset */
     id: number;
     body: {
         data: {
             parentId?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            data?: string | null;
             metadata?: UpdateCustomMetadata[] | null;
             customSettings?: UpdateCustomSettings[] | null;
             properties?: UpdateDataProperty[] | null;
@@ -163,7 +201,7 @@ export type UpdateAssetByIdApiArg = {
 };
 export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
 export type DownloadAssetVersionByIdApiArg = {
-    /** ID of the version */
+    /** Id of the version */
     id: number;
 };
 export type Permissions = {
@@ -356,10 +394,13 @@ export type ImageData = {
 export const {
     useGetAssetsQuery,
     usePatchAssetByIdMutation,
+    useCreateZipAssetsMutation,
     useGetAssetCustomMetadataByIdQuery,
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,
+    useDeleteAssetMutation,
     useDownloadAssetByIdQuery,
+    useDownloadZippedAssetsQuery,
     useGetAssetByIdQuery,
     useUpdateAssetByIdMutation,
     useDownloadAssetVersionByIdQuery,
