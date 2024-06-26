@@ -36,7 +36,8 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
       props.table.options.meta?.onUpdateCellData({
         rowIndex: props.row.index,
         columnId: props.column.id,
-        value: propertyUpdate
+        value: propertyUpdate,
+        rowData: props.row.original
       })
     }
   }

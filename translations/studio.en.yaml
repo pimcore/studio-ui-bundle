@@ -81,6 +81,9 @@ login-form.login: Login
 login-form-additional-logins.or: or
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
+unsaved-notice: Please save to confirm your changes
+widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
+save-success: Successfully saved
 version.versions: Versions
 version.version: Version
 version.publish: Publish
@@ -120,4 +123,3 @@ asset.asset-editor-tabs.schedule.select-an-action: Action
 asset.asset-editor-tabs.schedule.select-a-version: Version
 asset.asset-editor-tabs.schedule.archived: Archived
 asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
-

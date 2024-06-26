@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store/index'
 import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { getTabTokens } from './widget-manager-view.styles'
 import { theme } from 'antd'
-import { TabTitleContainer } from './title/tab-title-container'
+import { TabTitleOuterContainer } from './title/tab-title-outer-container'
 
 const { useToken } = theme
 
@@ -56,7 +56,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }
 
   function onRenderTab (node: TabNode, renderValues: ITabRenderValues): void {
-    renderValues.content = <TabTitleContainer node={ node } />
+    renderValues.content = <TabTitleOuterContainer node={ node } />
     renderValues.leading = <></>
   }
 
