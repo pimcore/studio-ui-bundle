@@ -13,6 +13,9 @@
 
 import React, { type ReactNode } from 'react'
 import { useStyles } from './tabs-toolbar-view.styles'
+import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { Result } from 'antd'
 
 export interface TabbarToolbarViewProps {
   renderTabbar: ReactNode
@@ -21,9 +24,16 @@ export interface TabbarToolbarViewProps {
 
 const TabsToolbarView = (props: TabbarToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { context } = useGlobalAssetContext()
+
+  if (context === undefined) {
+    return <Result title="Missing context" />
+  }
 
   return (
     <div className={ ['tabs-toolbar-layout', styles.tabbarToolbar].join(' ') }>
+      <ElementToolbar context={ context } />
+
       <div className='tabs-toolbar-layout__tabbar'>
         {props.renderTabbar}
       </div>
