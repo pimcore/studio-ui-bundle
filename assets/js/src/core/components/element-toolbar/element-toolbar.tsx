@@ -13,30 +13,30 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
-import { Button, Dropdown, type MenuProps, Result, Space } from 'antd'
+import { Button, Dropdown, type MenuProps, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { type GlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar-skeleton'
 
-export const ElementToolbar = (): React.JSX.Element => {
-  const { styles } = useStyle()
-  const { context } = useGlobalAssetContext()
+interface ITest {
+  context: GlobalAssetContext
+  // items: IAdvancedEditorTab[]
+}
 
-  if (context === undefined) {
-    return <Result title="Missing context" />
-  }
+export const ElementToolbar = ({ context }: ITest): React.JSX.Element => {
+  const { styles } = useStyle()
 
   const { data, isLoading } = useGetAssetByIdQuery({
-    id: context?.config.id
+    id: context.config.id
   })
 
   if (isLoading || data === undefined) {
     return <ElementToolbarSkeleton />
   }
 
-  const items: MenuProps['items'] = [
+  const menuItems: MenuProps['items'] = [
     {
       key: '1',
       label: `ID ${data.id} - Copy`,
@@ -72,7 +72,7 @@ export const ElementToolbar = (): React.JSX.Element => {
       <Breadcrumb path={ data.fullPath! } />
 
       <div className={ 'element-toolbar__info-dropdown' }>
-        <Dropdown menu={ { items } }>
+        <Dropdown menu={ { items: menuItems } }>
           <Button
             icon={
               <Icon
@@ -96,6 +96,12 @@ export const ElementToolbar = (): React.JSX.Element => {
       </div>
 
       <Icon name={ 'target' } />
+
+      {/* <Tabs
+        className={ tabStyles.editorTabs }
+        defaultActiveKey={ '0' }
+        items={ items }
+      /> */}
     </div>
   )
 }
