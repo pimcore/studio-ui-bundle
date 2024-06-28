@@ -70,14 +70,14 @@ export const Toolbar = (): React.JSX.Element => {
         if (typeof property.data === 'object') {
           return {
             ...property,
-            data: property.data.id
+            data: property?.data?.id ?? null
           }
         }
 
         return property
       })
 
-      update.properties = propertyUpdate
+      update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
     const savePromise = saveAsset({

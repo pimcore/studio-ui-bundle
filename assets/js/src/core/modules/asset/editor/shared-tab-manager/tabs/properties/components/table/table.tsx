@@ -37,8 +37,8 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
-  const { properties, setProperties, updateProperty } = useAssetDraft(id!)
-  const arePropertiesAvailable = properties !== undefined && properties.length > 0
+  const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
+  const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = useGetPropertiesForElementByTypeAndIdQuery({
     elementType: 'asset',
@@ -128,7 +128,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
             <Button
               icon={ <Icon name="trash" /> }
               onClick={ () => {
-                console.log('delete property with ID: ' + info.row.original.data.id)
+                removeProperty(info.row.original)
               } }
               type="link"
             />
