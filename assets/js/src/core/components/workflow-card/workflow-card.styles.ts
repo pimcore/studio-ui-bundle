@@ -48,6 +48,10 @@ export const useStyles = createStyles(({ token, css }) => {
           }
         }
       }
+
+      .ant-card-body {
+        overflow: auto;
+      }
     `
   }
 }, { hashPriority: 'low' })
