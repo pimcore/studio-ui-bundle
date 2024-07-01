@@ -41,7 +41,7 @@ const config: Meta = {
     }
 
     if(elementId === undefined || elementType === undefined) {
-      return (<p>Please fill 'elementId' and 'elementType' argument</p>)
+      return (<p>Please fill elementId and elementType argument</p>)
     }
 
     setContext({ id: elementId })
