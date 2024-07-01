@@ -11,13 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {EditorTabs, IEditorTabsProps} from '@Pimcore/components/editor-tabs/editor-tabs'
+import { EditorTabs, type IEditorTabsProps } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { type Meta } from '@storybook/react'
 import { PictureOutlined, TagOutlined } from '@ant-design/icons'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import {EditorTabsSkeleton} from "@Pimcore/components/editor-tabs/editor-tabs.skeleton";
-import {useGlobalAssetContext} from "@Pimcore/modules/asset/hooks/use-global-asset-context";
+import { EditorTabsSkeleton } from '@Pimcore/components/editor-tabs/editor-tabs.skeleton'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
 interface IEditorTabsStory extends IEditorTabsProps {
   elementId: number
@@ -32,42 +32,42 @@ const config: Meta = {
     layout: 'centered'
   },
   argTypes: {
-    elementId: {control: 'number'},
+    elementId: { control: 'number' },
     elementType: {
       options: ['asset', 'dataobject', 'document'],
-      control: { type: 'select'},
+      control: { type: 'select' }
     },
     showLabelIfActive: {
       table: {
-        defaultValue: { summary: 'false' },
+        defaultValue: { summary: 'false' }
       }
     },
-    items: {table: {disable: true}}
+    items: { table: { disable: true } }
   },
   tags: ['autodocs'],
-  render: ({elementId, elementType, loading, defaultActiveKey, showLabelIfActive, items}: IEditorTabsStory) => {
-    const {setContext} = useGlobalAssetContext();
+  render: ({ elementId, elementType, loading, defaultActiveKey, showLabelIfActive, items }: IEditorTabsStory) => {
+    const { setContext } = useGlobalAssetContext()
 
-    if(loading) {
+    if (loading) {
       return (
-        <div style={{minWidth: 1024}}>
+        <div style={ { minWidth: 1024 } }>
           <EditorTabsSkeleton />
         </div>
       )
     }
 
-    if(elementId === undefined || elementType === undefined) {
+    if (elementId === undefined || elementType === undefined) {
       return (<p>Please fill elementId and elementType argument</p>)
     }
 
     setContext({ id: elementId })
 
     return (
-      <div style={{minWidth: 1024}}>
+      <div style={ { minWidth: 1024 } }>
         <EditorTabs
-          defaultActiveKey={defaultActiveKey}
-          showLabelIfActive={showLabelIfActive}
-          items={items}
+          defaultActiveKey={ defaultActiveKey }
+          items={ items }
+          showLabelIfActive={ showLabelIfActive }
         />
       </div>
     )
