@@ -13,9 +13,9 @@
 
 import { Skeleton } from 'antd'
 import React from 'react'
-import { useStyle } from './element-toolbar-skeleton.styles'
+import { useStyle } from './breadcrumb.skeleton.styles'
 
-export const ElementToolbarSkeleton = (): React.JSX.Element => {
+export const BreadcrumbSkeleton = (): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
@@ -24,13 +24,14 @@ export const ElementToolbarSkeleton = (): React.JSX.Element => {
         active
         size={ 'small' }
       />
+
       <Skeleton.Button
         active
         size={ 'small' }
       />
-      <Skeleton.Avatar
+
+      <Skeleton.Input
         active
-        shape={ 'circle' }
         size={ 'small' }
       />
     </div>

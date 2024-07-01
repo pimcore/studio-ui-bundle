@@ -24,7 +24,7 @@ export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
 }
 
-interface IEditorTabsProps {
+export interface IEditorTabsProps {
   items: IAdvancedEditorTab[]
   defaultActiveKey?: string
   showLabelIfActive?: boolean
@@ -74,8 +74,6 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
 
     return tmpItem
   })
-
-  console.log(styles)
 
   return (
     <>

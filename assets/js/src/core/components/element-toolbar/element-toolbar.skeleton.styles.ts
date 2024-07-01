@@ -20,7 +20,6 @@ export const useStyle = createStyles(({ token, css }) => {
       align-items: center;
       gap: 8px;
       height: 40px;
-      border-bottom: 1px solid #DFD7EA;
     `
   }
 })

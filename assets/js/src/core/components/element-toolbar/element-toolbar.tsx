@@ -18,14 +18,9 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type GlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
-import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar-skeleton'
+import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 
-interface ITest {
-  context: GlobalAssetContext
-  // items: IAdvancedEditorTab[]
-}
-
-export const ElementToolbar = ({ context }: ITest): React.JSX.Element => {
+export const ElementToolbar = ({ context }: { context: GlobalAssetContext }): React.JSX.Element => {
   const { styles } = useStyle()
 
   const { data, isLoading } = useGetAssetByIdQuery({
@@ -96,12 +91,6 @@ export const ElementToolbar = ({ context }: ITest): React.JSX.Element => {
       </div>
 
       <Icon name={ 'target' } />
-
-      {/* <Tabs
-        className={ tabStyles.editorTabs }
-        defaultActiveKey={ '0' }
-        items={ items }
-      /> */}
     </div>
   )
 }
