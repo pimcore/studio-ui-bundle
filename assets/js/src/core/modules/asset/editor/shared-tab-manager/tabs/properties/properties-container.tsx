@@ -76,7 +76,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 <Button
                   icon={ <Icon name={ 'PlusCircleOutlined' } /> }
                   onClick={ () => {
-                    console.log('added custom property - in theorie :P')
+                    onAddPropertyClick()
                   } }
                 >
                   {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
@@ -119,4 +119,8 @@ export const PropertiesContainer = (): React.JSX.Element => {
       <Table propertiesTableTab={ propertiesTableTab } />
     </div>
   )
+
+  function onAddPropertyClick (): void {
+    console.log('add property')
+  }
 }
