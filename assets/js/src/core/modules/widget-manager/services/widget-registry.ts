@@ -13,10 +13,12 @@
 
 import { injectable } from 'inversify'
 import { type ComponentType, memo } from 'react'
+import { type TabTitleOuterContainerProps } from '../title/tab-title-outer-container'
 
 export interface Widget {
   name: string
   component: ComponentType
+  titleComponent?: ComponentType<TabTitleOuterContainerProps>
 }
 
 @injectable()

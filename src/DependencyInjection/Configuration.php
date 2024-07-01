@@ -32,9 +32,13 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('pimcore_studio_ui');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        // @phpstan-ignore-next-line
+        $treeBuilder
+            ->getRootNode()
+            ->children()
+                ->scalarNode('url_path')
+                ->defaultValue('/pimcore-studio')
+            ->end();
 
         return $treeBuilder;
     }

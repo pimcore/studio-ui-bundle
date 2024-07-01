@@ -16,6 +16,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { type IconLibrary } from './services/icon-library'
 import camera from '@Pimcore/assets/icons/camera.inline.svg'
+import close from '@Pimcore/assets/icons/close.inline.svg'
 import folder from '@Pimcore/assets/icons/folder.inline.svg'
 import widgetDefault from '@Pimcore/assets/icons/widget-default.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
@@ -359,6 +360,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'trash',
       component: Trash
+    })
+    iconLibrary.register({
+      name: 'close',
+      component: close
     })
   }
 })

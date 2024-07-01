@@ -37,6 +37,14 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/user/${queryArg.id}` }),
                 providesTags: ["User Management"],
             }),
+            updateUserById: build.mutation<UpdateUserByIdApiResponse, UpdateUserByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/user/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updateUser,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             deleteUser: build.mutation<DeleteUserApiResponse, DeleteUserApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/user/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
@@ -64,6 +72,14 @@ const injectedRtkApi = api
                     url: `/studio/api/user/reset-password`,
                     method: "POST",
                     body: queryArg.resetPassword,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
+            updateUserPasswordById: build.mutation<UpdateUserPasswordByIdApiResponse, UpdateUserPasswordByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/user/${queryArg.id}/password`,
+                    method: "PUT",
+                    body: queryArg.body,
                 }),
                 invalidatesTags: ["User Management"],
             }),
@@ -109,6 +125,12 @@ export type GetUserByIdApiArg = {
     /** Id of the element */
     id: number;
 };
+export type UpdateUserByIdApiResponse = /** status 200 Updated data. */ User;
+export type UpdateUserByIdApiArg = {
+    /** Id of the User */
+    id: number;
+    updateUser: User2;
+};
 export type DeleteUserApiResponse = /** status 200 Success */ void;
 export type DeleteUserApiArg = {
     /** Id of the user */
@@ -132,6 +154,15 @@ export type GetAvailableUserPermissionsApiArg = void;
 export type PostStudioApiUserResetPasswordApiResponse = /** status 200 Success */ void;
 export type PostStudioApiUserResetPasswordApiArg = {
     resetPassword: ResetPassword;
+};
+export type UpdateUserPasswordByIdApiResponse = /** status 200 Success */ void;
+export type UpdateUserPasswordByIdApiArg = {
+    /** Id of the User */
+    id: number;
+    body: {
+        password: string;
+        passwordConfirmation: string;
+    };
 };
 export type UserTreeNode = {
     /** AdditionalAttributes */
@@ -246,6 +277,44 @@ export type User = {
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
 };
+export type User2 = {
+    /** Email of the User */
+    email?: string | null;
+    /** Firstname of the User */
+    firstname?: string | null;
+    /** Lastname of the User */
+    lastname?: string | null;
+    /** If User is admin */
+    admin?: boolean;
+    /** If User is active */
+    active: boolean;
+    /** Classes the user is allows to see */
+    classes: object;
+    closeWarning: boolean;
+    allowDirtyClose: boolean;
+    /** List of available content Language already sorted. */
+    contentLanguages: object;
+    /** Key Bindings */
+    keyBindings: KeyBindingForAUser[];
+    /** Language of the User */
+    language: string;
+    memorizeTabs: boolean;
+    parentId: number;
+    /** List of permissions for the user */
+    permissions: object;
+    /** ID List of roles the user is assigned */
+    roles: object;
+    twoFactorAuthenticationEnabled: boolean;
+    websiteTranslationLanguagesEdit: object;
+    websiteTranslationLanguagesView: object;
+    welcomeScreen: boolean;
+    /** Asset Workspace */
+    assetWorkspaces: UserWorkspace[];
+    /** Data Object Workspace */
+    dataObjectWorkspaces: UserWorkspace[];
+    /** Document Workspace */
+    documentWorkspaces: UserWorkspace[];
+};
 export type UserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -277,9 +346,11 @@ export const {
     useCreateUserFolderMutation,
     useGetStudioApiUserCurrentUserInformationQuery,
     useGetUserByIdQuery,
+    useUpdateUserByIdMutation,
     useDeleteUserMutation,
     useDeleteUserFolderMutation,
     useGetUserRolesQuery,
     useGetAvailableUserPermissionsQuery,
     usePostStudioApiUserResetPasswordMutation,
+    useUpdateUserPasswordByIdMutation,
 } = injectedRtkApi;
