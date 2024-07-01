@@ -15,10 +15,15 @@ import React from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import { useStyle } from './breadcrumb.styles'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const Breadcrumb = ({ path }: { path: string }): React.JSX.Element => {
   const { styles } = useStyle()
+  const { openAsset } = useAsset()
   const items: NonNullable<BreadcrumbProps['items']> = []
+  const dispatch = useAppDispatch()
 
   function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
     // split to check if it has more that just the key
@@ -30,12 +35,34 @@ export const Breadcrumb = ({ path }: { path: string }): React.JSX.Element => {
       if (parts.length > 3) {
         const dotsMenuItems: MenuItemType[] = []
 
+        function onMenuItemClick (path: string): void {
+          const elementIdFetcher = dispatch(elementApi.endpoints.getElementIdByPath.initiate({
+            elementType: 'asset',
+            elementPath: path
+          }))
+
+          elementIdFetcher
+            .then(({ data }) => {
+              if (data !== undefined) {
+                openAsset({
+                  config: {
+                    id: data.id
+                  }
+                })
+              }
+            })
+            .catch(() => {})
+        }
+
         for (let i = 2; i < parts.length - 1; i++) {
           dotsMenuItems.push({
             key: i,
             label: (
               parts[i]
-            )
+            ),
+            onClick: () => {
+              onMenuItemClick(parts.slice(0, i + 1).join('/'))
+            }
           })
         }
 
