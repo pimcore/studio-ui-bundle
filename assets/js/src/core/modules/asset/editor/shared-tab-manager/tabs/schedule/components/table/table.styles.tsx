@@ -40,14 +40,15 @@ export const useStyles = createStyles(({ css, token }) => {
               }
             }
           }
-          
-          .ant-select {
-            width: 100%;
             
-            .version-id__select__label {
-              > p {
-                margin: 0;
-              }
+          .ant-dropdown-trigger {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            color: ${token.colorPrimary};
+              
+            &:hover {
+              color: ${token.colorPrimaryHover};
             }
           }
         }
