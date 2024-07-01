@@ -49,7 +49,7 @@ export type DownloadAssetVersionByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type StreamImageVersionByIdApiResponse = /** status 200 Image version stream */ Blob;
+export type StreamImageVersionByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
 export type StreamImageVersionByIdApiArg = {
     /** Id of the version */
     id: number;
@@ -118,6 +118,16 @@ export type AssetVersion = {
     /** file name */
     fileName: string;
 };
+export type CustomMetadataVersion = {
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: string | null;
+};
 export type VersionDimensions = {
     /** width */
     width?: number | null;
@@ -139,6 +149,8 @@ export type ImageVersion = {
     fileSize: number;
     /** mime type */
     mimeType: string;
+    /** Metadata */
+    metadata: CustomMetadataVersion[];
     /** dimensions */
     dimensions?: VersionDimensions | null;
 };
