@@ -16,27 +16,37 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     toolbar: css`
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        height: 40px;
-        border-bottom: 1px solid #DFD7EA;
-        
-        .ant-breadcrumb {
-            padding-left: ${token.paddingXS}px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      border-bottom: 1px solid #DFD7EA;
+
+      .ant-breadcrumb {
+        padding-left: ${token.paddingXS}px;
+      }
+
+      .element-toolbar__info-dropdown {
+        .ant-dropdown-trigger {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          border: 1px solid ${token.colorBorder};
+          background: ${token.colorFillTertiary};
+          color: ${token.colorText};
+
+          .ant-btn-icon.ant-btn-icon-end {
+            margin-left: 0;
+          }
         }
+      }
         
-        .ant-select {
-            height: 20px;
-            width: 70px;
+      .pimcore-icon {
+        color: ${token.colorPrimary};
+        &:hover {
+          color: ${token.colorPrimaryHover};
         }
-        
-        .pimcore-icon {
-            color: ${token.colorPrimary};
-            &:hover {
-                color: ${token.colorPrimaryHover};
-            }
-        }
+      }
     `
   }
 })

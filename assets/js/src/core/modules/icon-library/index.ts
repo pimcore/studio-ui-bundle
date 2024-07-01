@@ -84,6 +84,7 @@ import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
 import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
+import Icon from '@Pimcore/assets/icons/icon.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -360,6 +361,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'trash',
       component: Trash
+    })
+    iconLibrary.register({
+      name: 'icon',
+      component: Icon
     })
     iconLibrary.register({
       name: 'close',

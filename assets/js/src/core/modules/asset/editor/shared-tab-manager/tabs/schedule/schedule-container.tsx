@@ -12,7 +12,6 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
@@ -81,8 +80,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <ElementToolbar />
-
       <div className={ 'pimcore-schedule-toolbar' }>
         <div className={ 'pimcore-schedule-toolbar__headline' }>
           <p className={ 'pimcore-schedule-toolbar__headline__text' }>

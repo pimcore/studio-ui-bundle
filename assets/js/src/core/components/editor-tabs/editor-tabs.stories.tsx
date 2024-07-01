@@ -11,11 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { EditorTabs } from '@Pimcore/components/editor-tabs/editor-tabs'
+import { EditorTabs, type IEditorTabsProps } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { type Meta } from '@storybook/react'
 import { PictureOutlined, TagOutlined } from '@ant-design/icons'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import { EditorTabsSkeleton } from '@Pimcore/components/editor-tabs/editor-tabs.skeleton'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+
+interface IEditorTabsStory extends IEditorTabsProps {
+  elementId: number
+  elementType: string
+  loading: boolean
+}
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Editor Tabs',
@@ -24,19 +32,54 @@ const config: Meta = {
     layout: 'centered'
   },
   argTypes: {
-    items: {
+    elementId: { control: 'number' },
+    elementType: {
+      options: ['asset', 'dataobject', 'document'],
+      control: { type: 'select' }
+    },
+    showLabelIfActive: {
       table: {
-        disable: true
+        defaultValue: { summary: 'false' }
       }
-    }
+    },
+    items: { table: { disable: true } }
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
+  render: ({ elementId, elementType, loading, defaultActiveKey, showLabelIfActive, items }: IEditorTabsStory) => {
+    const { setContext } = useGlobalAssetContext()
+
+    if (loading) {
+      return (
+        <div style={ { minWidth: 1024 } }>
+          <EditorTabsSkeleton />
+        </div>
+      )
+    }
+
+    if (elementId === undefined || elementType === undefined) {
+      return (<p>Please fill elementId and elementType argument</p>)
+    }
+
+    setContext({ id: elementId })
+
+    return (
+      <div style={ { minWidth: 1024 } }>
+        <EditorTabs
+          defaultActiveKey={ defaultActiveKey }
+          items={ items }
+          showLabelIfActive={ showLabelIfActive }
+        />
+      </div>
+    )
+  }
 }
 
 export default config
 
 export const _default = {
   args: {
+    loading: true,
+    elementType: 'asset',
     defaultActiveKey: '2',
     showLabelIfActive: false,
     items: [

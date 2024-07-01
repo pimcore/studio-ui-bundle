@@ -13,31 +13,82 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
-import { Breadcrumb, Select } from 'antd'
+import { Button, Dropdown, type MenuProps, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { type GlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
+import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 
-export const ElementToolbar = (): React.JSX.Element => {
+export const ElementToolbar = ({ context }: { context: GlobalAssetContext }): React.JSX.Element => {
   const { styles } = useStyle()
+
+  const { data, isLoading } = useGetAssetByIdQuery({
+    id: context.config.id
+  })
+
+  if (isLoading || data === undefined) {
+    return <ElementToolbarSkeleton />
+  }
+
+  const menuItems: MenuProps['items'] = [
+    {
+      key: '1',
+      label: `ID ${data.id} - Copy`,
+      onClick: () => {
+        void navigator.clipboard.writeText(
+          data.id.toString()
+        )
+      }
+    },
+    {
+      key: '2',
+      label: 'Copy full path to clipboard',
+      onClick: () => {
+        void navigator.clipboard.writeText(
+          data.fullPath!
+        )
+      }
+    },
+    {
+      key: '3',
+      label: 'Copy deep link to clipboard',
+      onClick: () => {
+        void navigator.clipboard.writeText(`
+          http://localhost/admin/login/deeplink?${context.type}_${data.id}_${data.type}
+        `)
+      }
+    }
+  ]
 
   return (
     <div className={ styles.toolbar }>
-      <Breadcrumb
-        items={ [
-          { title: 'Home' },
-          { title: 'Application' },
-          { title: 'Element' }
-        ] }
-      />
 
-      <Select
-        options={ [
-          { value: 21, label: 'ID 21' },
-          { value: 22, label: 'ID 22' },
-          { value: 23, label: 'ID 23' },
-          { value: 24, label: 'ID 24' }
-        ] }
-        placeholder={ 'Select an option' }
-      />
+      <Breadcrumb path={ data.fullPath! } />
+
+      <div className={ 'element-toolbar__info-dropdown' }>
+        <Dropdown menu={ { items: menuItems } }>
+          <Button
+            icon={
+              <Icon
+                name={ 'icon' }
+                options={ { width: 14, height: 7 } }
+              />
+            }
+            iconPosition="end"
+            onClick={ () => {
+              void navigator.clipboard.writeText(
+                data.id.toString()
+              )
+            } }
+            size="small"
+          >
+            <Space>
+              ID: { data.id }
+            </Space>
+          </Button>
+        </Dropdown>
+      </div>
 
       <Icon name={ 'target' } />
     </div>
