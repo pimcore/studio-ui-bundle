@@ -12,9 +12,21 @@
 */
 
 import React from 'react'
+import { useStyle } from './dependencies-container.styles'
+import {
+  RequiresPanel
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/requires-panel/requires-panel'
+import {
+  RequiredByPanel
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/required-by-panel/required-by-panel'
 
 export const DependenciesTabContainer = (): React.JSX.Element => {
+  const { styles } = useStyle()
+
   return (
-    <h4>Dependencies TAB</h4>
+    <div className={ styles.tab }>
+      <RequiresPanel />
+      <RequiredByPanel />
+    </div>
   )
 }
