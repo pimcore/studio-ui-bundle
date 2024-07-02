@@ -12,20 +12,21 @@
 */
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Button, Dropdown, type MenuProps, Result, Space } from 'antd'
+import { type RefSelectProps, Result, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { DownOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
+import { type SelectProps } from 'rc-select/lib/Select'
 import { useStyles } from './version-id-cell.styles'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
-  // const selectRef = useRef<RefObject<SelectRef>>(null)
+  const selectRef = useRef<RefSelectProps>(null)
   const { context } = useGlobalAssetContext()
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -44,7 +45,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   useEffect(() => {
     if (isInEditMode) {
       setOpen(true)
-      // selectRef.current?.focus()
+      selectRef.current?.focus()
     }
   }, [isInEditMode])
 
@@ -70,18 +71,14 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
       )
     }
 
-    function onBlur (e: React.FocusEvent<HTMLUListElement, Element>): void {
-      saveValue(e.target.id)
+    function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
+      // saveValue(e.target.id)
     }
 
-    function onKeyDown (e: React.KeyboardEvent<HTMLUListElement>): void {
-      console.log('----------------------')
-      console.log('onKeyDown')
-      console.log(e)
-      console.log('----------------------')
-      // if (e.key === 'Escape' || e.key === 'Enter') {
-      //  disableEditMode()
-      // }
+    function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        disableEditMode()
+      }
     }
 
     function formatDate (timestamp: number): string {
@@ -101,43 +98,34 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
       selectOptions = data.items
     }
 
-    const ddMenu: MenuProps = {
-      onBlur,
-      onKeyDown,
-      items: selectOptions.map((value: Version) => {
-        return {
-          id: String(value.id),
-          key: String(value.id),
-          onClick: () => { saveValue(String(value.id)) },
-          label: (
-            <div className={ 'version-id__select__label' }>
-              <p>{value.id} | {value.user.name ?? 'not found'}</p>
-              <p>{formatDate(value.date)}</p>
-            </div>
-          )
-        }
-      })
-    }
+    const options: SelectProps['options'] = selectOptions.map((value: Version) => {
+      return {
+        value: value.id,
+        label: (
+          <div className={ 'version-id__select__label' }>
+            <p>
+              {value.id}
+              <span className={ 'version-id__select__label__username' }> | {value.user.name ?? 'not found'}</span>
+            </p>
+            <p>{formatDate(value.date)}</p>
+          </div>
+        )
+      }
+    })
 
     return (
-      <Dropdown
-        menu={ ddMenu }
+      <Select
+        className={ styles.select }
+        defaultValue={ props.getValue() }
+        onBlur={ onBlur }
+        onChange={ saveValue }
+        onKeyDown={ onKeyDown }
         open={ open }
-        overlayClassName={ styles.overlayStyle }
-      >
-        <Button
-          onClick={ (e) => { setOpen(!open) } }
-          type={ 'link' }
-        >
-          <Space>
-            {props.getValue() !== null
-              ? props.getValue()
-              : t('asset.asset-editor-tabs.schedule.select-a-version')
-            }
-            <DownOutlined />
-          </Space>
-        </Button>
-      </Dropdown>
+        options={ options }
+        popupClassName={ styles.overlayStyle }
+        popupMatchSelectWidth={ false }
+        ref={ selectRef }
+      />
     )
   }
 
