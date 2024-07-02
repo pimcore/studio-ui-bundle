@@ -1,11 +1,15 @@
 import { api } from "../../../app/api/pimcore/index";
-export const addTagTypes = ["User Management"] as const;
+export const addTagTypes = ["Role Management", "User Management"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            getUserRoles: build.query<GetUserRolesApiResponse, GetUserRolesApiArg>({
+                query: () => ({ url: `/studio/api/roles` }),
+                providesTags: ["Role Management"],
+            }),
             cloneUser: build.mutation<CloneUserApiResponse, CloneUserApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/user/clone/${queryArg.id}`,
@@ -13,10 +17,6 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["User Management"],
-            }),
-            getUsers: build.query<GetUsersApiResponse, GetUsersApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/users`, params: { parentId: queryArg.parentId } }),
-                providesTags: ["User Management"],
             }),
             createUser: build.mutation<CreateUserApiResponse, CreateUserApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/user/`, method: "POST", body: queryArg.body }),
@@ -53,10 +53,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
             }),
-            getUserRoles: build.query<GetUserRolesApiResponse, GetUserRolesApiArg>({
-                query: () => ({ url: `/studio/api/user/roles` }),
-                providesTags: ["User Management"],
-            }),
             getAvailableUserPermissions: build.query<
                 GetAvailableUserPermissionsApiResponse,
                 GetAvailableUserPermissionsApiArg
@@ -83,11 +79,20 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            getUserTree: build.query<GetUserTreeApiResponse, GetUserTreeApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/users/tree`, params: { parentId: queryArg.parentId } }),
+                providesTags: ["User Management"],
+            }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ UserTreeNode;
+export type GetUserRolesApiResponse = /** status 200 List of available user roles. */ {
+    totalItems: number;
+    items: UserRole[];
+};
+export type GetUserRolesApiArg = void;
+export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
 export type CloneUserApiArg = {
     /** Id of the user */
     id: number;
@@ -95,22 +100,14 @@ export type CloneUserApiArg = {
         name?: string;
     };
 };
-export type GetUsersApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
-    totalItems: number;
-    items: UserTreeNode[];
-};
-export type GetUsersApiArg = {
-    /** Filter users by parent id. */
-    parentId: number;
-};
-export type CreateUserApiResponse = /** status 200 Node of the new created User */ UserTreeNode;
+export type CreateUserApiResponse = /** status 200 Node of the new created User */ TreeNode;
 export type CreateUserApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ UserTreeNode;
+export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
 export type CreateUserFolderApiArg = {
     body: {
         parentId: number | null;
@@ -141,11 +138,6 @@ export type DeleteUserFolderApiArg = {
     /** Id of the user-folder */
     id: number;
 };
-export type GetUserRolesApiResponse = /** status 200 List of available user roles. */ {
-    totalItems: number;
-    items: UserRole[];
-};
-export type GetUserRolesApiArg = void;
 export type GetAvailableUserPermissionsApiResponse = /** status 200 List of available user permissions. */ {
     totalItems: number;
     items: UserPermission[];
@@ -164,19 +156,23 @@ export type UpdateUserPasswordByIdApiArg = {
         passwordConfirmation: string;
     };
 };
-export type UserTreeNode = {
+export type GetUserTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
+    totalItems: number;
+    items: TreeNode[];
+};
+export type GetUserTreeApiArg = {
+    /** Filter users by parent id. */
+    parentId: number;
+};
+export type UserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    /** Unique Identifier */
+    /** ID of the Role */
     id: number;
-    /** Name of Folder or User */
-    name: string;
-    /** Is ether user or folder */
-    type: string;
-    /** If a folder has sub items */
-    hasChildren: boolean;
+    /** Name of the Role */
+    name?: string;
 };
 export type Error = {
     /** Message */
@@ -187,6 +183,20 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
+};
+export type TreeNode = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Unique Identifier */
+    id: number;
+    /** Name of the tree node */
+    name: string;
+    /** Is ether folder or a specific item in the folder */
+    type: string;
+    /** If a folder has sub items */
+    hasChildren: boolean;
 };
 export type UserInformation = {
     /** Username */
@@ -315,16 +325,6 @@ export type User2 = {
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
 };
-export type UserRole = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** ID of the Role */
-    id: number;
-    /** Name of the Role */
-    category: string;
-};
 export type UserPermission = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -340,8 +340,8 @@ export type ResetPassword = {
     username: string;
 };
 export const {
+    useGetUserRolesQuery,
     useCloneUserMutation,
-    useGetUsersQuery,
     useCreateUserMutation,
     useCreateUserFolderMutation,
     useGetStudioApiUserCurrentUserInformationQuery,
@@ -349,8 +349,8 @@ export const {
     useUpdateUserByIdMutation,
     useDeleteUserMutation,
     useDeleteUserFolderMutation,
-    useGetUserRolesQuery,
     useGetAvailableUserPermissionsQuery,
     usePostStudioApiUserResetPasswordMutation,
     useUpdateUserPasswordByIdMutation,
+    useGetUserTreeQuery,
 } = injectedRtkApi;

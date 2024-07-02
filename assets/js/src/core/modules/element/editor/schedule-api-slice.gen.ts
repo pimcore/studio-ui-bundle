@@ -101,6 +101,8 @@ export type Schedule = {
     active: boolean;
     /** User ID */
     userId: number;
+    /** Username */
+    username: string;
 };
 export type UpdateSchedule = {
     /** id */
