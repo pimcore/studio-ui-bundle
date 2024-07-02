@@ -72,7 +72,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      // saveValue(e.target.id)
+      saveValue(e.target.id)
     }
 
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
