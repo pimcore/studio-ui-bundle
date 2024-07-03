@@ -17,6 +17,7 @@ import { App as AntApp } from 'antd'
 import { RouterProvider } from 'react-router-dom'
 import { router } from '@Pimcore/app/router/router'
 import { AppLoader } from '@Pimcore/modules/app/app-loader'
+import { DateTimeConfig } from '@Pimcore/app/config/date-time'
 
 export const AppView = (): React.JSX.Element => {
   return (
@@ -24,9 +25,11 @@ export const AppView = (): React.JSX.Element => {
       <StrictMode>
         <GlobalProvider>
           <AntApp>
-            <AppLoader>
-              <RouterProvider router={ router } />
-            </AppLoader>
+            <DateTimeConfig>
+              <AppLoader>
+                <RouterProvider router={ router } />
+              </AppLoader>
+            </DateTimeConfig>
           </AntApp>
         </GlobalProvider>
       </StrictMode>

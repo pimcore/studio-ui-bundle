@@ -178,6 +178,31 @@ export const slice = createSlice({
       }
 
       state.outerModel = { ...model.toJson() }
+    },
+
+    closeWidget: (state, action: PayloadAction<string>) => {
+      const outerModel = Model.fromJson(state.outerModel)
+      const innerModel = Model.fromJson(state.innerModel)
+
+      let node = outerModel.getNodeById(action.payload)
+      let model = outerModel
+      let isOuterModelNode = true
+
+      if (node === undefined) {
+        node = innerModel.getNodeById(action.payload)
+        model = innerModel
+        isOuterModelNode = false
+      }
+
+      if (node !== undefined) {
+        model.doAction(Actions.deleteTab(node.getId()))
+      }
+
+      if (isOuterModelNode) {
+        state.outerModel = { ...model.toJson() }
+      } else {
+        state.innerModel = { ...model.toJson() }
+      }
     }
   },
 
@@ -198,5 +223,5 @@ export const slice = createSlice({
 
 injectSliceWithState(slice)
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById } = slice.actions
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext } = slice.selectors

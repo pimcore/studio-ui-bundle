@@ -35,14 +35,16 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
-import { PropertiesContainer } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container'
 import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import {
+  PropertiesContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
+import {
   ValueCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
 import {
   TypeIconCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -75,6 +77,14 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.custom-metadata',
       children: <CustomMetadataTabContainer />,
       icon: <Icon name={ 'data-management-2' } />
+    })
+
+    imageEditorTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
@@ -120,14 +130,6 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
       icon: <Icon name={ 'workflow' } />,
-      isDetachable: true
-    })
-
-    imageEditorTabManager.register({
-      key: 'properties',
-      label: 'asset.asset-editor-tabs.properties.text',
-      children: <PropertiesContainer />,
-      icon: <Icon name={ 'settings2' } />,
       isDetachable: true
     })
 

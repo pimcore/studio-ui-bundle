@@ -21,7 +21,7 @@ interface FormattedDateProps {
 export const FormattedTime = (props: FormattedDateProps): React.JSX.Element => {
   const { i18n } = useTranslation()
   const formattedDate = i18n.format(
-    new Date(props.timestamp),
+    new Date(props.timestamp * 1000),
     'datetime',
     i18n.language,
     {

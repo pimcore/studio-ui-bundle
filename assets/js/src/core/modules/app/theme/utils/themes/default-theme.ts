@@ -63,6 +63,7 @@ const defaultTheme = {
     colorTextDescription: 'rgba(0, 0, 0, 0.6)',
     colorBgUnselectedTab: 'rgba(215, 199, 236, 0.4)',
     colorBgHoverUnselectedTab: 'rgba(215, 199, 236, 0.6)',
+    colorAccentSecondary: '#08979c',
     ...staticTokens.token
   },
   components: {
