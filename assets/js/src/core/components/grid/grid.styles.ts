@@ -46,6 +46,11 @@ export const useStyles = createStyles(({ token, css }) => {
       &.ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody>tr>td {
         padding: 0;
       }
+        
+      .ant-table-row-no-data {
+        margin: 0;
+        padding: ${token.paddingXS}px 0px ${token.paddingXS}px ${token.paddingXS}px;
+      }
 
       .ant-table-cell {
         position: relative;
