@@ -17,6 +17,7 @@ import '@Pimcore/modules/asset/editor/types/folder'
 import '@Pimcore/modules/asset/editor/types/image'
 import '@Pimcore/modules/asset/editor/types/text'
 import '@Pimcore/modules/asset/editor/types/video'
+import '@Pimcore/modules/asset/editor/types/audio'
 import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
@@ -36,6 +37,7 @@ import {
 import {
   ActionsCell
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/actions-cell/actions-cell'
+import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -49,6 +51,11 @@ moduleSystem.registerModule({
     componentRegistryService.registerComponent({
       name: 'video',
       component: VideoContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'audio',
+      component: AudioContainer
     })
 
     componentRegistryService.registerComponent({
