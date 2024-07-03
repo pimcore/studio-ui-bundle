@@ -13,16 +13,23 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ css }) => {
+export const useStyle = createStyles(({ token, css }) => {
   return {
     breadcrumb: css`
       .ant-dropdown-trigger {
-          cursor: pointer;
-          
-          > span[role="img"] {
-              display: none
-          }
+        cursor: pointer;
+        
+        > span[role="img"] {
+          display: none
+        }
       }
+    `,
+    pathItem: css`
+       cursor: pointer;
+       
+       &:hover {
+         color: ${token.colorPrimaryHover};
+       }
     `
   }
 })

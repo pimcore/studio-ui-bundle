@@ -20,12 +20,12 @@ export const BreadcrumbSkeleton = (): React.JSX.Element => {
 
   return (
     <div className={ styles.skeleton }>
-      <Skeleton.Input
+      <Skeleton.Button
         active
         size={ 'small' }
       />
 
-      <Skeleton.Button
+      <Skeleton.Input
         active
         size={ 'small' }
       />
