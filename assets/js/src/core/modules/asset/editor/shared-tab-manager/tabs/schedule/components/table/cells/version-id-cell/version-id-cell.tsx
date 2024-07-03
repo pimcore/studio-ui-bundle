@@ -55,13 +55,15 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   function getCellContent (): React.JSX.Element {
+    console.log(props.row.original)
+
     if (!isInEditMode) {
       return (
         <div className={ 'pseudo-select' }>
           { props.getValue() !== null
             ? (
               <div className={ 'pseudo-select__content' }>
-                <p>{props.row.original.id}</p>
+                <p>{props.row.original.versionCount}</p>
               </div>
               )
             : t('asset.asset-editor-tabs.schedule.select-a-version')
@@ -104,7 +106,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
         label: (
           <div className={ 'version-id__select__label' }>
             <p>
-              {value.id}
+              <b>{value.versionCount}</b>
               <span className={ 'version-id__select__label__username' }> | {value.user.name ?? 'not found'}</span>
             </p>
             <p>{formatDate(value.date)}</p>
