@@ -59,31 +59,24 @@ export const useStyles = createStyles(({ token, css }) => {
         position: sticky;
         top: 0;
         z-index: 1;
-          
-        .ant-table-cell {
-          border-top: 1px solid #F0F0F0;
-            
-          &:first-of-type {
-            border-left: 1px solid #F0F0F0;
-            border-radius: 8px 0 0 0;
-          }
-          &:last-of-type {
-            border-radius: 0 8px 0 0;
-          }
-        }
       }
-        
-      .ant-table-tbody {
-        .ant-table-row:last-of-type {
-          .ant-table-cell {
-            &:first-of-type {
-              border-radius: 0 0 0 8px;
-            }
-            &:last-of-type {
-                border-radius: 0 0 8px 0;
+
+      .ant-table-content {
+        table {
+          border: 1px solid #F0F0F0;
+          border-radius: 8px;
+        }
+          
+          .ant-table-tbody {
+            .ant-table-row:last-of-type {
+              .ant-table-cell:first-of-type {
+                border-bottom-left-radius: 8px;
+              }
+              .ant-table-cell:last-of-type {
+                border-bottom-right-radius: 8px;
+              }
             }
           }
-        }
       }
 
       .grid__cell-content {
