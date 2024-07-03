@@ -103,6 +103,7 @@ aria.version.expand: Expand version
 clear-all: Clear all
 by: By
 field: Field
+no-data-available-yet: No data available yet.
 asset.asset-editor-tabs.schedule.headline: Schedule
 asset.asset-editor-tabs.schedule.columns.date: Date
 asset.asset-editor-tabs.schedule.columns.time: Time
@@ -121,3 +122,8 @@ asset.asset-editor-tabs.schedule.select-an-action: Action
 asset.asset-editor-tabs.schedule.select-a-version: Version
 asset.asset-editor-tabs.schedule.archived: Archived
 asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
+asset.asset-editor-tabs.dependencies.requires: Requires
+asset.asset-editor-tabs.dependencies.required-by: Required by
+asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
+asset.asset-editor-tabs.dependencies.columns.path: Subtype
+asset.asset-editor-tabs.dependencies.columns.open: Open
