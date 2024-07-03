@@ -16,14 +16,17 @@ import {
   NotesAndEventsTabView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
 import {
+  useCreateNoteForElementMutation,
   useDeleteNoteMutation,
   useGetNotesForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Result } from 'antd'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
+import { useTranslation } from 'react-i18next'
 
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { context } = useGlobalAssetContext()
 
   if (context === undefined) {
@@ -34,6 +37,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState(20)
 
   const [deleteNote] = useDeleteNoteMutation()
+  const [createNote] = useCreateNoteForElementMutation()
 
   const { isLoading, data } = useGetNotesForElementByTypeAndIdQuery({
     id: context?.config?.id,
@@ -49,6 +53,18 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   return (
     <NotesAndEventsTabView
       notes={ data!.items }
+      onClickSaveNote={
+        async (type, title, description): Promise<void> => {
+          await createNote({
+            elementType: 'asset',
+            id: context?.config?.id,
+            createNote: {
+              type,
+              title,
+              description
+            }
+          })
+        } }
       onClickTrash={
         async (id: number): Promise<void> => {
           await deleteNote({
@@ -58,11 +74,12 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
       pagination={
         <Pagination
           current={ page }
-          hideOnSinglePage
           onChange={ (page, pageSize) => {
             setPage(page)
             setPageSize(pageSize)
           } }
+          showSizeChanger
+          showTotal={ (total) => t('pagination.show-total', { total }) }
           total={ data!.totalItems }
         />
       }

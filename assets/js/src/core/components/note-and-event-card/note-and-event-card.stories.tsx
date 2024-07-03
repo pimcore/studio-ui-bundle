@@ -15,7 +15,6 @@ import { type Meta } from '@storybook/react'
 import { NoteAndEventCard as NoteAndEventCardComponent } from './note-and-event-card'
 import i18n from '@Pimcore/app/i18n'
 
-
 const config: Meta = {
   title: 'Pimcore studio/UI/NoteAndEventCard',
   component: NoteAndEventCardComponent,
@@ -42,7 +41,7 @@ export const _default = {
         [i18n.t('notes-and-events.name')]: 'yourAsset',
         [i18n.t('notes-and-events.type')]: 'Asset',
         [i18n.t('notes-and-events.value')]: '/Brand Logos/BMW.png'
-      },
+      }
     ]
   }
 }

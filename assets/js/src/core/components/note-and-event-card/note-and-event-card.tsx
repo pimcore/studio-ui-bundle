@@ -25,12 +25,20 @@ interface NoteAndEventCardProps {
   date: string
   description: string
   data: any
+  showDetails?: boolean
   onClickTrash?: () => void
   className?: string
 }
 
 export const NoteAndEventCard = ({
-  title, type, date, description, data, onClickTrash, className
+  title,
+  type,
+  date,
+  description,
+  data,
+  showDetails = true,
+  onClickTrash,
+  className
 }: NoteAndEventCardProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { i18n } = useTranslation()
@@ -85,12 +93,18 @@ export const NoteAndEventCard = ({
         extra={ extra }
         title={ titleElement }
       >
-        <div className={ 'card-body__description' }>{description}</div>
-        <div className={ 'card-body__details' }>{i18n.t('notes-and-events.details')}</div>
-        <Grid
-          columns={ columns }
-          data={ data }
-        />
+        <span className={ 'card-body__description ' + (showDetails ? 'card-body__description-padding' : '') }>
+          {description}
+        </span>
+        {showDetails && (
+          <div>
+            <span className={ 'card-body__details' }>{i18n.t('notes-and-events.details')}</span>
+            <Grid
+              columns={ columns }
+              data={ data }
+            />
+          </div>
+        )}
       </Card>
     </div>
   )

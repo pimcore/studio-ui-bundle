@@ -14,7 +14,11 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-  const notesAndEventsToken = { notesContainerWidth: '637', ...token }
+  const notesAndEventsToken = {
+    notesContainerWidth: '710',
+    notesModalFieldsWidth: '637',
+    ...token
+  }
 
   return {
     'notes-and-events': css`
@@ -24,16 +28,22 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       overflow: hidden;
  
-      & .notes-container {
+      .notes-container {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        
-        height: 100%;
         width: ${notesAndEventsToken.notesContainerWidth}px;
       }
       
-      & .notes-container__header {
+      & .notes-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        overflow: auto;
+        
+        height: 100%;
+      }
+      
+      & .notes-content__header {
         padding: ${token.paddingXS}px ${notesAndEventsToken.paddingSM}px;
 
         display: flex;
@@ -41,12 +51,12 @@ export const useStyles = createStyles(({ token, css }) => {
         gap: ${notesAndEventsToken.paddingSM}px;
       }
       
-      & .notes-container__text {
+      & .notes-content__text {
         color: ${token.colorPrimary};
         margin: 0;
       }
       
-      & .notes-container__details {
+      & .notes-content__details {
         width: 100%;
         padding: 0 ${token.paddingXS}px;
       }
@@ -55,16 +65,46 @@ export const useStyles = createStyles(({ token, css }) => {
         margin-bottom: ${token.marginXS}px;
       }
 
-      & .notes-container > .notes-container__text {
+      & .notes-content > .notes-content__text {
         color: ${token.colorText};
       }
 
-      .notes-container__header > button {
+      & .notes-content__header > button {
         display: flex;
         align-items: center;
         line-height: 24px;
       }
       
+      .notes-container__pagination-container {
+        border-top: 1px solid ${notesAndEventsToken.colorBorderTertiary};
+        position: sticky;
+        bottom: 0;
+        height: ${notesAndEventsToken.sizeXXL}px;
+      }
+
+      .notes-container__pagination {
+        display: flex;
+        justify-content: space-between;
+        background-color: ${notesAndEventsToken.colorWhite};
+        padding-right: ${notesAndEventsToken.paddingSM}px;
+        padding-left: ${notesAndEventsToken.paddingXS}px;
+        align-items: center;
+        width: 100%;
+        height: ${notesAndEventsToken.sizeXXL}px;
+      }
+    `,
+
+    'add-note-modal__section': css`
+      width: ${notesAndEventsToken.notesModalFieldsWidth}px;
+      margin-bottom: 10px;
+
+      .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        width: ${notesAndEventsToken.notesModalFieldsWidth}px;
+      }
+      
+      .mandatory {
+        color: #FF4D4F;
+      }
     `
   }
 }, { hashPriority: 'low' })

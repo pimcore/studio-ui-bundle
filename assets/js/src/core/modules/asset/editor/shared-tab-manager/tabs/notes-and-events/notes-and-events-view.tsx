@@ -14,30 +14,39 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
-import { Button } from 'antd'
+import { Button, Input, Select } from 'antd'
 import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
 import { formatDateTime } from '@Pimcore/utils/helpers'
+import { useModal } from '@Pimcore/components/modal/useModal'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
   pagination: React.JSX.Element
   onClickTrash: (id: number) => void
+  onClickSaveNote: (type: string, title: string, description: string) => void
 }
 export const NotesAndEventsTabView = ({
   notes,
   pagination,
-  onClickTrash
+  onClickTrash,
+  onClickSaveNote
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const { renderModal: RenderModal, showModal, handleOk } = useModal()
+
+  let type = ''; let title = ''; let description = ''
 
   const NotesAndEvents = notes.map((note) => {
+    let showDetails = false
     const formatedData: any[] = []
-    if (Array.isArray(note.data)) {
+    if (Array.isArray(note.data) && note.data.length > 0) {
+      showDetails = true
       note.data.forEach((noteData) => {
         const tempData = structuredClone(noteData)
         if (typeof tempData.data === 'object') {
@@ -60,34 +69,98 @@ export const NotesAndEventsTabView = ({
         description={ note.description }
         key={ note.id }
         onClickTrash={ () => { onClickTrash(note.id) } }
+        showDetails={ showDetails }
         title={ note.title }
-        type={ note.type }
+        type={ t(`notes-and-events.${note.type}`) }
       />
     )
   })
 
+  const modal = (
+    <RenderModal
+      footer={
+        <ModalFooter buttonAlignment={ 'end' }>
+          <Button
+            onClick={ onClickSaveModal }
+            type={ 'primary' }
+          >{t('save')}</Button>
+        </ModalFooter>
+      }
+      title={ t('notes-and-events.new-note') }
+    >
+      <div className={ styles['add-note-modal__section'] }>
+        <label>{t('type')}</label>
+        <Select
+          onChange={ (val) => { type = val } }
+          options={ [
+            {
+              value: 'content', label: t('notes-and-events.content')
+            }, {
+              value: 'seo', label: t('notes-and-events.seo')
+            }, {
+              value: 'warning', label: t('notes-and-events.warning')
+            }, {
+              value: 'notice', label: t('notes-and-events.notice')
+            }
+          ] }
+          placeholder={ t('select') }
+        />
+      </div>
+      <div className={ styles['add-note-modal__section'] }>
+        <label>{t('title')}</label><span className={ 'mandatory' }>*</span>
+        <Input
+          onChange={ (e) => { title = e.target.value } }
+        />
+      </div>
+      <div className={ styles['add-note-modal__section'] }>
+        <label>{t('description')}</label>
+        <Input
+          onChange={ (e) => { description = e.target.value } }
+        />
+      </div>
+    </RenderModal>
+  )
+
   return (
     <div className={ styles['notes-and-events'] }>
       <div className={ 'notes-container' }>
-        <div className={ 'notes-container__header' }>
-          <span className={ 'notes-container__text' }>{t('notes-and-events.notes-and-events')}</span>
-          <Button
-            icon={ <Icon
-              name={ 'PlusCircleOutlined' }
-              options={ { width: '24px', height: '24px' } }
-                   /> }
-          >
-            { t('add') }
-          </Button>
+        <div className={ 'notes-content' }>
+          <div className={ 'notes-content__header' }>
+            <span className={ 'notes-content__text' }>{t('notes-and-events.notes-and-events')}</span>
+            <Button
+              icon={ <Icon
+                name={ 'PlusCircleOutlined' }
+                options={ { width: '24px', height: '24px' } }
+                     /> }
+              onClick={ showModal }
+            >
+              {t('add')}
+            </Button>
+            {modal}
+          </div>
+          <div className={ 'notes-content__details' }>
+            {NotesAndEvents}
+          </div>
         </div>
-        <div className={ 'notes-container__details' }>
-          {NotesAndEvents}
+        <div className={ 'notes-container__pagination-container' }>
+          <div className={ 'notes-container__pagination' }>
+            <div />
+            {pagination}
+          </div>
         </div>
-        {pagination}
       </div>
       <div>
-
       </div>
     </div>
   )
+
+  function onClickSaveModal (): void {
+    console.log(type, title, description)
+    if (title === '') {
+      // TODO display notification title is mandatory
+      return
+    }
+    handleOk()
+    onClickSaveNote(type, title, description)
+  }
 }
