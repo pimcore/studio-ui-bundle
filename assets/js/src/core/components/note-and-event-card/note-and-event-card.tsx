@@ -57,18 +57,20 @@ export const NoteAndEventCard = ({
   const titleElement = (
     <div>
       <span className={ 'card-title' }>{title}</span>
-      <Button
-        aria-label={ i18n.t('aria.notes-and-events.expand') }
-        className={ 'card-title__chevron-btn' }
-        icon={ <Icon
-          className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
-          name={ 'chevron-up' }
-               /> }
-        onClick={ onClickChevron }
-        role={ 'button' }
-        size="small"
-        type={ 'text' }
-      />
+      { (description !== '' || showDetails) && (
+        <Button
+          aria-label={ i18n.t('aria.notes-and-events.expand') }
+          className={ 'card-title__chevron-btn' }
+          icon={ <Icon
+            className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
+            name={ 'chevron-up' }
+                 /> }
+          onClick={ onClickChevron }
+          role={ 'button' }
+          size="small"
+          type={ 'text' }
+        />
+      )}
       <span className={ 'card-title__user' }>{user}</span>
     </div>
   )
