@@ -82,6 +82,15 @@ export const useStyles = createStyles(({ token, css }) => {
         display: flex;
         width: 100%;
         height: 100%;
+          
+        .ant-skeleton {
+          width: 100%;
+          margin: 4px;
+            
+            .ant-skeleton-input {
+                width: 100%;
+            }
+        }
       }
 
       .grid__cell-content > * {
