@@ -13,13 +13,13 @@
 
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData, type CellContext } from '@tanstack/react-table'
-import React, {useEffect, useMemo, useRef, useState} from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
 import { GridContextProvider } from './grid-context'
 import { useTranslation } from 'react-i18next'
-import {Skeleton} from "antd";
+import { Skeleton } from 'antd'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -57,9 +57,9 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   const tableElement = useRef<HTMLTableElement>(null)
 
   const tableData = useMemo(
-    () => (props.isLoading ? Array(5).fill({}) : props.data),
+    () => (props.isLoading === true ? Array(5).fill({}) : props.data),
     [props.isLoading, props.data]
-  );
+  )
 
   useEffect(() => {
     setData(tableData)
@@ -67,20 +67,21 @@ export const Grid = (props: GridProps): React.JSX.Element => {
 
   const tableColumns = useMemo(
     () =>
-      props.isLoading
+      props.isLoading === true
         ? props.columns.map((column) => ({
           ...column,
-          cell: <Skeleton.Input active={true} size={'small'}/>,
+          cell: <Skeleton.Input
+            active
+            size={ 'small' }
+                />
         }))
         : props.columns,
     [props.isLoading, columns]
-  );
+  )
 
   useEffect(() => {
     setColumns(tableColumns as GridProps['columns'])
   }, [tableColumns])
-
-
 
   const tableProps: TableOptions<any> = {
     data,
