@@ -88,7 +88,8 @@ export const useStyles = createStyles(({ token, css }) => {
           margin: 4px;
             
             .ant-skeleton-input {
-                width: 100%;
+              min-width: unset;
+              width: 100%;
             }
         }
       }
