@@ -23,6 +23,7 @@ import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-a
 import { formatDateTime } from '@Pimcore/utils/helpers'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import TextArea from 'antd/es/input/TextArea'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -114,7 +115,7 @@ export const NotesAndEventsTabView = ({
       </div>
       <div className={ styles['add-note-modal__section'] }>
         <label>{t('description')}</label>
-        <Input
+        <TextArea
           onChange={ (e) => { description = e.target.value } }
         />
       </div>
