@@ -42,9 +42,10 @@ export const RequiredByPanel = (): React.JSX.Element => {
       </div>
 
       <div className={ 'pimcore-dependencies__required-by__content' }>
-        {!isLoading && data !== undefined && (
-          <Table items={ data.items } />
-        )}
+        <Table
+          isLoading={ isLoading }
+          items={ data?.items ?? [] }
+        />
       </div>
     </div>
   )

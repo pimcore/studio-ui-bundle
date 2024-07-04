@@ -18,14 +18,19 @@ import {
   type GetDependenciesApiResponse
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
 import { useTranslation } from 'react-i18next'
-import { Grid } from '@Pimcore/components/grid/grid'
+import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { useStyle } from './table.styles'
 
 type DependencyTable = Dependency & {
   actions: React.JSX.Element
 }
 
-export const Table = ({ items }: Pick<GetDependenciesApiResponse, 'items'>): React.JSX.Element => {
+interface TableProps {
+  isLoading: GridProps['isLoading']
+  items: GetDependenciesApiResponse['items']
+}
+
+export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
 
@@ -56,6 +61,7 @@ export const Table = ({ items }: Pick<GetDependenciesApiResponse, 'items'>): Rea
       <Grid
         columns={ columns }
         data={ items }
+        isLoading={ isLoading }
       />
     </div>
   )
