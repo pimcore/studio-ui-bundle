@@ -19,10 +19,15 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       padding-left: ${token.paddingXS}px;
       padding-right: ${token.paddingXS}px;
+      height: 100%;
         
       .pimcore-dependencies__requires,
       .pimcore-dependencies__required-by {
         flex-grow: 1;
+      }
+        
+      > .ant-divider {
+        height: 100%
       }
     `,
     toolbar: css`
@@ -34,6 +39,10 @@ export const useStyle = createStyles(({ token, css }) => {
         
       &:hover {
         color: ${token.colorPrimaryHover};
+      }
+        
+      > p {
+        margin: 0;
       }
     `
   }

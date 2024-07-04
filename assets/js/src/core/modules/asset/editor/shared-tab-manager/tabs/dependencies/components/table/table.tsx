@@ -18,15 +18,16 @@ import {
   type GetDependenciesApiResponse
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
 import { useTranslation } from 'react-i18next'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Grid } from '@Pimcore/components/grid/grid'
+import { useStyle } from './table.styles'
 
 type DependencyTable = Dependency & {
   actions: React.JSX.Element
 }
 
-export const Table = ({ items, totalItems }: GetDependenciesApiResponse): React.JSX.Element => {
+export const Table = ({ items }: Pick<GetDependenciesApiResponse, 'items'>): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyle()
 
   const columnHelper = createColumnHelper<DependencyTable>()
   const columns = [
@@ -34,33 +35,28 @@ export const Table = ({ items, totalItems }: GetDependenciesApiResponse): React.
       header: t('asset.asset-editor-tabs.dependencies.columns.subtype'),
       meta: {
         type: 'asset-property-icon'
-      }
+      },
+      size: 70
     }),
     columnHelper.accessor('path', {
-      header: t('asset.asset-editor-tabs.dependencies.columns.path')
+      header: t('asset.asset-editor-tabs.dependencies.columns.path'),
+      size: 300
     }),
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.dependencies.columns.open'),
-      cell: (info) => {
-        return (
-          <Icon name={ 'group' } />
-        )
-      }
+      meta: {
+        type: 'open-element'
+      },
+      size: 50
     })
   ]
 
   return (
-    <>
-      {totalItems === 0 && (
-        <p>Sorry, all beers have been drunk</p>
-      )}
-
-      {totalItems > 0 && (
-        <Grid
-          columns={ columns }
-          data={ items }
-        />
-      )}
-    </>
+    <div className={ styles.table }>
+      <Grid
+        columns={ columns }
+        data={ items }
+      />
+    </div>
   )
 }

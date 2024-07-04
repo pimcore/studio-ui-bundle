@@ -19,6 +19,7 @@ import {
 import {
   RequiredByPanel
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/required-by-panel/required-by-panel'
+import { Divider } from 'antd'
 
 export const DependenciesTabContainer = (): React.JSX.Element => {
   const { styles } = useStyle()
@@ -26,6 +27,7 @@ export const DependenciesTabContainer = (): React.JSX.Element => {
   return (
     <div className={ styles.tab }>
       <RequiresPanel />
+      <Divider type={ 'vertical' } />
       <RequiredByPanel />
     </div>
   )
