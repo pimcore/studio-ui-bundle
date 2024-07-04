@@ -29,6 +29,7 @@ export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
       case 'asset':
         return <Icon name={ 'mainAsset' } />
       case 'object':
+      case 'dataObject':
         return <Icon name={ 'mainObject' } />
       case 'bool':
         return <Icon name={ 'check-done-02' } />
