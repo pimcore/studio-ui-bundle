@@ -156,7 +156,6 @@ export const NotesAndEventsTabView = ({
   )
 
   function onClickSaveModal (): void {
-    console.log(type, title, description)
     if (title === '') {
       // TODO display notification title is mandatory
       return
