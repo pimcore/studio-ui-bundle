@@ -22,6 +22,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 interface NoteAndEventCardProps {
   title: string
   type: string
+  user?: string | null
   date: string
   description: string
   data: any
@@ -33,6 +34,7 @@ interface NoteAndEventCardProps {
 export const NoteAndEventCard = ({
   title,
   type,
+  user,
   date,
   description,
   data,
@@ -67,6 +69,7 @@ export const NoteAndEventCard = ({
         size="small"
         type={ 'text' }
       />
+      <span className={ 'card-title__user' }>{user}</span>
     </div>
   )
 

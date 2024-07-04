@@ -73,6 +73,7 @@ export const NotesAndEventsTabView = ({
         showDetails={ showDetails }
         title={ note.title }
         type={ t(`notes-and-events.${note.type}`) }
+        user={ note.userName }
       />
     )
   })
