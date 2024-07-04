@@ -62,8 +62,6 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     return <></>
   }
 
-  console.log(asset.type)
-
   let definition = componentRegistryService.getComponent(asset.type!)
 
   if (definition === undefined) {

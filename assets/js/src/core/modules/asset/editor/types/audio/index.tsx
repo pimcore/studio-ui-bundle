@@ -37,10 +37,10 @@ import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 
-export const audioTabManager = container.get<AudioTabManager>(serviceIds['Asset/Editor/AudioTabManager'])
-
 moduleSystem.registerModule({
   onInit: () => {
+    const audioTabManager = container.get<AudioTabManager>(serviceIds['Asset/Editor/AudioTabManager'])
+
     audioTabManager.register({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',

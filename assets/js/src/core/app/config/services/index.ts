@@ -22,6 +22,7 @@ import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-man
 import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
+import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
 
 export const serviceIds = {
   // Widget manager
@@ -35,6 +36,7 @@ export const serviceIds = {
   'Asset/Editor/TextTabManager': 'Asset/Editor/TextTabManager',
   'Asset/Editor/VideoTabManager': 'Asset/Editor/VideoTabManager',
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
+  'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -55,6 +57,7 @@ container.bind(serviceIds['Asset/Editor/ImageTabManager']).to(ImageTabManager).i
 container.bind(serviceIds['Asset/Editor/TextTabManager']).to(TextTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/VideoTabManager']).to(VideoTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/AudioTabManager']).to(AudioTabManager).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()

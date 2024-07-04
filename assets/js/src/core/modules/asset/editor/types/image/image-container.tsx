@@ -22,8 +22,6 @@ import { Toolbar } from '../../toolbar/toolbar'
 const ImageContainer = (): React.JSX.Element => {
   const imageEditorTabManager = useInjection<ImageTabManager>(serviceIds['Asset/Editor/ImageTabManager'])
 
-  console.log('rendered')
-
   return (
     <TabsToolbarView
       renderTabbar={

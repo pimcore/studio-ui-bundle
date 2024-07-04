@@ -18,12 +18,12 @@ import '@Pimcore/modules/asset/editor/types/image'
 import '@Pimcore/modules/asset/editor/types/text'
 import '@Pimcore/modules/asset/editor/types/video'
 import '@Pimcore/modules/asset/editor/types/audio'
+import '@Pimcore/modules/asset/editor/types/unknown'
 import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
 import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { UnknownContainer } from './types/unknown/unknown-container'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { VideoContainer } from '@Pimcore/modules/asset/editor/types/video/video-container'
@@ -38,6 +38,7 @@ import {
   ActionsCell
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/actions-cell/actions-cell'
 import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-container'
+import { UnknownContainer } from '@Pimcore/modules/asset/editor/types/unknown/unknown-container'
 
 moduleSystem.registerModule({
   onInit: () => {
