@@ -13,16 +13,18 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
-import { Button, Tabs } from 'antd'
+import { Button, Result, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
 }
 
-interface IEditorTabsProps {
+export interface IEditorTabsProps {
   items: IAdvancedEditorTab[]
   defaultActiveKey?: string
   showLabelIfActive?: boolean
@@ -31,6 +33,11 @@ interface IEditorTabsProps {
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
+  const { context } = useGlobalAssetContext()
+
+  if (context === undefined) {
+    return <Result title="Missing context" />
+  }
 
   const openDetachedWidget = (item: IEditorTab): void => {
     detachWidget({
@@ -69,10 +76,15 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   })
 
   return (
-    <Tabs
-      className={ `${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}` }
-      defaultActiveKey={ defaultActiveKey }
-      items={ items }
-    />
+    <>
+      <Tabs
+        className={ `${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}` }
+        defaultActiveKey={ defaultActiveKey }
+        items={ items }
+        tabBarExtraContent={ {
+          left: <ElementToolbar context={ context } />
+        } }
+      />
+    </>
   )
 }

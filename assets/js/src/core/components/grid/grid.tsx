@@ -18,6 +18,7 @@ import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
 import { GridContextProvider } from './grid-context'
+import { useTranslation } from 'react-i18next'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,6 +46,7 @@ export interface GridProps {
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [columns, setColumns] = useState(props.columns)
   const [data, setData] = useState(props.data)
   const hashId = useCssComponentHash('table')
@@ -131,6 +133,11 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                   ))}
                 </thead>
                 <tbody className="ant-table-tbody">
+                  {table.getRowModel().rows.length === 0 && (
+                    <p className='ant-table-row-no-data'>
+                      {t('no-data-available-yet')}
+                    </p>
+                  )}
                   {table.getRowModel().rows.map(row => (
                     <tr
                       className='ant-table-row'
