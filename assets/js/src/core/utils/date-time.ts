@@ -17,7 +17,7 @@ interface IFormatDateTimeProps {
   date: Date
   lng: string
   timeStyle?: 'short' | 'medium' | 'long' | 'full'
-  dateStyle?: 'short' | 'medium' | 'long' | 'full',
+  dateStyle?: 'short' | 'medium' | 'long' | 'full'
   options?: Intl.DateTimeFormatOptions
 }
 
