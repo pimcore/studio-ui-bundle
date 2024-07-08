@@ -17,16 +17,18 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     tab: css`
       display: flex;
-      padding-left: ${token.paddingXS}px;
-      padding-right: ${token.paddingXS}px;
       height: 100%;
         
       .pimcore-dependencies__requires,
       .pimcore-dependencies__required-by {
         flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
       }
         
       > .ant-divider {
+        margin: 0;
         height: 100%
       }
     `,
@@ -43,6 +45,26 @@ export const useStyle = createStyles(({ token, css }) => {
         
       > p {
         margin: 0;
+      }
+    `,
+    wrapper: css`
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding-left: ${token.paddingXS}px;
+      padding-right: ${token.paddingXS}px;
+    `,
+    pagination: css`
+      height: 48px;
+      display: flex;
+      padding-left: ${token.paddingXS}px;
+      padding-right: ${token.paddingXS}px;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+        
+      &:has(*) {
+        border-top: 1px solid ${token.colorBorderTertiary};
       }
     `
   }
