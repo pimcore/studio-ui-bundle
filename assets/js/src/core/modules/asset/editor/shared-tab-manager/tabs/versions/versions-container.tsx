@@ -46,6 +46,11 @@ export const VersionsTabContainer = (): React.JSX.Element => {
   return (
     <div>
       <VersionsView
+        onBlurNote={
+          async (id, note): Promise<void> => {
+
+          }
+        }
         onClickClearAll={ async (
           elementType,
           id
@@ -54,8 +59,7 @@ export const VersionsTabContainer = (): React.JSX.Element => {
             elementType,
             id
           })
-        }
-        }
+        } }
         onClickDelete={
           async (id: number): Promise<void> => {
             await deleteVersion({

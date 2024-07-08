@@ -34,6 +34,7 @@ interface VersionCardProps {
   onClick?: () => void
   onClickPublish: () => void
   onClickDelete: () => void
+  onBlurNote: (e) => void
   onChangeCheckbox?: (e) => void
   className?: string
 }
@@ -54,6 +55,7 @@ export const VersionCard = ({
   onClick,
   onClickPublish,
   onClickDelete,
+  onBlurNote,
   onChangeCheckbox,
   className
 }: VersionCardProps): React.JSX.Element => {
@@ -165,6 +167,7 @@ export const VersionCard = ({
           <span>{t('version.note')}</span>
           <Input
             defaultValue={ note }
+            onBlur={ onBlurNote }
             placeholder={ 'Add a note' }
           />
         </div>

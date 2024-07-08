@@ -32,13 +32,15 @@ interface VersionsViewProps {
   onClickClearAll: (elementType: GetVersionsApiArg['elementType'], id: number) => void
   onClickPublish: (id: number) => void
   onClickDelete: (id: number) => void
+  onBlurNote: (id: number, note: string) => void
 }
 
 export const VersionsView = ({
   versions,
   onClickDelete,
   onClickPublish,
-  onClickClearAll
+  onClickClearAll,
+  onBlurNote
 }: VersionsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
@@ -98,6 +100,9 @@ export const VersionsView = ({
             date={ formatDate(version.date) }
             id={ version.id }
             key={ version.id }
+            onBlurNote={ (e): void => {
+              onBlurNote(version.id, e.target.value.toString() as string)
+            } }
             onChangeCheckbox={ (): void => {
               selectVersion(version.id)
             } }
