@@ -15,7 +15,8 @@ import React from 'react'
 import {
   useCleanupVersionMutation,
   useDeleteVersionMutation,
-  useGetVersionsQuery, usePublishVersionMutation
+  useGetVersionsQuery,
+  usePublishVersionMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
