@@ -11,11 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Empty } from 'antd'
-import { useTranslation } from 'react-i18next'
-import { useStyle } from './no-content.styles'
+import {Empty} from 'antd'
+import {useStyle} from './no-content.styles'
 import React from 'react'
-import { Icon } from '@Pimcore/components/icon/icon'
+import {Icon} from '@Pimcore/components/icon/icon'
 
 interface INoContentProps {
   text?: string
@@ -23,11 +22,6 @@ interface INoContentProps {
 
 export const NoContent = ({ text }: INoContentProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { t } = useTranslation()
-
-  if (text === undefined) {
-    text = t('component.no-content.no-content-available')
-  }
 
   return (
     <div className={ styles.content }>
