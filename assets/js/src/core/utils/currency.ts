@@ -19,8 +19,12 @@ interface IFormatCurrencyProps {
   options?: Intl.NumberFormatOptions
 }
 
-export function formatCurrency ({ value, lng = 'en', options }: IFormatCurrencyProps): string {
+export function formatCurrency ({ value, lng, options }: IFormatCurrencyProps): string {
   const { i18n } = useTranslation()
+
+  if (lng === undefined) {
+    lng = i18n.language
+  }
 
   return i18n.format(
     value,

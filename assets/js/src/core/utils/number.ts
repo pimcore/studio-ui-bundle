@@ -19,8 +19,12 @@ interface IFormatNumberProps {
   options?: Intl.NumberFormatOptions
 }
 
-export function formatNumber ({ value, lng = 'en', options }: IFormatNumberProps): string {
+export function formatNumber ({ value, lng, options }: IFormatNumberProps): string {
   const { i18n } = useTranslation()
+
+  if (lng === undefined) {
+    lng = i18n.language
+  }
 
   return i18n.format(
     value,

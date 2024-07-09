@@ -15,14 +15,18 @@ import { useTranslation } from 'react-i18next'
 
 interface IFormatDateTimeProps {
   date: Date
-  lng: string
+  lng?: string
   timeStyle?: 'short' | 'medium' | 'long' | 'full'
-  dateStyle?: 'short' | 'medium' | 'long' | 'full',
+  dateStyle?: 'short' | 'medium' | 'long' | 'full'
   options?: Intl.DateTimeFormatOptions
 }
 
-export function formatDateTime ({ date, lng = 'en', timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
+export function formatDateTime ({ date, lng, timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
   const { i18n } = useTranslation()
+
+  if (lng === undefined) {
+    lng = i18n.language
+  }
 
   return i18n.format(
     date,
@@ -36,10 +40,10 @@ export function formatDateTime ({ date, lng = 'en', timeStyle, dateStyle, option
   )
 }
 
-export function formatDate (date: Date, lng: string = 'en'): string {
-  return formatDateTime({ date, lng, dateStyle: 'short' })
+export function formatDate (date: Date): string {
+  return formatDateTime({ date, dateStyle: 'short' })
 }
 
-export function formatTime (date: Date, lng: string = 'en'): string {
-  return formatDateTime({ date, lng, timeStyle: 'short' })
+export function formatTime (date: Date): string {
+  return formatDateTime({ date, timeStyle: 'short' })
 }

@@ -10,6 +10,7 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
+import {useTranslation} from "react-i18next";
 
 interface IFormatRelativeTimeProps {
   value: number
@@ -18,7 +19,13 @@ interface IFormatRelativeTimeProps {
   options?: Intl.RelativeTimeFormatOptions
 }
 
-export function formatRelativeTime ({ value, unit, lng = 'en', options }: IFormatRelativeTimeProps): string {
+export function formatRelativeTime ({ value, unit, lng, options }: IFormatRelativeTimeProps): string {
+  const { i18n } = useTranslation()
+
+  if (lng === undefined) {
+    lng = i18n.language
+  }
+
   const formatter = new Intl.RelativeTimeFormat(lng, options)
 
   return formatter.format(value, unit)
