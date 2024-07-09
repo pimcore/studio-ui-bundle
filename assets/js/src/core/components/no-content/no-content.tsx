@@ -11,10 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {Empty} from 'antd'
-import {useStyle} from './no-content.styles'
+import { Empty } from 'antd'
+import { useStyle } from './no-content.styles'
 import React from 'react'
-import {Icon} from '@Pimcore/components/icon/icon'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface INoContentProps {
   text?: string
