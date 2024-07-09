@@ -10,7 +10,8 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import {useTranslation} from "react-i18next";
+
+import { useTranslation } from 'react-i18next'
 
 interface IFormatRelativeTimeProps {
   value: number
