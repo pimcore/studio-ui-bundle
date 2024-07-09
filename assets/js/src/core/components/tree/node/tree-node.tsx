@@ -40,7 +40,14 @@ const defaultProps: TreeNodeProps = {
 
 const { useToken } = theme
 
-const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
+const TreeNode = ({
+  id = defaultProps.id,
+  internalKey = defaultProps.internalKey,
+  icon = defaultProps.icon,
+  label = defaultProps.label,
+  level = defaultProps.level,
+  ...props
+}: TreeNodeProps): React.JSX.Element => {
   const { token } = useToken()
   const { children } = props
   const { styles } = useStyles()
@@ -48,11 +55,13 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
 
+  const treeNodeProps = { id, icon, label, internalKey, level, ...props }
+
   useEffect(() => {
     return () => {
       if (nodesRefs !== undefined) {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete nodesRefs.current[props.internalKey]
+        delete nodesRefs.current[internalKey]
       }
     }
   }, [])
@@ -60,7 +69,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
 
-    if (selectedIds.includes(props.id)) {
+    if (selectedIds.includes(id)) {
       classes.push('tree-node--selected')
     }
 
@@ -68,10 +77,10 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   }
 
   function selectNode (): void {
-    setSelectedIds([props.id])
+    setSelectedIds([id])
 
     if (onSelect !== undefined) {
-      onSelect({ ...props })
+      onSelect(treeNodeProps)
     }
   }
 
@@ -112,7 +121,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   function gotoNextNode (event: KeyboardEvent): void {
     event.preventDefault()
 
-    const index = nodeOrder!().indexOf(props.internalKey)
+    const index = nodeOrder!().indexOf(internalKey)
 
     if (index < nodeOrder!().length - 1) {
       nodesRefs!.current[nodeOrder!()[index + 1]].el.focus()
@@ -122,7 +131,7 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   function gotoPreviousNode (event: KeyboardEvent): void {
     event.preventDefault()
 
-    const index = nodeOrder!().indexOf(props.internalKey)
+    const index = nodeOrder!().indexOf(internalKey)
 
     if (index > 0) {
       nodesRefs!.current[nodeOrder!()[index - 1]].el.focus()
@@ -134,8 +143,8 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
   }
 
   function registerNode (el: HTMLElement): void {
-    const nodeRef: nodeRef = { el, node: props }
-    nodesRefs!.current[props.internalKey] = nodeRef
+    const nodeRef: nodeRef = { el, node: treeNodeProps }
+    nodesRefs!.current[internalKey] = nodeRef
   }
 
   return (
@@ -149,29 +158,27 @@ const TreeNode = (props: TreeNodeProps): React.JSX.Element => {
         role='button'
         style={
           {
-            paddingLeft: token.paddingSM + 20 * props.level,
-            minWidth: `${20 * props.level + 200}px`
+            paddingLeft: token.paddingSM + 20 * level,
+            minWidth: `${20 * level + 200}px`
           }
         }
         tabIndex={ -1 }
       >
         <TreeExpander
-          node={ props }
+          node={ treeNodeProps }
           state={ [isExpanded, setIsExpanded] }
         />
 
         <div className="tree-node__content-wrapper">
-          <RenderNodeContent node={ props } />
+          <RenderNodeContent node={ treeNodeProps } />
         </div>
       </Flex>
 
       {isExpanded && (
-        <TreeList node={ props } />
+        <TreeList node={ treeNodeProps } />
       )}
     </div>
   )
 }
-
-TreeNode.defaultProps = defaultProps
 
 export { TreeNode }

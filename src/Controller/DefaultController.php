@@ -23,15 +23,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DefaultController extends FrontendController
 {
-    #[Route('/')]
+    #[Route('')]
     #[Route('/login')]
-    public function indexAction(StaticResourcesResolverInterface $staticResourcesResolver): Response
+    public function indexAction(StaticResourcesResolverInterface $staticResourcesResolver, string $studioUrlUrlPath): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
             'studioCssFiles' => $staticResourcesResolver->getStudioCssFiles(),
             'studioJsFiles' => $staticResourcesResolver->getStudioJsFiles(),
             'bundleCssFiles' => $staticResourcesResolver->getBundleCssFiles(),
             'bundleJsFiles' => $staticResourcesResolver->getBundleJsFiles(),
+            'baseUrl' => $studioUrlUrlPath,
         ]);
     }
 }

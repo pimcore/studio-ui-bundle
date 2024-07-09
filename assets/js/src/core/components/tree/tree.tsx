@@ -54,7 +54,7 @@ export interface ITreeContext extends TreeProps {
   nodeOrder?: () => string[]
 }
 
-const defaultProps: TreeProps = {
+export const defaultProps: TreeProps = {
   nodeId: 1,
   nodeApiHook: () => {},
   maxItemsPerNode: 30,
@@ -66,10 +66,18 @@ export const TreeContext = createContext<ITreeContext>({
   ...defaultProps
 })
 
-const Tree = (props: TreeProps): React.JSX.Element => {
+const Tree = (
+  {
+    maxItemsPerNode = defaultProps.maxItemsPerNode,
+    nodeApiHook = defaultProps.nodeApiHook,
+    renderNode = defaultProps.renderNode,
+    renderNodeContent = defaultProps.renderNodeContent,
+    ...props
+  }: TreeProps
+): React.JSX.Element => {
   const selectedIdsState = useState<string[]>([])
   const { styles } = useStyles()
-  const { nodeId, nodeApiHook } = props
+  const { nodeId } = props
   const { apiHookResult, dataTransformer } = nodeApiHook({
     id: nodeId,
     level: -1
@@ -94,7 +102,7 @@ const Tree = (props: TreeProps): React.JSX.Element => {
     })
   }, [nodesRefs.current])
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder }), [props, selectedIdsState, nodesRefs, nodeOrder])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent }), [props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent])
 
   if (isError !== false) {
     return (<div>{'Error'}</div>)
@@ -107,7 +115,7 @@ const Tree = (props: TreeProps): React.JSX.Element => {
     items = nodes
   }
 
-  const TreeNode = props.renderNode
+  const TreeNode = renderNode
 
   return (
     <>
@@ -127,7 +135,5 @@ const Tree = (props: TreeProps): React.JSX.Element => {
     </>
   )
 }
-
-Tree.defaultProps = defaultProps
 
 export { Tree }

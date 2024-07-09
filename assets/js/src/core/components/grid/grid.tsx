@@ -12,12 +12,14 @@
 */
 
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData } from '@tanstack/react-table'
-import React, { useEffect, useRef, useState } from 'react'
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData, type CellContext } from '@tanstack/react-table'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
 import { GridContextProvider } from './grid-context'
+import { useTranslation } from 'react-i18next'
+import { Skeleton } from 'antd'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,8 +30,12 @@ declare module '@tanstack/react-table' {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface TableMeta<TData extends RowData> {
-    onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
+    onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData }) => void
   }
+}
+
+export interface ExtendedCellContext extends CellContext<any, any> {
+  modified?: boolean
 }
 
 export interface GridProps {
@@ -37,9 +43,12 @@ export interface GridProps {
   columns: Array<ColumnDef<any>>
   resizable?: boolean
   onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
+  modifiedCells?: Array<{ rowIndex: number, columnId: string }>
+  isLoading?: boolean
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [columns, setColumns] = useState(props.columns)
   const [data, setData] = useState(props.data)
   const hashId = useCssComponentHash('table')
@@ -47,13 +56,32 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
   const tableElement = useRef<HTMLTableElement>(null)
 
-  useEffect(() => {
-    setData(props.data)
-  }, [props.data])
+  const tableData = useMemo(
+    () => (props.isLoading === true ? Array(5).fill({}) : props.data),
+    [props.isLoading, props.data]
+  )
 
   useEffect(() => {
-    setColumns(props.columns)
-  }, [props.columns])
+    setData(tableData)
+  }, [tableData])
+
+  const tableColumns = useMemo(
+    () =>
+      props.isLoading === true
+        ? props.columns.map((column) => ({
+          ...column,
+          cell: <Skeleton.Input
+            active
+            size={ 'small' }
+                />
+        }))
+        : props.columns,
+    [props.isLoading, columns]
+  )
+
+  useEffect(() => {
+    setColumns(tableColumns as GridProps['columns'])
+  }, [tableColumns])
 
   const tableProps: TableOptions<any> = {
     data,
@@ -72,6 +100,15 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   }
 
   const table = useReactTable(tableProps)
+
+  function getExtendedCellContext (context: CellContext<any, any>): ExtendedCellContext {
+    return {
+      ...context,
+      modified: props.modifiedCells?.some(({ rowIndex, columnId }) => {
+        return rowIndex === context.row.index && columnId === context.column.id
+      })
+    }
+  }
 
   return (
     <GridContextProvider value={ { table: tableElement } }>
@@ -117,6 +154,11 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                   ))}
                 </thead>
                 <tbody className="ant-table-tbody">
+                  {table.getRowModel().rows.length === 0 && (
+                    <p className='ant-table-row-no-data'>
+                      {t('no-data-available-yet')}
+                    </p>
+                  )}
                   {table.getRowModel().rows.map(row => (
                     <tr
                       className='ant-table-row'
@@ -134,7 +176,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                           }
                         >
                           <div className='grid__cell-content'>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            {flexRender(cell.column.columnDef.cell, getExtendedCellContext(cell.getContext()))}
                           </div>
 
                           {props.resizable === true && (

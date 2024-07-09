@@ -33,6 +33,9 @@ import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import {
+  PropertiesContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 
 export const videoTabManager = container.get<VideoTabManager>(serviceIds['Asset/Editor/VideoTabManager'])
 
@@ -64,6 +67,14 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.custom-metadata',
       children: <CustomMetadataTabContainer />,
       icon: <Icon name={ 'data-management-2' } />
+    })
+
+    videoTabManager.register({
+      key: 'properties',
+      label: 'asset.asset-editor-tabs.properties.text',
+      children: <PropertiesContainer />,
+      icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
     })
 
     videoTabManager.register({

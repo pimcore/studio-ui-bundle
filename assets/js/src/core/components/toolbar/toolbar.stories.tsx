@@ -68,12 +68,6 @@ const pinnableToolbarElements: PinnableToolbarElement[] = [
   {
     iconName: 'target',
     label: 'toolbar.locate-in-tree'
-  },
-  {
-    iconName: 'info-circle-outlined',
-    label: 'toolbar.copy-id',
-    displayingArrowIcon: true,
-    pinning: true
   }
 ]
 

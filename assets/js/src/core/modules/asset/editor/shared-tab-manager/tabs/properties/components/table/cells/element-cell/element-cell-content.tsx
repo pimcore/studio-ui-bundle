@@ -16,9 +16,7 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { Tag } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
-import {
-  useStyle
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/element-cell/element-cell.styles'
+import { useStyle } from './element-cell.styles'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 
 export const ElementCellContent = forwardRef(function ElementCellContent (props: DefaultCellProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {

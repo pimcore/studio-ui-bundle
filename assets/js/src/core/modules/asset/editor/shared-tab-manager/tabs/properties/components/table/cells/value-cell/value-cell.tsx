@@ -18,7 +18,7 @@ import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select
 import { BooleanCell } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell'
 import {
   ElementCell
-} from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/cells/element-cell/element-cell'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/element-cell/element-cell'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type

@@ -11,10 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createContext } from 'react'
+import { createStyles } from 'antd-style'
 
-export interface IAssetContext {
-  id?: number
-}
-
-export const AssetContext = createContext<IAssetContext>({})
+export const useStyle = createStyles(({ token, css }) => {
+  return {
+    skeleton: css`
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+    `
+  }
+})

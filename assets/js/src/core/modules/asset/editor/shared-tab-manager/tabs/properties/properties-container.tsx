@@ -13,19 +13,16 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Divider, Result, Segmented, Select } from 'antd'
-import { useStyle } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/properties-container.styles'
+import { Button, Divider, Segmented, Select } from 'antd'
+import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Table } from '@Pimcore/modules/asset/editor/image/tab-manager/tabs/properties/components/table/table'
-import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { useGetPropertiesQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import Input from 'antd/es/input/Input'
+import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { context } = useGlobalAssetContext()
   const [propertiesTableTab, setPropertiesTableTab] = React.useState<string>('own')
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
 
@@ -33,14 +30,8 @@ export const PropertiesContainer = (): React.JSX.Element => {
     elementType: 'asset'
   })
 
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
-
   return (
     <div className={ styles.tab }>
-      <ElementToolbar />
-
       <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
         <p className={ 'pimcore-properties-toolbar__headline' }>
           { t('asset.asset-editor-tabs.properties.text') }
@@ -85,7 +76,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 <Button
                   icon={ <Icon name={ 'PlusCircleOutlined' } /> }
                   onClick={ () => {
-                    console.log('added custom property - in theorie :P')
+                    onAddPropertyClick()
                   } }
                 >
                   {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
@@ -128,4 +119,8 @@ export const PropertiesContainer = (): React.JSX.Element => {
       <Table propertiesTableTab={ propertiesTableTab } />
     </div>
   )
+
+  function onAddPropertyClick (): void {
+    console.log('add property')
+  }
 }

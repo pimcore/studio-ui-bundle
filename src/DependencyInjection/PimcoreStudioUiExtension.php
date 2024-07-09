@@ -37,7 +37,12 @@ class PimcoreStudioUiExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
         $loader->load('services.yaml');
+
+        $container->setParameter('pimcore_studio_ui.url_path', rtrim($config['url_path'], '/'));
     }
 }

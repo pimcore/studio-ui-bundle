@@ -48,6 +48,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
+            deleteAsset: build.mutation<DeleteAssetApiResponse, DeleteAssetApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/delete`, method: "DELETE" }),
+                invalidatesTags: ["Assets"],
+            }),
             downloadAssetById: build.query<DownloadAssetByIdApiResponse, DownloadAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
@@ -135,6 +139,15 @@ export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text d
     data: string;
 };
 export type GetAssetDataTextByIdApiArg = {
+    /** Id of the asset */
+    id: number;
+};
+export type DeleteAssetApiResponse =
+    /** status 200 Successfully deleted asset */ void | /** status 201 Successfully created jobRun for deleting assets */ {
+        /** ID of created jobRun */
+        id: number;
+    };
+export type DeleteAssetApiArg = {
     /** Id of the asset */
     id: number;
 };
@@ -385,6 +398,7 @@ export const {
     useGetAssetCustomMetadataByIdQuery,
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,
+    useDeleteAssetMutation,
     useDownloadAssetByIdQuery,
     useDownloadZippedAssetsQuery,
     useGetAssetByIdQuery,

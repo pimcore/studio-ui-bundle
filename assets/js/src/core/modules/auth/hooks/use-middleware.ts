@@ -14,6 +14,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
+import { routes } from '@Pimcore/app/router/router'
 
 export const useMiddleware = (): void => {
   const isAuthenticated = useIsAuthenticated()
@@ -21,11 +22,11 @@ export const useMiddleware = (): void => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/admin/studio')
+      navigate(routes.root)
     }
 
     if (!isAuthenticated) {
-      navigate('/admin/studio/login')
+      navigate(routes.login)
     }
   }, [isAuthenticated])
 }

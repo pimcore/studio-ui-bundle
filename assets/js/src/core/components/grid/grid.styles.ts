@@ -35,16 +35,13 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: ${token.Table.cellPaddingBlockSM}px ${token.Table.cellPaddingInlineSM}px;
       }
 
-      &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:first-child {
-        border-start-start-radius: 0;
-      }
-
-      &.ant-table-wrapper .ant-table-container table>thead>tr:first-child >*:last-child {
-        border-start-end-radius: 0;
-      }
-
       &.ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody>tr>td {
         padding: 0;
+      }
+        
+      .ant-table-row-no-data {
+        margin: 0;
+        padding: ${token.paddingXS}px 0px ${token.paddingXS}px ${token.paddingXS}px;
       }
 
       .ant-table-cell {
@@ -52,10 +49,6 @@ export const useStyles = createStyles(({ token, css }) => {
         border-left: 1px solid #F0F0F0;
         white-space: nowrap;
         text-overflow: ellipsis;
-
-        &:first-of-type {
-          border-left: 0;
-        }
 
         &:last-of-type {
           border-right: 1px solid #F0F0F0;
@@ -68,10 +61,37 @@ export const useStyles = createStyles(({ token, css }) => {
         z-index: 1;
       }
 
+      .ant-table-content {
+        table {
+          border: 1px solid #F0F0F0;
+          border-radius: 8px;
+        }
+          
+          .ant-table-tbody {
+            .ant-table-row:last-of-type {
+              .ant-table-cell:first-of-type {
+                border-bottom-left-radius: 8px;
+              }
+              .ant-table-cell:last-of-type {
+                border-bottom-right-radius: 8px;
+              }
+            }
+          }
+      }
+
       .grid__cell-content {
         display: flex;
         width: 100%;
         height: 100%;
+          
+        .ant-skeleton {
+          width: 100%;
+          margin: 4px;
+            
+            .ant-skeleton-input {
+                width: 100%;
+            }
+        }
       }
 
       .grid__cell-content > * {

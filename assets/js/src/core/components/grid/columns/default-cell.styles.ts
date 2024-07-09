@@ -31,6 +31,22 @@ export const useStyle = createStyles(({ token, css }) => {
         overflow: hidden;
         text-overflow: ellipsis;
       }
+
+      &.default-cell--modified, .default-cell--modified {
+        &::after {
+          content: '*';
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          pointer-events: none;
+          color: ${token.colorAccentSecondary};
+          padding: 3px 4px;
+          font-size: 12px;
+          line-height: 12px;
+          border-left: 3px solid ${token.colorAccentSecondary};
+        }
+      }
     `
   }
 })

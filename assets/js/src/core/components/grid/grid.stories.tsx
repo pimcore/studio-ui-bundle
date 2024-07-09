@@ -74,7 +74,19 @@ const columns = [
 export const _default = {
   args: {
     data,
-    columns
+    columns,
+    isLoading: false
+  }
+}
+
+export const ModifiedColumns = {
+  args: {
+    data,
+    columns,
+    modifiedCells: [
+      { rowIndex: 0, columnId: 'firstname' },
+      { rowIndex: 1, columnId: 'lastname' }
+    ]
   }
 }
 
