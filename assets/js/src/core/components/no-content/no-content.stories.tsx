@@ -11,10 +11,7 @@
  *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
-import { type Meta } from '@storybook/react'
-import React from 'react'
-import { Button } from 'antd'
-import { useMessage } from '@Pimcore/components/message/useMessage'
+import {type Meta} from '@storybook/react'
 import {NoContent} from "@Pimcore/components/no-content/no-content";
 
 const config: Meta = {
