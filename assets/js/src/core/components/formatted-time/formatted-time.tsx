@@ -21,7 +21,7 @@ interface FormattedDateProps {
 export const FormattedTime = (props: FormattedDateProps): React.JSX.Element => {
   return (
     <>
-      {formatTime(new Date(props.timestamp * 1000))}
+      {formatTime(props.timestamp)}
     </>
   )
 }
