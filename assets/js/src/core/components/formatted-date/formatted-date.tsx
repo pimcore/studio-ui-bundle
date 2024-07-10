@@ -12,23 +12,16 @@
 */
 
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { formatDate } from '@Pimcore/utils/date-time'
 
 interface FormattedDateProps {
   timestamp: number
 }
 
 const FormattedDate = (props: FormattedDateProps): React.JSX.Element => {
-  const { i18n } = useTranslation()
-  const formattedDate = i18n.format(
-    new Date(props.timestamp * 1000),
-    'datetime',
-    i18n.language
-  )
-
   return (
     <>
-      {formattedDate}
+      {formatDate(props.timestamp)}
     </>
   )
 }
