@@ -41,11 +41,9 @@ export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options 
         ...options
       }
     )
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error(`Failed to format date time: ${error}`)
   }
-
 }
 
 export function formatDate (timestamp: number): string {
