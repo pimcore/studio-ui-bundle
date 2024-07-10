@@ -26,6 +26,9 @@ import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical
 import {
   DetailsVersionsContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'
+import {
+  DetailsVersionContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -45,26 +48,6 @@ export const VersionsView = ({
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as number[])
-
-  const onClickCompareVersion = (): void => {
-    setDetailedVersions([])
-    setComparingActive(!comparingActive)
-  }
-
-  const selectVersion = (versionId: number): void => {
-    let tempComparedVersions = [...detailedVersions]
-    const isSelected = tempComparedVersions.includes(versionId)
-    if (tempComparedVersions.length === 2 && !isSelected) {
-      tempComparedVersions = []
-    }
-
-    if (!isSelected) {
-      tempComparedVersions.push(versionId)
-    } else {
-      tempComparedVersions.splice(tempComparedVersions.indexOf(versionId), 1)
-    }
-    setDetailedVersions(tempComparedVersions)
-  }
 
   return (
     <div className={ styles.versions }>
@@ -128,9 +111,35 @@ export const VersionsView = ({
         )) }
         />
       </div>
-      { detailedVersions.length > 0 && detailedVersions[0] !== -1 && (
+      { detailedVersions.length > 0 && comparingActive && (
         <DetailsVersionsContainer versionIds={ detailedVersions } />
+      )}
+      { detailedVersions.length > 0 && !comparingActive && (
+        <DetailsVersionContainer
+          versionId={ detailedVersions[0] }
+          versions={ versions }
+        />
       )}
     </div>
   )
+
+  function onClickCompareVersion (): void {
+    setDetailedVersions([])
+    setComparingActive(!comparingActive)
+  }
+
+  function selectVersion (versionId: number): void {
+    let tempComparedVersions = [...detailedVersions]
+    const isSelected = tempComparedVersions.includes(versionId)
+    if (tempComparedVersions.length === 2 && !isSelected) {
+      tempComparedVersions = []
+    }
+
+    if (!isSelected) {
+      tempComparedVersions.push(versionId)
+    } else {
+      tempComparedVersions.splice(tempComparedVersions.indexOf(versionId), 1)
+    }
+    setDetailedVersions(tempComparedVersions)
+  }
 }

@@ -20,14 +20,12 @@ export const useStyles = createStyles(({ token, css }) => {
     'right-side': css`
       width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
       padding: ${token.paddingSM}px;
+      text-align: center;
+      display: ruby;
 
       & > div {
         display: flex;
         flex-direction: row;
-      }
-      
-      & .ant-table {
-        width: 100%;
       }
       
       & .highlight-cell {

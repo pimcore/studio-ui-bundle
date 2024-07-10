@@ -42,6 +42,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .version-label {
+        color: ${versionToken.colorPrimaryTextActive};
         margin-right: ${versionToken.marginXS}px;
       }
 
