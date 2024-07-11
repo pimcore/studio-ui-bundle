@@ -11,17 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { formatDateTime } from '@Pimcore/utils/helpers'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 const formatMap: any = {
   dimensions: (data: any): string => {
     return data.width + ' x ' + data.height
   },
-  creationDate: (data: number): string => {
-    return formatDateTime(data)
+  creationDate: (timestamp: number): string => {
+    return formatDateTime({ timestamp, dateStyle: 'short', timeStyle: 'medium' })
   },
-  modificationDate: (data: number): string => {
-    return formatDateTime(data)
+  modificationDate: (timestamp: number): string => {
+    return formatDateTime({ timestamp, dateStyle: 'short', timeStyle: 'medium' })
   },
   fileSize: (data: number): string => {
     return (data / 1000) + ' KB'

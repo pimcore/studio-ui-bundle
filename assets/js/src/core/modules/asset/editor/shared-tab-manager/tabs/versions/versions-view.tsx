@@ -16,7 +16,7 @@ import i18n from '@Pimcore/app/i18n'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { formatDate, isSet } from '@Pimcore/utils/helpers'
+import { isSet } from '@Pimcore/utils/helpers'
 import { VersionCard } from '@Pimcore/components/version-card/version-card'
 import {
   type GetVersionsApiArg,
@@ -29,6 +29,7 @@ import {
 import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -88,7 +89,7 @@ export const VersionsView = ({
               activeDefault={ selected }
               autosaved={ version.autosave }
               className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
-              date={ formatDate(version.date) }
+              date={ formatDateTime({ timestamp: version.date, dateStyle: 'short', timeStyle: 'medium' }) }
               id={ version.id }
               key={ version.id }
               note={ version.note }
@@ -117,7 +118,7 @@ export const VersionsView = ({
               } }
               published={ version.published ?? false }
               savedBy={ version.user?.name ?? '' }
-              scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
+              scheduledDate={ isSet(version.scheduled) ? formatDateTime({ timestamp: version.scheduled!, dateStyle: 'short', timeStyle: 'short' }) : undefined }
               selectable={ comparingActive }
               selected={ selected }
               version={ version.versionCount }

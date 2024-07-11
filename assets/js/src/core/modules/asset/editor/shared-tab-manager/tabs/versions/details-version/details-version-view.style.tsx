@@ -15,7 +15,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   const versionToken = {
-    versionsLeftSideWidth: '369',
+    versionsLeftSideWidth: '383',
     ...token
   }
 

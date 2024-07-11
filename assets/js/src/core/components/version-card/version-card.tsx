@@ -132,7 +132,6 @@ export const VersionCard = ({
         extra={ extra }
         onClick={ onClick }
         size="small"
-        style={ { width: 300 } }
         title={ title }
       >
         <div className={ 'flexbox-start-end' }>
