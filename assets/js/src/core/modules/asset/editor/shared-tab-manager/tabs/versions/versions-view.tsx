@@ -83,6 +83,7 @@ export const VersionsView = ({
             date={ formatDate(version.date) }
             id={ version.id }
             key={ version.id }
+            note={ version.note }
             onBlurNote={ (e): void => {
               onBlurNote(version.id, e.target.value.toString() as string)
             } }
