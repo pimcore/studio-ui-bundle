@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import i18n from 'i18next';
+import i18n from 'i18next'
 
 interface IFormatNumberProps {
   value: number
