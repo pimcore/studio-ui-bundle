@@ -12,42 +12,37 @@
 */
 
 import React from 'react'
-import {Button, Divider, Segmented, Select} from "antd";
-import type { MenuProps } from 'antd';
-import Input from "antd/es/input/Input";
-import {Icon} from "@Pimcore/components/icon/icon";
-import {Table} from "@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table";
-import { useStyle } from './tags-container.styles';
-import {useTranslation} from "react-i18next";
-import DropdownButton from "antd/es/dropdown/dropdown-button";
+import type { MenuProps } from 'antd'
+import { useStyle } from './tags-container.styles'
+import { useTranslation } from 'react-i18next'
+import DropdownButton from 'antd/es/dropdown/dropdown-button'
 
 export const TagsTabContainer = (): React.JSX.Element => {
-  const {t} = useTranslation()
-  const {styles} = useStyle()
-
+  const { t } = useTranslation()
+  const { styles } = useStyle()
 
   const dropdownButtonMenu: MenuProps['items'] = [
     {
       label: 'Submit and continue',
-      key: '1',
-    },
+      key: '1'
+    }
   ]
 
   return (
-    <div className={styles.tab}>
-      <div className={['pimcore-tags-toolbar', styles.toolbar].join(' ')}>
-        <p className={'pimcore-tags-toolbar__headline'}>
+    <div className={ styles.tab }>
+      <div className={ ['pimcore-tags-toolbar', styles.toolbar].join(' ') }>
+        <p className={ 'pimcore-tags-toolbar__headline' }>
           {t('element.element-editor-tabs.tags.assigned-tags-text')}
         </p>
 
         <DropdownButton
-          menu={{
+          menu={ {
             items: dropdownButtonMenu
-          }}
+          } }
         />
       </div>
 
-      <div className={'pimcore-tags-content'}>
+      <div className={ 'pimcore-tags-content' }>
         {/* content goes here */}
       </div>
     </div>
