@@ -19,9 +19,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 
 interface DetailsVersionViewProps {
-  versionId: number
+  versionId: VersionIdentifiers
   data: any[]
   imgSrc: string
   firstVersion: boolean
@@ -45,7 +46,7 @@ export const DetailsVersionView = ({
 
   const columns = [
     columnHelper.accessor(i18n.t('field'), { size: 162 }),
-    columnHelper.accessor(i18n.t('version.version') + ' ' + versionId, { size: 180 })
+    columnHelper.accessor(i18n.t('version.version') + ' ' + versionId.count, { size: 180 })
   ]
 
   return (

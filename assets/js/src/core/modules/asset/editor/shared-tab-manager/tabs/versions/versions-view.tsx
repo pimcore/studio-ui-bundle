@@ -38,6 +38,11 @@ interface VersionsViewProps {
   onBlurNote: (id: number, note: string) => void
 }
 
+export interface VersionIdentifiers {
+  id: number
+  count: number
+}
+
 export const VersionsView = ({
   versions,
   onClickDelete,
@@ -47,7 +52,7 @@ export const VersionsView = ({
 }: VersionsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
-  const [detailedVersions, setDetailedVersions] = useState([] as number[])
+  const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 
   return (
     <div className={ styles.versions }>
@@ -75,41 +80,50 @@ export const VersionsView = ({
             {i18n.t('clear-all')}
           </Button>
         </div>
-        <VerticalTimeline timeStamps={ versions.map((version) => (
-          <VersionCard
-            activeDefault={ detailedVersions.includes(version.id) }
-            autosaved={ version.autosave }
-            className={ detailedVersions.includes(version.id) ? 'is-active' : '' }
-            date={ formatDate(version.date) }
-            id={ version.id }
-            key={ version.id }
-            note={ version.note }
-            onBlurNote={ (e): void => {
-              onBlurNote(version.id, e.target.value.toString() as string)
-            } }
-            onChangeCheckbox={ (): void => {
-              selectVersion(version.id)
-            } }
-            onClick={ () => {
-              if (comparingActive) {
-                selectVersion(version.id)
-              } else {
-                setDetailedVersions([version.id])
-              }
-            } }
-            onClickDelete={ (): void => {
-              setDetailedVersions([])
-              onClickDelete(version.id)
-            } }
-            onClickPublish={ (): void => { onClickPublish(version.id) } }
-            published={ version.published ?? false }
-            savedBy={ version.user?.name ?? '' }
-            scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
-            selectable={ comparingActive }
-            selected={ detailedVersions.includes(version.id) }
-            version={ version.versionCount }
-          />
-        )) }
+        <VerticalTimeline timeStamps={ versions.map((version) => {
+          const vId = { id: version.id, count: version.versionCount }
+          const selected = detailedVersions.some((v => v.id === version.id))
+          return (
+            <VersionCard
+              activeDefault={ selected }
+              autosaved={ version.autosave }
+              className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
+              date={ formatDate(version.date) }
+              id={ version.id }
+              key={ version.id }
+              note={ version.note }
+              onBlurNote={ (e): void => {
+                onBlurNote(version.id, e.target.value.toString() as string)
+              } }
+              onChangeCheckbox={ (): void => {
+                selectVersion(vId)
+              } }
+              onClick={ () => {
+                if (comparingActive) {
+                  selectVersion(vId)
+                } else {
+                  setDetailedVersions([{
+                    id: version.id,
+                    count: version.versionCount
+                  }])
+                }
+              } }
+              onClickDelete={ (): void => {
+                setDetailedVersions([])
+                onClickDelete(version.id)
+              } }
+              onClickPublish={ (): void => {
+                onClickPublish(version.id)
+              } }
+              published={ version.published ?? false }
+              savedBy={ version.user?.name ?? '' }
+              scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
+              selectable={ comparingActive }
+              selected={ selected }
+              version={ version.versionCount }
+            />
+          )
+        }) }
         />
       </div>
       { detailedVersions.length > 0 && comparingActive && (
@@ -129,17 +143,17 @@ export const VersionsView = ({
     setComparingActive(!comparingActive)
   }
 
-  function selectVersion (versionId: number): void {
+  function selectVersion (vId: VersionIdentifiers): void {
     let tempComparedVersions = [...detailedVersions]
-    const isSelected = tempComparedVersions.includes(versionId)
+    const isSelected = tempComparedVersions.some(v => v.id === vId.id)
     if (tempComparedVersions.length === 2 && !isSelected) {
       tempComparedVersions = []
     }
 
     if (!isSelected) {
-      tempComparedVersions.push(versionId)
+      tempComparedVersions.push(vId)
     } else {
-      tempComparedVersions.splice(tempComparedVersions.indexOf(versionId), 1)
+      tempComparedVersions.splice(tempComparedVersions.indexOf(vId), 1)
     }
     setDetailedVersions(tempComparedVersions)
   }

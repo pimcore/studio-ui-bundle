@@ -24,9 +24,10 @@ import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import {
   formatVersionData
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 
 export interface DetailsVersionsContainerProps {
-  versionIds: number[]
+  versionIds: VersionIdentifiers[]
 }
 
 export const DetailsVersionsContainer = ({
@@ -37,7 +38,8 @@ export const DetailsVersionsContainer = ({
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
-    versionIds.forEach(async id => {
+    versionIds.forEach(async vId => {
+      const id = vId.id
       versionPromises.push(store.dispatch(api.endpoints.getVersionById.initiate({ id })))
 
       if (!Object.keys(imageUrls).includes(id.toString())) {
@@ -71,14 +73,14 @@ export const DetailsVersionsContainer = ({
           const data = response.data
           let index = 0
           for (const key in data) {
-            tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex]}`] =
+            tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex].count}`] =
               formatVersionData(key, data[key])
           }
 
-          tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex]}`] = (
+          tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex].count}`] = (
             <PimcoreImage
               key={ 'image' }
-              src={ imageUrls[versionIds[versionIndex]] ?? '' }
+              src={ imageUrls[versionIds[versionIndex].id] ?? '' }
             />
           )
         })

@@ -21,33 +21,34 @@ import { formatVersionData } from '@Pimcore/modules/asset/editor/shared-tab-mana
 import {
   DetailsVersionView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view'
+import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 
 export interface DetailsVersionsContainerProps {
   versions: Version[]
-  versionId: number
+  versionId: VersionIdentifiers
 }
 
 export const DetailsVersionContainer = ({
   versions,
   versionId
 }: DetailsVersionsContainerProps): React.JSX.Element => {
-  const [id, setId] = useState(versionId)
+  const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
   const [imageUrls, setImageUrls] = useState({})
 
   useEffect(() => {
-    setId(versionId)
+    setVId(versionId)
   }, [versionId])
 
   useEffect(() => {
-    const versionPromise = store.dispatch(api.endpoints.getVersionById.initiate({ id }))
+    const versionPromise = store.dispatch(api.endpoints.getVersionById.initiate({ id: vId.id }))
 
-    if (!Object.keys(imageUrls).includes(id.toString())) {
-      fetch(`http://localhost/studio/api/versions/${id}/image/stream`)
+    if (!Object.keys(imageUrls).includes(vId.id.toString())) {
+      fetch(`http://localhost/studio/api/versions/${vId.id}/image/stream`)
         .then(async (response) => await response.blob())
         .then((imageBlob) => {
           const imageURL = URL.createObjectURL(imageBlob)
-          setImageUrls({ [id]: imageURL, ...imageUrls })
+          setImageUrls({ [vId.id]: imageURL, ...imageUrls })
         })
         .catch((err) => {
           console.error(err)
@@ -66,7 +67,7 @@ export const DetailsVersionContainer = ({
 
         let index = 0
         for (const key in data) {
-          tempVersionData[index++][`${i18n.t('version.version')} ${id}`] =
+          tempVersionData[index++][`${i18n.t('version.version')} ${vId.count}`] =
             formatVersionData(key, data[key])
         }
 
@@ -75,7 +76,7 @@ export const DetailsVersionContainer = ({
         }
       })
       .catch(err => { console.log(err) })
-  }, [imageUrls, id])
+  }, [imageUrls, vId])
 
   if (versionData.length === 0) {
     return <div>Loading ...</div>
@@ -84,12 +85,12 @@ export const DetailsVersionContainer = ({
   return (
     <DetailsVersionView
       data={ versionData }
-      firstVersion={ versions[0].id === id }
-      imgSrc={ imageUrls[id] }
-      lastVersion={ versions[versions.length - 1].id === id }
+      firstVersion={ versions[0].id === vId.id }
+      imgSrc={ imageUrls[vId.id] }
+      lastVersion={ versions[versions.length - 1].id === vId.id }
       onClickNext={ onClickNext }
       onClickPrevious={ onClickPrevious }
-      versionId={ id }
+      versionId={ vId }
     />
   )
 
@@ -103,9 +104,12 @@ export const DetailsVersionContainer = ({
 
   function setVersionIdByOffset (offset: number): void {
     for (let i = 0; i < versions.length; i++) {
-      if (versions[i].id === id) {
+      if (versions[i].id === vId.id) {
         if ((i + offset) >= 0 && (i + offset) < versions.length) {
-          setId(versions[i + offset].id)
+          setVId({
+            id: versions[i + offset].id,
+            count: versions[i + offset].versionCount
+          })
         }
         break
       }

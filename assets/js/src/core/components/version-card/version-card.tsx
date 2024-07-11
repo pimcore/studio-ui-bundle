@@ -77,7 +77,7 @@ export const VersionCard = ({
           onChange={ onChangeCheckbox }
         />
         ) }
-        <span className={ 'title' }>{`${t('version.version')} ${id} | ${date} `}</span>
+        <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
         <Button
           aria-label={ t('aria.version.expand') }
           icon={ <Icon
