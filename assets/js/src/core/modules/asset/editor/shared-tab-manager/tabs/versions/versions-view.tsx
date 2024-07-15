@@ -65,83 +65,90 @@ export const VersionsView = ({
     setDetailedVersions(tempComparedVersions)
   }
 
+  if (versions.length === 0) {
+    return (
+      <div className={ styles.noContent }>
+        <p className={ 'headline' }>{i18n.t('version.versions')}</p>
+        <div className={ 'empty-container' }>
+          <NoContent
+            text={ i18n.t('version.no-versions-to-show') }
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <>
-      <div className={ styles.versions }>
-        <div className={ 'left-side' }>
-          <div className={ 'flexbox-start-end' }>
-            <div>
-              <span className={ 'version-label' }>{i18n.t('version.versions')}</span>
-              {versions.length > 0 && (
-                <Button
-                  className={ comparingActive ? 'compare-button' : '' }
-                  onClick={ onClickCompareVersion }
-                >{i18n.t('version.compare-versions')}</Button>
-              )}
-            </div>
+    <div className={ styles.versions }>
+      <div className={ 'left-side' }>
+        <div className={ 'flexbox-start-end' }>
+          <div>
+            <span className={ 'version-label' }>{i18n.t('version.versions')}</span>
             {versions.length > 0 && (
               <Button
-                icon={ <Icon name={ 'trash' } /> }
-                onClick={ () => {
-                  if (versions.length === 0) {
-                    return
-                  }
-                  onClickClearAll(
-                    versions[0].ctype as GetVersionsApiArg['elementType'],
-                    versions[0].cid
-                  )
-                } }
-              >
-                {i18n.t('clear-all')}
-              </Button>
+                className={ comparingActive ? 'compare-button' : '' }
+                onClick={ onClickCompareVersion }
+              >{i18n.t('version.compare-versions')}</Button>
             )}
           </div>
 
           {versions.length > 0 && (
-            <VerticalTimeline timeStamps={ versions.map((version) => (
-              <VersionCard
-                activeDefault={ detailedVersions.includes(version.id) }
-                autosaved={ version.autosave }
-                className={ detailedVersions.includes(version.id) ? 'is-active' : '' }
-                date={ formatDate(version.date) }
-                id={ version.id }
-                key={ version.id }
-                onChangeCheckbox={ (): void => {
-                  selectVersion(version.id)
-                } }
-                onClick={ () => {
-                  if (comparingActive) {
-                    selectVersion(version.id)
-                  } else {
-                    setDetailedVersions([version.id])
-                  }
-                } }
-                onClickDelete={ (): void => {
-                  setDetailedVersions([])
-                  onClickDelete(version.id)
-                } }
-                onClickPublish={ (): void => { onClickPublish(version.id) } }
-                published={ version.published ?? false }
-                savedBy={ version.user?.name ?? '' }
-                scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
-                selectable={ comparingActive }
-                selected={ detailedVersions.includes(version.id) }
-                version={ version.versionCount }
-              />
-            )) }
-            />
+            <Button
+              icon={ <Icon name={ 'trash' } /> }
+              onClick={ () => {
+                if (versions.length === 0) {
+                  return
+                }
+                onClickClearAll(
+                  versions[0].ctype as GetVersionsApiArg['elementType'],
+                  versions[0].cid
+                )
+              } }
+            >
+              {i18n.t('clear-all')}
+            </Button>
           )}
         </div>
-        { detailedVersions.length > 0 && detailedVersions[0] !== -1 && (
-          <DetailsVersionsContainer versionIds={ detailedVersions } />
+
+        {versions.length > 0 && (
+          <VerticalTimeline timeStamps={ versions.map((version) => (
+            <VersionCard
+              activeDefault={ detailedVersions.includes(version.id) }
+              autosaved={ version.autosave }
+              className={ detailedVersions.includes(version.id) ? 'is-active' : '' }
+              date={ formatDate(version.date) }
+              id={ version.id }
+              key={ version.id }
+              onChangeCheckbox={ (): void => {
+                selectVersion(version.id)
+              } }
+              onClick={ () => {
+                if (comparingActive) {
+                  selectVersion(version.id)
+                } else {
+                  setDetailedVersions([version.id])
+                }
+              } }
+              onClickDelete={ (): void => {
+                setDetailedVersions([])
+                onClickDelete(version.id)
+              } }
+              onClickPublish={ (): void => { onClickPublish(version.id) } }
+              published={ version.published ?? false }
+              savedBy={ version.user?.name ?? '' }
+              scheduledDate={ isSet(version.scheduled) ? formatDate(version.scheduled!) : undefined }
+              selectable={ comparingActive }
+              selected={ detailedVersions.includes(version.id) }
+              version={ version.versionCount }
+            />
+          )) }
+          />
         )}
       </div>
 
-      {versions.length === 0 && (
-        <NoContent
-          text={ i18n.t('version.no-versions-to-show') }
-        />
+      { detailedVersions.length > 0 && detailedVersions[0] !== -1 && (
+        <DetailsVersionsContainer versionIds={ detailedVersions } />
       )}
-    </>
+    </div>
   )
 }

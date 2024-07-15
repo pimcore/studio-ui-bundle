@@ -60,6 +60,29 @@ export const useStyles = createStyles(({ token, css }) => {
         & .compare-button {
             background-color: ${versionToken.colorFillAlter};
         }
+    `,
+    noContent: css`
+        padding: ${token.paddingSM}px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        
+      .headline {
+          font-weight: 600;
+          color: ${token.colorPrimary};
+          margin: 0 8px 0 0;
+
+          &:hover {
+              color: ${token.colorPrimaryHover};
+          }
+      }
+        
+        .empty-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     `
   }
 }, { hashPriority: 'low' })

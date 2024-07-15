@@ -45,34 +45,32 @@ export const VersionsTabContainer = (): React.JSX.Element => {
   }
 
   return (
-    <div>
-      <VersionsView
-        onClickClearAll={ async (
+    <VersionsView
+      onClickClearAll={ async (
+        elementType,
+        id
+      ): Promise<void> => {
+        await cleanupVersion({
           elementType,
           id
-        ): Promise<void> => {
-          await cleanupVersion({
-            elementType,
+        })
+      }
+      }
+      onClickDelete={
+        async (id: number): Promise<void> => {
+          await deleteVersion({
             id
           })
         }
+      }
+      onClickPublish={
+        async (id: number): Promise<void> => {
+          await publishVersion({
+            id
+          })
         }
-        onClickDelete={
-          async (id: number): Promise<void> => {
-            await deleteVersion({
-              id
-            })
-          }
-        }
-        onClickPublish={
-          async (id: number): Promise<void> => {
-            await publishVersion({
-              id
-            })
-          }
-        }
-        versions={ data!.items }
-      />
-    </div>
+      }
+      versions={ data!.items }
+    />
   )
 }
