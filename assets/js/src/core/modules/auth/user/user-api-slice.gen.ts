@@ -89,7 +89,7 @@ const injectedRtkApi = api
 export { injectedRtkApi as api };
 export type GetUserRolesApiResponse = /** status 200 List of available user roles. */ {
     totalItems: number;
-    items: UserRole[];
+    items: SimpleUserRole[];
 };
 export type GetUserRolesApiArg = void;
 export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
@@ -119,7 +119,7 @@ export type GetStudioApiUserCurrentUserInformationApiResponse =
 export type GetStudioApiUserCurrentUserInformationApiArg = void;
 export type GetUserByIdApiResponse = /** status 200 User data. */ User;
 export type GetUserByIdApiArg = {
-    /** Id of the element */
+    /** Id of the user */
     id: number;
 };
 export type UpdateUserByIdApiResponse = /** status 200 Updated data. */ User;
@@ -164,7 +164,7 @@ export type GetUserTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
-export type UserRole = {
+export type SimpleUserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
