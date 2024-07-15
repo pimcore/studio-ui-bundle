@@ -18,41 +18,71 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     versions: css`
-      display: flex;
-      flex-direction: row;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
- 
-      & .left-side {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+
+        & .left-side {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+
+            height: 100%;
+            width: ${versionToken.versionsLeftSideWidth}px;
+        }
+
+        & .left-side > .flexbox-start-end {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: ${versionToken.paddingSM}px;
+        }
+
+        .version-label {
+
+            font-weight: 600;
+            color: ${token.colorPrimary};
+            margin: 0 8px 0 0;
+
+            &:hover {
+                color: ${token.colorPrimaryHover};
+            }
+        }
+
+
+        & .ant-btn-icon {
+            vertical-align: text-bottom;
+        }
+
+        & .compare-button {
+            background-color: ${versionToken.colorFillAlter};
+        }
+    `,
+    noContent: css`
+        padding: ${token.paddingSM}px;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
         
-        height: 100%;
-        width: ${versionToken.versionsLeftSideWidth}px;
-      }
+      .headline {
+          font-weight: 600;
+          color: ${token.colorPrimary};
+          margin: 0 8px 0 0;
 
-      & .left-side > .flexbox-start-end {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: ${versionToken.paddingSM}px;
+          &:hover {
+              color: ${token.colorPrimaryHover};
+          }
       }
-
-      .version-label {
-        margin-right: ${versionToken.marginXS}px;
-      }
-
-
-      & .ant-btn-icon {
-        vertical-align: text-bottom;
-      }
-      
-      & .compare-button {
-        background-color: ${versionToken.colorFillAlter};
-      }
+        
+        .empty-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     `
   }
 }, { hashPriority: 'low' })

@@ -85,6 +85,7 @@ import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
 import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
 import Icon from '@Pimcore/assets/icons/icon.inline.svg'
+import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -369,6 +370,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'close',
       component: close
+    })
+    iconLibrary.register({
+      name: 'no-content',
+      component: NoContent
     })
   }
 })
