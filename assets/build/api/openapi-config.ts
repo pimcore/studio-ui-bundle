@@ -42,6 +42,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/element/element-api-slice.gen.ts': {
       filterEndpoints: [/path/i]
     },
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts': {
+      filterEndpoints: [/tags/i]
+    },
   },
   exportName: 'api',
   hooks: true,

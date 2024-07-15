@@ -128,3 +128,5 @@ asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
 asset.asset-editor-tabs.dependencies.columns.path: Subtype
 asset.asset-editor-tabs.dependencies.columns.open: Open
 element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
+asset.asset-editor-tabs.tags.columns.path: Path
+asset.asset-editor-tabs.tags.columns.actions: Remove

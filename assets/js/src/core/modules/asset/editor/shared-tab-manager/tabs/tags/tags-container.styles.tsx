@@ -16,8 +16,47 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     tab: css`
+      display: flex;
+      flex-direction: row;
+        height: 100%;
+
+        .ant-btn {
+            color: ${token.colorPrimary};
+
+            &:hover {
+                color: ${token.colorPrimaryHover};
+            }
+        }
+        
+        .pimcore-tags-sidebar {
+            width: auto;
+        }
+        
+        .pimcore-tags-main {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .ant-divider {
+          stroke: ${token.Divider.colorSplit};
+          height: 100%;
+        }
     `,
     toolbar: css`
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    
+        .pimcore-tags-toolbar__headline {
+            font-weight: 600;
+            line-height: 20px;
+            color: ${token.itemActiveColor}; 
+        }
+        
+        .ant-dropdown-button {
+            width: auto;
+        }
     `
   }
 })
