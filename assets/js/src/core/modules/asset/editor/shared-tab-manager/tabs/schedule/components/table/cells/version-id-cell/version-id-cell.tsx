@@ -39,7 +39,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     elementType: context.type,
     id: context.config.id,
     page: 1,
-    pageSize: 20
+    pageSize: 9999
   })
 
   useEffect(() => {

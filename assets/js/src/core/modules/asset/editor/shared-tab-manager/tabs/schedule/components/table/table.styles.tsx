@@ -40,6 +40,10 @@ export const useStyles = createStyles(({ css, token }) => {
               }
             }
           }
+          
+          .ant-select {
+              width: 100%;
+          }
             
           .ant-dropdown-trigger {
             padding: 0;
