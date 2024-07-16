@@ -14,6 +14,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/image/stream` }),
                 providesTags: ["Versions"],
             }),
+            streamPdfVersionById: build.query<StreamPdfVersionByIdApiResponse, StreamPdfVersionByIdApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/pdf/stream` }),
+                providesTags: ["Versions"],
+            }),
             getVersionById: build.query<GetVersionByIdApiResponse, GetVersionByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}` }),
                 providesTags: ["Versions"],
@@ -51,6 +55,11 @@ export type DownloadAssetVersionByIdApiArg = {
 };
 export type StreamImageVersionByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
 export type StreamImageVersionByIdApiArg = {
+    /** Id of the version */
+    id: number;
+};
+export type StreamPdfVersionByIdApiResponse = /** status 200 PDF version stream */ Blob;
+export type StreamPdfVersionByIdApiArg = {
     /** Id of the version */
     id: number;
 };
@@ -214,6 +223,7 @@ export type Version = {
 export const {
     useDownloadAssetVersionByIdQuery,
     useStreamImageVersionByIdQuery,
+    useStreamPdfVersionByIdQuery,
     useGetVersionByIdQuery,
     usePublishVersionMutation,
     useDeleteVersionMutation,

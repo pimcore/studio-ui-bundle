@@ -38,6 +38,12 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
       filterEndpoints: [/schedule/i]
+    },
+    '../../js/src/core/modules/element/element-api-slice.gen.ts': {
+      filterEndpoints: [/path/i]
+    },
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen.ts': {
+      filterEndpoints: [/dependencies/i]
     }
   },
   exportName: 'api',

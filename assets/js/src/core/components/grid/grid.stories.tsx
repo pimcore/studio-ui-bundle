@@ -74,7 +74,8 @@ const columns = [
 export const _default = {
   args: {
     data,
-    columns
+    columns,
+    isLoading: false
   }
 }
 

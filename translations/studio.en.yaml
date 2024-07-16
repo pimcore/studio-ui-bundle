@@ -19,8 +19,6 @@ asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
 toolbar.reload: Reload
-toolbar.locate-in-tree: Locate in Tree
-toolbar.copy-id: Copy ID
 toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
@@ -100,11 +98,13 @@ version.fileSize: File Size
 version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
 version.image: Image
+version.no-versions-to-show: There are no versions to show.
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
 by: By
 field: Field
+no-data-available-yet: No data available yet.
 asset.asset-editor-tabs.schedule.headline: Schedule
 asset.asset-editor-tabs.schedule.columns.date: Date
 asset.asset-editor-tabs.schedule.columns.time: Time
@@ -123,3 +123,10 @@ asset.asset-editor-tabs.schedule.select-an-action: Action
 asset.asset-editor-tabs.schedule.select-a-version: Version
 asset.asset-editor-tabs.schedule.archived: Archived
 asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
+asset.asset-editor-tabs.dependencies.requires: Requires
+asset.asset-editor-tabs.dependencies.required-by: Required by
+asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
+asset.asset-editor-tabs.dependencies.columns.path: Path
+asset.asset-editor-tabs.dependencies.columns.open: Open
+component.no-content.no-content-available: No content available
+
