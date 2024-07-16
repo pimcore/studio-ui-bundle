@@ -1,15 +1,11 @@
 import { api } from "../../../app/api/pimcore/index";
-export const addTagTypes = ["Role Management", "User Management"] as const;
+export const addTagTypes = ["User Management"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getUserRoles: build.query<GetUserRolesApiResponse, GetUserRolesApiArg>({
-                query: () => ({ url: `/studio/api/roles` }),
-                providesTags: ["Role Management"],
-            }),
             cloneUser: build.mutation<CloneUserApiResponse, CloneUserApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/user/clone/${queryArg.id}`,
@@ -87,11 +83,6 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetUserRolesApiResponse = /** status 200 List of available user roles. */ {
-    totalItems: number;
-    items: SimpleUserRole[];
-};
-export type GetUserRolesApiArg = void;
 export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
 export type CloneUserApiArg = {
     /** Id of the user */
@@ -164,26 +155,6 @@ export type GetUserTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
-export type SimpleUserRole = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** ID of the Role */
-    id: number;
-    /** Name of the Role */
-    name?: string;
-};
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -197,6 +168,16 @@ export type TreeNode = {
     type: string;
     /** If a folder has sub items */
     hasChildren: boolean;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type UserInformation = {
     /** Username */
@@ -340,7 +321,6 @@ export type ResetPassword = {
     username: string;
 };
 export const {
-    useGetUserRolesQuery,
     useCloneUserMutation,
     useCreateUserMutation,
     useCreateUserFolderMutation,
