@@ -84,6 +84,8 @@ import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
 import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
+import intersectCircle from '@Pimcore/assets/icons/intersect-circle.inline.svg'
+import cornerLeftUp from '@Pimcore/assets/icons/corner-left-up.inline.svg'
 import Icon from '@Pimcore/assets/icons/icon.inline.svg'
 import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
 
@@ -374,6 +376,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'no-content',
       component: NoContent
+    })
+    iconLibrary.register({
+      name: 'intersect-circle',
+      component: intersectCircle
+    })
+    iconLibrary.register({
+      name: 'corner-left-up',
+      component: cornerLeftUp
     })
   }
 })

@@ -126,7 +126,9 @@ asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
 asset.asset-editor-tabs.dependencies.requires: Requires
 asset.asset-editor-tabs.dependencies.required-by: Required by
 asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
-asset.asset-editor-tabs.dependencies.columns.path: Subtype
+asset.asset-editor-tabs.dependencies.columns.path: Path
 asset.asset-editor-tabs.dependencies.columns.open: Open
+properties.property-already-exist.title: Property already exists
+properties.property-already-exist.error: Name is already in use, please choose a different one
+button.ok: Ok
 component.no-content.no-content-available: No content available
-

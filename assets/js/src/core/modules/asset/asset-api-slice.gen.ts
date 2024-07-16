@@ -6,6 +6,13 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            cloneElement: build.mutation<CloneElementApiResponse, CloneElementApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Assets"],
+            }),
             getAssets: build.query<GetAssetsApiResponse, GetAssetsApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets`,
@@ -56,6 +63,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/delete`, method: "DELETE" }),
                 invalidatesTags: ["Assets"],
             }),
+            streamDocumentPreview: build.query<StreamDocumentPreviewApiResponse, StreamDocumentPreviewApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
+                providesTags: ["Assets"],
+            }),
             downloadAssetById: build.query<DownloadAssetByIdApiResponse, DownloadAssetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
@@ -86,6 +97,32 @@ const injectedRtkApi = api
             getAssetGrid: build.mutation<GetAssetGridApiResponse, GetAssetGridApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/grid`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Grid"],
+            }),
+            downloadCustomImage: build.query<DownloadCustomImageApiResponse, DownloadCustomImageApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/image/download/custom`,
+                    params: {
+                        mimeType: queryArg.mimeType,
+                        resizeMode: queryArg.resizeMode,
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        quality: queryArg.quality,
+                        dpi: queryArg.dpi,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            downloadImageByFormat: build.query<DownloadImageByFormatApiResponse, DownloadImageByFormatApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/image/download/format/${queryArg.format}`,
+                }),
+                providesTags: ["Assets"],
+            }),
+            downloadImageByThumbnail: build.query<DownloadImageByThumbnailApiResponse, DownloadImageByThumbnailApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/image/download/thumbnail/${queryArg.thumbnailName}`,
+                }),
+                providesTags: ["Assets"],
             }),
             addAsset: build.mutation<AddAssetApiResponse, AddAssetApiArg>({
                 query: (queryArg) => ({
@@ -118,6 +155,31 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
+            getVideoImageThumbnail: build.query<GetVideoImageThumbnailApiResponse, GetVideoImageThumbnailApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/video/stream/image-thumbnail`,
+                    params: {
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        aspectRatio: queryArg.aspectRatio,
+                        frame: queryArg.frame,
+                        async: queryArg["async"],
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
+            downloadVideoByThumbnail: build.query<DownloadVideoByThumbnailApiResponse, DownloadVideoByThumbnailApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/video/download/${queryArg.thumbnailName}`,
+                }),
+                providesTags: ["Assets"],
+            }),
+            streamVideoByThumbnail: build.query<StreamVideoByThumbnailApiResponse, StreamVideoByThumbnailApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/${queryArg.id}/video/stream/${queryArg.thumbnailName}`,
+                }),
+                providesTags: ["Assets"],
+            }),
             downloadAssetVersionById: build.query<DownloadAssetVersionByIdApiResponse, DownloadAssetVersionByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
@@ -126,6 +188,17 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type CloneElementApiResponse =
+    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created jobRun for copying child assets */ {
+        /** ID of created jobRun */
+        id: number;
+    };
+export type CloneElementApiArg = {
+    /** Id of the asset */
+    id: number;
+    /** ParentId of the asset */
+    parentId: number;
+};
 export type GetAssetsApiResponse = /** status 200 Paginated assets with total count as header param */ {
     totalItems: number;
     items: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
@@ -215,6 +288,11 @@ export type DeleteAssetApiArg = {
     /** Id of the asset */
     id: number;
 };
+export type StreamDocumentPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
+export type StreamDocumentPreviewApiArg = {
+    /** Id of the document */
+    id: number;
+};
 export type DownloadAssetByIdApiResponse = /** status 200 Original asset */ Blob;
 export type DownloadAssetByIdApiArg = {
     /** Id of the asset */
@@ -284,6 +362,37 @@ export type GetAssetGridApiArg = {
         };
     };
 };
+export type DownloadCustomImageApiResponse = /** status 200 Custom image */ Blob;
+export type DownloadCustomImageApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Mime type of downloaded image. */
+    mimeType: "JPEG" | "PNG";
+    /** Resize mode of downloaded image. */
+    resizeMode: "resize" | "scaleByWidth" | "scaleByHeight";
+    /** Width of downloaded image */
+    width?: number;
+    /** Height of downloaded image */
+    height?: number;
+    /** Quality of downloaded image */
+    quality?: number;
+    /** Dpi of downloaded image */
+    dpi?: number;
+};
+export type DownloadImageByFormatApiResponse = /** status 200 Image based on format */ Blob;
+export type DownloadImageByFormatApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Find asset by matching format type. */
+    format: "office" | "print" | "web";
+};
+export type DownloadImageByThumbnailApiResponse = /** status 200 Image based on thumbnail name */ Blob;
+export type DownloadImageByThumbnailApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type AddAssetApiResponse = /** status 200 Successfully uploaded new asset */ {
     /** ID of created asset */
     id: number;
@@ -328,10 +437,49 @@ export type AddAssetsZipApiArg = {
         zipFile: Blob;
     };
 };
+export type GetVideoImageThumbnailApiResponse = /** status 200 Streamed video image thumbnail */ Blob;
+export type GetVideoImageThumbnailApiArg = {
+    /** Id of the video */
+    id: number;
+    /** Width of the video image thumbnail */
+    width?: number;
+    /** Height of the video image thumbnail */
+    height?: number;
+    /** Aspect ratio */
+    aspectRatio?: boolean;
+    /** Frame */
+    frame?: boolean;
+    /** Generate the asset asynchronously */
+    async?: boolean;
+};
+export type DownloadVideoByThumbnailApiResponse = /** status 200 Video based on thumbnail name */ Blob;
+export type DownloadVideoByThumbnailApiArg = {
+    /** Id of the video */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
+export type StreamVideoByThumbnailApiResponse = /** status 200 Video stream based on thumbnail name */ Blob;
+export type StreamVideoByThumbnailApiArg = {
+    /** Id of the video */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
 export type DownloadAssetVersionByIdApiArg = {
     /** Id of the version */
     id: number;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type Permissions = {
     /** List */
@@ -431,16 +579,6 @@ export type Archive = Asset;
 export type Text = Asset;
 export type Folder = Asset;
 export type Unknown = Asset;
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type PatchError = {
     /** ID */
     id?: number;
@@ -558,6 +696,7 @@ export type GridColumnData = {
     value?: any | null;
 };
 export const {
+    useCloneElementMutation,
     useGetAssetsQuery,
     usePatchAssetByIdMutation,
     useCreateCsvAssetsMutation,
@@ -566,6 +705,7 @@ export const {
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,
     useDeleteAssetMutation,
+    useStreamDocumentPreviewQuery,
     useDownloadAssetByIdQuery,
     useDownloadAssetsCsvQuery,
     useDownloadZippedAssetsQuery,
@@ -573,9 +713,15 @@ export const {
     useUpdateAssetByIdMutation,
     useGetAssetGridConfigurationQuery,
     useGetAssetGridMutation,
+    useDownloadCustomImageQuery,
+    useDownloadImageByFormatQuery,
+    useDownloadImageByThumbnailQuery,
     useAddAssetMutation,
     useGetAssetExistsQuery,
     useReplaceAssetMutation,
     useAddAssetsZipMutation,
+    useGetVideoImageThumbnailQuery,
+    useDownloadVideoByThumbnailQuery,
+    useStreamVideoByThumbnailQuery,
     useDownloadAssetVersionByIdQuery,
 } = injectedRtkApi;
