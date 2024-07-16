@@ -174,22 +174,19 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
 
   return (
     <div className={ styles.table }>
-      {isLoading && (
-        <p>Counting Lamas ...</p>
-      )}
-
-      {!isLoading && (
+      {(
         <>
-          {gridDataOwn.length > 0 && (
+          { (
             <Grid
               columns={ ownTableColumns }
               data={ gridDataOwn }
+              isLoading={ isLoading }
               modifiedCells={ getModifiedCells() }
               onUpdateCellData={ onUpdateCellData }
             />
           )}
 
-          {propertiesTableTab === 'all' && gridDataInherited.length > 0 && (
+          {propertiesTableTab === 'all' && (
             <>
               <p className={ 'headline' }>
                 {t('asset.asset-editor-tabs.properties.inherited.properties')}

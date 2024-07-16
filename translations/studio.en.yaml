@@ -127,3 +127,6 @@ asset.asset-editor-tabs.dependencies.required-by: Required by
 asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
 asset.asset-editor-tabs.dependencies.columns.path: Subtype
 asset.asset-editor-tabs.dependencies.columns.open: Open
+properties.property-already-exist.title: Property already exists
+properties.property-already-exist.error: Name is already in use, please choose a different one
+button.ok: Ok
