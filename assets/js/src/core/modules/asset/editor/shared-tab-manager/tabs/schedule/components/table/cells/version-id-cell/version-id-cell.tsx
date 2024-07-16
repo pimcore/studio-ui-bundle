@@ -55,15 +55,26 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   function getCellContent (): React.JSX.Element {
-    console.log(props.row.original)
+    let selectOptions: Version[] = []
+    if (!isLoading && data !== undefined) {
+      console.log('best data', data.items)
+      selectOptions = data.items
+    }
+    console.log('original', props.row.original)
+
+    function getVersionFromId (id: number): Version | null {
+      return selectOptions.find((version: Version) => version.id === id) ?? null
+    }
 
     if (!isInEditMode) {
+      const version = getVersionFromId(props.getValue() as number)
+
       return (
         <div className={ 'pseudo-select' }>
           { props.getValue() !== null
             ? (
               <div className={ 'pseudo-select__content' }>
-                <p>{props.row.original.versionCount}</p>
+                <p>{version !== null ? version.versionCount : t('asset.asset-editor-tabs.schedule.select-a-version')}</p>
               </div>
               )
             : t('asset.asset-editor-tabs.schedule.select-a-version')
@@ -93,11 +104,6 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
           timeStyle: 'short'
         }
       )
-    }
-
-    let selectOptions: Version[] = []
-    if (!isLoading && data !== undefined) {
-      selectOptions = data.items
     }
 
     const options: SelectProps['options'] = selectOptions.map((value: Version) => {
