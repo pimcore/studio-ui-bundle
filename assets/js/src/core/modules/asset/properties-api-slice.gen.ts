@@ -13,6 +13,18 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Properties"],
             }),
+            updateProperty: build.mutation<UpdatePropertyApiResponse, UpdatePropertyApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/properties/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.updatePredefinedProperty,
+                }),
+                invalidatesTags: ["Properties"],
+            }),
+            deleteProperty: build.mutation<DeletePropertyApiResponse, DeletePropertyApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.id}`, method: "DELETE" }),
+                invalidatesTags: ["Properties"],
+            }),
             getPropertiesForElementByTypeAndId: build.query<
                 GetPropertiesForElementByTypeAndIdApiResponse,
                 GetPropertiesForElementByTypeAndIdApiArg
@@ -33,6 +45,17 @@ export type GetPropertiesApiArg = {
     elementType?: "asset" | "document" | "data-object";
     /** Filter for properties */
     filter?: string;
+};
+export type UpdatePropertyApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
+export type UpdatePropertyApiArg = {
+    /** Id of the property */
+    id: string;
+    updatePredefinedProperty: UpdatePredefinedProperty;
+};
+export type DeletePropertyApiResponse = /** status 200 Successfully deleted property */ void;
+export type DeletePropertyApiArg = {
+    /** Id of the property */
+    id: string;
 };
 export type GetPropertiesForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
     items?: DataProperty[];
@@ -81,6 +104,24 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type UpdatePredefinedProperty = {
+    /** name */
+    name: string;
+    /** description */
+    description?: string | null;
+    /** key */
+    key: string;
+    /** type */
+    type: string;
+    /** data */
+    data?: string | null;
+    /** config */
+    config?: string | null;
+    /** ctype */
+    ctype: string;
+    /** inheritable */
+    inheritable: boolean;
+};
 export type DataProperty = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -103,4 +144,9 @@ export type DataProperty = {
     /** description */
     description?: string | null;
 };
-export const { useGetPropertiesQuery, useGetPropertiesForElementByTypeAndIdQuery } = injectedRtkApi;
+export const {
+    useGetPropertiesQuery,
+    useUpdatePropertyMutation,
+    useDeletePropertyMutation,
+    useGetPropertiesForElementByTypeAndIdQuery,
+} = injectedRtkApi;
