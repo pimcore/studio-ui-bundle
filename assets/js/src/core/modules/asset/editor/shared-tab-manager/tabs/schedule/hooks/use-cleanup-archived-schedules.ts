@@ -13,23 +13,25 @@
 
 import { useState } from 'react'
 import {
-  type CleanupVersionApiArg,
-  useCleanupVersionMutation
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
+  type DeleteScheduleApiArg,
+  useDeleteScheduleMutation
+} from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 
-interface IUseCleanupArchivedVersionsResponse {
+interface IUseCleanupArchivedSchedulesResponse {
   isLoading: boolean
-  cleanup: (props: CleanupVersionApiArg) => Promise<void>
+  cleanup: ({ ids }: { ids: Array<DeleteScheduleApiArg['id']> }) => Promise<void>
 }
 
-export const useCleanupArchivedVersions = (): IUseCleanupArchivedVersionsResponse => {
+export const useCleanupArchivedSchedules = (): IUseCleanupArchivedSchedulesResponse => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [cleanupVersion] = useCleanupVersionMutation()
+  const [deleteSchedule] = useDeleteScheduleMutation()
 
-  const cleanup = async ({ elementType, id }: CleanupVersionApiArg): Promise<void> => {
+  const cleanup = async ({ ids }: { ids: Array<DeleteScheduleApiArg['id']> }): Promise<void> => {
     setIsLoading(true)
 
-    await cleanupVersion({ elementType, id })
+    for (const id of ids) {
+      await deleteSchedule({ id })
+    }
 
     setIsLoading(false)
   }

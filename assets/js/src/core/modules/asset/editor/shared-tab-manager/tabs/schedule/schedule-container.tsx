@@ -24,8 +24,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import { DeleteOutlined } from '@ant-design/icons'
 import {
-  useCleanupArchivedVersions
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-versions'
+  useCleanupArchivedSchedules
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -33,7 +33,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { context } = useGlobalAssetContext()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(true)
-  const { cleanup, isLoading: deleteArchivedVersionsLoading } = useCleanupArchivedVersions()
+  const { cleanup, isLoading: deleteArchivedSchedulesLoading } = useCleanupArchivedSchedules()
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -83,12 +83,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   }
 
   function cleanupArchivedVersions (): void {
-    void cleanup({
-      id: context!.config.id,
-      elementType: context!.type
-    }).then(r => {
-      setGridDataArchive([])
-    })
+    void cleanup({ ids: gridDataArchive.map((item) => item.id) })
   }
 
   return (
@@ -149,7 +144,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               <Button
                 disabled={ gridDataArchive.length === 0 }
                 icon={ <DeleteOutlined /> }
-                loading={ deleteArchivedVersionsLoading }
+                loading={ deleteArchivedSchedulesLoading }
                 onClick={ cleanupArchivedVersions }
               >
                 {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
