@@ -130,6 +130,9 @@ const defaultTheme = {
     },
     Example: {
       color: '#722ed1'
+    },
+    Empty: {
+      colorTextDisabled: 'rgba(0, 0, 0, 0.25)'
     }
   }
 }
