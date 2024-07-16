@@ -98,6 +98,7 @@ version.fileSize: File Size
 version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
 version.image: Image
+version.no-versions-to-show: There are no versions to show.
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
@@ -127,3 +128,5 @@ asset.asset-editor-tabs.dependencies.required-by: Required by
 asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
 asset.asset-editor-tabs.dependencies.columns.path: Subtype
 asset.asset-editor-tabs.dependencies.columns.open: Open
+component.no-content.no-content-available: No content available
+
