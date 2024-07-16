@@ -57,18 +57,15 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   function getCellContent (): React.JSX.Element {
     let selectOptions: Version[] = []
     if (!isLoading && data !== undefined) {
-      console.log('best data', data.items)
       selectOptions = data.items
     }
-    console.log('original', props.row.original)
 
     function getVersionFromId (id: number): Version | null {
       return selectOptions.find((version: Version) => version.id === id) ?? null
     }
 
+    const version = getVersionFromId(props.getValue() as number)
     if (!isInEditMode) {
-      const version = getVersionFromId(props.getValue() as number)
-
       return (
         <div className={ 'pseudo-select' }>
           { props.getValue() !== null
@@ -124,7 +121,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     return (
       <Select
         className={ styles.select }
-        defaultValue={ props.getValue() }
+        defaultValue={ version !== null ? version.versionCount : '' }
         onBlur={ onBlur }
         onChange={ saveValue }
         onKeyDown={ onKeyDown }
