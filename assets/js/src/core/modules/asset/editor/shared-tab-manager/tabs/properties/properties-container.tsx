@@ -90,9 +90,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   onSelect={ onTypeSelect }
                   options={ [
                     { value: 'text', label: 'Text' },
-                    { value: 'number', label: 'Number' },
-                    { value: 'date', label: 'Date' },
-                    { value: 'select', label: 'Select' },
+                    { value: 'document', label: 'Document' },
+                    { value: 'asset', label: 'Asset' },
+                    { value: 'object', label: 'Object' },
                     { value: 'bool', label: 'Bool' }
                   ] }
                   placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
