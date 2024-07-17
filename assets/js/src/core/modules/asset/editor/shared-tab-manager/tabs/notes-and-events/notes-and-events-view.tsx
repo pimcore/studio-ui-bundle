@@ -58,8 +58,6 @@ export const NotesAndEventsTabView = ({
         delete tempData.data
         formatedData.push(tempData)
       })
-    } else {
-      // TODO
     }
 
     return (

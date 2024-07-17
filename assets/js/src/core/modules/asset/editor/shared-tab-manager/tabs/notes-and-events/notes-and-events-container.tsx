@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   NotesAndEventsTabView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
@@ -20,17 +20,17 @@ import {
   useDeleteNoteMutation,
   useGetNotesForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { Result } from 'antd'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { context } = useGlobalAssetContext()
+  const { id } = useContext(AssetContext)
 
-  if (context === undefined) {
-    return <Result title="No context" />
+  if (id === undefined) {
+    return <Result title="No id" />
   }
 
   const [page, setPage] = useState(1)
@@ -40,7 +40,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [createNote] = useCreateNoteForElementMutation()
 
   const { isLoading, data } = useGetNotesForElementByTypeAndIdQuery({
-    id: context?.config?.id,
+    id,
     elementType: 'asset',
     page,
     pageSize
@@ -53,24 +53,8 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   return (
     <NotesAndEventsTabView
       notes={ data!.items }
-      onClickSaveNote={
-        async (type, title, description): Promise<void> => {
-          await createNote({
-            elementType: 'asset',
-            id: context?.config?.id,
-            createNote: {
-              type,
-              title,
-              description
-            }
-          })
-        } }
-      onClickTrash={
-        async (id: number): Promise<void> => {
-          await deleteNote({
-            id
-          })
-        } }
+      onClickSaveNote={ onClickSaveNote }
+      onClickTrash={ onClickTrash }
       pagination={
         <Pagination
           current={ page }
@@ -85,4 +69,22 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
       }
     />
   )
+
+  async function onClickSaveNote (type, title, description): Promise<void> {
+    await createNote({
+      elementType: 'asset',
+      id: id!,
+      createNote: {
+        type,
+        title,
+        description
+      }
+    })
+  }
+
+  async function onClickTrash (id: number): Promise<void> {
+    await deleteNote({
+      id
+    })
+  }
 }
