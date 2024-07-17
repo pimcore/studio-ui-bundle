@@ -133,9 +133,7 @@ export type Note = {
     /** Locked */
     locked: boolean;
     /** Data of note */
-    data: {
-        [key: string]: string | number | boolean | object | any[];
-    };
+    data: any[];
     /** User ID */
     userId?: number | null;
     /** Username */
