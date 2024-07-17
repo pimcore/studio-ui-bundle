@@ -19,7 +19,9 @@ import DropdownButton from 'antd/es/dropdown/dropdown-button'
 import {
   AssignedTagsTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/assigned-tags/assigned-tags'
-import { TagsTree } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
+import {
+  TagsTreeContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -35,7 +37,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   return (
     <div className={ styles.tab }>
       <div className={ 'pimcore-tags-sidebar' }>
-        <TagsTree />
+        <TagsTreeContainer />
       </div>
 
       <Divider type={ 'vertical' } />

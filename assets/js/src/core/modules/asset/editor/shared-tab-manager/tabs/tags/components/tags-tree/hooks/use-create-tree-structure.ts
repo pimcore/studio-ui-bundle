@@ -15,28 +15,33 @@ import { type GetTagsApiResponse } from '@Pimcore/modules/asset/editor/shared-ta
 import type { TreeDataNode } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-export const useCreateTreeStructure = (
-  { tags }:
-  { tags: NonNullable<GetTagsApiResponse['items']> }
-): TreeDataNode[] => {
-  const createTreeStructure = (tags: NonNullable<GetTagsApiResponse['items']>): TreeDataNode[] => {
-    return tags.map((tag) => ({
-      key: tag.id!.toString(),
-      title: tag.text,
+interface UseCreateTreeStructureReturn {
+  createTreeStructure: ({ tags }: { tags: NonNullable<GetTagsApiResponse['items']> }) => TreeDataNode[]
+}
+
+export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
+  const createTreeStructure = ({ tags }: { tags: NonNullable<GetTagsApiResponse['items']> }): TreeDataNode[] => {
+    function treeWalker (tags: NonNullable<GetTagsApiResponse['items']>): TreeDataNode[] {
+      return tags.map((tag) => ({
+        key: tag.id!.toString(),
+        title: tag.text,
+        icon: Icon({
+          name: 'tag-02'
+        }),
+        children: tag.hasChildren === true ? treeWalker(tag.children!) : []
+        // hasChildren: tag.children !== null
+      }))
+    }
+
+    return [{
+      key: 'root',
+      title: 'All Tags',
       icon: Icon({
-        name: 'tag-02'
+        name: 'folder'
       }),
-      children: tag.hasChildren === true ? createTreeStructure(tag.children!) : []
-      // hasChildren: tag.children !== null
-    }))
+      children: tags.length > 0 ? treeWalker(tags) : []
+    }]
   }
 
-  return [{
-    key: 'root',
-    title: 'All Tags',
-    icon: Icon({
-      name: 'folder'
-    }),
-    children: tags.length > 0 ? createTreeStructure(tags) : []
-  }]
+  return { createTreeStructure }
 }
