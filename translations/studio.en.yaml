@@ -127,3 +127,16 @@ asset.asset-editor-tabs.dependencies.required-by: Required by
 asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
 asset.asset-editor-tabs.dependencies.columns.path: Subtype
 asset.asset-editor-tabs.dependencies.columns.open: Open
+width: Width
+height: Height
+quality: Quality
+mode: Mode
+format: Format
+resize: Resize
+scaleByWidth: Scale By Width
+scaleByHeight: Scale By Height
+download: Download
+asset.sidebar.original-file: Original File
+asset.sidebar.web-format: Web Format
+asset.sidebar.print-format: Print Format
+asset.sidebar.office-format: Office Format

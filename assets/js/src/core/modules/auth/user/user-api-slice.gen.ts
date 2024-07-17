@@ -89,10 +89,10 @@ const injectedRtkApi = api
 export { injectedRtkApi as api };
 export type GetUserRolesApiResponse = /** status 200 List of available user roles. */ {
     totalItems: number;
-    items: SimpleUserRole[];
+    items: UserRole[];
 };
 export type GetUserRolesApiArg = void;
-export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
+export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ UserTreeNode;
 export type CloneUserApiArg = {
     /** Id of the user */
     id: number;
@@ -100,14 +100,14 @@ export type CloneUserApiArg = {
         name?: string;
     };
 };
-export type CreateUserApiResponse = /** status 200 Node of the new created User */ TreeNode;
+export type CreateUserApiResponse = /** status 200 Node of the new created User */ UserTreeNode;
 export type CreateUserApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
+export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ UserTreeNode;
 export type CreateUserFolderApiArg = {
     body: {
         parentId: number | null;
@@ -119,7 +119,7 @@ export type GetStudioApiUserCurrentUserInformationApiResponse =
 export type GetStudioApiUserCurrentUserInformationApiArg = void;
 export type GetUserByIdApiResponse = /** status 200 User data. */ User;
 export type GetUserByIdApiArg = {
-    /** Id of the user */
+    /** Id of the element */
     id: number;
 };
 export type UpdateUserByIdApiResponse = /** status 200 Updated data. */ User;
@@ -158,13 +158,13 @@ export type UpdateUserPasswordByIdApiArg = {
 };
 export type GetUserTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
-    items: TreeNode[];
+    items: UserTreeNode[];
 };
 export type GetUserTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
-export type SimpleUserRole = {
+export type UserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
@@ -184,16 +184,16 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type TreeNode = {
+export type UserTreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
     /** Unique Identifier */
     id: number;
-    /** Name of the tree node */
+    /** Name of Folder or User */
     name: string;
-    /** Is ether folder or a specific item in the folder */
+    /** Is ether user or folder */
     type: string;
     /** If a folder has sub items */
     hasChildren: boolean;
