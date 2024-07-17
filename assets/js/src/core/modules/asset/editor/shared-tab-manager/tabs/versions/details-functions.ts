@@ -12,6 +12,7 @@
 */
 
 import { formatDateTime } from '@Pimcore/utils/date-time'
+import { formatDataUnit } from '@Pimcore/utils/data-unit'
 
 const formatMap: any = {
   dimensions: (data: any): string => {
@@ -23,8 +24,8 @@ const formatMap: any = {
   modificationDate: (timestamp: number): string => {
     return formatDateTime({ timestamp, dateStyle: 'short', timeStyle: 'medium' })
   },
-  fileSize: (data: number): string => {
-    return (data / 1000) + ' KB'
+  fileSize: (bytes: number): string => {
+    return formatDataUnit({ bytes })
   }
 }
 export const formatVersionData = (key: string, data: any): string => {
