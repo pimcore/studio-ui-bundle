@@ -37,6 +37,9 @@ export const _default = {
         date={ '2020-05-12' }
         id={ 112 }
         key={ 1 }
+        onBlurNote={ (e): void => {
+          console.log('Blur Note')
+        } }
         onClickDelete={ () => {
           console.log('Delete')
         } }
@@ -52,6 +55,9 @@ export const _default = {
         date={ '2020-07-12' }
         id={ 112 }
         key={ 2 }
+        onBlurNote={ (e): void => {
+          console.log('Blur Note')
+        } }
         onClickDelete={ () => {
           console.log('Delete')
         } }
@@ -68,6 +74,9 @@ export const _default = {
         date={ '2020-10-12' }
         id={ 112 }
         key={ 3 }
+        onBlurNote={ (e): void => {
+          console.log('Blur Note')
+        } }
         onClickDelete={ () => {
           console.log('Delete')
         } }

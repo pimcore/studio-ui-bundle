@@ -16,7 +16,7 @@ import {
   useCleanupVersionMutation,
   useDeleteVersionMutation,
   useGetVersionsQuery,
-  usePublishVersionMutation
+  usePublishVersionMutation, useUpdateVersionMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
@@ -32,6 +32,7 @@ export const VersionsTabContainer = (): React.JSX.Element => {
   const [deleteVersion] = useDeleteVersionMutation()
   const [publishVersion] = usePublishVersionMutation()
   const [cleanupVersion] = useCleanupVersionMutation()
+  const [updateVersion] = useUpdateVersionMutation()
 
   const { isLoading, data } = useGetVersionsQuery({
     id: context?.config?.id,
@@ -46,6 +47,16 @@ export const VersionsTabContainer = (): React.JSX.Element => {
 
   return (
     <VersionsView
+      onBlurNote={
+        async (id, note): Promise<void> => {
+          await updateVersion({
+            id,
+            body: {
+              note
+            }
+          })
+        }
+      }
       onClickClearAll={ async (
         elementType,
         id
@@ -54,8 +65,7 @@ export const VersionsTabContainer = (): React.JSX.Element => {
           elementType,
           id
         })
-      }
-      }
+      } }
       onClickDelete={
         async (id: number): Promise<void> => {
           await deleteVersion({

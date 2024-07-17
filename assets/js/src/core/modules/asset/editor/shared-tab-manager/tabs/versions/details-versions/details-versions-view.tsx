@@ -17,9 +17,10 @@ import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
+import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 
 interface DetailsVersionsViewProps {
-  versionIds: number[]
+  versionIds: VersionIdentifiers[]
   data: any[]
 }
 
@@ -31,8 +32,8 @@ export const DetailsVersionsView = ({
 
   const columnHelper = createColumnHelper<any>()
   const versionColumns: any[] = []
-  versionIds.forEach((id: number) => {
-    versionColumns.push(columnHelper.accessor(i18n.t('version.version') + ' ' + id, {
+  versionIds.forEach((vId: VersionIdentifiers) => {
+    versionColumns.push(columnHelper.accessor(i18n.t('version.version') + ' ' + vId.count, {
       cell: info => {
         const cellsInRow = info.row.getAllCells()
         if (cellsInRow.length === 3 && info.cell.id === cellsInRow[2].id) {
