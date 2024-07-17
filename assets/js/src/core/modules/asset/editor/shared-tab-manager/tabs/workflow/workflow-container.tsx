@@ -15,7 +15,6 @@ import React from 'react'
 import { useGetWorkflowsDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Result } from 'antd'
-import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { useStyle } from './workflow-container.styles'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
@@ -33,8 +32,6 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <ElementToolbar />
-
       <div className={ 'pimcore-workflow-toolbar' }>
         <p className={ 'pimcore-workflow-toolbar__headline' }>
           {t('asset.asset-editor-tabs.workflow.text')}

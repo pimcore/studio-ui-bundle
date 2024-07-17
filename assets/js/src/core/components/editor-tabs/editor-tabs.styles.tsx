@@ -48,6 +48,16 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       &.ant-tabs-top >.ant-tabs-nav {
         margin-bottom: 0;
+          
+        .ant-tabs-nav-wrap {
+          display: flex;
+          justify-content: flex-end;
+            
+          .ant-tabs-nav-list {
+            display: flex;
+            align-items: center;
+          }
+        }
       }
 
       &.ant-tabs .ant-tabs-tab-btn .ant-tabs-tab-icon:not(:last-child) {
@@ -135,7 +145,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-tab.ant-tabs-tab-active {
-          border-bottom: 3px solid ${token.colorPrimaryActive};
+          //border-bottom: 3px solid ${token.colorPrimaryActive};
       }
     `
   }

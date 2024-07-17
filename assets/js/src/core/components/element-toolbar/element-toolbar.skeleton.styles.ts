@@ -11,10 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import { createStyles } from 'antd-style'
 
-export const DependenciesTabContainer = (): React.JSX.Element => {
-  return (
-    <h4>Dependencies TAB</h4>
-  )
-}
+export const useStyle = createStyles(({ token, css }) => {
+  return {
+    skeleton: css`
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+    `
+  }
+})

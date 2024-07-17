@@ -12,6 +12,13 @@
 */
 
 import { type ConfigFile } from '@rtk-query/codegen-openapi'
+import { EndpointMatcherFunction } from '@rtk-query/codegen-openapi/lib/types';
+
+const pathMatcher = (pattern: RegExp): EndpointMatcherFunction => {
+  return (name, definition) => {
+    return pattern.test(definition.path);
+  }
+}
 
 const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
@@ -19,28 +26,34 @@ const config: ConfigFile = {
   apiImport: 'api',
   outputFiles: {
     '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
-      filterEndpoints: [/asset/i]
+      filterEndpoints: pathMatcher(/assets?/i)
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
-      filterEndpoints: [/translation/i]
+      filterEndpoints: pathMatcher(/translation/i)
     },
     '../../js/src/core/modules/asset/properties-api-slice.gen.ts': {
-      filterEndpoints: [/properties/i]
+      filterEndpoints: pathMatcher(/properties/i)
     },
     '../../js/src/core/modules/element/editor/workflow-api-slice.gen.ts': {
-      filterEndpoints: [/workflow/i]
+      filterEndpoints: pathMatcher(/workflow/i)
     },
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
-      filterEndpoints: [/user/i]
+      filterEndpoints: pathMatcher(/user/i)
     },
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen.ts': {
-      filterEndpoints: [/version/i]
+      filterEndpoints: pathMatcher(/version/i)
     },
     '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
-      filterEndpoints: [/schedule/i]
+      filterEndpoints: pathMatcher(/schedule/i)
+    },
+    '../../js/src/core/modules/element/element-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/path/i)
+    },
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/dependencies/i)
     },
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
-      filterEndpoints: [/note/i]
+      filterEndpoints: pathMatcher(/note/i)
     }
   },
   exportName: 'api',
