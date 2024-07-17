@@ -11,26 +11,39 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { TreeNode } from '@Pimcore/components/tree/node/tree-node'
-import { defaultProps, Tree } from '@Pimcore/components/tree/tree'
-import { PagerContainer } from '@Pimcore/modules/asset/tree/pager/pager-container'
 import React from 'react'
-import { type TreeContainerProps } from '@Pimcore/modules/asset/tree/tree-container'
+import { Tree } from 'antd'
+import { useGetTagsQuery } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
-  useNodeApiHook
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-node-api-hook'
+  useCreateTreeStructure
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
+import {
+  useStyle
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree.styles'
 
-export const TagsTree = ({ id = 0 }: TreeContainerProps): React.JSX.Element => {
+export const TagsTree = (): React.JSX.Element => {
+  const { styles } = useStyle()
+  const { data, isLoading } = useGetTagsQuery({
+    page: 1,
+    pageSize: 9999
+  })
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!isLoading && data === undefined) {
+    return <div>No data</div>
+  }
+
+  const treeData = useCreateTreeStructure({ tags: data!.items! })
+
   return (
     <Tree
       checkable
-      hide
-      maxItemsPerNode={ 20 }
-      nodeApiHook={ useNodeApiHook }
-      nodeId={ id }
-      renderNode={ TreeNode }
-      renderNodeContent={ defaultProps.renderNodeContent }
-      renderPager={ PagerContainer }
+      className={ styles.tree }
+      showIcon
+      treeData={ treeData }
     />
   )
 }
