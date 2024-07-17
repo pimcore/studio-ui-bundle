@@ -22,10 +22,10 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
-import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies-container'
+import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
 import {
   NotesAndEventsTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
 import { type ImageTabManager } from './tab-manager/image-tab-manager'
@@ -114,7 +114,8 @@ moduleSystem.registerModule({
       key: 'notes-events',
       label: 'asset.asset-editor-tabs.notes-events',
       children: <NotesAndEventsTabContainer />,
-      icon: <Icon name={ 'view-details' } />
+      icon: <Icon name={ 'view-details' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({

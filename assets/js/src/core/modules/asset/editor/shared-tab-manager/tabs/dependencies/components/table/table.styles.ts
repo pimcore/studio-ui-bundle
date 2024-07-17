@@ -11,10 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import { createStyles } from 'antd-style'
 
-export const NotesAndEventsTabContainer = (): React.JSX.Element => {
-  return (
-    <h4>Notes & Events TAB</h4>
-  )
-}
+export const useStyle = createStyles(({ token, css }) => {
+  return {
+    table: css`
+      .ant-table {
+        .ant-table-cell {
+          padding: ${token.paddingXS}px
+        }
+      }
+    `
+  }
+})

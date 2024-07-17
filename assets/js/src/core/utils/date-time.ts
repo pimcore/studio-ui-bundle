@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 
 interface IFormatDateTimeProps {
   timestamp: number
@@ -22,8 +22,6 @@ interface IFormatDateTimeProps {
 }
 
 export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
-  const { i18n } = useTranslation()
-
   if (lng === undefined) {
     lng = i18n.language
   }

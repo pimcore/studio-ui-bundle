@@ -26,6 +26,7 @@ import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical
 import {
   DetailsVersionsContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'
+import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
@@ -55,78 +56,99 @@ export const VersionsView = ({
   const [comparingActive, setComparingActive] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 
+  if (versions.length === 0) {
+    return (
+      <div className={ styles.noContent }>
+        <p className={ 'headline' }>{i18n.t('version.versions')}</p>
+        <div className={ 'empty-container' }>
+          <NoContent
+            text={ i18n.t('version.no-versions-to-show') }
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
         <div className={ 'flexbox-start-end' }>
           <div>
             <span className={ 'version-label' }>{i18n.t('version.versions')}</span>
-            <Button
-              className={ comparingActive ? 'compare-button' : '' }
-              onClick={ onClickCompareVersion }
-            >{i18n.t('version.compare-versions')}</Button>
+            {versions.length > 0 && (
+              <Button
+                className={ comparingActive ? 'compare-button' : '' }
+                onClick={ onClickCompareVersion }
+              >{i18n.t('version.compare-versions')}</Button>
+            )}
           </div>
-          <Button
-            icon={ <Icon name={ 'trash' } /> }
-            onClick={ () => {
-              if (versions.length === 0) {
-                return
-              }
-              onClickClearAll(
-                versions[0].ctype as GetVersionsApiArg['elementType'],
-                versions[0].cid
-              )
-            } }
-          >
-            {i18n.t('clear-all')}
-          </Button>
-        </div>
-        <VerticalTimeline timeStamps={ versions.map((version) => {
-          const vId = { id: version.id, count: version.versionCount }
-          const selected = detailedVersions.some((v => v.id === version.id))
-          return (
-            <VersionCard
-              activeDefault={ selected }
-              autosaved={ version.autosave }
-              className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
-              date={ formatDateTime({ timestamp: version.date, dateStyle: 'short', timeStyle: 'medium' }) }
-              id={ version.id }
-              key={ version.id }
-              note={ version.note }
-              onBlurNote={ (e): void => {
-                onBlurNote(version.id, e.target.value.toString() as string)
-              } }
-              onChangeCheckbox={ (): void => {
-                selectVersion(vId)
-              } }
+
+          {versions.length > 0 && (
+            <Button
+              icon={ <Icon name={ 'trash' } /> }
               onClick={ () => {
-                if (comparingActive) {
-                  selectVersion(vId)
-                } else {
-                  setDetailedVersions([{
-                    id: version.id,
-                    count: version.versionCount
-                  }])
+                if (versions.length === 0) {
+                  return
                 }
+                onClickClearAll(
+                  versions[0].ctype as GetVersionsApiArg['elementType'],
+                  versions[0].cid
+                )
               } }
-              onClickDelete={ (): void => {
-                setDetailedVersions([])
-                onClickDelete(version.id)
-              } }
-              onClickPublish={ (): void => {
-                onClickPublish(version.id)
-              } }
-              published={ version.published ?? false }
-              savedBy={ version.user?.name ?? '' }
-              scheduledDate={ isSet(version.scheduled) ? formatDateTime({ timestamp: version.scheduled!, dateStyle: 'short', timeStyle: 'short' }) : undefined }
-              selectable={ comparingActive }
-              selected={ selected }
-              version={ version.versionCount }
-            />
-          )
-        }) }
-        />
+            >
+              {i18n.t('clear-all')}
+            </Button>
+          )}
+        </div>
+        {versions.length > 0 && (
+          <VerticalTimeline timeStamps={ versions.map((version) => {
+            const vId = { id: version.id, count: version.versionCount }
+            const selected = detailedVersions.some((v => v.id === version.id))
+            return (
+              <VersionCard
+                activeDefault={ selected }
+                autosaved={ version.autosave }
+                className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
+                date={ formatDateTime({ timestamp: version.date, dateStyle: 'short', timeStyle: 'medium' }) }
+                id={ version.id }
+                key={ version.id }
+                note={ version.note }
+                onBlurNote={ (e): void => {
+                  onBlurNote(version.id, e.target.value.toString() as string)
+                } }
+                onChangeCheckbox={ (): void => {
+                  selectVersion(vId)
+                } }
+                onClick={ () => {
+                  if (comparingActive) {
+                    selectVersion(vId)
+                  } else {
+                    setDetailedVersions([{
+                      id: version.id,
+                      count: version.versionCount
+                    }])
+                  }
+                } }
+                onClickDelete={ (): void => {
+                  setDetailedVersions([])
+                  onClickDelete(version.id)
+                } }
+                onClickPublish={ (): void => {
+                  onClickPublish(version.id)
+                } }
+                published={ version.published ?? false }
+                savedBy={ version.user?.name ?? '' }
+                scheduledDate={ isSet(version.scheduled) ? formatDateTime({ timestamp: version.scheduled!, dateStyle: 'short', timeStyle: 'short' }) : undefined }
+                selectable={ comparingActive }
+                selected={ selected }
+                version={ version.versionCount }
+              />
+            )
+          }) }
+          />
+        )}
       </div>
+
       { detailedVersions.length > 0 && comparingActive && (
         <DetailsVersionsContainer versionIds={ detailedVersions } />
       )}

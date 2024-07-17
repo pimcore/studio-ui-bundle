@@ -15,7 +15,8 @@ import React from 'react'
 import {
   useCleanupVersionMutation,
   useDeleteVersionMutation,
-  useGetVersionsQuery, usePublishVersionMutation, useUpdateVersionMutation
+  useGetVersionsQuery,
+  usePublishVersionMutation, useUpdateVersionMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
@@ -45,43 +46,41 @@ export const VersionsTabContainer = (): React.JSX.Element => {
   }
 
   return (
-    <div>
-      <VersionsView
-        onBlurNote={
-          async (id, note): Promise<void> => {
-            await updateVersion({
-              id,
-              body: {
-                note
-              }
-            })
-          }
+    <VersionsView
+      onBlurNote={
+        async (id, note): Promise<void> => {
+          await updateVersion({
+            id,
+            body: {
+              note
+            }
+          })
         }
-        onClickClearAll={ async (
+      }
+      onClickClearAll={ async (
+        elementType,
+        id
+      ): Promise<void> => {
+        await cleanupVersion({
           elementType,
           id
-        ): Promise<void> => {
-          await cleanupVersion({
-            elementType,
+        })
+      } }
+      onClickDelete={
+        async (id: number): Promise<void> => {
+          await deleteVersion({
             id
           })
-        } }
-        onClickDelete={
-          async (id: number): Promise<void> => {
-            await deleteVersion({
-              id
-            })
-          }
         }
-        onClickPublish={
-          async (id: number): Promise<void> => {
-            await publishVersion({
-              id
-            })
-          }
+      }
+      onClickPublish={
+        async (id: number): Promise<void> => {
+          await publishVersion({
+            id
+          })
         }
-        versions={ data!.items }
-      />
-    </div>
+      }
+      versions={ data!.items }
+    />
   )
 }

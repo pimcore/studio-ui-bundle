@@ -102,8 +102,15 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
     })
   ]
 
-  function onUpdateCellData ({ rowIndex, columnId, value }): void {
-    console.log('triggered onUpdateCellData!', value)
+  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+    if (columnId === 'schedule-table--version-column') {
+      const updatedSchedules = [...(data ?? [])]
+      const scheduleToUpdate = { ...updatedSchedules.find((schedule) => schedule.id === rowData.id) }
+
+      scheduleToUpdate.version = value
+
+      console.log('updated Schedule', scheduleToUpdate)
+    }
   }
 
   return (

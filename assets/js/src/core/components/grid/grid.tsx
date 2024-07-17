@@ -163,9 +163,14 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                 </thead>
                 <tbody className="ant-table-tbody">
                   {table.getRowModel().rows.length === 0 && (
-                    <p className='ant-table-row-no-data'>
-                      {t('no-data-available-yet')}
-                    </p>
+                    <tr className='ant-table-row'>
+                      <td
+                        className='ant-table-cell ant-table-cell__no-data'
+                        colSpan={ table.getAllColumns().length }
+                      >
+                        {t('no-data-available-yet')}
+                      </td>
+                    </tr>
                   )}
                   {table.getRowModel().rows.map(row => (
                     <tr

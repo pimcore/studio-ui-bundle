@@ -11,10 +11,26 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import { type Meta } from '@storybook/react'
+import { NoContent } from '@Pimcore/components/no-content/no-content'
 
-export const DependenciesTabContainer = (): React.JSX.Element => {
-  return (
-    <h4>Dependencies TAB</h4>
-  )
+const config: Meta = {
+  title: 'Pimcore studio/UI/No Content',
+  component: NoContent,
+  parameters: {
+    layout: 'centered'
+  },
+  tags: ['autodocs']
+}
+
+export default config
+
+export const _default = {
+  args: {}
+}
+
+export const CustomText = {
+  args: {
+    text: 'This is a custom text'
+  }
 }
