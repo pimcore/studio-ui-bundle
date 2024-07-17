@@ -19,6 +19,7 @@ import { TextCell } from './columns/types/text/text-cell'
 import { DateCell } from './columns/types/date/date-cell'
 import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
 import { TimeCell } from '@Pimcore/components/grid/columns/types/time/time-cell'
+import { OpenElementCell } from '@Pimcore/components/grid/columns/types/open-element/open-element-cell'
 
 moduleSystem.registerModule({
   onInit () {
@@ -61,6 +62,11 @@ moduleSystem.registerModule({
     typeRegistry.registerType({
       type: 'checkbox',
       component: CheckboxCell
+    })
+
+    typeRegistry.registerType({
+      type: 'open-element',
+      component: OpenElementCell
     })
   }
 })
