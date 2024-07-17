@@ -1,15 +1,11 @@
 import { api } from "../../../app/api/pimcore/index";
-export const addTagTypes = ["Role Management", "User Management"] as const;
+export const addTagTypes = ["User Management"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getUserRoles: build.query<GetUserRolesApiResponse, GetUserRolesApiArg>({
-                query: () => ({ url: `/studio/api/roles` }),
-                providesTags: ["Role Management"],
-            }),
             cloneUser: build.mutation<CloneUserApiResponse, CloneUserApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/user/clone/${queryArg.id}`,
@@ -87,12 +83,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetUserRolesApiResponse = /** status 200 List of available user roles. */ {
-    totalItems: number;
-    items: UserRole[];
-};
-export type GetUserRolesApiArg = void;
-export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ UserTreeNode;
+export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
 export type CloneUserApiArg = {
     /** Id of the user */
     id: number;
@@ -100,14 +91,14 @@ export type CloneUserApiArg = {
         name?: string;
     };
 };
-export type CreateUserApiResponse = /** status 200 Node of the new created User */ UserTreeNode;
+export type CreateUserApiResponse = /** status 200 Node of the new created User */ TreeNode;
 export type CreateUserApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ UserTreeNode;
+export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
 export type CreateUserFolderApiArg = {
     body: {
         parentId: number | null;
@@ -119,7 +110,7 @@ export type GetStudioApiUserCurrentUserInformationApiResponse =
 export type GetStudioApiUserCurrentUserInformationApiArg = void;
 export type GetUserByIdApiResponse = /** status 200 User data. */ User;
 export type GetUserByIdApiArg = {
-    /** Id of the element */
+    /** Id of the user */
     id: number;
 };
 export type UpdateUserByIdApiResponse = /** status 200 Updated data. */ User;
@@ -158,21 +149,25 @@ export type UpdateUserPasswordByIdApiArg = {
 };
 export type GetUserTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
-    items: UserTreeNode[];
+    items: TreeNode[];
 };
 export type GetUserTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
-export type UserRole = {
+export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    /** ID of the Role */
+    /** Unique Identifier */
     id: number;
-    /** Name of the Role */
-    name?: string;
+    /** Name of the tree node */
+    name: string;
+    /** Is ether folder or a specific item in the folder */
+    type: string;
+    /** If a folder has sub items */
+    hasChildren: boolean;
 };
 export type Error = {
     /** Message */
@@ -183,20 +178,6 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
-};
-export type UserTreeNode = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Unique Identifier */
-    id: number;
-    /** Name of Folder or User */
-    name: string;
-    /** Is ether user or folder */
-    type: string;
-    /** If a folder has sub items */
-    hasChildren: boolean;
 };
 export type UserInformation = {
     /** Username */
@@ -340,7 +321,6 @@ export type ResetPassword = {
     username: string;
 };
 export const {
-    useGetUserRolesQuery,
     useCloneUserMutation,
     useCreateUserMutation,
     useCreateUserFolderMutation,

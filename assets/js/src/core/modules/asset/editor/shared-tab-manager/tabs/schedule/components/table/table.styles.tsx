@@ -25,19 +25,36 @@ export const useStyles = createStyles(({ css, token }) => {
 
         div[data-grid-column="schedule-table--action-column"],
         div[data-grid-column="schedule-table--version-column"]{
-            padding: 6px;
-            flex-grow: 1;
-            
-            .pseudo-select {
-                display: flex;
-                align-items: center;
-                gap: ${token.marginXS}px;
-                color: ${token.colorPrimary};
+          padding: 6px;
+          flex-grow: 1;
+          
+          .pseudo-select {
+            display: flex;
+            align-items: center;
+            gap: ${token.marginXS}px;
+            color: ${token.colorPrimary};
+
+            .pseudo-select__content {
+              > p {
+                margin: 0;
+              }
             }
+          }
+          
+          .ant-select {
+              width: 100%;
+          }
             
-            .ant-select {
-                width: 100%;
+          .ant-dropdown-trigger {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            color: ${token.colorPrimary};
+              
+            &:hover {
+              color: ${token.colorPrimaryHover};
             }
+          }
         }
 
         .schedule-table--actions-column {
