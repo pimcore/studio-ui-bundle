@@ -15,18 +15,18 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
+    search: css`
+      padding-top: ${token.paddingXS}px;
+    `,
     tree: css`
-        .ant-tree-list-holder-inner {
-            .ant-tree-treenode:first-of-type {
-                >.ant-tree-indent {
-                    display: none
-                }
-            }
+      padding-top: ${token.paddingXS}px;
+      .ant-tree-list-holder-inner {
+        .ant-tree-treenode:first-of-type {
+          >.ant-tree-indent {
+            display: none
+          }
         }
-        
-        .site-tree-search-value {
-            color: ${token.colorPrimary};
-        }
+      }
       .
     `
   }

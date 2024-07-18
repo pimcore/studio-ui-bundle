@@ -11,33 +11,62 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Divider, type MenuProps } from 'antd'
+import React, { useContext, useEffect, useState } from 'react'
+import { Divider, Dropdown } from 'antd'
 import { useStyle } from './tags-container.styles'
 import { useTranslation } from 'react-i18next'
-import DropdownButton from 'antd/es/dropdown/dropdown-button'
 import {
   AssignedTagsTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/assigned-tags/assigned-tags'
 import {
   TagsTreeContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
+import {
+  useBatchReplaceTagsForElementsMutation,
+  useGetTagsForElementByTypeAndIdQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
+  const { id } = useContext(AssetContext)
+  const [defaultSelectedTags, setDefaultSelectedTags] = useState<number[]>([])
+  const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
 
-  const dropdownButtonMenu: MenuProps['items'] = [
-    {
-      label: 'Submit and continue',
-      key: '1'
+  const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
+    elementType: 'asset',
+    id: id!
+  })
+
+  useEffect(() => {
+    if (
+      data?.items !== undefined &&
+      data.items.length > 0
+    ) {
+      setDefaultSelectedTags(
+        data.items.map((tag) => tag.id!)
+      )
     }
-  ]
+  }, [data])
+
+  const applyTagsToElement = async (): Promise<void> => {
+    await replaceTagsMutation({
+      elementType: 'asset',
+      elementTagIdCollection: {
+        elementIds: [id!],
+        tagIds: defaultSelectedTags
+      }
+    })
+  }
 
   return (
     <div className={ styles.tab }>
       <div className={ 'pimcore-tags-sidebar' }>
-        <TagsTreeContainer />
+        <TagsTreeContainer
+          defaultSelectedTags={ defaultSelectedTags }
+          setDefaultSelectedTags={ setDefaultSelectedTags }
+        />
       </div>
 
       <Divider type={ 'vertical' } />
@@ -48,15 +77,24 @@ export const TagsTabContainer = (): React.JSX.Element => {
             {t('element.element-editor-tabs.tags.assigned-tags-text')}
           </p>
 
-          <DropdownButton
+          <Dropdown.Button
             menu={ {
-              items: dropdownButtonMenu
+              items: [{
+                label: 'Submit and continue',
+                key: '1'
+              }]
             } }
-          />
+            onClick={ applyTagsToElement }
+          >
+            {t('element.element-editor-tabs.tags.apply-folder-tags')}
+          </Dropdown.Button>
         </div>
 
         <div className={ 'pimcore-tags-content' }>
-          <AssignedTagsTable />
+          <AssignedTagsTable
+            isLoading={ isLoading }
+            tags={ data?.items ?? [] }
+          />
         </div>
       </div>
     </div>

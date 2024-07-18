@@ -13,12 +13,19 @@
 
 import { useGetTagsQuery } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { TagsTree } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
-import React from 'react'
+import React, { useState } from 'react'
 
-export const TagsTreeContainer = (): React.JSX.Element => {
+export interface TagsTreeContainerProps {
+  defaultSelectedTags: number[]
+  setDefaultSelectedTags: (tags: number[]) => void
+}
+
+export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Element => {
+  const [filter, setFilter] = useState<string>('')
   const { data, isLoading } = useGetTagsQuery({
     page: 1,
-    pageSize: 9999
+    pageSize: 9999,
+    filter
   })
 
   if (isLoading) {
@@ -31,7 +38,12 @@ export const TagsTreeContainer = (): React.JSX.Element => {
 
   return (
     <>
-      <TagsTree tags={ data.items } />
+      <TagsTree
+        isLoading={ isLoading }
+        setFilter={ setFilter }
+        tags={ data.items }
+        { ...props }
+      />
     </>
   )
 }

@@ -11,12 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import {
-  type Tag,
-  useGetTagsForElementByTypeAndIdQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import React from 'react'
+import { type Tag } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -27,21 +23,8 @@ type TagWithActions = Tag & {
   actions: React.ReactNode
 }
 
-export const AssignedTagsTable = (): React.JSX.Element => {
+export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
-  const [tags, setTags] = useState<Tag[]>([])
-
-  const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
-    elementType: 'asset',
-    id: id!
-  })
-
-  useEffect(() => {
-    if (data !== undefined) {
-      setTags(data.items)
-    }
-  }, [data])
 
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
