@@ -23,6 +23,10 @@ export const useStyle = createStyles(({ token, css }) => {
                 }
             }
         }
+        
+        .site-tree-search-value {
+            color: ${token.colorPrimary};
+        }
       .
     `
   }

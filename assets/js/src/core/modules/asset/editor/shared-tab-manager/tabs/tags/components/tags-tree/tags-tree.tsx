@@ -21,6 +21,13 @@ import {
   useStyle
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree.styles'
 
+type TreeDataNodeWithCustomData = TreeDataNode & {
+  customData?: {
+    parentId: number
+    hasChildren: boolean
+  }
+}
+
 export const TagsTree = ({ tags }: { tags: Tag[] }): React.JSX.Element => {
   const { styles } = useStyle()
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
@@ -30,12 +37,16 @@ export const TagsTree = ({ tags }: { tags: Tag[] }): React.JSX.Element => {
 
   const initialData = createTreeStructure({ tags })
 
-  const dataList: Array<{ key: React.Key, title: string }> = []
+  const dataList: Array<{ key: React.Key, title: string, parentId?: number, hasParent?: boolean }> = []
   const generateList = (data: TreeDataNode[]): void => {
     for (let i = 0; i < data.length; i++) {
       const node = data[i]
-      const { key } = node
-      dataList.push({ key, title: key as string })
+      const { key, customData } = node as TreeDataNodeWithCustomData
+      dataList.push({
+        key,
+        title: node.title as string,
+        ...customData
+      })
       if (node.children!.length > 0) {
         generateList(node.children!)
       }
@@ -45,6 +56,14 @@ export const TagsTree = ({ tags }: { tags: Tag[] }): React.JSX.Element => {
 
   const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
     let parentKey: React.Key
+    const element = dataList.find((item) => item.key === key)
+    if (element !== undefined) {
+      parentKey = element.key!
+    }
+
+    return parentKey!
+
+    /* let parentKey: React.Key
     for (let i = 0; i < tree.length; i++) {
       const node = tree[i]
       if (node.children!.length > 0) {
@@ -55,7 +74,7 @@ export const TagsTree = ({ tags }: { tags: Tag[] }): React.JSX.Element => {
         }
       }
     }
-    return parentKey!
+    return parentKey! */
   }
 
   const onExpand = (newExpandedKeys: React.Key[]): void => {
@@ -67,16 +86,18 @@ export const TagsTree = ({ tags }: { tags: Tag[] }): React.JSX.Element => {
     const { value } = e.target
     const newExpandedKeys = dataList
       .map((item) => {
-        if (item.title.includes(value)) {
+        if (item.title.toLowerCase().includes(value.toLowerCase())) {
           return getParentKey(item.key, initialData)
         }
         return null
       })
       .filter((item, i, self): item is React.Key => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        console.log(!!(item && self.indexOf(item) === i))
+        console.log('item', item)
+        console.log('self', self.indexOf(item))
+        console.log('i', i)
 
-        return true
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        return !!(item && self.indexOf(item) === i)
       })
     setExpandedKeys(newExpandedKeys)
     setSearchValue(value)

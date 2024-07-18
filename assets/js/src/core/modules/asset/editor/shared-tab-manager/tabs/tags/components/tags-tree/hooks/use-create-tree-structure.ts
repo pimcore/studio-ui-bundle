@@ -28,8 +28,11 @@ export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
         icon: Icon({
           name: 'tag-02'
         }),
-        children: tag.hasChildren === true ? treeWalker(tag.children!) : []
-        // hasChildren: tag.children !== null
+        children: tag.hasChildren === true ? treeWalker(tag.children!) : [],
+        customData: {
+          hasChildren: tag.hasChildren,
+          parentId: tag.parentId ?? null
+        }
       }))
     }
 
