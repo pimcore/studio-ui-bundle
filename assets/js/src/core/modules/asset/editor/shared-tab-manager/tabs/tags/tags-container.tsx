@@ -42,10 +42,10 @@ export const TagsTabContainer = (): React.JSX.Element => {
   useEffect(() => {
     if (
       data?.items !== undefined &&
-      data.items.length > 0
+      data.totalItems > 0
     ) {
       setDefaultSelectedTags(
-        data.items.map((tag) => tag.id!)
+        Object.keys(data.items).map((item) => Number(item))
       )
     }
   }, [data])

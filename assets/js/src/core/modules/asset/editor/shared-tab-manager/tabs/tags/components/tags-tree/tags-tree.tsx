@@ -41,6 +41,8 @@ export const TagsTree = ({ tags, setFilter, isLoading, defaultSelectedTags, setD
     setDefaultSelectedTags(checkedKeys as number[])
   }
 
+  console.log(defaultSelectedTags)
+
   return (
     <>
       <Search
