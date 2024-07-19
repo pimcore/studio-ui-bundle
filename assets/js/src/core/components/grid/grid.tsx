@@ -80,7 +80,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                 />
         }))
         : props.columns,
-    [props.isLoading, columns]
+    [props.isLoading, props.columns]
   )
 
   useEffect(() => {

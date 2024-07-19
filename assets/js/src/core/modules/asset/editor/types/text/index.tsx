@@ -27,7 +27,7 @@ import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
+import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 import { type TextTabManager } from './tab-manager/text-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'

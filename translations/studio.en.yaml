@@ -149,3 +149,7 @@ type: Type
 title: Title
 description: Description
 select: Select
+element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
+element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
+asset.asset-editor-tabs.tags.columns.path: Path
+asset.asset-editor-tabs.tags.columns.actions: Remove
