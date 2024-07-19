@@ -32,7 +32,8 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       header: t('asset.asset-editor-tabs.tags.columns.path'),
       meta: {
         type: 'text'
-      }
+      },
+      minSize: 600
     }),
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.tags.columns.actions'),
@@ -56,7 +57,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   return (
     <Grid
       columns={ columns }
-      data={ tags }
+      data={ Object.values(tags) }
       isLoading={ isLoading }
     />
   )

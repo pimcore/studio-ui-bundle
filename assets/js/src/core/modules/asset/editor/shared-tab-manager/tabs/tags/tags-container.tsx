@@ -40,10 +40,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   })
 
   useEffect(() => {
-    if (
-      data?.items !== undefined &&
-      data.totalItems > 0
-    ) {
+    if (data?.items !== undefined && data.totalItems > 0) {
       setDefaultCheckedTags(Object.keys(data.items))
     }
   }, [data])
@@ -91,7 +88,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
         <div className={ 'pimcore-tags-content' }>
           <AssignedTagsTable
             isLoading={ isLoading }
-            tags={ data?.items ?? [] }
+            tags={ Object.values(data?.items ?? {}) }
           />
         </div>
       </div>

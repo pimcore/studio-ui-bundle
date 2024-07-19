@@ -39,8 +39,6 @@ export const TagsTree = ({ tags, setFilter, isLoading, defaultCheckedTags, setDe
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
     setDefaultCheckedTags(checkedKeys.checked)
-
-    console.log('checkedKeys', checkedKeys.checked)
   }
 
   return (
@@ -60,8 +58,8 @@ export const TagsTree = ({ tags, setFilter, isLoading, defaultCheckedTags, setDe
       <Tree
         checkStrictly
         checkable
+        checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         className={ styles.tree }
-        defaultCheckedKeys={ defaultCheckedTags }
         defaultExpandAll
         onCheck={ onCheck }
         showIcon
