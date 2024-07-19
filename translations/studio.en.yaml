@@ -133,5 +133,6 @@ properties.property-already-exist.error: Name is already in use, please choose a
 button.ok: Ok
 component.no-content.no-content-available: No content available
 element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
+element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
 asset.asset-editor-tabs.tags.columns.path: Path
 asset.asset-editor-tabs.tags.columns.actions: Remove
