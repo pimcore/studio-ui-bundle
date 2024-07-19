@@ -31,7 +31,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const { id } = useContext(AssetContext)
-  const [defaultSelectedTags, setDefaultSelectedTags] = useState<number[]>([])
+  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>([])
   const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
 
   const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
@@ -44,9 +44,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
       data?.items !== undefined &&
       data.totalItems > 0
     ) {
-      setDefaultSelectedTags(
-        Object.keys(data.items).map((item) => Number(item))
-      )
+      setDefaultCheckedTags(Object.keys(data.items))
     }
   }, [data])
 
@@ -55,7 +53,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
       elementType: 'asset',
       elementTagIdCollection: {
         elementIds: [id!],
-        tagIds: defaultSelectedTags
+        tagIds: defaultCheckedTags.map(Number)
       }
     })
   }
@@ -64,8 +62,8 @@ export const TagsTabContainer = (): React.JSX.Element => {
     <div className={ styles.tab }>
       <div className={ 'pimcore-tags-sidebar' }>
         <TagsTreeContainer
-          defaultSelectedTags={ defaultSelectedTags }
-          setDefaultSelectedTags={ setDefaultSelectedTags }
+          defaultCheckedTags={ defaultCheckedTags }
+          setDefaultCheckedTags={ setDefaultCheckedTags }
         />
       </div>
 

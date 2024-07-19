@@ -16,8 +16,8 @@ import { TagsTree } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/
 import React, { useState } from 'react'
 
 export interface TagsTreeContainerProps {
-  defaultSelectedTags: number[]
-  setDefaultSelectedTags: (tags: number[]) => void
+  defaultCheckedTags: React.Key[]
+  setDefaultCheckedTags: (tags: React.Key[]) => void
 }
 
 export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Element => {

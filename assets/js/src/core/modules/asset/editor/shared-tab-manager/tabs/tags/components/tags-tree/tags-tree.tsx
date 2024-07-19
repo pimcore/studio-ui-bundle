@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type Key } from 'react'
 import { Input, Tree, type TreeProps } from 'antd'
 import { type Tag } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
@@ -30,18 +30,18 @@ interface TagsTreeProps extends TagsTreeContainerProps {
   isLoading?: boolean
 }
 
-export const TagsTree = ({ tags, setFilter, isLoading, defaultSelectedTags, setDefaultSelectedTags }: TagsTreeProps): React.JSX.Element => {
+export const TagsTree = ({ tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { Search } = Input
   const { createTreeStructure } = useCreateTreeStructure()
 
-  const initialData = createTreeStructure({ tags })
+  const treeData = createTreeStructure({ tags })
 
-  const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
-    setDefaultSelectedTags(checkedKeys as number[])
+  const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
+    setDefaultCheckedTags(checkedKeys.checked)
+
+    console.log('checkedKeys', checkedKeys.checked)
   }
-
-  console.log(defaultSelectedTags)
 
   return (
     <>
@@ -58,13 +58,14 @@ export const TagsTree = ({ tags, setFilter, isLoading, defaultSelectedTags, setD
       />
 
       <Tree
+        checkStrictly
         checkable
         className={ styles.tree }
+        defaultCheckedKeys={ defaultCheckedTags }
         defaultExpandAll
-        defaultSelectedKeys={ defaultSelectedTags }
         onCheck={ onCheck }
         showIcon
-        treeData={ initialData }
+        treeData={ treeData }
       />
     </>
   )
