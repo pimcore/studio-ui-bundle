@@ -17,6 +17,13 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     search: css`
       padding-top: ${token.paddingXS}px;
+        
+      .ant-input-group-addon {        
+        > .ant-btn {
+            border-color: #d9d9d9;
+           color: ${token.colorPrimary} !important; 
+        }
+      }
     `,
     tree: css`
       padding-top: ${token.paddingXS}px;
