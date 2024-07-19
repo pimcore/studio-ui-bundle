@@ -19,6 +19,9 @@ import { type RefSelectProps, Result, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { DownOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
+import { type SelectProps } from 'rc-select/lib/Select'
+import { useStyles } from './version-id-cell.styles'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
@@ -26,6 +29,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
   const { context } = useGlobalAssetContext()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   if (context === undefined) {
     return <Result title="Missing context" />
@@ -35,7 +39,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     elementType: context.type,
     id: context.config.id,
     page: 1,
-    pageSize: 20
+    pageSize: 9999
   })
 
   useEffect(() => {
@@ -51,11 +55,25 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   function getCellContent (): React.JSX.Element {
+    let selectOptions: Version[] = []
+    if (!isLoading && data !== undefined) {
+      selectOptions = data.items
+    }
+
+    function getVersionFromId (id: number): Version | null {
+      return selectOptions.find((version: Version) => version.id === id) ?? null
+    }
+
+    const version = getVersionFromId(props.getValue() as number)
     if (!isInEditMode) {
       return (
         <div className={ 'pseudo-select' }>
           { props.getValue() !== null
-            ? props.getValue()
+            ? (
+              <div className={ 'pseudo-select__content' }>
+                <p>{version !== null ? version.versionCount : t('asset.asset-editor-tabs.schedule.select-a-version')}</p>
+              </div>
+              )
             : t('asset.asset-editor-tabs.schedule.select-a-version')
           }
           <DownOutlined />
@@ -64,7 +82,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      saveValue(e.target.value)
+      saveValue(e.target.id)
     }
 
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
@@ -73,25 +91,44 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
       }
     }
 
-    let selectOptions: Version[] = []
-    if (!isLoading && data !== undefined) {
-      selectOptions = data.items
+    function formatDate (timestamp: number): string {
+      return i18n.format(
+        new Date(timestamp * 1000),
+        'datetime',
+        i18n.language,
+        {
+          dateStyle: 'short',
+          timeStyle: 'short'
+        }
+      )
     }
-    const formattedSelectOptions = selectOptions.map((value: Version) => {
+
+    const options: SelectProps['options'] = selectOptions.map((value: Version) => {
       return {
-        value: String(value.id),
-        label: value.id
+        value: value.id,
+        label: (
+          <div className={ 'version-id__select__label' }>
+            <p>
+              <b>{value.versionCount}</b>
+              <span className={ 'version-id__select__label__username' }> | {value.user.name ?? 'not found'}</span>
+            </p>
+            <p>{formatDate(value.date)}</p>
+          </div>
+        )
       }
     })
 
     return (
       <Select
-        defaultValue={ props.getValue() }
+        className={ styles.select }
+        defaultValue={ version !== null ? version.versionCount : '' }
         onBlur={ onBlur }
         onChange={ saveValue }
         onKeyDown={ onKeyDown }
         open={ open }
-        options={ formattedSelectOptions }
+        options={ options }
+        popupClassName={ styles.overlayStyle }
+        popupMatchSelectWidth={ false }
         ref={ selectRef }
       />
     )

@@ -132,6 +132,23 @@ properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 button.ok: Ok
 component.no-content.no-content-available: No content available
+notes-and-events.notes-and-events: Notes & Events
+notes-and-events.details: Details
+notes-and-events.name: name
+notes-and-events.type: type
+notes-and-events.value: value
+notes-and-events.new-note: New Note
+notes-and-events.content: content
+notes-and-events.seo: seo
+notes-and-events.warning: warning
+notes-and-events.notice: notice
+notes-and-events.erp_import: erp_import
+add: Add
+save: Save
+type: Type
+title: Title
+description: Description
+select: Select
 element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
 element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
 asset.asset-editor-tabs.tags.columns.path: Path

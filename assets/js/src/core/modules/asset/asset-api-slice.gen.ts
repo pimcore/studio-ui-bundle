@@ -221,9 +221,11 @@ export type GetAssetsApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
-export type PatchAssetByIdApiResponse = /** status 200 Success */
-    | void
-    | /** status 207 Partial success with errors */ PatchError[];
+export type PatchAssetByIdApiResponse =
+    /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
+        /** ID of created jobRun */
+        id: number;
+    };
 export type PatchAssetByIdApiArg = {
     body: {
         data: {
@@ -579,12 +581,6 @@ export type Archive = Asset;
 export type Text = Asset;
 export type Folder = Asset;
 export type Unknown = Asset;
-export type PatchError = {
-    /** ID */
-    id?: number;
-    /** Message */
-    message?: string;
-};
 export type PatchCustomMetadata = {
     /** Name */
     name: string;

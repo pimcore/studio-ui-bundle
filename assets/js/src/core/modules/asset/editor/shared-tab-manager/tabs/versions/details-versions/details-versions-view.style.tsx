@@ -14,20 +14,18 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-  const versionToken = { versionsLeftSideWidth: '369', ...token }
+  const versionToken = { versionsLeftSideWidth: '383', ...token }
 
   return {
     'right-side': css`
       width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
       padding: ${token.paddingSM}px;
+      text-align: center;
+      display: ruby;
 
       & > div {
         display: flex;
         flex-direction: row;
-      }
-      
-      & .ant-table {
-        width: 100%;
       }
       
       & .highlight-cell {
