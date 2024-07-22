@@ -60,7 +60,7 @@ export const TagsTree = ({ tags, setFilter, isLoading, defaultCheckedTags, setDe
         checkable
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         className={ styles.tree }
-        defaultExpandAll
+        expandedKeys={ ['root'] }
         onCheck={ onCheck }
         showIcon
         treeData={ treeData }
