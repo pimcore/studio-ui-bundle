@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
   type Tag,
   useUnassignTagFromElementMutation
@@ -30,6 +30,7 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
+  const [loadingRows, setLoadingRows] = useState({})
   const { context } = useGlobalAssetContext()
   const { styles } = useStyle()
   const [unassignTag] = useUnassignTagFromElementMutation()
@@ -58,18 +59,21 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.tags.columns.actions'),
       cell: (info) => {
-        const [isUnassignLoading, setIsUnassignLoading] = React.useState<boolean>(false)
+        const isLoading = loadingRows[info.row.id]
+
+        const handleClick = async (): Promise<void> => {
+          setLoadingRows({ ...loadingRows, [info.row.id]: true })
+          await removeTag(info.row.original)
+          setLoadingRows({ ...loadingRows, [info.row.id]: false })
+        }
 
         return (
           <div className={ 'tags-table--actions-column' }>
             <Button
-              disabled={ isUnassignLoading }
+              disabled={ isLoading }
               icon={ <Icon name="trash" /> }
-              loading={ isUnassignLoading }
-              onClick={ async () => {
-                setIsUnassignLoading(true)
-                await removeTag(info.row.original)
-              } }
+              loading={ isLoading }
+              onClick={ handleClick }
               type="link"
             />
           </div>
