@@ -61,14 +61,15 @@ export const useStyle = createStyles(({ token, css }) => {
 
       .card-title__chevron-btn {
         vertical-align: top;
-        margin: 0 ${cardToken.marginXXS}px;
+        margin-left: ${cardToken.marginXXS}px;
       }
       
       .card-title__user {
         vertical-align: unset;
         font-weight: 400;
         line-height: 20px;
-        color: ${cardToken.colorTextSecondary}
+        color: ${cardToken.colorTextSecondary};
+        margin-left: ${cardToken.marginXXS}px;
       }
       
       .chevron {
