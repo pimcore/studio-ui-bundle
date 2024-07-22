@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from 'antd'
 import { Grid } from '@Pimcore/components/grid/grid'
+import { useStyle } from './assigned-tags.styles'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -25,6 +26,7 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyle()
 
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
@@ -55,11 +57,13 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   ]
 
   return (
-    <Grid
-      columns={ columns }
-      data={ Object.values(tags) }
-      isLoading={ isLoading }
-    />
+    <div className={ styles.table }>
+      <Grid
+        columns={ columns }
+        data={ Object.values(tags) }
+        isLoading={ isLoading }
+      />
+    </div>
   )
 }
 
