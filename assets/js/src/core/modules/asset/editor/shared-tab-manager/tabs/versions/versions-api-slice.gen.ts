@@ -22,6 +22,14 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}` }),
                 providesTags: ["Versions"],
             }),
+            updateVersion: build.mutation<UpdateVersionApiResponse, UpdateVersionApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/versions/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Versions"],
+            }),
             publishVersion: build.mutation<PublishVersionApiResponse, PublishVersionApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}`, method: "POST" }),
                 invalidatesTags: ["Versions"],
@@ -71,6 +79,15 @@ export type GetVersionByIdApiResponse = /** status 200 Version data as json */
 export type GetVersionByIdApiArg = {
     /** Id of the version */
     id: number;
+};
+export type UpdateVersionApiResponse = /** status 200 Successfully updated version */ void;
+export type UpdateVersionApiArg = {
+    /** Id of the version */
+    id: number;
+    body: {
+        public?: boolean;
+        note?: string;
+    };
 };
 export type PublishVersionApiResponse = /** status 200 ID of latest published version */ {
     /** ID of published version */
@@ -225,6 +242,7 @@ export const {
     useStreamImageVersionByIdQuery,
     useStreamPdfVersionByIdQuery,
     useGetVersionByIdQuery,
+    useUpdateVersionMutation,
     usePublishVersionMutation,
     useDeleteVersionMutation,
     useGetVersionsQuery,

@@ -79,6 +79,8 @@ import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
+import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
+import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
 import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
@@ -88,6 +90,9 @@ import intersectCircle from '@Pimcore/assets/icons/intersect-circle.inline.svg'
 import cornerLeftUp from '@Pimcore/assets/icons/corner-left-up.inline.svg'
 import Icon from '@Pimcore/assets/icons/icon.inline.svg'
 import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
+import flagOutlined from '@Pimcore/assets/icons/flag-outlined.inline.svg'
+import draggable from '@Pimcore/assets/icons/draggable.inline.svg'
+import settingsOutlined from '@Pimcore/assets/icons/settings-outlined.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -384,6 +389,30 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'corner-left-up',
       component: cornerLeftUp
+    })
+    iconLibrary.register({
+      name: 'flag-outlined',
+      component: flagOutlined
+    })
+
+    iconLibrary.register({
+      name: 'chevron-right',
+      component: chevronRight
+    })
+
+    iconLibrary.register({
+      name: 'chevron-left',
+      component: chevronLeft
+    })
+
+    iconLibrary.register({
+      name: 'draggable',
+      component: draggable
+    })
+
+    iconLibrary.register({
+      name: 'settings-outlined',
+      component: settingsOutlined
     })
   }
 })

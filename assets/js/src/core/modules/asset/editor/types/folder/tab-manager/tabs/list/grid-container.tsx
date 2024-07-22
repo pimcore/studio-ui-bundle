@@ -13,65 +13,52 @@
 
 import React from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useList } from './hooks/use-list'
 
 interface GridContainerProps {
-  assets: GetAssetsApiResponse
+  assets: GetAssetGridApiResponse | undefined
 }
 
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
-  const columnHelper = createColumnHelper<GetAssetsApiResponse['items']>()
+  const columnHelper = createColumnHelper()
+  const { columns: GridColumns } = useList()
 
-  const columns = [
-    columnHelper.accessor('imageThumbnailPath', {
-      header: t('asset.asset-editor-tabs.list.columns.preview'),
-      meta: {
-        type: 'asset-preview'
-      },
-      id: 'preview',
-      size: 110
-    }),
+  const columns: Array<ColumnDef<unknown, never>> = []
 
-    columnHelper.accessor('id', {
-      header: t('asset.asset-editor-tabs.list.columns.id')
-    }),
+  GridColumns.forEach((column) => {
+    columns.push(
+      columnHelper.accessor(column.key, {
+        header: t(column.key),
+        meta: {
+          type: 'text',
+          editable: column.editable
+        }
+      })
+    )
+  })
 
-    columnHelper.accessor('type', {
-      header: t('asset.asset-editor-tabs.list.columns.type')
-    }),
-
-    columnHelper.accessor('fullPath', {
-      header: t('asset.asset-editor-tabs.list.columns.fullPath'),
-      id: 'fullPath',
-      meta: {
-        type: 'asset-link'
-      },
-      size: 300
-    }),
-
-    columnHelper.accessor('creationDate', {
-      header: t('asset.asset-editor-tabs.list.columns.creationDate'),
-      meta: {
-        type: 'date'
-      }
-    }),
-
-    columnHelper.accessor('modificationDate', {
-      header: t('asset.asset-editor-tabs.list.columns.modificationDate'),
-      meta: {
-        type: 'date'
-      }
+  const data = assets?.items.map(item => {
+    const row = {}
+    item?.columns?.forEach(column => {
+      row[column.key!] = column.value
     })
-  ]
+    return row
+  })
+
+  if (data === undefined) {
+    return <></>
+  }
 
   return (
     <Grid
       columns={ columns }
-      data={ assets.items }
+      data={ data }
+      onUpdateCellData={ () => {} }
       resizable
     />
   )

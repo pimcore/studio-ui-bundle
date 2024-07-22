@@ -18,8 +18,9 @@ export const useStyles = createStyles(({ token, css }) => {
     ContentToolbarSidebarLayout: css`
       &.content-toolbar-sidebar-layout {
         position: relative;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: 1fr auto;
         height: 100%;
         width: 100%;
         overflow: hidden;
@@ -27,6 +28,8 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .content-toolbar-sidebar-layout__content {
         display: flex;
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
         overflow: auto;
         height: 100%;
         width: 100%;
@@ -34,9 +37,16 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .content-toolbar-sidebar-layout__toolbar {
         border-top: 1px solid ${token.colorBorderTertiary};
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
         position: sticky;
         bottom: 0;
         height: ${token.sizeXXL}px; 
+      }
+
+      .content-toolbar-sidebar-layout__sidebar {
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
       }
     `
   }
