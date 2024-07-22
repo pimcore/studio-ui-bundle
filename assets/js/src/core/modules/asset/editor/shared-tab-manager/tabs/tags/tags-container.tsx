@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
-import { Divider, Dropdown } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Divider, Dropdown, Result } from 'antd'
 import { useStyle } from './tags-container.styles'
 import { useTranslation } from 'react-i18next'
 import {
@@ -25,18 +25,23 @@ import {
   useBatchReplaceTagsForElementsMutation,
   useGetTagsForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { id } = useContext(AssetContext)
+  const { context } = useGlobalAssetContext()
   const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>([])
   const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
+  const [isReplaceLoading, setIsReplaceLoading] = useState<boolean>(false)
+
+  if (context === undefined) {
+    return <Result title="No context" />
+  }
 
   const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
-    elementType: 'asset',
-    id: id!
+    elementType: context.type,
+    id: context.config.id
   })
 
   useEffect(() => {
@@ -46,13 +51,15 @@ export const TagsTabContainer = (): React.JSX.Element => {
   }, [data])
 
   const applyTagsToElement = async (): Promise<void> => {
+    setIsReplaceLoading(true)
     await replaceTagsMutation({
-      elementType: 'asset',
+      elementType: context.type ?? 'asset',
       elementTagIdCollection: {
-        elementIds: [id!],
+        elementIds: [context.config.id],
         tagIds: defaultCheckedTags.map(Number)
       }
     })
+    setIsReplaceLoading(false)
   }
 
   return (
@@ -73,9 +80,11 @@ export const TagsTabContainer = (): React.JSX.Element => {
           </p>
 
           <Dropdown.Button
+            disabled={ isReplaceLoading }
+            loading={ isReplaceLoading }
             menu={ {
               items: [{
-                label: 'Submit and continue',
+                label: 'Remove current element tags & Apply folder tags',
                 key: '1'
               }]
             } }

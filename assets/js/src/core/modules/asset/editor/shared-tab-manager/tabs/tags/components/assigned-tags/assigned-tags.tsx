@@ -12,13 +12,17 @@
 */
 
 import React from 'react'
-import { type Tag } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import {
+  type Tag,
+  useUnassignTagFromElementMutation
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from 'antd'
+import { Button, Result } from 'antd'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyle } from './assigned-tags.styles'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -26,7 +30,21 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
+  const { context } = useGlobalAssetContext()
   const { styles } = useStyle()
+  const [unassignTag] = useUnassignTagFromElementMutation()
+
+  if (context === undefined) {
+    return <Result title="No context" />
+  }
+
+  async function removeTag (tag: Tag): Promise<void> {
+    await unassignTag({
+      elementType: context!.type,
+      id: context!.config.id,
+      tagId: tag.id!
+    })
+  }
 
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
@@ -40,12 +58,17 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.tags.columns.actions'),
       cell: (info) => {
+        const [isUnassignLoading, setIsUnassignLoading] = React.useState<boolean>(false)
+
         return (
           <div className={ 'tags-table--actions-column' }>
             <Button
+              disabled={ isUnassignLoading }
               icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                removeTag(info.row.original)
+              loading={ isUnassignLoading }
+              onClick={ async () => {
+                setIsUnassignLoading(true)
+                await removeTag(info.row.original)
               } }
               type="link"
             />
@@ -65,8 +88,4 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       />
     </div>
   )
-}
-
-function removeTag (tag: Tag): void {
-  throw new Error('Function not implemented.')
 }
