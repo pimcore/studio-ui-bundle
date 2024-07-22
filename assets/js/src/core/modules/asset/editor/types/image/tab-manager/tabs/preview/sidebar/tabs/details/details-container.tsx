@@ -14,17 +14,16 @@
 import React, { useContext } from 'react'
 import {
   type Image,
-  useDownloadImageByFormatQuery,
   useGetAssetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
-  AssetEditorSidebarDetailsView
+  AssetEditorSidebarDetailsView, type CustomDownloadProps
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
+import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
+import { buildQueryString } from '@Pimcore/utils/query-string'
 
 const DetailContainer = (): React.JSX.Element => {
-  const [downloadImageByFormat] = useDownloadImageByFormatQuery()
-
   const assetContext = useContext(AssetContext)
   const { data } = useGetAssetByIdQuery({ id: assetContext.id! })
   const imageData = data! as Image
@@ -32,20 +31,91 @@ const DetailContainer = (): React.JSX.Element => {
   return (
     <AssetEditorSidebarDetailsView
       height={ imageData.height }
-      onClickCustomDownload={ async () => {
-        await downloadImageByFormat({
-
-        })
+      onClickCustomDownload={ async (customDownloadProps) => {
+        await downloadImageByCustomSettings(assetContext.id!, customDownloadProps)
       } }
       onClickDownloadByFormat={ async (format) => {
-        await downloadImageByFormat({
-          id: assetContext.id,
-          format
-        })
+        await downloadImageByFormat(assetContext.id!, format)
       } }
       width={ imageData.width }
     />
   )
+
+  async function downloadImageByCustomSettings (id, {
+    width,
+    height,
+    quality,
+    dpi,
+    mode,
+    format
+  }: CustomDownloadProps): Promise<void> {
+    // ?mimeType=JPEG&resizeMode=scaleByWidth&width=140&height=78&quality=99&dpi=200
+    const keyValues = [
+      {
+        key: 'mimeType',
+        value: format
+      },
+      {
+        key: 'resizeMode',
+        value: mode
+      },
+      {
+        key: 'dpi',
+        value: dpi.toString()
+      },
+      {
+        key: 'quality',
+        value: quality.toString()
+      },
+      {
+        key: 'height',
+        value: height.toString()
+      },
+      {
+        key: 'width',
+        value: width.toString()
+      }
+    ]
+
+    const queryString = buildQueryString(keyValues, ['', '-1'])
+
+    fetch(`http://localhost/studio/api/assets/${id}/image/download/custom?${queryString}`)
+      .then(async (response) => await response.blob())
+      .then((imageBlob) => {
+        const imageURL = URL.createObjectURL(imageBlob)
+        downloadShortcutsHandlerForCustomSettings(imageData.filename!, imageURL, format)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  async function downloadImageByFormat (id: number, format: string): Promise<void> {
+    fetch(`http://localhost/studio/api/assets/${id}/image/download/format/${format}`)
+      .then(async (response) => await response.blob())
+      .then((imageBlob) => {
+        const imageURL = URL.createObjectURL(imageBlob)
+
+        downloadShortcutsHandler(imageData.filename!, imageURL, format)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  function downloadShortcutsHandler (name: string, url: string, format: string): void {
+    let filename = name
+    if (format !== 'original') {
+      filename = replaceFileEnding(name, 'jpg')
+    }
+
+    saveFileLocal(filename, url)
+  }
+
+  function downloadShortcutsHandlerForCustomSettings (name: string, url: string, format: string): void {
+    const filename = replaceFileEnding(name, format.toLowerCase())
+    saveFileLocal(filename, url)
+  }
 }
 
 export { DetailContainer }

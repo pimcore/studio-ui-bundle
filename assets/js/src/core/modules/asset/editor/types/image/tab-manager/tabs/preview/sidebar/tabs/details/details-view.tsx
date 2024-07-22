@@ -11,17 +11,33 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useStyle } from './details.styles'
 import { Button, Collapse, type CollapseProps, Form, Input, Select } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 
+export interface CustomDownloadProps {
+  width: number
+  height: number
+  quality: number
+  dpi: number
+  mode: string
+  format: string
+}
+
 interface AssetEditorSidebarDetailsViewProps {
   width?: number
   height?: number
   onClickDownloadByFormat: (format: string) => void
-  onClickCustomDownload: () => void
+  onClickCustomDownload: ({
+    width,
+    height,
+    quality,
+    dpi,
+    mode,
+    format
+  }: CustomDownloadProps) => void
 }
 
 export const AssetEditorSidebarDetailsView = ({
@@ -32,6 +48,13 @@ export const AssetEditorSidebarDetailsView = ({
 }: AssetEditorSidebarDetailsViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
+  const [downloadFormat, setDownloadFormat] = useState('original')
+  const [customWidth, setCustomWidth] = useState(-1)
+  const [customHeight, setCustomHeight] = useState(-1)
+  const [customQuality, setCustomQuality] = useState(-1)
+  const [customDPI, setCustomDPI] = useState(-1)
+  const [customMode, setCustomMode] = useState('')
+  const [customFormat, setCustomFormat] = useState('')
 
   const modes = [
     {
@@ -83,14 +106,20 @@ export const AssetEditorSidebarDetailsView = ({
               label={ t('width') }
               name={ 'width' }
             >
-              <Input type="number" />
+              <Input
+                onChange={ (e) => { setCustomWidth(e.target.value as unknown as number) } }
+                type="number"
+              />
             </Form.Item>
 
             <Form.Item
               label={ t('height') }
               name={ 'height' }
             >
-              <Input type="number" />
+              <Input
+                onChange={ (e) => { setCustomHeight(e.target.value as unknown as number) } }
+                type="number"
+              />
             </Form.Item>
           </div>
 
@@ -101,6 +130,7 @@ export const AssetEditorSidebarDetailsView = ({
                 name={ 'quality' }
               >
                 <Input
+                  onChange={ (e) => { setCustomQuality(e.target.value as unknown as number) } }
                   type="number"
                 />
               </Form.Item>
@@ -110,6 +140,7 @@ export const AssetEditorSidebarDetailsView = ({
                 name={ 'dpi' }
               >
                 <Input
+                  onChange={ (e) => { setCustomDPI(e.target.value as unknown as number) } }
                   type="number"
                 />
               </Form.Item>
@@ -119,6 +150,7 @@ export const AssetEditorSidebarDetailsView = ({
               <Form.Item name={ 'mode' }>
                 <Select
                   aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
+                  onChange={ mode => { setCustomMode(mode as string) } }
                   placeholder={ t('mode') }
                 >
                   {modes.map((mode) => (
@@ -134,6 +166,7 @@ export const AssetEditorSidebarDetailsView = ({
               <Form.Item name={ 'format' }>
                 <Select
                   aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format') }
+                  onChange={ format => { setCustomFormat(format as string) } }
                   placeholder={ t('format') }
                 >
                   {formats.map((format) => (
@@ -151,7 +184,16 @@ export const AssetEditorSidebarDetailsView = ({
           <div className={ 'entry-content__download-content-custom__button' }>
             <Button
               aria-label={ t('aria.asset.image-sidebar.tab.details.download-custom-thumbnail') }
-              onClick={ () => { onClickCustomDownload() } }
+              onClick={ () => {
+                onClickCustomDownload({
+                  width: customWidth,
+                  height: customHeight,
+                  quality: customQuality,
+                  dpi: customDPI,
+                  mode: customMode,
+                  format: customFormat
+                })
+              } }
             >
               {t('download')}
             </Button>
@@ -184,7 +226,8 @@ export const AssetEditorSidebarDetailsView = ({
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
                 aria-label={ t('aria.asset.image-sidebar.tab.details.precreated-thumbnail') }
-                defaultValue="original"
+                onChange={ format => { setDownloadFormat(format) } }
+                value={ downloadFormat }
               >
                 {downloadFormats.map((format) => (
                   <Select.Option
@@ -198,7 +241,7 @@ export const AssetEditorSidebarDetailsView = ({
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
                 icon={ <Icon name={ 'download-02' } /> }
-                onClick={ () => { onClickDownloadByFormat('web') } }
+                onClick={ () => { onClickDownloadByFormat(downloadFormat) } }
               />
             </div>
 
