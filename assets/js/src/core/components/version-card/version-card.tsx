@@ -34,6 +34,7 @@ interface VersionCardProps {
   onClick?: () => void
   onClickPublish: () => void
   onClickDelete: () => void
+  onBlurNote: (e) => void
   onChangeCheckbox?: (e) => void
   className?: string
 }
@@ -54,6 +55,7 @@ export const VersionCard = ({
   onClick,
   onClickPublish,
   onClickDelete,
+  onBlurNote,
   onChangeCheckbox,
   className
 }: VersionCardProps): React.JSX.Element => {
@@ -75,7 +77,7 @@ export const VersionCard = ({
           onChange={ onChangeCheckbox }
         />
         ) }
-        <span className={ 'title' }>{`${t('version.version')} ${id} | ${date} `}</span>
+        <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
         <Button
           aria-label={ t('aria.version.expand') }
           icon={ <Icon
@@ -130,7 +132,6 @@ export const VersionCard = ({
         extra={ extra }
         onClick={ onClick }
         size="small"
-        style={ { width: 300 } }
         title={ title }
       >
         <div className={ 'flexbox-start-end' }>
@@ -165,6 +166,7 @@ export const VersionCard = ({
           <span>{t('version.note')}</span>
           <Input
             defaultValue={ note }
+            onBlur={ onBlurNote }
             placeholder={ 'Add a note' }
           />
         </div>

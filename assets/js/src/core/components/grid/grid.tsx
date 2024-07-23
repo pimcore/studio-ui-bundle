@@ -65,6 +65,10 @@ export const Grid = (props: GridProps): React.JSX.Element => {
     setData(tableData)
   }, [tableData])
 
+  useEffect(() => {
+    setData(props.data)
+  }, [props.data])
+
   const tableColumns = useMemo(
     () =>
       props.isLoading === true
@@ -82,6 +86,10 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   useEffect(() => {
     setColumns(tableColumns as GridProps['columns'])
   }, [tableColumns])
+
+  useEffect(() => {
+    setColumns(props.columns)
+  }, [props.columns])
 
   const tableProps: TableOptions<any> = {
     data,
@@ -123,7 +131,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={ headerGroup.id }>
-                      {headerGroup.headers.map(header => (
+                      {headerGroup.headers.map((header, index) => (
                         <th
                           className='ant-table-cell'
                           key={ header.id }

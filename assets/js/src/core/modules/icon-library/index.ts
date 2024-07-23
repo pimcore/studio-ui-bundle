@@ -89,6 +89,7 @@ import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
 import intersectCircle from '@Pimcore/assets/icons/intersect-circle.inline.svg'
 import cornerLeftUp from '@Pimcore/assets/icons/corner-left-up.inline.svg'
 import Icon from '@Pimcore/assets/icons/icon.inline.svg'
+import Tag02 from '@Pimcore/assets/icons/tag-02.inline.svg'
 import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
 import flagOutlined from '@Pimcore/assets/icons/flag-outlined.inline.svg'
 import draggable from '@Pimcore/assets/icons/draggable.inline.svg'
@@ -377,6 +378,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'close',
       component: close
+    })
+    iconLibrary.register({
+      name: 'tag-02',
+      component: Tag02
     })
     iconLibrary.register({
       name: 'no-content',
