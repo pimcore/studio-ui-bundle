@@ -20,7 +20,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
-import { formatDateTime } from '@Pimcore/utils/helpers'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import TextArea from 'antd/es/input/TextArea'
@@ -64,7 +64,7 @@ export const NotesAndEventsTabView = ({
       <NoteAndEventCard
         className={ 'notes-card' }
         data={ formatedData }
-        date={ formatDateTime(note.date) }
+        date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
         key={ note.id }
         onClickTrash={ () => { onClickTrash(note.id) } }
