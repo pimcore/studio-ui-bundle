@@ -13,7 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api
+  api, type ImageVersion
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import {
   DetailsVersionsView
@@ -58,10 +58,22 @@ export const DetailsVersionsContainer = ({
     Promise.all(versionPromises)
       .then((responses): void => {
         const tempVersionData: any[] = []
-        const data = responses[0].data
+        const dataRaw = responses[0].data as ImageVersion
+        const metadata = dataRaw.metadata
+
+        const data: Partial<ImageVersion> = { ...dataRaw }
+        delete data.metadata
+
         for (const key in data) {
           tempVersionData.push({
             [i18n.t('field')]: i18n.t(`version.${key}`)
+          })
+        }
+
+        for (const meta of metadata) {
+          data[`${meta.name} (${meta.type})`] = meta.data
+          tempVersionData.push({
+            [i18n.t('field')]: `${meta.name} (${meta.type})`
           })
         }
 
@@ -70,11 +82,20 @@ export const DetailsVersionsContainer = ({
         })
 
         responses.forEach((response, versionIndex): void => {
-          const data = response.data
+          const dataRaw = response.data as ImageVersion
+          const metadata = dataRaw.metadata
+
+          const data: Partial<ImageVersion> = { ...dataRaw }
+          delete data.metadata
           let index = 0
           for (const key in data) {
             tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex].count}`] =
               formatVersionData(key, data[key])
+          }
+
+          for (const meta of metadata) {
+            tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex].count}`] =
+              meta.data
           }
 
           tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex].count}`] = (

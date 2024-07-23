@@ -243,7 +243,7 @@ export type CreateCsvAssetsApiResponse = /** status 200 Success */ {
 export type CreateCsvAssetsApiArg = {
     body: {
         assets?: number[];
-        gridConfig?: GridConfiguration;
+        gridConfig?: GridColumnRequest[];
         settings?: {
             delimiter?: string;
             header?: "settings" | "configuration" | "delimiter" | "header" | "no_header" | "title" | "name" | "\r\n";
@@ -348,7 +348,9 @@ export type UpdateAssetByIdApiArg = {
         };
     };
 };
-export type GetAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ GridConfiguration;
+export type GetAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
+    columns?: GridColumnConfiguration[];
+};
 export type GetAssetGridConfigurationApiArg = void;
 export type GetAssetGridApiResponse = /** status 200 Grid data */ {
     totalItems: number;
@@ -359,9 +361,7 @@ export type GetAssetGridApiResponse = /** status 200 Grid data */ {
 export type GetAssetGridApiArg = {
     body: {
         folderId: number;
-        gridConfig: {
-            columns?: GridColumnDefinition[];
-        };
+        columns: GridColumnRequest[];
     };
 };
 export type DownloadCustomImageApiResponse = /** status 200 Custom image */ Blob;
@@ -589,30 +589,17 @@ export type PatchCustomMetadata = {
     /** Data */
     data?: string | null;
 };
-export type GridColumnDefinition = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
+export type GridColumnRequest = {
     /** Key */
     key: string;
-    /** Group */
-    group: string;
-    /** Sortable */
-    sortable: boolean;
-    /** Editable */
-    editable: boolean;
-    /** Localizable */
-    localizable: boolean;
     /** Locale */
-    locale: string | null;
+    locale?: string | null;
     /** Type */
     type: string;
+    /** Group */
+    group?: string | null;
     /** Config */
     config: string[];
-};
-export type GridConfiguration = {
-    columns?: GridColumnDefinition[];
 };
 export type CustomMetadata = {
     /** AdditionalAttributes */
@@ -678,6 +665,30 @@ export type FocalPoint = {
 };
 export type ImageData = {
     focalPoint?: FocalPoint;
+};
+export type GridColumnConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key: string;
+    /** Group */
+    group: string;
+    /** Sortable */
+    sortable: boolean;
+    /** Editable */
+    editable: boolean;
+    /** Localizable */
+    localizable: boolean;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Frontend Type */
+    frontendType?: string;
+    /** Config */
+    config: string[];
 };
 export type GridColumnData = {
     /** AdditionalAttributes */
