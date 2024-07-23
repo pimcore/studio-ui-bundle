@@ -18,10 +18,11 @@ export const useStyles = createStyles(({ token, css }) => {
     stackListItem: css`
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 2px;
+      gap: 2px;
+      padding: 4px;
       border-radius: 4px;
       border: 1px solid ${token.colorBorder};
+      background-color: #fff;
 
       .stack-list-item__content {
         flex: 1;

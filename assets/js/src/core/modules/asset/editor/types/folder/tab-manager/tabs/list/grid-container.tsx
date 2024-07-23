@@ -35,7 +35,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       columnHelper.accessor(column.key, {
         header: t(column.key),
         meta: {
-          type: 'text',
+          type: column.frontendType,
           editable: column.editable
         }
       })

@@ -18,6 +18,7 @@ import { Tag } from 'antd'
 import { ButtonGroup } from '../button-group/button-group'
 import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
 import { IconButton } from '../icon-button/icon-button'
+import { id } from 'inversify'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/StackList',
@@ -35,9 +36,8 @@ export const _default = {
   args: {
     items: [
       {
-        renderLeftToolbar: <ButtonGroup items={[
-          <IconButton icon='draggable' />,
-        ]} />,
+        id: '1',
+        sortable: true,
         children: <Tag>Item 1</Tag>,
         renderRightToolbar: <ButtonGroup items={[
           <LanguageSelection languages={['EN', 'FR']} selectedLanguage={'EN'} onSelectLanguage={() => {}} />,
@@ -46,9 +46,8 @@ export const _default = {
       },
 
       {
-        renderLeftToolbar: <ButtonGroup items={[
-          <IconButton icon='draggable' />,
-        ]} />,
+        id: '2',
+        sortable: true,
         children: <Tag>Item 2</Tag>,
         renderRightToolbar: <ButtonGroup items={[
           <LanguageSelection languages={['EN', 'FR']} selectedLanguage={'EN'} onSelectLanguage={() => {}} />,
@@ -57,9 +56,8 @@ export const _default = {
       },
 
       {
-        renderLeftToolbar: <ButtonGroup items={[
-          <IconButton icon='draggable' />,
-        ]} />,
+        id: '3',
+        sortable: true,
         children: <Tag>Item 3</Tag>,
         renderRightToolbar: <ButtonGroup items={[
           <LanguageSelection languages={['EN', 'FR']} selectedLanguage={'EN'} onSelectLanguage={() => {}} />,

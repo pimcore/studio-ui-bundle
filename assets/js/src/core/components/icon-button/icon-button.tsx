@@ -12,15 +12,16 @@
 */
 
 import { Button, type ButtonProps } from 'antd'
-import React from 'react'
-import { Icon } from '../icon/icon'
+import React, { forwardRef } from 'react'
+import { Icon, type IconProps } from '../icon/icon'
 import { useStyles } from './icon-button.styles'
 
 export interface IconButtonProps extends ButtonProps {
   icon: string
+  iconOptions?: IconProps['options']
 }
 
-export const IconButton = ({ icon, children, className, ...buttonProps }: IconButtonProps): React.JSX.Element => {
+const Component = ({ icon, children, className, iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
   const { styles } = useStyles()
   const buttonClasses = [styles.button, className].join(' ')
 
@@ -28,8 +29,14 @@ export const IconButton = ({ icon, children, className, ...buttonProps }: IconBu
     <Button
       { ...buttonProps }
       className={ buttonClasses }
+      ref={ ref }
     >
-      <Icon name={ icon } />
+      <Icon
+        name={ icon }
+        { ...iconOptions }
+      />
     </Button>
   )
 }
+
+export const IconButton = forwardRef(Component)

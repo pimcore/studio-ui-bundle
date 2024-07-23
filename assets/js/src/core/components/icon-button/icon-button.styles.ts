@@ -18,7 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
     button: css`
       border: none;
       color: ${token.colorText};
-      padding: 10px;
+      padding: 6px;
       height: auto;
       line-height: 0;
       box-shadow: none;

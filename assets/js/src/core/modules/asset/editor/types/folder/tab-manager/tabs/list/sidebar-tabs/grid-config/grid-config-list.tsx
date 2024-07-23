@@ -26,15 +26,11 @@ interface GridConfigListProps {
 
 /* eslint-disable react/jsx-key */
 export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
-  const { removeColumn } = useGridConfig()
+  const { removeColumn, setColumns } = useGridConfig()
 
   const stackListItems: StackListProps['items'] = columns.map((column) => ({
-    renderLeftToolbar: (
-      <ButtonGroup items={ [
-        <IconButton icon='draggable' />
-      ] }
-      />
-    ),
+    id: column.key,
+    sortable: true,
 
     children: <Tag>{column.key}</Tag>,
 
@@ -51,7 +47,10 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
   }))
 
   return (
-    <StackList items={ stackListItems } />
+    <StackList
+      items={ stackListItems }
+      onItemsChange={ onItemsChange }
+    />
   )
 
   function getLanguageSelection (column: GridColumnConfiguration): React.JSX.Element[] {
@@ -67,5 +66,10 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
         selectedLanguage={ 'EN' }
       />
     ]
+  }
+
+  function onItemsChange (items: StackListProps['items']): void {
+    const newColumns = items.map((item) => columns.find((column) => column.key === item.id)) as GridColumnConfiguration[]
+    setColumns(newColumns)
   }
 }
