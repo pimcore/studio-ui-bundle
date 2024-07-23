@@ -11,38 +11,60 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetTagsQuery } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import {
+  type AssignTagForElementApiArg,
+  useGetTagsForElementByTypeAndIdQuery,
+  useGetTagsQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { TagsTree } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Result } from 'antd'
+import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
-export interface TagsTreeContainerProps {
-  defaultCheckedTags: React.Key[]
-  setDefaultCheckedTags: (tags: React.Key[]) => void
-}
-
-export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Element => {
+export const TagsTreeContainer = (): React.JSX.Element => {
   const [filter, setFilter] = useState<string>('')
-  const { data, isLoading } = useGetTagsQuery({
+  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>([])
+  const { context } = useGlobalAssetContext()
+
+  if (context === undefined) {
+    return <Result title="No context" />
+  }
+
+  const { data: tags, isLoading: tagsLoading } = useGetTagsQuery({
     page: 1,
     pageSize: 9999,
     filter
   })
 
-  if (isLoading) {
+  const { data: dataDefaultCheckedTags, isLoading: defaultCheckedTagsLoading } = useGetTagsForElementByTypeAndIdQuery({
+    elementType: context.type,
+    id: context.config.id
+  })
+
+  useEffect(() => {
+    if (dataDefaultCheckedTags?.items !== undefined && dataDefaultCheckedTags.totalItems > 0) {
+      setDefaultCheckedTags(Object.keys(dataDefaultCheckedTags.items))
+    }
+  }, [dataDefaultCheckedTags])
+
+  if (tagsLoading || defaultCheckedTagsLoading) {
     return <div>Loading...</div>
   }
 
-  if (data?.items === undefined) {
+  if (tags?.items === undefined || dataDefaultCheckedTags?.items === undefined) {
     return <div>Failed to load tags</div>
   }
 
   return (
     <>
       <TagsTree
-        isLoading={ isLoading }
+        defaultCheckedTags={ defaultCheckedTags }
+        elementId={ context.config.id }
+        elementType={ context.type as AssignTagForElementApiArg['elementType'] }
+        isLoading={ tagsLoading && defaultCheckedTagsLoading }
+        setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }
-        tags={ data.items }
-        { ...props }
+        tags={ tags.items }
       />
     </>
   )
