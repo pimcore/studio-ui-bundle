@@ -159,3 +159,4 @@ asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Language
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Cancel
+asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Add predefined definition

@@ -71,14 +71,28 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
           )}
 
           {!editmode && (
-            <Button
-              icon={ <Icon name={ 'PlusCircleOutlined' } /> }
-              onClick={ () => {
-                setEditMode(true)
-              } }
-            >
-              {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
-            </Button>
+            <>
+              <Select
+                options={ [
+                  { value: 'text', label: 'Text' },
+                  { value: 'document', label: 'Document' },
+                  { value: 'asset', label: 'Asset' },
+                  { value: 'object', label: 'Object' },
+                  { value: 'bool', label: 'Bool' }
+                ] }
+                placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
+                showSearch
+              />
+
+              <Button
+                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                onClick={ () => {
+                  setEditMode(true)
+                } }
+              >
+                {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
+              </Button>
+            </>
           )}
         </div>
 

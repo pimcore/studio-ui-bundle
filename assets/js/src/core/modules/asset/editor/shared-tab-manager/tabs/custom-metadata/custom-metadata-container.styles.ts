@@ -29,6 +29,20 @@ export const useStyle = createStyles(({ token, css }) => {
           display: flex;
           align-items: center;
       }
+        
+      .ant-select {
+        .ant-select-selector {
+          border: 1px solid ${token.Button.defaultBorderColor};
+          
+          .ant-select-selection-placeholder {
+            color: ${token.Button.defaultColor} !important;
+          }
+        }
+          
+        .ant-select-arrow {
+          color: ${token.Button.defaultColor} !important;
+        }
+      }
 
       .pimcore-custom-metadata-toolbar__headline {
           font-weight: 600;
