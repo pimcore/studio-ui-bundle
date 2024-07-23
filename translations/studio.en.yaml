@@ -153,3 +153,9 @@ element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
 element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
 asset.asset-editor-tabs.tags.columns.path: Path
 asset.asset-editor-tabs.tags.columns.actions: Remove
+asset.asset-editor-tabs.custom-metadata.text: Custom Metadata
+asset.asset-editor-tabs.custom-metadata.add-custom-definition.add: Add custom definition
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Language
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Cancel
