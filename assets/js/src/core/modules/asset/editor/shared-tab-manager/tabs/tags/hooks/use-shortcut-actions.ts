@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { api as tagsApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { api as tagsApi, type Tag } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useContext } from 'react'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -19,6 +19,7 @@ import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface UseShortcutActionsReturn {
   applyFolderTags: () => Promise<void>
+  removeCurrentAndApplyFolderTags: () => Promise<void>
 }
 
 export const useShortcutActions = (): UseShortcutActionsReturn => {
@@ -26,8 +27,8 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
   const dispatch = useAppDispatch()
   const assetInfo = dispatch(assetApi.endpoints.getAssetById.initiate({ id: id! }))
 
-  const applyFolderTags = async (): Promise<void> => {
-    Promise.resolve(assetInfo)
+  const getCurrentAndParentTags = async (): Promise<Awaited<any>> => {
+    return await Promise.resolve(assetInfo)
       .then(({ data }) => {
         if (data !== undefined) {
           return data.parentId
@@ -48,10 +49,15 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         return { parentTags, currentTags }
       })
+  }
+
+  const applyFolderTags = async (): Promise<void> => {
+    Promise.resolve(getCurrentAndParentTags())
       .then(async ({ parentTags, currentTags }) => {
         const saveParentTags = parentTags.data?.items ?? []
         const saveChildrenTags = currentTags.data?.items ?? []
-        const tagIds = Object.keys({ ...saveChildrenTags, ...saveParentTags }).map(Number)
+        const items: Tag[] = { ...saveParentTags, ...saveChildrenTags }
+        const tagIds = Object.keys(items).map(Number)
 
         dispatch(
           tagsApi.util.updateQueryData(
@@ -61,11 +67,6 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
               id: id!
             },
             (draft): any => {
-              const items = {
-                ...saveParentTags,
-                ...saveChildrenTags
-              }
-
               return {
                 totalItems: items.length,
                 items
@@ -91,7 +92,47 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
       })
   }
 
+  const removeCurrentAndApplyFolderTags = async (): Promise<void> => {
+    Promise.resolve(getCurrentAndParentTags())
+      .then(async ({ parentTags }) => {
+        const items: Tag[] = parentTags.data?.items ?? []
+        const tagIds = Object.keys(items).map(Number)
+
+        dispatch(
+          tagsApi.util.updateQueryData(
+            'getTagsForElementByTypeAndId',
+            {
+              elementType: 'asset',
+              id: id!
+            },
+            (draft): any => {
+              return {
+                totalItems: Object.keys(items).length,
+                items
+              }
+            }
+          )
+        )
+
+        try {
+          void await dispatch(tagsApi.endpoints.batchReplaceTagsForElements.initiate({
+            elementType: 'asset',
+            elementTagIdCollection: {
+              elementIds: [id!],
+              tagIds
+            }
+          }))
+        } catch (error) {
+          console.error(error)
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
   return {
-    applyFolderTags
+    applyFolderTags,
+    removeCurrentAndApplyFolderTags
   }
 }

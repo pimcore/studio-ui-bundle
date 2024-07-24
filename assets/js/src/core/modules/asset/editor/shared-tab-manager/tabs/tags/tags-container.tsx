@@ -33,7 +33,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const { context } = useGlobalAssetContext()
-  const { applyFolderTags } = useShortcutActions()
+  const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -66,7 +66,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
               items: [{
                 label: 'Remove current element tags & Apply folder tags',
                 key: '1',
-                onClick: () => { console.log('clicked') }
+                onClick: removeCurrentAndApplyFolderTags
               }]
             } }
             onClick={ applyFolderTags }
