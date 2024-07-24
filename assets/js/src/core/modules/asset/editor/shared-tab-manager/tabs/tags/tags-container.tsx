@@ -43,7 +43,10 @@ export const TagsTabContainer = (): React.JSX.Element => {
   return (
     <div className={ styles.tab }>
       <div className={ 'pimcore-tags-sidebar' }>
-        <TagsTreeContainer />
+        <TagsTreeContainer
+          isLoading={ isLoading }
+          tags={ data?.items ?? [] }
+        />
       </div>
 
       <Divider type={ 'vertical' } />

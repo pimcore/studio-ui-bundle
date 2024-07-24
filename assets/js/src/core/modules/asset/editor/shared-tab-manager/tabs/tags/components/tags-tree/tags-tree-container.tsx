@@ -13,18 +13,28 @@
 
 import {
   type AssignTagForElementApiArg,
-  useGetTagsForElementByTypeAndIdQuery,
   useGetTagsQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { TagsTree } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
+import {
+  TagsTree,
+  type TagsTreeProps
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
 import React, { useEffect, useState } from 'react'
 import { Result } from 'antd'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
-export const TagsTreeContainer = (): React.JSX.Element => {
+type TagsTreeContainerProps = NonNullable<Pick<TagsTreeProps, 'tags' | 'isLoading'>>
+
+export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Element => {
   const [filter, setFilter] = useState<string>('')
-  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>([])
+  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
+    Object.keys(props.tags)
+  )
   const { context } = useGlobalAssetContext()
+
+  useEffect(() => {
+    setDefaultCheckedTags(Object.keys(props.tags))
+  }, [props.tags])
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -36,22 +46,11 @@ export const TagsTreeContainer = (): React.JSX.Element => {
     filter
   })
 
-  const { data: dataDefaultCheckedTags, isLoading: defaultCheckedTagsLoading } = useGetTagsForElementByTypeAndIdQuery({
-    elementType: context.type,
-    id: context.config.id
-  })
-
-  useEffect(() => {
-    if (dataDefaultCheckedTags?.items !== undefined && dataDefaultCheckedTags.totalItems > 0) {
-      setDefaultCheckedTags(Object.keys(dataDefaultCheckedTags.items))
-    }
-  }, [dataDefaultCheckedTags])
-
-  if (tagsLoading || defaultCheckedTagsLoading) {
+  if (tagsLoading || props.isLoading!) {
     return <div>Loading...</div>
   }
 
-  if (tags?.items === undefined || dataDefaultCheckedTags?.items === undefined) {
+  if (tags?.items === undefined) {
     return <div>Failed to load tags</div>
   }
 
@@ -61,7 +60,7 @@ export const TagsTreeContainer = (): React.JSX.Element => {
         defaultCheckedTags={ defaultCheckedTags }
         elementId={ context.config.id }
         elementType={ context.type as AssignTagForElementApiArg['elementType'] }
-        isLoading={ tagsLoading && defaultCheckedTagsLoading }
+        isLoading={ tagsLoading }
         setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }
         tags={ tags.items }

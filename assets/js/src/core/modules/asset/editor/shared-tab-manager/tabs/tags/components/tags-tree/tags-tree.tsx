@@ -11,10 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key, useState } from 'react'
+import React, { type Key } from 'react'
 import { Input, Tree, type TreeProps } from 'antd'
 import {
+  api,
   type AssignTagForElementApiArg,
+  type GetTagsForElementByTypeAndIdApiResponse,
   type Tag,
   useBatchReplaceTagsForElementsMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
@@ -24,8 +26,9 @@ import {
 import {
   useStyle
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree.styles'
+import { useAppDispatch } from '@Pimcore/app/store'
 
-interface TagsTreeProps {
+export interface TagsTreeProps {
   elementId: number
   elementType: AssignTagForElementApiArg['elementType']
   tags: Tag[]
@@ -41,26 +44,70 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   const { createTreeStructure } = useCreateTreeStructure()
   const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
   const treeData = createTreeStructure({ tags })
-  const [isAssignRunning, setIsAssignRunning] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
 
-  console.log(isAssignRunning)
-  console.log(defaultCheckedTags)
+  const flattenArray = (tags: Tag[]): Tag[] => {
+    const result: Tag[] = []
 
-  const applyTagsToElement = async (checkedKeys: { checked: Key[], halfChecked: Key[] }): Promise<void> => {
-    setIsAssignRunning(true)
-    await replaceTagsMutation({
-      elementType,
-      elementTagIdCollection: {
-        elementIds: [elementId],
-        tagIds: checkedKeys.checked.map(Number)
+    const flatten = (tags: Tag[]): void => {
+      for (const tag of tags) {
+        result.push(tag)
+        if (tag.children !== undefined) {
+          flatten(tag.children)
+        }
       }
-    })
-    setIsAssignRunning(false)
+    }
+
+    flatten(tags)
+    return result
+  }
+
+  const flatTags = flattenArray(tags)
+
+  const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
+    console.log('applyTagsToElement')
+    // setIsAssignRunning(true)
+    dispatch(
+      api.util.updateQueryData(
+        'getTagsForElementByTypeAndId',
+        {
+          elementType,
+          id: elementId
+        },
+        (draft): GetTagsForElementByTypeAndIdApiResponse => {
+          const items = flatTags
+            .filter((tag) => checkedTags.includes(tag.id!))
+            .reduce((res, tag) => Object.assign(res, { [tag.id!]: tag }), {})
+
+          return {
+            totalItems: checkedTags.length,
+            items: items as Tag[]
+          }
+        }
+      )
+    )
+
+    setDefaultCheckedTags(checkedTags)
+
+    try {
+      await replaceTagsMutation({
+        elementType,
+        elementTagIdCollection: {
+          elementIds: [elementId],
+          tagIds: checkedTags.map(Number)
+        }
+      }).unwrap()
+    } catch (error) {
+      console.log('ERROR!')
+    }
+
+    // setIsAssignRunning(false)
   }
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
-    setDefaultCheckedTags(checkedKeys.checked)
-    void applyTagsToElement(checkedKeys)
+    console.log('onCheck', checkedKeys)
+    void applyTagsToElement(checkedKeys.checked.map(Number))
+    console.log(info)
   }
 
   return (
