@@ -19,9 +19,8 @@ import {
   TagsTree,
   type TagsTreeProps
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
-import React, { useEffect, useState } from 'react'
-import { Result } from 'antd'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import React, { useContext, useEffect, useState } from 'react'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 type TagsTreeContainerProps = NonNullable<Pick<TagsTreeProps, 'tags' | 'isLoading'>>
 
@@ -30,15 +29,11 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
   const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
     Object.keys(props.tags)
   )
-  const { context } = useGlobalAssetContext()
+  const { id } = useContext(AssetContext)
 
   useEffect(() => {
     setDefaultCheckedTags(Object.keys(props.tags))
   }, [props.tags])
-
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
 
   const { data: tags, isLoading: tagsLoading } = useGetTagsQuery({
     page: 1,
@@ -58,8 +53,8 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
     <>
       <TagsTree
         defaultCheckedTags={ defaultCheckedTags }
-        elementId={ context.config.id }
-        elementType={ context.type as AssignTagForElementApiArg['elementType'] }
+        elementId={ id! }
+        elementType={ 'asset' as AssignTagForElementApiArg['elementType'] }
         isLoading={ tagsLoading }
         setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }

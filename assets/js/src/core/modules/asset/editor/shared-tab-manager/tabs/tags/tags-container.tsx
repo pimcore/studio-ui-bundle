@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Divider, Dropdown, Result } from 'antd'
+import React, { useContext } from 'react'
+import { Divider, Dropdown } from 'antd'
 import { useStyle } from './tags-container.styles'
 import { useTranslation } from 'react-i18next'
 import {
@@ -24,24 +24,18 @@ import {
 import {
   useGetTagsForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import {
-  useShortcutActions
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
+import { useShortcutActions } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { context } = useGlobalAssetContext()
+  const { id } = useContext(AssetContext)
   const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
-
   const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
-    elementType: context.type,
-    id: context.config.id
+    elementType: 'asset',
+    id: id!
   })
 
   return (

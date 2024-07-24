@@ -67,14 +67,12 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
         }
       }).unwrap()
     } catch (error) {
-      console.log('ERROR!')
+      console.error(error)
     }
   }
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
-    console.log('onCheck', checkedKeys)
     void applyTagsToElement(checkedKeys.checked.map(Number))
-    console.log(info)
   }
 
   return (

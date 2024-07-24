@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key, useState } from 'react'
+import React, { type Key, useContext, useState } from 'react'
 import {
   type Tag,
   useUnassignTagFromElementMutation
@@ -19,14 +19,14 @@ import {
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Button, Result } from 'antd'
+import { Button } from 'antd'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyle } from './assigned-tags.styles'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import {
   useOptimisticUpdate
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -35,15 +35,11 @@ type TagWithActions = Tag & {
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
   const [loadingRows, setLoadingRows] = useState({})
-  const { context } = useGlobalAssetContext()
+  const { id } = useContext(AssetContext)
   const { styles } = useStyle()
   const [unassignTag] = useUnassignTagFromElementMutation()
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
-
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
 
   async function removeTag (tag: Tag): Promise<void> {
     const futureCheckedKeys = tags
@@ -51,16 +47,16 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       .filter((key: number) => tag.id !== key)
 
     updateTagsForElementByTypeAndId({
-      elementType: context!.type,
-      id: context!.config.id,
+      elementType: 'asset',
+      id: id!,
       flatTags,
       checkedTags: futureCheckedKeys as Key[]
     })
 
     try {
       await unassignTag({
-        elementType: context!.type,
-        id: context!.config.id,
+        elementType: 'asset',
+        id: id!,
         tagId: tag.id!
       }).unwrap()
     } catch (error) {
