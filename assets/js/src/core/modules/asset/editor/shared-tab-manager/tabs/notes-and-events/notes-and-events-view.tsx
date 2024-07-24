@@ -70,7 +70,7 @@ export const NotesAndEventsTabView = ({
         onClickTrash={ () => { onClickTrash(note.id) } }
         showDetails={ showDetails }
         title={ note.title }
-        type={ t(`notes-and-events.${note.type}`) }
+        type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }
         user={ note.userName }
       />
     )

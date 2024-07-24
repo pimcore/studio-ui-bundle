@@ -21,7 +21,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 
 interface NoteAndEventCardProps {
   title: string
-  type: string
+  type?: string
   user?: string | null
   date: string
   description: string
@@ -77,7 +77,7 @@ export const NoteAndEventCard = ({
 
   const extra = (
     <div>
-      <Tag>{type}</Tag>
+      {type !== undefined && <Tag>{type}</Tag>}
       <span>{date}</span>
       <Button
         aria-label={ i18n.t('aria.notes-and-events.delete') }
