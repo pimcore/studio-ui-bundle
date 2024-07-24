@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { type ComponentType, useEffect, useRef, useState } from 'react'
 import { TextCell } from './types/text/text-cell'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
@@ -24,9 +24,11 @@ import { useTranslation } from 'react-i18next'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
 
-export type DefaultCellProps = ExtendedCellContext
+export interface DefaultCellProps extends ExtendedCellContext {
+  fallbackType?: ComponentType<DefaultCellProps>
+}
 
-export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
+export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { column, table, row } = props
   const [isEditable] = useState(column.columnDef.meta?.editable ?? false)
@@ -45,7 +47,7 @@ export const DefaultCell = (props: DefaultCellProps): React.JSX.Element => {
     }
   }, [isInEditMode])
 
-  const Component = typeRegistry.getComponentByType(cellType) ?? TextCell
+  const Component = typeRegistry.getComponentByType(cellType) ?? fallbackType
 
   function getCssClasses (): string[] {
     const classes: string[] = []

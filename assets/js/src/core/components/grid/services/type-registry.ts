@@ -24,10 +24,10 @@ interface ITypeRegistryConfig {
 
 export interface ITypeRegistry {
   registerType: (config: ITypeRegistryConfig) => void
-  getComponentByType: (type: string) => ComponentType<DefaultCellProps>
-  getCopyHandlerByType: (type: string) => ITypeRegistryConfig['copyHandler']
-  getPasteHandlerByType: (type: string) => ITypeRegistryConfig['pasteHandler']
-  getConfigByType: (type: string) => ITypeRegistryConfig
+  getComponentByType: (type: string) => ComponentType<DefaultCellProps> | undefined
+  getCopyHandlerByType: (type: string) => ITypeRegistryConfig['copyHandler'] | undefined
+  getPasteHandlerByType: (type: string) => ITypeRegistryConfig['pasteHandler'] | undefined
+  getConfigByType: (type: string) => ITypeRegistryConfig | undefined
 }
 
 @injectable()
@@ -38,29 +38,29 @@ export class TypeRegistry implements ITypeRegistry {
     this.types.push(config)
   }
 
-  getComponentByType (type: string): ComponentType<DefaultCellProps> {
+  getComponentByType (type: string): ComponentType<DefaultCellProps> | undefined {
     const config = this.getConfigByType(type)
 
-    return config.component
+    return config?.component
   }
 
-  getCopyHandlerByType (type: string): ITypeRegistryConfig['copyHandler'] {
+  getCopyHandlerByType (type: string): ITypeRegistryConfig['copyHandler'] | undefined {
     const config = this.getConfigByType(type)
 
-    return config.copyHandler
+    return config?.copyHandler
   }
 
-  getPasteHandlerByType (type: string): ITypeRegistryConfig['pasteHandler'] {
+  getPasteHandlerByType (type: string): ITypeRegistryConfig['pasteHandler'] | undefined {
     const config = this.getConfigByType(type)
 
-    return config.pasteHandler
+    return config?.pasteHandler
   }
 
-  getConfigByType (type: string): ITypeRegistryConfig {
+  getConfigByType (type: string): ITypeRegistryConfig | undefined {
     const config = this.types.find((config) => config.type === type)
 
     if (config === undefined) {
-      throw new Error(`Type ${type} not found`)
+      return undefined
     }
 
     return config

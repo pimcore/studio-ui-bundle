@@ -13,7 +13,7 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/tree/tree'
-import { type GetAssetsApiResponse, useGetAssetsQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GetAssetTreeApiResponse, useGetAssetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
@@ -28,16 +28,16 @@ interface DataTransformerReturnType {
 
 interface NodeApiHookReturnType {
   apiHookResult: UseQueryHookResult<any>
-  dataTransformer: (data: GetAssetsApiResponse) => DataTransformerReturnType
+  dataTransformer: (data: GetAssetTreeApiResponse) => DataTransformerReturnType
   mergeAdditionalQueryParams: Dispatch<SetStateAction<AssetTreeAdditionalTreeProps | undefined>>
 }
 
 export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
   const [additionalQueryParams, setAdditionalQueryParams] = useState<AssetTreeAdditionalTreeProps>()
   const { maxItemsPerNode } = useContext(TreeContext)
-  const apiHookResult = useGetAssetsQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode, page: 1, ...additionalQueryParams })
+  const apiHookResult = useGetAssetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode, page: 1, ...additionalQueryParams })
 
-  function dataTransformer (data: GetAssetsApiResponse): DataTransformerReturnType {
+  function dataTransformer (data: GetAssetTreeApiResponse): DataTransformerReturnType {
     const nodes: TreeNodeProps[] = []
 
     const assetData = data.items

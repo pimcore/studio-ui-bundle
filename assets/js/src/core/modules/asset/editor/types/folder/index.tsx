@@ -25,6 +25,7 @@ import { LinkContainer } from './tab-manager/tabs/list/grid-columns/link/link-co
 import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
+import { AssetActions } from './tab-manager/tabs/list/grid-columns/asset-actions/asset-actions'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -62,6 +63,11 @@ moduleSystem.registerModule({
     gridTypeRegistry.registerType({
       component: LinkContainer,
       type: 'asset-link'
+    })
+
+    gridTypeRegistry.registerType({
+      component: AssetActions,
+      type: 'asset-actions'
     })
   }
 })
