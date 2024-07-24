@@ -17,6 +17,7 @@ import { ButtonGroup } from './button-group'
 import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
 import { Button } from 'antd'
 
+/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Pimcore studio/UI/ButtonGroup',
   component: ButtonGroup,

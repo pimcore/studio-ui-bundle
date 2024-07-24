@@ -30,6 +30,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default' }: SidebarPr
       label: 'TRANSLATED_LABEL'
     }
   })
+
   const preparedButtons = buttons?.map((button) => {
     return {
       ...button,

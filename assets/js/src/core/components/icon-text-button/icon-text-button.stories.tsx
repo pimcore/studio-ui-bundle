@@ -12,7 +12,6 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
 import { IconTextButton } from './icon-text-button'
 
 const config: Meta = {

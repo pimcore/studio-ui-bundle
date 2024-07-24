@@ -18,8 +18,8 @@ import { Tag } from 'antd'
 import { ButtonGroup } from '../button-group/button-group'
 import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
 import { IconButton } from '../icon-button/icon-button'
-import { id } from 'inversify'
 
+/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Pimcore studio/UI/StackList',
   component: StackList,

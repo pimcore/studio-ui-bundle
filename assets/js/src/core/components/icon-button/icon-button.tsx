@@ -19,11 +19,12 @@ import { useStyles } from './icon-button.styles'
 export interface IconButtonProps extends ButtonProps {
   icon: string
   iconOptions?: IconProps['options']
+  theme?: 'primary' | 'secondary'
 }
 
-const Component = ({ icon, children, className, iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
+const Component = ({ icon, children, className, theme = 'primary', iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
   const { styles } = useStyles()
-  const buttonClasses = [styles.button, className].join(' ')
+  const buttonClasses = [styles.button, className, `icon-button--theme-${theme}`].join(' ')
 
   return (
     <Button

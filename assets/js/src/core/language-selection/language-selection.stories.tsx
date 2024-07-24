@@ -12,7 +12,6 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
 import { LanguageSelection } from './language-selection'
 
 const config: Meta = {

@@ -20,14 +20,16 @@ import { useGridConfig } from './hooks/use-grid-config'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { Toolbar } from '@Pimcore/components/sidebar/toolbar/toolbar'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { useTranslation } from 'react-i18next'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu, setGridColumns, columns: gridColumns } = useList()
   const { columns, setColumns, addColumn } = useGridConfig()
+  const { t } = useTranslation()
 
   return (
     <>
-      <Title level={ 1 }>Grid config</Title>
+      <Title level={ 1 }>{ t('listing.grid-config.title') }</Title>
 
       <Space
         direction='vertical'
@@ -40,7 +42,7 @@ export const GridConfigInner = (): React.JSX.Element => {
             icon='PlusCircleOutlined'
             type='link'
           >
-            Add Column
+            { t('listing.add-column') }
           </IconTextButton>
         </Dropdown>
       </Space>
@@ -50,14 +52,14 @@ export const GridConfigInner = (): React.JSX.Element => {
           onClick={ onCancelClick }
           type='default'
         >
-          Cancel
+          { t('button.cancel') }
         </Button>
 
         <Button
           onClick={ onApplyClick }
           type='primary'
         >
-          Apply
+          { t('button.apply') }
         </Button>
       </Toolbar>
     </>
@@ -78,10 +80,10 @@ export const GridConfigInner = (): React.JSX.Element => {
     for (const [key, value] of Object.entries(dropDownMenu)) {
       formattedDropDownMenu.push({
         key: index++,
-        label: key,
+        label: t(`asset.listing.groups.${key}`),
         children: value.map((column) => ({
           key: column.key,
-          label: column.key,
+          label: t(`asset.listing.column.${column.key}`),
           onClick: () => { onColumnClick(column) }
         }))
       })

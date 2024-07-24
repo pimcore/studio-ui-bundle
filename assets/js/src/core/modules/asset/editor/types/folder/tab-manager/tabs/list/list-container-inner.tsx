@@ -24,7 +24,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const dispatch = useAppDispatch()
-  const { page, pageSize, setPage, setPageSize, columns, setGridConfig } = useList()
+  const { page, pageSize, setPage, setPageSize, columns, gridConfig, setGridConfig } = useList()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
   const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
@@ -34,10 +34,18 @@ export const ListContainerInner = (): React.JSX.Element => {
       return
     }
 
+    const columnsToRequest = [...columns]
+    const hasIdColumn = columns.some((column) => column.key === 'id')
+
+    if (!hasIdColumn) {
+      const idColumn = gridConfig!.find((column) => column.key === 'id')!
+      columnsToRequest.push(idColumn)
+    }
+
     fetchListing({
       body: {
         folderId: assetId,
-        columns: columns.map((column) => ({
+        columns: columnsToRequest.map((column) => ({
           config: column.config,
           key: column.key,
           type: column.type

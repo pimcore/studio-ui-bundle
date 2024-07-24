@@ -19,6 +19,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
 import { useGridConfig } from './hooks/use-grid-config'
+import { useTranslation } from 'react-i18next'
 
 interface GridConfigListProps {
   columns: GridColumnConfiguration[]
@@ -27,18 +28,20 @@ interface GridConfigListProps {
 /* eslint-disable react/jsx-key */
 export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
   const { removeColumn, setColumns } = useGridConfig()
+  const { t } = useTranslation()
 
   const stackListItems: StackListProps['items'] = columns.map((column) => ({
     id: column.key,
     sortable: true,
 
-    children: <Tag>{column.key}</Tag>,
+    children: <Tag>{t(`asset.listing.column.${column.key}`)}</Tag>,
 
     renderRightToolbar: (
       <ButtonGroup items={ [
         <IconButton
           icon='trash'
           onClick={ () => { removeColumn(column) } }
+          theme='secondary'
         />,
         ...getLanguageSelection(column)
       ] }

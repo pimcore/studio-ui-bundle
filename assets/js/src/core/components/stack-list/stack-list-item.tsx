@@ -45,6 +45,7 @@ export const StackListItem = ({ id, children, sortable = false, renderLeftToolba
         <IconButton
           icon='draggable'
           ref={ setActivatorNodeRef }
+          theme='secondary'
           { ...listeners }
         ></IconButton>
       )}

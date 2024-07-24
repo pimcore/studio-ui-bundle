@@ -17,11 +17,14 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
       border: none;
-      color: ${token.colorText};
       padding: 6px;
       height: auto;
       line-height: 0;
       box-shadow: none;
+
+      &.icon-button--theme-secondary {
+        color: ${token.colorText};
+      }
     `
   }
 })

@@ -22,6 +22,9 @@ interface GridContainerProps {
   assets: GetAssetGridApiResponse | undefined
 }
 
+type AssetRow = Record<string, any>
+type TransformedGridData = AssetRow[] | undefined
+
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
@@ -33,7 +36,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   GridColumns.forEach((column) => {
     columns.push(
       columnHelper.accessor(column.key, {
-        header: t(column.key),
+        header: t(`asset.listing.column.${column.key}`),
         meta: {
           type: column.frontendType,
           editable: column.editable
@@ -42,7 +45,17 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     )
   })
 
-  const data = assets?.items.map(item => {
+  columns.push(
+    columnHelper.accessor('actions', {
+      header: t('actions.open'),
+      meta: {
+        type: 'asset-actions'
+      },
+      size: 65
+    })
+  )
+
+  const data: TransformedGridData = assets?.items.map(item => {
     const row = {}
     item?.columns?.forEach(column => {
       row[column.key!] = column.value
@@ -58,6 +71,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     <Grid
       columns={ columns }
       data={ data }
+      // @todo implement inline editing
       onUpdateCellData={ () => {} }
       resizable
     />
