@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useContext } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
-import { Button, Result, Tabs } from 'antd'
+import { Button, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -33,11 +33,7 @@ export interface IEditorTabsProps {
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
-  const { context } = useGlobalAssetContext()
-
-  if (context === undefined) {
-    return <Result title="Missing context" />
-  }
+  const { id } = useContext(AssetContext)
 
   const openDetachedWidget = (item: IEditorTab): void => {
     detachWidget({
@@ -82,7 +78,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         defaultActiveKey={ defaultActiveKey }
         items={ items }
         tabBarExtraContent={ {
-          left: <ElementToolbar context={ context } />
+          left: <ElementToolbar id={ id! } />
         } }
       />
     </>
