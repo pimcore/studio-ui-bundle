@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetAssetsQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useState } from 'react'
 import { GridToolbarContainer } from '../list/grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
@@ -26,7 +26,7 @@ const PreviewContainer = (): React.JSX.Element => {
   const assetId = assetContext.id!
   const { asset } = useAssetDraft(assetId)
 
-  const { isLoading, isError, data } = useGetAssetsQuery({
+  const { isLoading, isError, data } = useGetAssetTreeQuery({
     pathIncludeDescendants: true,
     page: currentPage,
     pageSize,
