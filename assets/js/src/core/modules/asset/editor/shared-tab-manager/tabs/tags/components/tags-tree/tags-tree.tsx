@@ -14,9 +14,7 @@
 import React, { type Key } from 'react'
 import { Input, Tree, type TreeProps } from 'antd'
 import {
-  api,
   type AssignTagForElementApiArg,
-  type GetTagsForElementByTypeAndIdApiResponse,
   type Tag,
   useBatchReplaceTagsForElementsMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
@@ -26,7 +24,10 @@ import {
 import {
   useStyle
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree.styles'
-import { useAppDispatch } from '@Pimcore/app/store'
+import {
+  useOptimisticUpdate
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
+import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 
 export interface TagsTreeProps {
   elementId: number
@@ -44,48 +45,16 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   const { createTreeStructure } = useCreateTreeStructure()
   const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
   const treeData = createTreeStructure({ tags })
-  const dispatch = useAppDispatch()
-
-  const flattenArray = (tags: Tag[]): Tag[] => {
-    const result: Tag[] = []
-
-    const flatten = (tags: Tag[]): void => {
-      for (const tag of tags) {
-        result.push(tag)
-        if (tag.children !== undefined) {
-          flatten(tag.children)
-        }
-      }
-    }
-
-    flatten(tags)
-    return result
-  }
-
+  const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
-    console.log('applyTagsToElement')
-    // setIsAssignRunning(true)
-    dispatch(
-      api.util.updateQueryData(
-        'getTagsForElementByTypeAndId',
-        {
-          elementType,
-          id: elementId
-        },
-        (draft): GetTagsForElementByTypeAndIdApiResponse => {
-          const items = flatTags
-            .filter((tag) => checkedTags.includes(tag.id!))
-            .reduce((res, tag) => Object.assign(res, { [tag.id!]: tag }), {})
-
-          return {
-            totalItems: checkedTags.length,
-            items: items as Tag[]
-          }
-        }
-      )
-    )
+    updateTagsForElementByTypeAndId({
+      elementType,
+      id: elementId,
+      flatTags,
+      checkedTags
+    })
 
     setDefaultCheckedTags(checkedTags)
 
@@ -100,8 +69,6 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
     } catch (error) {
       console.log('ERROR!')
     }
-
-    // setIsAssignRunning(false)
   }
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
