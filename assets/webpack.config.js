@@ -115,13 +115,6 @@ Encore
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
   })
 
-  .addPlugin(
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
-    }),
-  )
-
   .addPlugin(new webpack.BannerPlugin({
     banner: `
       /**
@@ -148,6 +141,13 @@ if (!Encore.isDevServer()) {
       new webpack.DllReferencePlugin({
         context: __dirname,
         manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
+      }),
+    )
+
+    .addPlugin(
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
       }),
     )
 }
