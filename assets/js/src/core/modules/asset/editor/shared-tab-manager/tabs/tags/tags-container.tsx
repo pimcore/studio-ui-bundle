@@ -25,11 +25,15 @@ import {
   useGetTagsForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import {
+  useShortcutActions
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const { context } = useGlobalAssetContext()
+  const { applyFolderTags } = useShortcutActions()
 
   if (context === undefined) {
     return <Result title="No context" />
@@ -61,10 +65,11 @@ export const TagsTabContainer = (): React.JSX.Element => {
             menu={ {
               items: [{
                 label: 'Remove current element tags & Apply folder tags',
-                key: '1'
+                key: '1',
+                onClick: () => { console.log('clicked') }
               }]
             } }
-            onClick={ () => { console.log('clicked') } }
+            onClick={ applyFolderTags }
           >
             {t('element.element-editor-tabs.tags.apply-folder-tags')}
           </Dropdown.Button>
