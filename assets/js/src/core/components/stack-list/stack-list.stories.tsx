@@ -39,31 +39,46 @@ export const _default = {
         id: '1',
         sortable: true,
         children: <Tag>Item 1</Tag>,
-        renderRightToolbar: <ButtonGroup items={[
-          <LanguageSelection languages={['EN', 'FR']} selectedLanguage={'EN'} onSelectLanguage={() => {}} />,
+        renderRightToolbar: <ButtonGroup items={ [
+          <LanguageSelection
+            languages={ ['EN', 'FR'] }
+            onSelectLanguage={ () => {} }
+            selectedLanguage={ 'EN' }
+          />,
           <IconButton icon='trash' />
-        ]} />
+        ] }
+                            />
       },
 
       {
         id: '2',
         sortable: true,
         children: <Tag>Item 2</Tag>,
-        renderRightToolbar: <ButtonGroup items={[
-          <LanguageSelection languages={['EN', 'FR']} selectedLanguage={'EN'} onSelectLanguage={() => {}} />,
+        renderRightToolbar: <ButtonGroup items={ [
+          <LanguageSelection
+            languages={ ['EN', 'FR'] }
+            onSelectLanguage={ () => {} }
+            selectedLanguage={ 'EN' }
+          />,
           <IconButton icon='trash' />
-        ]} />
+        ] }
+                            />
       },
 
       {
         id: '3',
         sortable: true,
         children: <Tag>Item 3</Tag>,
-        renderRightToolbar: <ButtonGroup items={[
-          <LanguageSelection languages={['EN', 'FR']} selectedLanguage={'EN'} onSelectLanguage={() => {}} />,
+        renderRightToolbar: <ButtonGroup items={ [
+          <LanguageSelection
+            languages={ ['EN', 'FR'] }
+            onSelectLanguage={ () => {} }
+            selectedLanguage={ 'EN' }
+          />,
           <IconButton icon='trash' />
-        ]} />
-      },
+        ] }
+                            />
+      }
     ]
   }
 }

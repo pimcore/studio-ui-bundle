@@ -33,7 +33,11 @@ export default config
 export const _default = {
   args: {
     items: [
-      <LanguageSelection languages={ ['EN', 'FR'] } selectedLanguage={ 'EN' } onSelectLanguage={ () => {}} />,
+      <LanguageSelection
+        languages={ ['EN', 'FR'] }
+        onSelectLanguage={ () => {} }
+        selectedLanguage={ 'EN' }
+      />,
       <Button type='primary'>Standard Button</Button>
     ]
   }
