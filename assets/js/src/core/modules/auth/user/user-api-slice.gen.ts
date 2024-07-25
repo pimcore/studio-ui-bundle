@@ -83,7 +83,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ UserTreeNode;
+export type CloneUserApiResponse = /** status 200 Node of the cloned user. */ TreeNode;
 export type CloneUserApiArg = {
     /** Id of the user */
     id: number;
@@ -91,14 +91,14 @@ export type CloneUserApiArg = {
         name?: string;
     };
 };
-export type CreateUserApiResponse = /** status 200 Node of the new created User */ UserTreeNode;
+export type CreateUserApiResponse = /** status 200 Node of the new created User */ TreeNode;
 export type CreateUserApiArg = {
     body: {
         parentId: number | null;
         name: string;
     };
 };
-export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ UserTreeNode;
+export type CreateUserFolderApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
 export type CreateUserFolderApiArg = {
     body: {
         parentId: number | null;
@@ -110,7 +110,7 @@ export type GetStudioApiUserCurrentUserInformationApiResponse =
 export type GetStudioApiUserCurrentUserInformationApiArg = void;
 export type GetUserByIdApiResponse = /** status 200 User data. */ User;
 export type GetUserByIdApiArg = {
-    /** Id of the element */
+    /** Id of the user */
     id: number;
 };
 export type UpdateUserByIdApiResponse = /** status 200 Updated data. */ User;
@@ -149,22 +149,22 @@ export type UpdateUserPasswordByIdApiArg = {
 };
 export type GetUserTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
-    items: UserTreeNode[];
+    items: TreeNode[];
 };
 export type GetUserTreeApiArg = {
     /** Filter users by parent id. */
     parentId: number;
 };
-export type UserTreeNode = {
+export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
     /** Unique Identifier */
     id: number;
-    /** Name of Folder or User */
+    /** Name of the tree node */
     name: string;
-    /** Is ether user or folder */
+    /** Is ether folder or a specific item in the folder */
     type: string;
     /** If a folder has sub items */
     hasChildren: boolean;
