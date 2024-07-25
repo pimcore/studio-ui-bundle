@@ -32,7 +32,6 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
   const { id } = useContext(AssetContext)
 
   useEffect(() => {
-    console.log('props.tags', props.tags)
     setDefaultCheckedTags(Object.keys(props.tags).map(String))
   }, [props.tags])
 

@@ -48,8 +48,6 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
 
-  console.log('defaultCheckedTagsINIT', defaultCheckedTags)
-
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
     updateTagsForElementByTypeAndId({
       elementType,
