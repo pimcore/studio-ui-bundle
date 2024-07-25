@@ -54,11 +54,11 @@ export const _default = {
           options={ { width: '16px', height: '16px' } }
               />,
         component: <AssetEditorSidebarDetailsView
-          width={357}
-          height={185}
-          onClickCustomDownload={() => {} }
-          onClickDownloadByFormat={(format) => console.log(format) }
-        />
+          height={ 185 }
+          onClickCustomDownload={ () => {} }
+          onClickDownloadByFormat={ (format) => { console.log(format) } }
+          width={ 357 }
+                   />
       }
     ],
     buttons: [
