@@ -17,7 +17,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type Key } from 'react'
-import {PatchCollection} from "@reduxjs/toolkit/dist/query/core/buildThunks";
+import { type PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks'
 
 interface UpdateTagsForElementByTypeAndIdProps extends GetTagsForElementByTypeAndIdApiArg {
   flatTags: Tag[]
