@@ -31,7 +31,7 @@ const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Eleme
 
   return (
     <GridToolbarView
-      renderPagination={
+      renderPagination={ pager.total > 0 && (
         <Pagination
           current={ pager.current }
           defaultPageSize={ pager.pageSize }
@@ -41,7 +41,7 @@ const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Eleme
           showTotal={ (total) => t('pagination.show-total', { total }) }
           total={ pager.total }
         />
-      }
+      ) }
     />
   )
 }

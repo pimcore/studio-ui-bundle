@@ -77,6 +77,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       
       .sidebar__content {
+        position: relative;
         padding: ${token.paddingXS}px ${token.paddingSM}px;
         width: 250px;
 
@@ -90,6 +91,10 @@ export const useStyle = createStyles(({ token, css }) => {
         
         &:not(.expanded) {
           display: none;
+        }
+
+        &--sizing-large {
+          width: 432px;
         }
       }
     `
