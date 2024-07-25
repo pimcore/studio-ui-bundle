@@ -11,38 +11,54 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetTagsQuery } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { TagsTree } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
-import React, { useState } from 'react'
+import {
+  type AssignTagForElementApiArg,
+  useGetTagsQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import {
+  TagsTree,
+  type TagsTreeProps
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
+import React, { useContext, useEffect, useState } from 'react'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
-export interface TagsTreeContainerProps {
-  defaultCheckedTags: React.Key[]
-  setDefaultCheckedTags: (tags: React.Key[]) => void
-}
+type TagsTreeContainerProps = NonNullable<Pick<TagsTreeProps, 'tags' | 'isLoading'>>
 
 export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Element => {
   const [filter, setFilter] = useState<string>('')
-  const { data, isLoading } = useGetTagsQuery({
+  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
+    Object.keys(props.tags).map(String)
+  )
+  const { id } = useContext(AssetContext)
+
+  useEffect(() => {
+    setDefaultCheckedTags(Object.keys(props.tags).map(String))
+  }, [props.tags])
+
+  const { data: tags, isLoading: tagsLoading } = useGetTagsQuery({
     page: 1,
     pageSize: 9999,
     filter
   })
 
-  if (isLoading) {
+  if (tagsLoading || props.isLoading!) {
     return <div>Loading...</div>
   }
 
-  if (data?.items === undefined) {
+  if (tags?.items === undefined) {
     return <div>Failed to load tags</div>
   }
 
   return (
     <>
       <TagsTree
-        isLoading={ isLoading }
+        defaultCheckedTags={ defaultCheckedTags }
+        elementId={ id! }
+        elementType={ 'asset' as AssignTagForElementApiArg['elementType'] }
+        isLoading={ tagsLoading }
+        setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }
-        tags={ data.items }
-        { ...props }
+        tags={ tags.items }
       />
     </>
   )
