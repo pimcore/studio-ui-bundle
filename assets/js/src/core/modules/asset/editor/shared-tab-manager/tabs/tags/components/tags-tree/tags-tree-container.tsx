@@ -27,12 +27,13 @@ type TagsTreeContainerProps = NonNullable<Pick<TagsTreeProps, 'tags' | 'isLoadin
 export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Element => {
   const [filter, setFilter] = useState<string>('')
   const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
-    Object.keys(props.tags)
+    Object.keys(props.tags).map(String)
   )
   const { id } = useContext(AssetContext)
 
   useEffect(() => {
-    setDefaultCheckedTags(Object.keys(props.tags))
+    console.log('props.tags', props.tags)
+    setDefaultCheckedTags(Object.keys(props.tags).map(String))
   }, [props.tags])
 
   const { data: tags, isLoading: tagsLoading } = useGetTagsQuery({

@@ -48,18 +48,22 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
 
+  console.log('defaultCheckedTagsINIT', defaultCheckedTags)
+
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
+    console.log('applyTagsToElement init', checkedTags)
+
     updateTagsForElementByTypeAndId({
       elementType,
       id: elementId,
       flatTags,
-      checkedTags
+      checkedTags: checkedTags.map(Number)
     })
 
-    setDefaultCheckedTags(checkedTags)
+    // setDefaultCheckedTags(checkedTags)
 
     try {
-      await replaceTagsMutation({
+      void replaceTagsMutation({
         elementType,
         elementTagIdCollection: {
           elementIds: [elementId],
@@ -72,7 +76,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   }
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
-    void applyTagsToElement(checkedKeys.checked.map(Number))
+    void applyTagsToElement(checkedKeys.checked)
   }
 
   return (
