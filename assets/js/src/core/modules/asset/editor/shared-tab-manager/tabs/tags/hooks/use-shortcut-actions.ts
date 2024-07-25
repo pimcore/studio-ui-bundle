@@ -57,6 +57,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         const saveParentTags = parentTags.data?.items ?? []
         const saveChildrenTags = currentTags.data?.items ?? []
         const items: Tag[] = { ...saveParentTags, ...saveChildrenTags }
+        console.log('items', items)
         const tagIds = Object.keys(items).map(Number)
 
         const cacheUpdate = dispatch(

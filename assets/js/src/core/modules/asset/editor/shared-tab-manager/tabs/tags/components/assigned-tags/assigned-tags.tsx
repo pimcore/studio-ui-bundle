@@ -71,7 +71,8 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       meta: {
         type: 'text'
       },
-      minSize: 600
+      minSize: 600,
+      sortDescFirst: false
     }),
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.tags.columns.actions'),
@@ -105,6 +106,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       <Grid
         columns={ columns }
         data={ Object.values(tags) }
+        initialState={ { sorting: [{ id: 'path', desc: false }] } }
         isLoading={ isLoading }
       />
     </div>
