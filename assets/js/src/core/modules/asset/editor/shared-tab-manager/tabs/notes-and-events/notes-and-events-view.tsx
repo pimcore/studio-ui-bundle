@@ -20,10 +20,11 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
-import { formatDateTime } from '@Pimcore/utils/helpers'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import TextArea from 'antd/es/input/TextArea'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -53,7 +54,7 @@ export const NotesAndEventsTabView = ({
         if (typeof tempData.data === 'object') {
           tempData[t('notes-and-events.value')] = tempData.data.path
         } else {
-          tempData[t('notes-and-events.value')] = tempData.data
+          tempData[t('notes-and-events.value')] = respectLineBreak(tempData.data as string)
         }
         delete tempData.data
         formatedData.push(tempData)
@@ -64,13 +65,13 @@ export const NotesAndEventsTabView = ({
       <NoteAndEventCard
         className={ 'notes-card' }
         data={ formatedData }
-        date={ formatDateTime(note.date) }
+        date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
         key={ note.id }
         onClickTrash={ () => { onClickTrash(note.id) } }
         showDetails={ showDetails }
         title={ note.title }
-        type={ t(`notes-and-events.${note.type}`) }
+        type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }
         user={ note.userName }
       />
     )

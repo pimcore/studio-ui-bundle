@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React from 'react'
+
 export function onKeyEnterExecuteClick (e: any): void {
   if (e.key === 'Enter') {
     e.preventDefault()
@@ -23,12 +25,11 @@ export function isSet (par: any): boolean {
   return par !== null && par !== undefined
 }
 
-export function formatDate (unix: number): string {
-  const date = new Date(unix * 1000)
-  return date.toISOString().slice(0, 10)
-}
-
-export function formatDateTime (unix: number): string {
-  const date = new Date(unix * 1000)
-  return date.toISOString().slice(0, 10) + ' ' + date.toTimeString().slice(0, 5)
+export function respectLineBreak (text: string): React.JSX.Element {
+  const textSplit = text.split('\n')
+  return (
+    <div>{textSplit.map((line, index) =>
+      <p key={ index }>{line}</p>)}
+    </div>
+  )
 }

@@ -18,10 +18,11 @@ import { Icon } from '../icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
 
 interface NoteAndEventCardProps {
   title: string
-  type: string
+  type?: string
   user?: string | null
   date: string
   description: string
@@ -50,8 +51,8 @@ export const NoteAndEventCard = ({
 
   const columns = [
     columnHelper.accessor(i18n.t('notes-and-events.name'), {}),
-    columnHelper.accessor(i18n.t('notes-and-events.type'), {}),
-    columnHelper.accessor(i18n.t('notes-and-events.value'), {})
+    columnHelper.accessor(i18n.t('notes-and-events.type'), { size: 120 }),
+    columnHelper.accessor(i18n.t('notes-and-events.value'), { size: 310 })
   ]
 
   const titleElement = (
@@ -77,7 +78,7 @@ export const NoteAndEventCard = ({
 
   const extra = (
     <div>
-      <Tag>{type}</Tag>
+      {type !== undefined && <Tag>{type}</Tag>}
       <span>{date}</span>
       <Button
         aria-label={ i18n.t('aria.notes-and-events.delete') }
@@ -99,7 +100,7 @@ export const NoteAndEventCard = ({
         title={ titleElement }
       >
         <span className={ 'card-body__description ' + (showDetails ? 'card-body__description-padding' : '') }>
-          {description}
+          {respectLineBreak(description)}
         </span>
         {showDetails && (
           <div>
@@ -107,6 +108,7 @@ export const NoteAndEventCard = ({
             <Grid
               columns={ columns }
               data={ data }
+              resizable
             />
           </div>
         )}
