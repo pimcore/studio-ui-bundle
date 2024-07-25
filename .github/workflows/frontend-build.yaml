@@ -73,11 +73,10 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: './public/build/ ./public/core-dll/'
           commit_message: Apply latest automatic api client updates
 
   lint:
-    needs: install
+    needs: api-client-build
     runs-on: ubuntu-latest
 
     permissions:
