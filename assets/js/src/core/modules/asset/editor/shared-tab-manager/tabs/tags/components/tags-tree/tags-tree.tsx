@@ -51,8 +51,6 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   console.log('defaultCheckedTagsINIT', defaultCheckedTags)
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
-    console.log('applyTagsToElement init', checkedTags)
-
     updateTagsForElementByTypeAndId({
       elementType,
       id: elementId,
@@ -60,7 +58,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
       checkedTags: checkedTags.map(Number)
     })
 
-    // setDefaultCheckedTags(checkedTags)
+    setDefaultCheckedTags(checkedTags)
 
     try {
       void replaceTagsMutation({
