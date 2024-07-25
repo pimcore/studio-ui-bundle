@@ -15,16 +15,15 @@ import React from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
 import { Button, Dropdown, type MenuProps, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type GlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 
-export const ElementToolbar = ({ context }: { context: GlobalAssetContext }): React.JSX.Element => {
+export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
   const { styles } = useStyle()
 
   const { data, isLoading } = useGetAssetByIdQuery({
-    id: context.config.id
+    id
   })
 
   if (isLoading || data === undefined) {
@@ -54,8 +53,9 @@ export const ElementToolbar = ({ context }: { context: GlobalAssetContext }): Re
       key: '3',
       label: 'Copy deep link to clipboard',
       onClick: () => {
+        // @todo implement other types
         void navigator.clipboard.writeText(`
-          http://localhost/admin/login/deeplink?${context.type}_${data.id}_${data.type}
+          http://localhost/admin/login/deeplink?asset_${data.id}_${data.type}
         `)
       }
     }

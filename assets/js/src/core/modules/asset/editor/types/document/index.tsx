@@ -25,9 +25,9 @@ import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-m
 import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
 import {
   NotesAndEventsTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
+import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 import { type DocumentTabManager } from './tab-manager/document-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { container } from '@Pimcore/app/depency-injection'

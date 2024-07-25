@@ -18,7 +18,7 @@ export const useStyle = createStyles(({ token, css }) => {
     timeline: css`
       padding-left: ${token.paddingXS}px;
     
-      & > * {
+      & > div {
         position: relative;
         margin: 0;
         
@@ -27,7 +27,7 @@ export const useStyle = createStyles(({ token, css }) => {
         border-left: 2px solid rgba(0,0,0,6%);
       }
 
-      & > *:before {
+      & > div:before {
         content: '';
         
         position: absolute;
