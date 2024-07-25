@@ -17,6 +17,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type Key } from 'react'
+import {PatchCollection} from "@reduxjs/toolkit/dist/query/core/buildThunks";
 
 interface UpdateTagsForElementByTypeAndIdProps extends GetTagsForElementByTypeAndIdApiArg {
   flatTags: Tag[]
@@ -24,14 +25,14 @@ interface UpdateTagsForElementByTypeAndIdProps extends GetTagsForElementByTypeAn
 }
 
 interface UseOptimisticUpdateReturn {
-  updateTagsForElementByTypeAndId: (props: UpdateTagsForElementByTypeAndIdProps) => void
+  updateTagsForElementByTypeAndId: (props: UpdateTagsForElementByTypeAndIdProps) => PatchCollection
 }
 
 export const useOptimisticUpdate = (): UseOptimisticUpdateReturn => {
   const dispatch = useAppDispatch()
 
-  const updateTagsForElementByTypeAndId = (props: UpdateTagsForElementByTypeAndIdProps): void => {
-    dispatch(
+  const updateTagsForElementByTypeAndId = (props: UpdateTagsForElementByTypeAndIdProps): PatchCollection => {
+    return dispatch(
       api.util.updateQueryData(
         'getTagsForElementByTypeAndId',
         {

@@ -59,7 +59,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         const items: Tag[] = { ...saveParentTags, ...saveChildrenTags }
         const tagIds = Object.keys(items).map(Number)
 
-        dispatch(
+        const cacheUpdate = dispatch(
           tagsApi.util.updateQueryData(
             'getTagsForElementByTypeAndId',
             {
@@ -84,7 +84,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
             }
           }))
         } catch (error) {
-          console.error(error)
+          cacheUpdate.undo()
         }
       })
       .catch((error) => {
@@ -98,7 +98,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         const items: Tag[] = parentTags.data?.items ?? []
         const tagIds = Object.keys(items).map(Number)
 
-        dispatch(
+        const cacheUpdate = dispatch(
           tagsApi.util.updateQueryData(
             'getTagsForElementByTypeAndId',
             {
@@ -123,7 +123,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
             }
           }))
         } catch (error) {
-          console.error(error)
+          cacheUpdate.undo()
         }
       })
       .catch((error) => {

@@ -49,7 +49,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   const flatTags = flattenArray(tags)
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
-    updateTagsForElementByTypeAndId({
+    const cacheUpdate = updateTagsForElementByTypeAndId({
       elementType,
       id: elementId,
       flatTags,
@@ -67,7 +67,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
         }
       }).unwrap()
     } catch (error) {
-      console.error(error)
+      cacheUpdate.undo()
     }
   }
 
