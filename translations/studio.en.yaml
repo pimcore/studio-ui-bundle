@@ -181,6 +181,7 @@ height: Height
 quality: Quality
 mode: Mode
 format: Format
+default: default
 resize: Resize
 scaleByWidth: Scale By Width
 scaleByHeight: Scale By Height

@@ -30,25 +30,25 @@ const DetailContainer = (): React.JSX.Element => {
 
   return (
     <AssetEditorSidebarDetailsView
-      height={ imageData.height }
+      height={ imageData.height ?? 0 }
       onClickCustomDownload={ async (customDownloadProps) => {
-        await downloadImageByCustomSettings(assetContext.id!, customDownloadProps)
+        downloadImageByCustomSettings(assetContext.id!, customDownloadProps)
       } }
       onClickDownloadByFormat={ async (format) => {
-        await downloadImageByFormat(assetContext.id!, format)
+        downloadImageByFormat(assetContext.id!, format)
       } }
-      width={ imageData.width }
+      width={ imageData.width ?? 0 }
     />
   )
 
-  async function downloadImageByCustomSettings (id, {
+  function downloadImageByCustomSettings (id, {
     width,
     height,
     quality,
     dpi,
     mode,
     format
-  }: CustomDownloadProps): Promise<void> {
+  }: CustomDownloadProps): void {
     // ?mimeType=JPEG&resizeMode=scaleByWidth&width=140&height=78&quality=99&dpi=200
     const keyValues = [
       {
@@ -90,8 +90,16 @@ const DetailContainer = (): React.JSX.Element => {
       })
   }
 
-  async function downloadImageByFormat (id: number, format: string): Promise<void> {
-    fetch(`http://localhost/studio/api/assets/${id}/image/download/format/${format}`)
+  function downloadImageByFormat (id: number, format: string): void {
+    if (format === 'original') {
+      prepareDownload(`http://localhost/studio/api/assets/${id}/download`, format)
+      return
+    }
+    prepareDownload(`http://localhost/studio/api/assets/${id}/image/download/format/${format}`, format)
+  }
+
+  function prepareDownload (url: string, format: string): void {
+    fetch(url)
       .then(async (response) => await response.blob())
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)

@@ -27,8 +27,8 @@ export interface CustomDownloadProps {
 }
 
 interface AssetEditorSidebarDetailsViewProps {
-  width?: number
-  height?: number
+  width: number
+  height: number
   onClickDownloadByFormat: (format: string) => void
   onClickCustomDownload: ({
     width,
@@ -49,12 +49,12 @@ export const AssetEditorSidebarDetailsView = ({
   const { styles } = useStyle()
   const { t } = useTranslation()
   const [downloadFormat, setDownloadFormat] = useState('original')
-  const [customWidth, setCustomWidth] = useState(-1)
-  const [customHeight, setCustomHeight] = useState(-1)
+  const [customWidth, setCustomWidth] = useState(width)
+  const [customHeight, setCustomHeight] = useState(height)
   const [customQuality, setCustomQuality] = useState(-1)
   const [customDPI, setCustomDPI] = useState(-1)
-  const [customMode, setCustomMode] = useState('')
-  const [customFormat, setCustomFormat] = useState('')
+  const [customMode, setCustomMode] = useState('scaleByWidth')
+  const [customFormat, setCustomFormat] = useState('JPEG')
 
   const modes = [
     {
@@ -62,7 +62,12 @@ export const AssetEditorSidebarDetailsView = ({
       label: t('resize')
     }, {
       value: 'scaleByWidth',
-      label: t('scaleByWidth')
+      label: <>
+        {t('scaleByWidth') + ' '}
+        <span className={ 'entry-content__download-content-custom__default' }>
+          ({t('default')})
+        </span>
+      </>
     }, {
       value: 'scaleByHeight',
       label: t('scaleByHeight')
@@ -72,7 +77,12 @@ export const AssetEditorSidebarDetailsView = ({
   const formats = [
     {
       value: 'JPEG',
-      label: 'JPEG'
+      label: <>
+        {'JPEG '}
+        <span className={ 'entry-content__download-content-custom__default' }>
+          ({t('default')})
+        </span>
+      </>
     }, {
       value: 'PNG',
       label: 'PNG'
@@ -100,7 +110,15 @@ export const AssetEditorSidebarDetailsView = ({
       key: 1,
       label: 'Custom Download',
       children: (
-        <Form layout="vertical">
+        <Form
+          initialValues={ {
+            width,
+            height,
+            mode: customMode,
+            format: customFormat
+          } }
+          layout="vertical"
+        >
           <div className={ 'entry-content__download-content-custom__dimensions' }>
             <Form.Item
               label={ t('width') }
@@ -147,11 +165,13 @@ export const AssetEditorSidebarDetailsView = ({
             </div>
 
             <div>
-              <Form.Item name={ 'mode' }>
+              <Form.Item
+                label={ t('mode') }
+                name={ 'mode' }
+              >
                 <Select
                   aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
                   onChange={ mode => { setCustomMode(mode as string) } }
-                  placeholder={ t('mode') }
                 >
                   {modes.map((mode) => (
                     <Select.Option
@@ -162,12 +182,15 @@ export const AssetEditorSidebarDetailsView = ({
                   }
                 </Select>
               </Form.Item>
-
-              <Form.Item name={ 'format' }>
+            </div>
+            <div>
+              <Form.Item
+                label={ t('format') }
+                name={ 'format' }
+              >
                 <Select
                   aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format') }
                   onChange={ format => { setCustomFormat(format as string) } }
-                  placeholder={ t('format') }
                 >
                   {formats.map((format) => (
                     <Select.Option
