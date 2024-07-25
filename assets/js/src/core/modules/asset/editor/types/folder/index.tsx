@@ -26,6 +26,7 @@ import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 import { AssetActions } from './tab-manager/tabs/list/grid-columns/asset-actions/asset-actions'
+import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -50,6 +51,14 @@ moduleSystem.registerModule({
       label: 'asset.asset-editor-tabs.properties.text',
       children: <PropertiesContainer />,
       icon: <Icon name={ 'settings2' } />,
+      isDetachable: true
+    })
+
+    folderEditorTabManager.register({
+      key: 'tags',
+      label: 'asset.asset-editor-tabs.tag',
+      children: <TagsTabContainer />,
+      icon: <Icon name={ 'tag-two-tone' } />,
       isDetachable: true
     })
 
