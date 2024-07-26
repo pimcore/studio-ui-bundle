@@ -21,7 +21,7 @@ export const useStyle = createStyles(({ token, css }) => {
     `,
     toolbar: css`
       display: flex;
-        gap: 10px;
+      gap: 10px;
       padding: ${token.paddingXS}px;
       align-items: center;
 
@@ -59,6 +59,9 @@ export const useStyle = createStyles(({ token, css }) => {
                 gap: 10px;
             }
         }
+    `,
+    content: css`
+        padding: ${token.paddingXS}px;
     `
   }
 })

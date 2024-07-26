@@ -17,6 +17,9 @@ import { useTranslation } from 'react-i18next'
 import { Button, Select } from 'antd'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  CustomMetadataTable
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -72,17 +75,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
           {!editmode && (
             <>
-              <Select
-                options={ [
-                  { value: 'text', label: 'Text' },
-                  { value: 'document', label: 'Document' },
-                  { value: 'asset', label: 'Asset' },
-                  { value: 'object', label: 'Object' },
-                  { value: 'bool', label: 'Bool' }
-                ] }
-                placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
-                showSearch
-              />
+              <Button
+                onClick={ () => { console.log('clicked') } }
+              >
+                {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
+              </Button>
 
               <Button
                 icon={ <Icon name={ 'PlusCircleOutlined' } /> }
@@ -96,6 +93,10 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
           )}
         </div>
 
+      </div>
+
+      <div className={ styles.content }>
+        <CustomMetadataTable />
       </div>
     </div>
   )
