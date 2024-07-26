@@ -1,2 +1,0 @@
-/*! For license information please see 105.b4a62b68.js.LICENSE.txt */
-"use strict";(self.webpackChunkstudio_core=self.webpackChunkstudio_core||[]).push([[105],{78105:(e,s,c)=>{c.r(s),c.d(s,{Pimcore:()=>t});var i=c(81690),r=c(19387),n=c(52435),t={container:i.container,serviceIds:n.serviceIds,pluginSystem:r.pluginSystem}}}]);
