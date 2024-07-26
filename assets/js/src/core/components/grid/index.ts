@@ -20,6 +20,9 @@ import { DateCell } from './columns/types/date/date-cell'
 import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
 import { TimeCell } from '@Pimcore/components/grid/columns/types/time/time-cell'
 import { OpenElementCell } from '@Pimcore/components/grid/columns/types/open-element/open-element-cell'
+import {
+  TypeDependentContent
+} from '@Pimcore/components/grid/columns/types/type-dependent-content/type-dependent-content'
 
 moduleSystem.registerModule({
   onInit () {
@@ -47,6 +50,11 @@ moduleSystem.registerModule({
           })
         }
       }
+    })
+
+    typeRegistry.registerType({
+      type: 'type-dependent-content',
+      component: TypeDependentContent
     })
 
     typeRegistry.registerType({

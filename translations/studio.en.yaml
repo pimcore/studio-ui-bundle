@@ -183,3 +183,8 @@ asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Language
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Cancel
 asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Add predefined definition
+asset.asset-editor-tabs.custom-metadata.columns.type: Type
+asset.asset-editor-tabs.custom-metadata.columns.name: Name
+asset.asset-editor-tabs.custom-metadata.columns.language: Language
+asset.asset-editor-tabs.custom-metadata.columns.value: Value
+asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
