@@ -36,7 +36,7 @@ Encore
   // directory where compiled assets will be stored
   .setOutputPath(buildPath)
   // public path used by the web server to access the output path
-  .setPublicPath('/bundles/pimcorestudioui/' + buildId)
+  .setPublicPath('/bundles/pimcorestudioui/build/' + buildId)
 
   /*
     * ENTRY CONFIG
