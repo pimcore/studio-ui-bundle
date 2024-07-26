@@ -17,9 +17,31 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     table: css`
       .ant-table {
-        .custom-metadata-table--actions-column {
-          justify-content: center;
+          
+        .ant-table-cell {
+          .grid__cell-content {
+            >div:first-of-type {
+              padding: 4px;
+            }
+          }
+        }
+          
+        .custom-metadata-table--actions-column,
+        [data-grid-column="custom-metadata-table--data-column"] {
           align-items: center;
+        }
+          
+        [data-grid-column="custom-metadata-table--language-column"] {
+            align-items: center;
+            
+            >div:first-of-type {
+              flex-grow: 1;
+              align-items: center;
+
+              .ant-select {
+                width: 100%;
+              }
+            }
         }
       }
     `

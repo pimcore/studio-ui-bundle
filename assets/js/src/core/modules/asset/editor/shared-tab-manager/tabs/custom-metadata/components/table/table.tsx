@@ -35,6 +35,15 @@ export const CustomMetadataTable = (): React.JSX.Element => {
     console.log('removeMetadata', metadata)
   }
 
+  // const updateMetadata = (metadata: CustomMetadata): void => {
+  //  console.log('updateMetadata', metadata)
+  // }
+
+  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+    console.log({ rowIndex, columnId, value, rowData })
+    // updateMetadata(value)
+  }
+
   const columnHelper = createColumnHelper<CustomMetadataWithActions>()
   const columns = [
     columnHelper.accessor('type', {
@@ -48,13 +57,21 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name')
     }),
     columnHelper.accessor('language', {
-      header: t('asset.asset-editor-tabs.custom-metadata.columns.language')
+      header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
+      id: 'custom-metadata-table--language-column',
+      meta: {
+        type: 'language-select',
+        editable: true
+      }
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
+      id: 'custom-metadata-table--data-column',
       meta: {
-        type: 'type-dependent-content'
-      }
+        type: 'type-dependent-content',
+        editable: true
+      },
+      size: 400
     }),
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.actions'),
@@ -81,6 +98,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
         columns={ columns }
         data={ data?.items ?? [] }
         isLoading={ isLoading }
+        onUpdateCellData={ onUpdateCellData }
       />
     </div>
   )
