@@ -30,11 +30,7 @@ class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBund
 
     public function getWebpackEntryPointsJsonLocations(): array
     {
-        return [
-            $this->getPath() . '/public/build/52c5a488-5c47-4a71-b0f6-93eab7efabc1/entrypoints.json',
-            $this->getPath() . '/public/build/39430b3f-09c7-4283-b21c-a2e36d0aafc0/entrypoints.json',
-            $this->getPath() . '/public/build/66408e97-6381-4fcc-9c61-5b4df48172f4/entrypoints.json',
-        ];
+        return glob($this->getPath() . '/public/build/*/entrypoints.json');
     }
 
     public function getWebpackEntryPoints(): array
