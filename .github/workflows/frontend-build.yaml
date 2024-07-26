@@ -137,7 +137,7 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: './public/build/ ./public/core-dll/'
+          file_pattern: './public/'
           commit_message: Automatic frontend build
 
   test:
