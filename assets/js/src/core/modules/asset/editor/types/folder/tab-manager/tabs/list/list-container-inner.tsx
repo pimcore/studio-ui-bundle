@@ -49,7 +49,12 @@ export const ListContainerInner = (): React.JSX.Element => {
           config: column.config,
           key: column.key,
           type: column.type
-        }))
+        })),
+        filters: {
+          page,
+          pageSize: parseInt(pageSize.toString()),
+          includeDescendants: false
+        }
       }
     }).catch((error) => {
       console.error(error)

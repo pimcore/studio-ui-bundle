@@ -52,11 +52,11 @@ const injectedRtkApi = api
                 providesTags: ["Assets"],
             }),
             downloadAssetsCsv: build.query<DownloadAssetsCsvApiResponse, DownloadAssetsCsvApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/assets/download/csv`, params: { path: queryArg.path } }),
+                query: (queryArg) => ({ url: `/studio/api/assets/download/csv/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
             }),
             downloadZippedAssets: build.query<DownloadZippedAssetsApiResponse, DownloadZippedAssetsApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/assets/download/zip`, params: { path: queryArg.path } }),
+                query: (queryArg) => ({ url: `/studio/api/assets/download/zip/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
             }),
             getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
@@ -199,9 +199,9 @@ export type CloneElementApiArg = {
     /** ParentId of the asset */
     parentId: number;
 };
-export type CreateCsvAssetsApiResponse = /** status 200 Success */ {
-    /** Path to the csv file */
-    path?: string;
+export type CreateCsvAssetsApiResponse = /** status 201 Successfully created jobRun for csv export */ {
+    /** ID of created jobRun */
+    jobRunId: number;
 };
 export type CreateCsvAssetsApiArg = {
     body: {
@@ -209,13 +209,23 @@ export type CreateCsvAssetsApiArg = {
         gridConfig?: GridColumnRequest[];
         settings?: {
             delimiter?: string;
-            header?: "settings" | "configuration" | "delimiter" | "header" | "no_header" | "title" | "name" | "\r\n";
+            header?:
+                | "asset_to_export"
+                | "asset_export_data"
+                | "settings"
+                | "configuration"
+                | "delimiter"
+                | "header"
+                | "no_header"
+                | "title"
+                | "name"
+                | "\r\n";
         };
     };
 };
-export type CreateZipAssetsApiResponse = /** status 200 Success */ {
-    /** Path to the zip file */
-    path?: string;
+export type CreateZipAssetsApiResponse = /** status 201 Successfully created jobRun for zip export */ {
+    /** ID of created jobRun */
+    jobRunId: number;
 };
 export type CreateZipAssetsApiArg = {
     body: {
@@ -265,13 +275,13 @@ export type DownloadAssetByIdApiArg = {
 };
 export type DownloadAssetsCsvApiResponse = /** status 200 CSV File */ Blob;
 export type DownloadAssetsCsvApiArg = {
-    /** Filter by path. */
-    path?: string;
+    /** JobRunId of the JobRun */
+    jobRunId: number;
 };
 export type DownloadZippedAssetsApiResponse = /** status 200 Zip archive */ Blob;
 export type DownloadZippedAssetsApiArg = {
-    /** Filter by path. */
-    path?: string;
+    /** JobRunId of the JobRun */
+    jobRunId: number;
 };
 export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Image
@@ -325,6 +335,7 @@ export type GetAssetGridApiArg = {
     body: {
         folderId: number;
         columns: GridColumnRequest[];
+        filters?: GridFilter;
     };
 };
 export type DownloadCustomImageApiResponse = /** status 200 Custom image */ Blob;
@@ -706,6 +717,14 @@ export type GridColumnData = {
     locale?: string | null;
     /** Value */
     value?: any | null;
+};
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
 };
 export type PatchCustomMetadata = {
     /** Name */

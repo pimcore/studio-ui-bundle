@@ -94,6 +94,7 @@ import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
 import flagOutlined from '@Pimcore/assets/icons/flag-outlined.inline.svg'
 import draggable from '@Pimcore/assets/icons/draggable.inline.svg'
 import settingsOutlined from '@Pimcore/assets/icons/settings-outlined.inline.svg'
+import filterOutlined from '@Pimcore/assets/icons/filter-outlined.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -418,6 +419,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'settings-outlined',
       component: settingsOutlined
+    })
+
+    iconLibrary.register({
+      name: 'filter-outlined',
+      component: filterOutlined
     })
   }
 })

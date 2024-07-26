@@ -25,7 +25,8 @@ export const useStyles = createStyles(({ token, css }) => {
       left: 0;
       right: 0;
       height: 48px;
-      padding: ${token.paddingXS}px
+      background-color: ${token.colorBgBase};
+      padding: ${token.paddingXS}px;
     `
   }
 })

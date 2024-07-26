@@ -25,6 +25,7 @@ const config: Meta = {
         <Sidebar
           buttons={ args.buttons }
           entries={ args.entries }
+          highlights={ args.highlights }
         />
       </div>
     )
@@ -56,6 +57,34 @@ export const _default = {
         component: <AssetEditorSidebarDetailsTab />
       }
     ],
+    buttons: [
+      {
+        key: 'focal-point',
+        icon: <Icon
+          name={ 'focal-point' }
+          options={ { width: '16px', height: '16px' } }
+              />,
+        onClick: () => { console.log('focal-point button clicked') }
+      }
+    ]
+  }
+}
+
+export const HighlightedEntries = {
+  args: {
+    entries: [
+      {
+        key: 'details',
+        icon: <Icon
+          name={ 'view-details' }
+          options={ { width: '16px', height: '16px' } }
+              />,
+        component: <AssetEditorSidebarDetailsTab />
+      }
+    ],
+
+    highlights: ['details'],
+
     buttons: [
       {
         key: 'focal-point',
