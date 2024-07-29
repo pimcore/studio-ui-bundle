@@ -66,7 +66,8 @@ moduleSystem.registerModule({
       key: 'custom-metadata',
       label: 'asset.asset-editor-tabs.custom-metadata',
       children: <CustomMetadataTabContainer />,
-      icon: <Icon name={ 'data-management-2' } />
+      icon: <Icon name={ 'data-management-2' } />,
+      isDetachable: true
     })
 
     documentTabManager.register({
