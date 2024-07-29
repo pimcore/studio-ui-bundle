@@ -31,7 +31,7 @@ export const TypeDependentContent = (props: DefaultCellProps): React.JSX.Element
       case 'bool':
       case 'checkbox':
         return <BooleanCell { ...props } />
-      case 'text':
+      case 'textarea':
       case 'input':
         return <TextCell { ...props } />
       case 'document':

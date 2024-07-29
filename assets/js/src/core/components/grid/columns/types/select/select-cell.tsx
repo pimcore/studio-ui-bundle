@@ -71,7 +71,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div>
+    <div className={ ['default-cell__content'].join(' ') }>
       {getCellContent()}
     </div>
   )
