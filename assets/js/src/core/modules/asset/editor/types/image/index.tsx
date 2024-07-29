@@ -124,7 +124,8 @@ moduleSystem.registerModule({
       key: 'tags',
       label: 'asset.asset-editor-tabs.tag',
       children: <TagsTabContainer />,
-      icon: <Icon name={ 'tag-two-tone' } />
+      icon: <Icon name={ 'tag-two-tone' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({

@@ -6,12 +6,14 @@ on:
       - "[0-9]+.[0-9]+"
       - "[0-9]+.x"
       - "feature-*"
+      - "nightly"
   pull_request:
     branches:
       - "[0-9]+.[0-9]+"
       - "[0-9]+.x"
       - "*_actions"
       - "feature-*"
+      - "nightly"
 
 permissions:
   contents: read
@@ -41,8 +43,40 @@ jobs:
         working-directory: ./assets
         run: npm ci
 
-  lint:
+  api-client-build:
     needs: install
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./assets/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Run api client build
+        working-directory: ./assets
+        run: npm run build-api-client
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Apply latest automatic api client updates
+
+  lint:
+    needs: api-client-build
     runs-on: ubuntu-latest
 
     permissions:
@@ -103,7 +137,7 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: './public/build/ ./public/core-dll/'
+          file_pattern: './public/'
           commit_message: Automatic frontend build
 
   test:
