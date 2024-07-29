@@ -176,3 +176,17 @@ element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
 element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
 asset.asset-editor-tabs.tags.columns.path: Path
 asset.asset-editor-tabs.tags.columns.actions: Remove
+width: Width
+height: Height
+quality: Quality
+mode: Mode
+format: Format
+default: default
+resize: Resize
+scaleByWidth: Scale By Width
+scaleByHeight: Scale By Height
+download: Download
+asset.sidebar.original-file: Original File
+asset.sidebar.web-format: Web Format
+asset.sidebar.print-format: Print Format
+asset.sidebar.office-format: Office Format

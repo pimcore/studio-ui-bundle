@@ -12,7 +12,16 @@
 */
 
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
-import { type ColumnDef, flexRender, getCoreRowModel, useReactTable, type ColumnResizeMode, type TableOptions, type RowData, type CellContext } from '@tanstack/react-table'
+import {
+  type CellContext,
+  type ColumnDef,
+  type ColumnResizeMode,
+  flexRender,
+  getCoreRowModel, getSortedRowModel,
+  type RowData,
+  type TableOptions,
+  useReactTable
+} from '@tanstack/react-table'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
@@ -45,6 +54,7 @@ export interface GridProps {
   onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
   modifiedCells?: Array<{ rowIndex: number, columnId: string }>
   isLoading?: boolean
+  initialState?: TableOptions<any>['initialState']
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
@@ -94,10 +104,12 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   const tableProps: TableOptions<any> = {
     data,
     columns,
+    initialState: props.initialState,
     defaultColumn: {
       cell: DefaultCell
     },
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     meta: {
       onUpdateCellData: props.onUpdateCellData
     }

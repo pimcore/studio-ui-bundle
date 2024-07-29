@@ -13,7 +13,11 @@
 
 import React, { type Key } from 'react'
 import { Input, Tree, type TreeProps } from 'antd'
-import { type Tag } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import {
+  type AssignTagForElementApiArg,
+  type Tag,
+  useBatchReplaceTagsForElementsMutation
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   useCreateTreeStructure
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
@@ -21,24 +25,54 @@ import {
   useStyle
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree.styles'
 import {
-  type TagsTreeContainerProps
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
+  useOptimisticUpdate
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
+import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 
-interface TagsTreeProps extends TagsTreeContainerProps {
+export interface TagsTreeProps {
+  elementId: number
+  elementType: AssignTagForElementApiArg['elementType']
   tags: Tag[]
   setFilter: (filter: string) => void
   isLoading?: boolean
+  defaultCheckedTags: React.Key[]
+  setDefaultCheckedTags: (tags: React.Key[]) => void
 }
 
-export const TagsTree = ({ tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
+export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { Search } = Input
   const { createTreeStructure } = useCreateTreeStructure()
-
+  const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
   const treeData = createTreeStructure({ tags })
+  const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
+  const flatTags = flattenArray(tags)
+
+  const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
+    const cacheUpdate = updateTagsForElementByTypeAndId({
+      elementType,
+      id: elementId,
+      flatTags,
+      checkedTags: checkedTags.map(Number)
+    })
+
+    setDefaultCheckedTags(checkedTags)
+
+    try {
+      void replaceTagsMutation({
+        elementType,
+        elementTagIdCollection: {
+          elementIds: [elementId],
+          tagIds: checkedTags.map(Number)
+        }
+      }).unwrap()
+    } catch (error) {
+      cacheUpdate.undo()
+    }
+  }
 
   const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
-    setDefaultCheckedTags(checkedKeys.checked)
+    void applyTagsToElement(checkedKeys.checked)
   }
 
   return (
@@ -60,7 +94,7 @@ export const TagsTree = ({ tags, setFilter, isLoading, defaultCheckedTags, setDe
         checkable
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         className={ styles.tree }
-        defaultExpandAll
+        defaultExpandedKeys={ ['root'] }
         onCheck={ onCheck }
         showIcon
         treeData={ treeData }

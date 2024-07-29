@@ -31,7 +31,8 @@ Thumbs.db
 
 # Frontend related files
 assets/node_modules
-assets/dist/build
+assets/dist/*
+!assets/dist/.gitkeep
 
 # code style fixer
 .php_cs

@@ -27,14 +27,6 @@ export const useStyle = createStyles(({ token, css }) => {
     `,
     tree: css`
       padding-top: ${token.paddingXS}px;
-      .ant-tree-list-holder-inner {
-        .ant-tree-treenode:first-of-type {
-          >.ant-tree-indent {
-            display: none
-          }
-        }
-      }
-      .
     `
   }
 })
