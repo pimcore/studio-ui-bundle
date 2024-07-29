@@ -95,7 +95,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                     }
                 }
 
-                if (!$entryPointFound) {
+                /* if (!$entryPointFound) {
                     throw new InvalidEntrypointsJsonException(
                         sprintf(
                             'Entry point "%s" not found in any of the entry points JSON files: %s',
@@ -103,7 +103,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                             implode(', ', $bundle->getWebpackEntryPointsJsonLocations())
                         )
                     );
-                }
+                } */
             }
         }
 

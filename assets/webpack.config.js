@@ -166,9 +166,17 @@ if (!Encore.isDevServer() && !Encore.isProduction()) {
 }
 
 if (Encore.isDevServer()) {
+  if (fs.existsSync( path.resolve(__dirname, '..', 'public', 'build'))) {
+    fs.rmSync(path.resolve(__dirname, '..', 'public', 'build'), { recursive: true });
+  }
+
+  if (!fs.existsSync(buildPath)) {
+    fs.mkdirSync(buildPath, { recursive: true });
+  }
+
   Encore
-    .setOutputPath('../public/build/')
-    .setPublicPath('/build')
+    .setOutputPath(buildPath)
+    .setPublicPath('/build/' + buildId)
     .addPlugin(new ReactRefreshPlugin())
 }
 
