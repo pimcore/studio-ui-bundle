@@ -48,11 +48,18 @@ export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
 }
 
+export interface OnUpdateCellDataEvent {
+  rowIndex: number
+  columnId: string
+  value: any
+  rowData: any
+}
+
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
   resizable?: boolean
-  onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   modifiedCells?: Array<{ rowIndex: number, columnId: string }>
   isLoading?: boolean
   initialState?: TableOptions<any>['initialState']

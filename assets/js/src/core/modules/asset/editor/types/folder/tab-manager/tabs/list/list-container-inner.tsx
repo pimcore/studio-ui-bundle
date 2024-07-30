@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetAssetGridMutation, api, type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetGridMutation, api, type GetAssetGridApiResponse, usePatchAssetByIdMutation, type PatchAssetByIdApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useEffect, useState } from 'react'
 import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './grid-toolbar-container'
@@ -20,6 +20,7 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar-container'
 import { useList } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
 
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -28,8 +29,95 @@ export const ListContainerInner = (): React.JSX.Element => {
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
   const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
+  const [patchAsset] = usePatchAssetByIdMutation()
 
   useEffect(() => {
+    prepareAndFetchListing()
+  }, [columns, filterOptions, page, pageSize])
+
+  useEffect(() => {
+    async function fetchGridConfiguration (): Promise<void> {
+      const { data } = await dispatch(api.endpoints.getAssetGridConfiguration.initiate())
+      setGridConfig(data?.columns)
+    }
+
+    fetchGridConfiguration().catch((error) => {
+      console.error(error)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (apiData !== undefined) {
+      setData(apiData)
+    }
+  }, [apiData])
+
+  return (
+    <ContentToolbarSidebarView
+      renderSidebar={ <SidebarContainer /> }
+
+      renderToolbar={
+        <GridToolbarContainer
+          pager={ {
+            current: page,
+            total: data?.totalItems ?? 0,
+            pageSize,
+            onChange: onPagerChange
+          } }
+        />
+      }
+    >
+      <GridContainer
+        assets={ data }
+        onUpdateCellData={ onUpdateCellData }
+      />
+    </ContentToolbarSidebarView>
+  )
+
+  function onPagerChange (page: number, pageSize: number): void {
+    setPage(page)
+    setPageSize(pageSize)
+  }
+
+  function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
+    const column = columns.find((column) => column.key === columnId)
+
+    if (column === undefined) {
+      return
+    }
+
+    const backendType = column.type.split('.')
+
+    if (backendType[0] !== 'metadata') {
+      throw new Error('Only metadata columns are supported for now')
+    }
+
+    const update: PatchAssetByIdApiArg = {
+      body: {
+        data: [
+          {
+            id: rowData.id,
+            metadata: [
+              {
+                name: column.key,
+                data: value
+              }
+            ]
+          }
+        ]
+      }
+    }
+
+    patchAsset(update).catch((error) => {
+      console.error(error)
+    }).then(() => {
+      prepareAndFetchListing()
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
+
+  function prepareAndFetchListing (): void {
     if (columns.length === 0) {
       return
     }
@@ -59,46 +147,5 @@ export const ListContainerInner = (): React.JSX.Element => {
     }).catch((error) => {
       console.error(error)
     })
-  }, [columns, filterOptions, page, pageSize])
-
-  useEffect(() => {
-    async function fetchGridConfiguration (): Promise<void> {
-      const { data } = await dispatch(api.endpoints.getAssetGridConfiguration.initiate())
-      setGridConfig(data?.columns)
-    }
-
-    fetchGridConfiguration().catch((error) => {
-      console.error(error)
-    })
-  }, [])
-
-  useEffect(() => {
-    if (apiData !== undefined) {
-      setData(apiData)
-    }
-  }, [apiData])
-
-  function onPagerChange (page: number, pageSize: number): void {
-    setPage(page)
-    setPageSize(pageSize)
   }
-
-  return (
-    <ContentToolbarSidebarView
-      renderSidebar={ <SidebarContainer /> }
-
-      renderToolbar={
-        <GridToolbarContainer
-          pager={ {
-            current: page,
-            total: data?.totalItems ?? 0,
-            pageSize,
-            onChange: onPagerChange
-          } }
-        />
-      }
-    >
-      <GridContainer assets={ data } />
-    </ContentToolbarSidebarView>
-  )
 }

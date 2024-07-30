@@ -20,13 +20,14 @@ import { useList } from './hooks/use-list'
 
 interface GridContainerProps {
   assets: GetAssetGridApiResponse | undefined
+  onUpdateCellData: (data: Record<string, any>) => void
 }
 
 type AssetRow = Record<string, any>
 type TransformedGridData = AssetRow[] | undefined
 
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
-  const { assets } = props
+  const { assets, onUpdateCellData } = props
   const { t } = useTranslation()
   const columnHelper = createColumnHelper()
   const { columns: GridColumns } = useList()
@@ -73,7 +74,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       columns={ columns }
       data={ data }
       // @todo implement inline editing
-      onUpdateCellData={ () => {} }
+      onUpdateCellData={ onUpdateCellData }
       resizable
     />
   )
