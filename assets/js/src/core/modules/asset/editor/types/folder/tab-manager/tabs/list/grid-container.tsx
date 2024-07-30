@@ -39,7 +39,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         header: t(`asset.listing.column.${column.key}`),
         meta: {
           type: column.frontendType,
-          editable: column.editable
+          editable: column.editable,
+          config: column.config
         }
       })
     )

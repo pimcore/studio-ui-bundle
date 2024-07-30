@@ -11,17 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { FilterContainerInner } from './filter-container-inner'
-import { FilterProvider } from './filter-provider'
-import { GridConfigProvider } from '../grid-config/grid-config-provider'
+import { createStyles } from 'antd-style'
 
-export const FilterContainer = (): React.JSX.Element => {
-  return (
-    <FilterProvider>
-      <GridConfigProvider>
-        <FilterContainerInner />
-      </GridConfigProvider>
-    </FilterProvider>
-  )
-}
+export const useStyles = createStyles(({ css }) => {
+  return {
+    'select-cell': css`
+      padding: 4px;
+
+      .ant-select {
+        width: 100%;
+      }
+    `
+  }
+})

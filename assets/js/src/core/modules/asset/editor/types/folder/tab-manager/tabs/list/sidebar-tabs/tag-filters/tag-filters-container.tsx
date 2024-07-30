@@ -12,7 +12,7 @@
 */
 
 import React, { useState } from 'react'
-import { TagsTreeContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
+// import { TagsTreeContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/sidebar/toolbar/toolbar'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -24,15 +24,20 @@ interface TagFiltersContainerProps {
 
 export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContainerProps): React.JSX.Element => {
   const [selectedTags, setSelectedTags] = useState<React.Key[]>([])
+  console.log({ selectedTags, _onSelectedTagsChange })
 
   return (
     <>
       <Title>Tag Filters</Title>
 
+      {/*
+
       <TagsTreeContainer
         defaultCheckedTags={ selectedTags }
         setDefaultCheckedTags={ _onSelectedTagsChange }
       />
+
+      */}
 
       <Toolbar>
         <IconTextButton

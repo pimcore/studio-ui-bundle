@@ -24,7 +24,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const dispatch = useAppDispatch()
-  const { page, pageSize, setPage, setPageSize, columns, gridConfig, setGridConfig } = useList()
+  const { page, filterOptions, pageSize, setPage, setPageSize, columns, gridConfig, setGridConfig } = useList()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
   const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
@@ -46,20 +46,20 @@ export const ListContainerInner = (): React.JSX.Element => {
       body: {
         folderId: assetId,
         columns: columnsToRequest.map((column) => ({
-          config: column.config,
+          config: [],
           key: column.key,
           type: column.type
         })),
         filters: {
           page,
           pageSize: parseInt(pageSize.toString()),
-          includeDescendants: false
+          ...filterOptions
         }
       }
     }).catch((error) => {
       console.error(error)
     })
-  }, [columns, page, pageSize])
+  }, [columns, filterOptions, page, pageSize])
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
@@ -96,7 +96,7 @@ export const ListContainerInner = (): React.JSX.Element => {
             onChange: onPagerChange
           } }
         />
-    }
+      }
     >
       <GridContainer assets={ data } />
     </ContentToolbarSidebarView>

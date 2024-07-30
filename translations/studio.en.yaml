@@ -135,13 +135,14 @@ asset.listing.column.preview: Preview
 asset.listing.column.id: ID
 asset.listing.column.type: Type
 asset.listing.column.filename: Filename
+asset.listing.column.fullpath: Full path
 asset.listing.column.modificationDate: Modification date
 asset.listing.column.creationDate: Creation date
 asset.listing.column.size: Size
 asset.listing.column.title: Title
 asset.listing.column.alt: Alt
 asset.listing.column.copyright: Copyright
-asset.listing.column.author: Filename
+asset.listing.column.author: Author
 asset.listing.column.authorLink: Modification date
 asset.listing.column.license: License
 asset.listing.column.licensePath: License Path

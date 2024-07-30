@@ -79,12 +79,17 @@ export const HighlightedEntries = {
   args: {
     entries: [
       {
-        key: 'details',
+        key: 'details', 
         icon: <Icon
           name={ 'view-details' }
           options={ { width: '16px', height: '16px' } }
               />,
-        component: <AssetEditorSidebarDetailsTab />
+        component: <AssetEditorSidebarDetailsView
+          height={ 185 }
+          onClickCustomDownload={ () => {} }
+          onClickDownloadByFormat={ (format) => { console.log(format) } }
+          width={ 357 }
+           />
       }
     ],
 
