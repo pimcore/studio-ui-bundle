@@ -14,12 +14,15 @@
 import React, { createContext, useMemo, useState } from 'react'
 
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { defaultFilterOptions, type FilterOptions } from './sidebar-tabs/filters/filter-provider'
 
 export interface IListContext {
   gridConfig: GridColumnConfiguration[] | undefined
   setGridConfig: React.Dispatch<React.SetStateAction<GridColumnConfiguration[] | undefined>>
   columns: GridColumnConfiguration[]
   setColumns: React.Dispatch<React.SetStateAction<GridColumnConfiguration[]>>
+  filterOptions: FilterOptions
+  setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -31,6 +34,8 @@ export const ListContext = createContext<IListContext>({
   setGridConfig: () => {},
   columns: [],
   setColumns: () => {},
+  filterOptions: defaultFilterOptions,
+  setFilterOptions: () => {},
   page: 1,
   setPage: () => {},
   pageSize: 20,
@@ -44,6 +49,7 @@ interface ListProviderProps {
 export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element => {
   const [gridConfig, setGridConfig] = useState<GridColumnConfiguration[] | undefined>(undefined)
   const [columns, setColumns] = useState<GridColumnConfiguration[]>([])
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
 
@@ -53,6 +59,8 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
       setGridConfig,
       columns,
       setColumns,
+      filterOptions,
+      setFilterOptions,
       page,
       setPage,
       pageSize,
@@ -66,6 +74,7 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
     columns,
     page,
     pageSize,
+    filterOptions,
     children
   ])
 }

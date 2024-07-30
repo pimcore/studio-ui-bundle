@@ -20,6 +20,7 @@ import { DateCell } from './columns/types/date/date-cell'
 import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
 import { TimeCell } from '@Pimcore/components/grid/columns/types/time/time-cell'
 import { OpenElementCell } from '@Pimcore/components/grid/columns/types/open-element/open-element-cell'
+import { SelectCell } from './columns/types/select/select-cell'
 import {
   TypeDependentContent
 } from '@Pimcore/components/grid/columns/types/type-dependent-content/type-dependent-content'
@@ -69,8 +70,18 @@ moduleSystem.registerModule({
     })
 
     typeRegistry.registerType({
+      type: 'datetime',
+      component: DateCell
+    })
+
+    typeRegistry.registerType({
       type: 'time',
       component: TimeCell
+    })
+
+    typeRegistry.registerType({
+      type: 'select',
+      component: SelectCell
     })
 
     typeRegistry.registerType({

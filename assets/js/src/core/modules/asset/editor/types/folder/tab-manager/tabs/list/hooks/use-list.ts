@@ -15,20 +15,13 @@ import { useContext, useMemo } from 'react'
 import { type IListContext, ListContext } from '../list-provider'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
-export interface useListHookReturn {
-  gridConfig: IListContext['gridConfig']
-  setGridConfig: IListContext['setGridConfig']
+export interface useListHookReturn extends IListContext {
   dropDownMenu: Record<string, GridColumnConfiguration[]>
   setGridColumns: (columns: GridColumnConfiguration[]) => void
-  columns: IListContext['columns']
-  page: IListContext['page']
-  pageSize: IListContext['pageSize']
-  setPage: IListContext['setPage']
-  setPageSize: IListContext['setPageSize']
 }
 
 export const useList = (): useListHookReturn => {
-  const { gridConfig, setGridConfig, setColumns, columns, page, pageSize, setPage, setPageSize } = useContext(ListContext)
+  const { gridConfig, setColumns, ...contextProps } = useContext(ListContext)
 
   const dropDownMenu = useMemo(() => {
     const _dropDownMenu = {}
@@ -53,14 +46,10 @@ export const useList = (): useListHookReturn => {
   }
 
   return {
+    ...contextProps,
     gridConfig,
-    setGridConfig,
     dropDownMenu,
     setGridColumns,
-    columns,
-    page,
-    pageSize,
-    setPage,
-    setPageSize
+    setColumns
   }
 }

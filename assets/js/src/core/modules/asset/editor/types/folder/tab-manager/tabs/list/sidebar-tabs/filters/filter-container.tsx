@@ -11,21 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import React from 'react'
+import { FilterContainerInner } from './filter-container-inner'
+import { FilterProvider } from './filter-provider'
+import { GridConfigProvider } from '../grid-config/grid-config-provider'
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    title: css`
-      &.pimcore-title.ant-typography {
-        font-size: 12px;
-        font-weight: 600;
-        color: ${token.colorPrimary};
-        margin: ${token.paddingSM}px 0;
-
-        &:first-child {
-          margin-top: 4px;
-        }
-      }
-    `
-  }
-}, { hashPriority: 'low' })
+export const FilterContainer = (): React.JSX.Element => {
+  return (
+    <FilterProvider>
+      <GridConfigProvider>
+        <FilterContainerInner />
+      </GridConfigProvider>
+    </FilterProvider>
+  )
+}

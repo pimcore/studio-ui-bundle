@@ -54,6 +54,14 @@ export const useStyle = createStyles(({ token, css }) => {
                   justify-content: center;
                   align-items: center;
 
+                  &:not(.active).entry--highlighted {
+                    .pimcore-icon {
+                      background: ${token.colorFillQuaternary};
+                      border-radius: 2px;
+                      outline: 8px solid ${token.colorFillQuaternary};
+                    } 
+                  }
+
                   .pimcore-icon {
                       flex-shrink: 0;
                       color: ${token.colorIconSidebar};
@@ -78,15 +86,16 @@ export const useStyle = createStyles(({ token, css }) => {
       
       .sidebar__content {
         position: relative;
-        padding: ${token.paddingXS}px ${token.paddingSM}px;
+        padding: ${token.paddingXS}px ${token.paddingSM}px 0 ${token.paddingSM}px;
+        overflow: auto;
         width: 250px;
 
         .tab {
           display: none;
           
-            &.active {
-                display: block;
-            }
+          &.active {
+              display: block;
+          }
         }
         
         &:not(.expanded) {

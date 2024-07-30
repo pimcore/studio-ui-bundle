@@ -13,20 +13,14 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css }) => {
   return {
-    toolbar: css`
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid ${token.colorBorder};
-      gap: 8px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 48px;
-      background-color: ${token.colorBgBase};
-      padding: ${token.paddingXS}px;
+    'select-cell': css`
+      padding: 4px;
+
+      .ant-select {
+        width: 100%;
+      }
     `
   }
 })

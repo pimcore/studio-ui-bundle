@@ -24,9 +24,10 @@ export interface StackListItemProps {
   renderLeftToolbar?: React.ReactNode
   children: React.ReactNode
   renderRightToolbar?: React.ReactNode
+  body?: React.ReactNode
 }
 
-export const StackListItem = ({ id, children, sortable = false, renderLeftToolbar, renderRightToolbar }: StackListItemProps): React.JSX.Element => {
+export const StackListItem = ({ id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar }: StackListItemProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id })
 
@@ -41,22 +42,30 @@ export const StackListItem = ({ id, children, sortable = false, renderLeftToolba
       ref={ setNodeRef }
       style={ style }
     >
-      {sortable && (
-        <IconButton
-          icon='draggable'
-          ref={ setActivatorNodeRef }
-          theme='secondary'
-          { ...listeners }
-        ></IconButton>
-      )}
+      <div className="stack-list-item__title">
+        {sortable && (
+          <IconButton
+            icon='draggable'
+            ref={ setActivatorNodeRef }
+            theme='secondary'
+            { ...listeners }
+          ></IconButton>
+        )}
 
-      {renderLeftToolbar !== undefined && <div className="stack-list-item__left-toolbar">{renderLeftToolbar}</div>}
+        {renderLeftToolbar !== undefined && <div className="stack-list-item__left-toolbar">{renderLeftToolbar}</div>}
 
-      <div className="stack-list-item__content">
-        {children}
+        <div className="stack-list-item__content">
+          {children}
+        </div>
+
+        {renderRightToolbar !== undefined && <div className="stack-list-item__right-toolbar">{renderRightToolbar}</div>}
       </div>
 
-      {renderRightToolbar !== undefined && <div className="stack-list-item__right-toolbar">{renderRightToolbar}</div>}
+      {body !== undefined && (
+        <div className='stack-list-item__body'>
+          {body}
+        </div>
+      )}
     </div>
   )
 }
