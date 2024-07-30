@@ -18,8 +18,8 @@ namespace Pimcore\Bundle\StudioUiBundle\Service;
 
 use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
-use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
+use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Bundle\StudioUiBundle\PimcoreStudioUiBundle;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
 
@@ -118,6 +118,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
         if ($bundle instanceof PimcoreBundleStudioUiOptionalEntrypointsInterface) {
             $entryPoints = array_merge($entryPoints, $bundle->getWebpackOptionalEntrypoints());
         }
+
         return array_unique($entryPoints);
     }
 
