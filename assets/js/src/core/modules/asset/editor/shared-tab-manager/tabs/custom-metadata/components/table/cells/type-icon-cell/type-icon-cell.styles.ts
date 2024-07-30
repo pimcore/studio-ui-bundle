@@ -11,10 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import { createStyles } from 'antd-style'
 
-export const CustomMetadataTabContainer = (): React.JSX.Element => {
-  return (
-    <h4>Custom Metadata TAB</h4>
-  )
-}
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    typeIconCell: css`
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `
+  }
+})
