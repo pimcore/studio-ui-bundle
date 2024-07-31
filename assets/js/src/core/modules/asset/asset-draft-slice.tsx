@@ -211,6 +211,18 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
+    updateAllCustomMetadataForAsset: (state, action: PayloadAction<{ assetId: number, customMetadata: CustomMetadata[] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.customMetadata = action.payload.customMetadata
+      }
+
+      asset.modified = true
+
+      state.entities[action.payload.assetId] = asset
+    },
+
     setCustomMetadataForAsset: (state, action: PayloadAction<{ assetId: number, customMetadata: CustomMetadata[] }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
@@ -232,6 +244,7 @@ export const {
   removePropertyFromAsset,
   setPropertiesForAsset,
   updatePropertyForAsset,
+  updateAllCustomMetadataForAsset,
   addChanges,
   addCustomMetadataToAsset,
   removeCustomMetadataFromAsset,

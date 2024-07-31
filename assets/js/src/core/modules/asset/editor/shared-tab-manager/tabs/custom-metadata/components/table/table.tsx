@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata, useGetAssetCustomMetadataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -30,27 +30,15 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
-  const { customMetadata, setCustomMetadata } = useAssetDraft(id!)
+  const { customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
   const { data, isLoading } = useGetAssetCustomMetadataByIdQuery({ id: id! })
-
-  const removeMetadata = (metadata: CustomMetadata): void => {
-    console.log('removeMetadata', metadata)
-  }
+  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
       setCustomMetadata(data?.items)
     }
   }, [data])
-
-  // const updateMetadata = (metadata: CustomMetadata): void => {
-  //  console.log('updateMetadata', metadata)
-  // }
-
-  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
-    console.log({ rowIndex, columnId, value, rowData })
-    // updateMetadata(value)
-  }
 
   const columnHelper = createColumnHelper<CustomMetadataWithActions>()
   const columns = [
@@ -62,7 +50,10 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       size: 40
     }),
     columnHelper.accessor('name', {
-      header: t('asset.asset-editor-tabs.custom-metadata.columns.name')
+      header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),
+      meta: {
+        editable: true
+      }
     }),
     columnHelper.accessor('language', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
@@ -89,7 +80,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
             <Button
               icon={ <Icon name="trash" /> }
               onClick={ () => {
-                removeMetadata(info.row.original)
+                removeCustomMetadata(info.row.original)
               } }
               type="link"
             />
@@ -100,12 +91,39 @@ export const CustomMetadataTable = (): React.JSX.Element => {
     })
   ]
 
+  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+    const updatedCustomMetadata = [...(customMetadata ?? [])]
+    const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
+    const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
+
+    updatedCustomMetadata[customMetadataIndex] = {
+      ...customMetadataToUpdate,
+      [getRealColumnName(columnId as string)]: value
+    }
+
+    updateAllCustomMetadata(updatedCustomMetadata)
+
+    function getRealColumnName (columnId: string): string {
+      switch (columnId) {
+        case 'custom-metadata-table--language-column':
+          return 'language'
+        case 'custom-metadata-table--data-column':
+          return 'data'
+        default:
+          return columnId
+      }
+    }
+
+    setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+  }
+
   return (
     <div className={ styles.table }>
       <Grid
         columns={ columns }
         data={ customMetadata! }
         isLoading={ isLoading }
+        modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
       />
     </div>

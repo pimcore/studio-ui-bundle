@@ -23,7 +23,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, properties, removeTrackedChanges } = useAssetDraft(id!)
+  const { asset, properties, removeTrackedChanges, customMetadata } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess }] = useUpdateAssetByIdMutation()
   const messageApi = useMessage()
@@ -78,6 +78,10 @@ export const Toolbar = (): React.JSX.Element => {
       })
 
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
+    }
+
+    if (asset.changes.customMetadata === true) {
+      update.metadata = customMetadata
     }
 
     const savePromise = saveAsset({

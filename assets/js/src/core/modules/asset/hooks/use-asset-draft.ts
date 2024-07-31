@@ -22,7 +22,10 @@ import {
   selectAssetById,
   setPropertiesForAsset,
   updatePropertyForAsset,
-  updateCustomMetadataForAsset, addCustomMetadataToAsset, removeCustomMetadataFromAsset, setCustomMetadataForAsset
+  addCustomMetadataToAsset,
+  removeCustomMetadataFromAsset,
+  setCustomMetadataForAsset,
+  updateAllCustomMetadataForAsset
 } from '../asset-draft-slice'
 import { useEffect } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
@@ -30,7 +33,7 @@ import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-ma
 
 interface UseAssetDraftReturnCustomMetadata {
   customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
-  updateCustomMetadata: (customMetadata: CustomMetadata) => void
+  updateAllCustomMetadata: (customMetadata: CustomMetadata[]) => void
   addCustomMetadata: (customMetadata: CustomMetadata) => void
   removeCustomMetadata: (customMetadata: CustomMetadata) => void
   setCustomMetadata: (customMetadata: CustomMetadata[]) => void
@@ -97,8 +100,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setPropertiesForAsset({ assetId: id, properties }))
   }
 
-  function updateCustomMetadata (customMetadata): void {
-    dispatch(updateCustomMetadataForAsset({ assetId: id, customMetadata }))
+  function updateAllCustomMetadata (customMetadata): void {
+    dispatch(updateAllCustomMetadataForAsset({ assetId: id, customMetadata }))
   }
 
   function addCustomMetadata (customMetadata): void {
@@ -127,7 +130,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     removeProperty,
     setProperties,
     customMetadata,
-    updateCustomMetadata,
+    updateAllCustomMetadata,
     addCustomMetadata,
     removeCustomMetadata,
     setCustomMetadata,

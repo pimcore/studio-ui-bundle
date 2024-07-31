@@ -106,11 +106,13 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 <Select
                   onSelect={ onTypeSelectChange }
                   options={ [
-                    { value: 'text', label: 'Text' },
-                    { value: 'document', label: 'Document' },
+                    { value: 'input', label: 'Input' },
+                    { value: 'textarea', label: 'Textarea' },
                     { value: 'asset', label: 'Asset' },
+                    { value: 'document', label: 'Document' },
                     { value: 'object', label: 'Object' },
-                    { value: 'bool', label: 'Bool' }
+                    { value: 'date', label: 'Date' },
+                    { value: 'checkbox', label: 'Checkbox' }
                   ] }
                   placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type') }
                 />
