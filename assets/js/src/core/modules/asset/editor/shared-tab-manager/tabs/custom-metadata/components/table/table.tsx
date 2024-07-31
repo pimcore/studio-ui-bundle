@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata, useGetAssetCustomMetadataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -20,6 +20,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -29,11 +30,18 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
+  const { customMetadata, setCustomMetadata } = useAssetDraft(id!)
   const { data, isLoading } = useGetAssetCustomMetadataByIdQuery({ id: id! })
 
   const removeMetadata = (metadata: CustomMetadata): void => {
     console.log('removeMetadata', metadata)
   }
+
+  useEffect(() => {
+    if (data !== undefined && Array.isArray(data.items)) {
+      setCustomMetadata(data?.items)
+    }
+  }, [data])
 
   // const updateMetadata = (metadata: CustomMetadata): void => {
   //  console.log('updateMetadata', metadata)
@@ -96,7 +104,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
     <div className={ styles.table }>
       <Grid
         columns={ columns }
-        data={ data?.items ?? [] }
+        data={ customMetadata! }
         isLoading={ isLoading }
         onUpdateCellData={ onUpdateCellData }
       />

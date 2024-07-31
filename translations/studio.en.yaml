@@ -188,6 +188,9 @@ asset.asset-editor-tabs.custom-metadata.columns.name: Name
 asset.asset-editor-tabs.custom-metadata.columns.language: Language
 asset.asset-editor-tabs.custom-metadata.columns.value: Value
 asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
 width: Width
 height: Height
 quality: Quality
