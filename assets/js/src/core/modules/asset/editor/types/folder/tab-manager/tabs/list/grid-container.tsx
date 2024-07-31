@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useList } from './hooks/use-list'
@@ -29,7 +29,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
   const columnHelper = createColumnHelper()
-  const { columns: GridColumns } = useList()
+  const { columns: GridColumns, setSelectedRows } = useList()
 
   const columns: Array<ColumnDef<unknown, never>> = []
 
@@ -72,11 +72,16 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     <Grid
       columns={ columns }
       data={ data }
-      // @todo implement inline editing
+      enableMultipleRowSelection
+      onSelectedRowsChange={ onSelectedRowsChange }
       onUpdateCellData={ () => {} }
       resizable
     />
   )
+
+  function onSelectedRowsChange (rows: RowSelectionState): void {
+    setSelectedRows(rows)
+  }
 }
 
 export { GridContainer }

@@ -15,6 +15,7 @@ import React, { createContext, useMemo, useState } from 'react'
 
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { defaultFilterOptions, type FilterOptions } from './sidebar-tabs/filters/filter-provider'
+import { type RowSelectionState } from '@tanstack/react-table'
 
 export interface IListContext {
   gridConfig: GridColumnConfiguration[] | undefined
@@ -27,6 +28,8 @@ export interface IListContext {
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
   setPageSize: React.Dispatch<React.SetStateAction<number>>
+  selectedRows: RowSelectionState
+  setSelectedRows: React.Dispatch<React.SetStateAction<RowSelectionState>>
 }
 
 export const ListContext = createContext<IListContext>({
@@ -39,7 +42,9 @@ export const ListContext = createContext<IListContext>({
   page: 1,
   setPage: () => {},
   pageSize: 20,
-  setPageSize: () => {}
+  setPageSize: () => {},
+  selectedRows: {},
+  setSelectedRows: () => {}
 })
 
 interface ListProviderProps {
@@ -52,6 +57,7 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
   return useMemo(() => (
     <ListContext.Provider value={ {
@@ -64,7 +70,9 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
       page,
       setPage,
       pageSize,
-      setPageSize
+      setPageSize,
+      selectedRows,
+      setSelectedRows
     } }
     >
       {children}
@@ -75,6 +83,7 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
     page,
     pageSize,
     filterOptions,
-    children
+    children,
+    selectedRows
   ])
 }

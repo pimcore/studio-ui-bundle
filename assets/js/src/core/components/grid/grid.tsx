@@ -19,6 +19,7 @@ import {
   flexRender,
   getCoreRowModel, getSortedRowModel,
   type RowData,
+  type RowSelectionState,
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
@@ -28,7 +29,7 @@ import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
 import { GridContextProvider } from './grid-context'
 import { useTranslation } from 'react-i18next'
-import { Skeleton } from 'antd'
+import { Checkbox, Skeleton } from 'antd'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -56,6 +57,10 @@ export interface GridProps {
   modifiedCells?: Array<{ rowIndex: number, columnId: string }>
   isLoading?: boolean
   initialState?: TableOptions<any>['initialState']
+  enableRowSelection?: boolean
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
 }
 
 export const Grid = (props: GridProps): React.JSX.Element => {
@@ -66,6 +71,8 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
   const tableElement = useRef<HTMLTableElement>(null)
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>(props.selectedRows ?? {})
+  const isRowSelectionEnabled = props.enableRowSelection === true || props.enableMultipleRowSelection === true
 
   const tableData = useMemo(
     () => (props.isLoading === true ? Array(5).fill({}) : props.data),
@@ -79,6 +86,16 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   useEffect(() => {
     setData(props.data)
   }, [props.data])
+
+  useEffect(() => {
+    setRowSelection(props.selectedRows ?? {})
+  }, [props.selectedRows])
+
+  useEffect(() => {
+    if (props.onSelectedRowsChange !== undefined) {
+      props.onSelectedRowsChange(rowSelection)
+    }
+  }, [rowSelection])
 
   const tableColumns = useMemo(
     () =>
@@ -102,8 +119,19 @@ export const Grid = (props: GridProps): React.JSX.Element => {
     setColumns(props.columns)
   }, [props.columns])
 
+  useEffect(() => {
+    updateRowSelectionColumn()
+  }, [props.enableRowSelection, props.enableMultipleRowSelection])
+
+  if (props.enableMultipleRowSelection === true || props.enableRowSelection === true) {
+    updateRowSelectionColumn()
+  }
+
   const tableProps: TableOptions<any> = {
     data,
+    state: {
+      rowSelection
+    },
     columns,
     initialState: props.initialState,
     defaultColumn: {
@@ -111,6 +139,9 @@ export const Grid = (props: GridProps): React.JSX.Element => {
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    enableRowSelection: isRowSelectionEnabled,
+    enableMultiRowSelection: props.enableMultipleRowSelection,
+    onRowSelectionChange: updateRowSelection,
     meta: {
       onUpdateCellData: props.onUpdateCellData
     }
@@ -121,15 +152,6 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   }
 
   const table = useReactTable(tableProps)
-
-  function getExtendedCellContext (context: CellContext<any, any>): ExtendedCellContext {
-    return {
-      ...context,
-      modified: props.modifiedCells?.some(({ rowIndex, columnId }) => {
-        return rowIndex === context.row.index && columnId === context.column.id
-      })
-    }
-  }
 
   return (
     <GridContextProvider value={ { table: tableElement } }>
@@ -223,4 +245,76 @@ export const Grid = (props: GridProps): React.JSX.Element => {
       </div>
     </GridContextProvider>
   )
+
+  function getExtendedCellContext (context: CellContext<any, any>): ExtendedCellContext {
+    return {
+      ...context,
+      modified: props.modifiedCells?.some(({ rowIndex, columnId }) => {
+        return rowIndex === context.row.index && columnId === context.column.id
+      })
+    }
+  }
+
+  function updateRowSelection (selectedRows: RowSelectionState): void {
+    setRowSelection(selectedRows)
+  }
+
+  function hasRowSelectionColumn (): boolean {
+    return columns.some(column => column.id === 'selection')
+  }
+
+  function addRowSelectionColumn (): void {
+    if (hasRowSelectionColumn()) {
+      return
+    }
+
+    const column: ColumnDef<any> = {
+      id: 'selection',
+      header: props.enableMultipleRowSelection === true
+        ? ({ table }): React.JSX.Element => (
+          <Checkbox
+            checked={ table.getIsAllRowsSelected() }
+            indeterminate={ table.getIsSomeRowsSelected() }
+            onChange={ table.getToggleAllRowsSelectedHandler() }
+          />
+          )
+        : '',
+
+      cell: ({ row }): React.JSX.Element => (
+        <Checkbox
+          checked={ row.getIsSelected() }
+          onChange={ row.getToggleSelectedHandler() }
+        />
+      ),
+
+      enableResizing: false,
+
+      size: 50
+    }
+
+    columns.unshift(
+      column
+    )
+  }
+
+  function removeRowSelectionColumn (): void {
+    if (!hasRowSelectionColumn()) {
+      return
+    }
+
+    const index = columns.findIndex(column => column.id === 'selection')
+
+    if (index !== -1) {
+      columns.splice(index, 1)
+      setColumns([...columns])
+    }
+  }
+
+  function updateRowSelectionColumn (): void {
+    if (props.enableRowSelection === true || props.enableMultipleRowSelection === true) {
+      addRowSelectionColumn()
+    } else {
+      removeRowSelectionColumn()
+    }
+  }
 }
