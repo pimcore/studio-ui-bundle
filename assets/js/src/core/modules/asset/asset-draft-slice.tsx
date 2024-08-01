@@ -220,6 +220,11 @@ export const slice = createSlice({
 
       asset.modified = true
 
+      asset.changes = {
+        ...asset.changes,
+        customMetadata: true
+      }
+
       state.entities[action.payload.assetId] = asset
     },
 

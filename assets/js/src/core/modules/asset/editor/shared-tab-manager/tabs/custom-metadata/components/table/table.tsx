@@ -30,7 +30,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
-  const { customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
+  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
   const { data, isLoading } = useGetAssetCustomMetadataByIdQuery({ id: id! })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
@@ -39,6 +39,12 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       setCustomMetadata(data?.items)
     }
   }, [data])
+
+  useEffect(() => {
+    if (modifiedCells.length > 0 && asset?.changes.customMetadata === undefined) {
+      setModifiedCells([])
+    }
+  }, [asset])
 
   const columnHelper = createColumnHelper<CustomMetadataWithActions>()
   const columns = [
