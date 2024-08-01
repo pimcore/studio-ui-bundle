@@ -17,73 +17,168 @@ import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-s
 import { defaultFilterOptions, type FilterOptions } from './sidebar-tabs/filters/filter-provider'
 import { type RowSelectionState } from '@tanstack/react-table'
 
-export interface IListContext {
+export interface IListGridConfigContext {
   gridConfig: GridColumnConfiguration[] | undefined
   setGridConfig: React.Dispatch<React.SetStateAction<GridColumnConfiguration[] | undefined>>
+}
+
+export const ListGridConfigContext = createContext<IListGridConfigContext>({
+  gridConfig: undefined,
+  setGridConfig: () => {}
+})
+
+export interface ListGridConfigProviderProps {
+  children: React.ReactNode
+}
+
+export const ListGridConfigProvider = ({ children }: ListGridConfigProviderProps): React.JSX.Element => {
+  const [gridConfig, setGridConfig] = useState<GridColumnConfiguration[] | undefined>(undefined)
+
+  return useMemo(() => (
+    <ListGridConfigContext.Provider value={ { gridConfig, setGridConfig } }>
+      {children}
+    </ListGridConfigContext.Provider>
+  ), [gridConfig, children])
+}
+
+export interface IListColumnsContext {
   columns: GridColumnConfiguration[]
   setColumns: React.Dispatch<React.SetStateAction<GridColumnConfiguration[]>>
+}
+
+export const ListColumnsContext = createContext<IListColumnsContext>({
+  columns: [],
+  setColumns: () => {}
+})
+
+export interface ListColumnsProviderProps {
+  children: React.ReactNode
+}
+
+export const ListColumnsProvider = ({ children }: ListColumnsProviderProps): React.JSX.Element => {
+  const [columns, setColumns] = useState<GridColumnConfiguration[]>([])
+
+  return useMemo(() => (
+    <ListColumnsContext.Provider value={ { columns, setColumns } }>
+      {children}
+    </ListColumnsContext.Provider>
+  ), [columns, children])
+}
+
+export interface IListFilterOptionsContext {
   filterOptions: FilterOptions
   setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
+}
+
+export const ListFilterOptionsContext = createContext<IListFilterOptionsContext>({
+  filterOptions: defaultFilterOptions,
+  setFilterOptions: () => {}
+})
+
+export interface ListFilterOptionsProviderProps {
+  children: React.ReactNode
+}
+
+export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProviderProps): React.JSX.Element => {
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
+
+  return useMemo(() => (
+    <ListFilterOptionsContext.Provider value={ { filterOptions, setFilterOptions } }>
+      {children}
+    </ListFilterOptionsContext.Provider>
+  ), [filterOptions, children])
+}
+
+export interface IListPageContext {
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
+}
+
+export const ListPageContext = createContext<IListPageContext>({
+  page: 1,
+  setPage: () => {}
+})
+
+export interface ListPageProviderProps {
+  children: React.ReactNode
+}
+
+export const ListPageProvider = ({ children }: ListPageProviderProps): React.JSX.Element => {
+  const [page, setPage] = useState(1)
+
+  return useMemo(() => (
+    <ListPageContext.Provider value={ { page, setPage } }>
+      {children}
+    </ListPageContext.Provider>
+  ), [page, children])
+}
+
+export interface IListPageSizeContext {
   pageSize: number
   setPageSize: React.Dispatch<React.SetStateAction<number>>
+}
+
+export const ListPageSizeContext = createContext<IListPageSizeContext>({
+  pageSize: 20,
+  setPageSize: () => {}
+})
+
+export interface ListPageSizeProviderProps {
+  children: React.ReactNode
+}
+
+export const ListPageSizeProvider = ({ children }: ListPageSizeProviderProps): React.JSX.Element => {
+  const [pageSize, setPageSize] = useState(20)
+
+  return useMemo(() => (
+    <ListPageSizeContext.Provider value={ { pageSize, setPageSize } }>
+      {children}
+    </ListPageSizeContext.Provider>
+  ), [pageSize, children])
+}
+
+export interface IListSelectedRowsContext {
   selectedRows: RowSelectionState
   setSelectedRows: React.Dispatch<React.SetStateAction<RowSelectionState>>
 }
 
-export const ListContext = createContext<IListContext>({
-  gridConfig: undefined,
-  setGridConfig: () => {},
-  columns: [],
-  setColumns: () => {},
-  filterOptions: defaultFilterOptions,
-  setFilterOptions: () => {},
-  page: 1,
-  setPage: () => {},
-  pageSize: 20,
-  setPageSize: () => {},
+export const ListSelectedRowsContext = createContext<IListSelectedRowsContext>({
   selectedRows: {},
   setSelectedRows: () => {}
 })
 
-interface ListProviderProps {
+export interface ListSelectedRowsProviderProps {
+  children: React.ReactNode
+}
+
+export const ListSelectedRowsProvider = ({ children }: ListSelectedRowsProviderProps): React.JSX.Element => {
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+
+  return useMemo(() => (
+    <ListSelectedRowsContext.Provider value={ { selectedRows, setSelectedRows } }>
+      {children}
+    </ListSelectedRowsContext.Provider>
+  ), [selectedRows, children])
+}
+
+export interface ListProviderProps {
   children: React.ReactNode
 }
 
 export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element => {
-  const [gridConfig, setGridConfig] = useState<GridColumnConfiguration[] | undefined>(undefined)
-  const [columns, setColumns] = useState<GridColumnConfiguration[]>([])
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
-  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
-
-  return useMemo(() => (
-    <ListContext.Provider value={ {
-      gridConfig,
-      setGridConfig,
-      columns,
-      setColumns,
-      filterOptions,
-      setFilterOptions,
-      page,
-      setPage,
-      pageSize,
-      setPageSize,
-      selectedRows,
-      setSelectedRows
-    } }
-    >
-      {children}
-    </ListContext.Provider>
-  ), [
-    gridConfig,
-    columns,
-    page,
-    pageSize,
-    filterOptions,
-    children,
-    selectedRows
-  ])
+  return (
+    <ListGridConfigProvider>
+      <ListColumnsProvider>
+        <ListFilterOptionsProvider>
+          <ListPageProvider>
+            <ListPageSizeProvider>
+              <ListSelectedRowsProvider>
+                {children}
+              </ListSelectedRowsProvider>
+            </ListPageSizeProvider>
+          </ListPageProvider>
+        </ListFilterOptionsProvider>
+      </ListColumnsProvider>
+    </ListGridConfigProvider>
+  )
 }

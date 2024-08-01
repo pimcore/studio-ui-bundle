@@ -63,41 +63,24 @@ export interface GridProps {
   onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
 }
 
-export const Grid = (props: GridProps): React.JSX.Element => {
+export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const [columns, setColumns] = useState(props.columns)
-  const [data, setData] = useState(props.data)
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
   const tableElement = useRef<HTMLTableElement>(null)
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>(props.selectedRows ?? {})
-  const isRowSelectionEnabled = props.enableRowSelection === true || props.enableMultipleRowSelection === true
+  const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
 
-  const tableData = useMemo(
+  const data = useMemo(
     () => (props.isLoading === true ? Array(5).fill({}) : props.data),
     [props.isLoading, props.data]
   )
 
-  useEffect(() => {
-    setData(tableData)
-  }, [tableData])
+  const rowSelection = useMemo(() => {
+    return selectedRows
+  }, [selectedRows])
 
-  useEffect(() => {
-    setData(props.data)
-  }, [props.data])
-
-  useEffect(() => {
-    setRowSelection(props.selectedRows ?? {})
-  }, [props.selectedRows])
-
-  useEffect(() => {
-    if (props.onSelectedRowsChange !== undefined) {
-      props.onSelectedRowsChange(rowSelection)
-    }
-  }, [rowSelection])
-
-  const tableColumns = useMemo(
+  const columns = useMemo(
     () =>
       props.isLoading === true
         ? props.columns.map((column) => ({
@@ -109,21 +92,13 @@ export const Grid = (props: GridProps): React.JSX.Element => {
         }))
         : props.columns,
     [props.isLoading, props.columns]
-  )
-
-  useEffect(() => {
-    setColumns(tableColumns as GridProps['columns'])
-  }, [tableColumns])
-
-  useEffect(() => {
-    setColumns(props.columns)
-  }, [props.columns])
+  ) as Array<ColumnDef<any>>
 
   useEffect(() => {
     updateRowSelectionColumn()
-  }, [props.enableRowSelection, props.enableMultipleRowSelection])
+  }, [isRowSelectionEnabled])
 
-  if (props.enableMultipleRowSelection === true || props.enableRowSelection === true) {
+  if (isRowSelectionEnabled) {
     updateRowSelectionColumn()
   }
 
@@ -140,7 +115,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     enableRowSelection: isRowSelectionEnabled,
-    enableMultiRowSelection: props.enableMultipleRowSelection,
+    enableMultiRowSelection: enableMultipleRowSelection,
     onRowSelectionChange: updateRowSelection,
     meta: {
       onUpdateCellData: props.onUpdateCellData
@@ -154,7 +129,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   const table = useReactTable(tableProps)
 
   return (
-    <GridContextProvider value={ { table: tableElement } }>
+    <GridContextProvider table={ tableElement }>
       <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
         <div className="ant-table ant-table-small">
           <div className='ant-table-container'>
@@ -198,7 +173,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                 </thead>
                 <tbody className="ant-table-tbody">
                   {table.getRowModel().rows.length === 0 && (
-                    <tr className='ant-table-row'>
+                    <tr className={ 'ant-table-row' }>
                       <td
                         className='ant-table-cell ant-table-cell__no-data'
                         colSpan={ table.getAllColumns().length }
@@ -209,7 +184,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
                   )}
                   {table.getRowModel().rows.map(row => (
                     <tr
-                      className='ant-table-row'
+                      className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
                       key={ row.id }
                     >
                       {row.getVisibleCells().map(cell => (
@@ -256,7 +231,7 @@ export const Grid = (props: GridProps): React.JSX.Element => {
   }
 
   function updateRowSelection (selectedRows: RowSelectionState): void {
-    setRowSelection(selectedRows)
+    props.onSelectedRowsChange?.(selectedRows)
   }
 
   function hasRowSelectionColumn (): boolean {
@@ -270,21 +245,25 @@ export const Grid = (props: GridProps): React.JSX.Element => {
 
     const column: ColumnDef<any> = {
       id: 'selection',
-      header: props.enableMultipleRowSelection === true
+      header: enableMultipleRowSelection
         ? ({ table }): React.JSX.Element => (
-          <Checkbox
-            checked={ table.getIsAllRowsSelected() }
-            indeterminate={ table.getIsSomeRowsSelected() }
-            onChange={ table.getToggleAllRowsSelectedHandler() }
-          />
+          <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center' } }>
+            <Checkbox
+              checked={ table.getIsAllRowsSelected() }
+              indeterminate={ table.getIsSomeRowsSelected() }
+              onChange={ table.getToggleAllRowsSelectedHandler() }
+            />
+          </div>
           )
         : '',
 
       cell: ({ row }): React.JSX.Element => (
-        <Checkbox
-          checked={ row.getIsSelected() }
-          onChange={ row.getToggleSelectedHandler() }
-        />
+        <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center' } }>
+          <Checkbox
+            checked={ row.getIsSelected() }
+            onChange={ row.getToggleSelectedHandler() }
+          />
+        </div>
       ),
 
       enableResizing: false,
@@ -306,12 +285,11 @@ export const Grid = (props: GridProps): React.JSX.Element => {
 
     if (index !== -1) {
       columns.splice(index, 1)
-      setColumns([...columns])
     }
   }
 
   function updateRowSelectionColumn (): void {
-    if (props.enableRowSelection === true || props.enableMultipleRowSelection === true) {
+    if (isRowSelectionEnabled) {
       addRowSelectionColumn()
     } else {
       removeRowSelectionColumn()

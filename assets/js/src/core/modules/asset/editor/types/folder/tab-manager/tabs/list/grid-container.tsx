@@ -16,7 +16,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useList } from './hooks/use-list'
+import { useListColumns, useListSelectedRows } from './hooks/use-list'
 
 interface GridContainerProps {
   assets: GetAssetGridApiResponse | undefined
@@ -29,7 +29,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
   const columnHelper = createColumnHelper()
-  const { columns: GridColumns, setSelectedRows } = useList()
+  const { columns: GridColumns } = useListColumns()
+  const { selectedRows, setSelectedRows } = useListSelectedRows()
 
   const columns: Array<ColumnDef<unknown, never>> = []
 
@@ -76,6 +77,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       onSelectedRowsChange={ onSelectedRowsChange }
       onUpdateCellData={ () => {} }
       resizable
+      selectedRows={ selectedRows }
     />
   )
 

@@ -18,13 +18,17 @@ import { GridToolbarContainer } from './grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar-container'
-import { useList } from './hooks/use-list'
+import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const dispatch = useAppDispatch()
-  const { page, filterOptions, pageSize, setPage, setPageSize, columns, gridConfig, setGridConfig } = useList()
+  const { page, setPage } = useListPage()
+  const { pageSize, setPageSize } = useListPageSize()
+  const { filterOptions } = useListFilterOptions()
+  const { columns } = useListColumns()
+  const { gridConfig, setGridConfig } = useListGridConfig()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
   const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
