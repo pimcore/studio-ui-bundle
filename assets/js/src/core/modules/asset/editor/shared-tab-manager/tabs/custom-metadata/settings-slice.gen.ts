@@ -1,52 +1,42 @@
 import { api } from "../../../../../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Settings"] as const;
+export const addTagTypes = ["Assets"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getAssetCustomSettingsById: build.query<
-                GetAssetCustomSettingsByIdApiResponse,
-                GetAssetCustomSettingsByIdApiArg
+            getAssetCustomMetadataById: build.query<
+                GetAssetCustomMetadataByIdApiResponse,
+                GetAssetCustomMetadataByIdApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Assets"],
-            }),
-            getSystemSettings: build.query<GetSystemSettingsApiResponse, GetSystemSettingsApiArg>({
-                query: () => ({ url: `/studio/api/settings` }),
-                providesTags: ["Settings"],
             }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
-    items?: CustomSettings;
+export type GetAssetCustomMetadataByIdApiResponse = /** status 200 Array of custom metadata */ {
+    items?: CustomMetadata[];
 };
-export type GetAssetCustomSettingsByIdApiArg = {
+export type GetAssetCustomMetadataByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type GetSystemSettingsApiResponse = /** status 200 System settings */ {
-    [key: string]: any;
-};
-export type GetSystemSettingsApiArg = void;
-export type FixedCustomSettings = {
-    /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetaData: any[];
-    /** flag to indicate if the embedded meta data has been extracted from the asset */
-    embeddedMetaDataExtracted: boolean;
-};
-export type CustomSettings = {
+export type CustomMetadata = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    /** fixed custom settings */
-    fixedCustomSettings?: FixedCustomSettings | null;
-    /** dynamic custom settings - can be any key-value pair */
-    dynamicCustomSettings?: any[];
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: string | null;
 };
 export type Error = {
     /** Message */
@@ -58,4 +48,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetAssetCustomSettingsByIdQuery, useGetSystemSettingsQuery } = injectedRtkApi;
+export const { useGetAssetCustomMetadataByIdQuery } = injectedRtkApi;

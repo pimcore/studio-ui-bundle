@@ -32,6 +32,7 @@ export const useStyle = createStyles(({ token, css }) => {
         
       .ant-select {
         .ant-select-selector {
+          min-width: 100px;
           border: 1px solid ${token.Button.defaultBorderColor};
           
           .ant-select-selection-placeholder {

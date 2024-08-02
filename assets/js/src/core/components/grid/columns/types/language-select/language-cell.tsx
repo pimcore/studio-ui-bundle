@@ -14,16 +14,10 @@
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
-import {
-  useGetSystemSettingsQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { data, isLoading } = useGetSystemSettingsQuery()
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  const settings = useSettings()
 
   const modifiedProps = {
     ...props,
@@ -31,7 +25,7 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
       ...props.row,
       original: {
         ...props.row.original,
-        config: data?.requiredLanguages.join(',')
+        config: settings.requiredLanguages.join(',')
       }
     }
   }
