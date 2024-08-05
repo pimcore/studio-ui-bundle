@@ -57,6 +57,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/note/i)
+    },
+    '../../js/src/core/modules/asset/editor/types/asset-thumbnails-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/thumbnails/i)
     }
   },
   exportName: 'api',

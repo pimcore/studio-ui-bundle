@@ -33,19 +33,23 @@ interface InternalToolbarElement extends PinnableToolbarElement {
 interface ToolbarProps {
   renderSaveButton: ReactNode
   pinnableToolbarElements?: PinnableToolbarElement[]
+  showWorkflow?: boolean
+  className?: string
 }
 
 export const Toolbar = ({
   renderSaveButton,
-  pinnableToolbarElements
+  pinnableToolbarElements,
+  showWorkflow = true,
+  className
 }: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
-    <div className={ styles.container }>
+    <div className={ [styles.container, className].join(' ') }>
       <LeftContainer toolbarElements={ pinnableToolbarElements } />
       <div className='container__inline-container'>
-        <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button>
+        { showWorkflow && <Button className='inline-container__btn-workflow'>{i18n.t('toolbar.workflow')}</Button> }
         { renderSaveButton }
       </div>
     </div>
