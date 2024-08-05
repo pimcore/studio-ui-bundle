@@ -16,7 +16,7 @@ import { useStyles } from './resizer.styles'
 import { type Header, type Table } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 
-interface ResizerProps {
+export interface ResizerProps {
   isResizing: boolean
   table: Table<any>
   header?: Header<any, any>
@@ -143,4 +143,6 @@ const Resizer = (props: ResizerProps): React.JSX.Element => {
   )
 }
 
-export { Resizer }
+const CachedResizer = React.memo(Resizer)
+
+export { CachedResizer as Resizer }

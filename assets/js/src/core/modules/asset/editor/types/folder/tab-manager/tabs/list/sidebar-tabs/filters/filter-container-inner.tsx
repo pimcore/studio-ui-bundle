@@ -19,11 +19,11 @@ import Search from 'antd/es/input/Search'
 import React from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
-import { useList } from '../../hooks/use-list'
+import { useListFilterOptions } from '../../hooks/use-list'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
-  const { setFilterOptions } = useList()
+  const { setFilterOptions } = useListFilterOptions()
 
   return (
     <>

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
@@ -21,7 +21,7 @@ export const AssetActions = ({ row }: DefaultCellProps): React.JSX.Element => {
   const data = row.original
   const { openAsset } = useAsset()
 
-  return (
+  return useMemo(() => (
     <div className={ 'default-cell__content' }>
       <Flex
         justify='center'
@@ -33,5 +33,5 @@ export const AssetActions = ({ row }: DefaultCellProps): React.JSX.Element => {
         />
       </Flex>
     </div>
-  )
+  ), [data.id])
 }
