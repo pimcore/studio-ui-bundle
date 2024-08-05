@@ -13,16 +13,13 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
-    previewTab: css`
-      display: flex;
-      flex-direction: row;
-      flex: auto;
-    `,
-    relativeContainer: css`
-      position: relative;
+    typeIconCell: css`
       width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     `
   }
 })

@@ -14,7 +14,7 @@
 import React from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
-import { Tag } from 'antd'
+import { Empty, Tag } from 'antd'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
@@ -50,10 +50,15 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
   }))
 
   return (
-    <StackList
-      items={ stackListItems }
-      onItemsChange={ onItemsChange }
-    />
+    <>
+      { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
+      { stackListItems.length > 0 && (
+      <StackList
+        items={ stackListItems }
+        onItemsChange={ onItemsChange }
+      />
+      ) }
+    </>
   )
 
   function getLanguageSelection (column: GridColumnConfiguration): React.JSX.Element[] {

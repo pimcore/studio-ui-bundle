@@ -19,9 +19,10 @@ namespace Pimcore\Bundle\StudioUiBundle;
 
 use function dirname;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
+use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
-class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface
+class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface, PimcoreBundleStudioUiOptionalEntrypointsInterface
 {
     public function getPath(): string
     {
@@ -36,5 +37,10 @@ class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBund
     public function getWebpackEntryPoints(): array
     {
         return ['vendor', 'core-dll', 'main'];
+    }
+
+    public function getWebpackOptionalEntrypoints(): array
+    {
+        return ['vendor', 'core-dll'];
     }
 }

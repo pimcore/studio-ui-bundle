@@ -35,6 +35,7 @@ declare module '@tanstack/react-table' {
   export interface ColumnMeta<TData extends RowData, TValue> {
     editable?: boolean
     type?: string
+    config?: any
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

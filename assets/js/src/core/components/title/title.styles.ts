@@ -18,6 +18,7 @@ export const useStyle = createStyles(({ token, css }) => {
     title: css`
       &.pimcore-title.ant-typography {
         font-size: 12px;
+        font-weight: 600;
         color: ${token.colorPrimary};
         margin: ${token.paddingSM}px 0;
 

@@ -12,9 +12,16 @@
 */
 
 import React from 'react'
+import { FilterContainerInner } from './filter-container-inner'
+import { FilterProvider } from './filter-provider'
+import { GridConfigProvider } from '../grid-config/grid-config-provider'
 
-export const CustomMetadataTabContainer = (): React.JSX.Element => {
+export const FilterContainer = (): React.JSX.Element => {
   return (
-    <h4>Custom Metadata TAB</h4>
+    <FilterProvider>
+      <GridConfigProvider>
+        <FilterContainerInner />
+      </GridConfigProvider>
+    </FilterProvider>
   )
 }

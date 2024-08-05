@@ -11,68 +11,61 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { type DefaultCellProps } from '../../default-cell'
+import { Select } from 'antd'
+import { type RefSelectProps, type DefaultOptionType } from 'antd/es/select'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { type RefSelectProps, Select } from 'antd'
+import { useStyles } from './select-cell.styles'
+
+interface SelectCellConfig {
+  options: string[]
+}
 
 export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const { column, getValue } = props
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
-  const [open, setOpen] = useState<boolean>(false)
-  const selectRef = useRef<RefSelectProps>(null)
+  const config = column.columnDef.meta?.config as SelectCellConfig | undefined
+  const element = useRef<RefSelectProps>(null)
 
   useEffect(() => {
     if (isInEditMode) {
-      setOpen(true)
-      selectRef.current?.focus()
+      element.current?.focus()
     }
   }, [isInEditMode])
 
-  function saveValue (value: string): void {
-    fireOnUpdateCellDataEvent(value)
-    disableEditMode()
+  if (config === undefined) {
+    return getValue()
   }
 
-  function getCellContent (): React.JSX.Element {
-    if (!isInEditMode) {
-      return (
-        <>
-          { props.getValue() }
-        </>
-      )
-    }
-
-    function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      saveValue(e.target.value)
-    }
-
-    function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
-      if (e.key === 'Escape' || e.key === 'Enter') {
-        disableEditMode()
-      }
-    }
-
-    const selectOptions = props.row.original.config ?? ''
-    const formattedSelectOptions = selectOptions.split(',').map((value: string) => {
-      return { value, label: value }
-    })
-
+  if (!isInEditMode) {
     return (
-      <Select
-        defaultValue={ props.getValue() }
-        onBlur={ onBlur }
-        onChange={ saveValue }
-        onKeyDown={ onKeyDown }
-        open={ open }
-        options={ formattedSelectOptions }
-        ref={ selectRef }
-      />
+      <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
+        { getValue() }
+      </div>
     )
   }
 
+  const options: DefaultOptionType[] = config.options.map((value) => ({
+    label: value,
+    value
+  }))
+
   return (
-    <div>
-      {getCellContent()}
+    <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
+      <Select
+        onBlur={ disableEditMode }
+        onChange={ onChange }
+        options={ options }
+        ref={ element }
+        value={ getValue() }
+      />
     </div>
   )
+
+  function onChange (value: string): void {
+    fireOnUpdateCellDataEvent(value)
+    disableEditMode()
+  }
 }

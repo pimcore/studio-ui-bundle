@@ -16,13 +16,20 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     stackListItem: css`
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      padding: 4px;
       border-radius: 4px;
       border: 1px solid ${token.colorBorder};
       background-color: #fff;
+
+      .stack-list-item__title {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        padding: 4px;
+      }
+
+      .stack-list-item__body {
+        padding: 0 4px 4px 4px;
+      }
 
       .stack-list-item__content {
         flex: 1;

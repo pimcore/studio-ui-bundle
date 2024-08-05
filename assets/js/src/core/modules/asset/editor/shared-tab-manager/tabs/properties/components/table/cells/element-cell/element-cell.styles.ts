@@ -16,6 +16,9 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ css }) => {
   return {
     link: css`
+        display: flex;
+        align-items: center;
+        
       .ant-tag {
         overflow: hidden;
         text-overflow: ellipsis;

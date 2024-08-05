@@ -728,7 +728,7 @@ export type GridColumnConfiguration = {
     /** Frontend Type */
     frontendType?: string;
     /** Config */
-    config: string[];
+    config: object;
 };
 export type GridColumnData = {
     /** AdditionalAttributes */
@@ -749,6 +749,8 @@ export type GridFilter = {
     pageSize: number;
     /** Include Descendant Items */
     includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
 };
 export type PatchCustomMetadata = {
     /** Name */

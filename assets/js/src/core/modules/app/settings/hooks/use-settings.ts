@@ -11,15 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import { type GetSystemSettingsApiResponse } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { useSelector } from 'react-redux'
+import { getSettings } from '@Pimcore/modules/app/settings/settings-slice'
+import { useMemo } from 'react'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    booleanCell: css`
-        .ant-checkbox-wrapper {
-            display: flex;
-            justify-content: center;
-        }
-    `
-  }
-})
+export const useSettings = (): GetSystemSettingsApiResponse => {
+  const settings = useSelector(getSettings)
+
+  return useMemo(() => (settings), [settings])
+}

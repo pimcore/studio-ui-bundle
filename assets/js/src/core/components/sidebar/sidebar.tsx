@@ -19,9 +19,10 @@ interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'default'
+  highlights?: Array<ISidebarEntry['key']>
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default' }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [] }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
@@ -61,7 +62,11 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default' }: SidebarPr
                 <div
                   aria-controls={ entry.key }
                   aria-selected={ entry.key === activeTab }
-                  className={ 'entry ' + (entry.key === activeTab ? 'active' : '') }
+                  className={ [
+                    'entry',
+                    entry.key === activeTab ? 'active' : '',
+                    highlights.includes(entry.key) ? 'entry--highlighted' : ''
+                  ].join(' ') }
                   key={ entry.key }
                   onClick={ () => {
                     handleSidebarClick(entry.key)

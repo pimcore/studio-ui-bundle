@@ -94,6 +94,9 @@ import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
 import flagOutlined from '@Pimcore/assets/icons/flag-outlined.inline.svg'
 import draggable from '@Pimcore/assets/icons/draggable.inline.svg'
 import settingsOutlined from '@Pimcore/assets/icons/settings-outlined.inline.svg'
+import filterOutlined from '@Pimcore/assets/icons/filter-outlined.inline.svg'
+import textInput from '@Pimcore/assets/icons/text-input.inline.svg'
+import calendarDate from '@Pimcore/assets/icons/calendar-date.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -418,6 +421,21 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'settings-outlined',
       component: settingsOutlined
+    })
+
+    iconLibrary.register({
+      name: 'filter-outlined',
+      component: filterOutlined
+    })
+
+    iconLibrary.register({
+      name: 'text-input',
+      component: textInput
+    })
+
+    iconLibrary.register({
+      name: 'calendar-date',
+      component: calendarDate
     })
   }
 })
