@@ -23,13 +23,13 @@ import {
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
-import { GridContextProvider } from './grid-context'
 import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
+import { GridRow } from './grid-cell/grid-row'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,7 +72,9 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
 
   const data = useMemo(
-    () => (props.isLoading === true ? Array(5).fill({}) : props.data),
+    () => {
+      return props.isLoading === true ? Array(5).fill({}) : props.data
+    },
     [props.isLoading, props.data]
   )
 
@@ -94,15 +96,11 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
     [props.isLoading, props.columns]
   ) as Array<ColumnDef<any>>
 
-  useEffect(() => {
+  useMemo(() => {
     updateRowSelectionColumn()
-  }, [isRowSelectionEnabled])
+  }, [columns, isRowSelectionEnabled, selectedRows])
 
-  if (isRowSelectionEnabled) {
-    updateRowSelectionColumn()
-  }
-
-  const tableProps: TableOptions<any> = {
+  const tableProps: TableOptions<any> = useMemo(() => ({
     data,
     state: {
       rowSelection
@@ -120,7 +118,7 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
     meta: {
       onUpdateCellData: props.onUpdateCellData
     }
-  }
+  }), [data, columns, rowSelection, props.initialState])
 
   if (props.resizable === true) {
     tableProps.columnResizeMode = columnResizeMode
@@ -129,105 +127,77 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
   const table = useReactTable(tableProps)
 
   return (
-    <GridContextProvider table={ tableElement }>
-      <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
-        <div className="ant-table ant-table-small">
-          <div className='ant-table-container'>
-            <div className='ant-table-content'>
-              <table
-                ref={ tableElement }
-                style={ { width: table.getCenterTotalSize() } }
-              >
-                <thead className='ant-table-thead'>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={ headerGroup.id }>
-                      {headerGroup.headers.map((header, index) => (
-                        <th
-                          className='ant-table-cell'
-                          key={ header.id }
-                          style={
+    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
+      <div className="ant-table ant-table-small">
+        <div className='ant-table-container'>
+          <div className='ant-table-content'>
+            <table
+              ref={ tableElement }
+              style={ { width: table.getCenterTotalSize() } }
+            >
+              <thead className='ant-table-thead'>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={ headerGroup.id }>
+                    {headerGroup.headers.map((header, index) => (
+                      <th
+                        className='ant-table-cell'
+                        key={ header.id }
+                        style={
                             {
                               width: header.column.getSize(),
                               maxWidth: header.column.getSize()
                             }
                           }
-                        >
-                          <div className='grid__cell-content'>
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </div>
-
-                          {props.resizable === true && header.column.getCanResize() && (
-                            <Resizer
-                              header={ header }
-                              isResizing={ header.column.getIsResizing() }
-                              table={ table }
-                            />
-                          )}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody className="ant-table-tbody">
-                  {table.getRowModel().rows.length === 0 && (
-                    <tr className={ 'ant-table-row' }>
-                      <td
-                        className='ant-table-cell ant-table-cell__no-data'
-                        colSpan={ table.getAllColumns().length }
                       >
-                        {t('no-data-available-yet')}
-                      </td>
-                    </tr>
-                  )}
-                  {table.getRowModel().rows.map(row => (
-                    <tr
-                      className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
-                      key={ row.id }
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <td
-                          className='ant-table-cell'
-                          key={ cell.id }
-                          style={
-                            {
-                              width: cell.column.getSize(),
-                              maxWidth: cell.column.getSize()
-                            }
-                          }
-                        >
-                          <div className='grid__cell-content'>
-                            {flexRender(cell.column.columnDef.cell, getExtendedCellContext(cell.getContext()))}
-                          </div>
-
-                          {props.resizable === true && (
-                            <Resizer
-                              isResizing={ cell.column.getIsResizing() }
-                              table={ table }
-                            />
+                        <div className='grid__cell-content'>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
                           )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        </div>
+
+                        {props.resizable === true && header.column.getCanResize() && (
+                        <Resizer
+                          header={ header }
+                          isResizing={ header.column.getIsResizing() }
+                          table={ table }
+                        />
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="ant-table-tbody">
+                {table.getRowModel().rows.length === 0 && (
+                <tr className={ 'ant-table-row' }>
+                  <td
+                    className='ant-table-cell ant-table-cell__no-data'
+                    colSpan={ table.getAllColumns().length }
+                  >
+                    {t('no-data-available-yet')}
+                  </td>
+                </tr>
+                )}
+                {table.getRowModel().rows.map(row => (
+                  <GridRow
+                    isSelected={ row.getIsSelected() }
+                    key={ row.id }
+                    modifiedCells={ getModifiedRow(row.index) }
+                    row={ row }
+                    tableElement={ tableElement }
+                  />
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </GridContextProvider>
+    </div>
   )
 
-  function getExtendedCellContext (context: CellContext<any, any>): ExtendedCellContext {
-    return {
-      ...context,
-      modified: props.modifiedCells?.some(({ rowIndex, columnId }) => {
-        return rowIndex === context.row.index && columnId === context.column.id
-      })
-    }
+  function getModifiedRow (rowIndex: number): Array<{ rowIndex: number, columnId: string }> {
+    return props.modifiedCells?.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
   }
 
   function updateRowSelection (selectedRows: RowSelectionState): void {

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ComponentType, memo, useEffect, useMemo, useRef, useState } from 'react'
+import React, { type ComponentType, useEffect, useMemo, useRef, useState } from 'react'
 import { TextCell } from './types/text/text-cell'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
@@ -28,11 +28,11 @@ export interface DefaultCellProps extends ExtendedCellContext {
   fallbackType?: ComponentType<DefaultCellProps>
 }
 
-const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): React.JSX.Element => {
+export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { column, table, row } = props
   const [isEditable] = useState(column.columnDef.meta?.editable ?? false)
-  const cellType = column.columnDef.meta?.type ?? 'text'
+  const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
   const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
@@ -47,7 +47,9 @@ const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): R
     }
   }, [isInEditMode])
 
-  const Component = typeRegistry.getComponentByType(cellType) ?? fallbackType
+  const editableCellContextValue = useMemo(() => ({ isInEditMode, setIsInEditMode }), [isInEditMode])
+
+  const Component = useMemo(() => typeRegistry.getComponentByType(cellType) ?? fallbackType, [cellType])
 
   function getCssClasses (): string[] {
     const classes: string[] = []
@@ -111,26 +113,24 @@ const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): R
     }
   }
 
-  return useMemo(() => (
-    <div
-      className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
-      data-grid-column={ column.id }
-      data-grid-row={ row.id }
-      onCopy={ onCopy }
-      onDoubleClick={ onDoubleClick }
-      onKeyDown={ onKeyDown }
-      onPaste={ onPaste }
-      ref={ element }
-      role='button'
-      tabIndex={ 0 }
-    >
-      <EditableCellContextProvider value={ { isInEditMode, setIsInEditMode } }>
-        <Component { ...props } />
-      </EditableCellContextProvider>
-    </div>
-  ), [isEditable, isInEditMode, props])
+  return useMemo(() => {
+    return (
+      <div
+        className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
+        data-grid-column={ column.id }
+        data-grid-row={ row.id }
+        onCopy={ onCopy }
+        onDoubleClick={ onDoubleClick }
+        onKeyDown={ onKeyDown }
+        onPaste={ onPaste }
+        ref={ element }
+        role='button'
+        tabIndex={ 0 }
+      >
+        <EditableCellContextProvider value={ editableCellContextValue }>
+          <Component { ...props } />
+        </EditableCellContextProvider>
+      </div>
+    )
+  }, [isInEditMode, props.getValue(), row, row.getIsSelected()])
 }
-
-const memorizedDefaultCell = memo(DefaultCell)
-
-export { memorizedDefaultCell as DefaultCell }

@@ -18,7 +18,7 @@ import { GridToolbarContainer } from './grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar-container'
-import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize } from './hooks/use-list'
+import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 
 export const ListContainerInner = (): React.JSX.Element => {
@@ -26,6 +26,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { page, setPage } = useListPage()
   const { pageSize, setPageSize } = useListPageSize()
+  const { setSelectedRows } = useListSelectedRows()
   const { filterOptions } = useListFilterOptions()
   const { columns } = useListColumns()
   const { gridConfig, setGridConfig } = useListGridConfig()
@@ -83,6 +84,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   }, [apiData])
 
   function onPagerChange (page: number, pageSize: number): void {
+    setSelectedRows({})
     setPage(page)
     setPageSize(pageSize)
   }

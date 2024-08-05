@@ -143,4 +143,6 @@ const Resizer = (props: ResizerProps): React.JSX.Element => {
   )
 }
 
-export { Resizer }
+const CachedResizer = React.memo(Resizer)
+
+export { CachedResizer as Resizer }
