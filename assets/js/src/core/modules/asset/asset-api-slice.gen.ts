@@ -314,7 +314,7 @@ export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Video
     | Archive
     | Text
-    | Folder
+    | AssetFolder
     | Unknown;
 export type GetAssetByIdApiArg = {
     /** Id of the asset */
@@ -327,7 +327,7 @@ export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
     | Video
     | Archive
     | Text
-    | Folder
+    | AssetFolder
     | Unknown;
 export type UpdateAssetByIdApiArg = {
     /** Id of the asset */
@@ -410,7 +410,7 @@ export type PatchAssetByIdApiArg = {
 };
 export type GetAssetTreeApiResponse = /** status 200 Paginated assets with total count as header param */ {
     totalItems: number;
-    items: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
+    items: (Image | Document | Audio | Video | Archive | Text | AssetFolder | Unknown)[];
 };
 export type GetAssetTreeApiArg = {
     /** Page number */
@@ -560,6 +560,38 @@ export type GridColumnRequest = {
     /** Config */
     config: string[];
 };
+export type Element = {
+    /** ID */
+    id: number;
+    /** ID of parent */
+    parentId: number;
+    /** path */
+    path: string;
+    /** ID of owner */
+    userOwner: number;
+    /** User that modified the element */
+    userModification: number;
+    /** Locked */
+    locked: string | null;
+    /** Is locked */
+    isLocked: boolean;
+    /** Creation date */
+    creationDate: number | null;
+    /** Modification date */
+    modificationDate: number | null;
+};
+export type CustomTreeAttributes = {
+    /** Custom Icon */
+    icon: string | null;
+    /** Custom Tooltip */
+    tooltip: string | null;
+    /** AdditionalIcons */
+    additionalIcons: string[];
+    /** Custom Key/Filename */
+    key: string | null;
+    /** Additional Css Classes */
+    additionalCssClasses: string[];
+};
 export type Permissions = {
     /** List */
     list?: boolean;
@@ -580,39 +612,7 @@ export type Permissions = {
     /** Properties */
     properties?: boolean;
 };
-export type Element = {
-    /** ID */
-    id: number;
-    /** ID of parent */
-    parentId: number;
-    /** path */
-    path: string;
-    /** ID of owner */
-    userOwner: number;
-    /** User that modified the element */
-    userModification: number;
-    /** Locked */
-    locked: string | null;
-    /** Is locked */
-    isLocked: boolean;
-    /** Creation date */
-    creationDate: number | null;
-    /** Modification date */
-    modificationDate: number | null;
-    permissions: Permissions;
-};
-export type CustomTreeAttributes = {
-    /** Custom Icon */
-    icon: string | null;
-    /** Custom Tooltip */
-    tooltip: string | null;
-    /** AdditionalIcons */
-    additionalIcons: string[];
-    /** Custom Key/Filename */
-    key: string | null;
-    /** Additional Css Classes */
-    additionalCssClasses: string[];
-};
+export type AssetPermissions = Permissions;
 export type Asset = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -635,6 +635,7 @@ export type Asset = Element & {
     hasWorkflowWithPermissions?: boolean;
     /** Full path */
     fullPath?: string;
+    permissions?: AssetPermissions;
 };
 export type Image = Asset & {
     /** Format */
@@ -669,7 +670,7 @@ export type Video = Asset & {
 };
 export type Archive = Asset;
 export type Text = Asset;
-export type Folder = Asset;
+export type AssetFolder = Asset;
 export type Unknown = Asset;
 export type UpdateCustomMetadata = {
     /** Name */
@@ -751,6 +752,8 @@ export type GridFilter = {
     includeDescendants: boolean;
     /** Column Filter */
     columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
 };
 export type PatchCustomMetadata = {
     /** Name */
