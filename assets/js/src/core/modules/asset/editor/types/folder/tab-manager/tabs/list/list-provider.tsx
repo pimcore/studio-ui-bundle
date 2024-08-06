@@ -15,7 +15,7 @@ import React, { createContext, useMemo, useState } from 'react'
 
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { defaultFilterOptions, type FilterOptions } from './sidebar-tabs/filters/filter-provider'
-import { type RowSelectionState } from '@tanstack/react-table'
+import { type SortingState, type RowSelectionState } from '@tanstack/react-table'
 
 export interface IListGridConfigContext {
   gridConfig: GridColumnConfiguration[] | undefined
@@ -161,6 +161,30 @@ export const ListSelectedRowsProvider = ({ children }: ListSelectedRowsProviderP
   ), [selectedRows, children])
 }
 
+export interface IListSortingContext {
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+}
+
+export const ListSortingContext = createContext<IListSortingContext>({
+  sorting: [],
+  setSorting: () => {}
+})
+
+export interface ListSortingProviderProps {
+  children: React.ReactNode
+}
+
+export const ListSortingProvider = ({ children }: ListSortingProviderProps): React.JSX.Element => {
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  return useMemo(() => (
+    <ListSortingContext.Provider value={ { sorting, setSorting } }>
+      {children}
+    </ListSortingContext.Provider>
+  ), [sorting, children])
+}
+
 export interface ListProviderProps {
   children: React.ReactNode
 }
@@ -173,7 +197,9 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
           <ListPageProvider>
             <ListPageSizeProvider>
               <ListSelectedRowsProvider>
-                {children}
+                <ListSortingProvider>
+                  {children}
+                </ListSortingProvider>
               </ListSelectedRowsProvider>
             </ListPageSizeProvider>
           </ListPageProvider>
