@@ -13,7 +13,7 @@
 
 import React, { useContext } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
-import { Button, Tabs } from 'antd'
+import { Button, Tabs, Tooltip } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
@@ -44,7 +44,17 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   items = items?.map((item) => {
     const tmpItem = {
       ...item,
-      originalLabel: item.label as string
+      originalLabel: item.label as string,
+      label: (
+        <>
+          <Tooltip
+            arrow={ false }
+            placement="top"
+            title={ item.label }
+          >
+            {item.label}
+          </Tooltip>
+        </>)
     }
 
     if (tmpItem.isDetachable === true) {
