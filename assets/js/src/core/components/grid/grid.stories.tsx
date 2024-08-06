@@ -12,7 +12,7 @@
 */
 
 import React, { useState } from 'react'
-import { StoryObj, type Meta } from '@storybook/react'
+import { type Meta } from '@storybook/react'
 import { Grid, type GridProps } from './grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from './columns/default-cell'
