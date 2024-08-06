@@ -16,16 +16,16 @@ import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { TabsContainer } from '../../shared-tab-manager/tabs-container'
-import { type UnknownTabManager } from './tab-manager/unknown-tab-manager'
+import { type AudioTabManager } from './tab-manager/audio-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'
 
-const UnknownContainer = (): React.JSX.Element => {
-  const unknownTabManager = useInjection<UnknownTabManager>(serviceIds['Asset/Editor/UnknownTabManager'])
+const AudioContainer = (): React.JSX.Element => {
+  const audioTabManager = useInjection<AudioTabManager>(serviceIds['Asset/Editor/AudioTabManager'])
 
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ unknownTabManager } />
+        <TabsContainer tabManager={ audioTabManager } />
       }
 
       renderToolbar={
@@ -35,4 +35,4 @@ const UnknownContainer = (): React.JSX.Element => {
   )
 }
 
-export { UnknownContainer }
+export { AudioContainer }

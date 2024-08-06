@@ -28,8 +28,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
-import { type DocumentTabManager } from './tab-manager/document-tab-manager'
-import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
+import { type UnknownTabManager } from './tab-manager/unknown-tab-manager'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -39,38 +38,30 @@ import {
 
 moduleSystem.registerModule({
   onInit: () => {
-    const documentTabManager = container.get<DocumentTabManager>(serviceIds['Asset/Editor/DocumentTabManager'])
+    const unknownTabManager = container.get<UnknownTabManager>(serviceIds['Asset/Editor/UnknownTabManager'])
 
-    documentTabManager.register({
-      key: 'view',
-      label: 'asset.asset-editor-tabs.view',
-      children: <PreviewContainer />,
-      icon: <Icon name={ 'image-05' } />
-    })
-
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'edit',
       label: 'asset.asset-editor-tabs.edit',
       children: <EditTabContainer />,
       icon: <Icon name={ 'edit' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'embedded-metadata',
       label: 'asset.asset-editor-tabs.embedded-metadata',
       children: <EmbeddedMetadataTabContainer />,
       icon: <Icon name={ 'data-sheet' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'custom-metadata',
       label: 'asset.asset-editor-tabs.custom-metadata',
       children: <CustomMetadataTabContainer />,
-      icon: <Icon name={ 'data-management-2' } />,
-      isDetachable: true
+      icon: <Icon name={ 'data-management-2' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'properties',
       label: 'asset.asset-editor-tabs.properties.text',
       children: <PropertiesContainer />,
@@ -78,14 +69,14 @@ moduleSystem.registerModule({
       isDetachable: true
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'versions',
       label: 'asset.asset-editor-tabs.versions',
       children: <VersionsTabContainer />,
       icon: <Icon name={ 'history-outlined' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'schedule',
       label: 'asset.asset-editor-tabs.schedule',
       children: <ScheduleTabContainer />,
@@ -93,29 +84,28 @@ moduleSystem.registerModule({
       isDetachable: true
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'dependencies',
       label: 'asset.asset-editor-tabs.dependencies',
       children: <DependenciesTabContainer />,
       icon: <Icon name={ 'hierarchy' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'notes-events',
       label: 'asset.asset-editor-tabs.notes-events',
       children: <NotesAndEventsTabContainer />,
       icon: <Icon name={ 'view-details' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'tags',
       label: 'asset.asset-editor-tabs.tag',
       children: <TagsTabContainer />,
-      icon: <Icon name={ 'tag-two-tone' } />,
-      isDetachable: true
+      icon: <Icon name={ 'tag-two-tone' } />
     })
 
-    documentTabManager.register({
+    unknownTabManager.register({
       key: 'workflow',
       label: 'asset.asset-editor-tabs.workflow',
       children: <WorkflowTabContainer />,
