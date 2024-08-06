@@ -89,6 +89,10 @@ export const useStyle = createStyles(({ token, css }) => {
         display: block;
       }
 
+      .card-body__description p {
+        margin: 0;
+      } 
+
       .card-body__description-padding {
         padding-bottom: ${cardToken.paddingSM}px;
       }
@@ -96,6 +100,15 @@ export const useStyle = createStyles(({ token, css }) => {
       .card-body__details {
         display: block;  
         padding-bottom: ${cardToken.paddingXS}px;
+      }
+
+      .ant-table-wrapper p {
+        margin: 0;
+      }
+
+      .ant-table-wrapper .ant-table-cell {
+        white-space: unset;
+        overflow-wrap: anywhere;
       }
     `
   }

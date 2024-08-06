@@ -26,7 +26,9 @@ export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
     <Checkbox
       checked={ boolean }
       key={ props.row.id }
-      onChange={ (e) => { setBoolean(Boolean(e.target.checked)) } }
+      onChange={ (e) => {
+        setBoolean(Boolean(e.target.checked))
+      } }
     />
   )
 }

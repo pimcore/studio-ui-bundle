@@ -19,10 +19,12 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
 import {
   CustomMetadataTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
-import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
+import {
+  DependenciesTabContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
 import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
@@ -66,7 +68,8 @@ moduleSystem.registerModule({
       key: 'custom-metadata',
       label: 'asset.asset-editor-tabs.custom-metadata',
       children: <CustomMetadataTabContainer />,
-      icon: <Icon name={ 'data-management-2' } />
+      icon: <Icon name={ 'data-management-2' } />,
+      isDetachable: true
     })
 
     textTabManager.register({
@@ -110,7 +113,8 @@ moduleSystem.registerModule({
       key: 'tags',
       label: 'asset.asset-editor-tabs.tag',
       children: <TagsTabContainer />,
-      icon: <Icon name={ 'tag-two-tone' } />
+      icon: <Icon name={ 'tag-two-tone' } />,
+      isDetachable: true
     })
 
     textTabManager.register({

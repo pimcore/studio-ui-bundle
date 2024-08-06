@@ -15,10 +15,8 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import React, { useEffect, useRef } from 'react'
 import { Checkbox, type CheckboxRef } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { useStyles } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell.styles'
 
 export const BooleanCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const checkboxRef = useRef<CheckboxRef>(null)
 
@@ -62,7 +60,7 @@ export const BooleanCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ styles.booleanCell }>
+    <div className={ ['default-cell__content'].join(' ') }>
       {getCellContent()}
     </div>
   )

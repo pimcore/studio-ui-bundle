@@ -106,6 +106,10 @@ export const useStyle = createStyles(({ token, css }) => {
                 .entry-content__download-content-custom__button {
                     padding: ${token.paddingXS}px 0;
                 }
+              
+                .entry-content__download-content-custom__default {
+                  color: ${token.colorTextDescription};
+                }
             }
         `
   }

@@ -25,6 +25,8 @@ import { LinkContainer } from './tab-manager/tabs/list/grid-columns/link/link-co
 import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
+import { AssetActions } from './tab-manager/tabs/list/grid-columns/asset-actions/asset-actions'
+import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -52,6 +54,14 @@ moduleSystem.registerModule({
       isDetachable: true
     })
 
+    folderEditorTabManager.register({
+      key: 'tags',
+      label: 'asset.asset-editor-tabs.tag',
+      children: <TagsTabContainer />,
+      icon: <Icon name={ 'tag-two-tone' } />,
+      isDetachable: true
+    })
+
     const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
 
     gridTypeRegistry.registerType({
@@ -62,6 +72,11 @@ moduleSystem.registerModule({
     gridTypeRegistry.registerType({
       component: LinkContainer,
       type: 'asset-link'
+    })
+
+    gridTypeRegistry.registerType({
+      component: AssetActions,
+      type: 'asset-actions'
     })
   }
 })

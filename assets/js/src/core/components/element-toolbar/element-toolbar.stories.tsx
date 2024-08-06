@@ -15,7 +15,6 @@ import type { Meta } from '@storybook/react'
 import React from 'react'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
 const config: Meta = {
   title: 'Pimcore studio/UI/Element Toolbar',
@@ -33,8 +32,6 @@ const config: Meta = {
   },
   tags: ['autodocs'],
   render: ({ elementId, elementType, loading }: { elementId: number, elementType: string, loading: boolean }) => {
-    const { context, setContext } = useGlobalAssetContext()
-
     if (loading) {
       return (
         <ElementToolbarSkeleton />
@@ -45,11 +42,9 @@ const config: Meta = {
       return (<p>Please fill elementId and elementType argument</p>)
     }
 
-    setContext({ id: elementId })
-
     return (
       <ElementToolbar
-        context={ context! }
+        id={ elementId }
       />
     )
   }
@@ -59,6 +54,7 @@ export default config
 
 export const _default = {
   args: {
-    loading: true
+    loading: true,
+    id: 1
   }
 }

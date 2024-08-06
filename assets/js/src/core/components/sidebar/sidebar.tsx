@@ -18,9 +18,11 @@ import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/elemen
 interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
+  sizing?: 'large' | 'default'
+  highlights?: Array<ISidebarEntry['key']>
 }
 
-export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [] }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const preparedEntries = entries.map((entry) => {
     // TODO: do we need any type of translated label here?
@@ -29,6 +31,7 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
       label: 'TRANSLATED_LABEL'
     }
   })
+
   const preparedButtons = buttons?.map((button) => {
     return {
       ...button,
@@ -59,7 +62,11 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
                 <div
                   aria-controls={ entry.key }
                   aria-selected={ entry.key === activeTab }
-                  className={ 'entry ' + (entry.key === activeTab ? 'active' : '') }
+                  className={ [
+                    'entry',
+                    entry.key === activeTab ? 'active' : '',
+                    highlights.includes(entry.key) ? 'entry--highlighted' : ''
+                  ].join(' ') }
                   key={ entry.key }
                   onClick={ () => {
                     handleSidebarClick(entry.key)
@@ -96,7 +103,7 @@ export const Sidebar = ({ entries, buttons = [] }: SidebarProps): React.JSX.Elem
         </div>
       </div>
 
-      <div className={ 'sidebar__content ' + (activeTab !== '' ? 'expanded' : '') }>
+      <div className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (activeTab !== '' ? 'expanded' : '') }>
         {preparedEntries.map((entry, index) => {
           return (
             <div

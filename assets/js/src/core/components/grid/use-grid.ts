@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { GridContext } from './grid-context'
 
 export interface GridHookReturn {
@@ -21,7 +21,7 @@ export interface GridHookReturn {
 export const useGrid = (): GridHookReturn => {
   const { table } = useContext(GridContext)
 
-  return {
+  return useMemo(() => ({
     tableElement: table
-  }
+  }), [table])
 }

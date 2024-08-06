@@ -128,9 +128,33 @@ asset.asset-editor-tabs.dependencies.required-by: Required by
 asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
 asset.asset-editor-tabs.dependencies.columns.path: Path
 asset.asset-editor-tabs.dependencies.columns.open: Open
+asset.listing.groups.system: System
+asset.listing.groups.default_metadata: Default Metadata
+asset.listing.groups.predefined_metadata: Predefined Metadata
+asset.listing.column.preview: Preview
+asset.listing.column.id: ID
+asset.listing.column.type: Type
+asset.listing.column.filename: Filename
+asset.listing.column.fullpath: Full path
+asset.listing.column.modificationDate: Modification date
+asset.listing.column.creationDate: Creation date
+asset.listing.column.size: Size
+asset.listing.column.title: Title
+asset.listing.column.alt: Alt
+asset.listing.column.copyright: Copyright
+asset.listing.column.author: Author
+asset.listing.column.authorLink: Modification date
+asset.listing.column.license: License
+asset.listing.column.licensePath: License Path
+asset.listing.column.source: Source
+listing.grid-config.title: Grid config
+listing.add-column: Add a column
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 button.ok: Ok
+button.apply: Apply
+button.cancel: Cancel
+actions.open: Open
 component.no-content.no-content-available: No content available
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
@@ -153,3 +177,32 @@ element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
 element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
 asset.asset-editor-tabs.tags.columns.path: Path
 asset.asset-editor-tabs.tags.columns.actions: Remove
+asset.asset-editor-tabs.custom-metadata.text: Custom Metadata
+asset.asset-editor-tabs.custom-metadata.add-custom-definition.add: Add custom definition
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Language
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Cancel
+asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Add predefined definition
+asset.asset-editor-tabs.custom-metadata.columns.type: Type
+asset.asset-editor-tabs.custom-metadata.columns.name: Name
+asset.asset-editor-tabs.custom-metadata.columns.language: Language
+asset.asset-editor-tabs.custom-metadata.columns.value: Value
+asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
+width: Width
+height: Height
+quality: Quality
+mode: Mode
+format: Format
+default: default
+resize: Resize
+scaleByWidth: Scale By Width
+scaleByHeight: Scale By Height
+download: Download
+asset.sidebar.original-file: Original File
+asset.sidebar.web-format: Web Format
+asset.sidebar.print-format: Print Format
+asset.sidebar.office-format: Office Format

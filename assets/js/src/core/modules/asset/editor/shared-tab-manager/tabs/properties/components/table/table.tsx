@@ -88,7 +88,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.data'),
       id: 'properties-table--data-column',
       meta: {
-        type: 'asset-property-value',
+        type: 'type-dependent-content',
         editable: true
       }
     }),
@@ -152,7 +152,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       propertyToUpdate.data = value
 
       updateProperty(propertyToUpdate)
-    };
+    }
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {

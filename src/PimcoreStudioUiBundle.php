@@ -19,9 +19,10 @@ namespace Pimcore\Bundle\StudioUiBundle;
 
 use function dirname;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
+use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
-class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface
+class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface, PimcoreBundleStudioUiOptionalEntrypointsInterface
 {
     public function getPath(): string
     {
@@ -30,15 +31,16 @@ class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBund
 
     public function getWebpackEntryPointsJsonLocations(): array
     {
-        return [
-            $this->getPath() . '/public/build/entrypoints.json',
-            $this->getPath() . '/public/vendor/entrypoints.json',
-            $this->getPath() . '/public/core-dll/entrypoints.json',
-        ];
+        return glob($this->getPath() . '/public/build/*/entrypoints.json');
     }
 
     public function getWebpackEntryPoints(): array
     {
         return ['vendor', 'core-dll', 'main'];
+    }
+
+    public function getWebpackOptionalEntrypoints(): array
+    {
+        return ['vendor', 'core-dll'];
     }
 }

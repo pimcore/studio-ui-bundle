@@ -24,6 +24,8 @@ const staticTokens = {
 
 const defaultTheme = {
   token: {
+    colorLink: '#722ed1',
+    colorLinkActive: '#531dab',
     colorLinkHover: '#9254de',
     controlOutline: 'rgba(114, 46, 209, 0.1)',
     controlItemBgActive: '#f8eeff',
@@ -109,6 +111,8 @@ const defaultTheme = {
     Table: {
       cellPaddingBlockSM: 4,
       cellPaddingInlineSM: 4,
+      colorBorderSecondary: '#D9D9D9AA',
+      controlItemBgActive: '#f8eeff',
       footerBg: '#fafafa',
       headerBg: '#fafafa'
     },
@@ -133,6 +137,37 @@ const defaultTheme = {
     },
     Empty: {
       colorTextDisabled: 'rgba(0, 0, 0, 0.25)'
+    },
+
+    Tag: {
+      colorBorder: '#d9d9d9',
+      colorErrorBg: '#fff2f0',
+      colorErrorBorder: '#ffccc7',
+      colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
+      colorFillSecondary: 'rgba(0, 0, 0, 0.06)',
+      colorFillTertiary: 'rgba(0, 0, 0, 0.04)',
+      colorInfoBg: '#f9f0ff',
+      colorInfoBorder: '#d3adf7',
+      colorPrimary: '#722ed1',
+      colorPrimaryActive: '#531dab',
+      colorPrimaryHover: '#9254de',
+      colorSuccessBg: '#f6ffed',
+      colorSuccessBorder: '#b7eb8f',
+      colorText: 'rgba(0, 0, 0, 0.88)',
+      colorTextDescription: 'rgba(0, 0, 0, 0.6)',
+      colorTextHeading: 'rgba(0, 0, 0, 0.88)',
+      colorTextLightSolid: '#ffffff',
+      colorWarningBg: '#fffbe6',
+      colorWarningBorder: '#ffe58f',
+      borderRadiusSM: 4,
+      lineWidth: 1,
+      marginXS: 8,
+      paddingXXS: 4,
+      fontSize: 12,
+      fontSizeIcon: 12,
+      fontSizeSM: 12,
+      defaultBg: '#fafafa',
+      defaultColor: 'rgba(0, 0, 0, 0.88)'
     }
   }
 }

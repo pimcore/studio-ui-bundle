@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Divider, Dropdown } from 'antd'
 import { useStyle } from './tags-container.styles'
 import { useTranslation } from 'react-i18next'
@@ -22,45 +22,28 @@ import {
   TagsTreeContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import {
-  useBatchReplaceTagsForElementsMutation,
   useGetTagsForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { useShortcutActions } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const { id } = useContext(AssetContext)
-  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>([])
-  const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
+  const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
   const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!
   })
 
-  useEffect(() => {
-    if (data?.items !== undefined && data.totalItems > 0) {
-      setDefaultCheckedTags(Object.keys(data.items))
-    }
-  }, [data])
-
-  const applyTagsToElement = async (): Promise<void> => {
-    await replaceTagsMutation({
-      elementType: 'asset',
-      elementTagIdCollection: {
-        elementIds: [id!],
-        tagIds: defaultCheckedTags.map(Number)
-      }
-    })
-  }
-
   return (
     <div className={ styles.tab }>
       <div className={ 'pimcore-tags-sidebar' }>
         <TagsTreeContainer
-          defaultCheckedTags={ defaultCheckedTags }
-          setDefaultCheckedTags={ setDefaultCheckedTags }
+          isLoading={ isLoading }
+          tags={ data?.items ?? [] }
         />
       </div>
 
@@ -75,11 +58,12 @@ export const TagsTabContainer = (): React.JSX.Element => {
           <Dropdown.Button
             menu={ {
               items: [{
-                label: 'Submit and continue',
-                key: '1'
+                label: 'Remove current element tags & Apply folder tags',
+                key: '1',
+                onClick: removeCurrentAndApplyFolderTags
               }]
             } }
-            onClick={ applyTagsToElement }
+            onClick={ applyFolderTags }
           >
             {t('element.element-editor-tabs.tags.apply-folder-tags')}
           </Dropdown.Button>

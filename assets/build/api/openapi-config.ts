@@ -53,10 +53,16 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/dependencies/i)
     },
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts': {
-      filterEndpoints: [/tags/i]
+      filterEndpoints: pathMatcher(/tags/i)
     },
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/note/i)
+    },
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/custom-metadata/i)
+    },
+    '../../js/src/core/modules/app/settings/settings-slice.gen.ts': {
+      filterEndpoints: /settings/i
     }
   },
   exportName: 'api',

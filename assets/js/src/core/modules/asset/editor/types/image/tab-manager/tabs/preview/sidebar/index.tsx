@@ -14,7 +14,7 @@
 import { AssetEditorSidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { AssetEditorSidebarDetailsTab } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details'
+import { DetailContainer } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-container'
 
 export const sidebarManager = new AssetEditorSidebarManager()
 
@@ -24,7 +24,7 @@ sidebarManager.registerEntry({
     name={ 'view-details' }
     options={ { width: '16px', height: '16px' } }
         />,
-  component: <AssetEditorSidebarDetailsTab />
+  component: <DetailContainer />
 })
 
 sidebarManager.registerButton({
