@@ -100,7 +100,7 @@ const editableColumns = [
     cell: info => <b><DefaultCell { ...info } /></b>,
     meta: {
       editable: true
-    },
+    }
   }),
   columnHelper.accessor('age', {
     header: 'Non editable age',
