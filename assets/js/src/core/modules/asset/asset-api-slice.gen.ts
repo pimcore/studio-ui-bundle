@@ -751,6 +751,8 @@ export type GridFilter = {
     includeDescendants: boolean;
     /** Column Filter */
     columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
 };
 export type PatchCustomMetadata = {
     /** Name */

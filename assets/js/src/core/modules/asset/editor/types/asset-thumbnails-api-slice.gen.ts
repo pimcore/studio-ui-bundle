@@ -19,11 +19,11 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type GetImageThumbnailsApiResponse = /** status 200 All downloadable image thumbnails */ {
-    items: Thumbnail;
+    items: Thumbnail[];
 };
 export type GetImageThumbnailsApiArg = void;
 export type GetVideoThumbnailsApiResponse = /** status 200 All video thumbnails */ {
-    items: Thumbnail;
+    items: Thumbnail[];
 };
 export type GetVideoThumbnailsApiArg = void;
 export type Thumbnail = {

@@ -11,8 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type SyntheticEvent, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 
 interface VideoSourceType {
   src: string
@@ -42,6 +43,7 @@ export const PimcoreVideo = ({
   className
 }: PimcoreVideoProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { setPlayerPosition } = useContext(VideoContext)
 
   return (
     // eslint-disable-next-line jsx-a11y/media-has-caption
@@ -49,6 +51,8 @@ export const PimcoreVideo = ({
       className={ className }
       controls
       height={ height }
+      key={ sources[0].src }
+      onTimeUpdate={ onPlayerTimeUpdate }
       width={ width }
     >
       {sources.map((source, index) => (
@@ -72,4 +76,8 @@ export const PimcoreVideo = ({
       { t('asset.preview.no-video-support') }
     </video>
   )
+
+  function onPlayerTimeUpdate (e: SyntheticEvent): void {
+    setPlayerPosition(e.timeStamp)
+  }
 }

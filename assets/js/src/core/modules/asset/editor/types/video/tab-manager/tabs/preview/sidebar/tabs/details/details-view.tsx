@@ -24,46 +24,37 @@ import {
   DroppableContent
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/droppable-content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-// import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 
 interface VideoEditorSidebarDetailsViewProps {
   width: number
   height: number
-  thumbnails: any
-  // onClickDownloadByFormat: (format: string) => void
+  thumbnails: Thumbnail[]
+  onChangeThumbnail: (thumbnail: string) => void
+  onClickDownloadByFormat: (format: string) => void
 }
 
 export const VideoEditorSidebarDetailsTab = ({
   width,
   height,
-  thumbnails
-  // onClickDownloadByFormat
+  thumbnails,
+  onChangeThumbnail,
+  onClickDownloadByFormat
 }: VideoEditorSidebarDetailsViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
   const [imageSource, setImageSource] = useState('media')
+  const [customMode, setCustomMode] = useState('pimcore-system-treepreview')
+  const [downloadFormat, setDownloadFormat] = useState('pimcore-system-treepreview')
 
-  console.log(thumbnails)
-  const mappedThumbnails = thumbnails.map(thumbnail => {
+  const modes = thumbnails.map(thumbnail => {
     return {
       value: thumbnail.id,
       label: thumbnail.text
     }
   })
 
-  const modes = [
-    ...mappedThumbnails
-  ]
-
-  const downloadFormats = [
-    {
-      value: 'original',
-      label: t('asset.sidebar.original-file')
-    }, {
-      value: 'content',
-      label: t('content')
-    }
-  ]
+  const downloadFormats = modes
 
   const toolbar = (
     <Toolbar
@@ -97,8 +88,8 @@ export const VideoEditorSidebarDetailsTab = ({
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
                 aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
-                onChange={ mode => { /* setCustomMode(mode as string) */
-                } }
+                defaultValue={ customMode }
+                onChange={ onChangeMode }
               >
                 {modes.map((mode) => (
                   <Select.Option
@@ -115,7 +106,9 @@ export const VideoEditorSidebarDetailsTab = ({
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
                 aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
-                onChange={ mode => { /* setCustomMode(mode as string) */
+                defaultValue={ downloadFormat }
+                onChange={ format => {
+                  setDownloadFormat(format)
                 } }
               >
                 {downloadFormats.map((mode) => (
@@ -130,6 +123,7 @@ export const VideoEditorSidebarDetailsTab = ({
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
                 icon={ <Icon name={ 'download-02' } /> }
+                onClick={ onClickDownload }
               />
             </div>
           </div>
@@ -154,7 +148,7 @@ export const VideoEditorSidebarDetailsTab = ({
           <Card size={ 'small' }>
             <Droppable
               isValidContext={ (info: DragAndDropInfo) => true }
-              onDrop={ (e) => { console.log(e) } }
+              onDrop={ onDropAsset }
             >
               <DroppableContent />
             </Droppable>
@@ -167,11 +161,24 @@ export const VideoEditorSidebarDetailsTab = ({
     </div>
   )
 
+  function onChangeMode (mode: string): void {
+    setCustomMode(mode)
+    onChangeThumbnail(mode)
+  }
+
+  function onClickDownload (): void {
+    onClickDownloadByFormat(downloadFormat)
+  }
+
   function onClickCurrentPlayerPosition (): void {
     setImageSource('player')
   }
 
   function onClickChooseMedia (): void {
     setImageSource('media')
+  }
+
+  function onDropAsset (e): void {
+    console.log(e)
   }
 }
