@@ -12,16 +12,59 @@
 */
 
 import { useContext, useMemo } from 'react'
-import { type IListContext, ListContext } from '../list-provider'
+import {
+  type IListColumnsContext,
+  type IListFilterOptionsContext,
+  type IListGridConfigContext,
+  type IListPageContext,
+  type IListPageSizeContext,
+  type IListSelectedRowsContext,
+  ListColumnsContext,
+  ListPageContext,
+  ListSelectedRowsContext,
+  ListGridConfigContext,
+  ListPageSizeContext,
+  ListFilterOptionsContext
+
+} from '../list-provider'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
-export interface useListHookReturn extends IListContext {
-  dropDownMenu: Record<string, GridColumnConfiguration[]>
+export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void
 }
 
-export const useList = (): useListHookReturn => {
-  const { gridConfig, setColumns, ...contextProps } = useContext(ListContext)
+export const useListColumns = (): UseListColumnsHookReturn => {
+  const { columns, setColumns } = useContext(ListColumnsContext)
+
+  function setGridColumns (columns: GridColumnConfiguration[]): void {
+    setColumns(columns)
+  }
+
+  return {
+    columns,
+    setGridColumns,
+    setColumns
+  }
+}
+
+export interface UseListFilterOptionsHookReturn extends IListFilterOptionsContext {
+}
+
+export const useListFilterOptions = (): UseListFilterOptionsHookReturn => {
+  const { filterOptions, setFilterOptions } = useContext(ListFilterOptionsContext)
+
+  return {
+    filterOptions,
+    setFilterOptions
+  }
+}
+
+export interface UseListGridConfigHookReturn extends IListGridConfigContext {
+  dropDownMenu: Record<string, GridColumnConfiguration[]>
+}
+
+export const useListGridConfig = (): UseListGridConfigHookReturn => {
+  const { gridConfig, setGridConfig } = useContext(ListGridConfigContext)
 
   const dropDownMenu = useMemo(() => {
     const _dropDownMenu = {}
@@ -41,15 +84,45 @@ export const useList = (): useListHookReturn => {
     return _dropDownMenu
   }, [gridConfig])
 
-  function setGridColumns (columns: GridColumnConfiguration[]): void {
-    setColumns(columns)
+  return {
+    gridConfig,
+    setGridConfig,
+    dropDownMenu
   }
+}
+
+export interface UseListPageHookReturn extends IListPageContext {
+}
+
+export const useListPage = (): UseListPageHookReturn => {
+  const { page, setPage } = useContext(ListPageContext)
 
   return {
-    ...contextProps,
-    gridConfig,
-    dropDownMenu,
-    setGridColumns,
-    setColumns
+    page,
+    setPage
+  }
+}
+
+export interface UseListPageSizeHookReturn extends IListPageSizeContext {
+}
+
+export const useListPageSize = (): UseListPageSizeHookReturn => {
+  const { pageSize, setPageSize } = useContext(ListPageSizeContext)
+
+  return {
+    pageSize,
+    setPageSize
+  }
+}
+
+export interface UseListSelectedRowsHookReturn extends IListSelectedRowsContext {
+}
+
+export const useListSelectedRows = (): UseListSelectedRowsHookReturn => {
+  const { selectedRows, setSelectedRows } = useContext(ListSelectedRowsContext)
+
+  return {
+    selectedRows,
+    setSelectedRows
   }
 }

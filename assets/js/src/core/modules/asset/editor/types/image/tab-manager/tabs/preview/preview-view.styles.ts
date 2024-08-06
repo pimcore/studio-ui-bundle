@@ -16,6 +16,7 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     preview: css`
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;

@@ -152,7 +152,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       propertyToUpdate.data = value
 
       updateProperty(propertyToUpdate)
-    };
+    }
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {

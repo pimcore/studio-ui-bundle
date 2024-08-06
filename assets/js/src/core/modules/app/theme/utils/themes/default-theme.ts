@@ -111,6 +111,8 @@ const defaultTheme = {
     Table: {
       cellPaddingBlockSM: 4,
       cellPaddingInlineSM: 4,
+      colorBorderSecondary: '#D9D9D9AA',
+      controlItemBgActive: '#f8eeff',
       footerBg: '#fafafa',
       headerBg: '#fafafa'
     },

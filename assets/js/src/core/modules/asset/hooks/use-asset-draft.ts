@@ -13,19 +13,47 @@
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { useGetAssetByIdQuery } from '../asset-api-slice.gen'
-import { addPropertyToAsset, assetReceived, removeAsset, resetChanges, removePropertyFromAsset, selectAssetById, setPropertiesForAsset, updatePropertyForAsset } from '../asset-draft-slice'
+import {
+  addPropertyToAsset,
+  assetReceived,
+  removeAsset,
+  resetChanges,
+  removePropertyFromAsset,
+  selectAssetById,
+  setPropertiesForAsset,
+  updatePropertyForAsset,
+  addCustomMetadataToAsset,
+  removeCustomMetadataFromAsset,
+  setCustomMetadataForAsset,
+  updateAllCustomMetadataForAsset
+} from '../asset-draft-slice'
 import { useEffect } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
+import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 
-interface UseAssetDraftReturn {
-  isLoading: boolean
-  isError: boolean
-  asset: undefined | ReturnType<typeof selectAssetById>
+interface UseAssetDraftReturnCustomMetadata {
+  customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
+  updateAllCustomMetadata: (customMetadata: CustomMetadata[]) => void
+  addCustomMetadata: (customMetadata: CustomMetadata) => void
+  removeCustomMetadata: (customMetadata: CustomMetadata) => void
+  setCustomMetadata: (customMetadata: CustomMetadata[]) => void
+}
+
+interface UseAssetDraftReturnProperties {
   properties: undefined | ReturnType<typeof selectAssetById>['properties']
   updateProperty: (property: DataProperty) => void
   addProperty: (property: DataProperty) => void
   removeProperty: (property: DataProperty) => void
   setProperties: (properties: DataProperty[]) => void
+}
+
+interface UseAssetDraftReturn extends
+  UseAssetDraftReturnCustomMetadata,
+  UseAssetDraftReturnProperties {
+  isLoading: boolean
+  isError: boolean
+  asset: undefined | ReturnType<typeof selectAssetById>
+
   removeAssetFromState: () => void
   removeTrackedChanges: () => void
 }
@@ -35,10 +63,18 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const dispatch = useAppDispatch()
   const asset = useAppSelector(state => selectAssetById(state, id))
   const properties = asset?.properties
+  const customMetadata = asset?.customMetadata
 
   useEffect(() => {
     if (data !== undefined && asset === undefined) {
-      dispatch(assetReceived({ ...data, id, modified: false, properties: [], changes: {} }))
+      dispatch(assetReceived({
+        ...data,
+        id,
+        modified: false,
+        properties: [],
+        customMetadata: [],
+        changes: {}
+      }))
     }
   }, [data])
 
@@ -58,15 +94,47 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   function removeProperty (property): void {
     dispatch(removePropertyFromAsset({ assetId: id, property }))
-  };
+  }
 
   function setProperties (properties): void {
     dispatch(setPropertiesForAsset({ assetId: id, properties }))
-  };
+  }
+
+  function updateAllCustomMetadata (customMetadata): void {
+    dispatch(updateAllCustomMetadataForAsset({ assetId: id, customMetadata }))
+  }
+
+  function addCustomMetadata (customMetadata): void {
+    dispatch(addCustomMetadataToAsset({ assetId: id, customMetadata }))
+  }
+
+  function removeCustomMetadata (customMetadata): void {
+    dispatch(removeCustomMetadataFromAsset({ assetId: id, customMetadata }))
+  }
+
+  function setCustomMetadata (customMetadata): void {
+    dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
+  }
 
   function removeTrackedChanges (): void {
     dispatch(resetChanges(id))
   }
 
-  return { isLoading, isError, asset, properties, updateProperty, addProperty, removeProperty, setProperties, removeAssetFromState, removeTrackedChanges }
+  return {
+    isLoading,
+    isError,
+    asset,
+    properties,
+    updateProperty,
+    addProperty,
+    removeProperty,
+    setProperties,
+    customMetadata,
+    updateAllCustomMetadata,
+    addCustomMetadata,
+    removeCustomMetadata,
+    setCustomMetadata,
+    removeAssetFromState,
+    removeTrackedChanges
+  }
 }

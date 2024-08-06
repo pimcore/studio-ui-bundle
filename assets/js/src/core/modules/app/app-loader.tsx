@@ -13,10 +13,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useGetTranslationsMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -42,6 +44,20 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await userFetcher
   }
 
+  async function initSettings (): Promise<any> {
+    const settingsFetcher = dispatch(settingsApi.endpoints.getSystemSettings.initiate())
+
+    settingsFetcher
+      .then(({ data, isSuccess }) => {
+        if (isSuccess && data !== undefined) {
+          dispatch(setSettings(data))
+        }
+      })
+      .catch(() => {})
+
+    return await settingsFetcher
+  }
+
   async function loadTranslations (): Promise<any> {
     await translations({ translation: { locale: 'en', keys: [] } })
       .unwrap()
@@ -56,6 +72,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   useEffect(() => {
     Promise.all([
       initLoadUser(),
+      initSettings(),
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)

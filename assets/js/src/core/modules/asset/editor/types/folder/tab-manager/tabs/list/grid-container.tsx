@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useList } from './hooks/use-list'
+import { useListColumns, useListSelectedRows } from './hooks/use-list'
 
 interface GridContainerProps {
   assets: GetAssetGridApiResponse | undefined
@@ -30,54 +30,68 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets, onUpdateCellData } = props
   const { t } = useTranslation()
   const columnHelper = createColumnHelper()
-  const { columns: GridColumns } = useList()
+  const { columns: GridColumns } = useListColumns()
+  const { selectedRows, setSelectedRows } = useListSelectedRows()
 
-  const columns: Array<ColumnDef<unknown, never>> = []
+  const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
+    setSelectedRows(rows)
+  }, [])
 
-  GridColumns.forEach((column) => {
+  const columns = useMemo(() => {
+    const columns: Array<ColumnDef<unknown, never>> = []
+
+    GridColumns.forEach((column) => {
+      columns.push(
+        columnHelper.accessor(column.key, {
+          header: t(`asset.listing.column.${column.key}`),
+          meta: {
+            type: column.frontendType,
+            editable: column.editable,
+            config: column.config
+          }
+        })
+      )
+    })
+
     columns.push(
-      columnHelper.accessor(column.key, {
-        header: t(`asset.listing.column.${column.key}`),
+      columnHelper.accessor('actions', {
+        header: t('actions.open'),
         meta: {
-          type: column.frontendType,
-          editable: column.editable,
-          config: column.config
-        }
+          type: 'asset-actions'
+        },
+        size: 65
       })
     )
-  })
 
-  columns.push(
-    columnHelper.accessor('actions', {
-      header: t('actions.open'),
-      meta: {
-        type: 'asset-actions'
-      },
-      size: 65
+    return columns
+  }, [GridColumns])
+
+  const data: TransformedGridData = useMemo(() => {
+    return assets?.items.map(item => {
+      const row = {}
+      item?.columns?.forEach(column => {
+        row[column.key!] = column.value
+      })
+      return row
     })
-  )
+  }, [assets])
 
-  const data: TransformedGridData = assets?.items.map(item => {
-    const row = {}
-    item?.columns?.forEach(column => {
-      row[column.key!] = column.value
-    })
-    return row
-  })
-
-  if (data === undefined) {
-    return <></>
-  }
-
-  return (
-    <Grid
-      columns={ columns }
-      data={ data }
-      // @todo implement inline editing
-      onUpdateCellData={ onUpdateCellData }
-      resizable
-    />
-  )
+  return useMemo(() => {
+    if (data === undefined) {
+      return <></>
+    }
+    return (
+      <Grid
+        columns={ columns }
+        data={ data }
+        enableMultipleRowSelection
+        onSelectedRowsChange={ onSelectedRowsChange }
+        onUpdateCellData={ onUpdateCellData }
+        resizable
+        selectedRows={ selectedRows }
+      />
+    )
+  }, [columns, data, selectedRows, onSelectedRowsChange, onUpdateCellData])
 }
 
 export { GridContainer }
