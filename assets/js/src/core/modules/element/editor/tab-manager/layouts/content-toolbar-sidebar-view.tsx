@@ -17,6 +17,7 @@ import { useStyles } from './content-toolbar-sidebar-view.styles'
 interface ContentToolbarViewProps {
   children: ReactNode
   renderToolbar?: ReactNode
+  renderSidebar?: ReactNode
 }
 
 const ContentToolbarSidebarView = (props: ContentToolbarViewProps): React.JSX.Element => {
@@ -36,6 +37,12 @@ const ContentToolbarSidebarView = (props: ContentToolbarViewProps): React.JSX.El
       { props.renderToolbar !== undefined && (
         <div className='content-toolbar-sidebar-layout__toolbar'>
           {props.renderToolbar}
+        </div>
+      )}
+
+      { props.renderSidebar !== undefined && (
+        <div className='content-toolbar-sidebar-layout__sidebar'>
+          {props.renderSidebar}
         </div>
       )}
     </div>

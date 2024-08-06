@@ -15,7 +15,7 @@ import React, { type ReactNode } from 'react'
 import { useStyles } from './grid-toolbar-view.styles'
 
 export interface GridToolbarViewProps {
-  renderPagination: ReactNode
+  renderPagination?: ReactNode
 }
 
 const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
@@ -25,7 +25,9 @@ const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
     <div className={ styles.GridToolbar }>
       <div /> {/* @todo tools */}
 
-      {props.renderPagination}
+      {props.renderPagination !== undefined && (
+        <>{props.renderPagination}</>
+      )}
     </div>
   )
 }

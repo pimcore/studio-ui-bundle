@@ -52,6 +52,8 @@ export type WorkflowStatus = {
     title: string;
     /** label */
     label: string;
+    /** visibleInDetail */
+    visibleInDetail?: boolean;
 };
 export type AllowedTransition = {
     /** name */

@@ -19,15 +19,17 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
 import {
   CustomMetadataTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
-import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies-container'
+import {
+  DependenciesTabContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
 import {
   NotesAndEventsTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
+import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 import { type ImageTabManager } from './tab-manager/image-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -40,11 +42,11 @@ import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 import {
-  ValueCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/value-cell/value-cell'
-import {
-  TypeIconCell
+  TypeIconCell as PropertyTypeIconCell
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
+import {
+  TypeIconCell as CustomMetadataTypeIconCell
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/cells/type-icon-cell/type-icon-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -76,7 +78,8 @@ moduleSystem.registerModule({
       key: 'custom-metadata',
       label: 'asset.asset-editor-tabs.custom-metadata',
       children: <CustomMetadataTabContainer />,
-      icon: <Icon name={ 'data-management-2' } />
+      icon: <Icon name={ 'data-management-2' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
@@ -114,14 +117,16 @@ moduleSystem.registerModule({
       key: 'notes-events',
       label: 'asset.asset-editor-tabs.notes-events',
       children: <NotesAndEventsTabContainer />,
-      icon: <Icon name={ 'view-details' } />
+      icon: <Icon name={ 'view-details' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
       key: 'tags',
       label: 'asset.asset-editor-tabs.tag',
       children: <TagsTabContainer />,
-      icon: <Icon name={ 'tag-two-tone' } />
+      icon: <Icon name={ 'tag-two-tone' } />,
+      isDetachable: true
     })
 
     imageEditorTabManager.register({
@@ -140,12 +145,12 @@ moduleSystem.registerModule({
 
     const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
     gridTypeRegistry.registerType({
-      component: ValueCell,
-      type: 'asset-property-value'
+      component: PropertyTypeIconCell,
+      type: 'asset-property-icon'
     })
     gridTypeRegistry.registerType({
-      component: TypeIconCell,
-      type: 'asset-property-icon'
+      component: CustomMetadataTypeIconCell,
+      type: 'asset-custom-metadata-icon'
     })
   }
 })

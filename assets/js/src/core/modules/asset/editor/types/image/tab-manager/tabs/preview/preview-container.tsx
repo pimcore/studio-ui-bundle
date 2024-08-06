@@ -17,7 +17,7 @@ import { type Image, useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-a
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useStyle } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container.styles'
+import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 
 export interface IZoomContext {
   zoom: number
@@ -32,7 +32,6 @@ const PreviewContainer = (): React.JSX.Element => {
   const { data } = useGetAssetByIdQuery({ id: assetContext.id! })
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
-  const { styles } = useStyle()
 
   const contextValue = useMemo<IZoomContext>(() => ({
     zoom,
@@ -41,18 +40,17 @@ const PreviewContainer = (): React.JSX.Element => {
   const imageData = data as Image
   return (
     <ZoomContext.Provider value={ contextValue }>
-      <div className={ styles.previewTab }>
-        <div className={ styles.relativeContainer }>
-          <PreviewView
-            src={ imageData.imageThumbnailPath! }
-          />
-        </div>
-
+      <ContentToolbarSidebarView renderSidebar={
         <Sidebar
           buttons={ sidebarButtons }
           entries={ sidebarEntries }
         />
-      </div>
+      }
+      >
+        <PreviewView
+          src={ imageData.imageThumbnailPath! }
+        />
+      </ContentToolbarSidebarView>
     </ZoomContext.Provider>
   )
 }

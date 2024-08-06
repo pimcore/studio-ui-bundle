@@ -79,12 +79,24 @@ import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
+import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
+import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
 import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
 import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
+import intersectCircle from '@Pimcore/assets/icons/intersect-circle.inline.svg'
+import cornerLeftUp from '@Pimcore/assets/icons/corner-left-up.inline.svg'
 import Icon from '@Pimcore/assets/icons/icon.inline.svg'
+import Tag02 from '@Pimcore/assets/icons/tag-02.inline.svg'
+import NoContent from '@Pimcore/assets/icons/no-content.inline.svg'
+import flagOutlined from '@Pimcore/assets/icons/flag-outlined.inline.svg'
+import draggable from '@Pimcore/assets/icons/draggable.inline.svg'
+import settingsOutlined from '@Pimcore/assets/icons/settings-outlined.inline.svg'
+import filterOutlined from '@Pimcore/assets/icons/filter-outlined.inline.svg'
+import textInput from '@Pimcore/assets/icons/text-input.inline.svg'
+import calendarDate from '@Pimcore/assets/icons/calendar-date.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -369,6 +381,61 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'close',
       component: close
+    })
+    iconLibrary.register({
+      name: 'tag-02',
+      component: Tag02
+    })
+    iconLibrary.register({
+      name: 'no-content',
+      component: NoContent
+    })
+    iconLibrary.register({
+      name: 'intersect-circle',
+      component: intersectCircle
+    })
+    iconLibrary.register({
+      name: 'corner-left-up',
+      component: cornerLeftUp
+    })
+    iconLibrary.register({
+      name: 'flag-outlined',
+      component: flagOutlined
+    })
+
+    iconLibrary.register({
+      name: 'chevron-right',
+      component: chevronRight
+    })
+
+    iconLibrary.register({
+      name: 'chevron-left',
+      component: chevronLeft
+    })
+
+    iconLibrary.register({
+      name: 'draggable',
+      component: draggable
+    })
+
+    iconLibrary.register({
+      name: 'settings-outlined',
+      component: settingsOutlined
+    })
+
+    iconLibrary.register({
+      name: 'filter-outlined',
+      component: filterOutlined
+    })
+
+    iconLibrary.register({
+      name: 'text-input',
+      component: textInput
+    })
+
+    iconLibrary.register({
+      name: 'calendar-date',
+      component: calendarDate
     })
   }
 })

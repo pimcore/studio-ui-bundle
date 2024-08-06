@@ -11,70 +11,89 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type GetAssetsApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useListColumns, useListSelectedRows } from './hooks/use-list'
 
 interface GridContainerProps {
-  assets: GetAssetsApiResponse
+  assets: GetAssetGridApiResponse | undefined
 }
+
+type AssetRow = Record<string, any>
+type TransformedGridData = AssetRow[] | undefined
 
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
-  const columnHelper = createColumnHelper<GetAssetsApiResponse['items']>()
+  const columnHelper = createColumnHelper()
+  const { columns: GridColumns } = useListColumns()
+  const { selectedRows, setSelectedRows } = useListSelectedRows()
 
-  const columns = [
-    columnHelper.accessor('imageThumbnailPath', {
-      header: t('asset.asset-editor-tabs.list.columns.preview'),
-      meta: {
-        type: 'asset-preview'
-      },
-      id: 'preview',
-      size: 110
-    }),
+  const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
+    setSelectedRows(rows)
+  }, [])
 
-    columnHelper.accessor('id', {
-      header: t('asset.asset-editor-tabs.list.columns.id')
-    }),
+  const onUpdateCellData = useCallback(() => {}, [])
 
-    columnHelper.accessor('type', {
-      header: t('asset.asset-editor-tabs.list.columns.type')
-    }),
+  const columns = useMemo(() => {
+    const columns: Array<ColumnDef<unknown, never>> = []
 
-    columnHelper.accessor('fullPath', {
-      header: t('asset.asset-editor-tabs.list.columns.fullPath'),
-      id: 'fullPath',
-      meta: {
-        type: 'asset-link'
-      },
-      size: 300
-    }),
-
-    columnHelper.accessor('creationDate', {
-      header: t('asset.asset-editor-tabs.list.columns.creationDate'),
-      meta: {
-        type: 'date'
-      }
-    }),
-
-    columnHelper.accessor('modificationDate', {
-      header: t('asset.asset-editor-tabs.list.columns.modificationDate'),
-      meta: {
-        type: 'date'
-      }
+    GridColumns.forEach((column) => {
+      columns.push(
+        columnHelper.accessor(column.key, {
+          header: t(`asset.listing.column.${column.key}`),
+          meta: {
+            type: column.frontendType,
+            editable: column.editable,
+            config: column.config
+          }
+        })
+      )
     })
-  ]
 
-  return (
-    <Grid
-      columns={ columns }
-      data={ assets.items }
-      resizable
-    />
-  )
+    columns.push(
+      columnHelper.accessor('actions', {
+        header: t('actions.open'),
+        meta: {
+          type: 'asset-actions'
+        },
+        size: 65
+      })
+    )
+
+    return columns
+  }, [GridColumns])
+
+  const data: TransformedGridData = useMemo(() => {
+    return assets?.items.map(item => {
+      const row = {}
+      item?.columns?.forEach(column => {
+        row[column.key!] = column.value
+      })
+      return row
+    })
+  }, [assets])
+
+  return useMemo(() => {
+    if (data === undefined) {
+      return <></>
+    }
+
+    return (
+      <Grid
+        columns={ columns }
+        data={ data }
+        enableMultipleRowSelection
+        onSelectedRowsChange={ onSelectedRowsChange }
+        onUpdateCellData={ onUpdateCellData }
+        resizable
+        selectedRows={ selectedRows }
+      />
+    )
+  }, [columns, data, selectedRows, onSelectedRowsChange, onUpdateCellData])
 }
 
 export { GridContainer }

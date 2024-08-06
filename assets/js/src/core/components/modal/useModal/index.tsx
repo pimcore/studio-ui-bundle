@@ -20,6 +20,7 @@ interface useModalReturnType {
   showModal: () => void
   handleOk: () => void
   handleCancel: () => void
+  closeModal: () => void
 }
 
 export const useModal = (config = { type: 'default' }): useModalReturnType => {
@@ -29,12 +30,16 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
     setIsModalOpen(true)
   }
 
-  const handleOk = (): void => {
+  const closeModal = (): void => {
     setIsModalOpen(false)
   }
 
+  const handleOk = (): void => {
+    closeModal()
+  }
+
   const handleCancel = (): void => {
-    setIsModalOpen(false)
+    closeModal()
   }
 
   function getModalComponent (type: string): typeof Modal {
@@ -74,7 +79,7 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
     )
   }
 
-  return { renderModal, showModal, handleOk, handleCancel }
+  return { renderModal, showModal, handleOk, handleCancel, closeModal }
 }
 
 export const withError = (Component: typeof Modal): typeof Modal => {

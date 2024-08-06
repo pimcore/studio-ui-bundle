@@ -27,6 +27,7 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
       & .ant-card {
+        width: 340px;
         border: none;  
       }
       

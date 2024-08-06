@@ -13,47 +13,34 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api
+  api, type ImageVersion
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import {
   DetailsVersionsView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-view'
-import i18n from '@Pimcore/app/i18n'
 import { store } from '@Pimcore/app/store'
-import { formatDateTime } from '@Pimcore/utils/helpers'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import {
+  formatVersionData
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { useTranslation } from 'react-i18next'
 
 export interface DetailsVersionsContainerProps {
-  versionIds: number[]
+  versionIds: VersionIdentifiers[]
 }
 
 export const DetailsVersionsContainer = ({
   versionIds
 }: DetailsVersionsContainerProps): React.JSX.Element => {
-  const [versionData, setVersionData] = useState([{}])
+  const { t } = useTranslation()
+  const [versionData, setVersionData] = useState([] as object[])
   const [imageUrls, setImageUrls] = useState({})
-
-  const formatMap: any = {
-    dimensions: (data: any): string => {
-      return data.width + ' x ' + data.height
-    },
-    creationDate: (data: number): string => {
-      return formatDateTime(data)
-    },
-    modificationDate: (data: number): string => {
-      return formatDateTime(data)
-    },
-    fileSize: (data: number): string => {
-      return (data / 1000) + ' KB'
-    }
-  }
-  const formatData = (key: string, data: any): string => {
-    return formatMap[key] as boolean ? formatMap[key](data) : data.toString()
-  }
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
-    versionIds.forEach(async id => {
+    versionIds.forEach(async vId => {
+      const id = vId.id
       versionPromises.push(store.dispatch(api.endpoints.getVersionById.initiate({ id })))
 
       if (!Object.keys(imageUrls).includes(id.toString())) {
@@ -72,29 +59,50 @@ export const DetailsVersionsContainer = ({
     Promise.all(versionPromises)
       .then((responses): void => {
         const tempVersionData: any[] = []
-        const data = responses[0].data
+        const dataRaw = responses[0].data as ImageVersion
+        const metadata = dataRaw.metadata
+
+        const data: Partial<ImageVersion> = { ...dataRaw }
+        delete data.metadata
+
         for (const key in data) {
           tempVersionData.push({
-            [i18n.t('field')]: i18n.t(`version.${key}`)
+            [t('field')]: t(`version.${key}`)
+          })
+        }
+
+        for (const meta of metadata) {
+          data[`${meta.name} (${meta.type})`] = meta.data
+          tempVersionData.push({
+            [t('field')]: `${meta.name} (${meta.type})`
           })
         }
 
         tempVersionData.push({
-          [i18n.t('field')]: i18n.t('version.image')
+          [t('field')]: t('version.image')
         })
 
         responses.forEach((response, versionIndex): void => {
-          const data = response.data
+          const dataRaw = response.data as ImageVersion
+          const metadata = dataRaw.metadata
+
+          const data: Partial<ImageVersion> = { ...dataRaw }
+          delete data.metadata
           let index = 0
           for (const key in data) {
-            tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex]}`] =
-              formatData(key, data[key])
+            tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] =
+              formatVersionData(key, data[key])
           }
 
-          tempVersionData[index++][`${i18n.t('version.version')} ${versionIds[versionIndex]}`] = (
+          for (const meta of metadata) {
+            tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] =
+              meta.data
+          }
+
+          tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] = (
             <PimcoreImage
               key={ 'image' }
-              src={ imageUrls[versionIds[versionIndex]] ?? '' }
+              src={ imageUrls[versionIds[versionIndex].id] ?? '' }
             />
           )
         })
@@ -104,9 +112,9 @@ export const DetailsVersionsContainer = ({
         }
       })
       .catch(err => { console.log(err) })
-  })
+  }, [versionIds, imageUrls])
 
-  if (versionData.length === 1) {
+  if (versionData.length === 0) {
     return <div>Loading ...</div>
   }
 

@@ -14,7 +14,7 @@
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { TextCell } from '@Pimcore/components/grid/columns/types/text/text-cell'
-import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { SelectCell } from '@Pimcore/components/grid/columns/types/value-select/select-cell'
 import { BooleanCell } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell'
 import {
   ElementCell

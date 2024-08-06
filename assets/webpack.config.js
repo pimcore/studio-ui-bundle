@@ -17,6 +17,14 @@ const path = require('path')
 const webpack = require('webpack')
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const uuid = require('uuid');
+const buildId = uuid.v4();
+const fs = require('fs');
+const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
+
+if (!fs.existsSync(buildPath)) {
+  fs.mkdirSync(buildPath, { recursive: true });
+}
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -26,9 +34,9 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
   // directory where compiled assets will be stored
-  .setOutputPath(path.resolve(__dirname, '..', 'public', 'build'))
+  .setOutputPath(buildPath)
   // public path used by the web server to access the output path
-  .setPublicPath('/bundles/pimcorestudioui/build')
+  .setPublicPath('/bundles/pimcorestudioui/build/' + buildId)
 
   /*
     * ENTRY CONFIG
@@ -55,11 +63,11 @@ Encore
     * list of features, see:
     * https://symfony.com/doc/current/frontend.html#adding-more-features
     */
-  .cleanupOutputBeforeBuild()
+  // .cleanupOutputBeforeBuild()
   .enableBuildNotifications()
   .enableSourceMaps(!Encore.isProduction())
   // enables hashed filenames (e.g. app.abc123.css)
-  .enableVersioning(Encore.isProduction())
+  // .enableVersioning(Encore.isProduction())
 
 // .configureBabel((config) => {
 //   config.plugins.push('@babel/plugin-transform-class-properties');
@@ -115,13 +123,6 @@ Encore
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
   })
 
-  .addPlugin(
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
-    }),
-  )
-
   .addPlugin(new webpack.BannerPlugin({
     banner: `
       /**
@@ -142,12 +143,19 @@ Encore
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy
   Encore
-    .setManifestKeyPrefix('bundles/pimcorestudioui/build')
+    .setManifestKeyPrefix('bundles/pimcorestudioui/build/' + buildId)
 
     .addPlugin(
       new webpack.DllReferencePlugin({
         context: __dirname,
         manifest: path.join(__dirname, 'dist', 'core-dll', 'core-manifest.json')
+      }),
+    )
+
+    .addPlugin(
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: path.join(__dirname, 'dist', 'vendor',  'vendor-manifest.json')
       }),
     )
 }
@@ -158,9 +166,17 @@ if (!Encore.isDevServer() && !Encore.isProduction()) {
 }
 
 if (Encore.isDevServer()) {
+  if (fs.existsSync( path.resolve(__dirname, '..', 'public', 'build'))) {
+    fs.rmSync(path.resolve(__dirname, '..', 'public', 'build'), { recursive: true });
+  }
+
+  if (!fs.existsSync(buildPath)) {
+    fs.mkdirSync(buildPath, { recursive: true });
+  }
+
   Encore
-    .setOutputPath('../public/build/')
-    .setPublicPath('/build')
+    .setOutputPath(buildPath)
+    .setPublicPath('/build/' + buildId)
     .addPlugin(new ReactRefreshPlugin())
 }
 

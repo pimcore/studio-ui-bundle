@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\StudioUiBundle\Service;
 use Exception;
 use Pimcore\Bundle\StudioUiBundle\Exception\InvalidEntrypointsJsonException;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
+use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Bundle\StudioUiBundle\PimcoreStudioUiBundle;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
 
@@ -79,7 +80,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                 $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
 
-            foreach ($bundle->getWebpackEntryPoints() as $entryPointName) {
+            foreach ($this->getEntryPoints($bundle) as $entryPointName) {
 
                 $entryPointFound = false;
                 foreach ($entryPointJsonContents as $entryPointJson) {
@@ -95,7 +96,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                     }
                 }
 
-                if (!$entryPointFound) {
+                if (!$entryPointFound && !$this->isEntryPointOptional($bundle, $entryPointName)) {
                     throw new InvalidEntrypointsJsonException(
                         sprintf(
                             'Entry point "%s" not found in any of the entry points JSON files: %s',
@@ -108,6 +109,23 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
         }
 
         return $files;
+    }
+
+    private function getEntryPoints(PimcoreBundleStudioUiInterface $bundle): array
+    {
+        $entryPoints = $bundle->getWebpackEntryPoints();
+
+        if ($bundle instanceof PimcoreBundleStudioUiOptionalEntrypointsInterface) {
+            $entryPoints = array_merge($entryPoints, $bundle->getWebpackOptionalEntrypoints());
+        }
+
+        return array_unique($entryPoints);
+    }
+
+    private function isEntryPointOptional(PimcoreBundleStudioUiInterface $bundle, string $entryPointName): bool
+    {
+        return $bundle instanceof PimcoreBundleStudioUiOptionalEntrypointsInterface
+            && in_array($entryPointName, $bundle->getWebpackOptionalEntrypoints(), true);
     }
 
     /**

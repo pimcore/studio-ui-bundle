@@ -38,17 +38,16 @@ export const useStyles = createStyles(({ token, css }) => {
       &.ant-table-wrapper .ant-table.ant-table-small .ant-table-tbody>tr>td {
         padding: 0;
       }
-        
-      .ant-table-row-no-data {
-        margin: 0;
-        padding: ${token.paddingXS}px 0px ${token.paddingXS}px ${token.paddingXS}px;
-      }
 
       .ant-table-cell {
         position: relative;
-        border-left: 1px solid #F0F0F0;
+        border-left: 1px solid ${token.Table.colorBorderSecondary};
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        &.ant-table-cell__no-data {
+          padding: ${token.paddingXS}px 0px ${token.paddingXS}px ${token.paddingXS}px !important;
+        }
 
         &:last-of-type {
           border-right: 1px solid #F0F0F0;
@@ -83,12 +82,26 @@ export const useStyles = createStyles(({ token, css }) => {
         display: flex;
         width: 100%;
         height: 100%;
+          
+        .ant-skeleton {
+          width: 100%;
+          margin: 4px;
+            
+            .ant-skeleton-input {
+              min-width: unset;
+              width: 100%;
+            }
+        }
       }
 
       .grid__cell-content > * {
         display: flex;
         width: 100%;
         height: 100%;
+      }
+
+      .ant-table-row-selected td {
+        background-color: ${token.controlItemBgActive};
       }
     `
   }

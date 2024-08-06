@@ -14,6 +14,18 @@
 const Encore = require('@symfony/webpack-encore');
 const path = require('path');
 var { DllPlugin } = require('webpack');
+const uuid = require('uuid');
+const buildId = uuid.v4();
+const fs = require('fs');
+const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
+
+if (fs.existsSync( path.resolve(__dirname, '..', 'public', 'build'))) {
+  fs.rmSync(path.resolve(__dirname, '..', 'public', 'build'), { recursive: true });
+}
+
+if (!fs.existsSync(buildPath)) {
+  fs.mkdirSync(buildPath, { recursive: true });
+}
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
@@ -21,10 +33,10 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
     // directory where compiled assets will be stored
-  .setOutputPath(path.resolve(__dirname, '..', 'public', 'vendor'))
+  .setOutputPath(buildPath)
   // public path used by the web server to access the output path
-  .setPublicPath('/bundles/pimcorestudioui/vendor')
-  .setManifestKeyPrefix('bundles/pimcorestudioui/vendor')
+  .setPublicPath('/bundles/pimcorestudioui/build/' + buildId)
+  .setManifestKeyPrefix('bundles/pimcorestudioui/build/' + buildId)
 
     .addEntry('vendor', [
       'react',
@@ -44,7 +56,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+    // .enableVersioning(Encore.isProduction())
     
     .addPlugin(new DllPlugin({
       context: __dirname,

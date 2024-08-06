@@ -19,15 +19,15 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/embedded-metadata/embedded-metadata-container'
 import {
   CustomMetadataTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
-import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies-container'
+import { DependenciesTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
 import {
   NotesAndEventsTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events-container'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags-container'
+import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 import { type AudioTabManager } from './tab-manager/audio-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { container } from '@Pimcore/app/depency-injection'

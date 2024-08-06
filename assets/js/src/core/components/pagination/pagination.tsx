@@ -44,6 +44,8 @@ export const Pagination = ({
   showTotal,
   onChange
 }: PaginationProps): React.JSX.Element => {
+  const { styles } = useStyle()
+
   const hashId = useCssComponentHash('pagination')
 
   const [currentPage, setCurrentPage] = useState(current)
@@ -60,8 +62,6 @@ export const Pagination = ({
   if (total === 0 || (hideOnSinglePage && pages === 1)) {
     return <></>
   }
-
-  const { styles } = useStyle()
 
   const onClickPageNumber = (pageNumber: number): void => {
     setCurrentPage(pageNumber)
