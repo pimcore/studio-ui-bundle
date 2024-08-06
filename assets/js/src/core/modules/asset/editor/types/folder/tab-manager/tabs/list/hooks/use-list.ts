@@ -19,12 +19,14 @@ import {
   type IListPageContext,
   type IListPageSizeContext,
   type IListSelectedRowsContext,
+  type IListSortingContext,
   ListColumnsContext,
   ListPageContext,
   ListSelectedRowsContext,
   ListGridConfigContext,
   ListPageSizeContext,
-  ListFilterOptionsContext
+  ListFilterOptionsContext,
+  ListSortingContext
 
 } from '../list-provider'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -124,5 +126,17 @@ export const useListSelectedRows = (): UseListSelectedRowsHookReturn => {
   return {
     selectedRows,
     setSelectedRows
+  }
+}
+
+export interface UseListSortingHookReturn extends IListSortingContext {
+}
+
+export const useListSorting = (): UseListSortingHookReturn => {
+  const { sorting, setSorting } = useContext(ListSortingContext)
+
+  return {
+    sorting,
+    setSorting
   }
 }
