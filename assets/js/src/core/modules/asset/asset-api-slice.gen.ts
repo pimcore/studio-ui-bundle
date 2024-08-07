@@ -81,11 +81,21 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
+            getAvailableAssetGridConfiguration: build.query<
+                GetAvailableAssetGridConfigurationApiResponse,
+                GetAvailableAssetGridConfigurationApiArg
+            >({
+                query: () => ({ url: `/studio/api/assets/grid/available-configuration` }),
+                providesTags: ["Grid"],
+            }),
             getAssetGridConfiguration: build.query<
                 GetAssetGridConfigurationApiResponse,
                 GetAssetGridConfigurationApiArg
             >({
-                query: () => ({ url: `/studio/api/assets/grid/configuration` }),
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/grid/configuration/${queryArg.folderId}`,
+                    params: { configurationId: queryArg.configurationId },
+                }),
                 providesTags: ["Grid"],
             }),
             getAssetGrid: build.mutation<GetAssetGridApiResponse, GetAssetGridApiArg>({
@@ -345,10 +355,19 @@ export type UpdateAssetByIdApiArg = {
         };
     };
 };
+export type GetAvailableAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
+    columns?: GridColumnConfiguration[];
+};
+export type GetAvailableAssetGridConfigurationApiArg = void;
 export type GetAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
     columns?: GridColumnConfiguration[];
 };
-export type GetAssetGridConfigurationApiArg = void;
+export type GetAssetGridConfigurationApiArg = {
+    /** FolderId of the element */
+    folderId: number;
+    /** Configuration ID */
+    configurationId?: number;
+};
 export type GetAssetGridApiResponse = /** status 200 Grid data */ {
     totalItems: number;
     items: {
@@ -580,7 +599,7 @@ export type Element = {
     /** Modification date */
     modificationDate: number | null;
 };
-export type CustomTreeAttributes = {
+export type CustomAttributes = {
     /** Custom Icon */
     icon: string | null;
     /** Custom Tooltip */
@@ -618,7 +637,7 @@ export type Asset = Element & {
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    customTreeAttributes?: CustomTreeAttributes;
+    customAttributes?: CustomAttributes;
     /** IconName */
     iconName?: string;
     /** Has children */
@@ -779,6 +798,7 @@ export const {
     useDownloadAssetByIdQuery,
     useGetAssetByIdQuery,
     useUpdateAssetByIdMutation,
+    useGetAvailableAssetGridConfigurationQuery,
     useGetAssetGridConfigurationQuery,
     useGetAssetGridMutation,
     useDownloadCustomImageQuery,
