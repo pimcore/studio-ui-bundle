@@ -39,10 +39,10 @@ import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 
-export const textTabManager = container.get<TextTabManager>(serviceIds['Asset/Editor/TextTabManager'])
-
 moduleSystem.registerModule({
   onInit: () => {
+    const textTabManager = container.get<TextTabManager>(serviceIds['Asset/Editor/TextTabManager'])
+
     textTabManager.register({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',

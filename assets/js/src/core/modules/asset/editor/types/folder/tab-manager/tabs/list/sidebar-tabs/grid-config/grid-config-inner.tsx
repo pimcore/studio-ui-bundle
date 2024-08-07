@@ -12,8 +12,8 @@
 */
 
 import { Title } from '@Pimcore/components/title/title'
-import React from 'react'
-import { useList } from '../../hooks/use-list'
+import React, { useEffect } from 'react'
+import { useListColumns, useListGridConfig } from '../../hooks/use-list'
 import { Button, Dropdown, Space, type MenuProps } from 'antd'
 import { GridConfigList } from './grid-config-list'
 import { useGridConfig } from './hooks/use-grid-config'
@@ -23,9 +23,14 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { useTranslation } from 'react-i18next'
 
 export const GridConfigInner = (): React.JSX.Element => {
-  const { dropDownMenu, setGridColumns, columns: gridColumns } = useList()
+  const { dropDownMenu } = useListGridConfig()
+  const { columns: gridColumns, setGridColumns } = useListColumns()
   const { columns, setColumns, addColumn } = useGridConfig()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    setColumns(gridColumns)
+  }, [gridColumns])
 
   return (
     <>

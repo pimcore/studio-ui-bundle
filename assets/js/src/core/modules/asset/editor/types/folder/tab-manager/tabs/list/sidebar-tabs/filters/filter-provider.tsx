@@ -23,7 +23,7 @@ export interface IFilterContext {
 
 export const defaultFilterOptions: FilterOptions = {
   columnFilters: [],
-  includeDescendants: false
+  includeDescendants: true
 }
 
 export const FilterContext = createContext<IFilterContext>({

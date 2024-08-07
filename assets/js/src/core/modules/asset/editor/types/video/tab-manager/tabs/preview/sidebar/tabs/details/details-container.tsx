@@ -97,11 +97,10 @@ const DetailContainer = (): React.JSX.Element => {
         })
       }
     )
+      .then(() => { setImagePreviewFromBackend(200, 119) })
       .catch((err) => {
         console.error(err)
       })
-
-    setImagePreviewFromBackend(200, 119)
   }
 
   function downloadVideoByFormat (format: string): void {

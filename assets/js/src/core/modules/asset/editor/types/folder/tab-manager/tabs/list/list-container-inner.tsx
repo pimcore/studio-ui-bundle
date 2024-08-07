@@ -11,23 +11,33 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetAssetGridMutation, api, type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetGridMutation, api, type GetAssetGridApiResponse, type GridFilter } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useEffect, useState } from 'react'
 import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar-container'
-import { useList } from './hooks/use-list'
+import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const dispatch = useAppDispatch()
-  const { page, filterOptions, pageSize, setPage, setPageSize, columns, gridConfig, setGridConfig } = useList()
+  const { page, setPage } = useListPage()
+  const { pageSize, setPageSize } = useListPageSize()
+  const { setSelectedRows } = useListSelectedRows()
+  const { filterOptions } = useListFilterOptions()
+  const { columns, setGridColumns } = useListColumns()
+  const { gridConfig, setGridConfig } = useListGridConfig()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
   const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
+  const { sorting } = useListSorting()
+
+  useEffect(() => {
+    setSelectedRows({})
+  }, [sorting, page, pageSize, filterOptions])
 
   useEffect(() => {
     if (columns.length === 0) {
@@ -42,6 +52,16 @@ export const ListContainerInner = (): React.JSX.Element => {
       columnsToRequest.push(idColumn)
     }
 
+    let sortFilter: GridFilter['sortFilter'] = {}
+
+    if (sorting.length > 0) {
+      const currentSorting = sorting[0]
+      sortFilter = {
+        key: currentSorting.id,
+        direction: currentSorting.desc ? 'DESC' : 'ASC'
+      }
+    }
+
     fetchListing({
       body: {
         folderId: assetId,
@@ -53,18 +73,26 @@ export const ListContainerInner = (): React.JSX.Element => {
         filters: {
           page,
           pageSize: parseInt(pageSize.toString()),
-          ...filterOptions
+          ...filterOptions,
+          sortFilter
         }
       }
     }).catch((error) => {
       console.error(error)
     })
-  }, [columns, filterOptions, page, pageSize])
+  }, [columns, filterOptions, page, pageSize, sorting])
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const { data } = await dispatch(api.endpoints.getAssetGridConfiguration.initiate())
-      setGridConfig(data?.columns)
+      const availableGridCOnfigPromise = dispatch(api.endpoints.getAvailableAssetGridConfiguration.initiate())
+      const initialGridConfigPromise = dispatch(api.endpoints.getAssetGridConfiguration.initiate({ folderId: assetId }))
+
+      Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
+        setGridConfig(availableGridConfig.data?.columns)
+        setGridColumns(initialGridConfig.data!.columns!)
+      }).catch((error) => {
+        console.error(error)
+      })
     }
 
     fetchGridConfiguration().catch((error) => {

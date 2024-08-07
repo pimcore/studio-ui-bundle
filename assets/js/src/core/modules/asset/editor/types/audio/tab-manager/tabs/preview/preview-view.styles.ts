@@ -11,14 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type RefObject, createContext } from 'react'
+import { createStyles } from 'antd-style'
 
-export interface IGridContext {
-  table: RefObject<HTMLTableElement> | null
-}
-
-export const GridContext = createContext<IGridContext>({
-  table: null
-})
-
-export const GridContextProvider = GridContext.Provider
+export const useStyle = createStyles(({ token, css }) => {
+  return {
+    preview: css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    `
+  }
+}, { hashPriority: 'low' })

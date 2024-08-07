@@ -13,7 +13,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type Image, useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -37,7 +37,7 @@ const PreviewContainer = (): React.JSX.Element => {
     zoom,
     setZoom
   }), [zoom])
-
+  const imageData = data as Image
   return (
     <ZoomContext.Provider value={ contextValue }>
       <ContentToolbarSidebarView renderSidebar={
@@ -48,7 +48,7 @@ const PreviewContainer = (): React.JSX.Element => {
       }
       >
         <PreviewView
-          src={ data!.fullPath! }
+          src={ imageData.imageThumbnailPath! }
         />
       </ContentToolbarSidebarView>
     </ZoomContext.Provider>

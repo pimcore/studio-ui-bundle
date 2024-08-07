@@ -81,11 +81,21 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
+            getAvailableAssetGridConfiguration: build.query<
+                GetAvailableAssetGridConfigurationApiResponse,
+                GetAvailableAssetGridConfigurationApiArg
+            >({
+                query: () => ({ url: `/studio/api/assets/grid/available-configuration` }),
+                providesTags: ["Grid"],
+            }),
             getAssetGridConfiguration: build.query<
                 GetAssetGridConfigurationApiResponse,
                 GetAssetGridConfigurationApiArg
             >({
-                query: () => ({ url: `/studio/api/assets/grid/configuration` }),
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/grid/configuration/${queryArg.folderId}`,
+                    params: { configurationId: queryArg.configurationId },
+                }),
                 providesTags: ["Grid"],
             }),
             getAssetGrid: build.mutation<GetAssetGridApiResponse, GetAssetGridApiArg>({
@@ -314,7 +324,7 @@ export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Video
     | Archive
     | Text
-    | Folder
+    | AssetFolder
     | Unknown;
 export type GetAssetByIdApiArg = {
     /** Id of the asset */
@@ -327,7 +337,7 @@ export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
     | Video
     | Archive
     | Text
-    | Folder
+    | AssetFolder
     | Unknown;
 export type UpdateAssetByIdApiArg = {
     /** Id of the asset */
@@ -345,10 +355,19 @@ export type UpdateAssetByIdApiArg = {
         };
     };
 };
+export type GetAvailableAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
+    columns?: GridColumnConfiguration[];
+};
+export type GetAvailableAssetGridConfigurationApiArg = void;
 export type GetAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
     columns?: GridColumnConfiguration[];
 };
-export type GetAssetGridConfigurationApiArg = void;
+export type GetAssetGridConfigurationApiArg = {
+    /** FolderId of the element */
+    folderId: number;
+    /** Configuration ID */
+    configurationId?: number;
+};
 export type GetAssetGridApiResponse = /** status 200 Grid data */ {
     totalItems: number;
     items: {
@@ -410,7 +429,7 @@ export type PatchAssetByIdApiArg = {
 };
 export type GetAssetTreeApiResponse = /** status 200 Paginated assets with total count as header param */ {
     totalItems: number;
-    items: (Image | Document | Audio | Video | Archive | Text | Folder | Unknown)[];
+    items: (Image | Document | Audio | Video | Archive | Text | AssetFolder | Unknown)[];
 };
 export type GetAssetTreeApiArg = {
     /** Page number */
@@ -560,6 +579,38 @@ export type GridColumnRequest = {
     /** Config */
     config: string[];
 };
+export type Element = {
+    /** ID */
+    id: number;
+    /** ID of parent */
+    parentId: number;
+    /** path */
+    path: string;
+    /** ID of owner */
+    userOwner: number;
+    /** User that modified the element */
+    userModification: number;
+    /** Locked */
+    locked: string | null;
+    /** Is locked */
+    isLocked: boolean;
+    /** Creation date */
+    creationDate: number | null;
+    /** Modification date */
+    modificationDate: number | null;
+};
+export type CustomAttributes = {
+    /** Custom Icon */
+    icon: string | null;
+    /** Custom Tooltip */
+    tooltip: string | null;
+    /** AdditionalIcons */
+    additionalIcons: string[];
+    /** Custom Key/Filename */
+    key: string | null;
+    /** Additional Css Classes */
+    additionalCssClasses: string[];
+};
 export type Permissions = {
     /** List */
     list?: boolean;
@@ -580,45 +631,13 @@ export type Permissions = {
     /** Properties */
     properties?: boolean;
 };
-export type Element = {
-    /** ID */
-    id: number;
-    /** ID of parent */
-    parentId: number;
-    /** path */
-    path: string;
-    /** ID of owner */
-    userOwner: number;
-    /** User that modified the element */
-    userModification: number;
-    /** Locked */
-    locked: string | null;
-    /** Is locked */
-    isLocked: boolean;
-    /** Creation date */
-    creationDate: number | null;
-    /** Modification date */
-    modificationDate: number | null;
-    permissions: Permissions;
-};
-export type CustomTreeAttributes = {
-    /** Custom Icon */
-    icon: string | null;
-    /** Custom Tooltip */
-    tooltip: string | null;
-    /** AdditionalIcons */
-    additionalIcons: string[];
-    /** Custom Key/Filename */
-    key: string | null;
-    /** Additional Css Classes */
-    additionalCssClasses: string[];
-};
+export type AssetPermissions = Permissions;
 export type Asset = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    customTreeAttributes?: CustomTreeAttributes;
+    customAttributes?: CustomAttributes;
     /** IconName */
     iconName?: string;
     /** Has children */
@@ -635,6 +654,7 @@ export type Asset = Element & {
     hasWorkflowWithPermissions?: boolean;
     /** Full path */
     fullPath?: string;
+    permissions?: AssetPermissions;
 };
 export type Image = Asset & {
     /** Format */
@@ -669,7 +689,7 @@ export type Video = Asset & {
 };
 export type Archive = Asset;
 export type Text = Asset;
-export type Folder = Asset;
+export type AssetFolder = Asset;
 export type Unknown = Asset;
 export type UpdateCustomMetadata = {
     /** Name */
@@ -778,6 +798,7 @@ export const {
     useDownloadAssetByIdQuery,
     useGetAssetByIdQuery,
     useUpdateAssetByIdMutation,
+    useGetAvailableAssetGridConfigurationQuery,
     useGetAssetGridConfigurationQuery,
     useGetAssetGridMutation,
     useDownloadCustomImageQuery,

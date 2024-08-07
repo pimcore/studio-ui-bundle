@@ -41,7 +41,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-table-cell {
         position: relative;
-        border-left: 1px solid #F0F0F0;
+        border-left: 1px solid ${token.Table.colorBorderSecondary};
         white-space: nowrap;
         text-overflow: ellipsis;
 
@@ -58,6 +58,20 @@ export const useStyles = createStyles(({ token, css }) => {
         position: sticky;
         top: 0;
         z-index: 1;
+
+        .grid__cell-content {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .grid__sorter {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          width: 26px;
+        }
       }
 
       .ant-table-content {
@@ -98,6 +112,10 @@ export const useStyles = createStyles(({ token, css }) => {
         display: flex;
         width: 100%;
         height: 100%;
+      }
+
+      .ant-table-row-selected td {
+        background-color: ${token.controlItemBgActive};
       }
     `
   }
