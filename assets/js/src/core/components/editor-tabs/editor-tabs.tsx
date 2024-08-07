@@ -30,6 +30,12 @@ export interface IEditorTabsProps {
   showLabelIfActive?: boolean
 }
 
+export interface IconWrapperProps {
+  tabKey: string
+  title: string
+  children: React.ReactNode
+}
+
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
@@ -42,32 +48,44 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
     })
   }
 
-  items = items?.map((item) => {
+  const IconWrapper = ({ tabKey, title, children }: IconWrapperProps): React.JSX.Element => {
+    const toolTipIsVisible = hoveredTooltip === tabKey
+
     const handleMouseEnter = (): void => {
-      setHoveredTooltip(item.key)
+      setHoveredTooltip(tabKey)
     }
 
     const handleMouseLeave = (): void => {
       setHoveredTooltip(null)
     }
 
-    const toolTipIsVisible = hoveredTooltip === item.key
+    return (
+      <Tooltip
+        arrow={ false }
+        open={ toolTipIsVisible }
+        placement="top"
+        title={ title }
+      >
+        <div
+          onMouseEnter={ handleMouseEnter }
+          onMouseLeave={ handleMouseLeave }
+        >
+          {children}
+        </div>
+      </Tooltip>
+    )
+  }
 
+  items = items?.map((item) => {
     const tmpItem = {
       ...item,
       originalLabel: item.label as string,
-      icon: (
-        <Tooltip
-          arrow={ false }
-          open={ toolTipIsVisible }
-          placement="top"
-          title={ item.label }
-        >
-          <div
-            onMouseEnter={ handleMouseEnter }
-            onMouseLeave={ handleMouseLeave }
-          >{item.icon}</div>
-        </Tooltip>)
+      icon: (<IconWrapper
+        tabKey={ item.key }
+        title={ item.label as string }
+             >
+        {item.icon}
+      </IconWrapper>)
     }
 
     if (tmpItem.isDetachable === true) {
