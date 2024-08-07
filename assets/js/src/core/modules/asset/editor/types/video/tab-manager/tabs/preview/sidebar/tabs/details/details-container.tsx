@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import {
   useGetAssetByIdQuery, type Video
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -25,12 +25,17 @@ import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 
 const DetailContainer = (): React.JSX.Element => {
-  const { setThumbnail } = React.useContext(VideoContext)
+  const { playerPosition, setThumbnail } = React.useContext(VideoContext)
   const assetContext = useContext(AssetContext)
-  const { data } = useGetAssetByIdQuery({ id: assetContext.id! })
-  const videoData = data! as Video
-  const videoThumbnailsReq = useGetVideoThumbnailsQuery()
-  const videoThumbnails = videoThumbnailsReq.data?.items
+  const [imagePreview, setImagePreview] = useState('')
+
+  useMemo(() => {
+    setImagePreviewFromBackend(200, 119)
+  }, [])
+  const { data: assetData } = useGetAssetByIdQuery({ id: assetContext.id! })
+  const videoData = assetData! as Video
+  const { data: thumbnailsData } = useGetVideoThumbnailsQuery()
+  const videoThumbnails = thumbnailsData?.items
 
   if (videoThumbnails === null || videoThumbnails === undefined) {
     return <>Loading ....</>
@@ -39,20 +44,68 @@ const DetailContainer = (): React.JSX.Element => {
   return (
     <VideoEditorSidebarDetailsTab
       height={ videoData.height ?? 0 }
-      onChangeThumbnail={ async (thumbnail) => {
-        setThumbnailByThumbnailName(assetContext.id!, thumbnail)
-      } }
-      onClickDownloadByFormat={ async (format) => {
-        downloadVideoByFormat(assetContext.id!, format)
-      } }
+      imagePreview={ imagePreview }
+      onApplyPlayerPosition={ onApplyPlayerPosition }
+      onChangeThumbnail={ setThumbnailByThumbnailName }
+      onClickDownloadByFormat={ downloadVideoByFormat }
+      onDropImage={ onDropImage }
       thumbnails={ videoThumbnails }
       width={ videoData.width ?? 0 }
     />
   )
 
-  function downloadVideoByFormat (id: number, format: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${id}/video/download/${format}`
+  function setImagePreviewFromBackend (width: number, height: number): void {
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}/video/stream/image-thumbnail?width=${width}&height=${height}`
+    fetch(url)
+      .then(async (response) => await response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob)
+        setImagePreview(url)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 
+  function onDropImage (id: number): void {
+    setImagePreviewByToBackend('image_thumbnail_asset', id)
+  }
+
+  function onApplyPlayerPosition (): void {
+    setImagePreviewByToBackend('image_thumbnail_time', playerPosition)
+  }
+
+  function setImagePreviewByToBackend (key: string, value: number): void {
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}`
+    fetch(
+      url,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          data: {
+            customSettings: [
+              {
+                key,
+                value
+              }
+            ]
+          }
+        })
+      }
+    )
+      .catch((err) => {
+        console.error(err)
+      })
+
+    setImagePreviewFromBackend(200, 119)
+  }
+
+  function downloadVideoByFormat (format: string): void {
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}/video/download/${format}`
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {
@@ -64,8 +117,8 @@ const DetailContainer = (): React.JSX.Element => {
       })
   }
 
-  function setThumbnailByThumbnailName (id: number, name: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${id}/video/stream/${name}`
+  function setThumbnailByThumbnailName (name: string): void {
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}/video/stream/${name}`
 
     fetch(url)
       .then(async (response) => await response.blob())

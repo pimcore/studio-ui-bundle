@@ -48,7 +48,7 @@ const PreviewContainer = (): React.JSX.Element => {
     setThumbnail,
     playerPosition,
     setPlayerPosition
-  }), [thumbnail])
+  }), [thumbnail, playerPosition])
 
   return (
     <VideoContext.Provider value={ contextValue }>

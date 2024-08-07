@@ -135,7 +135,7 @@ export const useStyle = createStyles(({ token, css }) => {
         margin-top: ${token.marginSM}px;
       }
       
-      .image-preview-droppable-container {
+      .image-preview-container {
         height: 129px;
         display: flex;
         flex-direction: column;

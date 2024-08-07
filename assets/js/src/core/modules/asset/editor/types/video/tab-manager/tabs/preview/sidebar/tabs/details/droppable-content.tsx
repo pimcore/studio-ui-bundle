@@ -15,9 +15,10 @@ import React, { type MutableRefObject, forwardRef } from 'react'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
+import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 
 interface DroppableContentProps {
-  value?: string
+  imgSrc?: string
 }
 
 export const DroppableContent = forwardRef(function DNDDemoDroppableContent (props: DroppableContentProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -25,11 +26,8 @@ export const DroppableContent = forwardRef(function DNDDemoDroppableContent (pro
   const options = { width: '21px', height: '21px' }
   const { t } = useTranslation()
 
-  return (
-    <div
-      className={ ['image-preview-droppable-container', ...getStateClasses()].join(' ') }
-      ref={ ref }
-    >
+  let content = (
+    <>
       <div>
         <Icon
           name={ 'PlusOutlined' }
@@ -41,6 +39,21 @@ export const DroppableContent = forwardRef(function DNDDemoDroppableContent (pro
         />
       </div>
       <span>{t('drag-and-drop-asset')}</span>
+    </>
+  )
+
+  if (props.imgSrc !== '') {
+    content = (
+      <PimcoreImage src={ props.imgSrc } />
+    )
+  }
+
+  return (
+    <div
+      className={ ['image-preview-container', ...getStateClasses()].join(' ') }
+      ref={ ref }
+    >
+      {content}
     </div>
   )
 })

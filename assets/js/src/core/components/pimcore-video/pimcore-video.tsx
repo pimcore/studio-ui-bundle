@@ -78,6 +78,7 @@ export const PimcoreVideo = ({
   )
 
   function onPlayerTimeUpdate (e: SyntheticEvent): void {
-    setPlayerPosition(e.timeStamp)
+    const video = e.target as HTMLVideoElement
+    setPlayerPosition(video.currentTime)
   }
 }

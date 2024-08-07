@@ -25,11 +25,15 @@ import {
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/droppable-content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 
 interface VideoEditorSidebarDetailsViewProps {
   width: number
   height: number
   thumbnails: Thumbnail[]
+  imagePreview: string
+  onApplyPlayerPosition: () => void
+  onDropImage: (id: number) => void
   onChangeThumbnail: (thumbnail: string) => void
   onClickDownloadByFormat: (format: string) => void
 }
@@ -38,8 +42,11 @@ export const VideoEditorSidebarDetailsTab = ({
   width,
   height,
   thumbnails,
+  imagePreview,
+  onApplyPlayerPosition,
   onChangeThumbnail,
-  onClickDownloadByFormat
+  onClickDownloadByFormat,
+  onDropImage
 }: VideoEditorSidebarDetailsViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
@@ -56,14 +63,48 @@ export const VideoEditorSidebarDetailsTab = ({
 
   const downloadFormats = modes
 
-  const toolbar = (
-    <Toolbar
-      className={ 'image-preview__toolbar' }
-      pinnableToolbarElements={ [] }
-      renderSaveButton={ <Button>{t('apply')}</Button> }
-      showWorkflow={ false }
-    />
-  )
+  let cardContent
+  if (imageSource === 'media') {
+    cardContent = (
+      <>
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
+          onDrop={ onDropAsset }
+        >
+          <DroppableContent imgSrc={ imagePreview } />
+        </Droppable>
+        <Meta
+          title={
+            <Toolbar
+              className={ 'image-preview__toolbar' }
+              pinnableToolbarElements={ [] }
+              showWorkflow={ false }
+            />
+        }
+        />
+      </>
+    )
+  } else {
+    cardContent = (
+      <>
+        <div className={ 'image-preview-container' }>
+          <PimcoreImage
+            src={ imagePreview }
+          />
+        </div>
+        <Meta
+          title={
+            <Toolbar
+              className={ 'image-preview__toolbar' }
+              pinnableToolbarElements={ [] }
+              renderSaveButton={ <Button onClick={ onClickApply }>{t('apply')}</Button> }
+              showWorkflow={ false }
+            />
+          }
+        />
+      </>
+    )
+  }
 
   return (
     <div className={ styles.sidebarContentEntry }>
@@ -146,15 +187,7 @@ export const VideoEditorSidebarDetailsTab = ({
             </Button>
           </ButtonGroup>
           <Card size={ 'small' }>
-            <Droppable
-              isValidContext={ (info: DragAndDropInfo) => true }
-              onDrop={ onDropAsset }
-            >
-              <DroppableContent />
-            </Droppable>
-            <Meta
-              title={ toolbar }
-            />
+            {cardContent}
           </Card>
         </div>
       </div>
@@ -179,6 +212,10 @@ export const VideoEditorSidebarDetailsTab = ({
   }
 
   function onDropAsset (e): void {
-    console.log(e)
+    onDropImage(e.data.id as number)
+  }
+
+  function onClickApply (): void {
+    onApplyPlayerPosition()
   }
 }

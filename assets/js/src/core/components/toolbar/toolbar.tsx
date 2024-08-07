@@ -31,7 +31,7 @@ interface InternalToolbarElement extends PinnableToolbarElement {
 }
 
 interface ToolbarProps {
-  renderSaveButton: ReactNode
+  renderSaveButton?: ReactNode
   pinnableToolbarElements?: PinnableToolbarElement[]
   showWorkflow?: boolean
   className?: string
