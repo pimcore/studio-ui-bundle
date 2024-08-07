@@ -76,6 +76,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
         <Grid
           columns={ columns }
           data={ reformattedEmbeddedMetaData }
+          enableSorting
         />
       </div>
     </div>

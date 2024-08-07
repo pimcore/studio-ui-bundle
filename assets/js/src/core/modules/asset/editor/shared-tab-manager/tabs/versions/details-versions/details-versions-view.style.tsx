@@ -14,10 +14,11 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-  const versionToken = { versionsLeftSideWidth: '383', ...token }
+  const versionToken = { versionsLeftSideWidth: '395', ...token }
 
   return {
     'right-side': css`
+      overflow: auto;
       width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
       padding: ${token.paddingSM}px;
       text-align: center;

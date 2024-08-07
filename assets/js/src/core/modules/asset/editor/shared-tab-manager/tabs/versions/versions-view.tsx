@@ -12,7 +12,6 @@
 */
 
 import React, { useState } from 'react'
-import i18n from '@Pimcore/app/i18n'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -31,6 +30,7 @@ import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
 import { formatDateTime } from '@Pimcore/utils/date-time'
+import { useTranslation } from 'react-i18next'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -52,6 +52,7 @@ export const VersionsView = ({
   onClickClearAll,
   onBlurNote
 }: VersionsViewProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
@@ -59,10 +60,10 @@ export const VersionsView = ({
   if (versions.length === 0) {
     return (
       <div className={ styles.noContent }>
-        <p className={ 'headline' }>{i18n.t('version.versions')}</p>
+        <p className={ 'headline' }>{t('version.versions')}</p>
         <div className={ 'empty-container' }>
           <NoContent
-            text={ i18n.t('version.no-versions-to-show') }
+            text={ t('version.no-versions-to-show') }
           />
         </div>
       </div>
@@ -74,12 +75,12 @@ export const VersionsView = ({
       <div className={ 'left-side' }>
         <div className={ 'flexbox-start-end' }>
           <div>
-            <span className={ 'version-label' }>{i18n.t('version.versions')}</span>
+            <span className={ 'version-label' }>{t('version.versions')}</span>
             {versions.length > 0 && (
               <Button
                 className={ comparingActive ? 'compare-button' : '' }
                 onClick={ onClickCompareVersion }
-              >{i18n.t('version.compare-versions')}</Button>
+              >{t('version.compare-versions')}</Button>
             )}
           </div>
 
@@ -96,7 +97,7 @@ export const VersionsView = ({
                 )
               } }
             >
-              {i18n.t('clear-all')}
+              {t('clear-all')}
             </Button>
           )}
         </div>

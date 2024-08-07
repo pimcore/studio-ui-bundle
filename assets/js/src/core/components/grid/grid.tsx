@@ -14,22 +14,25 @@
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import {
   type CellContext,
+  type Column,
   type ColumnDef,
   type ColumnResizeMode,
   flexRender,
   getCoreRowModel, getSortedRowModel,
   type RowData,
   type RowSelectionState,
+  type SortingState,
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
 import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
+import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,16 +63,28 @@ export interface GridProps {
   enableRowSelection?: boolean
   enableMultipleRowSelection?: boolean
   selectedRows?: RowSelectionState
+  enableSorting?: boolean
+  manualSorting?: boolean
   onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
+  setRowId?: (originalRow: any, index: number, parent: any) => string
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
   const tableElement = useRef<HTMLTableElement>(null)
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
+  const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
+
+  useEffect(() => {
+    if (sorting !== undefined) {
+      setInternalSorting(sorting)
+    }
+  }, [sorting])
 
   const data = useMemo(
     () => {
@@ -103,7 +118,8 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
   const tableProps: TableOptions<any> = useMemo(() => ({
     data,
     state: {
-      rowSelection
+      rowSelection,
+      sorting: internalSorting
     },
     columns,
     initialState: props.initialState,
@@ -115,6 +131,11 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
     enableRowSelection: isRowSelectionEnabled,
     enableMultiRowSelection: enableMultipleRowSelection,
     onRowSelectionChange: updateRowSelection,
+    onSortingChange: updateSorting,
+    enableSorting,
+    manualSorting,
+    getRowId: props.setRowId,
+    enableMultiSorting: false,
     meta: {
       onUpdateCellData: props.onUpdateCellData
     }
@@ -150,9 +171,21 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
                           }
                       >
                         <div className='grid__cell-content'>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
+                          <span>
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </span>
+
+                          {header.column.getCanSort() && (
+                            <div className='grid__sorter'>
+                              <SortButton
+                                onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
+
+                                value={ getSortDirection(header.column) }
+                              />
+                            </div>
                           )}
                         </div>
 
@@ -217,7 +250,7 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
       id: 'selection',
       header: enableMultipleRowSelection
         ? ({ table }): React.JSX.Element => (
-          <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center' } }>
+          <div style={ { display: 'Flex', alignItems: 'center', justifyContent: 'center', width: '100%' } }>
             <Checkbox
               checked={ table.getIsAllRowsSelected() }
               indeterminate={ table.getIsSomeRowsSelected() }
@@ -264,5 +297,33 @@ export const Grid = ({ enableMultipleRowSelection = false, enableRowSelection = 
     } else {
       removeRowSelectionColumn()
     }
+  }
+
+  function updateSorting (sorting: SortingState): void {
+    if (props.onSortingChange !== undefined) {
+      props.onSortingChange(sorting)
+      return
+    }
+
+    setInternalSorting(sorting)
+  }
+
+  function updateSortDirection (column, direction: SortDirection): void {
+    if (direction === undefined) {
+      table.setSorting([])
+      return
+    }
+
+    table.setSorting([{ id: column.id, desc: direction === SortDirections.DESC }])
+  }
+
+  function getSortDirection (column: Column<any>): SortDirection | undefined {
+    const sortDirection = internalSorting.find(({ id }) => id === column.id)?.desc
+
+    if (sortDirection === undefined) {
+      return undefined
+    }
+
+    return sortDirection ? SortDirections.DESC : SortDirections.ASC
   }
 }

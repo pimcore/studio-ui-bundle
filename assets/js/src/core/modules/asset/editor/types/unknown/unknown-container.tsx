@@ -11,10 +11,28 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
+import { TabsContainer } from '../../shared-tab-manager/tabs-container'
+import { type UnknownTabManager } from './tab-manager/unknown-tab-manager'
+import { Toolbar } from '../../toolbar/toolbar'
 
-export const UnknownContainer = (): React.JSX.Element => {
+const UnknownContainer = (): React.JSX.Element => {
+  const unknownTabManager = useInjection<UnknownTabManager>(serviceIds['Asset/Editor/UnknownTabManager'])
+
   return (
-    <div>Unknown type</div>
+    <TabsToolbarView
+      renderTabbar={
+        <TabsContainer tabManager={ unknownTabManager } />
+      }
+
+      renderToolbar={
+        <Toolbar />
+      }
+    />
   )
 }
+
+export { UnknownContainer }
