@@ -121,9 +121,18 @@ export const useStyle = createStyles(({ token, css }) => {
       }
       
       .ant-btn-group {
-        & button {
+        button {
           padding: 0 4px;
           height: 24px;
+          border-radius: unset;
+        }
+        button:nth-child(1)  {
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+        }
+        button:nth-child(2)  {
+          border-top-right-radius: 6px;
+          border-bottom-right-radius: 6px;
         }
       }
 
