@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Button, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
@@ -41,7 +41,17 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
   const { id } = useContext(AssetContext)
+  const [openTabKey, setOpenTabKey] = useState<string | null>(null)
 
+  useEffect(() => {
+    if (openTabKey === null && items.length > 0) {
+      setOpenTabKey(items[0].key)
+    }
+  }, [items])
+
+  const onTabClick = (key: string): void => {
+    setOpenTabKey(key)
+  }
   const openDetachedWidget = (item: IEditorTab): void => {
     detachWidget({
       item
@@ -52,12 +62,15 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
     const tmpItem = {
       ...item,
       originalLabel: item.label as string,
-      icon: (<IconWrapper
-        tabKey={ item.key }
-        title={ item.label as string }
-             >
-        {item.icon}
-      </IconWrapper>)
+      icon: (
+        <IconWrapper
+          openTabKey={ openTabKey }
+          tabKey={ item.key }
+          title={ item.label as string }
+        >
+          {item.icon}
+        </IconWrapper>
+      )
     }
 
     if (tmpItem.isDetachable === true) {
@@ -90,6 +103,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         className={ `${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}` }
         defaultActiveKey={ defaultActiveKey }
         items={ items }
+        onTabClick={ onTabClick }
         tabBarExtraContent={ {
           left: <ElementToolbar id={ id! } />
         } }

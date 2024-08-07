@@ -16,32 +16,21 @@ import { Tooltip } from 'antd'
 
 export interface IconWrapperProps {
   tabKey: string
+  openTabKey: string | null
   title: string
   children: React.ReactNode
 }
-export const IconWrapper = ({ tabKey, title, children }: IconWrapperProps): React.JSX.Element => {
-  const [hoveredTab, setHoveredTab] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<string | null>(null)
+export const IconWrapper = ({ tabKey, openTabKey, title, children }: IconWrapperProps): React.JSX.Element => {
+  const [showTooltip, setShowTooltip] = useState<string | null>(null)
 
-  const toolTipIsVisible = hoveredTab === tabKey && hoveredTab !== activeTab
+  const toolTipIsVisible = showTooltip === tabKey && openTabKey !== tabKey
 
   const handleMouseEnter = (): void => {
-    setHoveredTab(tabKey)
+    setShowTooltip(tabKey)
   }
 
   const handleMouseLeave = (): void => {
-    setHoveredTab(null)
-  }
-
-  const handleClick = (): void => {
-    setActiveTab(tabKey)
-  }
-
-  const handleKeyDown = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      handleClick()
-    }
+    setShowTooltip(null)
   }
 
   return (
@@ -52,12 +41,8 @@ export const IconWrapper = ({ tabKey, title, children }: IconWrapperProps): Reac
       title={ title }
     >
       <div
-        onClick={ handleClick }
-        onKeyDown={ handleKeyDown }
         onMouseEnter={ handleMouseEnter }
         onMouseLeave={ handleMouseLeave }
-        role="button"
-        tabIndex={ 0 }
       >
         {children}
       </div>
