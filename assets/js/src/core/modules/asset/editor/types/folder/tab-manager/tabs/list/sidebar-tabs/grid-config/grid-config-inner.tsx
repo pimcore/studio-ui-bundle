@@ -12,7 +12,7 @@
 */
 
 import { Title } from '@Pimcore/components/title/title'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useListColumns, useListGridConfig } from '../../hooks/use-list'
 import { Button, Dropdown, Space, type MenuProps } from 'antd'
 import { GridConfigList } from './grid-config-list'
@@ -27,6 +27,10 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { columns: gridColumns, setGridColumns } = useListColumns()
   const { columns, setColumns, addColumn } = useGridConfig()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    setColumns(gridColumns)
+  }, [gridColumns])
 
   return (
     <>

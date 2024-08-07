@@ -28,7 +28,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { pageSize, setPageSize } = useListPageSize()
   const { setSelectedRows } = useListSelectedRows()
   const { filterOptions } = useListFilterOptions()
-  const { columns } = useListColumns()
+  const { columns, setGridColumns } = useListColumns()
   const { gridConfig, setGridConfig } = useListGridConfig()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
@@ -76,7 +76,6 @@ export const ListContainerInner = (): React.JSX.Element => {
           ...filterOptions,
           sortFilter
         }
-
       }
     }).catch((error) => {
       console.error(error)
@@ -85,8 +84,15 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const { data } = await dispatch(api.endpoints.getAssetGridConfiguration.initiate())
-      setGridConfig(data?.columns)
+      const availableGridCOnfigPromise = dispatch(api.endpoints.getAvailableAssetGridConfiguration.initiate())
+      const initialGridConfigPromise = dispatch(api.endpoints.getAssetGridConfiguration.initiate({ folderId: assetId }))
+
+      Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
+        setGridConfig(availableGridConfig.data?.columns)
+        setGridColumns(initialGridConfig.data!.columns!)
+      }).catch((error) => {
+        console.error(error)
+      })
     }
 
     fetchGridConfiguration().catch((error) => {
