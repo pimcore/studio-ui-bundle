@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Button, Tabs, Tooltip } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
@@ -34,6 +34,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
   const { id } = useContext(AssetContext)
+  const [hoveredTooltip, setHoveredTooltip] = useState<string | null>(null)
 
   const openDetachedWidget = (item: IEditorTab): void => {
     detachWidget({
@@ -42,20 +43,31 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   }
 
   items = items?.map((item) => {
+    const handleMouseEnter = (): void => {
+      setHoveredTooltip(item.key)
+    }
+
+    const handleMouseLeave = (): void => {
+      setHoveredTooltip(null)
+    }
+
+    const toolTipIsVisible = hoveredTooltip === item.key
+
     const tmpItem = {
       ...item,
       originalLabel: item.label as string,
       icon: (
-        <>
-          <Tooltip
-            arrow={ false }
-            placement="top"
-            title={ item.label }
-            open
-          >
-            {item.icon}
-          </Tooltip>
-        </>)
+        <Tooltip
+          arrow={ false }
+          open={ toolTipIsVisible }
+          placement="top"
+          title={ item.label }
+        >
+          <div
+            onMouseEnter={ handleMouseEnter }
+            onMouseLeave={ handleMouseLeave }
+          >{item.icon}</div>
+        </Tooltip>)
     }
 
     if (tmpItem.isDetachable === true) {
