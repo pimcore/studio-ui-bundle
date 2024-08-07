@@ -20,16 +20,28 @@ export interface IconWrapperProps {
   children: React.ReactNode
 }
 export const IconWrapper = ({ tabKey, title, children }: IconWrapperProps): React.JSX.Element => {
-  const [hoveredTooltip, setHoveredTooltip] = useState<string | null>(null)
+  const [hoveredTab, setHoveredTab] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<string | null>(null)
 
-  const toolTipIsVisible = hoveredTooltip === tabKey
+  const toolTipIsVisible = hoveredTab === tabKey && hoveredTab !== activeTab
 
   const handleMouseEnter = (): void => {
-    setHoveredTooltip(tabKey)
+    setHoveredTab(tabKey)
   }
 
   const handleMouseLeave = (): void => {
-    setHoveredTooltip(null)
+    setHoveredTab(null)
+  }
+
+  const handleClick = (): void => {
+    setActiveTab(tabKey)
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleClick()
+    }
   }
 
   return (
@@ -40,8 +52,12 @@ export const IconWrapper = ({ tabKey, title, children }: IconWrapperProps): Reac
       title={ title }
     >
       <div
+        onClick={ handleClick }
+        onKeyDown={ handleKeyDown }
         onMouseEnter={ handleMouseEnter }
         onMouseLeave={ handleMouseLeave }
+        role="button"
+        tabIndex={ 0 }
       >
         {children}
       </div>
