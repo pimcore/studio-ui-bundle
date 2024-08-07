@@ -45,14 +45,15 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
     const tmpItem = {
       ...item,
       originalLabel: item.label as string,
-      label: (
+      icon: (
         <>
           <Tooltip
             arrow={ false }
             placement="top"
             title={ item.label }
+            open
           >
-            {item.label}
+            {item.icon}
           </Tooltip>
         </>)
     }
