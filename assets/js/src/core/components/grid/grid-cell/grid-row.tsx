@@ -12,20 +12,19 @@
 */
 
 import { type Row } from '@tanstack/react-table'
-import { type GridProps } from '../grid'
 import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 
 export interface GridRowProps {
   row: Row<any>
-  modifiedCells: GridProps['modifiedCells']
+  modifiedCells: string
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
 }
 
-export const GridRow = ({ row, isSelected, ...props }: GridRowProps): React.JSX.Element => {
-  const modifiedCells = useMemo(() => props.modifiedCells ?? [], [props.modifiedCells])
+const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
+  const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
   return useMemo(() => {
     return (
@@ -54,9 +53,13 @@ export const GridRow = ({ row, isSelected, ...props }: GridRowProps): React.JSX.
         ))}
       </tr>
     )
-  }, [row, props.modifiedCells, isSelected])
+  }, [row, memoModifiedCells, isSelected])
 
   function isModifiedCell (cellId: string): boolean {
-    return modifiedCells.find((item) => item.columnId === cellId) !== undefined
+    return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
   }
 }
+
+const CachedGridRow = React.memo(GridRow)
+
+export { CachedGridRow as GridRow }

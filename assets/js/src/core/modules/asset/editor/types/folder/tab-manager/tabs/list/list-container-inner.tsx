@@ -12,7 +12,7 @@
 */
 
 import { useGetAssetGridMutation, api, type GetAssetGridApiResponse, type GridFilter } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
@@ -111,7 +111,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
-  return (
+  return useMemo(() => (
     <ContentToolbarSidebarView
       renderSidebar={ <SidebarContainer /> }
 
@@ -128,5 +128,5 @@ export const ListContainerInner = (): React.JSX.Element => {
     >
       <GridContainer assets={ data } />
     </ContentToolbarSidebarView>
-  )
+  ), [data, page, pageSize])
 }

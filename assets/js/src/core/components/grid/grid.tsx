@@ -71,7 +71,7 @@ export interface GridProps {
   setRowId?: (originalRow: any, index: number, parent: any) => string
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
@@ -79,6 +79,7 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
   const tableElement = useRef<HTMLTableElement>(null)
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
+  const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
 
   useEffect(() => {
     if (sorting !== undefined) {
@@ -147,7 +148,7 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
 
   const table = useReactTable(tableProps)
 
-  return (
+  return useMemo(() => (
     <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
@@ -216,7 +217,7 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
                   <GridRow
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
-                    modifiedCells={ getModifiedRow(row.index) }
+                    modifiedCells={ JSON.stringify(getModifiedRow(row.index)) }
                     row={ row }
                     tableElement={ tableElement }
                   />
@@ -227,10 +228,10 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
         </div>
       </div>
     </div>
-  )
+  ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
 
   function getModifiedRow (rowIndex: number): Array<{ rowIndex: number, columnId: string }> {
-    return props.modifiedCells?.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
+    return memoModifiedCells.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
   }
 
   function updateRowSelection (selectedRows: RowSelectionState): void {

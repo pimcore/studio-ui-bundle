@@ -32,6 +32,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { columns: GridColumns } = useListColumns()
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
+  const modifiedCells = useMemo(() => [], [])
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -92,6 +93,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         enableMultipleRowSelection
         enableSorting
         manualSorting
+        modifiedCells={ modifiedCells }
         onSelectedRowsChange={ onSelectedRowsChange }
         onSortingChange={ setSorting }
         onUpdateCellData={ onUpdateCellData }

@@ -22,8 +22,6 @@ type PreviewContainerProps = CellContext<Asset, string | undefined> | undefined
 const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
   const { openAsset } = useAsset()
 
-  console.log({ value: props?.getValue() })
-
   function openAssetWidget (): void {
     if (props !== undefined) {
       const asset = props.row.original
