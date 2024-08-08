@@ -16,13 +16,13 @@ import { Tooltip } from 'antd'
 
 export interface IconWrapperProps {
   tabKey: string
-  openTabKey: string | null
+  activeTabKey: string | null
   tabKeyInFocus: string | undefined
   tabKeyOutOfFocus: string | undefined
   title: string
   children: React.ReactNode
 }
-export const IconWrapper = ({ tabKey, openTabKey, tabKeyInFocus, tabKeyOutOfFocus, title, children }: IconWrapperProps): React.JSX.Element => {
+export const IconWrapper = ({ tabKey, activeTabKey, tabKeyInFocus, tabKeyOutOfFocus, title, children }: IconWrapperProps): React.JSX.Element => {
   const [showTooltip, setShowTooltip] = useState<string | null>(null)
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export const IconWrapper = ({ tabKey, openTabKey, tabKeyInFocus, tabKeyOutOfFocu
     if (tabKeyOutOfFocus !== undefined && tabKeyOutOfFocus === showTooltip) { setShowTooltip(null) }
   }, [tabKeyOutOfFocus])
 
-  const toolTipIsVisible = showTooltip === tabKey && openTabKey !== tabKey
+  const toolTipIsVisible = showTooltip === tabKey && activeTabKey !== tabKey
 
   const handleMouseEnter = (): void => {
     setShowTooltip(tabKey)

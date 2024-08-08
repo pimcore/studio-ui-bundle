@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, type FocusEvent, useEffect, useState } from 'react'
+import React, { type FocusEvent, useContext, useEffect, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Button, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
@@ -35,18 +35,18 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
   const { id } = useContext(AssetContext)
-  const [openTabKey, setOpenTabKey] = useState<string | null>(null)
+  const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    if (openTabKey === null && items.length > 0) {
-      setOpenTabKey(items[0].key)
+    if (activeTabKey === null && items.length > 0) {
+      setActiveTabKey(items[0].key)
     }
   }, [items])
 
   const onChange = (key: string): void => {
-    setOpenTabKey(key)
+    setActiveTabKey(key)
   }
 
   const tabKeys: string[] = items?.map(item => item.key)
@@ -54,7 +54,6 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const findTabKey = (event: FocusEvent<HTMLDivElement>): string | undefined => {
     const target = event.target as HTMLDivElement
     const id = target.id
-
     return tabKeys.find(substring => id.includes(substring))
   }
 
@@ -78,7 +77,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
       originalLabel: item.label as string,
       icon: (
         <IconWrapper
-          openTabKey={ openTabKey }
+          activeTabKey={ activeTabKey }
           tabKey={ item.key }
           tabKeyInFocus={ tabKeyInFocus }
           tabKeyOutOfFocus={ tabKeyOutOfFocus }
