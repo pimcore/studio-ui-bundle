@@ -168,6 +168,7 @@ notes-and-events.seo: seo
 notes-and-events.warning: warning
 notes-and-events.notice: notice
 notes-and-events.erp_import: erp_import
+notes-and-events-no-notes-and-events-to-show: There are no notes and events to show.
 add: Add
 save: Save
 type: Type

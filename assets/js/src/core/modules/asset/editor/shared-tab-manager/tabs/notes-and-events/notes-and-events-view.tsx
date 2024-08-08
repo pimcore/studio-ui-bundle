@@ -25,6 +25,7 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import TextArea from 'antd/es/input/TextArea'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
+import { NoContent } from '@Pimcore/components/no-content/no-content'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -43,6 +44,19 @@ export const NotesAndEventsTabView = ({
   const { renderModal: RenderModal, showModal, handleOk } = useModal()
 
   let type = ''; let title = ''; let description = ''
+
+  if (notes.length === 0) {
+    return (
+      <div className={ styles.noContent }>
+        <p className={ 'headline' }>{t('notes-and-events.notes-and-events')}</p>
+        <div className={ 'empty-container' }>
+          <NoContent
+            text={ t('notes-and-events.no-notes-and-events-to-show') }
+          />
+        </div>
+      </div>
+    )
+  }
 
   const NotesAndEvents = notes.map((note) => {
     let showDetails = false
