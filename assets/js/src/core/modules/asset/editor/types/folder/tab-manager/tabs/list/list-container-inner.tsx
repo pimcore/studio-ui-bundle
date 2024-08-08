@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetAssetGridMutation, api, type GetAssetGridApiResponse, usePatchAssetByIdMutation, type PatchAssetByIdApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import React, { useContext, useEffect, useState } from 'react'
+import { useGetAssetGridMutation, type GridFilter, api, type GetAssetGridApiResponse, usePatchAssetByIdMutation, type PatchAssetByIdApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar-container'
-import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows } from './hooks/use-list'
+import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
 
@@ -29,21 +29,39 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { pageSize, setPageSize } = useListPageSize()
   const { setSelectedRows } = useListSelectedRows()
   const { filterOptions } = useListFilterOptions()
-  const { columns } = useListColumns()
+  const { columns, setGridColumns } = useListColumns()
   const { gridConfig, setGridConfig } = useListGridConfig()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
   const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
   const [patchAsset] = usePatchAssetByIdMutation()
+  const { sorting } = useListSorting()
+
+  useEffect(() => {
+    setSelectedRows({})
+  }, [sorting, page, pageSize, filterOptions])
 
   useEffect(() => {
     prepareAndFetchListing()
   }, [columns, filterOptions, page, pageSize])
 
   useEffect(() => {
+    if (apiData !== undefined) {
+      setData(apiData)
+    }
+  }, [apiData])
+
+  useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const { data } = await dispatch(api.endpoints.getAssetGridConfiguration.initiate())
-      setGridConfig(data?.columns)
+      const availableGridCOnfigPromise = dispatch(api.endpoints.getAvailableAssetGridConfiguration.initiate())
+      const initialGridConfigPromise = dispatch(api.endpoints.getAssetGridConfiguration.initiate({ folderId: assetId }))
+
+      Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
+        setGridConfig(availableGridConfig.data?.columns)
+        setGridColumns(initialGridConfig.data!.columns!)
+      }).catch((error) => {
+        console.error(error)
+      })
     }
 
     fetchGridConfiguration().catch((error) => {
@@ -57,7 +75,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     }
   }, [apiData])
 
-  return (
+  return useMemo(() => (
     <ContentToolbarSidebarView
       renderSidebar={ <SidebarContainer /> }
 
@@ -77,7 +95,12 @@ export const ListContainerInner = (): React.JSX.Element => {
         onUpdateCellData={ onUpdateCellData }
       />
     </ContentToolbarSidebarView>
-  )
+  ), [data, page, pageSize])
+
+  function onPagerChange (page: number, pageSize: number): void {
+    setPage(page)
+    setPageSize(pageSize)
+  }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
     const column = columns.find((column) => column.key === columnId)
@@ -130,6 +153,16 @@ export const ListContainerInner = (): React.JSX.Element => {
       columnsToRequest.push(idColumn)
     }
 
+    let sortFilter: GridFilter['sortFilter'] = {}
+
+    if (sorting.length > 0) {
+      const currentSorting = sorting[0]
+      sortFilter = {
+        key: currentSorting.id,
+        direction: currentSorting.desc ? 'DESC' : 'ASC'
+      }
+    }
+
     fetchListing({
       body: {
         folderId: assetId,
@@ -141,17 +174,12 @@ export const ListContainerInner = (): React.JSX.Element => {
         filters: {
           page,
           pageSize: parseInt(pageSize.toString()),
-          ...filterOptions
+          ...filterOptions,
+          sortFilter
         }
       }
     }).catch((error) => {
       console.error(error)
     })
-  }
-
-  function onPagerChange (page: number, pageSize: number): void {
-    setSelectedRows({})
-    setPage(page)
-    setPageSize(pageSize)
   }
 }

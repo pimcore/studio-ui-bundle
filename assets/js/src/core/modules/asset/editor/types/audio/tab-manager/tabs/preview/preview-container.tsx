@@ -11,39 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { PreviewView } from './preview-view'
+import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const [docURL, setDocURL] = useState('')
-
-  useEffect(() => {
-    if (docURL !== '') {
-      return
-    }
-
-    fetch(`http://localhost/studio/api/assets/${assetContext.id!}/document/stream/pdf-preview`)
-      .then(async (response) => await response.blob())
-      .then((docBlob) => {
-        const docURL = URL.createObjectURL(docBlob)
-        setDocURL(docURL)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  })
-
-  if (docURL === '') {
-    <div>Loading ...</div>
-  }
+  const { data } = useGetAssetByIdQuery({ id: assetContext.id! })
 
   return (
     <ContentToolbarSidebarView>
       <PreviewView
-        src={ docURL }
+        src={ data!.fullPath! }
       />
     </ContentToolbarSidebarView>
   )

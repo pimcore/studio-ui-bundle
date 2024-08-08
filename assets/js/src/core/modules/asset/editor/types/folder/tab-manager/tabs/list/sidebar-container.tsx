@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -20,7 +20,7 @@ import { TagFiltersContainer } from './sidebar-tabs/tag-filters/tag-filters-cont
 import { FilterContainer } from './sidebar-tabs/filters/filter-container'
 
 export const SidebarContainer = (): React.JSX.Element => {
-  const entries: ISidebarEntry[] = [
+  const entries: ISidebarEntry[] = useMemo(() => [
     {
       key: 'filter',
       component: <FilterContainer />,
@@ -38,12 +38,16 @@ export const SidebarContainer = (): React.JSX.Element => {
       component: <GridConfig />,
       icon: <Icon name="settings-outlined" />
     }
-  ]
+  ], [])
 
-  return (
-    <Sidebar
-      entries={ entries }
-      sizing='large'
-    />
-  )
+  return useMemo(() => {
+    console.log('rerendered')
+
+    return (
+      <Sidebar
+        entries={ entries }
+        sizing='large'
+      />
+    )
+  }, [entries])
 }

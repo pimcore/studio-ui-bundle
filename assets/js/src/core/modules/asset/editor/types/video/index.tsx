@@ -39,10 +39,10 @@ import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 
-export const videoTabManager = container.get<VideoTabManager>(serviceIds['Asset/Editor/VideoTabManager'])
-
 moduleSystem.registerModule({
   onInit: () => {
+    const videoTabManager = container.get<VideoTabManager>(serviceIds['Asset/Editor/VideoTabManager'])
+
     videoTabManager.register({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',

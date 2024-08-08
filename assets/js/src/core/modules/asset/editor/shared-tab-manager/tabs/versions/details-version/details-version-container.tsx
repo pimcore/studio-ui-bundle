@@ -13,15 +13,15 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api, type Version
+  api, type ImageVersion, type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
-import i18n from '@Pimcore/app/i18n'
 import { store } from '@Pimcore/app/store'
 import { formatVersionData } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
 import {
   DetailsVersionView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { useTranslation } from 'react-i18next'
 
 export interface DetailsVersionsContainerProps {
   versions: Version[]
@@ -32,6 +32,7 @@ export const DetailsVersionContainer = ({
   versions,
   versionId
 }: DetailsVersionsContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
   const [imageUrls, setImageUrls] = useState({})
@@ -58,16 +59,28 @@ export const DetailsVersionContainer = ({
     Promise.resolve(versionPromise)
       .then((responses): void => {
         const tempVersionData: any[] = []
-        const data = responses.data
+        const dataRaw = responses.data as ImageVersion
+        const metadata = dataRaw.metadata
+
+        const data: Partial<ImageVersion> = { ...dataRaw }
+        delete data.metadata
+
         for (const key in data) {
           tempVersionData.push({
-            [i18n.t('field')]: i18n.t(`version.${key}`)
+            [t('field')]: t(`version.${key}`)
+          })
+        }
+
+        for (const meta of metadata) {
+          data[`${meta.name} (${meta.type})`] = meta.data
+          tempVersionData.push({
+            [t('field')]: `${meta.name} (${meta.type})`
           })
         }
 
         let index = 0
         for (const key in data) {
-          tempVersionData[index++][`${i18n.t('version.version')} ${vId.count}`] =
+          tempVersionData[index++][`${t('version.version')} ${vId.count}`] =
             formatVersionData(key, data[key])
         }
 

@@ -14,7 +14,7 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-  const versionToken = { versionsLeftSideWidth: '383', ...token }
+  const versionToken = { versionsLeftSideWidth: '395', ...token }
 
   return {
     versions: css`
@@ -25,6 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
         overflow: hidden;
 
         & .left-side {
+            overflow: auto;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -42,7 +43,6 @@ export const useStyles = createStyles(({ token, css }) => {
         }
 
         .version-label {
-
             font-weight: 600;
             color: ${token.colorPrimary};
             margin: 0 8px 0 0;

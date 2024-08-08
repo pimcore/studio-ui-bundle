@@ -117,3 +117,11 @@ export const EditableColumns = {
     }
   }
 }
+
+export const SortableColumns = {
+  args: {
+    data,
+    columns: editableColumns,
+    enableSorting: true
+  }
+}

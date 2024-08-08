@@ -16,7 +16,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useListColumns, useListSelectedRows } from './hooks/use-list'
+import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 
 interface GridContainerProps {
   assets: GetAssetGridApiResponse | undefined
@@ -32,6 +32,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
   const { columns: GridColumns } = useListColumns()
   const { selectedRows, setSelectedRows } = useListSelectedRows()
+  const { sorting, setSorting } = useListSorting()
+  const modifiedCells = useMemo(() => [], [])
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -44,6 +46,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       columns.push(
         columnHelper.accessor(column.key, {
           header: t(`asset.listing.column.${column.key}`),
+          enableSorting: column.sortable,
           meta: {
             type: column.frontendType,
             editable: column.editable,
@@ -56,6 +59,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     columns.push(
       columnHelper.accessor('actions', {
         header: t('actions.open'),
+        enableSorting: false,
         meta: {
           type: 'asset-actions'
         },
@@ -85,13 +89,19 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         columns={ columns }
         data={ data }
         enableMultipleRowSelection
+        enableSorting
+        manualSorting
+        modifiedCells={ modifiedCells }
         onSelectedRowsChange={ onSelectedRowsChange }
+        onSortingChange={ setSorting }
         onUpdateCellData={ onUpdateCellData }
         resizable
         selectedRows={ selectedRows }
+        setRowId={ (row: AssetRow) => row.id }
+        sorting={ sorting }
       />
     )
-  }, [columns, data, selectedRows, onSelectedRowsChange, onUpdateCellData])
+  }, [columns, data, selectedRows, onSelectedRowsChange, onUpdateCellData, sorting])
 }
 
 export { GridContainer }

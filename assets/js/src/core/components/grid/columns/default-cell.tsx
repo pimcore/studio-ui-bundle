@@ -118,7 +118,7 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
       <div
         className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
         data-grid-column={ column.id }
-        data-grid-row={ row.id }
+        data-grid-row={ row.index }
         onCopy={ onCopy }
         onDoubleClick={ onDoubleClick }
         onKeyDown={ onKeyDown }

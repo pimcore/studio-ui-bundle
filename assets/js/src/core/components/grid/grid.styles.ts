@@ -58,6 +58,20 @@ export const useStyles = createStyles(({ token, css }) => {
         position: sticky;
         top: 0;
         z-index: 1;
+
+        .grid__cell-content {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .grid__sorter {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          width: 26px;
+        }
       }
 
       .ant-table-content {

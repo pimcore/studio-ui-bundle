@@ -36,7 +36,7 @@ const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
 
   return (
     <>
-      {props?.row.original.type === 'image' && (
+      {props?.getValue() !== undefined && (
         <ImageView
           onClick={ openAssetWidget }
           src={ props.getValue()! }
