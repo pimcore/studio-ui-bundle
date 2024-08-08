@@ -94,6 +94,30 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
+    noContent: css`
+        padding: ${token.paddingSM}px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .headline {
+            font-weight: 600;
+            color: ${token.colorPrimary};
+            margin: 0 8px 0 0;
+
+            &:hover {
+                color: ${token.colorPrimaryHover};
+            }
+        }
+
+        .empty-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    `,
+
     'add-note-modal__section': css`
       width: ${notesAndEventsToken.notesModalFieldsWidth}px;
       margin-bottom: 10px;
