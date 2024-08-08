@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode } from 'react'
+import React, { memo, type ReactNode } from 'react'
 import { useStyles } from './content-toolbar-sidebar-view.styles'
 
 interface ContentToolbarViewProps {
@@ -20,7 +20,7 @@ interface ContentToolbarViewProps {
   renderSidebar?: ReactNode
 }
 
-const ContentToolbarSidebarView = (props: ContentToolbarViewProps): React.JSX.Element => {
+const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = ['content-toolbar-sidebar-layout', styles.ContentToolbarSidebarLayout]
 
@@ -49,4 +49,4 @@ const ContentToolbarSidebarView = (props: ContentToolbarViewProps): React.JSX.El
   )
 }
 
-export { ContentToolbarSidebarView }
+export const ContentToolbarSidebarView = memo(Component)
