@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, type FocusEvent, useEffect, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Button, Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
@@ -31,17 +31,13 @@ export interface IEditorTabsProps {
   showLabelIfActive?: boolean
 }
 
-export interface IconWrapperProps {
-  tabKey: string
-  title: string
-  children: React.ReactNode
-}
-
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
   const { id } = useContext(AssetContext)
   const [openTabKey, setOpenTabKey] = useState<string | null>(null)
+  const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
+  const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (openTabKey === null && items.length > 0) {
@@ -49,9 +45,27 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
     }
   }, [items])
 
-  const onTabClick = (key: string): void => {
+  const onChange = (key: string): void => {
     setOpenTabKey(key)
   }
+
+  const tabKeys: string[] = items?.map(item => item.key)
+
+  const findTabKey = (event: FocusEvent<HTMLDivElement>): string | undefined => {
+    const target = event.target as HTMLDivElement
+    const id = target.id
+
+    return tabKeys.find(substring => id.includes(substring))
+  }
+
+  const onFocus = (event: FocusEvent<HTMLDivElement>): void => {
+    setTabKeyInFocus(findTabKey(event))
+  }
+
+  const onBlur = (event: FocusEvent<HTMLDivElement>): void => {
+    setTabKeyOutOfFocus(findTabKey(event))
+  }
+
   const openDetachedWidget = (item: IEditorTab): void => {
     detachWidget({
       item
@@ -66,6 +80,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         <IconWrapper
           openTabKey={ openTabKey }
           tabKey={ item.key }
+          tabKeyInFocus={ tabKeyInFocus }
+          tabKeyOutOfFocus={ tabKeyOutOfFocus }
           title={ item.label as string }
         >
           {item.icon}
@@ -103,7 +119,9 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         className={ `${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}` }
         defaultActiveKey={ defaultActiveKey }
         items={ items }
-        onTabClick={ onTabClick }
+        onBlur={ onBlur }
+        onFocus={ onFocus }
+        onTabClick={ onChange }
         tabBarExtraContent={ {
           left: <ElementToolbar id={ id! } />
         } }

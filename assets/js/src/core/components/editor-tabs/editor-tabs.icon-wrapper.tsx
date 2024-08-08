@@ -11,17 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tooltip } from 'antd'
 
 export interface IconWrapperProps {
   tabKey: string
   openTabKey: string | null
+  tabKeyInFocus: string | undefined
+  tabKeyOutOfFocus: string | undefined
   title: string
   children: React.ReactNode
 }
-export const IconWrapper = ({ tabKey, openTabKey, title, children }: IconWrapperProps): React.JSX.Element => {
+export const IconWrapper = ({ tabKey, openTabKey, tabKeyInFocus, tabKeyOutOfFocus, title, children }: IconWrapperProps): React.JSX.Element => {
   const [showTooltip, setShowTooltip] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (tabKeyInFocus !== undefined) { setShowTooltip(tabKeyInFocus) }
+  }, [tabKeyInFocus])
+
+  useEffect(() => {
+    if (tabKeyOutOfFocus !== undefined && tabKeyOutOfFocus === showTooltip) { setShowTooltip(null) }
+  }, [tabKeyOutOfFocus])
 
   const toolTipIsVisible = showTooltip === tabKey && openTabKey !== tabKey
 
