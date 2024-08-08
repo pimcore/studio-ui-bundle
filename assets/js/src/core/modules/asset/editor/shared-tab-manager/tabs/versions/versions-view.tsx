@@ -11,30 +11,31 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { isSet } from '@Pimcore/utils/helpers'
-import { VersionCard } from '@Pimcore/components/version-card/version-card'
+import React, {useState} from 'react'
+import {useStyles} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
+import {Button} from 'antd'
+import {Icon} from '@Pimcore/components/icon/icon'
+import {isSet} from '@Pimcore/utils/helpers'
+import {VersionCard} from '@Pimcore/components/version-card/version-card'
 import {
   type GetVersionsApiArg,
   type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
-import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
+import {VerticalTimeline} from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import {
   DetailsVersionsContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'
-import { NoContent } from '@Pimcore/components/no-content/no-content'
+import {NoContent} from '@Pimcore/components/no-content/no-content'
 import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
-import { formatDateTime } from '@Pimcore/utils/date-time'
-import { useTranslation } from 'react-i18next'
+import {formatDateTime} from '@Pimcore/utils/date-time'
+import {useTranslation} from 'react-i18next'
+import {Modal} from '@Pimcore/components/modal/modal'
 
 interface VersionsViewProps {
   versions: Version[]
-  onClickClearAll: (elementType: GetVersionsApiArg['elementType'], id: number) => void
+  onClickClearAll: (elementType: GetVersionsApiArg['elementType'], id: number) => Promise<void>
   onClickPublish: (id: number) => void
   onClickDelete: (id: number) => void
   onBlurNote: (id: number, note: string) => void
@@ -55,6 +56,8 @@ export const VersionsView = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
+  const [clearAllLoading, setClearAllLoading] = useState(false)
+  const [clearAllModalOpen, setClearAllModalOpen] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 
   if (versions.length === 0) {
@@ -70,6 +73,22 @@ export const VersionsView = ({
     )
   }
 
+  const clearVersions = async (): Promise<void> => {
+
+    setClearAllModalOpen(false)
+
+    setClearAllLoading(true)
+
+    const promises = onClickClearAll(
+      versions[0].ctype as GetVersionsApiArg['elementType'],
+      versions[0].cid
+    )
+
+    await Promise.all([promises])
+
+    setClearAllLoading(false)
+  }
+
   return (
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
@@ -79,26 +98,28 @@ export const VersionsView = ({
             {versions.length > 0 && (
               <Button
                 className={ comparingActive ? 'compare-button' : '' }
+                disabled={ clearAllLoading }
                 onClick={ onClickCompareVersion }
               >{t('version.compare-versions')}</Button>
             )}
           </div>
-
           {versions.length > 0 && (
-            <Button
-              icon={ <Icon name={ 'trash' } /> }
-              onClick={ () => {
-                if (versions.length === 0) {
-                  return
-                }
-                onClickClearAll(
-                  versions[0].ctype as GetVersionsApiArg['elementType'],
-                  versions[0].cid
-                )
-              } }
-            >
-              {t('clear-all')}
-            </Button>
+            <>
+              <Button
+                icon={ <Icon name={ 'trash' } /> }
+                onClick={ () => { setClearAllModalOpen(true) } }
+              >
+                {clearAllLoading ? '...' : t('clear-all')}
+              </Button>
+              <Modal
+                onCancel={ () => { setClearAllModalOpen(false) } }
+                onOk={ async () => { await clearVersions() } }
+                open={ clearAllModalOpen }
+                title={ 'Clear All' }
+              >
+                <span>Do you really want to delete all versions of this element?</span>
+              </Modal>
+            </>
           )}
         </div>
         {versions.length > 0 && (
