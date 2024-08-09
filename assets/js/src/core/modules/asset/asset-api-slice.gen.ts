@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            cloneElement: build.mutation<CloneElementApiResponse, CloneElementApiArg>({
+            cloneAsset: build.mutation<CloneAssetApiResponse, CloneAssetApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
                     method: "POST",
@@ -212,12 +212,12 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type CloneElementApiResponse =
-    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created jobRun for copying child assets */ {
+export type CloneAssetApiResponse =
+    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
         id: number;
     };
-export type CloneElementApiArg = {
+export type CloneAssetApiArg = {
     /** Id of the asset */
     id: number;
     /** ParentId of the asset */
@@ -553,9 +553,9 @@ export type CustomMetadata = {
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetaData: any[];
+    embeddedMetadata: any[];
     /** flag to indicate if the embedded meta data has been extracted from the asset */
-    embeddedMetaDataExtracted: boolean;
+    embeddedMetadataExtracted: boolean;
 };
 export type CustomSettings = {
     /** AdditionalAttributes */
@@ -649,7 +649,7 @@ export type Asset = Element & {
     /** Mimetype */
     mimeType?: string | null;
     /** Has metadata */
-    hasMetaData?: boolean;
+    hasMetadata?: boolean;
     /** Workflow permissions */
     hasWorkflowWithPermissions?: boolean;
     /** Full path */
@@ -783,7 +783,7 @@ export type PatchCustomMetadata = {
     data?: string | null;
 };
 export const {
-    useCloneElementMutation,
+    useCloneAssetMutation,
     useGetAssetCustomMetadataByIdQuery,
     useGetAssetCustomSettingsByIdQuery,
     useGetAssetDataTextByIdQuery,

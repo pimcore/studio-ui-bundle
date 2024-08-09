@@ -12,7 +12,7 @@
 */
 
 import React, { useCallback, useMemo } from 'react'
-import { Grid } from '@Pimcore/components/grid/grid'
+import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -20,6 +20,7 @@ import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use
 
 interface GridContainerProps {
   assets: GetAssetGridApiResponse | undefined
+  modifiedCells: GridProps['modifiedCells']
   onUpdateCellData: (data: Record<string, any>) => void
 }
 
@@ -33,7 +34,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { columns: GridColumns } = useListColumns()
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
-  const modifiedCells = useMemo(() => [], [])
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -91,7 +91,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         enableMultipleRowSelection
         enableSorting
         manualSorting
-        modifiedCells={ modifiedCells }
+        modifiedCells={ props.modifiedCells }
         onSelectedRowsChange={ onSelectedRowsChange }
         onSortingChange={ setSorting }
         onUpdateCellData={ onUpdateCellData }

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetAssetGridMutation, type GridFilter, api, type GetAssetGridApiResponse, usePatchAssetByIdMutation, type PatchAssetByIdApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useGetAssetGridMutation, type GridFilter, api, type GetAssetGridApiResponse, usePatchAssetByIdMutation, type PatchAssetByIdApiArg, type GetAssetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './grid-toolbar-container'
@@ -20,7 +20,13 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar-container'
 import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
+import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
+
+interface DataPatch {
+  columnId: string
+  rowIndex: number
+  value: any
+}
 
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -33,8 +39,10 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { gridConfig, setGridConfig } = useListGridConfig()
   const assetId = assetContext.id!
   const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
-  const [fetchListing, { data: apiData }] = useGetAssetGridMutation()
+  const [fetchListing] = useGetAssetGridMutation()
   const [patchAsset] = usePatchAssetByIdMutation()
+  const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
+  const [, setDataPatches] = useState<DataPatch[]>([])
   const { sorting } = useListSorting()
 
   useEffect(() => {
@@ -42,14 +50,10 @@ export const ListContainerInner = (): React.JSX.Element => {
   }, [sorting, page, pageSize, filterOptions])
 
   useEffect(() => {
-    prepareAndFetchListing()
-  }, [columns, filterOptions, page, pageSize])
-
-  useEffect(() => {
-    if (apiData !== undefined) {
-      setData(apiData)
-    }
-  }, [apiData])
+    prepareAndFetchListing()?.catch((error) => {
+      console.log(error)
+    })
+  }, [columns, filterOptions, page, pageSize, sorting])
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
@@ -69,12 +73,6 @@ export const ListContainerInner = (): React.JSX.Element => {
     })
   }, [])
 
-  useEffect(() => {
-    if (apiData !== undefined) {
-      setData(apiData)
-    }
-  }, [apiData])
-
   return useMemo(() => (
     <ContentToolbarSidebarView
       renderSidebar={ <SidebarContainer /> }
@@ -92,10 +90,11 @@ export const ListContainerInner = (): React.JSX.Element => {
     >
       <GridContainer
         assets={ data }
+        modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
       />
     </ContentToolbarSidebarView>
-  ), [data, page, pageSize])
+  ), [data, page, pageSize, modifiedCells])
 
   function onPagerChange (page: number, pageSize: number): void {
     setPage(page)
@@ -108,6 +107,27 @@ export const ListContainerInner = (): React.JSX.Element => {
     if (column === undefined) {
       return
     }
+
+    setDataPatches((oldPatches) => {
+      return [
+        ...oldPatches,
+        {
+          columnId,
+          rowIndex: rowData.id,
+          value
+        }
+      ]
+    })
+
+    setModifiedCells((oldModified) => [
+      ...oldModified ?? [],
+      {
+        columnId,
+        rowIndex: rowData.id
+      }
+    ])
+
+    updateData()
 
     const backendType = column.type.split('.')
 
@@ -134,17 +154,40 @@ export const ListContainerInner = (): React.JSX.Element => {
     patchAsset(update).catch((error) => {
       console.error(error)
     }).then(() => {
-      prepareAndFetchListing()
+      prepareAndFetchListing()?.finally(() => {
+        setModifiedCells((oldModified) => {
+          return oldModified?.filter((item) => !(item.columnId === columnId && item.rowIndex === rowData.id))
+        })
+
+        setDataPatches((oldPatches) => {
+          return oldPatches.filter((patch) => !(patch.columnId === columnId && patch.rowIndex === rowData.id))
+        })
+      }).catch((error) => {
+        console.error(error)
+      })
     }).catch((error) => {
       console.error(error)
     })
   }
 
-  function prepareAndFetchListing (): void {
+  function prepareAndFetchListing (): Promise<any> | undefined {
     if (columns.length === 0) {
       return
     }
 
+    const requestData = getQueryArgs()
+
+    return fetchListing({
+      ...requestData
+    }).then((data: any) => {
+      const _data = data.data as GetAssetGridApiResponse
+      updateData(_data)
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
+
+  function getQueryArgs (): GetAssetGridApiArg {
     const columnsToRequest = [...columns]
     const hasIdColumn = columns.some((column) => column.key === 'id')
 
@@ -163,7 +206,7 @@ export const ListContainerInner = (): React.JSX.Element => {
       }
     }
 
-    fetchListing({
+    return {
       body: {
         folderId: assetId,
         columns: columnsToRequest.map((column) => ({
@@ -178,8 +221,48 @@ export const ListContainerInner = (): React.JSX.Element => {
           sortFilter
         }
       }
-    }).catch((error) => {
-      console.error(error)
+    }
+  }
+
+  function updateData (dataUpdate: GetAssetGridApiResponse | undefined = undefined): void {
+    setDataPatches((currentDataPatches) => {
+      setData((currentData) => {
+        const currentDataModel = dataUpdate ?? currentData
+
+        const items = currentDataModel?.items.map((item) => {
+          const itemId = item.columns!.find((column) => column.key === 'id')?.value
+          const hasPatch = currentDataPatches.some((patch) => patch.rowIndex === itemId)
+
+          if (!hasPatch) {
+            return item
+          }
+
+          const patchedColumns = item.columns!.map((column) => {
+            const patch = currentDataPatches.find((patch) => patch.rowIndex === itemId && patch.columnId === column.key)
+
+            if (patch === undefined) {
+              return column
+            }
+
+            return {
+              ...column,
+              value: patch.value
+            }
+          })
+
+          return {
+            ...item,
+            columns: patchedColumns
+          }
+        })
+
+        return {
+          items: items ?? [],
+          totalItems: currentDataModel?.totalItems ?? 0
+        }
+      })
+
+      return currentDataPatches
     })
   }
 }
