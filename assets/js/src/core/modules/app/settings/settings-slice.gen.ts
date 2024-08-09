@@ -34,9 +34,9 @@ export type GetSystemSettingsApiResponse = /** status 200 System settings */ {
 export type GetSystemSettingsApiArg = void;
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetaData: any[];
+    embeddedMetadata: any[];
     /** flag to indicate if the embedded meta data has been extracted from the asset */
-    embeddedMetaDataExtracted: boolean;
+    embeddedMetadataExtracted: boolean;
 };
 export type CustomSettings = {
     /** AdditionalAttributes */

@@ -52,12 +52,19 @@ export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
 }
 
+export interface OnUpdateCellDataEvent {
+  rowIndex: number
+  columnId: string
+  value: any
+  rowData: any
+}
+
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
   resizable?: boolean
-  onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
-  modifiedCells?: Array<{ rowIndex: number, columnId: string }>
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
+  modifiedCells?: Array<{ rowIndex: number | string, columnId: string }>
   isLoading?: boolean
   initialState?: TableOptions<any>['initialState']
   enableRowSelection?: boolean
@@ -217,7 +224,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                   <GridRow
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
-                    modifiedCells={ JSON.stringify(getModifiedRow(row.index)) }
+                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
                     row={ row }
                     tableElement={ tableElement }
                   />
@@ -230,7 +237,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
     </div>
   ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
 
-  function getModifiedRow (rowIndex: number): Array<{ rowIndex: number, columnId: string }> {
+  function getModifiedRow (rowIndex: string | number): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
   }
 
