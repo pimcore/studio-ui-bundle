@@ -12,20 +12,22 @@
 */
 
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
-import { Button, Input, Select } from 'antd'
+import {useTranslation} from 'react-i18next'
+import {
+  useStyles
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
+import {Button, Input, Select} from 'antd'
 import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
-import { formatDateTime } from '@Pimcore/utils/date-time'
-import { useModal } from '@Pimcore/components/modal/useModal'
-import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import {Icon} from '@Pimcore/components/icon/icon'
+import {NoteAndEventCard} from '@Pimcore/components/note-and-event-card/note-and-event-card'
+import {formatDateTime} from '@Pimcore/utils/date-time'
+import {useModal} from '@Pimcore/components/modal/useModal'
+import {ModalFooter} from '@Pimcore/components/modal/footer/modal-footer'
 import TextArea from 'antd/es/input/TextArea'
-import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { NoContent } from '@Pimcore/components/no-content/no-content'
+import {respectLineBreak} from '@Pimcore/utils/helpers'
+import {NoContent} from '@Pimcore/components/no-content/no-content'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -44,19 +46,6 @@ export const NotesAndEventsTabView = ({
   const { renderModal: RenderModal, showModal, handleOk } = useModal()
 
   let type = ''; let title = ''; let description = ''
-
-  if (notes.length === 0) {
-    return (
-      <div className={ styles.noContent }>
-        <p className={ 'headline' }>{t('notes-and-events.notes-and-events')}</p>
-        <div className={ 'empty-container' }>
-          <NoContent
-            text={ t('notes-and-events.no-notes-and-events-to-show') }
-          />
-        </div>
-      </div>
-    )
-  }
 
   const NotesAndEvents = notes.map((note) => {
     let showDetails = false
@@ -153,9 +142,18 @@ export const NotesAndEventsTabView = ({
             </Button>
             {modal}
           </div>
-          <div className={ 'notes-content__details' }>
-            {NotesAndEvents}
-          </div>
+          {notes.length > 0
+            ? (
+              <div className={ 'notes-content__details' }>
+                {NotesAndEvents}
+              </div>
+              )
+            : (
+              <div className={ 'notes-content__empty-container' }>
+                <NoContent text={ t('notes-and-events.no-notes-and-events-to-show') } />
+              </div>
+              )
+          }
         </div>
         <div className={ 'notes-container__pagination-container' }>
           <div className={ 'notes-container__pagination' }>

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import {createStyles} from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   const notesAndEventsToken = {
@@ -31,21 +31,19 @@ export const useStyles = createStyles(({ token, css }) => {
       .notes-container {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         width: ${notesAndEventsToken.notesContainerWidth}px;
       }
       
       & .notes-content {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         overflow: auto;
-        
         height: 100%;
       }
       
       & .notes-content__header {
         padding: ${token.paddingXS}px ${notesAndEventsToken.paddingSM}px;
-
         display: flex;
         align-items: center;
         gap: ${notesAndEventsToken.paddingSM}px;
@@ -59,7 +57,14 @@ export const useStyles = createStyles(({ token, css }) => {
       & .notes-content__details {
         width: 100%;
         padding: 0 ${token.paddingXS}px;
-      }
+        align-items: flex-start;
+      } 
+        
+      & .notes-content__empty-container {
+        align-content: center;
+        height: 100%;
+        width: 100%;
+        }
       
       & .notes-card {
         margin-bottom: ${token.marginXS}px;
@@ -92,30 +97,6 @@ export const useStyles = createStyles(({ token, css }) => {
         width: 100%;
         height: ${notesAndEventsToken.sizeXXL}px;
       }
-    `,
-
-    noContent: css`
-        padding: ${token.paddingSM}px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-
-        .headline {
-            font-weight: 600;
-            color: ${token.colorPrimary};
-            margin: 0 8px 0 0;
-
-            &:hover {
-                color: ${token.colorPrimaryHover};
-            }
-        }
-
-        .empty-container {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
     `,
 
     'add-note-modal__section': css`
