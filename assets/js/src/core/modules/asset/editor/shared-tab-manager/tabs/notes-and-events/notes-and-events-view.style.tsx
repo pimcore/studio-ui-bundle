@@ -52,6 +52,7 @@ export const useStyles = createStyles(({ token, css }) => {
       & .notes-content__text {
         color: ${token.colorPrimary};
         margin: 0;
+        font-weight: 600;
       }
       
       & .notes-content__details {
