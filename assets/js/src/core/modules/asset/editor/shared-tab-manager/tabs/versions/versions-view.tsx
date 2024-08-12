@@ -89,6 +89,8 @@ export const VersionsView = ({
     setClearAllLoading(false)
   }
 
+  const [modal, contextHolder] = Modal.useModal();
+
   return (
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
