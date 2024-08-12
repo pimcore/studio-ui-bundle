@@ -89,7 +89,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       id: 'properties-table--data-column',
       meta: {
         type: 'type-dependent-content',
-        editable: true
+        editable: propertiesTableTab === 'own'
       }
     }),
     columnHelper.accessor('inheritable', {
@@ -103,7 +103,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       },
       size: 70,
       meta: {
-        editable: true
+        editable: propertiesTableTab === 'own'
       }
     }),
     columnHelper.accessor('actions', {
