@@ -222,6 +222,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                 )}
                 {table.getRowModel().rows.map(row => (
                   <GridRow
+                    columns={ columns }
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
                     modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
