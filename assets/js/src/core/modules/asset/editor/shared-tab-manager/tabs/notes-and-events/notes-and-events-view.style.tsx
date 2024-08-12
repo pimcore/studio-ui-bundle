@@ -56,7 +56,6 @@ export const useStyles = createStyles(({ token, css }) => {
       
       & .notes-content__details {
         padding: 0 ${token.paddingXS}px;
-        align-items: flex-start;
       } 
         
       & .notes-content__empty-container {
