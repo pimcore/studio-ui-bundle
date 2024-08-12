@@ -12,22 +12,22 @@
 */
 
 import React from 'react'
-import {useTranslation} from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import {
   useStyles
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
-import {Button, Input, Select} from 'antd'
+import { Button, Input, Select } from 'antd'
 import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
-import {Icon} from '@Pimcore/components/icon/icon'
-import {NoteAndEventCard} from '@Pimcore/components/note-and-event-card/note-and-event-card'
-import {formatDateTime} from '@Pimcore/utils/date-time'
-import {useModal} from '@Pimcore/components/modal/useModal'
-import {ModalFooter} from '@Pimcore/components/modal/footer/modal-footer'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { useModal } from '@Pimcore/components/modal/useModal'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import TextArea from 'antd/es/input/TextArea'
-import {respectLineBreak} from '@Pimcore/utils/helpers'
-import {NoContent} from '@Pimcore/components/no-content/no-content'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
+import { NoContent } from '@Pimcore/components/no-content/no-content'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]

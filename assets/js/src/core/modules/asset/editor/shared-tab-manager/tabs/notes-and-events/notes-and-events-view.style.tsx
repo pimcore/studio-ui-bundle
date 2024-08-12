@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {createStyles} from 'antd-style'
+import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   const notesAndEventsToken = {
@@ -55,7 +55,6 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       
       & .notes-content__details {
-        width: 100%;
         padding: 0 ${token.paddingXS}px;
         align-items: flex-start;
       } 
@@ -63,7 +62,6 @@ export const useStyles = createStyles(({ token, css }) => {
       & .notes-content__empty-container {
         align-content: center;
         height: 100%;
-        width: 100%;
         }
       
       & .notes-card {
