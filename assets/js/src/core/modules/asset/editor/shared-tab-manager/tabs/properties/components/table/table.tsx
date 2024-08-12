@@ -125,13 +125,15 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
               )
             }
 
-            <Button
-              icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                removeProperty(info.row.original)
-              } }
-              type="link"
-            />
+            {propertiesTableTab === 'own' && (
+              <Button
+                icon={ <Icon name="trash" /> }
+                onClick={ () => {
+                  removeProperty(info.row.original)
+                } }
+                type="link"
+              />
+            )}
           </div>
         )
       }
