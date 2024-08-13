@@ -11,27 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, {useState} from 'react'
-import {useStyles} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
-import {Button} from 'antd'
-import {Icon} from '@Pimcore/components/icon/icon'
-import {isSet} from '@Pimcore/utils/helpers'
-import {VersionCard} from '@Pimcore/components/version-card/version-card'
+import React, { useState } from 'react'
+import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
+import { Button, type ButtonProps } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { isSet } from '@Pimcore/utils/helpers'
+import { VersionCard } from '@Pimcore/components/version-card/version-card'
 import {
   type GetVersionsApiArg,
   type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
-import {VerticalTimeline} from '@Pimcore/components/vertical-timeline/vertical-timeline'
+import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import {
   DetailsVersionsContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'
-import {NoContent} from '@Pimcore/components/no-content/no-content'
+import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
-import {formatDateTime} from '@Pimcore/utils/date-time'
-import {useTranslation} from 'react-i18next'
-import {Modal} from '@Pimcore/components/modal/modal'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { useTranslation } from 'react-i18next'
+import { Modal } from '@Pimcore/components/modal/modal'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -60,6 +60,8 @@ export const VersionsView = ({
   const [clearAllModalOpen, setClearAllModalOpen] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 
+  console.log('test')
+
   if (versions.length === 0) {
     return (
       <div className={ styles.noContent }>
@@ -74,7 +76,6 @@ export const VersionsView = ({
   }
 
   const clearVersions = async (): Promise<void> => {
-
     setClearAllModalOpen(false)
 
     setClearAllLoading(true)
@@ -89,7 +90,15 @@ export const VersionsView = ({
     setClearAllLoading(false)
   }
 
-  const [modal, contextHolder] = Modal.useModal();
+  const noButtonProps: ButtonProps = {
+    type: 'default',
+    className: '.no-button'
+  }
+
+  const yesButtonProps: ButtonProps = {
+    type: 'primary',
+    className: '.yes-button'
+  }
 
   return (
     <div className={ styles.versions }>
@@ -114,6 +123,10 @@ export const VersionsView = ({
                 {clearAllLoading ? '...' : t('clear-all')}
               </Button>
               <Modal
+                cancelButtonProps={ noButtonProps }
+                cancelText='Noo'
+                okButtonProps={ yesButtonProps }
+                okText='Yes'
                 onCancel={ () => { setClearAllModalOpen(false) } }
                 onOk={ async () => { await clearVersions() } }
                 open={ clearAllModalOpen }
