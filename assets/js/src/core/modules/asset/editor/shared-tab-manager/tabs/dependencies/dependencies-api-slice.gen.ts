@@ -6,7 +6,10 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getDependencies: build.query<GetDependenciesApiResponse, GetDependenciesApiArg>({
+            dependencyGetCollectionByElementType: build.query<
+                DependencyGetCollectionByElementTypeApiResponse,
+                DependencyGetCollectionByElementTypeApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/dependencies/${queryArg.elementType}/${queryArg.id}`,
                     params: {
@@ -21,11 +24,12 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetDependenciesApiResponse = /** status 200 Paginated dependencies with total count as header param */ {
-    totalItems: number;
-    items: Dependency[];
-};
-export type GetDependenciesApiArg = {
+export type DependencyGetCollectionByElementTypeApiResponse =
+    /** status 200 Paginated dependencies with total count as header param */ {
+        totalItems: number;
+        items: Dependency[];
+    };
+export type DependencyGetCollectionByElementTypeApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -63,4 +67,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetDependenciesQuery } = injectedRtkApi;
+export const { useDependencyGetCollectionByElementTypeQuery } = injectedRtkApi;

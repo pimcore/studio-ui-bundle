@@ -27,7 +27,7 @@ export { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 export { type Widget, WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 
 export type * from '@Pimcore/modules/asset/asset-api-slice.gen'
-export { useGetAssetByIdQuery, useGetAssetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+export { useAssetGetByIdQuery, useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 export { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
 export { AssetContext, AssetProvider, type IAssetContext, type IAssetProviderProps } from '@Pimcore/modules/asset/asset-provider'
 export type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'

@@ -6,9 +6,9 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getAssetCustomMetadataById: build.query<
-                GetAssetCustomMetadataByIdApiResponse,
-                GetAssetCustomMetadataByIdApiArg
+            assetCustomMetadataGetById: build.query<
+                AssetCustomMetadataGetByIdApiResponse,
+                AssetCustomMetadataGetByIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Assets"],
@@ -17,10 +17,10 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetAssetCustomMetadataByIdApiResponse = /** status 200 Array of custom metadata */ {
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
     items?: CustomMetadata[];
 };
-export type GetAssetCustomMetadataByIdApiArg = {
+export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
@@ -48,4 +48,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetAssetCustomMetadataByIdQuery } = injectedRtkApi;
+export const { useAssetCustomMetadataGetByIdQuery } = injectedRtkApi;

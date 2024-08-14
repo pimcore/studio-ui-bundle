@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { useGetAssetByIdQuery } from '../asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '../asset-api-slice.gen'
 import {
   addPropertyToAsset,
   assetReceived,
@@ -59,7 +59,7 @@ interface UseAssetDraftReturn extends
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
-  const { isLoading, isError, data } = useGetAssetByIdQuery({ id })
+  const { isLoading, isError, data } = useAssetGetByIdQuery({ id })
   const dispatch = useAppDispatch()
   const asset = useAppSelector(state => selectAssetById(state, id))
   const properties = asset?.properties

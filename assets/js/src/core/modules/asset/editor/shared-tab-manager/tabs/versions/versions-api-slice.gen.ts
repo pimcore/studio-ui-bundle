@@ -6,46 +6,52 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            downloadAssetVersionById: build.query<DownloadAssetVersionByIdApiResponse, DownloadAssetVersionByIdApiArg>({
+            versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
             }),
-            streamImageVersionById: build.query<StreamImageVersionByIdApiResponse, StreamImageVersionByIdApiArg>({
+            versionImageStreamById: build.query<VersionImageStreamByIdApiResponse, VersionImageStreamByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/image/stream` }),
                 providesTags: ["Versions"],
             }),
-            streamPdfVersionById: build.query<StreamPdfVersionByIdApiResponse, StreamPdfVersionByIdApiArg>({
+            versionPdfStreamById: build.query<VersionPdfStreamByIdApiResponse, VersionPdfStreamByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/pdf/stream` }),
                 providesTags: ["Versions"],
             }),
-            getVersionById: build.query<GetVersionByIdApiResponse, GetVersionByIdApiArg>({
+            versionGetById: build.query<VersionGetByIdApiResponse, VersionGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}` }),
                 providesTags: ["Versions"],
             }),
-            updateVersion: build.mutation<UpdateVersionApiResponse, UpdateVersionApiArg>({
+            versionUpdateById: build.mutation<VersionUpdateByIdApiResponse, VersionUpdateByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/versions/${queryArg.id}`,
                     method: "PUT",
-                    body: queryArg.body,
+                    body: queryArg.updateVersion,
                 }),
                 invalidatesTags: ["Versions"],
             }),
-            publishVersion: build.mutation<PublishVersionApiResponse, PublishVersionApiArg>({
+            versionPublishById: build.mutation<VersionPublishByIdApiResponse, VersionPublishByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}`, method: "POST" }),
                 invalidatesTags: ["Versions"],
             }),
-            deleteVersion: build.mutation<DeleteVersionApiResponse, DeleteVersionApiArg>({
+            versionDeleteById: build.mutation<VersionDeleteByIdApiResponse, VersionDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Versions"],
             }),
-            getVersions: build.query<GetVersionsApiResponse, GetVersionsApiArg>({
+            versionGetCollectionForElementByTypeAndId: build.query<
+                VersionGetCollectionForElementByTypeAndIdApiResponse,
+                VersionGetCollectionForElementByTypeAndIdApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
                     params: { page: queryArg.page, pageSize: queryArg.pageSize },
                 }),
                 providesTags: ["Versions"],
             }),
-            cleanupVersion: build.mutation<CleanupVersionApiResponse, CleanupVersionApiArg>({
+            versionCleanupForElementByTypeAndId: build.mutation<
+                VersionCleanupForElementByTypeAndIdApiResponse,
+                VersionCleanupForElementByTypeAndIdApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
                     method: "DELETE",
@@ -56,57 +62,55 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
-export type DownloadAssetVersionByIdApiArg = {
+export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
+export type VersionAssetDownloadByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type StreamImageVersionByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
-export type StreamImageVersionByIdApiArg = {
+export type VersionImageStreamByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
+export type VersionImageStreamByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type StreamPdfVersionByIdApiResponse = /** status 200 PDF version stream */ Blob;
-export type StreamPdfVersionByIdApiArg = {
+export type VersionPdfStreamByIdApiResponse = /** status 200 PDF version stream */ Blob;
+export type VersionPdfStreamByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type GetVersionByIdApiResponse = /** status 200 Version data as json */
+export type VersionGetByIdApiResponse = /** status 200 Successfully retrieved version data as JSON */
     | AssetVersion
     | ImageVersion
     | DataObjectVersion
     | DocumentVersion;
-export type GetVersionByIdApiArg = {
+export type VersionGetByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type UpdateVersionApiResponse = /** status 200 Successfully updated version */ void;
-export type UpdateVersionApiArg = {
+export type VersionUpdateByIdApiResponse = /** status 200 Successfully updated version */ void;
+export type VersionUpdateByIdApiArg = {
     /** Id of the version */
     id: number;
-    body: {
-        public?: boolean;
-        note?: string;
-    };
+    updateVersion: UpdateVersion;
 };
-export type PublishVersionApiResponse = /** status 200 ID of latest published version */ {
+export type VersionPublishByIdApiResponse = /** status 200 ID of the published version */ {
     /** ID of published version */
     id: number;
 };
-export type PublishVersionApiArg = {
+export type VersionPublishByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type DeleteVersionApiResponse = /** status 200 Successfully deleted version */ void;
-export type DeleteVersionApiArg = {
+export type VersionDeleteByIdApiResponse = /** status 200 Successfully deleted version */ void;
+export type VersionDeleteByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type GetVersionsApiResponse = /** status 200 Paginated versions with total count as header param */ {
-    totalItems: number;
-    items: Version[];
-};
-export type GetVersionsApiArg = {
+export type VersionGetCollectionForElementByTypeAndIdApiResponse =
+    /** status 200 Paginated element Versions data as JSON with total count as header param */ {
+        totalItems: number;
+        items: Version[];
+    };
+export type VersionGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -116,11 +120,11 @@ export type GetVersionsApiArg = {
     /** Number of items per page */
     pageSize: number;
 };
-export type CleanupVersionApiResponse = /** status 200 IDs of deleted versions */ {
+export type VersionCleanupForElementByTypeAndIdApiResponse = /** status 200 IDs of the removed versions */ {
     /** IDs of deleted versions */
     ids: number[];
 };
-export type CleanupVersionApiArg = {
+export type VersionCleanupForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the ID of the element */
@@ -204,6 +208,12 @@ export type DocumentVersion = {
     /** published */
     published: boolean;
 };
+export type UpdateVersion = {
+    /** Public */
+    public?: boolean | null;
+    /** Note */
+    note?: string | null;
+};
 export type VersionUser = {
     /** ID */
     id?: number | null;
@@ -238,13 +248,13 @@ export type Version = {
     scheduled?: number | null;
 };
 export const {
-    useDownloadAssetVersionByIdQuery,
-    useStreamImageVersionByIdQuery,
-    useStreamPdfVersionByIdQuery,
-    useGetVersionByIdQuery,
-    useUpdateVersionMutation,
-    usePublishVersionMutation,
-    useDeleteVersionMutation,
-    useGetVersionsQuery,
-    useCleanupVersionMutation,
+    useVersionAssetDownloadByIdQuery,
+    useVersionImageStreamByIdQuery,
+    useVersionPdfStreamByIdQuery,
+    useVersionGetByIdQuery,
+    useVersionUpdateByIdMutation,
+    useVersionPublishByIdMutation,
+    useVersionDeleteByIdMutation,
+    useVersionGetCollectionForElementByTypeAndIdQuery,
+    useVersionCleanupForElementByTypeAndIdMutation,
 } = injectedRtkApi;

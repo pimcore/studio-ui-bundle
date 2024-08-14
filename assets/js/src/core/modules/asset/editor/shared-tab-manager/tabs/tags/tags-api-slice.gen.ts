@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getTags: build.query<GetTagsApiResponse, GetTagsApiArg>({
+            tagGetCollection: build.query<TagGetCollectionApiResponse, TagGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/tags`,
                     params: {
@@ -19,11 +19,11 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Tags"],
             }),
-            getTagById: build.query<GetTagByIdApiResponse, GetTagByIdApiArg>({
+            tagGetById: build.query<TagGetByIdApiResponse, TagGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.id}` }),
                 providesTags: ["Tags"],
             }),
-            updateTag: build.mutation<UpdateTagApiResponse, UpdateTagApiArg>({
+            tagUpdateById: build.mutation<TagUpdateByIdApiResponse, TagUpdateByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/tags/${queryArg.id}`,
                     method: "PUT",
@@ -31,20 +31,20 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Tags"],
             }),
-            deleteTag: build.mutation<DeleteTagApiResponse, DeleteTagApiArg>({
+            tagDeleteById: build.mutation<TagDeleteByIdApiResponse, TagDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Tags"],
             }),
-            assignTagForElement: build.mutation<AssignTagForElementApiResponse, AssignTagForElementApiArg>({
+            tagAssignToElement: build.mutation<TagAssignToElementApiResponse, TagAssignToElementApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/tags/assign/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
-            batchAssignTagsForElements: build.mutation<
-                BatchAssignTagsForElementsApiResponse,
-                BatchAssignTagsForElementsApiArg
+            tagBatchAssignToElementsByType: build.mutation<
+                TagBatchAssignToElementsByTypeApiResponse,
+                TagBatchAssignToElementsByTypeApiArg
             >({
                 query: (queryArg) => ({
                     url: `/studio/api/tags/batch/assign/${queryArg.elementType}`,
@@ -53,9 +53,9 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
-            batchReplaceTagsForElements: build.mutation<
-                BatchReplaceTagsForElementsApiResponse,
-                BatchReplaceTagsForElementsApiArg
+            tagBatchReplaceForElementsByType: build.mutation<
+                TagBatchReplaceForElementsByTypeApiResponse,
+                TagBatchReplaceForElementsByTypeApiArg
             >({
                 query: (queryArg) => ({
                     url: `/studio/api/tags/batch/replace/${queryArg.elementType}`,
@@ -64,14 +64,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
-            getTagsForElementByTypeAndId: build.query<
-                GetTagsForElementByTypeAndIdApiResponse,
-                GetTagsForElementByTypeAndIdApiArg
+            tagGetCollectionForElementByTypeAndId: build.query<
+                TagGetCollectionForElementByTypeAndIdApiResponse,
+                TagGetCollectionForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Tags for Element"],
             }),
-            unassignTagFromElement: build.mutation<UnassignTagFromElementApiResponse, UnassignTagFromElementApiArg>({
+            tagUnassignFromElement: build.mutation<TagUnassignFromElementApiResponse, TagUnassignFromElementApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/tags/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "DELETE",
@@ -82,10 +82,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetTagsApiResponse = /** status 200 Tags filtered based on type and query parameters */ {
-    items?: Tag[];
-};
-export type GetTagsApiArg = {
+export type TagGetCollectionApiResponse =
+    /** status 200 All tags for a parent filtered based on type and query parameters */ {
+        items?: Tag[];
+    };
+export type TagGetCollectionApiArg = {
     /** Page number */
     page: number;
     /** Number of items per page */
@@ -97,27 +98,27 @@ export type GetTagsApiArg = {
     /** Filter tags by parent id. */
     parentId?: number;
 };
-export type GetTagByIdApiResponse = /** status 200 Tag data as json */ Tag;
-export type GetTagByIdApiArg = {
+export type TagGetByIdApiResponse = /** status 200 Successfully retrieved tag data as JSON */ Tag;
+export type TagGetByIdApiArg = {
     /** Id of the tag */
     id: number;
 };
-export type UpdateTagApiResponse = /** status 200 Updated tag data as json */ Tag;
-export type UpdateTagApiArg = {
+export type TagUpdateByIdApiResponse = /** status 200 Successfully updated tag data as JSON */ Tag;
+export type TagUpdateByIdApiArg = {
     /** Id of the tag */
     id: number;
     updateTagParameters: ChangeTagParameters;
 };
-export type DeleteTagApiResponse = /** status 200 Id of deleted tag */ {
+export type TagDeleteByIdApiResponse = /** status 200 ID of successfully deleted tag */ {
     /** ID of deleted tag */
     id: number;
 };
-export type DeleteTagApiArg = {
+export type TagDeleteByIdApiArg = {
     /** Id of the tag */
     id: number;
 };
-export type AssignTagForElementApiResponse = unknown;
-export type AssignTagForElementApiArg = {
+export type TagAssignToElementApiResponse = unknown;
+export type TagAssignToElementApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -125,30 +126,30 @@ export type AssignTagForElementApiArg = {
     /** TagId of the tag */
     tagId: number;
 };
-export type BatchAssignTagsForElementsApiResponse = unknown;
-export type BatchAssignTagsForElementsApiArg = {
+export type TagBatchAssignToElementsByTypeApiResponse = unknown;
+export type TagBatchAssignToElementsByTypeApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     elementTagIdCollection: CollectionOfElementAndTagIds;
 };
-export type BatchReplaceTagsForElementsApiResponse = unknown;
-export type BatchReplaceTagsForElementsApiArg = {
+export type TagBatchReplaceForElementsByTypeApiResponse = unknown;
+export type TagBatchReplaceForElementsByTypeApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     elementTagIdCollection: CollectionOfElementAndTagIds;
 };
-export type GetTagsForElementByTypeAndIdApiResponse = /** status 200 List of tags */ {
+export type TagGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Paginated tags for element */ {
     totalItems: number;
     items: Tag[];
 };
-export type GetTagsForElementByTypeAndIdApiArg = {
+export type TagGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
     id: number;
 };
-export type UnassignTagFromElementApiResponse = unknown;
-export type UnassignTagFromElementApiArg = {
+export type TagUnassignFromElementApiResponse = unknown;
+export type TagUnassignFromElementApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -199,13 +200,13 @@ export type CollectionOfElementAndTagIds = {
     tagIds?: number[];
 };
 export const {
-    useGetTagsQuery,
-    useGetTagByIdQuery,
-    useUpdateTagMutation,
-    useDeleteTagMutation,
-    useAssignTagForElementMutation,
-    useBatchAssignTagsForElementsMutation,
-    useBatchReplaceTagsForElementsMutation,
-    useGetTagsForElementByTypeAndIdQuery,
-    useUnassignTagFromElementMutation,
+    useTagGetCollectionQuery,
+    useTagGetByIdQuery,
+    useTagUpdateByIdMutation,
+    useTagDeleteByIdMutation,
+    useTagAssignToElementMutation,
+    useTagBatchAssignToElementsByTypeMutation,
+    useTagBatchReplaceForElementsByTypeMutation,
+    useTagGetCollectionForElementByTypeAndIdQuery,
+    useTagUnassignFromElementMutation,
 } = injectedRtkApi;

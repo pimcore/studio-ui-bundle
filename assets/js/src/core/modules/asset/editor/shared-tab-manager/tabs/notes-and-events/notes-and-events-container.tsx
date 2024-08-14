@@ -16,9 +16,9 @@ import {
   NotesAndEventsTabView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
 import {
-  useCreateNoteForElementMutation,
-  useDeleteNoteMutation,
-  useGetNotesForElementByTypeAndIdQuery
+  useNoteElementCreateMutation,
+  useNoteDeleteByIdMutation,
+  useNoteElementGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { Result } from 'antd'
@@ -36,10 +36,10 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
 
-  const [deleteNote] = useDeleteNoteMutation()
-  const [createNote] = useCreateNoteForElementMutation()
+  const [deleteNote] = useNoteDeleteByIdMutation()
+  const [createNote] = useNoteElementCreateMutation()
 
-  const { isLoading, data } = useGetNotesForElementByTypeAndIdQuery({
+  const { isLoading, data } = useNoteElementGetCollectionQuery({
     id,
     elementType: 'asset',
     page,

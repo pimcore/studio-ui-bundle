@@ -14,7 +14,7 @@
 import React, { type Key, useContext, useState } from 'react'
 import {
   type Tag,
-  useUnassignTagFromElementMutation
+  useTagUnassignFromElementMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -37,7 +37,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   const [loadingRows, setLoadingRows] = useState({})
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
-  const [unassignTag] = useUnassignTagFromElementMutation()
+  const [unassignTag] = useTagUnassignFromElementMutation()
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
 

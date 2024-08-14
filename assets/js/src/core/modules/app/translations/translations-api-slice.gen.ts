@@ -6,7 +6,10 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getTranslations: build.mutation<GetTranslationsApiResponse, GetTranslationsApiArg>({
+            translationGetCollection: build.mutation<
+                TranslationGetCollectionApiResponse,
+                TranslationGetCollectionApiArg
+            >({
                 query: (queryArg) => ({ url: `/studio/api/translations`, method: "POST", body: queryArg.translation }),
                 invalidatesTags: ["Translation"],
             }),
@@ -14,8 +17,9 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetTranslationsApiResponse = /** status 200 Key value pairs for given keys and locale */ Translation;
-export type GetTranslationsApiArg = {
+export type TranslationGetCollectionApiResponse =
+    /** status 200 Key value pairs for given keys and locale */ Translation;
+export type TranslationGetCollectionApiArg = {
     translation: Translation;
 };
 export type Translation = {
@@ -34,4 +38,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetTranslationsMutation } = injectedRtkApi;
+export const { useTranslationGetCollectionMutation } = injectedRtkApi;
