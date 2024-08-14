@@ -14,6 +14,7 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { Button } from 'antd'
+import {CSS} from '@dnd-kit/utilities'
 
 interface DraggableItemProps {
   style?: React.CSSProperties
@@ -40,10 +41,7 @@ export const DraggableItem = ({ style, top, left, children }: DraggableItemProps
     zIndex: 1000,
     top,
     left,
-    transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-    //'--translate-x': `${transform?.x ?? 0}px`,
-    //'--translate-y': `${transform?.y ?? 0}px`
-    transition: 'all 0.1s ease-out'
+    transform: CSS.Transform.toString(transform),
   } as React.CSSProperties
 
   return (
