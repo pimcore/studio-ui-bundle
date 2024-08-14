@@ -13,16 +13,16 @@
 
 import { type Meta } from '@storybook/react'
 import React from 'react'
-import { ButtonGroup } from './button-group'
 import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
 import { Button } from 'antd'
+import { IconLibraryOverview } from './icon-library-overview'
 
-/* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Pimcore studio/UI/ButtonGroup',
-  component: ButtonGroup,
+  title: 'Pimcore studio/IconLibrary',
+  component: IconLibraryOverview,
   parameters: {
     layout: 'fullscreen'
+
   },
   tags: ['autodocs']
 }
@@ -30,14 +30,4 @@ const config: Meta = {
 export default config
 
 export const _default = {
-  args: {
-    items: [
-      <LanguageSelection
-        languages={ ['EN', 'FR'] }
-        onSelectLanguage={ () => {} }
-        selectedLanguage={ 'EN' }
-      />,
-      <Button type='primary'>Standard Button</Button>
-    ]
-  }
 }

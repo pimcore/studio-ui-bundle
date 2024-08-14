@@ -15,9 +15,9 @@ import React, { useMemo } from 'react'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { GridConfig } from './sidebar-tabs/grid-config/grid-config'
-import { TagFiltersContainer } from './sidebar-tabs/tag-filters/tag-filters-container'
-import { FilterContainer } from './sidebar-tabs/filters/filter-container'
+import { GridConfig } from './grid-config/grid-config'
+import { TagFiltersContainer } from './tag-filters/tag-filters-container'
+import { FilterContainer } from './filters/filter-container'
 
 export const SidebarContainer = (): React.JSX.Element => {
   const entries: ISidebarEntry[] = useMemo(() => [

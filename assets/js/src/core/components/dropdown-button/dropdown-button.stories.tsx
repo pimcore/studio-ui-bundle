@@ -12,17 +12,14 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
-import { ButtonGroup } from './button-group'
-import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
-import { Button } from 'antd'
+import { DropdownButton } from './dropdown-button'
 
-/* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Pimcore studio/UI/ButtonGroup',
-  component: ButtonGroup,
+  title: 'Pimcore studio/UI/DropdownButton',
+  component: DropdownButton,
   parameters: {
     layout: 'fullscreen'
+
   },
   tags: ['autodocs']
 }
@@ -31,13 +28,6 @@ export default config
 
 export const _default = {
   args: {
-    items: [
-      <LanguageSelection
-        languages={ ['EN', 'FR'] }
-        onSelectLanguage={ () => {} }
-        selectedLanguage={ 'EN' }
-      />,
-      <Button type='primary'>Standard Button</Button>
-    ]
-  }
+    children: 'Dropdown Button',
+  }  
 }

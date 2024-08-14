@@ -15,6 +15,7 @@ import React from 'react'
 import { GridToolbarView } from './grid-toolbar-view'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
+import { GridTools } from './tools/grid-tools'
 
 interface GridToolbarContainerProps {
   pager: {
@@ -41,6 +42,10 @@ const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Eleme
           showTotal={ (total) => t('pagination.show-total', { total }) }
           total={ pager.total }
         />
+      ) }
+
+      renderTools={ (
+        <GridTools />
       ) }
     />
   )

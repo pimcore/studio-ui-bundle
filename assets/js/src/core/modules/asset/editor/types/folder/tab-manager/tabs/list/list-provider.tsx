@@ -14,7 +14,7 @@
 import React, { createContext, useMemo, useState } from 'react'
 
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { defaultFilterOptions, type FilterOptions } from './sidebar-tabs/filters/filter-provider'
+import { defaultFilterOptions, type FilterOptions } from './sidebar/filters/filter-provider'
 import { type SortingState, type RowSelectionState } from '@tanstack/react-table'
 
 export interface IListGridConfigContext {
