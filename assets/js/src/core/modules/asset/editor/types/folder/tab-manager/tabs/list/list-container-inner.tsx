@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useGetAssetGridMutation, type GridFilter, api, type GetAssetGridApiResponse, usePatchAssetByIdMutation, type PatchAssetByIdApiArg, type GetAssetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetGridMutation, type GridFilter, api, type AssetGetGridApiResponse, useAssetPatchByIdMutation, type AssetPatchByIdApiArg, type AssetGetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
@@ -38,9 +38,9 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { columns, setGridColumns } = useListColumns()
   const { gridConfig, setGridConfig } = useListGridConfig()
   const assetId = assetContext.id!
-  const [data, setData] = useState<GetAssetGridApiResponse | undefined>()
-  const [fetchListing] = useGetAssetGridMutation()
-  const [patchAsset] = usePatchAssetByIdMutation()
+  const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
+  const [fetchListing] = useAssetGetGridMutation()
+  const [patchAsset] = useAssetPatchByIdMutation()
   const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
   const [, setDataPatches] = useState<DataPatch[]>([])
   const { sorting } = useListSorting()
@@ -57,8 +57,8 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const availableGridCOnfigPromise = dispatch(api.endpoints.getAvailableAssetGridConfiguration.initiate())
-      const initialGridConfigPromise = dispatch(api.endpoints.getAssetGridConfiguration.initiate({ folderId: assetId }))
+      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridConfiguration.initiate())
+      const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId }))
 
       Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
         setGridConfig(availableGridConfig.data?.columns)
@@ -135,7 +135,7 @@ export const ListContainerInner = (): React.JSX.Element => {
       throw new Error('Only metadata columns are supported for now')
     }
 
-    const update: PatchAssetByIdApiArg = {
+    const update: AssetPatchByIdApiArg = {
       body: {
         data: [
           {
@@ -180,14 +180,14 @@ export const ListContainerInner = (): React.JSX.Element => {
     return fetchListing({
       ...requestData
     }).then((data: any) => {
-      const _data = data.data as GetAssetGridApiResponse
+      const _data = data.data as AssetGetGridApiResponse
       updateData(_data)
     }).catch((error) => {
       console.error(error)
     })
   }
 
-  function getQueryArgs (): GetAssetGridApiArg {
+  function getQueryArgs (): AssetGetGridApiArg {
     const columnsToRequest = [...columns]
     const hasIdColumn = columns.some((column) => column.key === 'id')
 
@@ -224,7 +224,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     }
   }
 
-  function updateData (dataUpdate: GetAssetGridApiResponse | undefined = undefined): void {
+  function updateData (dataUpdate: AssetGetGridApiResponse | undefined = undefined): void {
     setDataPatches((currentDataPatches) => {
       setData((currentData) => {
         const currentDataModel = dataUpdate ?? currentData

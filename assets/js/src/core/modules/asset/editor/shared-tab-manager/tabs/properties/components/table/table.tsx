@@ -23,7 +23,7 @@ import { useStyles } from './table.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useGetPropertiesForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
+import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -40,7 +40,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
-  const { data, isLoading } = useGetPropertiesForElementByTypeAndIdQuery({
+  const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!
   })

@@ -30,7 +30,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   const { openAsset } = useAsset()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
-    await store.dispatch(api.endpoints.getAssetById.initiate({ id: parseInt(node.id) }))
+    await store.dispatch(api.endpoints.assetGetById.initiate({ id: parseInt(node.id) }))
 
     openAsset({
       config: {

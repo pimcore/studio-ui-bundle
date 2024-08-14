@@ -11,17 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type GetTagsApiResponse } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { type TagGetCollectionApiResponse } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import type { TreeDataNode } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 interface UseCreateTreeStructureReturn {
-  createTreeStructure: ({ tags }: { tags: NonNullable<GetTagsApiResponse['items']> }) => TreeDataNode[]
+  createTreeStructure: ({ tags }: { tags: NonNullable<TagGetCollectionApiResponse['items']> }) => TreeDataNode[]
 }
 
 export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
-  const createTreeStructure = ({ tags }: { tags: NonNullable<GetTagsApiResponse['items']> }): TreeDataNode[] => {
-    function treeWalker (tags: NonNullable<GetTagsApiResponse['items']>): TreeDataNode[] {
+  const createTreeStructure = ({ tags }: { tags: NonNullable<TagGetCollectionApiResponse['items']> }): TreeDataNode[] => {
+    function treeWalker (tags: NonNullable<TagGetCollectionApiResponse['items']>): TreeDataNode[] {
       return tags.map((tag) => ({
         key: tag.id!.toString(),
         title: tag.text,

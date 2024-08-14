@@ -13,14 +13,14 @@
 
 import React, { useContext } from 'react'
 import { PreviewView } from './preview-view'
-import { useGetAssetDataTextByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetTextDataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from '@Pimcore/modules/asset/editor/types/text/tab-manager/tabs/preview/preview-container.styles'
 import { isSet } from '@Pimcore/utils/helpers'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useGetAssetDataTextByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id! })
   const { styles } = useStyle()
 
   return (

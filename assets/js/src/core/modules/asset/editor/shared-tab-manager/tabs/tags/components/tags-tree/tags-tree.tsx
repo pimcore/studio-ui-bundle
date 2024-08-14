@@ -14,9 +14,9 @@
 import React, { type Key } from 'react'
 import { Input, Tree, type TreeProps } from 'antd'
 import {
-  type AssignTagForElementApiArg,
+  type TagAssignToElementApiArg,
   type Tag,
-  useBatchReplaceTagsForElementsMutation
+  useTagBatchReplaceForElementsByTypeMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   useCreateTreeStructure
@@ -31,7 +31,7 @@ import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/t
 
 export interface TagsTreeProps {
   elementId: number
-  elementType: AssignTagForElementApiArg['elementType']
+  elementType: TagAssignToElementApiArg['elementType']
   tags: Tag[]
   setFilter: (filter: string) => void
   isLoading?: boolean
@@ -43,7 +43,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   const { styles } = useStyle()
   const { Search } = Input
   const { createTreeStructure } = useCreateTreeStructure()
-  const [replaceTagsMutation] = useBatchReplaceTagsForElementsMutation()
+  const [replaceTagsMutation] = useTagBatchReplaceForElementsByTypeMutation()
   const treeData = createTreeStructure({ tags })
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)

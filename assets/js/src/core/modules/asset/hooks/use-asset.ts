@@ -29,11 +29,15 @@ export const useAsset = (): UseAssetReturn => {
 
   async function openAsset (props: OpenAssetWidgetProps): Promise<void> {
     const { config } = props
-    const asset = await store.dispatch(api.endpoints.getAssetById.initiate({ id: config.id }))
+    const asset = await store.dispatch(api.endpoints.assetGetById.initiate({ id: config.id }))
+
+    if (asset.data?.icon?.type === 'path') {
+      return
+    }
 
     openMainWidget({
       name: asset.data?.filename,
-      icon: asset.data?.iconName,
+      icon: asset.data?.icon?.value,
       id: `asset-${config.id}`,
       component: 'asset-editor',
       config

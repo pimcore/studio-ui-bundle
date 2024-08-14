@@ -15,7 +15,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React from 'react'
 import {
   type Dependency,
-  type GetDependenciesApiResponse
+  type DependencyGetCollectionByElementTypeApiResponse
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
@@ -27,7 +27,7 @@ type DependencyTable = Dependency & {
 
 interface TableProps {
   isLoading: GridProps['isLoading']
-  items: GetDependenciesApiResponse['items']
+  items: DependencyGetCollectionByElementTypeApiResponse['items']
 }
 
 export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {

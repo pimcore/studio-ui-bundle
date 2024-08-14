@@ -12,14 +12,14 @@
 */
 
 import {
-  api, type GetTagsForElementByTypeAndIdApiArg,
-  type GetTagsForElementByTypeAndIdApiResponse, type Tag
+  api, type TagGetCollectionForElementByTypeAndIdApiArg,
+  type TagGetCollectionForElementByTypeAndIdApiResponse, type Tag
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type Key } from 'react'
 import { type PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks'
 
-interface UpdateTagsForElementByTypeAndIdProps extends GetTagsForElementByTypeAndIdApiArg {
+interface UpdateTagsForElementByTypeAndIdProps extends TagGetCollectionForElementByTypeAndIdApiArg {
   flatTags: Tag[]
   checkedTags: Key[]
 }
@@ -34,12 +34,12 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateReturn => {
   const updateTagsForElementByTypeAndId = (props: UpdateTagsForElementByTypeAndIdProps): PatchCollection => {
     return dispatch(
       api.util.updateQueryData(
-        'getTagsForElementByTypeAndId',
+        'tagGetCollectionForElementByTypeAndId',
         {
           elementType: props.elementType,
           id: props.id
         },
-        (draft): GetTagsForElementByTypeAndIdApiResponse => {
+        (draft): TagGetCollectionForElementByTypeAndIdApiResponse => {
           const items = props.flatTags
             .filter((tag) => props.checkedTags.includes(tag.id!))
             .reduce((res, tag) => Object.assign(res, { [tag.id!]: tag }), {})

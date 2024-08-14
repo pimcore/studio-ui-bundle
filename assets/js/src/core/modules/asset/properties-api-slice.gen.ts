@@ -6,14 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getProperties: build.query<GetPropertiesApiResponse, GetPropertiesApiArg>({
+            propertyGetCollection: build.query<PropertyGetCollectionApiResponse, PropertyGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/properties`,
                     params: { elementType: queryArg.elementType, filter: queryArg.filter },
                 }),
                 providesTags: ["Properties"],
             }),
-            updateProperty: build.mutation<UpdatePropertyApiResponse, UpdatePropertyApiArg>({
+            propertyUpdate: build.mutation<PropertyUpdateApiResponse, PropertyUpdateApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/properties/${queryArg.id}`,
                     method: "PUT",
@@ -21,13 +21,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Properties"],
             }),
-            deleteProperty: build.mutation<DeletePropertyApiResponse, DeletePropertyApiArg>({
+            propertyDelete: build.mutation<PropertyDeleteApiResponse, PropertyDeleteApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Properties"],
             }),
-            getPropertiesForElementByTypeAndId: build.query<
-                GetPropertiesForElementByTypeAndIdApiResponse,
-                GetPropertiesForElementByTypeAndIdApiArg
+            propertyGetCollectionForElementByTypeAndId: build.query<
+                PropertyGetCollectionForElementByTypeAndIdApiResponse,
+                PropertyGetCollectionForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Properties"],
@@ -36,31 +36,31 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetPropertiesApiResponse =
+export type PropertyGetCollectionApiResponse =
     /** status 200 Predefined properties filtered based on type and query parameters */ {
         items?: PredefinedProperty[];
     };
-export type GetPropertiesApiArg = {
+export type PropertyGetCollectionApiArg = {
     /** Filter elements by matching element type. */
     elementType?: "asset" | "document" | "data-object";
     /** Filter for properties */
     filter?: string;
 };
-export type UpdatePropertyApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
-export type UpdatePropertyApiArg = {
+export type PropertyUpdateApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
+export type PropertyUpdateApiArg = {
     /** Id of the property */
     id: string;
     updatePredefinedProperty: UpdatePredefinedProperty;
 };
-export type DeletePropertyApiResponse = /** status 200 Successfully deleted property */ void;
-export type DeletePropertyApiArg = {
+export type PropertyDeleteApiResponse = /** status 200 Successfully deleted property with given id */ void;
+export type PropertyDeleteApiArg = {
     /** Id of the property */
     id: string;
 };
-export type GetPropertiesForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
+export type PropertyGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
     items?: DataProperty[];
 };
-export type GetPropertiesForElementByTypeAndIdApiArg = {
+export type PropertyGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -145,8 +145,8 @@ export type DataProperty = {
     description?: string | null;
 };
 export const {
-    useGetPropertiesQuery,
-    useUpdatePropertyMutation,
-    useDeletePropertyMutation,
-    useGetPropertiesForElementByTypeAndIdQuery,
+    usePropertyGetCollectionQuery,
+    usePropertyUpdateMutation,
+    usePropertyDeleteMutation,
+    usePropertyGetCollectionForElementByTypeAndIdQuery,
 } = injectedRtkApi;

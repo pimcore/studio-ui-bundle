@@ -42,7 +42,7 @@ export const DetailsVersionContainer = ({
   }, [versionId])
 
   useEffect(() => {
-    const versionPromise = store.dispatch(api.endpoints.getVersionById.initiate({ id: vId.id }))
+    const versionPromise = store.dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
 
     if (!Object.keys(imageUrls).includes(vId.id.toString())) {
       fetch(`http://localhost/studio/api/versions/${vId.id}/image/stream`)

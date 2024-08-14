@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getElementIdByPath: build.query<GetElementIdByPathApiResponse, GetElementIdByPathApiArg>({
+            elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/elements/${queryArg.elementType}/path`,
                     params: { elementPath: queryArg.elementPath },
@@ -17,11 +17,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetElementIdByPathApiResponse = /** status 200 Id of the element */ {
+export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
     id: number;
 };
-export type GetElementIdByPathApiArg = {
+export type ElementGetIdByPathApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Filter elements by matching element path. */
@@ -37,4 +37,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetElementIdByPathQuery } = injectedRtkApi;
+export const { useElementGetIdByPathQuery } = injectedRtkApi;

@@ -6,20 +6,20 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            deleteSchedule: build.mutation<DeleteScheduleApiResponse, DeleteScheduleApiArg>({
+            scheduleDeleteById: build.mutation<ScheduleDeleteByIdApiResponse, ScheduleDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/schedules/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Schedule"],
             }),
-            getSchedulesForElementByTypeAndId: build.query<
-                GetSchedulesForElementByTypeAndIdApiResponse,
-                GetSchedulesForElementByTypeAndIdApiArg
+            scheduleGetCollectionForElementByTypeAndId: build.query<
+                ScheduleGetCollectionForElementByTypeAndIdApiResponse,
+                ScheduleGetCollectionForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/schedules/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Schedule"],
             }),
-            updateSchedulesForElementByTypeAndId: build.mutation<
-                UpdateSchedulesForElementByTypeAndIdApiResponse,
-                UpdateSchedulesForElementByTypeAndIdApiArg
+            scheduleUpdateForElementByTypeAndId: build.mutation<
+                ScheduleUpdateForElementByTypeAndIdApiResponse,
+                ScheduleUpdateForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
                     url: `/studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
@@ -28,7 +28,10 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Schedule"],
             }),
-            createSchedule: build.mutation<CreateScheduleApiResponse, CreateScheduleApiArg>({
+            scheduleCreateForElementByTypeAndId: build.mutation<
+                ScheduleCreateForElementByTypeAndIdApiResponse,
+                ScheduleCreateForElementByTypeAndIdApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
@@ -39,24 +42,24 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type DeleteScheduleApiResponse = /** status 200 Successfully deleted schedule */ void;
-export type DeleteScheduleApiArg = {
+export type ScheduleDeleteByIdApiResponse = /** status 200 Successfully deleted schedule */ void;
+export type ScheduleDeleteByIdApiArg = {
     /** Id of the schedule */
     id: number;
 };
-export type GetSchedulesForElementByTypeAndIdApiResponse = /** status 200 List of schedules */ {
+export type ScheduleGetCollectionForElementByTypeAndIdApiResponse = /** status 200 List of schedules for element */ {
     items?: Schedule[];
 };
-export type GetSchedulesForElementByTypeAndIdApiArg = {
+export type ScheduleGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
     id: number;
 };
-export type UpdateSchedulesForElementByTypeAndIdApiResponse = /** status 200 List of schedules */ {
+export type ScheduleUpdateForElementByTypeAndIdApiResponse = /** status 200 List of updated schedules */ {
     items?: Schedule[];
 };
-export type UpdateSchedulesForElementByTypeAndIdApiArg = {
+export type ScheduleUpdateForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -65,8 +68,8 @@ export type UpdateSchedulesForElementByTypeAndIdApiArg = {
         items?: UpdateSchedule[];
     };
 };
-export type CreateScheduleApiResponse = /** status 200 Created schedule */ Schedule;
-export type CreateScheduleApiArg = {
+export type ScheduleCreateForElementByTypeAndIdApiResponse = /** status 200 Created schedule for element */ Schedule;
+export type ScheduleCreateForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -117,8 +120,8 @@ export type UpdateSchedule = {
     active: boolean;
 };
 export const {
-    useDeleteScheduleMutation,
-    useGetSchedulesForElementByTypeAndIdQuery,
-    useUpdateSchedulesForElementByTypeAndIdMutation,
-    useCreateScheduleMutation,
+    useScheduleDeleteByIdMutation,
+    useScheduleGetCollectionForElementByTypeAndIdQuery,
+    useScheduleUpdateForElementByTypeAndIdMutation,
+    useScheduleCreateForElementByTypeAndIdMutation,
 } = injectedRtkApi;
