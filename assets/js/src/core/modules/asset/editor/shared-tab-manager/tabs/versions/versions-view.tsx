@@ -103,9 +103,9 @@ export const VersionsView = ({
           >{t('no')}</Button>
         </ModalFooter>
           }
-      title={ t('clear-all') }
+      title={ t('version.clear-unpublished-versions') }
     >
-      <span>Do you really want to delete all versions of this element?</span>
+      <span>{t('version.confirm-clear-unpublished')}</span>
     </RenderModal>
   )
 
@@ -129,7 +129,7 @@ export const VersionsView = ({
                 loading={ clearingAll }
                 onClick={ showModal }
               >
-                {t('clear-all')}
+                {t('version.clear-unpublished')}
               </Button>
               {modal}
             </>

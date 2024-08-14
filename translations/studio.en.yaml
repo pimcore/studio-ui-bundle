@@ -100,6 +100,9 @@ version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
 version.image: Image
 version.no-versions-to-show: There are no versions to show.
+version.clear-unpublished: Clear Unpublished
+version.clear-unpublished-versions: Clear unpublished versions
+version.confirm-clear-unpublished: Are you sure you want to clear all unpublished versions?
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
