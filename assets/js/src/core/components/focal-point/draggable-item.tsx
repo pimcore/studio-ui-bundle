@@ -31,18 +31,24 @@ export const DraggableItem = ({ style, top, left, children }: DraggableItemProps
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const craftedStyle = {
     ...style,
-    // position: 'relative',
+    width: 50,
+    height: 50,
+    background: 'yellow',
+    position: 'absolute',
+
+
     zIndex: 1000,
     top,
     left,
     transform: `translate(${transform?.x ?? 0}px, ${transform?.y ?? 0}px)`,
-    '--translate-x': `${transform?.x ?? 0}px`,
-    '--translate-y': `${transform?.y ?? 0}px`
+    //'--translate-x': `${transform?.x ?? 0}px`,
+    //'--translate-y': `${transform?.y ?? 0}px`
+    transition: 'all 0.1s ease-out'
   } as React.CSSProperties
 
   return (
-    <div>
-      <Button
+    <div style={{position: 'relative', display: 'flex'}}>
+      <div
         { ...attributes }
         { ...listeners }
         aria-label="Draggable"
@@ -51,7 +57,7 @@ export const DraggableItem = ({ style, top, left, children }: DraggableItemProps
         style={ { ...craftedStyle } }
       >
         Drag me
-      </Button>
+      </div>
 
       {children}
     </div>

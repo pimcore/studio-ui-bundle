@@ -23,6 +23,7 @@ import {
 } from '@dnd-kit/core'
 import type { Coordinates } from '@dnd-kit/utilities'
 import { DraggableItem } from '@Pimcore/components/focal-point/draggable-item'
+import { restrictToParentElement } from '@dnd-kit/modifiers'
 
 const defaultCoordinates = {
   x: 0,
@@ -40,8 +41,10 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
   const keyboardSensor = useSensor(KeyboardSensor, {})
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor)
+
   return (
     <DndContext
+      modifiers={ [restrictToParentElement] }
       onDragEnd={ ({ delta }) => {
         setCoordinates(({ x, y }) => {
           return {
