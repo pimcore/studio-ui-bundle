@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type GetDependenciesApiResponse
+  type DependencyGetCollectionByElementTypeApiResponse
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
 import { t } from 'i18next'
 import { Pagination as PimPagination } from '@Pimcore/components/pagination/pagination'
@@ -21,7 +21,7 @@ import {
   PaginationSkeleton
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/skeleton'
 
-type PaginationProps = Partial<GetDependenciesApiResponse> & {
+type PaginationProps = Partial<DependencyGetCollectionByElementTypeApiResponse> & {
   page: number
   isLoading: boolean
   onChange: (page: number, pageSize: number) => void

@@ -13,13 +13,13 @@
 
 import React, { useContext } from 'react'
 import { PreviewView } from './preview-view'
-import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useGetAssetByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetByIdQuery({ id: assetContext.id! })
 
   return (
     <ContentToolbarSidebarView>

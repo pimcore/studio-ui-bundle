@@ -22,7 +22,7 @@ import {
   TagsTreeContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import {
-  useGetTagsForElementByTypeAndIdQuery
+  useTagGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useShortcutActions } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -33,7 +33,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { id } = useContext(AssetContext)
   const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
-  const { data, isLoading } = useGetTagsForElementByTypeAndIdQuery({
+  const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!
   })

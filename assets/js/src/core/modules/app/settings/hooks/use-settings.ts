@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type GetSystemSettingsApiResponse } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { type SystemSettingsGetApiResponse } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useSelector } from 'react-redux'
 import { getSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { useMemo } from 'react'
 
-export const useSettings = (): GetSystemSettingsApiResponse => {
+export const useSettings = (): SystemSettingsGetApiResponse => {
   const settings = useSelector(getSettings)
 
   return useMemo(() => (settings), [settings])

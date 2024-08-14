@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useStyle as useDependencyTabStyle } from '../../dependencies-container.styles'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
-  useGetDependenciesQuery
+  useDependencyGetCollectionByElementTypeQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/table/table'
 import {
@@ -31,7 +31,7 @@ export const RequiresPanel = (): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
-  const { data, isLoading } = useGetDependenciesQuery({
+  const { data, isLoading } = useDependencyGetCollectionByElementTypeQuery({
     elementType: 'asset',
     id: id!,
     page,

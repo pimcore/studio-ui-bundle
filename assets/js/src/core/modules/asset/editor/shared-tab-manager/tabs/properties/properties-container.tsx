@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Divider, Segmented, Select } from 'antd'
 import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type DataProperty, useGetPropertiesQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import { type DataProperty, usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import Input from 'antd/es/input/Input'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
@@ -37,7 +37,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const keyInputValue = useRef<string>('')
   const typeSelectValue = useRef<string>('')
 
-  const { data, isLoading } = useGetPropertiesQuery({
+  const { data, isLoading } = usePropertyGetCollectionQuery({
     elementType: 'asset'
   })
 

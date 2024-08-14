@@ -13,20 +13,20 @@
 
 import { useState } from 'react'
 import {
-  type DeleteScheduleApiArg,
-  useDeleteScheduleMutation
+  type ScheduleDeleteByIdApiArg,
+  useScheduleDeleteByIdMutation
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 
 interface IUseCleanupArchivedSchedulesResponse {
   isLoading: boolean
-  cleanup: ({ ids }: { ids: Array<DeleteScheduleApiArg['id']> }) => Promise<void>
+  cleanup: ({ ids }: { ids: Array<ScheduleDeleteByIdApiArg['id']> }) => Promise<void>
 }
 
 export const useCleanupArchivedSchedules = (): IUseCleanupArchivedSchedulesResponse => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [deleteSchedule] = useDeleteScheduleMutation()
+  const [deleteSchedule] = useScheduleDeleteByIdMutation()
 
-  const cleanup = async ({ ids }: { ids: Array<DeleteScheduleApiArg['id']> }): Promise<void> => {
+  const cleanup = async ({ ids }: { ids: Array<ScheduleDeleteByIdApiArg['id']> }): Promise<void> => {
     setIsLoading(true)
 
     for (const id of ids) {
