@@ -32,7 +32,7 @@ interface VersionCardProps {
   scheduledDate?: string
   note?: string
   onClick?: () => void
-  onClickPublish: () => void
+  onClickPublish: () => Promise<void>
   onClickDelete: () => void
   onBlurNote: (e) => void
   onChangeCheckbox?: (e) => void
@@ -63,6 +63,8 @@ export const VersionCard = ({
   const { t } = useTranslation()
 
   const [isExpanded, setIsExpanded] = useState(false)
+  const [deletingVersion, setDeletingVersion] = useState(false)
+  const [publishingVersion, setPublishingVersion] = useState(false)
 
   const chevronOnClick = (e: any): void => {
     setIsExpanded(!isExpanded)
@@ -125,6 +127,17 @@ export const VersionCard = ({
     )
   }
 
+  const publishVersion = async (): Promise<void> => {
+    setPublishingVersion(true)
+    await onClickPublish()
+    setPublishingVersion(false)
+  }
+
+  const deleteVersion = (): void => {
+    setDeletingVersion(true)
+    onClickDelete()
+  }
+
   return (
     <div className={ [styles.card, className].join(' ') }>
       <Card
@@ -140,16 +153,20 @@ export const VersionCard = ({
             {!published && (
               <Button
                 className={ 'btn-publish' }
+                disabled={ publishingVersion || deletingVersion }
                 icon={ <Icon name="world" /> }
-                onClick={ onClickPublish }
+                loading={ publishingVersion }
+                onClick={ publishVersion }
               >
                 {t('version.publish')}
               </Button>
             )}
             <Button
               aria-label={ t('aria.version.delete') }
+              disabled={ publishingVersion }
               icon={ <Icon name="trash" /> }
-              onClick={ onClickDelete }
+              loading={ deletingVersion }
+              onClick={ deleteVersion }
             />
           </div>
         </div>

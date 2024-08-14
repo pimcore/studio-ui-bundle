@@ -37,7 +37,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 interface VersionsViewProps {
   versions: Version[]
   onClickClearAll: (elementType: GetVersionsApiArg['elementType'], id: number) => Promise<void>
-  onClickPublish: (id: number) => void
+  onClickPublish: (id: number) => Promise<void>
   onClickDelete: (id: number) => void
   onBlurNote: (id: number, note: string) => void
 }
@@ -92,9 +92,9 @@ export const VersionsView = ({
   const modal = (
     <RenderModal
       footer={
-        <ModalFooter buttonAlignment={ 'end' }>
+        <ModalFooter>
           <Button
-            onClick={ async () => { await clearVersions() } }
+            onClick={ clearVersions }
             type={ 'primary' }
           >{t('yes')}</Button>
           <Button
@@ -168,8 +168,8 @@ export const VersionsView = ({
                   setDetailedVersions([])
                   onClickDelete(version.id)
                 } }
-                onClickPublish={ (): void => {
-                  onClickPublish(version.id)
+                onClickPublish={ async (): Promise<void> => {
+                  await onClickPublish(version.id)
                 } }
                 published={ version.published ?? false }
                 savedBy={ version.user?.name ?? '' }
