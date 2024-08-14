@@ -18,7 +18,6 @@ export const useStyle = createStyles(({ token, css }) => {
     modal: css`
             &.ant-modal .ant-modal-footer >.ant-btn+.ant-btn {
                 margin-inline-start: 0;
-                margin-left: 10px;
             }
             
             .ant-modal-content {

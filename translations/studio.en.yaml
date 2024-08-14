@@ -103,6 +103,8 @@ version.no-versions-to-show: There are no versions to show.
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
+yes: Yes
+no: No
 by: By
 field: Field
 no-data-available-yet: No data available yet.

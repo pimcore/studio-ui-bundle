@@ -60,14 +60,6 @@ export const useStyles = createStyles(({ token, css }) => {
         & .compare-button {
             background-color: ${versionToken.colorFillAlter};
         }
-      
-        & .yes-button {
-          margin-right: 5px;
-        }
-      
-       & .modal {
-         background-color: #0a0a0a;
-       }
     `,
     noContent: css`
         padding: ${token.paddingSM}px;

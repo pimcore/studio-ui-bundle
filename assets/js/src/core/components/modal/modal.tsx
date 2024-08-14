@@ -29,12 +29,8 @@ export const Modal = (props: IModalProps): React.JSX.Element => {
 
   return (
     <AntModal
-      cancelButtonProps={ props.cancelButtonProps }
-      cancelText={ props.cancelText }
       className={ styles.modal }
       footer={ props.footer }
-      okButtonProps={ props.okButtonProps }
-      okText={ props.okText }
       onCancel={ props.onCancel }
       onOk={ props.onOk }
       open={ props.open }
