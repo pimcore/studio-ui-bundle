@@ -22,7 +22,7 @@ import {
   useSensors
 } from '@dnd-kit/core'
 import type { Coordinates } from '@dnd-kit/utilities'
-import { DraggableItem } from '@Pimcore/components/focal-point/draggable-item'
+import { DraggableItem } from '@Pimcore/components/focal-point/components/draggable-item/draggable-item'
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 
 const defaultCoordinates = {

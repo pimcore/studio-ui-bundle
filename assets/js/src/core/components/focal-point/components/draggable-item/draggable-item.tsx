@@ -15,6 +15,8 @@ import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { Button } from 'antd'
 import {CSS} from '@dnd-kit/utilities'
+import {Icon} from "@Pimcore/components/icon/icon";
+import { useStyle } from './draggable-item.styles';
 
 interface DraggableItemProps {
   style?: React.CSSProperties
@@ -24,6 +26,7 @@ interface DraggableItemProps {
 }
 
 export const DraggableItem = ({ style, top, left, children }: DraggableItemProps): React.JSX.Element => {
+  const {styles} = useStyle()
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({
       id: 'draggable'
@@ -31,13 +34,8 @@ export const DraggableItem = ({ style, top, left, children }: DraggableItemProps
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const craftedStyle = {
-    ...style,
-    width: 50,
-    height: 50,
-    background: 'yellow',
+    //...style,
     position: 'absolute',
-
-
     zIndex: 1000,
     top,
     left,
@@ -45,17 +43,18 @@ export const DraggableItem = ({ style, top, left, children }: DraggableItemProps
   } as React.CSSProperties
 
   return (
-    <div style={{position: 'relative', display: 'flex'}}>
-      <div
+    <div className={styles.draggableContainer}>
+      <Button
+        type={'dashed'}
+        icon={<Icon name={'focal-point'} />}
         { ...attributes }
         { ...listeners }
         aria-label="Draggable"
         data-cypress="draggable-item"
         ref={ setNodeRef }
+        className={styles.draggableItem}
         style={ { ...craftedStyle } }
-      >
-        Drag me
-      </div>
+      />
 
       {children}
     </div>
