@@ -12,21 +12,29 @@
 */
 
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { Checkbox } from 'antd'
 import React from 'react'
-import { useListSelectedRows } from '../../hooks/use-list'
+import { GridSelections } from './grid-selections'
+import { GridActions } from './grid-actions'
+import { useListData } from '../../hooks/use-list'
 
 export const GridTools = (): React.JSX.Element => {
-  const { selectedRows } = useListSelectedRows()
+  const { data } = useListData()
 
   return (
-    <ButtonGroup
-      items={ [
-        <Checkbox key={ 'checkbox' }>{Object.keys(selectedRows).length} selected</Checkbox>,
-        <DropdownButton key={ 'dropdown-button' }>Apply to selection</DropdownButton>
-      ] }
-      withSeparator
-    />
+    <>
+      { data !== undefined && (
+        <ButtonGroup
+          items={ [
+            <GridSelections key={ 'grid-selections' } />,
+            <GridActions key={ 'grid-actions' } />
+          ] }
+          withSeparator
+        />
+      )}
+
+      { data === undefined && (
+        <div />
+      )}
+    </>
   )
 }

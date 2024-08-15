@@ -11,9 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useEffect, useMemo, useState } from 'react'
 
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetGetGridApiResponse, type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { defaultFilterOptions, type FilterOptions } from './sidebar/filters/filter-provider'
 import { type SortingState, type RowSelectionState } from '@tanstack/react-table'
 
@@ -183,6 +183,33 @@ export const ListSortingProvider = ({ children }: ListSortingProviderProps): Rea
       {children}
     </ListSortingContext.Provider>
   ), [sorting, children])
+}
+
+export interface IListDataContext {
+  data: AssetGetGridApiResponse | undefined
+}
+
+export const ListDataContext = createContext<IListDataContext>({
+  data: undefined
+})
+
+export interface ListDataProviderProps {
+  data: IListDataContext['data']
+  children: React.ReactNode
+}
+
+export const ListDataProvider = ({ children, data }: ListDataProviderProps): React.JSX.Element => {
+  const [internalData, setData] = useState<IListDataContext['data']>(undefined)
+
+  useEffect(() => {
+    setData(data)
+  }, [data])
+
+  return useMemo(() => (
+    <ListDataContext.Provider value={ { data: internalData } }>
+      {children}
+    </ListDataContext.Provider>
+  ), [internalData, children])
 }
 
 export interface ListProviderProps {

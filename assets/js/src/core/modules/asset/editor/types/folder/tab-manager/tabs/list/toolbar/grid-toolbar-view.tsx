@@ -28,6 +28,10 @@ const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
         <>{props.renderTools}</>
       )}
 
+      {props.renderTools === undefined && (
+        <div />
+      )}
+
       {props.renderPagination !== undefined && (
         <>{props.renderPagination}</>
       )}

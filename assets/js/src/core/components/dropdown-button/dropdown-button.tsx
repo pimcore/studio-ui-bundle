@@ -21,10 +21,10 @@ export type dropdownButtonProps = Omit<IconTextButtonProps, 'icon'> & {
 export const DropdownButton = ({ icon = 'icon-tools', ...props }: dropdownButtonProps): React.JSX.Element => {
   return (
     <IconTextButton
+      icon={ icon }
       iconPlacement="right"
       type="link"
       { ...props }
-      icon="icon"
     />
   )
 }

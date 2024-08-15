@@ -30,6 +30,7 @@ export const ButtonGroup = ({ items, withSeparator = false }: ButtonGroupProps):
 
   return (
     <Flex
+      align='center'
       className={ classnames.join(' ') }
       gap={ 'small' }
     >

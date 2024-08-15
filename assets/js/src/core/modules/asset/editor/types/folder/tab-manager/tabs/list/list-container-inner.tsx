@@ -21,6 +21,7 @@ import { SidebarContainer } from './sidebar/sidebar-container'
 import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
+import { ListDataProvider } from './list-provider'
 
 interface DataPatch {
   columnId: string
@@ -74,26 +75,28 @@ export const ListContainerInner = (): React.JSX.Element => {
   }, [])
 
   return useMemo(() => (
-    <ContentToolbarSidebarView
-      renderSidebar={ <SidebarContainer /> }
+    <ListDataProvider data={ data }>
+      <ContentToolbarSidebarView
+        renderSidebar={ <SidebarContainer /> }
 
-      renderToolbar={
-        <GridToolbarContainer
-          pager={ {
-            current: page,
-            total: data?.totalItems ?? 0,
-            pageSize,
-            onChange: onPagerChange
-          } }
+        renderToolbar={
+          <GridToolbarContainer
+            pager={ {
+              current: page,
+              total: data?.totalItems ?? 0,
+              pageSize,
+              onChange: onPagerChange
+            } }
+          />
+        }
+      >
+        <GridContainer
+          assets={ data }
+          modifiedCells={ modifiedCells }
+          onUpdateCellData={ onUpdateCellData }
         />
-      }
-    >
-      <GridContainer
-        assets={ data }
-        modifiedCells={ modifiedCells }
-        onUpdateCellData={ onUpdateCellData }
-      />
-    </ContentToolbarSidebarView>
+      </ContentToolbarSidebarView>
+    </ListDataProvider>
   ), [data, page, pageSize, modifiedCells])
 
   function onPagerChange (page: number, pageSize: number): void {

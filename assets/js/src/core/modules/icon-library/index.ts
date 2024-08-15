@@ -97,6 +97,8 @@ import settingsOutlined from '@Pimcore/assets/icons/settings-outlined.inline.svg
 import filterOutlined from '@Pimcore/assets/icons/filter-outlined.inline.svg'
 import textInput from '@Pimcore/assets/icons/text-input.inline.svg'
 import calendarDate from '@Pimcore/assets/icons/calendar-date.inline.svg'
+import exportIcon from '@Pimcore/assets/icons/export.inline.svg'
+import grid from '@Pimcore/assets/icons/grid.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -436,6 +438,16 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'calendar-date',
       component: calendarDate
+    })
+
+    iconLibrary.register({
+      name: 'export',
+      component: exportIcon
+    })
+
+    iconLibrary.register({
+      name: 'grid',
+      component: grid
     })
   }
 })
