@@ -16,6 +16,7 @@ import { type Asset } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { type CustomSettings } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 interface propertyAction {
   assetId: number
@@ -27,9 +28,15 @@ interface customMetadataAction {
   customMetadata: CustomMetadata
 }
 
+interface dynamicCustomSettingsAction {
+  assetId: number
+  setting: any
+}
+
 export interface AssetDraft extends Asset {
   properties: DataProperty[]
   customMetadata: CustomMetadata[]
+  imageSettings: NonNullable<CustomSettings['dynamicCustomSettings']>
   modified: boolean
   changes: Record<string, any>
 }
@@ -38,7 +45,13 @@ export const assetsAdapter = createEntityAdapter<AssetDraft>({})
 
 export const slice = createSlice({
   name: 'asset-draft',
-  initialState: assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }),
+  initialState: assetsAdapter.getInitialState({
+    modified: false,
+    properties: [],
+    customMetadata: [],
+    imageSettings: [],
+    changes: {}
+  }),
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
 
@@ -236,8 +249,93 @@ export const slice = createSlice({
       }
 
       state.entities[action.payload.assetId] = asset
+    },
+
+    addImageSettingToAsset: (state, action: PayloadAction<dynamicCustomSettingsAction>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.imageSettings = [...(asset.imageSettings ?? []), action.payload.setting]
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          dynamicCustomSettings: true
+        }
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    removeImageSettingFromAsset: (state, action: PayloadAction<dynamicCustomSettingsAction>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.imageSettings = (asset.imageSettings ?? []).filter(setting => setting.key !== action
+          .payload.setting.name)
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          dynamicCustomSettings: true
+        }
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    updateImageSettingForAsset: (state, action: PayloadAction<dynamicCustomSettingsAction>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.imageSettings = (asset.imageSettings ?? []).map(setting => {
+          // TODO: find logic
+          /* if (customMetadata.name === action.payload.customMetadata.name) {
+            asset.modified = true
+
+            asset.changes = {
+              ...asset.changes,
+              customMetadata: true
+            }
+
+            return action.payload.setting
+          } */
+
+          return setting
+        })
+      }
+
+      state.entities[action.payload.assetId] = asset
     }
 
+    /* updateAllImageSettingsForAsset: (state, action: PayloadAction<{ assetId: number, settings: dynamicCustomSettingsAction[] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.dynamicCustomSettings = action.payload.settings
+      }
+
+      asset.modified = true
+
+      asset.changes = {
+        ...asset.changes,
+        dynamicCustomSettings: true
+      }
+
+      state.entities[action.payload.assetId] = asset
+    }
+
+    setImageSettingsForAsset: (state, action: PayloadAction<{ assetId: number, setting: dynamicCustomSettingsAction[] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.dynamicCustomSettings = action.payload.setting
+      }
+
+      state.entities[action.payload.assetId] = asset
+    } */
   }
 })
 
@@ -255,6 +353,13 @@ export const {
   removeCustomMetadataFromAsset,
   updateCustomMetadataForAsset,
   setCustomMetadataForAsset,
+
+  addImageSettingToAsset,
+  removeImageSettingFromAsset,
+  updateImageSettingForAsset,
+  // updateAllImageSettingsForAsset,
+  // setImageSettingsForAsset,
+
   removeAsset,
   resetAsset,
   resetChanges,

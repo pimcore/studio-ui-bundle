@@ -12,24 +12,30 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { useGetAssetByIdQuery } from '../asset-api-slice.gen'
+import { api as assetApi, type GetAssetByIdApiResponse, type Image } from '../asset-api-slice.gen'
 import {
+  addCustomMetadataToAsset,
+  addImageSettingToAsset,
   addPropertyToAsset,
   assetReceived,
   removeAsset,
-  resetChanges,
-  removePropertyFromAsset,
-  selectAssetById,
-  setPropertiesForAsset,
-  updatePropertyForAsset,
-  addCustomMetadataToAsset,
   removeCustomMetadataFromAsset,
+  removeImageSettingFromAsset,
+  removePropertyFromAsset,
+  resetChanges,
+  selectAssetById,
   setCustomMetadataForAsset,
-  updateAllCustomMetadataForAsset
+  setPropertiesForAsset,
+  updateAllCustomMetadataForAsset,
+  updateImageSettingForAsset,
+  updatePropertyForAsset
 } from '../asset-draft-slice'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
-import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import {
+  type CustomMetadata
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { api as settingsApi, type CustomSettings } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 interface UseAssetDraftReturnCustomMetadata {
   customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
@@ -47,9 +53,17 @@ interface UseAssetDraftReturnProperties {
   setProperties: (properties: DataProperty[]) => void
 }
 
+interface UseAssetDraftReturnDynamicSettings {
+  imageSettings: undefined | ReturnType<typeof selectAssetById>['imageSettings']
+  updateImageSetting: (setting: any) => void
+  addImageSetting: (setting: any) => void
+  removeImageSetting: (setting: any) => void
+}
+
 interface UseAssetDraftReturn extends
   UseAssetDraftReturnCustomMetadata,
-  UseAssetDraftReturnProperties {
+  UseAssetDraftReturnProperties,
+  UseAssetDraftReturnDynamicSettings {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
@@ -59,24 +73,60 @@ interface UseAssetDraftReturn extends
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
-  const { isLoading, isError, data } = useGetAssetByIdQuery({ id })
   const dispatch = useAppDispatch()
   const asset = useAppSelector(state => selectAssetById(state, id))
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isError, setIsError] = useState<boolean>(false)
   const properties = asset?.properties
   const customMetadata = asset?.customMetadata
+  const imageSettings = asset?.imageSettings
+
+  async function getAsset (): Promise<GetAssetByIdApiResponse> {
+    const { data, isSuccess } = await dispatch(assetApi.endpoints.getAssetById.initiate({ id }))
+
+    if (data !== undefined && isSuccess) {
+      return data
+    }
+
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {} as Image
+  }
+
+  async function getCustomSettings (): Promise<NonNullable<CustomSettings['dynamicCustomSettings']>> {
+    const { data, isSuccess } = await dispatch(settingsApi.endpoints.getAssetCustomSettingsById.initiate({ id }))
+
+    if (isSuccess && data !== undefined) {
+      return data.items?.dynamicCustomSettings ?? []
+    }
+
+    return []
+  }
 
   useEffect(() => {
-    if (data !== undefined && asset === undefined) {
-      dispatch(assetReceived({
-        ...data,
+    Promise.all([
+      getAsset(),
+      getCustomSettings()
+    ]).then(([assetData, customSettingsResponse]) => {
+      const mergedAssetData = {
+        ...assetData,
         id,
         modified: false,
         properties: [],
         customMetadata: [],
+        imageSettings: customSettingsResponse,
         changes: {}
-      }))
-    }
-  }, [data])
+      }
+
+      dispatch(assetReceived(mergedAssetData))
+
+      return mergedAssetData
+    }).catch((e) => {
+      console.error(e)
+      setIsError(true)
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }, [])
 
   function removeAssetFromState (): void {
     if (asset === undefined) return
@@ -86,11 +136,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   function updateProperty (property): void {
     dispatch(updatePropertyForAsset({ assetId: id, property }))
-  };
+  }
 
   function addProperty (property): void {
     dispatch(addPropertyToAsset({ assetId: id, property }))
-  };
+  }
 
   function removeProperty (property): void {
     dispatch(removePropertyFromAsset({ assetId: id, property }))
@@ -116,6 +166,18 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
   }
 
+  function addImageSetting (setting): void {
+    dispatch(addImageSettingToAsset({ assetId: id, setting }))
+  }
+
+  function removeImageSetting (setting): void {
+    dispatch(removeImageSettingFromAsset({ assetId: id, setting }))
+  }
+
+  function updateImageSetting (setting): void {
+    dispatch(updateImageSettingForAsset({ assetId: id, setting }))
+  }
+
   function removeTrackedChanges (): void {
     dispatch(resetChanges(id))
   }
@@ -134,6 +196,10 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     addCustomMetadata,
     removeCustomMetadata,
     setCustomMetadata,
+    imageSettings,
+    addImageSetting,
+    removeImageSetting,
+    updateImageSetting,
     removeAssetFromState,
     removeTrackedChanges
   }
