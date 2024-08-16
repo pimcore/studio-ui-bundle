@@ -12,15 +12,29 @@
 */
 
 import React, { useMemo } from 'react'
-import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
-import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
+import { Sidebar, type SidebarProps } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { GridConfig } from './sidebar-tabs/grid-config/grid-config'
 import { TagFiltersContainer } from './sidebar-tabs/tag-filters/tag-filters-container'
 import { FilterContainer } from './sidebar-tabs/filters/filter-container'
+import { useListFilterOptions } from './hooks/use-list'
+import { defaultFilterOptions } from './sidebar-tabs/filters/filter-provider'
 
 export const SidebarContainer = (): React.JSX.Element => {
-  const entries: ISidebarEntry[] = useMemo(() => [
+  const { filterOptions } = useListFilterOptions()
+  const areFiltersModified = Object.keys(filterOptions).some(key => filterOptions[key] !== defaultFilterOptions[key])
+
+  const modifiedSidebarEntries: SidebarProps['highlights'] = useMemo(() => {
+    const modifiedEntries: SidebarProps['highlights'] = []
+
+    if (areFiltersModified) {
+      modifiedEntries.push('filter')
+    }
+
+    return modifiedEntries
+  }, [areFiltersModified])
+
+  const entries: SidebarProps['entries'] = useMemo(() => [
     {
       key: 'filter',
       component: <FilterContainer />,
@@ -41,13 +55,12 @@ export const SidebarContainer = (): React.JSX.Element => {
   ], [])
 
   return useMemo(() => {
-    console.log('rerendered')
-
     return (
       <Sidebar
         entries={ entries }
+        highlights={ modifiedSidebarEntries }
         sizing='large'
       />
     )
-  }, [entries])
+  }, [entries, modifiedSidebarEntries])
 }

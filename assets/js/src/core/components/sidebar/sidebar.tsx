@@ -15,7 +15,7 @@ import { useStyle } from './sidebar.styles'
 import React, { useState } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
-interface SidebarProps {
+export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'default'
