@@ -15,9 +15,9 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as assetApi, type GetAssetByIdApiResponse, type Image } from '../asset-api-slice.gen'
 import {
   addCustomMetadataToAsset,
-  addImageSettingToAsset,
+  addImageSettingsToAsset,
   addPropertyToAsset,
-  assetReceived,
+  assetReceived, type dynamicCustomSettingsAction, type ImageSettings,
   removeAsset,
   removeCustomMetadataFromAsset,
   removeImageSettingFromAsset,
@@ -54,10 +54,10 @@ interface UseAssetDraftReturnProperties {
 }
 
 interface UseAssetDraftReturnDynamicSettings {
-  imageSettings: undefined | ReturnType<typeof selectAssetById>['imageSettings']
-  updateImageSetting: (setting: any) => void
-  addImageSetting: (setting: any) => void
-  removeImageSetting: (setting: any) => void
+  imageSettings: ReturnType<typeof selectAssetById>['imageSettings']
+  updateImageSetting: ({ key, value }: { key: string, value: any }) => void
+  addImageSettings: (setting: dynamicCustomSettingsAction<object>) => void
+  removeImageSetting: (setting: dynamicCustomSettingsAction<string>) => void
 }
 
 interface UseAssetDraftReturn extends
@@ -113,7 +113,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         modified: false,
         properties: [],
         customMetadata: [],
-        imageSettings: customSettingsResponse,
+        imageSettings: customSettingsResponse as ImageSettings,
         changes: {}
       }
 
@@ -166,16 +166,16 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
   }
 
-  function addImageSetting (setting): void {
-    dispatch(addImageSettingToAsset({ assetId: id, setting }))
+  function addImageSettings (setting): void {
+    dispatch(addImageSettingsToAsset({ assetId: id, setting }))
   }
 
   function removeImageSetting (setting): void {
     dispatch(removeImageSettingFromAsset({ assetId: id, setting }))
   }
 
-  function updateImageSetting (setting): void {
-    dispatch(updateImageSettingForAsset({ assetId: id, setting }))
+  function updateImageSetting ({ key, value }): void {
+    dispatch(updateImageSettingForAsset({ assetId: id, key, value }))
   }
 
   function removeTrackedChanges (): void {
@@ -197,7 +197,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     removeCustomMetadata,
     setCustomMetadata,
     imageSettings,
-    addImageSetting,
+    addImageSettings,
     removeImageSetting,
     updateImageSetting,
     removeAssetFromState,
