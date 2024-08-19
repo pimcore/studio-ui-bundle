@@ -44,7 +44,7 @@ export const _default = {
           console.log('Delete')
         } }
         onClickPublish={ async () => {
-          console.log('Publish');
+          console.log('Publish')
         } }
         published={ false }
         savedBy={ 'admin' }
@@ -62,7 +62,7 @@ export const _default = {
           console.log('Delete')
         } }
         onClickPublish={ async () => {
-          console.log('Publish');
+          console.log('Publish')
         } }
         published={ false }
         savedBy={ 'auto saved' }
