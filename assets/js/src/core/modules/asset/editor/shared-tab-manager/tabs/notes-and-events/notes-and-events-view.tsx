@@ -28,6 +28,9 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import TextArea from 'antd/es/input/TextArea'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -35,6 +38,7 @@ interface NotesAndEventsTabViewProps {
   onClickTrash: (id: number) => void
   onClickSaveNote: (type: string, title: string, description: string) => void
 }
+
 export const NotesAndEventsTabView = ({
   notes,
   pagination,
@@ -45,7 +49,9 @@ export const NotesAndEventsTabView = ({
   const { styles } = useStyles()
   const { renderModal: RenderModal, showModal, handleOk } = useModal()
 
-  let type = ''; let title = ''; let description = ''
+  let type = ''
+  let title = ''
+  let description = ''
 
   const NotesAndEvents = notes.map((note) => {
     let showDetails = false
@@ -71,7 +77,9 @@ export const NotesAndEventsTabView = ({
         date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
         key={ note.id }
-        onClickTrash={ () => { onClickTrash(note.id) } }
+        onClickTrash={ () => {
+          onClickTrash(note.id)
+        } }
         showDetails={ showDetails }
         title={ note.title }
         type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }
@@ -89,13 +97,15 @@ export const NotesAndEventsTabView = ({
             type={ 'primary' }
           >{t('save')}</Button>
         </ModalFooter>
-      }
+            }
       title={ t('notes-and-events.new-note') }
     >
       <div className={ styles['add-note-modal__section'] }>
         <label>{t('type')}</label>
         <Select
-          onChange={ (val) => { type = val } }
+          onChange={ (val) => {
+            type = val
+          } }
           options={ [
             {
               value: 'content', label: t('notes-and-events.content')
@@ -113,13 +123,17 @@ export const NotesAndEventsTabView = ({
       <div className={ styles['add-note-modal__section'] }>
         <label>{t('title')}</label><span className={ 'mandatory' }>*</span>
         <Input
-          onChange={ (e) => { title = e.target.value } }
+          onChange={ (e) => {
+            title = e.target.value
+          } }
         />
       </div>
       <div className={ styles['add-note-modal__section'] }>
         <label>{t('description')}</label>
         <TextArea
-          onChange={ (e) => { description = e.target.value } }
+          onChange={ (e) => {
+            description = e.target.value
+          } }
         />
       </div>
     </RenderModal>
@@ -129,8 +143,9 @@ export const NotesAndEventsTabView = ({
     <div className={ styles['notes-and-events'] }>
       <div className={ 'notes-container' }>
         <div className={ 'notes-content' }>
-          <div className={ 'notes-content__header' }>
-            <span className={ 'notes-content__text' }>{t('notes-and-events.notes-and-events')}</span>
+          <CardHeaderContainer
+            text={ t('notes-and-events.notes-and-events') }
+          >
             <Button
               icon={ <Icon
                 name={ 'PlusCircleOutlined' }
@@ -141,7 +156,7 @@ export const NotesAndEventsTabView = ({
               {t('add')}
             </Button>
             {modal}
-          </div>
+          </CardHeaderContainer>
           {notes.length > 0
             ? (
               <div className={ 'notes-content__details' }>
@@ -153,7 +168,7 @@ export const NotesAndEventsTabView = ({
                 <NoContent text={ t('notes-and-events.no-notes-and-events-to-show') } />
               </div>
               )
-          }
+                    }
         </div>
         <div className={ 'notes-container__pagination-container' }>
           <div className={ 'notes-container__pagination' }>

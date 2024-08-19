@@ -23,6 +23,9 @@ import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dep
 import {
   Pagination
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 
 export const RequiresPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -46,12 +49,11 @@ export const RequiresPanel = (): React.JSX.Element => {
 
   return (
     <div className={ 'pimcore-dependencies__requires' }>
+      <CardHeaderContainer
+        icon={ <Icon name={ 'intersect-circle' } /> }
+        text={ t('asset.asset-editor-tabs.dependencies.requires') }
+      />
       <div className={ ['dependencies__requires__wrapper', dependencyTabStyle.wrapper].join(' ') }>
-        <div className={ ['pimcore-dependencies__requires_toolbar', dependencyTabStyle.toolbar].join(' ') }>
-          <Icon name={ 'intersect-circle' } />
-          <p>{t('asset.asset-editor-tabs.dependencies.requires')}</p>
-        </div>
-
         <div className={ 'pimcore-dependencies__requires__content' }>
           <Table
             isLoading={ isLoading }

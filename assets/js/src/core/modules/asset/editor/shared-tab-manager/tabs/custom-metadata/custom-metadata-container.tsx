@@ -26,6 +26,9 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -80,13 +83,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
-        <p className={ 'pimcore-custom-metadata-toolbar__headline' }>
-          { t('asset.asset-editor-tabs.custom-metadata.text') }
-        </p>
-
-        <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
-          {editmode && (
+      <CardHeaderContainer
+        text={ t('asset.asset-editor-tabs.custom-metadata.text') }
+      >
+        <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
+          <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
+            {editmode && (
             <>
               <div className={ 'pimcore-custom-metadata-toolbar__manual__editmode' }>
                 <Button
@@ -147,9 +149,9 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 { t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error') }
               </Modal>
             </>
-          )}
+            )}
 
-          {!editmode && (
+            {!editmode && (
             <>
               <Button
                 onClick={ () => { console.log('clicked') } }
@@ -166,10 +168,10 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
               </Button>
             </>
-          )}
+            )}
+          </div>
         </div>
-
-      </div>
+      </CardHeaderContainer>
 
       <div className={ styles.content }>
         <CustomMetadataTable />

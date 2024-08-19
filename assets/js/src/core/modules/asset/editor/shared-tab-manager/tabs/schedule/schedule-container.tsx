@@ -26,6 +26,9 @@ import { DeleteOutlined } from '@ant-design/icons'
 import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -88,29 +91,24 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ 'pimcore-schedule-toolbar' }>
-        <div className={ 'pimcore-schedule-toolbar__headline' }>
-          <p className={ 'pimcore-schedule-toolbar__headline__text' }>
-            {t('asset.asset-editor-tabs.schedule.headline')}
-          </p>
+      <CardHeaderContainer text={ t('asset.asset-editor-tabs.schedule.headline') }>
+        <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
+          <Button
+            className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
+            icon={ <Icon name={ 'PlusOutlined' } /> }
+          >
+            {t('asset.asset-editor-tabs.schedule.toolbar.add')}
+          </Button>
 
-          <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
-            <Button
-              className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-              icon={ <Icon name={ 'PlusOutlined' } /> }
-            >
-              {t('asset.asset-editor-tabs.schedule.toolbar.add')}
-            </Button>
-
-            <Button
-              className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
-              type={ 'primary' }
-            >
-              {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
-            </Button>
-          </div>
+          <Button
+            className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
+            type={ 'primary' }
+          >
+            {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
+          </Button>
         </div>
-
+      </CardHeaderContainer>
+      <div className={ 'pimcore-schedule-toolbar' }>
         <div className={ 'pimcore-schedule-toolbar__filters' }>
           <Segmented<string>
             onChange={ setScheduleTab }

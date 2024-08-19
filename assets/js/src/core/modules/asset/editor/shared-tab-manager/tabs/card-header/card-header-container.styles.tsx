@@ -14,15 +14,23 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-  console.log('----> token', token)
-
   return {
     'header-container': css`
       display: flex;
+      padding: ${token.paddingSM}px;
+      width: 100%;
+      align-items: center;
       
       .header-text {
         font-weight: 600;
         color: ${token.colorPrimary};
+        margin-right: 8px;
+        white-space: nowrap;
+      }
+      
+      .pimcore-icon {
+        color: ${token.colorPrimary};
+        margin-right: 4px;
       }
   `
   }

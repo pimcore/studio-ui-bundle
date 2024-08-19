@@ -19,6 +19,9 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './embedded-metadata-container.styles'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -63,11 +66,9 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ 'pimcore-embedded-metadata-toolbar' }>
-        <p className={ 'pimcore-embedded-metadata-toolbar__headline' }>
-          {t('asset.asset-editor-tabs.embedded-metadata.headline')}
-        </p>
-      </div>
+      <CardHeaderContainer
+        text={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
+      />
 
       <div
         className={ 'pimcore-embedded-metadata-content' }

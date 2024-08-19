@@ -17,16 +17,18 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container.styles'
 
 export interface CardTitleContainerProps {
+  icon?: React.JSX.Element
   text: string
   children?: React.ReactNode
 }
 
 export const CardHeaderContainer = (props: CardTitleContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { text, children } = props
+  const { icon, text, children } = props
 
   return (
     <div className={ styles['header-container'] }>
+      {icon}
       <span className={ 'header-text' }>{text}</span>
       {children}
     </div>

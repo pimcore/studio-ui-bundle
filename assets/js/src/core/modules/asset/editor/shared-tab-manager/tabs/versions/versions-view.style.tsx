@@ -35,23 +35,11 @@ export const useStyles = createStyles(({ token, css }) => {
             width: ${versionToken.versionsLeftSideWidth}px;
         }
 
-        & .left-side > .flexbox-start-end {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: ${versionToken.paddingSM}px;
-        }
-
-        .version-label {
-            font-weight: 600;
-            color: ${token.colorPrimary};
-            margin: 0 8px 0 0;
-
-            &:hover {
-                color: ${token.colorPrimaryHover};
-            }
-        }
-
+      .flexbox-start-end {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
 
         & .ant-btn-icon {
             vertical-align: text-bottom;
@@ -66,12 +54,7 @@ export const useStyles = createStyles(({ token, css }) => {
         height: 100%;
         display: flex;
         flex-direction: column;
-        
-      .headline {
-          font-weight: 600;
-          color: ${token.colorPrimary};
-          margin: 0 8px 0 0;
-
+      
           &:hover {
               color: ${token.colorPrimaryHover};
           }

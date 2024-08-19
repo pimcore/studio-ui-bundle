@@ -16,38 +16,20 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tab: css`
-      .pimcore-schedule-toolbar {
-        padding: 0 ${token.paddingSM}px;
-          
-        .pimcore-schedule-toolbar__headline {
-          padding-top: ${token.paddingXS}px;
-          padding-bottom: ${token.paddingXS}px;
+        .pimcore-schedule-toolbar__headline__buttons {
           display: flex;
-          align-items: center;
-          gap: 8px;
-            
-          .pimcore-schedule-toolbar__headline__text {
-            font-weight: 600;
-            color: ${token.colorPrimary};
-            margin: 0;
+          justify-content: space-between;
+          flex-grow: 1;
 
-            &:hover {
-              color: ${token.colorPrimaryHover};
-            }
-          }
-            
-          .pimcore-schedule-toolbar__headline__buttons {
+          .pimcore-schedule-toolbar__headline__buttons__add,
+          .pimcore-schedule-toolbar__headline__buttons__save {
             display: flex;
-            justify-content: space-between;
-            flex-grow: 1;
-
-            .pimcore-schedule-toolbar__headline__buttons__add,
-            .pimcore-schedule-toolbar__headline__buttons__save {
-              display: flex;
-              align-items: center;
-              line-height: 22px;
-            }
+            align-items: center;
+            line-height: 22px;
           }
+        }
+        .pimcore-schedule-toolbar {
+          padding: 0 ${token.paddingSM}px;
         }
           
         .pimcore-schedule-toolbar__filters {
