@@ -252,8 +252,6 @@ export const slice = createSlice({
       if (asset !== undefined) {
         asset.imageSettings = { ...asset.imageSettings, ...action.payload.settings }
 
-        console.log(asset)
-
         asset.modified = true
 
         asset.changes = {
@@ -318,8 +316,6 @@ export const {
   addImageSettingsToAsset,
   removeImageSettingFromAsset,
   updateImageSettingForAsset,
-  // updateAllImageSettingsForAsset,
-  // setImageSettingsForAsset,
 
   removeAsset,
   resetAsset,

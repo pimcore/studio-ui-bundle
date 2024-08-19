@@ -11,10 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { AssetEditorSidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/sidebar-manager'
+import {
+  AssetEditorSidebarManager
+} from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { DetailContainer } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-container'
+import {
+  DetailContainer
+} from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-container'
 
 export const sidebarManager = new AssetEditorSidebarManager()
 
