@@ -118,7 +118,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
                 <Button
                   icon={ <Icon name="group" /> }
                   onClick={ () => {
-                    console.log('open document/asset with ID: ' + info.row.original.data.id)
+                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
                   } }
                   type="link"
                 />
