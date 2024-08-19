@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, isValidElement, useContext, useRef, useState } from 'react'
+import React, { Children, isValidElement, useContext, useEffect, useRef, useState } from 'react'
 import {
   DndContext,
   KeyboardSensor,
@@ -35,14 +35,15 @@ const defaultCoordinates = {
 interface FocalPointProps {
   activationConstraint?: PointerActivationConstraint
   children: React.ReactNode
+  active?: boolean
 }
 
-export const FocalPoint = ({ activationConstraint, children }: FocalPointProps): React.JSX.Element => {
+export const FocalPoint = ({ activationConstraint, children, active = false }: FocalPointProps): React.JSX.Element => {
   const Image = Children.only(children)
   const { id } = useContext(AssetContext)
   const { imageSettings } = useAssetDraft(id!)
-  const [disabled] = useState<boolean>(true)
-  const [isActive] = useState<boolean>(false)
+  const [disabled] = useState<boolean>(true) // to freeze the focal point
+  const [isActive, setIsActive] = useState<boolean>(active)
   const [{ x, y }, setCoordinates] = useState<Coordinates>(defaultCoordinates)
   const mouseSensor = useSensor(MouseSensor, { activationConstraint })
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
@@ -58,8 +59,10 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const ImageComponent = Image.type
 
   const onLoad = (): void => {
-    if (containerRef.current !== null &&
-      imageSettings?.focalPoint !== undefined) {
+    if (
+      containerRef.current !== null &&
+      imageSettings?.focalPoint !== undefined
+    ) {
       const focalPoint = imageSettings.focalPoint
       const calcX = containerRef.current.clientWidth * Number(focalPoint.x) / 100
       const calcY = containerRef.current.clientHeight * Number(focalPoint.y) / 100
@@ -67,6 +70,12 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
       setCoordinates({ x: calcX, y: calcY })
     }
   }
+
+  useEffect(() => {
+    if (imageSettings?.focalPoint !== undefined) {
+      setIsActive(true)
+    }
+  }, [])
 
   return (
     <DndContext
