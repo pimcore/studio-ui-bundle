@@ -14,9 +14,9 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { type GetSystemSettingsApiResponse } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { type SystemSettingsGetApiResponse } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
-const initialState: GetSystemSettingsApiResponse = {}
+const initialState: SystemSettingsGetApiResponse = {}
 
 const slice = createSlice({
   name: 'settings',
@@ -26,7 +26,7 @@ const slice = createSlice({
       state,
       {
         payload: { ...props }
-      }: PayloadAction<GetSystemSettingsApiResponse>
+      }: PayloadAction<SystemSettingsGetApiResponse>
     ) => {
       state.settings = props
     }
@@ -37,4 +37,4 @@ injectSliceWithState(slice)
 
 export const { setSettings } = slice.actions
 
-export const getSettings = (state: RootState): GetSystemSettingsApiResponse => state.settings.settings
+export const getSettings = (state: RootState): SystemSettingsGetApiResponse => state.settings.settings

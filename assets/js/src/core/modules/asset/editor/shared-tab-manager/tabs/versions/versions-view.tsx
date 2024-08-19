@@ -18,7 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { isSet } from '@Pimcore/utils/helpers'
 import { VersionCard } from '@Pimcore/components/version-card/version-card'
 import {
-  type GetVersionsApiArg,
+  type VersionGetCollectionForElementByTypeAndIdApiArg,
   type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
@@ -36,7 +36,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 
 interface VersionsViewProps {
   versions: Version[]
-  onClickClearAll: (elementType: GetVersionsApiArg['elementType'], id: number) => Promise<void>
+  onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
   onClickPublish: (id: number) => Promise<void>
   onClickDelete: (id: number) => void
   onBlurNote: (id: number, note: string) => void
@@ -84,7 +84,7 @@ export const VersionsView = ({
     setClearingAll(true)
 
     await onClickClearAll(
-      versions[0].ctype as GetVersionsApiArg['elementType'],
+      versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
       versions[0].cid
     )
   }

@@ -16,10 +16,10 @@ import { api as baseApi } from './properties-api-slice.gen'
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: ['Assets'],
   endpoints: {
-    getPropertiesForElementByTypeAndId: {
+    propertyGetCollectionForElementByTypeAndId: {
       providesTags: ['Assets']
     }
   }
 })
 
-export const { useGetPropertiesQuery, useGetPropertiesForElementByTypeAndIdQuery } = api
+export const { usePropertyGetCollectionQuery, usePropertyGetCollectionForElementByTypeAndIdQuery } = api

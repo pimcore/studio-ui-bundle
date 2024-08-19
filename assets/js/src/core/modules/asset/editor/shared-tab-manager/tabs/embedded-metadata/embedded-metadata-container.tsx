@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { useGetAssetCustomSettingsByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetCustomSettingsGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Result } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -29,7 +29,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
     return <Result title="No context" />
   }
 
-  const { data, isLoading, isError } = useGetAssetCustomSettingsByIdQuery({ id: context?.config?.id })
+  const { data, isLoading, isError } = useAssetCustomSettingsGetByIdQuery({ id: context?.config?.id })
 
   if (isLoading || data === undefined) {
     return <div>Loading...</div>
@@ -51,7 +51,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
     })
   ]
 
-  const embeddedMetaData = data.items?.fixedCustomSettings?.embeddedMetaData ?? []
+  const embeddedMetaData = data.items?.fixedCustomSettings?.embeddedMetadata ?? []
 
   /* eslint-disable @typescript-eslint/no-unsafe-argument */
   const reformattedEmbeddedMetaData = Object.entries(embeddedMetaData).map(([key, value]) => {

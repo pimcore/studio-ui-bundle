@@ -15,12 +15,14 @@ import { type Row } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
+import { type GridProps } from '../grid'
 
 export interface GridRowProps {
   row: Row<any>
   modifiedCells: string
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
+  columns: GridProps['columns']
 }
 
 const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
@@ -53,7 +55,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
         ))}
       </tr>
     )
-  }, [row, memoModifiedCells, isSelected])
+  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined

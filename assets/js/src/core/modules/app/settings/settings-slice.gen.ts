@@ -6,14 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getAssetCustomSettingsById: build.query<
-                GetAssetCustomSettingsByIdApiResponse,
-                GetAssetCustomSettingsByIdApiArg
+            assetCustomSettingsGetById: build.query<
+                AssetCustomSettingsGetByIdApiResponse,
+                AssetCustomSettingsGetByIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
                 providesTags: ["Assets"],
             }),
-            getSystemSettings: build.query<GetSystemSettingsApiResponse, GetSystemSettingsApiArg>({
+            systemSettingsGet: build.query<SystemSettingsGetApiResponse, SystemSettingsGetApiArg>({
                 query: () => ({ url: `/studio/api/settings` }),
                 providesTags: ["Settings"],
             }),
@@ -21,22 +21,22 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
+export type AssetCustomSettingsGetByIdApiResponse = /** status 200 Successfully retrieved custom settings as JSON */ {
     items?: CustomSettings;
 };
-export type GetAssetCustomSettingsByIdApiArg = {
+export type AssetCustomSettingsGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type GetSystemSettingsApiResponse = /** status 200 System settings */ {
+export type SystemSettingsGetApiResponse = /** status 200 System settings data */ {
     [key: string]: any;
 };
-export type GetSystemSettingsApiArg = void;
+export type SystemSettingsGetApiArg = void;
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetaData: any[];
+    embeddedMetadata: any[];
     /** flag to indicate if the embedded meta data has been extracted from the asset */
-    embeddedMetaDataExtracted: boolean;
+    embeddedMetadataExtracted: boolean;
 };
 export type CustomSettings = {
     /** AdditionalAttributes */
@@ -58,4 +58,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetAssetCustomSettingsByIdQuery, useGetSystemSettingsQuery } = injectedRtkApi;
+export const { useAssetCustomSettingsGetByIdQuery, useSystemSettingsGetQuery } = injectedRtkApi;

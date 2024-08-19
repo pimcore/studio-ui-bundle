@@ -18,7 +18,7 @@ import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-a
 import { Button, Result, Segmented, Switch } from 'antd'
 import {
   type Schedule,
-  useGetSchedulesForElementByTypeAndIdQuery
+  useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
@@ -39,7 +39,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     return <Result title="No context" />
   }
 
-  const { data, isLoading, isError } = useGetSchedulesForElementByTypeAndIdQuery({
+  const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType: context.type,
     id: context.config.id
   })

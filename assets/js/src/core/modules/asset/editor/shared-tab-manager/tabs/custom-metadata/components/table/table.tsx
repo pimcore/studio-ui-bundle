@@ -14,7 +14,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
-import { type CustomMetadata, useGetAssetCustomMetadataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -31,7 +31,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
   const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
-  const { data, isLoading } = useGetAssetCustomMetadataByIdQuery({ id: id! })
+  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id: id! })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   useEffect(() => {

@@ -14,7 +14,7 @@
 import React, { useContext } from 'react'
 import {
   type Image,
-  useGetAssetByIdQuery
+  useAssetGetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
@@ -25,7 +25,7 @@ import { buildQueryString } from '@Pimcore/utils/query-string'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useGetAssetByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetByIdQuery({ id: assetContext.id! })
   const imageData = data! as Image
 
   return (
