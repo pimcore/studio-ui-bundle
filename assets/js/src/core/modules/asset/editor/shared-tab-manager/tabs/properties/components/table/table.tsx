@@ -112,13 +112,13 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         return (
           <div className={ 'properties-table--actions-column' }>
             {
-              info.row.original.type === 'document' &&
-              info.row.original.data !== null &&
+              ['document', 'asset', 'object'].includes(info.row.original.type) &&
+                info.row.original.data !== null &&
               (
                 <Button
                   icon={ <Icon name="group" /> }
                   onClick={ () => {
-                    console.log('open document with ID: ' + info.row.original.data.id)
+                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
                   } }
                   type="link"
                 />
