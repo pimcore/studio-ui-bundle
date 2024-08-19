@@ -12,7 +12,7 @@
 */
 
 import React, { type RefObject } from 'react'
-import { useDraggable } from '@dnd-kit/core'
+import { useDraggable, type UseDraggableArguments } from '@dnd-kit/core'
 import { Button } from 'antd'
 import { CSS } from '@dnd-kit/utilities'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -23,14 +23,20 @@ interface DraggableItemProps {
   left?: number
   children: React.ReactNode
   containerRef: RefObject<HTMLDivElement>
+  disabled: NonNullable<UseDraggableArguments['disabled']>
+  active: boolean
 }
 
-export const DraggableItem = ({ top, left, children, containerRef }: DraggableItemProps): React.JSX.Element => {
+export const DraggableItem = ({ top, left, children, containerRef, disabled, active = false }: DraggableItemProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({
-      id: 'draggable'
+      id: 'draggable',
+      disabled
     })
+
+  // const shoudBeHidden = top === undefined && left === undefined ? 'hidden' : 'visible'
+  console.log('inside', { active })
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const craftedStyle = {
@@ -41,12 +47,21 @@ export const DraggableItem = ({ top, left, children, containerRef }: DraggableIt
     transform: CSS.Transform.toString(transform)
   } as React.CSSProperties
 
+  if (!active) {
+    return (
+      <>
+        {children}
+      </>
+    )
+  }
+
   return (
     <div
       className={ styles.draggableContainer }
       ref={ containerRef }
     >
       <Button
+        hidden={ !active }
         icon={ <Icon name={ 'focal-point' } /> }
         type={ 'dashed' }
         { ...attributes }

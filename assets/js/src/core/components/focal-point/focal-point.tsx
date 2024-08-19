@@ -41,6 +41,8 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const Image = Children.only(children)
   const { id } = useContext(AssetContext)
   const { imageSettings } = useAssetDraft(id!)
+  const [disabled] = useState<boolean>(true)
+  const [isActive] = useState<boolean>(false)
   const [{ x, y }, setCoordinates] = useState<Coordinates>(defaultCoordinates)
   const mouseSensor = useSensor(MouseSensor, { activationConstraint })
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
@@ -88,7 +90,9 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
       sensors={ sensors }
     >
       <DraggableItem
+        active={ isActive }
         containerRef={ containerRef }
+        disabled={ disabled }
         left={ x }
         top={ y }
       >
