@@ -43,8 +43,8 @@ export const _default = {
         onClickDelete={ () => {
           console.log('Delete')
         } }
-        onClickPublish={ () => {
-          console.log('Publish')
+        onClickPublish={ async () => {
+          console.log('Publish');
         } }
         published={ false }
         savedBy={ 'admin' }
@@ -61,8 +61,8 @@ export const _default = {
         onClickDelete={ () => {
           console.log('Delete')
         } }
-        onClickPublish={ () => {
-          console.log('Publish')
+        onClickPublish={ async () => {
+          console.log('Publish');
         } }
         published={ false }
         savedBy={ 'auto saved' }
@@ -80,7 +80,7 @@ export const _default = {
         onClickDelete={ () => {
           console.log('Delete')
         } }
-        onClickPublish={ () => {
+        onClickPublish={ async () => {
           console.log('Publish')
         } }
         published

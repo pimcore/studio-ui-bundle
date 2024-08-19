@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -31,11 +31,13 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useTranslation } from 'react-i18next'
+import { useModal } from '@Pimcore/components/modal/useModal'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 
 interface VersionsViewProps {
   versions: Version[]
-  onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => void
-  onClickPublish: (id: number) => void
+  onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
+  onClickPublish: (id: number) => Promise<void>
   onClickDelete: (id: number) => void
   onBlurNote: (id: number, note: string) => void
 }
@@ -55,7 +57,14 @@ export const VersionsView = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [comparingActive, setComparingActive] = useState(false)
+  const [clearingAll, setClearingAll] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
+
+  const { renderModal: RenderModal, showModal, handleOk } = useModal({ type: 'warn' })
+
+  useEffect(() => {
+    setClearingAll(false)
+  }, [versions])
 
   if (versions.length === 0) {
     return (
@@ -70,6 +79,36 @@ export const VersionsView = ({
     )
   }
 
+  const clearVersions = async (): Promise<void> => {
+    handleOk()
+    setClearingAll(true)
+
+    await onClickClearAll(
+      versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
+      versions[0].cid
+    )
+  }
+
+  const modal = (
+    <RenderModal
+      footer={
+        <ModalFooter>
+          <Button
+            onClick={ clearVersions }
+            type={ 'primary' }
+          >{t('yes')}</Button>
+          <Button
+            onClick={ handleOk }
+            type={ 'default' }
+          >{t('no')}</Button>
+        </ModalFooter>
+          }
+      title={ t('version.clear-unpublished-versions') }
+    >
+      <span>{t('version.confirm-clear-unpublished')}</span>
+    </RenderModal>
+  )
+
   return (
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
@@ -83,22 +122,17 @@ export const VersionsView = ({
               >{t('version.compare-versions')}</Button>
             )}
           </div>
-
           {versions.length > 0 && (
-            <Button
-              icon={ <Icon name={ 'trash' } /> }
-              onClick={ () => {
-                if (versions.length === 0) {
-                  return
-                }
-                onClickClearAll(
-                  versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
-                  versions[0].cid
-                )
-              } }
-            >
-              {t('clear-all')}
-            </Button>
+            <>
+              <Button
+                icon={ <Icon name={ 'trash' } /> }
+                loading={ clearingAll }
+                onClick={ showModal }
+              >
+                {t('version.clear-unpublished')}
+              </Button>
+              {modal}
+            </>
           )}
         </div>
         {versions.length > 0 && (
@@ -134,8 +168,8 @@ export const VersionsView = ({
                   setDetailedVersions([])
                   onClickDelete(version.id)
                 } }
-                onClickPublish={ (): void => {
-                  onClickPublish(version.id)
+                onClickPublish={ async (): Promise<void> => {
+                  await onClickPublish(version.id)
                 } }
                 published={ version.published ?? false }
                 savedBy={ version.user?.name ?? '' }
