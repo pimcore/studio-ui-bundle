@@ -258,7 +258,7 @@ export const slice = createSlice({
 
         asset.changes = {
           ...asset.changes,
-          dynamicCustomSettings: true
+          imageSettings: true
         }
       }
 
@@ -276,7 +276,7 @@ export const slice = createSlice({
 
         asset.changes = {
           ...asset.changes,
-          dynamicCustomSettings: true
+          imageSettings: true
         }
       }
 
@@ -292,7 +292,7 @@ export const slice = createSlice({
 
       asset.changes = {
         ...asset.changes,
-        dynamicCustomSettings: true
+        imageSettings: true
       }
 
       state.entities[action.payload.assetId] = asset
