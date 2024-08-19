@@ -112,7 +112,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         return (
           <div className={ 'properties-table--actions-column' }>
             {
-              (info.row.original.type === 'document' || info.row.original.type === 'asset') &&
+              ['document', 'asset', 'object'].includes(info.row.original.type) &&
                 info.row.original.data !== null &&
               (
                 <Button
