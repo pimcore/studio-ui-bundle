@@ -46,7 +46,7 @@ export type CustomSettings = {
     /** fixed custom settings */
     fixedCustomSettings?: FixedCustomSettings | null;
     /** dynamic custom settings - can be any key-value pair */
-    dynamicCustomSettings?: any[];
+    dynamicCustomSettings?: object;
 };
 export type Error = {
     /** Message */

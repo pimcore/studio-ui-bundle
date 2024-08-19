@@ -91,7 +91,7 @@ const defaultTheme = {
       defaultGhostBorderColor: '#d9d9d9',
       defaultGhostColor: '#722ed1',
       textGhostColor: 'rgba(0, 0, 0, 0.88)',
-      controlHeightSM: 24,
+      controlHeightSM: 24
     },
     Breadcrumb: {
       lastItemColor: '#531dab'

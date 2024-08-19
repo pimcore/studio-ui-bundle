@@ -12,7 +12,7 @@
 */
 
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { type Asset } from './asset-api-slice.gen'
+import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
@@ -27,21 +27,10 @@ interface customMetadataAction {
   customMetadata: CustomMetadata
 }
 
-export interface dynamicCustomSettingsAction<T> {
-  assetId: number
-  setting: T
-}
-
-export interface ImageSettings {
-  focalPointX?: string
-  focalPointY?: string
-  [key: string]: any
-}
-
 export interface AssetDraft extends Asset {
   properties: DataProperty[]
   customMetadata: CustomMetadata[]
-  imageSettings: ImageSettings
+  imageSettings: ImageData
   modified: boolean
   changes: Record<string, any>
 }
@@ -256,11 +245,14 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    addImageSettingsToAsset: (state, action: PayloadAction<dynamicCustomSettingsAction<object>>) => {
+    // TODO: check if we really need that
+    addImageSettingsToAsset: (state, action: PayloadAction<{ assetId: number, settings: ImageData }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
-        asset.imageSettings = { ...asset.imageSettings, ...action.payload.setting }
+        asset.imageSettings = { ...asset.imageSettings, ...action.payload.settings }
+
+        console.log(asset)
 
         asset.modified = true
 
@@ -273,7 +265,7 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    removeImageSettingFromAsset: (state, action: PayloadAction<dynamicCustomSettingsAction<string>>) => {
+    removeImageSettingFromAsset: (state, action: PayloadAction<{ assetId: number, setting: keyof ImageData }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (Object.prototype.hasOwnProperty.call(asset.imageSettings, action.payload.setting) === true) {
@@ -291,18 +283,16 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    updateImageSettingForAsset: (state, action: PayloadAction<{ assetId: number, key: string, value: any }>) => {
+    updateImageSettingForAsset: (state, action: PayloadAction<{ assetId: number, key: keyof ImageData, value: ImageData[keyof ImageData] }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
-      if (Object.prototype.hasOwnProperty.call(asset.imageSettings, action.payload.key) === true) {
-        asset.imageSettings[action.payload.key] = action.payload.value
+      asset.imageSettings[action.payload.key] = action.payload.value
 
-        asset.modified = true
+      asset.modified = true
 
-        asset.changes = {
-          ...asset.changes,
-          dynamicCustomSettings: true
-        }
+      asset.changes = {
+        ...asset.changes,
+        dynamicCustomSettings: true
       }
 
       state.entities[action.payload.assetId] = asset

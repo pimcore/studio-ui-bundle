@@ -12,12 +12,12 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as assetApi, type GetAssetByIdApiResponse, type Image } from '../asset-api-slice.gen'
+import { api as assetApi, type GetAssetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
   addPropertyToAsset,
-  assetReceived, type dynamicCustomSettingsAction, type ImageSettings,
+  assetReceived,
   removeAsset,
   removeCustomMetadataFromAsset,
   removeImageSettingFromAsset,
@@ -35,7 +35,7 @@ import { type DataProperty } from '../properties-api-slice.gen'
 import {
   type CustomMetadata
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
-import { api as settingsApi, type CustomSettings } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
 interface UseAssetDraftReturnCustomMetadata {
   customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
@@ -54,10 +54,10 @@ interface UseAssetDraftReturnProperties {
 }
 
 interface UseAssetDraftReturnDynamicSettings {
-  imageSettings: ReturnType<typeof selectAssetById>['imageSettings']
-  updateImageSetting: ({ key, value }: { key: string, value: any }) => void
-  addImageSettings: (setting: dynamicCustomSettingsAction<object>) => void
-  removeImageSetting: (setting: dynamicCustomSettingsAction<string>) => void
+  imageSettings: undefined | ImageData
+  addImageSettings: (settings: ImageData) => void
+  updateImageSetting: ({ key, value }: { key: keyof ImageData, value: ImageData[keyof ImageData] }) => void
+  removeImageSetting: ({ setting }: { setting: keyof ImageData }) => void
 }
 
 interface UseAssetDraftReturn extends
@@ -70,6 +70,11 @@ interface UseAssetDraftReturn extends
 
   removeAssetFromState: () => void
   removeTrackedChanges: () => void
+}
+
+interface DynamicCustomSettings {
+  focalPointX: number
+  focalPointY: number
 }
 
 export const useAssetDraft = (id: number): UseAssetDraftReturn => {
@@ -92,14 +97,32 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     return {} as Image
   }
 
-  async function getCustomSettings (): Promise<NonNullable<CustomSettings['dynamicCustomSettings']>> {
+  async function getCustomSettings (): Promise<ImageData> {
+    let objectToReturn: ImageData = {}
     const { data, isSuccess } = await dispatch(settingsApi.endpoints.getAssetCustomSettingsById.initiate({ id }))
 
     if (isSuccess && data !== undefined) {
-      return data.items?.dynamicCustomSettings ?? []
+      const settings = data.items!
+      const dynamicSettings = settings?.dynamicCustomSettings as DynamicCustomSettings
+
+      if (
+        dynamicSettings !== undefined &&
+        Object.prototype.hasOwnProperty.call(dynamicSettings, 'focalPointX') === true &&
+        Object.prototype.hasOwnProperty.call(dynamicSettings, 'focalPointY') === true
+      ) {
+        const focalPoint: ImageData['focalPoint'] = {
+          x: dynamicSettings.focalPointX,
+          y: dynamicSettings.focalPointY
+        }
+
+        objectToReturn = {
+          ...objectToReturn,
+          focalPoint
+        }
+      }
     }
 
-    return []
+    return objectToReturn
   }
 
   useEffect(() => {
@@ -113,7 +136,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         modified: false,
         properties: [],
         customMetadata: [],
-        imageSettings: customSettingsResponse as ImageSettings,
+        imageSettings: customSettingsResponse,
         changes: {}
       }
 
@@ -166,8 +189,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
   }
 
-  function addImageSettings (setting): void {
-    dispatch(addImageSettingsToAsset({ assetId: id, setting }))
+  function addImageSettings (settings): void {
+    dispatch(addImageSettingsToAsset({ assetId: id, settings }))
   }
 
   function removeImageSetting (setting): void {

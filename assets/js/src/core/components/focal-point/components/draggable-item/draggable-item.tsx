@@ -11,22 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type RefObject } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { Button } from 'antd'
-import {CSS} from '@dnd-kit/utilities'
-import {Icon} from "@Pimcore/components/icon/icon";
-import { useStyle } from './draggable-item.styles';
+import { CSS } from '@dnd-kit/utilities'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useStyle } from './draggable-item.styles'
 
 interface DraggableItemProps {
-  style?: React.CSSProperties
   top?: number
   left?: number
   children: React.ReactNode
+  containerRef: RefObject<HTMLDivElement>
 }
 
-export const DraggableItem = ({ style, top, left, children }: DraggableItemProps): React.JSX.Element => {
-  const {styles} = useStyle()
+export const DraggableItem = ({ top, left, children, containerRef }: DraggableItemProps): React.JSX.Element => {
+  const { styles } = useStyle()
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({
       id: 'draggable'
@@ -34,25 +34,27 @@ export const DraggableItem = ({ style, top, left, children }: DraggableItemProps
 
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const craftedStyle = {
-    //...style,
     position: 'absolute',
     zIndex: 1000,
     top,
     left,
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(transform)
   } as React.CSSProperties
 
   return (
-    <div className={styles.draggableContainer}>
+    <div
+      className={ styles.draggableContainer }
+      ref={ containerRef }
+    >
       <Button
-        type={'dashed'}
-        icon={<Icon name={'focal-point'} />}
+        icon={ <Icon name={ 'focal-point' } /> }
+        type={ 'dashed' }
         { ...attributes }
         { ...listeners }
         aria-label="Draggable"
+        className={ styles.draggableItem }
         data-cypress="draggable-item"
         ref={ setNodeRef }
-        className={styles.draggableItem}
         style={ { ...craftedStyle } }
       />
 
