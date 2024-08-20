@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as assetApi, type GetAssetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
+import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
@@ -86,8 +86,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const customMetadata = asset?.customMetadata
   const imageSettings = asset?.imageSettings
 
-  async function getAsset (): Promise<GetAssetByIdApiResponse> {
-    const { data, isSuccess } = await dispatch(assetApi.endpoints.getAssetById.initiate({ id }))
+  async function getAsset (): Promise<AssetGetByIdApiResponse> {
+    const { data, isSuccess } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 
     if (data !== undefined && isSuccess) {
       return data
@@ -99,11 +99,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   async function getCustomSettings (): Promise<ImageData> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess } = await dispatch(settingsApi.endpoints.getAssetCustomSettingsById.initiate({ id }))
+    const { data, isSuccess } = await dispatch(settingsApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
 
     if (isSuccess && data !== undefined) {
       const settings = data.items!
-      const dynamicSettings = settings?.dynamicCustomSettings as DynamicCustomSettings
+      const dynamicSettings = settings?.dynamicCustomSettings as any as DynamicCustomSettings
 
       if (
         dynamicSettings !== undefined &&
