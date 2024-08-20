@@ -53,7 +53,7 @@ asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
 asset.asset-editor-tabs.properties.text: Properties
-asset.asset-editor-tabs.properties.edit-own-properties: Editor own properties
+asset.asset-editor-tabs.properties.editable-properties: Editable properties
 asset.asset-editor-tabs.properties.all-properties: All Properties
 asset.asset-editor-tabs.properties.predefined-properties: Predefined Properties
 asset.asset-editor-tabs.properties.add-custom-property: Add a custom property
