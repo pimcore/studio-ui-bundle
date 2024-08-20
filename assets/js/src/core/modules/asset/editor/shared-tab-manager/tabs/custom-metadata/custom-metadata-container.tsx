@@ -14,7 +14,7 @@
 import { useStyle } from './custom-metadata-container.styles'
 import React, { useContext, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Select } from 'antd'
+import { Button, type InputRef, Select } from 'antd'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@Pimcore/components/icon/icon'
 import {
@@ -34,12 +34,16 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id!)
-  const { showModal, closeModal, renderModal: Modal } = useModal({
+  const { showModal: showDuplicateEntryModal, closeModal: closeDuplicateEntryModal, renderModal: DuplicateEntryModal } = useModal({
+    type: 'error'
+  })
+  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
 
   const nameInputValue = useRef<string>('')
-  const typeSelectValue = useRef<string>('')
+  const nameInputRef = useRef<InputRef>(null)
+  const typeSelectValue = useRef<string>('input')
   const languageSelectValue = useRef<string>('')
 
   function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
@@ -54,16 +58,21 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     languageSelectValue.current = value
   }
 
+  function onLanguageSelectClear (): void {
+    languageSelectValue.current = ''
+  }
+
   function onAddPropertyClick (): void {
     const isValidNameInput = nameInputValue.current !== undefined && nameInputValue.current.length > 0
     const isValidTypeSelectValue = typeSelectValue.current !== undefined
 
     if (!isValidNameInput || !isValidTypeSelectValue) {
+      showMandatoryModal()
       return
     }
 
-    if (customMetadata?.find((cm) => cm.name === nameInputValue.current) !== undefined) {
-      showModal()
+    if (customMetadata?.find((cm) => cm.name === nameInputValue.current && cm.language === languageSelectValue.current) !== undefined) {
+      showDuplicateEntryModal()
       return
     }
 
@@ -77,6 +86,16 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
     addCustomMetadata(newCustomMetadata)
   }
+
+  React.useEffect(() => {
+    if (editmode) {
+      nameInputRef.current?.focus()
+    } else {
+      typeSelectValue.current = 'input'
+      nameInputValue.current = ''
+      languageSelectValue.current = ''
+    }
+  }, [editmode])
 
   return (
     <div className={ styles.tab }>
@@ -101,23 +120,27 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 <Input
                   onChange={ onNameInputChange }
                   placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name') }
+                  ref={ nameInputRef }
                 />
 
                 <Select
+                  defaultValue={ typeSelectValue.current }
                   onSelect={ onTypeSelectChange }
                   options={ [
-                    { value: 'input', label: 'Input' },
-                    { value: 'textarea', label: 'Textarea' },
-                    { value: 'asset', label: 'Asset' },
-                    { value: 'document', label: 'Document' },
-                    { value: 'object', label: 'Object' },
-                    { value: 'date', label: 'Date' },
-                    { value: 'checkbox', label: 'Checkbox' }
+                    { value: 'input', label: t('data-type.input') },
+                    { value: 'textarea', label: t('data-type.textarea') },
+                    { value: 'asset', label: t('data-type.asset') },
+                    { value: 'document', label: t('data-type.document') },
+                    { value: 'object', label: t('data-type.object') },
+                    { value: 'date', label: t('data-type.date') },
+                    { value: 'checkbox', label: t('data-type.checkbox') }
                   ] }
                   placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type') }
                 />
 
                 <Select
+                  allowClear
+                  onClear={ onLanguageSelectClear }
                   onSelect={ onLanguageSelectChange }
                   options={ settings.requiredLanguages.map((value: string) => {
                     return { value, label: value }
@@ -135,17 +158,29 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 </Button>
               </div>
 
-              <Modal
+              <DuplicateEntryModal
                 footer={ <ModalFooter>
                   <Button
-                    onClick={ closeModal }
+                    onClick={ closeDuplicateEntryModal }
                     type='primary'
                   >{ t('button.ok') }</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title') }
               >
                 { t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error') }
-              </Modal>
+              </DuplicateEntryModal>
+
+              <MandatoryModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeMandatoryModal }
+                    type='primary'
+                  >{ t('button.ok') }</Button>
+                </ModalFooter> }
+                title={ t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title') }
+              >
+                { t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error') }
+              </MandatoryModal>
             </>
           )}
 

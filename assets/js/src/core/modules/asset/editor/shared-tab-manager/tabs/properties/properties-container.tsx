@@ -115,11 +115,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 <Select
                   onSelect={ onTypeSelect }
                   options={ [
-                    { value: 'text', label: t('properties.type.text') },
-                    { value: 'document', label: t('properties.type.document') },
-                    { value: 'asset', label: t('properties.type.asset') },
-                    { value: 'object', label: t('properties.type.object') },
-                    { value: 'bool', label: t('properties.type.bool') }
+                    { value: 'text', label: t('data-type.text') },
+                    { value: 'document', label: t('data-type.document') },
+                    { value: 'asset', label: t('data-type.asset') },
+                    { value: 'object', label: t('data-type.object') },
+                    { value: 'bool', label: t('data-type.checkbox') }
                   ] }
                   placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
                 />
