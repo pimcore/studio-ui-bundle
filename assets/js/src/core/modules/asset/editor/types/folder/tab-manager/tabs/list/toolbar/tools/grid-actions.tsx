@@ -13,35 +13,31 @@
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Dropdown, type MenuProps } from 'antd'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useListSelectedRows } from '../../hooks/use-list'
-import { useAssetCreateZipMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useMercureCreateCookieMutation } from './mercure-api-slice.gen'
+import { useListColumns, useListSelectedRows } from '../../hooks/use-list'
+import { type AssetCreateCsvApiResponse, type AssetCreateZipApiResponse, useAssetCreateCsvMutation, useAssetCreateZipMutation, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { topics } from '@Pimcore/modules/execution-engine/topics'
+import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
   const numberedSelectedRows = Object.keys(selectedRows).map(Number)
   const hasSelectedItems = Object.keys(selectedRows).length > 0
-  const [fetchCreateZip, { data }] = useAssetCreateZipMutation()
-  const [fetchMercureCookie] = useMercureCreateCookieMutation()
+  const { columns } = useListColumns()
+  const [fetchCreateZip] = useAssetCreateZipMutation()
+  const [fetchCreateCsv] = useAssetCreateCsvMutation()
+  const { id } = useAsset()
+  const { data } = useAssetGetByIdQuery({ id: id! })
+  const { addJob } = useJobs()
+  const [jobTitle, setJobTitle] = useState<string>('Asset')
 
   useEffect(() => {
-    async function fetchSomething (): Promise<void> {
-      if (data !== undefined) {
-        const SSEvent = new EventSource('http://localhost/studio/api/assets/download/zip/' + data.jobRunId, {
-          withCredentials: true
-        })
-
-        SSEvent.onmessage = (event) => {
-          console.log('Message:', event.data)
-        }
-      }
+    if (data !== undefined) {
+      setJobTitle(`${data.filename}`)
     }
-
-    fetchSomething().catch(() => {
-      console.error('Failed to fetch something')
-    })
   }, [data])
 
   const menu: MenuProps = {
@@ -56,19 +52,14 @@ export const GridActions = (): React.JSX.Element => {
       },
       {
         key: '2',
-        label: 'CSV-Export',
+        label: 'Export',
         icon: <Icon name={ 'export' } />,
-        onClick: () => {
-          console.log('Action 2')
-        },
         children: [
           {
             key: '2.1',
-            label: 'XLSX-Export',
+            label: 'CSV-Export',
             icon: <Icon name={ 'export' } />,
-            onClick: () => {
-              console.log('Action 2.1')
-            }
+            onClick: () => { createCSV() }
           }
         ]
       },
@@ -76,10 +67,7 @@ export const GridActions = (): React.JSX.Element => {
         key: '3',
         label: 'ZIP download',
         icon: <Icon name={ 'download-02' } />,
-        onClick: async () => {
-          await fetchMercureCookie()
-          createZip()
-        }
+        onClick: () => { createZip() }
       }
     ]
   }
@@ -94,8 +82,49 @@ export const GridActions = (): React.JSX.Element => {
   )
 
   function createZip (): void {
-    fetchCreateZip({ body: { items: numberedSelectedRows } }).catch(() => {
+    fetchCreateZip({ body: { items: numberedSelectedRows } }).then((promise: any) => {
+      const data = promise.data as AssetCreateZipApiResponse
+
+      addJob(createDownloadJob({
+        // @todo add api domain
+        downloadUrl: `/studio/api/assets/download/zip/${data.jobRunId}`,
+        id: data.jobRunId,
+        title: `Zip of ${jobTitle}`,
+        topics: [topics['zip-download-ready'], topics['handler-progress']]
+      }))
+    }).catch(() => {
       console.error('Failed to create zip')
+    })
+  }
+
+  function createCSV (): void {
+    fetchCreateCsv({
+      body: {
+        assets: numberedSelectedRows,
+        gridConfig: columns.map((column) => {
+          return {
+            key: column.key,
+            type: column.type,
+            config: column.config
+          }
+        }),
+        settings: {
+          delimiter: ',',
+          header: 'title'
+        }
+      }
+    }).then((response: any) => {
+      const data = response.data as AssetCreateCsvApiResponse
+
+      addJob(createDownloadJob({
+        // @todo add api domain
+        downloadUrl: `/studio/api/assets/download/csv/${data.jobRunId}`,
+        id: data.jobRunId,
+        title: `CSV of ${jobTitle}`,
+        topics: [topics['csv-download-ready'], topics['handler-progress']]
+      }))
+    }).catch(() => {
+      console.error('Failed to create CSV')
     })
   }
 }

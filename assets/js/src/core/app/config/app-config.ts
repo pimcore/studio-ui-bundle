@@ -13,9 +13,11 @@
 
 interface AppConfig {
   baseUrl: string
+  mercureUrl: string
 }
 
 const appElement = document.querySelector('#app')
+export const currentDomain = window.location.origin
 
 if (appElement === null) {
   console.warn('App element not found')
@@ -29,5 +31,6 @@ if (appConfigJSON !== null) {
 }
 
 export const appConfig: AppConfig = {
-  baseUrl: appConfigData?.baseUrl ?? '/pimcore-studio/'
+  baseUrl: appConfigData?.baseUrl ?? '/pimcore-studio/',
+  mercureUrl: appConfigData?.mercureUrl ?? `${currentDomain}/.well-known/mercure`
 }

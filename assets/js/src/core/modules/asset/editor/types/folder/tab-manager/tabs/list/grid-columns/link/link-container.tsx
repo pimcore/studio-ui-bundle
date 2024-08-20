@@ -14,11 +14,11 @@
 import React from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Tag } from 'antd'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useStyle } from './link-container.styles'
 
 export const LinkContainer = (props: DefaultCellProps): React.JSX.Element => {
-  const { openAsset } = useAsset()
+  const { openAsset } = useAssetHelper()
   const { styles } = useStyle()
 
   function openAssetWidget (): void {

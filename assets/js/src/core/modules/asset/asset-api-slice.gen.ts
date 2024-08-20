@@ -586,7 +586,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: string | null;
     /** Config */
-    config: string[];
+    config: object;
 };
 export type ElementIcon = {
     /** Icon type */

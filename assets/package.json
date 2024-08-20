@@ -82,6 +82,7 @@
     "@types/react-dom": "^18.2.22",
     "codemirror": "^5.56.0",
     "flexlayout-react": "^0.7.15",
+    "framer-motion": "^11.3.28",
     "i18next": "^23.8.2",
     "react-codemirror2": "^8.0.0",
     "react-i18next": "^14.0.5",

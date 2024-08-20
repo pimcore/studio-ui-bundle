@@ -36,6 +36,7 @@ export const Progressbar = (props: IProgressProps): React.JSX.Element => {
         { ...props }
         aria-labelledby={ 'progressbarLabel' }
         showInfo={ false }
+        status='normal'
       />
       <div className={ 'progressbar-status' }>
         <p>{props.progressStatus}</p>

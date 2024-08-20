@@ -11,17 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext } from 'react'
-import { AssetContext } from '../asset-provider'
-
-export interface UseAssetReturn {
-  id: number | undefined
-}
-
-export const useAsset = (): UseAssetReturn => {
-  const { id } = useContext(AssetContext)
-
-  return {
-    id
-  }
+export const topics: Record<string, string> = {
+  'zip-download-ready': 'zip-download-ready',
+  'csv-download-ready': 'csv-download-ready',
+  'handler-progress': 'handler-progress'
 }

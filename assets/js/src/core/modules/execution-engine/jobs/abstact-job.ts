@@ -11,17 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext } from 'react'
-import { AssetContext } from '../asset-provider'
+import { type NonEmptyArray } from 'types/non-empty-array'
+import { type topics } from '../topics'
 
-export interface UseAssetReturn {
-  id: number | undefined
+export enum JobStatus {
+  RUNNING = 'running',
+  SUCCESS = 'success',
+  FAILED = 'failed',
 }
 
-export const useAsset = (): UseAssetReturn => {
-  const { id } = useContext(AssetContext)
-
-  return {
-    id
-  }
+export interface AbstractJob {
+  id: number
+  jobId: number
+  type: string
+  title: string
+  status: JobStatus
+  topics: NonEmptyArray<(typeof topics)[string]>
+  config: unknown
 }
