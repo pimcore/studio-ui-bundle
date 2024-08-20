@@ -155,11 +155,14 @@ asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
-properties.type.text: Text
-properties.type.document: Document
-properties.type.asset: Asset
-properties.type.object: Object
-properties.type.bool: Checkbox
+data-type.input: Input
+data-type.textarea: Textarea
+data-type.date: Date
+data-type.text: Text
+data-type.document: Document
+data-type.asset: Asset
+data-type.object: Object
+data-type.checkbox: Checkbox
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
