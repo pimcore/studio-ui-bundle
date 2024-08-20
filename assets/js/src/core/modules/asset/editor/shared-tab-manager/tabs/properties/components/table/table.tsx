@@ -92,8 +92,8 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       id: 'properties-table--data-column',
       meta: {
         type: 'type-dependent-content',
-        editable: true,
-        autoWidth: true // this is the important part
+        editable: propertiesTableTab === 'own',
+        autoWidth: true
       },
       size: 300
     }),
@@ -108,7 +108,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       },
       size: 70,
       meta: {
-        editable: true
+        editable: propertiesTableTab === 'own'
       }
     }),
     columnHelper.accessor('actions', {
@@ -130,13 +130,15 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
               )
             }
 
-            <Button
-              icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                removeProperty(info.row.original)
-              } }
-              type="link"
-            />
+            {propertiesTableTab === 'own' && (
+              <Button
+                icon={ <Icon name="trash" /> }
+                onClick={ () => {
+                  removeProperty(info.row.original)
+                } }
+                type="link"
+              />
+            )}
           </div>
         )
       }
