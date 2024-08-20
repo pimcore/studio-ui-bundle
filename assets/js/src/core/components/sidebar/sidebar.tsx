@@ -12,7 +12,7 @@
 */
 
 import { useStyle } from './sidebar.styles'
-import React, { useState } from 'react'
+import React, { isValidElement, useState } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
 interface SidebarProps {
@@ -86,17 +86,20 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
         <div className={ 'sidebar__navigation__buttons' }>
           {
             preparedButtons.map((button, index) => {
+              const { component, key, ...props } = button
+
+              if (!isValidElement(component)) {
+                throw new Error('SidebarButton must be a valid react component')
+              }
+
+              const SidebarButton = component.type
+
               return (
-                <div
-                  aria-label={ button.key }
-                  key={ button.key }
-                  onClick={ button.onClick }
-                  onKeyDown={ button.onClick }
-                  role={ 'button' }
-                  tabIndex={ index }
-                >
-                  {button.icon}
-                </div>
+                <SidebarButton
+                  index={ index }
+                  key={ key }
+                  { ...props }
+                />
               )
             })
           }
