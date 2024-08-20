@@ -35,9 +35,6 @@ export const DraggableItem = ({ top, left, children, containerRef, disabled, act
       disabled
     })
 
-  // const shoudBeHidden = top === undefined && left === undefined ? 'hidden' : 'visible'
-  console.log('inside', { active })
-
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const craftedStyle = {
     position: 'absolute',
