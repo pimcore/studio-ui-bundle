@@ -15,14 +15,14 @@ import React from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
 import { Button, Dropdown, type MenuProps, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useGetAssetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 
 export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
   const { styles } = useStyle()
 
-  const { data, isLoading } = useGetAssetByIdQuery({
+  const { data, isLoading } = useAssetGetByIdQuery({
     id
   })
 

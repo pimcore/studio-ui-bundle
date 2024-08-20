@@ -13,10 +13,10 @@
 
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Divider, Segmented, Select } from 'antd'
+import { Button, Divider, type InputRef, Segmented, Select } from 'antd'
 import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type DataProperty, useGetPropertiesQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import { type DataProperty, usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import Input from 'antd/es/input/Input'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
@@ -31,15 +31,28 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
   const { id } = useContext(AssetContext)
   const { addProperty, properties } = useAssetDraft(id!)
-  const { showModal, closeModal, renderModal: Modal } = useModal({
+  const { showModal: showDuplicatePropertyModal, closeModal: closeDuplicatePropertyModal, renderModal: DuplicatePropertyModal } = useModal({
+    type: 'error'
+  })
+  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
   const keyInputValue = useRef<string>('')
+  const keyInputRef = useRef<InputRef>(null)
   const typeSelectValue = useRef<string>('')
 
-  const { data, isLoading } = useGetPropertiesQuery({
+  const { data, isLoading } = usePropertyGetCollectionQuery({
     elementType: 'asset'
   })
+
+  React.useEffect(() => {
+    if (createManualPropertyMode) {
+      keyInputRef.current?.focus()
+    } else {
+      typeSelectValue.current = ''
+      keyInputValue.current = ''
+    }
+  }, [createManualPropertyMode])
 
   return (
     <div className={ styles.tab }>
@@ -58,17 +71,29 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
         {propertiesTableTab === 'own' && (
           <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
-            <Modal
+            <DuplicatePropertyModal
               footer={ <ModalFooter>
                 <Button
-                  onClick={ closeModal }
+                  onClick={ closeDuplicatePropertyModal }
                   type='primary'
                 >{ t('button.ok') }</Button>
               </ModalFooter> }
               title={ t('properties.property-already-exist.title') }
             >
               { t('properties.property-already-exist.error') }
-            </Modal>
+            </DuplicatePropertyModal>
+
+            <MandatoryModal
+              footer={ <ModalFooter>
+                <Button
+                  onClick={ closeMandatoryModal }
+                  type='primary'
+                >{ t('button.ok') }</Button>
+              </ModalFooter> }
+              title={ t('properties.add-property-mandatory-fields-missing.title') }
+            >
+              { t('properties.add-property-mandatory-fields-missing.error') }
+            </MandatoryModal>
 
             {createManualPropertyMode && (
               <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
@@ -84,16 +109,17 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 <Input
                   onChange={ onKeyInputChange }
                   placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
+                  ref={ keyInputRef }
                 />
 
                 <Select
                   onSelect={ onTypeSelect }
                   options={ [
-                    { value: 'text', label: 'Text' },
-                    { value: 'document', label: 'Document' },
-                    { value: 'asset', label: 'Asset' },
-                    { value: 'object', label: 'Object' },
-                    { value: 'bool', label: 'Bool' }
+                    { value: 'text', label: t('properties.type.text') },
+                    { value: 'document', label: t('properties.type.document') },
+                    { value: 'asset', label: t('properties.type.asset') },
+                    { value: 'object', label: t('properties.type.object') },
+                    { value: 'bool', label: t('properties.type.bool') }
                   ] }
                   placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
                 />
@@ -158,7 +184,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
     }
 
     if (properties?.find((prop) => prop.key === property.name) !== undefined) {
-      showModal()
+      showDuplicatePropertyModal()
       return
     }
 
@@ -187,14 +213,15 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   function onAddPropertyClick (): void {
     const isValidKeyInput = keyInputValue.current !== undefined && keyInputValue.current.length > 0
-    const isValidTypeSelectValue = typeSelectValue.current !== undefined
+    const isValidTypeSelectValue = typeSelectValue.current !== undefined && typeSelectValue.current.length > 0
 
     if (!isValidKeyInput || !isValidTypeSelectValue) {
+      showMandatoryModal()
       return
     }
 
     if (properties?.find((prop) => prop.key === keyInputValue.current) !== undefined) {
-      showModal()
+      showDuplicatePropertyModal()
       return
     }
 

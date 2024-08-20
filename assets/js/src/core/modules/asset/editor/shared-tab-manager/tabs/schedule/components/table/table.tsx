@@ -17,7 +17,7 @@ import { Button, Result } from 'antd'
 import React from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type Schedule, useDeleteScheduleMutation } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
+import { type Schedule, useScheduleDeleteByIdMutation } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './table.styles'
 
@@ -29,7 +29,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { context } = useGlobalAssetContext()
-  const [deleteSchedule] = useDeleteScheduleMutation()
+  const [deleteSchedule] = useScheduleDeleteByIdMutation()
 
   if (context === undefined) {
     return <Result title="Missing context" />

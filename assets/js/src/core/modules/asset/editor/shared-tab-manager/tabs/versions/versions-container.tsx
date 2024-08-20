@@ -13,10 +13,10 @@
 
 import React from 'react'
 import {
-  useCleanupVersionMutation,
-  useDeleteVersionMutation,
-  useGetVersionsQuery,
-  usePublishVersionMutation, useUpdateVersionMutation
+  useVersionCleanupForElementByTypeAndIdMutation,
+  useVersionDeleteByIdMutation,
+  useVersionGetCollectionForElementByTypeAndIdQuery,
+  useVersionPublishByIdMutation, useVersionUpdateByIdMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
@@ -29,12 +29,12 @@ export const VersionsTabContainer = (): React.JSX.Element => {
     return <Result title="No context" />
   }
 
-  const [deleteVersion] = useDeleteVersionMutation()
-  const [publishVersion] = usePublishVersionMutation()
-  const [cleanupVersion] = useCleanupVersionMutation()
-  const [updateVersion] = useUpdateVersionMutation()
+  const [deleteVersion] = useVersionDeleteByIdMutation()
+  const [publishVersion] = useVersionPublishByIdMutation()
+  const [cleanupVersion] = useVersionCleanupForElementByTypeAndIdMutation()
+  const [updateVersion] = useVersionUpdateByIdMutation()
 
-  const { isLoading, data } = useGetVersionsQuery({
+  const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
     id: context?.config?.id,
     elementType: 'asset',
     page: 1,
@@ -51,7 +51,7 @@ export const VersionsTabContainer = (): React.JSX.Element => {
         async (id, note): Promise<void> => {
           await updateVersion({
             id,
-            body: {
+            updateVersion: {
               note
             }
           })

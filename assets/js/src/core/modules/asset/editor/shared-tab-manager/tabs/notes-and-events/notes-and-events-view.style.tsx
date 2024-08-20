@@ -31,21 +31,19 @@ export const useStyles = createStyles(({ token, css }) => {
       .notes-container {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         width: ${notesAndEventsToken.notesContainerWidth}px;
       }
       
       & .notes-content {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         overflow: auto;
-        
         height: 100%;
       }
       
       & .notes-content__header {
         padding: ${token.paddingXS}px ${notesAndEventsToken.paddingSM}px;
-
         display: flex;
         align-items: center;
         gap: ${notesAndEventsToken.paddingSM}px;
@@ -54,12 +52,17 @@ export const useStyles = createStyles(({ token, css }) => {
       & .notes-content__text {
         color: ${token.colorPrimary};
         margin: 0;
+        font-weight: 600;
       }
       
       & .notes-content__details {
-        width: 100%;
         padding: 0 ${token.paddingXS}px;
-      }
+      } 
+        
+      & .notes-content__empty-container {
+        align-content: center;
+        height: 100%;
+        }
       
       & .notes-card {
         margin-bottom: ${token.marginXS}px;

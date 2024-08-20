@@ -6,14 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getWorkflowsDetails: build.query<GetWorkflowsDetailsApiResponse, GetWorkflowsDetailsApiArg>({
+            workflowGetDetails: build.query<WorkflowGetDetailsApiResponse, WorkflowGetDetailsApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/workflows/details`,
                     params: { elementId: queryArg.elementId, elementType: queryArg.elementType },
                 }),
                 providesTags: ["Workflows"],
             }),
-            submitWorkflowAction: build.mutation<SubmitWorkflowActionApiResponse, SubmitWorkflowActionApiArg>({
+            workflowActionSubmit: build.mutation<WorkflowActionSubmitApiResponse, WorkflowActionSubmitApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/workflows/action`,
                     method: "POST",
@@ -25,22 +25,22 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetWorkflowsDetailsApiResponse = /** status 200 Detail data of element workflows */ {
+export type WorkflowGetDetailsApiResponse = /** status 200 Detail data of element workflows */ {
     items?: WorkflowDetails[];
 };
-export type GetWorkflowsDetailsApiArg = {
+export type WorkflowGetDetailsApiArg = {
     /** ID of the element */
     elementId: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type SubmitWorkflowActionApiResponse =
-    /** status 200 Json encoded name of workflow, name and type of submitted action */ {
+export type WorkflowActionSubmitApiResponse =
+    /** status 200 Json encoded name of workflow, name and type of submitted action. */ {
         workflowName?: string;
         actionName?: string;
         actionType?: string;
     };
-export type SubmitWorkflowActionApiArg = {
+export type WorkflowActionSubmitApiArg = {
     submitAction: SubmitAction;
 };
 export type WorkflowStatus = {
@@ -117,4 +117,4 @@ export type SubmitAction = {
     /** workflowOptions */
     workflowOptions: any[];
 };
-export const { useGetWorkflowsDetailsQuery, useSubmitWorkflowActionMutation } = injectedRtkApi;
+export const { useWorkflowGetDetailsQuery, useWorkflowActionSubmitMutation } = injectedRtkApi;

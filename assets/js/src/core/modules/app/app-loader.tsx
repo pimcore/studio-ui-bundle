@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { useGetTranslationsMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
+import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
@@ -26,12 +26,12 @@ export interface IAppLoaderProps {
 
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const [translations] = useGetTranslationsMutation()
+  const [translations] = useTranslationGetCollectionMutation()
   const { i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(true)
 
   async function initLoadUser (): Promise<any> {
-    const userFetcher = dispatch(api.endpoints.getStudioApiUserCurrentUserInformation.initiate())
+    const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
 
     userFetcher
       .then(({ data, isSuccess }) => {
@@ -45,7 +45,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   async function initSettings (): Promise<any> {
-    const settingsFetcher = dispatch(settingsApi.endpoints.getSystemSettings.initiate())
+    const settingsFetcher = dispatch(settingsApi.endpoints.systemSettingsGet.initiate())
 
     settingsFetcher
       .then(({ data, isSuccess }) => {

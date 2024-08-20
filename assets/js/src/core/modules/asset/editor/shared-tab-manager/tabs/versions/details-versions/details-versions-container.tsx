@@ -41,7 +41,7 @@ export const DetailsVersionsContainer = ({
     const versionPromises: Array<Promise<any>> = []
     versionIds.forEach(async vId => {
       const id = vId.id
-      versionPromises.push(store.dispatch(api.endpoints.getVersionById.initiate({ id })))
+      versionPromises.push(store.dispatch(api.endpoints.versionGetById.initiate({ id })))
 
       if (!Object.keys(imageUrls).includes(id.toString())) {
         fetch(`http://localhost/studio/api/versions/${id}/image/stream`)

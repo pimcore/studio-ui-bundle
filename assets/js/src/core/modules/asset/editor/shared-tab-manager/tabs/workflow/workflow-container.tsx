@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { useGetWorkflowsDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
+import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { Result } from 'antd'
 import { useStyle } from './workflow-container.styles'
@@ -28,7 +28,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
     return <Result title="Missing context" />
   }
 
-  const { data, isLoading } = useGetWorkflowsDetailsQuery({ elementType: 'asset', elementId: context?.config.id })
+  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType: 'asset', elementId: context?.config.id })
 
   return (
     <div className={ styles.tab }>

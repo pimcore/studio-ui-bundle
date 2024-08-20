@@ -25,7 +25,7 @@ interface UseShortcutActionsReturn {
 export const useShortcutActions = (): UseShortcutActionsReturn => {
   const { id } = useContext(AssetContext)
   const dispatch = useAppDispatch()
-  const assetInfo = dispatch(assetApi.endpoints.getAssetById.initiate({ id: id! }))
+  const assetInfo = dispatch(assetApi.endpoints.assetGetById.initiate({ id: id! }))
 
   const getCurrentAndParentTags = async (): Promise<Awaited<any>> => {
     return await Promise.resolve(assetInfo)
@@ -37,12 +37,12 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         throw new Error(`Asset with ID "${id}" not found`)
       })
       .then(async (parentId: number) => {
-        const parentTags = await dispatch(tagsApi.endpoints.getTagsForElementByTypeAndId.initiate({
+        const parentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
           elementType: 'asset',
           id: parentId
         }))
 
-        const currentTags = await dispatch(tagsApi.endpoints.getTagsForElementByTypeAndId.initiate({
+        const currentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
           elementType: 'asset',
           id: id!
         }))
@@ -62,7 +62,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         const cacheUpdate = dispatch(
           tagsApi.util.updateQueryData(
-            'getTagsForElementByTypeAndId',
+            'tagGetCollectionForElementByTypeAndId',
             {
               elementType: 'asset',
               id: id!
@@ -77,7 +77,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         )
 
         try {
-          void await dispatch(tagsApi.endpoints.batchAssignTagsForElements.initiate({
+          void await dispatch(tagsApi.endpoints.tagBatchAssignToElementsByType.initiate({
             elementType: 'asset',
             elementTagIdCollection: {
               elementIds: [id!],
@@ -101,7 +101,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         const cacheUpdate = dispatch(
           tagsApi.util.updateQueryData(
-            'getTagsForElementByTypeAndId',
+            'tagGetCollectionForElementByTypeAndId',
             {
               elementType: 'asset',
               id: id!
@@ -116,7 +116,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         )
 
         try {
-          void await dispatch(tagsApi.endpoints.batchReplaceTagsForElements.initiate({
+          void await dispatch(tagsApi.endpoints.tagBatchReplaceForElementsByType.initiate({
             elementType: 'asset',
             elementTagIdCollection: {
               elementIds: [id!],

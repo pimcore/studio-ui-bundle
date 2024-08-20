@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getNotes: build.query<GetNotesApiResponse, GetNotesApiArg>({
+            noteGetCollection: build.query<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/notes`,
                     params: {
@@ -20,14 +20,11 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Notes"],
             }),
-            deleteNote: build.mutation<DeleteNoteApiResponse, DeleteNoteApiArg>({
+            noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/notes/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Notes"],
             }),
-            getNotesForElementByTypeAndId: build.query<
-                GetNotesForElementByTypeAndIdApiResponse,
-                GetNotesForElementByTypeAndIdApiArg
-            >({
+            noteElementGetCollection: build.query<NoteElementGetCollectionApiResponse, NoteElementGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
                     params: {
@@ -41,7 +38,7 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Notes"],
             }),
-            createNoteForElement: build.mutation<CreateNoteForElementApiResponse, CreateNoteForElementApiArg>({
+            noteElementCreate: build.mutation<NoteElementCreateApiResponse, NoteElementCreateApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
@@ -53,11 +50,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetNotesApiResponse = /** status 200 Paginated assets with total count as header param */ {
+export type NoteGetCollectionApiResponse = /** status 200 Paginated notes with total count */ {
     totalItems: number;
     items: Note[];
 };
-export type GetNotesApiArg = {
+export type NoteGetCollectionApiArg = {
     /** Page number */
     page: number;
     /** Number of items per page */
@@ -72,17 +69,16 @@ export type GetNotesApiArg = {
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
     fieldFilters?: any;
 };
-export type DeleteNoteApiResponse = /** status 200 Successfully deleted note */ void;
-export type DeleteNoteApiArg = {
+export type NoteDeleteByIdApiResponse = /** status 200 note_delete_by_id_success_description */ void;
+export type NoteDeleteByIdApiArg = {
     /** Id of the element */
     id: number;
 };
-export type GetNotesForElementByTypeAndIdApiResponse =
-    /** status 200 Paginated notes with total count as header param */ {
-        totalItems: number;
-        items: Note[];
-    };
-export type GetNotesForElementByTypeAndIdApiArg = {
+export type NoteElementGetCollectionApiResponse = /** status 200 Paginated notes with total count */ {
+    totalItems: number;
+    items: Note[];
+};
+export type NoteElementGetCollectionApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -101,8 +97,8 @@ export type GetNotesForElementByTypeAndIdApiArg = {
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
     fieldFilters?: any;
 };
-export type CreateNoteForElementApiResponse = unknown;
-export type CreateNoteForElementApiArg = {
+export type NoteElementCreateApiResponse = /** status 200 Created note for element */ Note;
+export type NoteElementCreateApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
@@ -158,8 +154,8 @@ export type CreateNote = {
     type: string;
 };
 export const {
-    useGetNotesQuery,
-    useDeleteNoteMutation,
-    useGetNotesForElementByTypeAndIdQuery,
-    useCreateNoteForElementMutation,
+    useNoteGetCollectionQuery,
+    useNoteDeleteByIdMutation,
+    useNoteElementGetCollectionQuery,
+    useNoteElementCreateMutation,
 } = injectedRtkApi;

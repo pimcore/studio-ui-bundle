@@ -23,7 +23,7 @@ import { useStyles } from './table.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useGetPropertiesForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
+import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -40,7 +40,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
-  const { data, isLoading } = useGetPropertiesForElementByTypeAndIdQuery({
+  const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!
   })
@@ -89,7 +89,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       id: 'properties-table--data-column',
       meta: {
         type: 'type-dependent-content',
-        editable: true
+        editable: propertiesTableTab === 'own'
       }
     }),
     columnHelper.accessor('inheritable', {
@@ -103,7 +103,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       },
       size: 70,
       meta: {
-        editable: true
+        editable: propertiesTableTab === 'own'
       }
     }),
     columnHelper.accessor('actions', {
@@ -112,26 +112,28 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         return (
           <div className={ 'properties-table--actions-column' }>
             {
-              info.row.original.type === 'document' &&
-              info.row.original.data !== null &&
+              ['document', 'asset', 'object'].includes(info.row.original.type) &&
+                info.row.original.data !== null &&
               (
                 <Button
                   icon={ <Icon name="group" /> }
                   onClick={ () => {
-                    console.log('open document with ID: ' + info.row.original.data.id)
+                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
                   } }
                   type="link"
                 />
               )
             }
 
-            <Button
-              icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                removeProperty(info.row.original)
-              } }
-              type="link"
-            />
+            {propertiesTableTab === 'own' && (
+              <Button
+                icon={ <Icon name="trash" /> }
+                onClick={ () => {
+                  removeProperty(info.row.original)
+                } }
+                type="link"
+              />
+            )}
           </div>
         )
       }

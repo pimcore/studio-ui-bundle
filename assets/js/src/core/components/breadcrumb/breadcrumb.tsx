@@ -30,7 +30,7 @@ export const Breadcrumb = ({ path }: { path: string }): React.JSX.Element => {
     const parts = path.split('/')
 
     function onMenuItemClick (path: string): void {
-      const elementIdFetcher = dispatch(elementApi.endpoints.getElementIdByPath.initiate({
+      const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType: 'asset',
         elementPath: path
       }))

@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
-import { type UpdateAssetByIdApiArg, useUpdateAssetByIdMutation } from '../../asset-api-slice.gen'
+import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export const Toolbar = (): React.JSX.Element => {
@@ -25,7 +25,7 @@ export const Toolbar = (): React.JSX.Element => {
   const { id } = useContext(AssetContext)
   const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
-  const [saveAsset, { isLoading, isSuccess }] = useUpdateAssetByIdMutation()
+  const [saveAsset, { isLoading, isSuccess }] = useAssetUpdateByIdMutation()
   const messageApi = useMessage()
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export const Toolbar = (): React.JSX.Element => {
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
-    const update: UpdateAssetByIdApiArg['body']['data'] = {}
+    const update: AssetUpdateByIdApiArg['body']['data'] = {}
     if (asset.changes.properties === true) {
       const propertyUpdate = properties?.map((property) => {
         if (typeof property.data === 'object') {
