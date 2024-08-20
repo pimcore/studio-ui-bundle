@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, isValidElement, useContext, useEffect, useRef } from 'react'
+import React, { Children, isValidElement, useContext, useEffect } from 'react'
 import {
   DndContext,
   KeyboardSensor,
@@ -41,7 +41,6 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
   const keyboardSensor = useSensor(KeyboardSensor, {})
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor)
-  const containerRef = useRef<HTMLDivElement>(null)
   const { addImageSettings, removeImageSetting } = useAssetDraft(id!)
 
   if (focalPointContext === undefined) {
@@ -53,16 +52,9 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     setCoordinates,
     isActive,
     setIsActive,
-    disabled
+    disabled,
+    containerRef
   } = focalPointContext
-
-  console.log('context', {
-    coordinates,
-    setCoordinates,
-    isActive,
-    setIsActive,
-    disabled
-  })
 
   if (!isValidElement(Image)) {
     throw new Error('Children must be a valid react component')
@@ -75,30 +67,12 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
       containerRef.current !== null &&
       imageSettings?.focalPoint !== undefined
     ) {
-      console.log('onLoad')
       const focalPoint = imageSettings.focalPoint
       const calcX = containerRef.current.clientWidth * Number(focalPoint.x) / 100
       const calcY = containerRef.current.clientHeight * Number(focalPoint.y) / 100
 
       setCoordinates({ x: calcX, y: calcY })
-    }
-  }
-
-  useEffect(() => {
-    if (imageSettings?.focalPoint !== undefined) {
-      console.log('setActiveOnInit')
       setIsActive(true)
-    }
-  }, [])
-
-  const onToggleOn = (): void => {
-    if (imageSettings?.focalPoint === undefined) {
-      // center
-      console.log('onToggleOn')
-      const calcX = containerRef.current!.clientWidth * 0.5
-      const calcY = containerRef.current!.clientHeight * 0.5
-
-      setCoordinates({ x: calcX, y: calcY })
     }
   }
 
@@ -108,14 +82,8 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   }
 
   useEffect(() => {
-    if (!isLoading && containerRef.current !== null) {
-      if (isActive) {
-        onToggleOn()
-      }
-
-      if (!isActive) {
-        onToggleOff()
-      }
+    if (!isActive && !isLoading && containerRef.current !== null) {
+      onToggleOff()
     }
   }, [isActive])
 
@@ -141,7 +109,6 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     >
       <DraggableItem
         active={ isActive }
-        containerRef={ containerRef }
         disabled={ disabled }
         left={ coordinates.x }
         top={ coordinates.y }

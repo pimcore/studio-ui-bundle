@@ -23,10 +23,21 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
   const focalPointContext = useContext(FocalPointContext)
 
   const onClick = (): void => {
-    console.log(focalPointContext)
     if (focalPointContext !== undefined) {
-      const { isActive, setIsActive } = focalPointContext
-      setIsActive(!isActive)
+      const {
+        isActive,
+        setIsActive,
+        setCoordinates,
+        containerRef
+      } = focalPointContext
+
+      if (containerRef.current !== null) {
+        const calcX = containerRef.current.clientWidth * 0.5
+        const calcY = containerRef.current.clientHeight * 0.5
+
+        setCoordinates({ x: calcX, y: calcY })
+        setIsActive(!isActive)
+      }
     }
   }
 

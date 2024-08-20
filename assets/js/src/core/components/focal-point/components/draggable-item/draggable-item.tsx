@@ -11,23 +11,24 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type RefObject } from 'react'
+import React, { useContext } from 'react'
 import { useDraggable, type UseDraggableArguments } from '@dnd-kit/core'
 import { Button } from 'antd'
 import { CSS } from '@dnd-kit/utilities'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './draggable-item.styles'
+import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 
 interface DraggableItemProps {
   top?: number
   left?: number
   children: React.ReactNode
-  containerRef: RefObject<HTMLDivElement>
   disabled: NonNullable<UseDraggableArguments['disabled']>
   active: boolean
 }
 
-export const DraggableItem = ({ top, left, children, containerRef, disabled, active = false }: DraggableItemProps): React.JSX.Element => {
+export const DraggableItem = ({ top, left, children, disabled, active = false }: DraggableItemProps): React.JSX.Element => {
+  const { containerRef } = useContext(FocalPointContext)!
   const { styles } = useStyle()
   const { attributes, listeners, setNodeRef, transform } =
     useDraggable({

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import type { ImageData as AssetImageData } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { FocalPointContext } from '../context/focal-point-context'
 
@@ -22,6 +22,7 @@ export const FocalPointProvider = ({ children }: { children: React.ReactNode }):
   })
   const [isActive, setIsActive] = React.useState<boolean>(false)
   const [disabled, setDisabled] = useState<boolean>(false) // to freeze the focal point
+  const containerRef = useRef<HTMLDivElement>(null)
 
   return useMemo(() => (
     <FocalPointContext.Provider value={ {
@@ -30,7 +31,8 @@ export const FocalPointProvider = ({ children }: { children: React.ReactNode }):
       coordinates,
       setCoordinates,
       disabled,
-      setDisabled
+      setDisabled,
+      containerRef
     } }
     >
       {children}

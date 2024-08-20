@@ -21,6 +21,7 @@ export interface FocalPointContextProps {
   setIsActive: (isActive: boolean) => void
   disabled: boolean
   setDisabled: (disabled: boolean) => void
+  containerRef: React.RefObject<HTMLDivElement>
 }
 
 export const FocalPointContext = React.createContext<FocalPointContextProps | undefined>(undefined)
