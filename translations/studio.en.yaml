@@ -206,6 +206,8 @@ asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Mandatory fields missing
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
 quality: Quality
