@@ -18,6 +18,9 @@ import { Result } from 'antd'
 import { useStyle } from './workflow-container.styles'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,11 +35,9 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ 'pimcore-workflow-toolbar' }>
-        <p className={ 'pimcore-workflow-toolbar__headline' }>
-          {t('asset.asset-editor-tabs.workflow.text')}
-        </p>
-      </div>
+      <CardHeaderContainer
+        text={ t('asset.asset-editor-tabs.workflow.text') }
+      />
 
       <div className={ 'pimcore-workflow-workflows' }>
         {isLoading && (

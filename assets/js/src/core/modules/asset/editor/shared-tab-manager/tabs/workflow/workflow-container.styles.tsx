@@ -19,20 +19,6 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       flex-direction: column;
         
-      .pimcore-workflow-toolbar {
-        padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingSM}px;
-        
-        .pimcore-workflow-toolbar__headline {
-          font-weight: 600;
-          color: ${token.colorPrimary};
-          margin: 0;
-          
-          &:hover {
-              color: ${token.colorPrimaryHover};
-          }
-        }
-      }
-        
       .pimcore-workflow-workflows {
           padding: 0 ${token.paddingXS}px;
           display: flex;

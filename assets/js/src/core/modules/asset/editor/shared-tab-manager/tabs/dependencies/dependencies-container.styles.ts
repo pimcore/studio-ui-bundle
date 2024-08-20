@@ -19,14 +19,6 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       height: 100%;
         
-      .pimcore-dependencies__requires,
-      .pimcore-dependencies__required-by {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-        
       > .ant-divider {
         margin: 0;
         height: 100%

@@ -11,15 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { createStyles } from 'antd-style'
 
-export const EditTabContainer = (): React.JSX.Element => {
-  return (
-    <CardHeaderContainer
-      text={ 'Edit' }
-    />
-  )
-}
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    'card-container': css`
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding-left: ${token.paddingXS}px;
+      padding-right: ${token.paddingXS}px;
+  `
+  }
+}, { hashPriority: 'low' })

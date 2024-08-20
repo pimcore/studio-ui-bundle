@@ -26,6 +26,7 @@ import {
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const RequiredByPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -53,14 +54,12 @@ export const RequiredByPanel = (): React.JSX.Element => {
         icon={ <Icon name={ 'corner-left-up' } /> }
         text={ t('asset.asset-editor-tabs.dependencies.required-by') }
       />
-      <div className={ ['dependencies__required-by__wrapper', dependencyTabStyle.wrapper].join(' ') }>
-        <div className={ 'pimcore-dependencies__required-by__content' }>
-          <Table
-            isLoading={ isLoading }
-            items={ data?.items ?? [] }
-          />
-        </div>
-      </div>
+      <CardContainer>
+        <Table
+          isLoading={ isLoading }
+          items={ data?.items ?? [] }
+        />
+      </CardContainer>
 
       <div className={ ['dependencies__required-by__pagination', dependencyTabStyle.pagination].join(' ') }>
         <Pagination

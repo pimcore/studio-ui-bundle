@@ -60,9 +60,6 @@ export const useStyle = createStyles(({ token, css }) => {
                 gap: 10px;
             }
         }
-    `,
-    content: css`
-        padding: ${token.paddingXS}px;
     `
   }
 })

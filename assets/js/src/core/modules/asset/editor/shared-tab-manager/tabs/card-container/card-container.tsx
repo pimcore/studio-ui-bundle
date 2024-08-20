@@ -13,13 +13,22 @@
 
 import React from 'react'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+  useStyles
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container.styles'
 
-export const EditTabContainer = (): React.JSX.Element => {
+export interface CardContainerProps {
+  children: React.ReactNode
+}
+
+export const CardContainer = (props: CardContainerProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const { children } = props
+
+  console.log('----> herc')
+
   return (
-    <CardHeaderContainer
-      text={ 'Edit' }
-    />
+    <div className={ styles['card-container'] }>
+      {children}
+    </div>
   )
 }

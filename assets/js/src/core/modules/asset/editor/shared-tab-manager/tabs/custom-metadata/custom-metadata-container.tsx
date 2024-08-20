@@ -29,6 +29,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -173,9 +174,9 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
         </div>
       </CardHeaderContainer>
 
-      <div className={ styles.content }>
+      <CardContainer>
         <CustomMetadataTable />
-      </div>
+      </CardContainer>
     </div>
   )
 }

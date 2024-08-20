@@ -26,6 +26,7 @@ import {
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const RequiresPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -47,20 +48,20 @@ export const RequiresPanel = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
+  console.log('----> pags', page)
+
   return (
     <div className={ 'pimcore-dependencies__requires' }>
       <CardHeaderContainer
         icon={ <Icon name={ 'intersect-circle' } /> }
         text={ t('asset.asset-editor-tabs.dependencies.requires') }
       />
-      <div className={ ['dependencies__requires__wrapper', dependencyTabStyle.wrapper].join(' ') }>
-        <div className={ 'pimcore-dependencies__requires__content' }>
-          <Table
-            isLoading={ isLoading }
-            items={ data?.items ?? [] }
-          />
-        </div>
-      </div>
+      <CardContainer>
+        <Table
+          isLoading={ isLoading }
+          items={ data?.items ?? [] }
+        />
+      </CardContainer>
 
       <div className={ ['dependencies__requires__pagination', dependencyTabStyle.pagination].join(' ') }>
         <Pagination
