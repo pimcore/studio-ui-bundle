@@ -64,7 +64,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
         <Segmented<string>
           onChange={ setPropertiesTableTab }
           options={ [
-            { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
+            { label: t('asset.asset-editor-tabs.properties.editable-properties'), value: 'own' },
             { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
           ] }
         />
@@ -172,7 +172,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
         )}
       </div>
 
-      <Table propertiesTableTab={ propertiesTableTab } />
+      <div className={ styles.content }>
+        <Table propertiesTableTab={ propertiesTableTab } />
+      </div>
     </div>
   )
 

@@ -38,11 +38,15 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
           <td
             className='ant-table-cell'
             key={ cell.id }
-            style={
-              {
-                width: cell.column.getSize(),
-                maxWidth: cell.column.getSize()
-              }
+            style={ cell.column.columnDef.meta?.autoWidth === true
+              ? {
+                  width: 'auto',
+                  minWidth: cell.column.getSize()
+                }
+              : {
+                  width: cell.column.getSize(),
+                  maxWidth: cell.column.getSize()
+                }
             }
           >
             <GridCell
