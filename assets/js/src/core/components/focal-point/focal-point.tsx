@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, isValidElement, useContext, useEffect, useRef, useState } from 'react'
+import React, { Children, isValidElement, useContext, useEffect, useRef } from 'react'
 import {
   DndContext,
   KeyboardSensor,
@@ -21,36 +21,48 @@ import {
   useSensor,
   useSensors
 } from '@dnd-kit/core'
-import type { Coordinates } from '@dnd-kit/utilities'
 import { DraggableItem } from '@Pimcore/components/focal-point/components/draggable-item/draggable-item'
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-
-const defaultCoordinates = {
-  x: 0,
-  y: 0
-}
+import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
 
 interface FocalPointProps {
   activationConstraint?: PointerActivationConstraint
   children: React.ReactNode
-  active?: boolean
 }
 
-export const FocalPoint = ({ activationConstraint, children, active = false }: FocalPointProps): React.JSX.Element => {
+export const FocalPoint = ({ activationConstraint, children }: FocalPointProps): React.JSX.Element => {
   const Image = Children.only(children)
   const { id } = useContext(AssetContext)
+  const focalPointContext = useContext(FocalPointContext)
   const { imageSettings } = useAssetDraft(id!)
-  const [disabled] = useState<boolean>(true) // to freeze the focal point
-  const [isActive, setIsActive] = useState<boolean>(active)
-  const [{ x, y }, setCoordinates] = useState<Coordinates>(defaultCoordinates)
   const mouseSensor = useSensor(MouseSensor, { activationConstraint })
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
   const keyboardSensor = useSensor(KeyboardSensor, {})
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor)
   const containerRef = useRef<HTMLDivElement>(null)
   const { addImageSettings } = useAssetDraft(id!)
+
+  if (focalPointContext === undefined) {
+    throw new Error('FocalPoint must be used within the FocalPointProvider')
+  }
+
+  const {
+    coordinates,
+    setCoordinates,
+    isActive,
+    setIsActive,
+    disabled
+  } = focalPointContext
+
+  console.log('context', {
+    coordinates,
+    setCoordinates,
+    isActive,
+    setIsActive,
+    disabled
+  })
 
   if (!isValidElement(Image)) {
     throw new Error('Children must be a valid react component')
@@ -72,6 +84,7 @@ export const FocalPoint = ({ activationConstraint, children, active = false }: F
   }
 
   useEffect(() => {
+    console.log(imageSettings)
     if (imageSettings?.focalPoint !== undefined) {
       setIsActive(true)
     }
@@ -81,13 +94,12 @@ export const FocalPoint = ({ activationConstraint, children, active = false }: F
     <DndContext
       modifiers={ [restrictToParentElement] }
       onDragEnd={ ({ delta }) => {
-        const calcX = x + delta.x
-        const calcY = y + delta.y
+        const calcX = coordinates.x + delta.x
+        const calcY = coordinates.y + delta.y
 
         setCoordinates({ x: calcX, y: calcY })
 
         if (containerRef.current !== null) {
-          console.log('here')
           addImageSettings({
             focalPoint: {
               x: Number(Number(calcX * 100 / containerRef?.current.clientWidth).toPrecision(8)),
@@ -102,8 +114,8 @@ export const FocalPoint = ({ activationConstraint, children, active = false }: F
         active={ isActive }
         containerRef={ containerRef }
         disabled={ disabled }
-        left={ x }
-        top={ y }
+        left={ coordinates.x }
+        top={ coordinates.y }
       >
         <ImageComponent
           onLoad={ onLoad }
