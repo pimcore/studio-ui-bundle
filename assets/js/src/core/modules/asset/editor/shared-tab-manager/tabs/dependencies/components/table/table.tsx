@@ -41,10 +41,13 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
       meta: {
         type: 'asset-property-icon'
       },
-      size: 70
+      size: 60
     }),
     columnHelper.accessor('path', {
       header: t('asset.asset-editor-tabs.dependencies.columns.path'),
+      meta: {
+        autoWidth: true
+      },
       size: 300
     }),
     columnHelper.accessor('actions', {
@@ -59,9 +62,11 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
   return (
     <div className={ styles.table }>
       <Grid
+        autoWidth
         columns={ columns }
         data={ items }
         isLoading={ isLoading }
+        resizable
       />
     </div>
   )
