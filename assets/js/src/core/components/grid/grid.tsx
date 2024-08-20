@@ -167,14 +167,13 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
       const column = table.getColumn(newValue.isResizingColumn)
       const columnWidth = autoColumnRef.current?.clientWidth
       if (column?.columnDef.meta?.autoWidth === true && typeof columnWidth !== 'undefined') {
-        // console.log('I am here: ' + autoColumnRef.current?.clientWidth)
         column.columnDef.size = columnWidth
         column.columnDef.meta.autoWidth = false
 
         if (typeof autoColumnRef.current?.clientWidth !== 'undefined') {
           newValue.startSize = autoColumnRef.current?.clientWidth
-          newValue.columnSizingStart.forEach(_ref3 => {
-            _ref3[1] = columnWidth
+          newValue.columnSizingStart.forEach(columnSizing => {
+            columnSizing[1] = columnWidth
           })
         }
 
