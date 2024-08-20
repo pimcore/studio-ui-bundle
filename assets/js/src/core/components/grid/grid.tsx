@@ -187,17 +187,19 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
   }
 
   // validate if only one column has autoWidth set to true
-  if (tableAutoWidth) {
-    let autoWidthColumnFound: boolean = false
-    for (const column of columns) {
-      if (column.meta?.autoWidth === true) {
-        if (autoWidthColumnFound) {
-          throw new Error('Only one column can have autoWidth set to true')
+  useMemo(() => {
+    if (tableAutoWidth) {
+      let autoWidthColumnFound: boolean = false
+      for (const column of columns) {
+        if (column.meta?.autoWidth === true) {
+          if (autoWidthColumnFound) {
+            throw new Error('Only one column can have autoWidth set to true')
+          }
+          autoWidthColumnFound = true
         }
-        autoWidthColumnFound = true
       }
     }
-  }
+  }, [columns, tableAutoWidth])
 
   const table = useReactTable(tableProps)
 
