@@ -44,31 +44,25 @@ export const DraggableItem = ({ top, left, children, containerRef, disabled, act
     transform: CSS.Transform.toString(transform)
   } as React.CSSProperties
 
-  if (!active) {
-    return (
-      <>
-        {children}
-      </>
-    )
-  }
-
   return (
     <div
       className={ styles.draggableContainer }
       ref={ containerRef }
     >
-      <Button
-        hidden={ !active }
-        icon={ <Icon name={ 'focal-point' } /> }
-        type={ 'dashed' }
-        { ...attributes }
-        { ...listeners }
-        aria-label="Draggable"
-        className={ styles.draggableItem }
-        data-cypress="draggable-item"
-        ref={ setNodeRef }
-        style={ { ...craftedStyle } }
-      />
+      {active && (
+        <Button
+          hidden={ !active }
+          icon={ <Icon name={ 'focal-point' } /> }
+          type={ 'dashed' }
+          { ...attributes }
+          { ...listeners }
+          aria-label="Draggable"
+          className={ styles.draggableItem }
+          data-cypress="draggable-item"
+          ref={ setNodeRef }
+          style={ { ...craftedStyle } }
+        />
+      )}
 
       {children}
     </div>

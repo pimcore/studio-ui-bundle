@@ -57,7 +57,7 @@ interface UseAssetDraftReturnDynamicSettings {
   imageSettings: undefined | ImageData
   addImageSettings: (settings: ImageData) => void
   updateImageSetting: ({ key, value }: { key: keyof ImageData, value: ImageData[keyof ImageData] }) => void
-  removeImageSetting: ({ setting }: { setting: keyof ImageData }) => void
+  removeImageSetting: (setting: keyof ImageData) => void
 }
 
 interface UseAssetDraftReturn extends

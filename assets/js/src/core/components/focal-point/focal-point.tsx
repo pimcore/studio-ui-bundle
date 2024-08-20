@@ -36,13 +36,13 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const Image = Children.only(children)
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
-  const { imageSettings } = useAssetDraft(id!)
+  const { imageSettings, isLoading } = useAssetDraft(id!)
   const mouseSensor = useSensor(MouseSensor, { activationConstraint })
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
   const keyboardSensor = useSensor(KeyboardSensor, {})
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor)
   const containerRef = useRef<HTMLDivElement>(null)
-  const { addImageSettings } = useAssetDraft(id!)
+  const { addImageSettings, removeImageSetting } = useAssetDraft(id!)
 
   if (focalPointContext === undefined) {
     throw new Error('FocalPoint must be used within the FocalPointProvider')
@@ -75,6 +75,7 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
       containerRef.current !== null &&
       imageSettings?.focalPoint !== undefined
     ) {
+      console.log('onLoad')
       const focalPoint = imageSettings.focalPoint
       const calcX = containerRef.current.clientWidth * Number(focalPoint.x) / 100
       const calcY = containerRef.current.clientHeight * Number(focalPoint.y) / 100
@@ -84,11 +85,39 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   }
 
   useEffect(() => {
-    console.log(imageSettings)
     if (imageSettings?.focalPoint !== undefined) {
+      console.log('setActiveOnInit')
       setIsActive(true)
     }
   }, [])
+
+  const onToggleOn = (): void => {
+    if (imageSettings?.focalPoint === undefined) {
+      // center
+      console.log('onToggleOn')
+      const calcX = containerRef.current!.clientWidth * 0.5
+      const calcY = containerRef.current!.clientHeight * 0.5
+
+      setCoordinates({ x: calcX, y: calcY })
+    }
+  }
+
+  const onToggleOff = (): void => {
+    setCoordinates({ x: 0, y: 0 })
+    removeImageSetting('focalPoint')
+  }
+
+  useEffect(() => {
+    if (!isLoading && containerRef.current !== null) {
+      if (isActive) {
+        onToggleOn()
+      }
+
+      if (!isActive) {
+        onToggleOff()
+      }
+    }
+  }, [isActive])
 
   return (
     <DndContext

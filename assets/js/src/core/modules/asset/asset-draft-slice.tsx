@@ -267,8 +267,11 @@ export const slice = createSlice({
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (Object.prototype.hasOwnProperty.call(asset.imageSettings, action.payload.setting) === true) {
+        const clonedImageSettings = structuredClone(asset.imageSettings)
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete asset.imageSettings[action.payload.setting]
+        delete clonedImageSettings[action.payload.setting]
+
+        asset.imageSettings = { ...clonedImageSettings }
 
         asset.modified = true
 

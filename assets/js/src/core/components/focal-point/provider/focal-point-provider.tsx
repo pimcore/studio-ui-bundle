@@ -21,7 +21,7 @@ export const FocalPointProvider = ({ children }: { children: React.ReactNode }):
     y: 0
   })
   const [isActive, setIsActive] = React.useState<boolean>(false)
-  const [disabled, setDisabled] = useState<boolean>(true) // to freeze the focal point
+  const [disabled, setDisabled] = useState<boolean>(false) // to freeze the focal point
 
   return useMemo(() => (
     <FocalPointContext.Provider value={ {
