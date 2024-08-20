@@ -49,6 +49,8 @@ export const useStyles = createStyles(({ token, css }) => {
           }
 
           .properties-table--actions-column {
+            align-items: center;
+            
             .ant-btn-icon {
               color: ${token.colorPrimary};
                 

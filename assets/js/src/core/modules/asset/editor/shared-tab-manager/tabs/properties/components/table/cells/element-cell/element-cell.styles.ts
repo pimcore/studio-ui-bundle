@@ -13,7 +13,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ css }) => {
+export const useStyle = createStyles(({ css, token }) => {
   return {
     link: css`
         display: flex;
@@ -25,6 +25,10 @@ export const useStyle = createStyles(({ css }) => {
         max-width: 100%;
         cursor: pointer;
       }
+    `,
+    dropTargetIcon: css`
+      margin-left: auto;
+      margin-right: ${token.marginXS}px;
     `
   }
 })

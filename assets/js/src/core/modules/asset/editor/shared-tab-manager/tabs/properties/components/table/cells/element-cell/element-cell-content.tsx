@@ -47,11 +47,14 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
         onClick={ openAssetWidget }
         title={ propertyData.data.path + propertyData.data.key }
       >
-        {propertyData.data.path}{propertyData.data.key}
+        {propertyData.data.path}{propertyData.data.filename ?? propertyData.data.key}
       </Tag>
       )}
 
-      <Icon name={ 'copy-07' } />
+      <Icon
+        className={ styles.dropTargetIcon }
+        name={ 'copy-07' }
+      />
     </div>
   )
 })

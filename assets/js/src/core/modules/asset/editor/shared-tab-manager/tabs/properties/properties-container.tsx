@@ -172,7 +172,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
         )}
       </div>
 
-      <Table propertiesTableTab={ propertiesTableTab } />
+      <div className={ styles.content }>
+        <Table propertiesTableTab={ propertiesTableTab } />
+      </div>
     </div>
   )
 
