@@ -185,12 +185,12 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         <>
           { (
             <Grid
+              autoWidth
               columns={ ownTableColumns }
               data={ gridDataOwn }
               isLoading={ isLoading }
               modifiedCells={ getModifiedCells() }
               onUpdateCellData={ onUpdateCellData }
-              autoWidth
               resizable
             />
           )}
@@ -201,10 +201,10 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
                 {t('asset.asset-editor-tabs.properties.inherited.properties')}
               </p>
               <Grid
+                autoWidth
                 columns={ allTableColumns }
                 data={ gridDataInherited }
                 onUpdateCellData={ onUpdateCellData }
-                autoWidth
                 resizable
               />
             </>
