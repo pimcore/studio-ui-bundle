@@ -181,8 +181,11 @@ export const slice = createSlice({
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
-        asset.customMetadata = (asset.customMetadata ?? []).filter(customMetadata => customMetadata.name !== action
-          .payload.customMetadata.name)
+        asset.customMetadata = (asset.customMetadata ?? []).filter(
+          customMetadata =>
+            customMetadata.name !== action.payload.customMetadata.name ||
+              customMetadata.language !== action.payload.customMetadata.language
+        )
 
         asset.modified = true
 
