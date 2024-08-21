@@ -31,6 +31,7 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -159,9 +160,9 @@ export const NotesAndEventsTabView = ({
           </CardHeaderContainer>
           {notes.length > 0
             ? (
-              <div className={ 'notes-content__details' }>
+              <CardContainer>
                 {NotesAndEvents}
-              </div>
+              </CardContainer>
               )
             : (
               <div className={ 'notes-content__empty-container' }>

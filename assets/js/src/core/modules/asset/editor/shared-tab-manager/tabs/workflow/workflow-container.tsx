@@ -21,6 +21,7 @@ import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -44,14 +45,16 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
           'Loading...'
         )}
 
-        {!isLoading && data?.items !== undefined && data?.items.length > 0 && (
-          data.items.map((workflow, index) => (
-            <WorkflowCard
-              key={ index }
-              workflow={ workflow }
-            />
-          ))
-        )}
+        <CardContainer>
+          {!isLoading && data?.items !== undefined && data?.items.length > 0 && (
+            data.items.map((workflow, index) => (
+              <WorkflowCard
+                key={ index }
+                workflow={ workflow }
+              />
+            ))
+          )}
+        </CardContainer>
       </div>
     </div>
   )

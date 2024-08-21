@@ -19,6 +19,7 @@ export const useStyles = createStyles(({ token, css }) => {
       display: flex;
       padding: ${token.paddingSM}px;
       width: 100%;
+      height: 56px;
       align-items: center;
       
       .header-text {

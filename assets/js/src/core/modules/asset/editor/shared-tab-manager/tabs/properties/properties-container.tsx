@@ -23,6 +23,10 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import {
+  CardHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -43,110 +47,110 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
-        <p className={ 'pimcore-properties-toolbar__headline' }>
-          { t('asset.asset-editor-tabs.properties.text') }
-        </p>
+      <CardHeaderContainer text={ t('asset.asset-editor-tabs.properties.text') }>
+        <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
+          <Segmented<string>
+            onChange={ setPropertiesTableTab }
+            options={ [
+              { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
+              { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
+            ] }
+          />
 
-        <Segmented<string>
-          onChange={ setPropertiesTableTab }
-          options={ [
-            { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
-            { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
-          ] }
-        />
-
-        {propertiesTableTab === 'own' && (
+          {propertiesTableTab === 'own' && (
           <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
             <Modal
               footer={ <ModalFooter>
                 <Button
                   onClick={ closeModal }
                   type='primary'
-                >{ t('button.ok') }</Button>
+                >{t('button.ok')}</Button>
               </ModalFooter> }
               title={ t('properties.property-already-exist.title') }
             >
-              { t('properties.property-already-exist.error') }
+              {t('properties.property-already-exist.error')}
             </Modal>
 
             {createManualPropertyMode && (
-              <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
-                <Button
-                  onClick={ () => {
-                    setCreateManualPropertyMode(false)
-                  } }
-                  type={ 'link' }
-                >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property.cancel')}
-                </Button>
+            <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
+              <Button
+                onClick={ () => {
+                  setCreateManualPropertyMode(false)
+                } }
+                type={ 'link' }
+              >
+                {t('asset.asset-editor-tabs.properties.add-custom-property.cancel')}
+              </Button>
 
-                <Input
-                  onChange={ onKeyInputChange }
-                  placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
-                />
+              <Input
+                onChange={ onKeyInputChange }
+                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
+              />
 
-                <Select
-                  onSelect={ onTypeSelect }
-                  options={ [
-                    { value: 'text', label: 'Text' },
-                    { value: 'document', label: 'Document' },
-                    { value: 'asset', label: 'Asset' },
-                    { value: 'object', label: 'Object' },
-                    { value: 'bool', label: 'Bool' }
-                  ] }
-                  placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
-                />
+              <Select
+                onSelect={ onTypeSelect }
+                options={ [
+                  { value: 'text', label: 'Text' },
+                  { value: 'document', label: 'Document' },
+                  { value: 'asset', label: 'Asset' },
+                  { value: 'object', label: 'Object' },
+                  { value: 'bool', label: 'Bool' }
+                ] }
+                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
+              />
 
-                <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
-                  onClick={ () => {
-                    onAddPropertyClick()
-                  } }
-                >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
-                </Button>
-              </div>
+              <Button
+                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                onClick={ () => {
+                  onAddPropertyClick()
+                } }
+              >
+                {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
+              </Button>
+            </div>
             )}
 
             {!createManualPropertyMode && (
-              <>
-                <Select
-                  filterOption={ (input, option) => {
-                    return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
-                  } }
-                  loading={ isLoading }
-                  onSelect={ onPredefinedPropertyChange }
-                  placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
-                  showSearch
-                >
-                  {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
-                    <Select.Option
-                      key={ item.id }
-                      value={ item.id }
-                    >
-                      {item.name}
-                    </Select.Option>
-                  ))}
-                </Select>
+            <>
+              <Select
+                filterOption={ (input, option) => {
+                  return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
+                } }
+                loading={ isLoading }
+                onSelect={ onPredefinedPropertyChange }
+                placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
+                showSearch
+              >
+                {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
+                  <Select.Option
+                    key={ item.id }
+                    value={ item.id }
+                  >
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
 
-                <Divider type={ 'vertical' } />
+              <Divider type={ 'vertical' } />
 
-                <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
-                  onClick={ () => {
-                    setCreateManualPropertyMode(true)
-                  } }
-                >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property')}
-                </Button>
-              </>
+              <Button
+                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                onClick={ () => {
+                  setCreateManualPropertyMode(true)
+                } }
+              >
+                {t('asset.asset-editor-tabs.properties.add-custom-property')}
+              </Button>
+            </>
             )}
           </div>
-        )}
-      </div>
+          )}
+        </div>
+      </CardHeaderContainer>
 
-      <Table propertiesTableTab={ propertiesTableTab } />
+      <CardContainer>
+        <Table propertiesTableTab={ propertiesTableTab } />
+      </CardContainer>
     </div>
   )
 

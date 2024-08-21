@@ -18,14 +18,13 @@ import { Result } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'
-import { useStyles } from './embedded-metadata-container.styles'
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const { context } = useGlobalAssetContext()
 
   if (context === undefined) {
@@ -65,21 +64,18 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   })
 
   return (
-    <div className={ styles.tab }>
+    <div>
       <CardHeaderContainer
         text={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
       />
 
-      <div
-        className={ 'pimcore-embedded-metadata-content' }
-        style={ { marginLeft: 0 } }
-      >
+      <CardContainer>
         <Grid
           columns={ columns }
           data={ reformattedEmbeddedMetaData }
           enableSorting
         />
-      </div>
+      </CardContainer>
     </div>
   )
 }

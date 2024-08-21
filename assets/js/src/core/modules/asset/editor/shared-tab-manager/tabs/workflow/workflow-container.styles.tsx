@@ -20,7 +20,6 @@ export const useStyle = createStyles(({ token, css }) => {
       flex-direction: column;
         
       .pimcore-workflow-workflows {
-          padding: 0 ${token.paddingXS}px;
           display: flex;
           gap: 10px;
           flex-direction: column;

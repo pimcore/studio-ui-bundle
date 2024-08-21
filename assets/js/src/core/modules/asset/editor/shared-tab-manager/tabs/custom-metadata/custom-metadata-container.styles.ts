@@ -22,7 +22,6 @@ export const useStyle = createStyles(({ token, css }) => {
     toolbar: css`
       display: flex;
       gap: 10px;
-      padding: ${token.paddingXS}px;
       align-items: center;
 
       .ant-btn {

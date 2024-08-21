@@ -29,6 +29,7 @@ import {
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -108,7 +109,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           </Button>
         </div>
       </CardHeaderContainer>
-      <div className={ 'pimcore-schedule-toolbar' }>
+      <CardContainer>
         <div className={ 'pimcore-schedule-toolbar__filters' }>
           <Segmented<string>
             onChange={ setScheduleTab }
@@ -125,12 +126,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             />
           </div>
         </div>
-      </div>
 
-      <div
-        className={ 'pimcore-schedule-content' }
-        style={ { marginLeft: 0 } }
-      >
         <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
 
         {scheduleTab === 'all' && (
@@ -154,7 +150,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             />
           </>
         )}
-      </div>
+      </CardContainer>
     </div>
   )
 }

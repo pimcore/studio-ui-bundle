@@ -17,66 +17,59 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     tab: css`
         .pimcore-schedule-toolbar__headline__buttons {
-          display: flex;
-          justify-content: space-between;
-          flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
 
-          .pimcore-schedule-toolbar__headline__buttons__add,
-          .pimcore-schedule-toolbar__headline__buttons__save {
-            display: flex;
-            align-items: center;
-            line-height: 22px;
-          }
+            .pimcore-schedule-toolbar__headline__buttons__add,
+            .pimcore-schedule-toolbar__headline__buttons__save {
+                display: flex;
+                align-items: center;
+                line-height: 22px;
+            }
         }
-        .pimcore-schedule-toolbar {
-          padding: 0 ${token.paddingSM}px;
-        }
-          
+
         .pimcore-schedule-toolbar__filters {
-          padding-top: ${token.paddingXXS}px;
-          display: flex;
-          justify-content: space-between;
-            
-          .pimcore-schedule-toolbar__filters__active-switch {
+            padding-top: ${token.paddingXXS}px;
             display: flex;
-            align-items: center;
-            gap: 8px;
-          }
+            justify-content: space-between;
+
+            .pimcore-schedule-toolbar__filters__active-switch {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
         }
-      }
-          
-      .ant-segmented-group {
+    }
+
+    .ant-segmented-group {
         padding: 0;
         border-radius: ${token.borderRadius}px;
         border: 1px solid ${token.colorBorderSecondary};
         background: ${token.colorBgLayout};
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-        
-        .ant-segmented-item {
-          color: ${token.itemColor};
-        
-          &.ant-segmented-item-selected {
-            background: ${token.controlItemBgActive};
-            border-color: ${token.controlItemBgActive};
-            color: rgba(0, 0, 0, 0.88); //TODO: replace with token
-          }
-        }
-      }
 
-      .pimcore-schedule-content {
-        padding: 0 ${token.paddingSM}px;
-          
-        .pimcore-schedule-content__archive__toolbar {
-          padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px 0;
-          display: flex;
-          gap: 12px;
-          align-items: center;
-            
-          .pimcore-schedule-content__archive__toolbar__headline {
-            margin: 0
-          }
+        .ant-segmented-item {
+            color: ${token.itemColor};
+
+            &.ant-segmented-item-selected {
+                background: ${token.controlItemBgActive};
+                border-color: ${token.controlItemBgActive};
+                color: rgba(0, 0, 0, 0.88); //TODO: replace with token
+            }
         }
-      }
+    }
+      
+    .pimcore-schedule-content__archive__toolbar {
+        padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px 0;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        .pimcore-schedule-content__archive__toolbar__headline {
+            margin: 0
+        }
+    }
     `
   }
 })

@@ -22,20 +22,13 @@ export const useStyle = createStyles(({ token, css }) => {
     toolbar: css`
       display: flex;
       gap: 12px;
-      padding: ${token.paddingXS}px;
       align-items: center;
         
       .ant-btn {
         display: flex;
         align-items: center;
       }
-        
-      .pimcore-properties-toolbar__headline {
-          font-weight: 600;
-          line-height: 20px;
-          color: ${token.itemActiveColor};
-      }
-        
+      
       .ant-segmented-group {
         padding: 2px;
         border-radius: ${token.borderRadius}px;

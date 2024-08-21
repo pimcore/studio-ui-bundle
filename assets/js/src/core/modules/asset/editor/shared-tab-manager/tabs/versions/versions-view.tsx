@@ -34,6 +34,7 @@ import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { CardHeaderContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -135,7 +136,8 @@ export const VersionsView = ({
             )}
           </div>
         </CardHeaderContainer>
-        {versions.length > 0 && (
+        <CardContainer>
+          {versions.length > 0 && (
           <VerticalTimeline timeStamps={ versions.map((version) => {
             const vId = { id: version.id, count: version.versionCount }
             const selected = detailedVersions.some((v => v.id === version.id))
@@ -181,7 +183,8 @@ export const VersionsView = ({
             )
           }) }
           />
-        )}
+          )}
+        </CardContainer>
       </div>
 
       { detailedVersions.length > 0 && comparingActive && (
