@@ -19,8 +19,10 @@ import { ElementCellContent } from './element-cell-content'
 import { type Asset } from 'src/sdk/main'
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
+  const editable = props.column.columnDef.meta?.editable ?? true
+
   function isValidContext (info: DragAndDropInfo): boolean {
-    return info.type === 'asset'
+    return info.type === 'asset' && editable
   }
 
   function onDrop (info: DragAndDropInfo): void {
