@@ -25,11 +25,26 @@ export function isSet (par: any): boolean {
   return par !== null && par !== undefined
 }
 
-export function respectLineBreak (text: string): React.JSX.Element {
-  const textSplit = text.split('\n')
-  return (
-    <div>{textSplit.map((line, index) =>
-      <p key={ index }>{line}</p>)}
-    </div>
-  )
+export function respectLineBreak (text: string, useParagraph: boolean = true): React.JSX.Element {
+  const trimmedText = text.replace(/(\r\n|\n|\r)+$/, '')
+  const textSplit = trimmedText.split('\n')
+  console.log(trimmedText, textSplit)
+  if (useParagraph) {
+    return (
+      <div>{textSplit.map((line, index) =>
+        <p key={ index }>{line}</p>)}
+      </div>
+    )
+  } else {
+    return (
+      <div>{textSplit.map((line, index, arr) => (
+        <React.Fragment key={ index }>
+          {line}
+          {/* Do not add <br /> at the end */}
+          {index < arr.length - 1 && <br />}
+        </React.Fragment>
+      ))}
+      </div>
+    )
+  }
 }
