@@ -26,7 +26,7 @@ export function isSet (par: any): boolean {
 }
 
 export function respectLineBreak (text: string, useParagraph: boolean = true): React.JSX.Element {
-  const trimmedText = text.replace(/(\r\n|\n|\r)+$/, '')
+  const trimmedText = text.replace(/\n+$/, '')
   const textSplit = trimmedText.split('\n')
   console.log(trimmedText, textSplit)
   if (useParagraph) {
