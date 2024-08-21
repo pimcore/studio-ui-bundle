@@ -100,9 +100,14 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
       cell: (info) => {
+        const editable = info.column.columnDef.meta?.editable ?? false
+
         return (
           <div className={ 'properties-table--inheritable-column' }>
-            <Checkbox defaultChecked={ info.row.original.inheritable } />
+            <Checkbox
+              defaultChecked={ info.row.original.inheritable }
+              disabled={ !editable }
+            />
           </div>
         )
       },
