@@ -24,6 +24,7 @@ export type SortDirection = SortDirections.ASC | SortDirections.DESC | undefined
 
 export interface SortButtonProps {
   value?: SortDirection
+  allowUnsorted?: boolean
   onSortingChange?: (value: SortDirection) => void
 }
 
@@ -51,7 +52,7 @@ export const SortButton = ({ onSortingChange, ...props }: SortButtonProps): Reac
   function onClick (): void {
     if (value === SortDirections.ASC) {
       updateValue(SortDirections.DESC)
-    } else if (value === SortDirections.DESC) {
+    } else if (value === SortDirections.DESC && props.allowUnsorted === true) {
       updateValue(undefined)
     } else {
       updateValue(SortDirections.ASC)
