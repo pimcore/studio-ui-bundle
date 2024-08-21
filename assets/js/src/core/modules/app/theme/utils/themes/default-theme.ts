@@ -90,7 +90,8 @@ const defaultTheme = {
       defaultColor: '#722ed1',
       defaultGhostBorderColor: '#d9d9d9',
       defaultGhostColor: '#722ed1',
-      textGhostColor: 'rgba(0, 0, 0, 0.88)'
+      textGhostColor: 'rgba(0, 0, 0, 0.88)',
+      controlHeightSM: 24
     },
     Breadcrumb: {
       lastItemColor: '#531dab'
@@ -137,6 +138,13 @@ const defaultTheme = {
     },
     Empty: {
       colorTextDisabled: 'rgba(0, 0, 0, 0.25)'
+    },
+    Colors: {
+      Neutral: {
+        Fill: {
+          colorFill: 'rgba(215, 199, 236, 0.60)'
+        }
+      }
     },
 
     Tag: {

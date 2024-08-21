@@ -12,7 +12,7 @@
 */
 
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { type Asset } from './asset-api-slice.gen'
+import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
@@ -30,6 +30,7 @@ interface customMetadataAction {
 export interface AssetDraft extends Asset {
   properties: DataProperty[]
   customMetadata: CustomMetadata[]
+  imageSettings: ImageData
   modified: boolean
   changes: Record<string, any>
 }
@@ -38,7 +39,13 @@ export const assetsAdapter = createEntityAdapter<AssetDraft>({})
 
 export const slice = createSlice({
   name: 'asset-draft',
-  initialState: assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }),
+  initialState: assetsAdapter.getInitialState({
+    modified: false,
+    properties: [],
+    customMetadata: [],
+    imageSettings: [],
+    changes: {}
+  }),
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
 
@@ -239,8 +246,61 @@ export const slice = createSlice({
       }
 
       state.entities[action.payload.assetId] = asset
-    }
+    },
 
+    // TODO: check if we really need that
+    addImageSettingsToAsset: (state, action: PayloadAction<{ assetId: number, settings: ImageData }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.imageSettings = { ...asset.imageSettings, ...action.payload.settings }
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          imageSettings: true
+        }
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    removeImageSettingFromAsset: (state, action: PayloadAction<{ assetId: number, setting: keyof ImageData }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (Object.prototype.hasOwnProperty.call(asset.imageSettings, action.payload.setting) === true) {
+        const clonedImageSettings = structuredClone(asset.imageSettings)
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete clonedImageSettings[action.payload.setting]
+
+        asset.imageSettings = { ...clonedImageSettings }
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          imageSettings: true
+        }
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    updateImageSettingForAsset: (state, action: PayloadAction<{ assetId: number, key: keyof ImageData, value: ImageData[keyof ImageData] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      asset.imageSettings[action.payload.key] = action.payload.value
+
+      asset.modified = true
+
+      asset.changes = {
+        ...asset.changes,
+        imageSettings: true
+      }
+
+      state.entities[action.payload.assetId] = asset
+    }
   }
 })
 
@@ -258,6 +318,11 @@ export const {
   removeCustomMetadataFromAsset,
   updateCustomMetadataForAsset,
   setCustomMetadataForAsset,
+
+  addImageSettingsToAsset,
+  removeImageSettingFromAsset,
+  updateImageSettingForAsset,
+
   removeAsset,
   resetAsset,
   resetChanges,

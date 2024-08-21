@@ -17,7 +17,10 @@ import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-a
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
+import {
+  ContentToolbarSidebarView
+} from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
+import { FocalPointProvider } from '@Pimcore/components/focal-point/provider/focal-point-provider'
 
 export interface IZoomContext {
   zoom: number
@@ -39,19 +42,21 @@ const PreviewContainer = (): React.JSX.Element => {
   }), [zoom])
   const imageData = data as Image
   return (
-    <ZoomContext.Provider value={ contextValue }>
-      <ContentToolbarSidebarView renderSidebar={
-        <Sidebar
-          buttons={ sidebarButtons }
-          entries={ sidebarEntries }
-        />
-      }
-      >
-        <PreviewView
-          src={ imageData.imageThumbnailPath! }
-        />
-      </ContentToolbarSidebarView>
-    </ZoomContext.Provider>
+    <FocalPointProvider>
+      <ZoomContext.Provider value={ contextValue }>
+        <ContentToolbarSidebarView renderSidebar={
+          <Sidebar
+            buttons={ sidebarButtons }
+            entries={ sidebarEntries }
+          />
+          }
+        >
+          <PreviewView
+            src={ imageData.imageThumbnailPath! }
+          />
+        </ContentToolbarSidebarView>
+      </ZoomContext.Provider>
+    </FocalPointProvider>
   )
 }
 
