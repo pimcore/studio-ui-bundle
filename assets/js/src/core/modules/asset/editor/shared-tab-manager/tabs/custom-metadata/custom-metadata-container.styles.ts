@@ -43,12 +43,6 @@ export const useStyle = createStyles(({ token, css }) => {
           color: ${token.Button.defaultColor} !important;
         }
       }
-
-      .pimcore-custom-metadata-toolbar__headline {
-          font-weight: 600;
-          line-height: 20px;
-          color: ${token.itemActiveColor};
-      }
         
         .pimcore-custom-metadata-toolbar__manual {
             display: flex;
