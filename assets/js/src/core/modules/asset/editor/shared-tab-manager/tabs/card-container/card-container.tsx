@@ -24,8 +24,6 @@ export const CardContainer = (props: CardContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { children } = props
 
-  console.log('----> herc')
-
   return (
     <div className={ styles['card-container'] }>
       {children}
