@@ -11,13 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type CellContext } from '@tanstack/react-table'
 import React, { useEffect, useRef } from 'react'
 import { useEditMode } from '../../../edit-mode/use-edit-mode'
 import { Input, type InputRef } from 'antd'
 import { useStyle } from './text-cell.styles'
-
-export type DefaultCellProps = CellContext<any, any>
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
 export const TextCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)

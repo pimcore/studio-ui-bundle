@@ -11,25 +11,24 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type CellContext } from '@tanstack/react-table'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useEditMode } from '../../../edit-mode/use-edit-mode'
 import { useStyle } from './textarea-cell.styles'
-import TextArea from 'antd/es/input/TextArea'
+import TextArea, { type TextAreaRef } from 'antd/es/input/TextArea'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-
-export type DefaultCellProps = CellContext<any, any>
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
 export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const { styles } = useStyle()
   const [textAreaValue, setTextAreaValue] = useState(String(props.getValue() ?? ''))
+  const element = React.createRef<TextAreaRef>()
 
-  // useEffect(() => {
-  //  if (isInEditMode) {
-  //    setTextAreaValue(props.getValue())
-  //  }
-  // }, [isInEditMode, props])
+  useEffect(() => {
+    if (isInEditMode) {
+      element.current?.focus()
+    }
+  }, [isInEditMode])
 
   function saveValue (): void {
     fireOnUpdateCellDataEvent(textAreaValue)
@@ -58,6 +57,7 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
         autoSize={ { minRows: 2 } }
         onBlur={ onBlur }
         onChange={ onChange }
+        ref={ element }
         value={ textAreaValue }
       />
     )
