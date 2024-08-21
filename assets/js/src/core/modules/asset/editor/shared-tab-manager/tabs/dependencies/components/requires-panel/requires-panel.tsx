@@ -46,7 +46,7 @@ export const RequiresPanel = (): React.JSX.Element => {
 
   return (
     <div className={ 'pimcore-dependencies__requires' }>
-      <div className={ ['dependencies__requires__wrapper', dependencyTabStyle.wrapper].join(' ') }>
+      <div className={ ['pimcore-dependencies__requires__wrapper', dependencyTabStyle.wrapper].join(' ') }>
         <div className={ ['pimcore-dependencies__requires_toolbar', dependencyTabStyle.toolbar].join(' ') }>
           <Icon name={ 'intersect-circle' } />
           <p>{t('asset.asset-editor-tabs.dependencies.requires')}</p>
