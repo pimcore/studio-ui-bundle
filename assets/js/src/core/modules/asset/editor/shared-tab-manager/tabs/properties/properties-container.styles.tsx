@@ -82,6 +82,9 @@ export const useStyle = createStyles(({ token, css }) => {
           margin: 0;
         }
       }
+    `,
+    content: css`
+        padding: ${token.paddingXS}px;
     `
   }
 })

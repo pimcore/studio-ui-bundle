@@ -53,7 +53,7 @@ asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
 asset.asset-editor-tabs.properties.text: Properties
-asset.asset-editor-tabs.properties.edit-own-properties: Editor own properties
+asset.asset-editor-tabs.properties.editable-properties: Editable properties
 asset.asset-editor-tabs.properties.all-properties: All Properties
 asset.asset-editor-tabs.properties.predefined-properties: Predefined Properties
 asset.asset-editor-tabs.properties.add-custom-property: Add a custom property
@@ -155,8 +155,18 @@ asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
+data-type.input: Input
+data-type.textarea: Textarea
+data-type.date: Date
+data-type.text: Text
+data-type.document: Document
+data-type.asset: Asset
+data-type.object: Object
+data-type.checkbox: Checkbox
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
+properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
+properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
@@ -199,6 +209,8 @@ asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Mandatory fields missing
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
 quality: Quality

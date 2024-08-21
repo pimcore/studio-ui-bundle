@@ -76,21 +76,26 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       size: 40
     }),
     columnHelper.accessor('key', {
-      header: t('asset.asset-editor-tabs.properties.columns.key')
+      header: t('asset.asset-editor-tabs.properties.columns.key'),
+      size: 200
     }),
     columnHelper.accessor('predefinedName', {
-      header: t('asset.asset-editor-tabs.properties.columns.name')
+      header: t('asset.asset-editor-tabs.properties.columns.name'),
+      size: 200
     }),
     columnHelper.accessor('description', {
-      header: t('asset.asset-editor-tabs.properties.columns.description')
+      header: t('asset.asset-editor-tabs.properties.columns.description'),
+      size: 200
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.properties.columns.data'),
       id: 'properties-table--data-column',
       meta: {
         type: 'type-dependent-content',
-        editable: true
-      }
+        editable: propertiesTableTab === 'own',
+        autoWidth: true
+      },
+      size: 300
     }),
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
@@ -103,7 +108,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       },
       size: 70,
       meta: {
-        editable: true
+        editable: propertiesTableTab === 'own'
       }
     }),
     columnHelper.accessor('actions', {
@@ -112,26 +117,28 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         return (
           <div className={ 'properties-table--actions-column' }>
             {
-              info.row.original.type === 'document' &&
-              info.row.original.data !== null &&
+              ['document', 'asset', 'object'].includes(info.row.original.type) &&
+                info.row.original.data !== null &&
               (
                 <Button
                   icon={ <Icon name="group" /> }
                   onClick={ () => {
-                    console.log('open document with ID: ' + info.row.original.data.id)
+                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
                   } }
                   type="link"
                 />
               )
             }
 
-            <Button
-              icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                removeProperty(info.row.original)
-              } }
-              type="link"
-            />
+            {propertiesTableTab === 'own' && (
+              <Button
+                icon={ <Icon name="trash" /> }
+                onClick={ () => {
+                  removeProperty(info.row.original)
+                } }
+                type="link"
+              />
+            )}
           </div>
         )
       }
@@ -178,11 +185,13 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         <>
           { (
             <Grid
+              autoWidth
               columns={ ownTableColumns }
               data={ gridDataOwn }
               isLoading={ isLoading }
               modifiedCells={ getModifiedCells() }
               onUpdateCellData={ onUpdateCellData }
+              resizable
             />
           )}
 
@@ -192,9 +201,11 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
                 {t('asset.asset-editor-tabs.properties.inherited.properties')}
               </p>
               <Grid
+                autoWidth
                 columns={ allTableColumns }
                 data={ gridDataInherited }
                 onUpdateCellData={ onUpdateCellData }
+                resizable
               />
             </>
           )}

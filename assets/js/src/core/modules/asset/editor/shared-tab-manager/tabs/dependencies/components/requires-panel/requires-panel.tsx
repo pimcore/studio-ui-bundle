@@ -48,8 +48,6 @@ export const RequiresPanel = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
-  console.log('----> pags', page)
-
   return (
     <div className={ 'pimcore-dependencies__requires' }>
       <CardHeaderContainer
