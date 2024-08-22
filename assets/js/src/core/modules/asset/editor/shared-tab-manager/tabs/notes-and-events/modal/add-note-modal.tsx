@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { type FormProps, Modal } from 'antd'
+import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { AddNoteForm } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
@@ -26,8 +26,6 @@ export interface AddNoteFormValues {
   title: string
   description: string
 }
-
-export interface AddNoteFormProps extends FormProps {}
 
 export interface AddNoteModalProps {
   open: boolean
