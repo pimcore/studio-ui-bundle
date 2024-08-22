@@ -13,7 +13,6 @@
 
 import { Alert, Modal, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
 import { useForm } from 'antd/es/form/Form'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
@@ -58,7 +57,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       onOk={ () => { form.submit() } }
       open={ props.open }
       title={ (
-        <ModalTitle icon={ <Icon name='export' /> } >Export CSV</ModalTitle>
+        <ModalTitle iconName='export'>{ t('export-csv-form.modal-title') }</ModalTitle>
       ) }
     >
       <Space
@@ -67,7 +66,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
         style={ { paddingTop: 10 } }
       >
         <Alert
-          message="Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export."
+          message={ t('export-csv-form.export-notice') }
           showIcon
           type='warning'
         />

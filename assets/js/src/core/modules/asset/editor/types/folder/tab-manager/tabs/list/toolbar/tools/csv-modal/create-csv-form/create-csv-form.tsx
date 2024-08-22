@@ -13,6 +13,7 @@
 
 import { Input, Select, Form, type FormProps } from 'antd'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface CSVFormValues {
   delimiter: string
@@ -22,30 +23,32 @@ export interface CSVFormValues {
 export interface CreateCSVFormProps extends FormProps {}
 
 export const CreateCSVForm = ({ ...props }: CreateCSVFormProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   return (
     <Form
       layout='vertical'
       { ...props }
     >
       <Form.Item
-        label='Delimiter'
+        label={ t('export-csv-form.form-field.delimiter') }
         name={ 'delimiter' }
-        rules={ [{ required: true, message: '' }] }
+        rules={ [{ required: true, message: t('form.validation.required') }] }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label='Header'
+        label={ t('export-csv-form.form-field.header') }
         name={ 'header' }
-        rules={ [{ required: true }] }
+        rules={ [{ required: true, message: t('form.validation.required') }] }
       >
         <Select
           options={
             [
-              { value: 'name', label: 'System key' },
-              { value: 'title', label: 'Label' },
-              { value: 'no_header', label: 'No header' }
+              { value: 'name', label: t('export-csv-form.form-field.header.option.name') },
+              { value: 'title', label: t('export-csv-form.form-field.header.option.title') },
+              { value: 'no_header', label: t('export-csv-form.form-field.header.option.no-header') }
             ]
           }
         />
