@@ -97,6 +97,7 @@ import settingsOutlined from '@Pimcore/assets/icons/settings-outlined.inline.svg
 import filterOutlined from '@Pimcore/assets/icons/filter-outlined.inline.svg'
 import textInput from '@Pimcore/assets/icons/text-input.inline.svg'
 import calendarDate from '@Pimcore/assets/icons/calendar-date.inline.svg'
+import uploadCloud01 from '@Pimcore/assets/icons/upload-cloud-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -436,6 +437,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'calendar-date',
       component: calendarDate
+    })
+
+    iconLibrary.register({
+      name: 'upload-cloud',
+      component: uploadCloud01
     })
   }
 })
