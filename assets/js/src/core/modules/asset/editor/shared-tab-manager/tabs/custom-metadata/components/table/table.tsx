@@ -59,7 +59,8 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),
       meta: {
         editable: true
-      }
+      },
+      size: 200
     }),
     columnHelper.accessor('language', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
@@ -67,14 +68,16 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       meta: {
         type: 'language-select',
         editable: true
-      }
+      },
+      size: 100
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
       id: 'custom-metadata-table--data-column',
       meta: {
         type: 'type-dependent-content',
-        editable: true
+        editable: true,
+        autoWidth: true
       },
       size: 400
     }),
@@ -126,6 +129,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   return (
     <div className={ styles.table }>
       <Grid
+        autoWidth
         columns={ columns }
         data={ customMetadata! }
         isLoading={ isLoading }

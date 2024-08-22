@@ -11,16 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useEditMode } from '../../../edit-mode/use-edit-mode'
-import { Input, type InputRef } from 'antd'
-import { useStyle } from './text-cell.styles'
+import { useStyle } from './textarea-cell.styles'
+import TextArea, { type TextAreaRef } from 'antd/es/input/TextArea'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
-export const TextCell = (props: DefaultCellProps): React.JSX.Element => {
+export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const { styles } = useStyle()
-  const element = useRef<InputRef>(null)
+  const [textAreaValue, setTextAreaValue] = useState(String(props.getValue() ?? ''))
+  const element = React.createRef<TextAreaRef>()
 
   useEffect(() => {
     if (isInEditMode) {
@@ -29,42 +31,40 @@ export const TextCell = (props: DefaultCellProps): React.JSX.Element => {
   }, [isInEditMode])
 
   function saveValue (): void {
-    fireOnUpdateCellDataEvent(element.current!.input?.value ?? '')
+    fireOnUpdateCellDataEvent(textAreaValue)
     disableEditMode()
-  }
-
-  function onKeyDown (event: React.KeyboardEvent<HTMLInputElement>): void {
-    if (event.key === 'Enter') {
-      saveValue()
-    }
   }
 
   function onBlur (): void {
     saveValue()
   }
 
+  function onChange (e: React.ChangeEvent<HTMLTextAreaElement>): void {
+    setTextAreaValue(e.target.value)
+  }
+
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
       return (
         <>
-          { props.getValue() }
+          { respectLineBreak(String(props.getValue() ?? ''), false) }
         </>
       )
     }
 
     return (
-      <Input
-        defaultValue={ props.getValue() }
+      <TextArea
+        autoSize={ { minRows: 2 } }
         onBlur={ onBlur }
-        onKeyDown={ onKeyDown }
+        onChange={ onChange }
         ref={ element }
-        type="text"
+        value={ textAreaValue }
       />
     )
   }
 
   return (
-    <div className={ [styles['text-cell'], 'default-cell__content'].join(' ') }>
+    <div className={ [styles['textarea-cell'], 'default-cell__content'].join(' ') }>
       { getCellContent() }
     </div>
   )
