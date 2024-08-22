@@ -37,13 +37,13 @@ export const AddNoteForm = ({ ...props }: AddNoteFormProps): React.JSX.Element =
         name="type"
       >
         <Select
-            options={[
-              {value: 'content', label: t('notes-and-events.content')},
-              {value: 'seo', label: t('notes-and-events.seo')},
-              {value: 'warning', label: t('notes-and-events.warning')},
-              {value: 'notice', label: t('notes-and-events.notice')}
-            ]}
-            placeholder={t('select')}
+          options={ [
+            { value: 'content', label: t('notes-and-events.content') },
+            { value: 'seo', label: t('notes-and-events.seo') },
+            { value: 'warning', label: t('notes-and-events.warning') },
+            { value: 'notice', label: t('notes-and-events.notice') }
+          ] }
+          placeholder={ t('select') }
         />
       </Form.Item>
       <Form.Item
