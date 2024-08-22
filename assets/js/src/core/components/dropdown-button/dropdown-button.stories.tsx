@@ -28,6 +28,6 @@ export default config
 
 export const _default = {
   args: {
-    children: 'Dropdown Button',
-  }  
+    children: 'Dropdown Button'
+  }
 }

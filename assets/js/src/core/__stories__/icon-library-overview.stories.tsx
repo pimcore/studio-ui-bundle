@@ -12,9 +12,6 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
-import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
-import { Button } from 'antd'
 import { IconLibraryOverview } from './icon-library-overview'
 
 const config: Meta = {
