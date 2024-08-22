@@ -94,7 +94,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
               return {
                 key: column.key,
                 type: column.type,
-                config: column.config
+                config: [] // @todo add config after schema update
               }
             }),
             settings: {
