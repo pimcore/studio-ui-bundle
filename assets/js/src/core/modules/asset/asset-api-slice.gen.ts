@@ -613,7 +613,7 @@ export type GridColumnRequest = {
     /** Group */
     group?: string | null;
     /** Config */
-    config: object;
+    config: string[];
 };
 export type ElementIcon = {
     /** Icon type */
