@@ -13,7 +13,7 @@
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useMemo, useState } from 'react'
-import { GridToolbarContainer } from '../list/grid-toolbar-container'
+import { GridToolbarContainer } from '../list/toolbar/grid-toolbar-container'
 import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
 import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'

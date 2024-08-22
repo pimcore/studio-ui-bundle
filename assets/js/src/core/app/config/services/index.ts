@@ -23,6 +23,7 @@ import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { AudioTabManager } from '@Pimcore/modules/asset/editor/types/audio/tab-manager/audio-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
+import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
 
 export const serviceIds = {
   // Widget manager
@@ -42,7 +43,10 @@ export const serviceIds = {
   iconLibrary: 'IconLibrary',
 
   // Grid
-  'Grid/TypeRegistry': 'Grid/TypeRegistry'
+  'Grid/TypeRegistry': 'Grid/TypeRegistry',
+
+  // Execution engine
+  'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry'
 }
 
 // Widget manager
@@ -64,3 +68,6 @@ container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 
 // Grid
 container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScope()
+
+// Execution engine
+container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

@@ -13,15 +13,25 @@
 
 import React, { type ReactElement } from 'react'
 import { Flex } from 'antd'
+import { useStyles } from './button-group.styles'
 
 export interface ButtonGroupProps {
   items: ReactElement[]
+  withSeparator?: boolean
 }
 
-export const ButtonGroup = ({ items }: ButtonGroupProps): React.JSX.Element => {
+export const ButtonGroup = ({ items, withSeparator = false }: ButtonGroupProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const classnames = [styles.buttonGroup, 'button-group']
+
+  if (withSeparator) {
+    classnames.push('button-group--with-separator')
+  }
+
   return (
     <Flex
-      className="button-group"
+      align='center'
+      className={ classnames.join(' ') }
       gap={ 'small' }
     >
       {items.map((item, index) => (
