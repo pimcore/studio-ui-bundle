@@ -13,22 +13,10 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ css, token }) => {
+export const useStyle = createStyles(({ token, css }) => {
   return {
-    link: css`
-        display: flex;
-        align-items: center;
-        
-      .ant-tag {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-        cursor: pointer;
-      }
-    `,
-    dropTargetIcon: css`
-      margin-left: auto;
-      margin-right: ${token.marginXS}px;
+    'textarea-cell': css`
+      padding: 4px;
     `
   }
 })

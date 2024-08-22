@@ -20,6 +20,7 @@ import {
   ElementCell
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/element-cell/element-cell'
 import { DateCell } from '@Pimcore/components/grid/columns/types/date/date-cell'
+import { TextareaCell } from '@Pimcore/components/grid/columns/types/textarea/textarea-cell'
 
 export const TypeDependentContent = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type
@@ -31,10 +32,11 @@ export const TypeDependentContent = (props: DefaultCellProps): React.JSX.Element
       case 'bool':
       case 'checkbox':
         return <BooleanCell { ...props } />
-      case 'textarea':
       case 'input':
       case 'text':
         return <TextCell { ...props } />
+      case 'textarea':
+        return <TextareaCell { ...props } />
       case 'document':
       case 'asset':
       case 'object':

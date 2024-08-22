@@ -18,15 +18,24 @@ export const useStyle = createStyles(({ token, css }) => {
     tab: css`
       display: flex;
       height: 100%;
-        
+      overflow: auto hidden;
+
       .pimcore-dependencies__requires,
       .pimcore-dependencies__required-by {
-        flex-grow: 1;
+        flex: 0 0 calc(50% - 1px);
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+
+
+        .pimcore-dependencies__required-by__wrapper,
+        .pimcore-dependencies__requires__wrapper,
+        .pimcore-dependencies__required-by__content,
+        .pimcore-dependencies__requires__content {
+          overflow: hidden auto;
+        }
+
       }
-        
+
       > .ant-divider {
         margin: 0;
         height: 100%
