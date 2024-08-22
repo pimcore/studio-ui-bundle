@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { Button, type FormProps, Modal } from 'antd'
+import { type FormProps, Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { AddNoteForm } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
@@ -64,19 +64,13 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
 
   return (
     <Modal
-      footer={
-        <Button
-          loading={ saveInProgress }
-          onClick={ () => { form.submit() } }
-          type='primary'
-        >
-          { t('save') }
-        </Button>
-      }
+      okButtonProps={ { loading: saveInProgress } }
+      okText={ t('save') }
       onCancel={ () => {
         props.setOpen(false)
         form.resetFields()
       } }
+      onOk={ () => { form.submit() } }
       open={ props.open }
       title={ (
         <ModalTitle iconName='PlusCircleOutlined'>{ t('notes-and-events.new-note') }</ModalTitle>
