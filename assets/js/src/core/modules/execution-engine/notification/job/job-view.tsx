@@ -17,41 +17,92 @@ import { type JobProps } from './job'
 import React from 'react'
 import { Button, Flex } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useStyles } from './job-view.styles'
+import { useTranslation } from 'react-i18next'
+
+interface ButtonAction {
+  label: string
+  handler: () => void
+}
 
 export interface JobViewProps extends JobProps {
-  buttonLabel: string
-  buttonHandler: () => void
+  successButtonActions?: ButtonAction[]
+  failureButtonActions?: ButtonAction[]
   progress: number
 }
 
 export const JobView = (props: JobViewProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const { t } = useTranslation()
+
   return (
     <div>
-      { props.status === JobStatus.RUNNING && (
-        <Progressbar
-          description={ `${props.title} in progress` }
-          percent={ props.progress }
-          progressStatus={ `${props.progress}% completed...` }
-        />
-      ) }
-
-      { props.status === JobStatus.SUCCESS && (
-        <Flex
-          align='center'
-          justify='space-between'
+      <AnimatePresence>
+        <motion.div
+          animate={ { opacity: 1, height: 'auto' } }
+          exit={ { opacity: 0, height: 1 } }
+          initial={ { opacity: 0, height: 1 } }
+          key={ props.status }
         >
-          <Flex
-            align='center'
-            gap={ 4 }
-          >
-            <Icon name='check-circle-filled' /><span>{props.title} finished</span>
-          </Flex>
-          <Button
-            onClick={ props.buttonHandler }
-            type='link'
-          >{props.buttonLabel}</Button>
-        </Flex>
-      ) }
+          { props.status === JobStatus.RUNNING && (
+            <Progressbar
+              description={ t('jobs.job.in-progress', { title: props.title }) }
+              percent={ props.progress }
+              progressStatus={ t('jobs.job.progress', { progress: props.progress }) }
+
+            />
+          ) }
+
+          { props.status === JobStatus.SUCCESS && (
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Flex
+                align='center'
+                gap={ 'small' }
+              >
+                <Icon name='check-circle-filled' /><span>{ t('jobs.job.finished', { title: props.title }) }</span>
+              </Flex>
+              <Flex gap={ 'small' }>
+                { props.successButtonActions?.map((action, index) => (
+                  <Button
+                    className={ styles.buttonStyle }
+                    key={ index }
+                    onClick={ action.handler }
+                    type='link'
+                  >{action.label}</Button>
+                )) }
+              </Flex>
+            </Flex>
+          ) }
+
+          { props.status === JobStatus.FAILED && (
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Flex
+                align='center'
+                gap={ 'small' }
+              >
+                <Icon name='close-circle-filled' /><span>{ t('jobs.job.failed', { title: props.title }) }</span>
+              </Flex>
+              <Flex gap={ 'small' }>
+                { props.failureButtonActions?.map((action, index) => (
+                  <Button
+                    className={ styles.buttonStyle }
+                    key={ index }
+                    onClick={ action.handler }
+                    type='link'
+                  >{action.label}</Button>
+                )) }
+              </Flex>
+            </Flex>
+          ) }
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

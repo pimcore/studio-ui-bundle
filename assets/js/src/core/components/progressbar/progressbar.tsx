@@ -21,15 +21,15 @@ interface IProgressProps extends ProgressProps {
   progressStatus: string
 }
 
-export const Progressbar = (props: IProgressProps): React.JSX.Element => {
+export const Progressbar = ({ progressStatus, description, descriptionAction, ...props }: IProgressProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
     <div className={ styles.progressbar }>
       <div className={ 'progressbar-description' }>
-        <p id={ 'progressbarLabel' }>{props.description}</p>
+        <p id={ 'progressbarLabel' }>{description}</p>
         <div className={ 'progressbar-description__action' }>
-          {props.descriptionAction}
+          {descriptionAction}
         </div>
       </div>
       <Progress
@@ -39,7 +39,7 @@ export const Progressbar = (props: IProgressProps): React.JSX.Element => {
         status='normal'
       />
       <div className={ 'progressbar-status' }>
-        <p>{props.progressStatus}</p>
+        <p>{progressStatus}</p>
       </div>
     </div>
   )

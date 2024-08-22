@@ -11,16 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const topics: Record<string, string> = {
-  'zip-download-ready': 'zip-download-ready',
-  'csv-download-ready': 'csv-download-ready',
-  'handler-progress': 'handler-progress',
-  'job-finished-with-errors': 'job-finished-with-errors',
-  'job-failed': 'job-failed'
-}
+let index = 0
 
-export const defaultTopics: string[] = [
-  topics['handler-progress'],
-  topics['job-finished-with-errors'],
-  topics['job-failed']
-]
+export function getUniqueId (): number {
+  return index++
+};

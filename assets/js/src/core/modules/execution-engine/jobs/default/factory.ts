@@ -12,6 +12,7 @@
 */
 
 import { type AbstractJob, JobStatus } from '../abstact-job'
+import { getUniqueId } from '../factory-helper'
 
 export interface DefaultJob extends AbstractJob {
   type: 'default'
@@ -19,18 +20,18 @@ export interface DefaultJob extends AbstractJob {
 }
 
 export interface DefaultJobFactoryArgs {
-  id: AbstractJob['id']
+  action: AbstractJob['action']
   title: AbstractJob['title']
   topics: AbstractJob['topics']
 }
 
 export const createJob = (job: DefaultJobFactoryArgs): DefaultJob => {
   return {
-    id: job.id,
-    jobId: job.id,
+    id: getUniqueId(),
+    action: job.action,
     type: 'default',
     title: job.title,
-    status: JobStatus.RUNNING,
+    status: JobStatus.QUEUED,
     topics: job.topics,
     config: undefined
   }

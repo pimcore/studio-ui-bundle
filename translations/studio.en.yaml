@@ -150,6 +150,11 @@ asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
+listing.actions: Apply to selection
+listing.actions.zip-download: ZIP Download
+listing.actions.export: Export
+listing.actions.csv-export: CSV Export
+listing.actions.batch-edit: Batch edit
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 button.ok: Ok
@@ -208,3 +213,15 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
+jobs.notification.title: Notifications
+jobs.notification.jobs_one: {{count}} Action
+jobs.notification.jobs_other: {{count}} Actions
+jobs.job.in-progress: {{title}} in progress
+jobs.job.failed: {{title}} failed
+jobs.job.finished: {{title}} finished
+jobs.job.progress: {{progress}}% completed 
+jobs.job.button-retry: Retry
+jobs.job.button-hide: hide
+jobs.job.button-download: download
+jobs.zip-job.title: ZIP of {{title}}
+jobs.csv-job.title: CSV of {{title}}

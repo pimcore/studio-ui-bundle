@@ -15,16 +15,18 @@ import React, { useEffect } from 'react'
 import { useJobs } from '../hooks/useJobs'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { JobList } from './job-list/job-list'
+import { useTranslation } from 'react-i18next'
 
 export const Notification = (): React.JSX.Element => {
   const { jobs } = useJobs()
   const hasJobs = jobs.length > 0
   const [notificationApi] = useNotification()
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (hasJobs) {
       notificationApi.open({
-        message: 'Notification',
+        message: t('jobs.notification.title'),
         description: <JobList />,
         duration: 0,
         closable: false,

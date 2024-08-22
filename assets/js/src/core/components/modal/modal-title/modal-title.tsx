@@ -11,16 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const topics: Record<string, string> = {
-  'zip-download-ready': 'zip-download-ready',
-  'csv-download-ready': 'csv-download-ready',
-  'handler-progress': 'handler-progress',
-  'job-finished-with-errors': 'job-finished-with-errors',
-  'job-failed': 'job-failed'
+import { Flex } from 'antd'
+import React, { type ReactNode } from 'react'
+
+export interface ModalTitleProps {
+  icon?: ReactNode
+  children: ReactNode
 }
 
-export const defaultTopics: string[] = [
-  topics['handler-progress'],
-  topics['job-finished-with-errors'],
-  topics['job-failed']
-]
+export const ModalTitle = (props: ModalTitleProps): React.JSX.Element => {
+  return (
+    <Flex gap={ 'small' }>
+      {props.icon}
+
+      <span>
+        {props.children}
+      </span>
+    </Flex>
+  )
+}

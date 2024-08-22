@@ -19,11 +19,19 @@ interface PimcoreThemeConfig {
 const staticTokens = {
   token: {
     fontFamily: 'Lato, sans-serif'
+  },
+
+  components: {
+    Form: {
+      itemMarginBottom: 12,
+      verticalLabelPadding: 4
+    }
   }
 }
 
 const defaultTheme = {
   token: {
+    ...staticTokens.token,
     colorLink: '#722ed1',
     colorLinkActive: '#531dab',
     colorLinkHover: '#9254de',
@@ -65,10 +73,10 @@ const defaultTheme = {
     colorTextDescription: 'rgba(0, 0, 0, 0.6)',
     colorBgUnselectedTab: 'rgba(215, 199, 236, 0.4)',
     colorBgHoverUnselectedTab: 'rgba(215, 199, 236, 0.6)',
-    colorAccentSecondary: '#08979c',
-    ...staticTokens.token
+    colorAccentSecondary: '#08979c'
   },
   components: {
+    ...staticTokens.components,
     Pagination: {
       colorPrimary: '#531dab'
     },

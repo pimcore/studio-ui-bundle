@@ -12,6 +12,7 @@
 */
 
 import { type AbstractJob, JobStatus } from '../abstact-job'
+import { getUniqueId } from '../factory-helper'
 
 export interface DownloadJob extends AbstractJob {
   type: 'download'
@@ -21,7 +22,7 @@ export interface DownloadJob extends AbstractJob {
 }
 
 export interface DownloadJobFactoryArgs {
-  id: AbstractJob['id']
+  action: AbstractJob['action']
   title: AbstractJob['title']
   topics: AbstractJob['topics']
   downloadUrl: string
@@ -29,11 +30,11 @@ export interface DownloadJobFactoryArgs {
 
 export const createJob = (job: DownloadJobFactoryArgs): DownloadJob => {
   return {
-    id: job.id,
-    jobId: job.id,
+    id: getUniqueId(),
+    action: job.action,
     type: 'download',
     title: job.title,
-    status: JobStatus.RUNNING,
+    status: JobStatus.QUEUED,
     topics: job.topics,
     config: {
       downloadUrl: job.downloadUrl

@@ -11,16 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const topics: Record<string, string> = {
-  'zip-download-ready': 'zip-download-ready',
-  'csv-download-ready': 'csv-download-ready',
-  'handler-progress': 'handler-progress',
-  'job-finished-with-errors': 'job-finished-with-errors',
-  'job-failed': 'job-failed'
-}
+import { createStyles } from 'antd-style'
 
-export const defaultTopics: string[] = [
-  topics['handler-progress'],
-  topics['job-finished-with-errors'],
-  topics['job-failed']
-]
+export const useStyles = createStyles(({ css, token }) => {
+  return {
+    jobList: css`
+      &.ant-collapse>.ant-collapse-item >.ant-collapse-header {
+        padding: ${token.paddingXXS}px 0;
+      }
+
+      &.ant-collapse-ghost >.ant-collapse-item >.ant-collapse-content >.ant-collapse-content-box {
+        padding: ${token.paddingXXS}px 0;
+      }
+    `
+  }
+})

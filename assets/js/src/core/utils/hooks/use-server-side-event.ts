@@ -21,6 +21,7 @@ const ServerSideEventDomain = appConfig.mercureUrl
 export interface UseServerSideEventProps {
   topics: NonEmptyArray<(typeof topics)[string]>
   messageHandler?: (event: MessageEvent) => void
+  openHandler?: () => void
 }
 
 interface UseServerSideEventReturn {
@@ -28,7 +29,7 @@ interface UseServerSideEventReturn {
   close: () => void
 }
 
-export const useServerSideEvent = ({ topics, messageHandler }: UseServerSideEventProps): UseServerSideEventReturn => {
+export const useServerSideEvent = ({ topics, messageHandler, openHandler }: UseServerSideEventProps): UseServerSideEventReturn => {
   let event: EventSource | undefined
 
   if (topics.length === 0) {
@@ -45,6 +46,10 @@ export const useServerSideEvent = ({ topics, messageHandler }: UseServerSideEven
 
     if (messageHandler !== undefined) {
       event.onmessage = messageHandler
+    }
+
+    if (openHandler !== undefined) {
+      event.onopen = openHandler
     }
   }
 

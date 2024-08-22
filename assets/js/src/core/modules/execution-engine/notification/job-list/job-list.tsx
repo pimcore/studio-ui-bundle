@@ -15,28 +15,47 @@ import React from 'react'
 import { useJobs } from '../../hooks/useJobs'
 import { Job } from '../job/job'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Collapse } from 'antd'
+import { useStyles } from './job-list.styles'
+import { useTranslation } from 'react-i18next'
 
 export const JobList = (): React.JSX.Element => {
   const { jobs } = useJobs()
+  const { styles } = useStyles()
+  const { t } = useTranslation()
 
   return (
     <>
-      <div>Actions</div>
-      <AnimatePresence>
-        {jobs.map((job) => (
-          <motion.div
-            animate={ { opacity: 1, height: 'auto' } }
-            exit={ { opacity: 0, height: 1 } }
-            initial={ { opacity: 0, height: 1 } }
-            key={ `${job.id},${job.status}` }
-          >
-            <Job
-              { ...job }
-              key={ job.id }
-            />
-          </motion.div>
-        ))}
-      </AnimatePresence>
+      <Collapse
+        bordered={ false }
+        className={ styles.jobList }
+        defaultActiveKey={ ['1'] }
+        expandIconPosition='right'
+        ghost
+        items={ [
+          {
+            key: '1',
+            label: t('jobs.notification.jobs', { count: jobs.length }),
+            children: (
+              <AnimatePresence>
+                {jobs.map((job) => (
+                  <motion.div
+                    animate={ { opacity: 1, height: 'auto' } }
+                    exit={ { opacity: 0, height: 1 } }
+                    initial={ { opacity: 0, height: 1 } }
+                    key={ `${job.id}` }
+                  >
+                    <Job
+                      { ...job }
+                      key={ job.id }
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )
+          }
+        ] }
+      />
     </>
   )
 }

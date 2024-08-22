@@ -15,6 +15,7 @@ import { type NonEmptyArray } from 'types/non-empty-array'
 import { type topics } from '../topics'
 
 export enum JobStatus {
+  QUEUED = 'queued',
   RUNNING = 'running',
   SUCCESS = 'success',
   FAILED = 'failed',
@@ -22,7 +23,7 @@ export enum JobStatus {
 
 export interface AbstractJob {
   id: number
-  jobId: number
+  action: () => Promise<number>
   type: string
   title: string
   status: JobStatus
