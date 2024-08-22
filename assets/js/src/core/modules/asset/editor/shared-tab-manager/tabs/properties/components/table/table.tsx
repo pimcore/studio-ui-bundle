@@ -113,6 +113,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     }),
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.properties.columns.actions'),
+      size: 70,
       cell: (info) => {
         return (
           <div className={ 'properties-table--actions-column' }>
