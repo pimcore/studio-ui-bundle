@@ -66,16 +66,15 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
         try {
           const formData = new FormData()
           const file = files[i]
-          const fileAsBlob = new Blob([file], { type: file.type })
 
-          formData.append('file', fileAsBlob)
+          formData.append('file', file)
 
           if (formData.has('file')) {
             // @ts-expect-error - marvin will know why
             await dispatch(assetUpload.initiate({ body: formData, parentId: parseInt(node.id) })).unwrap()
           }
 
-          console.log('Archive uploaded successfully')
+          console.log('File uploaded successfully')
         } catch (error) {
           console.error(error)
         }
@@ -84,6 +83,8 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
   }
 
   const uploadArchive = async (event): Promise<void> => {
+    console.log('hello')
+
     const files = event.target.files as File[]
 
     if (files.length > 0 && node?.id !== undefined) {
@@ -91,16 +92,14 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
         try {
           const formData = new FormData()
           const archive = files[i]
-          const archiveAsBlob = new Blob([archive], { type: archive.type })
-
-          formData.append('zipFile', archiveAsBlob)
+          formData.append('zipFile', archive)
 
           if (formData.has('zipFile')) {
             // @ts-expect-error - marvin will know why
             await dispatch(archiveUpload.initiate({ body: formData, parentId: parseInt(node.id) })).unwrap()
           }
 
-          console.log('File uploaded successfully')
+          console.log('Archive uploaded successfully')
         } catch (error) {
           console.error(error)
         }
