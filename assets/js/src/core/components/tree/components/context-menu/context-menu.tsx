@@ -83,8 +83,6 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
   }
 
   const uploadArchive = async (event): Promise<void> => {
-    console.log('hello')
-
     const files = event.target.files as File[]
 
     if (files.length > 0 && node?.id !== undefined) {
