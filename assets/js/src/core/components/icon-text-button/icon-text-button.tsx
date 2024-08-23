@@ -16,11 +16,12 @@ import React from 'react'
 import { Icon } from '../icon/icon'
 import { useStyles } from './icon-text-button.styles'
 
-interface IconTextButtonProps extends ButtonProps {
+export interface IconTextButtonProps extends ButtonProps {
   icon: string
+  iconPlacement?: 'left' | 'right'
 }
 
-export const IconTextButton = ({ icon, children, ...buttonProps }: IconTextButtonProps): React.JSX.Element => {
+export const IconTextButton = ({ icon, children, iconPlacement = 'left', ...buttonProps }: IconTextButtonProps): React.JSX.Element => {
   const { styles } = useStyles()
   const buttonClasses = [styles.button, buttonProps.className].join(' ')
 
@@ -29,11 +30,13 @@ export const IconTextButton = ({ icon, children, ...buttonProps }: IconTextButto
       { ...buttonProps }
       className={ buttonClasses }
     >
-      <Icon name={ icon } />
+      { iconPlacement === 'left' && <Icon name={ icon } /> }
 
       <span>
         { children }
       </span>
+
+      { iconPlacement === 'right' && <Icon name={ icon } /> }
     </Button>
   )
 }

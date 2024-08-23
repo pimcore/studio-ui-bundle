@@ -23,7 +23,6 @@ const config: Meta = {
   component: ButtonGroup,
   parameters: {
     layout: 'fullscreen'
-
   },
   tags: ['autodocs']
 }

@@ -36,7 +36,13 @@ export const store = configureStore({
   reducer: rootReducer,
 
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(pimcoreApi.middleware)
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['execution-engine/jobReceived'],
+        ignoredActionPaths: ['execution-engine', 'meta'],
+        ignoredPaths: ['execution-engine', 'meta']
+      }
+    }).concat(pimcoreApi.middleware)
 })
 
 export const injectSliceWithState = (newSlice: AnySliceLike): CombinedSliceReducer<Record<string, any>, Record<string, any>> => {
