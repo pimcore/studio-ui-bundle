@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Tree, defaultProps } from '@Pimcore/components/tree/tree'
+import { defaultProps, Tree } from '@Pimcore/components/tree/tree'
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
