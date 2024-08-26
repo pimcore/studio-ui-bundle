@@ -11,31 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { LanguageSelection } from './language-selection'
+import type { Meta } from '@storybook/react'
+import React from 'react'
+import { Background } from './background'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/LanguageSelection',
-  component: LanguageSelection,
+  title: 'Components/Visuals/Background',
+  component: Background,
   parameters: {
-    layout: 'fullscreen'
-
+    layout: 'centered'
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
 }
 
 export default config
 
-export const _default = {
-  args: {
-    languages: [
-      'EN',
-      'DE',
-      'FR'
-    ],
-    selectedLanguage: 'EN',
-    onSelectLanguage: (language: string) => {
-      console.log('Selected language:', language)
-    }
-  }
-}
+export const _default = {}

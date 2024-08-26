@@ -16,8 +16,9 @@ import { FocalPoint } from '@Pimcore/components/focal-point/focal-point'
 import React from 'react'
 import { PimcoreImage } from '../pimcore-image/pimcore-image'
 
+// @todo Component needs refactoring because it contains business logic
 const config: Meta = {
-  title: 'Pimcore studio/UI/Focal Point',
+  title: 'Components/__Refactor__/Focal Point',
   component: () => {
     return (
       <FocalPoint>

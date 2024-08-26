@@ -12,13 +12,14 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { Example as ExampleComponent } from './example'
+import { LanguageSelection } from './language-selection'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Example',
-  component: ExampleComponent,
+  title: 'Components/Controls/LanguageSelection',
+  component: LanguageSelection,
   parameters: {
-    layout: 'centered'
+    layout: 'fullscreen'
+
   },
   tags: ['autodocs']
 }
@@ -27,7 +28,14 @@ export default config
 
 export const _default = {
   args: {
-    value: 'Save',
-    prefix: 'Unsaved changes!! '
+    languages: [
+      'EN',
+      'DE',
+      'FR'
+    ],
+    selectedLanguage: 'EN',
+    onSelectLanguage: (language: string) => {
+      console.log('Selected language:', language)
+    }
   }
 }

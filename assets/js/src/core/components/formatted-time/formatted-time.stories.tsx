@@ -11,12 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import type { Meta } from '@storybook/react'
+import { FormattedTime } from './formatted-time'
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    example: css`
-      color: ${token.Example.color};
-    `
+const config: Meta = {
+  title: 'Components/Data Display/Date & Time/FormattedTime',
+  component: FormattedTime,
+  parameters: {
+    layout: 'centered'
+  },
+  tags: ['autodocs']
+}
+
+export default config
+
+export const _default = {
+  args: {
+    timestamp: 1626864000000
   }
-}, { hashPriority: 'low' })
+}

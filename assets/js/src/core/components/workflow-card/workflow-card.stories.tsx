@@ -12,17 +12,14 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
-import { ButtonGroup } from './button-group'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { Button } from 'antd'
+import { WorkflowCard } from './workflow-card'
 
-/* eslint-disable react/jsx-key */
+// @todo check naming and check business logic
 const config: Meta = {
-  title: 'Components/Controls/Buttons/ButtonGroup',
-  component: ButtonGroup,
+  title: 'Components/__refactor__/wokflow-card',
+  component: WorkflowCard,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'centered'
   },
   tags: ['autodocs']
 }
@@ -30,14 +27,5 @@ const config: Meta = {
 export default config
 
 export const _default = {
-  args: {
-    items: [
-      <LanguageSelection
-        languages={ ['EN', 'FR'] }
-        onSelectLanguage={ () => {} }
-        selectedLanguage={ 'EN' }
-      />,
-      <Button type='primary'>Standard Button</Button>
-    ]
-  }
+  args: {}
 }

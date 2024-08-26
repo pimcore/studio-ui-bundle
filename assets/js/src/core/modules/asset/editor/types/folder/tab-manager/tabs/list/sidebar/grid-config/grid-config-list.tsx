@@ -17,7 +17,7 @@ import { StackList, type StackListProps } from '@Pimcore/components/stack-list/s
 import { Empty, Tag } from 'antd'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 

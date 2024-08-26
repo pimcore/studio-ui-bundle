@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { PimcoreVideo as PimcoreVideoComponent } from './pimcore-video'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/PimcoreVideo',
+  title: 'Components/Data Display/Media/PimcoreVideo',
   component: PimcoreVideoComponent,
   parameters: {
     layout: 'centered'

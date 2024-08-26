@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { DropdownButton } from './dropdown-button'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/DropdownButton',
+  title: 'Components/Controls/Dropdowns/DropdownButton',
   component: DropdownButton,
   parameters: {
     layout: 'fullscreen'

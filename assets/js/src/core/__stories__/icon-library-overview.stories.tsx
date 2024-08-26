@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { IconLibraryOverview } from './icon-library-overview'
 
 const config: Meta = {
-  title: 'Pimcore studio/IconLibrary',
+  title: 'Tools/IconLibrary',
   component: IconLibraryOverview,
   parameters: {
     layout: 'fullscreen'

@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { IconButton } from './icon-button'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/IconButton',
+  title: 'Components/Controls/Buttons/IconButton',
   component: IconButton,
   parameters: {
     layout: 'fullscreen'
