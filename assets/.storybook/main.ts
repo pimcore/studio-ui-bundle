@@ -85,7 +85,9 @@ const config: StorybookConfig = {
         },
       },
     };
-  }
+  },
+
+  staticDirs: [{from: __dirname + '/../../doc/img', to: 'img'}],
 };
 
 export default config;
