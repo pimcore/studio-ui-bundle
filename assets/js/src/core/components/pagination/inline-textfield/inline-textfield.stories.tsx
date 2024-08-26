@@ -14,8 +14,9 @@
 import { type Meta } from '@storybook/react'
 import { InlineTextfield as InlineTextfieldComponent } from './inline-textfield'
 
+// @todo check if only applicable to pager
 const config: Meta = {
-  title: 'Pimcore studio/UI/InlineTextfield',
+  title: 'Components/__refactor__/Pagination/InlineTextfield',
   component: InlineTextfieldComponent,
   parameters: {
     layout: 'centered'

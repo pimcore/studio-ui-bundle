@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { LanguageSelection } from './language-selection'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/LanguageSelection',
+  title: 'Components/Controls/LanguageSelection',
   component: LanguageSelection,
   parameters: {
     layout: 'fullscreen'

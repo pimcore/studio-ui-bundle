@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { EditorContainer } from './editor-container'
 
 const config: Meta = {
-  title: 'Pimcore studio/Modules/Asset/Editor',
+  title: 'Modules/Asset/Editor',
   component: EditorContainer,
   parameters: {
     layout: 'centered'

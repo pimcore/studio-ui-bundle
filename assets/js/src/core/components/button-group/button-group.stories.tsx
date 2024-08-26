@@ -14,12 +14,12 @@
 import { type Meta } from '@storybook/react'
 import React from 'react'
 import { ButtonGroup } from './button-group'
-import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { Button } from 'antd'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Pimcore studio/UI/ButtonGroup',
+  title: 'Components/Controls/Buttons/ButtonGroup',
   component: ButtonGroup,
   parameters: {
     layout: 'fullscreen'

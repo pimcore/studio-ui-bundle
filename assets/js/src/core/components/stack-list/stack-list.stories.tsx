@@ -16,12 +16,12 @@ import { StackList } from './stack-list'
 import React from 'react'
 import { Tag } from 'antd'
 import { ButtonGroup } from '../button-group/button-group'
-import { LanguageSelection } from '@Pimcore/language-selection/language-selection'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { IconButton } from '../icon-button/icon-button'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Pimcore studio/UI/StackList',
+  title: 'Components/Data Display/Listings/StackList',
   component: StackList,
   parameters: {
     layout: 'fullscreen'

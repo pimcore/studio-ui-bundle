@@ -14,8 +14,9 @@
 import { type Meta } from '@storybook/react'
 import { SizeChanger as SizeChangerComponent } from './size-changer'
 
+// @todo Check if only applicable to Pagination
 const config: Meta = {
-  title: 'Pimcore studio/UI/SizeChanger',
+  title: 'Components/__refactor__/Pagination/Size Changer',
   component: SizeChangerComponent,
   parameters: {
     layout: 'centered'

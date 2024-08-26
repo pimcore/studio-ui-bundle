@@ -19,7 +19,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { useModal } from '@Pimcore/components/modal/useModal'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Modal',
+  title: 'Components/Feedback/Modal',
   component: (args) => {
     const { renderModal: RenderModal, showModal } = useModal({ type: args.type })
 

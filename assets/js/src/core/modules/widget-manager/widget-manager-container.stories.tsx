@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { WidgetManagerContainer } from './widget-manager-container'
 
 const config: Meta = {
-  title: 'Pimcore studio/Modules/Widget Manager',
+  title: 'Modules/Widget Manager',
   component: WidgetManagerContainer,
   parameters: {
     layout: 'fullscreen',

@@ -17,7 +17,7 @@ import { Button } from 'antd'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Message',
+  title: 'Components/Feedback/Message',
   component: (args) => {
     const messageApi = useMessage()
 

@@ -17,7 +17,7 @@ import { BreadcrumbSkeleton } from '@Pimcore/components/breadcrumb/breadcrumb.sk
 import React from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Breadcrumbs',
+  title: 'Components/Controls/Breadcrumb',
   component: Breadcrumb,
   parameters: {
     layout: 'centered'

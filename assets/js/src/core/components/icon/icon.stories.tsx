@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { Icon } from './icon'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Icon',
+  title: 'Components/General/Icon',
   component: Icon,
   parameters: {
     layout: 'centered'

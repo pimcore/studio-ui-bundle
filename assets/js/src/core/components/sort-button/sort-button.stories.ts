@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { SortButton } from './sort-button'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/SortButton',
+  title: 'Components/Controls/Buttons/SortButton',
   component: SortButton,
   parameters: {
     layout: 'centered'

@@ -18,7 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/DropdownMenu',
+  title: 'Components/Controls/Dropdowns/DropdownMenu',
   component: DropdownMenuComponent,
   parameters: {
     layout: 'centered'

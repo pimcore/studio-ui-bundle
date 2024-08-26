@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { PimcoreImage as PimcoreImageComponent } from './pimcore-image'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/PimcoreImage',
+  title: 'Components/Data Display/Media/PimcoreImage',
   component: PimcoreImageComponent,
   parameters: {
     layout: 'centered'

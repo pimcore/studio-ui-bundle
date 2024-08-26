@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { Example as ExampleComponent } from './example'
+import type { Meta } from '@storybook/react'
+import { Background } from './background'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Example',
-  component: ExampleComponent,
+  title: 'Components/Visuals/Background',
+  component: Background,
   parameters: {
     layout: 'centered'
   },
@@ -25,9 +25,4 @@ const config: Meta = {
 
 export default config
 
-export const _default = {
-  args: {
-    value: 'Save',
-    prefix: 'Unsaved changes!! '
-  }
-}
+export const _default = {}

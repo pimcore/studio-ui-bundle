@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { Pagination as PaginationComponent } from './pagination'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Pagination',
+  title: 'Components/__refactor__/Pagination',
   component: PaginationComponent,
   argTypes: {
     total: {

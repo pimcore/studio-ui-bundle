@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { AppView } from './app-view'
+import type { Meta } from '@storybook/react'
+import { FormattedDate } from './formatted-date'
 
 const config: Meta = {
-  title: 'Pimcore studio/Modules/App/App',
-  component: AppView,
+  title: 'Components/Data Display/Date & Time/FormattedDate',
+  component: FormattedDate,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'centered'
   },
   tags: ['autodocs']
 }
@@ -26,12 +26,7 @@ const config: Meta = {
 export default config
 
 export const _default = {
-  parameters: {
-    docs: {
-      story: {
-        inline: false,
-        height: '600px'
-      }
-    }
+  args: {
+    timestamp: 1626864000000
   }
 }
