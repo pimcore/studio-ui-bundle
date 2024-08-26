@@ -166,7 +166,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       }
     }
 
-    updateProperty(rowData.key as string, updatedProperty)
+    updateProperty(Number(rowIndex), updatedProperty)
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {

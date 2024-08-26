@@ -19,7 +19,7 @@ import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-ma
 
 interface propertyAction {
   assetId: number
-  key?: string
+  rowIndex?: number
   property: DataProperty
 }
 
@@ -99,8 +99,8 @@ export const slice = createSlice({
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).map(property => {
-          if (property.key === action.payload.key) {
+        asset.properties = (asset.properties ?? []).map((property, index) => {
+          if (index === action.payload.rowIndex) {
             asset.modified = true
 
             asset.changes = {
