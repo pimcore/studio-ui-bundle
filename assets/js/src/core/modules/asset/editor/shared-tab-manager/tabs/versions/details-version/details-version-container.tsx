@@ -22,6 +22,9 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import { useTranslation } from 'react-i18next'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
+import { serviceIds } from '@Pimcore/app/config/services'
 
 export interface DetailsVersionsContainerProps {
   versions: Version[]
@@ -64,24 +67,31 @@ export const DetailsVersionContainer = ({
 
         const data: Partial<ImageVersion> = { ...dataRaw }
         delete data.metadata
+        delete data.additionalAttributes
+        const fieldColumn = t('field')
+        const dataColumn = `${t('version.version')} ${vId.count}`
+        const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
 
         for (const key in data) {
           tempVersionData.push({
-            [t('field')]: t(`version.${key}`)
+            [fieldColumn]: {
+              field: t(`version.${key}`)
+            },
+            [dataColumn]: formatVersionData(key, data[key])
           })
         }
 
         for (const meta of metadata) {
-          data[`${meta.name} (${meta.type})`] = meta.data
-          tempVersionData.push({
-            [t('field')]: `${meta.name} (${meta.type})`
-          })
-        }
+          const metadataType = metadataTypeRegistry.getTypeSelectionTypes().get(meta.type)
 
-        let index = 0
-        for (const key in data) {
-          tempVersionData[index++][`${t('version.version')} ${vId.count}`] =
-            formatVersionData(key, data[key])
+          tempVersionData.push({
+            [fieldColumn]: {
+              field: meta.name,
+              language: meta.language,
+              metadataType: meta.type
+            },
+            [dataColumn]: metadataType !== undefined ? metadataType.formatVersionPreview(meta.data) : 'Metadata type not supported'
+          })
         }
 
         if (JSON.stringify(tempVersionData) !== JSON.stringify(versionData)) {
@@ -94,7 +104,7 @@ export const DetailsVersionContainer = ({
   if (versionData.length === 0) {
     return <div>Loading ...</div>
   }
-
+  //  console.log(versionData)
   return (
     <DetailsVersionView
       data={ versionData }

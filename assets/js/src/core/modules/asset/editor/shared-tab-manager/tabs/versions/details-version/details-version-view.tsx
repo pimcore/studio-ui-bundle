@@ -45,7 +45,7 @@ export const DetailsVersionView = ({
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
-    columnHelper.accessor(i18n.t('field'), { size: 162 }),
+    columnHelper.accessor(i18n.t('field'), { size: 162, meta: { type: 'version-preview-field-label' } }),
     columnHelper.accessor(i18n.t('version.version') + ' ' + versionId.count, { size: 180 })
   ]
 
