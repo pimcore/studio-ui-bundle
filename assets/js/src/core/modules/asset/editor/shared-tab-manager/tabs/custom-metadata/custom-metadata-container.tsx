@@ -17,9 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, type InputRef, Select } from 'antd'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  CustomMetadataTable
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
+import { CustomMetadataTable } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
   type CustomMetadata
