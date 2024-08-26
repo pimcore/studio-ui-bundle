@@ -24,10 +24,10 @@ import {
   removePropertyFromAsset,
   resetChanges,
   selectAssetById,
-  setCustomMetadataForAsset,
-  setPropertiesForAsset,
+  setCustomMetadataForAsset, setPropertiesForAsset,
   updateAllCustomMetadataForAsset,
-  updateImageSettingForAsset, updatePropertiesForAsset
+  updateImageSettingForAsset,
+  updatePropertyForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
@@ -46,7 +46,7 @@ interface UseAssetDraftReturnCustomMetadata {
 
 interface UseAssetDraftReturnProperties {
   properties: undefined | ReturnType<typeof selectAssetById>['properties']
-  updateAllProperties: (properties: DataProperty[]) => void
+  updateProperty: (key: string, updatedProperty: DataProperty) => void
   addProperty: (property: DataProperty) => void
   removeProperty: (property: DataProperty) => void
   setProperties: (properties: DataProperty[]) => void
@@ -156,8 +156,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
-  function updateAllProperties (properties): void {
-    dispatch(updatePropertiesForAsset({ assetId: id, properties }))
+  function updateProperty (key, property): void {
+    dispatch(updatePropertyForAsset({ assetId: id, key, property }))
   }
 
   function addProperty (property): void {
@@ -209,7 +209,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isError,
     asset,
     properties,
-    updateAllProperties,
+    updateProperty,
     addProperty,
     removeProperty,
     setProperties,

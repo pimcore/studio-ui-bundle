@@ -35,7 +35,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
-  const { properties, setProperties, updateAllProperties, removeProperty } = useAssetDraft(id!)
+  const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
@@ -155,12 +155,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
     const updatedProperties = [...(properties ?? [])]
     const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
-    const propertyIndex = updatedProperties.findIndex(property => property.key === rowData.key)
-
-    updatedProperties[propertyIndex] = {
-      ...propertyToUpdate,
-      [getRealColumnName(columnId as string)]: value
-    }
+    const updatedProperty = { ...propertyToUpdate, [getRealColumnName(columnId as string)]: value }
 
     function getRealColumnName (columnId: string): string {
       switch (columnId) {
@@ -171,7 +166,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       }
     }
 
-    updateAllProperties(updatedProperties)
+    updateProperty(rowData.key as string, updatedProperty)
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
@@ -183,6 +178,11 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
           modifiedCells.push({
             rowIndex: propertyIndex,
             columnId: 'properties-table--data-column'
+          })
+        } else if (property.key !== item.key && property.data === item.data) {
+          modifiedCells.push({
+            rowIndex: propertyIndex,
+            columnId: 'key'
           })
         }
       })
