@@ -27,8 +27,7 @@ import {
   setCustomMetadataForAsset,
   setPropertiesForAsset,
   updateAllCustomMetadataForAsset,
-  updateImageSettingForAsset,
-  updatePropertyForAsset
+  updateImageSettingForAsset, updatePropertiesForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
@@ -47,7 +46,7 @@ interface UseAssetDraftReturnCustomMetadata {
 
 interface UseAssetDraftReturnProperties {
   properties: undefined | ReturnType<typeof selectAssetById>['properties']
-  updateProperty: (property: DataProperty) => void
+  updateAllProperties: (properties: DataProperty[]) => void
   addProperty: (property: DataProperty) => void
   removeProperty: (property: DataProperty) => void
   setProperties: (properties: DataProperty[]) => void
@@ -157,8 +156,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
-  function updateProperty (property): void {
-    dispatch(updatePropertyForAsset({ assetId: id, property }))
+  function updateAllProperties (properties): void {
+    dispatch(updatePropertiesForAsset({ assetId: id, properties }))
   }
 
   function addProperty (property): void {
@@ -210,7 +209,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isError,
     asset,
     properties,
-    updateProperty,
+    updateAllProperties,
     addProperty,
     removeProperty,
     setProperties,

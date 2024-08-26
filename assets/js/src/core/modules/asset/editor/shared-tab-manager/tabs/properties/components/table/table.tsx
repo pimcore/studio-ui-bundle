@@ -11,9 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  type DataProperty
-} from '@Pimcore/modules/asset/properties-api-slice.gen'
+import { type DataProperty } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -37,7 +35,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
-  const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
+  const { properties, setProperties, updateAllProperties, removeProperty } = useAssetDraft(id!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
@@ -77,6 +75,9 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     }),
     columnHelper.accessor('key', {
       header: t('asset.asset-editor-tabs.properties.columns.key'),
+      meta: {
+        editable: true
+      },
       size: 200
     }),
     columnHelper.accessor('predefinedName', {
@@ -117,27 +118,27 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
         return (
           <div className={ 'properties-table--actions-column' }>
             {
-              ['document', 'asset', 'object'].includes(info.row.original.type) &&
-                info.row.original.data !== null &&
-              (
-                <Button
-                  icon={ <Icon name="group" /> }
-                  onClick={ () => {
-                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
-                  } }
-                  type="link"
-                />
-              )
-            }
+                            ['document', 'asset', 'object'].includes(info.row.original.type) &&
+                            info.row.original.data !== null &&
+                            (
+                            <Button
+                              icon={ <Icon name="group" /> }
+                              onClick={ () => {
+                                console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
+                              } }
+                              type="link"
+                            />
+                            )
+                        }
 
             {propertiesTableTab === 'own' && (
-              <Button
-                icon={ <Icon name="trash" /> }
-                onClick={ () => {
-                  removeProperty(info.row.original)
-                } }
-                type="link"
-              />
+            <Button
+              icon={ <Icon name="trash" /> }
+              onClick={ () => {
+                removeProperty(info.row.original)
+              } }
+              type="link"
+            />
             )}
           </div>
         )
@@ -152,14 +153,25 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   ]
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
-    if (columnId === 'properties-table--data-column') {
-      const updatedProperties = [...(properties ?? [])]
-      const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
+    const updatedProperties = [...(properties ?? [])]
+    const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
+    const propertyIndex = updatedProperties.findIndex(property => property.key === rowData.key)
 
-      propertyToUpdate.data = value
-
-      updateProperty(propertyToUpdate)
+    updatedProperties[propertyIndex] = {
+      ...propertyToUpdate,
+      [getRealColumnName(columnId as string)]: value
     }
+
+    function getRealColumnName (columnId: string): string {
+      switch (columnId) {
+        case 'properties-table--data-column':
+          return 'data'
+        default:
+          return columnId
+      }
+    }
+
+    updateAllProperties(updatedProperties)
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
@@ -183,7 +195,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     <div className={ styles.table }>
       {(
         <>
-          { (
+          {(
             <Grid
               autoWidth
               columns={ ownTableColumns }
@@ -193,7 +205,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
               onUpdateCellData={ onUpdateCellData }
               resizable
             />
-          )}
+                    )}
 
           {propertiesTableTab === 'all' && (
             <>
@@ -210,7 +222,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
             </>
           )}
         </>
-      )}
+            )}
     </div>
   )
 }

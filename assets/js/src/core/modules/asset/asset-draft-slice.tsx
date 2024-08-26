@@ -84,34 +84,28 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    updatePropertyForAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).map(property => {
-          if (property.key === action.payload.property.key) {
-            asset.modified = true
-
-            asset.changes = {
-              ...asset.changes,
-              properties: true
-            }
-
-            return action.payload.property
-          }
-
-          return property
-        })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
     setPropertiesForAsset: (state, action: PayloadAction<{ assetId: number, properties: DataProperty[] }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
         asset.properties = action.payload.properties
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    updatePropertiesForAsset: (state, action: PayloadAction<{ assetId: number, properties: DataProperty[] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.properties = action.payload.properties
+      }
+
+      asset.modified = true
+
+      asset.changes = {
+        ...asset.changes,
+        properties: true
       }
 
       state.entities[action.payload.assetId] = asset
@@ -311,7 +305,7 @@ export const {
   addPropertyToAsset,
   removePropertyFromAsset,
   setPropertiesForAsset,
-  updatePropertyForAsset,
+  updatePropertiesForAsset,
   updateAllCustomMetadataForAsset,
   addChanges,
   addCustomMetadataToAsset,
