@@ -15,8 +15,9 @@ import { type Meta } from '@storybook/react'
 import { NoteAndEventCard as NoteAndEventCardComponent } from './note-and-event-card'
 import i18n from '@Pimcore/app/i18n'
 
+// @todo: check for more generic naming
 const config: Meta = {
-  title: 'Pimcore studio/UI/NoteAndEventCard',
+  title: 'Components/__Refactor__/NoteAndEventCard',
   component: NoteAndEventCardComponent,
   parameters: {
     layout: 'centered'

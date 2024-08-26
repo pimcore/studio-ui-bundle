@@ -19,6 +19,7 @@ import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/transl
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
+import { useMercureCreateCookieMutation } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -29,9 +30,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [translations] = useTranslationGetCollectionMutation()
   const { i18n } = useTranslation()
   const [isLoading, setIsLoading] = useState(true)
+  const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
   async function initLoadUser (): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
+    await fetchMercureCookie()
 
     userFetcher
       .then(({ data, isSuccess }) => {

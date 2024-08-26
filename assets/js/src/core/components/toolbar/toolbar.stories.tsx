@@ -18,7 +18,7 @@ import { Button } from 'antd'
 import React from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Toolbar',
+  title: 'Components/Controls/Toolbar',
   component: ToolbarComponent,
   parameters: {
     layout: 'centered'

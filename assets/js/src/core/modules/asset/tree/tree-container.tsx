@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Tree, defaultProps } from '@Pimcore/components/tree/tree'
+import { defaultProps, Tree } from '@Pimcore/components/tree/tree'
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { PagerContainer } from './pager/pager-container'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { api } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { store } from '@Pimcore/app/store'
 import { SearchContainer } from './search/search-container'
@@ -27,7 +27,7 @@ export interface TreeContainerProps {
 }
 
 const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
-  const { openAsset } = useAsset()
+  const { openAsset } = useAssetHelper()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
     await store.dispatch(api.endpoints.assetGetById.initiate({ id: parseInt(node.id) }))

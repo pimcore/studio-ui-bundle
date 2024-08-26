@@ -17,7 +17,7 @@ import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-tool
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Element Toolbar',
+  title: 'Components/__Refactor__/Element Toolbar',
   component: ElementToolbar,
   parameters: {
     layout: 'centered'

@@ -18,7 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Sidebar',
+  title: 'Components/Layout/Sidebar',
   component: (args) => {
     return (
       <div style={ { display: 'flex', height: '50vh' } }>

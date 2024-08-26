@@ -18,7 +18,7 @@ import React from 'react'
 import { ActionList } from '@Pimcore/components/notification/content/action-list/action-list'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Notification',
+  title: 'Components/Feedback/Notification',
   component: (args) => {
     const [notificationApi] = useNotification()
     const notificationType = typeof args.status === 'string' && args.status !== 'normal'

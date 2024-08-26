@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Grid", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -85,7 +85,7 @@ const injectedRtkApi = api
                 AssetGetAvailableGridConfigurationApiArg
             >({
                 query: () => ({ url: `/studio/api/assets/grid/available-configuration` }),
-                providesTags: ["Grid"],
+                providesTags: ["Asset Grid"],
             }),
             assetGetGridConfigurationByFolderId: build.query<
                 AssetGetGridConfigurationByFolderIdApiResponse,
@@ -95,7 +95,7 @@ const injectedRtkApi = api
                     url: `/studio/api/assets/grid/configuration/${queryArg.folderId}`,
                     params: { configurationId: queryArg.configurationId },
                 }),
-                providesTags: ["Grid"],
+                providesTags: ["Asset Grid"],
             }),
             assetSaveGridConfiguration: build.mutation<
                 AssetSaveGridConfigurationApiResponse,
@@ -106,11 +106,11 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Grid"],
+                invalidatesTags: ["Asset Grid"],
             }),
             assetGetGrid: build.mutation<AssetGetGridApiResponse, AssetGetGridApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/grid`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Grid"],
+                invalidatesTags: ["Asset Grid"],
             }),
             assetImageDownloadCustom: build.query<AssetImageDownloadCustomApiResponse, AssetImageDownloadCustomApiArg>({
                 query: (queryArg) => ({

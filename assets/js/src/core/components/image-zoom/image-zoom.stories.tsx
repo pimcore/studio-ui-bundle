@@ -16,7 +16,7 @@ import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 import React, { useState } from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Image Zoom',
+  title: 'Components/Others/Image Zoom',
   component: () => {
     const [zoom, setZoom] = useState<number>(100)
 

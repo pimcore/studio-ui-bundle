@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { Title } from './title'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Title',
+  title: 'Components/General/Title',
   component: Title,
   tags: ['autodocs']
 }
