@@ -12,7 +12,6 @@
 */
 
 import type { Meta } from '@storybook/react'
-import React from 'react'
 import { Background } from './background'
 
 const config: Meta = {
@@ -21,7 +20,7 @@ const config: Meta = {
   parameters: {
     layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 }
 
 export default config
