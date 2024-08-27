@@ -51,9 +51,9 @@ export const DetailsVersionsContainer = ({
           const dataRaw = response.data as ImageVersion
           versions.push(hydrateVersionData(dataRaw, 'image', versionIds[versionIndex].id, versionIds[versionIndex].count))
         })
-        console.log(versions, responses)
+
         const versionData = versionsDataToTableData(versions, true)
-        //  console.log(versionData)
+
         setVersionData(versionData)
       })
       .catch(err => { console.log(err) })
