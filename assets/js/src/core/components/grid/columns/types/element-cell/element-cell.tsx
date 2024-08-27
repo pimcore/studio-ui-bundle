@@ -43,14 +43,12 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <>
-      <Droppable
-        className='default-cell__content'
-        isValidContext={ isValidContext }
-        onDrop={ onDrop }
-      >
-        <ElementCellContent { ...props } />
-      </Droppable>
-    </>
+    <Droppable
+      className='default-cell__content'
+      isValidContext={ isValidContext }
+      onDrop={ onDrop }
+    >
+      <ElementCellContent { ...props } />
+    </Droppable>
   )
 }
