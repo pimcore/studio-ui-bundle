@@ -15,7 +15,7 @@ import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { HighlightedEntries as sidebarArgs } from '@Pimcore/components/sidebar/sidebar.stories'
-import { Toolbar, ToolbarProps } from '@Pimcore/components/toolbar/toolbar'
+import { Toolbar, type ToolbarProps } from '@Pimcore/components/toolbar/toolbar'
 import { Secondary } from '@Pimcore/components/toolbar/toolbar.stories'
 import { type Meta } from '@storybook/react'
 import React from 'react'
@@ -26,9 +26,9 @@ const config: Meta = {
   component: ContentToolbarSidebarLayout,
   parameters: {
     layout: 'fullscreen',
-    
+
     docs: {
-      iframeHeight: 400 
+      iframeHeight: 400
     }
   },
   tags: ['autodocs']

@@ -14,7 +14,7 @@
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { StoryObj, type Meta } from '@storybook/react'
+import { type StoryObj, type Meta } from '@storybook/react'
 import { Button } from 'antd'
 import React from 'react'
 
@@ -32,20 +32,33 @@ export default config
 const demoData = {
   children: (
     <>
-      <ButtonGroup items={[
-        <IconButton key={'icon-button-01'} icon="trash" type='link' />,
-        <IconButton key={'icon-button-02'} icon="refresh" type='link' />
-      ]} />
+      <ButtonGroup items={ [
+        <IconButton
+          icon="trash"
+          key={ 'icon-button-01' }
+          type='link'
+        />,
+        <IconButton
+          icon="refresh"
+          key={ 'icon-button-02' }
+          type='link'
+        />
+      ] }
+      />
 
-      <ButtonGroup items={[
-        <Button key={'action-01'}>clear</Button>,
-        <Button key={'action-02'} type='primary'>Save</Button>
-      ]} />
+      <ButtonGroup items={ [
+        <Button key={ 'action-01' }>clear</Button>,
+        <Button
+          key={ 'action-02' }
+          type='primary'
+        >Save</Button>
+      ] }
+      />
     </>
   )
 }
 
-type Story = StoryObj<typeof Toolbar>;
+type Story = StoryObj<typeof Toolbar>
 
 export const _default: Story = {
   args: {

@@ -66,7 +66,7 @@ const demoData = {
 export const _default = {
   args: {
     ...demoData,
-    
+
     buttons: [
       {
         key: 'focal-point',
@@ -84,6 +84,6 @@ export const HighlightedEntries = {
   args: {
     ...demoData,
 
-    highlights: ['details'],
+    highlights: ['details']
   }
 }
