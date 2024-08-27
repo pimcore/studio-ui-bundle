@@ -22,6 +22,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
+import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verifyCellUpdate'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -157,34 +158,12 @@ export const Table = ({
   const allTableColumns = [
     ...baseColumns
   ]
-  function verifyUpdate (value: any, properties: DataProperty[], columnId: any, primaryColumn: string): boolean {
-    const isStringValue = typeof value === 'string'
-    const isStringColumnId = typeof columnId === 'string'
-
-    if (!isStringValue || !isStringColumnId) {
-      return true
-    }
-
-    const isKeyColumn = columnId === primaryColumn
-
-    if (isKeyColumn) {
-      if (value.length < 1) {
-        showMandatoryModal()
-        return false
-      }
-
-      const hasDuplicateKey = properties.some(prop => prop.key === value)
-      if (hasDuplicateKey) {
-        showDuplicatePropertyModal()
-        return false
-      }
-    }
-
-    return true
-  }
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+    console.log('----> here')
+
     const updatedProperties = [...(properties ?? [])]
+    const propertyPrimaryKeys = updatedProperties.map(prop => prop.key)
     const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
     const updatedProperty = { ...propertyToUpdate, [getRealColumnName(columnId as string)]: value }
 
@@ -197,7 +176,9 @@ export const Table = ({
       }
     }
 
-    verifyUpdate(value, updatedProperties, columnId, 'key') && updateProperty(Number(rowIndex), updatedProperty)
+    console.log("----> verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal)", verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal))
+
+    verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal) && updateProperty(propertyToUpdate.key, updatedProperty)
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {

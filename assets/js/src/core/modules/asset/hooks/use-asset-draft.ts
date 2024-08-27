@@ -46,7 +46,7 @@ interface UseAssetDraftReturnCustomMetadata {
 
 interface UseAssetDraftReturnProperties {
   properties: undefined | ReturnType<typeof selectAssetById>['properties']
-  updateProperty: (rowIndex: number, updatedProperty: DataProperty) => void
+  updateProperty: (key: string, updatedProperty: DataProperty) => void
   addProperty: (property: DataProperty) => void
   removeProperty: (property: DataProperty) => void
   setProperties: (properties: DataProperty[]) => void
@@ -156,8 +156,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
-  function updateProperty (rowIndex, property): void {
-    dispatch(updatePropertyForAsset({ assetId: id, rowIndex, property }))
+  function updateProperty (key, property): void {
+    dispatch(updatePropertyForAsset({ assetId: id, key, property }))
   }
 
   function addProperty (property): void {

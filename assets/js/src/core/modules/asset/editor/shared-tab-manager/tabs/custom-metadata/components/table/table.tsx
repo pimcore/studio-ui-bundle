@@ -21,12 +21,18 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verifyCellUpdate'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
 }
 
-export const CustomMetadataTable = (): React.JSX.Element => {
+interface CustomMetadataTableProps {
+  showDuplicateEntryModal: () => void
+  showMandatoryModal: () => void
+}
+
+export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModal }: CustomMetadataTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
@@ -99,6 +105,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
     const updatedCustomMetadata = [...(customMetadata ?? [])]
+    const updatedCustomMetadataPrimaryKeys = updatedCustomMetadata.map(cm => cm.name)
     const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
     const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
 
@@ -107,7 +114,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       [getRealColumnName(columnId as string)]: value
     }
 
-    updateAllCustomMetadata(updatedCustomMetadata)
+    verifyUpdate(value, updatedCustomMetadataPrimaryKeys, columnId, 'name', showMandatoryModal, showDuplicateEntryModal) && updateAllCustomMetadata(updatedCustomMetadata)
 
     function getRealColumnName (columnId: string): string {
       switch (columnId) {

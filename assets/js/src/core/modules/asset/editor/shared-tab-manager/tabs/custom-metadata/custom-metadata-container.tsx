@@ -21,7 +21,9 @@ import {
   CustomMetadataTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import {
+  type CustomMetadata
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
@@ -34,7 +36,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id!)
-  const { showModal: showDuplicateEntryModal, closeModal: closeDuplicateEntryModal, renderModal: DuplicateEntryModal } = useModal({
+  const {
+    showModal: showDuplicateEntryModal,
+    closeModal: closeDuplicateEntryModal,
+    renderModal: DuplicateEntryModal
+  } = useModal({
     type: 'error'
   })
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -101,7 +107,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     <div className={ styles.tab }>
       <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
         <p className={ 'pimcore-custom-metadata-toolbar__headline' }>
-          { t('asset.asset-editor-tabs.custom-metadata.text') }
+          {t('asset.asset-editor-tabs.custom-metadata.text')}
         </p>
 
         <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
@@ -163,11 +169,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   <Button
                     onClick={ closeDuplicateEntryModal }
                     type='primary'
-                  >{ t('button.ok') }</Button>
+                  >{t('button.ok')}</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title') }
               >
-                { t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error') }
+                {t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error')}
               </DuplicateEntryModal>
 
               <MandatoryModal
@@ -175,11 +181,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   <Button
                     onClick={ closeMandatoryModal }
                     type='primary'
-                  >{ t('button.ok') }</Button>
+                  >{t('button.ok')}</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title') }
               >
-                { t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error') }
+                {t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error')}
               </MandatoryModal>
             </>
           )}
@@ -187,7 +193,9 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
           {!editmode && (
             <>
               <Button
-                onClick={ () => { console.log('clicked') } }
+                onClick={ () => {
+                  console.log('clicked')
+                } }
               >
                 {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
               </Button>
@@ -207,7 +215,10 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       </div>
 
       <div className={ styles.content }>
-        <CustomMetadataTable />
+        <CustomMetadataTable
+          showDuplicateEntryModal={ showDuplicateEntryModal }
+          showMandatoryModal={ showMandatoryModal }
+        />
       </div>
     </div>
   )
