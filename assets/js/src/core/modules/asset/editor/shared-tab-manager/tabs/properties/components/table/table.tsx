@@ -25,13 +25,19 @@ import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/mod
 
 interface ITableProps {
   propertiesTableTab: string
+  showDuplicatePropertyModal: () => void
+  showMandatoryModal: () => void
 }
 
 type DataPropertyWithActions = DataProperty & {
   actions: React.ReactNode
 }
 
-export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element => {
+export const Table = ({
+  propertiesTableTab,
+  showDuplicatePropertyModal,
+  showMandatoryModal
+}: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
@@ -151,6 +157,31 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   const allTableColumns = [
     ...baseColumns
   ]
+  function verifyUpdate (value: any, properties: DataProperty[], columnId: any, primaryColumn: string): boolean {
+    const isStringValue = typeof value === 'string'
+    const isStringColumnId = typeof columnId === 'string'
+
+    if (!isStringValue || !isStringColumnId) {
+      return true
+    }
+
+    const isKeyColumn = columnId === primaryColumn
+
+    if (isKeyColumn) {
+      if (value.length < 1) {
+        showMandatoryModal()
+        return false
+      }
+
+      const hasDuplicateKey = properties.some(prop => prop.key === value)
+      if (hasDuplicateKey) {
+        showDuplicatePropertyModal()
+        return false
+      }
+    }
+
+    return true
+  }
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
     const updatedProperties = [...(properties ?? [])]
@@ -166,7 +197,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       }
     }
 
-    updateProperty(Number(rowIndex), updatedProperty)
+    verifyUpdate(value, updatedProperties, columnId, 'key') && updateProperty(Number(rowIndex), updatedProperty)
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
