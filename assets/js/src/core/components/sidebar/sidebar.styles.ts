@@ -86,7 +86,6 @@ export const useStyle = createStyles(({ token, css }) => {
       
       .sidebar__content {
         position: relative;
-        padding: ${token.paddingXS}px ${token.paddingSM}px 0 ${token.paddingSM}px;
         overflow: auto;
         width: 250px;
 
@@ -94,7 +93,9 @@ export const useStyle = createStyles(({ token, css }) => {
           display: none;
           
           &.active {
-              display: block;
+              display: flex;
+              width: 100%;
+              height: 100%;
           }
         }
         

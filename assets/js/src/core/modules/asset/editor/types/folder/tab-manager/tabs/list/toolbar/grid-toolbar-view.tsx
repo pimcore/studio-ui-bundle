@@ -12,7 +12,7 @@
 */
 
 import React, { type ReactNode } from 'react'
-import { useStyles } from './grid-toolbar-view.styles'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 
 export interface GridToolbarViewProps {
   renderPagination?: ReactNode
@@ -20,10 +20,8 @@ export interface GridToolbarViewProps {
 }
 
 const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
-  const { styles } = useStyles()
-
   return (
-    <div className={ styles.GridToolbar }>
+    <Toolbar theme='secondary'>
       {props.renderTools !== undefined && (
         <>{props.renderTools}</>
       )}
@@ -35,7 +33,7 @@ const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
       {props.renderPagination !== undefined && (
         <>{props.renderPagination}</>
       )}
-    </div>
+    </Toolbar>
   )
 }
 

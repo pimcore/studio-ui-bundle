@@ -19,7 +19,6 @@ const config: Meta = {
   component: IconButton,
   parameters: {
     layout: 'fullscreen'
-
   },
   tags: ['autodocs']
 }

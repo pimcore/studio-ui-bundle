@@ -12,7 +12,6 @@
 */
 
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { Toolbar } from '@Pimcore/components/sidebar/toolbar/toolbar'
 import { Title } from '@Pimcore/components/title/title'
 import { Button, Checkbox, Form, Space } from 'antd'
 import Search from 'antd/es/input/Search'
@@ -20,64 +19,71 @@ import React from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
 import { useListFilterOptions } from '../../hooks/use-list'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { ContentContainer } from '@Pimcore/components/content-container/content-container'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
 
   return (
-    <>
-      <Title>Search & Filter</Title>
-
-      <Form>
-        <Space
-          direction='vertical'
-          style={ { width: '100%' } }
-        >
-          <Search
-            placeholder='Search'
-            value={ '' }
-          />
-
-          <Checkbox
-            checked={ false }
-            value={ 'direct-children' }
+    <ContentToolbarSidebarLayout
+      renderToolbar={
+        <Toolbar theme='secondary'>
+          <IconTextButton
+            icon='close'
+            onClick={ onResetAllFiltersClick }
+            type='link'
           >
-            only direct children
-          </Checkbox>
+            Clear all filters
+          </IconTextButton>
 
-          <Checkbox
-            checked={ false }
-            value={ 'referenced' }
+          <Button
+            onClick={ onApplyClick }
+            type='primary'
           >
-            only unreferenced
-          </Checkbox>
-        </Space>
-      </Form>
+            Apply
+          </Button>
+        </Toolbar>
+       }
+    >
+      <ContentContainer padded>
+        <Title>Search & Filter</Title>
 
-      <Title>
-        Field filters
-      </Title>
+        <Form>
+          <Space
+            direction='vertical'
+            style={ { width: '100%' } }
+          >
+            <Search
+              placeholder='Search'
+              value={ '' }
+            />
 
-      <FieldFiltersContainer />
+            <Checkbox
+              checked={ false }
+              value={ 'direct-children' }
+            >
+              only direct children
+            </Checkbox>
 
-      <Toolbar>
-        <IconTextButton
-          icon='close'
-          onClick={ onResetAllFiltersClick }
-          type='link'
-        >
-          Clear all filters
-        </IconTextButton>
+            <Checkbox
+              checked={ false }
+              value={ 'referenced' }
+            >
+              only unreferenced
+            </Checkbox>
+          </Space>
+        </Form>
 
-        <Button
-          onClick={ onApplyClick }
-          type='primary'
-        >
-          Apply
-        </Button>
-      </Toolbar>
-    </>
+        <Title>
+          Field filters
+        </Title>
+
+        <FieldFiltersContainer />
+      </ContentContainer>
+    </ContentToolbarSidebarLayout>
   )
 
   function onApplyClick (): void {
