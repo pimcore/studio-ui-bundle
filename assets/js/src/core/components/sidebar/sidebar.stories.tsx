@@ -45,23 +45,28 @@ const config: Meta = {
 
 export default config
 
+const demoData = {
+  entries: [
+    {
+      key: 'details',
+      icon: <Icon
+        name={ 'view-details' }
+        options={ { width: '16px', height: '16px' } }
+            />,
+      component: <AssetEditorSidebarDetailsView
+        height={ 185 }
+        onClickCustomDownload={ () => {} }
+        onClickDownloadByFormat={ (format) => { console.log(format) } }
+        width={ 357 }
+                 />
+    }
+  ]
+}
+
 export const _default = {
   args: {
-    entries: [
-      {
-        key: 'details',
-        icon: <Icon
-          name={ 'view-details' }
-          options={ { width: '16px', height: '16px' } }
-              />,
-        component: <AssetEditorSidebarDetailsView
-          height={ 185 }
-          onClickCustomDownload={ () => {} }
-          onClickDownloadByFormat={ (format) => { console.log(format) } }
-          width={ 357 }
-                   />
-      }
-    ],
+    ...demoData,
+    
     buttons: [
       {
         key: 'focal-point',
@@ -77,33 +82,8 @@ export const _default = {
 
 export const HighlightedEntries = {
   args: {
-    entries: [
-      {
-        key: 'details',
-        icon: <Icon
-          name={ 'view-details' }
-          options={ { width: '16px', height: '16px' } }
-              />,
-        component: <AssetEditorSidebarDetailsView
-          height={ 185 }
-          onClickCustomDownload={ () => {} }
-          onClickDownloadByFormat={ (format) => { console.log(format) } }
-          width={ 357 }
-                   />
-      }
-    ],
+    ...demoData,
 
     highlights: ['details'],
-
-    buttons: [
-      {
-        key: 'focal-point',
-        icon: <Icon
-          name={ 'focal-point' }
-          options={ { width: '16px', height: '16px' } }
-              />,
-        onClick: () => { console.log('focal-point button clicked') }
-      }
-    ]
   }
 }

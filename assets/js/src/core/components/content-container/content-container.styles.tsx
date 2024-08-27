@@ -15,18 +15,16 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    toolbar: css`
+    'content-container': css`
       display: flex;
-      justify-content: space-between;
-      border-top: 1px solid ${token.colorBorder};
-      gap: 8px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 48px;
-      background-color: ${token.colorBgBase};
-      padding: ${token.paddingXS}px;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      &.content-container--padded {
+        padding: ${token.paddingSM}px;
+      }
     `
   }
 })
