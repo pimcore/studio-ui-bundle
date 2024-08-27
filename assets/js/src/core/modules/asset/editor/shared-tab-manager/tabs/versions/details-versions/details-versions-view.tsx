@@ -17,26 +17,28 @@ import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
-import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import {
   type PreviewFieldLabelCellValue
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/table/cells/preview-field-label-cell/preview-field-label-cell'
+import { type AssetVersionData } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import { Flex, Space } from 'antd'
 
 interface DetailsVersionsViewProps {
-  versionIds: VersionIdentifiers[]
-  data: any[]
+  versions: AssetVersionData[]
+  gridData: any[]
 }
 
 export const DetailsVersionsView = ({
-  versionIds,
-  data
+  versions,
+  gridData
 }: DetailsVersionsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const columnHelper = createColumnHelper<any>()
   const versionColumns: any[] = []
-  versionIds.forEach((vId: VersionIdentifiers) => {
-    versionColumns.push(columnHelper.accessor(i18n.t('version.version') + ' ' + vId.count, {
+  versions.forEach((version) => {
+    versionColumns.push(columnHelper.accessor(i18n.t('version.version') + ' ' + version.versionCount, {
       cell: info => {
         const cellsInRow = info.row.getAllCells()
         if (cellsInRow.length === 3 && info.cell.id === cellsInRow[2].id) {
@@ -60,11 +62,46 @@ export const DetailsVersionsView = ({
 
   return (
     <div className={ styles['right-side'] }>
-      <Grid
-        columns={ columns }
-        data={ data }
-        resizable
-      />
+
+      <Space
+        direction="vertical"
+        style={ { maxWidth: versions.length > 1 ? 1200 : 600 } }
+      >
+        <Flex
+          align="center"
+          gap="small"
+          justify="center"
+          style={ { minHeight: 100 } }
+        >
+          {versions.map((version, index) => {
+            return (
+              <div key={ index }>
+                { version.previewImageUrl !== null
+                  ? (
+                    <PimcoreImage
+                      src={ version.previewImageUrl }
+                      style={ { maxHeight: 500, maxWidth: 500 } }
+                    />
+                    )
+                  : 'No preview available' }
+
+              </div>
+            )
+          })}
+        </Flex>
+
+        <Flex
+          align="center"
+        >
+          <Grid
+            autoWidth
+            columns={ columns }
+            data={ gridData }
+          />
+        </Flex>
+
+      </Space>
+
     </div>
   )
 }

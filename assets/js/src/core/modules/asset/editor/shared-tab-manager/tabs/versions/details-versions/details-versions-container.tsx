@@ -34,7 +34,8 @@ export interface DetailsVersionsContainerProps {
 export const DetailsVersionsContainer = ({
   versionIds
 }: DetailsVersionsContainerProps): React.JSX.Element => {
-  const [versionData, setVersionData] = useState([] as object[])
+  const [gridData, setGridData] = useState([] as object[])
+  const [versions, setVersions] = useState<AssetVersionData[]>([])
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
@@ -52,21 +53,20 @@ export const DetailsVersionsContainer = ({
           versions.push(hydrateVersionData(dataRaw, 'image', versionIds[versionIndex].id, versionIds[versionIndex].count))
         })
 
-        const versionData = versionsDataToTableData(versions, true)
-
-        setVersionData(versionData)
+        setVersions(versions)
+        setGridData(versionsDataToTableData(versions))
       })
       .catch(err => { console.log(err) })
   }, [versionIds])
 
-  if (versionData.length === 0) {
+  if (gridData.length === 0) {
     return <div>Loading ...</div>
   }
 
   return (
     <DetailsVersionsView
-      data={ versionData }
-      versionIds={ versionIds }
+      gridData={ gridData }
+      versions={ versions }
     />
   )
 }

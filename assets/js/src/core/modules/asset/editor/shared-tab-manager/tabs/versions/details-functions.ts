@@ -20,12 +20,10 @@ import {
 import { container } from '@Pimcore/app/depency-injection'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
-import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import i18n from 'i18next'
 import {
   type PreviewFieldLabelCellValue
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/table/cells/preview-field-label-cell/preview-field-label-cell'
-import { createElement } from 'react'
 
 export interface AssetVersionData {
   versionCount: number
@@ -100,16 +98,11 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
   return map
 }
 
-export const versionsDataToTableData = (data: AssetVersionData[], addPreviewRow: boolean = false): object[] => {
+export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
   const t = i18n.t
   const tableBaseData: object[] = []
   const tableMetaData: object[] = []
   const fieldColumn = t('field')
-  const previewRow: object = {
-    [fieldColumn]: {
-      key: 'version-preview'
-    }
-  }
 
   data.forEach((versionData, index) => {
     const dataColumn = `${t('version.version')} ${versionData.versionCount}`
@@ -148,12 +141,6 @@ export const versionsDataToTableData = (data: AssetVersionData[], addPreviewRow:
         })
       }
     })
-
-    previewRow[dataColumn] = versionData.previewImageUrl !== null
-      ? createElement(PimcoreImage, {
-        src: versionData.previewImageUrl
-      })
-      : ''
   })
 
   tableMetaData.sort((a: [], b: []) => {
@@ -169,9 +156,5 @@ export const versionsDataToTableData = (data: AssetVersionData[], addPreviewRow:
     return 0
   })
 
-  const tableData = [...tableBaseData, ...tableMetaData]
-  if (addPreviewRow) {
-    return [...tableData, previewRow]
-  }
-  return tableData
+  return [...tableBaseData, ...tableMetaData]
 }

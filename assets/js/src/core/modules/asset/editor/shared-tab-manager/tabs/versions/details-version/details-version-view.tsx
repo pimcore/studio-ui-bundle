@@ -17,7 +17,7 @@ import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import { Button } from 'antd'
+import { Button, Flex, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 
@@ -41,7 +41,6 @@ export const DetailsVersionView = ({
   onClickNext
 }: DetailsVersionViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
@@ -51,34 +50,47 @@ export const DetailsVersionView = ({
 
   return (
     <div className={ styles['right-side'] }>
-      <div className={ 'image-slider' }>
-        <Button
-          disabled={ firstVersion }
-          icon={ <Icon name={ 'left-outlined' } /> }
-          onClick={ onClickPrevious }
-          type={ 'text' }
-        />
-        {imgSrc !== null
-          ? (
-            <PimcoreImage
-              className={ 'image-slider__image' }
-              src={ imgSrc }
-            />
-            )
-          : null}
+      <Space
+        align="center"
+        direction="vertical"
+        style={ { maxWidth: 600 } }
+      >
+        <Flex
+          align="center"
+          gap="small"
+          justify="center"
+          style={ { minHeight: 100 } }
+        >
+          <Button
+            disabled={ firstVersion }
+            icon={ <Icon name={ 'left-outlined' } /> }
+            onClick={ onClickPrevious }
+            type={ 'text' }
+          />
+          {imgSrc !== null
+            ? (
+              <PimcoreImage
+                className={ 'image-slider__image' }
+                src={ imgSrc }
+                style={ { maxHeight: 500, maxWidth: 500 } }
+              />
+              )
+            : null}
 
-        <Button
-          disabled={ lastVersion }
-          icon={ <Icon name={ 'right-outlined' } /> }
-          onClick={ onClickNext }
-          type={ 'text' }
-        />
+          <Button
+            disabled={ lastVersion }
+            icon={ <Icon name={ 'right-outlined' } /> }
+            onClick={ onClickNext }
+            type={ 'text' }
+          />
 
-      </div>
-      <Grid
-        columns={ columns }
-        data={ data }
-      />
+        </Flex>
+        <Grid
+          autoWidth
+          columns={ columns }
+          data={ data }
+        />
+      </Space>
     </div>
   )
 }
