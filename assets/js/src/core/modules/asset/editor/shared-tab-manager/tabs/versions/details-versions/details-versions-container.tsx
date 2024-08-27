@@ -13,18 +13,19 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api, type ImageVersion
+  api,
+  type ImageVersion
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import {
   DetailsVersionsView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-view'
-import { store } from '@Pimcore/app/store'
-import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import {
-  formatVersionData
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
-import { useTranslation } from 'react-i18next'
+import {
+  type AssetVersionData,
+  hydrateVersionData,
+  versionsDataToTableData
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+import { store } from '@Pimcore/app/store'
 
 export interface DetailsVersionsContainerProps {
   versionIds: VersionIdentifiers[]
@@ -33,86 +34,30 @@ export interface DetailsVersionsContainerProps {
 export const DetailsVersionsContainer = ({
   versionIds
 }: DetailsVersionsContainerProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const [versionData, setVersionData] = useState([] as object[])
-  const [imageUrls, setImageUrls] = useState({})
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
+
     versionIds.forEach(async vId => {
       const id = vId.id
       versionPromises.push(store.dispatch(api.endpoints.versionGetById.initiate({ id })))
-
-      if (!Object.keys(imageUrls).includes(id.toString())) {
-        fetch(`http://localhost/studio/api/versions/${id}/image/stream`)
-          .then(async (response) => await response.blob())
-          .then((imageBlob) => {
-            const imageURL = URL.createObjectURL(imageBlob)
-            setImageUrls({ [id]: imageURL, ...imageUrls })
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-      }
     })
 
     Promise.all(versionPromises)
       .then((responses): void => {
-        const tempVersionData: any[] = []
-        const dataRaw = responses[0].data as ImageVersion
-        const metadata = dataRaw.metadata
-
-        const data: Partial<ImageVersion> = { ...dataRaw }
-        delete data.metadata
-
-        for (const key in data) {
-          tempVersionData.push({
-            [t('field')]: t(`version.${key}`)
-          })
-        }
-
-        for (const meta of metadata) {
-          data[`${meta.name} (${meta.type})`] = meta.data
-          tempVersionData.push({
-            [t('field')]: `${meta.name} (${meta.type})`
-          })
-        }
-
-        tempVersionData.push({
-          [t('field')]: t('version.image')
-        })
-
-        responses.forEach((response, versionIndex): void => {
+        const versions: AssetVersionData[] = []
+        responses.forEach((response, versionIndex) => {
           const dataRaw = response.data as ImageVersion
-          const metadata = dataRaw.metadata
-
-          const data: Partial<ImageVersion> = { ...dataRaw }
-          delete data.metadata
-          let index = 0
-          for (const key in data) {
-            tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] =
-              formatVersionData(key, data[key])
-          }
-
-          for (const meta of metadata) {
-            tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] =
-              meta.data
-          }
-
-          tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] = (
-            <PimcoreImage
-              key={ 'image' }
-              src={ imageUrls[versionIds[versionIndex].id] ?? '' }
-            />
-          )
+          versions.push(hydrateVersionData(dataRaw, 'image', versionIds[versionIndex].id, versionIds[versionIndex].count))
         })
-
-        if (JSON.stringify(tempVersionData) !== JSON.stringify(versionData)) {
-          setVersionData(tempVersionData)
-        }
+        console.log(versions, responses)
+        const versionData = versionsDataToTableData(versions, true)
+        //  console.log(versionData)
+        setVersionData(versionData)
       })
       .catch(err => { console.log(err) })
-  }, [versionIds, imageUrls])
+  }, [versionIds])
 
   if (versionData.length === 0) {
     return <div>Loading ...</div>

@@ -16,14 +16,19 @@ import React from 'react'
 import { Typography } from 'antd'
 const { Text } = Typography
 
-interface CellValue {
+export interface PreviewFieldLabelCellValue {
+  key: string
   field: string
   language: string | null | undefined
   metadataType: string | null | undefined
 }
 
 export const PreviewFieldLabelCell = (props: DefaultCellProps): React.JSX.Element => {
-  const value = props.getValue() as CellValue
+  const value = props.getValue() as PreviewFieldLabelCellValue
+
+  if (value === undefined) {
+    return <div></div>
+  }
 
   return (
     <div className="default-cell__content">

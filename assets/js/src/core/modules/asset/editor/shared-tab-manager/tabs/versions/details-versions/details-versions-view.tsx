@@ -18,6 +18,9 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import {
+  type PreviewFieldLabelCellValue
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/table/cells/preview-field-label-cell/preview-field-label-cell'
 
 interface DetailsVersionsViewProps {
   versionIds: VersionIdentifiers[]
@@ -38,8 +41,10 @@ export const DetailsVersionsView = ({
         const cellsInRow = info.row.getAllCells()
         if (cellsInRow.length === 3 && info.cell.id === cellsInRow[2].id) {
           const cellValue = info.cell.getValue()
-          if (!(cellValue instanceof Object && cellValue.key === 'image') &&
-            cellValue !== cellsInRow[1].getValue()) {
+          const labelCellValue = cellsInRow[0].getValue()
+
+          if (!(typeof labelCellValue === 'object' && (labelCellValue as PreviewFieldLabelCellValue).key === 'version-preview') &&
+            JSON.stringify(cellValue) !== JSON.stringify(cellsInRow[1].getValue())) {
             return <span className={ 'highlight-cell' }><DefaultCell { ...info } /></span>
           }
         }
@@ -49,7 +54,7 @@ export const DetailsVersionsView = ({
   })
 
   const columns = [
-    columnHelper.accessor(i18n.t('field'), {}),
+    columnHelper.accessor(i18n.t('field'), { meta: { type: 'version-preview-field-label' } }),
     ...versionColumns
   ]
 

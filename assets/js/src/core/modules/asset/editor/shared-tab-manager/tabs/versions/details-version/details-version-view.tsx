@@ -24,7 +24,7 @@ import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-ta
 interface DetailsVersionViewProps {
   versionId: VersionIdentifiers
   data: any[]
-  imgSrc: string
+  imgSrc: string | null
   firstVersion: boolean
   lastVersion: boolean
   onClickPrevious: () => void
@@ -58,10 +58,15 @@ export const DetailsVersionView = ({
           onClick={ onClickPrevious }
           type={ 'text' }
         />
-        <PimcoreImage
-          className={ 'image-slider__image' }
-          src={ imgSrc }
-        />
+        {imgSrc !== null
+          ? (
+            <PimcoreImage
+              className={ 'image-slider__image' }
+              src={ imgSrc }
+            />
+            )
+          : null}
+
         <Button
           disabled={ lastVersion }
           icon={ <Icon name={ 'right-outlined' } /> }

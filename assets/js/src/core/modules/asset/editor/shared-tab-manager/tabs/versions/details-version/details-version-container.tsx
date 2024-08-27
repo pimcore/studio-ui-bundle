@@ -11,20 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
-  api, type ImageVersion, type Version
+  api,
+  type ImageVersion,
+  type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { store } from '@Pimcore/app/store'
-import { formatVersionData } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+import {
+  hydrateVersionData, versionsDataToTableData
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
 import {
   DetailsVersionView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
-import { useTranslation } from 'react-i18next'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
 
 export interface DetailsVersionsContainerProps {
   versions: Version[]
@@ -35,71 +35,26 @@ export const DetailsVersionContainer = ({
   versions,
   versionId
 }: DetailsVersionsContainerProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
-  const [imageUrls, setImageUrls] = useState({})
+  const [versionPreviewImageUrl, setVersionPreviewImageUrl] = useState<string | null>(null)
 
-  useEffect(() => {
+  useMemo(() => {
     setVId(versionId)
   }, [versionId])
 
-  useEffect(() => {
+  useMemo(() => {
     const versionPromise = store.dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
-
-    if (!Object.keys(imageUrls).includes(vId.id.toString())) {
-      fetch(`http://localhost/studio/api/versions/${vId.id}/image/stream`)
-        .then(async (response) => await response.blob())
-        .then((imageBlob) => {
-          const imageURL = URL.createObjectURL(imageBlob)
-          setImageUrls({ [vId.id]: imageURL, ...imageUrls })
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    }
 
     Promise.resolve(versionPromise)
       .then((responses): void => {
-        const tempVersionData: any[] = []
         const dataRaw = responses.data as ImageVersion
-        const metadata = dataRaw.metadata
-
-        const data: Partial<ImageVersion> = { ...dataRaw }
-        delete data.metadata
-        delete data.additionalAttributes
-        const fieldColumn = t('field')
-        const dataColumn = `${t('version.version')} ${vId.count}`
-        const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
-
-        for (const key in data) {
-          tempVersionData.push({
-            [fieldColumn]: {
-              field: t(`version.${key}`)
-            },
-            [dataColumn]: formatVersionData(key, data[key])
-          })
-        }
-
-        for (const meta of metadata) {
-          const metadataType = metadataTypeRegistry.getTypeSelectionTypes().get(meta.type)
-
-          tempVersionData.push({
-            [fieldColumn]: {
-              field: meta.name,
-              language: meta.language,
-              metadataType: meta.type
-            },
-            [dataColumn]: metadataType !== undefined ? metadataType.formatVersionPreview(meta.data) : 'Metadata type not supported'
-          })
-        }
-
-        if (JSON.stringify(tempVersionData) !== JSON.stringify(versionData)) {
-          setVersionData(tempVersionData)
-        }
+        const tempVersionData = hydrateVersionData(dataRaw, 'image', vId.id, vId.count)
+        setVersionData(versionsDataToTableData([tempVersionData]))
+        setVersionPreviewImageUrl(tempVersionData.previewImageUrl)
       })
       .catch(err => { console.log(err) })
-  }, [imageUrls, vId])
+  }, [vId])
 
   if (versionData.length === 0) {
     return <div>Loading ...</div>
@@ -109,7 +64,7 @@ export const DetailsVersionContainer = ({
     <DetailsVersionView
       data={ versionData }
       firstVersion={ versions[0].id === vId.id }
-      imgSrc={ imageUrls[vId.id] }
+      imgSrc={ versionPreviewImageUrl }
       lastVersion={ versions[versions.length - 1].id === vId.id }
       onClickNext={ onClickNext }
       onClickPrevious={ onClickPrevious }
