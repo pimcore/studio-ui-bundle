@@ -20,6 +20,7 @@ import { useForm } from 'antd/es/form/Form'
 import {
   useNoteElementCreateMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+import {ElementType} from "types/element-type.d";
 
 export interface AddNoteFormValues {
   type: string
@@ -30,7 +31,7 @@ export interface AddNoteFormValues {
 export interface AddNoteModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-  elementType: 'asset' | 'document' | 'data-object'
+  elementType: ElementType
   elementId: number
 }
 

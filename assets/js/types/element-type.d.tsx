@@ -1,0 +1,1 @@
+export type ElementType = 'asset' | 'document' | 'data-object'

@@ -28,12 +28,13 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   AddNoteModal
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
+import {ElementType} from "types/element-type.d";
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
   pagination: React.JSX.Element
   onClickTrash: (id: number) => void
-  elementType: 'asset' | 'document' | 'data-object'
+  elementType: ElementType
   elementId: number
 }
 export const NotesAndEventsTabView = ({
