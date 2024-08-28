@@ -28,10 +28,10 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import {
   ContentHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+} from '@Pimcore/components/content-containers/content-header-container'
 import {
   ContentPaddingContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
+} from '@Pimcore/components/content-containers/content-padding-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]

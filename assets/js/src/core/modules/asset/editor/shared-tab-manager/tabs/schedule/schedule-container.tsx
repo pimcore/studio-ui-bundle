@@ -28,8 +28,8 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
 import {
   ContentHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()

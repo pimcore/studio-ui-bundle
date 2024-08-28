@@ -14,7 +14,7 @@
 import React from 'react'
 import {
   ContentHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+} from '@Pimcore/components/content-containers/content-header-container'
 
 export const EditTabContainer = (): React.JSX.Element => {
   return (

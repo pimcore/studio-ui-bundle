@@ -14,22 +14,18 @@
 import React from 'react'
 import {
   useStyles
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container.styles'
+} from '@Pimcore/components/content-containers/content-padding-container.styles'
 
-export interface ContentHeaderContainerProps {
-  icon?: React.JSX.Element
-  text: string
-  children?: React.ReactNode
+export interface ContentPaddingContainerProps {
+  children: React.ReactNode
 }
 
-export const ContentHeaderContainer = (props: ContentHeaderContainerProps): React.JSX.Element => {
+export const ContentPaddingContainer = (props: ContentPaddingContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { icon, text, children } = props
+  const { children } = props
 
   return (
-    <div className={ styles['content-header-container'] }>
-      {icon}
-      <span className={ 'header-text' }>{text}</span>
+    <div className={ styles['content-padding-container'] }>
       {children}
     </div>
   )

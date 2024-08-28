@@ -25,8 +25,8 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import {
   ContentHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()

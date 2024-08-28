@@ -25,8 +25,8 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
 import {
   ContentHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const RequiresPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
