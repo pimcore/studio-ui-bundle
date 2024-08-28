@@ -22,7 +22,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
-import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verifyCellUpdate'
+import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 
 interface ITableProps {
   propertiesTableTab: string

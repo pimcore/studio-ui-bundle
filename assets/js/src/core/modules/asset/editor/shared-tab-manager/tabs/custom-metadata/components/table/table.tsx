@@ -21,7 +21,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verifyCellUpdate'
+import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
