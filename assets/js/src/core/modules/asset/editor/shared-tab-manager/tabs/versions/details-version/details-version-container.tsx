@@ -47,7 +47,7 @@ export const DetailsVersionContainer = ({
     Promise.resolve(versionPromise)
       .then((responses): void => {
         const dataRaw = responses.data as AssetVersion
-        const tempVersionData = hydrateVersionData(dataRaw, 'image', vId.id, vId.count)
+        const tempVersionData = hydrateVersionData(dataRaw, vId.id, vId.count)
         setVersionData(versionsDataToTableData([tempVersionData]))
         setVersionPreviewImageUrl(tempVersionData.previewImageUrl)
       })

@@ -49,7 +49,7 @@ export const DetailsVersionsContainer = ({
         const versions: AssetVersionData[] = []
         responses.forEach((response, versionIndex) => {
           const dataRaw = response.data as AssetVersion
-          versions.push(hydrateVersionData(dataRaw, 'image', versionIds[versionIndex].id, versionIds[versionIndex].count))
+          versions.push(hydrateVersionData(dataRaw, versionIds[versionIndex].id, versionIds[versionIndex].count))
         })
 
         setVersions(versions)

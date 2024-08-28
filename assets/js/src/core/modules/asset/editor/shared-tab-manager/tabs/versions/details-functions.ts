@@ -56,7 +56,7 @@ export interface AssetVersionMetadata {
   raw: CustomMetadataVersion
 }
 
-export const hydrateVersionData = (dataRaw: AssetVersion, type: string, versionId: number, versionCount: number): AssetVersionData => {
+export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, versionCount: number): AssetVersionData => {
   return {
     versionCount,
     baseDataFormatted: {
@@ -68,7 +68,7 @@ export const hydrateVersionData = (dataRaw: AssetVersion, type: string, versionI
       dimensions: dataRaw.dimensions !== null && dataRaw.dimensions !== undefined ? dataRaw.dimensions.width + ' x ' + dataRaw.dimensions.height : ''
     },
     metadata: formatMetadata(dataRaw.metadata),
-    previewImageUrl: type === 'image' ? '/studio/api/versions/' + versionId + '/image/stream' : null,
+    previewImageUrl: isImageVersion(dataRaw) ? '/studio/api/versions/' + versionId + '/image/stream' : null,
     dataRaw
   }
 }
@@ -98,6 +98,10 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
   return map
 }
 
+const isImageVersion = (version: AssetVersion): boolean => {
+  return version.type === 'image'
+}
+
 export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
   const t = i18n.t
   const tableBaseData: object[] = []
@@ -108,6 +112,9 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
     const dataColumn = `${t('version.version')} ${versionData.versionCount}`
 
     Object.keys(versionData.baseDataFormatted).forEach((key) => {
+      if (key === 'dimensions' && isImageVersion(versionData.dataRaw)) {
+        return
+      }
       const row = tableBaseData.find((row: any) => row[fieldColumn].key === key)
       if (row !== undefined) {
         row[dataColumn] = versionData.baseDataFormatted[key]
