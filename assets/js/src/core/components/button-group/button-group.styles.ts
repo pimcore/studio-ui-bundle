@@ -23,7 +23,7 @@ export const useStyles = createStyles(({ css, token }) => {
           &::after {
             content: '';
             position: absolute;
-            right: -3px;
+            right: -4px;
             top: 50%;
             transform: translateY(-50%);
             width: 1px;

@@ -35,16 +35,22 @@ export const _default = {
   args: {
     items: [
       <Button >clear</Button>,
-      <Button type='primary'>save</Button>,
+      <Button type='primary'>save</Button>
     ]
   }
 }
 
-export const combinedButtons = {
+export const CombinedButtons = {
   args: {
     items: [
-      <IconTextButton type="default" icon="trash">Delete</IconTextButton>,
-      <IconButton type="default" icon="edit" />,
+      <IconTextButton
+        icon="trash"
+        type="default"
+      >Delete</IconTextButton>,
+      <IconButton
+        icon="edit"
+        type="default"
+      />,
       <Button>save</Button>,
       <Button>cancel</Button>
     ],
@@ -52,11 +58,17 @@ export const combinedButtons = {
   }
 }
 
-export const combinedButtons02 = {
+export const CombinedButtons02 = {
   args: {
     items: [
-      <IconButton type="primary" icon="trash">clear</IconButton>,
-      <IconButton type="dashed" icon="edit">clear</IconButton>,
+      <IconButton
+        icon="trash"
+        type="primary"
+      >clear</IconButton>,
+      <IconButton
+        icon="edit"
+        type="dashed"
+      >clear</IconButton>,
       <Button type='primary'>save</Button>,
       <Button>cancel</Button>
     ],
@@ -64,7 +76,40 @@ export const combinedButtons02 = {
   }
 }
 
-export const IconTextButtonGroup = {
+export const ButtonsWithSeparator = {
+  args: {
+    items: [
+      <IconButton icon="trash">clear</IconButton>,
+      <IconButton icon="edit">clear</IconButton>,
+      <Button type='link'>save</Button>,
+      <Button type='link'>cancel</Button>
+    ],
+    withSeparator: true
+  }
+}
+
+export const ButtonGroupNesting = {
+  args: {
+    items: [
+      <ButtonGroup
+        items={ [
+          <Button>clear</Button>,
+          <Button>save</Button>
+        ] }
+        noSpacing
+      />,
+      <ButtonGroup
+        items={ [
+          <Button type='link'>cancel</Button>,
+          <Button type='link'>close</Button>
+        ] }
+        withSeparator
+      />
+    ]
+  }
+}
+
+export const IconAndButtonGroup = {
   args: {
     items: [
       <IconButton icon='trash' />,
@@ -77,16 +122,7 @@ export const IconButtonExample = {
   args: {
     items: [
       <IconButton icon='trash' />,
-      <IconTextButton icon='edit' >edit</IconTextButton>
-    ]
-  }
-}
-
-export const IconTextButtonExample = {
-  args: {
-    items: [
-      <IconButton icon='trash' />,
-      <Button>delete</Button>
+      <IconButton icon='edit' />
     ]
   }
 }

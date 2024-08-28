@@ -32,21 +32,21 @@ export const _default = {
   }
 }
 
-export const secondary = {
+export const Secondary = {
   args: {
     ..._default.args,
     theme: 'secondary'
   }
 }
 
-export const primary = {
+export const Primary = {
   args: {
     ..._default.args,
     type: 'primary'
   }
 }
 
-export const outlined = {
+export const Outlined = {
   args: {
     ..._default.args,
     type: 'default'

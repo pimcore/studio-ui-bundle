@@ -13,8 +13,6 @@
 
 import { type Meta } from '@storybook/react'
 import { DropdownMenu as DropdownMenuComponent, type DropdownMenuItemProps } from './dropdown-menu'
-import { Button } from '@Pimcore/components/button/button'
-import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { IconButton } from '../icon-button/icon-button'
 
@@ -33,8 +31,8 @@ const children: React.JSX.Element =
   (
     <IconButton
       icon='dots-horizontal'
-      type='dashed'
       size="small"
+      type='dashed'
     />
   )
 

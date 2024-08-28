@@ -33,21 +33,21 @@ export const _default = {
   }
 }
 
-export const primary = {
+export const Primary = {
   args: {
     ..._default.args,
     type: 'primary'
   }
 }
 
-export const link = {
+export const Link = {
   args: {
     ..._default.args,
     type: 'link'
   }
 }
 
-export const text = {
+export const Text = {
   args: {
     ..._default.args,
     type: 'text'

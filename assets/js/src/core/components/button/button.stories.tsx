@@ -14,14 +14,13 @@
 import type { Meta } from '@storybook/react'
 import { Button } from './button'
 
-
 const config: Meta = {
   title: 'Components/Controls/Buttons/Button',
   component: Button,
   parameters: {
     layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 }
 
 export default config
@@ -33,21 +32,21 @@ export const _default = {
   }
 }
 
-export const primary = {
+export const Primary = {
   args: {
     ..._default.args,
     type: 'primary'
   }
 }
 
-export const text = {
+export const Text = {
   args: {
     ..._default.args,
     type: 'text'
   }
 }
 
-export const link = {
+export const Link = {
   args: {
     ..._default.args,
     type: 'link'

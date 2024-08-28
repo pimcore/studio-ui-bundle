@@ -19,7 +19,6 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: 6px;
       height: auto;
       line-height: 0;
-      box-shadow: none;
 
       &.icon-button--theme-secondary {
         color: ${token.colorText};
