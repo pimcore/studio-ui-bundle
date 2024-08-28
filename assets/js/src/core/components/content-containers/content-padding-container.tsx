@@ -15,7 +15,7 @@ import React from 'react'
 import {
   useStyles
 } from '@Pimcore/components/content-containers/content-padding-container.styles'
-
+import { Flex } from 'antd'
 export interface ContentPaddingContainerProps {
   children: React.ReactNode
 }
@@ -25,8 +25,11 @@ export const ContentPaddingContainer = (props: ContentPaddingContainerProps): Re
   const { children } = props
 
   return (
-    <div className={ styles['content-padding-container'] }>
+    <Flex
+      className={ styles['content-padding-container'] }
+      vertical
+    >
       {children}
-    </div>
+    </Flex>
   )
 }
