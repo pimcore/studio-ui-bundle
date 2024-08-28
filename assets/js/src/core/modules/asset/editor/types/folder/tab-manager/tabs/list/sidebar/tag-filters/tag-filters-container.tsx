@@ -14,9 +14,11 @@
 import React, { useState } from 'react'
 // import { TagsTreeContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import { Title } from '@Pimcore/components/title/title'
-import { Toolbar } from '@Pimcore/components/sidebar/toolbar/toolbar'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { ContentContainer } from '@Pimcore/components/content-container/content-container'
 
 interface TagFiltersContainerProps {
   onSelectedTagsChange?: (tags: React.Key[]) => void
@@ -27,8 +29,29 @@ export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContaine
   console.log({ selectedTags, _onSelectedTagsChange })
 
   return (
-    <>
-      <Title>Tag Filters</Title>
+    <ContentToolbarSidebarLayout
+      renderToolbar={
+        <Toolbar theme='secondary'>
+          <IconTextButton
+            icon='close'
+            onClick={ clearAllFilters }
+            type='link'
+          >
+            Clear all filters
+          </IconTextButton>
+
+          <Button
+            onClick={ () => { _onSelectedTagsChange(selectedTags) } }
+            type='primary'
+          >
+            Apply
+          </Button>
+        </Toolbar>
+      }
+    >
+      <ContentContainer padded>
+        <Title>Tag Filters</Title>
+      </ContentContainer>
 
       {/*
 
@@ -38,21 +61,7 @@ export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContaine
       />
 
       */}
-
-      <Toolbar>
-        <IconTextButton
-          icon='close'
-          onClick={ clearAllFilters }
-          type='link'
-        >
-          Clear all filters
-        </IconTextButton>
-
-        <Button type="primary">
-          Apply
-        </Button>
-      </Toolbar>
-    </>
+    </ContentToolbarSidebarLayout>
   )
 
   function clearAllFilters (): void {

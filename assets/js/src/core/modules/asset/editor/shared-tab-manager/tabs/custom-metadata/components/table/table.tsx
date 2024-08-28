@@ -15,12 +15,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -86,8 +85,8 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       cell: (info) => {
         return (
           <div className={ 'custom-metadata-table--actions-column' }>
-            <Button
-              icon={ <Icon name="trash" /> }
+            <IconButton
+              icon={ 'trash' }
               onClick={ () => {
                 removeCustomMetadata(info.row.original)
               } }

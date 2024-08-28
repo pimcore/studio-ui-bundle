@@ -13,17 +13,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
-    GridToolbar: css`
+    'content-container': css`
       display: flex;
-      justify-content: space-between;
-      background-color: ${token.colorWhite};
-      padding-right: ${token.paddingSM}px;
-      padding-left: ${token.paddingXS}px;
-      height: ${token.sizeXXL}px;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      &.content-container--padded {
+        padding: ${token.paddingSM}px;
+      }
     `
   }
-}, { hashPriority: 'low' })
+})

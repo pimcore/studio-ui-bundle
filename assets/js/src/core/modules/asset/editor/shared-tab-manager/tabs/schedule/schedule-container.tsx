@@ -15,17 +15,18 @@ import React, { useEffect, useState } from 'react'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Button, Result, Segmented, Switch } from 'antd'
+import { Result, Segmented, Switch } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import {
   type Schedule,
   useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import { DeleteOutlined } from '@ant-design/icons'
 import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -95,12 +96,12 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           </p>
 
           <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
-            <Button
+            <IconTextButton
               className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-              icon={ <Icon name={ 'PlusOutlined' } /> }
+              icon={ 'PlusOutlined' }
             >
               {t('asset.asset-editor-tabs.schedule.toolbar.add')}
-            </Button>
+            </IconTextButton>
 
             <Button
               className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
@@ -141,6 +142,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
                 {t('asset.asset-editor-tabs.schedule.archived')}
               </p>
+              {/* @todo check button and icon */}
               <Button
                 disabled={ gridDataArchive.length === 0 }
                 icon={ <DeleteOutlined /> }

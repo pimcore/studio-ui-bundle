@@ -12,23 +12,22 @@
 */
 
 import React from 'react'
-import { useStyles } from './toolbar.styles'
+import { Spin as AntdSpin, type SpinProps as AntdSpinProps } from 'antd'
+import { Icon } from '../icon/icon'
+import { useStyles } from './spin.styles'
 
-interface ToolbarProps {
-  children: React.ReactNode
-  className?: string
-  style?: React.CSSProperties
-}
+interface SpinProps extends AntdSpinProps {};
 
-export const Toolbar = ({ children, className, style, ...props }: ToolbarProps): React.JSX.Element => {
+export const Spin = ({ ...props }: SpinProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = ['sidebar-toolbar', styles.toolbar, className].join(' ')
 
   return (
-    <div
-      className={ classes }
-      style={ style }
+    <AntdSpin
+      indicator={ <Icon
+        className={ styles.spin }
+        name='spinner'
+                  /> }
       { ...props }
-    >{children}</div>
+    />
   )
 }

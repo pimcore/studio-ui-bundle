@@ -14,7 +14,8 @@
 import { useStyle } from './custom-metadata-container.styles'
 import React, { useContext, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, type InputRef, Select } from 'antd'
+import { type InputRef, Select } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import Input from 'antd/es/input/Input'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { CustomMetadataTable } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
@@ -29,6 +30,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -147,14 +149,14 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language') }
                 />
 
-                <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                <IconTextButton
+                  icon={ 'PlusCircleOutlined' }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
                 >
                   {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
-                </Button>
+                </IconTextButton>
               </div>
 
               <DuplicateEntryModal
@@ -191,14 +193,14 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
               </Button>
 
-              <Button
-                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+              <IconTextButton
+                icon={ 'PlusCircleOutlined' }
                 onClick={ () => {
                   setEditMode(true)
                 } }
               >
                 {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
-              </Button>
+              </IconTextButton>
             </>
           )}
         </div>

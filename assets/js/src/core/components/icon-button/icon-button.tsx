@@ -11,10 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, type ButtonProps } from 'antd'
 import React, { forwardRef } from 'react'
 import { Icon, type IconProps } from '../icon/icon'
 import { useStyles } from './icon-button.styles'
+import { Button, type ButtonProps } from '../button/button'
 
 export interface IconButtonProps extends ButtonProps {
   icon: string
@@ -22,12 +22,13 @@ export interface IconButtonProps extends ButtonProps {
   theme?: 'primary' | 'secondary'
 }
 
-const Component = ({ icon, children, className, theme = 'primary', iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
+const Component = ({ icon, children, className, type = 'link', theme = 'primary', iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
   const { styles } = useStyles()
   const buttonClasses = [styles.button, className, `icon-button--theme-${theme}`].join(' ')
 
   return (
     <Button
+      type={ type }
       { ...buttonProps }
       className={ buttonClasses }
       ref={ ref }

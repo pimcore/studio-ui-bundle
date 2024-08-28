@@ -80,11 +80,11 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
-            assetGetAvailableGridConfiguration: build.query<
-                AssetGetAvailableGridConfigurationApiResponse,
-                AssetGetAvailableGridConfigurationApiArg
+            assetGetAvailableGridColumns: build.query<
+                AssetGetAvailableGridColumnsApiResponse,
+                AssetGetAvailableGridColumnsApiArg
             >({
-                query: () => ({ url: `/studio/api/assets/grid/available-configuration` }),
+                query: () => ({ url: `/studio/api/assets/grid/available-columns` }),
                 providesTags: ["Asset Grid"],
             }),
             assetGetGridConfigurationByFolderId: build.query<
@@ -97,6 +97,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Asset Grid"],
             }),
+            assetGetSavedGridConfigurations: build.query<
+                AssetGetSavedGridConfigurationsApiResponse,
+                AssetGetSavedGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({ url: `/studio/api/assets/grid/configurations/${queryArg.folderId}` }),
+                providesTags: ["Asset Grid"],
+            }),
             assetSaveGridConfiguration: build.mutation<
                 AssetSaveGridConfigurationApiResponse,
                 AssetSaveGridConfigurationApiArg
@@ -104,6 +111,27 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/studio/api/assets/grid/configuration/save`,
                     method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Asset Grid"],
+            }),
+            assetSetGridConfigurationAsFavorite: build.mutation<
+                AssetSetGridConfigurationAsFavoriteApiResponse,
+                AssetSetGridConfigurationAsFavoriteApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/grid/configuration/set-as-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Asset Grid"],
+            }),
+            assetUpdateGridConfiguration: build.mutation<
+                AssetUpdateGridConfigurationApiResponse,
+                AssetUpdateGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/grid/configuration/update/${queryArg.configurationId}`,
+                    method: "PUT",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -371,33 +399,67 @@ export type AssetUpdateByIdApiArg = {
         };
     };
 };
-export type AssetGetAvailableGridConfigurationApiResponse =
-    /** status 200 All available grid configurations for assets */ {
+export type AssetGetAvailableGridColumnsApiResponse =
+    /** status 200 All available grid column configurations for assets */ {
         columns?: GridColumnConfiguration[];
     };
-export type AssetGetAvailableGridConfigurationApiArg = void;
-export type AssetGetGridConfigurationByFolderIdApiResponse = /** status 200 Asset grid configuration */ {
-    columns?: GridColumnConfiguration[];
-};
+export type AssetGetAvailableGridColumnsApiArg = void;
+export type AssetGetGridConfigurationByFolderIdApiResponse =
+    /** status 200 Asset grid configuration */ GridConfiguration;
 export type AssetGetGridConfigurationByFolderIdApiArg = {
     /** FolderId of the element */
     folderId: number;
     /** Configuration ID */
     configurationId?: number;
 };
+export type AssetGetSavedGridConfigurationsApiResponse =
+    /** status 200 List of saved grid configurations for the given folder */ {
+        totalItems: number;
+        items: GridConfiguration2[];
+    };
+export type AssetGetSavedGridConfigurationsApiArg = {
+    /** FolderId of the folderId */
+    folderId: number;
+};
 export type AssetSaveGridConfigurationApiResponse = /** status 200 Asset grid configuration saved successfully */ void;
 export type AssetSaveGridConfigurationApiArg = {
     body: {
         folderId: number;
-        pageSize?: number;
-        name?: string;
-        description?: string;
+        pageSize: number;
+        name: string;
+        description: string;
         shareGlobal?: boolean;
         setAsFavorite?: boolean;
         saveFilter?: boolean;
         sharedUsers?: object;
         sharedRoles?: object;
-        columns?: Column[];
+        columns: Column[];
+        filter?: GridFilter | null;
+    };
+};
+export type AssetSetGridConfigurationAsFavoriteApiResponse =
+    /** status 200 asset_set_grid_configuration_as_favorite_response */ void;
+export type AssetSetGridConfigurationAsFavoriteApiArg = {
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    /** FolderId of the folderId */
+    folderId: number;
+};
+export type AssetUpdateGridConfigurationApiResponse =
+    /** status 200 Asset grid configuration updated successfully */ void;
+export type AssetUpdateGridConfigurationApiArg = {
+    /** ConfigurationId of the configurationId */
+    configurationId: number;
+    body: {
+        pageSize: number;
+        name: string;
+        description: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns: Column[];
         filter?: GridFilter | null;
     };
 };
@@ -811,6 +873,44 @@ export type GridFilter = {
     /** Sort Filter */
     sortFilter?: object;
 };
+export type GridConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Description */
+    description: string;
+    /** shareGlobal */
+    shareGlobal?: boolean;
+    /** saveFilter */
+    saveFilter?: boolean;
+    /** setAsFavorite */
+    setAsFavorite?: boolean;
+    /** sharedUsers */
+    sharedUsers?: object;
+    /** sharedRoles */
+    sharedRoles?: object;
+    /** columns */
+    columns?: Column[];
+    /** filter */
+    filter?: GridFilter[];
+    /** Page Size */
+    pageSize?: number;
+};
+export type GridConfiguration2 = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+    /** Description */
+    description: string;
+};
 export type GridColumnData = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -846,9 +946,12 @@ export const {
     useAssetDownloadByIdQuery,
     useAssetGetByIdQuery,
     useAssetUpdateByIdMutation,
-    useAssetGetAvailableGridConfigurationQuery,
+    useAssetGetAvailableGridColumnsQuery,
     useAssetGetGridConfigurationByFolderIdQuery,
+    useAssetGetSavedGridConfigurationsQuery,
     useAssetSaveGridConfigurationMutation,
+    useAssetSetGridConfigurationAsFavoriteMutation,
+    useAssetUpdateGridConfigurationMutation,
     useAssetGetGridMutation,
     useAssetImageDownloadCustomQuery,
     useAssetImageDownloadByFormatQuery,

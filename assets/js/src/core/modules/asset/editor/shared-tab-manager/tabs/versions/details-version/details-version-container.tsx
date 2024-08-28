@@ -13,9 +13,7 @@
 
 import React, { useMemo, useState } from 'react'
 import {
-  api,
-  type ImageVersion,
-  type Version
+  api, type AssetVersion, type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { store } from '@Pimcore/app/store'
 import {

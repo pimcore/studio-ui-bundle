@@ -14,13 +14,16 @@
 import { Title } from '@Pimcore/components/title/title'
 import React, { useEffect } from 'react'
 import { useListColumns, useListGridConfig } from '../../hooks/use-list'
-import { Button, Dropdown, Space, type MenuProps } from 'antd'
+import { Dropdown, Space, type MenuProps } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { GridConfigList } from './grid-config-list'
 import { useGridConfig } from './hooks/use-grid-config'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { Toolbar } from '@Pimcore/components/sidebar/toolbar/toolbar'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { ContentContainer } from '@Pimcore/components/content-container/content-container'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridConfig()
@@ -33,41 +36,45 @@ export const GridConfigInner = (): React.JSX.Element => {
   }, [gridColumns])
 
   return (
-    <>
-      <Title level={ 1 }>{ t('listing.grid-config.title') }</Title>
-
-      <Space
-        direction='vertical'
-        style={ { width: '100%' } }
-      >
-        <GridConfigList columns={ columns } />
-
-        <Dropdown menu={ { items: getFormattedDropDownMenu() } }>
-          <IconTextButton
-            icon='PlusCircleOutlined'
-            type='link'
+    <ContentToolbarSidebarLayout
+      renderToolbar={
+        <Toolbar theme='secondary'>
+          <Button
+            onClick={ onCancelClick }
+            type='default'
           >
-            { t('listing.add-column') }
-          </IconTextButton>
-        </Dropdown>
-      </Space>
+            { t('button.cancel') }
+          </Button>
 
-      <Toolbar>
-        <Button
-          onClick={ onCancelClick }
-          type='default'
-        >
-          { t('button.cancel') }
-        </Button>
+          <Button
+            onClick={ onApplyClick }
+            type='primary'
+          >
+            { t('button.apply') }
+          </Button>
+        </Toolbar>
+      }
+    >
+      <ContentContainer padded>
+        <Title level={ 1 }>{ t('listing.grid-config.title') }</Title>
 
-        <Button
-          onClick={ onApplyClick }
-          type='primary'
+        <Space
+          direction='vertical'
+          style={ { width: '100%' } }
         >
-          { t('button.apply') }
-        </Button>
-      </Toolbar>
-    </>
+          <GridConfigList columns={ columns } />
+
+          <Dropdown menu={ { items: getFormattedDropDownMenu() } }>
+            <IconTextButton
+              icon='PlusCircleOutlined'
+              type='link'
+            >
+              { t('listing.add-column') }
+            </IconTextButton>
+          </Dropdown>
+        </Space>
+      </ContentContainer>
+    </ContentToolbarSidebarLayout>
   )
 
   function onCancelClick (): void {

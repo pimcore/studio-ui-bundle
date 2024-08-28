@@ -20,6 +20,7 @@ import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Button, Flex, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface DetailsVersionViewProps {
   versionId: VersionIdentifiers
@@ -62,7 +63,7 @@ export const DetailsVersionView = ({
           justify="center"
           style={ { minHeight: 100 } }
         >
-          <Button
+          <IconButton
             disabled={ firstVersion }
             icon={ <Icon name={ 'left-outlined' } /> }
             onClick={ onClickPrevious }
@@ -78,7 +79,7 @@ export const DetailsVersionView = ({
               )
             : null}
 
-          <Button
+          <IconButton
             disabled={ lastVersion }
             icon={ <Icon name={ 'right-outlined' } /> }
             onClick={ onClickNext }

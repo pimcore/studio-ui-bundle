@@ -43,6 +43,11 @@ const preview: Preview = {
         method: 'alphabetical',
         order: [
           'Docs',
+          [
+            'Overview',
+            'Core',
+            'SDK'
+          ],
           'Components',
           [
             'General',

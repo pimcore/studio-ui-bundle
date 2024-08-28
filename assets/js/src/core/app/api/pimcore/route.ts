@@ -11,14 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+export function getDomain (): string {
+  return 'http://localhost'
+}
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    button: css`
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    `
-  }
-})
+export function getDomainWithPrefix (): string {
+  return `${getDomain()}/studio/api`
+}

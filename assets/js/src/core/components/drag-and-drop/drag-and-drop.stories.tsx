@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import React, { useState } from 'react'
 import { Draggable } from './draggable'
 import { DNDDemoDroppableContent } from './__STORIES__/dnd-demo-droppable-content'
-import { Button } from 'antd'
+import { Button } from '../button/button'
 import { Droppable } from './droppable'
 import { type DragAndDropInfo } from './context-provider'
 

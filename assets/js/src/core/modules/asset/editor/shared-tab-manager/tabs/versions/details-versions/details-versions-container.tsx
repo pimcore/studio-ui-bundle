@@ -13,8 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api,
-  type ImageVersion
+  api, type AssetVersion
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import {
   DetailsVersionsView
