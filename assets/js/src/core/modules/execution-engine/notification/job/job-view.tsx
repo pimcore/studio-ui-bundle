@@ -66,6 +66,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 <Icon name='check-circle-filled' /><span>{ t('jobs.job.finished', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
+                {/* todo check button type */}
                 { props.successButtonActions?.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }

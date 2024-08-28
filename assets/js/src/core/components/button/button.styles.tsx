@@ -16,9 +16,18 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+
+      .button__loading-spinner,
+      .ant-spin-dot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        color: inherit;
+      }
     `
   }
 })

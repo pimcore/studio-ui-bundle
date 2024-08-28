@@ -12,7 +12,8 @@
 */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Button, Popconfirm, Space } from 'antd'
+import { Popconfirm, Space } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import React, { type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'

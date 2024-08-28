@@ -100,6 +100,7 @@ import calendarDate from '@Pimcore/assets/icons/calendar-date.inline.svg'
 import uploadCloud01 from '@Pimcore/assets/icons/upload-cloud-01.inline.svg'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg'
 import grid from '@Pimcore/assets/icons/grid.inline.svg'
+import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -454,6 +455,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'grid',
       component: grid
+    })
+
+    iconLibrary.register({
+      name: 'spinner',
+      component: spinner
     })
   }
 })

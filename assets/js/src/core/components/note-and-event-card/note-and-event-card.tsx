@@ -11,7 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Tag } from 'antd'
+import { Card, Tag } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import React, { useState } from 'react'
 import { useStyle } from './note-and-event-card.styles'
 import { Icon } from '../icon/icon'

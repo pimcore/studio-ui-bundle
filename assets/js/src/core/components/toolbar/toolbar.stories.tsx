@@ -15,7 +15,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { type StoryObj, type Meta } from '@storybook/react'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 
 const config: Meta = {
