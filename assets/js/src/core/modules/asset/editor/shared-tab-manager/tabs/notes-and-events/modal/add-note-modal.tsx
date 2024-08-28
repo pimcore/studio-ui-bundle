@@ -20,7 +20,7 @@ import { useForm } from 'antd/es/form/Form'
 import {
   useNoteElementCreateMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
-import {ElementType} from "types/element-type.d";
+import { type ElementType } from 'types/element-type.d'
 
 export interface AddNoteFormValues {
   type: string
