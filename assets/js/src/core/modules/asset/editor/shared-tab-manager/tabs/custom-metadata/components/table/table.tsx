@@ -103,22 +103,21 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     })
   ]
 
-  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+  const getRealColumnName = (columnId: string): string => {
+    switch (columnId) {
+      case 'custom-metadata-table--language-column':
+        return 'language'
+      case 'custom-metadata-table--data-column':
+        return 'data'
+      default:
+        return columnId
+    }
+  }
+  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedCustomMetadata = [...(customMetadata ?? [])]
     const updatedCustomMetadataPrimaryKeys = updatedCustomMetadata.map(cm => cm.name)
     const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
     const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
-
-    function getRealColumnName (columnId: string): string {
-      switch (columnId) {
-        case 'custom-metadata-table--language-column':
-          return 'language'
-        case 'custom-metadata-table--data-column':
-          return 'data'
-        default:
-          return columnId
-      }
-    }
 
     updatedCustomMetadata[customMetadataIndex] = {
       ...customMetadataToUpdate,

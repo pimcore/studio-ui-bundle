@@ -166,20 +166,19 @@ export const Table = ({
     ...baseColumns
   ]
 
-  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+  const getRealColumnName = (columnId: string): string => {
+    switch (columnId) {
+      case 'properties-table--data-column':
+        return 'data'
+      default:
+        return columnId
+    }
+  }
+  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedProperties = [...(properties ?? [])]
     const propertyPrimaryKeys = updatedProperties.map(prop => prop.key)
     const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
     const updatedProperty = { ...propertyToUpdate, [getRealColumnName(columnId as string)]: value }
-
-    function getRealColumnName (columnId: string): string {
-      switch (columnId) {
-        case 'properties-table--data-column':
-          return 'data'
-        default:
-          return columnId
-      }
-    }
 
     if (verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(propertyToUpdate.key, updatedProperty)
