@@ -15,7 +15,9 @@ import React, { createContext, useContext, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
 import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 
@@ -30,9 +32,11 @@ export interface IVideoContext {
 export const VideoContext =
   createContext<IVideoContext>({
     thumbnail: '',
-    setThumbnail: () => {},
+    setThumbnail: () => {
+    },
     playerPosition: 0,
-    setPlayerPosition: () => {}
+    setPlayerPosition: () => {
+    }
   })
 
 const PreviewContainer = (): React.JSX.Element => {
@@ -52,13 +56,15 @@ const PreviewContainer = (): React.JSX.Element => {
 
   return (
     <VideoContext.Provider value={ contextValue }>
-      <ContentToolbarSidebarLayout>
-        <PreviewView
-          src={ thumbnail === '' ? data!.fullPath! : thumbnail }
-        />
+      <ContentToolbarSidebarLayout renderSidebar={
         <Sidebar
           buttons={ sidebarButtons }
           entries={ sidebarEntries }
+        />
+      }
+      >
+        <PreviewView
+          src={ thumbnail === '' ? data!.fullPath! : thumbnail }
         />
       </ContentToolbarSidebarLayout>
     </VideoContext.Provider>

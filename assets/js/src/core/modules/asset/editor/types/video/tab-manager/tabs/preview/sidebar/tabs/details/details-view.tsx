@@ -75,11 +75,9 @@ export const VideoEditorSidebarDetailsTab = ({
         </Droppable>
         <Meta
           title={
-            <Toolbar
-              className={ 'image-preview__toolbar' }
-              pinnableToolbarElements={ [] }
-              showWorkflow={ false }
-            />
+            <Toolbar theme={ 'secondary' }>
+              <div></div>
+            </Toolbar>
         }
         />
       </>
@@ -95,11 +93,11 @@ export const VideoEditorSidebarDetailsTab = ({
         <Meta
           title={
             <Toolbar
-              className={ 'image-preview__toolbar' }
-              pinnableToolbarElements={ [] }
-              renderSaveButton={ <Button onClick={ onClickApply }>{t('apply')}</Button> }
-              showWorkflow={ false }
-            />
+              justify={ 'flex-end' }
+              theme={ 'secondary' }
+            >
+              <Button onClick={ onClickApply }>{t('apply')}</Button>
+            </Toolbar>
           }
         />
       </>

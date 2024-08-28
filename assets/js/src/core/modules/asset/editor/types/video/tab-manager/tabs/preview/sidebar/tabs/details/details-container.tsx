@@ -13,13 +13,13 @@
 
 import React, { useContext, useMemo, useState } from 'react'
 import {
-  useGetAssetByIdQuery, type Video
+  useAssetGetByIdQuery, type Video
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   VideoEditorSidebarDetailsTab
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
-import { useGetVideoThumbnailsQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { useThumbnailVideoGetCollectionQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
@@ -32,9 +32,9 @@ const DetailContainer = (): React.JSX.Element => {
   useMemo(() => {
     setImagePreviewFromBackend(200, 119)
   }, [])
-  const { data: assetData } = useGetAssetByIdQuery({ id: assetContext.id! })
+  const { data: assetData } = useAssetGetByIdQuery({ id: assetContext.id! })
   const videoData = assetData! as Video
-  const { data: thumbnailsData } = useGetVideoThumbnailsQuery()
+  const { data: thumbnailsData } = useThumbnailVideoGetCollectionQuery()
   const videoThumbnails = thumbnailsData?.items
 
   if (videoThumbnails === null || videoThumbnails === undefined) {

@@ -1,31 +1,37 @@
 import { api } from "../../../../app/api/pimcore/index";
-export const addTagTypes = ["AssetThumbnails"] as const;
+export const addTagTypes = ["Asset Thumbnails"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            getImageThumbnails: build.query<GetImageThumbnailsApiResponse, GetImageThumbnailsApiArg>({
+            thumbnailImageGetCollection: build.query<
+                ThumbnailImageGetCollectionApiResponse,
+                ThumbnailImageGetCollectionApiArg
+            >({
                 query: () => ({ url: `/studio/api/thumbnails/image` }),
-                providesTags: ["AssetThumbnails"],
+                providesTags: ["Asset Thumbnails"],
             }),
-            getVideoThumbnails: build.query<GetVideoThumbnailsApiResponse, GetVideoThumbnailsApiArg>({
+            thumbnailVideoGetCollection: build.query<
+                ThumbnailVideoGetCollectionApiResponse,
+                ThumbnailVideoGetCollectionApiArg
+            >({
                 query: () => ({ url: `/studio/api/thumbnails/video` }),
-                providesTags: ["AssetThumbnails"],
+                providesTags: ["Asset Thumbnails"],
             }),
         }),
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GetImageThumbnailsApiResponse = /** status 200 All downloadable image thumbnails */ {
+export type ThumbnailImageGetCollectionApiResponse = /** status 200 All downloadable image thumbnails */ {
     items: Thumbnail[];
 };
-export type GetImageThumbnailsApiArg = void;
-export type GetVideoThumbnailsApiResponse = /** status 200 All video thumbnails */ {
+export type ThumbnailImageGetCollectionApiArg = void;
+export type ThumbnailVideoGetCollectionApiResponse = /** status 200 All video thumbnails */ {
     items: Thumbnail[];
 };
-export type GetVideoThumbnailsApiArg = void;
+export type ThumbnailVideoGetCollectionApiArg = void;
 export type Thumbnail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -46,4 +52,4 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useGetImageThumbnailsQuery, useGetVideoThumbnailsQuery } = injectedRtkApi;
+export const { useThumbnailImageGetCollectionQuery, useThumbnailVideoGetCollectionQuery } = injectedRtkApi;
