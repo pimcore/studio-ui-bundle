@@ -13,7 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api, type ImageVersion, type Version
+  api, type AssetVersion, type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { store } from '@Pimcore/app/store'
 import { formatVersionData } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
@@ -59,10 +59,10 @@ export const DetailsVersionContainer = ({
     Promise.resolve(versionPromise)
       .then((responses): void => {
         const tempVersionData: any[] = []
-        const dataRaw = responses.data as ImageVersion
+        const dataRaw = responses.data as AssetVersion
         const metadata = dataRaw.metadata
 
-        const data: Partial<ImageVersion> = { ...dataRaw }
+        const data: Partial<AssetVersion> = { ...dataRaw }
         delete data.metadata
 
         for (const key in data) {
