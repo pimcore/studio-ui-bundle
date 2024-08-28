@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
+import {Button} from "@Pimcore/components/button/button";
 
 interface NoteAndEventCardProps {
   title: string
