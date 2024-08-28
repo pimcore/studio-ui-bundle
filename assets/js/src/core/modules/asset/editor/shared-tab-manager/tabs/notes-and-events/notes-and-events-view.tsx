@@ -25,13 +25,13 @@ import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-a
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
-import {
-  AddNoteModal
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
+import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import {
   ContentHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
+import {
+  ContentPaddingContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -40,6 +40,7 @@ interface NotesAndEventsTabViewProps {
   elementType: 'asset' | 'document' | 'data-object'
   elementId: number
 }
+
 export const NotesAndEventsTabView = ({
   notes,
   pagination,
@@ -75,7 +76,9 @@ export const NotesAndEventsTabView = ({
         date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
         key={ note.id }
-        onClickTrash={ () => { onClickTrash(note.id) } }
+        onClickTrash={ () => {
+          onClickTrash(note.id)
+        } }
         showDetails={ showDetails }
         title={ note.title }
         type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }
@@ -96,7 +99,9 @@ export const NotesAndEventsTabView = ({
                 name={ 'PlusCircleOutlined' }
                 options={ { width: '24px', height: '24px' } }
                      /> }
-              onClick={ () => { setAddNoteModalOpen(true) } }
+              onClick={ () => {
+                setAddNoteModalOpen(true)
+              } }
             >
               {t('add')}
             </Button>
@@ -118,14 +123,16 @@ export const NotesAndEventsTabView = ({
                 <NoContent text={ t('notes-and-events.no-notes-and-events-to-show') } />
               </div>
               )
-          }
+                    }
         </div>
+        {notes.length > 0 && (
         <div className={ 'notes-container__pagination-container' }>
           <div className={ 'notes-container__pagination' }>
             <div />
             {pagination}
           </div>
         </div>
+        )}
       </div>
       <div>
       </div>
