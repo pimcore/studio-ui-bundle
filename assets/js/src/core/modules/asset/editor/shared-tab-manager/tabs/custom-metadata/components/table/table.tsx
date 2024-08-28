@@ -109,13 +109,6 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
     const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
 
-    updatedCustomMetadata[customMetadataIndex] = {
-      ...customMetadataToUpdate,
-      [getRealColumnName(columnId as string)]: value
-    }
-
-    verifyUpdate(value, updatedCustomMetadataPrimaryKeys, columnId, 'name', showMandatoryModal, showDuplicateEntryModal) && updateAllCustomMetadata(updatedCustomMetadata)
-
     function getRealColumnName (columnId: string): string {
       switch (columnId) {
         case 'custom-metadata-table--language-column':
@@ -127,7 +120,15 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       }
     }
 
-    setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+    updatedCustomMetadata[customMetadataIndex] = {
+      ...customMetadataToUpdate,
+      [getRealColumnName(columnId as string)]: value
+    }
+
+    if (verifyUpdate(value, updatedCustomMetadataPrimaryKeys, columnId, 'name', showMandatoryModal, showDuplicateEntryModal)) {
+      updateAllCustomMetadata(updatedCustomMetadata)
+      setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+    }
   }
 
   return (

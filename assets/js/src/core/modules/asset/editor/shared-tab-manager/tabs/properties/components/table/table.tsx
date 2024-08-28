@@ -42,7 +42,7 @@ export const Table = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
-  const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
+  const { asset, properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
@@ -52,6 +52,7 @@ export const Table = ({
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
+  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
@@ -70,6 +71,12 @@ export const Table = ({
       }))
     }
   }, [properties])
+
+  useEffect(() => {
+    if (modifiedCells.length > 0 && asset?.changes.properties === undefined) {
+      setModifiedCells([])
+    }
+  }, [asset])
 
   const columnHelper = createColumnHelper<DataPropertyWithActions>()
   const baseColumns = [
@@ -160,8 +167,6 @@ export const Table = ({
   ]
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
-    console.log('----> here')
-
     const updatedProperties = [...(properties ?? [])]
     const propertyPrimaryKeys = updatedProperties.map(prop => prop.key)
     const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
@@ -176,31 +181,10 @@ export const Table = ({
       }
     }
 
-    console.log("----> verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal)", verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal))
-
-    verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal) && updateProperty(propertyToUpdate.key, updatedProperty)
-  }
-
-  function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
-    const modifiedCells: Array<{ rowIndex: number, columnId: string }> = []
-
-    data?.items!.forEach((item, index) => {
-      gridDataOwn.forEach((property, propertyIndex) => {
-        if (property.key === item.key && property.data !== item.data) {
-          modifiedCells.push({
-            rowIndex: propertyIndex,
-            columnId: 'properties-table--data-column'
-          })
-        } else if (property.key !== item.key && property.data === item.data) {
-          modifiedCells.push({
-            rowIndex: propertyIndex,
-            columnId: 'key'
-          })
-        }
-      })
-    })
-
-    return modifiedCells
+    if (verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal)) {
+      updateProperty(propertyToUpdate.key, updatedProperty)
+      setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+    }
   }
 
   return (
@@ -213,7 +197,7 @@ export const Table = ({
               columns={ ownTableColumns }
               data={ gridDataOwn }
               isLoading={ isLoading }
-              modifiedCells={ getModifiedCells() }
+              modifiedCells={ modifiedCells }
               onUpdateCellData={ onUpdateCellData }
               resizable
             />
