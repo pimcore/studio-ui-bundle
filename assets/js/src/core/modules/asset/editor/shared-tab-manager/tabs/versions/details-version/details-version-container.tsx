@@ -59,7 +59,7 @@ export const DetailsVersionContainer = ({
   if (versionData.length === 0) {
     return <div>Loading ...</div>
   }
-  //  console.log(versionData)
+
   return (
     <DetailsVersionView
       data={ versionData }
