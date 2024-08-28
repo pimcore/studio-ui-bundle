@@ -28,11 +28,6 @@ export const useStyles = createStyles(({ token, css }) => {
                 margin-right: 8px;
                 white-space: nowrap;
             }
-
-            .pimcore-icon {
-                color: ${token.colorPrimary};
-                margin-right: 4px;
-            }
         `
   }
 }, { hashPriority: 'low' })

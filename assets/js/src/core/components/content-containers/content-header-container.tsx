@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { Title } from '@Pimcore/components/title/title'
 import {
   useStyles
 } from '@Pimcore/components/content-containers/content-header-container.styles'
@@ -28,8 +29,11 @@ export const ContentHeaderContainer = (props: ContentHeaderContainerProps): Reac
 
   return (
     <div className={ styles['content-header-container'] }>
-      {icon}
-      <span className={ 'header-text' }>{text}</span>
+      <span className={ 'header-text' }>
+        <Title icon={ icon }>
+          {text}
+        </Title>
+      </span>
       {children}
     </div>
   )
