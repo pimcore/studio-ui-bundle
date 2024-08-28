@@ -15,7 +15,7 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import {
   type CustomMetadataVersion,
-  type ImageVersion
+  type AssetVersion
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { container } from '@Pimcore/app/depency-injection'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
@@ -43,7 +43,7 @@ export interface AssetVersionData {
   /** Metadata */
   metadata: Map<string, AssetVersionMetadata>
   previewImageUrl: string | null
-  dataRaw: ImageVersion
+  dataRaw: AssetVersion
 
 }
 
@@ -56,7 +56,7 @@ export interface AssetVersionMetadata {
   raw: CustomMetadataVersion
 }
 
-export const hydrateVersionData = (dataRaw: ImageVersion, type: string, versionId: number, versionCount: number): AssetVersionData => {
+export const hydrateVersionData = (dataRaw: AssetVersion, type: string, versionId: number, versionCount: number): AssetVersionData => {
   return {
     versionCount,
     baseDataFormatted: {
