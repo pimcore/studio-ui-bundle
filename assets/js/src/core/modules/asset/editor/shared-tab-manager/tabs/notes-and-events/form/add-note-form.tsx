@@ -15,6 +15,9 @@ import React from 'react'
 import { Form, type FormProps, Input, Select } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { useTranslation } from 'react-i18next'
+import {
+  useNoteElementGetTypeCollectionQuery
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 
 export interface AddNoteFormValues {
   type: string
@@ -22,10 +25,22 @@ export interface AddNoteFormValues {
   description: string
 }
 
-export interface AddNoteFormProps extends FormProps {}
+export interface AddNoteFormProps extends FormProps {
+  elementType: 'asset' | 'document' | 'data-object'
+}
 
-export const AddNoteForm = ({ ...props }: AddNoteFormProps): React.JSX.Element => {
+export const AddNoteForm = ({ elementType, ...props }: AddNoteFormProps): React.JSX.Element => {
   const { t } = useTranslation()
+
+  const { isLoading, data: noteTypesResponse } = useNoteElementGetTypeCollectionQuery({
+    elementType
+  })
+
+  if (isLoading) {
+    return <div>Loading ...</div>
+  }
+
+  const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: t('notes-and-events.' + noteType.id) }))
 
   return (
     <Form
@@ -37,12 +52,7 @@ export const AddNoteForm = ({ ...props }: AddNoteFormProps): React.JSX.Element =
         name="type"
       >
         <Select
-          options={ [
-            { value: 'content', label: t('notes-and-events.content') },
-            { value: 'seo', label: t('notes-and-events.seo') },
-            { value: 'warning', label: t('notes-and-events.warning') },
-            { value: 'notice', label: t('notes-and-events.notice') }
-          ] }
+          options={ noteTypeOptions }
           placeholder={ t('select') }
         />
       </Form.Item>

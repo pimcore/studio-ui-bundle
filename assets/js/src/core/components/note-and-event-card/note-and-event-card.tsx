@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Tag } from 'antd'
+import { Button, Card, Space, Tag } from 'antd'
 import React, { useState } from 'react'
 import { useStyle } from './note-and-event-card.styles'
 import { Icon } from '../icon/icon'
@@ -52,12 +52,23 @@ export const NoteAndEventCard = ({
   const columns = [
     columnHelper.accessor(i18n.t('notes-and-events.name'), {}),
     columnHelper.accessor(i18n.t('notes-and-events.type'), { size: 120 }),
-    columnHelper.accessor(i18n.t('notes-and-events.value'), { size: 310 })
+    columnHelper.accessor(i18n.t('notes-and-events.value'), { size: 310, meta: { autoWidth: true } })
   ]
 
   const titleElement = (
-    <div>
-      <span className={ 'card-title' }>{title}</span>
+    <>
+      <Space>
+        { title !== ''
+          ? (
+            <>
+              <span className={ 'card-title' }>{title}</span>
+              <span className={ 'card-title__divider' }>|</span>
+            </>
+            )
+          : null }
+        <span className={ 'card-title__user' }>{user}</span>
+      </Space>
+
       { (description !== '' || showDetails) && (
         <Button
           aria-label={ i18n.t('aria.notes-and-events.expand') }
@@ -72,8 +83,7 @@ export const NoteAndEventCard = ({
           type={ 'text' }
         />
       )}
-      <span className={ 'card-title__user' }>{user}</span>
-    </div>
+    </>
   )
 
   const extra = (
@@ -100,12 +110,13 @@ export const NoteAndEventCard = ({
         title={ titleElement }
       >
         <span className={ 'card-body__description ' + (showDetails ? 'card-body__description-padding' : '') }>
-          {respectLineBreak(description)}
+          {respectLineBreak(description, false)}
         </span>
         {showDetails && (
           <div>
             <span className={ 'card-body__details' }>{i18n.t('notes-and-events.details')}</span>
             <Grid
+              autoWidth
               columns={ columns }
               data={ data }
               resizable

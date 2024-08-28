@@ -76,6 +76,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
     >
 
       <AddNoteForm
+        elementType={ props.elementType }
         form={ form }
         onFinish={ onFinish }
       />
