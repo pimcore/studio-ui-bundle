@@ -18,7 +18,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from './columns/default-cell'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Grid',
+  title: 'Components/Data Display/Grid',
   component: Grid,
 
   tags: ['autodocs'],
@@ -72,6 +72,7 @@ const columns = [
 ]
 
 export const _default = {
+
   args: {
     data,
     columns,

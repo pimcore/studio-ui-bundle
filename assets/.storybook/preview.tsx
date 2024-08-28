@@ -37,6 +37,33 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: [
+          'Docs',
+          [
+            'Overview',
+            'Core',
+            'SDK'
+          ],
+          'Components',
+          [
+            'General',
+            'Layout',
+            'Controls',
+            'Data Display',
+            'Feedback',
+            'Visuals',
+            'Others',
+            '*'
+          ],
+          'Tools',
+          'Modules',
+        ]
+      }
+    }
   },
 
   decorators: [

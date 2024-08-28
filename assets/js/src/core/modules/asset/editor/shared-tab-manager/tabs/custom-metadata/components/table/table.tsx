@@ -14,7 +14,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
-import { type CustomMetadata, useGetAssetCustomMetadataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Button } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -31,7 +31,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
   const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
-  const { data, isLoading } = useGetAssetCustomMetadataByIdQuery({ id: id! })
+  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id: id! })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   useEffect(() => {
@@ -59,7 +59,8 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),
       meta: {
         editable: true
-      }
+      },
+      size: 200
     }),
     columnHelper.accessor('language', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
@@ -67,14 +68,16 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       meta: {
         type: 'language-select',
         editable: true
-      }
+      },
+      size: 100
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
       id: 'custom-metadata-table--data-column',
       meta: {
         type: 'type-dependent-content',
-        editable: true
+        editable: true,
+        autoWidth: true
       },
       size: 400
     }),
@@ -126,6 +129,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
   return (
     <div className={ styles.table }>
       <Grid
+        autoWidth
         columns={ columns }
         data={ customMetadata! }
         isLoading={ isLoading }

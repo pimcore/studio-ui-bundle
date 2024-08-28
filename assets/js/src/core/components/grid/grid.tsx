@@ -16,8 +16,8 @@ import {
   type CellContext,
   type Column,
   type ColumnDef,
-  type ColumnResizeMode,
-  flexRender,
+  type ColumnResizeMode, type ColumnSizingInfoState,
+  flexRender, functionalUpdate,
   getCoreRowModel, getSortedRowModel,
   type RowData,
   type RowSelectionState,
@@ -38,6 +38,7 @@ declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface ColumnMeta<TData extends RowData, TValue> {
     editable?: boolean
+    autoWidth?: boolean
     type?: string
     config?: any
   }
@@ -52,12 +53,19 @@ export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
 }
 
+export interface OnUpdateCellDataEvent {
+  rowIndex: number
+  columnId: string
+  value: any
+  rowData: any
+}
+
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any>>
   resizable?: boolean
-  onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any }) => void
-  modifiedCells?: Array<{ rowIndex: number, columnId: string }>
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
+  modifiedCells?: Array<{ rowIndex: number | string, columnId: string }>
   isLoading?: boolean
   initialState?: TableOptions<any>['initialState']
   enableRowSelection?: boolean
@@ -69,16 +77,20 @@ export interface GridProps {
   sorting?: SortingState
   onSortingChange?: (sorting: SortingState) => void
   setRowId?: (originalRow: any, index: number, parent: any) => string
+  autoWidth?: boolean
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
+  const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
   const tableElement = useRef<HTMLTableElement>(null)
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
+  const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
+  const autoColumnRef = useRef<HTMLTableCellElement>(null)
 
   useEffect(() => {
     if (sorting !== undefined) {
@@ -145,16 +157,60 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
     tableProps.columnResizeMode = columnResizeMode
   }
 
+  const [columnSizingInfo, setColumnSizingInfo] = useState<ColumnSizingInfoState>()
+
+  tableProps.onColumnSizingInfoChange = (updater) => {
+    // Update your own state with the new column sizing info
+    const newValue = functionalUpdate(updater, columnSizingInfo)
+
+    if (tableAutoWidth && typeof newValue !== 'undefined' && typeof newValue?.isResizingColumn === 'string') {
+      const column = table.getColumn(newValue.isResizingColumn)
+      const columnWidth = autoColumnRef.current?.clientWidth
+      if (column?.columnDef.meta?.autoWidth === true && typeof columnWidth !== 'undefined') {
+        column.columnDef.size = columnWidth
+        column.columnDef.meta.autoWidth = false
+
+        if (typeof autoColumnRef.current?.clientWidth !== 'undefined') {
+          newValue.startSize = autoColumnRef.current?.clientWidth
+          newValue.columnSizingStart.forEach(columnSizing => {
+            columnSizing[1] = columnWidth
+          })
+        }
+
+        setColumnSizingInfo(newValue)
+        setTableAutoWidth(false)
+        return
+      }
+    }
+
+    setColumnSizingInfo(updater)
+  }
+
+  // validate if only one column has autoWidth set to true
+  useMemo(() => {
+    if (tableAutoWidth) {
+      let autoWidthColumnFound: boolean = false
+      for (const column of columns) {
+        if (column.meta?.autoWidth === true) {
+          if (autoWidthColumnFound) {
+            throw new Error('Only one column can have autoWidth set to true')
+          }
+          autoWidthColumnFound = true
+        }
+      }
+    }
+  }, [columns, tableAutoWidth])
+
   const table = useReactTable(tableProps)
 
-  return (
+  return useMemo(() => (
     <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>
             <table
               ref={ tableElement }
-              style={ { width: table.getCenterTotalSize() } }
+              style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
             >
               <thead className='ant-table-thead'>
                 {table.getHeaderGroups().map(headerGroup => (
@@ -163,11 +219,17 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
                       <th
                         className='ant-table-cell'
                         key={ header.id }
+                        ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
                         style={
-                            {
-                              width: header.column.getSize(),
-                              maxWidth: header.column.getSize()
-                            }
+                            header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                              ? {
+                                  width: 'auto',
+                                  minWidth: header.column.getSize()
+                                }
+                              : {
+                                  width: header.column.getSize(),
+                                  maxWidth: header.column.getSize()
+                                }
                           }
                       >
                         <div className='grid__cell-content'>
@@ -181,8 +243,8 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
                           {header.column.getCanSort() && (
                             <div className='grid__sorter'>
                               <SortButton
+                                allowUnsorted={ sorting === undefined }
                                 onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-
                                 value={ getSortDirection(header.column) }
                               />
                             </div>
@@ -214,9 +276,10 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
                 )}
                 {table.getRowModel().rows.map(row => (
                   <GridRow
+                    columns={ columns }
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
-                    modifiedCells={ getModifiedRow(row.index) }
+                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
                     row={ row }
                     tableElement={ tableElement }
                   />
@@ -227,10 +290,10 @@ export const Grid = ({ enableMultipleRowSelection = false, sorting, manualSortin
         </div>
       </div>
     </div>
-  )
+  ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
 
-  function getModifiedRow (rowIndex: number): Array<{ rowIndex: number, columnId: string }> {
-    return props.modifiedCells?.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
+  function getModifiedRow (rowIndex: string | number): GridProps['modifiedCells'] {
+    return memoModifiedCells.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
   }
 
   function updateRowSelection (selectedRows: RowSelectionState): void {

@@ -17,11 +17,11 @@ import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import { useStyle } from './breadcrumb.styles'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 
 export const Breadcrumb = ({ path }: { path: string }): React.JSX.Element => {
   const { styles } = useStyle()
-  const { openAsset } = useAsset()
+  const { openAsset } = useAssetHelper()
   let items: NonNullable<BreadcrumbProps['items']> = []
   const dispatch = useAppDispatch()
 
@@ -30,7 +30,7 @@ export const Breadcrumb = ({ path }: { path: string }): React.JSX.Element => {
     const parts = path.split('/')
 
     function onMenuItemClick (path: string): void {
-      const elementIdFetcher = dispatch(elementApi.endpoints.getElementIdByPath.initiate({
+      const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType: 'asset',
         elementPath: path
       }))

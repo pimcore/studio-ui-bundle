@@ -1,0 +1,38 @@
+import {Meta, Title, Subtitle, Description, Source} from '@storybook/blocks';
+
+<Meta title="Docs/Core/Concepts" />
+
+# Concepts
+
+In pimcore studio, we follow a few core concepts that help us build scalable and maintainable applications. Here are some of the key concepts that we use:
+
+## React 
+
+### Atomic Design
+
+Atomic design is a methodology for creating design systems, developed by Brad Frost. It breaks down user interfaces into fundamental building blocks, making it easier to create consistent, reusable components. When applied to React, atomic design helps in building modular and scalable component libraries. Here’s a rough summary of how it works:
+
+1. **Atoms**: These are the basic building blocks of the UI, such as buttons, form inputs, and typography. They are the smallest components that cannot be broken down further.
+2. **Molecules**: These are groups of atoms bonded together to form simple components. For example, a search form might consist of an input field, a button, and a label.
+3. **Organisms**: These are more complex components that are made up of groups of molecules and/or atoms. Examples include headers, footers, and navigation menus.
+4. **Templates**: These define the overall layout of a page, showing how organisms fit together. They provide a structure for the content but do not contain actual content themselves.
+5. **Pages**: These are specific instances of templates filled with real content. They represent what the user will see and interact with.
+
+By organizing components in this hierarchical manner, developers can create highly modular and reusable UI parts, which can be combined to build complex applications efficiently.
+
+Would you like to dive deeper into any specific part of atomic design?
+
+References:
+
+- [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/)
+
+## Container/Presentational Components
+
+In React, we follow the container/presentational component pattern. This pattern separates components into two categories:
+
+1. **Container Components**: These components are responsible for fetching data and managing state. They are connected to the Redux store and pass data down to presentational components as props.
+2. **Presentational Components**: These components are concerned with how things look. They receive data from container components and render it in a visually appealing way.
+
+References:
+
+- [Container/Presentational Pattern](https://medium.com/@vitorbritto/react-design-patterns-the-container-presentational-pattern-775b91aa0c49)

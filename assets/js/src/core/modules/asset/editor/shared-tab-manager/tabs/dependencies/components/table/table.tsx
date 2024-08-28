@@ -15,7 +15,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React from 'react'
 import {
   type Dependency,
-  type GetDependenciesApiResponse
+  type DependencyGetCollectionByElementTypeApiResponse
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
@@ -27,7 +27,7 @@ type DependencyTable = Dependency & {
 
 interface TableProps {
   isLoading: GridProps['isLoading']
-  items: GetDependenciesApiResponse['items']
+  items: DependencyGetCollectionByElementTypeApiResponse['items']
 }
 
 export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
@@ -41,10 +41,13 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
       meta: {
         type: 'asset-property-icon'
       },
-      size: 70
+      size: 60
     }),
     columnHelper.accessor('path', {
       header: t('asset.asset-editor-tabs.dependencies.columns.path'),
+      meta: {
+        autoWidth: true
+      },
       size: 300
     }),
     columnHelper.accessor('actions', {
@@ -59,9 +62,11 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
   return (
     <div className={ styles.table }>
       <Grid
+        autoWidth
         columns={ columns }
         data={ items }
         isLoading={ isLoading }
+        resizable
       />
     </div>
   )

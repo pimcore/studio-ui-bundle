@@ -12,21 +12,23 @@
 */
 
 import React, { useCallback, useMemo } from 'react'
-import { Grid } from '@Pimcore/components/grid/grid'
+import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type GetAssetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 
 interface GridContainerProps {
-  assets: GetAssetGridApiResponse | undefined
+  assets: AssetGetGridApiResponse | undefined
+  modifiedCells: GridProps['modifiedCells']
+  onUpdateCellData: (data: Record<string, any>) => void
 }
 
 type AssetRow = Record<string, any>
 type TransformedGridData = AssetRow[] | undefined
 
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
-  const { assets } = props
+  const { assets, onUpdateCellData } = props
   const { t } = useTranslation()
   const columnHelper = createColumnHelper()
   const { columns: GridColumns } = useListColumns()
@@ -36,8 +38,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
   }, [])
-
-  const onUpdateCellData = useCallback(() => {}, [])
 
   const columns = useMemo(() => {
     const columns: Array<ColumnDef<unknown, never>> = []
@@ -84,7 +84,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     if (data === undefined) {
       return <></>
     }
-
     return (
       <Grid
         columns={ columns }
@@ -92,6 +91,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         enableMultipleRowSelection
         enableSorting
         manualSorting
+        modifiedCells={ props.modifiedCells }
         onSelectedRowsChange={ onSelectedRowsChange }
         onSortingChange={ setSorting }
         onUpdateCellData={ onUpdateCellData }

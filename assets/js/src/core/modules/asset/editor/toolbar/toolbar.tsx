@@ -17,15 +17,15 @@ import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
-import { type UpdateAssetByIdApiArg, useUpdateAssetByIdMutation } from '../../asset-api-slice.gen'
+import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, properties, removeTrackedChanges, customMetadata } = useAssetDraft(id!)
+  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
-  const [saveAsset, { isLoading, isSuccess }] = useUpdateAssetByIdMutation()
+  const [saveAsset, { isLoading, isSuccess }] = useAssetUpdateByIdMutation()
   const messageApi = useMessage()
 
   useEffect(() => {
@@ -37,34 +37,22 @@ export const Toolbar = (): React.JSX.Element => {
   }, [isSuccess])
 
   return (
-    <ToolbarView
-      pinnableToolbarElements={
-    [
-      {
-        iconName: 'refresh',
-        label: t('toolbar.reload'),
-        pinning: true
-      }
-    ]
-  }
-      renderSaveButton={
-        <Button
-          disabled={ !hasChanges || isLoading }
-          onClick={ onSaveClick }
-          type="primary"
-        >
-          {t('toolbar.save-and-publish')}
-
-          {isLoading && '...'}
-        </Button>
-      }
-    />
+    <ToolbarView justify='flex-end'>
+      <Button
+        disabled={ !hasChanges || isLoading }
+        loading={ isLoading }
+        onClick={ onSaveClick }
+        type="primary"
+      >
+        {t('toolbar.save-and-publish')}
+      </Button>
+    </ToolbarView>
   )
 
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
-    const update: UpdateAssetByIdApiArg['body']['data'] = {}
+    const update: AssetUpdateByIdApiArg['body']['data'] = {}
     if (asset.changes.properties === true) {
       const propertyUpdate = properties?.map((property) => {
         if (typeof property.data === 'object') {
@@ -82,6 +70,10 @@ export const Toolbar = (): React.JSX.Element => {
 
     if (asset.changes.customMetadata === true) {
       update.metadata = customMetadata
+    }
+
+    if (asset.changes.imageSettings === true) {
+      update.image = imageSettings
     }
 
     const savePromise = saveAsset({

@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { PimcoreDocument as PimcoreDocumentComponent } from './pimcore-document'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/PimcoreDocument',
+  title: 'Components/Data Display/Media/PimcoreDocument',
   component: PimcoreDocumentComponent,
   parameters: {
     layout: 'centered'

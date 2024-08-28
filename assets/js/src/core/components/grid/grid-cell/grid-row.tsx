@@ -12,20 +12,21 @@
 */
 
 import { type Row } from '@tanstack/react-table'
-import { type GridProps } from '../grid'
 import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
+import { type GridProps } from '../grid'
 
 export interface GridRowProps {
   row: Row<any>
-  modifiedCells: GridProps['modifiedCells']
+  modifiedCells: string
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
+  columns: GridProps['columns']
 }
 
-export const GridRow = ({ row, isSelected, ...props }: GridRowProps): React.JSX.Element => {
-  const modifiedCells = useMemo(() => props.modifiedCells ?? [], [props.modifiedCells])
+const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
+  const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
   return useMemo(() => {
     return (
@@ -37,11 +38,15 @@ export const GridRow = ({ row, isSelected, ...props }: GridRowProps): React.JSX.
           <td
             className='ant-table-cell'
             key={ cell.id }
-            style={
-              {
-                width: cell.column.getSize(),
-                maxWidth: cell.column.getSize()
-              }
+            style={ cell.column.columnDef.meta?.autoWidth === true
+              ? {
+                  width: 'auto',
+                  minWidth: cell.column.getSize()
+                }
+              : {
+                  width: cell.column.getSize(),
+                  maxWidth: cell.column.getSize()
+                }
             }
           >
             <GridCell
@@ -54,9 +59,13 @@ export const GridRow = ({ row, isSelected, ...props }: GridRowProps): React.JSX.
         ))}
       </tr>
     )
-  }, [row, props.modifiedCells, isSelected])
+  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
 
   function isModifiedCell (cellId: string): boolean {
-    return modifiedCells.find((item) => item.columnId === cellId) !== undefined
+    return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
   }
 }
+
+const CachedGridRow = React.memo(GridRow)
+
+export { CachedGridRow as GridRow }

@@ -31,7 +31,7 @@ export interface DefaultCellProps extends ExtendedCellContext {
 export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { column, table, row } = props
-  const [isEditable] = useState(column.columnDef.meta?.editable ?? false)
+  const [isEditable, setIsEditable] = useState(column.columnDef.meta?.editable ?? false)
   const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
@@ -40,6 +40,10 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
   const messageAPi = useMessage()
   const { t } = useTranslation()
   const oldInEditMode = usePrevious(isInEditMode)
+
+  useEffect(() => {
+    setIsEditable(column.columnDef.meta?.editable ?? false)
+  }, [column])
 
   useEffect(() => {
     if (oldInEditMode !== undefined && oldInEditMode !== isInEditMode && !isInEditMode) {
@@ -118,7 +122,7 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
       <div
         className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
         data-grid-column={ column.id }
-        data-grid-row={ row.id }
+        data-grid-row={ row.index }
         onCopy={ onCopy }
         onDoubleClick={ onDoubleClick }
         onKeyDown={ onKeyDown }
@@ -132,5 +136,5 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
         </EditableCellContextProvider>
       </div>
     )
-  }, [isInEditMode, props.getValue(), row, row.getIsSelected()])
+  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable])
 }

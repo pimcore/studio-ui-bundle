@@ -17,7 +17,7 @@ import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeli
 import { VersionCard } from '@Pimcore/components/version-card/version-card'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/VerticalTimeline',
+  title: 'Components/Data Display/VerticalTimeline',
   component: VerticalTimelineComponent,
   parameters: {
     layout: 'centered'
@@ -43,7 +43,7 @@ export const _default = {
         onClickDelete={ () => {
           console.log('Delete')
         } }
-        onClickPublish={ () => {
+        onClickPublish={ async () => {
           console.log('Publish')
         } }
         published={ false }
@@ -61,7 +61,7 @@ export const _default = {
         onClickDelete={ () => {
           console.log('Delete')
         } }
-        onClickPublish={ () => {
+        onClickPublish={ async () => {
           console.log('Publish')
         } }
         published={ false }
@@ -80,7 +80,7 @@ export const _default = {
         onClickDelete={ () => {
           console.log('Delete')
         } }
-        onClickPublish={ () => {
+        onClickPublish={ async () => {
           console.log('Publish')
         } }
         published

@@ -13,16 +13,14 @@
 
 import { ImageView } from '@Pimcore/components/grid/columns/views/image/image-view'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type CellContext } from '@tanstack/react-table'
 import React from 'react'
 
 type PreviewContainerProps = CellContext<Asset, string | undefined> | undefined
 
 const PreviewContainer = (props: PreviewContainerProps): React.JSX.Element => {
-  const { openAsset } = useAsset()
-
-  console.log({ value: props?.getValue() })
+  const { openAsset } = useAssetHelper()
 
   function openAssetWidget (): void {
     if (props !== undefined) {

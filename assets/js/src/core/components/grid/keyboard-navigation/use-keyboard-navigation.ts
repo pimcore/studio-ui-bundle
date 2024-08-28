@@ -23,7 +23,7 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
   const { tableElement } = useGrid()
 
   function handleArrowNavigation (event: KeyboardEvent): void {
-    let rowId = parseInt(props.row.id)
+    let rowId = props.row.index
     let columnId = props.column.id
     const isArrowKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)
 

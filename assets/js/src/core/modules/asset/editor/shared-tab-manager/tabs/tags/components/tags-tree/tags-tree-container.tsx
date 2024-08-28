@@ -12,8 +12,8 @@
 */
 
 import {
-  type AssignTagForElementApiArg,
-  useGetTagsQuery
+  type TagAssignToElementApiArg,
+  useTagGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   TagsTree,
@@ -35,7 +35,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
     setDefaultCheckedTags(Object.keys(props.tags).map(String))
   }, [props.tags])
 
-  const { data: tags, isLoading: tagsLoading } = useGetTagsQuery({
+  const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
     pageSize: 9999,
     filter
@@ -54,7 +54,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
       <TagsTree
         defaultCheckedTags={ defaultCheckedTags }
         elementId={ id! }
-        elementType={ 'asset' as AssignTagForElementApiArg['elementType'] }
+        elementType={ 'asset' as TagAssignToElementApiArg['elementType'] }
         isLoading={ tagsLoading }
         setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }

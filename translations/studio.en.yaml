@@ -53,7 +53,7 @@ asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
 asset.asset-editor-tabs.properties.text: Properties
-asset.asset-editor-tabs.properties.edit-own-properties: Editor own properties
+asset.asset-editor-tabs.properties.editable-properties: Editable properties
 asset.asset-editor-tabs.properties.all-properties: All Properties
 asset.asset-editor-tabs.properties.predefined-properties: Predefined Properties
 asset.asset-editor-tabs.properties.add-custom-property: Add a custom property
@@ -100,9 +100,14 @@ version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
 version.image: Image
 version.no-versions-to-show: There are no versions to show.
+version.clear-unpublished: Clear Unpublished
+version.clear-unpublished-versions: Clear unpublished versions
+version.confirm-clear-unpublished: Are you sure you want to clear all unpublished versions?
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
+yes: Yes
+no: No
 by: By
 field: Field
 no-data-available-yet: No data available yet.
@@ -150,8 +155,23 @@ asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
+listing.actions: Apply to selection
+listing.actions.zip-download: ZIP Download
+listing.actions.export: Export
+listing.actions.csv-export: CSV Export
+listing.actions.batch-edit: Batch edit
+data-type.input: Input
+data-type.textarea: Textarea
+data-type.date: Date
+data-type.text: Text
+data-type.document: Document
+data-type.asset: Asset
+data-type.object: Object
+data-type.checkbox: Checkbox
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
+properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
+properties.add-property-mandatory-fields-missing.error: Key and type are mandatory fields and need to be filled out.
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
@@ -168,6 +188,7 @@ notes-and-events.seo: seo
 notes-and-events.warning: warning
 notes-and-events.notice: notice
 notes-and-events.erp_import: erp_import
+notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
 add: Add
 save: Save
 type: Type
@@ -193,6 +214,8 @@ asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Mandatory fields missing
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 width: Width
 height: Height
 quality: Quality
@@ -207,6 +230,27 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
+jobs.notification.title: Notifications
+jobs.notification.jobs_one: "{{count}} Action"
+jobs.notification.jobs_other: "{{count}} Actions"
+jobs.job.in-progress: "{{title}} in progress"
+jobs.job.failed: "{{title}} failed"
+jobs.job.finished: "{{title}} finished"
+jobs.job.progress: "{{progress}}% completed"
+jobs.job.button-retry: Retry
+jobs.job.button-hide: hide
+jobs.job.button-download: download
+jobs.zip-job.title: "ZIP of {{title}}"
+jobs.csv-job.title: "CSV of {{title}}"
+export-csv-form.modal-title: Export CSV
+export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
+export-csv-form.form-field.delimiter: Delimiter
+export-csv-form.form-field.header: Header
+export-csv-form.form-field.header.option.name: System key
+export-csv-form.form-field.header.option.title: Label
+export-csv-form.form-field.header.option.no-header: No header
+form.validation.required: This field is required
+
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media

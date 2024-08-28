@@ -25,8 +25,9 @@ interface IEditorTabsStory extends IEditorTabsProps {
   loading: boolean
 }
 
+// TODO: Component needs refactoring because it contains business logic
 const config: Meta = {
-  title: 'Pimcore studio/UI/Editor Tabs',
+  title: 'Components/__Refactor__/EditorTabs',
   component: EditorTabs,
   parameters: {
     layout: 'centered'

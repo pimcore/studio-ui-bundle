@@ -1,108 +1,118 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Grid", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            cloneElement: build.mutation<CloneElementApiResponse, CloneElementApiArg>({
+            assetClone: build.mutation<AssetCloneApiResponse, AssetCloneApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Assets"],
             }),
-            getAssetCustomMetadataById: build.query<
-                GetAssetCustomMetadataByIdApiResponse,
-                GetAssetCustomMetadataByIdApiArg
+            assetCustomMetadataGetById: build.query<
+                AssetCustomMetadataGetByIdApiResponse,
+                AssetCustomMetadataGetByIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Assets"],
             }),
-            getAssetCustomSettingsById: build.query<
-                GetAssetCustomSettingsByIdApiResponse,
-                GetAssetCustomSettingsByIdApiArg
+            assetCustomSettingsGetById: build.query<
+                AssetCustomSettingsGetByIdApiResponse,
+                AssetCustomSettingsGetByIdApiArg
             >({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
                 providesTags: ["Assets"],
             }),
-            getAssetDataTextById: build.query<GetAssetDataTextByIdApiResponse, GetAssetDataTextByIdApiArg>({
+            assetGetTextDataById: build.query<AssetGetTextDataByIdApiResponse, AssetGetTextDataByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
-            deleteAsset: build.mutation<DeleteAssetApiResponse, DeleteAssetApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/delete`, method: "DELETE" }),
-                invalidatesTags: ["Assets"],
-            }),
-            streamDocumentPreview: build.query<StreamDocumentPreviewApiResponse, StreamDocumentPreviewApiArg>({
+            assetDocumentStreamPreview: build.query<
+                AssetDocumentStreamPreviewApiResponse,
+                AssetDocumentStreamPreviewApiArg
+            >({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
                 providesTags: ["Assets"],
             }),
-            createCsvAssets: build.mutation<CreateCsvAssetsApiResponse, CreateCsvAssetsApiArg>({
+            assetCreateCsv: build.mutation<AssetCreateCsvApiResponse, AssetCreateCsvApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/csv/create`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
-            createZipAssets: build.mutation<CreateZipAssetsApiResponse, CreateZipAssetsApiArg>({
+            assetCreateZip: build.mutation<AssetCreateZipApiResponse, AssetCreateZipApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/zip/create`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
-            downloadAssetsCsv: build.query<DownloadAssetsCsvApiResponse, DownloadAssetsCsvApiArg>({
+            assetDownloadCsv: build.query<AssetDownloadCsvApiResponse, AssetDownloadCsvApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/download/csv/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
             }),
-            deleteAssetsCsv: build.mutation<DeleteAssetsCsvApiResponse, DeleteAssetsCsvApiArg>({
+            assetDeleteCsv: build.mutation<AssetDeleteCsvApiResponse, AssetDeleteCsvApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/download/csv/${queryArg.jobRunId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Assets"],
             }),
-            downloadZippedAssets: build.query<DownloadZippedAssetsApiResponse, DownloadZippedAssetsApiArg>({
+            assetDownloadZip: build.query<AssetDownloadZipApiResponse, AssetDownloadZipApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/download/zip/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
             }),
-            deleteAssetsZip: build.mutation<DeleteAssetsZipApiResponse, DeleteAssetsZipApiArg>({
+            assetDeleteZip: build.mutation<AssetDeleteZipApiResponse, AssetDeleteZipApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/download/zip/${queryArg.jobRunId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Assets"],
             }),
-            downloadAssetById: build.query<DownloadAssetByIdApiResponse, DownloadAssetByIdApiArg>({
+            assetDownloadById: build.query<AssetDownloadByIdApiResponse, AssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
             }),
-            getAssetById: build.query<GetAssetByIdApiResponse, GetAssetByIdApiArg>({
+            assetGetById: build.query<AssetGetByIdApiResponse, AssetGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
             }),
-            updateAssetById: build.mutation<UpdateAssetByIdApiResponse, UpdateAssetByIdApiArg>({
+            assetUpdateById: build.mutation<AssetUpdateByIdApiResponse, AssetUpdateByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
-            getAvailableAssetGridConfiguration: build.query<
-                GetAvailableAssetGridConfigurationApiResponse,
-                GetAvailableAssetGridConfigurationApiArg
+            assetGetAvailableGridConfiguration: build.query<
+                AssetGetAvailableGridConfigurationApiResponse,
+                AssetGetAvailableGridConfigurationApiArg
             >({
                 query: () => ({ url: `/studio/api/assets/grid/available-configuration` }),
-                providesTags: ["Grid"],
+                providesTags: ["Asset Grid"],
             }),
-            getAssetGridConfiguration: build.query<
-                GetAssetGridConfigurationApiResponse,
-                GetAssetGridConfigurationApiArg
+            assetGetGridConfigurationByFolderId: build.query<
+                AssetGetGridConfigurationByFolderIdApiResponse,
+                AssetGetGridConfigurationByFolderIdApiArg
             >({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/grid/configuration/${queryArg.folderId}`,
                     params: { configurationId: queryArg.configurationId },
                 }),
-                providesTags: ["Grid"],
+                providesTags: ["Asset Grid"],
             }),
-            getAssetGrid: build.mutation<GetAssetGridApiResponse, GetAssetGridApiArg>({
+            assetSaveGridConfiguration: build.mutation<
+                AssetSaveGridConfigurationApiResponse,
+                AssetSaveGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/grid/configuration/save`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Asset Grid"],
+            }),
+            assetGetGrid: build.mutation<AssetGetGridApiResponse, AssetGetGridApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/grid`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Grid"],
+                invalidatesTags: ["Asset Grid"],
             }),
-            downloadCustomImage: build.query<DownloadCustomImageApiResponse, DownloadCustomImageApiArg>({
+            assetImageDownloadCustom: build.query<AssetImageDownloadCustomApiResponse, AssetImageDownloadCustomApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/image/download/custom`,
                     params: {
@@ -116,23 +126,29 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            downloadImageByFormat: build.query<DownloadImageByFormatApiResponse, DownloadImageByFormatApiArg>({
+            assetImageDownloadByFormat: build.query<
+                AssetImageDownloadByFormatApiResponse,
+                AssetImageDownloadByFormatApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/image/download/format/${queryArg.format}`,
                 }),
                 providesTags: ["Assets"],
             }),
-            downloadImageByThumbnail: build.query<DownloadImageByThumbnailApiResponse, DownloadImageByThumbnailApiArg>({
+            assetImageDownloadByThumbnail: build.query<
+                AssetImageDownloadByThumbnailApiResponse,
+                AssetImageDownloadByThumbnailApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/image/download/thumbnail/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
             }),
-            patchAssetById: build.mutation<PatchAssetByIdApiResponse, PatchAssetByIdApiArg>({
+            assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
-            getAssetTree: build.query<GetAssetTreeApiResponse, GetAssetTreeApiArg>({
+            assetGetTree: build.query<AssetGetTreeApiResponse, AssetGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/tree`,
                     params: {
@@ -148,7 +164,7 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            addAsset: build.mutation<AddAssetApiResponse, AddAssetApiArg>({
+            assetAdd: build.mutation<AssetAddApiResponse, AssetAddApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/add/${queryArg.parentId}`,
                     method: "POST",
@@ -156,14 +172,14 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
-            getAssetExists: build.query<GetAssetExistsApiResponse, GetAssetExistsApiArg>({
+            assetUploadInfo: build.query<AssetUploadInfoApiResponse, AssetUploadInfoApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/exists/${queryArg.parentId}`,
                     params: { fileName: queryArg.fileName },
                 }),
                 providesTags: ["Assets"],
             }),
-            replaceAsset: build.mutation<ReplaceAssetApiResponse, ReplaceAssetApiArg>({
+            assetReplace: build.mutation<AssetReplaceApiResponse, AssetReplaceApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/replace`,
                     method: "POST",
@@ -171,7 +187,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
-            addAssetsZip: build.mutation<AddAssetsZipApiResponse, AddAssetsZipApiArg>({
+            assetUploadZip: build.mutation<AssetUploadZipApiResponse, AssetUploadZipApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/add-zip/${queryArg.parentId}`,
                     method: "POST",
@@ -179,7 +195,10 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
-            getVideoImageThumbnail: build.query<GetVideoImageThumbnailApiResponse, GetVideoImageThumbnailApiArg>({
+            assetVideoImageThumbnailStream: build.query<
+                AssetVideoImageThumbnailStreamApiResponse,
+                AssetVideoImageThumbnailStreamApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/video/stream/image-thumbnail`,
                     params: {
@@ -192,19 +211,25 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            downloadVideoByThumbnail: build.query<DownloadVideoByThumbnailApiResponse, DownloadVideoByThumbnailApiArg>({
+            assetVideoDownloadByThumbnail: build.query<
+                AssetVideoDownloadByThumbnailApiResponse,
+                AssetVideoDownloadByThumbnailApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/video/download/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
             }),
-            streamVideoByThumbnail: build.query<StreamVideoByThumbnailApiResponse, StreamVideoByThumbnailApiArg>({
+            assetVideoStreamByThumbnail: build.query<
+                AssetVideoStreamByThumbnailApiResponse,
+                AssetVideoStreamByThumbnailApiArg
+            >({
                 query: (queryArg) => ({
                     url: `/studio/api/assets/${queryArg.id}/video/stream/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
             }),
-            downloadAssetVersionById: build.query<DownloadAssetVersionByIdApiResponse, DownloadAssetVersionByIdApiArg>({
+            versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
             }),
@@ -212,58 +237,49 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type CloneElementApiResponse =
-    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created jobRun for copying child assets */ {
+export type AssetCloneApiResponse =
+    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
         id: number;
     };
-export type CloneElementApiArg = {
+export type AssetCloneApiArg = {
     /** Id of the asset */
     id: number;
     /** ParentId of the asset */
     parentId: number;
 };
-export type GetAssetCustomMetadataByIdApiResponse = /** status 200 Array of custom metadata */ {
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
     items?: CustomMetadata[];
 };
-export type GetAssetCustomMetadataByIdApiArg = {
+export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type GetAssetCustomSettingsByIdApiResponse = /** status 200 Array of custom settings */ {
+export type AssetCustomSettingsGetByIdApiResponse = /** status 200 Successfully retrieved custom settings as JSON */ {
     items?: CustomSettings;
 };
-export type GetAssetCustomSettingsByIdApiArg = {
+export type AssetCustomSettingsGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type GetAssetDataTextByIdApiResponse = /** status 200 UTF8 encoded text data */ {
+export type AssetGetTextDataByIdApiResponse = /** status 200 Successfully retrieved UTF8 encoded text data of asset */ {
     /** UTF 8 encoded text data */
     data: string;
 };
-export type GetAssetDataTextByIdApiArg = {
+export type AssetGetTextDataByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type DeleteAssetApiResponse =
-    /** status 200 Successfully deleted asset */ void | /** status 201 Successfully created jobRun for deleting assets */ {
-        /** ID of created jobRun */
-        id: number;
-    };
-export type DeleteAssetApiArg = {
-    /** Id of the asset */
-    id: number;
-};
-export type StreamDocumentPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
-export type StreamDocumentPreviewApiArg = {
+export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
+export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
 };
-export type CreateCsvAssetsApiResponse = /** status 201 Successfully created jobRun for csv export */ {
+export type AssetCreateCsvApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
-export type CreateCsvAssetsApiArg = {
+export type AssetCreateCsvApiArg = {
     body: {
         assets?: number[];
         gridConfig?: GridColumnRequest[];
@@ -283,41 +299,41 @@ export type CreateCsvAssetsApiArg = {
         };
     };
 };
-export type CreateZipAssetsApiResponse = /** status 201 Successfully created jobRun for zip export */ {
+export type AssetCreateZipApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
-export type CreateZipAssetsApiArg = {
+export type AssetCreateZipApiArg = {
     body: {
         items?: number[];
     };
 };
-export type DownloadAssetsCsvApiResponse = /** status 200 CSV File */ Blob;
-export type DownloadAssetsCsvApiArg = {
+export type AssetDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
+export type AssetDownloadCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type DeleteAssetsCsvApiResponse = /** status 200 Success */ void;
-export type DeleteAssetsCsvApiArg = {
+export type AssetDeleteCsvApiResponse = /** status 200 Success */ void;
+export type AssetDeleteCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type DownloadZippedAssetsApiResponse = /** status 200 Zip archive */ Blob;
-export type DownloadZippedAssetsApiArg = {
+export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
+export type AssetDownloadZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type DeleteAssetsZipApiResponse = /** status 200 Success */ void;
-export type DeleteAssetsZipApiArg = {
+export type AssetDeleteZipApiResponse = /** status 200 Success */ void;
+export type AssetDeleteZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type DownloadAssetByIdApiResponse = /** status 200 Original asset */ Blob;
-export type DownloadAssetByIdApiArg = {
+export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary file */ Blob;
+export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type GetAssetByIdApiResponse = /** status 200 One of asset types */
+export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
     | Image
     | Document
     | Audio
@@ -326,11 +342,11 @@ export type GetAssetByIdApiResponse = /** status 200 One of asset types */
     | Text
     | AssetFolder
     | Unknown;
-export type GetAssetByIdApiArg = {
+export type AssetGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
+export type AssetUpdateByIdApiResponse = /** status 200 One of asset types */
     | Image
     | Document
     | Audio
@@ -339,7 +355,7 @@ export type UpdateAssetByIdApiResponse = /** status 200 One of asset types */
     | Text
     | AssetFolder
     | Unknown;
-export type UpdateAssetByIdApiArg = {
+export type AssetUpdateByIdApiArg = {
     /** Id of the asset */
     id: number;
     body: {
@@ -355,34 +371,51 @@ export type UpdateAssetByIdApiArg = {
         };
     };
 };
-export type GetAvailableAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
+export type AssetGetAvailableGridConfigurationApiResponse =
+    /** status 200 All available grid configurations for assets */ {
+        columns?: GridColumnConfiguration[];
+    };
+export type AssetGetAvailableGridConfigurationApiArg = void;
+export type AssetGetGridConfigurationByFolderIdApiResponse = /** status 200 Asset grid configuration */ {
     columns?: GridColumnConfiguration[];
 };
-export type GetAvailableAssetGridConfigurationApiArg = void;
-export type GetAssetGridConfigurationApiResponse = /** status 200 Grid configuration */ {
-    columns?: GridColumnConfiguration[];
-};
-export type GetAssetGridConfigurationApiArg = {
+export type AssetGetGridConfigurationByFolderIdApiArg = {
     /** FolderId of the element */
     folderId: number;
     /** Configuration ID */
     configurationId?: number;
 };
-export type GetAssetGridApiResponse = /** status 200 Grid data */ {
+export type AssetSaveGridConfigurationApiResponse = /** status 200 Asset grid configuration saved successfully */ void;
+export type AssetSaveGridConfigurationApiArg = {
+    body: {
+        folderId: number;
+        pageSize?: number;
+        name?: string;
+        description?: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns?: Column[];
+        filter?: GridFilter | null;
+    };
+};
+export type AssetGetGridApiResponse = /** status 200 Asset grid data */ {
     totalItems: number;
     items: {
         columns?: GridColumnData[];
     }[];
 };
-export type GetAssetGridApiArg = {
+export type AssetGetGridApiArg = {
     body: {
         folderId: number;
         columns: GridColumnRequest[];
         filters?: GridFilter;
     };
 };
-export type DownloadCustomImageApiResponse = /** status 200 Custom image */ Blob;
-export type DownloadCustomImageApiArg = {
+export type AssetImageDownloadCustomApiResponse = /** status 200 Custom image binary file */ Blob;
+export type AssetImageDownloadCustomApiArg = {
     /** Id of the image */
     id: number;
     /** Mime type of downloaded image. */
@@ -398,40 +431,43 @@ export type DownloadCustomImageApiArg = {
     /** Dpi of downloaded image */
     dpi?: number;
 };
-export type DownloadImageByFormatApiResponse = /** status 200 Image based on format */ Blob;
-export type DownloadImageByFormatApiArg = {
+export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
+export type AssetImageDownloadByFormatApiArg = {
     /** Id of the image */
     id: number;
     /** Find asset by matching format type. */
     format: "office" | "print" | "web";
 };
-export type DownloadImageByThumbnailApiResponse = /** status 200 Image based on thumbnail name */ Blob;
-export type DownloadImageByThumbnailApiArg = {
+export type AssetImageDownloadByThumbnailApiResponse =
+    /** status 200 Image asset binary file based on thumbnail name */ Blob;
+export type AssetImageDownloadByThumbnailApiArg = {
     /** Id of the image */
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type PatchAssetByIdApiResponse =
+export type AssetPatchByIdApiResponse =
     /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
         /** ID of created jobRun */
         id: number;
     };
-export type PatchAssetByIdApiArg = {
+export type AssetPatchByIdApiArg = {
     body: {
         data: {
             /** Asset ID */
             id: number;
             parentId?: number | null;
+            key?: string | null;
+            locked?: string | null;
             metadata?: PatchCustomMetadata[] | null;
         }[];
     };
 };
-export type GetAssetTreeApiResponse = /** status 200 Paginated assets with total count as header param */ {
+export type AssetGetTreeApiResponse = /** status 200 asset_get_tree_success_description */ {
     totalItems: number;
     items: (Image | Document | Audio | Video | Archive | Text | AssetFolder | Unknown)[];
 };
-export type GetAssetTreeApiArg = {
+export type AssetGetTreeApiArg = {
     /** Page number */
     page: number;
     /** Number of items per page */
@@ -449,11 +485,11 @@ export type GetAssetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
-export type AddAssetApiResponse = /** status 200 Successfully uploaded new asset */ {
+export type AssetAddApiResponse = /** status 200 ID of successfully uploaded new asset */ {
     /** ID of created asset */
     id: number;
 };
-export type AddAssetApiArg = {
+export type AssetAddApiArg = {
     /** ParentId of the asset */
     parentId: number;
     body: {
@@ -461,19 +497,19 @@ export type AddAssetApiArg = {
         file: Blob;
     };
 };
-export type GetAssetExistsApiResponse =
+export type AssetUploadInfoApiResponse =
     /** status 200 Returns true if asset with the same name and in the same path already exists, false otherwise */ {
         /** True if asset exists, false otherwise */
         exists: boolean;
     };
-export type GetAssetExistsApiArg = {
+export type AssetUploadInfoApiArg = {
     /** ParentId of the asset */
     parentId: number;
     /** Name of the file to upload */
     fileName: string;
 };
-export type ReplaceAssetApiResponse = /** status 200 Successfully replaced asset binary */ void;
-export type ReplaceAssetApiArg = {
+export type AssetReplaceApiResponse = /** status 200 Successfully replaced asset binary */ void;
+export type AssetReplaceApiArg = {
     /** Id of the asset */
     id: number;
     body: {
@@ -481,11 +517,11 @@ export type ReplaceAssetApiArg = {
         file: Blob;
     };
 };
-export type AddAssetsZipApiResponse = /** status 201 Successfully created jobRun to upload multiple assets */ {
+export type AssetUploadZipApiResponse = /** status 201 Successfully created jobRun ID to upload multiple assets */ {
     /** ID of created jobRun */
     id: number;
 };
-export type AddAssetsZipApiArg = {
+export type AssetUploadZipApiArg = {
     /** ParentId of the asset */
     parentId: number;
     body: {
@@ -493,8 +529,8 @@ export type AddAssetsZipApiArg = {
         zipFile: Blob;
     };
 };
-export type GetVideoImageThumbnailApiResponse = /** status 200 Streamed video image thumbnail */ Blob;
-export type GetVideoImageThumbnailApiArg = {
+export type AssetVideoImageThumbnailStreamApiResponse = /** status 200 Video image thumbnail stream */ Blob;
+export type AssetVideoImageThumbnailStreamApiArg = {
     /** Id of the video */
     id: number;
     /** Width of the video image thumbnail */
@@ -508,22 +544,22 @@ export type GetVideoImageThumbnailApiArg = {
     /** Generate the asset asynchronously */
     async?: boolean;
 };
-export type DownloadVideoByThumbnailApiResponse = /** status 200 Video based on thumbnail name */ Blob;
-export type DownloadVideoByThumbnailApiArg = {
+export type AssetVideoDownloadByThumbnailApiResponse = /** status 200 Video binary file based on thumbnail name */ Blob;
+export type AssetVideoDownloadByThumbnailApiArg = {
     /** Id of the video */
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type StreamVideoByThumbnailApiResponse = /** status 200 Video stream based on thumbnail name */ Blob;
-export type StreamVideoByThumbnailApiArg = {
+export type AssetVideoStreamByThumbnailApiResponse = /** status 200 Video stream based on thumbnail name */ Blob;
+export type AssetVideoStreamByThumbnailApiArg = {
     /** Id of the video */
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type DownloadAssetVersionByIdApiResponse = /** status 200 Asset version binary file */ Blob;
-export type DownloadAssetVersionByIdApiArg = {
+export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
+export type VersionAssetDownloadByIdApiArg = {
     /** Id of the version */
     id: number;
 };
@@ -553,9 +589,9 @@ export type CustomMetadata = {
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetaData: any[];
+    embeddedMetadata: any[];
     /** flag to indicate if the embedded meta data has been extracted from the asset */
-    embeddedMetaDataExtracted: boolean;
+    embeddedMetadataExtracted: boolean;
 };
 export type CustomSettings = {
     /** AdditionalAttributes */
@@ -579,6 +615,12 @@ export type GridColumnRequest = {
     /** Config */
     config: string[];
 };
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
 export type Element = {
     /** ID */
     id: number;
@@ -586,6 +628,7 @@ export type Element = {
     parentId: number;
     /** path */
     path: string;
+    icon?: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
@@ -601,7 +644,7 @@ export type Element = {
 };
 export type CustomAttributes = {
     /** Custom Icon */
-    icon: string | null;
+    icon: ElementIcon | null;
     /** Custom Tooltip */
     tooltip: string | null;
     /** AdditionalIcons */
@@ -638,8 +681,6 @@ export type Asset = Element & {
         [key: string]: string | number | boolean | object | any[];
     };
     customAttributes?: CustomAttributes;
-    /** IconName */
-    iconName?: string;
     /** Has children */
     hasChildren?: boolean;
     /** Type */
@@ -649,7 +690,7 @@ export type Asset = Element & {
     /** Mimetype */
     mimeType?: string | null;
     /** Has metadata */
-    hasMetaData?: boolean;
+    hasMetadata?: boolean;
     /** Workflow permissions */
     hasWorkflowWithPermissions?: boolean;
     /** Full path */
@@ -750,17 +791,13 @@ export type GridColumnConfiguration = {
     /** Config */
     config: object;
 };
-export type GridColumnData = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Key */
-    key?: string;
-    /** Locale */
-    locale?: string | null;
-    /** Value */
-    value?: any | null;
+export type Column = {
+    /** Key of the Column */
+    key: string;
+    /** Locale of the Column */
+    locale: string | null;
+    /** Group of the Column */
+    group: string;
 };
 export type GridFilter = {
     /** Page */
@@ -774,6 +811,18 @@ export type GridFilter = {
     /** Sort Filter */
     sortFilter?: object;
 };
+export type GridColumnData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Value */
+    value?: any | null;
+};
 export type PatchCustomMetadata = {
     /** Name */
     name: string;
@@ -783,35 +832,35 @@ export type PatchCustomMetadata = {
     data?: string | null;
 };
 export const {
-    useCloneElementMutation,
-    useGetAssetCustomMetadataByIdQuery,
-    useGetAssetCustomSettingsByIdQuery,
-    useGetAssetDataTextByIdQuery,
-    useDeleteAssetMutation,
-    useStreamDocumentPreviewQuery,
-    useCreateCsvAssetsMutation,
-    useCreateZipAssetsMutation,
-    useDownloadAssetsCsvQuery,
-    useDeleteAssetsCsvMutation,
-    useDownloadZippedAssetsQuery,
-    useDeleteAssetsZipMutation,
-    useDownloadAssetByIdQuery,
-    useGetAssetByIdQuery,
-    useUpdateAssetByIdMutation,
-    useGetAvailableAssetGridConfigurationQuery,
-    useGetAssetGridConfigurationQuery,
-    useGetAssetGridMutation,
-    useDownloadCustomImageQuery,
-    useDownloadImageByFormatQuery,
-    useDownloadImageByThumbnailQuery,
-    usePatchAssetByIdMutation,
-    useGetAssetTreeQuery,
-    useAddAssetMutation,
-    useGetAssetExistsQuery,
-    useReplaceAssetMutation,
-    useAddAssetsZipMutation,
-    useGetVideoImageThumbnailQuery,
-    useDownloadVideoByThumbnailQuery,
-    useStreamVideoByThumbnailQuery,
-    useDownloadAssetVersionByIdQuery,
+    useAssetCloneMutation,
+    useAssetCustomMetadataGetByIdQuery,
+    useAssetCustomSettingsGetByIdQuery,
+    useAssetGetTextDataByIdQuery,
+    useAssetDocumentStreamPreviewQuery,
+    useAssetCreateCsvMutation,
+    useAssetCreateZipMutation,
+    useAssetDownloadCsvQuery,
+    useAssetDeleteCsvMutation,
+    useAssetDownloadZipQuery,
+    useAssetDeleteZipMutation,
+    useAssetDownloadByIdQuery,
+    useAssetGetByIdQuery,
+    useAssetUpdateByIdMutation,
+    useAssetGetAvailableGridConfigurationQuery,
+    useAssetGetGridConfigurationByFolderIdQuery,
+    useAssetSaveGridConfigurationMutation,
+    useAssetGetGridMutation,
+    useAssetImageDownloadCustomQuery,
+    useAssetImageDownloadByFormatQuery,
+    useAssetImageDownloadByThumbnailQuery,
+    useAssetPatchByIdMutation,
+    useAssetGetTreeQuery,
+    useAssetAddMutation,
+    useAssetUploadInfoQuery,
+    useAssetReplaceMutation,
+    useAssetUploadZipMutation,
+    useAssetVideoImageThumbnailStreamQuery,
+    useAssetVideoDownloadByThumbnailQuery,
+    useAssetVideoStreamByThumbnailQuery,
+    useVersionAssetDownloadByIdQuery,
 } = injectedRtkApi;

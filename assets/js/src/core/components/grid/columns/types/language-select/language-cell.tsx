@@ -21,11 +21,17 @@ export const LanguageCell = (props: DefaultCellProps): React.JSX.Element => {
 
   const modifiedProps = {
     ...props,
-    row: {
-      ...props.row,
-      original: {
-        ...props.row.original,
-        config: settings.requiredLanguages.join(',')
+    column: {
+      ...props.column,
+      columnDef: {
+        ...props.column.columnDef,
+        meta: {
+          ...props.column.columnDef.meta,
+          config: {
+            ...props.column.columnDef?.meta?.config,
+            options: settings.requiredLanguages
+          }
+        }
       }
     }
   }

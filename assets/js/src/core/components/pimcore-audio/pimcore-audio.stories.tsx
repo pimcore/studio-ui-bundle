@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { PimcoreAudio as PimcoreAudioComponent } from './pimcore-audio'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/PimcoreAudio',
+  title: 'Components/Data Display/Media/PimcoreAudio',
   component: PimcoreAudioComponent,
   parameters: {
     layout: 'centered'
