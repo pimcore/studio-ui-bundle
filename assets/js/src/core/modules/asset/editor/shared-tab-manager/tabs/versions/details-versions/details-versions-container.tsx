@@ -21,7 +21,7 @@ import {
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
 import {
   type AssetVersionData,
-  hydrateVersionData,
+  hydrateVersionData, loadPreviewImage,
   versionsDataToTableData
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
 import { store } from '@Pimcore/app/store'
@@ -39,6 +39,7 @@ export const DetailsVersionsContainer = ({
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
 
+    setVersions([])
     setGridData([])
 
     versionIds.forEach(async vId => {
@@ -49,13 +50,23 @@ export const DetailsVersionsContainer = ({
     Promise.all(versionPromises)
       .then((responses): void => {
         const versions: AssetVersionData[] = []
+        const imagePromises: Array<Promise<string | null>> = []
         responses.forEach((response, versionIndex) => {
           const dataRaw = response.data as AssetVersion
           versions.push(hydrateVersionData(dataRaw, versionIds[versionIndex].id, versionIds[versionIndex].count))
+          imagePromises.push(loadPreviewImage(dataRaw, versionIds[versionIndex].id))
         })
 
-        setVersions(versions)
-        setGridData(versionsDataToTableData(versions))
+        Promise.all(imagePromises)
+          .then((imageUrls): void => {
+            versions.forEach((version, versionIndex) => {
+              version.previewImageUrl = imageUrls[versionIndex]
+            })
+
+            setVersions(versions)
+            setGridData(versionsDataToTableData(versions))
+          })
+          .catch(err => { console.log(err) })
       })
       .catch(err => { console.log(err) })
   }, [versionIds])

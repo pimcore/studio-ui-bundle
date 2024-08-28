@@ -68,11 +68,10 @@ export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, ver
       dimensions: dataRaw.dimensions !== null && dataRaw.dimensions !== undefined ? dataRaw.dimensions.width + ' x ' + dataRaw.dimensions.height : ''
     },
     metadata: formatMetadata(dataRaw.metadata),
-    previewImageUrl: isImageVersion(dataRaw) ? '/studio/api/versions/' + versionId + '/image/stream' : null,
+    previewImageUrl: `/studio/api/versions/${versionId}/image/stream`,
     dataRaw
   }
 }
-
 const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<string, AssetVersionMetadata> => {
   const metadataTypeRegistry = container.get<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
 
@@ -100,6 +99,26 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
 
 const isImageVersion = (version: AssetVersion): boolean => {
   return version.type === 'image'
+}
+
+export const loadPreviewImage = async (version: AssetVersion, versionId: number): Promise<string | null> => {
+  if (!isImageVersion(version)) {
+    return null
+  }
+  let result: string | null = null
+
+  await fetch(`/studio/api/versions/${versionId}/image/stream`, {
+    cache: 'force-cache'
+  })
+    .then(async (response) => await response.blob())
+    .then((imageBlob) => {
+      result = URL.createObjectURL(imageBlob)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+
+  return result
 }
 
 export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
