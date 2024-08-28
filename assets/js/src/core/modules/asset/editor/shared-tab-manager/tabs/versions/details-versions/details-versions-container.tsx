@@ -39,6 +39,8 @@ export const DetailsVersionsContainer = ({
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
 
+    setGridData([])
+
     versionIds.forEach(async vId => {
       const id = vId.id
       versionPromises.push(store.dispatch(api.endpoints.versionGetById.initiate({ id })))

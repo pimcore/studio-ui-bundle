@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   api, type AssetVersion, type Version
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
@@ -37,11 +37,12 @@ export const DetailsVersionContainer = ({
   const [versionData, setVersionData] = useState([] as object[])
   const [versionPreviewImageUrl, setVersionPreviewImageUrl] = useState<string | null>(null)
 
-  useMemo(() => {
+  useEffect(() => {
+    setVersionData([])
     setVId(versionId)
   }, [versionId])
 
-  useMemo(() => {
+  useEffect(() => {
     const versionPromise = store.dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
 
     Promise.resolve(versionPromise)
@@ -71,10 +72,12 @@ export const DetailsVersionContainer = ({
   )
 
   function onClickNext (): void {
+    setVersionData([])
     setVersionIdByOffset(1)
   }
 
   function onClickPrevious (): void {
+    setVersionData([])
     setVersionIdByOffset(-1)
   }
 
