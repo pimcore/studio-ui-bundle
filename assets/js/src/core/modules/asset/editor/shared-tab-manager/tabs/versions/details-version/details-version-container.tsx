@@ -27,11 +27,13 @@ import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-ta
 export interface DetailsVersionsContainerProps {
   versions: Version[]
   versionId: VersionIdentifiers
+  setDetailedVersions: (vIds: VersionIdentifiers[]) => void
 }
 
 export const DetailsVersionContainer = ({
   versions,
-  versionId
+  versionId,
+  setDetailedVersions
 }: DetailsVersionsContainerProps): React.JSX.Element => {
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
@@ -44,7 +46,6 @@ export const DetailsVersionContainer = ({
 
   useEffect(() => {
     const versionPromise = store.dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
-
     Promise.resolve(versionPromise)
       .then((responses): void => {
         const dataRaw = responses.data as AssetVersion
@@ -85,10 +86,10 @@ export const DetailsVersionContainer = ({
     for (let i = 0; i < versions.length; i++) {
       if (versions[i].id === vId.id) {
         if ((i + offset) >= 0 && (i + offset) < versions.length) {
-          setVId({
+          setDetailedVersions([{
             id: versions[i + offset].id,
             count: versions[i + offset].versionCount
-          })
+          }])
         }
         break
       }
