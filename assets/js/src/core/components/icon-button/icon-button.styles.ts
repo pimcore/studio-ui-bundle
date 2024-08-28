@@ -16,7 +16,6 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
-      border: none;
       padding: 6px;
       height: auto;
       line-height: 0;

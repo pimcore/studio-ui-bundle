@@ -32,3 +32,24 @@ export const _default = {
     children: 'Delete'
   }
 }
+
+export const primary = {
+  args: {
+    ..._default.args,
+    type: 'primary'
+  }
+}
+
+export const link = {
+  args: {
+    ..._default.args,
+    type: 'link'
+  }
+}
+
+export const text = {
+  args: {
+    ..._default.args,
+    type: 'text'
+  }
+}

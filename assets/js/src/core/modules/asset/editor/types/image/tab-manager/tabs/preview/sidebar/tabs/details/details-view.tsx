@@ -13,9 +13,10 @@
 
 import React, { useState } from 'react'
 import { useStyle } from './details.styles'
-import { Button, Collapse, type CollapseProps, Form, Input, Select } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
+import { Collapse, type CollapseProps, Form, Input, Select } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface CustomDownloadProps {
   width: number
@@ -261,9 +262,9 @@ export const AssetEditorSidebarDetailsView = ({
                 }
               </Select>
 
-              <Button
+              <IconButton
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ <Icon name={ 'download-02' } /> }
+                icon={ 'download-02' }
                 onClick={ () => { onClickDownloadByFormat(downloadFormat) } }
               />
             </div>

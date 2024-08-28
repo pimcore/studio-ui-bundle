@@ -17,9 +17,8 @@ import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface DetailsVersionViewProps {
   versionId: VersionIdentifiers
@@ -52,9 +51,9 @@ export const DetailsVersionView = ({
   return (
     <div className={ styles['right-side'] }>
       <div className={ 'image-slider' }>
-        <Button
+        <IconButton
           disabled={ firstVersion }
-          icon={ <Icon name={ 'left-outlined' } /> }
+          icon={ 'left-outlined' }
           onClick={ onClickPrevious }
           type={ 'text' }
         />
@@ -62,9 +61,9 @@ export const DetailsVersionView = ({
           className={ 'image-slider__image' }
           src={ imgSrc }
         />
-        <Button
+        <IconButton
           disabled={ lastVersion }
-          icon={ <Icon name={ 'right-outlined' } /> }
+          icon={ 'right-outlined' }
           onClick={ onClickNext }
           type={ 'text' }
         />

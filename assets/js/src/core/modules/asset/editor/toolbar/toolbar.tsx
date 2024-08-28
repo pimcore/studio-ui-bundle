@@ -14,7 +14,7 @@
 import React, { useContext, useEffect } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'

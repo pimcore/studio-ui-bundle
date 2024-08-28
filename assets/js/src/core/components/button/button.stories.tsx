@@ -11,31 +11,25 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { IconButton } from './icon-button'
+import type { Meta } from '@storybook/react'
+import { Button } from './button'
+
 
 const config: Meta = {
-  title: 'Components/Controls/Buttons/IconButton',
-  component: IconButton,
+  title: 'Components/Controls/Buttons/Button',
+  component: Button,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'centered'
   },
-  tags: ['autodocs']
+  tags: ['autodocs'],
 }
 
 export default config
 
 export const _default = {
   args: {
-    icon: 'trash',
-    loading: false
-  }
-}
-
-export const secondary = {
-  args: {
-    ..._default.args,
-    theme: 'secondary'
+    loading: false,
+    children: 'Button'
   }
 }
 
@@ -46,9 +40,16 @@ export const primary = {
   }
 }
 
-export const outlined = {
+export const text = {
   args: {
     ..._default.args,
-    type: 'default'
+    type: 'text'
+  }
+}
+
+export const link = {
+  args: {
+    ..._default.args,
+    type: 'link'
   }
 }

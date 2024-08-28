@@ -11,7 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Checkbox, Input } from 'antd'
+import { Checkbox, Input } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
