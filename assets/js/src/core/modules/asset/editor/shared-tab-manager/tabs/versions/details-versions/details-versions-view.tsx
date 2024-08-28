@@ -65,6 +65,7 @@ export const DetailsVersionsView = ({
 
       <Space
         direction="vertical"
+        size="large"
         style={ { maxWidth: versions.length > 1 ? 1200 : 600 } }
       >
         <Flex
