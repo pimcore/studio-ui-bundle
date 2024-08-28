@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './langguage-selection.styles'

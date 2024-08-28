@@ -13,7 +13,7 @@
 
 import React, { useContext } from 'react'
 import { useDraggable, type UseDraggableArguments } from '@dnd-kit/core'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { CSS } from '@dnd-kit/utilities'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './draggable-item.styles'

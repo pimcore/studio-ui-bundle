@@ -17,7 +17,7 @@ import { useStyle } from './open-element-cell.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 
 export const OpenElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()

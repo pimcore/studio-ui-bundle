@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Space, Tag } from 'antd'
+import { Card, Space, Tag } from 'antd'
 import React, { useState } from 'react'
 import { useStyle } from './note-and-event-card.styles'
 import { Icon } from '../icon/icon'
@@ -110,7 +110,7 @@ export const NoteAndEventCard = ({
         title={ titleElement }
       >
         <span className={ 'card-body__description ' + (showDetails ? 'card-body__description-padding' : '') }>
-          {respectLineBreak(description, false)}
+          {respectLineBreak(description)}
         </span>
         {showDetails && (
           <div>

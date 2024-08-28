@@ -250,3 +250,10 @@ export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+
+thumbnail: Thumbnail
+select-image-preview: Select Image Preview
+choose-media: Choose Media
+current-player-position: Current Player Position
+drag-and-drop-asset: Drag and Drop Asset
+apply: Apply

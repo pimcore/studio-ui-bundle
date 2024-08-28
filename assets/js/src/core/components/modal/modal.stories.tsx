@@ -12,7 +12,7 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 import { FileList } from '@Pimcore/components/modal/file-list/file-list'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'

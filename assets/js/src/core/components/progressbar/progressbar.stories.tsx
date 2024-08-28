@@ -14,7 +14,7 @@
 import { type Meta } from '@storybook/react'
 import React from 'react'
 import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 
 const config: Meta = {
   title: 'Components/Data Display/Progressbar',

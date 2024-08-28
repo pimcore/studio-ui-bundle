@@ -13,13 +13,13 @@
 
 import React, { type FocusEvent, useContext, useEffect, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
-import { Button, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
+import { IconButton } from '../icon-button/icon-button'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -92,14 +92,9 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
       tmpItem.label = (
         <>
           <span>{tmpItem.label}</span>
-          <Button
+          <IconButton
             className={ 'detachable-button' }
-            icon={
-              <Icon
-                name={ 'share-03' }
-                options={ { width: 14, height: 14 } }
-              />
-            }
+            icon={ 'share-03' }
             onClick={ () => {
               openDetachedWidget(tmpItem)
             } }

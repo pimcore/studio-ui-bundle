@@ -13,13 +13,13 @@
 
 import { useTranslation } from 'react-i18next'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Button, Result } from 'antd'
+import { Result } from 'antd'
 import React from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { type Schedule, useScheduleDeleteByIdMutation } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './table.styles'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 type ScheduleTable = Schedule & {
   actions: React.ReactNode
@@ -84,8 +84,8 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       cell: (info) => {
         return (
           <div className={ 'schedule-table--actions-column' }>
-            <Button
-              icon={ <Icon name="trash" /> }
+            <IconButton
+              icon={ 'trash' }
               onClick={ (): void => {
                 deleteSchedule({ id: info.row.original.id })
                   .unwrap()

@@ -13,7 +13,8 @@
 
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Button, Checkbox, Form, Space } from 'antd'
+import { Checkbox, Form, Space } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import Search from 'antd/es/input/Search'
 import React from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'

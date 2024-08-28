@@ -13,7 +13,7 @@
 
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { type ReactNode, useState } from 'react'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from './action-list.style'
 import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
 import { useTranslation } from 'react-i18next'

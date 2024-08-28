@@ -18,8 +18,6 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from 'antd'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyle } from './assigned-tags.styles'
 import {
@@ -27,6 +25,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -87,9 +86,9 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
 
         return (
           <div className={ 'tags-table--actions-column' }>
-            <Button
+            <IconButton
               disabled={ isLoading }
-              icon={ <Icon name="trash" /> }
+              icon={ 'trash' }
               loading={ isLoading }
               onClick={ handleClick }
               type="link"
