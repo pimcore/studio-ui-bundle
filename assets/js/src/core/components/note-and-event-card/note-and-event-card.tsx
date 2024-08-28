@@ -59,14 +59,12 @@ export const NoteAndEventCard = ({
   const titleElement = (
     <>
       <Space>
-        { title !== ''
-          ? (
-            <>
-              <span className={ 'card-title' }>{title}</span>
-              <span className={ 'card-title__divider' }>|</span>
-            </>
-            )
-          : null }
+        { title !== '' && (
+        <>
+          <span className={ 'card-title' }>{title}</span>
+          <span className={ 'card-title__divider' }>|</span>
+        </>
+        )}
         <span className={ 'card-title__user' }>{user}</span>
       </Space>
 
