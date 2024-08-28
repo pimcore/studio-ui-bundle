@@ -17,7 +17,7 @@ import { Progressbar } from '@Pimcore/components/progressbar/progressbar'
 import { Button } from 'antd'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Progressbar',
+  title: 'Components/Data Display/Progressbar',
   component: (args) => {
     return (
       <div style={ { minWidth: '500px' } }>

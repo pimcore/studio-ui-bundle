@@ -11,40 +11,41 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useStyles
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
-import { Button, Input, Select } from 'antd'
+import { Button } from 'antd'
 import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { useModal } from '@Pimcore/components/modal/useModal'
-import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import TextArea from 'antd/es/input/TextArea'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   CardHeaderContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
 import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  AddNoteModal
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
   pagination: React.JSX.Element
   onClickTrash: (id: number) => void
-  onClickSaveNote: (type: string, title: string, description: string) => void
+  elementType: 'asset' | 'document' | 'data-object'
+  elementId: number
 }
 
 export const NotesAndEventsTabView = ({
   notes,
   pagination,
   onClickTrash,
-  onClickSaveNote
+  elementId,
+  elementType
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -53,6 +54,7 @@ export const NotesAndEventsTabView = ({
   let type = ''
   let title = ''
   let description = ''
+  const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
 
   const NotesAndEvents = notes.map((note) => {
     let showDetails = false
@@ -152,12 +154,19 @@ export const NotesAndEventsTabView = ({
                 name={ 'PlusCircleOutlined' }
                 options={ { width: '24px', height: '24px' } }
                      /> }
-              onClick={ showModal }
+              onClick={ () => { setAddNoteModalOpen(true) } }
             >
               {t('add')}
             </Button>
             {modal}
           </CardHeaderContainer>
+            <AddNoteModal
+              elementId={ elementId }
+              elementType={ elementType }
+              open={ addNoteModalOpen }
+              setOpen={ setAddNoteModalOpen }
+            />
+          </div>
           {notes.length > 0
             ? (
               <CardContainer>
@@ -182,13 +191,4 @@ export const NotesAndEventsTabView = ({
       </div>
     </div>
   )
-
-  function onClickSaveModal (): void {
-    if (title === '') {
-      // TODO display notification title is mandatory
-      return
-    }
-    handleOk()
-    onClickSaveNote(type, title, description)
-  }
 }

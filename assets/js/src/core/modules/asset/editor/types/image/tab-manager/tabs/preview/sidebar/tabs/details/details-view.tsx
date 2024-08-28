@@ -228,7 +228,7 @@ export const AssetEditorSidebarDetailsView = ({
 
   return (
     <div className={ styles.sidebarContentEntry }>
-      <p className={ 'sidebar__content-label' }>Details</p>
+      <p className={ 'sidebar__content-label' }>{t('details')}</p>
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>

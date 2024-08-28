@@ -243,8 +243,8 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                           {header.column.getCanSort() && (
                             <div className='grid__sorter'>
                               <SortButton
+                                allowUnsorted={ sorting === undefined }
                                 onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-
                                 value={ getSortDirection(header.column) }
                               />
                             </div>

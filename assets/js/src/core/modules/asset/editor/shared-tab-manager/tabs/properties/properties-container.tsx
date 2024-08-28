@@ -184,6 +184,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
     </div>
   )
 
+  function propertyExists (key: string): boolean {
+    return properties?.find((prop) => prop.key === key && !prop.inherited) !== undefined
+  }
+
   function onPredefinedPropertyChange (value: string): void {
     const property = data?.items?.find((item) => item.id === value)
 
@@ -191,7 +195,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
       return
     }
 
-    if (properties?.find((prop) => prop.key === property.name) !== undefined) {
+    if (propertyExists(property.name)) {
       showDuplicatePropertyModal()
       return
     }
@@ -228,7 +232,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
       return
     }
 
-    if (properties?.find((prop) => prop.key === keyInputValue.current) !== undefined) {
+    if (propertyExists(keyInputValue.current)) {
       showDuplicatePropertyModal()
       return
     }

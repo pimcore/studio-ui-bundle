@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/No Content',
+  title: 'Components/Data Display/No Content',
   component: NoContent,
   parameters: {
     layout: 'centered'

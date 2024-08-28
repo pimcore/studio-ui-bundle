@@ -13,11 +13,11 @@
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useMemo, useState } from 'react'
-import { GridToolbarContainer } from '../list/grid-toolbar-container'
-import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
+import { GridToolbarContainer } from '../list/toolbar/grid-toolbar-container'
 import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -44,7 +44,7 @@ const PreviewContainer = (): React.JSX.Element => {
   return useMemo(() => (
     <>
       { data !== undefined && (
-        <ContentToolbarSidebarView
+        <ContentToolbarSidebarLayout
           renderToolbar={
             <GridToolbarContainer
               pager={ {
@@ -57,7 +57,7 @@ const PreviewContainer = (): React.JSX.Element => {
           }
         >
           <FlexContainer assets={ data } />
-        </ContentToolbarSidebarView>
+        </ContentToolbarSidebarLayout>
       )}
     </>
   ), [currentPage, pageSize, data])

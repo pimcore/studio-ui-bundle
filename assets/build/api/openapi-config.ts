@@ -63,6 +63,12 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/app/settings/settings-slice.gen.ts': {
       filterEndpoints: /settings/i
+    },
+    '../../js/src/core/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/mercure/i)
+    },
+    '../../js/src/core/modules/asset/editor/types/asset-thumbnails-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/thumbnails/i)
     }
   },
   exportName: 'api',

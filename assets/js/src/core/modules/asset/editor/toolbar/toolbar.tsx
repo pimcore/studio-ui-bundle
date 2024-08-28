@@ -23,7 +23,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, properties, removeTrackedChanges, customMetadata } = useAssetDraft(id!)
+  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess }] = useAssetUpdateByIdMutation()
   const messageApi = useMessage()
@@ -37,28 +37,16 @@ export const Toolbar = (): React.JSX.Element => {
   }, [isSuccess])
 
   return (
-    <ToolbarView
-      pinnableToolbarElements={
-    [
-      {
-        iconName: 'refresh',
-        label: t('toolbar.reload'),
-        pinning: true
-      }
-    ]
-  }
-      renderSaveButton={
-        <Button
-          disabled={ !hasChanges || isLoading }
-          onClick={ onSaveClick }
-          type="primary"
-        >
-          {t('toolbar.save-and-publish')}
-
-          {isLoading && '...'}
-        </Button>
-      }
-    />
+    <ToolbarView justify='flex-end'>
+      <Button
+        disabled={ !hasChanges || isLoading }
+        loading={ isLoading }
+        onClick={ onSaveClick }
+        type="primary"
+      >
+        {t('toolbar.save-and-publish')}
+      </Button>
+    </ToolbarView>
   )
 
   function onSaveClick (): void {
@@ -82,6 +70,10 @@ export const Toolbar = (): React.JSX.Element => {
 
     if (asset.changes.customMetadata === true) {
       update.metadata = customMetadata
+    }
+
+    if (asset.changes.imageSettings === true) {
+      update.image = imageSettings
     }
 
     const savePromise = saveAsset({

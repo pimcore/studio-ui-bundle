@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Grid", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -85,7 +85,7 @@ const injectedRtkApi = api
                 AssetGetAvailableGridConfigurationApiArg
             >({
                 query: () => ({ url: `/studio/api/assets/grid/available-configuration` }),
-                providesTags: ["Grid"],
+                providesTags: ["Asset Grid"],
             }),
             assetGetGridConfigurationByFolderId: build.query<
                 AssetGetGridConfigurationByFolderIdApiResponse,
@@ -95,11 +95,22 @@ const injectedRtkApi = api
                     url: `/studio/api/assets/grid/configuration/${queryArg.folderId}`,
                     params: { configurationId: queryArg.configurationId },
                 }),
-                providesTags: ["Grid"],
+                providesTags: ["Asset Grid"],
+            }),
+            assetSaveGridConfiguration: build.mutation<
+                AssetSaveGridConfigurationApiResponse,
+                AssetSaveGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/grid/configuration/save`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Asset Grid"],
             }),
             assetGetGrid: build.mutation<AssetGetGridApiResponse, AssetGetGridApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/grid`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Grid"],
+                invalidatesTags: ["Asset Grid"],
             }),
             assetImageDownloadCustom: build.query<AssetImageDownloadCustomApiResponse, AssetImageDownloadCustomApiArg>({
                 query: (queryArg) => ({
@@ -373,6 +384,22 @@ export type AssetGetGridConfigurationByFolderIdApiArg = {
     folderId: number;
     /** Configuration ID */
     configurationId?: number;
+};
+export type AssetSaveGridConfigurationApiResponse = /** status 200 Asset grid configuration saved successfully */ void;
+export type AssetSaveGridConfigurationApiArg = {
+    body: {
+        folderId: number;
+        pageSize?: number;
+        name?: string;
+        description?: string;
+        shareGlobal?: boolean;
+        setAsFavorite?: boolean;
+        saveFilter?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns?: Column[];
+        filter?: GridFilter | null;
+    };
 };
 export type AssetGetGridApiResponse = /** status 200 Asset grid data */ {
     totalItems: number;
@@ -764,17 +791,13 @@ export type GridColumnConfiguration = {
     /** Config */
     config: object;
 };
-export type GridColumnData = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Key */
-    key?: string;
-    /** Locale */
-    locale?: string | null;
-    /** Value */
-    value?: any | null;
+export type Column = {
+    /** Key of the Column */
+    key: string;
+    /** Locale of the Column */
+    locale: string | null;
+    /** Group of the Column */
+    group: string;
 };
 export type GridFilter = {
     /** Page */
@@ -787,6 +810,18 @@ export type GridFilter = {
     columnFilters?: object;
     /** Sort Filter */
     sortFilter?: object;
+};
+export type GridColumnData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Value */
+    value?: any | null;
 };
 export type PatchCustomMetadata = {
     /** Name */
@@ -813,6 +848,7 @@ export const {
     useAssetUpdateByIdMutation,
     useAssetGetAvailableGridConfigurationQuery,
     useAssetGetGridConfigurationByFolderIdQuery,
+    useAssetSaveGridConfigurationMutation,
     useAssetGetGridMutation,
     useAssetImageDownloadCustomQuery,
     useAssetImageDownloadByFormatQuery,

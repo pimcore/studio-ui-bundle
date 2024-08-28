@@ -74,6 +74,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
           columns={ columns }
           data={ reformattedEmbeddedMetaData }
           enableSorting
+          sorting={ [{ id: 'name', desc: false }] }
         />
       </CardContainer>
     </div>

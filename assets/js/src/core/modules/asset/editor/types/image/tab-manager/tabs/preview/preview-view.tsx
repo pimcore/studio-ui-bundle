@@ -16,6 +16,7 @@ import React from 'react'
 import { useStyle } from './preview-view.styles'
 import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
+import { FocalPoint } from '@Pimcore/components/focal-point/focal-point'
 
 interface PreviewViewProps {
   src: string
@@ -28,7 +29,9 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
 
   return (
     <div className={ styles.preview }>
-      <PimcoreImage src={ src } />
+      <FocalPoint>
+        <PimcoreImage src={ src } />
+      </FocalPoint>
 
       <div className={ styles.floatingContainer }>
         <div className={ styles.flexContainer }>

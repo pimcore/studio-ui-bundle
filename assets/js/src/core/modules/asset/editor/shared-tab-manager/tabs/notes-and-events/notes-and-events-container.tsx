@@ -16,7 +16,6 @@ import {
   NotesAndEventsTabView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
 import {
-  useNoteElementCreateMutation,
   useNoteDeleteByIdMutation,
   useNoteElementGetCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
@@ -37,7 +36,6 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState(20)
 
   const [deleteNote] = useNoteDeleteByIdMutation()
-  const [createNote] = useNoteElementCreateMutation()
 
   const { isLoading, data } = useNoteElementGetCollectionQuery({
     id,
@@ -52,8 +50,9 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   return (
     <NotesAndEventsTabView
+      elementId={ id }
+      elementType="asset"
       notes={ data!.items }
-      onClickSaveNote={ onClickSaveNote }
       onClickTrash={ onClickTrash }
       pagination={
         <Pagination
@@ -69,18 +68,6 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
       }
     />
   )
-
-  async function onClickSaveNote (type, title, description): Promise<void> {
-    await createNote({
-      elementType: 'asset',
-      id: id!,
-      createNote: {
-        type,
-        title,
-        description
-      }
-    })
-  }
 
   async function onClickTrash (id: number): Promise<void> {
     await deleteNote({

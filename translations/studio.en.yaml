@@ -155,6 +155,11 @@ asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
+listing.actions: Apply to selection
+listing.actions.zip-download: ZIP Download
+listing.actions.export: Export
+listing.actions.csv-export: CSV Export
+listing.actions.batch-edit: Batch edit
 data-type.input: Input
 data-type.textarea: Textarea
 data-type.date: Date
@@ -225,3 +230,30 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
+jobs.notification.title: Notifications
+jobs.notification.jobs_one: "{{count}} Action"
+jobs.notification.jobs_other: "{{count}} Actions"
+jobs.job.in-progress: "{{title}} in progress"
+jobs.job.failed: "{{title}} failed"
+jobs.job.finished: "{{title}} finished"
+jobs.job.progress: "{{progress}}% completed"
+jobs.job.button-retry: Retry
+jobs.job.button-hide: hide
+jobs.job.button-download: download
+jobs.zip-job.title: "ZIP of {{title}}"
+jobs.csv-job.title: "CSV of {{title}}"
+export-csv-form.modal-title: Export CSV
+export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
+export-csv-form.form-field.delimiter: Delimiter
+export-csv-form.form-field.header: Header
+export-csv-form.form-field.header.option.name: System key
+export-csv-form.form-field.header.option.title: Label
+export-csv-form.form-field.header.option.no-header: No header
+form.validation.required: This field is required
+
+thumbnail: Thumbnail
+select-image-preview: Select Image Preview
+choose-media: Choose Media
+current-player-position: Current Player Position
+drag-and-drop-asset: Drag and Drop Asset
+apply: Apply

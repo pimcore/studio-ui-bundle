@@ -30,7 +30,7 @@ export const PimcoreImage = (props: PimcoreImageProps): React.JSX.Element => {
         <div className={ styles['loading-div'] }>
           <Spin size="small" />
         </div>
-          }
+      }
       preview={ false }
       style={ {
         transform: `scale(${zoom * 0.01})`

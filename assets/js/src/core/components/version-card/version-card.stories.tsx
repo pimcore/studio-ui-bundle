@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { VersionCard as VersionCardComponent } from './version-card'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/VersionCard',
+  title: 'Components/__Refactor__/VersionCard',
   component: VersionCardComponent,
   parameters: {
     layout: 'centered'
