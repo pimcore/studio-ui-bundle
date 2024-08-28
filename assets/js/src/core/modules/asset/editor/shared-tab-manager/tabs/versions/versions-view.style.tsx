@@ -50,7 +50,6 @@ export const useStyles = createStyles(({ token, css }) => {
         }
     `,
     noContent: css`
-        padding: ${token.paddingSM}px;
         height: 100%;
         display: flex;
         flex-direction: column;

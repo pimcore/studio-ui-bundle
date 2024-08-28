@@ -27,9 +27,9 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -103,7 +103,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <CardHeaderContainer
+      <ContentHeaderContainer
         text={ t('asset.asset-editor-tabs.custom-metadata.text') }
       >
         <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
@@ -207,11 +207,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
             )}
           </div>
         </div>
-      </CardHeaderContainer>
+      </ContentHeaderContainer>
 
-      <CardContainer>
+      <ContentPaddingContainer>
         <CustomMetadataTable />
-      </CardContainer>
+      </ContentPaddingContainer>
     </div>
   )
 }

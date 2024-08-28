@@ -15,14 +15,14 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    'card-container': css`
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      padding-left: ${token.paddingXS}px;
-      padding-right: ${token.paddingXS}px;
-  `
+    'content-padding-container': css`
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding-left: ${token.paddingXS}px;
+            padding-right: ${token.paddingXS}px;
+        `
   }
 }, { hashPriority: 'low' })

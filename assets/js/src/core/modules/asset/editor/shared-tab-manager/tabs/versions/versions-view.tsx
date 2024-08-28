@@ -33,8 +33,8 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { CardHeaderContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+import { ContentHeaderContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -71,12 +71,14 @@ export const VersionsView = ({
   if (versions.length === 0) {
     return (
       <div className={ styles.noContent }>
-        <CardHeaderContainer text={ t('version.versions') } />
-        <div className={ 'empty-container' }>
-          <NoContent
-            text={ t('version.no-versions-to-show') }
-          />
-        </div>
+        <ContentHeaderContainer text={ t('version.versions') } />
+        <ContentPaddingContainer>
+          <div className={ 'empty-container' }>
+            <NoContent
+              text={ t('version.no-versions-to-show') }
+            />
+          </div>
+        </ContentPaddingContainer>
       </div>
     )
   }
@@ -114,7 +116,7 @@ export const VersionsView = ({
   return (
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
-        <CardHeaderContainer text={ t('version.versions') }>
+        <ContentHeaderContainer text={ t('version.versions') }>
           <div className={ 'flexbox-start-end' }>
             {versions.length > 0 && (
             <Button
@@ -135,8 +137,8 @@ export const VersionsView = ({
             </>
             )}
           </div>
-        </CardHeaderContainer>
-        <CardContainer>
+        </ContentHeaderContainer>
+        <ContentPaddingContainer>
           {versions.length > 0 && (
           <VerticalTimeline timeStamps={ versions.map((version) => {
             const vId = { id: version.id, count: version.versionCount }
@@ -184,7 +186,7 @@ export const VersionsView = ({
           }) }
           />
           )}
-        </CardContainer>
+        </ContentPaddingContainer>
       </div>
 
       { detailedVersions.length > 0 && comparingActive && (

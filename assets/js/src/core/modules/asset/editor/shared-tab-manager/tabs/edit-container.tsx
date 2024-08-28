@@ -13,12 +13,12 @@
 
 import React from 'react'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
 
 export const EditTabContainer = (): React.JSX.Element => {
   return (
-    <CardHeaderContainer
+    <ContentHeaderContainer
       text={ 'Edit' }
     />
   )

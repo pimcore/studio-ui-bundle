@@ -14,20 +14,20 @@
 import React from 'react'
 import {
   useStyles
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container.styles'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container.styles'
 
-export interface CardTitleContainerProps {
+export interface ContentHeaderContainerProps {
   icon?: React.JSX.Element
   text: string
   children?: React.ReactNode
 }
 
-export const CardHeaderContainer = (props: CardTitleContainerProps): React.JSX.Element => {
+export const ContentHeaderContainer = (props: ContentHeaderContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { icon, text, children } = props
 
   return (
-    <div className={ styles['header-container'] }>
+    <div className={ styles['content-header-container'] }>
       {icon}
       <span className={ 'header-text' }>{text}</span>
       {children}

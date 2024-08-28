@@ -15,24 +15,24 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    'header-container': css`
-      display: flex;
-      padding: ${token.paddingSM}px;
-      width: 100%;
-      height: 56px;
-      align-items: center;
-      
-      .header-text {
-        font-weight: 600;
-        color: ${token.colorPrimary};
-        margin-right: 8px;
-        white-space: nowrap;
-      }
-      
-      .pimcore-icon {
-        color: ${token.colorPrimary};
-        margin-right: 4px;
-      }
-  `
+    'content-header-container': css`
+            display: flex;
+            padding: ${token.paddingSM}px;
+            width: 100%;
+            height: 56px;
+            align-items: center;
+
+            .header-text {
+                font-weight: 600;
+                color: ${token.colorPrimary};
+                margin-right: 8px;
+                white-space: nowrap;
+            }
+
+            .pimcore-icon {
+                color: ${token.colorPrimary};
+                margin-right: 4px;
+            }
+        `
   }
 }, { hashPriority: 'low' })

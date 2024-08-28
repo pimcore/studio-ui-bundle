@@ -19,9 +19,9 @@ import { useStyle } from './workflow-container.styles'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -36,7 +36,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <CardHeaderContainer
+      <ContentHeaderContainer
         text={ t('asset.asset-editor-tabs.workflow.text') }
       />
 
@@ -45,7 +45,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
           'Loading...'
         )}
 
-        <CardContainer>
+        <ContentPaddingContainer>
           {!isLoading && data?.items !== undefined && data?.items.length > 0 && (
             data.items.map((workflow, index) => (
               <WorkflowCard
@@ -54,7 +54,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
               />
             ))
           )}
-        </CardContainer>
+        </ContentPaddingContainer>
       </div>
     </div>
   )

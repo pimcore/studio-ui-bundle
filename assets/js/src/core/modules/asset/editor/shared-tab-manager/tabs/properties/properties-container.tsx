@@ -24,9 +24,9 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -64,7 +64,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <CardHeaderContainer text={ t('asset.asset-editor-tabs.properties.text') }>
+      <ContentHeaderContainer text={ t('asset.asset-editor-tabs.properties.text') }>
         <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
           <Segmented<string>
             onChange={ setPropertiesTableTab }
@@ -176,11 +176,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
             </div>
           )}
         </div>
-      </CardHeaderContainer>
+      </ContentHeaderContainer>
 
-      <CardContainer>
+      <ContentPaddingContainer>
         <Table propertiesTableTab={ propertiesTableTab } />
-      </CardContainer>
+      </ContentPaddingContainer>
     </div>
   )
 

@@ -14,18 +14,18 @@
 import React from 'react'
 import {
   useStyles
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container.styles'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container.styles'
 
-export interface CardContainerProps {
+export interface ContentPaddingContainerProps {
   children: React.ReactNode
 }
 
-export const CardContainer = (props: CardContainerProps): React.JSX.Element => {
+export const ContentPaddingContainer = (props: ContentPaddingContainerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { children } = props
 
   return (
-    <div className={ styles['card-container'] }>
+    <div className={ styles['content-padding-container'] }>
       {children}
     </div>
   )

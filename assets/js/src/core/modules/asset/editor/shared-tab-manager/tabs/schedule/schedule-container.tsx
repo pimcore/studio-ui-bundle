@@ -27,9 +27,9 @@ import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -92,7 +92,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <CardHeaderContainer text={ t('asset.asset-editor-tabs.schedule.headline') }>
+      <ContentHeaderContainer text={ t('asset.asset-editor-tabs.schedule.headline') }>
         <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
           <Button
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
@@ -108,8 +108,8 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
           </Button>
         </div>
-      </CardHeaderContainer>
-      <CardContainer>
+      </ContentHeaderContainer>
+      <ContentPaddingContainer>
         <div className={ 'pimcore-schedule-toolbar__filters' }>
           <Segmented<string>
             onChange={ setScheduleTab }
@@ -150,7 +150,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             />
           </>
         )}
-      </CardContainer>
+      </ContentPaddingContainer>
     </div>
   )
 }

@@ -29,9 +29,9 @@ import {
   AddNoteModal
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -88,7 +88,7 @@ export const NotesAndEventsTabView = ({
     <div className={ styles['notes-and-events'] }>
       <div className={ 'notes-container' }>
         <div className={ 'notes-content' }>
-          <CardHeaderContainer
+          <ContentHeaderContainer
             text={ t('notes-and-events.notes-and-events') }
           >
             <Button
@@ -106,12 +106,12 @@ export const NotesAndEventsTabView = ({
               open={ addNoteModalOpen }
               setOpen={ setAddNoteModalOpen }
             />
-          </CardHeaderContainer>
+          </ContentHeaderContainer>
           {notes.length > 0
             ? (
-              <CardContainer>
+              <ContentPaddingContainer>
                 {NotesAndEvents}
-              </CardContainer>
+              </ContentPaddingContainer>
               )
             : (
               <div className={ 'notes-content__empty-container' }>

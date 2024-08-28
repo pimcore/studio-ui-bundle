@@ -19,9 +19,9 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'
 import {
-  CardHeaderContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-header/card-header-container'
-import { CardContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/card-container/card-container'
+  ContentHeaderContainer
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/content-containers/content-padding-container'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -65,18 +65,18 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div>
-      <CardHeaderContainer
+      <ContentHeaderContainer
         text={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
       />
 
-      <CardContainer>
+      <ContentPaddingContainer>
         <Grid
           columns={ columns }
           data={ reformattedEmbeddedMetaData }
           enableSorting
           sorting={ [{ id: 'name', desc: false }] }
         />
-      </CardContainer>
+      </ContentPaddingContainer>
     </div>
   )
 }
