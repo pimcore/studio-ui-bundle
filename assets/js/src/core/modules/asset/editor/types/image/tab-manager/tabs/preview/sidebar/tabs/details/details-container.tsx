@@ -22,7 +22,7 @@ import {
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
-import { getDomainWithPrefix } from '@Pimcore/utils/route'
+import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)

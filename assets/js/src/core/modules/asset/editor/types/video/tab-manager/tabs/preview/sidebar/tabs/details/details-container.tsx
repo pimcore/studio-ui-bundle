@@ -20,7 +20,7 @@ import {
   VideoEditorSidebarDetailsTab
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { useGetVideoThumbnailsQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { getDomainWithPrefix } from '@Pimcore/utils/route'
+import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 
