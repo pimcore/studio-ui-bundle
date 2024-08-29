@@ -30,6 +30,10 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -111,13 +115,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
-        <p className={ 'pimcore-custom-metadata-toolbar__headline' }>
-          {t('asset.asset-editor-tabs.custom-metadata.text')}
-        </p>
-
-        <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
-          {editmode && (
+      <ContentHeaderContainer
+        text={ t('asset.asset-editor-tabs.custom-metadata.text') }
+      >
+        <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
+          <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
+            {editmode && (
             <>
               <div className={ 'pimcore-custom-metadata-toolbar__manual__editmode' }>
                 <Button
@@ -167,11 +170,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   <Button
                     onClick={ closeDuplicateEntryModal }
                     type='primary'
-                  >{t('button.ok')}</Button>
+                  >{ t('button.ok') }</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title') }
               >
-                {t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error')}
+                { t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error') }
               </DuplicateEntryModal>
 
               <MandatoryModal
@@ -179,21 +182,19 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   <Button
                     onClick={ closeMandatoryModal }
                     type='primary'
-                  >{t('button.ok')}</Button>
+                  >{ t('button.ok') }</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title') }
               >
-                {t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error')}
+                { t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error') }
               </MandatoryModal>
             </>
-          )}
+            )}
 
-          {!editmode && (
+            {!editmode && (
             <>
               <Button
-                onClick={ () => {
-                  console.log('clicked')
-                } }
+                onClick={ () => { console.log('clicked') } }
               >
                 {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
               </Button>
@@ -207,17 +208,16 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
               </IconTextButton>
             </>
-          )}
+            )}
+          </div>
         </div>
+      </ContentHeaderContainer>
 
-      </div>
-
-      <div className={ styles.content }>
+      <ContentPaddingContainer>
         <CustomMetadataTable
           showDuplicateEntryModal={ showDuplicateEntryModal }
           showMandatoryModal={ showMandatoryModal }
-        />
-      </div>
+        />      </ContentPaddingContainer>
     </div>
   )
 }

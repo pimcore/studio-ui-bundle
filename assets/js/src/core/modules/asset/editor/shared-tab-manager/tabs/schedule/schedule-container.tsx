@@ -27,6 +27,10 @@ import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -89,29 +93,24 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ 'pimcore-schedule-toolbar' }>
-        <div className={ 'pimcore-schedule-toolbar__headline' }>
-          <p className={ 'pimcore-schedule-toolbar__headline__text' }>
-            {t('asset.asset-editor-tabs.schedule.headline')}
-          </p>
+      <ContentHeaderContainer text={ t('asset.asset-editor-tabs.schedule.headline') }>
+        <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
+          <IconTextButton
+            className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
+            icon={ 'PlusOutlined' }
+          >
+            {t('asset.asset-editor-tabs.schedule.toolbar.add')}
+          </IconTextButton>
 
-          <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
-            <IconTextButton
-              className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-              icon={ 'PlusOutlined' }
-            >
-              {t('asset.asset-editor-tabs.schedule.toolbar.add')}
-            </IconTextButton>
-
-            <Button
-              className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
-              type={ 'primary' }
-            >
-              {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
-            </Button>
-          </div>
+          <Button
+            className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
+            type={ 'primary' }
+          >
+            {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
+          </Button>
         </div>
-
+      </ContentHeaderContainer>
+      <ContentPaddingContainer>
         <div className={ 'pimcore-schedule-toolbar__filters' }>
           <Segmented<string>
             onChange={ setScheduleTab }
@@ -128,15 +127,15 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             />
           </div>
         </div>
-      </div>
 
-      <div
-        className={ 'pimcore-schedule-content' }
-        style={ { marginLeft: 0 } }
-      >
-        <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
+        <div
+          className={ 'pimcore-schedule-content' }
+          style={ { marginLeft: 0 } }
+        >
 
-        {scheduleTab === 'all' && (
+          <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
+
+          {scheduleTab === 'all' && (
           <>
             <div className={ 'pimcore-schedule-content__archive__toolbar' }>
               <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
@@ -157,8 +156,9 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               data={ filterSchedules(gridDataArchive ?? []) }
             />
           </>
-        )}
-      </div>
+          )}
+        </div>
+      </ContentPaddingContainer>
     </div>
   )
 }

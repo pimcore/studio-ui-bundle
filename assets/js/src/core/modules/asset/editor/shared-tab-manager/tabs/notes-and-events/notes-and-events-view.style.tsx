@@ -42,19 +42,6 @@ export const useStyles = createStyles(({ token, css }) => {
         height: 100%;
       }
       
-      & .notes-content__header {
-        padding: ${token.paddingXS}px ${notesAndEventsToken.paddingSM}px;
-        display: flex;
-        align-items: center;
-        gap: ${notesAndEventsToken.paddingSM}px;
-      }
-      
-      & .notes-content__text {
-        color: ${token.colorPrimary};
-        margin: 0;
-        font-weight: 600;
-      }
-      
       & .notes-content__details {
         padding: 0 ${token.paddingXS}px;
       } 
@@ -72,7 +59,7 @@ export const useStyles = createStyles(({ token, css }) => {
         color: ${token.colorText};
       }
 
-      & .notes-content__header > button {
+      & .ant-btn {
         display: flex;
         align-items: center;
         line-height: 24px;

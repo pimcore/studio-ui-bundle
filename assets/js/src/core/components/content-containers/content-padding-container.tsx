@@ -13,13 +13,23 @@
 
 import React from 'react'
 import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
+  useStyles
+} from '@Pimcore/components/content-containers/content-padding-container.styles'
+import { Flex } from 'antd'
+export interface ContentPaddingContainerProps {
+  children: React.ReactNode
+}
 
-export const EditTabContainer = (): React.JSX.Element => {
+export const ContentPaddingContainer = (props: ContentPaddingContainerProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const { children } = props
+
   return (
-    <ContentHeaderContainer
-      text={ 'Edit' }
-    />
+    <Flex
+      className={ styles['content-padding-container'] }
+      vertical
+    >
+      {children}
+    </Flex>
   )
 }

@@ -18,11 +18,13 @@ import { Result } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'
-import { useStyles } from './embedded-metadata-container.styles'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const { context } = useGlobalAssetContext()
 
   if (context === undefined) {
@@ -62,24 +64,19 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   })
 
   return (
-    <div className={ styles.tab }>
-      <div className={ 'pimcore-embedded-metadata-toolbar' }>
-        <p className={ 'pimcore-embedded-metadata-toolbar__headline' }>
-          {t('asset.asset-editor-tabs.embedded-metadata.headline')}
-        </p>
-      </div>
+    <div>
+      <ContentHeaderContainer
+        text={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
+      />
 
-      <div
-        className={ 'pimcore-embedded-metadata-content' }
-        style={ { marginLeft: 0 } }
-      >
+      <ContentPaddingContainer>
         <Grid
           columns={ columns }
           data={ reformattedEmbeddedMetaData }
           enableSorting
           sorting={ [{ id: 'name', desc: false }] }
         />
-      </div>
+      </ContentPaddingContainer>
     </div>
   )
 }

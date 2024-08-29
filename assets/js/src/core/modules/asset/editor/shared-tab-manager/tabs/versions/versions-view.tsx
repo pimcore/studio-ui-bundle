@@ -33,6 +33,8 @@ import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -69,12 +71,14 @@ export const VersionsView = ({
   if (versions.length === 0) {
     return (
       <div className={ styles.noContent }>
-        <p className={ 'headline' }>{t('version.versions')}</p>
-        <div className={ 'empty-container' }>
-          <NoContent
-            text={ t('version.no-versions-to-show') }
-          />
-        </div>
+        <ContentHeaderContainer text={ t('version.versions') } />
+        <ContentPaddingContainer>
+          <div className={ 'empty-container' }>
+            <NoContent
+              text={ t('version.no-versions-to-show') }
+            />
+          </div>
+        </ContentPaddingContainer>
       </div>
     )
   }
@@ -112,17 +116,15 @@ export const VersionsView = ({
   return (
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
-        <div className={ 'flexbox-start-end' }>
-          <div>
-            <span className={ 'version-label' }>{t('version.versions')}</span>
+        <ContentHeaderContainer text={ t('version.versions') }>
+          <div className={ 'flexbox-start-end' }>
             {versions.length > 0 && (
-              <Button
-                className={ comparingActive ? 'compare-button' : '' }
-                onClick={ onClickCompareVersion }
-              >{t('version.compare-versions')}</Button>
+            <Button
+              className={ comparingActive ? 'compare-button' : '' }
+              onClick={ onClickCompareVersion }
+            >{t('version.compare-versions')}</Button>
             )}
-          </div>
-          {versions.length > 0 && (
+            {versions.length > 0 && (
             <>
               <IconTextButton
                 icon={ 'trash' }
@@ -133,9 +135,11 @@ export const VersionsView = ({
               </IconTextButton>
               {modal}
             </>
-          )}
-        </div>
-        {versions.length > 0 && (
+            )}
+          </div>
+        </ContentHeaderContainer>
+        <ContentPaddingContainer>
+          {versions.length > 0 && (
           <VerticalTimeline timeStamps={ versions.map((version) => {
             const vId = { id: version.id, count: version.versionCount }
             const selected = detailedVersions.some((v => v.id === version.id))
@@ -181,7 +185,8 @@ export const VersionsView = ({
             )
           }) }
           />
-        )}
+          )}
+        </ContentPaddingContainer>
       </div>
 
       { detailedVersions.length > 0 && comparingActive && (

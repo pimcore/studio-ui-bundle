@@ -22,7 +22,6 @@ export const useStyle = createStyles(({ token, css }) => {
     toolbar: css`
       display: flex;
       gap: 10px;
-      padding: ${token.paddingXS}px;
       align-items: center;
 
       .ant-btn {
@@ -44,12 +43,6 @@ export const useStyle = createStyles(({ token, css }) => {
           color: ${token.Button.defaultColor} !important;
         }
       }
-
-      .pimcore-custom-metadata-toolbar__headline {
-          font-weight: 600;
-          line-height: 20px;
-          color: ${token.itemActiveColor};
-      }
         
         .pimcore-custom-metadata-toolbar__manual {
             display: flex;
@@ -60,9 +53,6 @@ export const useStyle = createStyles(({ token, css }) => {
                 gap: 10px;
             }
         }
-    `,
-    content: css`
-        padding: ${token.paddingXS}px;
     `
   }
 })
