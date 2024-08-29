@@ -101,8 +101,8 @@ export const CustomMetadataTable = (): React.JSX.Element => {
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
     const updatedCustomMetadata = [...(customMetadata ?? [])]
-    const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
-    const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
+    const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name && cm.language === rowData.language)! }
+    const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name && cm.language === rowData.language)
 
     updatedCustomMetadata[customMetadataIndex] = {
       ...customMetadataToUpdate,
