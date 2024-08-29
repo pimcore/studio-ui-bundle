@@ -17,6 +17,14 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     'checkbox-cell': css`
       padding: 4px;
+    `,
+    'align-center': css`
+      justify-content: center;
+      display: flex;
+    `,
+    'align-right': css`
+      justify-content: flex-end;
+      display: flex;
     `
   }
 })

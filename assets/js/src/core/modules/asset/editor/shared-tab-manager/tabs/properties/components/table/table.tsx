@@ -117,7 +117,10 @@ export const Table = ({
       size: 70,
       meta: {
         type: 'checkbox',
-        editable: propertiesTableTab === 'own'
+        editable: propertiesTableTab === 'own',
+        config: {
+          align: 'center'
+        }
       }
     }),
     columnHelper.accessor('actions', {

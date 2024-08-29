@@ -17,13 +17,23 @@ import { Checkbox, type CheckboxRef } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { useStyle } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell.styles'
 
+export interface CheckboxCellConfig {
+  align: 'left' | 'center' | 'right'
+}
+
 export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { fireOnUpdateCellDataEvent } = useEditMode(props)
   const checkboxRef = useRef<CheckboxRef>(null)
+  const { column } = props
 
   function saveValue (): void {
     fireOnUpdateCellDataEvent(checkboxRef.current!.input?.checked ?? false)
+  }
+
+  let config = column.columnDef.meta?.config as CheckboxCellConfig | undefined
+  if (config === undefined) {
+    config = { align: 'left' }
   }
 
   function getCellContent (): React.JSX.Element {
@@ -38,7 +48,7 @@ export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ [styles['checkbox-cell'], 'default-cell__content'].join(' ') }>
+    <div className={ [styles['checkbox-cell'], styles['align-' + config.align] ?? '', 'default-cell__content'].join(' ') }>
       {getCellContent()}
     </div>
   )
