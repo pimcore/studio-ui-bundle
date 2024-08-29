@@ -25,19 +25,18 @@ import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-a
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
-import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
-import {
-  ContentPaddingContainer
-} from '@Pimcore/components/content-containers/content-padding-container'
+  AddNoteModal
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
+import { type ElementType } from 'types/element-type.d'
+import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
   pagination: React.JSX.Element
   onClickTrash: (id: number) => void
-  elementType: 'asset' | 'document' | 'data-object'
+  elementType: ElementType
   elementId: number
 }
 
@@ -76,9 +75,7 @@ export const NotesAndEventsTabView = ({
         date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
         key={ note.id }
-        onClickTrash={ () => {
-          onClickTrash(note.id)
-        } }
+        onClickTrash={ () => { onClickTrash(note.id) } }
         showDetails={ showDetails }
         title={ note.title }
         type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }

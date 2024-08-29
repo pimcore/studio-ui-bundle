@@ -64,7 +64,7 @@ export const useStyle = createStyles(({ token, css }) => {
         margin: 0 ${cardToken.marginXXS}px;
       }
       
-      .card-title__user {
+      .card-title__user, .card-title__divider {
         vertical-align: unset;
         font-weight: 400;
         line-height: 20px;

@@ -37,16 +37,9 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
-import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import {
   PropertiesContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
-import {
-  TypeIconCell as PropertyTypeIconCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/cells/type-icon-cell/type-icon-cell'
-import {
-  TypeIconCell as CustomMetadataTypeIconCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/cells/type-icon-cell/type-icon-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -141,16 +134,6 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'detachable-tab',
       component: DetachedTab
-    })
-
-    const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
-    gridTypeRegistry.registerType({
-      component: PropertyTypeIconCell,
-      type: 'asset-property-icon'
-    })
-    gridTypeRegistry.registerType({
-      component: CustomMetadataTypeIconCell,
-      type: 'asset-custom-metadata-icon'
     })
   }
 })

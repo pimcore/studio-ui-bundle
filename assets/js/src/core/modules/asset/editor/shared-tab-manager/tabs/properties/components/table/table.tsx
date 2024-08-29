@@ -71,7 +71,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.properties.columns.type'),
       meta: {
-        type: 'asset-property-icon'
+        type: 'property-icon'
       },
       size: 40
     }),
@@ -91,7 +91,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
       header: t('asset.asset-editor-tabs.properties.columns.data'),
       id: 'properties-table--data-column',
       meta: {
-        type: 'type-dependent-content',
+        type: 'property-value',
         editable: propertiesTableTab === 'own',
         autoWidth: true
       },

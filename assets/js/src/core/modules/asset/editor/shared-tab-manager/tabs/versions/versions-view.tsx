@@ -194,6 +194,7 @@ export const VersionsView = ({
       )}
       { detailedVersions.length > 0 && !comparingActive && (
         <DetailsVersionContainer
+          setDetailedVersions={ setDetailedVersions }
           versionId={ detailedVersions[0] }
           versions={ versions }
         />

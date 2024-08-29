@@ -11,21 +11,4 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
-
-export const useStyles = createStyles(({ token, css }) => {
-  const versionToken = {
-    versionsLeftSideWidth: '395',
-    ...token
-  }
-
-  return {
-    'right-side': css`
-      overflow: auto;
-      width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
-      padding: ${token.paddingSM}px;
-      display: ruby;
-      text-align: center;
-    `
-  }
-}, { hashPriority: 'low' })
+export type ElementType = 'asset' | 'document' | 'data-object'

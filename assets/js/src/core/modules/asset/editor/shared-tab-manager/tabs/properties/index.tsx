@@ -11,21 +11,24 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import './metadata-type-provider'
-import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import '@Pimcore/modules/asset/editor'
-import { TreeContainer } from './tree/tree-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
+import { TypeIconCell } from './components/table/cells/type-icon-cell/type-icon-cell'
+import { ValueCell } from './components/table/cells/value-cell/value-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
+    const typeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
 
-    widgetRegistryService.registerWidget({
-      name: 'asset-tree',
-      component: TreeContainer
+    typeRegistry.registerType({
+      component: ValueCell,
+      type: 'property-value'
+    })
+    typeRegistry.registerType({
+      component: TypeIconCell,
+      type: 'property-icon'
     })
   }
 })

@@ -13,31 +13,20 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { TextCell } from '@Pimcore/components/grid/columns/types/text/text-cell'
-import { SelectCell } from '@Pimcore/components/grid/columns/types/value-select/select-cell'
-import { BooleanCell } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell'
-import {
-  ElementCell
-} from '@Pimcore/components/grid/columns/types/element-cell/element-cell'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
+import { type MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type
+  const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
+  const metadataType = metadataTypeRegistry.getComponentByType(String(propertyType))
 
   function renderCell (): React.JSX.Element {
-    switch (propertyType) {
-      case 'select':
-        return <SelectCell { ...props } />
-      case 'bool':
-        return <BooleanCell { ...props } />
-      case 'text':
-        return <TextCell { ...props } />
-      case 'document':
-      case 'asset':
-      case 'object':
-        return <ElementCell { ...props } />
-      default:
-        return <div>{ 'cell type not supported' }</div>
+    if (metadataType === undefined) {
+      return <div>{ 'cell type not supported' }</div>
     }
+    return metadataType.getGridCell(props)
   }
 
   return (
