@@ -23,11 +23,6 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       gap: 10px;
       align-items: center;
-
-      .ant-btn {
-          display: flex;
-          align-items: center;
-      }
         
       .ant-select {
         .ant-select-selector {
