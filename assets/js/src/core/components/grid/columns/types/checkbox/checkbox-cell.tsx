@@ -11,24 +11,35 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useRef } from 'react'
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { Checkbox } from 'antd'
+import { Checkbox, type CheckboxRef } from 'antd'
+import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { useStyle } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell.styles'
 
 export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
-  const [boolean, setBoolean] = useState<boolean>(Boolean(props.getValue()))
+  const { styles } = useStyle()
+  const { fireOnUpdateCellDataEvent } = useEditMode(props)
+  const checkboxRef = useRef<CheckboxRef>(null)
 
-  useEffect(() => {
-    setBoolean(Boolean(props.getValue()))
-  }, [props.getValue()])
+  function saveValue (): void {
+    fireOnUpdateCellDataEvent(checkboxRef.current!.input?.checked ?? false)
+  }
+
+  function getCellContent (): React.JSX.Element {
+    return (
+      <Checkbox
+        defaultChecked={ props.getValue() }
+        disabled={ props.column.columnDef.meta?.editable === false }
+        onChange={ saveValue }
+        ref={ checkboxRef }
+      />
+    )
+  }
 
   return (
-    <Checkbox
-      checked={ boolean }
-      key={ props.row.id }
-      onChange={ (e) => {
-        setBoolean(Boolean(e.target.checked))
-      } }
-    />
+    <div className={ [styles['checkbox-cell'], 'default-cell__content'].join(' ') }>
+      {getCellContent()}
+    </div>
   )
 }

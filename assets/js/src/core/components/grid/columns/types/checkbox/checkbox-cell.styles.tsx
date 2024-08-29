@@ -15,14 +15,8 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    table: css`
-      .ant-table {
-        .custom-metadata-table--actions-column {
-          align-items: center;
-          justify-content: center;
-        }
-
-      }
+    'checkbox-cell': css`
+      padding: 4px;
     `
   }
 })

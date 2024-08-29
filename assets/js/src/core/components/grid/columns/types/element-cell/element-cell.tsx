@@ -17,8 +17,10 @@ import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { ElementCellContent } from './element-cell-content'
 import { type Asset } from '../../../../../../sdk/main'
+import { useStyle } from './element-cell.styles'
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
+  const styles = useStyle().styles
   function isValidContext (info: DragAndDropInfo): boolean {
     return info.type === 'asset'
   }
@@ -41,10 +43,10 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
       })
     }
   }
-
+  console.log(styles['element-cell'])
   return (
     <Droppable
-      className='default-cell__content'
+      className={ [styles['element-cell'], 'default-cell__content'].join(' ') }
       isValidContext={ isValidContext }
       onDrop={ onDrop }
     >

@@ -18,7 +18,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { Checkbox } from 'antd'
 import { useStyles } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -99,15 +98,10 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     }),
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
-      cell: (info) => {
-        return (
-          <div className={ 'properties-table--inheritable-column' }>
-            <Checkbox defaultChecked={ info.row.original.inheritable } />
-          </div>
-        )
-      },
+      id: 'properties-table--inheritable-column',
       size: 70,
       meta: {
+        type: 'checkbox',
         editable: propertiesTableTab === 'own'
       }
     }),
@@ -153,14 +147,18 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
   ]
 
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+    const updatedProperties = [...(properties ?? [])]
+    const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
+
     if (columnId === 'properties-table--data-column') {
-      const updatedProperties = [...(properties ?? [])]
-      const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
-
       propertyToUpdate.data = value
-
-      updateProperty(propertyToUpdate)
     }
+
+    if (columnId === 'properties-table--inheritable-column') {
+      propertyToUpdate.inheritable = value
+    }
+
+    updateProperty(propertyToUpdate)
   }
 
   function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
@@ -172,6 +170,12 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
           modifiedCells.push({
             rowIndex: propertyIndex,
             columnId: 'properties-table--data-column'
+          })
+        }
+        if (property.key === item.key && property.inheritable !== item.inheritable) {
+          modifiedCells.push({
+            rowIndex: propertyIndex,
+            columnId: 'properties-table--inheritable-column'
           })
         }
       })

@@ -14,7 +14,7 @@
 import { type AssetMetadataTypeInterface } from '../services/metadata-type-registry'
 import React from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { BooleanCell } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell'
+import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
 
 export class Checkbox implements AssetMetadataTypeInterface {
   visibleInTypeSelection = true
@@ -23,6 +23,6 @@ export class Checkbox implements AssetMetadataTypeInterface {
   }
 
   getGridCell (props: DefaultCellProps): JSX.Element {
-    return <BooleanCell { ...props } />
+    return <CheckboxCell { ...props } />
   }
 }

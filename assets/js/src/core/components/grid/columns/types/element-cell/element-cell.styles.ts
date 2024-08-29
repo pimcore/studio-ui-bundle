@@ -15,10 +15,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ css, token }) => {
   return {
+    'element-cell': css`
+      padding: 3px;
+    `,
     link: css`
-        display: flex;
-        align-items: center;
-        
+      display: flex;
+      
       .ant-tag {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -28,7 +30,7 @@ export const useStyle = createStyles(({ css, token }) => {
     `,
     dropTargetIcon: css`
       margin-left: auto;
-      margin-right: ${token.marginXS}px;
+      margin-top: 4px
     `
   }
 })
