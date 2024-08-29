@@ -20,12 +20,18 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
 }
 
-export const CustomMetadataTable = (): React.JSX.Element => {
+interface CustomMetadataTableProps {
+  showDuplicateEntryModal: () => void
+  showMandatoryModal: () => void
+}
+
+export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModal }: CustomMetadataTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { styles } = useStyle()
@@ -99,30 +105,31 @@ export const CustomMetadataTable = (): React.JSX.Element => {
     })
   ]
 
-  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
+  const getRealColumnName = (columnId: string): string => {
+    switch (columnId) {
+      case 'custom-metadata-table--language-column':
+        return 'language'
+      case 'custom-metadata-table--data-column':
+        return 'data'
+      default:
+        return columnId
+    }
+  }
+  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedCustomMetadata = [...(customMetadata ?? [])]
-    const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name && cm.language === rowData.language)! }
-    const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name && cm.language === rowData.language)
+    const updatedCustomMetadataPrimaryKeys = updatedCustomMetadata.map(cm => cm.name)
+    const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
+    const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
 
     updatedCustomMetadata[customMetadataIndex] = {
       ...customMetadataToUpdate,
       [getRealColumnName(columnId as string)]: value
     }
 
-    updateAllCustomMetadata(updatedCustomMetadata)
-
-    function getRealColumnName (columnId: string): string {
-      switch (columnId) {
-        case 'custom-metadata-table--language-column':
-          return 'language'
-        case 'custom-metadata-table--data-column':
-          return 'data'
-        default:
-          return columnId
-      }
+    if (verifyUpdate(value, updatedCustomMetadataPrimaryKeys, columnId, 'name', showMandatoryModal, showDuplicateEntryModal)) {
+      updateAllCustomMetadata(updatedCustomMetadata)
+      setModifiedCells([...modifiedCells, { rowIndex, columnId }])
     }
-
-    setModifiedCells([...modifiedCells, { rowIndex, columnId }])
   }
 
   return (

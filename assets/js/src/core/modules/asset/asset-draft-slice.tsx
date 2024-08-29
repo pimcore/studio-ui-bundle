@@ -19,6 +19,7 @@ import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-ma
 
 interface propertyAction {
   assetId: number
+  key?: string
   property: DataProperty
 }
 
@@ -84,12 +85,22 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
+    setPropertiesForAsset: (state, action: PayloadAction<{ assetId: number, properties: DataProperty[] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.properties = action.payload.properties
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
     updatePropertyForAsset: (state, action: PayloadAction<propertyAction>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).map(property => {
-          if (property.key === action.payload.property.key) {
+        asset.properties = (asset.properties ?? []).map((property, index) => {
+          if (property.key === action.payload.key) {
             asset.modified = true
 
             asset.changes = {
@@ -102,16 +113,6 @@ export const slice = createSlice({
 
           return property
         })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    setPropertiesForAsset: (state, action: PayloadAction<{ assetId: number, properties: DataProperty[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = action.payload.properties
       }
 
       state.entities[action.payload.assetId] = asset
