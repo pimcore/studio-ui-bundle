@@ -15,13 +15,13 @@ import { type DefaultCellProps } from '../../default-cell'
 import React from 'react'
 import { useStyle } from './open-element-cell.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 
 export const OpenElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { openAsset } = useAsset()
+  const { openAsset } = useAssetHelper()
   const propertyType = props.row.original.type
   const elementId = props.row.original.id
 

@@ -11,69 +11,78 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { type PinnableToolbarElement, Toolbar as ToolbarComponent } from './toolbar'
-import i18n from '@Pimcore/app/i18n'
-import { Button } from 'antd'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { type StoryObj, type Meta } from '@storybook/react'
+import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Toolbar',
-  component: ToolbarComponent,
+  title: 'Components/Controls/Toolbar',
+  component: Toolbar,
   parameters: {
-    layout: 'centered'
+    layout: 'fullscreen'
   },
   tags: ['autodocs']
 }
 
 export default config
 
-const pinnableToolbarElements: PinnableToolbarElement[] = [
-  {
-    iconName: 'translation',
-    label: 'toolbar.translate',
-    pinning: true
-  },
-  {
-    iconName: 'expand-alt-outlined',
-    label: 'toolbar.expand',
-    displayingArrowIcon: true
-  },
-  {
-    iconName: 'eye-outlined',
-    label: 'toolbar.preview'
-  },
-  {
-    iconName: 'share-alt-outlined',
-    label: 'toolbar.share',
-    pinning: true
-  },
-  {
-    iconName: 'edit-outlined',
-    label: 'toolbar.rename'
-  },
-  {
-    iconName: 'trash',
-    label: 'toolbar.delete'
-  },
-  {
-    iconName: 'download-02',
-    label: 'toolbar.download',
-    pinning: true
-  },
-  {
-    iconName: 'refresh',
-    label: 'toolbar.reload'
-  },
-  {
-    iconName: 'target',
-    label: 'toolbar.locate-in-tree'
-  }
-]
+const demoData = {
+  children: (
+    <>
+      <ButtonGroup items={ [
+        <IconButton
+          icon="trash"
+          key={ 'icon-button-01' }
+          type='link'
+        />,
+        <IconButton
+          icon="refresh"
+          key={ 'icon-button-02' }
+          type='link'
+        />
+      ] }
+      />
 
-export const _default = {
+      <ButtonGroup items={ [
+        <Button key={ 'action-01' }>clear</Button>,
+        <Button
+          key={ 'action-02' }
+          type='primary'
+        >Save</Button>
+      ] }
+      />
+    </>
+  )
+}
+
+type Story = StoryObj<typeof Toolbar>
+
+export const _default: Story = {
   args: {
-    pinnableToolbarElements,
-    renderSaveButton: <Button type='primary'>{ i18n.t('toolbar.save-and-publish') }</Button>
+    ...demoData
+  }
+}
+
+export const Secondary: Story = {
+  args: {
+    ...demoData,
+    theme: 'secondary'
+  }
+}
+
+export const RightAligned: Story = {
+  args: {
+    ...demoData,
+    justify: 'flex-end'
+  }
+}
+
+export const LeftAligned: Story = {
+  args: {
+    ...demoData,
+    justify: 'flex-start'
   }
 }

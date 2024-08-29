@@ -14,7 +14,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { PreviewView } from './preview-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -41,11 +41,11 @@ const PreviewContainer = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarView>
+    <ContentToolbarSidebarLayout>
       <PreviewView
         src={ docURL }
       />
-    </ContentToolbarSidebarView>
+    </ContentToolbarSidebarLayout>
   )
 }
 

@@ -15,12 +15,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 
 interface CustomMetadataWithActions extends CustomMetadata {
@@ -65,7 +64,8 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       header: t('asset.asset-editor-tabs.custom-metadata.columns.name'),
       meta: {
         editable: true
-      }
+      },
+      size: 200
     }),
     columnHelper.accessor('language', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
@@ -73,14 +73,16 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       meta: {
         type: 'language-select',
         editable: true
-      }
+      },
+      size: 100
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
       id: 'custom-metadata-table--data-column',
       meta: {
-        type: 'type-dependent-content',
-        editable: true
+        type: 'asset-custom-metadata-value',
+        editable: true,
+        autoWidth: true
       },
       size: 400
     }),
@@ -89,8 +91,8 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       cell: (info) => {
         return (
           <div className={ 'custom-metadata-table--actions-column' }>
-            <Button
-              icon={ <Icon name="trash" /> }
+            <IconButton
+              icon={ 'trash' }
               onClick={ () => {
                 removeCustomMetadata(info.row.original)
               } }
@@ -133,6 +135,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   return (
     <div className={ styles.table }>
       <Grid
+        autoWidth
         columns={ columns }
         data={ customMetadata! }
         isLoading={ isLoading }

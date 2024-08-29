@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { IconTextButton } from './icon-text-button'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/IconTextButton',
+  title: 'Components/Controls/Buttons/IconTextButton',
   component: IconTextButton,
   parameters: {
     layout: 'fullscreen'
@@ -30,5 +30,26 @@ export const _default = {
   args: {
     icon: 'trash',
     children: 'Delete'
+  }
+}
+
+export const Primary = {
+  args: {
+    ..._default.args,
+    type: 'primary'
+  }
+}
+
+export const Link = {
+  args: {
+    ..._default.args,
+    type: 'link'
+  }
+}
+
+export const Text = {
+  args: {
+    ..._default.args,
+    type: 'text'
   }
 }

@@ -13,8 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
+import { Button } from '@Pimcore/components/button/button'
 import { isSet } from '@Pimcore/utils/helpers'
 import { VersionCard } from '@Pimcore/components/version-card/version-card'
 import {
@@ -33,6 +32,7 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -124,13 +124,13 @@ export const VersionsView = ({
           </div>
           {versions.length > 0 && (
             <>
-              <Button
-                icon={ <Icon name={ 'trash' } /> }
+              <IconTextButton
+                icon={ 'trash' }
                 loading={ clearingAll }
                 onClick={ showModal }
               >
                 {t('version.clear-unpublished')}
-              </Button>
+              </IconTextButton>
               {modal}
             </>
           )}
@@ -189,6 +189,7 @@ export const VersionsView = ({
       )}
       { detailedVersions.length > 0 && !comparingActive && (
         <DetailsVersionContainer
+          setDetailedVersions={ setDetailedVersions }
           versionId={ detailedVersions[0] }
           versions={ versions }
         />

@@ -15,12 +15,12 @@ import { type Meta } from '@storybook/react'
 import React, { useState } from 'react'
 import { Draggable } from './draggable'
 import { DNDDemoDroppableContent } from './__STORIES__/dnd-demo-droppable-content'
-import { Button } from 'antd'
+import { Button } from '../button/button'
 import { Droppable } from './droppable'
 import { type DragAndDropInfo } from './context-provider'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/DragAndDrop',
+  title: 'Components/Controls/DragAndDrop',
   component: () => {
     const [valueDemo1, setValueDemo1] = useState<string>('')
     const [valueDemo2, setValueDemo2] = useState<string>('')

@@ -13,18 +13,18 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api, type ImageVersion
+  api, type AssetVersion
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import {
   DetailsVersionsView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-view'
-import { store } from '@Pimcore/app/store'
-import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import {
-  formatVersionData
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
-import { useTranslation } from 'react-i18next'
+import {
+  type AssetVersionData,
+  hydrateVersionData, loadPreviewImage,
+  versionsDataToTableData
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+import { store } from '@Pimcore/app/store'
 
 export interface DetailsVersionsContainerProps {
   versionIds: VersionIdentifiers[]
@@ -33,95 +33,52 @@ export interface DetailsVersionsContainerProps {
 export const DetailsVersionsContainer = ({
   versionIds
 }: DetailsVersionsContainerProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const [versionData, setVersionData] = useState([] as object[])
-  const [imageUrls, setImageUrls] = useState({})
+  const [gridData, setGridData] = useState([] as object[])
+  const [versions, setVersions] = useState<AssetVersionData[]>([])
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
+
+    setVersions([])
+    setGridData([])
+
     versionIds.forEach(async vId => {
       const id = vId.id
       versionPromises.push(store.dispatch(api.endpoints.versionGetById.initiate({ id })))
-
-      if (!Object.keys(imageUrls).includes(id.toString())) {
-        fetch(`http://localhost/studio/api/versions/${id}/image/stream`)
-          .then(async (response) => await response.blob())
-          .then((imageBlob) => {
-            const imageURL = URL.createObjectURL(imageBlob)
-            setImageUrls({ [id]: imageURL, ...imageUrls })
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-      }
     })
 
     Promise.all(versionPromises)
       .then((responses): void => {
-        const tempVersionData: any[] = []
-        const dataRaw = responses[0].data as ImageVersion
-        const metadata = dataRaw.metadata
-
-        const data: Partial<ImageVersion> = { ...dataRaw }
-        delete data.metadata
-
-        for (const key in data) {
-          tempVersionData.push({
-            [t('field')]: t(`version.${key}`)
-          })
-        }
-
-        for (const meta of metadata) {
-          data[`${meta.name} (${meta.type})`] = meta.data
-          tempVersionData.push({
-            [t('field')]: `${meta.name} (${meta.type})`
-          })
-        }
-
-        tempVersionData.push({
-          [t('field')]: t('version.image')
+        const versions: AssetVersionData[] = []
+        const imagePromises: Array<Promise<string | null>> = []
+        responses.forEach((response, versionIndex) => {
+          const dataRaw = response.data as AssetVersion
+          versions.push(hydrateVersionData(dataRaw, versionIds[versionIndex].id, versionIds[versionIndex].count))
+          imagePromises.push(loadPreviewImage(dataRaw, versionIds[versionIndex].id))
         })
 
-        responses.forEach((response, versionIndex): void => {
-          const dataRaw = response.data as ImageVersion
-          const metadata = dataRaw.metadata
+        Promise.all(imagePromises)
+          .then((imageUrls): void => {
+            versions.forEach((version, versionIndex) => {
+              version.previewImageUrl = imageUrls[versionIndex]
+            })
 
-          const data: Partial<ImageVersion> = { ...dataRaw }
-          delete data.metadata
-          let index = 0
-          for (const key in data) {
-            tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] =
-              formatVersionData(key, data[key])
-          }
-
-          for (const meta of metadata) {
-            tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] =
-              meta.data
-          }
-
-          tempVersionData[index++][`${t('version.version')} ${versionIds[versionIndex].count}`] = (
-            <PimcoreImage
-              key={ 'image' }
-              src={ imageUrls[versionIds[versionIndex].id] ?? '' }
-            />
-          )
-        })
-
-        if (JSON.stringify(tempVersionData) !== JSON.stringify(versionData)) {
-          setVersionData(tempVersionData)
-        }
+            setVersions(versions)
+            setGridData(versionsDataToTableData(versions))
+          })
+          .catch(err => { console.log(err) })
       })
       .catch(err => { console.log(err) })
-  }, [versionIds, imageUrls])
+  }, [versionIds])
 
-  if (versionData.length === 0) {
+  if (gridData.length === 0) {
     return <div>Loading ...</div>
   }
 
   return (
     <DetailsVersionsView
-      data={ versionData }
-      versionIds={ versionIds }
+      gridData={ gridData }
+      versions={ versions }
     />
   )
 }

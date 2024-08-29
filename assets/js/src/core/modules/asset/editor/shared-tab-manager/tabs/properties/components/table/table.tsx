@@ -11,17 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type DataProperty } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import {
+  type DataProperty
+} from '@Pimcore/modules/asset/properties-api-slice.gen'
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { Button, Checkbox } from 'antd'
+import { Checkbox } from 'antd'
 import { useStyles } from './table.styles'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 
 interface ITableProps {
@@ -83,7 +85,7 @@ export const Table = ({
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.properties.columns.type'),
       meta: {
-        type: 'asset-property-icon'
+        type: 'property-icon'
       },
       size: 40
     }),
@@ -106,7 +108,7 @@ export const Table = ({
       header: t('asset.asset-editor-tabs.properties.columns.data'),
       id: 'properties-table--data-column',
       meta: {
-        type: 'type-dependent-content',
+        type: 'property-value',
         editable: propertiesTableTab === 'own',
         autoWidth: true
       },
@@ -128,31 +130,32 @@ export const Table = ({
     }),
     columnHelper.accessor('actions', {
       header: t('asset.asset-editor-tabs.properties.columns.actions'),
+      size: 70,
       cell: (info) => {
         return (
           <div className={ 'properties-table--actions-column' }>
             {
-                            ['document', 'asset', 'object'].includes(info.row.original.type) &&
-                            info.row.original.data !== null &&
-                            (
-                            <Button
-                              icon={ <Icon name="group" /> }
-                              onClick={ () => {
-                                console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
-                              } }
-                              type="link"
-                            />
-                            )
-                        }
+              ['document', 'asset', 'object'].includes(info.row.original.type) &&
+                info.row.original.data !== null &&
+              (
+                <IconButton
+                  icon={ 'group' }
+                  onClick={ () => {
+                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
+                  } }
+                  type="link"
+                />
+              )
+            }
 
             {propertiesTableTab === 'own' && (
-            <Button
-              icon={ <Icon name="trash" /> }
-              onClick={ () => {
-                removeProperty(info.row.original)
-              } }
-              type="link"
-            />
+              <IconButton
+                icon={ 'trash' }
+                onClick={ () => {
+                  removeProperty(info.row.original)
+                } }
+                type="link"
+              />
             )}
           </div>
         )
@@ -217,7 +220,7 @@ export const Table = ({
             </>
           )}
         </>
-            )}
+      )}
     </div>
   )
 }

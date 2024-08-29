@@ -14,13 +14,14 @@
 import { useAssetGetGridMutation, type GridFilter, api, type AssetGetGridApiResponse, useAssetPatchByIdMutation, type AssetPatchByIdApiArg, type AssetGetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { GridContainer } from './grid-container'
-import { GridToolbarContainer } from './grid-toolbar-container'
-import { ContentToolbarSidebarView } from '@Pimcore/modules/element/editor/tab-manager/layouts/content-toolbar-sidebar-view'
+import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { SidebarContainer } from './sidebar-container'
+import { SidebarContainer } from './sidebar/sidebar-container'
 import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
+import { ListDataProvider } from './list-provider'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 
 interface DataPatch {
   columnId: string
@@ -57,12 +58,23 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridConfiguration.initiate())
+      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
       const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId }))
 
       Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
         setGridConfig(availableGridConfig.data?.columns)
-        setGridColumns(initialGridConfig.data!.columns!)
+
+        const initialColumns = initialGridConfig.data!.columns!.map((column) => {
+          const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
+
+          if (availableColumn === undefined) {
+            throw new Error(`Column with key ${column.key} is not available`)
+          }
+
+          return availableColumn
+        })
+
+        setGridColumns(initialColumns)
       }).catch((error) => {
         console.error(error)
       })
@@ -74,26 +86,28 @@ export const ListContainerInner = (): React.JSX.Element => {
   }, [])
 
   return useMemo(() => (
-    <ContentToolbarSidebarView
-      renderSidebar={ <SidebarContainer /> }
+    <ListDataProvider data={ data }>
+      <ContentToolbarSidebarLayout
+        renderSidebar={ <SidebarContainer /> }
 
-      renderToolbar={
-        <GridToolbarContainer
-          pager={ {
-            current: page,
-            total: data?.totalItems ?? 0,
-            pageSize,
-            onChange: onPagerChange
-          } }
+        renderToolbar={
+          <GridToolbarContainer
+            pager={ {
+              current: page,
+              total: data?.totalItems ?? 0,
+              pageSize,
+              onChange: onPagerChange
+            } }
+          />
+        }
+      >
+        <GridContainer
+          assets={ data }
+          modifiedCells={ modifiedCells }
+          onUpdateCellData={ onUpdateCellData }
         />
-      }
-    >
-      <GridContainer
-        assets={ data }
-        modifiedCells={ modifiedCells }
-        onUpdateCellData={ onUpdateCellData }
-      />
-    </ContentToolbarSidebarView>
+      </ContentToolbarSidebarLayout>
+    </ListDataProvider>
   ), [data, page, pageSize, modifiedCells])
 
   function onPagerChange (page: number, pageSize: number): void {

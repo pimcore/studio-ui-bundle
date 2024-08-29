@@ -11,29 +11,45 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, type ButtonProps } from 'antd'
+import { Button, type ButtonProps } from '../button/button'
 import React from 'react'
-import { Icon } from '../icon/icon'
-import { useStyles } from './icon-text-button.styles'
+import { Icon, type IconProps } from '../icon/icon'
+import { Flex } from 'antd'
 
-interface IconTextButtonProps extends ButtonProps {
+export interface IconTextButtonProps extends ButtonProps {
   icon: string
+  iconOptions?: IconProps['options']
+  iconPlacement?: 'left' | 'right'
 }
 
-export const IconTextButton = ({ icon, children, ...buttonProps }: IconTextButtonProps): React.JSX.Element => {
-  const { styles } = useStyles()
-  const buttonClasses = [styles.button, buttonProps.className].join(' ')
-
+export const IconTextButton = ({ icon, children, iconOptions, iconPlacement = 'left', ...buttonProps }: IconTextButtonProps): React.JSX.Element => {
   return (
     <Button
       { ...buttonProps }
-      className={ buttonClasses }
     >
-      <Icon name={ icon } />
+      <Flex
+        align='center'
+        gap={ 6 }
+        justify='center'
+      >
+        { iconPlacement === 'left' && (
+        <Icon
+          name={ icon }
+          options={ iconOptions }
+        />
+        ) }
 
-      <span>
-        { children }
-      </span>
+        <span>
+          { children }
+        </span>
+
+        { iconPlacement === 'right' && (
+        <Icon
+          name={ icon }
+          options={ iconOptions }
+        />
+        ) }
+      </Flex>
     </Button>
   )
 }

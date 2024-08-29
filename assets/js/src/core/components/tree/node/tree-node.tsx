@@ -51,7 +51,7 @@ const TreeNode = ({
   const { token } = useToken()
   const { children } = props
   const { styles } = useStyles()
-  const { renderNodeContent: RenderNodeContent, onSelect, selectedIdsState, nodesRefs, nodeOrder } = useContext(TreeContext)
+  const { renderNodeContent: RenderNodeContent, onSelect, onRightClick, selectedIdsState, nodesRefs, nodeOrder } = useContext(TreeContext)
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
 
@@ -86,6 +86,12 @@ const TreeNode = ({
 
   function onClick (event: MouseEvent): void {
     selectNode()
+  }
+
+  function onContextMenu (event: MouseEvent): void {
+    if (onRightClick !== undefined) {
+      onRightClick(event, treeNodeProps)
+    }
   }
 
   function onKeyDown (event: React.KeyboardEvent): void {
@@ -153,6 +159,7 @@ const TreeNode = ({
         className='tree-node__content'
         gap="small"
         onClick={ onClick }
+        onContextMenu={ onContextMenu }
         onKeyDown={ onKeyDown }
         ref={ setRef }
         role='button'

@@ -13,12 +13,11 @@
 
 import { type Meta } from '@storybook/react'
 import { DropdownMenu as DropdownMenuComponent, type DropdownMenuItemProps } from './dropdown-menu'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import { IconButton } from '../icon-button/icon-button'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/DropdownMenu',
+  title: 'Components/Controls/Dropdowns/DropdownMenu',
   component: DropdownMenuComponent,
   parameters: {
     layout: 'centered'
@@ -30,9 +29,10 @@ export default config
 
 const children: React.JSX.Element =
   (
-    <Button
-      icon={ <Icon name="dots-horizontal" /> }
+    <IconButton
+      icon='dots-horizontal'
       size="small"
+      type='dashed'
     />
   )
 

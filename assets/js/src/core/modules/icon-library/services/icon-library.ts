@@ -17,6 +17,7 @@ import { type ComponentType } from 'react'
 interface AbstractIconLibrary {
   register: ({ name, component }: { name: string, component: ComponentType }) => void
   get: (iconName: string) => ComponentType | undefined
+  getIcons: () => Map<string, ComponentType>
 }
 
 @injectable()
@@ -29,5 +30,9 @@ export class IconLibrary implements AbstractIconLibrary {
 
   get (name: string): ComponentType | undefined {
     return this.icons.get(name)
+  }
+
+  getIcons (): Map<string, ComponentType> {
+    return this.icons
   }
 }

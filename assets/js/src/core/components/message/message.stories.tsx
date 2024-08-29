@@ -13,11 +13,11 @@
 
 import { type Meta } from '@storybook/react'
 import React from 'react'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/Message',
+  title: 'Components/Feedback/Message',
   component: (args) => {
     const messageApi = useMessage()
 

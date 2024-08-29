@@ -79,7 +79,6 @@ export type VersionPdfStreamByIdApiArg = {
 };
 export type VersionGetByIdApiResponse = /** status 200 Successfully retrieved version data as JSON */
     | AssetVersion
-    | ImageVersion
     | DataObjectVersion
     | DocumentVersion;
 export type VersionGetByIdApiArg = {
@@ -140,14 +139,6 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type AssetVersion = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** file name */
-    fileName: string;
-};
 export type CustomMetadataVersion = {
     /** Name */
     name: string;
@@ -164,11 +155,13 @@ export type VersionDimensions = {
     /** height */
     height?: number | null;
 };
-export type ImageVersion = {
+export type AssetVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
+    /** asset type */
+    type: string;
     /** file name */
     fileName: string;
     /** creation date */
@@ -181,8 +174,7 @@ export type ImageVersion = {
     mimeType: string;
     /** Metadata */
     metadata: CustomMetadataVersion[];
-    /** dimensions */
-    dimensions?: VersionDimensions | null;
+    dimensions: VersionDimensions;
 };
 export type DataObjectVersion = {
     /** AdditionalAttributes */

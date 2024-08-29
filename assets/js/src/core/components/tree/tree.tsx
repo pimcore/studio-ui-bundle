@@ -11,10 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ElementType, createContext, useState, type Dispatch, useMemo, useRef, type MutableRefObject, useCallback } from 'react'
+import React, {
+  createContext,
+  type Dispatch,
+  type ElementType,
+  type MutableRefObject,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './tree.styles'
+import { TreeContextMenu } from './components/context-menu/context-menu'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -40,7 +50,7 @@ export interface TreeProps {
 
   onLoad?: (node: TreeNodeProps) => Promise<void>
   onSelect?: (node: TreeNodeProps) => void
-  onContextMenu?: (node: TreeNodeProps, event: React.MouseEvent) => void
+  onRightClick?: (event: React.MouseEvent, node: TreeNodeProps) => void
 }
 
 export interface nodeRef {
@@ -101,8 +111,15 @@ const Tree = (
       return 0
     })
   }, [nodesRefs.current])
+  const [rightClickedNode, setRightClickedNode] = useState<TreeNodeProps | undefined>(undefined)
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent }), [props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent])
+  async function onRightClick (event: React.MouseEvent, node: TreeNodeProps): Promise<void> {
+    event.preventDefault()
+
+    setRightClickedNode(node)
+  }
+
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
 
   if (isError !== false) {
     return (<div>{'Error'}</div>)
@@ -120,17 +137,19 @@ const Tree = (
   return (
     <>
       {isLoading === false && items.length !== 0 && (
-        <div className={ ['tree', styles.tree].join(' ') }>
-          <TreeContext.Provider value={ treeContextValue }>
-            {items.map((item, index) => (
-              <TreeNode
-                internalKey={ `${index}` }
-                key={ item.id }
-                { ...item }
-              />
-            ))}
-          </TreeContext.Provider>
-        </div>
+        <TreeContextMenu node={ rightClickedNode }>
+          <div className={ ['tree', styles.tree].join(' ') }>
+            <TreeContext.Provider value={ treeContextValue }>
+              {items.map((item, index) => (
+                <TreeNode
+                  internalKey={ `${index}` }
+                  key={ item.id }
+                  { ...item }
+                />
+              ))}
+            </TreeContext.Provider>
+          </div>
+        </TreeContextMenu>
       )}
     </>
   )

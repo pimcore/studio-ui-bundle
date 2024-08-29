@@ -15,8 +15,9 @@ import { type Meta } from '@storybook/react'
 import { PreviewCard as PreviewCardComponent, SizeTypes } from './preview-card'
 import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
 
+// @todo refactor die to naming and component splitting
 const config: Meta = {
-  title: 'Pimcore studio/UI/PreviewCard',
+  title: 'Components/__Refactor__/PreviewCard',
   component: PreviewCardComponent,
   parameters: {
     layout: 'centered'

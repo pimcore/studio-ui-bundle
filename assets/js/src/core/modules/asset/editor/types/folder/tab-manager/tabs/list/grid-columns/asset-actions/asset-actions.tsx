@@ -14,12 +14,12 @@
 import React, { useMemo } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { Flex } from 'antd'
 
 export const AssetActions = ({ row }: DefaultCellProps): React.JSX.Element => {
   const data = row.original
-  const { openAsset } = useAsset()
+  const { openAsset } = useAssetHelper()
 
   return useMemo(() => (
     <div className={ 'default-cell__content' }>

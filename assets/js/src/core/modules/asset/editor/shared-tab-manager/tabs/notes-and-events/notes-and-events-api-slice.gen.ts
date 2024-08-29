@@ -46,6 +46,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Notes"],
             }),
+            noteElementGetTypeCollection: build.query<
+                NoteElementGetTypeCollectionApiResponse,
+                NoteElementGetTypeCollectionApiArg
+            >({
+                query: (queryArg) => ({ url: `/studio/api/notes/type/${queryArg.elementType}` }),
+                providesTags: ["Notes"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -105,6 +112,13 @@ export type NoteElementCreateApiArg = {
     id: number;
     createNote: CreateNote;
 };
+export type NoteElementGetTypeCollectionApiResponse = /** status 200 Note types collection */ {
+    items: NoteType[];
+};
+export type NoteElementGetTypeCollectionApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
 export type Note = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -153,9 +167,18 @@ export type CreateNote = {
     /** type */
     type: string;
 };
+export type NoteType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** id */
+    id: string;
+};
 export const {
     useNoteGetCollectionQuery,
     useNoteDeleteByIdMutation,
     useNoteElementGetCollectionQuery,
     useNoteElementCreateMutation,
+    useNoteElementGetTypeCollectionQuery,
 } = injectedRtkApi;

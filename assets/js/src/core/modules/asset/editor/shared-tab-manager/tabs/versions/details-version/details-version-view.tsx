@@ -17,14 +17,14 @@ import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import { Button } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex, Space } from 'antd'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface DetailsVersionViewProps {
   versionId: VersionIdentifiers
   data: any[]
-  imgSrc: string
+  imgSrc: string | null
   firstVersion: boolean
   lastVersion: boolean
   onClickPrevious: () => void
@@ -41,39 +41,57 @@ export const DetailsVersionView = ({
   onClickNext
 }: DetailsVersionViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
-    columnHelper.accessor(i18n.t('field'), { size: 162 }),
+    columnHelper.accessor(i18n.t('field'), { size: 162, meta: { type: 'version-preview-field-label' } }),
     columnHelper.accessor(i18n.t('version.version') + ' ' + versionId.count, { size: 180 })
   ]
 
   return (
     <div className={ styles['right-side'] }>
-      <div className={ 'image-slider' }>
-        <Button
-          disabled={ firstVersion }
-          icon={ <Icon name={ 'left-outlined' } /> }
-          onClick={ onClickPrevious }
-          type={ 'text' }
-        />
-        <PimcoreImage
-          className={ 'image-slider__image' }
-          src={ imgSrc }
-        />
-        <Button
-          disabled={ lastVersion }
-          icon={ <Icon name={ 'right-outlined' } /> }
-          onClick={ onClickNext }
-          type={ 'text' }
-        />
+      <Space
+        align="center"
+        direction="vertical"
+        size="large"
+        style={ { maxWidth: 600 } }
+      >
+        <Flex
+          align="center"
+          gap="small"
+          justify="center"
+          style={ { minHeight: 100 } }
+        >
+          <IconButton
+            disabled={ firstVersion }
+            icon={ 'left-outlined' }
+            onClick={ onClickPrevious }
+            type={ 'text' }
+          />
+          {imgSrc !== null
+            ? (
+              <PimcoreImage
+                className={ 'image-slider__image' }
+                src={ imgSrc }
+                style={ { maxHeight: 500, maxWidth: 500 } }
+              />
+              )
+            : null}
 
-      </div>
-      <Grid
-        columns={ columns }
-        data={ data }
-      />
+          <IconButton
+            disabled={ lastVersion }
+            icon={ 'right-outlined' }
+            onClick={ onClickNext }
+            type={ 'text' }
+          />
+
+        </Flex>
+        <Grid
+          autoWidth
+          columns={ columns }
+          data={ data }
+        />
+      </Space>
     </div>
   )
 }

@@ -17,7 +17,7 @@ import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeli
 import { VersionCard } from '@Pimcore/components/version-card/version-card'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/VerticalTimeline',
+  title: 'Components/Data Display/VerticalTimeline',
   component: VerticalTimelineComponent,
   parameters: {
     layout: 'centered'

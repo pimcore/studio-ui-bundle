@@ -15,11 +15,10 @@ import { type Meta } from '@storybook/react'
 import { IconButton } from './icon-button'
 
 const config: Meta = {
-  title: 'Pimcore studio/UI/IconButton',
+  title: 'Components/Controls/Buttons/IconButton',
   component: IconButton,
   parameters: {
     layout: 'fullscreen'
-
   },
   tags: ['autodocs']
 }
@@ -28,6 +27,28 @@ export default config
 
 export const _default = {
   args: {
-    icon: 'trash'
+    icon: 'trash',
+    loading: false
+  }
+}
+
+export const Secondary = {
+  args: {
+    ..._default.args,
+    theme: 'secondary'
+  }
+}
+
+export const Primary = {
+  args: {
+    ..._default.args,
+    type: 'primary'
+  }
+}
+
+export const Outlined = {
+  args: {
+    ..._default.args,
+    type: 'default'
   }
 }

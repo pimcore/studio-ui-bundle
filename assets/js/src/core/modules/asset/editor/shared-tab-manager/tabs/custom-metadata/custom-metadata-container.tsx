@@ -14,12 +14,10 @@
 import { useStyle } from './custom-metadata-container.styles'
 import React, { useContext, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, type InputRef, Select } from 'antd'
+import { type InputRef, Select } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import Input from 'antd/es/input/Input'
-import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  CustomMetadataTable
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
+import { CustomMetadataTable } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
   type CustomMetadata
@@ -28,6 +26,10 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
+import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -52,6 +54,10 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const typeSelectValue = useRef<string>('input')
   const languageSelectValue = useRef<string>('')
 
+  const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
+  const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
+    return { value: type, label: t('data-type.' + type) }
+  })
   function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
     nameInputValue.current = event.target.value
   }
@@ -132,15 +138,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 <Select
                   defaultValue={ typeSelectValue.current }
                   onSelect={ onTypeSelectChange }
-                  options={ [
-                    { value: 'input', label: t('data-type.input') },
-                    { value: 'textarea', label: t('data-type.textarea') },
-                    { value: 'asset', label: t('data-type.asset') },
-                    { value: 'document', label: t('data-type.document') },
-                    { value: 'object', label: t('data-type.object') },
-                    { value: 'date', label: t('data-type.date') },
-                    { value: 'checkbox', label: t('data-type.checkbox') }
-                  ] }
+                  options={ typeSelectOptions }
                   placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type') }
                 />
 
@@ -154,14 +152,14 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language') }
                 />
 
-                <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                <IconTextButton
+                  icon={ 'PlusCircleOutlined' }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
                 >
                   {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
-                </Button>
+                </IconTextButton>
               </div>
 
               <DuplicateEntryModal
@@ -200,14 +198,14 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
               </Button>
 
-              <Button
-                icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+              <IconTextButton
+                icon={ 'PlusCircleOutlined' }
                 onClick={ () => {
                   setEditMode(true)
                 } }
               >
                 {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
-              </Button>
+              </IconTextButton>
             </>
           )}
         </div>
