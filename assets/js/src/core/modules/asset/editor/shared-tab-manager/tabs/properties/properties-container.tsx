@@ -13,9 +13,9 @@
 
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Divider, type InputRef, Segmented, Select } from 'antd'
+import { Divider, type InputRef, Segmented, Select } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { type DataProperty, usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import Input from 'antd/es/input/Input'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
@@ -23,6 +23,7 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import {
   ContentHeaderContainer
 } from '@Pimcore/components/content-containers/content-header-container'
@@ -35,11 +36,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
   const { id } = useContext(AssetContext)
   const { addProperty, properties } = useAssetDraft(id!)
-  const {
-    showModal: showDuplicatePropertyModal,
-    closeModal: closeDuplicatePropertyModal,
-    renderModal: DuplicatePropertyModal
-  } = useModal({
+  const { showModal: showDuplicatePropertyModal, closeModal: closeDuplicatePropertyModal, renderModal: DuplicatePropertyModal } = useModal({
     type: 'error'
   })
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -129,14 +126,14 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
                 />
 
-                <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                <IconTextButton
+                  icon={ 'PlusCircleOutlined' }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
                 >
                   {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
-                </Button>
+                </IconTextButton>
               </div>
               )}
 
@@ -163,14 +160,14 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
                 <Divider type={ 'vertical' } />
 
-                <Button
-                  icon={ <Icon name={ 'PlusCircleOutlined' } /> }
+                <IconTextButton
+                  icon={ 'PlusCircleOutlined' }
                   onClick={ () => {
                     setCreateManualPropertyMode(true)
                   } }
                 >
                   {t('asset.asset-editor-tabs.properties.add-custom-property')}
-                </Button>
+                </IconTextButton>
               </>
               )}
             </div>

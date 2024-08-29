@@ -58,12 +58,23 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridConfiguration.initiate())
+      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
       const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId }))
 
       Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
         setGridConfig(availableGridConfig.data?.columns)
-        setGridColumns(initialGridConfig.data!.columns!)
+
+        const initialColumns = initialGridConfig.data!.columns!.map((column) => {
+          const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
+
+          if (availableColumn === undefined) {
+            throw new Error(`Column with key ${column.key} is not available`)
+          }
+
+          return availableColumn
+        })
+
+        setGridColumns(initialColumns)
       }).catch((error) => {
         console.error(error)
       })

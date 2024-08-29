@@ -14,7 +14,7 @@
 import React, { useEffect, useState } from 'react'
 import { useStyle } from './inline-textfield.styles'
 import { isSet } from '@Pimcore/utils/helpers'
-import { Button } from 'antd'
+import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 interface InlineTextfieldProps {

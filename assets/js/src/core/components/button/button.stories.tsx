@@ -11,15 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { IconTextButton } from './icon-text-button'
+import type { Meta } from '@storybook/react'
+import { Button } from './button'
 
 const config: Meta = {
-  title: 'Components/Controls/Buttons/IconTextButton',
-  component: IconTextButton,
+  title: 'Components/Controls/Buttons/Button',
+  component: Button,
   parameters: {
-    layout: 'fullscreen'
-
+    layout: 'centered'
   },
   tags: ['autodocs']
 }
@@ -28,8 +27,8 @@ export default config
 
 export const _default = {
   args: {
-    icon: 'trash',
-    children: 'Delete'
+    loading: false,
+    children: 'Button'
   }
 }
 
@@ -40,16 +39,16 @@ export const Primary = {
   }
 }
 
-export const Link = {
-  args: {
-    ..._default.args,
-    type: 'link'
-  }
-}
-
 export const Text = {
   args: {
     ..._default.args,
     type: 'text'
+  }
+}
+
+export const Link = {
+  args: {
+    ..._default.args,
+    type: 'link'
   }
 }
