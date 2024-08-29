@@ -23,6 +23,7 @@ import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies'
+import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule'
 import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
@@ -34,13 +35,6 @@ import { VideoContainer } from '@Pimcore/modules/asset/editor/types/video/video-
 import { TextContainer } from '@Pimcore/modules/asset/editor/types/text/text-container'
 import { DocumentContainer } from '@Pimcore/modules/asset/editor/types/document/document-container'
 import { TitleContainer } from './title/title-container'
-import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
-import {
-  VersionIdCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/version-id-cell/version-id-cell'
-import {
-  ActionsCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/actions-cell/actions-cell'
 import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-container'
 import { UnknownContainer } from '@Pimcore/modules/asset/editor/types/unknown/unknown-container'
 
@@ -89,18 +83,6 @@ moduleSystem.registerModule({
       name: 'asset-editor',
       component: EditorContainer,
       titleComponent: TitleContainer
-    })
-
-    const typeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
-
-    typeRegistry.registerType({
-      type: 'version-id-select',
-      component: VersionIdCell
-    })
-
-    typeRegistry.registerType({
-      type: 'schedule-actions-select',
-      component: ActionsCell
     })
   }
 })
