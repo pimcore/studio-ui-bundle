@@ -16,21 +16,18 @@ import { useTranslation } from 'react-i18next'
 import {
   useStyles
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
-import { Button } from 'antd'
 import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
-import {
-  AddNoteModal
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
+import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import { type ElementType } from 'types/element-type.d'
 import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
 import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -75,7 +72,9 @@ export const NotesAndEventsTabView = ({
         date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
         key={ note.id }
-        onClickTrash={ () => { onClickTrash(note.id) } }
+        onClickTrash={ () => {
+          onClickTrash(note.id)
+        } }
         showDetails={ showDetails }
         title={ note.title }
         type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }
@@ -91,17 +90,16 @@ export const NotesAndEventsTabView = ({
           <ContentHeaderContainer
             text={ t('notes-and-events.notes-and-events') }
           >
-            <Button
-              icon={ <Icon
-                name={ 'PlusCircleOutlined' }
-                options={ { width: '24px', height: '24px' } }
-                     /> }
+            <IconTextButton
+              icon={ 'PlusCircleOutlined' }
+              iconOptions={ { width: '24px', height: '24px' } }
               onClick={ () => {
                 setAddNoteModalOpen(true)
               } }
             >
               {t('add')}
-            </Button>
+            </IconTextButton>
+
             <AddNoteModal
               elementId={ elementId }
               elementType={ elementType }
