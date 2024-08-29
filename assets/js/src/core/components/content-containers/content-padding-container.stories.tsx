@@ -12,9 +12,9 @@
 */
 
 import { type Meta } from '@storybook/react'
-import {ContentHeaderContainer} from "@Pimcore/components/content-containers/content-header-container";
-import React from "react";
-import {Icon} from "@Pimcore/components/icon/icon";
+import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
+import React from 'react'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 const config: Meta = {
   title: 'Components/Layout/ContentHeaderContainer',
