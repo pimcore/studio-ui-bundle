@@ -292,8 +292,8 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
     </div>
   ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
 
-  function getModifiedRow (rowIndex: string | number): GridProps['modifiedCells'] {
-    return memoModifiedCells.filter(({ rowIndex: rIndex }) => rIndex === rowIndex) ?? []
+  function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
+    return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === rowIndex) ?? []
   }
 
   function updateRowSelection (selectedRows: RowSelectionState): void {

@@ -24,20 +24,27 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 
 interface ITableProps {
   propertiesTableTab: string
+  showDuplicatePropertyModal: () => void
+  showMandatoryModal: () => void
 }
 
 type DataPropertyWithActions = DataProperty & {
   actions: React.ReactNode
 }
 
-export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element => {
+export const Table = ({
+  propertiesTableTab,
+  showDuplicatePropertyModal,
+  showMandatoryModal
+}: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
-  const { properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
+  const { asset, properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
@@ -47,6 +54,7 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
+  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
@@ -66,6 +74,12 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     }
   }, [properties])
 
+  useEffect(() => {
+    if (modifiedCells.length > 0 && asset?.changes.properties === undefined) {
+      setModifiedCells([])
+    }
+  }, [asset])
+
   const columnHelper = createColumnHelper<DataPropertyWithActions>()
   const baseColumns = [
     columnHelper.accessor('type', {
@@ -77,6 +91,9 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     }),
     columnHelper.accessor('key', {
       header: t('asset.asset-editor-tabs.properties.columns.key'),
+      meta: {
+        editable: true
+      },
       size: 200
     }),
     columnHelper.accessor('predefinedName', {
@@ -152,49 +169,41 @@ export const Table = ({ propertiesTableTab }: ITableProps): React.JSX.Element =>
     ...baseColumns
   ]
 
-  function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
-    if (columnId === 'properties-table--data-column') {
-      const updatedProperties = [...(properties ?? [])]
-      const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
-
-      propertyToUpdate.data = value
-
-      updateProperty(propertyToUpdate)
+  const getRealColumnName = (columnId: string): string => {
+    switch (columnId) {
+      case 'properties-table--data-column':
+        return 'data'
+      default:
+        return columnId
     }
   }
+  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
+    const updatedProperties = [...(properties ?? [])]
+    const propertyPrimaryKeys = updatedProperties.map(prop => prop.key)
+    const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
+    const updatedProperty = { ...propertyToUpdate, [getRealColumnName(columnId as string)]: value }
 
-  function getModifiedCells (): Array<{ rowIndex: number, columnId: string }> {
-    const modifiedCells: Array<{ rowIndex: number, columnId: string }> = []
-
-    data?.items!.forEach((item, index) => {
-      gridDataOwn.forEach((property, propertyIndex) => {
-        if (property.key === item.key && property.data !== item.data) {
-          modifiedCells.push({
-            rowIndex: propertyIndex,
-            columnId: 'properties-table--data-column'
-          })
-        }
-      })
-    })
-
-    return modifiedCells
+    if (verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal)) {
+      updateProperty(propertyToUpdate.key, updatedProperty)
+      setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+    }
   }
 
   return (
     <div className={ styles.table }>
       {(
         <>
-          { (
+          {(
             <Grid
               autoWidth
               columns={ ownTableColumns }
               data={ gridDataOwn }
               isLoading={ isLoading }
-              modifiedCells={ getModifiedCells() }
+              modifiedCells={ modifiedCells }
               onUpdateCellData={ onUpdateCellData }
               resizable
             />
-          )}
+                    )}
 
           {propertiesTableTab === 'all' && (
             <>

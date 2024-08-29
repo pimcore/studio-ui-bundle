@@ -176,8 +176,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
       </ContentHeaderContainer>
 
       <ContentPaddingContainer>
-        <Table propertiesTableTab={ propertiesTableTab } />
-      </ContentPaddingContainer>
+        <Table
+          propertiesTableTab={ propertiesTableTab }
+          showDuplicatePropertyModal={ showDuplicatePropertyModal }
+          showMandatoryModal={ showMandatoryModal }
+        />      </ContentPaddingContainer>
     </div>
   )
 

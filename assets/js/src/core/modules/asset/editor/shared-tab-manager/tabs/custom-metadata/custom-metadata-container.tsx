@@ -42,7 +42,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id!)
-  const { showModal: showDuplicateEntryModal, closeModal: closeDuplicateEntryModal, renderModal: DuplicateEntryModal } = useModal({
+  const {
+    showModal: showDuplicateEntryModal,
+    closeModal: closeDuplicateEntryModal,
+    renderModal: DuplicateEntryModal
+  } = useModal({
     type: 'error'
   })
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -210,8 +214,10 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       </ContentHeaderContainer>
 
       <ContentPaddingContainer>
-        <CustomMetadataTable />
-      </ContentPaddingContainer>
+        <CustomMetadataTable
+          showDuplicateEntryModal={ showDuplicateEntryModal }
+          showMandatoryModal={ showMandatoryModal }
+        />      </ContentPaddingContainer>
     </div>
   )
 }
