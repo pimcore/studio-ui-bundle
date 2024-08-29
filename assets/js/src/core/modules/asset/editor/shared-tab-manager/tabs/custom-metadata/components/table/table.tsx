@@ -69,7 +69,6 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     }),
     columnHelper.accessor('language', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.language'),
-      id: 'custom-metadata-table--language-column',
       meta: {
         type: 'language-select',
         editable: true
@@ -78,7 +77,6 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
-      id: 'custom-metadata-table--data-column',
       meta: {
         type: 'asset-custom-metadata-value',
         editable: true,
@@ -105,29 +103,15 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     })
   ]
 
-  const getRealColumnName = (columnId: string): string => {
-    switch (columnId) {
-      case 'custom-metadata-table--language-column':
-        return 'language'
-      case 'custom-metadata-table--data-column':
-        return 'data'
-      default:
-        return columnId
-    }
-  }
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
-    const updatedCustomMetadata = [...(customMetadata ?? [])]
-    const updatedCustomMetadataPrimaryKeys = updatedCustomMetadata.map(cm => cm.name)
-    const customMetadataToUpdate = { ...updatedCustomMetadata.find(cm => cm.name === rowData.name)! }
-    const customMetadataIndex = updatedCustomMetadata.findIndex(cm => cm.name === rowData.name)
+    const updatedCustomMetadataEntries = [...(customMetadata ?? [])]
+    const customMetadataIndex = updatedCustomMetadataEntries.findIndex(cm => cm.name === rowData.name && cm.language === rowData.language)
+    const updatedCustomMetadata = { ...updatedCustomMetadataEntries.at(customMetadataIndex)!, [columnId]: value }
+    updatedCustomMetadataEntries[customMetadataIndex] = updatedCustomMetadata
+    const hasDuplicate = updatedCustomMetadataEntries.filter(cm => cm.name === updatedCustomMetadata.name && cm.language === updatedCustomMetadata.language).length > 1
 
-    updatedCustomMetadata[customMetadataIndex] = {
-      ...customMetadataToUpdate,
-      [getRealColumnName(columnId as string)]: value
-    }
-
-    if (verifyUpdate(value, updatedCustomMetadataPrimaryKeys, columnId, 'name', showMandatoryModal, showDuplicateEntryModal)) {
-      updateAllCustomMetadata(updatedCustomMetadata)
+    if (verifyUpdate(value, columnId, 'name', hasDuplicate, showMandatoryModal, showDuplicateEntryModal)) {
+      updateAllCustomMetadata(updatedCustomMetadataEntries)
       setModifiedCells([...modifiedCells, { rowIndex, columnId }])
     }
   }

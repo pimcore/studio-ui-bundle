@@ -11,27 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const verifyUpdate = (value: any, keys: string[], columnId: any, primaryColumn: string, showMandatoryModal: () => void, showDuplicatePropertyModal: () => void): boolean => {
-  const isStringValue = typeof value === 'string'
-  const isStringColumnId = typeof columnId === 'string'
-
-  if (!isStringValue || !isStringColumnId) {
-    return true
-  }
-
+export const verifyUpdate = (value: any, columnId: any, primaryColumn: string, hasDuplicate: boolean, showMandatoryModal: () => void, showDupliacteModal: () => void): boolean => {
   const isKeyColumn = columnId === primaryColumn
 
   if (isKeyColumn) {
-    if (value.length < 1) {
+    if (value === '') {
       showMandatoryModal()
       return false
     }
+  }
 
-    const hasDuplicateKey = keys.includes(value)
-    if (hasDuplicateKey) {
-      showDuplicatePropertyModal()
-      return false
-    }
+  if (hasDuplicate) {
+    showDupliacteModal()
+    return false
   }
 
   return true
