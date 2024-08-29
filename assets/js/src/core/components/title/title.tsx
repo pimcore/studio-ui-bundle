@@ -12,21 +12,29 @@
 */
 
 import { type TitleProps as AntTitleProps } from 'antd/es/typography/Title'
-import { Typography } from 'antd'
+import { Flex, Typography } from 'antd'
 import React from 'react'
 import { useStyle } from './title.styles'
 
 const { Title: AntTitle } = Typography
 
-export interface TitleProps extends AntTitleProps {}
+export interface TitleProps extends AntTitleProps {
+  icon?: React.JSX.Element
+}
 
-export const Title = ({ children, ...props }: TitleProps): React.JSX.Element => {
+export const Title = ({ children, icon, ...props }: TitleProps): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
-    <AntTitle
-      className={ [styles.title, 'pimcore-title'].join(' ') }
-      { ...props }
-    >{children}</AntTitle>
+    <Flex
+      align={ 'center' }
+      className={ styles.flex }
+    >
+      {icon}
+      <AntTitle
+        className={ [styles.title, 'pimcore-title'].join(' ') }
+        { ...props }
+      >{children}</AntTitle>
+    </Flex>
   )
 }

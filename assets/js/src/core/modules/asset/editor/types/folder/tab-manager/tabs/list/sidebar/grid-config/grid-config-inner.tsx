@@ -23,7 +23,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { useTranslation } from 'react-i18next'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ContentContainer } from '@Pimcore/components/content-container/content-container'
+import { ContentContainer } from '@Pimcore/components/content-containers/content-container'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridConfig()

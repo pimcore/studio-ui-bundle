@@ -29,6 +29,8 @@ import {
   AddNoteModal
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import { type ElementType } from 'types/element-type.d'
+import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -37,6 +39,7 @@ interface NotesAndEventsTabViewProps {
   elementType: ElementType
   elementId: number
 }
+
 export const NotesAndEventsTabView = ({
   notes,
   pagination,
@@ -85,14 +88,17 @@ export const NotesAndEventsTabView = ({
     <div className={ styles['notes-and-events'] }>
       <div className={ 'notes-container' }>
         <div className={ 'notes-content' }>
-          <div className={ 'notes-content__header' }>
-            <span className={ 'notes-content__text' }>{t('notes-and-events.notes-and-events')}</span>
+          <ContentHeaderContainer
+            text={ t('notes-and-events.notes-and-events') }
+          >
             <Button
               icon={ <Icon
                 name={ 'PlusCircleOutlined' }
                 options={ { width: '24px', height: '24px' } }
                      /> }
-              onClick={ () => { setAddNoteModalOpen(true) } }
+              onClick={ () => {
+                setAddNoteModalOpen(true)
+              } }
             >
               {t('add')}
             </Button>
@@ -102,26 +108,28 @@ export const NotesAndEventsTabView = ({
               open={ addNoteModalOpen }
               setOpen={ setAddNoteModalOpen }
             />
-          </div>
+          </ContentHeaderContainer>
           {notes.length > 0
             ? (
-              <div className={ 'notes-content__details' }>
+              <ContentPaddingContainer>
                 {NotesAndEvents}
-              </div>
+              </ContentPaddingContainer>
               )
             : (
               <div className={ 'notes-content__empty-container' }>
                 <NoContent text={ t('notes-and-events.no-notes-and-events-to-show') } />
               </div>
               )
-          }
+                    }
         </div>
+        {notes.length > 0 && (
         <div className={ 'notes-container__pagination-container' }>
           <div className={ 'notes-container__pagination' }>
             <div />
             {pagination}
           </div>
         </div>
+        )}
       </div>
       <div>
       </div>

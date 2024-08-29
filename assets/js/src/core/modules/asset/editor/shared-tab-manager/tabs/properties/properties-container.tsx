@@ -24,6 +24,10 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -57,46 +61,43 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
-        <p className={ 'pimcore-properties-toolbar__headline' }>
-          { t('asset.asset-editor-tabs.properties.text') }
-        </p>
+      <ContentHeaderContainer text={ t('asset.asset-editor-tabs.properties.text') }>
+        <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
+          <Segmented<string>
+            onChange={ setPropertiesTableTab }
+            options={ [
+              { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
+              { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
+            ] }
+          />
 
-        <Segmented<string>
-          onChange={ setPropertiesTableTab }
-          options={ [
-            { label: t('asset.asset-editor-tabs.properties.editable-properties'), value: 'own' },
-            { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
-          ] }
-        />
+          {propertiesTableTab === 'own' && (
+            <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
+              <DuplicatePropertyModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeDuplicatePropertyModal }
+                    type='primary'
+                  >{t('button.ok')}</Button>
+                </ModalFooter> }
+                title={ t('properties.property-already-exist.title') }
+              >
+                {t('properties.property-already-exist.error')}
+              </DuplicatePropertyModal>
 
-        {propertiesTableTab === 'own' && (
-          <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
-            <DuplicatePropertyModal
-              footer={ <ModalFooter>
-                <Button
-                  onClick={ closeDuplicatePropertyModal }
-                  type='primary'
-                >{ t('button.ok') }</Button>
-              </ModalFooter> }
-              title={ t('properties.property-already-exist.title') }
-            >
-              { t('properties.property-already-exist.error') }
-            </DuplicatePropertyModal>
+              <MandatoryModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeMandatoryModal }
+                    type='primary'
+                  >{t('button.ok')}</Button>
+                </ModalFooter> }
+                title={ t('properties.add-property-mandatory-fields-missing.title') }
+              >
+                {t('properties.add-property-mandatory-fields-missing.error')}
+              </MandatoryModal>
 
-            <MandatoryModal
-              footer={ <ModalFooter>
-                <Button
-                  onClick={ closeMandatoryModal }
-                  type='primary'
-                >{ t('button.ok') }</Button>
-              </ModalFooter> }
-              title={ t('properties.add-property-mandatory-fields-missing.title') }
-            >
-              { t('properties.add-property-mandatory-fields-missing.error') }
-            </MandatoryModal>
-
-            {createManualPropertyMode && (
+              {createManualPropertyMode && (
               <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
                 <Button
                   onClick={ () => {
@@ -134,9 +135,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
                 </IconTextButton>
               </div>
-            )}
+              )}
 
-            {!createManualPropertyMode && (
+              {!createManualPropertyMode && (
               <>
                 <Select
                   filterOption={ (input, option) => {
@@ -168,14 +169,15 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   {t('asset.asset-editor-tabs.properties.add-custom-property')}
                 </IconTextButton>
               </>
-            )}
-          </div>
-        )}
-      </div>
+              )}
+            </div>
+          )}
+        </div>
+      </ContentHeaderContainer>
 
-      <div className={ styles.content }>
+      <ContentPaddingContainer>
         <Table propertiesTableTab={ propertiesTableTab } />
-      </div>
+      </ContentPaddingContainer>
     </div>
   )
 

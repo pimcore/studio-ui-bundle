@@ -41,21 +41,6 @@ export const useStyle = createStyles(({ token, css }) => {
         height: 100%
       }
     `,
-    toolbar: css`
-      display: flex;
-      padding: ${token.paddingSM}px ${token.paddingXS}px  ${token.paddingSM}px ${token.paddingSM}px;
-      align-items: center;
-      color: ${token.colorPrimary};
-      gap: 4px;
-        
-      &:hover {
-        color: ${token.colorPrimaryHover};
-      }
-        
-      > p {
-        margin: 0;
-      }
-    `,
     wrapper: css`
       display: flex;
       flex-direction: column;

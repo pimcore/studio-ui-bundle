@@ -13,17 +13,21 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
-    tab: css`
-      display: flex;
-      flex-direction: column;
-        
-      .pimcore-workflow-workflows {
-          display: flex;
-          gap: 10px;
-          flex-direction: column;
-      }
-    `
+    'content-header-container': css`
+            display: flex;
+            padding: ${token.paddingSM}px;
+            width: 100%;
+            height: 56px;
+            align-items: center;
+
+            .header-text {
+                font-weight: 600;
+                color: ${token.colorPrimary};
+                margin-right: 8px;
+                white-space: nowrap;
+            }
+        `
   }
-})
+}, { hashPriority: 'low' })
