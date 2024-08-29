@@ -25,21 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
       width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
       padding: ${token.paddingSM}px;
       display: ruby;
-      
-      .image-slider {
-        display: block;
-        margin: 0 auto 20px auto;
-        width: 470px;
-        text-align: center;
-        
-        .image-slider__image {
-          max-width: 360px; 
-        }
-      }
-
-      .ant-table.ant-table-small {
-        margin: auto;
-      }
+      text-align: center;
     `
   }
 }, { hashPriority: 'low' })

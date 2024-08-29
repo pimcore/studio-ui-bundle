@@ -74,7 +74,7 @@ export const CustomMetadataTable = (): React.JSX.Element => {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
       id: 'custom-metadata-table--data-column',
       meta: {
-        type: 'type-dependent-content',
+        type: 'asset-custom-metadata-value',
         editable: true,
         autoWidth: true
       },

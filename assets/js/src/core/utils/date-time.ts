@@ -14,7 +14,7 @@
 import i18n from 'i18next'
 
 interface IFormatDateTimeProps {
-  timestamp: number
+  timestamp: number | null
   lng?: string
   timeStyle?: 'short' | 'medium' | 'long' | 'full'
   dateStyle?: 'short' | 'medium' | 'long' | 'full'
@@ -24,6 +24,10 @@ interface IFormatDateTimeProps {
 export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
   if (lng === undefined) {
     lng = i18n.language
+  }
+
+  if (timestamp === null) {
+    return ''
   }
 
   try {
