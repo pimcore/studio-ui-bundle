@@ -23,6 +23,10 @@ import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dep
 import {
   Pagination
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const RequiresPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -46,19 +50,16 @@ export const RequiresPanel = (): React.JSX.Element => {
 
   return (
     <div className={ 'pimcore-dependencies__requires' }>
-      <div className={ ['pimcore-dependencies__requires__wrapper', dependencyTabStyle.wrapper].join(' ') }>
-        <div className={ ['pimcore-dependencies__requires_toolbar', dependencyTabStyle.toolbar].join(' ') }>
-          <Icon name={ 'intersect-circle' } />
-          <p>{t('asset.asset-editor-tabs.dependencies.requires')}</p>
-        </div>
-
-        <div className={ 'pimcore-dependencies__requires__content' }>
-          <Table
-            isLoading={ isLoading }
-            items={ data?.items ?? [] }
-          />
-        </div>
-      </div>
+      <ContentHeaderContainer
+        icon={ <Icon name={ 'intersect-circle' } /> }
+        text={ t('asset.asset-editor-tabs.dependencies.requires') }
+      />
+      <ContentPaddingContainer>
+        <Table
+          isLoading={ isLoading }
+          items={ data?.items ?? [] }
+        />
+      </ContentPaddingContainer>
 
       <div className={ ['dependencies__requires__pagination', dependencyTabStyle.pagination].join(' ') }>
         <Pagination

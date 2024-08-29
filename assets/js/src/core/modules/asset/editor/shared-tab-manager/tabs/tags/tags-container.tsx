@@ -38,6 +38,8 @@ export const TagsTabContainer = (): React.JSX.Element => {
     id: id!
   })
 
+  console.log('----> here')
+
   return (
     <div className={ styles.tab }>
       <div className={ 'pimcore-tags-sidebar' }>

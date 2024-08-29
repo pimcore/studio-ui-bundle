@@ -30,6 +30,10 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -107,13 +111,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
-        <p className={ 'pimcore-custom-metadata-toolbar__headline' }>
-          { t('asset.asset-editor-tabs.custom-metadata.text') }
-        </p>
-
-        <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
-          {editmode && (
+      <ContentHeaderContainer
+        text={ t('asset.asset-editor-tabs.custom-metadata.text') }
+      >
+        <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
+          <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
+            {editmode && (
             <>
               <div className={ 'pimcore-custom-metadata-toolbar__manual__editmode' }>
                 <Button
@@ -182,9 +185,9 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 { t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error') }
               </MandatoryModal>
             </>
-          )}
+            )}
 
-          {!editmode && (
+            {!editmode && (
             <>
               <Button
                 onClick={ () => { console.log('clicked') } }
@@ -201,14 +204,14 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
               </IconTextButton>
             </>
-          )}
+            )}
+          </div>
         </div>
+      </ContentHeaderContainer>
 
-      </div>
-
-      <div className={ styles.content }>
+      <ContentPaddingContainer>
         <CustomMetadataTable />
-      </div>
+      </ContentPaddingContainer>
     </div>
   )
 }

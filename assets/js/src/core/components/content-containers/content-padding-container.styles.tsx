@@ -11,15 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
+import { createStyles } from 'antd-style'
 
-export const EditTabContainer = (): React.JSX.Element => {
-  return (
-    <ContentHeaderContainer
-      text={ 'Edit' }
-    />
-  )
-}
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    'content-padding-container': css`
+            height: 100%;
+            width: 100%;
+            flex-grow: 1;
+            padding-left: ${token.paddingXS}px;
+            padding-right: ${token.paddingXS}px;
+        `
+  }
+}, { hashPriority: 'low' })

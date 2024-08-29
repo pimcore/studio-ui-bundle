@@ -13,7 +13,7 @@
 
 import React, { memo, type ReactNode } from 'react'
 import { useStyles } from './content-toolbar-sidebar-layout.styles'
-import { ContentContainer } from '../content-container/content-container'
+import { ContentContainer } from '../content-containers/content-container'
 
 interface ContentToolbarViewProps {
   children: ReactNode

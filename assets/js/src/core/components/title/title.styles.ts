@@ -15,16 +15,21 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
+    flex: css`
+      .pimcore-icon {
+        color: ${token.colorPrimary};
+        margin-right: 4px;
+      }
+    `,
     title: css`
       &.pimcore-title.ant-typography {
         font-size: 12px;
         font-weight: 600;
         color: ${token.colorPrimary};
-        margin: ${token.paddingSM}px 0;
-
-        &:first-child {
-          margin-top: 4px;
-        }
+      }
+      .pimcore-icon {
+        color: ${token.colorPrimary};
+        margin-right: 4px;
       }
     `
   }

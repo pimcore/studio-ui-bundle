@@ -18,6 +18,10 @@ import { Result } from 'antd'
 import { useStyle } from './workflow-container.styles'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
+import {
+  ContentHeaderContainer
+} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,25 +36,25 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
 
   return (
     <div className={ styles.tab }>
-      <div className={ 'pimcore-workflow-toolbar' }>
-        <p className={ 'pimcore-workflow-toolbar__headline' }>
-          {t('asset.asset-editor-tabs.workflow.text')}
-        </p>
-      </div>
+      <ContentHeaderContainer
+        text={ t('asset.asset-editor-tabs.workflow.text') }
+      />
 
       <div className={ 'pimcore-workflow-workflows' }>
         {isLoading && (
           'Loading...'
         )}
 
-        {!isLoading && data?.items !== undefined && data?.items.length > 0 && (
-          data.items.map((workflow, index) => (
-            <WorkflowCard
-              key={ index }
-              workflow={ workflow }
-            />
-          ))
-        )}
+        <ContentPaddingContainer>
+          {!isLoading && data?.items !== undefined && data?.items.length > 0 && (
+            data.items.map((workflow, index) => (
+              <WorkflowCard
+                key={ index }
+                workflow={ workflow }
+              />
+            ))
+          )}
+        </ContentPaddingContainer>
       </div>
     </div>
   )
