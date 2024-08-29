@@ -36,10 +36,10 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
 
   const columnHelper = createColumnHelper<DependencyTable>()
   const columns = [
-    columnHelper.accessor('type', {
+    columnHelper.accessor('subType', {
       header: t('asset.asset-editor-tabs.dependencies.columns.subtype'),
       meta: {
-        type: 'asset-property-icon'
+        type: 'dependency-type-icon'
       },
       size: 60
     }),
