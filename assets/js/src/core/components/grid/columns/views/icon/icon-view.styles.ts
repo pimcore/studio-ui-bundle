@@ -15,11 +15,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    typeIconCell: css`
-      width: 100%;
+    'icon-view': css`
       display: flex;
       justify-content: center;
-      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding: 7px;
     `
   }
-})
+}, { hashPriority: 'low' })

@@ -13,29 +13,27 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { useStyles } from './type-icon-cell.styles'
+import { IconView } from '@Pimcore/components/grid/columns/views/icon/icon-view'
 
 export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const propertyType = props.row.original.type
 
   function renderCell (): React.JSX.Element {
     switch (propertyType) {
       case 'document':
-        return <Icon name={ 'mainDocument' } />
+        return <IconView name={ 'mainDocument' } />
       case 'asset':
-        return <Icon name={ 'mainAsset' } />
+        return <IconView name={ 'mainAsset' } />
       case 'dataObject':
-        return <Icon name={ 'mainObject' } />
+        return <IconView name={ 'mainObject' } />
       default:
         return <span>{ propertyType }</span>
     }
   }
 
   return (
-    <div className={ styles.typeIconCell }>
+    <>
       {renderCell()}
-    </div>
+    </>
   )
 }
