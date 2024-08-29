@@ -43,7 +43,7 @@ export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
       })
     }
   }
-  console.log(styles['element-cell'])
+
   return (
     <Droppable
       className={ [styles['element-cell'], 'default-cell__content'].join(' ') }
