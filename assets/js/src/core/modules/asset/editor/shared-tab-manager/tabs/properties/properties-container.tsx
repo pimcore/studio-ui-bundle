@@ -13,7 +13,7 @@
 
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Divider, type InputRef, Segmented, Select } from 'antd'
+import { type InputRef, Segmented, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { type DataProperty, usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
@@ -24,10 +24,9 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
 import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -36,7 +35,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
   const { id } = useContext(AssetContext)
   const { addProperty, properties } = useAssetDraft(id!)
-  const { showModal: showDuplicatePropertyModal, closeModal: closeDuplicatePropertyModal, renderModal: DuplicatePropertyModal } = useModal({
+  const {
+    showModal: showDuplicatePropertyModal,
+    closeModal: closeDuplicatePropertyModal,
+    renderModal: DuplicatePropertyModal
+  } = useModal({
     type: 'error'
   })
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -66,7 +69,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
           <Segmented<string>
             onChange={ setPropertiesTableTab }
             options={ [
-              { label: t('asset.asset-editor-tabs.properties.edit-own-properties'), value: 'own' },
+              { label: t('asset.asset-editor-tabs.properties.editable-properties'), value: 'own' },
               { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
             ] }
           />
@@ -138,37 +141,39 @@ export const PropertiesContainer = (): React.JSX.Element => {
               )}
 
               {!createManualPropertyMode && (
-              <>
-                <Select
-                  filterOption={ (input, option) => {
-                    return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
-                  } }
-                  loading={ isLoading }
-                  onSelect={ onPredefinedPropertyChange }
-                  placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
-                  showSearch
-                >
-                  {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
-                    <Select.Option
-                      key={ item.id }
-                      value={ item.id }
-                    >
-                      {item.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-
-                <Divider type={ 'vertical' } />
-
-                <IconTextButton
-                  icon={ 'PlusCircleOutlined' }
-                  onClick={ () => {
-                    setCreateManualPropertyMode(true)
-                  } }
-                >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property')}
-                </IconTextButton>
-              </>
+              <ButtonGroup
+                items={ [
+                  <Select
+                    filterOption={ (input, option) => {
+                      return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
+                    } }
+                    key={ 'properties-select' }
+                    loading={ isLoading }
+                    onSelect={ onPredefinedPropertyChange }
+                    placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
+                    showSearch
+                  >
+                    {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
+                      <Select.Option
+                        key={ item.id }
+                        value={ item.id }
+                      >
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                  </Select>,
+                  <IconTextButton
+                    icon={ 'PlusCircleOutlined' }
+                    key={ t('asset.asset-editor-tabs.properties.add-custom-property') }
+                    onClick={ () => {
+                      setCreateManualPropertyMode(true)
+                    } }
+                  >
+                    {t('asset.asset-editor-tabs.properties.add-custom-property')}
+                  </IconTextButton>
+                ] }
+                withSeparator
+              />
               )}
             </div>
           )}
