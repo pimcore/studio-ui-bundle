@@ -26,8 +26,8 @@ export const OpenElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const elementId = props.row.original.id
 
   function renderCell (): React.JSX.Element {
-    const onClick = (): void => {
-      openElement({
+    const onClick = async (): Promise<void> => {
+      await openElement({
         id: elementId,
         type: elementType
       })

@@ -137,8 +137,8 @@ export const Table = ({
               (
                 <IconButton
                   icon={ 'group' }
-                  onClick={ () => {
-                    openElement({
+                  onClick={ async () => {
+                    await openElement({
                       type: mapToElementType(info.row.original.type),
                       id: info.row.original.data.id
                     })
