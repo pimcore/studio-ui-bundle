@@ -24,10 +24,9 @@ export const useStyles = createStyles(({ css, token }) => {
             content: '';
             position: absolute;
             right: -4px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 3px;
+            bottom: 3px;
             width: 1px;
-            height: 100%;
             background-color: ${token.colorPrimary};
           }
         }

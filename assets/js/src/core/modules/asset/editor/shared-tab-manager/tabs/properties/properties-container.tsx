@@ -24,9 +24,9 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -63,8 +63,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
   }, [createManualPropertyMode])
 
   return (
-    <div className={ styles.tab }>
-      <ContentHeaderContainer text={ t('asset.asset-editor-tabs.properties.text') }>
+    <Content
+      className={ styles.tab }
+      padded
+    >
+      <Header title={ t('asset.asset-editor-tabs.properties.text') }>
         <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
           <Segmented<string>
             onChange={ setPropertiesTableTab }
@@ -178,15 +181,14 @@ export const PropertiesContainer = (): React.JSX.Element => {
             </div>
           )}
         </div>
-      </ContentHeaderContainer>
+      </Header>
 
-      <ContentPaddingContainer>
-        <Table
-          propertiesTableTab={ propertiesTableTab }
-          showDuplicatePropertyModal={ showDuplicatePropertyModal }
-          showMandatoryModal={ showMandatoryModal }
-        />      </ContentPaddingContainer>
-    </div>
+      <Table
+        propertiesTableTab={ propertiesTableTab }
+        showDuplicatePropertyModal={ showDuplicatePropertyModal }
+        showMandatoryModal={ showMandatoryModal }
+      />
+    </Content>
   )
 
   function propertyExists (key: string): boolean {

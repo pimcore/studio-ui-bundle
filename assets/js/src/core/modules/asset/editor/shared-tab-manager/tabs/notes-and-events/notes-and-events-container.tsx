@@ -23,6 +23,7 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { Result } from 'antd'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
+import { Content } from '@Pimcore/components/content/content'
 
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -45,7 +46,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   })
 
   if (isLoading) {
-    return <div>Loading ...</div>
+    return <Content loading />
   }
 
   return (

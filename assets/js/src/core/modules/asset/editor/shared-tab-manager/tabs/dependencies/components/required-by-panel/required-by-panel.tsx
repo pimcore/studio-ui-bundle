@@ -14,7 +14,6 @@
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useStyle as useDependencyTabStyle } from '../../dependencies-container.styles'
 import {
   useDependencyGetCollectionByElementTypeQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
@@ -23,14 +22,13 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   Pagination
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { Content } from '@Pimcore/components/content/content'
+import { Header } from '@Pimcore/components/header/header'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 
 export const RequiredByPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles: dependencyTabStyle } = useDependencyTabStyle()
   const { id } = useContext(AssetContext)
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
@@ -49,26 +47,35 @@ export const RequiredByPanel = (): React.JSX.Element => {
   }
 
   return (
-    <div className={ 'pimcore-dependencies__required-by' }>
-      <ContentHeaderContainer
-        icon={ <Icon name={ 'corner-left-up' } /> }
-        text={ t('asset.asset-editor-tabs.dependencies.required-by') }
-      />
-      <ContentPaddingContainer>
+    <ContentToolbarSidebarLayout
+      renderToolbar={
+        <Toolbar
+          justify='flex-end'
+          theme='secondary'
+        >
+          <Pagination
+            { ...data }
+            isLoading={ isLoading }
+            onChange={ onChange }
+            page={ page }
+          />
+        </Toolbar>
+      }
+    >
+      <Content
+        className={ 'pimcore-dependencies__required-by' }
+        padded
+      >
+        <Header
+          icon={ <Icon name={ 'corner-left-up' } /> }
+          title={ t('asset.asset-editor-tabs.dependencies.required-by') }
+        />
+
         <Table
           isLoading={ isLoading }
           items={ data?.items ?? [] }
         />
-      </ContentPaddingContainer>
-
-      <div className={ ['dependencies__required-by__pagination', dependencyTabStyle.pagination].join(' ') }>
-        <Pagination
-          { ...data }
-          isLoading={ isLoading }
-          onChange={ onChange }
-          page={ page }
-        />
-      </div>
-    </div>
+      </Content>
+    </ContentToolbarSidebarLayout>
   )
 }

@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { useMercureCreateCookieMutation } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -84,7 +85,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   if (isLoading) {
     return (
-      <div>Loading ...</div>
+      <Content loading />
     )
   }
 

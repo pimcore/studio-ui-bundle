@@ -14,30 +14,26 @@
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React, { useEffect, useRef, useState } from 'react'
 import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { type RefSelectProps, Result, Select } from 'antd'
+import { type RefSelectProps, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { DownOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
 import { useStyles } from './version-id-cell.styles'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
   const selectRef = useRef<RefSelectProps>(null)
-  const { context } = useGlobalAssetContext()
+  const { id } = useAsset()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  if (context === undefined) {
-    return <Result title="Missing context" />
-  }
-
   const { data, isLoading } = useGetVersionsQuery({
-    elementType: context.type,
-    id: context.config.id,
+    elementType: 'asset',
+    id: id!,
     page: 1,
     pageSize: 9999
   })

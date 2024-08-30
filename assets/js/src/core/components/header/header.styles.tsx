@@ -15,16 +15,19 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    'content-container': css`
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
+    header: css`
+            display: flex;
+            width: 100%;
+            height: 32px;
+            min-height: 32px;
+            align-items: center;
+            gap: 8px;
 
-      &.content-container--padded {
-        padding: ${token.paddingSM}px;
-      }
-    `
+            .header__title {
+                font-weight: 600;
+                color: ${token.colorPrimary};
+                white-space: nowrap;
+            }
+        `
   }
-})
+}, { hashPriority: 'low' })

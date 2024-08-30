@@ -15,12 +15,22 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    'content-padding-container': css`
-            height: 100%;
-            width: 100%;
-            flex-grow: 1;
-            padding-left: ${token.paddingXS}px;
-            padding-right: ${token.paddingXS}px;
-        `
+    content: css`
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      gap: 12px;
+
+      &.content--padded {
+        padding: ${token.paddingSM}px;
+      }
+
+      &.content--centered {
+        justify-content: center;
+        align-items: center;
+      }
+    `
   }
-}, { hashPriority: 'low' })
+})

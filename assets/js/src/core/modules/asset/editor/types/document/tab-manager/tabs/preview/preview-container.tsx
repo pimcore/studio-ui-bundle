@@ -15,6 +15,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { PreviewView } from './preview-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Content } from '@Pimcore/components/content/content'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -37,7 +38,7 @@ const PreviewContainer = (): React.JSX.Element => {
   })
 
   if (docURL === '') {
-    <div>Loading ...</div>
+    <Content loading />
   }
 
   return (

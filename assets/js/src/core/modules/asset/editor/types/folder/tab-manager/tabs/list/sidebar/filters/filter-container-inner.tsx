@@ -22,7 +22,7 @@ import { useFilters } from './hooks/use-filters'
 import { useListFilterOptions } from '../../hooks/use-list'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ContentContainer } from '@Pimcore/components/content-containers/content-container'
+import { Content } from '@Pimcore/components/content/content'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
@@ -49,7 +49,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Toolbar>
        }
     >
-      <ContentContainer padded>
+      <Content padded>
         <Title>Search & Filter</Title>
 
         <Form>
@@ -83,7 +83,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
         </Title>
 
         <FieldFiltersContainer />
-      </ContentContainer>
+      </Content>
     </ContentToolbarSidebarLayout>
   )
 

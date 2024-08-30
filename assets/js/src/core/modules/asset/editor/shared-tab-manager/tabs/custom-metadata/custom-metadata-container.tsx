@@ -32,9 +32,9 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -116,9 +116,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   }, [editmode])
 
   return (
-    <div className={ styles.tab }>
-      <ContentHeaderContainer
-        text={ t('asset.asset-editor-tabs.custom-metadata.text') }
+    <Content
+      className={ styles.tab }
+      padded
+    >
+      <Header
+        title={ t('asset.asset-editor-tabs.custom-metadata.text') }
       >
         <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
           <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
@@ -215,13 +218,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
             )}
           </div>
         </div>
-      </ContentHeaderContainer>
+      </Header>
 
-      <ContentPaddingContainer>
-        <CustomMetadataTable
-          showDuplicateEntryModal={ showDuplicateEntryModal }
-          showMandatoryModal={ showMandatoryModal }
-        />      </ContentPaddingContainer>
-    </div>
+      <CustomMetadataTable
+        showDuplicateEntryModal={ showDuplicateEntryModal }
+        showMandatoryModal={ showMandatoryModal }
+      />
+    </Content>
   )
 }

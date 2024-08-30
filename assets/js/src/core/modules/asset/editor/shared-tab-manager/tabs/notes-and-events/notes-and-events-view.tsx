@@ -14,20 +14,18 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  useStyles
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view.style'
-import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import { type ElementType } from 'types/element-type.d'
-import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -45,7 +43,6 @@ export const NotesAndEventsTabView = ({
   elementType
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
 
   const NotesAndEvents = notes.map((note) => {
@@ -67,7 +64,6 @@ export const NotesAndEventsTabView = ({
 
     return (
       <NoteAndEventCard
-        className={ 'notes-card' }
         data={ formatedData }
         date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
         description={ note.description }
@@ -84,53 +80,53 @@ export const NotesAndEventsTabView = ({
   })
 
   return (
-    <div className={ styles['notes-and-events'] }>
-      <div className={ 'notes-container' }>
-        <div className={ 'notes-content' }>
-          <ContentHeaderContainer
-            text={ t('notes-and-events.notes-and-events') }
+    <ContentToolbarSidebarLayout
+      renderToolbar={ notes.length !== 0
+        ? (
+          <Toolbar
+            justify='flex-end'
+            theme='secondary'
           >
-            <IconTextButton
-              icon={ 'PlusCircleOutlined' }
-              iconOptions={ { width: '24px', height: '24px' } }
-              onClick={ () => {
-                setAddNoteModalOpen(true)
-              } }
-            >
-              {t('add')}
-            </IconTextButton>
+            <>
+              { pagination }
+            </>
+          </Toolbar>
+          )
+        : undefined }
+    >
+      <Content
+        padded
+      >
+        <Header
+          title={ t('notes-and-events.notes-and-events') }
+        >
+          <IconTextButton
+            icon={ 'PlusCircleOutlined' }
+            iconOptions={ { width: '24px', height: '24px' } }
+            onClick={ () => {
+              setAddNoteModalOpen(true)
+            } }
+          >
+            {t('add')}
+          </IconTextButton>
 
-            <AddNoteModal
-              elementId={ elementId }
-              elementType={ elementType }
-              open={ addNoteModalOpen }
-              setOpen={ setAddNoteModalOpen }
-            />
-          </ContentHeaderContainer>
-          {notes.length > 0
-            ? (
-              <ContentPaddingContainer>
-                {NotesAndEvents}
-              </ContentPaddingContainer>
-              )
-            : (
-              <div className={ 'notes-content__empty-container' }>
-                <NoContent text={ t('notes-and-events.no-notes-and-events-to-show') } />
-              </div>
-              )
-                    }
-        </div>
-        {notes.length > 0 && (
-        <div className={ 'notes-container__pagination-container' }>
-          <div className={ 'notes-container__pagination' }>
-            <div />
-            {pagination}
-          </div>
-        </div>
-        )}
-      </div>
-      <div>
-      </div>
-    </div>
+          <AddNoteModal
+            elementId={ elementId }
+            elementType={ elementType }
+            open={ addNoteModalOpen }
+            setOpen={ setAddNoteModalOpen }
+          />
+        </Header>
+
+        <Content
+          none={ notes.length === 0 }
+          noneOptions={ {
+            text: t('notes-and-events.no-notes-and-events-to-show')
+          } }
+        >
+          {NotesAndEvents}
+        </Content>
+      </Content>
+    </ContentToolbarSidebarLayout>
   )
 }

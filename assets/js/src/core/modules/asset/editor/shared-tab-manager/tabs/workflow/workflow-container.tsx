@@ -13,49 +13,40 @@
 
 import React from 'react'
 import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Result } from 'antd'
 import { useStyle } from './workflow-container.styles'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { context } = useGlobalAssetContext()
+  const { id } = useAsset()
 
-  if (context === undefined) {
-    return <Result title="Missing context" />
-  }
-
-  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType: 'asset', elementId: context?.config.id })
+  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType: 'asset', elementId: id! })
 
   return (
-    <div className={ styles.tab }>
-      <ContentHeaderContainer
-        text={ t('asset.asset-editor-tabs.workflow.text') }
+    <Content
+      className={ styles.tab }
+      loading={ isLoading }
+      padded
+    >
+      <Header
+        title={ t('asset.asset-editor-tabs.workflow.text') }
       />
 
       <div className={ 'pimcore-workflow-workflows' }>
-        {isLoading && (
-          'Loading...'
+        {data?.items !== undefined && data?.items.length > 0 && (
+          data.items.map((workflow, index) => (
+            <WorkflowCard
+              key={ index }
+              workflow={ workflow }
+            />
+          ))
         )}
-
-        <ContentPaddingContainer>
-          {!isLoading && data?.items !== undefined && data?.items.length > 0 && (
-            data.items.map((workflow, index) => (
-              <WorkflowCard
-                key={ index }
-                workflow={ workflow }
-              />
-            ))
-          )}
-        </ContentPaddingContainer>
       </div>
-    </div>
+    </Content>
   )
 }

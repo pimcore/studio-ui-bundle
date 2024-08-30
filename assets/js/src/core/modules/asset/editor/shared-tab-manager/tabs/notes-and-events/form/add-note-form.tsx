@@ -19,6 +19,7 @@ import {
   useNoteElementGetTypeCollectionQuery
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { type ElementType } from 'types/element-type.d'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface AddNoteFormValues {
   type: string
@@ -38,7 +39,7 @@ export const AddNoteForm = ({ elementType, ...props }: AddNoteFormProps): React.
   })
 
   if (isLoading) {
-    return <div>Loading ...</div>
+    return <Content loading />
   }
 
   const noteTypeOptions = noteTypesResponse?.items?.map((noteType) => ({ value: noteType.id, label: t('notes-and-events.' + noteType.id) }))

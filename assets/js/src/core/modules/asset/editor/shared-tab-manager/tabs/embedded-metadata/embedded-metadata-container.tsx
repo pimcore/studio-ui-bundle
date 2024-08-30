@@ -13,28 +13,21 @@
 
 import React from 'react'
 import { useAssetCustomSettingsGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Result } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { Content } from '@Pimcore/components/content/content'
+import { Header } from '@Pimcore/components/header/header'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { context } = useGlobalAssetContext()
+  const { id } = useAsset()
 
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
-
-  const { data, isLoading, isError } = useAssetCustomSettingsGetByIdQuery({ id: context?.config?.id })
+  const { data, isLoading, isError } = useAssetCustomSettingsGetByIdQuery({ id: id! })
 
   if (isLoading || data === undefined) {
-    return <div>Loading...</div>
+    return <Content loading />
   }
 
   if (isError) {
@@ -64,19 +57,17 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   })
 
   return (
-    <div>
-      <ContentHeaderContainer
-        text={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
+    <Content padded>
+      <Header
+        title={ t('asset.asset-editor-tabs.embedded-metadata.headline') }
       />
 
-      <ContentPaddingContainer>
-        <Grid
-          columns={ columns }
-          data={ reformattedEmbeddedMetaData }
-          enableSorting
-          sorting={ [{ id: 'name', desc: false }] }
-        />
-      </ContentPaddingContainer>
-    </div>
+      <Grid
+        columns={ columns }
+        data={ reformattedEmbeddedMetaData }
+        enableSorting
+        sorting={ [{ id: 'name', desc: false }] }
+      />
+    </Content>
   )
 }

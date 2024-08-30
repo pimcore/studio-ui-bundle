@@ -33,9 +33,10 @@ import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
+import { Flex } from 'antd'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -71,16 +72,19 @@ export const VersionsView = ({
 
   if (versions.length === 0) {
     return (
-      <div className={ styles.noContent }>
-        <ContentHeaderContainer text={ t('version.versions') } />
-        <ContentPaddingContainer>
+      <Content
+        className={ styles.noContent }
+        padded
+      >
+        <Header title={ t('version.versions') } />
+        <Content>
           <div className={ 'empty-container' }>
             <NoContent
               text={ t('version.no-versions-to-show') }
             />
           </div>
-        </ContentPaddingContainer>
-      </div>
+        </Content>
+      </Content>
     )
   }
 
@@ -115,33 +119,39 @@ export const VersionsView = ({
   )
 
   return (
-    <div className={ styles.versions }>
-      <div className={ 'left-side' }>
-        <ContentHeaderContainer text={ t('version.versions') }>
-          {versions.length > 0 &&
-                (
-                <div>
-                  <ButtonGroup
-                    items={ [
-                      <Button
-                        className={ comparingActive ? 'compare-button' : '' }
-                        key={ t('version.compare-versions') }
-                        onClick={ onClickCompareVersion }
-                      >{t('version.compare-versions')}</Button>,
-                      <IconTextButton
-                        icon={ 'trash' }
-                        key={ t('version.clear-unpublished') }
-                        loading={ clearingAll }
-                        onClick={ showModal }
-                      >
-                        {t('version.clear-unpublished')}
-                      </IconTextButton>] }
-                  />
-                  {modal}
-                </div>
-                )}
-        </ContentHeaderContainer>
-        <ContentPaddingContainer>
+    <Content
+      className={ styles.versions }
+      padded
+    >
+      <Flex>
+        <Content
+          className={ 'left-side' }
+        >
+          <Header title={ t('version.versions') }>
+            {versions.length > 0 &&
+                  (
+                  <div>
+                    <ButtonGroup
+                      items={ [
+                        <Button
+                          className={ comparingActive ? 'compare-button' : '' }
+                          key={ t('version.compare-versions') }
+                          onClick={ onClickCompareVersion }
+                        >{t('version.compare-versions')}</Button>,
+                        <IconTextButton
+                          icon={ 'trash' }
+                          key={ t('version.clear-unpublished') }
+                          loading={ clearingAll }
+                          onClick={ showModal }
+                        >
+                          {t('version.clear-unpublished')}
+                        </IconTextButton>] }
+                    />
+                    {modal}
+                  </div>
+                  )}
+          </Header>
+
           {versions.length > 0 && (
           <VerticalTimeline timeStamps={ versions.map((version) => {
             const vId = { id: version.id, count: version.versionCount }
@@ -189,20 +199,20 @@ export const VersionsView = ({
           }) }
           />
           )}
-        </ContentPaddingContainer>
-      </div>
+        </Content>
 
-      { detailedVersions.length > 0 && comparingActive && (
-        <DetailsVersionsContainer versionIds={ detailedVersions } />
-      )}
-      { detailedVersions.length > 0 && !comparingActive && (
-        <DetailsVersionContainer
-          setDetailedVersions={ setDetailedVersions }
-          versionId={ detailedVersions[0] }
-          versions={ versions }
-        />
-      )}
-    </div>
+        { detailedVersions.length > 0 && comparingActive && (
+          <DetailsVersionsContainer versionIds={ detailedVersions } />
+        )}
+        { detailedVersions.length > 0 && !comparingActive && (
+          <DetailsVersionContainer
+            setDetailedVersions={ setDetailedVersions }
+            versionId={ detailedVersions[0] }
+            versions={ versions }
+          />
+        )}
+      </Flex>
+    </Content>
   )
 
   function onClickCompareVersion (): void {

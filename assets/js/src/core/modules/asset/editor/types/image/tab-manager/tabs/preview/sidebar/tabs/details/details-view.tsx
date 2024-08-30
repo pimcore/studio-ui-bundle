@@ -17,6 +17,8 @@ import { Collapse, type CollapseProps, Form, Input, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Content } from '@Pimcore/components/content/content'
+import { Header } from '@Pimcore/components/header/header'
 
 export interface CustomDownloadProps {
   width: number
@@ -228,8 +230,11 @@ export const AssetEditorSidebarDetailsView = ({
   ]
 
   return (
-    <div className={ styles.sidebarContentEntry }>
-      <p className={ 'sidebar__content-label' }>{t('details')}</p>
+    <Content
+      className={ styles.sidebarContentEntry }
+      padded
+    >
+      <Header title={ t('details') } />
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>
@@ -278,6 +283,6 @@ export const AssetEditorSidebarDetailsView = ({
           </div>
         </div>
       </div>
-    </div>
+    </Content>
   )
 }

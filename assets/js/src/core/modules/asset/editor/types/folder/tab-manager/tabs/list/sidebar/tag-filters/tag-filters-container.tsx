@@ -18,7 +18,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Button } from '@Pimcore/components/button/button'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { ContentContainer } from '@Pimcore/components/content-containers/content-container'
+import { Content } from '@Pimcore/components/content/content'
 
 interface TagFiltersContainerProps {
   onSelectedTagsChange?: (tags: React.Key[]) => void
@@ -49,9 +49,9 @@ export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContaine
         </Toolbar>
       }
     >
-      <ContentContainer padded>
+      <Content padded>
         <Title>Tag Filters</Title>
-      </ContentContainer>
+      </Content>
 
       {/*
 

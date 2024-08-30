@@ -28,7 +28,8 @@ export default config
 export const _default = {
   args: {
     loading: false,
-    children: 'Button'
+    children: 'Button',
+    onClick: () => { console.log('Button clicked') }
   }
 }
 

@@ -12,21 +12,54 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
-import React from 'react'
-import { Icon } from '@Pimcore/components/icon/icon'
+import { Content } from './content'
 
+/* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Components/Layout/ContentHeaderContainer',
-  component: ContentHeaderContainer,
+  title: 'Components/General/Content',
+  component: Content,
+  parameters: {
+    layout: 'fullscreen'
+  },
   tags: ['autodocs']
 }
 
 export default config
 
+const demoData = {
+  children: 'Content goes here'
+}
+
 export const _default = {
   args: {
-    icon: <Icon name={ 'corner-left-up' } />,
-    text: 'Default Title'
+    ...demoData
+  }
+}
+
+export const WithPadded = {
+  args: {
+    ...demoData,
+    padded: true
+  }
+}
+
+export const WithCentered = {
+  args: {
+    ...demoData,
+    centered: true
+  }
+}
+
+export const WithLoading = {
+  args: {
+    ...demoData,
+    loading: true
+  }
+}
+
+export const WithNone = {
+  args: {
+    ...demoData,
+    none: true
   }
 }

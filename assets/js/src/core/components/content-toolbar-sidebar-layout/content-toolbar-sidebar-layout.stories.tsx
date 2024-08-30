@@ -12,13 +12,13 @@
 */
 
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
-import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { HighlightedEntries as sidebarArgs } from '@Pimcore/components/sidebar/sidebar.stories'
 import { Toolbar, type ToolbarProps } from '@Pimcore/components/toolbar/toolbar'
 import { Secondary } from '@Pimcore/components/toolbar/toolbar.stories'
 import { type Meta } from '@storybook/react'
 import React from 'react'
+import { Content } from '../content/content'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
@@ -37,7 +37,7 @@ const config: Meta = {
 export default config
 
 const demoData = {
-  children: <NoContent />,
+  children: <Content none />,
   renderToolbar: <Toolbar { ...Secondary.args as ToolbarProps } />,
   renderSidebar: <Sidebar { ...sidebarArgs.args } />
 }

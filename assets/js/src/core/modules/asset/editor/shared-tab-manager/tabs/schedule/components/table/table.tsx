@@ -12,8 +12,6 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Result } from 'antd'
 import React from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type Schedule, useScheduleDeleteByIdMutation } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
@@ -28,12 +26,7 @@ type ScheduleTable = Schedule & {
 export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { context } = useGlobalAssetContext()
   const [deleteSchedule] = useScheduleDeleteByIdMutation()
-
-  if (context === undefined) {
-    return <Result title="Missing context" />
-  }
 
   const columnHelper = createColumnHelper<ScheduleTable>()
   const columns = [

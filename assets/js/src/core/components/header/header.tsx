@@ -15,26 +15,29 @@ import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import {
   useStyles
-} from '@Pimcore/components/content-containers/content-header-container.styles'
+} from '@Pimcore/components/header/header.styles'
 
-export interface ContentHeaderContainerProps {
+export interface HeaderProps {
   icon?: React.JSX.Element
-  text: string
+  title: string
   children?: React.ReactNode
 }
 
-export const ContentHeaderContainer = (props: ContentHeaderContainerProps): React.JSX.Element => {
+export const Header = (props: HeaderProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { icon, text, children } = props
+  const { icon, title, children } = props
 
   return (
-    <div className={ styles['content-header-container'] }>
-      <span className={ 'header-text' }>
+    <div className={ styles.header }>
+      <span className={ 'header__text' }>
         <Title icon={ icon }>
-          {text}
+          {title}
         </Title>
       </span>
-      {children}
+
+      <div className='header__content'>
+        {children}
+      </div>
     </div>
   )
 }

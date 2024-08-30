@@ -14,8 +14,7 @@
 import React, { useEffect, useState } from 'react'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Result, Segmented, Switch } from 'antd'
+import { Segmented, Switch } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import {
   type Schedule,
@@ -27,26 +26,22 @@ import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
-import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { context } = useGlobalAssetContext()
+  const { id } = useAsset()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(true)
   const { cleanup, isLoading: deleteArchivedSchedulesLoading } = useCleanupArchivedSchedules()
 
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
-
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
-    elementType: context.type,
-    id: context.config.id
+    elementType: 'asset',
+    id: id!
   })
 
   const [gridDataUpcoming, setGridDataUpcoming] = useState<Schedule[]>([])
@@ -66,7 +61,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   }, [data])
 
   if (isLoading || data === undefined) {
-    return <div>Loading...</div>
+    return <Content loading />
   }
 
   if (isError) {
@@ -92,73 +87,78 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   }
 
   return (
-    <div className={ styles.tab }>
-      <ContentHeaderContainer text={ t('asset.asset-editor-tabs.schedule.headline') }>
-        <div className={ 'pimcore-schedule-toolbar__headline__buttons' }>
+    <Content
+      className={ styles.tab }
+      padded
+    >
+      <Header title={ t('asset.asset-editor-tabs.schedule.headline') }>
+        <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
             icon={ 'PlusOutlined' }
+            key={ 'add' }
           >
             {t('asset.asset-editor-tabs.schedule.toolbar.add')}
-          </IconTextButton>
+          </IconTextButton>,
 
           <Button
             className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
+            key={ 'save' }
             type={ 'primary' }
           >
             {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
           </Button>
-        </div>
-      </ContentHeaderContainer>
-      <ContentPaddingContainer>
-        <div className={ 'pimcore-schedule-toolbar__filters' }>
-          <Segmented<string>
-            onChange={ setScheduleTab }
-            options={ [
-              { label: t('asset.asset-editor-tabs.schedule.upcoming'), value: 'upcoming' },
-              { label: t('asset.asset-editor-tabs.schedule.all'), value: 'all' }
-            ] }
+        ] }
+        />
+      </Header>
+
+      <div className={ 'pimcore-schedule-toolbar__filters' }>
+        <Segmented<string>
+          onChange={ setScheduleTab }
+          options={ [
+            { label: t('asset.asset-editor-tabs.schedule.upcoming'), value: 'upcoming' },
+            { label: t('asset.asset-editor-tabs.schedule.all'), value: 'all' }
+          ] }
+        />
+        <div className={ 'pimcore-schedule-toolbar__filters__active-switch' }>
+          <p>{t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch')}</p>
+          <Switch
+            onChange={ setActiveOnly }
+            value={ activeOnly }
           />
-          <div className={ 'pimcore-schedule-toolbar__filters__active-switch' }>
-            <p>{t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch')}</p>
-            <Switch
-              onChange={ setActiveOnly }
-              value={ activeOnly }
-            />
+        </div>
+      </div>
+
+      <div
+        className={ 'pimcore-schedule-content' }
+        style={ { marginLeft: 0 } }
+      >
+
+        <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
+
+        {scheduleTab === 'all' && (
+        <>
+          <div className={ 'pimcore-schedule-content__archive__toolbar' }>
+            <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
+              {t('asset.asset-editor-tabs.schedule.archived')}
+            </p>
+            {/* @todo check button and icon */}
+            <Button
+              disabled={ gridDataArchive.length === 0 }
+              icon={ <DeleteOutlined /> }
+              loading={ deleteArchivedSchedulesLoading }
+              onClick={ cleanupArchivedVersions }
+            >
+              {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
+            </Button>
           </div>
-        </div>
 
-        <div
-          className={ 'pimcore-schedule-content' }
-          style={ { marginLeft: 0 } }
-        >
-
-          <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
-
-          {scheduleTab === 'all' && (
-          <>
-            <div className={ 'pimcore-schedule-content__archive__toolbar' }>
-              <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
-                {t('asset.asset-editor-tabs.schedule.archived')}
-              </p>
-              {/* @todo check button and icon */}
-              <Button
-                disabled={ gridDataArchive.length === 0 }
-                icon={ <DeleteOutlined /> }
-                loading={ deleteArchivedSchedulesLoading }
-                onClick={ cleanupArchivedVersions }
-              >
-                {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
-              </Button>
-            </div>
-
-            <Table
-              data={ filterSchedules(gridDataArchive ?? []) }
-            />
-          </>
-          )}
-        </div>
-      </ContentPaddingContainer>
-    </div>
+          <Table
+            data={ filterSchedules(gridDataArchive ?? []) }
+          />
+        </>
+        )}
+      </div>
+    </Content>
   )
 }
