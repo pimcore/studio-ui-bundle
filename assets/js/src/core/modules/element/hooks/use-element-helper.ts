@@ -20,7 +20,7 @@ interface OpenElementWidgetProps {
 }
 
 interface UseElementReturn {
-  openElement: (props: OpenElementWidgetProps) => void
+  openElement: (props: OpenElementWidgetProps) => Promise<void>
   mapToElementType: (elementType: string) => ElementType
 }
 
