@@ -18,7 +18,7 @@ import { type DefaultCellProps } from '../columns/default-cell'
 export interface EditModeHookReturnType {
   isInEditMode: boolean
   disableEditMode: () => void
-  fireOnUpdateCellDataEvent: (value: string) => void
+  fireOnUpdateCellDataEvent: (value: any) => void
 }
 
 export const useEditMode = (props: DefaultCellProps): EditModeHookReturnType => {
@@ -28,7 +28,7 @@ export const useEditMode = (props: DefaultCellProps): EditModeHookReturnType => 
     setIsInEditMode(false)
   }
 
-  function fireOnUpdateCellDataEvent (value: string): void {
+  function fireOnUpdateCellDataEvent (value: any): void {
     props.table.options.meta?.onUpdateCellData!({
       rowIndex: props.row.index,
       columnId: props.column.id,

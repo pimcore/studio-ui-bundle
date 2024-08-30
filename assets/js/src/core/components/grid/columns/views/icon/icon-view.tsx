@@ -11,15 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import React from 'react'
+import { useStyles } from './icon-view.styles'
+import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    typeIconCell: css`
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    `
-  }
-})
+const IconView = (props: IconProps): React.JSX.Element => {
+  const { styles } = useStyles()
+
+  return (
+    <div className={ [styles['icon-view'], 'default-cell__content'].join(' ') }>
+      <Icon { ...props } />
+    </div>
+  )
+}
+
+export { IconView }

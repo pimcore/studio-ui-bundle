@@ -11,20 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const verifyUpdate = (value: any, columnId: any, primaryColumn: string, hasDuplicate: boolean, showMandatoryModal: () => void, showDupliacteModal: () => void): boolean => {
-  const isKeyColumn = columnId === primaryColumn
+import { createStyles } from 'antd-style'
 
-  if (isKeyColumn) {
-    if (value === '') {
-      showMandatoryModal()
-      return false
-    }
+export const useStyle = createStyles(({ token, css }) => {
+  return {
+    'checkbox-cell': css`
+      padding: 4px;
+    `,
+    'align-center': css`
+      justify-content: center;
+      display: flex;
+    `,
+    'align-right': css`
+      justify-content: flex-end;
+      display: flex;
+    `
   }
-
-  if (hasDuplicate) {
-    showDupliacteModal()
-    return false
-  }
-
-  return true
-}
+})

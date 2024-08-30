@@ -18,7 +18,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { Checkbox } from 'antd'
 import { useStyles } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -106,7 +105,6 @@ export const Table = ({
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.properties.columns.data'),
-      id: 'properties-table--data-column',
       meta: {
         type: 'property-value',
         editable: propertiesTableTab === 'own',
@@ -116,16 +114,13 @@ export const Table = ({
     }),
     columnHelper.accessor('inheritable', {
       header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
-      cell: (info) => {
-        return (
-          <div className={ 'properties-table--inheritable-column' }>
-            <Checkbox defaultChecked={ info.row.original.inheritable } />
-          </div>
-        )
-      },
       size: 70,
       meta: {
-        editable: propertiesTableTab === 'own'
+        type: 'checkbox',
+        editable: propertiesTableTab === 'own',
+        config: {
+          align: 'center'
+        }
       }
     }),
     columnHelper.accessor('actions', {
@@ -169,22 +164,15 @@ export const Table = ({
     ...baseColumns
   ]
 
-  const getRealColumnName = (columnId: string): string => {
-    switch (columnId) {
-      case 'properties-table--data-column':
-        return 'data'
-      default:
-        return columnId
-    }
-  }
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedProperties = [...(properties ?? [])]
-    const propertyPrimaryKeys = updatedProperties.map(prop => prop.key)
-    const propertyToUpdate = { ...updatedProperties.find((property) => property.key === rowData.key)! }
-    const updatedProperty = { ...propertyToUpdate, [getRealColumnName(columnId as string)]: value }
+    const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key)
+    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
+    updatedProperties[propertyIndex] = updatedProperty
+    const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key).length > 1
 
-    if (verifyUpdate(value, propertyPrimaryKeys, columnId, 'key', showMandatoryModal, showDuplicatePropertyModal)) {
-      updateProperty(propertyToUpdate.key, updatedProperty)
+    if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
+      updateProperty(rowData.key as string, updatedProperty)
       setModifiedCells([...modifiedCells, { rowIndex, columnId }])
     }
   }

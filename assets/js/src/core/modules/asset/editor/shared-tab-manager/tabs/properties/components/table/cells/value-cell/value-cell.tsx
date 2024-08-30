@@ -15,10 +15,11 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import React from 'react'
 import { TextCell } from '@Pimcore/components/grid/columns/types/text/text-cell'
 import { SelectCell } from '@Pimcore/components/grid/columns/types/value-select/select-cell'
-import { BooleanCell } from '@Pimcore/components/grid/columns/types/boolean/boolean-cell'
 import {
   ElementCell
 } from '@Pimcore/components/grid/columns/types/element-cell/element-cell'
+import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
+import { Alert } from 'antd'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type
@@ -28,7 +29,7 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
       case 'select':
         return <SelectCell { ...props } />
       case 'bool':
-        return <BooleanCell { ...props } />
+        return <CheckboxCell { ...props } />
       case 'text':
         return <TextCell { ...props } />
       case 'document':
@@ -36,7 +37,13 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
       case 'object':
         return <ElementCell { ...props } />
       default:
-        return <div>{ 'cell type not supported' }</div>
+        return (
+          <Alert
+            message="cell type not supported"
+            style={ { display: 'flex' } }
+            type="warning"
+          />
+        )
     }
   }
 

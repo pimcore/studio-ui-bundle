@@ -16,6 +16,7 @@ import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { type MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
+import { Alert } from 'antd'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   const propertyType = props.row.original.type
@@ -24,7 +25,12 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
 
   function renderCell (): React.JSX.Element {
     if (metadataType === undefined) {
-      return <div>{ 'cell type not supported' }</div>
+      return (
+        <Alert
+          message="cell type not supported"
+          type="warning"
+        />
+      )
     }
     return metadataType.getGridCell(props)
   }

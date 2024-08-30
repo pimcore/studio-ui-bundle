@@ -18,36 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
     table: css`
       .ant-table {
         .ant-table-tbody {
-          div[data-grid-column="properties-table--data-column"] {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: ${token.paddingXS}px ${token.paddingXXS}px ${token.paddingXS}px ${token.paddingXXS}px;
-
-            > :first-child {
-              margin: 0;
-              padding: 0;
-              flex-grow: 1;
-              
-              > * {
-                flex-grow: 1;
-                width: 100%;
-              }
-            }
-
-            .pimcore-icon {
-              color: ${token.colorIcon};
-            }
-          }
-
-          .properties-table--inheritable-column {
-              width: 100%;
-              display: flex;
-              justify-content: center;
-            }
-          }
-
+          
           .properties-table--actions-column {
             align-items: center;
             
