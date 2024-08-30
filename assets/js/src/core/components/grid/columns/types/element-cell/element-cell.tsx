@@ -21,8 +21,10 @@ import { useStyle } from './element-cell.styles'
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const styles = useStyle().styles
+  const editable = props.column.columnDef.meta?.editable ?? true
+
   function isValidContext (info: DragAndDropInfo): boolean {
-    return info.type === 'asset'
+    return info.type === 'asset' && editable
   }
 
   function onDrop (info: DragAndDropInfo): void {

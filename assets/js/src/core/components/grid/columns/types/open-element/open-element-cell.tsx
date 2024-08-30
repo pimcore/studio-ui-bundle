@@ -15,42 +15,22 @@ import { type DefaultCellProps } from '../../default-cell'
 import React from 'react'
 import { useStyle } from './open-element-cell.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 import { Button } from '@Pimcore/components/button/button'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 
 export const OpenElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { openAsset } = useAssetHelper()
-  const propertyType = props.row.original.type
+  const { openElement, mapToElementType } = useElementHelper()
+  const elementType = mapToElementType(props.row.original.type as string)
   const elementId = props.row.original.id
 
   function renderCell (): React.JSX.Element {
-    let onClick = (): void => {
-      console.log('not implemented yet')
-    }
-
-    switch (propertyType) {
-      case 'document':
-        onClick = (): void => {
-          console.error('opening "document" is not supported yet')
-        }
-        break
-      case 'asset':
-        onClick = (): void => {
-          openAsset({
-            config: {
-              id: elementId
-            }
-          })
-        }
-        break
-      case 'object':
-      case 'dataObject':
-        onClick = (): void => {
-          console.error('opening "objects" is not supported yet')
-        }
-        break
+    const onClick = (): void => {
+      openElement({
+        id: elementId,
+        type: elementType
+      })
     }
 
     return (

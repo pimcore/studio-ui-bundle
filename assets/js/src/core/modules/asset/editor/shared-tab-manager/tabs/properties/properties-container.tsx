@@ -74,109 +74,107 @@ export const PropertiesContainer = (): React.JSX.Element => {
             ] }
           />
 
-          {propertiesTableTab === 'own' && (
-            <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
-              <DuplicatePropertyModal
-                footer={ <ModalFooter>
-                  <Button
-                    onClick={ closeDuplicatePropertyModal }
-                    type='primary'
-                  >{t('button.ok')}</Button>
-                </ModalFooter> }
-                title={ t('properties.property-already-exist.title') }
-              >
-                {t('properties.property-already-exist.error')}
-              </DuplicatePropertyModal>
-
-              <MandatoryModal
-                footer={ <ModalFooter>
-                  <Button
-                    onClick={ closeMandatoryModal }
-                    type='primary'
-                  >{t('button.ok')}</Button>
-                </ModalFooter> }
-                title={ t('properties.add-property-mandatory-fields-missing.title') }
-              >
-                {t('properties.add-property-mandatory-fields-missing.error')}
-              </MandatoryModal>
-
-              {createManualPropertyMode && (
-              <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
+          <div className={ 'pimcore-properties-toolbar__predefined-properties' }>
+            <DuplicatePropertyModal
+              footer={ <ModalFooter>
                 <Button
-                  onClick={ () => {
-                    setCreateManualPropertyMode(false)
-                  } }
-                  type={ 'link' }
-                >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property.cancel')}
-                </Button>
+                  onClick={ closeDuplicatePropertyModal }
+                  type='primary'
+                >{t('button.ok')}</Button>
+              </ModalFooter> }
+              title={ t('properties.property-already-exist.title') }
+            >
+              {t('properties.property-already-exist.error')}
+            </DuplicatePropertyModal>
 
-                <Input
-                  onChange={ onKeyInputChange }
-                  placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
-                  ref={ keyInputRef }
-                />
+            <MandatoryModal
+              footer={ <ModalFooter>
+                <Button
+                  onClick={ closeMandatoryModal }
+                  type='primary'
+                >{t('button.ok')}</Button>
+              </ModalFooter> }
+              title={ t('properties.add-property-mandatory-fields-missing.title') }
+            >
+              {t('properties.add-property-mandatory-fields-missing.error')}
+            </MandatoryModal>
 
+            {createManualPropertyMode && (
+            <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
+              <Button
+                onClick={ () => {
+                  setCreateManualPropertyMode(false)
+                } }
+                type={ 'link' }
+              >
+                {t('asset.asset-editor-tabs.properties.add-custom-property.cancel')}
+              </Button>
+
+              <Input
+                onChange={ onKeyInputChange }
+                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
+                ref={ keyInputRef }
+              />
+
+              <Select
+                onSelect={ onTypeSelect }
+                options={ [
+                  { value: 'text', label: t('data-type.text') },
+                  { value: 'document', label: t('data-type.document') },
+                  { value: 'asset', label: t('data-type.asset') },
+                  { value: 'object', label: t('data-type.object') },
+                  { value: 'bool', label: t('data-type.checkbox') }
+                ] }
+                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
+              />
+
+              <IconTextButton
+                icon={ 'PlusCircleOutlined' }
+                onClick={ () => {
+                  onAddPropertyClick()
+                } }
+              >
+                {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
+              </IconTextButton>
+            </div>
+            )}
+
+            {!createManualPropertyMode && (
+            <ButtonGroup
+              items={ [
                 <Select
-                  onSelect={ onTypeSelect }
-                  options={ [
-                    { value: 'text', label: t('data-type.text') },
-                    { value: 'document', label: t('data-type.document') },
-                    { value: 'asset', label: t('data-type.asset') },
-                    { value: 'object', label: t('data-type.object') },
-                    { value: 'bool', label: t('data-type.checkbox') }
-                  ] }
-                  placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
-                />
-
+                  filterOption={ (input, option) => {
+                    return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
+                  } }
+                  key={ 'properties-select' }
+                  loading={ isLoading }
+                  onSelect={ onPredefinedPropertyChange }
+                  placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
+                  showSearch
+                >
+                  {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
+                    <Select.Option
+                      key={ item.id }
+                      value={ item.id }
+                    >
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>,
                 <IconTextButton
                   icon={ 'PlusCircleOutlined' }
+                  key={ t('asset.asset-editor-tabs.properties.add-custom-property') }
                   onClick={ () => {
-                    onAddPropertyClick()
+                    setCreateManualPropertyMode(true)
                   } }
                 >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
+                  {t('asset.asset-editor-tabs.properties.add-custom-property')}
                 </IconTextButton>
-              </div>
-              )}
-
-              {!createManualPropertyMode && (
-              <ButtonGroup
-                items={ [
-                  <Select
-                    filterOption={ (input, option) => {
-                      return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
-                    } }
-                    key={ 'properties-select' }
-                    loading={ isLoading }
-                    onSelect={ onPredefinedPropertyChange }
-                    placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
-                    showSearch
-                  >
-                    {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
-                      <Select.Option
-                        key={ item.id }
-                        value={ item.id }
-                      >
-                        {item.name}
-                      </Select.Option>
-                    ))}
-                  </Select>,
-                  <IconTextButton
-                    icon={ 'PlusCircleOutlined' }
-                    key={ t('asset.asset-editor-tabs.properties.add-custom-property') }
-                    onClick={ () => {
-                      setCreateManualPropertyMode(true)
-                    } }
-                  >
-                    {t('asset.asset-editor-tabs.properties.add-custom-property')}
-                  </IconTextButton>
-                ] }
-                withSeparator
-              />
-              )}
-            </div>
-          )}
+              ] }
+              withSeparator
+            />
+            )}
+          </div>
         </div>
       </ContentHeaderContainer>
 
