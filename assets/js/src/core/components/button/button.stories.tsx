@@ -29,7 +29,7 @@ export const _default = {
   args: {
     loading: false,
     children: 'Button',
-    onClick: () => console.log('Button clicked')
+    onClick: () => { console.log('Button clicked') }
   }
 }
 
