@@ -27,15 +27,14 @@ interface UseElementReturn {
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
-    switch (props.type) {
-      case 'asset':
-      { openAsset({
+    if (props.type === 'asset') {
+      openAsset({
         config: {
           id: props.id
         }
-      }); return }
-      default:
-        console.log('Opening ' + props.type + ' is not supported yet.')
+      })
+    } else {
+      console.log('Opening ' + props.type + ' is not supported yet.')
     }
   }
 
