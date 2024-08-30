@@ -35,6 +35,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
 import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -117,26 +118,28 @@ export const VersionsView = ({
     <div className={ styles.versions }>
       <div className={ 'left-side' }>
         <ContentHeaderContainer text={ t('version.versions') }>
-          <div className={ 'flexbox-start-end' }>
-            {versions.length > 0 && (
-            <Button
-              className={ comparingActive ? 'compare-button' : '' }
-              onClick={ onClickCompareVersion }
-            >{t('version.compare-versions')}</Button>
-            )}
-            {versions.length > 0 && (
-            <>
-              <IconTextButton
-                icon={ 'trash' }
-                loading={ clearingAll }
-                onClick={ showModal }
-              >
-                {t('version.clear-unpublished')}
-              </IconTextButton>
-              {modal}
-            </>
-            )}
-          </div>
+          {versions.length > 0 &&
+                (
+                <div>
+                  <ButtonGroup
+                    items={ [
+                      <Button
+                        className={ comparingActive ? 'compare-button' : '' }
+                        key={ t('version.compare-versions') }
+                        onClick={ onClickCompareVersion }
+                      >{t('version.compare-versions')}</Button>,
+                      <IconTextButton
+                        icon={ 'trash' }
+                        key={ t('version.clear-unpublished') }
+                        loading={ clearingAll }
+                        onClick={ showModal }
+                      >
+                        {t('version.clear-unpublished')}
+                      </IconTextButton>] }
+                  />
+                  {modal}
+                </div>
+                )}
         </ContentHeaderContainer>
         <ContentPaddingContainer>
           {versions.length > 0 && (

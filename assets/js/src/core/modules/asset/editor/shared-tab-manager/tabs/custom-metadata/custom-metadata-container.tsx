@@ -17,7 +17,9 @@ import { useTranslation } from 'react-i18next'
 import { type InputRef, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import Input from 'antd/es/input/Input'
-import { CustomMetadataTable } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
+import {
+  CustomMetadataTable
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
   type CustomMetadata
@@ -30,10 +32,9 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
+import { ContentHeaderContainer } from '@Pimcore/components/content-containers/content-header-container'
 import { ContentPaddingContainer } from '@Pimcore/components/content-containers/content-padding-container'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -62,6 +63,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
     return { value: type, label: t('data-type.' + type) }
   })
+
   function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
     nameInputValue.current = event.target.value
   }
@@ -170,11 +172,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   <Button
                     onClick={ closeDuplicateEntryModal }
                     type='primary'
-                  >{ t('button.ok') }</Button>
+                  >{t('button.ok')}</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title') }
               >
-                { t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error') }
+                {t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error')}
               </DuplicateEntryModal>
 
               <MandatoryModal
@@ -182,32 +184,34 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                   <Button
                     onClick={ closeMandatoryModal }
                     type='primary'
-                  >{ t('button.ok') }</Button>
+                  >{t('button.ok')}</Button>
                 </ModalFooter> }
                 title={ t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title') }
               >
-                { t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error') }
+                {t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error')}
               </MandatoryModal>
             </>
             )}
 
             {!editmode && (
-            <>
-              <Button
-                onClick={ () => { console.log('clicked') } }
-              >
-                {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
-              </Button>
-
+            <ButtonGroup items={ [<Button
+              key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
+              onClick={ () => {
+                console.log('clicked')
+              } }
+                                  >
+              {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
+            </Button>,
               <IconTextButton
                 icon={ 'PlusCircleOutlined' }
+                key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
                 onClick={ () => {
                   setEditMode(true)
                 } }
               >
                 {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
-              </IconTextButton>
-            </>
+              </IconTextButton>] }
+            />
             )}
           </div>
         </div>
