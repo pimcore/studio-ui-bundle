@@ -19,6 +19,7 @@ import { AssetProvider } from '../asset-provider'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface EditorContainerProps {
   id: number
@@ -55,7 +56,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Content loading />
   }
 
   if (asset === undefined) {

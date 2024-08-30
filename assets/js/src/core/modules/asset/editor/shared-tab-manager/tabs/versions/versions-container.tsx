@@ -19,15 +19,11 @@ import {
   useVersionPublishByIdMutation, useVersionUpdateByIdMutation
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
 import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
-import { Result } from 'antd'
+import { Content } from '@Pimcore/components/content/content'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const VersionsTabContainer = (): React.JSX.Element => {
-  const { context } = useGlobalAssetContext()
-
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
+  const { id } = useAsset()
 
   const [deleteVersion] = useVersionDeleteByIdMutation()
   const [publishVersion] = useVersionPublishByIdMutation()
@@ -35,14 +31,14 @@ export const VersionsTabContainer = (): React.JSX.Element => {
   const [updateVersion] = useVersionUpdateByIdMutation()
 
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
-    id: context?.config?.id,
+    id: id!,
     elementType: 'asset',
     page: 1,
     pageSize: 9999
   })
 
   if (isLoading) {
-    return <div>Loading ...</div>
+    return <Content loading />
   }
 
   return (

@@ -23,6 +23,7 @@ import {
   DetailsVersionView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view'
 import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface DetailsVersionsContainerProps {
   versions: Version[]
@@ -57,7 +58,7 @@ export const DetailsVersionContainer = ({
   }, [vId])
 
   if (versionData.length === 0) {
-    return <div>Loading ...</div>
+    return <Content loading />
   }
 
   return (

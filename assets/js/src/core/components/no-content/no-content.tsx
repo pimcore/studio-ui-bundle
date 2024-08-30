@@ -16,7 +16,7 @@ import { useStyle } from './no-content.styles'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-interface INoContentProps {
+export interface INoContentProps {
   text?: string
 }
 

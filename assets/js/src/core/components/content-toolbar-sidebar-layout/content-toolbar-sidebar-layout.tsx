@@ -13,7 +13,7 @@
 
 import React, { memo, type ReactNode } from 'react'
 import { useStyles } from './content-toolbar-sidebar-layout.styles'
-import { ContentContainer } from '../content-containers/content-container'
+import { Content } from '../content/content'
 
 interface ContentToolbarViewProps {
   children: ReactNode
@@ -31,9 +31,9 @@ const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
 
   return (
     <div className={ classes.join(' ') }>
-      <ContentContainer className='content-toolbar-sidebar-layout__content'>
+      <Content className='content-toolbar-sidebar-layout__content'>
         {props.children}
-      </ContentContainer>
+      </Content>
 
       { props.renderToolbar !== undefined && (
         <div className='content-toolbar-sidebar-layout__toolbar'>

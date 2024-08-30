@@ -26,6 +26,8 @@ import {
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import { Content } from '@Pimcore/components/content/content'
+import { Header } from '@Pimcore/components/header/header'
 
 interface VideoEditorSidebarDetailsViewProps {
   width: number
@@ -105,8 +107,11 @@ export const VideoEditorSidebarDetailsTab = ({
   }
 
   return (
-    <div className={ styles.sidebarContentEntry }>
-      <p className={ 'sidebar__content-label' }>{t('details')}</p>
+    <Content
+      className={ styles.sidebarContentEntry }
+      padded
+    >
+      <Header title={ t('details') } />
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>
@@ -189,7 +194,7 @@ export const VideoEditorSidebarDetailsTab = ({
           </Card>
         </div>
       </div>
-    </div>
+    </Content>
   )
 
   function onChangeMode (mode: string): void {

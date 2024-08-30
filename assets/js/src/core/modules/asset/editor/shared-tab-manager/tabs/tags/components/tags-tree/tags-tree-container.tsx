@@ -21,6 +21,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
 import React, { useContext, useEffect, useState } from 'react'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { Content } from '@Pimcore/components/content/content'
 
 type TagsTreeContainerProps = NonNullable<Pick<TagsTreeProps, 'tags' | 'isLoading'>>
 
@@ -42,7 +43,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
   })
 
   if (tagsLoading || props.isLoading!) {
-    return <div>Loading...</div>
+    return <Content loading />
   }
 
   if (tags?.items === undefined) {

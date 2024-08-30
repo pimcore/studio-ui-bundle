@@ -25,6 +25,7 @@ import {
   versionsDataToTableData
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
 import { store } from '@Pimcore/app/store'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface DetailsVersionsContainerProps {
   versionIds: VersionIdentifiers[]
@@ -72,7 +73,7 @@ export const DetailsVersionsContainer = ({
   }, [versionIds])
 
   if (gridData.length === 0) {
-    return <div>Loading ...</div>
+    return <Content loading />
   }
 
   return (

@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { Content } from '@Pimcore/components/content/content'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -25,7 +26,7 @@ export const AssetContainer = ({ id }: AssetContainerProps): React.JSX.Element =
   const { isLoading, isError, data } = useAssetGetByIdQuery({ id })
 
   if (isLoading || data === undefined) {
-    return <div>Loading...</div>
+    return <Content loading />
   }
 
   if (isError) {

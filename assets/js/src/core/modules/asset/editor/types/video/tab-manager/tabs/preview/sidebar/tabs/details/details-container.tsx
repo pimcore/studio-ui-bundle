@@ -23,6 +23,7 @@ import { useThumbnailVideoGetCollectionQuery } from '@Pimcore/modules/asset/edit
 import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
+import { Content } from '@Pimcore/components/content/content'
 
 const DetailContainer = (): React.JSX.Element => {
   const { playerPosition, setThumbnail } = React.useContext(VideoContext)
@@ -38,7 +39,7 @@ const DetailContainer = (): React.JSX.Element => {
   const videoThumbnails = thumbnailsData?.items
 
   if (videoThumbnails === null || videoThumbnails === undefined) {
-    return <>Loading ....</>
+    return <Content loading />
   }
 
   return (

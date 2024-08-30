@@ -22,6 +22,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
 import { ListDataProvider } from './list-provider'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Content } from '@Pimcore/components/content/content'
 
 interface DataPatch {
   columnId: string
@@ -45,6 +46,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
   const [, setDataPatches] = useState<DataPatch[]>([])
   const { sorting } = useListSorting()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setSelectedRows({})
@@ -75,6 +77,8 @@ export const ListContainerInner = (): React.JSX.Element => {
         })
 
         setGridColumns(initialColumns)
+      }).then(() => {
+        setIsLoading(false)
       }).catch((error) => {
         console.error(error)
       })
@@ -87,28 +91,30 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   return useMemo(() => (
     <ListDataProvider data={ data }>
-      <ContentToolbarSidebarLayout
-        renderSidebar={ <SidebarContainer /> }
+      <Content loading={ isLoading }>
+        <ContentToolbarSidebarLayout
+          renderSidebar={ <SidebarContainer /> }
 
-        renderToolbar={
-          <GridToolbarContainer
-            pager={ {
-              current: page,
-              total: data?.totalItems ?? 0,
-              pageSize,
-              onChange: onPagerChange
-            } }
+          renderToolbar={
+            <GridToolbarContainer
+              pager={ {
+                current: page,
+                total: data?.totalItems ?? 0,
+                pageSize,
+                onChange: onPagerChange
+              } }
+            />
+          }
+        >
+          <GridContainer
+            assets={ data }
+            modifiedCells={ modifiedCells }
+            onUpdateCellData={ onUpdateCellData }
           />
-        }
-      >
-        <GridContainer
-          assets={ data }
-          modifiedCells={ modifiedCells }
-          onUpdateCellData={ onUpdateCellData }
-        />
-      </ContentToolbarSidebarLayout>
+        </ContentToolbarSidebarLayout>
+      </Content>
     </ListDataProvider>
-  ), [data, page, pageSize, modifiedCells])
+  ), [data, page, pageSize, modifiedCells, isLoading])
 
   function onPagerChange (page: number, pageSize: number): void {
     setPage(page)

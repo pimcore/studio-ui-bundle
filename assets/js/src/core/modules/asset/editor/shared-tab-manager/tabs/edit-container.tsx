@@ -11,15 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { Content } from '@Pimcore/components/content/content'
+import { Header } from '@Pimcore/components/header/header'
 import React from 'react'
-import {
-  ContentHeaderContainer
-} from '@Pimcore/components/content-containers/content-header-container'
 
 export const EditTabContainer = (): React.JSX.Element => {
   return (
-    <ContentHeaderContainer
-      text={ 'Edit' }
-    />
+    <Content padded>
+      <Header
+        title={ 'Edit' }
+      />
+    </Content>
+
   )
 }
