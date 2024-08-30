@@ -12,7 +12,6 @@
 */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
 import { Content } from './content'
 
 /* eslint-disable react/jsx-key */
