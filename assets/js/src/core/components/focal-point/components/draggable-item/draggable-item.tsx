@@ -51,8 +51,8 @@ export const DraggableItem = ({ top, left, children, disabled, active = false }:
     >
       {active && (
         <IconButton
+          c
           hidden={ !active }
-          icon={ 'focal-point' }
           type={ 'dashed' }
           { ...attributes }
           { ...listeners }

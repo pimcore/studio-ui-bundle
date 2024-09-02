@@ -16,6 +16,9 @@ import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { AssetEditorSidebarDetailsView } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import {FocalPoint} from "@Pimcore/components/focal-point/focal-point";
+import {Button} from "antd";
+import {IconButton} from "@Pimcore/components/icon-button/icon-button";
 
 const config: Meta = {
   title: 'Components/Layout/Sidebar',
@@ -60,23 +63,21 @@ const demoData = {
         width={ 357 }
                  />
     }
-  ]
+  ],
+  buttons: [
+    {
+      key: 'focal-point',
+      icon: <Icon
+        name={ 'focal-point' }
+        options={ { width: '16px', height: '16px' } }
+      />
+    }
+  ],
 }
 
 export const _default = {
   args: {
     ...demoData,
-
-    buttons: [
-      {
-        key: 'focal-point',
-        icon: <Icon
-          name={ 'focal-point' }
-          options={ { width: '16px', height: '16px' } }
-              />,
-        onClick: () => { console.log('focal-point button clicked') }
-      }
-    ]
   }
 }
 
@@ -84,6 +85,6 @@ export const HighlightedEntries = {
   args: {
     ...demoData,
 
-    highlights: ['details']
+    highlights: ['details', 'focal-point']
   }
 }

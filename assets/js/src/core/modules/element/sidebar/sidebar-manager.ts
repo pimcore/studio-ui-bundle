@@ -22,8 +22,8 @@ export interface ISidebarEntry {
 export interface ISidebarButton {
   key: string
   icon: React.JSX.Element
-  onClick?: () => void
-  component: React.JSX.Element
+  // onClick?: () => void
+  // component: React.JSX.Element
 }
 
 export abstract class SidebarManager {
