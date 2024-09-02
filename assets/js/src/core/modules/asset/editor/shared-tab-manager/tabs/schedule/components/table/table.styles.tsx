@@ -17,13 +17,9 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     table: css`
       .ant-table-content {
-        div[data-grid-column="schedule-table--active-column"] {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+    
 
-        div[data-grid-column="schedule-table--action-column"],
+
         div[data-grid-column="schedule-table--version-column"]{
           padding: 6px;
           flex-grow: 1;

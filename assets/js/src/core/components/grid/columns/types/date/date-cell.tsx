@@ -20,6 +20,7 @@ import { DatePicker } from 'antd'
 import type { Dayjs } from 'dayjs'
 
 import dayjs from 'dayjs'
+import { useStyle } from './date-cell.styles'
 
 export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
@@ -27,6 +28,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const [value, setValue] = useState<number>(Number(props.getValue()))
   const datePickerRef = useRef<PickerRef>(null)
   const dateFormat = 'YYYY-MM-DD'
+  const { styles } = useStyle()
 
   useEffect(() => {
     if (isInEditMode) {
@@ -78,7 +80,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ ['default-cell__content'].join(' ') }>
+    <div className={ [styles['date-cell'], 'default-cell__content'].join(' ') }>
       {getCellContent()}
     </div>
   )

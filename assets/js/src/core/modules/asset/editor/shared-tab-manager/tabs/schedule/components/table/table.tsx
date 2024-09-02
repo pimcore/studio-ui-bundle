@@ -12,12 +12,14 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import React from 'react'
+import React, { useContext } from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type Schedule, useScheduleDeleteByIdMutation } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 type ScheduleTable = Schedule & {
   actions: React.ReactNode
@@ -27,6 +29,8 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const [deleteSchedule] = useScheduleDeleteByIdMutation()
+  const { id } = useContext(AssetContext)
+  const { updateSchedule } = useAssetDraft(id!)
 
   const columnHelper = createColumnHelper<ScheduleTable>()
   const columns = [
@@ -69,6 +73,9 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       size: 60,
       meta: {
         type: 'checkbox',
+        config: {
+          align: 'center'
+        },
         editable: true
       }
     }),
@@ -98,11 +105,15 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   function onUpdateCellData ({ rowIndex, columnId, value, rowData }): void {
     if (columnId === 'schedule-table--version-column') {
       const updatedSchedules = [...(data ?? [])]
-      const scheduleToUpdate = { ...updatedSchedules.find((schedule) => schedule.id === rowData.id) }
-
-      scheduleToUpdate.version = value
-
-      console.log('updated Schedule', scheduleToUpdate)
+      console.log(updatedSchedules)
+      const scheduleToUpdate: Schedule | undefined = updatedSchedules.find((schedule) => schedule.id === rowData.id)
+      if (scheduleToUpdate === undefined) {
+        console.log('Schedule not found')
+        return
+      }
+      const updatedSchedule: Schedule = { ...scheduleToUpdate }
+      updatedSchedule.version = value
+      updateSchedule(updatedSchedule)
     }
   }
 

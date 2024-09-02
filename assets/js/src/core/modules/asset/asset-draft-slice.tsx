@@ -16,6 +16,7 @@ import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { type Schedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 
 interface propertyAction {
   assetId: number
@@ -28,9 +29,16 @@ interface customMetadataAction {
   customMetadata: CustomMetadata
 }
 
+interface scheduleAction {
+  assetId: number
+  id?: number
+  schedule: Schedule
+}
+
 export interface AssetDraft extends Asset {
   properties: DataProperty[]
   customMetadata: CustomMetadata[]
+  schedules: Schedule[]
   imageSettings: ImageData
   modified: boolean
   changes: Record<string, any>
@@ -45,6 +53,7 @@ export const slice = createSlice({
     properties: [],
     customMetadata: [],
     imageSettings: [],
+    schedule: [],
     changes: {}
   }),
   reducers: {
@@ -113,6 +122,39 @@ export const slice = createSlice({
 
           return property
         })
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    updateScheduleForAsset: (state, action: PayloadAction<scheduleAction>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.schedules = (asset.schedules ?? []).map((schedule, index) => {
+          if (schedule.id === action.payload.schedule.id) {
+            asset.modified = true
+
+            asset.changes = {
+              ...asset.changes,
+              schedule: true
+            }
+
+            return action.payload.schedule
+          }
+
+          return schedule
+        })
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    setSchedulesForAsset: (state, action: PayloadAction<{ assetId: number, schedules: Schedule[] }>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.schedules = action.payload.schedules
       }
 
       state.entities[action.payload.assetId] = asset
@@ -309,23 +351,33 @@ injectSliceWithState(slice)
 
 export const {
   assetReceived,
+  removeAsset,
+  resetAsset,
+
+  // Properties
   addPropertyToAsset,
   removePropertyFromAsset,
   setPropertiesForAsset,
   updatePropertyForAsset,
+
+  // Custom Metadata
   updateAllCustomMetadataForAsset,
-  addChanges,
   addCustomMetadataToAsset,
   removeCustomMetadataFromAsset,
   updateCustomMetadataForAsset,
   setCustomMetadataForAsset,
 
+  // Schedule
+  updateScheduleForAsset,
+  setSchedulesForAsset,
+
+  // Image Settings
   addImageSettingsToAsset,
   removeImageSettingFromAsset,
   updateImageSettingForAsset,
 
-  removeAsset,
-  resetAsset,
+  // Changes
+  addChanges,
   resetChanges,
   setChanges
 } = slice.actions

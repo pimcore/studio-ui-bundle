@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
 import { Segmented, Switch } from 'antd'
@@ -21,7 +21,6 @@ import {
   useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
-import { DeleteOutlined } from '@ant-design/icons'
 import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
@@ -29,36 +28,44 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { id } = useAsset()
+  const { id } = useContext(AssetContext)
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(true)
   const { cleanup, isLoading: deleteArchivedSchedulesLoading } = useCleanupArchivedSchedules()
+  const { schedules, setSchedules } = useAssetDraft(id!)
 
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!
   })
 
+  useEffect(() => {
+    if (data !== undefined && Array.isArray(data.items)) {
+      setSchedules(data?.items)
+    }
+  }, [])
+
   const [gridDataUpcoming, setGridDataUpcoming] = useState<Schedule[]>([])
   const [gridDataArchive, setGridDataArchive] = useState<Schedule[]>([])
   useEffect(() => {
     const currentDate = Math.floor(Date.now() / 1000)
 
-    if (data !== undefined && Array.isArray(data.items)) {
-      setGridDataUpcoming(data.items.filter((item) => {
+    if (schedules !== undefined && schedules.length > 0) {
+      setGridDataUpcoming(schedules.filter((item) => {
         return item.date > currentDate
       }))
 
-      setGridDataArchive(data.items.filter((item) => {
+      setGridDataArchive(schedules.filter((item) => {
         return item.date < currentDate
       }))
     }
-  }, [data])
+  }, [schedules])
 
   if (isLoading || data === undefined) {
     return <Content loading />
@@ -142,15 +149,15 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
               {t('asset.asset-editor-tabs.schedule.archived')}
             </p>
-            {/* @todo check button and icon */}
-            <Button
+
+            <IconTextButton
               disabled={ gridDataArchive.length === 0 }
-              icon={ <DeleteOutlined /> }
+              icon={ 'trash' }
               loading={ deleteArchivedSchedulesLoading }
               onClick={ cleanupArchivedVersions }
             >
               {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
-            </Button>
+            </IconTextButton>
           </div>
 
           <Table

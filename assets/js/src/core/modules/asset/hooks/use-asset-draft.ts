@@ -24,10 +24,10 @@ import {
   removePropertyFromAsset,
   resetChanges,
   selectAssetById,
-  setCustomMetadataForAsset, setPropertiesForAsset,
+  setCustomMetadataForAsset, setPropertiesForAsset, setSchedulesForAsset,
   updateAllCustomMetadataForAsset,
   updateImageSettingForAsset,
-  updatePropertyForAsset
+  updatePropertyForAsset, updateScheduleForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
 import { type DataProperty } from '../properties-api-slice.gen'
@@ -35,6 +35,7 @@ import {
   type CustomMetadata
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
+import { type Schedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 
 interface UseAssetDraftReturnCustomMetadata {
   customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
@@ -52,6 +53,14 @@ interface UseAssetDraftReturnProperties {
   setProperties: (properties: DataProperty[]) => void
 }
 
+interface UseAssetDraftReturnSchedule {
+  schedules: undefined | ReturnType<typeof selectAssetById>['schedules']
+  updateSchedule: (updatedSchedule: Schedule) => void
+  // addProperty: (property: DataProperty) => void
+  // removeProperty: (property: DataProperty) => void
+  setSchedules: (schedules: Schedule[]) => void
+}
+
 interface UseAssetDraftReturnDynamicSettings {
   imageSettings: undefined | ImageData
   addImageSettings: (settings: ImageData) => void
@@ -62,6 +71,7 @@ interface UseAssetDraftReturnDynamicSettings {
 interface UseAssetDraftReturn extends
   UseAssetDraftReturnCustomMetadata,
   UseAssetDraftReturnProperties,
+  UseAssetDraftReturnSchedule,
   UseAssetDraftReturnDynamicSettings {
   isLoading: boolean
   isError: boolean
@@ -83,6 +93,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const [isError, setIsError] = useState<boolean>(false)
   const properties = asset?.properties
   const customMetadata = asset?.customMetadata
+  const schedules = asset?.schedules
   const imageSettings = asset?.imageSettings
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
@@ -135,6 +146,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         modified: false,
         properties: [],
         customMetadata: [],
+        schedules: [],
         imageSettings: customSettingsResponse,
         changes: {}
       }
@@ -188,6 +200,14 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
   }
 
+  function updateSchedule (schedule): void {
+    dispatch(updateScheduleForAsset({ assetId: id, schedule }))
+  }
+
+  function setSchedules (schedules): void {
+    dispatch(setSchedulesForAsset({ assetId: id, schedules }))
+  }
+
   function addImageSettings (settings): void {
     dispatch(addImageSettingsToAsset({ assetId: id, settings }))
   }
@@ -208,21 +228,34 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isLoading,
     isError,
     asset,
+    removeAssetFromState,
+
+    // Properties
     properties,
     updateProperty,
     addProperty,
     removeProperty,
     setProperties,
+
+    // Custom Metadata
     customMetadata,
     updateAllCustomMetadata,
     addCustomMetadata,
     removeCustomMetadata,
     setCustomMetadata,
+
+    // Schedule
+    schedules,
+    updateSchedule,
+    setSchedules,
+
+    // Image Settings
     imageSettings,
     addImageSettings,
     removeImageSetting,
     updateImageSetting,
-    removeAssetFromState,
+
+    // Changes
     removeTrackedChanges
   }
 }
