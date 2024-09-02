@@ -42,7 +42,7 @@ export const _default = {
   }
 }
 
-export const layout25_75 = {
+export const LayoutLeft25Right75 = {
   args: {
     leftItem: {
       id: '1',
@@ -59,7 +59,7 @@ export const layout25_75 = {
   }
 }
 
-export const layout25_75WithDivider = {
+export const LayoutLeft25Right75WithDivider = {
   args: {
     withDivider: true,
     leftItem: {
@@ -77,7 +77,7 @@ export const layout25_75WithDivider = {
   }
 }
 
-export const layout25_75WithDividerAndResizer = {
+export const LayoutLeft25Right75WithDividerAndResizer = {
   args: {
     withDivider: true,
     resizeAble: true,
