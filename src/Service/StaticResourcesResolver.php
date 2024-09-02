@@ -143,7 +143,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
                     JSON_THROW_ON_ERROR
                 );
 
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 throw new InvalidEntrypointsJsonException(
                     sprintf(
                         'Error parsing entry points JSON file %s: %s',
@@ -176,7 +176,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
             if ($bundle instanceof PimcoreStudioUiBundle) {
                 continue;
             }
-            if($bundle instanceof PimcoreBundleStudioUiInterface) {
+            if ($bundle instanceof PimcoreBundleStudioUiInterface) {
                 $bundles[] = $bundle;
             }
         }
