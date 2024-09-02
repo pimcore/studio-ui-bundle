@@ -27,7 +27,7 @@ export const useStyles = createStyles(({ css, token }) => {
             top: 3px;
             bottom: 3px;
             width: 1px;
-            background-color: ${token.colorPrimary};
+            background-color: ${token.Divider.colorSplit};
           }
         }
       }
