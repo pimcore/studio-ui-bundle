@@ -13,13 +13,11 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    'right-side': css`
-      overflow: auto;
-      padding: ${token.paddingSM}px;
-      display: ruby;
-      text-align: center;
-    `
-  }
-}, { hashPriority: 'low' })
+export const useStyles = createStyles(({ css }) => ({
+  splitLayoutItem: css`
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  `
+}))

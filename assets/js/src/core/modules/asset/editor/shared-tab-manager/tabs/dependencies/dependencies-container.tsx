@@ -12,23 +12,20 @@
 */
 
 import React from 'react'
-import { useStyle } from './dependencies-container.styles'
 import {
   RequiresPanel
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/requires-panel/requires-panel'
 import {
   RequiredByPanel
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/required-by-panel/required-by-panel'
-import { Divider } from 'antd'
+import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 
 export const DependenciesTabContainer = (): React.JSX.Element => {
-  const { styles } = useStyle()
-
   return (
-    <div className={ styles.tab }>
-      <RequiresPanel />
-      <Divider type={ 'vertical' } />
-      <RequiredByPanel />
-    </div>
+    <SplitLayout
+      leftItem={ { minSize: 450, size: 50, children: <RequiresPanel /> } }
+      rightItem={ { minSize: 450, size: 50, children: <RequiredByPanel /> } }
+      withDivider
+    />
   )
 }

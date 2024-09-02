@@ -12,8 +12,7 @@
 */
 
 import React, { useContext } from 'react'
-import { Divider, Dropdown } from 'antd'
-import { useStyle } from './tags-container.styles'
+import { Dropdown } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   AssignedTagsTable
@@ -26,10 +25,12 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useShortcutActions } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
+import { Content } from '@Pimcore/components/content/content'
+import { Header } from '@Pimcore/components/header/header'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyle()
   const { id } = useContext(AssetContext)
   const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
@@ -39,43 +40,55 @@ export const TagsTabContainer = (): React.JSX.Element => {
   })
 
   return (
-    <div className={ styles.tab }>
-      <div className={ 'pimcore-tags-sidebar' }>
-        <TagsTreeContainer
-          isLoading={ isLoading }
-          tags={ data?.items ?? [] }
-        />
-      </div>
-
-      <Divider type={ 'vertical' } />
-
-      <div className={ 'pimcore-tags-main' }>
-        <div className={ ['pimcore-tags-toolbar', styles.toolbar].join(' ') }>
-          <p className={ 'pimcore-tags-toolbar__headline' }>
-            {t('element.element-editor-tabs.tags.assigned-tags-text')}
-          </p>
-
-          <Dropdown.Button
-            menu={ {
-              items: [{
-                label: 'Remove current element tags & Apply folder tags',
-                key: '1',
-                onClick: removeCurrentAndApplyFolderTags
-              }]
-            } }
-            onClick={ applyFolderTags }
+    <SplitLayout
+      leftItem={ {
+        minSize: 315,
+        size: 25,
+        children: (
+          <Content
+            loading={ isLoading }
+            padded
           >
-            {t('element.element-editor-tabs.tags.apply-folder-tags')}
-          </Dropdown.Button>
-        </div>
+            <TagsTreeContainer
+              isLoading={ isLoading }
+              tags={ data?.items ?? [] }
+            />
+          </Content>
+        )
+      } }
+      resizeAble
 
-        <div className={ 'pimcore-tags-content' }>
-          <AssignedTagsTable
-            isLoading={ isLoading }
-            tags={ Object.values(data?.items ?? {}) }
-          />
-        </div>
-      </div>
-    </div>
+      rightItem={ {
+        minSize: 300,
+        size: 75,
+        children: (
+          <Content padded>
+            <Header title={ t('element.element-editor-tabs.tags.assigned-tags-text') }>
+              <Dropdown.Button
+                menu={ {
+                  items: [{
+                    label: 'Remove current element tags & Apply folder tags',
+                    key: '1',
+                    onClick: removeCurrentAndApplyFolderTags
+                  }]
+                } }
+                onClick={ applyFolderTags }
+              >
+                {t('element.element-editor-tabs.tags.apply-folder-tags')}
+              </Dropdown.Button>
+            </Header>
+
+            <div className={ 'pimcore-tags-content' }>
+              <AssignedTagsTable
+                isLoading={ isLoading }
+                tags={ Object.values(data?.items ?? {}) }
+              />
+            </div>
+          </Content>
+        )
+      } }
+
+      withDivider
+    />
   )
 }
