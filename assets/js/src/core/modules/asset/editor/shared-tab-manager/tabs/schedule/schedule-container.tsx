@@ -95,7 +95,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-            icon={ 'PlusOutlined' }
+            icon={ 'PlusCircleOutlined' }
             key={ 'add' }
           >
             {t('asset.asset-editor-tabs.schedule.toolbar.add')}

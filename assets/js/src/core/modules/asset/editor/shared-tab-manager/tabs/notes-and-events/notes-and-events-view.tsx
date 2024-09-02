@@ -102,7 +102,6 @@ export const NotesAndEventsTabView = ({
         >
           <IconTextButton
             icon={ 'PlusCircleOutlined' }
-            iconOptions={ { width: '24px', height: '24px' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }
