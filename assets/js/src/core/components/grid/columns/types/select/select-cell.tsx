@@ -46,11 +46,9 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
       </div>
     )
   }
-
-  const options: DefaultOptionType[] = config.options.map((value) => ({
-    label: value,
-    value
-  }))
+  const options: DefaultOptionType[] = config.options.map((value: string | object) => (
+    typeof value === 'object' ? value : { label: value, value }
+  ))
 
   return (
     <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>

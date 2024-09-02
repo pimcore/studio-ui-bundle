@@ -23,11 +23,7 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       gap: 12px;
       align-items: center;
-        
-      .ant-btn {
-        display: flex;
-        align-items: center;
-      }
+
       
       .ant-segmented-group {
         padding: 2px;
@@ -56,14 +52,6 @@ export const useStyle = createStyles(({ token, css }) => {
           display: flex;
           gap: 8px;
           
-          .ant-btn {
-            color: ${token.colorPrimary};
-            
-            &:hover {
-              color: ${token.colorPrimaryHover};
-            }
-          }
-            
           .ant-select {
             min-width: 100px;
           }
@@ -75,12 +63,7 @@ export const useStyle = createStyles(({ token, css }) => {
             color: rgba(0, 0, 0, 0.88)   
           }
         }
-        
-        .ant-divider {
-          border-color: ${token.Divider.colorSplit};
-          height: 24px;
-          margin: 0;
-        }
+
       }
     `,
     content: css`

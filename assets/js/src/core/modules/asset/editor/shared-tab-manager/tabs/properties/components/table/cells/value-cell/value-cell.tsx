@@ -14,7 +14,7 @@
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { TextCell } from '@Pimcore/components/grid/columns/types/text/text-cell'
-import { SelectCell } from '@Pimcore/components/grid/columns/types/value-select/select-cell'
+import { ValueSelectCell } from '../value-select/value-select-cell'
 import {
   ElementCell
 } from '@Pimcore/components/grid/columns/types/element-cell/element-cell'
@@ -27,7 +27,7 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
   function renderCell (): React.JSX.Element {
     switch (propertyType) {
       case 'select':
-        return <SelectCell { ...props } />
+        return <ValueSelectCell { ...props } />
       case 'bool':
         return <CheckboxCell { ...props } />
       case 'text':
