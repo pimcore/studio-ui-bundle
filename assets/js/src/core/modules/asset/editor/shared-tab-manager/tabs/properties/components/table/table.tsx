@@ -24,6 +24,7 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -41,6 +42,7 @@ export const Table = ({
   showMandatoryModal
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
   const { id } = useContext(AssetContext)
   const { asset, properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
@@ -80,7 +82,7 @@ export const Table = ({
   }, [asset])
 
   const columnHelper = createColumnHelper<DataPropertyWithActions>()
-  const baseColumns = [
+  const createColumns = (tableType: 'own' | 'inherited'): any => [
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.properties.columns.type'),
       meta: {
@@ -107,7 +109,7 @@ export const Table = ({
       header: t('asset.asset-editor-tabs.properties.columns.data'),
       meta: {
         type: 'property-value',
-        editable: propertiesTableTab === 'own',
+        editable: tableType === 'own',
         autoWidth: true
       },
       size: 300
@@ -117,7 +119,7 @@ export const Table = ({
       size: 70,
       meta: {
         type: 'checkbox',
-        editable: propertiesTableTab === 'own',
+        editable: tableType === 'own',
         config: {
           align: 'center'
         }
@@ -135,15 +137,18 @@ export const Table = ({
               (
                 <IconButton
                   icon={ 'group' }
-                  onClick={ () => {
-                    console.log(`open ${info.row.original.type} with ID: ` + info.row.original.data.id)
+                  onClick={ async () => {
+                    await openElement({
+                      type: mapToElementType(info.row.original.type),
+                      id: info.row.original.data.id
+                    })
                   } }
                   type="link"
                 />
               )
             }
 
-            {propertiesTableTab === 'own' && (
+            {tableType === 'own' && (
               <IconButton
                 icon={ 'trash' }
                 onClick={ () => {
@@ -158,18 +163,19 @@ export const Table = ({
     })
   ]
   const ownTableColumns = [
-    ...baseColumns
+    ...createColumns('own')
   ]
   const allTableColumns = [
-    ...baseColumns
+    ...createColumns('inherited')
   ]
 
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedProperties = [...(properties ?? [])]
-    const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key)
+    const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key && !property.inherited)
+    console.log(propertyIndex, updatedProperties.at(propertyIndex))
     const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
     updatedProperties[propertyIndex] = updatedProperty
-    const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key).length > 1
+    const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)

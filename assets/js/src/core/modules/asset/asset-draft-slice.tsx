@@ -100,7 +100,7 @@ export const slice = createSlice({
 
       if (asset !== undefined) {
         asset.properties = (asset.properties ?? []).map((property, index) => {
-          if (property.key === action.payload.key) {
+          if (property.key === action.payload.key && property.inherited === action.payload.property.inherited) {
             asset.modified = true
 
             asset.changes = {
