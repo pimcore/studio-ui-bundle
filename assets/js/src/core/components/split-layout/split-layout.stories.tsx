@@ -32,7 +32,7 @@ export const _default = {
     leftItem: {
       id: '1',
       size: 50,
-      children: <Content none />,
+      children: <Content none />
     },
     rightItem: {
       id: '2',
@@ -48,7 +48,7 @@ export const LayoutLeft25Right75 = {
       id: '1',
       size: 25,
       minSize: 200,
-      children: <Content none />,
+      children: <Content none />
     },
     rightItem: {
       id: '2',
@@ -66,7 +66,7 @@ export const LayoutLeft25Right75WithDivider = {
       id: '1',
       size: 25,
       minSize: 200,
-      children: <Content none />,
+      children: <Content none />
     },
     rightItem: {
       id: '2',
@@ -85,7 +85,7 @@ export const LayoutLeft25Right75WithDividerAndResizer = {
       id: '1',
       size: 25,
       minSize: 200,
-      children: <Content none />,
+      children: <Content none />
     },
     rightItem: {
       id: '2',
