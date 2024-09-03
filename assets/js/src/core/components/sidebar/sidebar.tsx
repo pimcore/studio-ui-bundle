@@ -86,20 +86,21 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
         <div className={ 'sidebar__navigation__buttons' }>
           {
             preparedButtons.map((button, index) => {
-              const { icon, key, ...props } = button
+              const { component, key, ...props } = button
 
-              console.log(highlights)
+              if (!isValidElement(component)) {
+                throw new Error('SidebarButton must be a valid react component')
+              }
+
+              const SidebarButton = component.type
+              const sidebarButtonProps = component.props as any
 
               return (
-                <div
-                  aria-controls={ key }
-                  className={ [
-                    'button',
-                    highlights.includes(key) ? 'button--highlighted' : ''
-                  ].join(' ') }
-                >
-                  {icon}
-                </div>
+                <SidebarButton
+                  key={ key }
+                  { ...props }
+                  { ...sidebarButtonProps }
+                />
               )
             })
           }
