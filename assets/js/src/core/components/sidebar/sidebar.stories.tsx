@@ -53,7 +53,6 @@ const config: Meta = {
 export default config
 
 const FocalPointDemoButton = ({initialActive = false}: {initialActive?: boolean}) => {
-  console.log(initialActive)
   const [isActive, setIsActive] = React.useState(initialActive)
 
   return (
