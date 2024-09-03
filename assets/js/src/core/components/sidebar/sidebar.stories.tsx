@@ -52,7 +52,7 @@ const config: Meta = {
 
 export default config
 
-const FocalPointDemoButton = ({initialActive = false}: {initialActive?: boolean}) => {
+const FocalPointDemoButton = ({initialActive = false}: {initialActive?: boolean}): React.JSX.Element => {
   const [isActive, setIsActive] = React.useState(initialActive)
 
   return (
@@ -63,8 +63,10 @@ const FocalPointDemoButton = ({initialActive = false}: {initialActive?: boolean}
         isActive ? 'button--highlighted' : ''
       ].join(' ')}
       onClick={() => setIsActive(!isActive)}
+      onKeyDown={() => setIsActive(!isActive)}
       key={'focal-point-demo'}
       role={'button'}
+      tabIndex={ 1 }
     >
       <Icon name={'focal-point'} options={{width: '16px', height: '16px'}} />
     </div>
