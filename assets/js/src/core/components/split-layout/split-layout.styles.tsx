@@ -13,17 +13,10 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    tab: css`
-      display: flex;
-      flex-direction: column;
-        
-      .pimcore-workflow-workflows {
-          display: flex;
-          gap: 10px;
-          flex-direction: column;
-      }
-    `
-  }
-})
+export const useStyles = createStyles(({ css }) => ({
+  splitLayout: css`
+    display: flex;
+    height: 100%;
+    width: 100%;
+  `
+}))

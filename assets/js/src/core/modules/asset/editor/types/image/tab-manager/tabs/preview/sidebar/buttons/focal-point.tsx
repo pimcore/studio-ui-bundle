@@ -44,12 +44,17 @@ export const FocalPointSidebarButton = (props: Partial<SidebarButtonProps>): Rea
   return (
     <div
       aria-label={ props.key }
+      className={ [
+        'button',
+        focalPointContext?.isActive === true ? 'button--highlighted' : ''
+      ].join(' ') }
+      key={ props.key }
       onClick={ onClick }
       onKeyDown={ onClick }
       role={ 'button' }
       tabIndex={ props.index }
     >
-      {props.icon}
+      { props.icon }
     </div>
   )
 }

@@ -151,7 +151,9 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         changes: {}
       }
 
-      dispatch(assetReceived(mergedAssetData))
+      if (asset === undefined && assetData !== undefined) {
+        dispatch(assetReceived(mergedAssetData))
+      }
 
       return mergedAssetData
     }).catch((e) => {

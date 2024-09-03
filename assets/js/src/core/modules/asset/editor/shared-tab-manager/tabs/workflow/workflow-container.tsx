@@ -13,23 +13,21 @@
 
 import React from 'react'
 import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
-import { useStyle } from './workflow-container.styles'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { Space } from 'antd'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyle()
   const { id } = useAsset()
 
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType: 'asset', elementId: id! })
 
   return (
     <Content
-      className={ styles.tab }
       loading={ isLoading }
       padded
     >
@@ -37,7 +35,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
         title={ t('asset.asset-editor-tabs.workflow.text') }
       />
 
-      <div className={ 'pimcore-workflow-workflows' }>
+      <Space direction="vertical">
         {data?.items !== undefined && data?.items.length > 0 && (
           data.items.map((workflow, index) => (
             <WorkflowCard
@@ -46,7 +44,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
             />
           ))
         )}
-      </div>
+      </Space>
     </Content>
   )
 }

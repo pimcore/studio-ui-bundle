@@ -19,7 +19,6 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     'right-side': css`
       overflow: auto;
-      width: calc(100% - ${versionToken.versionsLeftSideWidth}px);
       padding: ${token.paddingSM}px;
       text-align: center;
       display: ruby;

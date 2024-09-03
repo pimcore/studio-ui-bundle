@@ -13,13 +13,14 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    'right-side': css`
-      overflow: auto;
-      padding: ${token.paddingSM}px;
-      display: ruby;
-      text-align: center;
-    `
-  }
-}, { hashPriority: 'low' })
+export const useStyles = createStyles(({ css, token }) => ({
+  divider: css`
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -2px;
+    width: 4px;
+    overflow: hidden;
+    background-color: ${token.Divider.colorSplit};
+  `
+}))

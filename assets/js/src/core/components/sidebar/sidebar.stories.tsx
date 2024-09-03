@@ -13,7 +13,9 @@
 
 import { type Meta } from '@storybook/react'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
-import { AssetEditorSidebarDetailsView } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
+import {
+  AssetEditorSidebarDetailsView
+} from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 
@@ -39,11 +41,40 @@ const config: Meta = {
       table: {
         disable: true
       }
+    },
+    buttons: {
+      table: {
+        disable: true
+      }
     }
   }
 }
 
 export default config
+
+const FocalPointDemoButton = ({ initialActive = false }: { initialActive?: boolean }): React.JSX.Element => {
+  const [isActive, setIsActive] = React.useState(initialActive)
+
+  return (
+    <div
+      aria-label={ 'focal-point' }
+      className={ [
+        'button',
+        isActive ? 'button--highlighted' : ''
+      ].join(' ') }
+      key={ 'focal-point-demo' }
+      onClick={ () => { setIsActive(!isActive) } }
+      onKeyDown={ () => { setIsActive(!isActive) } }
+      role={ 'button' }
+      tabIndex={ 0 }
+    >
+      <Icon
+        name={ 'focal-point' }
+        options={ { width: '16px', height: '16px' } }
+      />
+    </div>
+  )
+}
 
 const demoData = {
   entries: [
@@ -55,18 +86,36 @@ const demoData = {
             />,
       component: <AssetEditorSidebarDetailsView
         height={ 185 }
-        onClickCustomDownload={ () => {} }
-        onClickDownloadByFormat={ (format) => { console.log(format) } }
+        onClickCustomDownload={ () => {
+        } }
+        onClickDownloadByFormat={ (format) => {
+          console.log(format)
+        } }
         width={ 357 }
                  />
+    }
+  ],
+  buttons: [
+    {
+      key: 'focal-point',
+      icon: <Icon
+        name={ 'focal-point' }
+        options={ { width: '16px', height: '16px' } }
+            />,
+      component: <FocalPointDemoButton />
     }
   ]
 }
 
 export const _default = {
   args: {
-    ...demoData,
+    ...demoData
+  }
+}
 
+export const HighlightedEntries = {
+  args: {
+    ...demoData,
     buttons: [
       {
         key: 'focal-point',
@@ -74,15 +123,9 @@ export const _default = {
           name={ 'focal-point' }
           options={ { width: '16px', height: '16px' } }
               />,
-        onClick: () => { console.log('focal-point button clicked') }
+        component: <FocalPointDemoButton initialActive />
       }
-    ]
-  }
-}
-
-export const HighlightedEntries = {
-  args: {
-    ...demoData,
+    ],
 
     highlights: ['details']
   }
