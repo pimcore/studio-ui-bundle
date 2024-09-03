@@ -93,12 +93,13 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
               }
 
               const SidebarButton = component.type
+              const sidebarButtonProps = component.props as any
 
               return (
                 <SidebarButton
-                  index={ index }
                   key={ key }
                   { ...props }
+                  { ...sidebarButtonProps }
                 />
               )
             })

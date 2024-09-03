@@ -26,8 +26,11 @@ export const useStyle = createStyles(({ token, css }) => {
       background: ${token.Colors.Neutral.Fill.colorFill};
       box-shadow: none;
       border: 2px dashed;
-      
-      &:hover {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+        &:hover {
         color: ${token.colorPrimary};
         background: ${token.Colors.Neutral.Fill.colorFill} !important;
       }
