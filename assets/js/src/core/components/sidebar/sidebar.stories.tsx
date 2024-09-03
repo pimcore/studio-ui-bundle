@@ -66,7 +66,7 @@ const FocalPointDemoButton = ({initialActive = false}: {initialActive?: boolean}
       onKeyDown={() => setIsActive(!isActive)}
       key={'focal-point-demo'}
       role={'button'}
-      tabIndex={ 1 }
+      tabIndex={0}
     >
       <Icon name={'focal-point'} options={{width: '16px', height: '16px'}} />
     </div>
