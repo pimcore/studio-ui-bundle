@@ -32,13 +32,18 @@ interface customMetadataAction {
 interface scheduleAction {
   assetId: number
   id?: number
-  schedule: Schedule
+  schedule: AssetDraftSchedule
+}
+
+export type AssetDraftSchedule = Schedule & {
+  hidden: boolean
+  archived: boolean
 }
 
 export interface AssetDraft extends Asset {
   properties: DataProperty[]
   customMetadata: CustomMetadata[]
-  schedules: Schedule[]
+  schedules: AssetDraftSchedule[]
   imageSettings: ImageData
   modified: boolean
   changes: Record<string, any>
@@ -150,7 +155,42 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    setSchedulesForAsset: (state, action: PayloadAction<{ assetId: number, schedules: Schedule[] }>) => {
+    addScheduleToAsset: (state, action: PayloadAction<scheduleAction>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.schedules = [...(asset.schedules ?? []), action.payload.schedule]
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          schedules: true
+        }
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    removeScheduleFromAsset: (state, action: PayloadAction<scheduleAction>) => {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
+
+      if (asset !== undefined) {
+        asset.schedules = (asset.schedules ?? []).filter(schedule => schedule.id !== action
+          .payload.schedule.id)
+
+        asset.modified = true
+
+        asset.changes = {
+          ...asset.changes,
+          schedules: true
+        }
+      }
+
+      state.entities[action.payload.assetId] = asset
+    },
+
+    setSchedulesForAsset: (state, action: PayloadAction<{ assetId: number, schedules: AssetDraftSchedule[] }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
@@ -369,6 +409,8 @@ export const {
 
   // Schedule
   updateScheduleForAsset,
+  addScheduleToAsset,
+  removeScheduleFromAsset,
   setSchedulesForAsset,
 
   // Image Settings

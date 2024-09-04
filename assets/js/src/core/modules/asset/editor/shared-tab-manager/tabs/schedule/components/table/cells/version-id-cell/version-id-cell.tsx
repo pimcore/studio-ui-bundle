@@ -12,127 +12,75 @@
 */
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext } from 'react'
 import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
-import { type RefSelectProps, Select } from 'antd'
-import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { DownOutlined } from '@ant-design/icons'
-import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
+import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyles } from './version-id-cell.styles'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
-  const [open, setOpen] = useState<boolean>(false)
-  const selectRef = useRef<RefSelectProps>(null)
-  const { id } = useAsset()
-  const { t } = useTranslation()
-  const { styles } = useStyles()
-
+  const { id } = useContext(AssetContext)
   const { data, isLoading } = useGetVersionsQuery({
     elementType: 'asset',
     id: id!,
     page: 1,
     pageSize: 9999
   })
-
-  useEffect(() => {
-    if (isInEditMode) {
-      setOpen(true)
-      selectRef.current?.focus()
-    }
-  }, [isInEditMode])
-
-  function saveValue (value: string): void {
-    fireOnUpdateCellDataEvent(value)
-    disableEditMode()
+  let selectOptions: Version[] = []
+  if (!isLoading && data !== undefined) {
+    selectOptions = data.items
   }
-
-  function getCellContent (): React.JSX.Element {
-    let selectOptions: Version[] = []
-    if (!isLoading && data !== undefined) {
-      selectOptions = data.items
-    }
-
-    function getVersionFromId (id: number): Version | null {
-      return selectOptions.find((version: Version) => version.id === id) ?? null
-    }
-
-    const version = getVersionFromId(props.getValue() as number)
-    if (!isInEditMode) {
-      return (
-        <div className={ 'pseudo-select' }>
-          { props.getValue() !== null
-            ? (
-              <div className={ 'pseudo-select__content' }>
-                <p>{version !== null ? version.versionCount : t('asset.asset-editor-tabs.schedule.select-a-version')}</p>
-              </div>
-              )
-            : t('asset.asset-editor-tabs.schedule.select-a-version')
-          }
-          <DownOutlined />
+  const formattedSelectOptions: SelectProps['options'] = selectOptions.map((value: Version) => {
+    return {
+      value: value.id,
+      displayValue: value.versionCount,
+      label: (
+        <div className={ 'version-id__select__label' }>
+          <div>
+            <b>{value.versionCount}</b>
+            <span className={ 'version-id__selection-item-hidden' }> | {value.user.name ?? 'not found'}</span>
+          </div>
+          <div className={ 'version-id__selection-item-hidden' }>{formatDate(value.date)}</div>
         </div>
       )
     }
+  })
 
-    function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      saveValue(e.target.id)
-    }
-
-    function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
-      if (e.key === 'Escape' || e.key === 'Enter') {
-        disableEditMode()
+  function formatDate (timestamp: number): string {
+    return i18n.format(
+      new Date(timestamp * 1000),
+      'datetime',
+      i18n.language,
+      {
+        dateStyle: 'short',
+        timeStyle: 'short'
       }
-    }
-
-    function formatDate (timestamp: number): string {
-      return i18n.format(
-        new Date(timestamp * 1000),
-        'datetime',
-        i18n.language,
-        {
-          dateStyle: 'short',
-          timeStyle: 'short'
-        }
-      )
-    }
-
-    const options: SelectProps['options'] = selectOptions.map((value: Version) => {
-      return {
-        value: value.id,
-        label: (
-          <div className={ 'version-id__select__label' }>
-            <p>
-              <b>{value.versionCount}</b>
-              <span className={ 'version-id__select__label__username' }> | {value.user.name ?? 'not found'}</span>
-            </p>
-            <p>{formatDate(value.date)}</p>
-          </div>
-        )
-      }
-    })
-
-    return (
-      <Select
-        className={ styles.select }
-        defaultValue={ version !== null ? version.versionCount : '' }
-        onBlur={ onBlur }
-        onChange={ saveValue }
-        onKeyDown={ onKeyDown }
-        open={ open }
-        options={ options }
-        popupClassName={ styles.overlayStyle }
-        popupMatchSelectWidth={ false }
-        ref={ selectRef }
-      />
     )
+  }
+  const { styles } = useStyles()
+
+  const modifiedProps = {
+    ...props,
+    column: {
+      ...props.column,
+      columnDef: {
+        ...props.column.columnDef,
+        meta: {
+          ...props.column.columnDef.meta,
+          config: {
+            ...props.column.columnDef?.meta?.config,
+            options: formattedSelectOptions
+          }
+        }
+      }
+    }
   }
 
   return (
-    <>
-      {getCellContent()}
-    </>
+    <div className={ styles.select } >
+      <SelectCell { ...modifiedProps } />
+    </div>
   )
 }

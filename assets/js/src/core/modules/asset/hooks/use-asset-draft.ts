@@ -14,14 +14,17 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
 import {
+  type AssetDraftSchedule,
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
   addPropertyToAsset,
+  addScheduleToAsset,
   assetReceived,
   removeAsset,
   removeCustomMetadataFromAsset,
   removeImageSettingFromAsset,
   removePropertyFromAsset,
+  removeScheduleFromAsset,
   resetChanges,
   selectAssetById,
   setCustomMetadataForAsset, setPropertiesForAsset, setSchedulesForAsset,
@@ -35,7 +38,6 @@ import {
   type CustomMetadata
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
-import { type Schedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 
 interface UseAssetDraftReturnCustomMetadata {
   customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
@@ -55,10 +57,10 @@ interface UseAssetDraftReturnProperties {
 
 interface UseAssetDraftReturnSchedule {
   schedules: undefined | ReturnType<typeof selectAssetById>['schedules']
-  updateSchedule: (updatedSchedule: Schedule) => void
-  // addProperty: (property: DataProperty) => void
-  // removeProperty: (property: DataProperty) => void
-  setSchedules: (schedules: Schedule[]) => void
+  updateSchedule: (updatedSchedule: AssetDraftSchedule) => void
+  addSchedule: (schedule: AssetDraftSchedule) => void
+  removeSchedule: (schedule: AssetDraftSchedule) => void
+  setSchedules: (schedules: AssetDraftSchedule[]) => void
 }
 
 interface UseAssetDraftReturnDynamicSettings {
@@ -205,7 +207,12 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   function updateSchedule (schedule): void {
     dispatch(updateScheduleForAsset({ assetId: id, schedule }))
   }
-
+  function addSchedule (schedule): void {
+    dispatch(addScheduleToAsset({ assetId: id, schedule }))
+  }
+  function removeSchedule (schedule): void {
+    dispatch(removeScheduleFromAsset({ assetId: id, schedule }))
+  }
   function setSchedules (schedules): void {
     dispatch(setSchedulesForAsset({ assetId: id, schedules }))
   }
@@ -249,6 +256,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     // Schedule
     schedules,
     updateSchedule,
+    addSchedule,
+    removeSchedule,
     setSchedules,
 
     // Image Settings

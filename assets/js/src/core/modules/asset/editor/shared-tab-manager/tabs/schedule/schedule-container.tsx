@@ -20,7 +20,9 @@ import {
   type Schedule,
   useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
-import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
+import {
+  Table
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import {
   useCleanupArchivedSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
@@ -30,15 +32,16 @@ import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { type AssetDraftSchedule } from '@Pimcore/modules/asset/asset-draft-slice'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
-  const [activeOnly, setActiveOnly] = useState<boolean>(true)
+  const [activeOnly, setActiveOnly] = useState<boolean>(false)
   const { cleanup, isLoading: deleteArchivedSchedulesLoading } = useCleanupArchivedSchedules()
-  const { schedules, setSchedules } = useAssetDraft(id!)
+  const { schedules, setSchedules, addSchedule } = useAssetDraft(id!)
 
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
@@ -47,22 +50,25 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
-      setSchedules(data?.items)
+      const currentDate = Math.floor(Date.now() / 1000)
+
+      const schedules = data.items.map((item: Schedule): AssetDraftSchedule => {
+        return { ...item, hidden: activeOnly && !item.active, archived: item.date !== 0 && item.date < currentDate }
+      })
+      setSchedules(schedules)
     }
-  }, [])
+  }, [data])
 
-  const [gridDataUpcoming, setGridDataUpcoming] = useState<Schedule[]>([])
-  const [gridDataArchive, setGridDataArchive] = useState<Schedule[]>([])
+  const [gridDataUpcoming, setGridDataUpcoming] = useState<AssetDraftSchedule[]>([])
+  const [gridDataArchive, setGridDataArchive] = useState<AssetDraftSchedule[]>([])
   useEffect(() => {
-    const currentDate = Math.floor(Date.now() / 1000)
-
     if (schedules !== undefined && schedules.length > 0) {
       setGridDataUpcoming(schedules.filter((item) => {
-        return item.date > currentDate
+        return !item.archived
       }))
 
       setGridDataArchive(schedules.filter((item) => {
-        return item.date < currentDate
+        return item.archived
       }))
     }
   }, [schedules])
@@ -75,18 +81,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     return <div>Error</div>
   }
 
-  function filterSchedules (schedules: Schedule[]): Schedule[] {
-    if (schedules !== undefined) {
-      return schedules.filter((item) => {
-        if (activeOnly) {
-          return item.active === activeOnly
-        }
-
-        return true
-      })
-    }
-
-    return []
+  function filterSchedules (schedules: AssetDraftSchedule[]): AssetDraftSchedule[] {
+    return schedules.filter((item: AssetDraftSchedule): boolean => {
+      return !activeOnly || item.active
+    })
   }
 
   function cleanupArchivedVersions (): void {
@@ -104,6 +102,18 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
             icon={ 'PlusCircleOutlined' }
             key={ 'add' }
+            onClick={ (): void => {
+              addSchedule({
+                id: -new Date().getTime(),
+                archived: false,
+                hidden: false,
+                ctype: 'asset',
+                userId: 0,
+                username: '',
+                date: 0,
+                active: true
+              })
+            } }
           >
             {t('asset.asset-editor-tabs.schedule.toolbar.add')}
           </IconTextButton>,

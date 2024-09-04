@@ -112,8 +112,7 @@ by: By
 field: Field
 no-data-available-yet: No data available yet.
 asset.asset-editor-tabs.schedule.headline: Schedule
-asset.asset-editor-tabs.schedule.columns.date: Date
-asset.asset-editor-tabs.schedule.columns.time: Time
+asset.asset-editor-tabs.schedule.columns.datetime: Date & Time
 asset.asset-editor-tabs.schedule.columns.action: Action
 asset.asset-editor-tabs.schedule.columns.version: Version
 asset.asset-editor-tabs.schedule.columns.active: Active

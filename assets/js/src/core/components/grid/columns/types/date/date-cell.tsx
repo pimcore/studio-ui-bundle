@@ -21,14 +21,21 @@ import type { Dayjs } from 'dayjs'
 
 import dayjs from 'dayjs'
 import { useStyle } from './date-cell.styles'
+import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
+
+export interface DateCellConfig {
+  showTime: boolean
+}
 
 export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [open, setOpen] = useState<boolean>(false)
-  const [value, setValue] = useState<number>(Number(props.getValue()))
   const datePickerRef = useRef<PickerRef>(null)
-  const dateFormat = 'YYYY-MM-DD'
   const { styles } = useStyle()
+  const { column } = props
+  const config: DateCellConfig | undefined = column.columnDef.meta?.config as DateCellConfig | undefined
+  const showTime = config?.showTime ?? false
+  const dateFormat = showTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD'
 
   useEffect(() => {
     if (isInEditMode) {
@@ -38,15 +45,19 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   }, [isInEditMode])
 
   function saveValue (value: number): void {
-    setValue(value)
-    fireOnUpdateCellDataEvent(String(value))
+    fireOnUpdateCellDataEvent(value)
     disableEditMode()
   }
 
+  const value = Number(props.getValue()) !== 0 ? dayjs.unix(Number(props.getValue())) : null
+
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
+      if (value === null) {
+        return <></>
+      }
       return (
-        <FormattedDate timestamp={ value } />
+        showTime ? <FormattedDateTime timestamp={ value.unix() } /> : <FormattedDate timestamp={ value.unix() } />
       )
     }
 
@@ -62,10 +73,6 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
 
     return (
       <DatePicker
-        defaultValue={ dayjs.unix(value) }
-        disabledDate={ (current: Dayjs) => {
-          return current < dayjs().subtract(1, 'day')
-        } }
         format={ dateFormat }
         needConfirm
         onBlur={ onBlur }
@@ -75,6 +82,8 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
         onKeyDown={ onKeyDown }
         open={ open }
         ref={ datePickerRef }
+        showTime={ showTime ? { format: 'HH:mm' } : false }
+        value={ value }
       />
     )
   }
