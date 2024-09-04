@@ -57,7 +57,14 @@ const items: CollapseProps['items'] = [
   item2
 ]
 export const _default = {
+<<<<<<< HEAD
   args: {
     items
   }
+=======
+    args: {
+        items: items,
+        exclusive: true,
+    }
+>>>>>>> e682488 (add exclusive option)
 }
