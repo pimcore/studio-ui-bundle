@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Segmented, Switch } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import {
-  type Schedule,
+  type Schedule as ApiSchedule,
   useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 import {
@@ -32,7 +32,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { type AssetDraftSchedule } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type Schedule } from '@Pimcore/modules/asset/asset-draft-slice'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -52,15 +52,15 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     if (data !== undefined && Array.isArray(data.items)) {
       const currentDate = Math.floor(Date.now() / 1000)
 
-      const schedules = data.items.map((item: Schedule): AssetDraftSchedule => {
-        return { ...item, hidden: activeOnly && !item.active, archived: item.date !== 0 && item.date < currentDate }
+      const schedules = data.items.map((item: ApiSchedule): Schedule => {
+        return { ...item, archived: item.date !== 0 && item.date < currentDate }
       })
       setSchedules(schedules)
     }
   }, [data])
 
-  const [gridDataUpcoming, setGridDataUpcoming] = useState<AssetDraftSchedule[]>([])
-  const [gridDataArchive, setGridDataArchive] = useState<AssetDraftSchedule[]>([])
+  const [gridDataUpcoming, setGridDataUpcoming] = useState<Schedule[]>([])
+  const [gridDataArchive, setGridDataArchive] = useState<Schedule[]>([])
   useEffect(() => {
     if (schedules !== undefined && schedules.length > 0) {
       setGridDataUpcoming(schedules.filter((item) => {
@@ -81,8 +81,8 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     return <div>Error</div>
   }
 
-  function filterSchedules (schedules: AssetDraftSchedule[]): AssetDraftSchedule[] {
-    return schedules.filter((item: AssetDraftSchedule): boolean => {
+  function filterSchedules (schedules: Schedule[]): Schedule[] {
+    return schedules.filter((item: Schedule): boolean => {
       return !activeOnly || item.active
     })
   }
@@ -106,7 +106,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               addSchedule({
                 id: -new Date().getTime(),
                 archived: false,
-                hidden: false,
                 ctype: 'asset',
                 userId: 0,
                 username: '',

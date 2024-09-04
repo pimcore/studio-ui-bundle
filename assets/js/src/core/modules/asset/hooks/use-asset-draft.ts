@@ -14,7 +14,7 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
 import {
-  type AssetDraftSchedule,
+  type Schedule,
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
   addPropertyToAsset,
@@ -57,10 +57,10 @@ interface UseAssetDraftReturnProperties {
 
 interface UseAssetDraftReturnSchedule {
   schedules: undefined | ReturnType<typeof selectAssetById>['schedules']
-  updateSchedule: (updatedSchedule: AssetDraftSchedule) => void
-  addSchedule: (schedule: AssetDraftSchedule) => void
-  removeSchedule: (schedule: AssetDraftSchedule) => void
-  setSchedules: (schedules: AssetDraftSchedule[]) => void
+  updateSchedule: (updatedSchedule: Schedule) => void
+  addSchedule: (schedule: Schedule) => void
+  removeSchedule: (schedule: Schedule) => void
+  setSchedules: (schedules: Schedule[]) => void
 }
 
 interface UseAssetDraftReturnDynamicSettings {

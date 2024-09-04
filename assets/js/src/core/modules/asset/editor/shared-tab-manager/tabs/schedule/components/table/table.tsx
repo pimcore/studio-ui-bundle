@@ -19,13 +19,13 @@ import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { type AssetDraftSchedule } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type Schedule } from '@Pimcore/modules/asset/asset-draft-slice'
 
-type ScheduleTable = AssetDraftSchedule & {
+type ScheduleTable = Schedule & {
   actions: React.ReactNode
 }
 
-export const Table = ({ data }: { data: AssetDraftSchedule[] }): React.JSX.Element => {
+export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
@@ -96,12 +96,12 @@ export const Table = ({ data }: { data: AssetDraftSchedule[] }): React.JSX.Eleme
 
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedSchedules = [...(data ?? [])]
-    const scheduleToUpdate: AssetDraftSchedule | undefined = updatedSchedules.find((schedule) => schedule.id === rowData.id)
+    const scheduleToUpdate: Schedule | undefined = updatedSchedules.find((schedule) => schedule.id === rowData.id)
     if (scheduleToUpdate === undefined) {
       return
     }
 
-    const updatedSchedule: AssetDraftSchedule = { ...scheduleToUpdate, [columnId]: value }
+    const updatedSchedule: Schedule = { ...scheduleToUpdate, [columnId]: value }
     updateSchedule(updatedSchedule)
     console.log('..', rowIndex, columnId, rowData)
     setModifiedCells([...modifiedCells, { rowIndex: getRowId(rowData), columnId }])

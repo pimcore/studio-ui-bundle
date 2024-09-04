@@ -16,7 +16,7 @@ import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
-import { type Schedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
+import { type Schedule as ApiSchedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
 
 interface propertyAction {
   assetId: number
@@ -32,18 +32,17 @@ interface customMetadataAction {
 interface scheduleAction {
   assetId: number
   id?: number
-  schedule: AssetDraftSchedule
+  schedule: Schedule
 }
 
-export type AssetDraftSchedule = Schedule & {
-  hidden: boolean
+export type Schedule = ApiSchedule & {
   archived: boolean
 }
 
 export interface AssetDraft extends Asset {
   properties: DataProperty[]
   customMetadata: CustomMetadata[]
-  schedules: AssetDraftSchedule[]
+  schedules: Schedule[]
   imageSettings: ImageData
   modified: boolean
   changes: Record<string, any>
@@ -190,7 +189,7 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    setSchedulesForAsset: (state, action: PayloadAction<{ assetId: number, schedules: AssetDraftSchedule[] }>) => {
+    setSchedulesForAsset: (state, action: PayloadAction<{ assetId: number, schedules: Schedule[] }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
