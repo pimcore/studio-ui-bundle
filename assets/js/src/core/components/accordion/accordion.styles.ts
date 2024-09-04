@@ -14,7 +14,6 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-
   return {
     accordion: css`
       .ant-collapse-item {
@@ -37,4 +36,3 @@ export const useStyles = createStyles(({ token, css }) => {
     `
   }
 })
-
