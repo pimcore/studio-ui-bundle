@@ -18,7 +18,7 @@ export { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library
 
 // Components
 export { Background } from '@Pimcore/components/background/background'
-export { type IconProps as DropdownIconProps, DropdownMenu, type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
+export { type IconProps as DropdownIconProps, DropdownMenu, type DropdownMenuItemProps } from '@Pimcore/components/dropdown/old/dropdown-menu'
 export { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 export { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 

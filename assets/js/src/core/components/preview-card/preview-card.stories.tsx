@@ -13,7 +13,7 @@
 
 import { type Meta } from '@storybook/react'
 import { PreviewCard as PreviewCardComponent, SizeTypes } from './preview-card'
-import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
+import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown/old/dropdown-menu'
 
 // @todo refactor die to naming and component splitting
 const config: Meta = {

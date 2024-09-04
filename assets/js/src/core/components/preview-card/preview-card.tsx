@@ -16,7 +16,7 @@ import React, { useState } from 'react'
 import { useStyle } from './preview-card.styles'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
-import { DropdownMenu, type DropdownMenuItemProps } from '../dropdown-menu/dropdown-menu'
+import { DropdownMenu, type DropdownMenuItemProps } from '../dropdown/old/dropdown-menu'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 
 export enum SizeTypes {

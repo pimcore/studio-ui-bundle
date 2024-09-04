@@ -15,7 +15,7 @@ import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlexContainerView } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container-view'
 import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
-import type { DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
+import type { DropdownMenuItemProps } from '@Pimcore/components/dropdown/old/dropdown-menu'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 

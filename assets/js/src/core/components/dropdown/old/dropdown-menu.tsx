@@ -31,7 +31,7 @@ export interface IconProps {
   onClick?: (e: any) => void
 }
 
-interface DropdownMenuProps extends React.PropsWithChildren {
+export interface DropdownMenuProps extends React.PropsWithChildren {
   children: ReactElement
   placement: DropdownProps['placement']
   dropdownItems: DropdownMenuItemProps[]

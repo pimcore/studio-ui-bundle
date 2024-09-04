@@ -14,10 +14,10 @@
 import { type Meta } from '@storybook/react'
 import { DropdownMenu as DropdownMenuComponent, type DropdownMenuItemProps } from './dropdown-menu'
 import React from 'react'
-import { IconButton } from '../icon-button/icon-button'
+import { IconButton } from '../../icon-button/icon-button'
 
 const config: Meta = {
-  title: 'Components/Controls/Dropdowns/DropdownMenu',
+  title: 'OLD/Components/Controls/Dropdowns/DropdownMenu',
   component: DropdownMenuComponent,
   parameters: {
     layout: 'centered'
@@ -43,7 +43,7 @@ const dropdownItems: DropdownMenuItemProps[] = [
       console.log('clicked div')
     },
     iconLeft: 'target',
-    label: 'preview-card.locate-in-tree'
+    label: 'preview-card.locate-in-tree',
   },
   {
     iconLeft: 'info-circle-outlined',
