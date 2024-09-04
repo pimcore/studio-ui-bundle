@@ -141,7 +141,7 @@ export const slice = createSlice({
 
             asset.changes = {
               ...asset.changes,
-              schedule: true
+              schedules: true
             }
 
             return action.payload.schedule
@@ -197,6 +197,18 @@ export const slice = createSlice({
       }
 
       state.entities[action.payload.assetId] = asset
+    },
+
+    resetSchedulesChangesForAsset (state, action: PayloadAction<number>): void {
+      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload) }
+
+      if (asset.changes.schedules === undefined) {
+        return
+      }
+      const { schedules, ...changesWithoutSchedules } = asset.changes
+      asset.changes = changesWithoutSchedules
+      asset.modified = Object.keys(asset.changes).length > 0
+      state.entities[action.payload] = asset
     },
 
     setChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
@@ -411,6 +423,7 @@ export const {
   addScheduleToAsset,
   removeScheduleFromAsset,
   setSchedulesForAsset,
+  resetSchedulesChangesForAsset,
 
   // Image Settings
   addImageSettingsToAsset,

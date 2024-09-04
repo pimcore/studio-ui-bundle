@@ -19,28 +19,39 @@ import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import {
+  useSaveSchedules
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
-  const [saveAsset, { isLoading, isSuccess }] = useAssetUpdateByIdMutation()
+  const [saveAsset, { isLoading, isSuccess, isError }] = useAssetUpdateByIdMutation()
+  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id!, false)
   const messageApi = useMessage()
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && isSchedulesSuccess) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success(t('save-success'))
       removeTrackedChanges()
     }
-  }, [isSuccess])
+  }, [isSuccess, isSchedulesSuccess])
+
+  useEffect(() => {
+    if (isError || isSchedulesError) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error(t('save-failed'))
+    }
+  }, [isError, isSchedulesError])
 
   return (
     <ToolbarView justify='flex-end'>
       <Button
-        disabled={ !hasChanges || isLoading }
-        loading={ isLoading }
+        disabled={ !hasChanges || isLoading || isSchedulesLoading }
+        loading={ isLoading || isSchedulesLoading }
         onClick={ onSaveClick }
         type="primary"
       >
@@ -76,7 +87,7 @@ export const Toolbar = (): React.JSX.Element => {
       update.image = imageSettings
     }
 
-    const savePromise = saveAsset({
+    const saveAssetPromise = saveAsset({
       id: id!,
       body: {
         data: {
@@ -85,8 +96,10 @@ export const Toolbar = (): React.JSX.Element => {
       }
     })
 
-    savePromise.catch((error) => {
-      console.error(error)
+    const saveSchedulesPromise = saveSchedules()
+
+    Promise.all([saveAssetPromise, saveSchedulesPromise]).catch((error) => {
+      console.log(error)
     })
   }
 }

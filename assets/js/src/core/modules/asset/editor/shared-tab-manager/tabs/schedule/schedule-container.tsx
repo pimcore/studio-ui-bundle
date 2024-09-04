@@ -23,9 +23,6 @@ import {
 import {
   Table
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
-import {
-  useCleanupArchivedSchedules
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-cleanup-archived-schedules'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
@@ -33,6 +30,9 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { type Schedule } from '@Pimcore/modules/asset/asset-draft-slice'
+import {
+  useSaveSchedules
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -40,8 +40,8 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { id } = useContext(AssetContext)
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(false)
-  const { cleanup, isLoading: deleteArchivedSchedulesLoading } = useCleanupArchivedSchedules()
-  const { schedules, setSchedules, addSchedule } = useAssetDraft(id!)
+  const { asset, schedules, setSchedules, addSchedule, removeSchedule } = useAssetDraft(id!)
+  const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules('asset', id!)
 
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
@@ -88,7 +88,11 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   }
 
   function cleanupArchivedVersions (): void {
-    void cleanup({ ids: gridDataArchive.map((item) => item.id) })
+    schedules?.forEach((item) => {
+      if (item.archived) {
+        removeSchedule(item)
+      }
+    })
   }
 
   return (
@@ -119,7 +123,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
           <Button
             className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
+            disabled={ asset?.changes.schedules === undefined }
             key={ 'save' }
+            loading={ isSaveLoading }
+            onClick={ saveSchedules }
             type={ 'primary' }
           >
             {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
@@ -162,7 +169,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             <IconTextButton
               disabled={ gridDataArchive.length === 0 }
               icon={ 'trash' }
-              loading={ deleteArchivedSchedulesLoading }
               onClick={ cleanupArchivedVersions }
             >
               {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}

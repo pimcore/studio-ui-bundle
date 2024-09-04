@@ -26,8 +26,11 @@ import {
   removePropertyFromAsset,
   removeScheduleFromAsset,
   resetChanges,
+  resetSchedulesChangesForAsset,
   selectAssetById,
-  setCustomMetadataForAsset, setPropertiesForAsset, setSchedulesForAsset,
+  setCustomMetadataForAsset,
+  setPropertiesForAsset,
+  setSchedulesForAsset,
   updateAllCustomMetadataForAsset,
   updateImageSettingForAsset,
   updatePropertyForAsset, updateScheduleForAsset
@@ -61,6 +64,7 @@ interface UseAssetDraftReturnSchedule {
   addSchedule: (schedule: Schedule) => void
   removeSchedule: (schedule: Schedule) => void
   setSchedules: (schedules: Schedule[]) => void
+  resetSchedulesChanges: () => void
 }
 
 interface UseAssetDraftReturnDynamicSettings {
@@ -217,6 +221,10 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(setSchedulesForAsset({ assetId: id, schedules }))
   }
 
+  function resetSchedulesChanges (): void {
+    dispatch(resetSchedulesChangesForAsset(id))
+  }
+
   function addImageSettings (settings): void {
     dispatch(addImageSettingsToAsset({ assetId: id, settings }))
   }
@@ -259,6 +267,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     addSchedule,
     removeSchedule,
     setSchedules,
+    resetSchedulesChanges,
 
     // Image Settings
     imageSettings,

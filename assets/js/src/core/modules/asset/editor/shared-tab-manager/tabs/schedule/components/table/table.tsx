@@ -12,7 +12,7 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './table.styles'
@@ -29,7 +29,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { updateSchedule, removeSchedule } = useAssetDraft(id!)
+  const { asset, updateSchedule, removeSchedule } = useAssetDraft(id!)
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: string, columnId: string }>>([])
 
   const columnHelper = createColumnHelper<ScheduleTable>()
@@ -103,9 +103,15 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
 
     const updatedSchedule: Schedule = { ...scheduleToUpdate, [columnId]: value }
     updateSchedule(updatedSchedule)
-    console.log('..', rowIndex, columnId, rowData)
     setModifiedCells([...modifiedCells, { rowIndex: getRowId(rowData), columnId }])
   }
+
+  useEffect(() => {
+    if (modifiedCells.length > 0 && asset?.changes.schedules === undefined) {
+      setModifiedCells([])
+    }
+  }, [asset])
+
   return (
     <div className={ styles.table }>
       <Grid

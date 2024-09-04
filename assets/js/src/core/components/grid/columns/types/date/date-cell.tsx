@@ -61,10 +61,6 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
       )
     }
 
-    function onBlur (e: React.FocusEvent<HTMLInputElement>): void {
-      // saveValue(e.target.value)
-    }
-
     function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
       if (e.key === 'Escape' || e.key === 'Enter') {
         disableEditMode()
@@ -75,11 +71,11 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
       <DatePicker
         format={ dateFormat }
         needConfirm
-        onBlur={ onBlur }
         onChange={ (date: Dayjs) => {
-          saveValue(date.unix())
+          saveValue(date === null ? 0 : date.unix())
         } }
         onKeyDown={ onKeyDown }
+        onOk={ disableEditMode }
         open={ open }
         ref={ datePickerRef }
         showTime={ showTime ? { format: 'HH:mm' } : false }
