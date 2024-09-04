@@ -57,8 +57,8 @@ const items: CollapseProps['items'] = [
   item2
 ]
 export const _default = {
-    args: {
-        items: items,
-        exclusive: true,
-    }
+  args: {
+    items,
+    exclusive: true
+  }
 }
