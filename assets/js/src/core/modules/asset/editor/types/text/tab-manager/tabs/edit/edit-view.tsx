@@ -12,14 +12,14 @@
 */
 
 import React from 'react'
-import { useStyle } from './preview-view.styles'
+import { useStyle } from './edit-view.styles'
 import { TextEditor } from '@Pimcore/components/text-editor/text-editor'
 
 interface PreviewViewProps {
   src: string | undefined
 }
 
-const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
+const EditView = (props: PreviewViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { src } = props
 
@@ -32,4 +32,4 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   )
 }
 
-export { PreviewView }
+export { EditView }

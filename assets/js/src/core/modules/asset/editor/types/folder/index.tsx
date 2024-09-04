@@ -22,11 +22,14 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import { LinkContainer } from './tab-manager/tabs/list/grid-columns/link/link-container'
-import {
-  PropertiesContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 import { AssetActions } from './tab-manager/tabs/list/grid-columns/asset-actions/asset-actions'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
+import {
+  TAB_DEPENDENCIES,
+  TAB_NOTES_AND_EVENTS,
+  TAB_PROPERTIES,
+  TAB_TAGS,
+  TAB_WORKFLOW
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -46,21 +49,11 @@ moduleSystem.registerModule({
       label: 'folder.folder-editor-tabs.view'
     })
 
-    folderEditorTabManager.register({
-      key: 'properties',
-      label: 'asset.asset-editor-tabs.properties.text',
-      children: <PropertiesContainer />,
-      icon: <Icon name={ 'settings2' } />,
-      isDetachable: true
-    })
-
-    folderEditorTabManager.register({
-      key: 'tags',
-      label: 'asset.asset-editor-tabs.tag',
-      children: <TagsTabContainer />,
-      icon: <Icon name={ 'tag-two-tone' } />,
-      isDetachable: true
-    })
+    folderEditorTabManager.register(TAB_PROPERTIES)
+    folderEditorTabManager.register(TAB_DEPENDENCIES)
+    folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)
+    folderEditorTabManager.register(TAB_TAGS)
+    folderEditorTabManager.register(TAB_WORKFLOW)
 
     const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
 

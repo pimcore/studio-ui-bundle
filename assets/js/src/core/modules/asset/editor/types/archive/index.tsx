@@ -11,9 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { type AudioTabManager } from './tab-manager/audio-tab-manager'
-import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
+import { type ArchiveTabManager } from './tab-manager/archive-tab-manager'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -27,26 +25,18 @@ import {
   TAB_VERSIONS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
-import { Icon } from '@Pimcore/components/icon/icon'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const audioTabManager = container.get<AudioTabManager>(serviceIds['Asset/Editor/AudioTabManager'])
+    const archiveTabManager = container.get<ArchiveTabManager>(serviceIds['Asset/Editor/ArchiveTabManager'])
 
-    audioTabManager.register({
-      key: 'view',
-      label: 'asset.asset-editor-tabs.view',
-      children: <PreviewContainer />,
-      icon: <Icon name={ 'image-05' } />
-    })
-
-    audioTabManager.register(TAB_CUSTOM_METADATA)
-    audioTabManager.register(TAB_PROPERTIES)
-    audioTabManager.register(TAB_VERSIONS)
-    audioTabManager.register(TAB_SCHEDULE)
-    audioTabManager.register(TAB_DEPENDENCIES)
-    audioTabManager.register(TAB_NOTES_AND_EVENTS)
-    audioTabManager.register(TAB_TAGS)
-    audioTabManager.register(TAB_WORKFLOW)
+    archiveTabManager.register(TAB_CUSTOM_METADATA)
+    archiveTabManager.register(TAB_PROPERTIES)
+    archiveTabManager.register(TAB_VERSIONS)
+    archiveTabManager.register(TAB_SCHEDULE)
+    archiveTabManager.register(TAB_DEPENDENCIES)
+    archiveTabManager.register(TAB_NOTES_AND_EVENTS)
+    archiveTabManager.register(TAB_TAGS)
+    archiveTabManager.register(TAB_WORKFLOW)
   }
 })
