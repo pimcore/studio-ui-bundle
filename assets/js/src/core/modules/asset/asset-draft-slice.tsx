@@ -29,7 +29,7 @@ interface customMetadataAction {
   customMetadata: CustomMetadata
 }
 
-interface scheduleAction {
+interface ScheduleAction {
   assetId: number
   id?: number
   schedule: Schedule
@@ -131,7 +131,7 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    updateScheduleForAsset: (state, action: PayloadAction<scheduleAction>) => {
+    updateScheduleForAsset: (state, action: PayloadAction<ScheduleAction>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
@@ -154,7 +154,7 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    addScheduleToAsset: (state, action: PayloadAction<scheduleAction>) => {
+    addScheduleToAsset: (state, action: PayloadAction<ScheduleAction>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
@@ -171,7 +171,7 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    removeScheduleFromAsset: (state, action: PayloadAction<scheduleAction>) => {
+    removeScheduleFromAsset: (state, action: PayloadAction<ScheduleAction>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
 
       if (asset !== undefined) {
