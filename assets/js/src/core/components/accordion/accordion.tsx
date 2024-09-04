@@ -11,16 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 import React from "react";
-import {Collapse, CollapseProps} from "antd";
+import {Collapse, CollapseProps, theme} from "antd";
 import {useStyles} from "@Pimcore/components/accordion/accordion.styles";
 
-export interface AccordionProps {
-    items: CollapseProps['items'];
-    exclusive: boolean;
+export interface AccordionProps extends CollapseProps{
 }
 
-export const Accordion = ({items, exclusive}: AccordionProps): React.JSX.Element => {
+export const Accordion = ({items}: AccordionProps): React.JSX.Element => {
+
     const { styles } = useStyles()
+
 
     return (
       <Collapse
@@ -28,7 +28,6 @@ export const Accordion = ({items, exclusive}: AccordionProps): React.JSX.Element
           items={items}
           defaultActiveKey={['1']}
           expandIconPosition = 'end'
-          accordion={exclusive}
       />
   )
 }

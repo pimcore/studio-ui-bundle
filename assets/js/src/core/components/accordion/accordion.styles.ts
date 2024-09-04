@@ -14,16 +14,27 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
+
   return {
     accordion: css`
-      .ant-collapse-item > .ant-collapse-header {
-        display: inline-flex;
-        width: 100%;
+      .ant-collapse-item {
+          > .ant-collapse-header {
+              display: inline-flex;
+              width: 100%;
+
+              > .ant-collapse-header-text {
+                  flex: none;
+                  margin-inline-end: 0;
+              }
+          }
       }
+      
       .ant-collapse-extra {
         order: 1;
         margin-left: auto;
       }
+      
     `
   }
 })
+
