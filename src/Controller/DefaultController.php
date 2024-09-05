@@ -25,7 +25,11 @@ final class DefaultController extends FrontendController
 {
     #[Route('')]
     #[Route('/login')]
-    public function indexAction(StaticResourcesResolverInterface $staticResourcesResolver, string $studioUrlUrlPath, string $studioMercureClientUrl): Response
+    public function indexAction(
+        StaticResourcesResolverInterface $staticResourcesResolver,
+        string $studioUrlUrlPath,
+        string $studioMercureClientUrl
+    ): Response
     {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
             'studioCssFiles' => $staticResourcesResolver->getStudioCssFiles(),
