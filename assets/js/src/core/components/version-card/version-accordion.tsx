@@ -17,8 +17,9 @@ import { useStyle } from './version-accordion.styles'
 import { Icon } from '../icon/icon'
 import { isSet } from '@Pimcore/utils/helpers'
 import { useTranslation } from 'react-i18next'
+import { Accordion } from '@Pimcore/components/accordion/accordion'
 
-interface VersionCardProps {
+interface VersionAccordionProps {
   version: number
   date: string
   savedBy: string
@@ -39,7 +40,7 @@ interface VersionCardProps {
   className?: string
 }
 
-export const VersionCard = ({
+export const VersionAccordion = ({
   version,
   date,
   savedBy,
@@ -58,7 +59,7 @@ export const VersionCard = ({
   onBlurNote,
   onChangeCheckbox,
   className
-}: VersionCardProps): React.JSX.Element => {
+}: VersionAccordionProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
 
@@ -138,55 +139,75 @@ export const VersionCard = ({
     onClickDelete()
   }
 
+  const children = (
+    <>
+      <div className={ 'flexbox-start-end' }>
+        <Tag className={ 'id-tag' }>ID: {id}</Tag>
+        <div>
+          {!published && (
+          <Button
+            className={ 'btn-publish' }
+            disabled={ publishingVersion || deletingVersion }
+            icon={ <Icon name="world" /> }
+            loading={ publishingVersion }
+            onClick={ publishVersion }
+          >
+            {t('version.publish')}
+          </Button>
+          )}
+          <Button
+            aria-label={ t('aria.version.delete') }
+            disabled={ publishingVersion }
+            icon={ <Icon name="trash" /> }
+            loading={ deletingVersion }
+            onClick={ deleteVersion }
+          />
+        </div>
+      </div>
+      {
+        isSet(scheduledDate) && (
+        <div className={ 'row-margin' }>
+          <div>{t('version.schedule-for')}</div>
+          <div className={ 'date-container' }>
+            <Icon name="calender" />
+            <span className={ 'scheduled-date' }>{scheduledDate}</span>
+          </div>
+        </div>
+        )
+    }
+      <div className={ 'row-margin' }>
+        <span>{t('version.note')}</span>
+        <Input
+          defaultValue={ note }
+          onBlur={ onBlurNote }
+          placeholder={ 'Add a note' }
+        />
+      </div>
+    </>
+  )
+
+  const item = [{
+    key: id,
+    label: title,
+    extra,
+    children,
+    onClick
+
+  }]
+
   return (
     <div className={ [styles.card, className].join(' ') }>
+      <Accordion
+        className={ [classNameByState, isExpanded ? 'card-body__expand' : 'card-body__hide'].join(' ') }
+        items={ item }
+        onChange={ onClick }
+      />
       <Card
         className={ [classNameByState, isExpanded ? 'card-body__expand' : 'card-body__hide'].join(' ') }
         extra={ extra }
-        onClick={ onClick }
         size="small"
         title={ title }
       >
-        <div className={ 'flexbox-start-end' }>
-          <Tag className={ 'id-tag' }>ID: {id}</Tag>
-          <div>
-            {!published && (
-              <Button
-                className={ 'btn-publish' }
-                disabled={ publishingVersion || deletingVersion }
-                icon={ <Icon name="world" /> }
-                loading={ publishingVersion }
-                onClick={ publishVersion }
-              >
-                {t('version.publish')}
-              </Button>
-            )}
-            <Button
-              aria-label={ t('aria.version.delete') }
-              disabled={ publishingVersion }
-              icon={ <Icon name="trash" /> }
-              loading={ deletingVersion }
-              onClick={ deleteVersion }
-            />
-          </div>
-        </div>
-        {isSet(scheduledDate) && (
-          <div className={ 'row-margin' }>
-            <div>{t('version.schedule-for')}</div>
-            <div className={ 'date-container' }>
-              <Icon name="calender" />
-              <span className={ 'scheduled-date' }>{scheduledDate}</span>
-            </div>
-          </div>
-        )}
-        <div className={ 'row-margin' }>
-          <span>{t('version.note')}</span>
-          <Input
-            defaultValue={ note }
-            onBlur={ onBlurNote }
-            placeholder={ 'Add a note' }
-          />
-        </div>
       </Card>
     </div>
   )

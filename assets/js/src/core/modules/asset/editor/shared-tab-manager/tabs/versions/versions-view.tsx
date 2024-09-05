@@ -14,13 +14,10 @@
 import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
-import { isSet } from '@Pimcore/utils/helpers'
-import { VersionCard } from '@Pimcore/components/version-card/version-card'
 import {
-  type VersionGetCollectionForElementByTypeAndIdApiArg,
-  type Version
+  type Version,
+  type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
-import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import {
   DetailsVersionsContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'
@@ -37,6 +34,9 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
+import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
+import { isSet } from '@Pimcore/utils/helpers'
+import { VersionAccordion } from '@Pimcore/components/version-card/version-accordion'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -111,7 +111,7 @@ export const VersionsView = ({
             type={ 'default' }
           >{t('no')}</Button>
         </ModalFooter>
-          }
+            }
       title={ t('version.clear-unpublished-versions') }
     >
       <span>{t('version.confirm-clear-unpublished')}</span>
@@ -130,27 +130,27 @@ export const VersionsView = ({
             <Content padded>
               <Header title={ t('version.versions') }>
                 {versions.length > 0 &&
-                      (
-                      <div>
-                        <ButtonGroup
-                          items={ [
-                            <Button
-                              className={ comparingActive ? 'compare-button' : '' }
-                              key={ t('version.compare-versions') }
-                              onClick={ onClickCompareVersion }
-                            >{t('version.compare-versions')}</Button>,
-                            <IconTextButton
-                              icon={ 'trash' }
-                              key={ t('version.clear-unpublished') }
-                              loading={ clearingAll }
-                              onClick={ showModal }
-                            >
-                              {t('version.clear-unpublished')}
-                            </IconTextButton>] }
-                        />
-                        {modal}
-                      </div>
-                      )}
+                                    (
+                                    <div>
+                                      <ButtonGroup
+                                        items={ [
+                                          <Button
+                                            className={ comparingActive ? 'compare-button' : '' }
+                                            key={ t('version.compare-versions') }
+                                            onClick={ onClickCompareVersion }
+                                          >{t('version.compare-versions')}</Button>,
+                                          <IconTextButton
+                                            icon={ 'trash' }
+                                            key={ t('version.clear-unpublished') }
+                                            loading={ clearingAll }
+                                            onClick={ showModal }
+                                          >
+                                            {t('version.clear-unpublished')}
+                                          </IconTextButton>] }
+                                      />
+                                      {modal}
+                                    </div>
+                                    )}
               </Header>
 
               {versions.length > 0 && (
@@ -158,7 +158,7 @@ export const VersionsView = ({
                 const vId = { id: version.id, count: version.versionCount }
                 const selected = detailedVersions.some((v => v.id === version.id))
                 return (
-                  <VersionCard
+                  <VersionAccordion
                     activeDefault={ selected }
                     autosaved={ version.autosave }
                     className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
@@ -208,11 +208,11 @@ export const VersionsView = ({
           size: 75,
           children: (
             <Content padded>
-              { detailedVersions.length > 0 && comparingActive && (
+              {detailedVersions.length > 0 && comparingActive && (
                 <DetailsVersionsContainer versionIds={ detailedVersions } />
               )}
 
-              { detailedVersions.length > 0 && !comparingActive && (
+              {detailedVersions.length > 0 && !comparingActive && (
                 <DetailsVersionContainer
                   setDetailedVersions={ setDetailedVersions }
                   versionId={ detailedVersions[0] }
