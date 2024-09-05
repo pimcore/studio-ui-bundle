@@ -12,13 +12,13 @@
 */
 
 import React, { useContext } from 'react'
-import { PreviewView } from './preview-view'
+import { EditView } from './edit-view'
 import { useAssetGetTextDataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useStyle } from '@Pimcore/modules/asset/editor/types/text/tab-manager/tabs/preview/preview-container.styles'
+import { useStyle } from './edit-container.styles'
 import { isSet } from '@Pimcore/utils/helpers'
 
-const PreviewContainer = (): React.JSX.Element => {
+const EditContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id! })
   const { styles } = useStyle()
@@ -26,7 +26,7 @@ const PreviewContainer = (): React.JSX.Element => {
   return (
     <div className={ styles.relativeContainer }>
       { isSet(data) && (
-      <PreviewView
+      <EditView
         src={ data!.data }
       />
       ) }
@@ -34,4 +34,4 @@ const PreviewContainer = (): React.JSX.Element => {
   )
 }
 
-export { PreviewContainer }
+export { EditContainer }
