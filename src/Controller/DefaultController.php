@@ -29,8 +29,7 @@ final class DefaultController extends FrontendController
         StaticResourcesResolverInterface $staticResourcesResolver,
         string $studioUrlUrlPath,
         string $studioMercureClientUrl
-    ): Response
-    {
+    ): Response {
         return $this->render('@PimcoreStudioUi/default/index.html.twig', [
             'studioCssFiles' => $staticResourcesResolver->getStudioCssFiles(),
             'studioJsFiles' => $staticResourcesResolver->getStudioJsFiles(),
