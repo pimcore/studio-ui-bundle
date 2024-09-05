@@ -36,7 +36,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import { isSet } from '@Pimcore/utils/helpers'
-import { VersionAccordion } from '@Pimcore/components/version-card/version-accordion'
+import { VersionAccordion } from '@Pimcore/components/version-accordion/version-accordion'
 
 interface VersionsViewProps {
   versions: Version[]
