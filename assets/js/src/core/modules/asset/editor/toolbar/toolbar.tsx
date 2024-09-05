@@ -19,6 +19,9 @@ import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { type CustomMetadata, type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/asset/properties-api-slice.gen'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -54,22 +57,27 @@ export const Toolbar = (): React.JSX.Element => {
 
     const update: AssetUpdateByIdApiArg['body']['data'] = {}
     if (asset.changes.properties === true) {
-      const propertyUpdate = properties?.map((property) => {
-        if (typeof property.data === 'object') {
+      const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
+        const { rowId, ...propertyApi } = property
+
+        if (typeof propertyApi.data === 'object') {
           return {
-            ...property,
-            data: property?.data?.id ?? null
+            ...propertyApi,
+            data: propertyApi?.data?.id ?? null
           }
         }
 
-        return property
+        return propertyApi
       })
 
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
     if (asset.changes.customMetadata === true) {
-      update.metadata = customMetadata
+      update.metadata = customMetadata?.map((metadata: CustomMetadata): CustomMetadataApi => {
+        const { rowId, ...metadataApi } = metadata
+        return metadataApi
+      })
     }
 
     if (asset.changes.imageSettings === true) {
