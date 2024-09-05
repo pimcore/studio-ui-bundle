@@ -15,17 +15,9 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    button: css`
-      padding: 6px;
-      height: auto;
-      line-height: 0;
-
-      &.icon-button--theme-secondary {
-        color: ${token.colorText};
-      }
-
-      &.icon-button--minimal {
-        padding: 0;
+    groupItem: css`
+      .ant-dropdown-menu-item-group-list {
+        margin: 0 !important;
       }
     `
   }

@@ -11,22 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import { Menu } from 'antd'
+import { type MenuDividerType } from '../../../dropdown'
+import React from 'react'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    button: css`
-      padding: 6px;
-      height: auto;
-      line-height: 0;
-
-      &.icon-button--theme-secondary {
-        color: ${token.colorText};
-      }
-
-      &.icon-button--minimal {
-        padding: 0;
-      }
-    `
-  }
-})
+export const DividerItem = (props: MenuDividerType): React.JSX.Element => {
+  return (
+    <Menu.Divider { ...props } />
+  )
+}

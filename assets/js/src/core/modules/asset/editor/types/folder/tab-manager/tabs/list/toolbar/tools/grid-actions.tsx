@@ -12,7 +12,6 @@
 */
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { Dropdown, type MenuProps } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useListSelectedRows } from '../../hooks/use-list'
@@ -23,6 +22,7 @@ import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engin
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
@@ -42,7 +42,7 @@ export const GridActions = (): React.JSX.Element => {
     }
   }, [data])
 
-  const menu: MenuProps = {
+  const menu: DropdownMenuProps = {
     items: [
       {
         key: '1',

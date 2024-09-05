@@ -13,19 +13,14 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
-    button: css`
-      padding: 6px;
-      height: auto;
-      line-height: 0;
+    selectionButton: css`
+      color: transparent;
+      transition: color 0.3s;
 
-      &.icon-button--theme-secondary {
-        color: ${token.colorText};
-      }
-
-      &.icon-button--minimal {
-        padding: 0;
+      &.selection-button--active {
+        color: ${token.colorPrimary};
       }
     `
   }

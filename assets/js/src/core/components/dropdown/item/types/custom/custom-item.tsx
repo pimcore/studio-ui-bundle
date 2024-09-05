@@ -11,22 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import React from 'react'
+import { type MenuItemCustomType } from '../../../dropdown'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    button: css`
-      padding: 6px;
-      height: auto;
-      line-height: 0;
-
-      &.icon-button--theme-secondary {
-        color: ${token.colorText};
-      }
-
-      &.icon-button--minimal {
-        padding: 0;
-      }
-    `
-  }
-})
+export const CustomItem = ({ component }: MenuItemCustomType): React.JSX.Element => {
+  return (
+    <>
+      {component}
+    </>
+  )
+}

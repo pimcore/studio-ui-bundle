@@ -15,17 +15,17 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    button: css`
-      padding: 6px;
-      height: auto;
-      line-height: 0;
+    dropdownItem: css`
+      &.ant-dropdown-menu-item-active {
+        background-color: ${token.colorBgContainer} !important;
 
-      &.icon-button--theme-secondary {
-        color: ${token.colorText};
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04) !important;
+        }
       }
 
-      &.icon-button--minimal {
-        padding: 0;
+      &.default-item--with-icon-right {
+        padding-right: 4px !important;
       }
     `
   }
