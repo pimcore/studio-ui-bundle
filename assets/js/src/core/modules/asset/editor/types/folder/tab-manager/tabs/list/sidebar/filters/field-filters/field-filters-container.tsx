@@ -13,12 +13,13 @@
 
 import React from 'react'
 import { useListGridConfig } from '../../../hooks/use-list'
-import { Dropdown, Space, type MenuProps } from 'antd'
+import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { FieldFiltersListContainer } from './field-filters-list-container'
 import { useFilters } from '../hooks/use-filters'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -43,8 +44,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     </Space>
   )
 
-  function getFormattedDropDownMenu (): MenuProps['items'] {
-    const formattedDropDownMenu: MenuProps['items'] = []
+  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
+    const formattedDropDownMenu: DropdownMenuProps['items'] = []
     let index = 0
 
     for (const [key, value] of Object.entries(dropDownMenu)) {

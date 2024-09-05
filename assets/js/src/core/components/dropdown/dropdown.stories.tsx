@@ -382,7 +382,43 @@ export const Submenu = {
   args: {
     children: <DropdownButton>Hover</DropdownButton>,
     menu: {
+      selectable: true,
+      multiple: true,
       items: SubmenuDropdownItems
+    }
+  }
+}
+
+export const ContextMenu = {
+  args: {
+    children: <Content>Dropdown will behave like a context menu</Content>,
+    trigger: ['contextMenu'],
+    menu: {
+      items: [
+        {
+          key: 'context-1',
+          label: 'Item 1',
+          onClick: () => {
+            console.log('Item 1 clicked')
+          }
+        },
+
+        {
+          key: 'context-2',
+          label: 'Item 2',
+          onClick: () => {
+            console.log('Item 2 clicked')
+          }
+        },
+
+        {
+          key: 'context-3',
+          label: 'Item 3',
+          onClick: () => {
+            console.log('Item 3 clicked')
+          }
+        },
+      ]
     }
   }
 }

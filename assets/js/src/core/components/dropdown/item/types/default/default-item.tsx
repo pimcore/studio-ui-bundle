@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ComponentType } from 'react'
 import { type MenuItemType } from '../../../dropdown'
 import { Flex, Menu } from 'antd'
 import { useStyles } from './default-item.styles'
@@ -22,32 +22,43 @@ export interface DefaultItemProps extends MenuItemType {
   id: React.Key
 }
 
-export const WithExtendedApi = (Component: typeof Menu.Item) => {
-  return ({ label, key, selectable, id, ...props }: DefaultItemProps) => {
+export const WithExtendedApi = (Component: typeof Menu.Item): ComponentType<DefaultItemProps> => {
+  const DecoratedMenuItem = ({ label, key, selectable, id, ...props }: DefaultItemProps): React.JSX.Element => {
     const { styles } = useStyles()
-    const { selectionType } = useSelection();
+    const { selectionType } = useSelection()
     const classes = [styles.dropdownItem]
-    
+
     classes.push('is-custom-item')
 
-    if (selectable && selectionType !== 'disabled') {
+    if (selectable === true && selectionType !== 'disabled') {
       classes.push('default-item--with-icon-right')
     }
 
-    return <Component
-      id={ key as string }
-      { ...props }
-      className={ classes.join(' ') }
-    >
-      <Flex gap={8} justify='space-between' align='center'>
-        <span>{label}</span>
+    return (
+      <Component
+        id={ key as string }
+        { ...props }
+        className={ classes.join(' ') }
+      >
+        <Flex
+          align='center'
+          gap={ 8 }
+          justify='space-between'
+        >
+          <span>{label}</span>
 
-        {selectable && selectionType !== 'disabled' && (
-          <SelectionButton key={id} id={id} />
-        )}
-      </Flex>
-    </Component>
+          {selectable === true && selectionType !== 'disabled' && (
+            <SelectionButton
+              id={ id }
+              key={ id }
+            />
+          )}
+        </Flex>
+      </Component>
+    )
   }
+
+  return DecoratedMenuItem
 }
 
-export const DefaultItem = WithExtendedApi(Menu.Item);
+export const DefaultItem = WithExtendedApi(Menu.Item)

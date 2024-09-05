@@ -1,5 +1,19 @@
-import React, { useContext } from "react"
-import { ISelectionContext, SelectionContext, SelectionType } from "../selection-provider";
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import type React from 'react'
+import { useContext } from 'react'
+import { type ISelectionContext, SelectionContext, SelectionType } from '../selection-provider'
 
 export interface UseSelectionHookReturn extends ISelectionContext {
   isSelected: (key: React.Key) => boolean
@@ -9,42 +23,42 @@ export interface UseSelectionHookReturn extends ISelectionContext {
 }
 
 export const useSelection = (): UseSelectionHookReturn => {
-  const { selectedKeys, setSelectedKeys, selectionType, ...context } = useContext(SelectionContext);
+  const { selectedKeys, setSelectedKeys, selectionType, ...context } = useContext(SelectionContext)
 
-  function isSelected(key: React.Key): boolean {
-    return selectedKeys.includes(key);
+  function isSelected (key: React.Key): boolean {
+    return selectedKeys.includes(key)
   }
 
-  function select(key: React.Key): void {
+  function select (key: React.Key): void {
     if (selectionType === SelectionType.Disabled) {
-      return;
+      return
     }
 
     if (selectionType === SelectionType.Single) {
-      setSelectedKeys([key]);
-      return;
+      setSelectedKeys([key])
+      return
     }
 
     if (selectionType === SelectionType.Multiple) {
-      setSelectedKeys([...selectedKeys, key]);
+      setSelectedKeys([...selectedKeys, key])
     }
   }
 
-  function deselect(key: React.Key): void {
+  function deselect (key: React.Key): void {
     if (selectionType === SelectionType.Disabled) {
-      return;
+      return
     }
 
-    setSelectedKeys(selectedKeys.filter((selectedKey) => selectedKey !== key));
+    setSelectedKeys(selectedKeys.filter((selectedKey) => selectedKey !== key))
   }
 
-  function toggle(key: React.Key): void {
+  function toggle (key: React.Key): void {
     if (isSelected(key)) {
-      deselect(key);
-      return;
+      deselect(key)
+      return
     }
 
-    select(key);
+    select(key)
   }
 
   return {
@@ -56,5 +70,5 @@ export const useSelection = (): UseSelectionHookReturn => {
     setSelectedKeys,
     selectionType,
     ...context
-  };
+  }
 }

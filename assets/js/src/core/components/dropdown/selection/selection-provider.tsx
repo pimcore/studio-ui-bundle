@@ -1,5 +1,18 @@
-import React, { createContext, useEffect, useState } from "react";
-import { DropdownProps } from "../dropdown";
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { type DropdownProps } from '../dropdown'
 
 export enum SelectionType {
   Disabled = 'disabled',
@@ -19,35 +32,35 @@ export const SelectionContext = createContext<ISelectionContext>({
   selectedKeys: [],
   setSelectedKeys: () => {},
   onSelected: () => {}
-});
+})
 
 export interface SelectionProviderProps {
-  selectedKeys?: ISelectionContext['selectedKeys'],
-  selectionType: SelectionType,
+  selectedKeys?: ISelectionContext['selectedKeys']
+  selectionType: SelectionType
   children: React.ReactNode
   onSelected?: DropdownProps['onSelect']
 }
 
 export const SelectionProvider = ({ children, onSelected, ...props }: SelectionProviderProps): React.JSX.Element => {
-  const [selected, setSelected] = useState<ISelectionContext["selectedKeys"]>(props.selectedKeys || []);
+  const [selected, setSelected] = useState<ISelectionContext['selectedKeys']>(props.selectedKeys ?? [])
 
   useEffect(() => {
-    setSelected(props.selectedKeys || [])
-  }, [props.selectedKeys]);
+    setSelected(props.selectedKeys ?? [])
+  }, [props.selectedKeys])
 
-  return (
-    <SelectionContext.Provider value={{ selectedKeys: selected, setSelectedKeys, selectionType: props.selectionType, onSelected }}>
+  return useMemo(() => (
+    <SelectionContext.Provider value={ { selectedKeys: selected, setSelectedKeys, selectionType: props.selectionType, onSelected } }>
       {children}
     </SelectionContext.Provider>
-  )
+  ), [selected, props.selectionType, children])
 
-  function setSelectedKeys(selected: React.Key[]): void {
+  function setSelectedKeys (selected: React.Key[]): void {
     setSelected(() => {
       if (onSelected !== undefined) {
-        onSelected(selected);
+        onSelected(selected)
       }
-      
+
       return selected
-    });
+    })
   }
 }

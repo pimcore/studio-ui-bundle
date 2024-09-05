@@ -12,8 +12,10 @@
 */
 
 import { type Meta } from '@storybook/react'
+import React from 'react'
 import { PreviewCard as PreviewCardComponent, SizeTypes } from './preview-card'
-import { type DropdownMenuItemProps } from '@Pimcore/components/dropdown/old/dropdown-menu'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '../icon/icon'
 
 // @todo refactor die to naming and component splitting
 const config: Meta = {
@@ -27,30 +29,12 @@ const config: Meta = {
 
 export default config
 
-const dropdownItems: DropdownMenuItemProps[] = [
+const dropdownItems: DropdownProps['menu']['items'] = [
   {
-    iconLeft: 'target',
+    key: 'locate-in-tree',
+    icon: <Icon name="target" />,
     label: 'preview-card.locate-in-tree'
   },
-  {
-    iconLeft: 'info-circle-outlined',
-    label: 'preview-card.info',
-    iconRight: {
-      name: 'right-outlined'
-    }
-  },
-  {
-    iconLeft: 'rich-edit',
-    label: 'preview-card.rename'
-  },
-  {
-    iconLeft: 'download-02',
-    label: 'preview-card.download-zip'
-  },
-  {
-    iconLeft: 'trash',
-    label: 'preview-card.delete'
-  }
 ]
 
 export const _default = {

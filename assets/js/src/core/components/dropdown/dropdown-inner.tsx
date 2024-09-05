@@ -11,47 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, type ReactNode } from 'react'
-import { Dropdown as AntdDropdown, type DropdownProps as AntdDropdownProps, Menu, type MenuProps } from 'antd'
+import React from 'react'
+import { Dropdown as AntdDropdown, Menu } from 'antd'
 import { renderDropdownItem } from './item/utils/dropdown-item'
+import { type DropdownProps, type ItemType } from './dropdown'
 
-export type OldItemType = Extract<MenuProps['items'], any[]>[0]
-export type OldMenuItemType = Extract<OldItemType, { danger?: boolean }>
-export type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
-export type OldSubMenuType = Extract<OldItemType, { children: OldItemType[] }>
-export type MenuDividerType = Extract<OldItemType, { type: 'divider' }>
-
-export interface MenuItemType extends OldMenuItemType {
-  selectable?: boolean
-}
-
-export interface SubMenuItemType extends Omit<OldSubMenuType, 'children'> {
-  children: ItemType[]
-}
-
-export interface MenuItemGroupType extends Omit<OldMenuItemGroupType, 'children'> {
-  children?: ItemType[]
-}
-
-export interface MenuItemCustomType extends Pick<MenuItemType, 'key'> {
-  type: 'custom'
-  component: ReactNode
-}
-
-export type ItemType = MenuItemType | MenuItemGroupType | SubMenuItemType | MenuDividerType | MenuItemCustomType
-
-export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
-  items?: ItemType[]
-}
-
-export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'> {
-  menu: DropdownMenuProps,
-  selectedKeys?: string[],
-  onSelect?: (keys: []) => void
-}
-
-export const DropdownInner = ({ selectedKeys, onSelect, menu, ...props}: DropdownProps): React.JSX.Element => {
-  const { items } = menu;
+export const DropdownInner = ({ selectedKeys, onSelect, menu, ...props }: DropdownProps): React.JSX.Element => {
+  const { items } = menu
 
   return (
     <AntdDropdown

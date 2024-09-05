@@ -16,7 +16,7 @@ import React, { useState } from 'react'
 import { useStyle } from './preview-card.styles'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
-import { DropdownMenu, type DropdownMenuItemProps } from '../dropdown/old/dropdown-menu'
+import { Dropdown, type DropdownProps } from '../dropdown/dropdown'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 
 export enum SizeTypes {
@@ -26,7 +26,7 @@ export enum SizeTypes {
 
 interface PreviewCardProps {
   name: string
-  dropdownItems: DropdownMenuItemProps[]
+  dropdownItems: DropdownProps['menu']['items']
   imgSrc?: string
   size?: SizeTypes
   onClick?: (e) => void
@@ -76,9 +76,10 @@ export const PreviewCard = ({
         onChange={ onChangeSelection }
         onClick={ (e) => { e.stopPropagation() } }
       />
-      <DropdownMenu
-        dropdownItems={ dropdownItems }
-        openClassName='dots-button-open-dropdown'
+      <Dropdown
+        menu={ {
+          items: dropdownItems
+        } }
         placement='bottomLeft'
       >
         <Button
@@ -90,7 +91,7 @@ export const PreviewCard = ({
           onClick={ (e) => { e.stopPropagation() } }
           size="small"
         />
-      </DropdownMenu>
+      </Dropdown>
       <Meta
         title={ name }
       />

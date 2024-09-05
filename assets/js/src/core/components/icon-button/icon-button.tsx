@@ -28,7 +28,7 @@ const Component = ({ icon, children, className, minimal = false, type = 'link', 
   const buttonClasses = [styles.button, className, `icon-button--theme-${theme}`]
 
   if (minimal) {
-    buttonClasses.push('icon-button--minimal');
+    buttonClasses.push('icon-button--minimal')
   }
 
   return (

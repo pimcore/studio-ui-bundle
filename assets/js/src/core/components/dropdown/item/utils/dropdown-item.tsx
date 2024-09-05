@@ -45,7 +45,12 @@ export const renderDropdownItem = ({ item }: DropdownItemProps): React.JSX.Eleme
   }
 
   if (!('type' in item) && !('children' in item)) {
-    return <DefaultItem { ...item } id={item.key} />
+    return (
+      <DefaultItem
+        { ...item }
+        id={ item.key }
+      />
+    )
   }
 
   return <></>

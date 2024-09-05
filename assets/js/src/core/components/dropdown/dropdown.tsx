@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, type ReactNode } from 'react'
-import { Dropdown as AntdDropdown, type DropdownProps as AntdDropdownProps, Menu, type MenuProps } from 'antd'
+import React, { type ReactNode } from 'react'
+import { type DropdownProps as AntdDropdownProps, type MenuProps } from 'antd'
 import { DropdownInner } from './dropdown-inner'
 import { SelectionProvider, SelectionType } from './selection/selection-provider'
 
@@ -46,22 +46,29 @@ export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
 }
 
 export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'> {
-  menu: DropdownMenuProps,
-  selectedKeys?: React.Key[],
+  menu: DropdownMenuProps
+  selectedKeys?: React.Key[]
   onSelect?: (keys: React.Key[]) => void
 }
 
-export const Dropdown = ({ selectedKeys, onSelect, menu, ...props}: DropdownProps): React.JSX.Element => {
-  const { selectable, multiple } = menu;
+export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownProps): React.JSX.Element => {
+  const { selectable, multiple } = menu
   let selectionType = SelectionType.Disabled
 
-  if (selectable) {
-    selectionType = multiple ? SelectionType.Multiple : SelectionType.Single
+  if (selectable === true) {
+    selectionType = multiple === true ? SelectionType.Multiple : SelectionType.Single
   }
 
   return (
-    <SelectionProvider selectionType={selectionType} selectedKeys={selectedKeys}>
-      <DropdownInner { ...props } menu={menu} onSelect={onSelect} />
+    <SelectionProvider
+      selectedKeys={ selectedKeys }
+      selectionType={ selectionType }
+    >
+      <DropdownInner
+        { ...props }
+        menu={ menu }
+        onSelect={ onSelect }
+      />
     </SelectionProvider>
   )
 }
