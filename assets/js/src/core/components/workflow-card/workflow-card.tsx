@@ -12,10 +12,11 @@
 */
 
 import React, { type ReactNode, useEffect } from 'react'
-import { Badge, Button, Card, Dropdown, type MenuProps, Tag } from 'antd'
+import { Badge, Button, Card, Tag } from 'antd'
 import { type WorkflowDetails } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
+import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -25,10 +26,10 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
-    const [items, setItems] = React.useState<MenuProps['items']>([])
+    const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
     useEffect(() => {
-      const items: MenuProps['items'] = []
+      const items: DropdownMenuProps['items'] = []
 
       const mergedActions = [
         ...workflow.allowedTransitions ?? [],

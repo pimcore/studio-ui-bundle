@@ -40,5 +40,11 @@ sidebarManager.registerButton({
     name={ 'focal-point' }
     options={ { width: '16px', height: '16px' } }
         />,
-  component: <FocalPointSidebarButton />
+  component: <FocalPointSidebarButton
+    icon={ <Icon
+      name={ 'focal-point' }
+      options={ { width: '16px', height: '16px' } }
+           /> }
+    key={ 'focal-point' }
+             />
 })

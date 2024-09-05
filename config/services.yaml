@@ -5,6 +5,7 @@ services:
         public: false
         bind:
             $studioUrlUrlPath: '%pimcore_studio_ui.url_path%'
+            $studioMercureClientUrl: '%pimcore_studio_backend.mercure_settings.hub_url_client%'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services

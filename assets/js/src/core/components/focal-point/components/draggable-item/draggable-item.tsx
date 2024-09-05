@@ -13,11 +13,10 @@
 
 import React, { useContext } from 'react'
 import { useDraggable, type UseDraggableArguments } from '@dnd-kit/core'
-import { Button } from '@Pimcore/components/button/button'
 import { CSS } from '@dnd-kit/utilities'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './draggable-item.styles'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface DraggableItemProps {
   top?: number
@@ -51,9 +50,9 @@ export const DraggableItem = ({ top, left, children, disabled, active = false }:
       ref={ containerRef }
     >
       {active && (
-        <Button
+        <IconButton
           hidden={ !active }
-          icon={ <Icon name={ 'focal-point' } /> }
+          icon={ 'focal-point' }
           type={ 'dashed' }
           { ...attributes }
           { ...listeners }

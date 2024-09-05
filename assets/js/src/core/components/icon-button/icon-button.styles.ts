@@ -23,6 +23,10 @@ export const useStyles = createStyles(({ token, css }) => {
       &.icon-button--theme-secondary {
         color: ${token.colorText};
       }
+
+      &.icon-button--minimal {
+        padding: 0;
+      }
     `
   }
 })

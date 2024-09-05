@@ -22,7 +22,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .sidebar__navigation {
           display: flex;
           width: 45px;
-          padding: 4px 8px;
+          padding: 4px 8px ${token.paddingSM}px 8px;
           flex-direction: column;
           align-items: center;
           flex-shrink: 0;
@@ -55,11 +55,11 @@ export const useStyle = createStyles(({ token, css }) => {
                   align-items: center;
 
                   &:not(.active).entry--highlighted {
-                    .pimcore-icon {
-                      background: ${token.colorFillQuaternary};
-                      border-radius: 2px;
-                      outline: 8px solid ${token.colorFillQuaternary};
-                    } 
+                      .pimcore-icon {
+                          background: ${token.colorFillQuaternary};
+                          border-radius: 2px;
+                          outline: 8px solid ${token.colorFillQuaternary};
+                      }
                   }
 
                   .pimcore-icon {
@@ -81,8 +81,20 @@ export const useStyle = createStyles(({ token, css }) => {
                       }
                   }
               }
+          },
+      
+          .sidebar__navigation__buttons
+            .button {
+              &.button--highlighted {
+                .pimcore-icon {
+                    background: ${token.colorFillQuaternary};
+                    border-radius: 2px;
+                    outline: 8px solid ${token.colorFillQuaternary};
+                  color: ${token.colorPrimary};
+                }
+              }
+            }
           }
-      }
       
       .sidebar__content {
         position: relative;
