@@ -33,6 +33,7 @@ interface NoteAndEventCardProps {
   className?: string
 }
 
+
 export const NoteAndEventCard = ({
   title,
   type,
@@ -130,3 +131,5 @@ export const NoteAndEventCard = ({
     setIsExpanded(!isExpanded)
   }
 }
+
+// collaps
