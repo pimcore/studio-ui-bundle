@@ -12,7 +12,7 @@
 */
 
 import {
-  type DataProperty
+  type DataProperty as DataPropertyApi
 } from '@Pimcore/modules/asset/properties-api-slice.gen'
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -25,6 +25,7 @@ import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/mod
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -55,11 +56,20 @@ export const Table = ({
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
-  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
+  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: string, columnId: string }>>([])
+
+  const enrichProperties = (data: DataPropertyApi[]): DataProperty[] => {
+    return data.map((item) => {
+      return {
+        ...item,
+        rowId: crypto.randomUUID()
+      }
+    })
+  }
 
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
-      setProperties(data?.items)
+      setProperties(enrichProperties(data?.items))
     }
   }, [data])
 
@@ -172,14 +182,14 @@ export const Table = ({
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedProperties = [...(properties ?? [])]
     const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key && !property.inherited)
-    console.log(propertyIndex, updatedProperties.at(propertyIndex))
     const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
     updatedProperties[propertyIndex] = updatedProperty
     const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)
-      setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+      console.log('rowdata', rowData)
+      setModifiedCells([...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
 
@@ -196,8 +206,9 @@ export const Table = ({
               modifiedCells={ modifiedCells }
               onUpdateCellData={ onUpdateCellData }
               resizable
+              setRowId={ (row: DataProperty) => row.rowId }
             />
-                    )}
+          )}
 
           {propertiesTableTab === 'all' && (
             <>
@@ -208,7 +219,6 @@ export const Table = ({
                 autoWidth
                 columns={ allTableColumns }
                 data={ gridDataInherited }
-                onUpdateCellData={ onUpdateCellData }
                 resizable
               />
             </>

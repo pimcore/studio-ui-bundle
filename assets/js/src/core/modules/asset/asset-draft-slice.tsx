@@ -14,8 +14,16 @@
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
-import { type DataProperty } from './properties-api-slice.gen'
-import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { type DataProperty as DataPropertyApi } from './properties-api-slice.gen'
+import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+
+export type DataProperty = DataPropertyApi & {
+  rowId: string
+}
+
+export type CustomMetadata = CustomMetadataApi & {
+  rowId: string
+}
 
 interface propertyAction {
   assetId: number

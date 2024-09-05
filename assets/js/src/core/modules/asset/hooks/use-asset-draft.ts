@@ -17,7 +17,7 @@ import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
   addPropertyToAsset,
-  assetReceived,
+  assetReceived, type CustomMetadata, type DataProperty,
   removeAsset,
   removeCustomMetadataFromAsset,
   removeImageSettingFromAsset,
@@ -30,9 +30,7 @@ import {
   updatePropertyForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
-import { type DataProperty } from '../properties-api-slice.gen'
 import {
-  type CustomMetadata
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
