@@ -13,7 +13,7 @@
 
 import { type Meta } from '@storybook/react'
 import React from 'react'
-import { Dropdown, DropdownProps } from './dropdown'
+import { Dropdown, type DropdownProps } from './dropdown'
 import { DropdownButton } from '../dropdown-button/dropdown-button'
 import { Icon } from '../icon/icon'
 import { Button } from '../button/button'
@@ -33,7 +33,7 @@ export default config
 
 const demoData: DropdownProps = {
   children: <DropdownButton>Hover</DropdownButton>,
-  
+
   menu: {
     selectable: true,
     multiple: false,
@@ -84,8 +84,7 @@ const demoData: DropdownProps = {
           }
         ]
       },
-      
-      
+
       {
         key: '1.x',
         type: 'divider',
@@ -95,7 +94,7 @@ const demoData: DropdownProps = {
       {
         key: '1',
         label: 'Item 1',
-        selectable: true,
+        selectable: true
       },
 
       {
@@ -148,12 +147,12 @@ const demoData: DropdownProps = {
             onClick: () => {
               console.log('Item 2.1 clicked')
             }
-          },
+          }
         ],
         onClick: () => {
           console.log('Item 2 clicked')
         }
-      },
+      }
     ]
   }
 }
@@ -187,7 +186,7 @@ const SimpleDropdownItems: DropdownProps['menu']['items'] = [
     onClick: () => {
       console.log('Item 3 clicked')
     }
-  },
+  }
 ]
 
 export const Simple = {
@@ -225,7 +224,7 @@ const SelectableDropdownItems: DropdownProps['menu']['items'] = [
     onClick: () => {
       console.log('Item 3 clicked')
     }
-  },
+  }
 ]
 
 export const Selectable = {
@@ -264,7 +263,7 @@ const MultipleSelectableDropdownItems: DropdownProps['menu']['items'] = [
     onClick: () => {
       console.log('Item 3 clicked')
     }
-  },
+  }
 ]
 
 export const MultiSelectable = {
@@ -298,7 +297,7 @@ const CustomDropdownItems: DropdownProps['menu']['items'] = [
     component: (
       <Button>Custom Button 3</Button>
     )
-  },
+  }
 ]
 
 export const CustomSelectable = {
@@ -323,7 +322,7 @@ const GroupedDropdownItems: DropdownProps['menu']['items'] = [
           console.log('Item 1 clicked')
         }
       },
-    
+
       {
         key: 'grouped-2',
         label: 'Item 2',
@@ -331,14 +330,14 @@ const GroupedDropdownItems: DropdownProps['menu']['items'] = [
           console.log('Item 2 clicked')
         }
       },
-    
+
       {
         key: 'grouped-3',
         label: 'Item 3',
         onClick: () => {
           console.log('Item 3 clicked')
         }
-      },
+      }
     ]
   }
 ]
@@ -357,7 +356,7 @@ const SubmenuDropdownItems: DropdownProps['menu']['items'] = [
     key: 'submenu-1',
     label: 'Default',
     children: [
-      ...SimpleDropdownItems,
+      ...SimpleDropdownItems
     ]
   },
 
@@ -365,7 +364,7 @@ const SubmenuDropdownItems: DropdownProps['menu']['items'] = [
     key: 'submenu-2',
     label: 'Selectable',
     children: [
-      ...SelectableDropdownItems,
+      ...SelectableDropdownItems
     ]
   },
 
@@ -373,7 +372,7 @@ const SubmenuDropdownItems: DropdownProps['menu']['items'] = [
     key: 'submenu-3',
     label: 'Custom',
     children: [
-      ...CustomDropdownItems,
+      ...CustomDropdownItems
     ]
   }
 ]
@@ -417,7 +416,7 @@ export const ContextMenu = {
           onClick: () => {
             console.log('Item 3 clicked')
           }
-        },
+        }
       ]
     }
   }
