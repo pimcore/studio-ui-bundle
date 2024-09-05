@@ -14,7 +14,7 @@
 import React from 'react'
 import { type Meta } from '@storybook/react'
 import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeline'
-import {VersionAccordion} from "@Pimcore/components/version-accordion/version-accordion";
+import { VersionAccordion } from '@Pimcore/components/version-accordion/version-accordion'
 
 const config: Meta = {
   title: 'Components/Data Display/VerticalTimeline',
