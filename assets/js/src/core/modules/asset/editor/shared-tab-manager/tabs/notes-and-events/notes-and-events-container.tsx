@@ -14,7 +14,7 @@
 import React, { useContext, useState } from 'react'
 import {
   NotesAndEventsTabView
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view-copy'
 import {
   useNoteDeleteByIdMutation,
   useNoteElementGetCollectionQuery
