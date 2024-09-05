@@ -13,8 +13,7 @@
 
 import React, { useState, type ReactNode } from 'react'
 import { Dropdown as AntdDropdown, type DropdownProps as AntdDropdownProps, Menu, type MenuProps } from 'antd'
-import { DropdownInner } from './dropdown-inner'
-import { SelectionProvider, SelectionType } from './selection/selection-provider'
+import { renderDropdownItem } from './item/utils/dropdown-item'
 
 export type OldItemType = Extract<MenuProps['items'], any[]>[0]
 export type OldMenuItemType = Extract<OldItemType, { danger?: boolean }>
@@ -47,21 +46,27 @@ export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
 
 export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'> {
   menu: DropdownMenuProps,
-  selectedKeys?: React.Key[],
-  onSelect?: (keys: React.Key[]) => void
+  selectedKeys?: string[],
+  onSelect?: (keys: []) => void
 }
 
-export const Dropdown = ({ selectedKeys, onSelect, menu, ...props}: DropdownProps): React.JSX.Element => {
-  const { selectable, multiple } = menu;
-  let selectionType = SelectionType.Disabled
-
-  if (selectable) {
-    selectionType = multiple ? SelectionType.Multiple : SelectionType.Single
-  }
+export const DropdownInner = ({ selectedKeys, onSelect, menu, ...props}: DropdownProps): React.JSX.Element => {
+  const { items } = menu;
 
   return (
-    <SelectionProvider selectionType={selectionType} selectedKeys={selectedKeys}>
-      <DropdownInner { ...props } menu={menu} onSelect={onSelect} />
-    </SelectionProvider>
+    <AntdDropdown
+      { ...props }
+      dropdownRender={ () => {
+        return (
+          <>
+            <Menu>
+              {items?.map((item: ItemType) => renderDropdownItem({ item }))}
+            </Menu>
+          </>
+        )
+      } }
+    >
+      {props.children}
+    </AntdDropdown>
   )
 }

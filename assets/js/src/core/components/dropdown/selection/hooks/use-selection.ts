@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
-import { SelectionContext, SelectionType } from "../selection-provider";
+import { ISelectionContext, SelectionContext, SelectionType } from "../selection-provider";
 
-export interface UseSelectionHookReturn {
+export interface UseSelectionHookReturn extends ISelectionContext {
   isSelected: (key: React.Key) => boolean
   select: (key: React.Key) => void
   deselect: (key: React.Key) => void
@@ -9,7 +9,7 @@ export interface UseSelectionHookReturn {
 }
 
 export const useSelection = (): UseSelectionHookReturn => {
-  const { selectedKeys, setSelectedKeys, selectionType } = useContext(SelectionContext);
+  const { selectedKeys, setSelectedKeys, selectionType, ...context } = useContext(SelectionContext);
 
   function isSelected(key: React.Key): boolean {
     return selectedKeys.includes(key);
@@ -52,5 +52,9 @@ export const useSelection = (): UseSelectionHookReturn => {
     select,
     deselect,
     toggle,
+    selectedKeys,
+    setSelectedKeys,
+    selectionType,
+    ...context
   };
 }

@@ -13,25 +13,26 @@
 
 import { Menu } from 'antd'
 import { type ItemType, type MenuItemGroupType } from '../../../dropdown'
-import { DropdownItem } from '../../dropdown-item'
+import { renderDropdownItem } from '../../utils/dropdown-item'
 import React from 'react'
 import { useStyles } from './group-item.styles'
 
-export const GroupItem = ({ children, label, ...props }: MenuItemGroupType): React.JSX.Element => {
-  const { styles } = useStyles()
+export const WithExtendedApi = (Component: typeof Menu.ItemGroup) => {
+  return ({ children, label, ...props }: MenuItemGroupType) => {
+    const { styles } = useStyles()
 
-  return (
-    <Menu.ItemGroup
-      title={ label }
-      { ...props }
-      className={ styles.groupItem }
-    >
-      {children?.map((item: ItemType) => (
-        <DropdownItem
-          item={ item }
-          key={ item.key }
-        />
-      ))}
-    </Menu.ItemGroup>
-  )
+    return (
+      <Component
+        title={ label }
+        { ...props }
+        className={ styles.groupItem }
+      >
+        {children?.map((item: ItemType) => (
+          renderDropdownItem({item})
+        ))}
+      </Component>
+    )
+  }
 }
+
+export const GroupItem = WithExtendedApi(Menu.ItemGroup);

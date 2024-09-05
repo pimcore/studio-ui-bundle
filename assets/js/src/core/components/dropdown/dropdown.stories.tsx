@@ -36,7 +36,7 @@ const demoData: DropdownProps = {
   
   menu: {
     selectable: true,
-    multiple: true,
+    multiple: false,
     items: [
       {
         key: '1.0',
@@ -47,7 +47,7 @@ const demoData: DropdownProps = {
             key: '1.0.0',
             label: 'Item 1.0.0',
             icon: <Icon name="trash" />,
-            selectable: false,
+            selectable: true,
             onClick: () => {
               console.log('Item 1.0.0 clicked')
             }
@@ -61,9 +61,33 @@ const demoData: DropdownProps = {
           }
         ]
       },
+
+      {
+        key: '22.0',
+        label: 'Item 1.0',
+        children: [
+          {
+            key: '12.0.0',
+            label: 'Item 12.0.0',
+            icon: <Icon name="trash" />,
+            selectable: true,
+            onClick: () => {
+              console.log('Item 1.0.0 clicked')
+            }
+          },
+          {
+            key: '12.0.1',
+            label: 'Item 12.0.1',
+            onClick: () => {
+              console.log('Item 1.0.1 clicked')
+            }
+          }
+        ]
+      },
+      
       
       {
-        key: '1',
+        key: '1.x',
         type: 'divider',
         dashed: true
       },
@@ -71,7 +95,7 @@ const demoData: DropdownProps = {
       {
         key: '1',
         label: 'Item 1',
-        selectable: false,
+        selectable: true,
       },
 
       {
@@ -110,7 +134,6 @@ const demoData: DropdownProps = {
                 <Header title='Title' />
                 <Button>Custom Button</Button>
               </Content>
-              
             )
           },
 
@@ -121,6 +144,7 @@ const demoData: DropdownProps = {
           {
             key: '2.1',
             label: 'Item 2.1',
+            selectable: true,
             onClick: () => {
               console.log('Item 2.1 clicked')
             }
@@ -140,3 +164,225 @@ export const _default = {
   }
 }
 
+const SimpleDropdownItems: DropdownProps['menu']['items'] = [
+  {
+    key: 'simple-1',
+    label: 'Item 1',
+    onClick: () => {
+      console.log('Item 1 clicked')
+    }
+  },
+
+  {
+    key: 'simple-2',
+    label: 'Item 2',
+    onClick: () => {
+      console.log('Item 2 clicked')
+    }
+  },
+
+  {
+    key: 'simple-3',
+    label: 'Item 3',
+    onClick: () => {
+      console.log('Item 3 clicked')
+    }
+  },
+]
+
+export const Simple = {
+  args: {
+    children: <DropdownButton>Hover</DropdownButton>,
+    menu: {
+      items: SimpleDropdownItems
+    }
+  }
+}
+
+const SelectableDropdownItems: DropdownProps['menu']['items'] = [
+  {
+    key: 'selectable-1',
+    label: 'Item 1',
+    selectable: true,
+    onClick: () => {
+      console.log('Item 1 clicked')
+    }
+  },
+
+  {
+    key: 'selectable-2',
+    label: 'Item 2',
+    selectable: true,
+    onClick: () => {
+      console.log('Item 2 clicked')
+    }
+  },
+
+  {
+    key: 'selectable-3',
+    label: 'Item 3',
+    selectable: true,
+    onClick: () => {
+      console.log('Item 3 clicked')
+    }
+  },
+]
+
+export const Selectable = {
+  args: {
+    children: <DropdownButton>Hover</DropdownButton>,
+    menu: {
+      selectable: true,
+      items: SelectableDropdownItems
+    }
+  }
+}
+
+const MultipleSelectableDropdownItems: DropdownProps['menu']['items'] = [
+  {
+    key: 'multi-selectable-1',
+    label: 'Item 1',
+    selectable: true,
+    onClick: () => {
+      console.log('Item 1 clicked')
+    }
+  },
+
+  {
+    key: 'multi-selectable-2',
+    label: 'Item 2',
+    selectable: true,
+    onClick: () => {
+      console.log('Item 2 clicked')
+    }
+  },
+
+  {
+    key: 'multi-selectable-3',
+    label: 'Item 3',
+    selectable: true,
+    onClick: () => {
+      console.log('Item 3 clicked')
+    }
+  },
+]
+
+export const MultiSelectable = {
+  args: {
+    children: <DropdownButton>Hover</DropdownButton>,
+    menu: {
+      selectable: true,
+      multiple: true,
+      items: MultipleSelectableDropdownItems
+    }
+  }
+}
+
+const CustomDropdownItems: DropdownProps['menu']['items'] = [
+  {
+    key: 'custom-1',
+    type: 'custom',
+    component: (
+      <Button>Custom Button 1</Button>
+    )
+  },
+
+  {
+    key: 'custom-2',
+    type: 'divider'
+  },
+
+  {
+    key: 'custom-3',
+    type: 'custom',
+    component: (
+      <Button>Custom Button 3</Button>
+    )
+  },
+]
+
+export const CustomSelectable = {
+  args: {
+    children: <DropdownButton>Hover</DropdownButton>,
+    menu: {
+      items: CustomDropdownItems
+    }
+  }
+}
+
+const GroupedDropdownItems: DropdownProps['menu']['items'] = [
+  {
+    type: 'group',
+    key: 'group-1',
+    label: 'Group 1',
+    children: [
+      {
+        key: 'grouped-1',
+        label: 'Item 1',
+        onClick: () => {
+          console.log('Item 1 clicked')
+        }
+      },
+    
+      {
+        key: 'grouped-2',
+        label: 'Item 2',
+        onClick: () => {
+          console.log('Item 2 clicked')
+        }
+      },
+    
+      {
+        key: 'grouped-3',
+        label: 'Item 3',
+        onClick: () => {
+          console.log('Item 3 clicked')
+        }
+      },
+    ]
+  }
+]
+
+export const Grouped = {
+  args: {
+    children: <DropdownButton>Hover</DropdownButton>,
+    menu: {
+      items: GroupedDropdownItems
+    }
+  }
+}
+
+const SubmenuDropdownItems: DropdownProps['menu']['items'] = [
+  {
+    key: 'submenu-1',
+    label: 'Default',
+    children: [
+      ...SimpleDropdownItems,
+    ]
+  },
+
+  {
+    key: 'submenu-2',
+    label: 'Selectable',
+    children: [
+      ...SelectableDropdownItems,
+    ]
+  },
+
+  {
+    key: 'submenu-3',
+    label: 'Custom',
+    children: [
+      ...CustomDropdownItems,
+    ]
+  }
+]
+
+export const Submenu = {
+  args: {
+    children: <DropdownButton>Hover</DropdownButton>,
+    menu: {
+      items: SubmenuDropdownItems
+    }
+  }
+}

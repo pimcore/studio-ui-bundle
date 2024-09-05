@@ -12,18 +12,18 @@
 */
 
 import React from 'react'
-import { type ItemType } from '../dropdown'
-import { CustomItem } from './types/custom/custom-item'
-import { DividerItem } from './types/divider/divider-item'
-import { GroupItem } from './types/group/group-item'
-import { SubMenuItem } from './types/sub-menu/sub-menu-item'
-import { DefaultItem } from './types/default/default-item'
+import { type ItemType } from '../../dropdown'
+import { CustomItem } from '../types/custom/custom-item'
+import { DividerItem } from '../types/divider/divider-item'
+import { GroupItem } from '../types/group/group-item'
+import { SubMenuItem } from '../types/sub-menu/sub-menu-item'
+import { DefaultItem } from '../types/default/default-item'
 
 export interface DropdownItemProps {
   item: ItemType
 }
 
-export const DropdownItem = ({ item }: DropdownItemProps): React.JSX.Element => {
+export const renderDropdownItem = ({ item }: DropdownItemProps): React.JSX.Element => {
   if (item === null) {
     return <></>
   }
@@ -45,7 +45,7 @@ export const DropdownItem = ({ item }: DropdownItemProps): React.JSX.Element => 
   }
 
   if (!('type' in item) && !('children' in item)) {
-    return <DefaultItem { ...item } />
+    return <DefaultItem { ...item } id={item.key} />
   }
 
   return <></>

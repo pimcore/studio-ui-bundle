@@ -23,6 +23,10 @@ export const useStyles = createStyles(({ token, css }) => {
           background-color: rgba(0, 0, 0, 0.04) !important;
         }
       }
+
+      &.default-item--with-icon-right {
+        padding-right: 4px !important;
+      }
     `
   }
 })

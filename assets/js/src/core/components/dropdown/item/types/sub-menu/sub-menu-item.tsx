@@ -13,21 +13,22 @@
 
 import { Menu } from 'antd'
 import { type ItemType, type SubMenuItemType } from '../../../dropdown'
-import { DropdownItem } from '../../dropdown-item'
+import { renderDropdownItem } from '../../utils/dropdown-item'
 import React from 'react'
 
-export const SubMenuItem = ({ children, popupOffset, label, ...props }: SubMenuItemType): React.JSX.Element => {
-  return (
-    <Menu.SubMenu
-      title={ label }
-      { ...props }
-    >
-      {children?.map((item: ItemType) => (
-        <DropdownItem
-          item={ item }
-          key={ item.key }
-        />
-      ))}
-    </Menu.SubMenu>
-  )
+export const WithExtendedApi = (Component: typeof Menu.SubMenu) => {
+  return ({ children, popupOffset, label, ...props }: SubMenuItemType) => {
+    return (
+      <Component
+        title={ label }
+        { ...props }
+      >
+        {children?.map((item: ItemType) => (
+          renderDropdownItem({ item })
+        ))}
+      </Component>
+    )
+  }
 }
+
+export const SubMenuItem = WithExtendedApi(Menu.SubMenu);

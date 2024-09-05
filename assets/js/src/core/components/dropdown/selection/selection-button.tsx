@@ -1,18 +1,34 @@
 import { IconButton } from "@Pimcore/components/icon-button/icon-button";
-import React from "react";
+import React, { MouseEvent } from "react";
 import { useSelection } from "./hooks/use-selection";
+import { useStyles } from "./selection-button.styles";
 
 export interface SelectionButtonProps {
-  key: React.Key
+  id: React.Key
 }
 
-export const SelectionButton = ({ key }: SelectionButtonProps): React.JSX.Element => {
+export const SelectionButton = ({ id }: SelectionButtonProps): React.JSX.Element => {
+  const { styles } = useStyles();
   const { toggle, isSelected } = useSelection();
+
+  const classes = [styles.selectionButton];
+
+  if (isSelected(id)) {
+    classes.push('selection-button--active');
+  }
 
   return (
     <IconButton
-      icon={ isSelected(key) ? 'check': 'circle' }
-      onClick={ () => toggle(key) }
+      className={classes.join(' ')}
+      icon={ 'pin-02' }
+      onClick={ onClick }
+      minimal
     />
   )
+
+  function onClick(event: MouseEvent<HTMLButtonElement>): void {
+    event.stopPropagation();
+
+    toggle(id)
+  }
 }

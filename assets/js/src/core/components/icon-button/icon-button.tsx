@@ -20,17 +20,22 @@ export interface IconButtonProps extends ButtonProps {
   icon: string
   iconOptions?: IconProps['options']
   theme?: 'primary' | 'secondary'
+  minimal?: boolean
 }
 
-const Component = ({ icon, children, className, type = 'link', theme = 'primary', iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
+const Component = ({ icon, children, className, minimal = false, type = 'link', theme = 'primary', iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
   const { styles } = useStyles()
-  const buttonClasses = [styles.button, className, `icon-button--theme-${theme}`].join(' ')
+  const buttonClasses = [styles.button, className, `icon-button--theme-${theme}`]
+
+  if (minimal) {
+    buttonClasses.push('icon-button--minimal');
+  }
 
   return (
     <Button
       type={ type }
       { ...buttonProps }
-      className={ buttonClasses }
+      className={ buttonClasses.join(' ') }
       ref={ ref }
     >
       <Icon
