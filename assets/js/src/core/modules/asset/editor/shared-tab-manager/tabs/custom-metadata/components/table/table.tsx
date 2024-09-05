@@ -44,7 +44,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     return data.map((item) => {
       return {
         ...item,
-        rowId: Math.random()
+        rowId: crypto.randomUUID()
       }
     })
   }
@@ -135,7 +135,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
         isLoading={ isLoading }
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
-        setRowId={ (row: CustomMetadata) => row.rowId + '' }
+        setRowId={ (row: CustomMetadata) => row.rowId }
       />
     </div>
   )

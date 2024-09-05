@@ -62,7 +62,7 @@ export const Table = ({
     return data.map((item) => {
       return {
         ...item,
-        rowId: Math.random()
+        rowId: crypto.randomUUID()
       }
     })
   }
@@ -206,7 +206,7 @@ export const Table = ({
               modifiedCells={ modifiedCells }
               onUpdateCellData={ onUpdateCellData }
               resizable
-              setRowId={ (row: DataProperty) => row.rowId + '' }
+              setRowId={ (row: DataProperty) => row.rowId }
             />
           )}
 

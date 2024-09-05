@@ -216,7 +216,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
       config: property.config,
       description: property.description,
       predefinedName: property.name,
-      rowId: Math.random()
+      rowId: crypto.randomUUID()
     }
 
     addProperty(newDataProperty)
@@ -251,7 +251,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
       data: null,
       inherited: false,
       inheritable: false,
-      rowId: Math.random()
+      rowId: crypto.randomUUID()
     }
 
     addProperty(newDataProperty)

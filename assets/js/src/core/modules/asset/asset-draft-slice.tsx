@@ -18,11 +18,11 @@ import { type DataProperty as DataPropertyApi } from './properties-api-slice.gen
 import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 
 export type DataProperty = DataPropertyApi & {
-  rowId: number
+  rowId: string
 }
 
 export type CustomMetadata = CustomMetadataApi & {
-  rowId: number
+  rowId: string
 }
 
 interface propertyAction {

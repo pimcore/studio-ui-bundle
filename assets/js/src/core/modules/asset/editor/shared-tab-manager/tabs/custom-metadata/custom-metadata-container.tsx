@@ -100,7 +100,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       type: typeSelectValue.current,
       language: languageSelectValue.current,
       data: null,
-      rowId: Math.random()
+      rowId: crypto.randomUUID()
     }
 
     addCustomMetadata(newCustomMetadata)
