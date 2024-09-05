@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Checkbox, Input, Tag } from 'antd'
+import { Button, Checkbox, Input, Tag } from 'antd'
 import React, { useState } from 'react'
 import { useStyle } from './version-accordion.styles'
 import { Icon } from '../icon/icon'
@@ -63,39 +63,23 @@ export const VersionAccordion = ({
   const { styles } = useStyle()
   const { t } = useTranslation()
 
-  const [isExpanded, setIsExpanded] = useState(false)
   const [deletingVersion, setDeletingVersion] = useState(false)
   const [publishingVersion, setPublishingVersion] = useState(false)
-
-  const chevronOnClick = (e: any): void => {
-    setIsExpanded(!isExpanded)
-  }
 
   const title = (
     <div>
       <div>
-        { selectable && (
+        {selectable && (
         <Checkbox
           checked={ selected }
           onChange={ onChangeCheckbox }
         />
-        ) }
+        )}
         <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
-        <Button
-          aria-label={ t('aria.version.expand') }
-          icon={ <Icon
-            className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
-            name="chevron-up"
-                 /> }
-          onClick={ chevronOnClick }
-          role={ 'button' }
-          size="small"
-          type="text"
-        />
       </div>
       <div>
-        <span className={ 'sub-title' } >{`${t('by')} ${savedBy}`}</span>
-        {isSet(autosaved) && autosaved && <Icon name="lightning-01" /> }
+        <span className={ 'sub-title' }>{`${t('by')} ${savedBy}`}</span>
+        {isSet(autosaved) && autosaved && <Icon name="lightning-01" />}
       </div>
     </div>
   )
@@ -145,15 +129,15 @@ export const VersionAccordion = ({
         <Tag className={ 'id-tag' }>ID: {id}</Tag>
         <div>
           {!published && (
-          <Button
-            className={ 'btn-publish' }
-            disabled={ publishingVersion || deletingVersion }
-            icon={ <Icon name="world" /> }
-            loading={ publishingVersion }
-            onClick={ publishVersion }
-          >
-            {t('version.publish')}
-          </Button>
+            <Button
+              className={ 'btn-publish' }
+              disabled={ publishingVersion || deletingVersion }
+              icon={ <Icon name="world" /> }
+              loading={ publishingVersion }
+              onClick={ publishVersion }
+            >
+              {t('version.publish')}
+            </Button>
           )}
           <Button
             aria-label={ t('aria.version.delete') }
@@ -165,16 +149,16 @@ export const VersionAccordion = ({
         </div>
       </div>
       {
-        isSet(scheduledDate) && (
-        <div className={ 'row-margin' }>
-          <div>{t('version.schedule-for')}</div>
-          <div className={ 'date-container' }>
-            <Icon name="calender" />
-            <span className={ 'scheduled-date' }>{scheduledDate}</span>
-          </div>
-        </div>
-        )
-    }
+                isSet(scheduledDate) && (
+                <div className={ 'row-margin' }>
+                  <div>{t('version.schedule-for')}</div>
+                  <div className={ 'date-container' }>
+                    <Icon name="calender" />
+                    <span className={ 'scheduled-date' }>{scheduledDate}</span>
+                  </div>
+                </div>
+                )
+            }
       <div className={ 'row-margin' }>
         <span>{t('version.note')}</span>
         <Input
@@ -191,24 +175,16 @@ export const VersionAccordion = ({
     label: title,
     extra,
     children,
-    onClick
+    onClick,
+    className: classNameByState
 
   }]
 
   return (
     <div className={ [styles.card, className].join(' ') }>
       <Accordion
-        className={ [classNameByState, isExpanded ? 'card-body__expand' : 'card-body__hide'].join(' ') }
         items={ item }
-        onChange={ onClick }
       />
-      <Card
-        className={ [classNameByState, isExpanded ? 'card-body__expand' : 'card-body__hide'].join(' ') }
-        extra={ extra }
-        size="small"
-        title={ title }
-      >
-      </Card>
     </div>
   )
 }
