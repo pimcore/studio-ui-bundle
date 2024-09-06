@@ -15,6 +15,7 @@ import { type AssetMetadataTypeInterface } from '../services/metadata-type-regis
 import React from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { ElementCell } from '@Pimcore/components/grid/columns/types/element-cell/element-cell'
+import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 export class Document implements AssetMetadataTypeInterface {
   visibleInTypeSelection = true
@@ -23,6 +24,6 @@ export class Document implements AssetMetadataTypeInterface {
   }
 
   getGridCell (props: DefaultCellProps): JSX.Element {
-    return <ElementCell { ...props } />
+    return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['document'] }) } />
   }
 }

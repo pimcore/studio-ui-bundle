@@ -14,9 +14,22 @@
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
+<<<<<<< HEAD
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type Schedule as ApiSchedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
+=======
+import { type DataProperty as DataPropertyApi } from './properties-api-slice.gen'
+import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+
+export type DataProperty = DataPropertyApi & {
+  rowId: string
+}
+
+export type CustomMetadata = CustomMetadataApi & {
+  rowId: string
+}
+>>>>>>> origin/1.x
 
 interface propertyAction {
   assetId: number

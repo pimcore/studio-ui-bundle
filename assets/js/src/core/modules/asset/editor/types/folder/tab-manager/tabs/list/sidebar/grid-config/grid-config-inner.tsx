@@ -14,7 +14,7 @@
 import { Title } from '@Pimcore/components/title/title'
 import React, { useEffect } from 'react'
 import { useListColumns, useListGridConfig } from '../../hooks/use-list'
-import { Dropdown, Space, type MenuProps } from 'antd'
+import { Space } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { GridConfigList } from './grid-config-list'
 import { useGridConfig } from './hooks/use-grid-config'
@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridConfig()
@@ -85,8 +86,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     setGridColumns(columns)
   }
 
-  function getFormattedDropDownMenu (): MenuProps['items'] {
-    const formattedDropDownMenu: MenuProps['items'] = []
+  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
+    const formattedDropDownMenu: DropdownMenuProps['items'] = []
     let index = 0
 
     for (const [key, value] of Object.entries(dropDownMenu)) {
