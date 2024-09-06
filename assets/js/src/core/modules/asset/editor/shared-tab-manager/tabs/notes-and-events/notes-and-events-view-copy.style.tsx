@@ -65,6 +65,23 @@ export const useStyles = createStyles(({ token, css }) => {
         line-height: 24px;
       }
       
+      .notes-container__pagination-container {
+        border-top: 1px solid ${notesAndEventsToken.colorBorderTertiary};
+        position: sticky;
+        bottom: 0;
+        height: ${notesAndEventsToken.sizeXXL}px;
+      }
+
+      .notes-container__pagination {
+        display: flex;
+        justify-content: space-between;
+        background-color: ${notesAndEventsToken.colorWhite};
+        padding-right: ${notesAndEventsToken.paddingSM}px;
+        padding-left: ${notesAndEventsToken.paddingXS}px;
+        align-items: center;
+        width: 100%;
+        height: ${notesAndEventsToken.sizeXXL}px;
+      }
     `,
 
     'add-note-modal__section': css`

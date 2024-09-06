@@ -18,86 +18,40 @@ export const useStyle = createStyles(({ token, css }) => {
 
   return {
     card: css`
-      .ant-card {
-        width: 100%;
-        min-width: 480px;
-      }
-      
-      .ant-card > .ant-card-head {
-        border-bottom: unset;
-        padding: ${cardToken.paddingXS}px ${cardToken.paddingSM}px;
-        min-height: 32px;
-      }
-
-      .ant-card > .ant-card-body {
-        padding: ${cardToken.paddingSM}px;
-      }
-
-      .ant-card.card-body__expand > .ant-card-body {
-        border-top-right-radius: unset;
-        border-top-left-radius: unset;
-        display: block;
-        border-top: 1px solid #f0f0f0;
-      }
-
-      .ant-card.card-body__expand > .ant-card-head {
-        border-bottom-right-radius: unset;
-        border-bottom-left-radius: unset;
-      }
-
-
-      .ant-card.card-body__hide > .ant-card-body {
-        display: none;
-      };
 
       span, div, div.anticon, button {
         vertical-align: middle;
       }
       
-      .card-title {
+      .panel-title {
         font-size: 12px;
         font-weight: 600;
       }
-
-      .card-title__chevron-btn {
-        vertical-align: top;
-        margin: 0 ${cardToken.marginXXS}px;
-      }
       
-      .card-title__user, .card-title__divider {
+      .panel-title__user, .panel-title__divider {
         vertical-align: unset;
         font-weight: 400;
         line-height: 20px;
         color: ${cardToken.colorTextSecondary}
       }
       
-      .chevron {
-        rotate: 180deg;
-        transition-duration: 0.6s;
-        transition-property: transform;
-      }
-
-      .chevron-up {
-        transform: rotate(-180deg);
-      }
-      
-      .card-extra__trash-icon {
+      .panel-extra__trash-icon {
         color: ${cardToken.colorPrimary};
       }
       
-      .card-body__description {
+      .panel-body__description {
         display: block;
       }
 
-      .card-body__description p {
+      .panel-body__description p {
         margin: 0;
       } 
 
-      .card-body__description-padding {
+      .panel-body__description-padding {
         padding-bottom: ${cardToken.paddingSM}px;
       }
 
-      .card-body__details {
+      .panel-body__details {
         display: block;  
         padding-bottom: ${cardToken.paddingXS}px;
       }

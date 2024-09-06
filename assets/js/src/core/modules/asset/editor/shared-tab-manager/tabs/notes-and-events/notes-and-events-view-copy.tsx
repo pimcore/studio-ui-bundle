@@ -33,6 +33,7 @@ import i18n from 'i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { useStyle } from '@Pimcore/components/note-and-event-card/note-and-event-card.styles'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -51,6 +52,8 @@ export const NotesAndEventsTabView = ({
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
+
+  const { styles } = useStyle()
 
   const NotesAndEvents: Array<{
     children: React.JSX.Element
@@ -84,7 +87,7 @@ export const NotesAndEventsTabView = ({
           <Button
             aria-label={ i18n.t('aria.notes-and-events.delete') }
             icon={ <Icon
-              className={ 'card-extra__trash-icon' }
+              className={ 'panel-extra__trash-icon' }
               name={ 'trash' }
                    /> }
             onClick={ () => { onClickTrash(note.id) } }
@@ -105,13 +108,13 @@ export const NotesAndEventsTabView = ({
     const children = (): React.JSX.Element => {
       return (
         <><span
-          className={ 'card-body__description ' + (showDetails ? 'card-body__description-padding' : '') }
+          className={ 'panel-body__description ' + (showDetails ? 'panel-body__description-padding' : '') }
           >
           {respectLineBreak(note.description)}
         </span>
           {showDetails && (
           <div>
-            <span className={ 'card-body__details' }>{i18n.t('notes-and-events.details')}</span>
+            <span className={ 'panel-body__details' }>{i18n.t('notes-and-events.details')}</span>
             <Grid
               autoWidth
               columns={ columns }
@@ -129,14 +132,15 @@ export const NotesAndEventsTabView = ({
       label: <Space>
         {note.title !== '' && (
         <>
-          <span className={ 'card-title' }>{note.title}</span>
-          <span className={ 'card-title__divider' }>|</span>
+          <span className={ 'panel-title' }>{note.title}</span>
+          <span className={ 'panel-title__divider' }>|</span>
         </>
         )}
-        <span className={ 'card-title__user' }>{note.userName}</span>
+        <span className={ 'panel-title__user' }>{note.userName}</span>
       </Space>,
       extra: extra(),
-      children: children()
+      children: children(),
+      className: styles.card
     })
   })
 
