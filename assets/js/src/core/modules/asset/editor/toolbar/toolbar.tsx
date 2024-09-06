@@ -19,15 +19,12 @@ import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-<<<<<<< HEAD
 import {
   useSaveSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
-=======
 import { type CustomMetadata, type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
 import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/asset/properties-api-slice.gen'
->>>>>>> origin/1.x
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()

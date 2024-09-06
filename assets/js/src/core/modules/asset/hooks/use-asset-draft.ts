@@ -18,12 +18,10 @@ import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,
   addPropertyToAsset,
-<<<<<<< HEAD
   addScheduleToAsset,
   assetReceived,
-=======
-  assetReceived, type CustomMetadata, type DataProperty,
->>>>>>> origin/1.x
+  type CustomMetadata,
+  type DataProperty,
   removeAsset,
   removeCustomMetadataFromAsset,
   removeImageSettingFromAsset,
