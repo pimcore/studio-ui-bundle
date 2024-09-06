@@ -13,8 +13,9 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'
 import { useTranslation } from 'react-i18next'
+import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -29,24 +30,11 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
     }
   ]
 
-  const modifiedProps = {
-    ...props,
-    column: {
-      ...props.column,
-      columnDef: {
-        ...props.column.columnDef,
-        meta: {
-          ...props.column.columnDef.meta,
-          config: {
-            ...props.column.columnDef?.meta?.config,
-            options: selectOptions
-          }
-        }
-      }
-    }
+  const columnConfig: SelectCellConfig = {
+    options: selectOptions
   }
 
   return (
-    <SelectCell { ...modifiedProps } />
+    <SelectCell { ...addColumnConfig(props, columnConfig) } />
   )
 }

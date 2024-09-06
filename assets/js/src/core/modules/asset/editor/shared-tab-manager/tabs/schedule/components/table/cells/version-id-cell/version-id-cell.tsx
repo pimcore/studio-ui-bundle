@@ -16,9 +16,10 @@ import React, { useContext } from 'react'
 import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
 import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
-import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyles } from './version-id-cell.styles'
+import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { id } = useContext(AssetContext)
@@ -61,26 +62,13 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   }
   const { styles } = useStyles()
 
-  const modifiedProps = {
-    ...props,
-    column: {
-      ...props.column,
-      columnDef: {
-        ...props.column.columnDef,
-        meta: {
-          ...props.column.columnDef.meta,
-          config: {
-            ...props.column.columnDef?.meta?.config,
-            options: formattedSelectOptions
-          }
-        }
-      }
-    }
+  const columnConfig: SelectCellConfig = {
+    options: formattedSelectOptions
   }
 
   return (
     <div className={ styles.select } >
-      <SelectCell { ...modifiedProps } />
+      <SelectCell { ...addColumnConfig(props, columnConfig) } />
     </div>
   )
 }

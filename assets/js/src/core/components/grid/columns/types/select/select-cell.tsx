@@ -18,8 +18,8 @@ import { type RefSelectProps, type DefaultOptionType } from 'antd/es/select'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { useStyles } from './select-cell.styles'
 
-interface SelectCellConfig {
-  options: string[]
+export interface SelectCellConfig {
+  options: string[] | SelectOptionType[]
 }
 
 export type SelectOptionType = DefaultOptionType & {
