@@ -56,7 +56,7 @@ export const Toolbar = (): React.JSX.Element => {
     if (asset?.changes === undefined) return
 
     const update: AssetUpdateByIdApiArg['body']['data'] = {}
-    if (asset.changes.properties === true) {
+    if (asset.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
 
@@ -73,14 +73,14 @@ export const Toolbar = (): React.JSX.Element => {
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
-    if (asset.changes.customMetadata === true) {
+    if (asset.changes.customMetadata) {
       update.metadata = customMetadata?.map((metadata: CustomMetadata): CustomMetadataApi => {
         const { rowId, ...metadataApi } = metadata
         return metadataApi
       })
     }
 
-    if (asset.changes.imageSettings === true) {
+    if (asset.changes.imageSettings) {
       update.image = imageSettings
     }
 
