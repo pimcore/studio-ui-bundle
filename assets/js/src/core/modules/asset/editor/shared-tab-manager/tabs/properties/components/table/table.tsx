@@ -188,7 +188,6 @@ export const Table = ({
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)
-      console.log('rowdata', rowData)
       setModifiedCells([...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
