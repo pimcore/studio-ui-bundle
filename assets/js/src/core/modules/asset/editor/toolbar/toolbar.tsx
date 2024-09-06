@@ -17,12 +17,17 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
-import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
+import { api, type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import ButtonGroup from 'antd/es/button/button-group'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
+  const dispatch = useAppDispatch()
   const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess }] = useAssetUpdateByIdMutation()
@@ -37,7 +42,16 @@ export const Toolbar = (): React.JSX.Element => {
   }, [isSuccess])
 
   return (
-    <ToolbarView justify='flex-end'>
+    <ToolbarView>
+      <ButtonGroup>
+        <IconButton
+          icon='refresh'
+          onClick={ onRefreshClick }
+        >
+          {t('toolbar.reload')}
+        </IconButton>
+      </ButtonGroup>
+
       <Button
         disabled={ !hasChanges || isLoading }
         loading={ isLoading }
@@ -48,6 +62,10 @@ export const Toolbar = (): React.JSX.Element => {
       </Button>
     </ToolbarView>
   )
+
+  function onRefreshClick (): void {
+    dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id!)))
+  }
 
   function onSaveClick (): void {
     if (asset?.changes === undefined) return

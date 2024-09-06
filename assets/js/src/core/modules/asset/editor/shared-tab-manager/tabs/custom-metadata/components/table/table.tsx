@@ -14,7 +14,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
-import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'

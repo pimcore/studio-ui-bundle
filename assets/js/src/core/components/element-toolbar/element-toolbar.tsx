@@ -16,7 +16,7 @@ import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.st
 import { Button, Space } from 'antd'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 

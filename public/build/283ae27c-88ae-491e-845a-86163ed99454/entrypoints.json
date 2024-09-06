@@ -1,0 +1,14 @@
+{
+  "entrypoints": {
+    "main": {
+      "css": [
+        "http://localhost:3030/build/283ae27c-88ae-491e-845a-86163ed99454/vendors-node_modules_ant-design_icons_es_icons_CaretDownOutlined_js-node_modules_ant-design_i-c3aa77.css",
+        "http://localhost:3030/build/283ae27c-88ae-491e-845a-86163ed99454/main.css"
+      ],
+      "js": [
+        "http://localhost:3030/build/283ae27c-88ae-491e-845a-86163ed99454/vendors-node_modules_ant-design_icons_es_icons_CaretDownOutlined_js-node_modules_ant-design_i-c3aa77.js",
+        "http://localhost:3030/build/283ae27c-88ae-491e-845a-86163ed99454/main.js"
+      ]
+    }
+  }
+}

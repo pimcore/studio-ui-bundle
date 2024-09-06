@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
+import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice-enhanced'
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset,

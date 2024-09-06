@@ -13,7 +13,7 @@
 
 import { Content } from '@Pimcore/components/content/content'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Breadcrumb, Divider, type BreadcrumbProps } from 'antd'
 import React from 'react'

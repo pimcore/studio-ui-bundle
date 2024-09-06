@@ -12,7 +12,7 @@
 */
 
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { type Asset, type ImageData } from './asset-api-slice.gen'
+import { type Asset, type ImageData } from './asset-api-slice-enhanced'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty } from './properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'

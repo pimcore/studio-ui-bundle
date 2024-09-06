@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'

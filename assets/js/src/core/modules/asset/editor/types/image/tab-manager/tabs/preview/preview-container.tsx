@@ -13,7 +13,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'

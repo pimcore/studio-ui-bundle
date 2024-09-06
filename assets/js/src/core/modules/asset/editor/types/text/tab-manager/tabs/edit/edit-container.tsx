@@ -13,7 +13,7 @@
 
 import React, { useContext } from 'react'
 import { EditView } from './edit-view'
-import { useAssetGetTextDataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetTextDataByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './edit-container.styles'
 import { isSet } from '@Pimcore/utils/helpers'

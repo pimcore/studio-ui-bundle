@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useMemo, useState } from 'react'
 import { GridToolbarContainer } from '../list/toolbar/grid-toolbar-container'
 import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
