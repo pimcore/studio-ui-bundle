@@ -16,14 +16,14 @@ import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageDa
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset, addPropertyToAsset,
-  assetReceived, type CustomMetadata,
+  assetReceived,
   removeAsset,
   removeCustomMetadataFromAsset,
   removeImageSettingFromAsset, removePropertyFromAsset,
   resetChanges,
   selectAssetById,
   setCustomMetadataForAsset, setPropertiesForAsset,
-  updateAllCustomMetadataForAsset,
+  updateAllCustomMetadataForAsset, updateCustomMetadataForAsset,
   updateImageSettingForAsset,
   updatePropertyForAsset
 } from '../asset-draft-slice'
@@ -32,14 +32,10 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
-
-interface UseAssetDraftReturnCustomMetadata {
-  customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
-  updateAllCustomMetadata: (customMetadata: CustomMetadata[]) => void
-  addCustomMetadata: (customMetadata: CustomMetadata) => void
-  removeCustomMetadata: (customMetadata: CustomMetadata) => void
-  setCustomMetadata: (customMetadata: CustomMetadata[]) => void
-}
+import {
+  useCustomMetadataDraft,
+  type UseCustomMetadataDraftReturn
+} from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 
 interface UseAssetDraftReturnDynamicSettings {
   imageSettings: undefined | ImageData
@@ -49,7 +45,7 @@ interface UseAssetDraftReturnDynamicSettings {
 }
 
 interface UseAssetDraftReturn extends
-  UseAssetDraftReturnCustomMetadata,
+  UseCustomMetadataDraftReturn,
   UsePropertiesDraftReturn,
   UseAssetDraftReturnDynamicSettings {
   isLoading: boolean
@@ -70,7 +66,6 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const asset = useAppSelector(state => selectAssetById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
-  const customMetadata = asset?.customMetadata
   const imageSettings = asset?.imageSettings
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
@@ -155,21 +150,15 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     setPropertiesForAsset
   )
 
-  function updateAllCustomMetadata (customMetadata): void {
-    dispatch(updateAllCustomMetadataForAsset({ assetId: id, customMetadata }))
-  }
-
-  function addCustomMetadata (customMetadata): void {
-    dispatch(addCustomMetadataToAsset({ assetId: id, customMetadata }))
-  }
-
-  function removeCustomMetadata (customMetadata): void {
-    dispatch(removeCustomMetadataFromAsset({ assetId: id, customMetadata }))
-  }
-
-  function setCustomMetadata (customMetadata): void {
-    dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
-  }
+  const customMetadataActions = useCustomMetadataDraft(
+    id,
+    asset,
+    updateCustomMetadataForAsset,
+    addCustomMetadataToAsset,
+    removeCustomMetadataFromAsset,
+    setCustomMetadataForAsset,
+    updateAllCustomMetadataForAsset
+  )
 
   function addImageSettings (settings): void {
     dispatch(addImageSettingsToAsset({ assetId: id, settings }))
@@ -192,11 +181,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isError,
     asset,
     ...propertyActions,
-    customMetadata,
-    updateAllCustomMetadata,
-    addCustomMetadata,
-    removeCustomMetadata,
-    setCustomMetadata,
+    ...customMetadataActions,
     imageSettings,
     addImageSettings,
     removeImageSetting,

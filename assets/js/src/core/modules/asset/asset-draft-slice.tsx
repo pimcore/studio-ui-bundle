@@ -14,22 +14,12 @@
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
-import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type PropertiesDraft, usePropertiesReducers } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
+import { type CustomMetadataDraft, useCustomMetadataReducers } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/trackable-changes-draft'
 
-export type CustomMetadata = CustomMetadataApi & {
-  rowId: string
-}
-
-interface customMetadataAction {
-  assetId: number
-  customMetadata: CustomMetadata
-}
-
-export interface AssetDraft extends Asset, PropertiesDraft, TrackableChangesDraft {
-  customMetadata: CustomMetadata[]
+export interface AssetDraft extends Asset, PropertiesDraft, CustomMetadataDraft, TrackableChangesDraft {
   imageSettings: ImageData
 }
 
@@ -88,96 +78,6 @@ export const slice = createSlice({
       state.entities[action.payload.assetId] = asset
     },
 
-    // TODO: Remove this function
-
-    addCustomMetadataToAsset: (state, action: PayloadAction<customMetadataAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = [...(asset.customMetadata ?? []), action.payload.customMetadata]
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          customMetadata: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removeCustomMetadataFromAsset: (state, action: PayloadAction<customMetadataAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = (asset.customMetadata ?? []).filter(
-          customMetadata =>
-            customMetadata.name !== action.payload.customMetadata.name ||
-              customMetadata.language !== action.payload.customMetadata.language
-        )
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          customMetadata: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateCustomMetadataForAsset: (state, action: PayloadAction<customMetadataAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = (asset.customMetadata ?? []).map(customMetadata => {
-          if (customMetadata.name === action.payload.customMetadata.name) {
-            asset.modified = true
-
-            asset.changes = {
-              ...asset.changes,
-              customMetadata: true
-            }
-
-            return action.payload.customMetadata
-          }
-
-          return customMetadata
-        })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateAllCustomMetadataForAsset: (state, action: PayloadAction<{ assetId: number, customMetadata: CustomMetadata[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = action.payload.customMetadata
-      }
-
-      asset.modified = true
-
-      asset.changes = {
-        ...asset.changes,
-        customMetadata: true
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    setCustomMetadataForAsset: (state, action: PayloadAction<{ assetId: number, customMetadata: CustomMetadata[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = action.payload.customMetadata
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
     // TODO: check if we really need that
     addImageSettingsToAsset: (state, action: PayloadAction<{ assetId: number, settings: ImageData }>) => {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
@@ -231,7 +131,8 @@ export const slice = createSlice({
 
       state.entities[action.payload.assetId] = asset
     },
-    ...usePropertiesReducers(assetsAdapter)
+    ...usePropertiesReducers(assetsAdapter),
+    ...useCustomMetadataReducers(assetsAdapter)
   }
 })
 
@@ -239,12 +140,8 @@ injectSliceWithState(slice)
 
 export const {
   assetReceived,
-  updateAllCustomMetadataForAsset,
+
   addChanges,
-  addCustomMetadataToAsset,
-  removeCustomMetadataFromAsset,
-  updateCustomMetadataForAsset,
-  setCustomMetadataForAsset,
 
   addImageSettingsToAsset,
   removeImageSettingFromAsset,
@@ -258,6 +155,12 @@ export const {
   addProperty: addPropertyToAsset,
   removeProperty: removePropertyFromAsset,
   setProperties: setPropertiesForAsset,
-  updateProperty: updatePropertyForAsset
+  updateProperty: updatePropertyForAsset,
+
+  updateAllCustomMetadata: updateAllCustomMetadataForAsset,
+  addCustomMetadata: addCustomMetadataToAsset,
+  removeCustomMetadata: removeCustomMetadataFromAsset,
+  updateCustomMetadata: updateCustomMetadataForAsset,
+  setCustomMetadata: setCustomMetadataForAsset
 } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])
