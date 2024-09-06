@@ -146,7 +146,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
-  const PropertyActions = usePropertiesDraft(
+  const propertyActions = usePropertiesDraft(
     id,
     asset,
     updatePropertyForAsset,
@@ -191,7 +191,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isLoading,
     isError,
     asset,
-    ...PropertyActions,
+    ...propertyActions,
     customMetadata,
     updateAllCustomMetadata,
     addCustomMetadata,
