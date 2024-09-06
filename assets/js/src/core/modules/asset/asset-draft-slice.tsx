@@ -17,7 +17,10 @@ import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type PropertiesDraft, usePropertiesReducers } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { type CustomMetadataDraft, useCustomMetadataReducers } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
-import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/trackable-changes-draft'
+import {
+  type TrackableChangesDraft,
+  useTrackableChangesReducers
+} from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 
 export interface AssetDraft extends Asset, PropertiesDraft, CustomMetadataDraft, TrackableChangesDraft {
   imageSettings: ImageData
@@ -37,27 +40,6 @@ export const slice = createSlice({
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
 
-    setChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.changes = action.payload.changes
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    resetChanges (state, action: PayloadAction<number>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload) }
-
-      if (asset !== undefined) {
-        asset.changes = {}
-        asset.modified = false
-      }
-
-      state.entities[action.payload] = asset
-    },
-
     removeAsset (state, action: PayloadAction<number>): void {
       assetsAdapter.removeOne(state, action.payload)
     },
@@ -66,16 +48,6 @@ export const slice = createSlice({
       if (state.entities[action.payload] !== undefined) {
         state.entities[action.payload] = assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }).entities[action.payload]
       }
-    },
-
-    addChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.changes = { ...asset.changes, ...action.payload.changes }
-      }
-
-      state.entities[action.payload.assetId] = asset
     },
 
     // TODO: check if we really need that
@@ -131,6 +103,7 @@ export const slice = createSlice({
 
       state.entities[action.payload.assetId] = asset
     },
+    ...useTrackableChangesReducers(assetsAdapter),
     ...usePropertiesReducers(assetsAdapter),
     ...useCustomMetadataReducers(assetsAdapter)
   }
@@ -141,8 +114,6 @@ injectSliceWithState(slice)
 export const {
   assetReceived,
 
-  addChanges,
-
   addImageSettingsToAsset,
   removeImageSettingFromAsset,
   updateImageSettingForAsset,
@@ -150,7 +121,6 @@ export const {
   removeAsset,
   resetAsset,
   resetChanges,
-  setChanges,
 
   addProperty: addPropertyToAsset,
   removeProperty: removePropertyFromAsset,

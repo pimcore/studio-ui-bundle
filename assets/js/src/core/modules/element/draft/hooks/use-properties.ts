@@ -14,9 +14,9 @@
 import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 import type { DataProperty as DataPropertyApi } from '@Pimcore/modules/asset/properties-api-slice.gen'
-import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/trackable-changes-draft'
 
 import { useAppDispatch } from '@Pimcore/app/store'
+import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 
 export interface PropertyAction {
   id: number

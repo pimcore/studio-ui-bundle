@@ -36,6 +36,10 @@ import {
   useCustomMetadataDraft,
   type UseCustomMetadataDraftReturn
 } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
+import {
+  useTrackableChangesDraft,
+  type UseTrackableChangesDraftReturn
+} from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 
 interface UseAssetDraftReturnDynamicSettings {
   imageSettings: undefined | ImageData
@@ -47,13 +51,13 @@ interface UseAssetDraftReturnDynamicSettings {
 interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
   UsePropertiesDraftReturn,
+  UseTrackableChangesDraftReturn,
   UseAssetDraftReturnDynamicSettings {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
 
   removeAssetFromState: () => void
-  removeTrackedChanges: () => void
 }
 
 interface DynamicCustomSettings {
@@ -141,6 +145,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
+  const trackableChangesActions = useTrackableChangesDraft(
+    id,
+    resetChanges
+  )
+
   const propertyActions = usePropertiesDraft(
     id,
     asset,
@@ -172,21 +181,17 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(updateImageSettingForAsset({ assetId: id, key, value }))
   }
 
-  function removeTrackedChanges (): void {
-    dispatch(resetChanges(id))
-  }
-
   return {
     isLoading,
     isError,
     asset,
+    ...trackableChangesActions,
     ...propertyActions,
     ...customMetadataActions,
     imageSettings,
     addImageSettings,
     removeImageSetting,
     updateImageSetting,
-    removeAssetFromState,
-    removeTrackedChanges
+    removeAssetFromState
   }
 }
