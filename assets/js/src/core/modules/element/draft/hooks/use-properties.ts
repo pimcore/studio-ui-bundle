@@ -46,7 +46,7 @@ interface UsePropertiesReturn {
 
 export const usePropertiesReducers = (entityAdapter: EntityAdapter<PropertiesDraft, number>): UsePropertiesReturn => {
   const addProperty = (state: EntityState<PropertiesDraft, number>, action: PayloadAction<PropertyAction>): void => {
-    modifyAsset(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
+    modifyDraft(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
       draft.properties = [...(draft.properties ?? []), action.payload.property]
 
       markedAsModified(draft)
@@ -55,7 +55,7 @@ export const usePropertiesReducers = (entityAdapter: EntityAdapter<PropertiesDra
   }
 
   const updateProperty = (state: EntityState<PropertiesDraft, number>, action: PayloadAction<PropertyAction>): void => {
-    modifyAsset(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
+    modifyDraft(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
       draft.properties = (draft.properties ?? []).map((property, index) => {
         if (property.key === action.payload.key && property.inherited === action.payload.property.inherited) {
           markedAsModified(draft)
@@ -70,7 +70,7 @@ export const usePropertiesReducers = (entityAdapter: EntityAdapter<PropertiesDra
     })
   }
   const removeProperty = (state: EntityState<PropertiesDraft, number>, action: PayloadAction<PropertyAction>): void => {
-    modifyAsset(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
+    modifyDraft(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
       draft.properties = (draft.properties ?? []).filter(property => property.key !== action
         .payload.property.key)
 
@@ -80,16 +80,16 @@ export const usePropertiesReducers = (entityAdapter: EntityAdapter<PropertiesDra
   }
 
   const setProperties = (state: EntityState<PropertiesDraft, number>, action: PayloadAction<PropertiesAction>): void => {
-    modifyAsset(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
+    modifyDraft(state, action.payload.id, (draft: PropertiesDraft): PropertiesDraft => {
       draft.properties = action.payload.properties
       return draft
     })
   }
 
-  const modifyAsset = (state: EntityState<PropertiesDraft, number>, id: number, modification: (draft: PropertiesDraft) => PropertiesDraft): void => {
+  const modifyDraft = (state: EntityState<PropertiesDraft, number>, id: number, modification: (draft: PropertiesDraft) => PropertiesDraft): void => {
     const draft = entityAdapter.getSelectors().selectById(state, id)
     if (draft === undefined) {
-      console.error(`Asset with id ${id} not found`)
+      console.error(`Item with id ${id} not found`)
       return
     }
 
