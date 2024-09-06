@@ -16,6 +16,9 @@ import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
 import { type DataProperty as DataPropertyApi } from './properties-api-slice.gen'
 import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { type PropertiesDraft, usePropertiesReducers } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { type EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
+import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/trackable-changes-draft'
 
 export type DataProperty = DataPropertyApi & {
   rowId: string
@@ -25,26 +28,17 @@ export type CustomMetadata = CustomMetadataApi & {
   rowId: string
 }
 
-interface propertyAction {
-  assetId: number
-  key?: string
-  property: DataProperty
-}
-
 interface customMetadataAction {
   assetId: number
   customMetadata: CustomMetadata
 }
 
-export interface AssetDraft extends Asset {
-  properties: DataProperty[]
+export interface AssetDraft extends Asset, PropertiesDraft, TrackableChangesDraft {
   customMetadata: CustomMetadata[]
   imageSettings: ImageData
-  modified: boolean
-  changes: Record<string, any>
 }
 
-export const assetsAdapter = createEntityAdapter<AssetDraft>({})
+export const assetsAdapter: EntityAdapter<AssetDraft, number> = createEntityAdapter<AssetDraft>({})
 
 export const slice = createSlice({
   name: 'asset-draft',
@@ -57,74 +51,6 @@ export const slice = createSlice({
   }),
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
-
-    addPropertyToAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = [...(asset.properties ?? []), action.payload.property]
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          properties: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removePropertyFromAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).filter(property => property.key !== action
-          .payload.property.key)
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          properties: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    setPropertiesForAsset: (state, action: PayloadAction<{ assetId: number, properties: DataProperty[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = action.payload.properties
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updatePropertyForAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).map((property, index) => {
-          if (property.key === action.payload.key && property.inherited === action.payload.property.inherited) {
-            asset.modified = true
-
-            asset.changes = {
-              ...asset.changes,
-              properties: true
-            }
-
-            return action.payload.property
-          }
-
-          return property
-        })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
 
     setChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
       const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
@@ -309,7 +235,8 @@ export const slice = createSlice({
       }
 
       state.entities[action.payload.assetId] = asset
-    }
+    },
+    ...usePropertiesReducers(assetsAdapter)
   }
 })
 
@@ -317,10 +244,6 @@ injectSliceWithState(slice)
 
 export const {
   assetReceived,
-  addPropertyToAsset,
-  removePropertyFromAsset,
-  setPropertiesForAsset,
-  updatePropertyForAsset,
   updateAllCustomMetadataForAsset,
   addChanges,
   addCustomMetadataToAsset,
@@ -335,6 +258,11 @@ export const {
   removeAsset,
   resetAsset,
   resetChanges,
-  setChanges
+  setChanges,
+
+  addProperty: addPropertyToAsset,
+  removeProperty: removePropertyFromAsset,
+  setProperties: setPropertiesForAsset,
+  updateProperty: updatePropertyForAsset
 } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])
