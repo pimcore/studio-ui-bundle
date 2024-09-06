@@ -40,19 +40,16 @@ import {
   useTrackableChangesDraft,
   type UseTrackableChangesDraftReturn
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
-
-interface UseAssetDraftReturnDynamicSettings {
-  imageSettings: undefined | ImageData
-  addImageSettings: (settings: ImageData) => void
-  updateImageSetting: ({ key, value }: { key: keyof ImageData, value: ImageData[keyof ImageData] }) => void
-  removeImageSetting: (setting: keyof ImageData) => void
-}
+import {
+  useImageSettingsDraft,
+  type UseImageSettingsDraftReturn
+} from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
 interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
   UsePropertiesDraftReturn,
   UseTrackableChangesDraftReturn,
-  UseAssetDraftReturnDynamicSettings {
+  UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
@@ -70,7 +67,6 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const asset = useAppSelector(state => selectAssetById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
-  const imageSettings = asset?.imageSettings
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
     const { data, isSuccess } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
@@ -169,29 +165,22 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateAllCustomMetadataForAsset
   )
 
-  function addImageSettings (settings): void {
-    dispatch(addImageSettingsToAsset({ assetId: id, settings }))
-  }
-
-  function removeImageSetting (setting): void {
-    dispatch(removeImageSettingFromAsset({ assetId: id, setting }))
-  }
-
-  function updateImageSetting ({ key, value }): void {
-    dispatch(updateImageSettingForAsset({ assetId: id, key, value }))
-  }
+  const imageSettingsActions = useImageSettingsDraft(
+    id,
+    asset,
+    addImageSettingsToAsset,
+    removeImageSettingFromAsset,
+    updateImageSettingForAsset
+  )
 
   return {
     isLoading,
     isError,
     asset,
+    removeAssetFromState,
     ...trackableChangesActions,
     ...propertyActions,
     ...customMetadataActions,
-    imageSettings,
-    addImageSettings,
-    removeImageSetting,
-    updateImageSetting,
-    removeAssetFromState
+    ...imageSettingsActions
   }
 }

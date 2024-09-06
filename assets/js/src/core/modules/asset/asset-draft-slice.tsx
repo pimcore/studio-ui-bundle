@@ -21,6 +21,7 @@ import {
   type TrackableChangesDraft,
   useTrackableChangesReducers
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import { useImageSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
 export interface AssetDraft extends Asset, PropertiesDraft, CustomMetadataDraft, TrackableChangesDraft {
   imageSettings: ImageData
@@ -49,63 +50,10 @@ export const slice = createSlice({
         state.entities[action.payload] = assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }).entities[action.payload]
       }
     },
-
-    // TODO: check if we really need that
-    addImageSettingsToAsset: (state, action: PayloadAction<{ assetId: number, settings: ImageData }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.imageSettings = { ...asset.imageSettings, ...action.payload.settings }
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          imageSettings: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removeImageSettingFromAsset: (state, action: PayloadAction<{ assetId: number, setting: keyof ImageData }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (Object.prototype.hasOwnProperty.call(asset.imageSettings, action.payload.setting) === true) {
-        const clonedImageSettings = structuredClone(asset.imageSettings)
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete clonedImageSettings[action.payload.setting]
-
-        asset.imageSettings = { ...clonedImageSettings }
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          imageSettings: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateImageSettingForAsset: (state, action: PayloadAction<{ assetId: number, key: keyof ImageData, value: ImageData[keyof ImageData] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      asset.imageSettings[action.payload.key] = action.payload.value
-
-      asset.modified = true
-
-      asset.changes = {
-        ...asset.changes,
-        imageSettings: true
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
     ...useTrackableChangesReducers(assetsAdapter),
     ...usePropertiesReducers(assetsAdapter),
-    ...useCustomMetadataReducers(assetsAdapter)
+    ...useCustomMetadataReducers(assetsAdapter),
+    ...useImageSettingsReducers(assetsAdapter)
   }
 })
 
@@ -113,14 +61,14 @@ injectSliceWithState(slice)
 
 export const {
   assetReceived,
-
-  addImageSettingsToAsset,
-  removeImageSettingFromAsset,
-  updateImageSettingForAsset,
-
   removeAsset,
   resetAsset,
+
   resetChanges,
+
+  addImageSettings: addImageSettingsToAsset,
+  removeImageSetting: removeImageSettingFromAsset,
+  updateImageSetting: updateImageSettingForAsset,
 
   addProperty: addPropertyToAsset,
   removeProperty: removePropertyFromAsset,
