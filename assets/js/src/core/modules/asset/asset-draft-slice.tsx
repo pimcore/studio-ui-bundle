@@ -14,15 +14,10 @@
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { type Asset, type ImageData } from './asset-api-slice.gen'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
-import { type DataProperty as DataPropertyApi } from './properties-api-slice.gen'
 import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type PropertiesDraft, usePropertiesReducers } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/trackable-changes-draft'
-
-export type DataProperty = DataPropertyApi & {
-  rowId: string
-}
 
 export type CustomMetadata = CustomMetadataApi & {
   rowId: string
