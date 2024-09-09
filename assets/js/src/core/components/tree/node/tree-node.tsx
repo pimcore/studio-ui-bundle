@@ -170,7 +170,6 @@ const TreeNode = ({
     openFileDialogOnClick: false,
     showUploadList: false,
     onChange: ({ fileList }) => {
-      // setUploadFileList(fileList)
       setUploadFileList(fileList.filter((file) => file.status === 'uploading'))
     }
   }
