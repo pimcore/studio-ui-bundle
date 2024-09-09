@@ -12,7 +12,7 @@
 */
 
 import React, { useState } from 'react'
-import { Collapse, type CollapseProps } from 'antd'
+import { Collapse, type CollapseProps, Flex } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
 import { Button } from '@Pimcore/components/button/button'
@@ -30,7 +30,13 @@ export interface AccordionProps extends CollapseProps {
   spaced?: boolean
 }
 
-export const Accordion = ({ items, exclusive = false, spaced = false, className, ...props }: AccordionProps): React.JSX.Element => {
+export const Accordion = ({
+  items,
+  exclusive = false,
+  spaced = false,
+  className,
+  ...props
+}: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -44,22 +50,28 @@ export const Accordion = ({ items, exclusive = false, spaced = false, className,
     ...i,
     className: [i?.className, 'card'].filter(Boolean).join(' '),
     label: <>
-      <span>{i.title}</span>
-      { (i.children !== null) && (
-      <Button
-        aria-label={ i18n.t('aria.notes-and-events.expand') }
-        className={ 'card-title__chevron-btn' }
-        icon={ <Icon
-          className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
-          name={ 'chevron-up' }
-               /> }
-        onClick={ onClickChevron }
-        role={ 'button' }
-        size="small"
-        type={ 'text' }
-      />
-      )}
-      <span>{i.subtitle}</span>
+      <Flex
+        align={ 'center' }
+        justify={ 'center' }
+        vertical={ false }
+      >
+        {i.title}
+        {(i.children !== null) && (
+        <Button
+          aria-label={ i18n.t('aria.notes-and-events.expand') }
+          className={ 'card-title__chevron-btn' }
+          icon={ <Icon
+            className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
+            name={ 'chevron-up' }
+                 /> }
+          onClick={ onClickChevron }
+          role={ 'button' }
+          size="small"
+          type={ 'text' }
+        />
+        )}
+      </Flex>
+      {i.subtitle}
     </>
   })) ?? []
 

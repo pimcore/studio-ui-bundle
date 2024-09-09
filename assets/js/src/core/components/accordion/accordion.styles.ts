@@ -28,7 +28,27 @@ export const useStyles = createStyles(({ token, css }) => {
                      flex: none;
                      margin-inline-end: 0;
                  }
+                > .ant-collapse-expand-icon {
+                    display: none;
+                }
+               
              }
+
+         .card-title__chevron-btn {
+           display: flex;
+           margin: 0 ${token.marginXXS}px;
+         }
+
+
+         .chevron {
+           rotate: 180deg;
+           transition-duration: 0.6s;
+           transition-property: transform;
+         }
+
+         .chevron-up {
+           transform: rotate(-180deg);
+         }
          }
 
          .ant-collapse-extra {
