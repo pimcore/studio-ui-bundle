@@ -37,9 +37,9 @@ export const Accordion = ({
   className,
   ...props
 }: AccordionProps): React.JSX.Element => {
-
   const { styles } = useStyles()
   const [expandedIds, setExpandedIds] = useState<string[]>([])
+
   const onClickChevron = (id: string): void => {
     setExpandedIds((prevIds) =>
       prevIds.includes(id)
@@ -59,7 +59,6 @@ export const Accordion = ({
       label: <>
         <Flex
           align={ 'center' }
-          justify={ 'center' }
           vertical={ false }
         >
           {item.title}
