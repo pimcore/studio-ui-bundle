@@ -33,7 +33,6 @@ import i18n from 'i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useStyle } from '@Pimcore/components/note-and-event-card/note-and-event-card.styles'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 
 interface NotesAndEventsTabViewProps {
