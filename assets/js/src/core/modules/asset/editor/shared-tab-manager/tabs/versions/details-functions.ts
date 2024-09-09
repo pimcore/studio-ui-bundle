@@ -16,7 +16,7 @@ import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import {
   type CustomMetadataVersion,
   type AssetVersion
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
+} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import { container } from '@Pimcore/app/depency-injection'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { serviceIds } from '@Pimcore/app/config/services'

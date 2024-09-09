@@ -15,7 +15,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   type Note
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'

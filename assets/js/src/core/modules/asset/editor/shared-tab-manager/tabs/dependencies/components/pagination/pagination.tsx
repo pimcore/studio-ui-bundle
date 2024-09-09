@@ -14,7 +14,7 @@
 import React from 'react'
 import {
   type DependencyGetCollectionByElementTypeApiResponse
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { t } from 'i18next'
 import { Pagination as PimPagination } from '@Pimcore/components/pagination/pagination'
 import {

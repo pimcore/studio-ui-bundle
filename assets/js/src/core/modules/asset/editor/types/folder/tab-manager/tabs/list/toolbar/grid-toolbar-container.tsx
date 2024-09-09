@@ -23,7 +23,7 @@ interface GridToolbarContainerProps {
     pageSize: number
     current: number
     onChange: (page: number, pageSize: number) => void
-  }
+  } | undefined
 }
 
 const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Element => {
@@ -32,17 +32,19 @@ const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Eleme
 
   return (
     <GridToolbarView
-      renderPagination={ pager.total > 0 && (
-        <Pagination
-          current={ pager.current }
-          defaultPageSize={ pager.pageSize }
-          onChange={ pager.onChange }
-          pageSizeOptions={ ['10', '20', '50', '100'] }
-          showSizeChanger
-          showTotal={ (total) => t('pagination.show-total', { total }) }
-          total={ pager.total }
-        />
-      ) }
+      renderPagination={ pager !== undefined && pager.total > 0
+        ? (
+          <Pagination
+            current={ pager.current }
+            defaultPageSize={ pager.pageSize }
+            onChange={ pager.onChange }
+            pageSizeOptions={ ['10', '20', '50', '100'] }
+            showSizeChanger
+            showTotal={ (total) => t('pagination.show-total', { total }) }
+            total={ pager.total }
+          />
+          )
+        : undefined }
 
       renderTools={ (
         <GridTools />

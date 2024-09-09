@@ -37,5 +37,5 @@ export const FocalPointProvider = ({ children }: { children: React.ReactNode }):
     >
       {children}
     </FocalPointContext.Provider>
-  ), [isActive, coordinates, disabled])
+  ), [isActive, coordinates, disabled, children])
 }

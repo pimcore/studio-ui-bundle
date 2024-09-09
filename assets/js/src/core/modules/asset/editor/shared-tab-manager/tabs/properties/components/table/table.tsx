@@ -172,7 +172,6 @@ export const Table = ({
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
     const updatedProperties = [...(properties ?? [])]
     const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key && !property.inherited)
-    console.log(propertyIndex, updatedProperties.at(propertyIndex))
     const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
     updatedProperties[propertyIndex] = updatedProperty
     const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
@@ -197,7 +196,7 @@ export const Table = ({
               onUpdateCellData={ onUpdateCellData }
               resizable
             />
-                    )}
+          )}
 
           {propertiesTableTab === 'all' && (
             <>

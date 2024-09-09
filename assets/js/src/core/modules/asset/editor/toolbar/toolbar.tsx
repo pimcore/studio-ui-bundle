@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
@@ -23,15 +23,17 @@ import ButtonGroup from 'antd/es/button/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { Popconfirm } from 'antd'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const dispatch = useAppDispatch()
-  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
+  const { asset, properties, removeTrackedChanges, removeAssetFromState, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess }] = useAssetUpdateByIdMutation()
   const messageApi = useMessage()
+  const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (isSuccess) {
@@ -44,12 +46,19 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <ButtonGroup>
-        <IconButton
-          icon='refresh'
-          onClick={ onRefreshClick }
+        <Popconfirm
+          onCancel={ onCancel }
+          onConfirm={ onConfirm }
+          onOpenChange={ onOpenChange }
+          open={ popConfirmOpen }
+          title={ t('toolbar.reload.confirmation') }
         >
-          {t('toolbar.reload')}
-        </IconButton>
+          <IconButton
+            icon='refresh'
+          >
+            {t('toolbar.reload')}
+          </IconButton>
+        </Popconfirm>
       </ButtonGroup>
 
       <Button
@@ -63,7 +72,30 @@ export const Toolbar = (): React.JSX.Element => {
     </ToolbarView>
   )
 
-  function onRefreshClick (): void {
+  function onOpenChange (newOpen: boolean): void {
+    if (!newOpen) {
+      setPopConfirmOpen(false)
+      return
+    }
+
+    if (Object.keys(asset?.changes ?? {}).length > 0) {
+      setPopConfirmOpen(true)
+    } else {
+      refreshAsset()
+    }
+  }
+
+  function onConfirm (): void {
+    setPopConfirmOpen(false)
+    refreshAsset()
+  }
+
+  function onCancel (): void {
+    setPopConfirmOpen(false)
+  }
+
+  function refreshAsset (): void {
+    removeAssetFromState()
     dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id!)))
   }
 

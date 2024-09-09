@@ -19,7 +19,7 @@ import { VersionCard } from '@Pimcore/components/version-card/version-card'
 import {
   type VersionGetCollectionForElementByTypeAndIdApiArg,
   type Version
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
+} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import {
   DetailsVersionsContainer
