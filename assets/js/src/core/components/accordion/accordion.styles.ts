@@ -38,8 +38,7 @@ export const useStyles = createStyles(({ token, css }) => {
            display: flex;
            margin: 0 ${token.marginXXS}px;
          }
-
-
+         
          .chevron {
            rotate: 180deg;
            transition-duration: 0.6s;
