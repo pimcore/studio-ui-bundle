@@ -16,23 +16,72 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     accordion: css`
-      .ant-collapse-item {
-          > .ant-collapse-header {
-              display: inline-flex;
-              width: 100%;
+      
+       .ant-collapse-item {
+             border-bottom: none !important;
 
-              > .ant-collapse-header-text {
-                  flex: none;
-                  margin-inline-end: 0;
-              }
-          }
+             > .ant-collapse-header {
+                 display: inline-flex;
+                 width: 100%;
+
+                 > .ant-collapse-header-text {
+                     flex: none;
+                     margin-inline-end: 0;
+                 }
+             }
+         }
+
+         .ant-collapse-extra {
+             order: 1;
+             margin-left: auto;
+         }
+
+    `,
+    spaced: css`
+        background: ${token.colorBgContainer};
+
+      .card {
+        margin-bottom: 24px;
       }
       
-      .ant-collapse-extra {
-        order: 1;
-        margin-left: auto;
+      .ant-collapse-item {
+        border-bottom: none;
       }
-      
+
+      &.ant-collapse-borderless > .ant-collapse-item:last-child, &.ant-collapse-borderless > .ant-collapse-item:last-child .ant-collapse-header {
+        border-radius: 5px;
+      }
+
+      &.ant-collapse-borderless >.ant-collapse-item:last-child .ant-collapse-header[aria-expanded="true"] {
+        border: 1px solid ${token.colorBorder};
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .ant-collapse-header[aria-expanded="false"] {
+        background-color: ${token.colorBgSelectedTab};
+
+        border: 1px solid ${token.colorBorder};
+        border-radius: 5px;
+      }
+
+      .ant-collapse-header[aria-expanded="true"] {
+        background-color: ${token.colorBgSelectedTab};
+
+        border: 1px solid ${token.colorBorder};
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+
+      .ant-collapse-content {
+        .ant-collapse-content-box {
+          border: 1px solid ${token.colorBorder};
+          border-top: none;
+          border-bottom-left-radius: 5px;
+          border-bottom-right-radius: 5px;
+          background-color: ${token.colorBgSelectedTab};
+        }
+      }
     `
   }
 })

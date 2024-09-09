@@ -18,52 +18,48 @@ export const useStyle = createStyles(({ token, css }) => {
 
   return {
     card: css`
+       span, div, div.anticon, button {
+         vertical-align: middle;
+       }
 
-      span, div, div.anticon, button {
-        vertical-align: middle;
-      }
-      
-      .panel-title {
-        font-size: 12px;
-        font-weight: 600;
-      }
-      
+       .panel-title {
+         font-size: 12px;
+         font-weight: 600;
+       }
+
       .panel-title__user, .panel-title__divider {
         vertical-align: unset;
         font-weight: 400;
         line-height: 20px;
         color: ${cardToken.colorTextSecondary}
       }
-      
+
       .panel-extra__trash-icon {
         color: ${cardToken.colorPrimary};
       }
-      
-      .panel-body__description {
-        display: block;
-      }
 
-      .panel-body__description p {
-        margin: 0;
-      } 
+       .panel-body__description {
+         display: block;
+         margin: 0;
+       }
 
       .panel-body__description-padding {
         padding-bottom: ${cardToken.paddingSM}px;
       }
 
       .panel-body__details {
-        display: block;  
+        display: block;
         padding-bottom: ${cardToken.paddingXS}px;
       }
 
-      .ant-table-wrapper p {
-        margin: 0;
-      }
+       .ant-table-wrapper p {
+         margin: 0;
+       }
 
-      .ant-table-wrapper .ant-table-cell {
-        white-space: unset;
-        overflow-wrap: anywhere;
-      }
+       .ant-table-wrapper .ant-table-cell {
+         white-space: unset;
+         overflow-wrap: anywhere;
+       }
     `
   }
 }, { hashPriority: 'low' })

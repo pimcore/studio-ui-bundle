@@ -34,6 +34,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useStyle } from '@Pimcore/components/note-and-event-card/note-and-event-card.styles'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -83,14 +84,16 @@ export const NotesAndEventsTabView = ({
       return (
         <div>
           {type !== undefined && <Tag>{type}</Tag>}
-          <span>{note.date}</span>
+          <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
           <Button
             aria-label={ i18n.t('aria.notes-and-events.delete') }
             icon={ <Icon
               className={ 'panel-extra__trash-icon' }
               name={ 'trash' }
                    /> }
-            onClick={ () => { onClickTrash(note.id) } }
+            onClick={ () => {
+              onClickTrash(note.id)
+            } }
             type={ 'text' }
           />
         </div>
@@ -128,7 +131,7 @@ export const NotesAndEventsTabView = ({
     }
 
     return ({
-      key: '1',
+      key: note.id.toString(),
       label: <Space>
         {note.title !== '' && (
         <>
@@ -140,7 +143,7 @@ export const NotesAndEventsTabView = ({
       </Space>,
       extra: extra(),
       children: children(),
-      className: styles.card
+      className: [styles.card, 'card'].join(' ')
     })
   })
 
@@ -189,8 +192,9 @@ export const NotesAndEventsTabView = ({
           } }
         >
           <Accordion
-            exclusive
+            exclusive={ false }
             items={ NotesAndEvents }
+            spaced
           />
         </Content>
       </Content>

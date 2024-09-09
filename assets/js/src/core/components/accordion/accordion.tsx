@@ -16,16 +16,26 @@ import { Collapse, type CollapseProps } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 
 export interface AccordionProps extends CollapseProps {
-  exclusive: boolean
+  exclusive?: boolean
+  spaced?: boolean
 }
 
-export const Accordion = ({ items, exclusive, ...props }: AccordionProps): React.JSX.Element => {
+export const Accordion = ({ items, exclusive = false, spaced = false, className, ...props }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
+
+  const allClassNames = [
+    'accordion',
+    className,
+    spaced ? 'spaced' : '',
+    spaced ? styles.spaced : '',
+    styles.accordion
+  ].filter(Boolean).join(' ')
 
   return (
     <Collapse
       accordion={ exclusive }
-      className={ [styles.accordion, 'accordion'].join(' ') }
+      bordered={ !spaced }
+      className={ allClassNames }
       defaultActiveKey={ ['1'] }
       expandIconPosition='end'
       items={ items }
