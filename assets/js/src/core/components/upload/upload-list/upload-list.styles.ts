@@ -28,12 +28,6 @@ export const useStyles = createStyles(({ token, css }) => {
               margin: 0
             }
           }
-            
-          //.file-upload-list__file__progress {
-          //    .ant-progress-bg {
-          //        height: 4px !important;
-          //    }
-          //}
         }
       }
     `
