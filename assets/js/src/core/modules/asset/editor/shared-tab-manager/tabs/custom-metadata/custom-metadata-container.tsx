@@ -34,7 +34,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import { type CustomMetadata } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
