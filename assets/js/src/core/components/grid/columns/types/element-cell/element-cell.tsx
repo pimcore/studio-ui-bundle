@@ -16,31 +16,35 @@ import React from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { ElementCellContent } from './element-cell-content'
-import { type Asset } from '../../../../../../sdk/main'
 import { useStyle } from './element-cell.styles'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementType } from 'types/element-type.d'
+
+export interface ElementCellConfig {
+  allowedTypes: ElementType[] | ((props: DefaultCellProps) => ElementType[])
+}
 
 export const ElementCell = (props: DefaultCellProps): React.JSX.Element => {
   const styles = useStyle().styles
+  const { column } = props
   const editable = props.column.columnDef.meta?.editable ?? true
+  const config = column.columnDef.meta?.config as ElementCellConfig | null ?? {
+    allowedTypes: ['asset', 'data-object', 'document']
+  }
+
+  const allowedTypes = typeof config.allowedTypes === 'function' ? config.allowedTypes(props) : config.allowedTypes
 
   function isValidContext (info: DragAndDropInfo): boolean {
-    return info.type === 'asset' && editable
+    return allowedTypes.includes(info.type as ElementType) && editable
   }
 
   function onDrop (info: DragAndDropInfo): void {
-    const asset = info.data as Asset
-    const propertyUpdate = {
-      path: asset.path,
-      id: asset.id,
-      type: asset.type,
-      filename: asset.filename
-    }
-
+    const element = info.data as Asset // @todo add other element types as soon as APIs are available
     if (props.column.columnDef.meta?.editable !== undefined && props.table.options.meta?.onUpdateCellData !== undefined) {
       props.table.options.meta?.onUpdateCellData({
         rowIndex: props.row.index,
         columnId: props.column.id,
-        value: propertyUpdate,
+        value: element,
         rowData: props.row.original
       })
     }

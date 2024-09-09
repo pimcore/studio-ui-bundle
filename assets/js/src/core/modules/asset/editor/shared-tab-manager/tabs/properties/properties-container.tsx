@@ -27,7 +27,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import { type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()

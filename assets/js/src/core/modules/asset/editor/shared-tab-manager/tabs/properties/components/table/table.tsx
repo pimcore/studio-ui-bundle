@@ -25,7 +25,7 @@ import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/mod
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -188,7 +188,6 @@ export const Table = ({
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)
-      console.log('rowdata', rowData)
       setModifiedCells([...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
