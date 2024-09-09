@@ -19,24 +19,33 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import i18n from 'i18next'
 
+export interface AccordionItemType extends ItemType {
+  title: React.ReactElement
+  subtitle?: React.ReactElement
+}
+
 export interface AccordionProps extends CollapseProps {
-  items: ItemType[]
+  items: AccordionItemType[]
   exclusive?: boolean
   spaced?: boolean
-  header: string
-  subheader?: string
 }
 
 export const Accordion = ({ items, exclusive = false, spaced = false, className, ...props }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [isExpanded, setIsExpanded] = useState(false)
 
+  const onClickChevron = (): void => {
+    setIsExpanded(!isExpanded)
+  }
+
+  // use whats given through collapsible and just use the background that expands
+  // pass in via each item whether it is empty i.e. text that then transform into showDetails and put into conditional for button
   const itemsWithCardClassName = items?.map((i) => ({
     ...i,
     className: [i?.className, 'card'].filter(Boolean).join(' '),
     label: <>
-      <span></span>
-      { (description !== '' || showDetails) && (
+      <span>{i.title}</span>
+      { (i.children !== null) && (
       <Button
         aria-label={ i18n.t('aria.notes-and-events.expand') }
         className={ 'card-title__chevron-btn' }
@@ -50,7 +59,7 @@ export const Accordion = ({ items, exclusive = false, spaced = false, className,
         type={ 'text' }
       />
       )}
-      <span></span>
+      <span>{i.subtitle}</span>
     </>
   })) ?? []
 
@@ -70,7 +79,6 @@ export const Accordion = ({ items, exclusive = false, spaced = false, className,
       accordion={ exclusive }
       bordered={ !spaced }
       className={ allClassNames.join(' ') }
-      expandIconPosition='end'
       items={ itemsWithCardClassName }
       { ...props }
     />

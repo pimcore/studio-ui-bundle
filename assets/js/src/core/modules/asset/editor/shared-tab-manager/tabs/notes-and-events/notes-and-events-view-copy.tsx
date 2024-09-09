@@ -56,7 +56,7 @@ export const NotesAndEventsTabView = ({
   const NotesAndEvents: Array<{
     children: React.JSX.Element
     extra: React.JSX.Element
-    label: React.JSX.Element
+    title: React.JSX.Element
     key: string
   }> = notes.map((note) => {
     let showDetails = false
@@ -129,7 +129,7 @@ export const NotesAndEventsTabView = ({
 
     return ({
       key: note.id.toString(),
-      label: <Space>
+      title: <Space>
         {note.title !== '' && (
         <>
           <span className={ 'panel-title' }>{note.title}</span>

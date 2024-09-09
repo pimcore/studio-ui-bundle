@@ -68,19 +68,20 @@ export const VersionAccordion = ({
 
   const title = (
     <div>
-      <div>
-        {selectable && (
+      {selectable && (
         <Checkbox
           checked={ selected }
           onChange={ onChangeCheckbox }
         />
-        )}
-        <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
-      </div>
-      <div>
-        <span className={ 'sub-title' }>{`${t('by')} ${savedBy}`}</span>
-        {isSet(autosaved) && autosaved && <Icon name="lightning-01" />}
-      </div>
+      )}
+      <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
+    </div>
+  )
+
+  const subtitle = (
+    <div>
+      <span className={ 'sub-title' }>{`${t('by')} ${savedBy}`}</span>
+      {isSet(autosaved) && autosaved && <Icon name="lightning-01" />}
     </div>
   )
 
@@ -172,7 +173,8 @@ export const VersionAccordion = ({
 
   const item = [{
     key: id,
-    label: title,
+    title,
+    subtitle,
     extra,
     children,
     onClick,
