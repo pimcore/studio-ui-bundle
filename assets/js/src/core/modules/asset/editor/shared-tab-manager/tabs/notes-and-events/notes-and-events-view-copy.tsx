@@ -54,8 +54,6 @@ export const NotesAndEventsTabView = ({
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
 
-  const { styles } = useStyle()
-
   const NotesAndEvents: Array<{
     children: React.JSX.Element
     extra: React.JSX.Element
@@ -142,8 +140,7 @@ export const NotesAndEventsTabView = ({
         <span className={ 'panel-title__user' }>{note.userName}</span>
       </Space>,
       extra: extra(),
-      children: children(),
-      className: [styles.card, 'card'].join(' ')
+      children: children()
     })
   })
 

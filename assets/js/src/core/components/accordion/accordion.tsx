@@ -14,14 +14,18 @@
 import React from 'react'
 import { Collapse, type CollapseProps } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
+import { type ItemType } from 'rc-collapse/es/interface'
 
 export interface AccordionProps extends CollapseProps {
+  items: ItemType[]
   exclusive?: boolean
   spaced?: boolean
 }
 
 export const Accordion = ({ items, exclusive = false, spaced = false, className, ...props }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
+
+  const itemsWithCardClassName = items && items.map((i) => ({ ...i, className: [i.className, 'card'].filter(Boolean).join(' ') }))
 
   const allClassNames = [
     'accordion',
@@ -38,7 +42,7 @@ export const Accordion = ({ items, exclusive = false, spaced = false, className,
       className={ allClassNames }
       defaultActiveKey={ ['1'] }
       expandIconPosition='end'
-      items={ items }
+      items={ itemsWithCardClassName }
       { ...props }
     />
   )
