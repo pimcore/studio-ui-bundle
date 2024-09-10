@@ -60,7 +60,6 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
 
   const uploadFiles = async (event): Promise<void> => {
     const files = event.target.files as File[]
-
     if (files.length > 0 && node?.id !== undefined) {
       for (let i = 0; i < files.length; i++) {
         try {
@@ -71,7 +70,7 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
 
           if (formData.has('file')) {
             // @ts-expect-error - marvin will know why
-            await dispatch(assetUpload.initiate({ body: formData, parentId: parseInt(node.id) })).unwrap()
+            await dispatch(assetUpload.initiate({ body: formData, parentId: parseInt(node.id) }))
           }
 
           console.log('File uploaded successfully')
@@ -94,7 +93,7 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
 
           if (formData.has('zipFile')) {
             // @ts-expect-error - marvin will know why
-            await dispatch(archiveUpload.initiate({ body: formData, parentId: parseInt(node.id) })).unwrap()
+            await dispatch(archiveUpload.initiate({ body: formData, parentId: parseInt(node.id) }))
           }
 
           console.log('Archive uploaded successfully')
