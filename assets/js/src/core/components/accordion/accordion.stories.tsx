@@ -50,6 +50,14 @@ const item2: AccordionItemType = {
         pests.</p>
 }
 
+
+const item3: AccordionItemType = {
+    key: '3',
+    title: <span>'This is panel header 3'</span>,
+    children: <p></p>,
+    collapsible: 'icon'
+}
+
 const items: CollapseProps['items'] = [
     item1,
     item2
@@ -57,6 +65,12 @@ const items: CollapseProps['items'] = [
 export const DefaultSinglePanel = {
     args: {
         items: [item1],
+    }
+}
+
+export const CollapseDisabled = {
+    args: {
+        items: [item3],
     }
 }
 

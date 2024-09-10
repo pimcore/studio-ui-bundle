@@ -56,6 +56,7 @@ export const Accordion = ({
 
   const itemsWithCardClassName = items?.map((item) => {
     const chevronClassName = ['chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'chevron-up' : ''].join(' ')
+    const collapsibleDisabled = item.collapsible === 'icon'
 
     return ({
       ...item,
@@ -66,7 +67,7 @@ export const Accordion = ({
           vertical={ false }
         >
           {item.title}
-          {(item.children !== null) && (
+          {(item.children !== null) && !collapsibleDisabled && (
           <Button
             aria-label={ i18n.t('aria.notes-and-events.expand') }
             className={ 'card-title__chevron-btn' }

@@ -130,6 +130,8 @@ export const NotesAndEventsTabView = ({
       )
     }
 
+    const collapsibleDisabled = { collapsible: 'icon' }
+
     return ({
       key: note.id.toString(),
       title: <Space>
@@ -142,7 +144,8 @@ export const NotesAndEventsTabView = ({
         <span className={ 'panel-title__user' }>{note.userName}</span>
       </Space>,
       extra: extra(),
-      children: children()
+      children: children(),
+      ...(note.description.length === 0 && collapsibleDisabled)
     })
   })
 
