@@ -13,12 +13,13 @@
 
 import React, { useState } from 'react'
 import { useStyle } from './details.styles'
-import { Collapse, type CollapseProps, Form, Input, Select } from 'antd'
+import { Form, Input, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
+import { Accordion } from '@Pimcore/components/accordion/accordion'
 
 export interface CustomDownloadProps {
   width: number
@@ -108,10 +109,10 @@ export const AssetEditorSidebarDetailsView = ({
     }
   ]
 
-  const customDownloadOptions: CollapseProps['items'] = [
+  const customDownloadOptions = [
     {
       key: 1,
-      label: 'Custom Download',
+      title: <span>Custom Download</span>,
       children: (
         <Form
           initialValues={ {
@@ -275,7 +276,8 @@ export const AssetEditorSidebarDetailsView = ({
             </div>
 
             <div className={ 'entry-content__download-content-custom' }>
-              <Collapse
+              <Accordion
+                alignButtonLeft
                 defaultActiveKey={ ['1'] }
                 items={ customDownloadOptions }
               />

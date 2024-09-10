@@ -18,7 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
     accordion: css`
       
        .ant-collapse-item {
-             border-bottom: none !important;
+             border-bottom: none;
 
              > .ant-collapse-header {
                  display: inline-flex;

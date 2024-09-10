@@ -28,6 +28,7 @@ export interface AccordionProps extends CollapseProps {
   items: AccordionItemType[]
   accordion?: boolean
   spaced?: boolean
+  alignButtonLeft?: boolean
 }
 
 export const Accordion = ({
@@ -36,6 +37,7 @@ export const Accordion = ({
   spaced = false,
   className,
   activeKey,
+  alignButtonLeft = false,
   ...props
 }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -63,6 +65,27 @@ export const Accordion = ({
     const chevronClassName = ['chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'chevron-up' : ''].join(' ')
     const collapsibleDisabled = item.collapsible === 'icon'
 
+    const chevronButton = (): React.ReactElement => {
+      return (
+        <Button
+          aria-label={ i18n.t('aria.notes-and-events.expand') }
+          className={ 'card-title__chevron-btn' }
+          icon={ <Icon
+            className={ chevronClassName }
+            name={ 'chevron-up' }
+                 /> }
+          onClick={ () => {
+            if (item.id != null) {
+              onClickChevron(item.id)
+            }
+          } }
+          role={ 'button' }
+          size="small"
+          type={ 'text' }
+        />
+      )
+    }
+
     return ({
       ...item,
       className: [item?.className, 'card'].filter(Boolean).join(' '),
@@ -71,25 +94,11 @@ export const Accordion = ({
           align={ 'center' }
           vertical={ false }
         >
+          {alignButtonLeft && (item.children !== null) && !collapsibleDisabled &&
+                        chevronButton()}
           {item.title}
-          {(item.children !== null) && !collapsibleDisabled && (
-          <Button
-            aria-label={ i18n.t('aria.notes-and-events.expand') }
-            className={ 'card-title__chevron-btn' }
-            icon={ <Icon
-              className={ chevronClassName }
-              name={ 'chevron-up' }
-                   /> }
-            onClick={ () => {
-              if (item.id != null) {
-                onClickChevron(item.id)
-              }
-            } }
-            role={ 'button' }
-            size="small"
-            type={ 'text' }
-          />
-          )}
+          {!alignButtonLeft && (item.children !== null) && !collapsibleDisabled &&
+                        chevronButton()}
         </Flex>
         {item.subtitle}
       </>
