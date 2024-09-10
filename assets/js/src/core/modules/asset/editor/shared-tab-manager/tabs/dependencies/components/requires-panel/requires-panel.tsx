@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   useDependencyGetCollectionByElementTypeQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/table/table'
 import {
   Pagination

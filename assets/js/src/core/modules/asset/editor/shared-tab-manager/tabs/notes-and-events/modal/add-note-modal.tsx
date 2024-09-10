@@ -19,7 +19,7 @@ import { AddNoteForm } from '@Pimcore/modules/asset/editor/shared-tab-manager/ta
 import { useForm } from 'antd/es/form/Form'
 import {
   useNoteElementCreateMutation
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { type ElementType } from 'types/element-type.d'
 
 export interface AddNoteFormValues {

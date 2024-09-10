@@ -13,7 +13,7 @@
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React, { useEffect, useRef, useState } from 'react'
-import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
+import { useVersionGetCollectionForElementByTypeAndIdQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import { type RefSelectProps, Select } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { DownOutlined } from '@ant-design/icons'
@@ -31,7 +31,7 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const { data, isLoading } = useGetVersionsQuery({
+  const { data, isLoading } = useVersionGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!,
     page: 1,

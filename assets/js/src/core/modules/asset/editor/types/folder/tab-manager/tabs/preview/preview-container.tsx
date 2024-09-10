@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useMemo, useState } from 'react'
 import { GridToolbarContainer } from '../list/toolbar/grid-toolbar-container'
 import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { Content } from '@Pimcore/components/content/content'
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -26,7 +27,7 @@ const PreviewContainer = (): React.JSX.Element => {
   const assetId = assetContext.id!
   const { asset } = useAssetDraft(assetId)
 
-  const { data } = useAssetGetTreeQuery({
+  const { data, isLoading } = useAssetGetTreeQuery({
     pathIncludeDescendants: true,
     page: currentPage,
     pageSize,
@@ -42,25 +43,30 @@ const PreviewContainer = (): React.JSX.Element => {
   }
 
   return useMemo(() => (
-    <>
-      { data !== undefined && (
-        <ContentToolbarSidebarLayout
-          renderToolbar={
-            <GridToolbarContainer
-              pager={ {
+    <ContentToolbarSidebarLayout
+      renderToolbar={
+        <GridToolbarContainer
+          pager={ data !== undefined && data.totalItems > 0
+            ? {
                 current: currentPage,
                 total,
                 pageSize,
                 onChange: onPagerChange
-              } }
-            />
-          }
-        >
+              }
+            : undefined }
+        />
+      }
+    >
+      <Content
+        loading={ isLoading }
+        padded
+      >
+        { data?.items !== undefined && data.items.length > 0 && (
           <FlexContainer assets={ data } />
-        </ContentToolbarSidebarLayout>
-      )}
-    </>
-  ), [currentPage, pageSize, data])
+        )}
+      </Content>
+    </ContentToolbarSidebarLayout>
+  ), [currentPage, pageSize, data, isLoading])
 }
 
 export { PreviewContainer }

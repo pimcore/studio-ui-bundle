@@ -12,7 +12,7 @@
 */
 
 import React, { useMemo, useState } from 'react'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export interface IGridConfigContext {
   columns: GridColumnConfiguration[]

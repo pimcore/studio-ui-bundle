@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'

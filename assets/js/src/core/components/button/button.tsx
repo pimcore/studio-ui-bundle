@@ -38,15 +38,15 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
   }
 
   useEffect(() => {
-    if (loading === true) {
-      buttonRef.current!.style.width = buttonRef.current!.getBoundingClientRect().width + 'px'
-      buttonRef.current!.style.height = buttonRef.current!.getBoundingClientRect().height + 'px'
+    if (loading === true && buttonRef.current !== null) {
+      buttonRef.current.style.width = buttonRef.current.getBoundingClientRect().width + 'px'
+      buttonRef.current.style.height = buttonRef.current.getBoundingClientRect().height + 'px'
     }
 
     return () => {
-      if (loading === true) {
-        buttonRef.current!.style.width = ''
-        buttonRef.current!.style.height = ''
+      if (loading === true && buttonRef.current !== null) {
+        buttonRef.current.style.width = ''
+        buttonRef.current.style.height = ''
       }
     }
   }, [loading])

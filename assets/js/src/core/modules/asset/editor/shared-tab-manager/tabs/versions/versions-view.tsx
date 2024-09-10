@@ -15,9 +15,9 @@ import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
 import {
-  type Version,
-  type VersionGetCollectionForElementByTypeAndIdApiArg
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
+  type VersionGetCollectionForElementByTypeAndIdApiArg,
+  type Version
+} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import {
   DetailsVersionsContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'

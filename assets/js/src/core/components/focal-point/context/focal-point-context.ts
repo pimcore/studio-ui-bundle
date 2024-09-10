@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { ImageData as AssetImageData } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import type { ImageData as AssetImageData } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React from 'react'
 
 export interface FocalPointContextProps {

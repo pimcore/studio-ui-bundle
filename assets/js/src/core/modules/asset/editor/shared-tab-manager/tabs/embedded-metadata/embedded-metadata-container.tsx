@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { useAssetCustomSettingsGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetCustomSettingsGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useTranslation } from 'react-i18next'

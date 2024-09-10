@@ -18,7 +18,7 @@ import {
 import {
   useNoteDeleteByIdMutation,
   useNoteElementGetCollectionQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { Result } from 'antd'
 import { Pagination } from '@Pimcore/components/pagination/pagination'

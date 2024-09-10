@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
+import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
 import { Header } from '@Pimcore/components/header/header'

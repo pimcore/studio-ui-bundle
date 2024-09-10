@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { FlexContainerView } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container-view'
 import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 
