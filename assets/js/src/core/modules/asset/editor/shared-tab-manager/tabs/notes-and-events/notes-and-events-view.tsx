@@ -16,16 +16,25 @@ import { useTranslation } from 'react-i18next'
 import {
   type Note
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
-import { NoteAndEventCard } from '@Pimcore/components/note-and-event-card/note-and-event-card'
-import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import { type ElementType } from 'types/element-type.d'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Space, Tag } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Button } from '@Pimcore/components/button/button'
+import i18n from 'i18next'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { createColumnHelper } from '@tanstack/react-table'
+import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { useStyles } from './notes-and-events-view.style'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -45,7 +54,14 @@ export const NotesAndEventsTabView = ({
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
 
-  const NotesAndEvents = notes.map((note) => {
+  const { styles } = useStyles()
+
+  const NotesAndEvents: Array<{
+    children: React.JSX.Element
+    extra: React.JSX.Element
+    title: React.JSX.Element
+    key: string
+  }> = notes.map((note) => {
     let showDetails = false
     const formatedData: any[] = []
     if (Array.isArray(note.data) && note.data.length > 0) {
@@ -62,21 +78,72 @@ export const NotesAndEventsTabView = ({
       })
     }
 
-    return (
-      <NoteAndEventCard
-        data={ formatedData }
-        date={ formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' }) }
-        description={ note.description }
-        key={ note.id }
-        onClickTrash={ () => {
-          onClickTrash(note.id)
-        } }
-        showDetails={ showDetails }
-        title={ note.title }
-        type={ note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined }
-        user={ note.userName }
-      />
-    )
+    const extra = (): React.JSX.Element => {
+      const type = note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined
+
+      return (
+        <div>
+          {type !== undefined && <Tag>{type}</Tag>}
+          <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
+          <Button
+            aria-label={ i18n.t('aria.notes-and-events.delete') }
+            icon={ <Icon
+              className={ 'panel-extra__trash-icon' }
+              name={ 'trash' }
+                   /> }
+            onClick={ () => {
+              onClickTrash(note.id)
+            } }
+            type={ 'text' }
+          />
+        </div>
+      )
+    }
+
+    const columnHelper = createColumnHelper<any>()
+
+    const columns = [
+      columnHelper.accessor(i18n.t('notes-and-events.name'), {}),
+      columnHelper.accessor(i18n.t('notes-and-events.type'), { size: 120 }),
+      columnHelper.accessor(i18n.t('notes-and-events.value'), { size: 310, meta: { autoWidth: true } })
+    ]
+
+    const children = (): React.JSX.Element => {
+      return (
+        <><span
+          className={ 'panel-body__description ' + (showDetails ? 'panel-body__description-padding' : '') }
+          >
+          {respectLineBreak(note.description)}
+        </span>
+          {showDetails && (
+          <div>
+            <span className={ 'panel-body__details' }>{i18n.t('notes-and-events.details')}</span>
+            <Grid
+              autoWidth
+              columns={ columns }
+              data={ note.data }
+              resizable
+            />
+          </div>
+          )}
+        </>
+      )
+    }
+
+    return ({
+      key: note.id.toString(),
+      title: <Space>
+        {note.title !== '' && (
+        <>
+          <span className={ 'panel-title' }>{note.title}</span>
+          <span className={ 'panel-title__divider' }>|</span>
+        </>
+        )}
+        <span className={ 'panel-title__user' }>{note.userName}</span>
+      </Space>,
+      extra: extra(),
+      children: children()
+    })
   })
 
   return (
@@ -88,7 +155,7 @@ export const NotesAndEventsTabView = ({
             theme='secondary'
           >
             <>
-              { pagination }
+              {pagination}
             </>
           </Toolbar>
           )
@@ -123,7 +190,13 @@ export const NotesAndEventsTabView = ({
             text: t('notes-and-events.no-notes-and-events-to-show')
           } }
         >
-          {NotesAndEvents}
+          <div className={ styles['notes-and-events'] }>
+            <Accordion
+              exclusive={ false }
+              items={ NotesAndEvents }
+              spaced
+            />
+          </div>
         </Content>
       </Content>
     </ContentToolbarSidebarLayout>

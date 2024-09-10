@@ -22,12 +22,50 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     'notes-and-events': css`
-      display: flex;
-      flex-direction: row;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
- 
+
+      span, div, div.anticon, button {
+        vertical-align: middle;
+      }
+
+      .panel-title {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .panel-title__user, .panel-title__divider {
+        vertical-align: unset;
+        font-weight: 400;
+        line-height: 20px;
+        color: ${token.colorTextSecondary}
+      }
+
+      .panel-extra__trash-icon {
+        color: ${token.colorPrimary};
+      }
+
+      .panel-body__description {
+        display: block;
+        margin: 0;
+      }
+
+      .panel-body__description-padding {
+        padding-bottom: ${token.paddingSM}px;
+      }
+
+      .panel-body__details {
+        display: block;
+        padding-bottom: ${token.paddingXS}px;
+      }
+
+      .ant-table-wrapper p {
+        margin: 0;
+      }
+
+      .ant-table-wrapper .ant-table-cell {
+        white-space: unset;
+        overflow-wrap: anywhere;
+      }
+      
       .notes-container {
         display: flex;
         flex-direction: column;
@@ -58,26 +96,43 @@ export const useStyles = createStyles(({ token, css }) => {
       & .notes-content > .notes-content__text {
         color: ${token.colorText};
       }
-
-      & .ant-btn {
-        display: flex;
-        align-items: center;
-        line-height: 24px;
-      }
-      
-    `,
-
-    'add-note-modal__section': css`
-      width: ${notesAndEventsToken.notesModalFieldsWidth}px;
-      margin-bottom: 10px;
-
-      .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-        width: ${notesAndEventsToken.notesModalFieldsWidth}px;
-      }
-      
-      .mandatory {
-        color: #FF4D4F;
-      }
+      //
+      // & .ant-btn {
+      //   display: flex;
+      //   align-items: center;
+      //   line-height: 24px;
+      // }
+      //
+      // .notes-container__pagination-container {
+      //   border-top: 1px solid ${notesAndEventsToken.colorBorderTertiary};
+      //   position: sticky;
+      //   bottom: 0;
+      //   height: ${notesAndEventsToken.sizeXXL}px;
+      // }
+      //
+      // .notes-container__pagination {
+      //   display: flex;
+      //   justify-content: space-between;
+      //   background-color: ${notesAndEventsToken.colorWhite};
+      //   padding-right: ${notesAndEventsToken.paddingSM}px;
+      //   padding-left: ${notesAndEventsToken.paddingXS}px;
+      //   align-items: center;
+      //   width: 100%;
+      //   height: ${notesAndEventsToken.sizeXXL}px;
+      // }
     `
+
+    // 'add-note-modal__section': css`
+    //   width: ${notesAndEventsToken.notesModalFieldsWidth}px;
+    //   margin-bottom: 10px;
+    //
+    //   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    //     width: ${notesAndEventsToken.notesModalFieldsWidth}px;
+    //   }
+    //
+    //   .mandatory {
+    //     color: #FF4D4F;
+    //   }
+    // `
   }
 }, { hashPriority: 'low' })

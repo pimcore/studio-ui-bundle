@@ -41,15 +41,19 @@ export const Accordion = ({
   const [expandedIds, setExpandedIds] = useState<string[]>([])
 
   const onClickChevron = (id: string): void => {
-    setExpandedIds((prevIds) =>
-      prevIds.includes(id)
-        ? prevIds.filter((expandedId) => expandedId !== id)
-        : [...prevIds, id]
-    )
+    if (exclusive) {
+      setExpandedIds((prevIds) =>
+        prevIds.includes(id) ? [] : [id]
+      )
+    } else {
+      setExpandedIds((prevIds) =>
+        prevIds.includes(id)
+          ? prevIds.filter((expandedId) => expandedId !== id)
+          : [...prevIds, id]
+      )
+    }
   }
 
-  // use whats given through collapsible and just use the background that expands
-  // pass in via each item whether it is empty i.e. text that then transform into showDetails and put into conditional for button
   const itemsWithCardClassName = items?.map((item) => {
     const chevronClassName = ['chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'chevron-up' : ''].join(' ')
 
@@ -104,7 +108,9 @@ export const Accordion = ({
       bordered={ !spaced }
       className={ allClassNames.join(' ') }
       items={ itemsWithCardClassName }
-      onChange={ (keys) => { setExpandedIds(Array.isArray(keys) ? keys : [keys]) } }
+      onChange={ (keys) => {
+        setExpandedIds(Array.isArray(keys) ? keys : [keys])
+      } }
       { ...props }
     />
   )
