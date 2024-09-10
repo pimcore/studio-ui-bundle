@@ -96,43 +96,8 @@ export const useStyles = createStyles(({ token, css }) => {
       & .notes-content > .notes-content__text {
         color: ${token.colorText};
       }
-      //
-      // & .ant-btn {
-      //   display: flex;
-      //   align-items: center;
-      //   line-height: 24px;
-      // }
-      //
-      // .notes-container__pagination-container {
-      //   border-top: 1px solid ${notesAndEventsToken.colorBorderTertiary};
-      //   position: sticky;
-      //   bottom: 0;
-      //   height: ${notesAndEventsToken.sizeXXL}px;
-      // }
-      //
-      // .notes-container__pagination {
-      //   display: flex;
-      //   justify-content: space-between;
-      //   background-color: ${notesAndEventsToken.colorWhite};
-      //   padding-right: ${notesAndEventsToken.paddingSM}px;
-      //   padding-left: ${notesAndEventsToken.paddingXS}px;
-      //   align-items: center;
-      //   width: 100%;
-      //   height: ${notesAndEventsToken.sizeXXL}px;
-      // }
+      
     `
 
-    // 'add-note-modal__section': css`
-    //   width: ${notesAndEventsToken.notesModalFieldsWidth}px;
-    //   margin-bottom: 10px;
-    //
-    //   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    //     width: ${notesAndEventsToken.notesModalFieldsWidth}px;
-    //   }
-    //
-    //   .mandatory {
-    //     color: #FF4D4F;
-    //   }
-    // `
   }
 }, { hashPriority: 'low' })
