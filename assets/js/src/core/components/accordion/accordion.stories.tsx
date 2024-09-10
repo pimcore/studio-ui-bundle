@@ -68,6 +68,13 @@ export const DefaultSinglePanel = {
     }
 }
 
+export const ChevronLeft = {
+    args: {
+        items: [item1],
+        alignChevronLeft: true
+    }
+}
+
 export const CollapseDisabled = {
     args: {
         items: [item3],

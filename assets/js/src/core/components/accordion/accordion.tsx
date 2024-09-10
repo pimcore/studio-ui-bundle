@@ -28,7 +28,7 @@ export interface AccordionProps extends CollapseProps {
   items: AccordionItemType[]
   accordion?: boolean
   spaced?: boolean
-  alignButtonLeft?: boolean
+  alignChevronLeft?: boolean
 }
 
 export const Accordion = ({
@@ -37,7 +37,7 @@ export const Accordion = ({
   spaced = false,
   className,
   activeKey,
-  alignButtonLeft = false,
+  alignChevronLeft = false,
   ...props
 }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -94,10 +94,10 @@ export const Accordion = ({
           align={ 'center' }
           vertical={ false }
         >
-          {alignButtonLeft && (item.children !== null) && !collapsibleDisabled &&
+          {alignChevronLeft && (item.children !== null) && !collapsibleDisabled &&
                         chevronButton()}
           {item.title}
-          {!alignButtonLeft && (item.children !== null) && !collapsibleDisabled &&
+          {!alignChevronLeft && (item.children !== null) && !collapsibleDisabled &&
                         chevronButton()}
         </Flex>
         {item.subtitle}
