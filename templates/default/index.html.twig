@@ -19,7 +19,8 @@
 
     <body>
         <div id="app" data-app-config="{{ {
-            baseUrl: baseUrl ~ '/'
+            baseUrl: baseUrl ~ '/',
+            mercureUrl: mercureUrl,
         }|json_encode }}"></div>
 
         {% for jsFile in studioJsFiles %}

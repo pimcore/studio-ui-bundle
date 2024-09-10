@@ -13,9 +13,10 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
-import { Button, Dropdown, type MenuProps, Space } from 'antd'
+import { Button, Space } from 'antd'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
 
@@ -30,7 +31,7 @@ export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
     return <ElementToolbarSkeleton />
   }
 
-  const menuItems: MenuProps['items'] = [
+  const menuItems: DropdownMenuProps['items'] = [
     {
       key: '1',
       label: `ID ${data.id} - Copy`,

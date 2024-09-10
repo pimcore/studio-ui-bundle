@@ -12,7 +12,7 @@
 */
 
 import React, { useState, createContext, useMemo } from 'react'
-import { type GridFilter } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GridFilter } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export type FilterOptions = Pick<GridFilter, 'columnFilters' | 'includeDescendants'>
 

@@ -18,6 +18,7 @@ asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
+toolbar.reload.confirmation: Are you sure you want to reload this tab? All unsaved changes will be lost.
 toolbar.reload: Reload
 toolbar.save-and-publish: Save & Publish
 toolbar.more: More

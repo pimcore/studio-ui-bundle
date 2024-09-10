@@ -11,15 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './properties-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: ['Assets'],
+  addTagTypes: [tagNames.ASSET_DETAIL],
   endpoints: {
     propertyGetCollectionForElementByTypeAndId: {
-      providesTags: ['Assets']
+      providesTags: (result, error, args) => providingTags.ASSET_PROPERTIES(args.id)
     }
   }
 })
+
+export type * from './properties-api-slice.gen'
 
 export const { usePropertyGetCollectionQuery, usePropertyGetCollectionForElementByTypeAndIdQuery } = api

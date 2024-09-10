@@ -12,7 +12,7 @@
 */
 
 import { ImageView } from '@Pimcore/components/grid/columns/views/image/image-view'
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type CellContext } from '@tanstack/react-table'
 import React from 'react'

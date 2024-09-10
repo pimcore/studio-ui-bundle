@@ -15,7 +15,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 
 interface GridContainerProps {

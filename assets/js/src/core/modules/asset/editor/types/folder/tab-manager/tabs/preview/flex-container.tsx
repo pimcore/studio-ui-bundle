@@ -15,9 +15,10 @@ import React, { type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FlexContainerView } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container-view'
 import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
-import type { DropdownMenuItemProps } from '@Pimcore/components/dropdown-menu/dropdown-menu'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface FlexContainerProps {
   assets: AssetGetTreeApiResponse
@@ -28,28 +29,30 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
 
-  const dropdownItems: DropdownMenuItemProps[] = [
+  const dropdownItems: DropdownProps['menu']['items'] = [
     {
-      iconLeft: 'target',
+      key: 'locate-in-tree',
+      icon: <Icon name="target" />,
       label: t('preview-card.locate-in-tree')
     },
     {
-      iconLeft: 'info-circle-outlined',
-      label: t('preview-card.info'),
-      iconRight: {
-        name: 'right-outlined'
-      }
+      key: 'info',
+      icon: <Icon name="info-circle-outlined" />,
+      label: t('preview-card.info')
     },
     {
-      iconLeft: 'rich-edit',
+      key: 'rename',
+      icon: <Icon name="rich-edit" />,
       label: t('preview-card.rename')
     },
     {
-      iconLeft: 'download-02',
+      key: 'download-zip',
+      icon: <Icon name="download-02" />,
       label: t('preview-card.download-zip')
     },
     {
-      iconLeft: 'trash',
+      key: 'delete',
+      icon: <Icon name="trash" />,
       label: t('preview-card.delete')
     }
   ]

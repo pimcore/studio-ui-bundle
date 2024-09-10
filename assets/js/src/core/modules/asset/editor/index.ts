@@ -18,6 +18,7 @@ import '@Pimcore/modules/asset/editor/types/image'
 import '@Pimcore/modules/asset/editor/types/text'
 import '@Pimcore/modules/asset/editor/types/video'
 import '@Pimcore/modules/asset/editor/types/audio'
+import '@Pimcore/modules/asset/editor/types/archive'
 import '@Pimcore/modules/asset/editor/types/unknown'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata'
@@ -37,6 +38,7 @@ import { DocumentContainer } from '@Pimcore/modules/asset/editor/types/document/
 import { TitleContainer } from './title/title-container'
 import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-container'
 import { UnknownContainer } from '@Pimcore/modules/asset/editor/types/unknown/unknown-container'
+import { ArchiveContainer } from '@Pimcore/modules/asset/editor/types/archive/archive-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -70,6 +72,11 @@ moduleSystem.registerModule({
     componentRegistryService.registerComponent({
       name: 'folder',
       component: FolderContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'archive',
+      component: ArchiveContainer
     })
 
     componentRegistryService.registerComponent({

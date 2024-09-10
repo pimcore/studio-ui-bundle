@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Dropdown, type MenuProps } from 'antd'
 import React from 'react'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 interface TreeContextMenuProps {
   children: React.ReactNode
@@ -27,7 +27,7 @@ export const TreeContextMenu = ({ children, node }: TreeContextMenuProps): React
   const dispatch = useAppDispatch()
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const archiveInputRef = React.useRef<HTMLInputElement>(null)
-  const items: MenuProps['items'] = [
+  const items: DropdownMenuProps['items'] = [
     {
       label: 'Add Asset(s)',
       key: '1',

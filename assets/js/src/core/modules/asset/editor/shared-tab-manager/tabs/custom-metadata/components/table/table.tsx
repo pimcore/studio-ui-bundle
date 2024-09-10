@@ -14,13 +14,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
-import { type CustomMetadata, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type CustomMetadata as CustomMetadataApi, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
+import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -39,9 +40,18 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id: id! })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
+  const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {
+    return data.map((item) => {
+      return {
+        ...item,
+        rowId: crypto.randomUUID()
+      }
+    })
+  }
+
   useEffect(() => {
     if (data !== undefined && Array.isArray(data.items)) {
-      setCustomMetadata(data?.items)
+      setCustomMetadata(enrichCustomMetadata(data?.items))
     }
   }, [data])
 
@@ -112,7 +122,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
 
     if (verifyUpdate(value, columnId, 'name', hasDuplicate, showMandatoryModal, showDuplicateEntryModal)) {
       updateAllCustomMetadata(updatedCustomMetadataEntries)
-      setModifiedCells([...modifiedCells, { rowIndex, columnId }])
+      setModifiedCells([...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
 
@@ -125,6 +135,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
         isLoading={ isLoading }
         modifiedCells={ modifiedCells }
         onUpdateCellData={ onUpdateCellData }
+        setRowId={ (row: CustomMetadata) => row.rowId }
       />
     </div>
   )

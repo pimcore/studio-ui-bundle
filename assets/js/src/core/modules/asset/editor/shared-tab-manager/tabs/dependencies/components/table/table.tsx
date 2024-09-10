@@ -16,7 +16,7 @@ import React from 'react'
 import {
   type Dependency,
   type DependencyGetCollectionByElementTypeApiResponse
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { useStyle } from './table.styles'

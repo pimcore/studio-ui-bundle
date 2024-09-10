@@ -13,7 +13,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   ContentToolbarSidebarLayout

@@ -12,7 +12,7 @@
 */
 
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { api } from '../asset-api-slice.gen'
+import { api } from '../asset-api-slice-enhanced'
 import { store } from '@Pimcore/app/store'
 import { type EditorContainerProps } from '../editor/editor-container'
 
