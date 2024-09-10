@@ -195,7 +195,7 @@ export const NotesAndEventsTabView = ({
         >
           <div className={ styles['notes-and-events'] }>
             <Accordion
-              exclusive={ false }
+              accordion={ false }
               items={ NotesAndEvents }
               spaced
             />

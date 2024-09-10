@@ -26,13 +26,13 @@ export interface AccordionItemType extends ItemType {
 
 export interface AccordionProps extends CollapseProps {
   items: AccordionItemType[]
-  exclusive?: boolean
+  accordion?: boolean
   spaced?: boolean
 }
 
 export const Accordion = ({
   items,
-  exclusive = false,
+  accordion = false,
   spaced = false,
   className,
   activeKey,
@@ -46,7 +46,7 @@ export const Accordion = ({
   }, [activeKey])
 
   const onClickChevron = (id: string): void => {
-    if (exclusive) {
+    if (accordion) {
       setExpandedIds((prevIds) =>
         prevIds.includes(id) ? [] : [id]
       )
@@ -109,7 +109,7 @@ export const Accordion = ({
 
   return (
     <Collapse
-      accordion={ exclusive }
+      accordion={ accordion }
       activeKey={ expandedIds }
       bordered={ !spaced }
       className={ allClassNames.join(' ') }
