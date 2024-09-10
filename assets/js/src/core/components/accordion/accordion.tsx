@@ -16,10 +16,10 @@ import { Collapse, type CollapseProps } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 
 export interface AccordionProps extends CollapseProps {
-  exclusive: boolean
+  exclusive?: boolean
 }
 
-export const Accordion = ({ items, exclusive, ...props }: AccordionProps): React.JSX.Element => {
+export const Accordion = ({ items, exclusive = true, ...props }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (

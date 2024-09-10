@@ -22,7 +22,6 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
-  type CustomMetadata
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -35,6 +34,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
+import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -99,7 +99,8 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       name: nameInputValue.current,
       type: typeSelectValue.current,
       language: languageSelectValue.current,
-      data: null
+      data: null,
+      rowId: crypto.randomUUID()
     }
 
     addCustomMetadata(newCustomMetadata)

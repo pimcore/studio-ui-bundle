@@ -15,54 +15,41 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice-enhanced'
 import {
   addCustomMetadataToAsset,
-  addImageSettingsToAsset,
-  addPropertyToAsset,
+  addImageSettingsToAsset, addPropertyToAsset,
   assetReceived,
   removeAsset,
   removeCustomMetadataFromAsset,
-  removeImageSettingFromAsset,
-  removePropertyFromAsset,
+  removeImageSettingFromAsset, removePropertyFromAsset,
   resetChanges,
   selectAssetById,
   setCustomMetadataForAsset, setPropertiesForAsset,
-  updateAllCustomMetadataForAsset,
+  updateAllCustomMetadataForAsset, updateCustomMetadataForAsset,
   updateImageSettingForAsset,
   updatePropertyForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
-import { type DataProperty } from '../properties-api-slice.gen'
 import {
-  type CustomMetadata
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
-
-interface UseAssetDraftReturnCustomMetadata {
-  customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
-  updateAllCustomMetadata: (customMetadata: CustomMetadata[]) => void
-  addCustomMetadata: (customMetadata: CustomMetadata) => void
-  removeCustomMetadata: (customMetadata: CustomMetadata) => void
-  setCustomMetadata: (customMetadata: CustomMetadata[]) => void
-}
-
-interface UseAssetDraftReturnProperties {
-  properties: undefined | ReturnType<typeof selectAssetById>['properties']
-  updateProperty: (key: string, updatedProperty: DataProperty) => void
-  addProperty: (property: DataProperty) => void
-  removeProperty: (property: DataProperty) => void
-  setProperties: (properties: DataProperty[]) => void
-}
-
-interface UseAssetDraftReturnDynamicSettings {
-  imageSettings: undefined | ImageData
-  addImageSettings: (settings: ImageData) => void
-  updateImageSetting: ({ key, value }: { key: keyof ImageData, value: ImageData[keyof ImageData] }) => void
-  removeImageSetting: (setting: keyof ImageData) => void
-}
+import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import {
+  useCustomMetadataDraft,
+  type UseCustomMetadataDraftReturn
+} from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
+import {
+  useTrackableChangesDraft,
+  type UseTrackableChangesDraftReturn
+} from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import {
+  useImageSettingsDraft,
+  type UseImageSettingsDraftReturn
+} from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
 interface UseAssetDraftReturn extends
-  UseAssetDraftReturnCustomMetadata,
-  UseAssetDraftReturnProperties,
-  UseAssetDraftReturnDynamicSettings {
+  UseCustomMetadataDraftReturn,
+  UsePropertiesDraftReturn,
+  UseTrackableChangesDraftReturn,
+  UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
@@ -83,9 +70,6 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const asset = useAppSelector(state => selectAssetById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
-  const properties = asset?.properties
-  const customMetadata = asset?.customMetadata
-  const imageSettings = asset?.imageSettings
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
     const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
@@ -170,74 +154,47 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
-  function updateProperty (key, property): void {
-    dispatch(updatePropertyForAsset({ assetId: id, key, property }))
-  }
+  const trackableChangesActions = useTrackableChangesDraft(
+    id,
+    resetChanges
+  )
 
-  function addProperty (property): void {
-    dispatch(addPropertyToAsset({ assetId: id, property }))
-  }
+  const propertyActions = usePropertiesDraft(
+    id,
+    asset,
+    updatePropertyForAsset,
+    addPropertyToAsset,
+    removePropertyFromAsset,
+    setPropertiesForAsset
+  )
 
-  function removeProperty (property): void {
-    dispatch(removePropertyFromAsset({ assetId: id, property }))
-  }
+  const customMetadataActions = useCustomMetadataDraft(
+    id,
+    asset,
+    updateCustomMetadataForAsset,
+    addCustomMetadataToAsset,
+    removeCustomMetadataFromAsset,
+    setCustomMetadataForAsset,
+    updateAllCustomMetadataForAsset
+  )
 
-  function setProperties (properties): void {
-    dispatch(setPropertiesForAsset({ assetId: id, properties }))
-  }
-
-  function updateAllCustomMetadata (customMetadata): void {
-    dispatch(updateAllCustomMetadataForAsset({ assetId: id, customMetadata }))
-  }
-
-  function addCustomMetadata (customMetadata): void {
-    dispatch(addCustomMetadataToAsset({ assetId: id, customMetadata }))
-  }
-
-  function removeCustomMetadata (customMetadata): void {
-    dispatch(removeCustomMetadataFromAsset({ assetId: id, customMetadata }))
-  }
-
-  function setCustomMetadata (customMetadata): void {
-    dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
-  }
-
-  function addImageSettings (settings): void {
-    dispatch(addImageSettingsToAsset({ assetId: id, settings }))
-  }
-
-  function removeImageSetting (setting): void {
-    dispatch(removeImageSettingFromAsset({ assetId: id, setting }))
-  }
-
-  function updateImageSetting ({ key, value }): void {
-    dispatch(updateImageSettingForAsset({ assetId: id, key, value }))
-  }
-
-  function removeTrackedChanges (): void {
-    dispatch(resetChanges(id))
-  }
+  const imageSettingsActions = useImageSettingsDraft(
+    id,
+    asset,
+    addImageSettingsToAsset,
+    removeImageSettingFromAsset,
+    updateImageSettingForAsset
+  )
 
   return {
     isLoading,
     isError,
     asset,
-    properties,
-    updateProperty,
-    addProperty,
-    removeProperty,
-    setProperties,
-    customMetadata,
-    updateAllCustomMetadata,
-    addCustomMetadata,
-    removeCustomMetadata,
-    setCustomMetadata,
-    imageSettings,
-    addImageSettings,
-    removeImageSetting,
-    updateImageSetting,
     removeAssetFromState,
-    removeTrackedChanges,
-    fetchAsset
+    fetchAsset,
+    ...trackableChangesActions,
+    ...propertyActions,
+    ...customMetadataActions,
+    ...imageSettingsActions
   }
 }

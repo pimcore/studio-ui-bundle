@@ -11,14 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Checkbox, Input, Tag } from 'antd'
+import { Button, Checkbox, Input, Tag } from 'antd'
 import React, { useState } from 'react'
-import { useStyle } from './version-card.styles'
+import { useStyle } from './version-accordion.styles'
 import { Icon } from '../icon/icon'
 import { isSet } from '@Pimcore/utils/helpers'
 import { useTranslation } from 'react-i18next'
+import { Accordion } from '@Pimcore/components/accordion/accordion'
 
-interface VersionCardProps {
+interface VersionAccordionProps {
   version: number
   date: string
   savedBy: string
@@ -39,7 +40,7 @@ interface VersionCardProps {
   className?: string
 }
 
-export const VersionCard = ({
+export const VersionAccordion = ({
   version,
   date,
   savedBy,
@@ -58,43 +59,27 @@ export const VersionCard = ({
   onBlurNote,
   onChangeCheckbox,
   className
-}: VersionCardProps): React.JSX.Element => {
+}: VersionAccordionProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
 
-  const [isExpanded, setIsExpanded] = useState(false)
   const [deletingVersion, setDeletingVersion] = useState(false)
   const [publishingVersion, setPublishingVersion] = useState(false)
-
-  const chevronOnClick = (e: any): void => {
-    setIsExpanded(!isExpanded)
-  }
 
   const title = (
     <div>
       <div>
-        { selectable && (
+        {selectable && (
         <Checkbox
           checked={ selected }
           onChange={ onChangeCheckbox }
         />
-        ) }
+        )}
         <span className={ 'title' }>{`${t('version.version')} ${version} | ${date} `}</span>
-        <Button
-          aria-label={ t('aria.version.expand') }
-          icon={ <Icon
-            className={ ['chevron', isExpanded ? 'chevron-up' : ''].join(' ') }
-            name="chevron-up"
-                 /> }
-          onClick={ chevronOnClick }
-          role={ 'button' }
-          size="small"
-          type="text"
-        />
       </div>
       <div>
-        <span className={ 'sub-title' } >{`${t('by')} ${savedBy}`}</span>
-        {isSet(autosaved) && autosaved && <Icon name="lightning-01" /> }
+        <span className={ 'sub-title' }>{`${t('by')} ${savedBy}`}</span>
+        {isSet(autosaved) && autosaved && <Icon name="lightning-01" />}
       </div>
     </div>
   )
@@ -138,56 +123,68 @@ export const VersionCard = ({
     onClickDelete()
   }
 
-  return (
-    <div className={ [styles.card, className].join(' ') }>
-      <Card
-        className={ [classNameByState, isExpanded ? 'card-body__expand' : 'card-body__hide'].join(' ') }
-        extra={ extra }
-        onClick={ onClick }
-        size="small"
-        title={ title }
-      >
-        <div className={ 'flexbox-start-end' }>
-          <Tag className={ 'id-tag' }>ID: {id}</Tag>
-          <div>
-            {!published && (
-              <Button
-                className={ 'btn-publish' }
-                disabled={ publishingVersion || deletingVersion }
-                icon={ <Icon name="world" /> }
-                loading={ publishingVersion }
-                onClick={ publishVersion }
-              >
-                {t('version.publish')}
-              </Button>
-            )}
+  const children = (
+    <>
+      <div className={ 'flexbox-start-end' }>
+        <Tag className={ 'id-tag' }>ID: {id}</Tag>
+        <div>
+          {!published && (
             <Button
-              aria-label={ t('aria.version.delete') }
-              disabled={ publishingVersion }
-              icon={ <Icon name="trash" /> }
-              loading={ deletingVersion }
-              onClick={ deleteVersion }
-            />
-          </div>
-        </div>
-        {isSet(scheduledDate) && (
-          <div className={ 'row-margin' }>
-            <div>{t('version.schedule-for')}</div>
-            <div className={ 'date-container' }>
-              <Icon name="calender" />
-              <span className={ 'scheduled-date' }>{scheduledDate}</span>
-            </div>
-          </div>
-        )}
-        <div className={ 'row-margin' }>
-          <span>{t('version.note')}</span>
-          <Input
-            defaultValue={ note }
-            onBlur={ onBlurNote }
-            placeholder={ 'Add a note' }
+              className={ 'btn-publish' }
+              disabled={ publishingVersion || deletingVersion }
+              icon={ <Icon name="world" /> }
+              loading={ publishingVersion }
+              onClick={ publishVersion }
+            >
+              {t('version.publish')}
+            </Button>
+          )}
+          <Button
+            aria-label={ t('aria.version.delete') }
+            disabled={ publishingVersion }
+            icon={ <Icon name="trash" /> }
+            loading={ deletingVersion }
+            onClick={ deleteVersion }
           />
         </div>
-      </Card>
+      </div>
+      {
+                isSet(scheduledDate) && (
+                <div className={ 'row-margin' }>
+                  <div>{t('version.schedule-for')}</div>
+                  <div className={ 'date-container' }>
+                    <Icon name="calender" />
+                    <span className={ 'scheduled-date' }>{scheduledDate}</span>
+                  </div>
+                </div>
+                )
+            }
+      <div className={ 'row-margin' }>
+        <span>{t('version.note')}</span>
+        <Input
+          defaultValue={ note }
+          onBlur={ onBlurNote }
+          placeholder={ 'Add a note' }
+        />
+      </div>
+    </>
+  )
+
+  const item = [{
+    key: id,
+    label: title,
+    extra,
+    children,
+    onClick,
+    className: classNameByState
+
+  }]
+
+  return (
+    <div className={ [styles.card, className].join(' ') }>
+      <Accordion
+        items={ item }
+      />
     </div>
   )
 }
