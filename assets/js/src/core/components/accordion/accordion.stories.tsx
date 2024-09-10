@@ -88,7 +88,7 @@ export const Spaced = {
     }
 }
 
-export const SpacedActiveKeyControlled = {
+export const ActiveKeyControlled = {
     args: {
         items,
         spaced: true,
@@ -97,7 +97,7 @@ export const SpacedActiveKeyControlled = {
 }
 
 
-export const SpacedExclusive = {
+export const ExclusiveAccordion = {
     args: {
         items,
         spaced: true,

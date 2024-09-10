@@ -25,7 +25,6 @@ export interface AccordionItemType extends ItemType {
 
 export interface AccordionProps extends CollapseProps {
   items: AccordionItemType[]
-  accordion?: boolean
   spaced?: boolean
   alignChevronLeft?: boolean
 }
