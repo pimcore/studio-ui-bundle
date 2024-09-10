@@ -15,9 +15,8 @@ import React, { useEffect, useState } from 'react'
 import { Collapse, type CollapseProps, Flex } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
-import { Button } from '@Pimcore/components/button/button'
-import { Icon } from '@Pimcore/components/icon/icon'
 import i18n from 'i18next'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface AccordionItemType extends ItemType {
   title: React.ReactElement
@@ -67,13 +66,11 @@ export const Accordion = ({
 
     const chevronButton = (): React.ReactElement => {
       return (
-        <Button
+        <IconButton
           aria-label={ i18n.t('aria.notes-and-events.expand') }
           className={ 'card-title__chevron-btn' }
-          icon={ <Icon
-            className={ chevronClassName }
-            name={ 'chevron-up' }
-                 /> }
+          icon={ 'chevron-up' }
+          iconOptions={ { className: chevronClassName } }
           onClick={ () => {
             if (item.id != null) {
               onClickChevron(item.id)
