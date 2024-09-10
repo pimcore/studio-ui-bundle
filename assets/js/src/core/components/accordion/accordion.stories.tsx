@@ -45,7 +45,7 @@ const item1: AccordionItemType = {
 
 const item2: AccordionItemType = {
     key: '2',
-    title: <span>'This is panel header 2'</span>,
+    title: <span>This is panel header 2</span>,
     children: <p>The ancient Egyptians were the first to tame the cat (in about 3000 BC), and used them to control
         pests.</p>
 }
@@ -53,7 +53,7 @@ const item2: AccordionItemType = {
 
 const item3: AccordionItemType = {
     key: '3',
-    title: <span>'This is panel header 3'</span>,
+    title: <span>This is panel header 3</span>,
     children: <p></p>,
     collapsible: 'icon'
 }
