@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Collapse, type CollapseProps, Flex } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
@@ -35,10 +35,15 @@ export const Accordion = ({
   exclusive = false,
   spaced = false,
   className,
+  activeKey,
   ...props
 }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [expandedIds, setExpandedIds] = useState<string[]>([])
+
+  useEffect(() => {
+    setExpandedIds([String(activeKey)])
+  }, [activeKey])
 
   const onClickChevron = (id: string): void => {
     if (exclusive) {

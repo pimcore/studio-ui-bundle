@@ -184,9 +184,19 @@ export const VersionAccordion = ({
 
   return (
     <div className={ [styles.card, className].join(' ') }>
-      <Accordion
-        items={ item }
-      />
+      {selected
+        ? (
+          <Accordion
+            activeKey={ id }
+            items={ item }
+          />
+          )
+        : (
+          <Accordion
+            items={ item }
+          />
+          )
+      }
     </div>
   )
 }
