@@ -130,7 +130,7 @@ export const NotesAndEventsTabView = ({
       )
     }
 
-    const collapsibleDisabled = { collapsible: 'icon' }
+    const collapseDisabled = { disabled: true }
 
     return ({
       key: note.id.toString(),
@@ -145,7 +145,7 @@ export const NotesAndEventsTabView = ({
       </Space>,
       extra: extra(),
       children: children(),
-      ...(note.description.length === 0 && collapsibleDisabled)
+      ...(note.description.length === 0 && collapseDisabled)
     })
   })
 

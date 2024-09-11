@@ -17,7 +17,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-list.styles'
 import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { type CollapsibleType } from 'antd/es/collapse/CollapsePanel'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 
 export const JobList = (): React.JSX.Element => {
@@ -25,7 +24,7 @@ export const JobList = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const collapsibleDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
+  const collapseDisabled: { disabled: boolean } = { disabled: true }
 
   const item = {
     key: '1',
@@ -46,7 +45,7 @@ export const JobList = (): React.JSX.Element => {
       </motion.div>
     ))}
   </AnimatePresence>,
-    ...(jobs.length === 0 && collapsibleDisabled)
+    ...(jobs.length === 0 && collapseDisabled)
   }
 
   return (

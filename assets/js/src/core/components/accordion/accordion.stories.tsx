@@ -55,7 +55,7 @@ const item3: AccordionItemType = {
     key: '3',
     title: <span>This is panel header 3</span>,
     children: <p></p>,
-    collapsible: 'icon'
+    disabled: true
 }
 
 const items: CollapseProps['items'] = [
