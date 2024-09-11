@@ -277,8 +277,8 @@ export const AssetEditorSidebarDetailsView = ({
 
             <div className={ 'entry-content__download-content-custom' }>
               <Accordion
-                alignChevronLeft
                 defaultActiveKey={ ['1'] }
+                expandIconPosition={ 'start' }
                 items={ customDownloadOptions }
               />
             </div>

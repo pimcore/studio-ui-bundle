@@ -18,15 +18,17 @@ import { type ItemType } from 'rc-collapse/es/interface'
 import i18n from 'i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
+export type CustomExpandIconPosition = 'start' | 'after-title' // Custom values
+
 export interface AccordionItemType extends ItemType {
   title: React.ReactElement
   subtitle?: React.ReactElement
 }
 
-export interface AccordionProps extends CollapseProps {
+export interface AccordionProps extends Omit<CollapseProps, 'expandIconPosition'> {
   items: AccordionItemType[]
   spaced?: boolean
-  alignChevronLeft?: boolean
+  expandIconPosition?: CustomExpandIconPosition
 }
 
 export const Accordion = ({
@@ -35,7 +37,7 @@ export const Accordion = ({
   spaced = false,
   className,
   activeKey,
-  alignChevronLeft = false,
+  expandIconPosition = 'after-title',
   ...props
 }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -90,10 +92,10 @@ export const Accordion = ({
           align={ 'center' }
           vertical={ false }
         >
-          {alignChevronLeft && (item.children !== null) && !collapsibleDisabled &&
+          {expandIconPosition === 'start' && (item.children !== null) && !collapsibleDisabled &&
                         chevronButton()}
           {item.title}
-          {!alignChevronLeft && (item.children !== null) && !collapsibleDisabled &&
+          {expandIconPosition === 'after-title' && (item.children !== null) && !collapsibleDisabled &&
                         chevronButton()}
         </Flex>
         {item.subtitle}

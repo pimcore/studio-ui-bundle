@@ -71,7 +71,7 @@ export const DefaultSinglePanel = {
 export const ChevronLeft = {
     args: {
         items: [item1],
-        alignChevronLeft: true
+        expandIconPosition: 'start'
     }
 }
 

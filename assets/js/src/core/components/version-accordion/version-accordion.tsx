@@ -188,15 +188,17 @@ export const VersionAccordion = ({
         ? (
           <Accordion
             activeKey={ id }
+            expandIconPosition={ 'after-title' }
             items={ item }
           />
           )
         : (
           <Accordion
+            expandIconPosition={ 'after-title' }
             items={ item }
           />
           )
-      }
+            }
     </div>
   )
 }
