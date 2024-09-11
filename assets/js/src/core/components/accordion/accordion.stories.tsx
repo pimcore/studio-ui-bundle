@@ -43,6 +43,29 @@ const item1: AccordionItemType = {
     children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
 }
 
+const successItem: AccordionItemType = {
+    key: '1',
+    title: <span>This is panel header 1</span>,
+    subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
+
+    extra: <Tag className={['title-tag', 'title-tag__published'].join(' ')}>
+        <Icon
+            className="tag-icon"
+            name="world"
+            options={{width: '12px', height: '12px'}}
+        />
+        Published
+    </Tag>,
+    children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
+}
+
+const primaryItem: AccordionItemType = {
+    key: '1',
+    title: <span>This is panel header 1</span>,
+    subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
+    children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
+}
+
 const item2: AccordionItemType = {
     key: '2',
     title: <span>This is panel header 2</span>,
@@ -65,6 +88,17 @@ const items: CollapseProps['items'] = [
 export const DefaultSinglePanel = {
     args: {
         items: [item1],
+    }
+}
+
+export const Primary = {
+    args: {
+        items: [primaryItem],
+    }
+}
+export const Success = {
+    args: {
+        items: [successItem],
     }
 }
 
