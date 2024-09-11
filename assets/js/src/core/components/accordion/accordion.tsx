@@ -17,8 +17,9 @@ import {useStyles} from '@Pimcore/components/accordion/accordion.styles'
 import {type ItemType} from 'rc-collapse/es/interface'
 import i18n from 'i18next'
 import {IconButton} from '@Pimcore/components/icon-button/icon-button'
+import {type CollapsibleType} from 'antd/es/collapse/CollapsePanel'
 
-export type CustomExpandIconPosition = 'start' | 'after-title' // Custom values
+export type CustomExpandIconPosition = 'start' | 'after-title'
 
 export interface AccordionItemType extends ItemType {
     title: React.ReactElement
@@ -84,22 +85,27 @@ export const Accordion = ({
             )
         }
 
+        const {disabled, ...restItem} = item
+
+        const collapseDisabled: { collapsible: CollapsibleType } = {collapsible: 'icon'}
+
         return ({
-            ...item,
+            ...restItem,
             className: [item?.className, 'card'].filter(Boolean).join(' '),
             label: <>
                 <Flex
                     align={'center'}
                     vertical={false}
                 >
-                    {expandIconPosition === 'start' && (item.children !== null) && item.disabled === false &&
+                    {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}
                     {item.title}
-                    {expandIconPosition === 'after-title' && (item.children !== null) && item.disabled === false &&
+                    {expandIconPosition === 'after-title' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}
                 </Flex>
                 {item.subtitle}
-            </>
+            </>,
+            ...(item.disabled ?? false ? collapseDisabled : {})
         })
     }) ?? []
 
