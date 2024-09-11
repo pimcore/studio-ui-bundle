@@ -18,7 +18,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
-interface TreeContextMenuProps {
+export interface TreeContextMenuProps {
   children: React.ReactNode
   node?: TreeNodeProps
 }

@@ -24,7 +24,10 @@ import React, {
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './tree.styles'
-import { TreeContextMenu } from './components/context-menu/context-menu'
+import { type TreeContextMenuProps } from './components/context-menu/context-menu'
+import { container } from '@Pimcore/app/depency-injection'
+import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { serviceIds } from '@Pimcore/app/config/services'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -112,6 +115,8 @@ const Tree = (
     })
   }, [nodesRefs.current])
   const [rightClickedNode, setRightClickedNode] = useState<TreeNodeProps | undefined>(undefined)
+  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+  const ContextMenu = componentRegistry.get<TreeContextMenuProps>('assetTreeContextMenu')
 
   async function onRightClick (event: React.MouseEvent, node: TreeNodeProps): Promise<void> {
     event.preventDefault()
@@ -137,7 +142,7 @@ const Tree = (
   return (
     <>
       {isLoading === false && items.length !== 0 && (
-        <TreeContextMenu node={ rightClickedNode }>
+        <ContextMenu node={ rightClickedNode }>
           <div className={ ['tree', styles.tree].join(' ') }>
             <TreeContext.Provider value={ treeContextValue }>
               {items.map((item, index) => (
@@ -149,7 +154,7 @@ const Tree = (
               ))}
             </TreeContext.Provider>
           </div>
-        </TreeContextMenu>
+        </ContextMenu>
       )}
     </>
   )
