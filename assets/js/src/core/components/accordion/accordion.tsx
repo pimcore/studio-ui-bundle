@@ -92,9 +92,14 @@ export const Accordion = ({
 
     const collapseDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
 
+    const itemClassNames = [item?.className, 'card'].filter(Boolean)
+    if (item.theme !== undefined) {
+      itemClassNames.push(item.theme)
+    }
+
     return ({
       ...restItem,
-      className: [item?.className, 'card'].filter(Boolean).join(' '),
+      className: itemClassNames.join(' '),
       label: <>
         <Flex
           align={ 'center' }

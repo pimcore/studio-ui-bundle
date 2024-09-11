@@ -45,22 +45,15 @@ const item1: AccordionItemType = {
 
 const successItem: AccordionItemType = {
     key: '1',
+    theme: 'success',
     title: <span>This is panel header 1</span>,
     subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
-
-    extra: <Tag className={['title-tag', 'title-tag__published'].join(' ')}>
-        <Icon
-            className="tag-icon"
-            name="world"
-            options={{width: '12px', height: '12px'}}
-        />
-        Published
-    </Tag>,
     children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
 }
 
 const primaryItem: AccordionItemType = {
     key: '1',
+    theme: 'primary',
     title: <span>This is panel header 1</span>,
     subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
     children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>

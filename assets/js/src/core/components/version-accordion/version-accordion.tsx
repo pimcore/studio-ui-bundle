@@ -17,7 +17,7 @@ import { useStyle } from './version-accordion.styles'
 import { Icon } from '../icon/icon'
 import { isSet } from '@Pimcore/utils/helpers'
 import { useTranslation } from 'react-i18next'
-import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { Accordion, type PanelTheme } from '@Pimcore/components/accordion/accordion'
 
 interface VersionAccordionProps {
   version: number
@@ -86,10 +86,10 @@ export const VersionAccordion = ({
   )
 
   let extra
-  let classNameByState = activeDefault ? 'card__is-active' : ''
+  let themeByState: PanelTheme = activeDefault ? 'primary' : 'default'
 
   if (published) {
-    classNameByState = 'card__is-published'
+    themeByState = 'success'
     extra = (
       <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
         <Icon
@@ -178,8 +178,7 @@ export const VersionAccordion = ({
     extra,
     children,
     onClick,
-    className: classNameByState
-
+    theme: themeByState
   }]
 
   return (

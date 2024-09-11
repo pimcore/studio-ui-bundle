@@ -28,117 +28,92 @@ export const useStyle = createStyles(({ token, css }) => {
     card: css`
         & .ant-collapse {
             width: 340px;
-            border: none;
             background-color: white;
         }
-
-        .ant-collapse {
-            > .ant-collapse-item.card__is-active {
-                border: 1px solid ${cardToken.colorBorder};
-                border-radius: ${cardToken.borderRadiusLG}px;
-                background-color: ${cardToken.colorFillAlter};
-
-                > .ant-collapse-content {
-                    border-top: 1px solid ${cardToken.colorBorder};
-                    background-color: transparent;
-                }
-            }
-
-           > .ant-collapse-item.card__is-published {
-                border: 1px solid ${cardToken.highlightBorderColor};
-                border-radius: ${cardToken.borderRadiusLG}px;
-                background-color: ${cardToken.highlightBackgroundColor};
-
-                > .ant-collapse-content {
-                    border-top: 1px solid ${cardToken.highlightBorderColor};
-                    background-color: transparent;
-                }
-            }
-        }
       
-            & span, & div, div.anticon, button {
-                vertical-align: middle;
-            }
+        & span, & div, div.anticon, button {
+            vertical-align: middle;
+        }
 
-            & input.ant-input {
-                margin-top: 5px;
-            }
+        & input.ant-input {
+            margin-top: 5px;
+        }
 
-            & .ant-checkbox-wrapper {
-                margin-right: 6px;
-            }
+        & .ant-checkbox-wrapper {
+            margin-right: 6px;
+        }
 
-            .ant-card-extra {
-                height: 44px;
-            }
+        .ant-card-extra {
+            height: 44px;
+        }
 
-            .sub-title {
-                font-weight: normal;
-                margin-right: 4px;
-                color: ${cardToken.colorTextDescription};
-            }
+        .sub-title {
+            font-weight: normal;
+            margin-right: 4px;
+            color: ${cardToken.colorTextDescription};
+        }
 
-            .title-tag {
-                font-size: 12px;
-            }
+        .title-tag {
+            font-size: 12px;
+        }
 
-            .tag-icon {
-                position: relative;
-                right: 3px;
-                bottom: 1px;
-            }
+        .tag-icon {
+            position: relative;
+            right: 3px;
+            bottom: 1px;
+        }
 
-            .title-tag__published {
-                color: ${cardToken.highlightColor};
-                border-color: ${cardToken.highlightBorderColor};
-                background-color: ${cardToken.highlightBackgroundColor};
-            }
+        .title-tag__published {
+            color: ${cardToken.highlightColor};
+            border-color: ${cardToken.highlightBorderColor};
+            background-color: ${cardToken.highlightBackgroundColor};
+        }
 
-            .title-tag__own-draft {
-                color: ${cardToken.signalColor};
-                border-color: ${cardToken.signalBorderColor};
-                background-color: ${cardToken.signalBackgroundColor};
-            }
+        .title-tag__own-draft {
+            color: ${cardToken.signalColor};
+            border-color: ${cardToken.signalBorderColor};
+            background-color: ${cardToken.signalBackgroundColor};
+        }
 
-            .flexbox-start-end {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .flexbox-start-end {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .id-tag {
-                width: 56px;
-                height: 22px;
+        .id-tag {
+            width: 56px;
+            height: 22px;
 
-                display: inline-grid;
-                justify-content: center;
+            display: inline-grid;
+            justify-content: center;
 
-                font-weight: 400;
-                font-size: 12px;
-                line-height: 20px;
-            }
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 20px;
+        }
 
-            .btn-publish {
-                margin-right: ${cardToken.marginXXS}px;
-                padding-top: ${cardToken.paddingXXS}px;
-            }
+        .btn-publish {
+            margin-right: ${cardToken.marginXXS}px;
+            padding-top: ${cardToken.paddingXXS}px;
+        }
 
-            .btn-publish > .ant-btn-icon {
-                vertical-align: middle;
-            }
+        .btn-publish > .ant-btn-icon {
+            vertical-align: middle;
+        }
 
-            .row-margin {
-                margin-top: ${cardToken.marginXS}px;
-            }
+        .row-margin {
+            margin-top: ${cardToken.marginXS}px;
+        }
 
-            .date-container {
-                margin-top: 3px;
-            }
+        .date-container {
+            margin-top: 3px;
+        }
 
-            .scheduled-date {
-                margin-left: ${cardToken.marginXXS}px;
-                color: ${cardToken.colorTextDescription};
-            }
+        .scheduled-date {
+            margin-left: ${cardToken.marginXXS}px;
+            color: ${cardToken.colorTextDescription};
+        }
     `
   }
 }, { hashPriority: 'low' })
