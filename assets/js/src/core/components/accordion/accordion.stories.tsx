@@ -81,6 +81,13 @@ export const CollapseDisabled = {
     }
 }
 
+export const Ghost = {
+    args: {
+        items,
+        ghost: true,
+    }
+}
+
 export const Spaced = {
     args: {
         items,

@@ -12,49 +12,49 @@
 */
 
 import React from 'react'
-import { useJobs } from '../../hooks/useJobs'
 import { Job } from '../job/job'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Collapse } from 'antd'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-list.styles'
 import { useTranslation } from 'react-i18next'
+import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { type CollapsibleType } from 'antd/es/collapse/CollapsePanel'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 
 export const JobList = (): React.JSX.Element => {
   const { jobs } = useJobs()
   const { styles } = useStyles()
   const { t } = useTranslation()
 
+  const collapsibleDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
+
+  const item = {
+    key: '1',
+    title: <span>{t('jobs.notification.jobs', { count: jobs.length })}</span>,
+    children:
+  <AnimatePresence>
+    {jobs.map((job) => (
+      <motion.div
+        animate={ { opacity: 1, height: 'auto' } }
+        exit={ { opacity: 0, height: 1 } }
+        initial={ { opacity: 0, height: 1 } }
+        key={ `${job.id}` }
+      >
+        <Job
+          { ...job }
+          key={ job.id }
+        />
+      </motion.div>
+    ))}
+  </AnimatePresence>,
+    ...(jobs.length === 0 && collapsibleDisabled)
+  }
+
   return (
     <>
-      <Collapse
-        bordered={ false }
+      <Accordion
         className={ styles.jobList }
-        defaultActiveKey={ ['1'] }
-        expandIconPosition='right'
         ghost
-        items={ [
-          {
-            key: '1',
-            label: t('jobs.notification.jobs', { count: jobs.length }),
-            children: (
-              <AnimatePresence>
-                {jobs.map((job) => (
-                  <motion.div
-                    animate={ { opacity: 1, height: 'auto' } }
-                    exit={ { opacity: 0, height: 1 } }
-                    initial={ { opacity: 0, height: 1 } }
-                    key={ `${job.id}` }
-                  >
-                    <Job
-                      { ...job }
-                      key={ job.id }
-                    />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            )
-          }
-        ] }
+        items={ [item] }
       />
     </>
   )
