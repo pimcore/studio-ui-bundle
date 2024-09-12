@@ -39,8 +39,10 @@ import { TitleContainer } from './title/title-container'
 import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-container'
 import { UnknownContainer } from '@Pimcore/modules/asset/editor/types/unknown/unknown-container'
 import { ArchiveContainer } from '@Pimcore/modules/asset/editor/types/archive/archive-container'
-import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
-import { type ComponentRegistry as GlobalComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import {
+  type ComponentRegistry as GlobalComponentRegistry
+} from '@Pimcore/modules/app/component-registry/component-registry'
+import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -97,8 +99,8 @@ moduleSystem.registerModule({
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'editorToolbar',
-      component: Toolbar
+      name: 'editorToolbarContextMenu',
+      component: EditorToolbarContextMenu
     })
   }
 })
