@@ -11,19 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { Title } from './title'
+import React from 'react'
+import { Typography } from 'antd'
+import { type ParagraphProps as AntParagraphProps } from 'antd/es/typography/Paragraph'
 
-const config: Meta = {
-  title: 'Components/General/Typography/Title',
-  component: Title,
-  tags: ['autodocs']
-}
+export interface ParagraphProps extends AntParagraphProps {}
 
-export default config
+const { Paragraph: AntParagraph } = Typography
 
-export const _default = {
-  args: {
-    children: 'Default Title'
-  }
+export const Paragraph = (props: ParagraphProps): React.JSX.Element => {
+  return <AntParagraph { ...props } />
 }
