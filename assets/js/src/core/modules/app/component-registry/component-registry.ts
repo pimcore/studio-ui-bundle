@@ -14,35 +14,39 @@
 import { injectable } from 'inversify'
 import type React from 'react'
 
-interface ContextMenuEntry<T> {
+interface ComponentRegistryEntry<T> {
   name: string
   component: React.ComponentType<T>
 }
 
 export interface ComponentRegistryInterface {
-  register: (component: ContextMenuEntry<any>) => void
-  getAll: () => Record<string, ContextMenuEntry<any>>
-  get: (name: string) => ContextMenuEntry<any>['component']
+  register: (component: ComponentRegistryEntry<any>) => void
+  getAll: () => Record<string, ComponentRegistryEntry<any>>
+  get: (name: string) => ComponentRegistryEntry<any>['component']
   has: (name: string) => boolean
-  override: (name: string, component: ContextMenuEntry<any>) => void
+  override: (name: string, component: ComponentRegistryEntry<any>) => void
 }
 
 @injectable()
 export class ComponentRegistry implements ComponentRegistryInterface {
-  private registry: Record<string, ContextMenuEntry<any>> = {}
+  private registry: Record<string, ComponentRegistryEntry<any>> = {}
 
-  register (component: ContextMenuEntry<any>): void {
-    // TODO: throw exception if component already exists
+  register (component: ComponentRegistryEntry<any>): void {
+    if (this.has(component.name)) {
+      throw new Error(`Component with the name "${component.name}" already exists. Use the override method to override it`)
+    }
 
     this.registry[component.name] = component
   }
 
-  getAll (): Record<string, ContextMenuEntry<any>> {
+  getAll (): Record<string, ComponentRegistryEntry<any>> {
     return this.registry
   }
 
-  get<T>(name: string): ContextMenuEntry<T>['component'] {
-    // TODO: exception
+  get<T>(name: string): ComponentRegistryEntry<T>['component'] {
+    if (!this.has(name)) {
+      throw new Error(`No component with the name "${name}" found`)
+    }
 
     return this.registry[name].component
   }
@@ -51,10 +55,11 @@ export class ComponentRegistry implements ComponentRegistryInterface {
     return name in this.registry
   }
 
-  override <T>(name: string, component: ContextMenuEntry<T>): void {
-    // TODO: throw exception if `name` is not present in this.registry
+  override <T>(name: string, component: ComponentRegistryEntry<T>): void {
+    if (!this.has(name)) {
+      throw new Error(`No component named "${name}" found to override`)
+    }
+
+    this.registry[name] = component
   }
 }
-
-const componentRegistry = new ComponentRegistry()
-export { componentRegistry }
