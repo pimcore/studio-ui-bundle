@@ -6,7 +6,7 @@ export interface TextProps extends AntTextProps {}
 
 const { Text: AntText } = Typography;
 
-export const Text = (props: TextProps) => {
+export const Text = (props: TextProps): React.JSX.Element => {
   return <AntText {...props} />;
 }
 

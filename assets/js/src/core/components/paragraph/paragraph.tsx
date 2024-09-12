@@ -6,6 +6,6 @@ export interface ParagraphProps extends AntParagraphProps {}
 
 const { Paragraph: AntParagraph } = Typography;
 
-export const Paragraph = (props: ParagraphProps) => {
+export const Paragraph = (props: ParagraphProps): React.JSX.Element => {
     return <AntParagraph {...props} />;
 }
