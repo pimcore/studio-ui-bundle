@@ -22,7 +22,9 @@ export const BaseLayoutView = (): React.JSX.Element => {
   const { styles } = useStlyes()
 
   return (
-    <div className={ ['base-layout', styles.baseLayout].join(' ') }>
+    <div
+      className={ ['base-layout', styles.baseLayout].join(' ') }
+    >
       <LeftSidebarView />
 
       <WidgetManagerContainer />

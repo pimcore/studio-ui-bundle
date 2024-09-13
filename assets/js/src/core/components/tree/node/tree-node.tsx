@@ -11,14 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex, theme, type UploadProps } from 'antd'
+import { Flex, theme, Upload, type UploadProps } from 'antd'
 import React, { type KeyboardEvent, type MouseEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type nodeRef, TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { type UploadFile } from 'antd/es/upload/interface'
-import { Upload } from '@Pimcore/components/upload/upload'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -64,12 +63,10 @@ const TreeNode = ({
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
+  const dispatch = useAppDispatch()
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
   const [uploadFileList, setUploadFileList] = React.useState<UploadFile[]>([])
-  const assetUpload = assetApi.endpoints.assetAdd
-  const dispatch = useAppDispatch()
-
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
 
   useEffect(() => {
@@ -175,8 +172,6 @@ const TreeNode = ({
       setSelectedIds([id])
     }
   }
-
-  console.log(assetUpload.select(id))
 
   const uploadProps: UploadProps = {
     action: `/studio/api/assets/add/${id}`,
