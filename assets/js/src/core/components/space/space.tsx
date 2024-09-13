@@ -1,4 +1,4 @@
-import { theme, Space as AntSpace, SpaceProps as AntSpaceProps } from 'antd';
+import { Space as AntSpace, SpaceProps as AntSpaceProps } from 'antd';
 import React from 'react';
 import { useStyles } from './space.styles';
 

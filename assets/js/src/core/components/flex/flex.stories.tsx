@@ -134,7 +134,7 @@ export const CustomGap = {
   }
 }
 
-export const vertical = {
+export const Vertical = {
   args: {
     children: children,
     vertical: true,
