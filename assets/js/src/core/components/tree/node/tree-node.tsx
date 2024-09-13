@@ -11,13 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex, theme, Upload, type UploadProps } from 'antd'
+import { Flex, theme, type UploadProps } from 'antd'
 import React, { type KeyboardEvent, type MouseEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type nodeRef, TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { type UploadFile } from 'antd/es/upload/interface'
+import { useFileUploader } from '@Pimcore/modules/asset/tree/context-menu/hooks/upload-files'
+import { Upload } from '@Pimcore/components/upload/upload'
 
 export interface TreeNodeProps {
   id: string
@@ -56,6 +58,7 @@ const TreeNode = ({
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
   const [uploadFileList, setUploadFileList] = React.useState<UploadFile[]>([])
+  const { uploadFile } = useFileUploader({ parentId: parseInt(id) })
 
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
 
@@ -164,13 +167,15 @@ const TreeNode = ({
   }
 
   const uploadProps: UploadProps = {
-    action: `/studio/api/assets/add/${id}`,
     name: 'file',
     multiple: true,
     openFileDialogOnClick: false,
     showUploadList: false,
     onChange: ({ fileList }) => {
       setUploadFileList(fileList.filter((file) => file.status === 'uploading'))
+    },
+    customRequest: async ({ file }) => {
+      await uploadFile(file as File)
     }
   }
 
