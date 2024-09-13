@@ -19,13 +19,14 @@ const config: StorybookConfig = {
   stories: ["../js/**/*.mdx", "../js/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
   typescript: {
     reactDocgen: 'react-docgen-typescript',
+
     reactDocgenTypescriptOptions: {
-      shouldExtractLiteralValuesFromEnum: true,
       propFilter: (prop: any) => {
         const res = /antd/.test(prop.parent?.fileName) || !/node_modules/.test(prop.parent?.fileName);
         return prop.parent ? res : true;
       },
-      savePropValueAsString: true,
+      shouldExtractLiteralValuesFromEnum: true,
+      shouldRemoveUndefinedFromOptional: true,      
     }
   },
   addons: [
