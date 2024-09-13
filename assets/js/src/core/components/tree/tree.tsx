@@ -24,7 +24,7 @@ import React, {
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './tree.styles'
-import { TreeContextMenu } from './components/context-menu/context-menu'
+import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -137,7 +137,7 @@ const Tree = (
   return (
     <>
       {isLoading === false && items.length !== 0 && (
-        <TreeContextMenu node={ rightClickedNode }>
+        <AssetTreeContextMenu node={ rightClickedNode }>
           <div className={ ['tree', styles.tree].join(' ') }>
             <TreeContext.Provider value={ treeContextValue }>
               {items.map((item, index) => (
@@ -149,7 +149,7 @@ const Tree = (
               ))}
             </TreeContext.Provider>
           </div>
-        </TreeContextMenu>
+        </AssetTreeContextMenu>
       )}
     </>
   )

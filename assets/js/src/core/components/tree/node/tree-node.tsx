@@ -11,12 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex, theme } from 'antd'
-import React, { type KeyboardEvent, useContext, useEffect, type MouseEvent } from 'react'
+import { Flex, theme, Upload, type UploadProps } from 'antd'
+import React, { type KeyboardEvent, type MouseEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { TreeContext, type nodeRef } from '../tree'
+import { type nodeRef, TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
+import { type UploadFile } from 'antd/es/upload/interface'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface TreeNodeProps {
   id: string
@@ -49,12 +53,20 @@ const TreeNode = ({
   ...props
 }: TreeNodeProps): React.JSX.Element => {
   const { token } = useToken()
-  const { children } = props
+  const { children, metaData } = props
   const { styles } = useStyles()
-  const { renderNodeContent: RenderNodeContent, onSelect, onRightClick, selectedIdsState, nodesRefs, nodeOrder } = useContext(TreeContext)
+  const {
+    renderNodeContent: RenderNodeContent,
+    onSelect,
+    onRightClick,
+    selectedIdsState,
+    nodesRefs,
+    nodeOrder
+  } = useContext(TreeContext)
+  const dispatch = useAppDispatch()
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
-
+  const [uploadFileList, setUploadFileList] = React.useState<UploadFile[]>([])
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
 
   useEffect(() => {
@@ -153,8 +165,37 @@ const TreeNode = ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
+  function onDragOver (event: MouseEvent): void {
+    const assetMetaData = metaData?.asset
+
+    if (assetMetaData !== undefined && assetMetaData.type === 'folder') {
+      setSelectedIds([id])
+    }
+  }
+
+  const uploadProps: UploadProps = {
+    action: `/studio/api/assets/add/${id}`,
+    name: 'file',
+    multiple: true,
+    openFileDialogOnClick: false,
+    showUploadList: false,
+    onChange: ({ fileList }) => {
+      const fileStates = fileList.map((file) => file.status)
+      const allFullFilled = fileStates.every(item => item === 'done')
+
+      if (allFullFilled) {
+        dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(id))))
+      }
+
+      setUploadFileList(fileList.filter((file) => file.status === 'uploading'))
+    }
+  }
+
   return (
-    <div className={ getClasses() }>
+    <div
+      className={ getClasses() }
+      onDragOver={ onDragOver }
+    >
       <Flex
         className='tree-node__content'
         gap="small"
@@ -176,13 +217,18 @@ const TreeNode = ({
           state={ [isExpanded, setIsExpanded] }
         />
 
-        <div className="tree-node__content-wrapper">
-          <RenderNodeContent node={ treeNodeProps } />
-        </div>
+        <Upload { ...uploadProps }>
+          <div className="tree-node__content-wrapper">
+            <RenderNodeContent node={ treeNodeProps } />
+          </div>
+        </Upload>
       </Flex>
 
       {isExpanded && (
-        <TreeList node={ treeNodeProps } />
+        <TreeList
+          node={ treeNodeProps }
+          uploadFileList={ uploadFileList }
+        />
       )}
     </div>
   )

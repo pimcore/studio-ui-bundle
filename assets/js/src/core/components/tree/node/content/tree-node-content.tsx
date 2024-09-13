@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type MutableRefObject, forwardRef } from 'react'
+import React, { forwardRef, type MutableRefObject } from 'react'
 import { type TreeNodeProps } from '../tree-node'
 import { Flex } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
