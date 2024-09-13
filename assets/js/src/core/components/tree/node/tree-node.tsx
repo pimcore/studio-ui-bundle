@@ -18,8 +18,10 @@ import { type nodeRef, TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { type UploadFile } from 'antd/es/upload/interface'
-import { useFileUploader } from '@Pimcore/modules/asset/tree/context-menu/hooks/upload-files'
 import { Upload } from '@Pimcore/components/upload/upload'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface TreeNodeProps {
   id: string
@@ -54,11 +56,19 @@ const TreeNode = ({
   const { token } = useToken()
   const { children, metaData } = props
   const { styles } = useStyles()
-  const { renderNodeContent: RenderNodeContent, onSelect, onRightClick, selectedIdsState, nodesRefs, nodeOrder } = useContext(TreeContext)
+  const {
+    renderNodeContent: RenderNodeContent,
+    onSelect,
+    onRightClick,
+    selectedIdsState,
+    nodesRefs,
+    nodeOrder
+  } = useContext(TreeContext)
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
   const [uploadFileList, setUploadFileList] = React.useState<UploadFile[]>([])
-  const { uploadFile } = useFileUploader({ parentId: parseInt(id) })
+  const assetUpload = assetApi.endpoints.assetAdd
+  const dispatch = useAppDispatch()
 
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
 
@@ -166,16 +176,23 @@ const TreeNode = ({
     }
   }
 
+  console.log(assetUpload.select(id))
+
   const uploadProps: UploadProps = {
+    action: `/studio/api/assets/add/${id}`,
     name: 'file',
     multiple: true,
     openFileDialogOnClick: false,
     showUploadList: false,
     onChange: ({ fileList }) => {
+      const fileStates = fileList.map((file) => file.status)
+      const allFullFilled = fileStates.every(item => item === 'done')
+
+      if (allFullFilled) {
+        dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(id))))
+      }
+
       setUploadFileList(fileList.filter((file) => file.status === 'uploading'))
-    },
-    customRequest: async ({ file }) => {
-      await uploadFile(file as File)
     }
   }
 

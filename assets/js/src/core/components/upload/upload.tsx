@@ -15,9 +15,14 @@ import { Upload as AntUpload, type UploadProps } from 'antd'
 import React from 'react'
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
+  const onChange = (event: any): void => {
+    console.log(event)
+  }
+
   return (
     <AntUpload
       { ...props }
+      onChange={ onChange }
     >
       {props.children}
     </AntUpload>
