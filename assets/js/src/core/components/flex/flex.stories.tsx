@@ -35,7 +35,7 @@ const children = (
 
 export const _default = {
   args: {
-    children: children,
+    children
   }
 }
 
@@ -43,7 +43,10 @@ export const Nesting = {
   args: {
     children: (
       <>
-        <Flex align='center' gap={'extra-small'}>
+        <Flex
+          align='center'
+          gap={ 'extra-small' }
+        >
           <Text>
             Text 1
           </Text>
@@ -53,7 +56,10 @@ export const Nesting = {
           </Button>
         </Flex>
 
-        <Flex align='center' gap={'extra-small'}>
+        <Flex
+          align='center'
+          gap={ 'extra-small' }
+        >
           <Text>
             Text 2
           </Text>
@@ -73,70 +79,70 @@ export const Nesting = {
 
 export const Mini = {
   args: {
-    children: children,
+    children,
     gap: 'mini'
   }
 }
 
 export const ExtraSmall = {
   args: {
-    children: children,
+    children,
     gap: 'extra-small'
   }
 }
 
 export const Small = {
   args: {
-    children: children,
+    children,
     gap: 'small'
   }
 }
 
 export const Normal = {
   args: {
-    children: children,
+    children,
     gap: 'normal'
   }
 }
 
 export const Medium = {
   args: {
-    children: children,
+    children,
     gap: 'medium'
   }
 }
 
 export const Large = {
   args: {
-    children: children,
+    children,
     gap: 'large'
   }
 }
 
 export const ExtraLarge = {
   args: {
-    children: children,
+    children,
     gap: 'extra-large'
   }
 }
 
 export const Maxi = {
   args: {
-    children: children,
+    children,
     gap: 'maxi'
   }
 }
 
 export const CustomGap = {
   args: {
-    children: children,
+    children,
     gap: 5
   }
 }
 
 export const Vertical = {
   args: {
-    children: children,
+    children,
     vertical: true,
     gap: 'large'
   }

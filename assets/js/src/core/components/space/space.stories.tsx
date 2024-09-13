@@ -16,7 +16,6 @@ import { Space } from './space'
 import React from 'react'
 import { Button } from '../button/button'
 
-
 const config: Meta = {
   title: 'Components/Layout/Spacing/Space',
   component: Space,
