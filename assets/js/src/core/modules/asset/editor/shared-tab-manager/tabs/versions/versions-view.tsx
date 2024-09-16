@@ -34,12 +34,14 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import { isSet } from '@Pimcore/utils/helpers'
-import { TimelineAccordions } from '@Pimcore/components/timeline-accordions/timeline-accordions'
 import { Checkbox, Input, Tag } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type AccordionItemType, type PanelTheme } from '@Pimcore/components/accordion/accordion'
+import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
+import {
+  AccordionTimeline,
+  type TimeLineAccordionItemType
+} from '@Pimcore/components/accordion-timeline/accordion-timeline'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -121,7 +123,7 @@ export const VersionsView = ({
     </RenderModal>
   )
 
-  const createAccordionItem = (version: Version): AccordionItemType => {
+  const createAccordionItem = (version: Version): TimeLineAccordionItemType => {
     const [deletingVersion, setDeletingVersion] = useState(false)
     const [publishingVersion, setPublishingVersion] = useState(false)
 
@@ -263,8 +265,8 @@ export const VersionsView = ({
       </>
     )
 
-    const item = {
-      key: version.id,
+    return {
+      key: String(version.id),
       title,
       subtitle,
       extra,
@@ -272,9 +274,10 @@ export const VersionsView = ({
       onClick,
       theme: themeByState
     }
-
-    return item
   }
+
+  const accordionItems: TimeLineAccordionItemType[] = versions.map((version) =>
+    createAccordionItem(version))
 
   return (
     <Content
@@ -312,18 +315,7 @@ export const VersionsView = ({
               </Header>
 
               {versions.length > 0 && (
-                <VerticalTimeline timeStamps={ versions.map((version) => {
-                  const selected = detailedVersions.some((v => v.id === version.id))
-                  return (
-                    <TimelineAccordions
-                      id={ version.id }
-                      item={ createAccordionItem(version) }
-                      key={ version.id }
-                      selected={ selected }
-                    />
-                  )
-                }) }
-                />
+                <AccordionTimeline items={ accordionItems } />
               )}
             </Content>
           )
