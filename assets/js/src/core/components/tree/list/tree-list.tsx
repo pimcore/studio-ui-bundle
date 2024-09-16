@@ -16,14 +16,17 @@ import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
+import { type UploadFile } from 'antd/es/upload/interface'
+import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 
 interface TreeListProps {
   node: TreeNodeProps
+  uploadFileList: UploadFile[]
 }
 
 const { useToken } = theme
 
-export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
+export const TreeList = ({ node, uploadFileList }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode, nodeApiHook } = useContext(TreeContext)
@@ -56,7 +59,20 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {children?.map((item, index) => (
+        {uploadFileList.length > 0 && (
+          <div
+            className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
+            style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
+          >
+            <UploadList
+              items={ uploadFileList }
+              locale={ { uploading: 'uploading' } }
+              showRemoveIcon={ false }
+            />
+          </div>
+        )}
+
+        {uploadFileList.length === 0 && children?.map((item, index) => (
           <RenderNode
             internalKey={ `${node.internalKey}-${index}` }
             key={ item.id }

@@ -12,11 +12,13 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { Title } from './title'
+import { Space } from './space'
+import React from 'react'
+import { Button } from '../button/button'
 
 const config: Meta = {
-  title: 'Components/General/Typography/Title',
-  component: Title,
+  title: 'Components/Layout/Spacing/Space',
+  component: Space,
   tags: ['autodocs']
 }
 
@@ -24,6 +26,12 @@ export default config
 
 export const _default = {
   args: {
-    children: 'Default Title'
+    children: (
+      <>
+        <Button>Button 1</Button>
+        <Button>Button 2</Button>
+        <Button>Button 3</Button>
+      </>
+    )
   }
 }

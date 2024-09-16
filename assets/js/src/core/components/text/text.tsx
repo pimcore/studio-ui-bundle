@@ -11,19 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { Title } from './title'
+import React from 'react'
+import { type TextProps as AntTextProps } from 'antd/es/typography/Text'
+import { Typography } from 'antd'
 
-const config: Meta = {
-  title: 'Components/General/Typography/Title',
-  component: Title,
-  tags: ['autodocs']
-}
+export interface TextProps extends AntTextProps {}
 
-export default config
+const { Text: AntText } = Typography
 
-export const _default = {
-  args: {
-    children: 'Default Title'
-  }
+export const Text = (props: TextProps): React.JSX.Element => {
+  return <AntText { ...props } />
 }

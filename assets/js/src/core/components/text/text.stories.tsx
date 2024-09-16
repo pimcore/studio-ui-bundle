@@ -12,11 +12,14 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { Title } from './title'
+import { Text } from './text'
 
 const config: Meta = {
-  title: 'Components/General/Typography/Title',
-  component: Title,
+  title: 'Components/General/Typography/Text',
+  component: Text,
+  parameters: {
+    layout: 'centered'
+  },
   tags: ['autodocs']
 }
 
@@ -24,6 +27,20 @@ export default config
 
 export const _default = {
   args: {
-    children: 'Default Title'
+    children: 'Simple text component'
+  }
+}
+
+export const Strong = {
+  args: {
+    children: 'Simple text component',
+    strong: true
+  }
+}
+
+export const Secondary = {
+  args: {
+    children: 'Simple text component',
+    type: 'secondary'
   }
 }

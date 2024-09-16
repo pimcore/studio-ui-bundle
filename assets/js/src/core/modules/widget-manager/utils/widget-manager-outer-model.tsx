@@ -49,16 +49,9 @@ export const getInitialModelJson = (): IJsonModel => {
           id: 'bottom_tabset',
           enableDeleteWhenEmpty: false,
           weight: 50,
-          height: 40,
+          height: 0,
           selected: 0,
-          children: [
-            {
-              type: 'tab',
-              name: 'Interconnected widget',
-              component: 'example',
-              enableClose: false
-            }
-          ]
+          children: []
         }
       ]
     },

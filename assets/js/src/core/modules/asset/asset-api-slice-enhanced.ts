@@ -43,6 +43,10 @@ const api = baseApi.enhanceEndpoints({
 
     assetUpdateById: {
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_DETAIL_ID(args.id)
+    },
+
+    assetAdd: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
     }
   }
 })
