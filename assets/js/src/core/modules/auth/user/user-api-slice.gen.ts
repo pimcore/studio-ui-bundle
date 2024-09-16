@@ -56,6 +56,10 @@ const injectedRtkApi = api
                 query: () => ({ url: `/studio/api/user/available-permissions` }),
                 providesTags: ["User Management"],
             }),
+            userGetCollection: build.query<UserGetCollectionApiResponse, UserGetCollectionApiArg>({
+                query: () => ({ url: `/studio/api/users` }),
+                providesTags: ["User Management"],
+            }),
             userResetPassword: build.mutation<UserResetPasswordApiResponse, UserResetPasswordApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/user/reset-password`,
@@ -130,6 +134,11 @@ export type UserGetAvailablePermissionsApiResponse = /** status 200 List of avai
     items: UserPermission[];
 };
 export type UserGetAvailablePermissionsApiArg = void;
+export type UserGetCollectionApiResponse = /** status 200 List of users */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type UserGetCollectionApiArg = void;
 export type UserResetPasswordApiResponse = /** status 200 Success */ void;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
@@ -312,6 +321,16 @@ export type UserPermission = {
     /** Category og the Permission */
     category: string;
 };
+export type SimpleUser = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** ID of the User */
+    id: number;
+    /** Name of the User */
+    username?: string;
+};
 export type ResetPassword = {
     /** Username */
     username: string;
@@ -326,6 +345,7 @@ export const {
     useUserDeleteByIdMutation,
     useUserFolderDeleteByIdMutation,
     useUserGetAvailablePermissionsQuery,
+    useUserGetCollectionQuery,
     useUserResetPasswordMutation,
     useUserUpdatePasswordByIdMutation,
     useUserGetTreeQuery,

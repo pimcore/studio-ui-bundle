@@ -108,8 +108,8 @@ export type Schedule = {
     username: string;
 };
 export type UpdateSchedule = {
-    /** id */
-    id: number;
+    /** Id of schedule, if null a new one will be created */
+    id: number | null;
     /** Date of schedule */
     date: number;
     /** Action */
