@@ -67,13 +67,13 @@ export const Accordion = ({
   }
 
   const itemsWithCardClassName = items?.map((item) => {
-    const chevronClassName = ['chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'chevron-up' : ''].join(' ')
+    const chevronClassName = ['accordion__chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'accordion__chevron--up' : ''].join(' ')
 
     const chevronButton = (): React.ReactElement => {
       return (
         <IconButton
           aria-label={ i18n.t('aria.notes-and-events.expand') }
-          className={ 'card-title__chevron-btn' }
+          className={ 'accordion__chevron-btn' }
           icon={ 'chevron-up' }
           iconOptions={ { className: chevronClassName } }
           onClick={ () => {
@@ -92,9 +92,9 @@ export const Accordion = ({
 
     const collapseDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
 
-    const itemClassNames = [item?.className, 'card'].filter(Boolean)
+    const itemClassNames = [item?.className, 'accordion__item'].filter(Boolean)
     if (item.theme !== undefined) {
-      itemClassNames.push(item.theme)
+      itemClassNames.push(`accordion__item--${item.theme}`)
     }
 
     return ({
@@ -124,7 +124,7 @@ export const Accordion = ({
   ]
 
   if (spaced) {
-    allClassNames.push('spaced')
+    allClassNames.push('accordion--spaced', styles.spaced)
     allClassNames.push(styles.spaced)
   }
 
