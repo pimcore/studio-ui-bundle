@@ -36,7 +36,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import { isSet } from '@Pimcore/utils/helpers'
-import { VersionAccordion } from '@Pimcore/components/version-accordion/version-accordion'
+import { TimelineAccordions } from '@Pimcore/components/timeline-accordions/timeline-accordions'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -158,7 +158,7 @@ export const VersionsView = ({
                 const vId = { id: version.id, count: version.versionCount }
                 const selected = detailedVersions.some((v => v.id === version.id))
                 return (
-                  <VersionAccordion
+                  <TimelineAccordions
                     activeDefault={ selected }
                     autosaved={ version.autosave }
                     className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }

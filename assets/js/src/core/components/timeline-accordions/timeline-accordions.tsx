@@ -13,7 +13,7 @@
 
 import { Button, Checkbox, Input, Tag } from 'antd'
 import React, { useState } from 'react'
-import { useStyle } from './version-accordion.styles'
+import { useStyle } from './timeline-accordions.styles'
 import { Icon } from '../icon/icon'
 import { isSet } from '@Pimcore/utils/helpers'
 import { useTranslation } from 'react-i18next'
@@ -40,7 +40,7 @@ interface VersionAccordionProps {
   className?: string
 }
 
-export const VersionAccordion = ({
+export const TimelineAccordions = ({
   version,
   date,
   savedBy,

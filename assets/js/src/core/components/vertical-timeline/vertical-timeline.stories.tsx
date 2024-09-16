@@ -14,7 +14,7 @@
 import React from 'react'
 import { type Meta } from '@storybook/react'
 import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeline'
-import { VersionAccordion } from '@Pimcore/components/version-accordion/version-accordion'
+import { TimelineAccordions } from '@Pimcore/components/timeline-accordions/timeline-accordions'
 
 const config: Meta = {
   title: 'Components/Data Display/VerticalTimeline',
@@ -30,7 +30,7 @@ export default config
 export const _default = {
   args: {
     timeStamps: [
-      <VersionAccordion
+      <TimelineAccordions
         activeDefault
         autosaved={ false }
         className={ 'is-active' }
@@ -50,7 +50,7 @@ export const _default = {
         savedBy={ 'admin' }
         version={ 1 }
       />,
-      <VersionAccordion
+      <TimelineAccordions
         autosaved
         date={ '2020-07-12' }
         id={ 112 }
@@ -68,7 +68,7 @@ export const _default = {
         savedBy={ 'auto saved' }
         version={ 2 }
       />,
-      <VersionAccordion
+      <TimelineAccordions
         autosaved={ false }
         className={ 'is-published' }
         date={ '2020-10-12' }

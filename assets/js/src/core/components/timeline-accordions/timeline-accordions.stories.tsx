@@ -12,10 +12,10 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { VersionAccordion as VersionAccordionComponent } from './version-accordion'
+import { TimelineAccordions as VersionAccordionComponent } from './timeline-accordions'
 
 const config: Meta = {
-  title: 'Components/__Refactor__/VersionAccordion',
+  title: 'Components/__Refactor__/TimelineAccordions',
   component: VersionAccordionComponent,
   parameters: {
     layout: 'centered'
