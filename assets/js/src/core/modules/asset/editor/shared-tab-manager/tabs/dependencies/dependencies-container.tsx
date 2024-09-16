@@ -24,6 +24,7 @@ export const DependenciesTabContainer = (): React.JSX.Element => {
   return (
     <SplitLayout
       leftItem={ { minSize: 450, size: 50, children: <RequiresPanel /> } }
+      resizeAble
       rightItem={ { minSize: 450, size: 50, children: <RequiredByPanel /> } }
       withDivider
     />

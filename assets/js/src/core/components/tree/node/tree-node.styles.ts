@@ -24,6 +24,17 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: 2px ${token.paddingSM}px 2px 0;
         white-space: nowrap;
         align-items: center;
+          
+        .ant-upload-wrapper {
+          width: 100%;
+            
+          .ant-upload {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px
+          }
+        }
 
         @media (hover: hover) {
           &:hover {
@@ -42,7 +53,8 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .tree-node__content-wrapper {
-        max-width: max(100px, calc(100% - 16px));
+        //max-width: max(100%, calc(100px - 16px));
+        width: 100%;
       }
 
       .tree-node-content__label {

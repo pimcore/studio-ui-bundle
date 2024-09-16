@@ -12,7 +12,7 @@
 */
 
 import { Flex } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useStyles } from './split-layout.styles'
 import { SplitLayoutItem, type SplitLayoutItemProps } from './item/split-layout-item'
 
@@ -25,21 +25,19 @@ export interface SplitLayoutProps {
   resizeAble?: boolean
 }
 
+export interface ISplitLayoutItemSizing extends Omit<ISplitLayoutItem, 'children'> {}
+
 export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAble = false }: SplitLayoutProps): React.JSX.Element => {
   const { styles } = useStyles()
   const leftItemRef = useRef<HTMLDivElement>(null)
   const rightItemRef = useRef<HTMLDivElement>(null)
   const elementRef = useRef<HTMLDivElement>(null)
-  const [internalLeftItem, setInternalLeftItem] = useState<ISplitLayoutItem>(leftItem)
-  const [internalRightItem, setInternalRightItem] = useState<ISplitLayoutItem>(rightItem)
 
-  useEffect(() => {
-    setInternalLeftItem(leftItem)
-  }, [leftItem])
+  const { children: leftItemChildren, ...leftSizing } = leftItem
+  const { children: rightItemChildren, ...rightSizing } = rightItem
 
-  useEffect(() => {
-    setInternalRightItem(rightItem)
-  }, [rightItem])
+  const [internalLeftItemSizing, setInternalLeftItemSizing] = useState<ISplitLayoutItemSizing>(leftSizing)
+  const [internalRightItemSizing, setInternalRightItemSizing] = useState<ISplitLayoutItemSizing>(rightSizing)
 
   return (
     <Flex
@@ -48,15 +46,19 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
     >
       <SplitLayoutItem
         ref={ leftItemRef }
-        { ...internalLeftItem }
+        { ...internalLeftItemSizing }
         onResize={ resizeAble ? onResize : undefined }
         withDivider={ withDivider }
-      />
+      >
+        { leftItemChildren }
+      </SplitLayoutItem>
 
       <SplitLayoutItem
         ref={ rightItemRef }
-        { ...internalRightItem }
-      />
+        { ...internalRightItemSizing }
+      >
+        { rightItemChildren }
+      </SplitLayoutItem>
     </Flex>
   )
 
@@ -65,13 +67,13 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
     const rightRect = rightItemRef.current!.getBoundingClientRect()
     const elementRect = elementRef.current!.getBoundingClientRect()
 
-    setInternalLeftItem({
-      ...internalLeftItem,
+    setInternalLeftItemSizing({
+      ...internalLeftItemSizing,
       size: (leftRect.width + event.movementX) / elementRect.width * 100
     })
 
-    setInternalRightItem({
-      ...internalRightItem,
+    setInternalRightItemSizing({
+      ...internalRightItemSizing,
       size: (rightRect.width - event.movementX) / elementRect.width * 100
     })
   }

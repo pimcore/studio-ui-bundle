@@ -30,7 +30,7 @@ import {
   ListSortingContext,
   ListDataContext
 } from '../list-provider'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void

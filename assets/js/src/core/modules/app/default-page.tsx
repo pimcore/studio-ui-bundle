@@ -19,10 +19,17 @@ import { useMiddleware } from '@Pimcore/modules/auth/hooks/use-middleware'
 export const DefaultPage = (): React.JSX.Element => {
   useMiddleware()
 
+  const preventDrop = (event: React.DragEvent<HTMLDivElement>): void => {
+    event.preventDefault()
+  }
+
   return (
-    <>
+    <div
+      onDragOver={ preventDrop }
+      onDrop={ preventDrop }
+    >
       <Background />
       <BaseLayoutView />
-    </>
+    </div>
   )
 }

@@ -15,16 +15,14 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   type Note
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { AddNoteModal } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
 import { type ElementType } from 'types/element-type.d'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Space, Tag } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -158,7 +156,7 @@ export const NotesAndEventsTabView = ({
             theme='secondary'
           >
             <>
-              {pagination}
+              { pagination }
             </>
           </Toolbar>
           )

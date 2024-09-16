@@ -15,7 +15,7 @@ import { api as tagsApi, type Tag } from '@Pimcore/modules/asset/editor/shared-t
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useContext } from 'react'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 interface UseShortcutActionsReturn {
   applyFolderTags: () => Promise<void>

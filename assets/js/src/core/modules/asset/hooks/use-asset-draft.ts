@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
+import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice-enhanced'
 import {
   addCustomMetadataToAsset,
   addImageSettingsToAsset, addPropertyToAsset,
@@ -55,6 +55,9 @@ interface UseAssetDraftReturn extends
   asset: undefined | ReturnType<typeof selectAssetById>
 
   removeAssetFromState: () => void
+  removeTrackedChanges: () => void
+
+  fetchAsset: () => void
 }
 
 interface DynamicCustomSettings {
@@ -69,9 +72,9 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const [isError, setIsError] = useState<boolean>(false)
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
-    const { data, isSuccess } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 
-    if (data !== undefined && isSuccess) {
+    if (data !== undefined) {
       return data
     }
 
@@ -108,6 +111,16 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   }
 
   useEffect(() => {
+    console.log({ asset })
+
+    if (asset === undefined) {
+      fetchAsset()
+    }
+  }, [asset])
+
+  function fetchAsset (): void {
+    setIsLoading(true)
+
     Promise.all([
       getAsset(),
       getCustomSettings()
@@ -122,7 +135,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         changes: {}
       }
 
-      if (asset === undefined && assetData !== undefined) {
+      if (assetData !== undefined) {
         dispatch(assetReceived(mergedAssetData))
       }
 
@@ -133,7 +146,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [])
+  }
 
   function removeAssetFromState (): void {
     if (asset === undefined) return
@@ -178,6 +191,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     isError,
     asset,
     removeAssetFromState,
+    fetchAsset,
     ...trackableChangesActions,
     ...propertyActions,
     ...customMetadataActions,

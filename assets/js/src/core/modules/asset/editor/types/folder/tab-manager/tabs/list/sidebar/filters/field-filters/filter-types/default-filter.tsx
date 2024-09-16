@@ -12,7 +12,7 @@
 */
 
 import React, { useMemo, type ComponentType } from 'react'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { TextFilter } from './text-filter'
 import { SelectFilter } from './select-filter'
 
