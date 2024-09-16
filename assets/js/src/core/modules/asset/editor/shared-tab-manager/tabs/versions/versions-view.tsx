@@ -15,8 +15,8 @@ import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
 import {
-  type VersionGetCollectionForElementByTypeAndIdApiArg,
-  type Version
+  type Version,
+  type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import {
   DetailsVersionsContainer
@@ -37,6 +37,9 @@ import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import { isSet } from '@Pimcore/utils/helpers'
 import { TimelineAccordions } from '@Pimcore/components/timeline-accordions/timeline-accordions'
+import { Checkbox, Input, Tag } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { type AccordionItemType, type PanelTheme } from '@Pimcore/components/accordion/accordion'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -118,6 +121,161 @@ export const VersionsView = ({
     </RenderModal>
   )
 
+  const createAccordionItem = (version: Version): AccordionItemType => {
+    const [deletingVersion, setDeletingVersion] = useState(false)
+    const [publishingVersion, setPublishingVersion] = useState(false)
+
+    const vId = { id: version.id, count: version.versionCount }
+    const selected = detailedVersions.some((v => v.id === version.id))
+    const selectable = comparingActive
+    const ownDraft = false
+    const published = version.published ?? false
+    const onClick = (): void => {
+      if (comparingActive) {
+        selectVersion(vId)
+      } else {
+        setDetailedVersions([{
+          id: version.id,
+          count: version.versionCount
+        }])
+      }
+    }
+
+    const scheduledDate = isSet(version.scheduled)
+      ? formatDateTime({
+        timestamp: version.scheduled!,
+        dateStyle: 'short',
+        timeStyle: 'short'
+      })
+      : undefined
+
+    const title = (
+      <div>
+        {selectable && (
+        <Checkbox
+          checked={ selected }
+          onChange={ () => {
+            selectVersion(vId)
+          } }
+        />
+        )}
+        <span className={ 'title' }>{`${t('version.version')} ${version.versionCount} | ${formatDateTime({
+                    timestamp: version.date,
+                    dateStyle: 'short',
+                    timeStyle: 'medium'
+                })} `}</span>
+      </div>
+    )
+
+    const subtitle = (
+      <div>
+        <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
+        {isSet(version.autosave) && version.autosave && <Icon name="lightning-01" />}
+      </div>
+    )
+
+    let extra
+    let themeByState: PanelTheme = selected ? 'primary' : 'default'
+
+    if (published) {
+      themeByState = 'success'
+      extra = (
+        <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
+          <Icon
+            className="tag-icon"
+            name="world"
+            options={ { width: '12px', height: '12px' } }
+          />
+          {t('version.published')}
+        </Tag>
+      )
+    } else if (isSet(ownDraft) && ownDraft) {
+      extra = (
+        <Tag className={ ['title-tag', 'title-tag__own-draft'].join(' ') }>
+          <Icon
+            className="tag-icon"
+            name="user-01"
+            options={ { width: '12px', height: '12px' } }
+          />
+          {t('version.own-draft')}
+        </Tag>
+      )
+    }
+
+    const publishVersion = async (): Promise<void> => {
+      setPublishingVersion(true)
+      await onClickPublish(version.id)
+      setPublishingVersion(false)
+    }
+
+    const deleteVersion = (): void => {
+      setDeletingVersion(true)
+      setDetailedVersions([])
+      onClickDelete(version.id)
+    }
+
+    const children = (
+      <>
+        <div className={ 'flexbox-start-end' }>
+          <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
+          <div>
+            {!published && (
+            <Button
+              className={ 'btn-publish' }
+              disabled={ publishingVersion || deletingVersion }
+              icon={ <Icon name="world" /> }
+              loading={ publishingVersion }
+              onClick={ publishVersion }
+            >
+              {t('version.publish')}
+            </Button>
+            )}
+            <Button
+              aria-label={ t('aria.version.delete') }
+              disabled={ publishingVersion }
+              icon={ <Icon name="trash" /> }
+              loading={ deletingVersion }
+              onClick={ deleteVersion }
+            />
+          </div>
+        </div>
+        {
+                    isSet(scheduledDate) && (
+                    <div className={ 'row-margin' }>
+                      <div>{t('version.schedule-for')}</div>
+                      <div className={ 'date-container' }>
+                        <Icon name="calender" />
+                        <span className={ 'scheduled-date' }>{scheduledDate}</span>
+                      </div>
+                    </div>
+                    )
+                }
+        <div className={ 'row-margin' }>
+          <span>{t('version.note')}</span>
+          <Input
+            defaultValue={ version.note }
+            onBlur={ (e): void => {
+              onBlurNote(version.id, e.target.value.toString())
+            } }
+            placeholder={ 'Add a note' }
+          />
+        </div>
+      </>
+    )
+
+    const item = {
+      key: version.id,
+      title,
+      subtitle,
+      extra,
+      children,
+      onClick,
+      theme: themeByState
+    }
+
+    return item
+  }
+
   return (
     <Content
       className={ styles.versions }
@@ -154,51 +312,18 @@ export const VersionsView = ({
               </Header>
 
               {versions.length > 0 && (
-              <VerticalTimeline timeStamps={ versions.map((version) => {
-                const vId = { id: version.id, count: version.versionCount }
-                const selected = detailedVersions.some((v => v.id === version.id))
-                return (
-                  <TimelineAccordions
-                    activeDefault={ selected }
-                    autosaved={ version.autosave }
-                    className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
-                    date={ formatDateTime({ timestamp: version.date, dateStyle: 'short', timeStyle: 'medium' }) }
-                    id={ version.id }
-                    key={ version.id }
-                    note={ version.note }
-                    onBlurNote={ (e): void => {
-                      onBlurNote(version.id, e.target.value.toString() as string)
-                    } }
-                    onChangeCheckbox={ (): void => {
-                      selectVersion(vId)
-                    } }
-                    onClick={ () => {
-                      if (comparingActive) {
-                        selectVersion(vId)
-                      } else {
-                        setDetailedVersions([{
-                          id: version.id,
-                          count: version.versionCount
-                        }])
-                      }
-                    } }
-                    onClickDelete={ (): void => {
-                      setDetailedVersions([])
-                      onClickDelete(version.id)
-                    } }
-                    onClickPublish={ async (): Promise<void> => {
-                      await onClickPublish(version.id)
-                    } }
-                    published={ version.published ?? false }
-                    savedBy={ version.user?.name ?? '' }
-                    scheduledDate={ isSet(version.scheduled) ? formatDateTime({ timestamp: version.scheduled!, dateStyle: 'short', timeStyle: 'short' }) : undefined }
-                    selectable={ comparingActive }
-                    selected={ selected }
-                    version={ version.versionCount }
-                  />
-                )
-              }) }
-              />
+                <VerticalTimeline timeStamps={ versions.map((version) => {
+                  const selected = detailedVersions.some((v => v.id === version.id))
+                  return (
+                    <TimelineAccordions
+                      id={ version.id }
+                      item={ createAccordionItem(version) }
+                      key={ version.id }
+                      selected={ selected }
+                    />
+                  )
+                }) }
+                />
               )}
             </Content>
           )
