@@ -18,7 +18,7 @@ import {
 } from '@Pimcore/components/tree/components/context-menu/asset-tree-context-menu'
 import { useFileUploader } from '@Pimcore/modules/asset/tree/context-menu/hooks/upload-files'
 
-interface TreeContextMenuProps {
+export interface TreeContextMenuProps {
   children: React.ReactNode
   node?: TreeNodeProps
 }

@@ -24,10 +24,10 @@ import React, {
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './tree.styles'
-import { type TreeContextMenuProps } from './components/context-menu/context-menu'
 import { container } from '@Pimcore/app/depency-injection'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
+import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 
 export interface TreeSearchProps {
   node: TreeNodeProps

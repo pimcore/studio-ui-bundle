@@ -16,7 +16,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
-import { TreeContextMenu } from '@Pimcore/components/tree/components/context-menu/context-menu'
+import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -24,7 +24,7 @@ moduleSystem.registerModule({
 
     componentRegistry.register({
       name: 'assetTreeContextMenu',
-      component: TreeContextMenu
+      component: AssetTreeContextMenu
     })
   }
 })
