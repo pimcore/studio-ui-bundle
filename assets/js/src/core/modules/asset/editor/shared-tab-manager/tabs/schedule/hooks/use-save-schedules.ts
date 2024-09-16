@@ -20,7 +20,7 @@ import { type ElementType } from 'types/element-type.d'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
-import { type Schedule } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 
 interface UseCleanupArchivedSchedulesResponseInterface {
   isLoading: boolean

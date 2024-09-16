@@ -14,28 +14,29 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice-enhanced'
 import {
-  type Schedule,
   addCustomMetadataToAsset,
-  addImageSettingsToAsset, addPropertyToAsset,
+  addImageSettingsToAsset,
+  addPropertyToAsset,
+  addScheduleToAsset,
   assetReceived,
   removeAsset,
   removeCustomMetadataFromAsset,
-  removeImageSettingFromAsset, removePropertyFromAsset,
+  removeImageSettingFromAsset,
+  removePropertyFromAsset,
+  removeScheduleFromAsset,
   resetChanges,
   resetSchedulesChangesForAsset,
   selectAssetById,
-  setCustomMetadataForAsset, setPropertiesForAsset,
-  updateAllCustomMetadataForAsset, updateCustomMetadataForAsset,
   setCustomMetadataForAsset,
   setPropertiesForAsset,
   setSchedulesForAsset,
   updateAllCustomMetadataForAsset,
+  updateCustomMetadataForAsset,
   updateImageSettingForAsset,
-  updatePropertyForAsset, updateScheduleForAsset
+  updatePropertyForAsset,
+  updateScheduleForAsset
 } from '../asset-draft-slice'
 import { useEffect, useState } from 'react'
-import {
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import {
@@ -50,10 +51,12 @@ import {
   useImageSettingsDraft,
   type UseImageSettingsDraftReturn
 } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
+import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 
 interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
   UsePropertiesDraftReturn,
+  UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn,
   UseImageSettingsDraftReturn {
   isLoading: boolean
@@ -174,26 +177,16 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     removePropertyFromAsset,
     setPropertiesForAsset
   )
-  function updateSchedule (schedule): void {
-    dispatch(updateScheduleForAsset({ assetId: id, schedule }))
-  }
-  function addSchedule (schedule): void {
-    dispatch(addScheduleToAsset({ assetId: id, schedule }))
-  }
-  function removeSchedule (schedule): void {
-    dispatch(removeScheduleFromAsset({ assetId: id, schedule }))
-  }
-  function setSchedules (schedules): void {
-    dispatch(setSchedulesForAsset({ assetId: id, schedules }))
-  }
 
-  function resetSchedulesChanges (): void {
-    dispatch(resetSchedulesChangesForAsset(id))
-  }
-
-  function addImageSettings (settings): void {
-    dispatch(addImageSettingsToAsset({ assetId: id, settings }))
-  }
+  const schedulesActions = useSchedulesDraft(
+    id,
+    asset,
+    updateScheduleForAsset,
+    addScheduleToAsset,
+    removeScheduleFromAsset,
+    setSchedulesForAsset,
+    resetSchedulesChangesForAsset
+  )
 
   const customMetadataActions = useCustomMetadataDraft(
     id,
@@ -221,6 +214,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     fetchAsset,
     ...trackableChangesActions,
     ...propertyActions,
+    ...schedulesActions,
     ...customMetadataActions,
     ...imageSettingsActions
   }

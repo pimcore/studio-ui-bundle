@@ -29,10 +29,10 @@ import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { type Schedule } from '@Pimcore/modules/asset/asset-draft-slice'
 import {
   useSaveSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()

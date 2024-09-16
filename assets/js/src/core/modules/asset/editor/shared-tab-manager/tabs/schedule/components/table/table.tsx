@@ -19,7 +19,7 @@ import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { type Schedule } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 
 type ScheduleTable = Schedule & {
   actions: React.ReactNode
