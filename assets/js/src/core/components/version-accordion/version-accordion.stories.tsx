@@ -12,11 +12,11 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { VersionCard as VersionCardComponent } from './version-card'
+import { VersionAccordion as VersionAccordionComponent } from './version-accordion'
 
 const config: Meta = {
-  title: 'Components/__Refactor__/VersionCard',
-  component: VersionCardComponent,
+  title: 'Components/__Refactor__/VersionAccordion',
+  component: VersionAccordionComponent,
   parameters: {
     layout: 'centered'
   },

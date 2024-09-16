@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { type InputRef, Segmented, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
-import { usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import { usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
 import Input from 'antd/es/input/Input'
 import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
@@ -27,7 +27,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import { type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
+import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()

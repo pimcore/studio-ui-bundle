@@ -12,24 +12,20 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice.gen'
+import { api as assetApi, type AssetGetByIdApiResponse, type Image, type ImageData } from '../asset-api-slice-enhanced'
 import {
   type Schedule,
   addCustomMetadataToAsset,
-  addImageSettingsToAsset,
-  addPropertyToAsset,
-  addScheduleToAsset,
+  addImageSettingsToAsset, addPropertyToAsset,
   assetReceived,
-  type CustomMetadata,
-  type DataProperty,
   removeAsset,
   removeCustomMetadataFromAsset,
-  removeImageSettingFromAsset,
-  removePropertyFromAsset,
-  removeScheduleFromAsset,
+  removeImageSettingFromAsset, removePropertyFromAsset,
   resetChanges,
   resetSchedulesChangesForAsset,
   selectAssetById,
+  setCustomMetadataForAsset, setPropertiesForAsset,
+  updateAllCustomMetadataForAsset, updateCustomMetadataForAsset,
   setCustomMetadataForAsset,
   setPropertiesForAsset,
   setSchedulesForAsset,
@@ -41,50 +37,33 @@ import { useEffect, useState } from 'react'
 import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
-
-interface UseAssetDraftReturnCustomMetadata {
-  customMetadata: undefined | ReturnType<typeof selectAssetById>['customMetadata']
-  updateAllCustomMetadata: (customMetadata: CustomMetadata[]) => void
-  addCustomMetadata: (customMetadata: CustomMetadata) => void
-  removeCustomMetadata: (customMetadata: CustomMetadata) => void
-  setCustomMetadata: (customMetadata: CustomMetadata[]) => void
-}
-
-interface UseAssetDraftReturnProperties {
-  properties: undefined | ReturnType<typeof selectAssetById>['properties']
-  updateProperty: (key: string, updatedProperty: DataProperty) => void
-  addProperty: (property: DataProperty) => void
-  removeProperty: (property: DataProperty) => void
-  setProperties: (properties: DataProperty[]) => void
-}
-
-interface UseAssetDraftReturnSchedule {
-  schedules: undefined | ReturnType<typeof selectAssetById>['schedules']
-  updateSchedule: (updatedSchedule: Schedule) => void
-  addSchedule: (schedule: Schedule) => void
-  removeSchedule: (schedule: Schedule) => void
-  setSchedules: (schedules: Schedule[]) => void
-  resetSchedulesChanges: () => void
-}
-
-interface UseAssetDraftReturnDynamicSettings {
-  imageSettings: undefined | ImageData
-  addImageSettings: (settings: ImageData) => void
-  updateImageSetting: ({ key, value }: { key: keyof ImageData, value: ImageData[keyof ImageData] }) => void
-  removeImageSetting: (setting: keyof ImageData) => void
-}
+import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import {
+  useCustomMetadataDraft,
+  type UseCustomMetadataDraftReturn
+} from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
+import {
+  useTrackableChangesDraft,
+  type UseTrackableChangesDraftReturn
+} from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import {
+  useImageSettingsDraft,
+  type UseImageSettingsDraftReturn
+} from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
 interface UseAssetDraftReturn extends
-  UseAssetDraftReturnCustomMetadata,
-  UseAssetDraftReturnProperties,
-  UseAssetDraftReturnSchedule,
-  UseAssetDraftReturnDynamicSettings {
+  UseCustomMetadataDraftReturn,
+  UsePropertiesDraftReturn,
+  UseTrackableChangesDraftReturn,
+  UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
 
   removeAssetFromState: () => void
   removeTrackedChanges: () => void
+
+  fetchAsset: () => void
 }
 
 interface DynamicCustomSettings {
@@ -97,15 +76,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const asset = useAppSelector(state => selectAssetById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
-  const properties = asset?.properties
-  const customMetadata = asset?.customMetadata
-  const schedules = asset?.schedules
-  const imageSettings = asset?.imageSettings
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
-    const { data, isSuccess } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 
-    if (data !== undefined && isSuccess) {
+    if (data !== undefined) {
       return data
     }
 
@@ -142,6 +117,16 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   }
 
   useEffect(() => {
+    console.log({ asset })
+
+    if (asset === undefined) {
+      fetchAsset()
+    }
+  }, [asset])
+
+  function fetchAsset (): void {
+    setIsLoading(true)
+
     Promise.all([
       getAsset(),
       getCustomSettings()
@@ -157,7 +142,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         changes: {}
       }
 
-      if (asset === undefined && assetData !== undefined) {
+      if (assetData !== undefined) {
         dispatch(assetReceived(mergedAssetData))
       }
 
@@ -168,7 +153,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     }).finally(() => {
       setIsLoading(false)
     })
-  }, [])
+  }
 
   function removeAssetFromState (): void {
     if (asset === undefined) return
@@ -176,38 +161,19 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(removeAsset(asset.id))
   }
 
-  function updateProperty (key, property): void {
-    dispatch(updatePropertyForAsset({ assetId: id, key, property }))
-  }
+  const trackableChangesActions = useTrackableChangesDraft(
+    id,
+    resetChanges
+  )
 
-  function addProperty (property): void {
-    dispatch(addPropertyToAsset({ assetId: id, property }))
-  }
-
-  function removeProperty (property): void {
-    dispatch(removePropertyFromAsset({ assetId: id, property }))
-  }
-
-  function setProperties (properties): void {
-    dispatch(setPropertiesForAsset({ assetId: id, properties }))
-  }
-
-  function updateAllCustomMetadata (customMetadata): void {
-    dispatch(updateAllCustomMetadataForAsset({ assetId: id, customMetadata }))
-  }
-
-  function addCustomMetadata (customMetadata): void {
-    dispatch(addCustomMetadataToAsset({ assetId: id, customMetadata }))
-  }
-
-  function removeCustomMetadata (customMetadata): void {
-    dispatch(removeCustomMetadataFromAsset({ assetId: id, customMetadata }))
-  }
-
-  function setCustomMetadata (customMetadata): void {
-    dispatch(setCustomMetadataForAsset({ assetId: id, customMetadata }))
-  }
-
+  const propertyActions = usePropertiesDraft(
+    id,
+    asset,
+    updatePropertyForAsset,
+    addPropertyToAsset,
+    removePropertyFromAsset,
+    setPropertiesForAsset
+  )
   function updateSchedule (schedule): void {
     dispatch(updateScheduleForAsset({ assetId: id, schedule }))
   }
@@ -229,53 +195,33 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     dispatch(addImageSettingsToAsset({ assetId: id, settings }))
   }
 
-  function removeImageSetting (setting): void {
-    dispatch(removeImageSettingFromAsset({ assetId: id, setting }))
-  }
+  const customMetadataActions = useCustomMetadataDraft(
+    id,
+    asset,
+    updateCustomMetadataForAsset,
+    addCustomMetadataToAsset,
+    removeCustomMetadataFromAsset,
+    setCustomMetadataForAsset,
+    updateAllCustomMetadataForAsset
+  )
 
-  function updateImageSetting ({ key, value }): void {
-    dispatch(updateImageSettingForAsset({ assetId: id, key, value }))
-  }
-
-  function removeTrackedChanges (): void {
-    dispatch(resetChanges(id))
-  }
+  const imageSettingsActions = useImageSettingsDraft(
+    id,
+    asset,
+    addImageSettingsToAsset,
+    removeImageSettingFromAsset,
+    updateImageSettingForAsset
+  )
 
   return {
     isLoading,
     isError,
     asset,
     removeAssetFromState,
-
-    // Properties
-    properties,
-    updateProperty,
-    addProperty,
-    removeProperty,
-    setProperties,
-
-    // Custom Metadata
-    customMetadata,
-    updateAllCustomMetadata,
-    addCustomMetadata,
-    removeCustomMetadata,
-    setCustomMetadata,
-
-    // Schedule
-    schedules,
-    updateSchedule,
-    addSchedule,
-    removeSchedule,
-    setSchedules,
-    resetSchedulesChanges,
-
-    // Image Settings
-    imageSettings,
-    addImageSettings,
-    removeImageSetting,
-    updateImageSetting,
-
-    // Changes
-    removeTrackedChanges
+    fetchAsset,
+    ...trackableChangesActions,
+    ...propertyActions,
+    ...customMetadataActions,
+    ...imageSettingsActions
   }
 }

@@ -12,7 +12,7 @@
 */
 
 import React, { useMemo, useRef, useState } from 'react'
-import type { ImageData as AssetImageData } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import type { ImageData as AssetImageData } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { FocalPointContext } from '../context/focal-point-context'
 
 export const FocalPointProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
@@ -37,5 +37,5 @@ export const FocalPointProvider = ({ children }: { children: React.ReactNode }):
     >
       {children}
     </FocalPointContext.Provider>
-  ), [isActive, coordinates, disabled])
+  ), [isActive, coordinates, disabled, children])
 }

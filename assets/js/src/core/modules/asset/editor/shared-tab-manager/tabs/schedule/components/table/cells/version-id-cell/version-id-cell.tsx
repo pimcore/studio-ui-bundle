@@ -13,7 +13,7 @@
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React, { useContext } from 'react'
-import { useGetVersionsQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
+import { useVersionGetCollectionForElementByTypeAndIdQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
 import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'
@@ -23,7 +23,7 @@ import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { id } = useContext(AssetContext)
-  const { data, isLoading } = useGetVersionsQuery({
+  const { data, isLoading } = useVersionGetCollectionForElementByTypeAndIdQuery({
     elementType: 'asset',
     id: id!,
     page: 1,
@@ -62,8 +62,35 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   }
   const { styles } = useStyles()
 
-  const columnConfig: SelectCellConfig = {
-    options: formattedSelectOptions
+    const options: SelectProps['options'] = selectOptions.map((value: Version) => {
+      return {
+        value: value.id,
+        label: (
+          <div className={ 'version-id__select__label' }>
+            <p>
+              <b>{value.versionCount}</b>
+              <span className={ 'version-id__select__label__username' }> | {value.user.name ?? 'not found'}</span>
+            </p>
+            <p>{formatDate(value.date)}</p>
+          </div>
+        )
+      }
+    })
+
+    return (
+      <Select
+        className={ styles.select }
+        defaultValue={ version !== null ? version.versionCount : '' }
+        onBlur={ onBlur }
+        onChange={ saveValue }
+        onKeyDown={ onKeyDown }
+        open={ open }
+        options={ options }
+        popupClassName={ styles.overlayStyle }
+        popupMatchSelectWidth={ false }
+        ref={ selectRef }
+      />
+    )
   }
 
   return (

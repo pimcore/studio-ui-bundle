@@ -11,29 +11,38 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
-import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice.gen'
+import { api, type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import ButtonGroup from 'antd/es/button/button-group'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { Popconfirm } from 'antd'
 import {
   useSaveSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type CustomMetadata, type DataProperty } from '@Pimcore/modules/asset/asset-draft-slice'
 import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
+  const dispatch = useAppDispatch()
+  const { asset, properties, removeTrackedChanges, removeAssetFromState, customMetadata, imageSettings } = useAssetDraft(id!)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess, isError }] = useAssetUpdateByIdMutation()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id!, false)
   const messageApi = useMessage()
+  const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (isSuccess && isSchedulesSuccess) {
@@ -51,7 +60,23 @@ export const Toolbar = (): React.JSX.Element => {
   }, [isError, isSchedulesError])
 
   return (
-    <ToolbarView justify='flex-end'>
+    <ToolbarView>
+      <ButtonGroup>
+        <Popconfirm
+          onCancel={ onCancel }
+          onConfirm={ onConfirm }
+          onOpenChange={ onOpenChange }
+          open={ popConfirmOpen }
+          title={ t('toolbar.reload.confirmation') }
+        >
+          <IconButton
+            icon='refresh'
+          >
+            {t('toolbar.reload')}
+          </IconButton>
+        </Popconfirm>
+      </ButtonGroup>
+
       <Button
         disabled={ !hasChanges || isLoading || isSchedulesLoading }
         loading={ isLoading || isSchedulesLoading }
@@ -63,11 +88,38 @@ export const Toolbar = (): React.JSX.Element => {
     </ToolbarView>
   )
 
+  function onOpenChange (newOpen: boolean): void {
+    if (!newOpen) {
+      setPopConfirmOpen(false)
+      return
+    }
+
+    if (Object.keys(asset?.changes ?? {}).length > 0) {
+      setPopConfirmOpen(true)
+    } else {
+      refreshAsset()
+    }
+  }
+
+  function onConfirm (): void {
+    setPopConfirmOpen(false)
+    refreshAsset()
+  }
+
+  function onCancel (): void {
+    setPopConfirmOpen(false)
+  }
+
+  function refreshAsset (): void {
+    removeAssetFromState()
+    dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id!)))
+  }
+
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
     const update: AssetUpdateByIdApiArg['body']['data'] = {}
-    if (asset.changes.properties === true) {
+    if (asset.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
 
@@ -84,14 +136,14 @@ export const Toolbar = (): React.JSX.Element => {
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
-    if (asset.changes.customMetadata === true) {
+    if (asset.changes.customMetadata) {
       update.metadata = customMetadata?.map((metadata: CustomMetadata): CustomMetadataApi => {
         const { rowId, ...metadataApi } = metadata
         return metadataApi
       })
     }
 
-    if (asset.changes.imageSettings === true) {
+    if (asset.changes.imageSettings) {
       update.image = imageSettings
     }
 

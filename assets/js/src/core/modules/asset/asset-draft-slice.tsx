@@ -12,51 +12,22 @@
 */
 
 import { type PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { type Asset, type ImageData } from './asset-api-slice.gen'
+import { type Asset, type ImageData } from './asset-api-slice-enhanced'
 import { type RootState, injectSliceWithState } from '@Pimcore/app/store'
-import { type Schedule as ApiSchedule } from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
-import { type DataProperty as DataPropertyApi } from './properties-api-slice.gen'
-import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
+import { type PropertiesDraft, usePropertiesReducers } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { type EntityAdapter } from '@reduxjs/toolkit/src/entities/models'
+import { type CustomMetadataDraft, useCustomMetadataReducers } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
+import {
+  type TrackableChangesDraft,
+  useTrackableChangesReducers
+} from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import { useImageSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 
-export type DataProperty = DataPropertyApi & {
-  rowId: string
-}
-
-export type CustomMetadata = CustomMetadataApi & {
-  rowId: string
-}
-
-interface propertyAction {
-  assetId: number
-  key?: string
-  property: DataProperty
-}
-
-interface customMetadataAction {
-  assetId: number
-  customMetadata: CustomMetadata
-}
-
-interface ScheduleAction {
-  assetId: number
-  id?: number
-  schedule: Schedule
-}
-
-export type Schedule = ApiSchedule & {
-  archived: boolean
-}
-
-export interface AssetDraft extends Asset {
-  properties: DataProperty[]
-  customMetadata: CustomMetadata[]
-  schedules: Schedule[]
+export interface AssetDraft extends Asset, PropertiesDraft, CustomMetadataDraft, TrackableChangesDraft {
   imageSettings: ImageData
-  modified: boolean
-  changes: Record<string, any>
 }
 
-export const assetsAdapter = createEntityAdapter<AssetDraft>({})
+export const assetsAdapter: EntityAdapter<AssetDraft, number> = createEntityAdapter<AssetDraft>({})
 
 export const slice = createSlice({
   name: 'asset-draft',
@@ -71,175 +42,6 @@ export const slice = createSlice({
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
 
-    addPropertyToAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = [...(asset.properties ?? []), action.payload.property]
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          properties: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removePropertyFromAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).filter(property => property.key !== action
-          .payload.property.key)
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          properties: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    setPropertiesForAsset: (state, action: PayloadAction<{ assetId: number, properties: DataProperty[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = action.payload.properties
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updatePropertyForAsset: (state, action: PayloadAction<propertyAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.properties = (asset.properties ?? []).map((property, index) => {
-          if (property.key === action.payload.key && property.inherited === action.payload.property.inherited) {
-            asset.modified = true
-
-            asset.changes = {
-              ...asset.changes,
-              properties: true
-            }
-
-            return action.payload.property
-          }
-
-          return property
-        })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateScheduleForAsset: (state, action: PayloadAction<ScheduleAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.schedules = (asset.schedules ?? []).map((schedule, index) => {
-          if (schedule.id === action.payload.schedule.id) {
-            asset.modified = true
-
-            asset.changes = {
-              ...asset.changes,
-              schedules: true
-            }
-
-            return action.payload.schedule
-          }
-
-          return schedule
-        })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    addScheduleToAsset: (state, action: PayloadAction<ScheduleAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.schedules = [...(asset.schedules ?? []), action.payload.schedule]
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          schedules: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removeScheduleFromAsset: (state, action: PayloadAction<ScheduleAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.schedules = (asset.schedules ?? []).filter(schedule => schedule.id !== action
-          .payload.schedule.id)
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          schedules: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    setSchedulesForAsset: (state, action: PayloadAction<{ assetId: number, schedules: Schedule[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.schedules = action.payload.schedules
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    resetSchedulesChangesForAsset (state, action: PayloadAction<number>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload) }
-
-      if (asset.changes.schedules === undefined) {
-        return
-      }
-      const { schedules, ...changesWithoutSchedules } = asset.changes
-      asset.changes = changesWithoutSchedules
-      asset.modified = Object.keys(asset.changes).length > 0
-      state.entities[action.payload] = asset
-    },
-
-    setChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.changes = action.payload.changes
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    resetChanges (state, action: PayloadAction<number>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload) }
-
-      if (asset !== undefined) {
-        asset.changes = {}
-        asset.modified = false
-      }
-
-      state.entities[action.payload] = asset
-    },
-
     removeAsset (state, action: PayloadAction<number>): void {
       assetsAdapter.removeOne(state, action.payload)
     },
@@ -249,160 +51,10 @@ export const slice = createSlice({
         state.entities[action.payload] = assetsAdapter.getInitialState({ modified: false, properties: [], changes: {} }).entities[action.payload]
       }
     },
-
-    addChanges (state, action: PayloadAction<{ assetId: number, changes: Record<string, any> }>): void {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.changes = { ...asset.changes, ...action.payload.changes }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    // TODO: Remove this function
-
-    addCustomMetadataToAsset: (state, action: PayloadAction<customMetadataAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = [...(asset.customMetadata ?? []), action.payload.customMetadata]
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          customMetadata: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removeCustomMetadataFromAsset: (state, action: PayloadAction<customMetadataAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = (asset.customMetadata ?? []).filter(
-          customMetadata =>
-            customMetadata.name !== action.payload.customMetadata.name ||
-              customMetadata.language !== action.payload.customMetadata.language
-        )
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          customMetadata: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateCustomMetadataForAsset: (state, action: PayloadAction<customMetadataAction>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = (asset.customMetadata ?? []).map(customMetadata => {
-          if (customMetadata.name === action.payload.customMetadata.name) {
-            asset.modified = true
-
-            asset.changes = {
-              ...asset.changes,
-              customMetadata: true
-            }
-
-            return action.payload.customMetadata
-          }
-
-          return customMetadata
-        })
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateAllCustomMetadataForAsset: (state, action: PayloadAction<{ assetId: number, customMetadata: CustomMetadata[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = action.payload.customMetadata
-      }
-
-      asset.modified = true
-
-      asset.changes = {
-        ...asset.changes,
-        customMetadata: true
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    setCustomMetadataForAsset: (state, action: PayloadAction<{ assetId: number, customMetadata: CustomMetadata[] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.customMetadata = action.payload.customMetadata
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    // TODO: check if we really need that
-    addImageSettingsToAsset: (state, action: PayloadAction<{ assetId: number, settings: ImageData }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (asset !== undefined) {
-        asset.imageSettings = { ...asset.imageSettings, ...action.payload.settings }
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          imageSettings: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    removeImageSettingFromAsset: (state, action: PayloadAction<{ assetId: number, setting: keyof ImageData }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      if (Object.prototype.hasOwnProperty.call(asset.imageSettings, action.payload.setting) === true) {
-        const clonedImageSettings = structuredClone(asset.imageSettings)
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete clonedImageSettings[action.payload.setting]
-
-        asset.imageSettings = { ...clonedImageSettings }
-
-        asset.modified = true
-
-        asset.changes = {
-          ...asset.changes,
-          imageSettings: true
-        }
-      }
-
-      state.entities[action.payload.assetId] = asset
-    },
-
-    updateImageSettingForAsset: (state, action: PayloadAction<{ assetId: number, key: keyof ImageData, value: ImageData[keyof ImageData] }>) => {
-      const asset = { ...assetsAdapter.getSelectors().selectById(state, action.payload.assetId) }
-
-      asset.imageSettings[action.payload.key] = action.payload.value
-
-      asset.modified = true
-
-      asset.changes = {
-        ...asset.changes,
-        imageSettings: true
-      }
-
-      state.entities[action.payload.assetId] = asset
-    }
+    ...useTrackableChangesReducers(assetsAdapter),
+    ...usePropertiesReducers(assetsAdapter),
+    ...useCustomMetadataReducers(assetsAdapter),
+    ...useImageSettingsReducers(assetsAdapter)
   }
 })
 
@@ -413,34 +65,21 @@ export const {
   removeAsset,
   resetAsset,
 
-  // Properties
-  addPropertyToAsset,
-  removePropertyFromAsset,
-  setPropertiesForAsset,
-  updatePropertyForAsset,
-
-  // Custom Metadata
-  updateAllCustomMetadataForAsset,
-  addCustomMetadataToAsset,
-  removeCustomMetadataFromAsset,
-  updateCustomMetadataForAsset,
-  setCustomMetadataForAsset,
-
-  // Schedule
-  updateScheduleForAsset,
-  addScheduleToAsset,
-  removeScheduleFromAsset,
-  setSchedulesForAsset,
-  resetSchedulesChangesForAsset,
-
-  // Image Settings
-  addImageSettingsToAsset,
-  removeImageSettingFromAsset,
-  updateImageSettingForAsset,
-
-  // Changes
-  addChanges,
   resetChanges,
-  setChanges
+
+  addImageSettings: addImageSettingsToAsset,
+  removeImageSetting: removeImageSettingFromAsset,
+  updateImageSetting: updateImageSettingForAsset,
+
+  addProperty: addPropertyToAsset,
+  removeProperty: removePropertyFromAsset,
+  setProperties: setPropertiesForAsset,
+  updateProperty: updatePropertyForAsset,
+
+  updateAllCustomMetadata: updateAllCustomMetadataForAsset,
+  addCustomMetadata: addCustomMetadataToAsset,
+  removeCustomMetadata: removeCustomMetadataFromAsset,
+  updateCustomMetadata: updateCustomMetadataForAsset,
+  setCustomMetadata: setCustomMetadataForAsset
 } = slice.actions
 export const { selectById: selectAssetById } = assetsAdapter.getSelectors((state: RootState) => state['asset-draft'])

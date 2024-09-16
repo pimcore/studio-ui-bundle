@@ -12,18 +12,13 @@
 */
 
 import React from 'react'
-import { Result } from 'antd'
-import { AssetContainer } from './asset-container'
-import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
+import { Typography } from 'antd'
+import { type ParagraphProps as AntParagraphProps } from 'antd/es/typography/Paragraph'
 
-export const Example = (): React.JSX.Element => {
-  const { context } = useGlobalAssetContext()
+export interface ParagraphProps extends AntParagraphProps {}
 
-  if (context === undefined) {
-    return <Result title="No context" />
-  }
+const { Paragraph: AntParagraph } = Typography
 
-  return (
-    <AssetContainer id={ context.config.id } />
-  )
+export const Paragraph = (props: ParagraphProps): React.JSX.Element => {
+  return <AntParagraph { ...props } />
 }

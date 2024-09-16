@@ -14,7 +14,7 @@
 import React, { useEffect, useState } from 'react'
 import {
   api, type AssetVersion
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-api-slice.gen'
+} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import {
   DetailsVersionsView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-view'

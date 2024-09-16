@@ -15,7 +15,7 @@ import { type Meta } from '@storybook/react'
 import { Title } from './title'
 
 const config: Meta = {
-  title: 'Components/General/Title',
+  title: 'Components/General/Typography/Title',
   component: Title,
   tags: ['autodocs']
 }
