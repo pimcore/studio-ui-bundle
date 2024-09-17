@@ -28,18 +28,18 @@ export const useStyles = createStyles(({ token, css }) => {
     accordion: css`
       border: none;
 
-      .accordion__item--success {
+      .ant-collapse-item.accordion__item--success {
         border: 1px solid ${themeToken.highlightBorderColor};
         border-radius: ${themeToken.borderRadiusLG}px !important;
         background-color: ${themeToken.highlightBackgroundColor};
 
-        > .ant-collapse-content {
+        > .ant-collapse-item.ant-collapse-content {
           border-top: 1px solid ${themeToken.highlightBorderColor};
           background-color: transparent;
         }
       }
 
-      .accordion__item--primary {
+      .ant-collapse-item.accordion__item--primary {
         border: 1px solid ${themeToken.colorBorder};
         border-radius: ${themeToken.borderRadiusLG}px !important;
         background-color: ${themeToken.colorFillAlter};
@@ -57,7 +57,6 @@ export const useStyles = createStyles(({ token, css }) => {
           align-items: center;
 
           > .ant-collapse-header-text {
-            flex: none;
             margin-inline-end: 0;
           }
 
