@@ -25,7 +25,6 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
-import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -34,14 +33,8 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { isSet } from '@Pimcore/utils/helpers'
-import { Checkbox, Input, Tag } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
-import {
-  AccordionTimeline,
-  type TimeLineAccordionItemType
-} from '@Pimcore/components/accordion-timeline/accordion-timeline'
+import { createVersionAccordionItem } from './create-version-accordion-item-functions'
+import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -116,168 +109,25 @@ export const VersionsView = ({
             type={ 'default' }
           >{t('no')}</Button>
         </ModalFooter>
-            }
+          }
       title={ t('version.clear-unpublished-versions') }
     >
       <span>{t('version.confirm-clear-unpublished')}</span>
     </RenderModal>
   )
 
-  const createAccordionItem = (version: Version): TimeLineAccordionItemType => {
-    const [deletingVersion, setDeletingVersion] = useState(false)
-    const [publishingVersion, setPublishingVersion] = useState(false)
-
-    const vId = { id: version.id, count: version.versionCount }
-    const selected = detailedVersions.some((v => v.id === version.id))
-    const selectable = comparingActive
-    const ownDraft = false
-    const published = version.published ?? false
-    const onClick = (): void => {
-      if (comparingActive) {
-        selectVersion(vId)
-      } else {
-        setDetailedVersions([{
-          id: version.id,
-          count: version.versionCount
-        }])
-      }
-    }
-
-    const scheduledDate = isSet(version.scheduled)
-      ? formatDateTime({
-        timestamp: version.scheduled!,
-        dateStyle: 'short',
-        timeStyle: 'short'
-      })
-      : undefined
-
-    const title = (
-      <div>
-        {selectable && (
-        <Checkbox
-          checked={ selected }
-          onChange={ () => {
-            selectVersion(vId)
-          } }
-        />
-        )}
-        <span className={ 'title' }>{`${t('version.version')} ${version.versionCount} | ${formatDateTime({
-                    timestamp: version.date,
-                    dateStyle: 'short',
-                    timeStyle: 'medium'
-                })} `}</span>
-      </div>
-    )
-
-    const subtitle = (
-      <div>
-        <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
-        {isSet(version.autosave) && version.autosave && <Icon name="lightning-01" />}
-      </div>
-    )
-
-    let extra
-    let themeByState: PanelTheme = selected ? 'primary' : 'default'
-
-    if (published) {
-      themeByState = 'success'
-      extra = (
-        <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
-          <Icon
-            className="tag-icon"
-            name="world"
-            options={ { width: '12px', height: '12px' } }
-          />
-          {t('version.published')}
-        </Tag>
-      )
-    } else if (isSet(ownDraft) && ownDraft) {
-      extra = (
-        <Tag className={ ['title-tag', 'title-tag__own-draft'].join(' ') }>
-          <Icon
-            className="tag-icon"
-            name="user-01"
-            options={ { width: '12px', height: '12px' } }
-          />
-          {t('version.own-draft')}
-        </Tag>
-      )
-    }
-
-    const publishVersion = async (): Promise<void> => {
-      setPublishingVersion(true)
-      await onClickPublish(version.id)
-      setPublishingVersion(false)
-    }
-
-    const deleteVersion = (): void => {
-      setDeletingVersion(true)
-      setDetailedVersions([])
-      onClickDelete(version.id)
-    }
-
-    const children = (
-      <>
-        <div className={ 'flexbox-start-end' }>
-          <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
-          <div>
-            {!published && (
-            <Button
-              className={ 'btn-publish' }
-              disabled={ publishingVersion || deletingVersion }
-              icon={ <Icon name="world" /> }
-              loading={ publishingVersion }
-              onClick={ publishVersion }
-            >
-              {t('version.publish')}
-            </Button>
-            )}
-            <Button
-              aria-label={ t('aria.version.delete') }
-              disabled={ publishingVersion }
-              icon={ <Icon name="trash" /> }
-              loading={ deletingVersion }
-              onClick={ deleteVersion }
-            />
-          </div>
-        </div>
-        {
-                    isSet(scheduledDate) && (
-                    <div className={ 'row-margin' }>
-                      <div>{t('version.schedule-for')}</div>
-                      <div className={ 'date-container' }>
-                        <Icon name="calender" />
-                        <span className={ 'scheduled-date' }>{scheduledDate}</span>
-                      </div>
-                    </div>
-                    )
-                }
-        <div className={ 'row-margin' }>
-          <span>{t('version.note')}</span>
-          <Input
-            defaultValue={ version.note }
-            onBlur={ (e): void => {
-              onBlurNote(version.id, e.target.value.toString())
-            } }
-            placeholder={ 'Add a note' }
-          />
-        </div>
-      </>
-    )
-
-    return {
-      key: String(version.id),
-      title,
-      subtitle,
-      extra,
-      children,
-      onClick,
-      theme: themeByState
-    }
-  }
-
-  const accordionItems: TimeLineAccordionItemType[] = versions.map((version) =>
-    createAccordionItem(version))
+  const accordionItems = versions.map((version) =>
+    createVersionAccordionItem({
+      version,
+      detailedVersions,
+      comparingActive,
+      onClickDelete,
+      onClickPublish,
+      onBlurNote,
+      selectVersion,
+      setDetailedVersions
+    })
+  )
 
   return (
     <Content
@@ -291,27 +141,27 @@ export const VersionsView = ({
             <Content padded>
               <Header title={ t('version.versions') }>
                 {versions.length > 0 &&
-                                    (
-                                    <div>
-                                      <ButtonGroup
-                                        items={ [
-                                          <Button
-                                            className={ comparingActive ? 'compare-button' : '' }
-                                            key={ t('version.compare-versions') }
-                                            onClick={ onClickCompareVersion }
-                                          >{t('version.compare-versions')}</Button>,
-                                          <IconTextButton
-                                            icon={ 'trash' }
-                                            key={ t('version.clear-unpublished') }
-                                            loading={ clearingAll }
-                                            onClick={ showModal }
-                                          >
-                                            {t('version.clear-unpublished')}
-                                          </IconTextButton>] }
-                                      />
-                                      {modal}
-                                    </div>
-                                    )}
+                          (
+                          <div>
+                            <ButtonGroup
+                              items={ [
+                                <Button
+                                  className={ comparingActive ? 'compare-button' : '' }
+                                  key={ t('version.compare-versions') }
+                                  onClick={ onClickCompareVersion }
+                                >{t('version.compare-versions')}</Button>,
+                                <IconTextButton
+                                  icon={ 'trash' }
+                                  key={ t('version.clear-unpublished') }
+                                  loading={ clearingAll }
+                                  onClick={ showModal }
+                                >
+                                  {t('version.clear-unpublished')}
+                                </IconTextButton>] }
+                            />
+                            {modal}
+                          </div>
+                          )}
               </Header>
 
               {versions.length > 0 && (
