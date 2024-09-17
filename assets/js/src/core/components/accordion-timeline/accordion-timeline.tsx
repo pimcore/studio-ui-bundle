@@ -29,6 +29,8 @@ export const AccordionTimeline = ({ items }: AccordionTimelineProps): React.JSX.
   const { styles } = useStyle()
 
   const ItemAccordions = items.map((item) => {
+    console.log('----> item.selected', item.selected)
+
     return (
       <div
         className={ [styles.card, item.className].join(' ') }

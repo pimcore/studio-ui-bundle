@@ -54,6 +54,10 @@ export const createVersionAccordionItem = ({
 
   const vId = { id: version.id, count: version.versionCount }
   const selected = detailedVersions.some((v => v.id === version.id))
+  console.log('----> detailedVersions', detailedVersions)
+  console.log('----> id', version.id)
+  console.log('----> selected', selected)
+
   const selectable = comparingActive
   const ownDraft = false
   const published = version.published ?? false
@@ -192,6 +196,7 @@ export const createVersionAccordionItem = ({
 
   return {
     key: String(version.id),
+    selected,
     title,
     subtitle,
     extra,
