@@ -19,7 +19,7 @@ import {Icon} from "@Pimcore/components/icon/icon";
 import React from "react";
 
 const config: Meta = {
-    title: 'Components/Layout/AccordionTimeline',
+    title: 'Components/Data Display/AccordionTimeline',
     component: AccordionTimeline,
     parameters: {
         layout: 'fullscreen'
