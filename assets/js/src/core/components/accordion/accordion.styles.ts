@@ -83,7 +83,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .ant-collapse-extra {
         order: 1;
-        margin-left: auto;
+        margin-left: 5px;
       }
     `,
     spaced: css`
