@@ -33,7 +33,7 @@ export const useStyles = createStyles(({ token, css }) => {
         border-radius: ${themeToken.borderRadiusLG}px !important;
         background-color: ${themeToken.highlightBackgroundColor};
 
-        > .ant-collapse-item.ant-collapse-content {
+        > .ant-collapse-content {
           border-top: 1px solid ${themeToken.highlightBorderColor};
           background-color: transparent;
         }
