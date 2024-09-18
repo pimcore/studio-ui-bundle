@@ -14,6 +14,7 @@
 import { Dropdown, type MenuProps } from 'antd'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
 
 export interface AssetTreeContextMenuProps {
   children: React.ReactNode
@@ -24,14 +25,16 @@ export interface AssetTreeContextMenuProps {
 }
 
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   const items: MenuProps['items'] = [
     {
-      label: 'Add Asset(s)',
+      label: t('asset.tree.context-menu.add-assets'),
       key: '1',
       children: [
         {
           icon: <Icon name={ 'upload-cloud' } />,
-          label: 'Upload Files',
+          label: t('asset.tree.context-menu.add-assets.upload-files'),
           key: '1-1',
           onClick: () => {
             if (props.fileInputRef.current !== null) {
@@ -41,7 +44,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         },
         {
           icon: <Icon name={ 'upload-cloud' } />,
-          label: 'Upload Zip',
+          label: t('asset.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
             if (props.archiveInputRef.current !== null) {
