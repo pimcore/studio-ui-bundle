@@ -30,7 +30,7 @@ export const useStyle = createStyles(({ token, css }) => {
             width: 340px;
             background-color: white;
         }
-      
+
         & span, & div, div.anticon, button {
             vertical-align: middle;
         }
@@ -95,11 +95,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
         .btn-publish {
             margin-right: ${cardToken.marginXXS}px;
-            padding-top: ${cardToken.paddingXXS}px;
-        }
-
-        .btn-publish > .ant-btn-icon {
-            vertical-align: middle;
         }
 
         .row-margin {

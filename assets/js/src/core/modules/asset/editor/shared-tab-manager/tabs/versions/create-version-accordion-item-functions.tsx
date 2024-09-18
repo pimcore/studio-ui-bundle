@@ -15,12 +15,13 @@ import React, { useState } from 'react'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isSet } from '@Pimcore/utils/helpers'
 import { Checkbox, Input, Tag } from 'antd'
-import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
 import { type TimeLineAccordionItemType } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { useTranslation } from 'react-i18next'
 import { type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 interface VersionIdentifiers {
   id: number
@@ -54,9 +55,6 @@ export const createVersionAccordionItem = ({
 
   const vId = { id: version.id, count: version.versionCount }
   const selected = detailedVersions.some((v => v.id === version.id))
-  console.log('----> detailedVersions', detailedVersions)
-  console.log('----> id', version.id)
-  console.log('----> selected', selected)
 
   const selectable = comparingActive
   const ownDraft = false
@@ -151,22 +149,23 @@ export const createVersionAccordionItem = ({
         <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
         <div>
           {!published && (
-            <Button
+            <IconTextButton
               className={ 'btn-publish' }
               disabled={ publishingVersion || deletingVersion }
-              icon={ <Icon name="world" /> }
+              icon={ 'world' }
               loading={ publishingVersion }
               onClick={ publishVersion }
             >
               {t('version.publish')}
-            </Button>
+            </IconTextButton>
           )}
-          <Button
+          <IconButton
             aria-label={ t('aria.version.delete') }
             disabled={ publishingVersion }
-            icon={ <Icon name="trash" /> }
+            icon={ 'trash' }
             loading={ deletingVersion }
             onClick={ deleteVersion }
+            type={ 'default' }
           />
         </div>
       </div>
