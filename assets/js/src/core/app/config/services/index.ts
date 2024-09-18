@@ -26,6 +26,7 @@ import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/t
 import { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
+import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 
 export const serviceIds = {
   // Widget manager
@@ -50,7 +51,10 @@ export const serviceIds = {
   'Grid/TypeRegistry': 'Grid/TypeRegistry',
 
   // Execution engine
-  'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry'
+  'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+
+  // Component registry
+  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
 }
 
 // Widget manager
@@ -77,3 +81,6 @@ container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScop
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+
+// Component registry
+container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
