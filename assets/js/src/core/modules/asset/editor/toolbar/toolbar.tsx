@@ -19,17 +19,7 @@ import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { AssetContext } from '../../asset-provider'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-
-import ButtonGroup from 'antd/es/button/button-group'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { Popconfirm } from 'antd'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
-import { type CustomMetadata as CustomMetadataApi } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
-
+import { useSaveSchedules } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import {
   type CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
