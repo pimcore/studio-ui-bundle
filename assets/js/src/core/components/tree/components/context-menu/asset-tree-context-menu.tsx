@@ -15,7 +15,7 @@ import { Dropdown, type MenuProps } from 'antd'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-interface AssetTreeContextMenuProps {
+export interface AssetTreeContextMenuProps {
   children: React.ReactNode
   uploadFiles: (event: any) => Promise<void>
   fileInputRef: React.RefObject<HTMLInputElement>
