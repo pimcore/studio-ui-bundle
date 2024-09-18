@@ -19,7 +19,7 @@ import { Button } from '@Pimcore/components/button/button'
 import {
   type Schedule as ApiSchedule,
   useScheduleGetCollectionForElementByTypeAndIdQuery
-} from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
+} from '@Pimcore/modules/element/editor/schedule-api-slice-enhanced'
 import {
   Table
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'

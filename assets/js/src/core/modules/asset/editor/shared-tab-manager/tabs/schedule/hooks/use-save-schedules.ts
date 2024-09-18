@@ -15,7 +15,7 @@ import { useEffect } from 'react'
 import {
   type UpdateSchedule,
   useScheduleUpdateForElementByTypeAndIdMutation
-} from '@Pimcore/modules/element/editor/schedule-api-slice.gen'
+} from '@Pimcore/modules/element/editor/schedule-api-slice-enhanced'
 import { type ElementType } from 'types/element-type.d'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useMessage } from '@Pimcore/components/message/useMessage'
