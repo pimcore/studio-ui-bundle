@@ -25,6 +25,7 @@ export const tagNames = {
   WORKFLOW: 'WORKFLOW',
   VERSIONS: 'VERSION',
   PROPERTIES: 'PROPERTIES',
+  SCHEDULES: 'SCHEDULES',
   DEPENDENCIES: 'DEPENDENCIES',
   NOTES_AND_EVENTS: 'NOTES_AND_EVENTS'
 }
@@ -40,6 +41,7 @@ export const providingTags = {
   ASSET_WORKFLOW: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.WORKFLOW],
   ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.VERSIONS],
   ASSET_PROPERTIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.PROPERTIES],
+  ASSET_SCHEDULES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.SCHEDULES],
   ASSET_DEPENDENCIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.DEPENDENCIES],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
   ASSET_NOTES_AND_EVENTS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.NOTES_AND_EVENTS],
@@ -57,6 +59,7 @@ export const invalidatingTags = {
   ASSET_WORKFLOW: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_PROPERTIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
+  ASSET_SCHEDULES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_DEPENDENCIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],

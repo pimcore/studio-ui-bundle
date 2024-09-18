@@ -19,7 +19,7 @@ export const api = baseApi.enhanceEndpoints({
   endpoints: {
     scheduleGetCollectionForElementByTypeAndId: {
       providesTags: (result, error, args) => {
-        return providingTags.ASSET_DETAIL_ID(args.id)
+        return providingTags.ASSET_SCHEDULES(args.id)
       }
     }
   }
