@@ -16,6 +16,9 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tag: css`
+      .theme-id {
+          color: ${token.colorText}
+      }
     `
   }
 })

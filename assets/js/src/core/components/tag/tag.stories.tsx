@@ -43,3 +43,10 @@ export const OwnDraftIconTag = {
         tagText: "Own draft"
     }
 }
+
+export const IDTag = {
+    args: {
+        theme: 'id',
+        tagText: "ID: 150"
+    }
+}

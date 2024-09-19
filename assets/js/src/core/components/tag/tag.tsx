@@ -18,15 +18,18 @@ import { GlobalOutlined, UserOutlined } from '@ant-design/icons'
 
 export interface TagProps extends AntTagPropsProps {
   tagText: string
-  iconName: IconNameType
+  iconName?: IconNameType
   className?: string
+  theme?: TagTheme
 }
 
 export type IconNameType = 'world' | 'user'
 
-export const Tag = ({ tagText, iconName, className, ...props }: TagProps): React.JSX.Element => {
+export type TagTheme = 'id'
+
+export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = [styles.tag, className].filter(Boolean).join(' ')
+  const classes = [styles.tag, className].filter(Boolean)
 
   const renderIcon = (): React.JSX.Element | null => {
     switch (iconName) {
@@ -39,9 +42,11 @@ export const Tag = ({ tagText, iconName, className, ...props }: TagProps): React
     }
   }
 
+  theme !== undefined && classes.push(`theme-${theme}`)
+
   return (
     <AntTag
-      className={ classes }
+      className={ classes.join(' ') }
       icon={ renderIcon() }
       { ...props }
     >

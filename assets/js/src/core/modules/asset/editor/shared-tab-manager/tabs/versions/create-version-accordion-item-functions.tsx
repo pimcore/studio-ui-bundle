@@ -141,7 +141,10 @@ export const createVersionAccordionItem = ({
   const children = (
     <>
       <div className={ 'flexbox-start-end' }>
-        {/* <Tag className={'id-tag'}>ID: {version.id}</Tag> */}
+        <Tag
+          tagText={ `ID: ${version.id}` }
+          theme={ 'id' }
+        />
         <div>
           {!published && (
             <IconTextButton
