@@ -29,9 +29,9 @@ export default config
 export const _default = {
     args: {
         timeStamps: [
-            <div>Stamp 1</div>,
-            <div>Stamp 2</div>,
-            <div>Stamp 3</div>,
+            <div key={1}>Stamp 1</div>,
+            <div key={2}>Stamp 2</div>,
+            <div key={3}>Stamp 3</div>,
         ]
     }
 }
