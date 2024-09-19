@@ -45,8 +45,6 @@ export const Accordion = ({
   expandIconPosition = 'after-title',
   ...props
 }: AccordionProps): React.JSX.Element => {
-  console.log('----> here')
-
   const { styles } = useStyles()
   const [expandedIds, setExpandedIds] = useState<string[]>([])
 

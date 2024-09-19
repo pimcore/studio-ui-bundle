@@ -12,11 +12,10 @@
  */
 
 import {type Meta} from '@storybook/react'
-import {Tag} from 'antd'
 import {AccordionTimeline} from "@Pimcore/components/accordion-timeline/accordion-timeline";
 import {AccordionItemType} from "@Pimcore/components/accordion/accordion";
-import {Icon} from "@Pimcore/components/icon/icon";
 import React from "react";
+import {IconTextButton} from "@Pimcore/components/icon-text-button/icon-text-button";
 
 const config: Meta = {
     title: 'Components/Data Display/AccordionTimeline',
@@ -34,14 +33,11 @@ const item1: AccordionItemType = {
     title: <span>This is panel header 1</span>,
     subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
 
-    extra: <Tag className={['title-tag', 'title-tag__theme-success'].join(' ')}>
-        <Icon
-            className="tag-icon"
-            name="world"
-            options={{width: '12px', height: '12px'}}
-        />
-        Published
-    </Tag>,
+    extra: <IconTextButton
+        className={['title-tag', 'title-tag__theme-success'].join(' ')}
+        icon={'world'}
+        iconOptions={{width: '12px', height: '12px'}}
+    >Extra</IconTextButton>,
     children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
 }
 
