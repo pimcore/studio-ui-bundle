@@ -37,7 +37,7 @@ export const SpacingOverview = (): React.JSX.Element => {
     <>
       <table>
         {sizes.map((size) => (
-          <tr>
+          <tr key={size}>
             <td>{size} ({sizeTokenMap[size]}px)</td>
             <td style={{ width: 500}}><div style={{ width: '100%', height: sizeTokenMap[size], backgroundColor: token.colorPrimary }} /></td>
           </tr>

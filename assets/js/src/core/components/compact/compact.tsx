@@ -1,4 +1,3 @@
-import react from 'react'
 import { Space,  } from 'antd'
 import { SpaceCompactProps } from 'antd/es/space/Compact'
 import React from 'react'

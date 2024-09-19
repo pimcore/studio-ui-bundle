@@ -16,10 +16,12 @@ export default config;
 
 export const _default = {
   args: {
-    children: [
-      <Button>Button 1</Button>,
-      <div>Content 2</div>,
-      <div>Content 3</div>
-    ]
+    children: (
+      <>
+        <Button>Button 1</Button>,
+        <div>Content 2</div>,
+        <div>Content 3</div>
+      </>
+    )
   }
 }
