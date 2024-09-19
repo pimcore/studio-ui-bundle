@@ -11,16 +11,32 @@
  *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 import React from "react";
+import type {SwitchProps as AntdSwitchProps} from 'antd/es/switch/index'
+import {Switch as AntdSwitch} from 'antd'
+import {useStyles} from "@Pimcore/components/switch/switch.styles";
+import {Flex} from "@Pimcore/components/flex/flex";
 
-export interface SwitchProps {
+export interface SwitchProps extends AntdSwitchProps {
+    tag: string
+    tagPosition: TagPosition
 }
 
+export type TagPosition = 'start' | 'end'
+
 export const Switch = ({
+                           tag,
+                           tagPosition,
                            ...props
                        }: SwitchProps): React.JSX.Element => {
+
+    const { styles } = useStyles()
+
     return (
-        <Switch
-        onChange={ onChange }
-        value={ activeOnly }
-    />)
+        <Flex align={"center"} gap={"extra-small"} className={styles.switch}>
+            {tagPosition === 'start'  && <p>{tag}</p>}
+            <AntdSwitch
+                {...props}
+            />
+            {tagPosition === 'end'  && <p>{tag}</p>}
+        </Flex>)
 };

@@ -13,6 +13,7 @@
 
 import {type Meta} from '@storybook/react'
 import {Switch} from "@Pimcore/components/switch/switch";
+import {useState} from "react";
 
 
 const config: Meta = {
@@ -25,8 +26,17 @@ const config: Meta = {
 }
 export default config
 
-export const Default = {
+export const TagStart = {
     args: {
+        tag: 'Switch',
+        tagPosition: 'start'
+    }
+}
+
+export const TagEnd = {
+    args: {
+        tag: 'Switch',
+        tagPosition: 'end'
     }
 }
 
