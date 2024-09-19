@@ -14,7 +14,6 @@
 import React from 'react'
 import type { SwitchProps as AntdSwitchProps } from 'antd/es/switch/index'
 import { Switch as AntdSwitch } from 'antd'
-import { useStyles } from '@Pimcore/components/switch/switch.styles'
 import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface SwitchProps extends AntdSwitchProps {
@@ -29,12 +28,9 @@ export const Switch = ({
   tagPosition,
   ...props
 }: SwitchProps): React.JSX.Element => {
-  const { styles } = useStyles()
-
   return (
     <Flex
       align={ 'center' }
-      className={ styles.switch }
       gap={ 'extra-small' }
     >
       {tagPosition === 'start' && <p>{tag}</p>}
