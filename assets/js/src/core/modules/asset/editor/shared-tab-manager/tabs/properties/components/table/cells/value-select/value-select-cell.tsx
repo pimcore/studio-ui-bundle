@@ -13,7 +13,8 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { SelectCell } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 export const ValueSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const selectOptions = props.row.original.config ?? ''
@@ -21,24 +22,11 @@ export const ValueSelectCell = (props: DefaultCellProps): React.JSX.Element => {
     return { value, label: value }
   })
 
-  const modifiedProps = {
-    ...props,
-    column: {
-      ...props.column,
-      columnDef: {
-        ...props.column.columnDef,
-        meta: {
-          ...props.column.columnDef.meta,
-          config: {
-            ...props.column.columnDef?.meta?.config,
-            options: formattedSelectOptions
-          }
-        }
-      }
-    }
+  const columnConfig: SelectCellConfig = {
+    options: formattedSelectOptions
   }
 
   return (
-    <SelectCell { ...modifiedProps } />
+    <SelectCell { ...addColumnConfig(props, columnConfig) } />
   )
 }

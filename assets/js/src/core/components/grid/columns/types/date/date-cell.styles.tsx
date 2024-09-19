@@ -13,24 +13,10 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyle = createStyles(({ token, css }) => {
   return {
-    table: css`
-      .ant-table-content {
-        
-        .schedule-table--actions-column {
-          display: flex;
-          align-items: center;
-  
-          .ant-btn-icon {
-            color: ${token.colorPrimary};
-  
-              &:hover {
-                color: ${token.colorPrimaryHover};
-              }
-          }
-        }
-      }
-    `
+    'date-cell': css`
+          padding: 4px;
+        `
   }
 })

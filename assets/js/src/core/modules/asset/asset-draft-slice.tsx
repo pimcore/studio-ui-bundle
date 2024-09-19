@@ -22,8 +22,9 @@ import {
   useTrackableChangesReducers
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useImageSettingsReducers } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
+import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 
-export interface AssetDraft extends Asset, PropertiesDraft, CustomMetadataDraft, TrackableChangesDraft {
+export interface AssetDraft extends Asset, PropertiesDraft, SchedulesDraft, CustomMetadataDraft, TrackableChangesDraft {
   imageSettings: ImageData
 }
 
@@ -36,6 +37,7 @@ export const slice = createSlice({
     properties: [],
     customMetadata: [],
     imageSettings: [],
+    schedule: [],
     changes: {}
   }),
   reducers: {
@@ -52,6 +54,7 @@ export const slice = createSlice({
     },
     ...useTrackableChangesReducers(assetsAdapter),
     ...usePropertiesReducers(assetsAdapter),
+    ...useSchedulesReducers(assetsAdapter),
     ...useCustomMetadataReducers(assetsAdapter),
     ...useImageSettingsReducers(assetsAdapter)
   }
@@ -74,6 +77,12 @@ export const {
   removeProperty: removePropertyFromAsset,
   setProperties: setPropertiesForAsset,
   updateProperty: updatePropertyForAsset,
+
+  addSchedule: addScheduleToAsset,
+  removeSchedule: removeScheduleFromAsset,
+  setSchedules: setSchedulesForAsset,
+  updateSchedule: updateScheduleForAsset,
+  resetSchedulesChanges: resetSchedulesChangesForAsset,
 
   updateAllCustomMetadata: updateAllCustomMetadataForAsset,
   addCustomMetadata: addCustomMetadataToAsset,

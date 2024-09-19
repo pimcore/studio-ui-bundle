@@ -29,23 +29,12 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     select: css`
-      width: 60px;
-
       .ant-select-selection-item {
-        .version-id__select__label {
-          > p {
-            margin: 0;
+          .version-id__select__label {
+              .version-id__selection-item-hidden {
+                  display: none;
+              }
           }
-            
-          p:nth-child(2),
-          .version-id__select__label__username {
-            display: none;
-          }
-      }
-    `,
-    overlayStyle: css`        
-      .ant-select-item p {
-          margin: 0;
       }
     `
   }
