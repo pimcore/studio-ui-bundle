@@ -13,8 +13,6 @@
 
 import {type Meta} from '@storybook/react'
 import {Switch} from "@Pimcore/components/switch/switch";
-import {useState} from "react";
-
 
 const config: Meta = {
     title: 'Components/Controls/Switch',
