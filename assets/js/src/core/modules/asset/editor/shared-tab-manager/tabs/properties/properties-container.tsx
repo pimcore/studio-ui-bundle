@@ -13,7 +13,7 @@
 
 import React, { useContext, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type InputRef, Segmented, Select } from 'antd'
+import { type InputRef, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
@@ -28,6 +28,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -70,7 +71,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
     >
       <Header title={ t('asset.asset-editor-tabs.properties.text') }>
         <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
-          <Segmented<string>
+          <Segmented
             onChange={ setPropertiesTableTab }
             options={ [
               { label: t('asset.asset-editor-tabs.properties.editable-properties'), value: 'own' },
