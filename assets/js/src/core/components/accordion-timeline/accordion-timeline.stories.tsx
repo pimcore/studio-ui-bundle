@@ -32,12 +32,6 @@ const item1: AccordionItemType = {
   theme: 'theme-success',
   title: <span>This is panel header 1</span>,
   subtitle: <span style={ { color: 'grey' } }>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
-
-  extra: <IconTextButton
-    className={ ['title-tag', 'title-tag__theme-success'].join(' ') }
-    icon={ 'world' }
-    iconOptions={ { width: '12px', height: '12px' } }
-         >Extra</IconTextButton>,
   children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
 }
 
