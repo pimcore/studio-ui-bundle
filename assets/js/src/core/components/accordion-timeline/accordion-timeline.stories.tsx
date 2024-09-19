@@ -15,7 +15,6 @@ import { type Meta } from '@storybook/react'
 import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { type AccordionItemType } from '@Pimcore/components/accordion/accordion'
 import React from 'react'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 const config: Meta = {
   title: 'Components/Data Display/AccordionTimeline',
