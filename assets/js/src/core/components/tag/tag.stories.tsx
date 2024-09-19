@@ -15,7 +15,7 @@ import {type Meta} from '@storybook/react'
 import {Tag} from "@Pimcore/components/tag/tag";
 
 const config: Meta = {
-    title: 'Components/General/Tab',
+    title: 'Components/General/Tag',
     component: Tag,
     tags: ['autodocs']
 }
@@ -23,5 +23,23 @@ const config: Meta = {
 export default config
 
 export const _default = {
-    args: {}
+    args: {
+        tagText: 'default'
+    }
+}
+
+export const SuccessIconTag = {
+    args: {
+        iconName: 'world',
+        color: 'success',
+        tagText: "Published"
+    }
+}
+
+export const OwnDraftIconTag = {
+    args: {
+        iconName: 'user',
+        color: 'blue',
+        tagText: "Own draft"
+    }
 }

@@ -11,22 +11,41 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Tag as AntTag, TagProps as AntTagPropsProps } from 'antd'
+import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import React from 'react'
 import { useStyles } from './tag.styles'
+import { GlobalOutlined, UserOutlined } from '@ant-design/icons'
 
 export interface TagProps extends AntTagPropsProps {
-  className: string,
+  tagText: string
+  iconName: IconNameType
+  className?: string
 }
 
-export const Tag = ({ className, ...props }: TagProps): React.JSX.Element => {
+export type IconNameType = 'world' | 'user'
+
+export const Tag = ({ tagText, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = [styles.tag, className]
+  const classes = [styles.tag, className].filter(Boolean).join(' ')
+
+  const renderIcon = (): React.JSX.Element | null => {
+    switch (iconName) {
+      case 'world':
+        return <GlobalOutlined />
+      case 'user':
+        return <UserOutlined />
+      default:
+        return null
+    }
+  }
 
   return (
     <AntTag
-      className={ classes.join(' ') }
+      className={ classes }
+      icon={ renderIcon() }
       { ...props }
-    />
+    >
+      {tagText}
+    </AntTag>
   )
 }
