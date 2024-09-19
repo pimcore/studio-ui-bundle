@@ -104,10 +104,10 @@ export const createVersionAccordionItem = ({
   )
 
   let extra
-  let themeByState: PanelTheme = selected ? 'primary' : 'default'
+  let themeByState: PanelTheme = selected ? 'theme-primary' : 'theme-default'
 
   if (published) {
-    themeByState = 'success'
+    themeByState = 'theme-success'
     extra = (
       <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
         <Icon

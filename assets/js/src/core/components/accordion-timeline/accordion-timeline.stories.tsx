@@ -30,7 +30,7 @@ export default config
 
 const item1: AccordionItemType = {
     key: '1',
-    theme: 'success',
+    theme: 'theme-success',
     title: <span>This is panel header 1</span>,
     subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
 
@@ -45,19 +45,19 @@ const item1: AccordionItemType = {
     children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
 }
 
-const successItem: AccordionItemType = {
+const Item2: AccordionItemType = {
     key: '2',
+    theme: 'theme-primary',
     title: <span>This is panel header 2</span>,
     subtitle: <span style={{color: 'grey'}}>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
     children: <p>Mount Vesuvius is a stratovolcano, which is an extremely deadly form of volcano.</p>
 }
 
-const items = [
-    item1, successItem
-];
+const items = [item1, Item2];
 
 export const DefaultAccordionTimeline = {
     args: {
+        ghost: true,
         items: items
     }
 }

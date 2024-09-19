@@ -21,7 +21,7 @@ import { type CollapsibleType } from 'antd/es/collapse/CollapsePanel'
 
 export type CustomExpandIconPosition = 'start' | 'after-title'
 
-export type PanelTheme = 'success' | 'primary' | 'default'
+export type PanelTheme = 'theme-success' | 'theme-primary' | 'theme-default'
 
 export interface AccordionItemType extends ItemType {
   title: React.ReactElement
@@ -45,6 +45,8 @@ export const Accordion = ({
   expandIconPosition = 'after-title',
   ...props
 }: AccordionProps): React.JSX.Element => {
+  console.log('----> here')
+
   const { styles } = useStyles()
   const [expandedIds, setExpandedIds] = useState<string[]>([])
 

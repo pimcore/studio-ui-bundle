@@ -28,7 +28,7 @@ export const useStyles = createStyles(({ token, css }) => {
     accordion: css`
       border: none;
 
-      .ant-collapse-item.accordion__item--success {
+      .ant-collapse-item.accordion__item--theme-success {
         border: 1px solid ${themeToken.highlightBorderColor};
         border-radius: ${themeToken.borderRadiusLG}px !important;
         background-color: ${themeToken.highlightBackgroundColor};
@@ -39,7 +39,7 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
-      .ant-collapse-item.accordion__item--primary {
+      .ant-collapse-item.accordion__item--theme-primary {
         border: 1px solid ${themeToken.colorBorder};
         border-radius: ${themeToken.borderRadiusLG}px !important;
         background-color: ${themeToken.colorFillAlter};
