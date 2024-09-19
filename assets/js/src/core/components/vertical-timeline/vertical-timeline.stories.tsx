@@ -14,7 +14,6 @@
 import React from 'react'
 import { type Meta } from '@storybook/react'
 import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeline'
-import { VersionAccordion } from '@Pimcore/components/version-accordion/version-accordion'
 
 const config: Meta = {
   title: 'Components/Data Display/VerticalTimeline',
@@ -30,63 +29,9 @@ export default config
 export const _default = {
   args: {
     timeStamps: [
-      <VersionAccordion
-        activeDefault
-        autosaved={ false }
-        className={ 'is-active' }
-        date={ '2020-05-12' }
-        id={ 112 }
-        key={ 1 }
-        onBlurNote={ (e): void => {
-          console.log('Blur Note')
-        } }
-        onClickDelete={ () => {
-          console.log('Delete')
-        } }
-        onClickPublish={ async () => {
-          console.log('Publish')
-        } }
-        published={ false }
-        savedBy={ 'admin' }
-        version={ 1 }
-      />,
-      <VersionAccordion
-        autosaved
-        date={ '2020-07-12' }
-        id={ 112 }
-        key={ 2 }
-        onBlurNote={ (e): void => {
-          console.log('Blur Note')
-        } }
-        onClickDelete={ () => {
-          console.log('Delete')
-        } }
-        onClickPublish={ async () => {
-          console.log('Publish')
-        } }
-        published={ false }
-        savedBy={ 'auto saved' }
-        version={ 2 }
-      />,
-      <VersionAccordion
-        autosaved={ false }
-        className={ 'is-published' }
-        date={ '2020-10-12' }
-        id={ 112 }
-        key={ 3 }
-        onBlurNote={ (e): void => {
-          console.log('Blur Note')
-        } }
-        onClickDelete={ () => {
-          console.log('Delete')
-        } }
-        onClickPublish={ async () => {
-          console.log('Publish')
-        } }
-        published
-        savedBy={ 'admin' }
-        version={ 3 }
-      />
+      <div key={ 1 }>Stamp 1</div>,
+      <div key={ 2 }>Stamp 2</div>,
+      <div key={ 3 }>Stamp 3</div>
     ]
   }
 }
