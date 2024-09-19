@@ -18,8 +18,8 @@ export const _default = {
   args: {
     children: (
       <>
-        <Button>Button 1</Button>,
-        <div>Content 2</div>,
+        <Button>Button 1</Button>
+        <div>Content 2</div>
         <div>Content 3</div>
       </>
     )
