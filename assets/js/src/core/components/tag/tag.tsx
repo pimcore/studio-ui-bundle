@@ -11,27 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { Space } from './space'
+import { Tag as AntTag, TagProps as AntTagPropsProps } from 'antd'
 import React from 'react'
-import { Button } from '../button/button'
+import { useStyles } from './tag.styles'
 
-const config: Meta = {
-  title: 'Components/Layout/Tag/Tag',
-  component: Space,
-  tags: ['autodocs']
+export interface TagProps extends AntTagPropsProps {
+  className: string,
 }
 
-export default config
+export const Tag = ({ className, ...props }: TagProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const classes = [styles.tag, className]
 
-export const _default = {
-  args: {
-    children: (
-      <>
-        <Button>Button 1</Button>
-        <Button>Button 2</Button>
-        <Button>Button 3</Button>
-      </>
-    )
-  }
+  return (
+    <AntTag
+      className={ classes.join(' ') }
+      { ...props }
+    />
+  )
 }
