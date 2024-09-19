@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { theme } from 'antd';
-import React from 'react';
+import { theme } from 'antd'
+import React from 'react'
 
 const { useToken } = theme
 
-const sizes = ['none', 'mini', 'extra-small', 'small', 'normal', 'medium', 'large', 'extra-large', 'maxi'];
+const sizes = ['none', 'mini', 'extra-small', 'small', 'normal', 'medium', 'large', 'extra-large', 'maxi']
 
 export const SpacingOverview = (): React.JSX.Element => {
   const { token } = useToken()
@@ -30,16 +30,16 @@ export const SpacingOverview = (): React.JSX.Element => {
     medium: token.sizeMD,
     large: token.sizeLG,
     'extra-large': token.sizeXL,
-    maxi: token.sizeXXL,
+    maxi: token.sizeXXL
   }
 
   return (
     <>
       <table>
         {sizes.map((size) => (
-          <tr key={size}>
+          <tr key={ size }>
             <td>{size} ({sizeTokenMap[size]}px)</td>
-            <td style={{ width: 500}}><div style={{ width: '100%', height: sizeTokenMap[size], backgroundColor: token.colorPrimary }} /></td>
+            <td style={ { width: 500 } }><div style={ { width: '100%', height: sizeTokenMap[size], backgroundColor: token.colorPrimary } } /></td>
           </tr>
         ))}
       </table>
