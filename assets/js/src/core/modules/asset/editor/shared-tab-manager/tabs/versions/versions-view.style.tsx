@@ -40,6 +40,12 @@ export const useStyles = createStyles(({ token, css }) => {
             background-color: ${themeToken.signalBackgroundColor};
       }
 
+      .title-tag__published {
+        color: ${themeToken.highlightColor};
+        border-color: ${themeToken.highlightBorderColor};
+        background-color: ${themeToken.highlightBackgroundColor};
+      }
+      
       .btn-publish {
         margin-right: ${themeToken.marginXXS}px;
       }

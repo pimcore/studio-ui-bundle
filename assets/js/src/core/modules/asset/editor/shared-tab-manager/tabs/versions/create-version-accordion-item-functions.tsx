@@ -109,7 +109,7 @@ export const createVersionAccordionItem = ({
   if (published) {
     themeByState = 'theme-success'
     extra = (
-      <Tag className={ ['title-tag', 'title-tag__theme-success'].join(' ') }>
+      <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
         <Icon
           className="tag-icon"
           name="world"
