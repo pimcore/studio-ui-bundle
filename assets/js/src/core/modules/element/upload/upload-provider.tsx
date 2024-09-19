@@ -13,10 +13,6 @@
 
 import React, { createContext, type ReactNode, useMemo, useState } from 'react'
 import { type UploadFile } from 'antd/es/upload/interface'
-import { useFileUploader } from '@Pimcore/modules/asset/tree/context-menu/hooks/upload-files'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UploadContextProps {
   uploadFileList: UploadFile[]
@@ -28,10 +24,8 @@ export interface UploadContextProps {
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
 
 export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
-  const dispatch = useAppDispatch()
   const [uploadFileList, setUploadFileList] = useState<UploadFile[]>([])
   const [uploadingNode, setUploadingNode] = useState<string | null>(null)
-  const { uploadFiles } = useFileUploader({ parentId: uploadingNode ?? undefined })
 
   const contextValue = useMemo(() => ({
     uploadFileList,
@@ -40,7 +34,7 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     setUploadingNode
   }), [uploadFileList, uploadingNode])
 
-  const startFileUpload = async () => {
+  /* const startFileUpload = async () => {
     if (uploadFileList.length > 0) {
       const fileStates = uploadFileList.map((file) => file.status)
       const allFullFilled = fileStates.every(item => item === 'done')
@@ -65,7 +59,7 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
         setUploadingNode(null)
       }
     }
-  }
+  } */
 
   return (
     <UploadContext.Provider value={ contextValue }>

@@ -40,6 +40,7 @@ export const useFileUploader = ({ parentId }: { parentId?: string }): useFileUpl
   const uploadFile = async ({ file, onSuccess, onError }: UploadFileProps): Promise<void> => {
     try {
       const formData = new FormData()
+      // @ts-expect-error fuck shitty linter
       formData.append('file', file)
 
       if (formData.has('file')) {

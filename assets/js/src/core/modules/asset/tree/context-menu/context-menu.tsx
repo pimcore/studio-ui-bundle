@@ -16,7 +16,6 @@ import type { TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import {
   AssetTreeContextMenu as ContextMenu
 } from '@Pimcore/components/tree/components/context-menu/asset-tree-context-menu'
-import { useFileUploader } from '@Pimcore/modules/asset/tree/context-menu/hooks/upload-files'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 export interface TreeContextMenuProps {
@@ -25,10 +24,7 @@ export interface TreeContextMenuProps {
 }
 
 export const AssetTreeContextMenu = ({ children, node }: TreeContextMenuProps): React.JSX.Element => {
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
-  const archiveInputRef = React.useRef<HTMLInputElement>(null)
   const uploadContext = React.useContext(UploadContext)!
-  const { uploadFiles, uploadArchive } = useFileUploader({ parentId: node?.id ?? undefined })
 
   useEffect(() => {
     if (node !== undefined) {
@@ -37,12 +33,7 @@ export const AssetTreeContextMenu = ({ children, node }: TreeContextMenuProps): 
   }, [node])
 
   return (
-    <ContextMenu
-      archiveInputRef={ archiveInputRef }
-      fileInputRef={ fileInputRef }
-      uploadArchive={ uploadArchive }
-      uploadFiles={ uploadFiles }
-    >
+    <ContextMenu node={ node }>
       {children}
     </ContextMenu>
   )

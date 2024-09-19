@@ -11,24 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Dropdown, type MenuProps, type UploadProps } from 'antd'
+import { Button, Dropdown, type MenuProps, Upload, type UploadProps } from 'antd'
 import React, { useContext } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import type { UploadFile } from 'antd/es/upload/interface'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { type UploadChangeParam } from 'antd/lib/upload'
 
 export interface AssetTreeContextMenuProps {
+  node: TreeContextMenuProps['node']
   children: React.ReactNode
-  uploadFiles: (event: any) => Promise<void>
-  fileInputRef: React.RefObject<HTMLInputElement>
-  uploadArchive: (event: any) => Promise<void>
-  archiveInputRef: React.RefObject<HTMLInputElement>
 }
 
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const uploadContext = useContext(UploadContext)!
+  const uploadFileRef = React.useRef<HTMLButtonElement>(null)
+  const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 
   const items: MenuProps['items'] = [
     {
@@ -40,8 +45,8 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
           label: t('asset.tree.context-menu.add-assets.upload-files'),
           key: '1-1',
           onClick: () => {
-            if (props.fileInputRef.current !== null) {
-              props.fileInputRef.current?.click()
+            if (uploadFileRef.current !== null) {
+              uploadFileRef.current?.click()
             }
           }
         },
@@ -50,8 +55,8 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
           label: t('asset.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
-            if (props.archiveInputRef.current !== null) {
-              props.archiveInputRef.current?.click()
+            if (uploadZipRef.current !== null) {
+              uploadZipRef.current?.click()
             }
           }
         }
@@ -59,41 +64,52 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   ]
 
+  const onChange = ({ fileList }: UploadChangeParam<UploadFile<any>>): void => {
+    const fileStates = fileList.map((file) => file.status)
+    const allFullFilled = fileStates.every(item => item === 'done')
+
+    if (allFullFilled) {
+      dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.node!.id))))
+      uploadContext.setUploadFileList([])
+      uploadContext.setUploadingNode(null)
+    }
+
+    uploadContext.setUploadFileList(fileList)
+    uploadContext.setUploadingNode(props.node?.id ?? null)
+  }
+
+  const uploadFile: UploadProps = {
+    action: `/studio/api/assets/add/${props.node?.id}`,
+    name: 'file',
+    multiple: true,
+    showUploadList: false,
+    onChange
+  }
+
+  const uploadZip: UploadProps = {
+    action: `/studio/api/assets/add-zip/${props.node?.id}`,
+    accept: '.zip, .rar, .7zip',
+    name: 'file',
+    multiple: true,
+    showUploadList: false,
+    onChange
+  }
+
   return (
     <>
-      <input
-        hidden
-        multiple
-        onChange={ async (event) => {
-          if (event.target.files !== undefined) {
-            console.log('now')
+      <Upload { ...uploadFile }>
+        <Button
+          ref={ uploadFileRef }
+          style={ { display: 'none' } }
+        ></Button>
+      </Upload>
 
-            const files = event.target.files! as unknown as UploadFile[]
-            const uploadFileList: UploadFile[] = Array.from(files).map((file) => {
-              const uploadFile: UploadFile = {
-                ...file,
-                status: 'uploading',
-                uid: crypto.randomUUID()
-              }
-
-              return uploadFile
-            })
-
-            uploadContext.setUploadFileList(uploadFileList)
-          }
-        } }
-        ref={ props.fileInputRef }
-        type="file"
-      />
-
-      <input
-        accept={ '.zip, .rar, .7zip' }
-        hidden
-        multiple
-        onChange={ props.uploadArchive }
-        ref={ props.archiveInputRef }
-        type="file"
-      />
+      <Upload { ...uploadZip }>
+        <Button
+          ref={ uploadZipRef }
+          style={ { display: 'none' } }
+        ></Button>
+      </Upload>
 
       <Dropdown
         menu={ { items } }
