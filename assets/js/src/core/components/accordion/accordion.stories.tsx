@@ -32,7 +32,7 @@ const item1: AccordionItemType = {
   title: <span>This is panel header 1</span>,
   subtitle: <span style={ { color: 'grey' } }>I ate a clock yesterday, and it was so time-consuming, especially when I went back for seconds!</span>,
 
-  extra: <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
+  extra: <Tag className={ ['title-tag', 'title-tag__theme-success'].join(' ') }>
     <Icon
       className="tag-icon"
       name="world"

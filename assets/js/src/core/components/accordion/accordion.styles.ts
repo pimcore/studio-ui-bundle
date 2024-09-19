@@ -81,6 +81,12 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      .title-tag__theme-success {
+        color: ${themeToken.highlightColor};
+        border-color: ${themeToken.highlightBorderColor};
+        background-color: ${themeToken.highlightBackgroundColor};
+      }
+
       .ant-collapse-extra {
         order: 1;
         margin-left: 5px;

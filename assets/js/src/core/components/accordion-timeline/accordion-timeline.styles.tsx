@@ -14,16 +14,6 @@
 import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
-  const cardToken = {
-    highlightBackgroundColor: '#F6FFED',
-    highlightBorderColor: '#B7EB8F',
-    highlightColor: '#52C41A',
-    signalBackgroundColor: '#E6F4FF',
-    signalBorderColor: '#91CAFF',
-    signalColor: '#1677FF',
-    ...token
-  }
-
   return {
     card: css`
         & .ant-collapse {
@@ -33,81 +23,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
         & span, & div, div.anticon, button {
             vertical-align: middle;
-        }
-
-        & input.ant-input {
-            margin-top: 5px;
-        }
-
-        & .ant-checkbox-wrapper {
-            margin-right: 6px;
-        }
-
-        .ant-card-extra {
-            height: 44px;
-        }
-
-        .sub-title {
-            font-weight: normal;
-            margin-right: 4px;
-            color: ${cardToken.colorTextDescription};
-        }
-
-        .title-tag {
-            font-size: 12px;
-        }
-
-        .tag-icon {
-            position: relative;
-            right: 3px;
-            bottom: 1px;
-        }
-
-        .title-tag__published {
-            color: ${cardToken.highlightColor};
-            border-color: ${cardToken.highlightBorderColor};
-            background-color: ${cardToken.highlightBackgroundColor};
-        }
-
-        .title-tag__own-draft {
-            color: ${cardToken.signalColor};
-            border-color: ${cardToken.signalBorderColor};
-            background-color: ${cardToken.signalBackgroundColor};
-        }
-
-        .flexbox-start-end {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .id-tag {
-            width: 56px;
-            height: 22px;
-
-            display: inline-grid;
-            justify-content: center;
-
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 20px;
-        }
-
-        .btn-publish {
-            margin-right: ${cardToken.marginXXS}px;
-        }
-
-        .row-margin {
-            margin-top: ${cardToken.marginXS}px;
-        }
-
-        .date-container {
-            margin-top: 3px;
-        }
-
-        .scheduled-date {
-            margin-left: ${cardToken.marginXXS}px;
-            color: ${cardToken.colorTextDescription};
         }
     `
   }
