@@ -11,10 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Dropdown, type MenuProps } from 'antd'
-import React from 'react'
+import { Dropdown, type MenuProps, type UploadProps } from 'antd'
+import React, { useContext } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
+import type { UploadFile } from 'antd/es/upload/interface'
+import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 export interface AssetTreeContextMenuProps {
   children: React.ReactNode
@@ -26,6 +28,7 @@ export interface AssetTreeContextMenuProps {
 
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const uploadContext = useContext(UploadContext)!
 
   const items: MenuProps['items'] = [
     {
@@ -61,7 +64,24 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       <input
         hidden
         multiple
-        onChange={ props.uploadFiles }
+        onChange={ async (event) => {
+          if (event.target.files !== undefined) {
+            console.log('now')
+
+            const files = event.target.files! as unknown as UploadFile[]
+            const uploadFileList: UploadFile[] = Array.from(files).map((file) => {
+              const uploadFile: UploadFile = {
+                ...file,
+                status: 'uploading',
+                uid: crypto.randomUUID()
+              }
+
+              return uploadFile
+            })
+
+            uploadContext.setUploadFileList(uploadFileList)
+          }
+        } }
         ref={ props.fileInputRef }
         type="file"
       />

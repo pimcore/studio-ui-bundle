@@ -21,6 +21,7 @@ import { type UploadFile } from 'antd/es/upload/interface'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 export interface TreeNodeProps {
   id: string
@@ -68,6 +69,7 @@ const TreeNode = ({
   const [selectedIds, setSelectedIds] = selectedIdsState!
   const [uploadFileList, setUploadFileList] = React.useState<UploadFile[]>([])
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
+  const uploadContext = useContext(UploadContext)!
 
   useEffect(() => {
     return () => {
@@ -187,6 +189,8 @@ const TreeNode = ({
         dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(id))))
       }
 
+      uploadContext.setUploadFileList(fileList)
+      uploadContext.setUploadingNode(id)
       setUploadFileList(fileList.filter((file) => file.status === 'uploading'))
     }
   }

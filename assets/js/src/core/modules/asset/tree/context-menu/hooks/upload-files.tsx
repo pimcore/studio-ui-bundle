@@ -14,19 +14,30 @@
 import type React from 'react'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { type UploadFile } from 'antd/es/upload/interface'
 
 interface useFileUploaderReturn {
-  uploadFile: (file: File) => Promise<void>
-  uploadFiles: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>
+  uploadFile: (props: UploadFileProps) => Promise<void>
+  uploadFiles: (props: UploadFilesProps) => Promise<void>
   uploadArchive: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>
 }
 
-export const useFileUploader = ({ parentId }: { parentId?: number }): useFileUploaderReturn => {
+interface UploadFileProps {
+  file: UploadFile
+  onError: (file: UploadFile) => void
+  onSuccess: (file: UploadFile) => void
+}
+
+interface UploadFilesProps extends Omit<UploadFileProps, 'file'> {
+  files: UploadFile[]
+}
+
+export const useFileUploader = ({ parentId }: { parentId?: string }): useFileUploaderReturn => {
   const dispatch = useAppDispatch()
   const assetUpload = assetApi.endpoints.assetAdd
   const archiveUpload = assetApi.endpoints.assetUploadZip
 
-  const uploadFile = async (file: File): Promise<void> => {
+  const uploadFile = async ({ file, onSuccess, onError }: UploadFileProps): Promise<void> => {
     try {
       const formData = new FormData()
       formData.append('file', file)
@@ -34,20 +45,23 @@ export const useFileUploader = ({ parentId }: { parentId?: number }): useFileUpl
       if (formData.has('file')) {
         // @ts-expect-error - marvin will know why
         await dispatch(assetUpload.initiate({ body: formData, parentId })).unwrap()
-      }
 
-      console.log('File uploaded successfully')
+        onSuccess(file)
+      }
     } catch (error) {
       console.error(error)
+      onError(file)
     }
   }
 
-  const uploadFiles = async (event): Promise<void> => {
-    const files = event.target.files as File[]
-
+  const uploadFiles = async ({ files, onSuccess, onError }: UploadFilesProps): Promise<void> => {
     if (files.length > 0 && parentId !== undefined) {
       for (let i = 0; i < files.length; i++) {
-        await uploadFile(files[i])
+        await uploadFile({
+          file: files[i],
+          onError,
+          onSuccess
+        })
       }
     }
   }

@@ -28,6 +28,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
+import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -140,7 +141,7 @@ const Tree = (
   const TreeNode = renderNode
 
   return (
-    <>
+    <UploadProvider>
       {isLoading === false && items.length !== 0 && (
         <ContextMenu node={ rightClickedNode }>
           <div className={ ['tree', styles.tree].join(' ') }>
@@ -156,7 +157,7 @@ const Tree = (
           </div>
         </ContextMenu>
       )}
-    </>
+    </UploadProvider>
   )
 }
 
