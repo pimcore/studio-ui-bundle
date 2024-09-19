@@ -30,6 +30,7 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useSaveSchedules } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -132,7 +133,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         />
       </Header>
 
-      <div className={ 'pimcore-schedule-toolbar__filters' }>
+      <Flex
+        align={ 'center' }
+        justify={ 'space-between' }
+      >
         <Segmented
           onChange={ setScheduleTab }
           options={ [
@@ -146,7 +150,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           tagPosition={ 'start' }
           value={ activeOnly }
         />
-      </div>
+      </Flex>
 
       <div
         className={ 'pimcore-schedule-content' }
