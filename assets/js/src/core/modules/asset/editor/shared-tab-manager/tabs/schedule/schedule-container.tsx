@@ -14,7 +14,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
-import { Segmented, Switch } from 'antd'
+import { Switch } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import {
   type Schedule as ApiSchedule,
@@ -33,6 +33,7 @@ import {
   useSaveSchedules
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -136,7 +137,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
       </Header>
 
       <div className={ 'pimcore-schedule-toolbar__filters' }>
-        <Segmented<string>
+        <Segmented
           onChange={ setScheduleTab }
           options={ [
             { label: t('asset.asset-editor-tabs.schedule.upcoming'), value: 'upcoming' },
