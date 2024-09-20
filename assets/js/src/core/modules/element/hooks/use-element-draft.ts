@@ -22,7 +22,9 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
-
+  id: number
+  fullPath?: string
+  type?: string
 }
 
 interface UseElementDraftReturn extends

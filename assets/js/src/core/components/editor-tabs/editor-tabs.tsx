@@ -11,15 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type FocusEvent, useContext, useEffect, useState } from 'react'
+import React, { type FocusEvent, useEffect, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
 import { IconButton } from '../icon-button/icon-button'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -34,7 +34,7 @@ export interface IEditorTabsProps {
 export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEditorTabsProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
@@ -117,7 +117,10 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         onFocus={ onFocus }
         onTabClick={ onChange }
         tabBarExtraContent={ {
-          left: <ElementToolbar id={ id! } />
+          left: <ElementToolbar
+            elementType={ elementType! }
+            id={ id! }
+                />
         } }
       />
     </>

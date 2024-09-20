@@ -15,6 +15,7 @@ import type { Meta } from '@storybook/react'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { BreadcrumbSkeleton } from '@Pimcore/components/breadcrumb/breadcrumb.skeleton'
 import React from 'react'
+import {ElementType} from "types/element-type.d";
 
 const config: Meta = {
   title: 'Components/Controls/Breadcrumb',
@@ -23,13 +24,13 @@ const config: Meta = {
     layout: 'centered'
   },
   tags: ['autodocs'],
-  render: ({ path, loading }: { path: string, loading: boolean }) => {
+  render: ({ path, elementType, loading }: { path: string, elementType: ElementType, loading: boolean }) => {
     if (loading) {
       return <BreadcrumbSkeleton />
     }
 
     return (
-      <Breadcrumb path={ path } />
+      <Breadcrumb path={ path } elementType={elementType} />
     )
   }
 }

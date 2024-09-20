@@ -16,28 +16,26 @@ import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.st
 import { Button, Space } from 'antd'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
-import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { type ElementType } from 'types/element-type.d'
 
-export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
+export const ElementToolbar = ({ id, elementType }: { id: number, elementType: ElementType }): React.JSX.Element => {
   const { styles } = useStyle()
 
-  const { data, isLoading } = useAssetGetByIdQuery({
-    id
-  })
+  const { element } = useElementDraft(id, elementType)
 
-  if (isLoading || data === undefined) {
-    return <ElementToolbarSkeleton />
+  if (element === undefined) {
+    return <></>
   }
 
   const menuItems: DropdownMenuProps['items'] = [
     {
       key: '1',
-      label: `ID ${data.id} - Copy`,
+      label: `ID ${element.id} - Copy`,
       onClick: () => {
         void navigator.clipboard.writeText(
-          data.id.toString()
+          element.id.toString()
         )
       }
     },
@@ -46,7 +44,7 @@ export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
       label: 'Copy full path to clipboard',
       onClick: () => {
         void navigator.clipboard.writeText(
-          data.fullPath!
+          element.fullPath!
         )
       }
     },
@@ -56,7 +54,7 @@ export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
       onClick: () => {
         // @todo implement other types
         void navigator.clipboard.writeText(`
-          http://localhost/admin/login/deeplink?asset_${data.id}_${data.type}
+          http://localhost/admin/login/deeplink?asset_${element.id}_${element.type}
         `)
       }
     }
@@ -65,7 +63,10 @@ export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
   return (
     <div className={ styles.toolbar }>
 
-      <Breadcrumb path={ data.fullPath! } />
+      <Breadcrumb
+        elementType={ elementType }
+        path={ element.fullPath! }
+      />
 
       <div className={ 'element-toolbar__info-dropdown' }>
         <Dropdown menu={ { items: menuItems } }>
@@ -79,13 +80,13 @@ export const ElementToolbar = ({ id }: { id: number }): React.JSX.Element => {
             iconPosition="end"
             onClick={ () => {
               void navigator.clipboard.writeText(
-                data.id.toString()
+                element.id.toString()
               )
             } }
             size="small"
           >
             <Space>
-              ID: { data.id }
+              ID: { element.id }
             </Space>
           </Button>
         </Dropdown>
