@@ -19,7 +19,7 @@ import { type LiteralUnion } from 'antd/es/_util/type'
 import type { PresetColorType, PresetStatusColorType } from 'antd/es/_util/colors'
 
 export interface TagProps extends AntTagPropsProps {
-  tagText: string
+  text: string
   iconName?: IconNameType
   className?: string
   theme?: TagTheme
@@ -27,17 +27,17 @@ export interface TagProps extends AntTagPropsProps {
 
 export type IconNameType = 'world' | 'user'
 
-export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link' | 'element-context'
+export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link-blue' | 'link-purple'
 
-export const Tag = ({ tagText, theme, color, iconName, className, ...props }: TagProps): React.JSX.Element => {
+export const Tag = ({ text, theme, color, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [styles.tag, className].filter(Boolean)
 
   const themeColor = (): LiteralUnion<PresetColorType | PresetStatusColorType> | undefined => {
     switch (theme) {
-      case 'link':
+      case 'link-blue':
         return 'blue'
-      case 'element-context':
+      case 'link-purple':
         return 'processing'
       default:
         return color
@@ -46,9 +46,9 @@ export const Tag = ({ tagText, theme, color, iconName, className, ...props }: Ta
 
   const themeBorder = (): boolean => {
     switch (theme) {
-      case 'link':
+      case 'link-blue':
         return false
-      case 'element-context':
+      case 'link-purple':
         return false
       default:
         return true
@@ -114,7 +114,7 @@ export const Tag = ({ tagText, theme, color, iconName, className, ...props }: Ta
       icon={ renderIcon() }
       { ...props }
     >
-      {tagText}
+      {text}
     </AntTag>
   )
 }

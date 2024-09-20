@@ -76,16 +76,16 @@ export const ThemeUserRole = {
     }
 }
 
-export const ThemeLink = {
+export const ThemeLinkBlue = {
     args: {
-        theme: 'link',
+        theme: 'link-blue',
         tagText: "Car Images/Jaguar"
     }
 }
 
-export const ThemeElementContext = {
+export const ThemeLinkPurple = {
     args: {
-        theme: 'element-context',
+        theme: 'link-purple',
         tagText: "Car Images/BMW"
     }
 }

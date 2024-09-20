@@ -43,8 +43,8 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
       {propertyData.data !== null && (
       <Tag
         onClick={ openAssetWidget }
-        tagText={ `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}` }
-        theme='element-context'
+        text={ `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}` }
+        theme='link-purple'
       />
       )}
 

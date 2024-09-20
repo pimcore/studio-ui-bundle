@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { Tag } from 'antd'
+import { Tag } from '@Pimcore/components/tag/tag'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useStyle } from './link-container.styles'
 
@@ -36,11 +36,10 @@ export const LinkContainer = (props: DefaultCellProps): React.JSX.Element => {
   return (
     <div className={ [styles.link, 'default-cell__content'].join(' ') }>
       <Tag
-        bordered={ false }
-        color='processing'
         onClick={ openAssetWidget }
-        title={ props.getValue() }
-      >{props.getValue()!}</Tag>
+        text={ props.getValue() }
+        theme='link-purple'
+      />
     </div>
   )
 }

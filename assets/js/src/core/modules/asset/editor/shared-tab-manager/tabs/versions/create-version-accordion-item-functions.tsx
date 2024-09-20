@@ -113,7 +113,7 @@ export const createVersionAccordionItem = ({
       <Tag
         color="success"
         iconName={ 'world' }
-        tagText={ t('version.published') }
+        text={ t('version.published') }
       />
     )
   } else if (isSet(ownDraft) && ownDraft) {
@@ -121,7 +121,7 @@ export const createVersionAccordionItem = ({
       <Tag
         color="blue"
         iconName="user"
-        tagText={ t('version.own-draft') }
+        text={ t('version.own-draft') }
       />
     )
   }
@@ -142,7 +142,7 @@ export const createVersionAccordionItem = ({
     <>
       <div className={ 'flexbox-start-end' }>
         <Tag
-          tagText={ `ID: ${version.id}` }
+          text={ `ID: ${version.id}` }
           theme={ 'transparent' }
         />
         <div>
