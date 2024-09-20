@@ -11,13 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { type Meta } from '@storybook/react'
-import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeline'
+import type { Meta } from '@storybook/react'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
 
 const config: Meta = {
-  title: 'Components/Data Display/VerticalTimeline',
-  component: VerticalTimelineComponent,
+  title: 'Components/Controls/Segmented',
+  component: Segmented,
   parameters: {
     layout: 'centered'
   },
@@ -28,10 +27,6 @@ export default config
 
 export const _default = {
   args: {
-    timeStamps: [
-      <div key={ 1 }>Stamp 1</div>,
-      <div key={ 2 }>Stamp 2</div>,
-      <div key={ 3 }>Stamp 3</div>
-    ]
+    options: ['Option 1', 'Option 2']
   }
 }

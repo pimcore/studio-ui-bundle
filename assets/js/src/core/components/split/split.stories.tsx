@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import type { Meta } from '@storybook/react'
+import { Split } from './split'
 import React from 'react'
-import { type Meta } from '@storybook/react'
-import { VerticalTimeline as VerticalTimelineComponent } from './vertical-timeline'
+import { Button } from '../button/button'
 
 const config: Meta = {
-  title: 'Components/Data Display/VerticalTimeline',
-  component: VerticalTimelineComponent,
+  title: 'Components/Layout/Spacing/Split',
+  component: Split,
   parameters: {
     layout: 'centered'
   },
@@ -28,10 +29,12 @@ export default config
 
 export const _default = {
   args: {
-    timeStamps: [
-      <div key={ 1 }>Stamp 1</div>,
-      <div key={ 2 }>Stamp 2</div>,
-      <div key={ 3 }>Stamp 3</div>
-    ]
+    children: (
+      <>
+        <Button>Button 1</Button>
+        <div>Content 2</div>
+        <div>Content 3</div>
+      </>
+    )
   }
 }

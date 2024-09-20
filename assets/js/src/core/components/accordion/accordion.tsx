@@ -11,24 +11,133 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Collapse, type CollapseProps } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Collapse, type CollapseProps, Flex } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
+import { type ItemType } from 'rc-collapse/es/interface'
+import i18n from 'i18next'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { type CollapsibleType } from 'antd/es/collapse/CollapsePanel'
 
-export interface AccordionProps extends CollapseProps {
-  exclusive?: boolean
+export type CustomExpandIconPosition = 'start' | 'after-title'
+
+export type PanelTheme = 'theme-success' | 'theme-primary' | 'theme-default'
+
+export interface AccordionItemType extends ItemType {
+  title: React.ReactElement
+  subtitle?: React.ReactElement
+  disabled?: boolean
+  theme?: PanelTheme
 }
 
-export const Accordion = ({ items, exclusive = true, ...props }: AccordionProps): React.JSX.Element => {
+export interface AccordionProps extends Omit<CollapseProps, 'expandIconPosition'> {
+  items: AccordionItemType[]
+  spaced?: boolean
+  expandIconPosition?: CustomExpandIconPosition
+}
+
+export const Accordion = ({
+  items,
+  accordion = false,
+  spaced = false,
+  className,
+  activeKey,
+  expandIconPosition = 'after-title',
+  ...props
+}: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const [expandedIds, setExpandedIds] = useState<string[]>([])
+
+  useEffect(() => {
+    setExpandedIds([String(activeKey)])
+  }, [activeKey])
+
+  const onClickChevron = (id: string): void => {
+    if (accordion) {
+      setExpandedIds((prevIds) =>
+        prevIds.includes(id) ? [] : [id]
+      )
+    } else {
+      setExpandedIds((prevIds) =>
+        prevIds.includes(id)
+          ? prevIds.filter((expandedId) => expandedId !== id)
+          : [...prevIds, id]
+      )
+    }
+  }
+
+  const itemsWithCardClassName = items?.map((item) => {
+    const chevronClassName = ['accordion__chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'accordion__chevron--up' : ''].join(' ')
+
+    const chevronButton = (): React.ReactElement => {
+      return (
+        <IconButton
+          aria-label={ i18n.t('aria.notes-and-events.expand') }
+          className={ 'accordion__chevron-btn' }
+          icon={ 'chevron-up' }
+          iconOptions={ { className: chevronClassName } }
+          onClick={ () => {
+            if (item.id != null) {
+              onClickChevron(item.id)
+            }
+          } }
+          role={ 'button' }
+          size="small"
+          type={ 'text' }
+        />
+      )
+    }
+
+    const { disabled, ...restItem } = item
+
+    const collapseDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
+
+    const itemClassNames = [item?.className, 'accordion__item'].filter(Boolean)
+    if (item.theme !== undefined) {
+      itemClassNames.push(`accordion__item--${item.theme}`)
+    }
+
+    return ({
+      ...restItem,
+      className: itemClassNames.join(' '),
+      label: <>
+        <Flex
+          align={ 'center' }
+          vertical={ false }
+        >
+          {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
+                        chevronButton()}
+          {item.title}
+          {expandIconPosition === 'after-title' && (item.children !== null) && !(item.disabled === true) &&
+                        chevronButton()}
+        </Flex>
+        {item.subtitle}
+      </>,
+      ...(item.disabled ?? false ? collapseDisabled : {})
+    })
+  }) ?? []
+
+  const allClassNames = [
+    'accordion',
+    className,
+    styles.accordion
+  ]
+
+  if (spaced) {
+    allClassNames.push('accordion--spaced', styles.spaced)
+    allClassNames.push(styles.spaced)
+  }
 
   return (
     <Collapse
-      accordion={ exclusive }
-      className={ [styles.accordion, 'accordion'].join(' ') }
-      defaultActiveKey={ ['1'] }
-      expandIconPosition='end'
-      items={ items }
+      accordion={ accordion }
+      activeKey={ expandedIds }
+      bordered={ !spaced }
+      className={ allClassNames.join(' ') }
+      items={ itemsWithCardClassName }
+      onChange={ (keys) => {
+        setExpandedIds(Array.isArray(keys) ? keys : [keys])
+      } }
       { ...props }
     />
   )
