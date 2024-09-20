@@ -16,13 +16,11 @@ import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
-import { type UploadFile } from 'antd/es/upload/interface'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 interface TreeListProps {
   node: TreeNodeProps
-  uploadFileList?: UploadFile[] // TODO: remove
 }
 
 const { useToken } = theme
@@ -34,11 +32,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
   const { isLoading, isError, data } = apiHookResult
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
-
-  console.log(uploadFileList)
-  console.log('tree-list', uploadingNode)
-  console.log('tree-list node.id', node.id)
-  console.log('tree-list compare', node.id === uploadingNode)
 
   if (isLoading === true) {
     return <></>

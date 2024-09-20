@@ -34,33 +34,6 @@ export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX
     setUploadingNode
   }), [uploadFileList, uploadingNode])
 
-  /* const startFileUpload = async () => {
-    if (uploadFileList.length > 0) {
-      const fileStates = uploadFileList.map((file) => file.status)
-      const allFullFilled = fileStates.every(item => item === 'done')
-
-      try {
-        await uploadFiles({
-          files: uploadFileList as any as UploadFile[],
-          onSuccess: (file: UploadFile) => {
-            file.status = 'done'
-          },
-          onError: (file: UploadFile) => {
-            file.status = 'error'
-          }
-        })
-      } catch (error) {
-        console.error(error)
-      }
-
-      if (allFullFilled && uploadingNode !== null) {
-        dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(uploadingNode))))
-        setUploadFileList([])
-        setUploadingNode(null)
-      }
-    }
-  } */
-
   return (
     <UploadContext.Provider value={ contextValue }>
       {children}
