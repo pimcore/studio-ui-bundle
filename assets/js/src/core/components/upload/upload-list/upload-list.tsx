@@ -12,62 +12,30 @@
 */
 
 import { type UploadListProps } from 'antd/es/upload'
-import React, { type ReactElement } from 'react'
-import AntUploadList from 'antd/es/upload/UploadList'
-import { useStyles } from '@Pimcore/components/upload/upload-list/upload-list.styles'
-import { type UploadFile } from 'antd/es/upload/interface'
-import { Icon } from '@Pimcore/components/icon/icon'
+import React from 'react'
 import { Progress } from 'antd'
+import { useStyles } from './upload-list.styles'
 
 export const UploadList = (props: UploadListProps): React.JSX.Element => {
   const { styles } = useStyles()
-
-  const iconRenderer = (file: UploadFile): React.JSX.Element => {
-    const fileType = file.type
-
-    switch (fileType) {
-      default:
-        return <Icon name={ 'image-01' } />
-    }
-  }
-
-  const itemRender = (originNode: ReactElement, file: UploadFile, fileList: object[]): React.JSX.Element => {
-    const icon = iconRenderer(file)
-
-    return (
-      <>
-        <div className={ 'file-upload-list__file-details' }>
-          {icon}
-
-          <p className={ 'file-upload-list__file__filename' }>
-            {file.name}
-          </p>
-        </div>
-
-        {'percent' in file && (
-          <div className={ 'file-upload-list__file__progress' }>
-            <Progress
-              { ...props.progress }
-              aria-label={ file['aria-label'] }
-              aria-labelledby={ file['aria-labelledby'] }
-              percent={ file.percent }
-              showInfo={ false }
-              size={ [-1, 2] }
-              type="line"
-            />
-          </div>
-        )}
-      </>
-    )
-  }
+  const items = props.items!
+  const totalCount = items.length
+  const doneCount = items.filter(file => file.status === 'done').length
 
   return (
     <div className={ styles.uploadList }>
-      <AntUploadList
-        iconRender={ iconRenderer }
-        itemRender={ itemRender }
-        { ...props }
+      <Progress
+        { ...props.progress }
+        aria-label={ 'upload progress' }
+        percent={ (doneCount / totalCount) * 100 }
+        showInfo={ false }
+        size={ [-1, 2] }
+        type="line"
       />
+
+      <span>
+        {doneCount}/{totalCount} files uploaded
+      </span>
     </div>
   )
 }
