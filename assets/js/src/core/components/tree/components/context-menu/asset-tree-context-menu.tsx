@@ -45,7 +45,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
           }
         },
         {
-          icon: <Icon name={ 'upload-cloud' } />,
+          icon: <Icon name={ 'upload-zip' } />,
           label: t('asset.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
@@ -69,7 +69,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   const uploadZip: UploadProps = {
     action: `/studio/api/assets/add-zip/${props.node?.id}`,
     accept: '.zip, .rar, .7zip',
-    name: 'file',
+    name: 'zipFile',
     multiple: true,
     showUploadList: false,
     onChange: uploadFileProcessor
