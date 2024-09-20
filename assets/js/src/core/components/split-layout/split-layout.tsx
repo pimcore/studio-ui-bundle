@@ -15,6 +15,7 @@ import { Flex } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useStyles } from './split-layout.styles'
 import { SplitLayoutItem, type SplitLayoutItemProps } from './item/split-layout-item'
+import { Divider } from './divider/divider'
 
 export interface ISplitLayoutItem extends Omit<SplitLayoutItemProps, 'withDivider' | 'onResize'> {}
 
@@ -47,11 +48,11 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
       <SplitLayoutItem
         ref={ leftItemRef }
         { ...internalLeftItemSizing }
-        onResize={ resizeAble ? onResize : undefined }
-        withDivider={ withDivider }
       >
         { leftItemChildren }
       </SplitLayoutItem>
+
+      {withDivider && <Divider onResize={ resizeAble ? onResize : undefined } />}
 
       <SplitLayoutItem
         ref={ rightItemRef }

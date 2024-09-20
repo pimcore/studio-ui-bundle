@@ -13,19 +13,16 @@
 
 import React, { forwardRef } from 'react'
 import { useStyles } from './split-layout-item.styles'
-import { Divider } from '../divider/divider'
 
 export interface SplitLayoutItemProps {
   size: number
   children: React.ReactNode
   minSize?: number
   maxSize?: number
-  withDivider?: boolean
-  onResize?: (event: MouseEvent, item: SplitLayoutItemProps) => void
 }
 
 const SplitLayoutItem = (props: SplitLayoutItemProps, ref): React.JSX.Element => {
-  const { children, size, minSize, maxSize, withDivider, onResize } = props
+  const { children, size, minSize, maxSize } = props
   const { styles } = useStyles()
 
   return (
@@ -39,10 +36,6 @@ const SplitLayoutItem = (props: SplitLayoutItemProps, ref): React.JSX.Element =>
       } }
     >
       {children}
-
-      {withDivider === true && (
-        <Divider onResize={ onResize !== undefined ? (event) => { onResize(event, props) } : undefined } />
-      )}
     </div>
   )
 }

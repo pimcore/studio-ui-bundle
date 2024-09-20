@@ -15,12 +15,8 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => ({
   dividerContainer: css`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 24px;
-    height: 100%;
+    position: relative;
+    min-width: 24px;
   `,
 
   resizable: css`
