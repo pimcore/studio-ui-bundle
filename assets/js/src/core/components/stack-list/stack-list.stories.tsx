@@ -14,7 +14,7 @@
 import { type Meta } from '@storybook/react'
 import { StackList } from './stack-list'
 import React from 'react'
-import { Tag } from 'antd'
+import { Tag } from '@Pimcore/components/tag/tag'
 import { ButtonGroup } from '../button-group/button-group'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { IconButton } from '../icon-button/icon-button'
@@ -38,7 +38,7 @@ export const _default = {
       {
         id: '1',
         sortable: true,
-        children: <Tag>Item 1</Tag>,
+        children: <Tag tagText={"Item 1"}/>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
             languages={ ['EN', 'FR'] }
@@ -53,7 +53,7 @@ export const _default = {
       {
         id: '2',
         sortable: true,
-        children: <Tag>Item 2</Tag>,
+        children: <Tag tagText={"Item 2"}/>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
             languages={ ['EN', 'FR'] }
@@ -68,7 +68,7 @@ export const _default = {
       {
         id: '3',
         sortable: true,
-        children: <Tag>Item 3</Tag>,
+        children: <Tag tagText={"Item 3"}/>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
             languages={ ['EN', 'FR'] }

@@ -82,3 +82,10 @@ export const ThemeLink = {
         tagText: "Car Images/Jaguar"
     }
 }
+
+export const ThemeElementContext = {
+    args: {
+        theme: 'element-context',
+        tagText: "Car Images/BMW"
+    }
+}

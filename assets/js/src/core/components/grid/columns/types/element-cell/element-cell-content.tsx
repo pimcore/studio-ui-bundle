@@ -13,7 +13,7 @@
 
 import React, { type MutableRefObject, forwardRef } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { Tag } from 'antd'
+import { Tag } from '@Pimcore/components/tag/tag'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useStyle } from './element-cell.styles'
@@ -42,13 +42,10 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     >
       {propertyData.data !== null && (
       <Tag
-        bordered={ false }
-        color='processing'
         onClick={ openAssetWidget }
-        title={ propertyData.data.path + propertyData.data.key }
-      >
-        {propertyData.data.path}{propertyData.data.filename ?? propertyData.data.key}
-      </Tag>
+        tagText={ `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}` }
+        theme='element-context'
+      />
       )}
 
       <Icon

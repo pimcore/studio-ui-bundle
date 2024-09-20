@@ -15,6 +15,8 @@ import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import React from 'react'
 import { useStyles } from './tag.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { type LiteralUnion } from 'antd/es/_util/type'
+import type { PresetColorType, PresetStatusColorType } from 'antd/es/_util/colors'
 
 export interface TagProps extends AntTagPropsProps {
   tagText: string
@@ -25,11 +27,34 @@ export interface TagProps extends AntTagPropsProps {
 
 export type IconNameType = 'world' | 'user'
 
-export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link'
+export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link' | 'element-context'
 
 export const Tag = ({ tagText, theme, color, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [styles.tag, className].filter(Boolean)
+
+  const themeColor = (): LiteralUnion<PresetColorType | PresetStatusColorType> | undefined => {
+    switch (theme) {
+      case 'link':
+        return 'blue'
+      case 'element-context':
+        return 'processing'
+      default:
+        return color
+    }
+  }
+
+  const themeBorder = (): boolean => {
+    switch (theme) {
+      case 'link':
+        return false
+      case 'element-context':
+        return false
+      default:
+        return true
+    }
+  }
+
   const renderThemeIcon = (): React.JSX.Element | null => {
     switch (theme) {
       case 'user-role':
@@ -83,9 +108,9 @@ export const Tag = ({ tagText, theme, color, iconName, className, ...props }: Ta
 
   return (
     <AntTag
-      bordered={ theme !== 'link' }
+      bordered={ themeBorder() }
       className={ classes.join(' ') }
-      color={ theme === 'link' ? 'blue' : color }
+      color={ themeColor() }
       icon={ renderIcon() }
       { ...props }
     >
