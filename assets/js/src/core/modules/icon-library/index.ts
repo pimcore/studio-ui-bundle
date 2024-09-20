@@ -79,6 +79,7 @@ import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
+import ChevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
@@ -373,6 +374,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'chevron-selector-vertical',
       component: ChevronSelectorVertical
+    })
+    iconLibrary.register({
+      name: 'chevron-selector-horizontal',
+      component: ChevronSelectorHorizontal
     })
     iconLibrary.register({
       name: 'trash',

@@ -14,13 +14,42 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => ({
-  divider: css`
+  dividerContainer: css`
     position: absolute;
     top: 0;
     bottom: 0;
-    right: -2px;
-    width: 4px;
+    right: 0;
+    width: 24px;
+    height: 100%;
+  `,
+
+  resizable: css`
+    cursor: col-resize;
+  `,
+
+  divider: css`
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    height: 100%;
     overflow: hidden;
     background-color: ${token.Divider.colorSplit};
+  `,
+
+  iconContainer: css`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    display: flex;
+    border: 1px solid ${token.colorBorderContainer};
+    background-color: ${token.Divider.colorBgContainer};
+    border-radius: ${token.Divider.borderRadiusSM};
+  `,
+
+  icon: css`
+    color: ${token.colorPrimary};
   `
 }))

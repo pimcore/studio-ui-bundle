@@ -40,7 +40,7 @@ const Component = ({ icon, children, className, minimal = false, type = 'link', 
     >
       <Icon
         name={ icon }
-        { ...iconOptions }
+        options={ iconOptions }
       />
     </Button>
   )
