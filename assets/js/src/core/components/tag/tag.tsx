@@ -25,12 +25,11 @@ export interface TagProps extends AntTagPropsProps {
 
 export type IconNameType = 'world' | 'user'
 
-export type TagTheme = 'transparent' | 'user-role' | 'admin-role'
+export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link'
 
-export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps): React.JSX.Element => {
+export const Tag = ({ tagText, theme, color, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [styles.tag, className].filter(Boolean)
-
   const renderThemeIcon = (): React.JSX.Element | null => {
     switch (theme) {
       case 'user-role':
@@ -84,7 +83,9 @@ export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps)
 
   return (
     <AntTag
+      bordered={ theme !== 'link' }
       className={ classes.join(' ') }
+      color={ theme === 'link' ? 'blue' : color }
       icon={ renderIcon() }
       { ...props }
     >

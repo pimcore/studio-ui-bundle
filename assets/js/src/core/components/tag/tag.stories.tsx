@@ -75,3 +75,10 @@ export const ThemeUserRole = {
         tagText: "Jane Doe"
     }
 }
+
+export const ThemeLink = {
+    args: {
+        theme: 'link',
+        tagText: "Car Images/Jaguar"
+    }
+}

@@ -16,7 +16,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tag: css`
-        .anticon+span {
+        .anticon + span {
             margin-inline-start: 4px;
         }
 
