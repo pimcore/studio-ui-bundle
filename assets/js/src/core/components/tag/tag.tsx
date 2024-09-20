@@ -14,7 +14,7 @@
 import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import React from 'react'
 import { useStyles } from './tag.styles'
-import { GlobalOutlined, UserOutlined } from '@ant-design/icons'
+import { GlobalOutlined, UserOutlined, TrophyOutlined } from '@ant-design/icons'
 
 export interface TagProps extends AntTagPropsProps {
   tagText: string
@@ -25,13 +25,27 @@ export interface TagProps extends AntTagPropsProps {
 
 export type IconNameType = 'world' | 'user'
 
-export type TagTheme = 'transparent'
+export type TagTheme = 'transparent' | 'user-role' | 'admin-role'
 
 export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [styles.tag, className].filter(Boolean)
 
+  const renderThemeIcon = (): React.JSX.Element | null => {
+    switch (theme) {
+      case 'user-role':
+        return <UserOutlined />
+      case 'admin-role':
+        return <TrophyOutlined />
+      default:
+        return null
+    }
+  }
+
   const renderIcon = (): React.JSX.Element | null => {
+    if (iconName === undefined) {
+      return renderThemeIcon()
+    }
     switch (iconName) {
       case 'world':
         return <GlobalOutlined />

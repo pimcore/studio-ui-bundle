@@ -19,6 +19,14 @@ export const useStyles = createStyles(({ css, token }) => {
       &.ant-tag.theme-transparent {
           background-color: transparent;
       }
+
+      &.ant-tag.theme-user-role,
+      &.ant-tag.theme-admin-role {
+        background-color: rgba(0, 0, 0, 0.04);
+        color: #565656;
+        border-color: #EBEBEB;
+      }
+
     `
   }
 })

@@ -45,7 +45,7 @@ export const OwnDraftIconTag = {
     }
 }
 
-export const TransparentTag = {
+export const TransparentTheme = {
     args: {
         theme: 'transparent',
         tagText: "ID: 150",
@@ -60,4 +60,18 @@ export const TransparentTag = {
             <Tag {...args} />
         </div>
     )
+}
+
+export const AdminRoleTheme = {
+    args: {
+        theme: 'admin-role',
+        tagText: "Jane Doe"
+    }
+}
+
+export const UserRoleTheme = {
+    args: {
+        theme: 'user-role',
+        tagText: "Jane Doe"
+    }
 }
