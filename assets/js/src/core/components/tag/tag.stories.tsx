@@ -13,6 +13,7 @@
 
 import {type Meta} from '@storybook/react'
 import {Tag} from "@Pimcore/components/tag/tag";
+import React from 'react';
 
 const config: Meta = {
     title: 'Components/General/Tag',
@@ -44,9 +45,19 @@ export const OwnDraftIconTag = {
     }
 }
 
-export const IDTag = {
+export const TransparentTag = {
     args: {
-        theme: 'id',
-        tagText: "ID: 150"
-    }
+        theme: 'transparent',
+        tagText: "ID: 150",
+        wrapperStyle: {
+            backgroundColor: 'rgba(215, 199, 236, 0.4)',
+            padding: '10px',
+            borderRadius: '4px',
+        }
+    },
+    render: (args) => (
+        <div style={args.wrapperStyle}>
+            <Tag {...args} />
+        </div>
+    )
 }

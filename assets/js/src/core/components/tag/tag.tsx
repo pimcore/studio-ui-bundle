@@ -25,7 +25,7 @@ export interface TagProps extends AntTagPropsProps {
 
 export type IconNameType = 'world' | 'user'
 
-export type TagTheme = 'id'
+export type TagTheme = 'transparent'
 
 export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
