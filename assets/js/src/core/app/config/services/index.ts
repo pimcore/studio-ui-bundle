@@ -48,6 +48,7 @@ export const serviceIds = {
   // Data Objects
   'DataObject/Editor/ComponentRegistry': 'DataObject/Editor/ComponentRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
+  'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -82,6 +83,7 @@ container.bind(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry']).to
 container.bind(serviceIds['DataObject/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
 
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()

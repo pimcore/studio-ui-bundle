@@ -66,7 +66,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   let definition = componentRegistryService.getComponent(dataObject.type!)
 
   if (definition === undefined) {
-    definition = componentRegistryService.getComponent('unknown')!
+    definition = componentRegistryService.getComponent('object')!
   }
 
   const Component = definition.component

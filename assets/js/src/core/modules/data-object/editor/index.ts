@@ -20,6 +20,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TitleContainer } from './title/title-container'
 import { type ComponentRegistry } from '@Pimcore/modules/data-object/services/component-registry'
 import { ObjectContainer } from '@Pimcore/modules/data-object/editor/types/object/object-container'
+import { FolderContainer } from '@Pimcore/modules/data-object/editor/types/folder/folder-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -28,6 +29,11 @@ moduleSystem.registerModule({
     componentRegistryService.registerComponent({
       name: 'object',
       component: ObjectContainer
+    })
+
+    componentRegistryService.registerComponent({
+      name: 'folder',
+      component: FolderContainer
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
