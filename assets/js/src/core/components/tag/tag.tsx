@@ -14,7 +14,7 @@
 import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import React from 'react'
 import { useStyles } from './tag.styles'
-import { GlobalOutlined, UserOutlined, TrophyOutlined } from '@ant-design/icons'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface TagProps extends AntTagPropsProps {
   tagText: string
@@ -34,9 +34,21 @@ export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps)
   const renderThemeIcon = (): React.JSX.Element | null => {
     switch (theme) {
       case 'user-role':
-        return <UserOutlined />
+        return (
+          <Icon
+            className="tag-icon"
+            name="user-01"
+            options={ { width: '12px', height: '12px' } }
+          />
+        )
       case 'admin-role':
-        return <TrophyOutlined />
+        return (
+          <Icon
+            className="tag-icon"
+            name="shield-02"
+            options={ { width: '12px', height: '12px' } }
+          />
+        )
       default:
         return null
     }
@@ -48,9 +60,21 @@ export const Tag = ({ tagText, theme, iconName, className, ...props }: TagProps)
     }
     switch (iconName) {
       case 'world':
-        return <GlobalOutlined />
+        return (
+          <Icon
+            className="tag-icon"
+            name="world"
+            options={ { width: '12px', height: '12px' } }
+          />
+        )
       case 'user':
-        return <UserOutlined />
+        return (
+          <Icon
+            className="tag-icon"
+            name="user-01"
+            options={ { width: '12px', height: '12px' } }
+          />
+        )
       default:
         return null
     }

@@ -29,7 +29,7 @@ export const _default = {
     }
 }
 
-export const SuccessIconTag = {
+export const ColorSuccessIconTag = {
     args: {
         iconName: 'world',
         color: 'success',
@@ -37,7 +37,7 @@ export const SuccessIconTag = {
     }
 }
 
-export const OwnDraftIconTag = {
+export const ColorBlueIconTag = {
     args: {
         iconName: 'user',
         color: 'blue',
@@ -45,7 +45,7 @@ export const OwnDraftIconTag = {
     }
 }
 
-export const TransparentTheme = {
+export const ThemeTransparent = {
     args: {
         theme: 'transparent',
         tagText: "ID: 150",
@@ -62,14 +62,14 @@ export const TransparentTheme = {
     )
 }
 
-export const AdminRoleTheme = {
+export const ThemeAdminRole = {
     args: {
         theme: 'admin-role',
         tagText: "Jane Doe"
     }
 }
 
-export const UserRoleTheme = {
+export const ThemeUserRole = {
     args: {
         theme: 'user-role',
         tagText: "Jane Doe"
