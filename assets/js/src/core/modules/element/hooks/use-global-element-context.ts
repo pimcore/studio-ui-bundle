@@ -11,22 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {GlobalAssetContext, useGlobalAssetContext} from "@Pimcore/modules/asset/hooks/use-global-asset-context";
+import { type GlobalAssetContext, useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import {
-  GlobalDataObjectContext,
+  type GlobalDataObjectContext,
   useGlobalDataObjectContext
-} from "@Pimcore/modules/data-object/hooks/use-global-data-object-context";
-
+} from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 
 interface UseGlobalElementContext {
   context: GlobalAssetContext | GlobalDataObjectContext | undefined
 }
 
 export const useGlobalElementContext = (): UseGlobalElementContext => {
-  const {context: assetContext} = useGlobalAssetContext();
-  const {context: dataObjectContext} = useGlobalDataObjectContext();
+  const { context: assetContext } = useGlobalAssetContext()
+  const { context: dataObjectContext } = useGlobalDataObjectContext()
 
   return {
-    context: assetContext ?? dataObjectContext,
+    context: assetContext ?? dataObjectContext
   }
 }
