@@ -23,11 +23,11 @@ interface UseElementContextReturn {
 
 export const useElementContext = (): UseElementContextReturn => {
   const { id: assetId } = useContext(AssetContext)
+  const { id: dataObjectId } = useContext(DataObjectContext)
+
   if (assetId !== undefined) {
     return { id: assetId, elementType: 'asset' }
-  }
-  const { id: dataObjectId } = useContext(DataObjectContext)
-  if (dataObjectId !== undefined) {
+  } else if (dataObjectId !== undefined) {
     return { id: dataObjectId, elementType: 'data-object' }
   }
 

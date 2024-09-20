@@ -47,7 +47,7 @@ interface UseDataObjectDraftReturn extends
   removeDataObjectFromState: () => void
   removeTrackedChanges: () => void
 
-  fetchDataObject: () => void
+  fetchDataObject: () => Promise<DataObject>
 }
 
 export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
@@ -68,8 +68,6 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
   }
 
   useEffect(() => {
-    console.log({ dataObject })
-
     if (dataObject === undefined) {
       getDataObject()
     }

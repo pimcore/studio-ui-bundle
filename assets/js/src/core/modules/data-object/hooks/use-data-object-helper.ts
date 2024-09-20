@@ -21,7 +21,7 @@ interface OpenDataObjectWidgetProps {
 }
 
 interface UseDataObjectReturn {
-  openDataObject: (props: OpenDataObjectWidgetProps) => void
+  openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -30,11 +30,11 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
     const dataObject = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
-    console.log('foo1', dataObject)
+
     if (dataObject.data?.icon?.type === 'path') {
     //  return
     }
-    console.log('foo', dataObject)
+
     openMainWidget({
       name: dataObject.data?.key,
       // icon: dataObject.data?.icon?.value,
