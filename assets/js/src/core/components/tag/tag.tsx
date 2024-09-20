@@ -32,8 +32,9 @@ export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link-blue' 
 export const Tag = ({ text, theme, color, iconName, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [styles.tag, className].filter(Boolean)
+  theme !== undefined && classes.push(`theme-${theme}`)
 
-  const themeColor = (): LiteralUnion<PresetColorType | PresetStatusColorType> | undefined => {
+  const getThemeColor = (): LiteralUnion<PresetColorType | PresetStatusColorType> | undefined => {
     switch (theme) {
       case 'link-blue':
         return 'blue'
@@ -44,74 +45,50 @@ export const Tag = ({ text, theme, color, iconName, className, ...props }: TagPr
     }
   }
 
-  const themeBorder = (): boolean => {
-    switch (theme) {
-      case 'link-blue':
-        return false
-      case 'link-purple':
-        return false
-      default:
-        return true
-    }
+  const isBordered = (): boolean => {
+    const noBorderThemes: TagTheme[] = ['link-blue', 'link-purple']
+    return theme !== undefined ? !noBorderThemes.includes(theme) : true
   }
 
-  const renderThemeIcon = (): React.JSX.Element | null => {
+  const renderIcon = (name: string): React.JSX.Element => (
+    <Icon
+      className="tag-icon"
+      name={ name }
+      options={ { width: '12px', height: '12px' } }
+    />
+  )
+
+  const getThemeIcon = (): React.JSX.Element | null => {
     switch (theme) {
       case 'user-role':
-        return (
-          <Icon
-            className="tag-icon"
-            name="user-01"
-            options={ { width: '12px', height: '12px' } }
-          />
-        )
+        return renderIcon('user-01')
       case 'admin-role':
-        return (
-          <Icon
-            className="tag-icon"
-            name="shield-02"
-            options={ { width: '12px', height: '12px' } }
-          />
-        )
+        return renderIcon('shield-02')
       default:
         return null
     }
   }
 
-  const renderIcon = (): React.JSX.Element | null => {
-    if (iconName === undefined) {
-      return renderThemeIcon()
+  const getIcon = (): React.JSX.Element | null => {
+    if (theme !== undefined) {
+      return getThemeIcon()
     }
     switch (iconName) {
       case 'world':
-        return (
-          <Icon
-            className="tag-icon"
-            name="world"
-            options={ { width: '12px', height: '12px' } }
-          />
-        )
+        return renderIcon('world')
       case 'user':
-        return (
-          <Icon
-            className="tag-icon"
-            name="user-01"
-            options={ { width: '12px', height: '12px' } }
-          />
-        )
+        return renderIcon('user-01')
       default:
         return null
     }
   }
 
-  theme !== undefined && classes.push(`theme-${theme}`)
-
   return (
     <AntTag
-      bordered={ themeBorder() }
+      bordered={ isBordered() }
       className={ classes.join(' ') }
-      color={ themeColor() }
-      icon={ renderIcon() }
+      color={ getThemeColor() }
+      icon={ getIcon() }
       { ...props }
     >
       {text}
