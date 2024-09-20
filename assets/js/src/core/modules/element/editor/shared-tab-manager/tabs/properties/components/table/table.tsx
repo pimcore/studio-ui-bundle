@@ -13,19 +13,19 @@
 
 import {
   type DataProperty as DataPropertyApi
-} from '@Pimcore/modules/asset/properties-api-slice.gen'
-import React, { useContext, useEffect, useState } from 'react'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import React, { useEffect, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -45,12 +45,12 @@ export const Table = ({
   const { t } = useTranslation()
   const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
-  const { id } = useContext(AssetContext)
-  const { asset, properties, setProperties, updateProperty, removeProperty } = useAssetDraft(id!)
+  const { id, elementType } = useElementContext()
+  const { element, properties, setProperties, updateProperty, removeProperty } = useElementDraft(id!, elementType!)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
-    elementType: 'asset',
+    elementType: elementType!,
     id: id!
   })
 
@@ -86,37 +86,37 @@ export const Table = ({
   }, [properties])
 
   useEffect(() => {
-    if (modifiedCells.length > 0 && asset?.changes.properties === undefined) {
+    if (modifiedCells.length > 0 && element?.changes.properties === undefined) {
       setModifiedCells([])
     }
-  }, [asset])
+  }, [element])
 
   const columnHelper = createColumnHelper<DataPropertyWithActions>()
   const createColumns = (tableType: 'own' | 'inherited'): any => [
     columnHelper.accessor('type', {
-      header: t('asset.asset-editor-tabs.properties.columns.type'),
+      header: t('properties.columns.type'),
       meta: {
         type: 'property-icon'
       },
       size: 40
     }),
     columnHelper.accessor('key', {
-      header: t('asset.asset-editor-tabs.properties.columns.key'),
+      header: t('properties.columns.key'),
       meta: {
         editable: true
       },
       size: 200
     }),
     columnHelper.accessor('predefinedName', {
-      header: t('asset.asset-editor-tabs.properties.columns.name'),
+      header: t('properties.columns.name'),
       size: 200
     }),
     columnHelper.accessor('description', {
-      header: t('asset.asset-editor-tabs.properties.columns.description'),
+      header: t('properties.columns.description'),
       size: 200
     }),
     columnHelper.accessor('data', {
-      header: t('asset.asset-editor-tabs.properties.columns.data'),
+      header: t('properties.columns.data'),
       meta: {
         type: 'property-value',
         editable: tableType === 'own',
@@ -125,7 +125,7 @@ export const Table = ({
       size: 300
     }),
     columnHelper.accessor('inheritable', {
-      header: t('asset.asset-editor-tabs.properties.columns.inheritable'),
+      header: t('properties.columns.inheritable'),
       size: 70,
       meta: {
         type: 'checkbox',
@@ -136,7 +136,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.properties.columns.actions'),
+      header: t('properties.columns.actions'),
       size: 70,
       cell: (info) => {
         return (
@@ -212,7 +212,7 @@ export const Table = ({
           {propertiesTableTab === 'all' && (
             <>
               <p className={ 'headline' }>
-                {t('asset.asset-editor-tabs.properties.inherited.properties')}
+                {t('properties.inherited.properties')}
               </p>
               <Grid
                 autoWidth

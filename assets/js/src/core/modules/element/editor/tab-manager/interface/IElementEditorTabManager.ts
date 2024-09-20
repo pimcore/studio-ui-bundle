@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type IAssetEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/types/IAssetEditorTab'
+import { type IElementEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/types/IElementEditorTab'
 import { type IEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTabManager'
 
-export interface IAssetEditorTabManager extends IEditorTabManager {
-  tabs: IAssetEditorTab[]
-  getTabs: () => IAssetEditorTab[]
-  getTab: (key: string) => IAssetEditorTab | undefined
-  register: (tab: IAssetEditorTab) => void
+export interface IElementEditorTabManager extends IEditorTabManager {
+  tabs: IElementEditorTab[]
+  getTabs: () => IElementEditorTab[]
+  getTab: (key: string) => IElementEditorTab | undefined
+  register: (tab: IElementEditorTab) => void
 }

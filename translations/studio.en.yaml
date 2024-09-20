@@ -9,6 +9,7 @@ asset.asset-editor-tabs.schedule: Schedule
 asset.asset-editor-tabs.dependencies: Dependencies
 asset.asset-editor-tabs.notes-events: Notes & Events
 asset.asset-editor-tabs.tag: Tags
+asset.asset-editor-tabs.workflow.text: Workflow Details
 asset.asset-editor-tabs.workflow: Workflow
 asset.asset-editor-tabs.list.columns.preview: Preview
 asset.asset-editor-tabs.list.columns.id: ID
@@ -53,24 +54,6 @@ aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels s
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
-asset.asset-editor-tabs.properties.text: Properties
-asset.asset-editor-tabs.properties.editable-properties: Editable Properties
-asset.asset-editor-tabs.properties.all-properties: All Properties
-asset.asset-editor-tabs.properties.predefined-properties: Predefined Properties
-asset.asset-editor-tabs.properties.add-custom-property: Add a custom property
-asset.asset-editor-tabs.properties.columns.type: Type
-asset.asset-editor-tabs.properties.columns.key: Key
-asset.asset-editor-tabs.properties.columns.name: Name
-asset.asset-editor-tabs.properties.columns.description: Description
-asset.asset-editor-tabs.properties.columns.data: Value
-asset.asset-editor-tabs.properties.columns.inheritable: Inheritable
-asset.asset-editor-tabs.properties.columns.actions: Actions
-asset.asset-editor-tabs.properties.inherited.properties: Inherited Properties
-asset.asset-editor-tabs.properties.add-custom-property.cancel: Cancel
-asset.asset-editor-tabs.properties.add-custom-property.key: Key
-asset.asset-editor-tabs.properties.add-custom-property.add: Add
-asset.asset-editor-tabs.properties.add-custom-property.type: Type
-asset.asset-editor-tabs.workflow.text: Workflow Details
 component.workflow-card.action-btn: Workflow Actions
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
@@ -169,6 +152,23 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
+properties.label: Properties
+properties.editable-properties: Editable Properties
+properties.all-properties: All Properties
+properties.predefined-properties: Predefined Properties
+properties.add-custom-property: Add a custom property
+properties.columns.type: Type
+properties.columns.key: Key
+properties.columns.name: Name
+properties.columns.description: Description
+properties.columns.data: Value
+properties.columns.inheritable: Inheritable
+properties.columns.actions: Actions
+properties.inherited.properties: Inherited Properties
+properties.add-custom-property.cancel: Cancel
+properties.add-custom-property.key: Key
+properties.add-custom-property.add: Add
+properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing

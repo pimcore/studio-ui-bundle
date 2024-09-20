@@ -17,7 +17,7 @@ import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '../asset-provider'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
+import { type ComponentRegistry } from '@Pimcore/modules/element/editor/services/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { Content } from '@Pimcore/components/content/content'
 

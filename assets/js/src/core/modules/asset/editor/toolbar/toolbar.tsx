@@ -24,7 +24,7 @@ import {
   type CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 
-import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/asset/properties-api-slice.gen'
+import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'

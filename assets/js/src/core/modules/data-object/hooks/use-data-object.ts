@@ -11,6 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { useContext } from 'react'
+import { DataObjectContext } from '../data-object-provider'
 
-export interface IObjectEditorTab extends IEditorTab {}
+export interface UseDataObjectReturn {
+  id: number | undefined
+}
+
+export const useDataObject = (): UseDataObjectReturn => {
+  const { id } = useContext(DataObjectContext)
+
+  return {
+    id
+  }
+}

@@ -27,11 +27,13 @@ const config: ConfigFile = {
   outputFiles: {
     '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/assets?/i)
+    },'../../js/src/core/modules/data-object/data-object-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/data-object?/i)
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/translation/i)
     },
-    '../../js/src/core/modules/asset/properties-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/properties/i)
     },
     '../../js/src/core/modules/element/editor/workflow-api-slice.gen.ts': {

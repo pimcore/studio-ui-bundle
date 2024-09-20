@@ -14,9 +14,9 @@
 import React from 'react'
 import { EditorTabs as EditorTabsView } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { useTranslation } from 'react-i18next'
-import { type IAssetEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IAssetEditorTabManager'
+import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 
-export const TabsContainer = ({ tabManager }: { tabManager: IAssetEditorTabManager }): React.JSX.Element => {
+export const TabsContainer = ({ tabManager }: { tabManager: IElementEditorTabManager }): React.JSX.Element => {
   const { t } = useTranslation()
 
   const tabs = tabManager.getTabs()

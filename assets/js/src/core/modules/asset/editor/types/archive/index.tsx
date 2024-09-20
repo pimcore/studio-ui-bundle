@@ -19,12 +19,14 @@ import {
   TAB_CUSTOM_METADATA,
   TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
-  TAB_PROPERTIES,
   TAB_SCHEDULE,
   TAB_TAGS,
   TAB_VERSIONS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
+import {
+  TAB_PROPERTIES
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {

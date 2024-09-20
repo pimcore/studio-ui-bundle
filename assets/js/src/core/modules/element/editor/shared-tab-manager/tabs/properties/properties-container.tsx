@@ -11,16 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type InputRef, Segmented, Select } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import { useStyle } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container.styles'
-import { usePropertyGetCollectionQuery } from '@Pimcore/modules/asset/properties-api-slice-enhanced'
+import { useStyle } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container.styles'
+import { usePropertyGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import Input from 'antd/es/input/Input'
-import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/components/table/table'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { Table } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/components/table/table'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -28,14 +26,17 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const [propertiesTableTab, setPropertiesTableTab] = React.useState<string>('own')
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
-  const { id } = useContext(AssetContext)
-  const { addProperty, properties } = useAssetDraft(id!)
+  const { id, elementType } = useElementContext()
+
+  const { addProperty, properties } = useElementDraft(id!, elementType!)
   const {
     showModal: showDuplicatePropertyModal,
     closeModal: closeDuplicatePropertyModal,
@@ -51,7 +52,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const typeSelectValue = useRef<string>('')
 
   const { data, isLoading } = usePropertyGetCollectionQuery({
-    elementType: 'asset'
+    elementType
   })
 
   React.useEffect(() => {
@@ -68,13 +69,13 @@ export const PropertiesContainer = (): React.JSX.Element => {
       className={ styles.tab }
       padded
     >
-      <Header title={ t('asset.asset-editor-tabs.properties.text') }>
+      <Header title={ t('properties.label') }>
         <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
           <Segmented<string>
             onChange={ setPropertiesTableTab }
             options={ [
-              { label: t('asset.asset-editor-tabs.properties.editable-properties'), value: 'own' },
-              { label: t('asset.asset-editor-tabs.properties.all-properties'), value: 'all' }
+              { label: t('properties.editable-properties'), value: 'own' },
+              { label: t('properties.all-properties'), value: 'all' }
             ] }
           />
 
@@ -111,12 +112,12 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 } }
                 type={ 'link' }
               >
-                {t('asset.asset-editor-tabs.properties.add-custom-property.cancel')}
+                {t('properties.add-custom-property.cancel')}
               </Button>
 
               <Input
                 onChange={ onKeyInputChange }
-                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.key') }
+                placeholder={ t('properties.add-custom-property.key') }
                 ref={ keyInputRef }
               />
 
@@ -129,7 +130,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   { value: 'object', label: t('data-type.object') },
                   { value: 'bool', label: t('data-type.checkbox') }
                 ] }
-                placeholder={ t('asset.asset-editor-tabs.properties.add-custom-property.type') }
+                placeholder={ t('properties.add-custom-property.type') }
               />
 
               <IconTextButton
@@ -138,7 +139,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   onAddPropertyClick()
                 } }
               >
-                {t('asset.asset-editor-tabs.properties.add-custom-property.add')}
+                {t('properties.add-custom-property.add')}
               </IconTextButton>
             </div>
             )}
@@ -153,7 +154,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   key={ 'properties-select' }
                   loading={ isLoading }
                   onSelect={ onPredefinedPropertyChange }
-                  placeholder={ t('asset.asset-editor-tabs.properties.predefined-properties') }
+                  placeholder={ t('properties.predefined-properties') }
                   showSearch
                 >
                   {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
@@ -167,12 +168,12 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 </Select>,
                 <IconTextButton
                   icon={ 'PlusCircleOutlined' }
-                  key={ t('asset.asset-editor-tabs.properties.add-custom-property') }
+                  key={ t('properties.add-custom-property') }
                   onClick={ () => {
                     setCreateManualPropertyMode(true)
                   } }
                 >
-                  {t('asset.asset-editor-tabs.properties.add-custom-property')}
+                  {t('properties.add-custom-property')}
                 </IconTextButton>
               ] }
               withSeparator

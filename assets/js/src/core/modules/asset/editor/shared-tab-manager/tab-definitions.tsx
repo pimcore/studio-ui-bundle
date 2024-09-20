@@ -19,9 +19,6 @@ import {
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
-import {
-  PropertiesContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
 import {
@@ -47,14 +44,6 @@ export const TAB_CUSTOM_METADATA: IEditorTab = {
   label: 'asset.asset-editor-tabs.custom-metadata',
   children: <CustomMetadataTabContainer />,
   icon: <Icon name={ 'data-management-2' } />,
-  isDetachable: true
-}
-
-export const TAB_PROPERTIES: IEditorTab = {
-  key: 'properties',
-  label: 'asset.asset-editor-tabs.properties.text',
-  children: <PropertiesContainer />,
-  icon: <Icon name={ 'settings2' } />,
   isDetachable: true
 }
 

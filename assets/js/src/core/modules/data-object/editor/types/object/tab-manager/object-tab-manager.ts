@@ -11,6 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
+import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
+import { injectable } from 'inversify'
 
-export interface IAssetEditorTab extends IEditorTab {}
+@injectable()
+export class ObjectTabManager extends TabManager implements IElementEditorTabManager {
+  constructor () {
+    super()
+    this.type = 'object'
+  }
+}

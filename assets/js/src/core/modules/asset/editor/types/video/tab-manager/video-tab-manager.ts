@@ -12,9 +12,9 @@
 */
 
 import { TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
-import { type IAssetEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IAssetEditorTabManager'
+import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 
-export class VideoTabManager extends TabManager implements IAssetEditorTabManager {
+export class VideoTabManager extends TabManager implements IElementEditorTabManager {
   constructor () {
     super()
     this.type = 'video'
