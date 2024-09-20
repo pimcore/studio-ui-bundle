@@ -1,4 +1,4 @@
-import { api } from "../../../../../../app/api/pimcore";
+import { api } from "../../../../../../app/api/pimcore/index";
 export const addTagTypes = ["Properties"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
