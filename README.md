@@ -2,9 +2,7 @@
 
 The Studio UI Bundle provides a Backend UI for Pimcore. It is based on the [React](https://react.dev/) framework.
 
-#### Backend Admin Panel: `{your-domain}/admin`
-
-#### Frontend UI: `{your-domain}/pimcore-studio`
+#### Admin UI: `{your-domain}/pimcore-studio`
 
 #### Storybook: `{your-domain/storybook}`
 
@@ -14,8 +12,7 @@ The Studio UI Bundle provides a Backend UI for Pimcore. It is based on the [Reac
 
 ## How to open
 
-- Login via the classic backend UI
-- Access it under `{your-domain}/pimcore-studio`
+Access it under `{your-domain}/pimcore-studio`
 
 #### Run the UI under a different URL
 
