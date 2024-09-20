@@ -30,7 +30,6 @@ export const useStyles = createStyles(({ css, token }) => {
             color: #565656;
             border-color: #EBEBEB;
         }
-
     `
   }
 })
