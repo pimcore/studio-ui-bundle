@@ -17,34 +17,46 @@ import { useStyles } from './divider.styles'
 
 export interface DividerProps {
   onMouseResize?: (event: MouseEvent) => void
+  onKeyboardResize?: (event: React.KeyboardEvent<HTMLDivElement>) => void
 }
 
-export const Divider = ({ onMouseResize }: DividerProps): React.JSX.Element => {
+export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const dividerRef = useRef<HTMLDivElement>(null)
   const enableResize = useRef(false)
 
   const [isHovered, setIsHovered] = useState(false)
-  const [isMouseDown, setIsMouseDown] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+  const [isMoving, setIsMoving] = useState(false)
 
   const isResizable = onMouseResize !== undefined
-  const isButtonVisible = isResizable && (isHovered || isMouseDown)
+
+  // Covered next cases:
+  // 1. Divider is hovered
+  // 2. Divider is focused by keyboard
+  // 3. Mouse is moving out of Divider area
+  const isButtonVisible = isResizable && (isHovered || isFocused || isMoving)
 
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
 
     return () => {
-      document.removeEventListener('mousemove', onMouseMove)
-      document.removeEventListener('mouseup', onMouseUp)
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
     }
   }, [])
 
   return (
     <div
       className={ [styles.dividerContainer, isResizable ? styles.resizable : ''].join(' ') }
-      onMouseDown={ onMouseDown }
+      onBlur={ handleBlur }
+      onFocus={ handleFocus }
+      onKeyDown={ onKeyboardResize }
+      onMouseDown={ handleMouseDown }
       onMouseEnter={ handleMouseEnter }
       onMouseLeave={ handleMouseLeave }
+      ref={ dividerRef }
       role='button'
       tabIndex={ 0 }
     >
@@ -62,19 +74,17 @@ export const Divider = ({ onMouseResize }: DividerProps): React.JSX.Element => {
     </div>
   )
 
-  function onMouseDown (): void {
+  function handleMouseDown (): void {
     enableResize.current = true
-    setIsMouseDown(true)
   }
 
-  function onMouseUp (): void {
+  function handleMouseUp (event: MouseEvent): void {
     enableResize.current = false
-    setIsMouseDown(false)
-  }
+    setIsMoving(false)
 
-  function onMouseMove (event: MouseEvent): void {
-    if (enableResize.current && onMouseResize !== undefined) {
-      onMouseResize(event)
+    // Hide resize icon in case if user release click outside divider area
+    if (event.target !== dividerRef.current) {
+      setIsHovered(false)
     }
   }
 
@@ -84,5 +94,20 @@ export const Divider = ({ onMouseResize }: DividerProps): React.JSX.Element => {
 
   function handleMouseLeave (): void {
     setIsHovered(false)
+  }
+
+  function handleFocus (): void {
+    setIsFocused(true)
+  }
+
+  function handleBlur (): void {
+    setIsFocused(false)
+  }
+
+  function handleMouseMove (event: MouseEvent): void {
+    if (enableResize.current && onMouseResize !== undefined) {
+      onMouseResize?.(event)
+      setIsMoving(true)
+    }
   }
 }

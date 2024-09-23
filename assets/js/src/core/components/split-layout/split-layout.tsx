@@ -52,7 +52,12 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
         { leftItemChildren }
       </SplitLayoutItem>
 
-      {withDivider && <Divider onMouseResize={ resizeAble ? onMouseResize : undefined } />}
+      {withDivider && (
+      <Divider
+        onKeyboardResize={ resizeAble ? onKeyboardResize : undefined }
+        onMouseResize={ resizeAble ? onMouseResize : undefined }
+      />
+      )}
 
       <SplitLayoutItem
         ref={ rightItemRef }
@@ -77,5 +82,35 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
       ...internalRightItemSizing,
       size: (rightRect.width - event.movementX) / elementRect.width * 100
     })
+  }
+
+  function onKeyboardResize (event: React.KeyboardEvent<HTMLDivElement>): void {
+    const increment = 5 // Define how much to resize with each key press
+    const leftRect = leftItemRef.current!.getBoundingClientRect()
+    const rightRect = rightItemRef.current!.getBoundingClientRect()
+
+    if (event.key === 'ArrowLeft') {
+      setInternalLeftItemSizing({
+        ...internalLeftItemSizing,
+        size: leftRect.width - increment
+      })
+
+      setInternalRightItemSizing({
+        ...internalRightItemSizing,
+        size: rightRect.width + increment
+      })
+    }
+
+    if (event.key === 'ArrowRight') {
+      setInternalLeftItemSizing({
+        ...internalLeftItemSizing,
+        size: leftRect.width + increment
+      })
+
+      setInternalRightItemSizing({
+        ...internalRightItemSizing,
+        size: rightRect.width - increment
+      })
+    }
   }
 }
