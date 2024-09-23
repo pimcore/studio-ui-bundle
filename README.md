@@ -1,6 +1,10 @@
-# Studio Ui
+# Studio UI
 
 The Studio UI Bundle provides a Backend UI for Pimcore. It is based on the [React](https://react.dev/) framework.
+
+#### Admin UI: `{your-domain}/pimcore-studio`
+
+#### Storybook: `{your-domain/storybook}`
 
 ## How to install
 
@@ -8,8 +12,7 @@ The Studio UI Bundle provides a Backend UI for Pimcore. It is based on the [Reac
 
 ## How to open
 
-- Login via the classic backend UI
-- Access it under `{your-domain}/pimcore-studio`
+Access it under `{your-domain}/pimcore-studio`
 
 #### Run the UI under a different URL
 
@@ -69,14 +72,14 @@ Use the following command to run the dev-server:
 
 `npm run dev-server`
 
-Now your dev-server should be running. 
+Now your dev-server should be running (the dev server started on the same URL, but it’s using Webpack HMR).  
 You can access it under your normal project domain: 
 
-`{your-domain}/admin/studio`
+`{your-domain}/pimcore-studio`
 
 ### Storybook
 
-Pimcore studio is using [Storybook](https://storybook.js.org/) for documentation of react components.
+Pimcore studio is using [Storybook](https://storybook.js.org/) for documentation of React components.
 
 #### Commands
 
@@ -87,7 +90,7 @@ npm run build-storybook // for building storybook for a static hosting
 
 #### Docker environment
 
-To use storybook in your local environment ensure that you open up port `6006`
+To use Storybook in your local environment ensure that you open up port `6006`
 
 ```
 node:
@@ -112,8 +115,8 @@ server {
 }
 ```
 
-Now ensure that storybook is running via `npm run storybook`.
-Finally you can access it under `{your-domain/storybook}`
+Now ensure that Storybook is running via `npm run storybook`.
+Finally, you can access it under `{your-domain/storybook}`
 
 ## Documentation Overview
 
