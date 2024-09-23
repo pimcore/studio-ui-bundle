@@ -21,7 +21,7 @@ interface OpenDataObjectWidgetProps {
 }
 
 interface UseDataObjectReturn {
-  openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
+  openDataObject: (props: OpenDataObjectWidgetProps) => void
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
