@@ -15,8 +15,6 @@ import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import React from 'react'
 import { useStyles } from './tag.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type LiteralUnion } from 'antd/es/_util/type'
-import type { PresetColorType, PresetStatusColorType } from 'antd/es/_util/colors'
 
 export interface TagProps extends AntTagPropsProps {
   children: React.JSX.Element | string
@@ -25,28 +23,12 @@ export interface TagProps extends AntTagPropsProps {
   theme?: TagTheme
 }
 
-export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link-blue' | 'link-purple'
+export type TagTheme = 'transparent'
 
-export const Tag = ({ children, theme, color, iconName, className, ...props }: TagProps): React.JSX.Element => {
+export const Tag = ({ children, icon, iconName, theme, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [styles.tag, className].filter(Boolean)
   theme !== undefined && classes.push(`theme-${theme}`)
-
-  const getThemeColor = (): LiteralUnion<PresetColorType | PresetStatusColorType> | undefined => {
-    switch (theme) {
-      case 'link-blue':
-        return 'blue'
-      case 'link-purple':
-        return 'processing'
-      default:
-        return color
-    }
-  }
-
-  const isBordered = (): boolean => {
-    const noBorderThemes: TagTheme[] = ['link-blue', 'link-purple']
-    return theme !== undefined ? !noBorderThemes.includes(theme) : true
-  }
 
   const renderIcon = (name: string): React.JSX.Element => (
     <Icon
@@ -56,29 +38,15 @@ export const Tag = ({ children, theme, color, iconName, className, ...props }: T
     />
   )
 
-  const getThemeIcon = (): React.JSX.Element | null => {
-    switch (theme) {
-      case 'user-role':
-        return renderIcon('user-01')
-      case 'admin-role':
-        return renderIcon('shield-02')
-      default:
-        return null
-    }
-  }
-
-  const getIcon = (): React.JSX.Element | null => {
-    if (theme !== undefined) {
-      return getThemeIcon()
-    } else if (iconName !== undefined) return renderIcon('theme')
+  const getIcon = (): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | Iterable<React.ReactNode> | React.ReactPortal | null | boolean => {
+    if (iconName !== undefined) return renderIcon(iconName)
+    else if (icon !== undefined) return icon
     else return null
   }
 
   return (
     <AntTag
-      bordered={ isBordered() }
       className={ classes.join(' ') }
-      color={ getThemeColor() }
       icon={ getIcon() }
       { ...props }
     >

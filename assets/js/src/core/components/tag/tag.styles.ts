@@ -17,10 +17,12 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     tag: css`
       &.ant-tag {
-          background-color: rgba(0, 0, 0, 0.04);
-          color: #565656;
-          border-color: #EBEBEB;
-
+        &.ant-tag-default {
+            background-color: rgba(0, 0, 0, 0.04);
+            color: #565656;
+            border-color: #EBEBEB;
+        }
+        
         &.theme-transparent {
           background-color: transparent;
           border-color: #D9D9D9;
