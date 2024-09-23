@@ -20,12 +20,10 @@ import type { PresetColorType, PresetStatusColorType } from 'antd/es/_util/color
 
 export interface TagProps extends AntTagPropsProps {
   children: React.JSX.Element | string
-  iconName?: IconNameType
+  iconName?: string
   className?: string
   theme?: TagTheme
 }
-
-export type IconNameType = 'world' | 'user'
 
 export type TagTheme = 'transparent' | 'user-role' | 'admin-role' | 'link-blue' | 'link-purple'
 
@@ -72,15 +70,8 @@ export const Tag = ({ children, theme, color, iconName, className, ...props }: T
   const getIcon = (): React.JSX.Element | null => {
     if (theme !== undefined) {
       return getThemeIcon()
-    }
-    switch (iconName) {
-      case 'world':
-        return renderIcon('world')
-      case 'user':
-        return renderIcon('user-01')
-      default:
-        return null
-    }
+    } else if (iconName !== undefined) return renderIcon('theme')
+    else return null
   }
 
   return (
