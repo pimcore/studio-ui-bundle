@@ -16,20 +16,20 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tag: css`
+      &.ant-tag {
+          background-color: rgba(0, 0, 0, 0.04);
+          color: #565656;
+          border-color: #EBEBEB;
+
+        &.theme-transparent {
+          background-color: transparent;
+          border-color: #D9D9D9;
+        }
+
         .anticon + span {
-            margin-inline-start: 4px;
+          margin-inline-start: 4px;
         }
-
-        &.ant-tag.theme-transparent {
-            background-color: transparent;
-        }
-
-        &.ant-tag.theme-user-role,
-        &.ant-tag.theme-admin-role {
-            background-color: rgba(0, 0, 0, 0.04);
-            color: #565656;
-            border-color: #EBEBEB;
-        }
+      }
     `
   }
 })
