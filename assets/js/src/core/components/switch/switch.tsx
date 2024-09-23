@@ -17,15 +17,15 @@ import { Switch as AntdSwitch } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface SwitchProps extends AntdSwitchProps {
-  tag: string
-  tagPosition: TagPosition
+  label: string
+  labelPosition: LabelPosition
 }
 
-export type TagPosition = 'start' | 'end'
+export type LabelPosition = 'start' | 'end'
 
 export const Switch = ({
-  tag,
-  tagPosition,
+  label,
+  labelPosition,
   ...props
 }: SwitchProps): React.JSX.Element => {
   return (
@@ -33,11 +33,11 @@ export const Switch = ({
       align={ 'center' }
       gap={ 'extra-small' }
     >
-      {tagPosition === 'start' && <p>{tag}</p>}
+      {labelPosition === 'start' && <p>{label}</p>}
       <AntdSwitch
         { ...props }
       />
-      {tagPosition === 'end' && <p>{tag}</p>}
+      {labelPosition === 'end' && <p>{label}</p>}
     </Flex>
   )
 }

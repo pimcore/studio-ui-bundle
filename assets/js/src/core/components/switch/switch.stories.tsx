@@ -26,14 +26,14 @@ export default config
 
 export const TagStart = {
   args: {
-    tag: 'Switch',
-    tagPosition: 'start'
+    label: 'Switch',
+    labelPosition: 'start'
   }
 }
 
 export const TagEnd = {
   args: {
-    tag: 'Switch',
-    tagPosition: 'end'
+    label: 'Switch',
+    labelPosition: 'end'
   }
 }

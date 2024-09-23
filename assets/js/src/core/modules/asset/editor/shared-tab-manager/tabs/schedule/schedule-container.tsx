@@ -145,9 +145,9 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           ] }
         />
         <Switch
+          label={ t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch') }
+          labelPosition={ 'start' }
           onChange={ setActiveOnly }
-          tag={ t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch') }
-          tagPosition={ 'start' }
           value={ activeOnly }
         />
       </Flex>
