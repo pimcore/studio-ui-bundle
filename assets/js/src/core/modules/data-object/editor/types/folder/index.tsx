@@ -24,7 +24,7 @@ moduleSystem.registerModule({
     const folderEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/FolderTabManager'])
 
     folderEditorTabManager.register(TAB_PROPERTIES)
-    console.log('register it')
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
       name: 'detachable-tab',
