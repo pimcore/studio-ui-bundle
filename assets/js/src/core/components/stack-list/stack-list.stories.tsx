@@ -38,7 +38,7 @@ export const _default = {
       {
         id: '1',
         sortable: true,
-        children: <Tag text={ 'Item 1' } />,
+        children: <Tag>'Item 1'</Tag>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
             languages={ ['EN', 'FR'] }
@@ -53,7 +53,7 @@ export const _default = {
       {
         id: '2',
         sortable: true,
-        children: <Tag text={ 'Item 2' } />,
+        children: <Tag>'Item 2'</Tag>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
             languages={ ['EN', 'FR'] }
@@ -68,7 +68,7 @@ export const _default = {
       {
         id: '3',
         sortable: true,
-        children: <Tag text={ 'Item 3' } />,
+        children: <Tag>'Item 3'</Tag>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
             languages={ ['EN', 'FR'] }

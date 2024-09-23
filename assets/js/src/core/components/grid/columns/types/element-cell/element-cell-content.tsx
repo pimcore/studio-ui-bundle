@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type MutableRefObject, forwardRef } from 'react'
+import React, { forwardRef, type MutableRefObject } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -35,17 +35,20 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     }
   }
 
+  const tagText = propertyData.data !== null && `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}`
+
   return (
     <div
       className={ [styles.link, ...getStateClasses()].join(' ') }
       ref={ ref }
     >
-      {propertyData.data !== null && (
-      <Tag
-        onClick={ openAssetWidget }
-        text={ `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}` }
-        theme='link-purple'
-      />
+      {tagText !== false && (
+        <Tag
+          onClick={ openAssetWidget }
+          theme='link-purple'
+        >
+          {tagText}
+        </Tag>
       )}
 
       <Icon

@@ -25,7 +25,7 @@ export default config
 
 export const _default = {
   args: {
-    text: 'default'
+    children: 'default'
   }
 }
 
@@ -33,7 +33,7 @@ export const ColorSuccessIconTag = {
   args: {
     iconName: 'world',
     color: 'success',
-    text: 'Published'
+    children: 'Published'
   }
 }
 
@@ -41,14 +41,14 @@ export const ColorBlueIconTag = {
   args: {
     iconName: 'user',
     color: 'blue',
-    text: 'Own draft'
+    children: 'Own draft'
   }
 }
 
 export const ThemeTransparent = {
   args: {
     theme: 'transparent',
-    text: 'ID: 150',
+    children: 'ID: 150',
     wrapperStyle: {
       backgroundColor: 'rgba(215, 199, 236, 0.4)',
       padding: '10px',
@@ -65,27 +65,27 @@ export const ThemeTransparent = {
 export const ThemeAdminRole = {
   args: {
     theme: 'admin-role',
-    text: 'Jane Doe'
+    children: 'Jane Doe'
   }
 }
 
 export const ThemeUserRole = {
   args: {
     theme: 'user-role',
-    text: 'Jane Doe'
+    children: 'Jane Doe'
   }
 }
 
 export const ThemeLinkBlue = {
   args: {
     theme: 'link-blue',
-    text: 'Car Images/Jaguar'
+    children: 'Car Images/Jaguar'
   }
 }
 
 export const ThemeLinkPurple = {
   args: {
     theme: 'link-purple',
-    text: 'Car Images/BMW'
+    children: 'Car Images/BMW'
   }
 }
