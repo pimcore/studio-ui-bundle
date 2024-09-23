@@ -14,7 +14,7 @@
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { store } from '@Pimcore/app/store'
-import { api } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps

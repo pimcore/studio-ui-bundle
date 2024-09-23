@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { api as dataObjectApi, type DataObject, type DataObjectGetByIdApiResponse } from '../data-object-api-slice.gen'
+import { api as dataObjectApi, type DataObject, type DataObjectGetByIdApiResponse } from '../data-object-api-slice-enhanced'
 import {
   addPropertyToDataObject,
   addScheduleToDataObject,
@@ -45,7 +45,6 @@ interface UseDataObjectDraftReturn extends
   dataObject: undefined | ReturnType<typeof selectDataObjectById>
 
   removeDataObjectFromState: () => void
-  removeTrackedChanges: () => void
 
   fetchDataObject: () => Promise<DataObject>
 }

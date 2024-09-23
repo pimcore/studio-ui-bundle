@@ -20,7 +20,7 @@ import {
   useTrackableChangesReducers
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
-import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
 }

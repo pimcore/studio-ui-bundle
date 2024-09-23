@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { type ElementType } from 'types/element-type.d'
+
 export type Tag = string | {
   type: string
   id: number
@@ -22,6 +24,9 @@ export const tagNames = {
   ASSET_DETAIL: 'ASSET_DETAIL',
   ASSET_TREE: 'ASSET_TREE',
   ASSET_LIST: 'ASSET_LIST',
+  DATA_OBJECT: 'DATA_OBJECT',
+  DATA_OBJECT_DETAIL: 'DATA_OBJECT_DETAIL',
+  DATA_OBJECT_TREE: 'DATA_OBJECT_TREE',
   WORKFLOW: 'WORKFLOW',
   VERSIONS: 'VERSION',
   PROPERTIES: 'PROPERTIES',
@@ -40,9 +45,13 @@ export const providingTags = {
   ASSET_LIST: (id) => [tagNames.ASSET, tagNames.ASSET_LIST, { type: tagNames.ASSET_DETAIL, id }],
   ASSET_WORKFLOW: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.WORKFLOW],
   ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.VERSIONS],
-  ASSET_PROPERTIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.PROPERTIES],
   ASSET_SCHEDULES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.SCHEDULES],
   ASSET_DEPENDENCIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.DEPENDENCIES],
+  DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL],
+  DATA_OBJECT_DETAIL_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT, id }],
+  DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
+  DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, { type: tagNames.DATA_OBJECT_DETAIL, id }, { type: tagNames.DATA_OBJECT_TREE, id }],
+  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.PROPERTIES],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
   ASSET_NOTES_AND_EVENTS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }]
@@ -58,10 +67,26 @@ export const invalidatingTags = {
   ASSET_LIST: () => [tagNames.ASSET_LIST],
   ASSET_WORKFLOW: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
-  ASSET_PROPERTIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_SCHEDULES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_DEPENDENCIES: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
+  DATA_OBJECT: () => [tagNames.DATA_OBJECT],
+  DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT_DETAIL],
+  DATA_OBJECT_DETAIL_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_DETAIL, id }],
+  DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
+  DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
+  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ASSET_NOTES_AND_EVENTS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }]
+}
+
+const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
+  switch (elementType) {
+    case 'asset':
+      return { type: tagNames.ASSET_DETAIL, id }
+    case 'data-object':
+      return { type: tagNames.DATA_OBJECT_DETAIL, id }
+  }
+
+  throw new Error(`Unknown element type: ${elementType}`)
 }

@@ -11,16 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   type UpdateSchedule,
   useScheduleUpdateForElementByTypeAndIdMutation
 } from '@Pimcore/modules/element/editor/schedule-api-slice-enhanced'
 import { type ElementType } from 'types/element-type.d'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 interface UseCleanupArchivedSchedulesResponseInterface {
   isLoading: boolean
@@ -30,8 +30,9 @@ interface UseCleanupArchivedSchedulesResponseInterface {
 }
 
 export const useSaveSchedules = (elementType: ElementType, id: number, showNotifications: boolean = true): UseCleanupArchivedSchedulesResponseInterface => {
-  const [updateSchedulesApi, { isLoading, isSuccess, isError }] = useScheduleUpdateForElementByTypeAndIdMutation()
-  const { asset, schedules, resetSchedulesChanges } = useAssetDraft(id)
+  const [updateSchedulesApi, { isLoading, isSuccess: isApiSuccess, isError }] = useScheduleUpdateForElementByTypeAndIdMutation()
+  const [isSuccess, setIsSuccess] = useState(false)
+  const { element, schedules, resetSchedulesChanges } = useElementDraft(id, elementType)
   const messageApi = useMessage()
   const { t } = useTranslation()
 
@@ -46,6 +47,10 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
   }, [isSuccess])
 
   useEffect(() => {
+    setIsSuccess(isApiSuccess)
+  }, [isApiSuccess])
+
+  useEffect(() => {
     if (isError && showNotifications) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error(t('save-failed'))
@@ -53,7 +58,8 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
   }, [isError])
 
   const saveSchedules = async (): Promise<void> => {
-    if (asset?.changes.schedules === undefined) {
+    if (element?.changes.schedules === undefined) {
+      setIsSuccess(true)
       return
     }
     await updateSchedulesApi({

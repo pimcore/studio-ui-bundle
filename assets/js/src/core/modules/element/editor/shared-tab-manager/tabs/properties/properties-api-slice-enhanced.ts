@@ -18,7 +18,7 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL],
   endpoints: {
     propertyGetCollectionForElementByTypeAndId: {
-      providesTags: (result, error, args) => providingTags.ASSET_PROPERTIES(args.id)
+      providesTags: (result, error, args) => providingTags.ELEMENT_PROPERTIES(args.elementType, args.id)
     }
   }
 })

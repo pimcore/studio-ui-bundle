@@ -28,7 +28,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import {
   type DataObjectUpdateByIdApiArg,
   useDataObjectUpdateByIdMutation
-} from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -36,12 +36,13 @@ export const Toolbar = (): React.JSX.Element => {
   const { dataObject, properties, removeTrackedChanges } = useDataObjectDraft(id!)
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
-  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id!, false)
+  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id!, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenu')
 
   useEffect(() => {
+    console.log('suc', isSuccess, isSchedulesSuccess)
     if (isSuccess && isSchedulesSuccess) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success(t('save-success'))
