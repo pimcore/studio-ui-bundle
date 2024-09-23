@@ -17,6 +17,7 @@ export const useStyles = createStyles(({ css, token }) => ({
   dividerContainer: css`
     position: relative;
     min-width: 24px;
+    outline: none;
   `,
 
   resizable: css`

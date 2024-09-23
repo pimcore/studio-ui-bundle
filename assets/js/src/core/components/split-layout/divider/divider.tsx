@@ -50,17 +50,21 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
   return (
     <div
       className={ [styles.dividerContainer, isResizable ? styles.resizable : ''].join(' ') }
-      onBlur={ handleBlur }
-      onFocus={ handleFocus }
-      onKeyDown={ onKeyboardResize }
       onMouseDown={ handleMouseDown }
       onMouseEnter={ handleMouseEnter }
       onMouseLeave={ handleMouseLeave }
       ref={ dividerRef }
-      role='button'
-      tabIndex={ 0 }
+      role={ 'button' }
+      tabIndex={ -1 }
     >
-      <div className={ styles.divider } />
+      <div
+        className={ styles.divider }
+        onBlur={ handleBlur }
+        onFocus={ handleFocus }
+        onKeyDown={ onKeyboardResize }
+        role={ 'button' }
+        tabIndex={ 0 }
+      />
 
       {isButtonVisible && (
         <div className={ styles.iconContainer }>
@@ -82,7 +86,7 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
     enableResize.current = false
     setIsMoving(false)
 
-    // Hide resize icon in case if user release click outside divider area
+    // Hide resize icon in case if user released click outside divider area
     if (event.target !== dividerRef.current) {
       setIsHovered(false)
     }
