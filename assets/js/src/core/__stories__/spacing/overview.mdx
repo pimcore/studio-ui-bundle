@@ -1,0 +1,22 @@
+import { SpacingOverview } from './spacing-overview.tsx';
+import {Meta, Title, Subtitle, Description} from '@storybook/blocks';
+
+<Meta title="Components/Layout/Spacing/01 Overview" />
+
+# Available spacings
+
+To create an overall consistent layout, we use a set of predefined spacings.  
+It's recommended to use these spacings to ensure a consistent look and feel across the application.  
+So always prefer the different string values from the list below over using custom numeric values.
+
+<SpacingOverview />
+
+## Utility classes
+
+The spacings are also available as utility classes. But it's recommended to use the box compoment if possible.
+
+```html
+<div class="p-small p-x-small p-y-large p-t-small p-r-small p-b-small p-l-small">Padding</div>
+<div class="m-small m-x-small m-y-large m-t-small m-r-small m-b-small m-l-small">Margin</div>
+```
+
