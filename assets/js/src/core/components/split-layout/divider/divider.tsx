@@ -16,17 +16,17 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './divider.styles'
 
 export interface DividerProps {
-  onResize?: (event: MouseEvent) => void
+  onMouseResize?: (event: MouseEvent) => void
 }
 
-export const Divider = ({ onResize }: DividerProps): React.JSX.Element => {
+export const Divider = ({ onMouseResize }: DividerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const enableResize = useRef(false)
 
   const [isHovered, setIsHovered] = useState(false)
   const [isMouseDown, setIsMouseDown] = useState(false)
 
-  const isResizable = onResize !== undefined
+  const isResizable = onMouseResize !== undefined
   const isButtonVisible = isResizable && (isHovered || isMouseDown)
 
   useEffect(() => {
@@ -73,8 +73,8 @@ export const Divider = ({ onResize }: DividerProps): React.JSX.Element => {
   }
 
   function onMouseMove (event: MouseEvent): void {
-    if (enableResize.current && onResize !== undefined) {
-      onResize(event)
+    if (enableResize.current && onMouseResize !== undefined) {
+      onMouseResize(event)
     }
   }
 

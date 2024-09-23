@@ -52,7 +52,7 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
         { leftItemChildren }
       </SplitLayoutItem>
 
-      {withDivider && <Divider onResize={ resizeAble ? onResize : undefined } />}
+      {withDivider && <Divider onMouseResize={ resizeAble ? onMouseResize : undefined } />}
 
       <SplitLayoutItem
         ref={ rightItemRef }
@@ -63,7 +63,7 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
     </Flex>
   )
 
-  function onResize (event: MouseEvent): void {
+  function onMouseResize (event: MouseEvent): void {
     const leftRect = leftItemRef.current!.getBoundingClientRect()
     const rightRect = rightItemRef.current!.getBoundingClientRect()
     const elementRect = elementRef.current!.getBoundingClientRect()
