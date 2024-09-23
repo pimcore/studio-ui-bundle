@@ -44,7 +44,7 @@ export const Padding = {
     ..._default.args,
     padding: { x: 'small', y: 'medium' },
     style: { background: '#f2f2f2' }
-  },
+  }
 }
 
 export const Margin = {
@@ -52,7 +52,7 @@ export const Margin = {
     ..._default.args,
     margin: { x: 'small', y: 'medium' },
     style: { background: '#f2f2f2' }
-  },
+  }
 }
 
 export const Inline = {
@@ -64,12 +64,12 @@ export const Inline = {
     ),
     inline: true,
     component: 'span',
-    padding: { x: 'small'},
+    padding: { x: 'small' }
   },
 
   render: (args) => {
     return (
-      <Text>Lorem <Box {...args} /> ipsum</Text>
+      <Text>Lorem <Box { ...args } /> ipsum</Text>
     )
   }
 }
