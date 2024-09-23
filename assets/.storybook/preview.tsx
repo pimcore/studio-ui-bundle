@@ -16,6 +16,7 @@ import '../js/src/core/bootstrap';
 import type { Preview } from "@storybook/react";
 import "../css/globals.css";
 import { GlobalProvider } from "../js/src/core/modules/app/global-provider";
+import { GlobalStyles } from "../js/src/core/styles/global.styles";
 import { App } from 'antd'
 import { Pimcore } from '../js/src/core/app/public-api'
 import { moduleSystem } from "../js/src/core/app/module-system/module-system";
@@ -71,6 +72,7 @@ const preview: Preview = {
       return (
         <GlobalProvider>
           <App>
+            <GlobalStyles />
             <Story />
           </App>
         </GlobalProvider>
