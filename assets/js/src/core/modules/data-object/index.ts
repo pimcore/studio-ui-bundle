@@ -13,36 +13,9 @@
 
 import '@Pimcore/modules/data-object/editor'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { container } from '@Pimcore/app/depency-injection'
-import type { ComponentRegistry } from '@Pimcore/modules/element/editor/services/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
-import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { EditorContainer } from '@Pimcore/modules/data-object/editor/editor-container'
-import { TitleContainer } from '@Pimcore/modules/data-object/editor/title/title-container'
-import { ObjectContainer } from '@Pimcore/modules/data-object/editor/types/object/object-container'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const componentRegistryService = container.get<ComponentRegistry>(serviceIds['DataObject/Editor/ComponentRegistry'])
 
-    componentRegistryService.registerComponent({
-      name: 'object',
-      component: ObjectContainer
-    })
-
-    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
-
-    widgetRegistryService.registerWidget({
-      name: 'data-object-editor',
-      component: EditorContainer,
-      titleComponent: TitleContainer
-    })
-
-    /* const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-
-        componentRegistry.register({
-            name: 'editorToolbarContextMenu',
-            component: EditorToolbarContextMenu
-        }) */
   }
 })

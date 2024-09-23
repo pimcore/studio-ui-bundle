@@ -20,12 +20,12 @@ import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manage
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 
 const FolderContainer = (): React.JSX.Element => {
-  const objectEditorTabManager = useInjection<FolderTabManager>(serviceIds['DataObject/Editor/FolderTabManager'])
+  const folderEditorTabManager = useInjection<FolderTabManager>(serviceIds['DataObject/Editor/FolderTabManager'])
 
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ objectEditorTabManager } />
+        <TabsContainer tabManager={ folderEditorTabManager } />
       }
 
       renderToolbar={

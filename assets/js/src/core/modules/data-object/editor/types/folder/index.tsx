@@ -21,24 +21,10 @@ import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types
 
 moduleSystem.registerModule({
   onInit: () => {
-    const objectEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/ObjectTabManager'])
-    /*
-    objectEditorTabManager.register({
-      key: 'view',
-      label: 'asset.asset-editor-tabs.view',
-      children: <PreviewContainer />,
-      icon: <Icon name={ 'image-05' } />
-    })
+    const folderEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/FolderTabManager'])
 
-    objectEditorTabManager.register({
-      key: 'edit',
-      label: 'asset.asset-editor-tabs.edit',
-      children: <EditTabContainer />,
-      icon: <Icon name={ 'edit' } />
-    }) */
-    console.log('tab prop')
-    objectEditorTabManager.register(TAB_PROPERTIES)
-
+    folderEditorTabManager.register(TAB_PROPERTIES)
+    console.log('register it')
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     widgetRegistryService.registerWidget({
       name: 'detachable-tab',
