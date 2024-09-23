@@ -39,7 +39,7 @@ export const CheckboxCell = (props: DefaultCellProps): React.JSX.Element => {
   function getCellContent (): React.JSX.Element {
     return (
       <Checkbox
-        defaultChecked={ props.getValue() }
+        checked={ props.getValue() }
         disabled={ props.column.columnDef.meta?.editable === false }
         onChange={ saveValue }
         ref={ checkboxRef }

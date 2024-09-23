@@ -15,8 +15,8 @@ import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
 import {
-  type VersionGetCollectionForElementByTypeAndIdApiArg,
-  type Version
+  type Version,
+  type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import {
   DetailsVersionsContainer
@@ -25,7 +25,6 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 import {
   DetailsVersionContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
-import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -34,9 +33,8 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
-import { isSet } from '@Pimcore/utils/helpers'
-import { VersionAccordion } from '@Pimcore/components/version-accordion/version-accordion'
+import { createVersionAccordionItem } from './create-version-accordion-item-functions'
+import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 
 interface VersionsViewProps {
   versions: Version[]
@@ -111,11 +109,24 @@ export const VersionsView = ({
             type={ 'default' }
           >{t('no')}</Button>
         </ModalFooter>
-            }
+          }
       title={ t('version.clear-unpublished-versions') }
     >
       <span>{t('version.confirm-clear-unpublished')}</span>
     </RenderModal>
+  )
+
+  const accordionItems = versions.map((version) =>
+    createVersionAccordionItem({
+      version,
+      detailedVersions,
+      comparingActive,
+      onClickDelete,
+      onClickPublish,
+      onBlurNote,
+      selectVersion,
+      setDetailedVersions
+    })
   )
 
   return (
@@ -130,75 +141,31 @@ export const VersionsView = ({
             <Content padded>
               <Header title={ t('version.versions') }>
                 {versions.length > 0 &&
-                                    (
-                                    <div>
-                                      <ButtonGroup
-                                        items={ [
-                                          <Button
-                                            className={ comparingActive ? 'compare-button' : '' }
-                                            key={ t('version.compare-versions') }
-                                            onClick={ onClickCompareVersion }
-                                          >{t('version.compare-versions')}</Button>,
-                                          <IconTextButton
-                                            icon={ 'trash' }
-                                            key={ t('version.clear-unpublished') }
-                                            loading={ clearingAll }
-                                            onClick={ showModal }
-                                          >
-                                            {t('version.clear-unpublished')}
-                                          </IconTextButton>] }
-                                      />
-                                      {modal}
-                                    </div>
-                                    )}
+                          (
+                          <div>
+                            <ButtonGroup
+                              items={ [
+                                <Button
+                                  className={ comparingActive ? 'compare-button' : '' }
+                                  key={ t('version.compare-versions') }
+                                  onClick={ onClickCompareVersion }
+                                >{t('version.compare-versions')}</Button>,
+                                <IconTextButton
+                                  icon={ 'trash' }
+                                  key={ t('version.clear-unpublished') }
+                                  loading={ clearingAll }
+                                  onClick={ showModal }
+                                >
+                                  {t('version.clear-unpublished')}
+                                </IconTextButton>] }
+                            />
+                            {modal}
+                          </div>
+                          )}
               </Header>
 
               {versions.length > 0 && (
-              <VerticalTimeline timeStamps={ versions.map((version) => {
-                const vId = { id: version.id, count: version.versionCount }
-                const selected = detailedVersions.some((v => v.id === version.id))
-                return (
-                  <VersionAccordion
-                    activeDefault={ selected }
-                    autosaved={ version.autosave }
-                    className={ [selected ? 'is-active' : '', version.published ? 'is-published' : ''].join(' ') }
-                    date={ formatDateTime({ timestamp: version.date, dateStyle: 'short', timeStyle: 'medium' }) }
-                    id={ version.id }
-                    key={ version.id }
-                    note={ version.note }
-                    onBlurNote={ (e): void => {
-                      onBlurNote(version.id, e.target.value.toString() as string)
-                    } }
-                    onChangeCheckbox={ (): void => {
-                      selectVersion(vId)
-                    } }
-                    onClick={ () => {
-                      if (comparingActive) {
-                        selectVersion(vId)
-                      } else {
-                        setDetailedVersions([{
-                          id: version.id,
-                          count: version.versionCount
-                        }])
-                      }
-                    } }
-                    onClickDelete={ (): void => {
-                      setDetailedVersions([])
-                      onClickDelete(version.id)
-                    } }
-                    onClickPublish={ async (): Promise<void> => {
-                      await onClickPublish(version.id)
-                    } }
-                    published={ version.published ?? false }
-                    savedBy={ version.user?.name ?? '' }
-                    scheduledDate={ isSet(version.scheduled) ? formatDateTime({ timestamp: version.scheduled!, dateStyle: 'short', timeStyle: 'short' }) : undefined }
-                    selectable={ comparingActive }
-                    selected={ selected }
-                    version={ version.versionCount }
-                  />
-                )
-              }) }
-              />
+                <AccordionTimeline items={ accordionItems } />
               )}
             </Content>
           )

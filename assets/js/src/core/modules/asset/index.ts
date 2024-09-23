@@ -18,6 +18,7 @@ import { TreeContainer } from './tree/tree-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import '@Pimcore/modules/asset/tree'
 
 moduleSystem.registerModule({
   onInit: () => {
