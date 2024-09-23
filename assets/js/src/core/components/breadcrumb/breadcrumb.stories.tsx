@@ -15,7 +15,7 @@ import type { Meta } from '@storybook/react'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { BreadcrumbSkeleton } from '@Pimcore/components/breadcrumb/breadcrumb.skeleton'
 import React from 'react'
-import {ElementType} from "types/element-type.d";
+import { type ElementType } from 'types/element-type.d'
 
 const config: Meta = {
   title: 'Components/Controls/Breadcrumb',
@@ -30,7 +30,10 @@ const config: Meta = {
     }
 
     return (
-      <Breadcrumb path={ path } elementType={elementType} />
+      <Breadcrumb
+        elementType={ elementType }
+        path={ path }
+      />
     )
   }
 }
