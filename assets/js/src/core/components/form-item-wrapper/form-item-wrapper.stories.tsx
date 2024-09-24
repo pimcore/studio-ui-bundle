@@ -37,7 +37,7 @@ export const ValidatedSwitch: StoryObj = {
                 name="toggle"
                 valuePropName="checked"
                 rules={[{
-                    required: true, transform: value => (value || undefined),
+                    required: true, transform: value => (value ?? undefined),
                     type: 'boolean', message: 'You must accept the terms and conditions!'
                 }]}
             >
