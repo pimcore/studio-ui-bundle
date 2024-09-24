@@ -33,12 +33,6 @@ export const useStyles = createStyles(({ css, token }) => {
             padding-top: ${token.paddingXXS}px;
             display: flex;
             justify-content: space-between;
-
-            .pimcore-schedule-toolbar__filters__active-switch {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
         }
     }
       
