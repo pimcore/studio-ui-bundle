@@ -15,13 +15,12 @@ import React, { useRef, useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './divider.styles'
 
-export interface DividerProps {
+interface DividerProps {
   onMouseResize?: (event: MouseEvent) => void
   onKeyboardResize?: (event: React.KeyboardEvent<HTMLDivElement>) => void
 }
 
 export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const dividerRef = useRef<HTMLDivElement>(null)
   const enableResize = useRef(false)
 
@@ -29,13 +28,7 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
   const [isFocused, setIsFocused] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
 
-  const isResizable = onMouseResize !== undefined
-
-  // Covered next cases:
-  // 1. Divider is hovered
-  // 2. Divider is focused by keyboard
-  // 3. Mouse is moving out of Divider area
-  const isButtonVisible = isResizable && (isHovered || isFocused || isMoving)
+  const { styles } = useStyles()
 
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove)
@@ -46,6 +39,41 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
       document.removeEventListener('mouseup', handleMouseUp)
     }
   }, [])
+
+  const isResizable = onMouseResize !== undefined
+
+  // Covered next cases:
+  // 1. Divider is hovered
+  // 2. Divider is focused by keyboard
+  // 3. Mouse is moving out of Divider area
+  const isButtonVisible = isResizable && (isHovered || isFocused || isMoving)
+
+  const handleMouseDown = (): void => { enableResize.current = true }
+
+  const handleMouseUp = (event: MouseEvent): void => {
+    enableResize.current = false
+    setIsMoving(false)
+
+    // Hide resize icon in case if user released click outside divider area
+    if (event.target !== dividerRef.current) {
+      setIsHovered(false)
+    }
+  }
+
+  const handleMouseEnter = (): void => { setIsHovered(true) }
+
+  const handleMouseLeave = (): void => { setIsHovered(false) }
+
+  const handleFocus = (): void => { setIsFocused(true) }
+
+  const handleBlur = (): void => { setIsFocused(false) }
+
+  const handleMouseMove = (event: MouseEvent): void => {
+    if (enableResize.current && onMouseResize !== undefined) {
+      onMouseResize?.(event)
+      setIsMoving(true)
+    }
+  }
 
   return (
     <div
@@ -77,41 +105,4 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
       )}
     </div>
   )
-
-  function handleMouseDown (): void {
-    enableResize.current = true
-  }
-
-  function handleMouseUp (event: MouseEvent): void {
-    enableResize.current = false
-    setIsMoving(false)
-
-    // Hide resize icon in case if user released click outside divider area
-    if (event.target !== dividerRef.current) {
-      setIsHovered(false)
-    }
-  }
-
-  function handleMouseEnter (): void {
-    setIsHovered(true)
-  }
-
-  function handleMouseLeave (): void {
-    setIsHovered(false)
-  }
-
-  function handleFocus (): void {
-    setIsFocused(true)
-  }
-
-  function handleBlur (): void {
-    setIsFocused(false)
-  }
-
-  function handleMouseMove (event: MouseEvent): void {
-    if (enableResize.current && onMouseResize !== undefined) {
-      onMouseResize?.(event)
-      setIsMoving(true)
-    }
-  }
 }
