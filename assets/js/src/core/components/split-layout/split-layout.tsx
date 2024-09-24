@@ -11,13 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex } from 'antd'
 import React, { useRef, useState } from 'react'
+import { Flex } from 'antd'
+import { SplitLayoutItem, type SplitLayoutItemProps } from './components/item/split-layout-item'
+import { Divider } from './components/divider/divider'
 import { useStyles } from './split-layout.styles'
-import { SplitLayoutItem, type SplitLayoutItemProps } from './item/split-layout-item'
-import { Divider } from './divider/divider'
 
-export interface ISplitLayoutItem extends Omit<SplitLayoutItemProps, 'withDivider' | 'onResize'> {}
+interface ISplitLayoutItem extends Omit<SplitLayoutItemProps, 'withDivider' | 'onResize'> {}
 
 export interface SplitLayoutProps {
   leftItem: ISplitLayoutItem
@@ -26,19 +26,67 @@ export interface SplitLayoutProps {
   resizeAble?: boolean
 }
 
-export interface ISplitLayoutItemSizing extends Omit<ISplitLayoutItem, 'children'> {}
+interface ISplitLayoutItemSizing extends Omit<ISplitLayoutItem, 'children'> {}
+
+const RESIZE_INCREMENT = 5 // define the amount to resize with each key press
 
 export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAble = false }: SplitLayoutProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const leftItemRef = useRef<HTMLDivElement>(null)
   const rightItemRef = useRef<HTMLDivElement>(null)
   const elementRef = useRef<HTMLDivElement>(null)
+
+  const { styles } = useStyles()
 
   const { children: leftItemChildren, ...leftSizing } = leftItem
   const { children: rightItemChildren, ...rightSizing } = rightItem
 
   const [internalLeftItemSizing, setInternalLeftItemSizing] = useState<ISplitLayoutItemSizing>(leftSizing)
   const [internalRightItemSizing, setInternalRightItemSizing] = useState<ISplitLayoutItemSizing>(rightSizing)
+
+  const onMouseResize = (event: MouseEvent): void => {
+    const leftRect = leftItemRef.current!.getBoundingClientRect()
+    const rightRect = rightItemRef.current!.getBoundingClientRect()
+    const elementRect = elementRef.current!.getBoundingClientRect()
+
+    setInternalLeftItemSizing({
+      ...internalLeftItemSizing,
+      size: (leftRect.width + event.movementX) / elementRect.width * 100
+    })
+
+    setInternalRightItemSizing({
+      ...internalRightItemSizing,
+      size: (rightRect.width - event.movementX) / elementRect.width * 100
+    })
+  }
+
+  const onKeyboardResize = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    const leftRect = leftItemRef.current!.getBoundingClientRect()
+    const rightRect = rightItemRef.current!.getBoundingClientRect()
+
+    if (event.key === 'ArrowLeft') {
+      setInternalLeftItemSizing({
+        ...internalLeftItemSizing,
+        size: leftRect.width - RESIZE_INCREMENT
+      })
+
+      setInternalRightItemSizing({
+        ...internalRightItemSizing,
+        size: rightRect.width + RESIZE_INCREMENT
+      })
+    }
+
+    if (event.key === 'ArrowRight') {
+      setInternalLeftItemSizing({
+        ...internalLeftItemSizing,
+        size: leftRect.width + RESIZE_INCREMENT
+      })
+
+      setInternalRightItemSizing({
+        ...internalRightItemSizing,
+        size: rightRect.width - RESIZE_INCREMENT
+      })
+    }
+  }
 
   return (
     <Flex
@@ -67,50 +115,4 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
       </SplitLayoutItem>
     </Flex>
   )
-
-  function onMouseResize (event: MouseEvent): void {
-    const leftRect = leftItemRef.current!.getBoundingClientRect()
-    const rightRect = rightItemRef.current!.getBoundingClientRect()
-    const elementRect = elementRef.current!.getBoundingClientRect()
-
-    setInternalLeftItemSizing({
-      ...internalLeftItemSizing,
-      size: (leftRect.width + event.movementX) / elementRect.width * 100
-    })
-
-    setInternalRightItemSizing({
-      ...internalRightItemSizing,
-      size: (rightRect.width - event.movementX) / elementRect.width * 100
-    })
-  }
-
-  function onKeyboardResize (event: React.KeyboardEvent<HTMLDivElement>): void {
-    const increment = 5 // Define how much to resize with each key press
-    const leftRect = leftItemRef.current!.getBoundingClientRect()
-    const rightRect = rightItemRef.current!.getBoundingClientRect()
-
-    if (event.key === 'ArrowLeft') {
-      setInternalLeftItemSizing({
-        ...internalLeftItemSizing,
-        size: leftRect.width - increment
-      })
-
-      setInternalRightItemSizing({
-        ...internalRightItemSizing,
-        size: rightRect.width + increment
-      })
-    }
-
-    if (event.key === 'ArrowRight') {
-      setInternalLeftItemSizing({
-        ...internalLeftItemSizing,
-        size: leftRect.width + increment
-      })
-
-      setInternalRightItemSizing({
-        ...internalRightItemSizing,
-        size: rightRect.width - increment
-      })
-    }
-  }
 }
