@@ -12,6 +12,7 @@
 */
 
 import React, { useRef, useEffect, useState } from 'react'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './divider.styles'
 
@@ -77,7 +78,7 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
 
   return (
     <div
-      className={ [styles.dividerContainer, isResizable ? styles.resizable : ''].join(' ') }
+      className={ cn(styles.dividerContainer, { [styles.resizable]: isResizable }) }
       onMouseDown={ handleMouseDown }
       onMouseEnter={ handleMouseEnter }
       onMouseLeave={ handleMouseLeave }

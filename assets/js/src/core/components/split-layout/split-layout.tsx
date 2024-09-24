@@ -13,6 +13,7 @@
 
 import React, { useRef, useState } from 'react'
 import { Flex } from 'antd'
+import cn from 'classnames'
 import { SplitLayoutItem, type SplitLayoutItemProps } from './components/item/split-layout-item'
 import { Divider } from './components/divider/divider'
 import { useStyles } from './split-layout.styles'
@@ -90,7 +91,7 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
 
   return (
     <Flex
-      className={ ['split-layout', styles.splitLayout].join(' ') }
+      className={ cn('split-layout', styles.splitLayout) }
       ref={ elementRef }
     >
       <SplitLayoutItem
