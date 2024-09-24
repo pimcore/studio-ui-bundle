@@ -18,6 +18,9 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useContext } from 'react'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { createJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 
 interface UseFileUploaderProps {
   parentId?: string
@@ -25,11 +28,18 @@ interface UseFileUploaderProps {
 
 interface UseFileUploaderReturn {
   uploadFile: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
+  uploadZip: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
 }
 
 export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUploaderReturn => {
+  const { addJob } = useJobs()
   const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!
+  let firstRun = true
+  let promiseResolve: (value: number | PromiseLike<number>) => void = () => {}
+  const promise: Promise<number> | undefined = new Promise(resolve => {
+    promiseResolve = resolve
+  })
 
   const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     console.log({ file, fileList })
@@ -51,11 +61,32 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
     }
   }
 
-  /* const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+  const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+    if (firstRun) {
+      firstRun = false
+      addJob(createJob({
+        title: 'Upload Zip',
+        topics: [topics['asset-upload-finished'], ...defaultTopics],
+        action: async () => {
+          return await promise
+        },
+        parentFolder: uploadContext.uploadingNode!
+      }))
+    }
+
     await uploadFile(props)
 
-    // TODO: add new job for zip upload
-  } */
+    const fileStates = props.fileList.map((file) => file.status)
+    const allFullFilled = fileStates.every(item => item === 'done')
 
-  return { uploadFile }
+    if (allFullFilled) {
+      if (props.file.response !== undefined) {
+        promiseResolve(props.file.response.id as number)
+      }
+
+      firstRun = true
+    }
+  }
+
+  return { uploadFile, uploadZip }
 }

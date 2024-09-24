@@ -33,8 +33,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { isLoading, isError, data } = apiHookResult
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
 
-  console.log()
-
   if (isLoading === true) {
     return <></>
   }

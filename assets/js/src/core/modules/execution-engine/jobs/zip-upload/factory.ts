@@ -15,7 +15,7 @@ import { type AbstractJob, JobStatus } from '../abstact-job'
 import { getUniqueId } from '../factory-helper'
 
 export interface DownloadJob extends AbstractJob {
-  type: 'unpack',
+  type: 'unpack'
   config: {
     parentFolder: string
   }

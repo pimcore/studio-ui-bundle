@@ -31,11 +31,6 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
           const doneFiles = changeProps.fileList.filter((item) => item.status === 'done')
           console.log(doneFiles)
 
-          // we need magic with the following things:
-          // - async
-          // - mercure
-          // - register something
-
           setFileList(changeProps.fileList.filter((item) => item.status !== 'done'))
         }
       } }

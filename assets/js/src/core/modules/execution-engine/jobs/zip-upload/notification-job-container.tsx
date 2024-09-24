@@ -25,6 +25,8 @@ export interface DownloadJobProps extends JobProps {
 }
 
 export const NotificationJobContainer = (props: DownloadJobProps): React.JSX.Element => {
+  console.log('NotificationJobContainer')
+
   const { id, topics, status, action } = props
   const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
   const [progress, setProgress] = useState<number>(0)
@@ -68,13 +70,17 @@ export const NotificationJobContainer = (props: DownloadJobProps): React.JSX.Ele
   )
 
   function openHandler (): void {
+    console.log('openHandler')
     action().then(actionJobId => {
-      jobId.current = actionJobId
+      console.log('actionJobId', actionJobId)
+
+      jobId.current = actionJobId + 1
     }).catch(console.error)
   }
 
   function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
+    console.log('messageHandler', data)
 
     if (data.jobRunId !== jobId.current) {
       return

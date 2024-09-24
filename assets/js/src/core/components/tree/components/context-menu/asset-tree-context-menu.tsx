@@ -26,7 +26,7 @@ export interface AssetTreeContextMenuProps {
 
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: props.node?.id })
+  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 
@@ -73,7 +73,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     name: 'zipFile',
     multiple: true,
     showUploadList: false,
-    onChange: uploadFileProcessor
+    onChange: uploadZipProcessor
   }
 
   return (
