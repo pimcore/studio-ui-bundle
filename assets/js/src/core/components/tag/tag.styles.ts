@@ -18,14 +18,14 @@ export const useStyles = createStyles(({ css, token }) => {
     tag: css`
       &.ant-tag {
         &.ant-tag-default {
-            background-color: rgba(0, 0, 0, 0.04);
-            color: #565656;
-            border-color: #EBEBEB;
+            background-color: ${token.colorFillTertiary};
+            color: ${token.colorTextLabel};
+            border-color: ${token.Tag.colorBorder};
         }
         
         &.theme-transparent {
-          background-color: transparent;
-          border-color: #D9D9D9;
+          background-color: ${token.colorFillTertiary};
+          border-color: ${token.colorBorder};
         }
 
         .anticon + span {
