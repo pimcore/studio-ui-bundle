@@ -14,10 +14,10 @@
 import React from 'react'
 import {
   RequiresPanel
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/requires-panel/requires-panel'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/requires-panel/requires-panel'
 import {
   RequiredByPanel
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/required-by-panel/required-by-panel'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/required-by-panel/required-by-panel'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 
 export const DependenciesTabContainer = (): React.JSX.Element => {

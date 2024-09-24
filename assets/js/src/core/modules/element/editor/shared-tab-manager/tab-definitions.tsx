@@ -17,9 +17,10 @@ import {
   PropertiesContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import { ScheduleTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-container'
 import {
-  ScheduleTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-container'
+  DependenciesTabContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
@@ -33,5 +34,12 @@ export const TAB_SCHEDULE: IEditorTab = {
   label: 'schedule.label',
   children: <ScheduleTabContainer />,
   icon: <Icon name={ 'schedule-outlined' } />,
+  isDetachable: true
+}
+export const TAB_DEPENDENCIES: IEditorTab = {
+  key: 'dependencies',
+  label: 'dependencies.label',
+  children: <DependenciesTabContainer />,
+  icon: <Icon name={ 'hierarchy' } />,
   isDetachable: true
 }

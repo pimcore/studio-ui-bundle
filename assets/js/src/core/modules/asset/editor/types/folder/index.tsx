@@ -24,12 +24,12 @@ import { type TypeRegistry } from '@Pimcore/components/grid/services/type-regist
 import { LinkContainer } from './tab-manager/tabs/list/grid-columns/link/link-container'
 import { AssetActions } from './tab-manager/tabs/list/grid-columns/asset-actions/asset-actions'
 import {
-  TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 import {
+  TAB_DEPENDENCIES,
   TAB_PROPERTIES
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 

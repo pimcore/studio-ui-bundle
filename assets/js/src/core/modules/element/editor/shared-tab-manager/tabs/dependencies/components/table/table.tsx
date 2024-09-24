@@ -16,7 +16,7 @@ import React from 'react'
 import {
   type Dependency,
   type DependencyGetCollectionByElementTypeApiResponse
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { useStyle } from './table.styles'
@@ -37,21 +37,21 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<DependencyTable>()
   const columns = [
     columnHelper.accessor('subType', {
-      header: t('asset.asset-editor-tabs.dependencies.columns.subtype'),
+      header: t('dependencies.columns.subtype'),
       meta: {
         type: 'dependency-type-icon'
       },
       size: 60
     }),
     columnHelper.accessor('path', {
-      header: t('asset.asset-editor-tabs.dependencies.columns.path'),
+      header: t('dependencies.columns.path'),
       meta: {
         autoWidth: true
       },
       size: 300
     }),
     columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.dependencies.columns.open'),
+      header: t('dependencies.columns.open'),
       meta: {
         type: 'open-element'
       },

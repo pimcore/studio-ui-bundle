@@ -19,7 +19,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import {
   TAB_CUSTOM_METADATA,
-  TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
   TAB_TAGS,
   TAB_VERSIONS,
@@ -27,6 +26,7 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 import { EditContainer } from '@Pimcore/modules/asset/editor/types/text/tab-manager/tabs/edit/edit-container'
 import {
+  TAB_DEPENDENCIES,
   TAB_PROPERTIES, TAB_SCHEDULE
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 

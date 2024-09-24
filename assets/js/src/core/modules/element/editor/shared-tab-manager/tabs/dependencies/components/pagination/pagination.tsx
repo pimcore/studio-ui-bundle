@@ -14,12 +14,12 @@
 import React from 'react'
 import {
   type DependencyGetCollectionByElementTypeApiResponse
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { t } from 'i18next'
 import { Pagination as PimPagination } from '@Pimcore/components/pagination/pagination'
 import {
   PaginationSkeleton
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/skeleton'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/pagination/skeleton'
 
 type PaginationProps = Partial<DependencyGetCollectionByElementTypeApiResponse> & {
   page: number

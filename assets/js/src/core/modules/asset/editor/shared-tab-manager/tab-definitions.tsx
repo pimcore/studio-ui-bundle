@@ -21,9 +21,6 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import {
-  DependenciesTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
-import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
@@ -51,14 +48,6 @@ export const TAB_VERSIONS: IEditorTab = {
   label: 'asset.asset-editor-tabs.versions',
   children: <VersionsTabContainer />,
   icon: <Icon name={ 'history-outlined' } />,
-  isDetachable: true
-}
-
-export const TAB_DEPENDENCIES: IEditorTab = {
-  key: 'dependencies',
-  label: 'asset.asset-editor-tabs.dependencies',
-  children: <DependenciesTabContainer />,
-  icon: <Icon name={ 'hierarchy' } />,
   isDetachable: true
 }
 

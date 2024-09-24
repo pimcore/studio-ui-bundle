@@ -11,34 +11,34 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   useDependencyGetCollectionByElementTypeQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
-import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/table/table'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
+import { Table } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/table/table'
 import {
   Pagination
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
-export const RequiresPanel = (): React.JSX.Element => {
+export const RequiredByPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
 
   const { data, isLoading } = useDependencyGetCollectionByElementTypeQuery({
-    elementType: 'asset',
+    elementType: elementType!,
     id: id!,
     page,
     pageSize,
-    dependencyMode: 'requires'
+    dependencyMode: 'required_by'
   })
 
   function onChange (page: number, pageSize: number): void {
@@ -47,27 +47,28 @@ export const RequiresPanel = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarLayout renderToolbar={
-      <Toolbar
-        justify='flex-end'
-        theme='secondary'
-      >
-        <Pagination
-          { ...data }
-          isLoading={ isLoading }
-          onChange={ onChange }
-          page={ page }
-        />
-      </Toolbar>
-    }
+    <ContentToolbarSidebarLayout
+      renderToolbar={
+        <Toolbar
+          justify='flex-end'
+          theme='secondary'
+        >
+          <Pagination
+            { ...data }
+            isLoading={ isLoading }
+            onChange={ onChange }
+            page={ page }
+          />
+        </Toolbar>
+      }
     >
       <Content
-        className={ 'pimcore-dependencies__requires' }
+        className={ 'pimcore-dependencies__required-by' }
         padded
       >
         <Header
-          icon={ <Icon name={ 'intersect-circle' } /> }
-          title={ t('asset.asset-editor-tabs.dependencies.requires') }
+          icon={ <Icon name={ 'corner-left-up' } /> }
+          title={ t('dependencies.required-by') }
         />
 
         <Table

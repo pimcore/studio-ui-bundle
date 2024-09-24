@@ -5,8 +5,6 @@ asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata
 asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
-schedule.label: Schedule
-asset.asset-editor-tabs.dependencies: Dependencies
 asset.asset-editor-tabs.notes-events: Notes & Events
 asset.asset-editor-tabs.tag: Tags
 asset.asset-editor-tabs.workflow.text: Workflow Details
@@ -96,6 +94,7 @@ no: No
 by: By
 field: Field
 no-data-available-yet: No data available yet.
+schedule.label: Schedule
 schedule.headline: Schedule
 schedule.columns.datetime: Date & Time
 schedule.columns.action: Action
@@ -113,11 +112,12 @@ schedule.select-an-action: Action
 schedule.select-a-version: Version
 schedule.archived: Archived
 schedule.archived.cleanup-all: Clean up all
-asset.asset-editor-tabs.dependencies.requires: Requires
-asset.asset-editor-tabs.dependencies.required-by: Required by
-asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
-asset.asset-editor-tabs.dependencies.columns.path: Path
-asset.asset-editor-tabs.dependencies.columns.open: Open
+dependencies.label: Dependencies
+dependencies.requires: Requires
+dependencies.required-by: Required by
+dependencies.columns.subtype: Subtype
+dependencies.columns.path: Path
+dependencies.columns.open: Open
 asset.listing.groups.system: System
 asset.listing.groups.default_metadata: Default Metadata
 asset.listing.groups.predefined_metadata: Predefined Metadata
