@@ -5,7 +5,7 @@ asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata
 asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
-asset.asset-editor-tabs.schedule: Schedule
+schedule.label: Schedule
 asset.asset-editor-tabs.dependencies: Dependencies
 asset.asset-editor-tabs.notes-events: Notes & Events
 asset.asset-editor-tabs.tag: Tags
@@ -96,23 +96,23 @@ no: No
 by: By
 field: Field
 no-data-available-yet: No data available yet.
-asset.asset-editor-tabs.schedule.headline: Schedule
-asset.asset-editor-tabs.schedule.columns.datetime: Date & Time
-asset.asset-editor-tabs.schedule.columns.action: Action
-asset.asset-editor-tabs.schedule.columns.version: Version
-asset.asset-editor-tabs.schedule.columns.active: Active
-asset.asset-editor-tabs.schedule.columns.actions: Delete
-asset.asset-editor-tabs.schedule.upcoming: Upcoming
-asset.asset-editor-tabs.schedule.all: All scheduled (upcoming & archive)
-asset.asset-editor-tabs.schedule.toolbar.filters.active-switch: Active only
-asset.asset-editor-tabs.schedule.toolbar.add: Add
-asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
-asset.asset-editor-tabs.schedule.version.delete: Delete version
-asset.asset-editor-tabs.schedule.version.publish: Publish version
-asset.asset-editor-tabs.schedule.select-an-action: Action
-asset.asset-editor-tabs.schedule.select-a-version: Version
-asset.asset-editor-tabs.schedule.archived: Archived
-asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
+schedule.headline: Schedule
+schedule.columns.datetime: Date & Time
+schedule.columns.action: Action
+schedule.columns.version: Version
+schedule.columns.active: Active
+schedule.columns.actions: Delete
+schedule.upcoming: Upcoming
+schedule.all: All scheduled (upcoming & archive)
+schedule.toolbar.filters.active-switch: Active only
+schedule.toolbar.add: Add
+schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
+schedule.version.delete: Delete version
+schedule.version.publish: Publish version
+schedule.select-an-action: Action
+schedule.select-a-version: Version
+schedule.archived: Archived
+schedule.archived.cleanup-all: Clean up all
 asset.asset-editor-tabs.dependencies.requires: Requires
 asset.asset-editor-tabs.dependencies.required-by: Required by
 asset.asset-editor-tabs.dependencies.columns.subtype: Subtype

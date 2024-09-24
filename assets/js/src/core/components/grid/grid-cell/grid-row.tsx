@@ -62,6 +62,7 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
   }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
 
   function isModifiedCell (cellId: string): boolean {
+    console.log('is modified?', cellId, memoModifiedCells, memoModifiedCells.find((item) => item.columnId === cellId) !== undefined)
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
   }
 }

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
 import { Switch } from 'antd'
@@ -22,30 +22,30 @@ import {
 } from '@Pimcore/modules/element/editor/schedule-api-slice-enhanced'
 import {
   Table
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   useSaveSchedules
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(false)
-  const { asset, schedules, setSchedules, addSchedule, removeSchedule } = useAssetDraft(id!)
-  const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules('asset', id!)
+  const { element, schedules, setSchedules, addSchedule, removeSchedule } = useElementDraft(id!, elementType!)
+  const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules(elementType!, id!)
 
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
-    elementType: 'asset',
+    elementType: elementType!,
     id: id!
   })
 
@@ -101,7 +101,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
       className={ styles.tab }
       padded
     >
-      <Header title={ t('asset.asset-editor-tabs.schedule.headline') }>
+      <Header title={ t('schedule.headline') }>
         <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
@@ -119,18 +119,18 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               })
             } }
           >
-            {t('asset.asset-editor-tabs.schedule.toolbar.add')}
+            {t('schedule.toolbar.add')}
           </IconTextButton>,
 
           <Button
             className={ 'pimcore-schedule-toolbar__headline__buttons__save' }
-            disabled={ asset?.changes.schedules === undefined }
+            disabled={ element?.changes.schedules === undefined }
             key={ 'save' }
             loading={ isSaveLoading }
             onClick={ saveSchedules }
             type={ 'primary' }
           >
-            {t('asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks')}
+            {t('schedule.toolbar.save-scheduled-tasks')}
           </Button>
         ] }
         />
@@ -140,12 +140,12 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <Segmented
           onChange={ setScheduleTab }
           options={ [
-            { label: t('asset.asset-editor-tabs.schedule.upcoming'), value: 'upcoming' },
-            { label: t('asset.asset-editor-tabs.schedule.all'), value: 'all' }
+            { label: t('schedule.upcoming'), value: 'upcoming' },
+            { label: t('schedule.all'), value: 'all' }
           ] }
         />
         <div className={ 'pimcore-schedule-toolbar__filters__active-switch' }>
-          <p>{t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch')}</p>
+          <p>{t('schedule.toolbar.filters.active-switch')}</p>
           <Switch
             onChange={ setActiveOnly }
             value={ activeOnly }
@@ -164,7 +164,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <>
           <div className={ 'pimcore-schedule-content__archive__toolbar' }>
             <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
-              {t('asset.asset-editor-tabs.schedule.archived')}
+              {t('schedule.archived')}
             </p>
 
             <IconTextButton
@@ -172,7 +172,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               icon={ 'trash' }
               onClick={ cleanupArchivedVersions }
             >
-              {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
+              {t('schedule.archived.cleanup-all')}
             </IconTextButton>
           </div>
 

@@ -13,13 +13,25 @@
 
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { PropertiesContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container'
+import {
+  PropertiesContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import {
+  ScheduleTabContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-container'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
   label: 'properties.label',
   children: <PropertiesContainer />,
   icon: <Icon name={ 'settings2' } />,
+  isDetachable: true
+}
+export const TAB_SCHEDULE: IEditorTab = {
+  key: 'schedule',
+  label: 'schedule.label',
+  children: <ScheduleTabContainer />,
+  icon: <Icon name={ 'schedule-outlined' } />,
   isDetachable: true
 }

@@ -12,14 +12,14 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 type ScheduleTable = Schedule & {
   actions: React.ReactNode
@@ -28,14 +28,14 @@ type ScheduleTable = Schedule & {
 export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
-  const { asset, updateSchedule, removeSchedule } = useAssetDraft(id!)
+  const { id, elementType } = useElementContext()
+  const { element, updateSchedule, removeSchedule } = useElementDraft(id!, elementType!)
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: string, columnId: string }>>([])
 
   const columnHelper = createColumnHelper<ScheduleTable>()
   const columns = [
     columnHelper.accessor('date', {
-      header: t('asset.asset-editor-tabs.schedule.columns.datetime'),
+      header: t('schedule.columns.datetime'),
       meta: {
         type: 'date',
         editable: true,
@@ -46,14 +46,14 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       size: 200
     }),
     columnHelper.accessor('action', {
-      header: t('asset.asset-editor-tabs.schedule.columns.action'),
+      header: t('schedule.columns.action'),
       meta: {
         type: 'schedule-actions-select',
         editable: true
       }
     }),
     columnHelper.accessor('version', {
-      header: t('asset.asset-editor-tabs.schedule.columns.version'),
+      header: t('schedule.columns.version'),
       meta: {
         type: 'version-id-select',
         editable: true
@@ -61,7 +61,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       size: 80
     }),
     columnHelper.accessor('active', {
-      header: t('asset.asset-editor-tabs.schedule.columns.active'),
+      header: t('schedule.columns.active'),
       size: 60,
       meta: {
         type: 'checkbox',
@@ -72,7 +72,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       }
     }),
     columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.schedule.columns.actions'),
+      header: t('schedule.columns.actions'),
       cell: (info) => {
         return (
           <div className={ 'schedule-table--actions-column' }>
@@ -107,10 +107,10 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   }
 
   useEffect(() => {
-    if (modifiedCells.length > 0 && asset?.changes.schedules === undefined) {
+    if (modifiedCells.length > 0 && element?.changes.schedules === undefined) {
       setModifiedCells([])
     }
-  }, [asset])
+  }, [element])
 
   return (
     <div className={ styles.table }>

@@ -22,11 +22,11 @@ export const ActionsCell = (props: DefaultCellProps): React.JSX.Element => {
   const selectOptions = [
     {
       value: 'delete',
-      label: t('asset.asset-editor-tabs.schedule.version.delete')
+      label: t('schedule.version.delete')
     },
     {
       value: 'publish',
-      label: t('asset.asset-editor-tabs.schedule.version.publish')
+      label: t('schedule.version.publish')
     }
   ]
 

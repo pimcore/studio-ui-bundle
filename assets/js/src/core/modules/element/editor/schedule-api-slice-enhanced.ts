@@ -11,16 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './schedule-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.ASSET_DETAIL],
+  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     scheduleGetCollectionForElementByTypeAndId: {
       providesTags: (result, error, args) => {
-        return providingTags.ASSET_SCHEDULES(args.id)
+        return providingTags.ELEMENT_SCHEDULES(args.elementType, args.id)
       }
+    },
+    scheduleUpdateForElementByTypeAndId: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_SCHEDULES(args.elementType, args.id)
     }
   }
 })

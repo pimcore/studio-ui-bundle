@@ -18,7 +18,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { useDataObjectDraft } from '../../hooks/use-data-object-draft'
 import { DataObjectContext } from '../../data-object-provider'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useSaveSchedules } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
 import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'

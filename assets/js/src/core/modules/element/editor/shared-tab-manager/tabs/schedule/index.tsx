@@ -17,10 +17,10 @@ import type { TypeRegistry } from '@Pimcore/components/grid/services/type-regist
 import { serviceIds } from '@Pimcore/app/config/services'
 import {
   VersionIdCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/version-id-cell/version-id-cell'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/cells/version-id-cell/version-id-cell'
 import {
   ActionsCell
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/cells/actions-cell/actions-cell'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/cells/actions-cell/actions-cell'
 
 moduleSystem.registerModule({
   onInit: () => {

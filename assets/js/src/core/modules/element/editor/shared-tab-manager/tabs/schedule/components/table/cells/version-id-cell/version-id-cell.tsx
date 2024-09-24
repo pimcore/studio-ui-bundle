@@ -12,19 +12,19 @@
 */
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useVersionGetCollectionForElementByTypeAndIdQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
 import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useStyles } from './version-id-cell.styles'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const { data, isLoading } = useVersionGetCollectionForElementByTypeAndIdQuery({
-    elementType: 'asset',
+    elementType: elementType!,
     id: id!,
     page: 1,
     pageSize: 9999

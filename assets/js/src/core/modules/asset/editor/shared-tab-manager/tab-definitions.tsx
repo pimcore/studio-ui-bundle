@@ -20,7 +20,6 @@ import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
-import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
 import {
   DependenciesTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
@@ -52,14 +51,6 @@ export const TAB_VERSIONS: IEditorTab = {
   label: 'asset.asset-editor-tabs.versions',
   children: <VersionsTabContainer />,
   icon: <Icon name={ 'history-outlined' } />,
-  isDetachable: true
-}
-
-export const TAB_SCHEDULE: IEditorTab = {
-  key: 'schedule',
-  label: 'asset.asset-editor-tabs.schedule',
-  children: <ScheduleTabContainer />,
-  icon: <Icon name={ 'schedule-outlined' } />,
   isDetachable: true
 }
 
