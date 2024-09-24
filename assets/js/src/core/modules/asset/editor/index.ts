@@ -99,7 +99,7 @@ moduleSystem.registerModule({
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'editorToolbarContextMenu',
+      name: 'editorToolbarContextMenuAsset',
       component: EditorToolbarContextMenu
     })
   }

@@ -39,10 +39,9 @@ export const Toolbar = (): React.JSX.Element => {
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id!, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get('editorToolbarContextMenu')
+  const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
 
   useEffect(() => {
-    console.log('suc', isSuccess, isSchedulesSuccess)
     if (isSuccess && isSchedulesSuccess) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success(t('save-success'))

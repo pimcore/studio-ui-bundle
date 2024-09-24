@@ -23,6 +23,10 @@ import { TitleContainer } from './title/title-container'
 import { type ComponentRegistry } from '@Pimcore/modules/data-object/services/component-registry'
 import { ObjectContainer } from '@Pimcore/modules/data-object/editor/types/object/object-container'
 import { FolderContainer } from '@Pimcore/modules/data-object/editor/types/folder/folder-container'
+import type {
+  ComponentRegistry as GlobalComponentRegistry
+} from '@Pimcore/modules/app/component-registry/component-registry'
+import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -44,6 +48,13 @@ moduleSystem.registerModule({
       name: 'data-object-editor',
       component: EditorContainer,
       titleComponent: TitleContainer
+    })
+
+    const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+
+    componentRegistry.register({
+      name: 'editorToolbarContextMenuDataObject',
+      component: EditorToolbarContextMenu
     })
   }
 })

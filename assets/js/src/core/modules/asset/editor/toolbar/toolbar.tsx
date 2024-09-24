@@ -40,7 +40,7 @@ export const Toolbar = (): React.JSX.Element => {
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id!, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get('editorToolbarContextMenu')
+  const ContextMenu = componentRegistry.get('editorToolbarContextMenuAsset')
 
   useEffect(() => {
     if (isSuccess && isSchedulesSuccess) {

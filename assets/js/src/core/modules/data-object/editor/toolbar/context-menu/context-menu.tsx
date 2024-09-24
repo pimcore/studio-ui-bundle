@@ -15,18 +15,18 @@ import { Popconfirm } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import ButtonGroup from 'antd/es/button/button-group'
 import React, { useContext, useState } from 'react'
-import { api } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslation } from 'react-i18next'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { id } = useContext(AssetContext)
-  const { asset, removeAssetFromState } = useAssetDraft(id!)
+  const { id } = useContext(DataObjectContext)
+  const { dataObject, removeDataObjectFromState } = useDataObjectDraft(id!)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
 
   return (
@@ -53,24 +53,24 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
       return
     }
 
-    if (Object.keys(asset?.changes ?? {}).length > 0) {
+    if (Object.keys(dataObject?.changes ?? {}).length > 0) {
       setPopConfirmOpen(true)
     } else {
-      refreshAsset()
+      refreshDataObject()
     }
   }
 
   function onConfirm (): void {
     setPopConfirmOpen(false)
-    refreshAsset()
+    refreshDataObject()
   }
 
   function onCancel (): void {
     setPopConfirmOpen(false)
   }
 
-  function refreshAsset (): void {
-    removeAssetFromState()
-    dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id!)))
+  function refreshDataObject (): void {
+    removeDataObjectFromState()
+    dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id!)))
   }
 }
