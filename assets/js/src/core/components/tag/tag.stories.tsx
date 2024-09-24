@@ -25,7 +25,7 @@ export default config
 
 export const _default = {
   args: {
-    color:'default',
+    color: 'default',
     children: 'default'
   }
 }
@@ -33,7 +33,7 @@ export const _default = {
 export const ColorSuccessIconTag = {
   args: {
     iconName: 'world',
-    color: "success",
+    color: 'success',
     children: 'Published'
   }
 }
@@ -65,7 +65,7 @@ export const ThemeTransparent = {
 
 export const DefaultIconTag = {
   args: {
-    color:'default',
+    color: 'default',
     iconName: 'shield-02',
     children: 'Jane Doe'
   }
@@ -73,7 +73,7 @@ export const DefaultIconTag = {
 
 export const ColorBlueNotBordered = {
   args: {
-    bordered: false ,
+    bordered: false,
     color: 'blue',
     children: 'Car Images/Jaguar'
   }
@@ -81,7 +81,7 @@ export const ColorBlueNotBordered = {
 
 export const ColorProcessingNotBordered = {
   args: {
-    bordered: false ,
+    bordered: false,
     color: 'processing',
     children: 'Car Images/BMW'
   }
