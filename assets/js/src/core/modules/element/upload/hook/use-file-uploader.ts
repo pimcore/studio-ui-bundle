@@ -31,7 +31,9 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
   const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!
 
-  const uploadFile = async ({ fileList }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+  const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+    console.log({ file, fileList })
+
     if (parentId === undefined) {
       throw new Error('Parent ID is required')
     }
@@ -48,6 +50,12 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
       uploadContext.setUploadingNode(null)
     }
   }
+
+  /* const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+    await uploadFile(props)
+
+    // TODO: add new job for zip upload
+  } */
 
   return { uploadFile }
 }

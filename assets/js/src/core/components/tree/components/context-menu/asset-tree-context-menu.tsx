@@ -11,12 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Dropdown, type MenuProps, Upload, type UploadProps } from 'antd'
+import { Button, Dropdown, type MenuProps, type UploadProps } from 'antd'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { Upload } from '@Pimcore/components/upload/upload'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -84,7 +85,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         ></Button>
       </Upload>
 
-      <Upload { ...uploadZip }>
+      <Upload{ ...uploadZip }>
         <Button
           ref={ uploadZipRef }
           style={ { display: 'none' } }
