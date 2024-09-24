@@ -44,8 +44,9 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     >
       {tagText !== false && (
         <Tag
+          bordered={ false }
+          color="processing"
           onClick={ openAssetWidget }
-          theme='link-purple'
         >
           {tagText}
         </Tag>

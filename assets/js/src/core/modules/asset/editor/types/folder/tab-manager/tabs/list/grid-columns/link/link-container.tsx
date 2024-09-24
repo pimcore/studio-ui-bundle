@@ -36,8 +36,9 @@ export const LinkContainer = (props: DefaultCellProps): React.JSX.Element => {
   return (
     <div className={ [styles.link, 'default-cell__content'].join(' ') }>
       <Tag
+        bordered={ false }
+        color={ 'processing' }
         onClick={ openAssetWidget }
-        theme='link-purple'
       >
         {props.getValue()}
       </Tag>

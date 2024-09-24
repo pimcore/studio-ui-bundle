@@ -79,7 +79,7 @@ export const ColorBlueNotBordered = {
   }
 }
 
-export const ColorPurpleNotBordered = {
+export const ColorProcessingNotBordered = {
   args: {
     bordered: false ,
     color: 'processing',
