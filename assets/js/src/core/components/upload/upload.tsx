@@ -15,12 +15,15 @@ import React, { useState } from 'react'
 import { type UploadProps } from 'antd'
 import { Upload as AntUpload } from 'antd'
 import { type UploadFile } from 'antd/es/upload/interface'
+import { useStyles } from './upload.styles'
 
 export const Upload = (props: UploadProps): React.JSX.Element => {
+  const { styles } = useStyles()
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
   return (
     <AntUpload
+      className={ styles.upload }
       { ...props }
       fileList={ fileList }
       onChange={ (changeProps) => {
