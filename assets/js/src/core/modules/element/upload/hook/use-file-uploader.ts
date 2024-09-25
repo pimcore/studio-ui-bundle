@@ -11,7 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { UploadChangeParam } from 'antd/lib/upload'
 import type { UploadFile } from 'antd/es/upload/interface'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
@@ -21,6 +20,7 @@ import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { type UploadChangeParam } from '@Pimcore/components/upload/upload'
 
 interface UseFileUploaderProps {
   parentId?: string
@@ -37,10 +37,13 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
   const { addJob } = useJobs()
   const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!
-  let promiseResolve: (value: number | PromiseLike<number>) => void = () => {}
-  const promise: Promise<number> | undefined = new Promise(resolve => {
-    promiseResolve = resolve
-  })
+
+  // let promiseResolve: (value: number | PromiseLike<number>) => void = () => {}
+  // const promise: Promise<number> | undefined = new Promise(resolve => {
+  //  promiseResolve = resolve
+  // })
+
+  // console.log('promise', promise)
 
   const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (parentId === undefined) {
@@ -66,9 +69,9 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
       zipUploadFirstRun = [...zipUploadFirstRun, props.file.uid]
       addJob(createJob({
         title: 'Upload Zip',
-        topics: [topics['asset-upload-finished'], ...defaultTopics],
+        topics: [topics['zip-upload-finished'], topics['asset-upload-finished'], ...defaultTopics],
         action: async () => {
-          return await promise
+          return await props.promise!
         },
         parentFolder: uploadContext.uploadingNode!
       }))
@@ -79,11 +82,13 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
     const fileStates = props.fileList.map((file) => file.status)
     const allFullFilled = fileStates.every(item => item === 'done')
 
-    if (allFullFilled) {
-      if (props.file.response !== undefined) {
-        promiseResolve(props.file.response.id as number)
-      }
+    console.log('test', props.file.response)
+    if (props.file.response !== undefined) {
+      console.log('promise resolved! - yey')
+      props.promiseResolve(props.file.response.id as number)
+    }
 
+    if (allFullFilled) {
       // setZipUploadFirstRun(
       //  zipUploadFirstRun.filter((item) => item !== props.file.uid)
       // )
