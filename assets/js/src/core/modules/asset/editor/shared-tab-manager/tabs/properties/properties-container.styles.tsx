@@ -16,23 +16,11 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     tab: css`
-      display: flex;
-      flex-direction: column;
     `,
     toolbar: css`
-      display: flex;
-      gap: 12px;
-      align-items: center;
-
-      .pimcore-properties-toolbar__predefined-properties {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-          
-        .pimcore-properties-toolbar__predefined-properties__manual {
-          display: flex;
-          gap: 8px;
-          
+      .pimcore-properties-toolbar__predefined-properties {        
+        // @todo remove this once the antd select is fixed
+        .pimcore-properties-toolbar__predefined-properties__manual {          
           .ant-select {
             min-width: 100px;
           }
@@ -48,7 +36,6 @@ export const useStyle = createStyles(({ token, css }) => {
       }
     `,
     content: css`
-        padding: ${token.paddingXS}px;
     `
   }
 })

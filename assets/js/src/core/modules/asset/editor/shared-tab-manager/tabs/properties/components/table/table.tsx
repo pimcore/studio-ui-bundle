@@ -26,6 +26,8 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
+import { Text } from '@Pimcore/components/text/text'
+import { Box } from '@Pimcore/components/box/box'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -211,9 +213,12 @@ export const Table = ({
 
           {propertiesTableTab === 'all' && (
             <>
-              <p className={ 'headline' }>
-                {t('asset.asset-editor-tabs.properties.inherited.properties')}
-              </p>
+              <Box padding={ { y: 'small' } }>
+                <Text strong>
+                  {t('asset.asset-editor-tabs.properties.inherited.properties')}
+                </Text>
+              </Box>
+
               <Grid
                 autoWidth
                 columns={ allTableColumns }

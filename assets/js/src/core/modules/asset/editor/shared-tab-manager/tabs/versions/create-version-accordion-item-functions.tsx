@@ -22,6 +22,8 @@ import { useTranslation } from 'react-i18next'
 import { type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
 
 interface VersionIdentifiers {
@@ -141,14 +143,16 @@ export const createVersionAccordionItem = ({
   }
 
   const children = (
-    <>
-      <div className={ 'flexbox-start-end' }>
-        <Tag
-          theme={ 'transparent' }
-        >
-          {`ID: ${version.id}`}
-        </Tag>
-        <div>
+    <Flex
+      gap={ 'extra-small' }
+      vertical
+    >
+      <Flex
+        align='center'
+        justify='space-between'
+      >
+        <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
+        <Space size='mini'>
           {!published && (
             <IconTextButton
               className={ 'btn-publish' }
@@ -168,8 +172,8 @@ export const createVersionAccordionItem = ({
             onClick={ deleteVersion }
             type={ 'default' }
           />
-        </div>
-      </div>
+        </Space>
+      </Flex>
       {
                 isSet(scheduledDate) && (
                 <div className={ 'row-margin' }>
@@ -191,7 +195,7 @@ export const createVersionAccordionItem = ({
           placeholder={ 'Add a note' }
         />
       </div>
-    </>
+    </Flex>
   )
 
   return {

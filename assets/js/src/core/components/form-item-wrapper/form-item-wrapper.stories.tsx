@@ -11,11 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
 import { FormItemWrapper } from '@Pimcore/components/form-item-wrapper/form-item-wrapper'
 import { Switch } from '@Pimcore/components/switch/switch'
+import React from 'react'
 import { Checkbox, Form } from 'antd'
+
+/* eslint-disable @typescript-eslint/no-floating-promises */
 
 const config: Meta = {
   title: 'Components/layout/FormItemWrapper',
@@ -46,14 +48,9 @@ export const ValidatedSwitch: StoryObj = {
         <Switch
           label={ 'I accept the terms and conditions' }
           labelPosition={ 'start' }
-          onChange={ async () => {
+          onChange={ () => {
             const form = Form.useFormInstance()
-
-            try {
-              await form.validateFields(['acceptTerms'])
-            } catch (error) {
-              console.error(error)
-            }
+            form.validateFields(['acceptTerms'])
           } }
         />
       </FormItemWrapper>

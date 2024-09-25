@@ -26,7 +26,7 @@ export const FormItemWrapper = ({
     <Form.Item
       { ...props }
     >
-      { children }
+      {children}
     </Form.Item>
   )
 }

@@ -16,6 +16,7 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ css }) => {
   return {
     link: css`
+      // @todo make ellipsis a option for the tags and remove this afterwards
       .ant-tag {
         overflow: hidden;
         text-overflow: ellipsis;
