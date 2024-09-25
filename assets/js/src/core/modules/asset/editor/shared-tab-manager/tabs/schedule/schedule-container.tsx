@@ -12,26 +12,21 @@
 */
 
 import React, { useContext, useEffect, useState } from 'react'
-import { useStyles } from './schedule-container.styles'
 import { useTranslation } from 'react-i18next'
-import { Switch } from 'antd'
+import { Switch } from '@Pimcore/components/switch/switch'
 import { Button } from '@Pimcore/components/button/button'
 import {
   type Schedule as ApiSchedule,
   useScheduleGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/schedule-api-slice-enhanced'
-import {
-  Table
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
+import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { useSaveSchedules } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -40,7 +35,6 @@ import { Space } from '@Pimcore/components/space/space'
 import { Box } from '@Pimcore/components/box/box'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
-  const { styles } = useStyles()
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
@@ -102,7 +96,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   return (
     <Content
-      className={ styles.tab }
       padded
     >
       <Header title={ t('asset.asset-editor-tabs.schedule.headline') }>
@@ -141,8 +134,8 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
       </Header>
 
       <Flex
-        className={ 'pimcore-schedule-toolbar__filters' }
-        justify='space-between'
+        align={ 'center' }
+        justify={ 'space-between' }
       >
         <Segmented
           onChange={ setScheduleTab }
@@ -158,6 +151,8 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         >
           <Text>{t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch')}</Text>
           <Switch
+            label={ t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch') }
+            labelPosition={ 'start' }
             onChange={ setActiveOnly }
             value={ activeOnly }
           />

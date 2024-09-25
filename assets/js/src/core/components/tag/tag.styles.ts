@@ -15,8 +15,23 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    tab: css`
+    tag: css`
+      &.ant-tag {
+        &.ant-tag-default {
+            background-color: ${token.colorFillTertiary};
+            color: ${token.colorTextLabel};
+            border-color: ${token.Tag.colorBorder};
+        }
         
+        &.theme-transparent {
+          background-color: ${token.colorFillTertiary};
+          border-color: ${token.colorBorder};
+        }
+
+        .anticon + span {
+          margin-inline-start: 4px;
+        }
+      }
     `
   }
 })
