@@ -15,10 +15,10 @@ import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './dependencies-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DEPENDENCIES],
+  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.DEPENDENCIES],
   endpoints: {
     dependencyGetCollectionByElementType: {
-      providesTags: (result, error, args) => providingTags.ASSET_DEPENDENCIES(args.id)
+      providesTags: (result, error, args) => providingTags.ELEMENT_DEPENDENCIES(args.elementType, args.id)
     }
   }
 })
