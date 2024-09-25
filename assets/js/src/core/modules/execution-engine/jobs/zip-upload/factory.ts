@@ -14,21 +14,21 @@
 import { type AbstractJob, JobStatus } from '../abstact-job'
 import { getUniqueId } from '../factory-helper'
 
-export interface DownloadJob extends AbstractJob {
+export interface ZipUploadJob extends AbstractJob {
   type: 'unpack'
   config: {
     parentFolder: string
   }
 }
 
-export interface DownloadJobFactoryArgs {
+export interface ZipUploadFactoryArgs {
   action: AbstractJob['action']
   title: AbstractJob['title']
   topics: AbstractJob['topics']
   parentFolder: string
 }
 
-export const createJob = (job: DownloadJobFactoryArgs): DownloadJob => {
+export const createJob = (job: ZipUploadFactoryArgs): ZipUploadJob => {
   return {
     id: getUniqueId(),
     action: job.action,

@@ -17,14 +17,14 @@ import { useServerSideEvent } from '@Pimcore/utils/hooks/use-server-side-event'
 import { useJobs } from '../../hooks/useJobs'
 import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
-import { type DownloadJob } from './factory'
+import { type ZipUploadJob } from './factory'
 import { useTranslation } from 'react-i18next'
 
-export interface DownloadJobProps extends JobProps {
-  config: DownloadJob['config']
+export interface ZipUploadJobProps extends JobProps {
+  config: ZipUploadJob['config']
 }
 
-export const NotificationJobContainer = (props: DownloadJobProps): React.JSX.Element => {
+export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.Element => {
   console.log('NotificationJobContainer')
 
   const { id, topics, status, action } = props
@@ -74,7 +74,7 @@ export const NotificationJobContainer = (props: DownloadJobProps): React.JSX.Ele
     action().then(actionJobId => {
       console.log('actionJobId', actionJobId)
 
-      jobId.current = actionJobId + 1
+      jobId.current = actionJobId
     }).catch(console.error)
   }
 
