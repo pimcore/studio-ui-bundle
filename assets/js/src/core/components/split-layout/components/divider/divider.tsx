@@ -77,20 +77,20 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/interactive-supports-focus
     <div
       className={ cn(styles.dividerContainer, { [styles.resizable]: isResizable }) }
       onMouseDown={ handleMouseDown }
       onMouseEnter={ handleMouseEnter }
       onMouseLeave={ handleMouseLeave }
       ref={ dividerRef }
-      role={ 'button' }
-      tabIndex={ -1 }
     >
       <div
         className={ styles.divider }
         onBlur={ handleBlur }
         onFocus={ handleFocus }
         onKeyDown={ onKeyboardResize }
+        // We should focus on the divider line instead of the divider line wrapper
         role={ 'button' }
         tabIndex={ 0 }
       />
