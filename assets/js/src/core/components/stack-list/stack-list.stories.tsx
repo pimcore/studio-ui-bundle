@@ -14,7 +14,7 @@
 import { type Meta } from '@storybook/react'
 import { StackList } from './stack-list'
 import React from 'react'
-import { Tag } from 'antd'
+import { Tag } from '@Pimcore/components/tag/tag'
 import { ButtonGroup } from '../button-group/button-group'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { IconButton } from '../icon-button/icon-button'

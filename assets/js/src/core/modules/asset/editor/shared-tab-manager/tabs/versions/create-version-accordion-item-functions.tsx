@@ -14,7 +14,7 @@
 import React, { useState } from 'react'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isSet } from '@Pimcore/utils/helpers'
-import { Checkbox, Input, Tag } from 'antd'
+import { Checkbox, Input } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
 import { type TimeLineAccordionItemType } from '@Pimcore/components/accordion-timeline/accordion-timeline'
@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { type Version } from '@Pimcore/modules/element/editor/version-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Tag } from '@Pimcore/components/tag/tag'
 
 interface VersionIdentifiers {
   id: number
@@ -109,24 +110,20 @@ export const createVersionAccordionItem = ({
   if (published) {
     themeByState = 'theme-success'
     extra = (
-      <Tag className={ ['title-tag', 'title-tag__published'].join(' ') }>
-        <Icon
-          className="tag-icon"
-          name="world"
-          options={ { width: '12px', height: '12px' } }
-        />
-        {t('version.published')}
+      <Tag
+        color="success"
+        iconName={ 'world' }
+      >
+        { t('version.published') }
       </Tag>
     )
   } else if (isSet(ownDraft) && ownDraft) {
     extra = (
-      <Tag className={ ['title-tag', 'title-tag__own-draft'].join(' ') }>
-        <Icon
-          className="tag-icon"
-          name="user-01"
-          options={ { width: '12px', height: '12px' } }
-        />
-        {t('version.own-draft')}
+      <Tag
+        color="blue"
+        iconName="user"
+      >
+        { t('version.own-draft') }
       </Tag>
     )
   }
@@ -146,7 +143,11 @@ export const createVersionAccordionItem = ({
   const children = (
     <>
       <div className={ 'flexbox-start-end' }>
-        <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
+        <Tag
+          theme={ 'transparent' }
+        >
+          {`ID: ${version.id}`}
+        </Tag>
         <div>
           {!published && (
             <IconTextButton

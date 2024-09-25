@@ -87,6 +87,7 @@ import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
 import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
+import shield02 from '@Pimcore/assets/icons/shield-02.inline.svg'
 import intersectCircle from '@Pimcore/assets/icons/intersect-circle.inline.svg'
 import cornerLeftUp from '@Pimcore/assets/icons/corner-left-up.inline.svg'
 import Icon from '@Pimcore/assets/icons/icon.inline.svg'
@@ -338,6 +339,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'user-01',
       component: user01
+    })
+    iconLibrary.register({
+      name: 'shield-02',
+      component: shield02
     })
     iconLibrary.register({
       name: 'share-03',
