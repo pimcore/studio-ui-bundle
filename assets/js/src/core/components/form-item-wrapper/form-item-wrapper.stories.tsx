@@ -46,9 +46,14 @@ export const ValidatedSwitch: StoryObj = {
         <Switch
           label={ 'I accept the terms and conditions' }
           labelPosition={ 'start' }
-          onChange={ () => {
+          onChange={ async () => {
             const form = Form.useFormInstance()
-            form.validateFields(['acceptTerms'])
+
+            try {
+              await form.validateFields(['acceptTerms'])
+            } catch (error) {
+              console.error(error)
+            }
           } }
         />
       </FormItemWrapper>
