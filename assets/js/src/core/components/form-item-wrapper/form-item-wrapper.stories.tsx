@@ -66,7 +66,7 @@ export const ValidatedCheckbox: StoryObj = {
                     valuePropName="checked"
                     rules={[{
                         required: true,
-                        transform: value => (value || undefined),
+                        transform: value => (value ?? undefined),
                         type: 'boolean',
                         message: 'You must accept the terms and conditions!'
                     }]}
