@@ -24,7 +24,6 @@ import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
-import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 
 export const TAB_EMBEDDED_METADATA: IEditorTab = {
@@ -64,13 +63,5 @@ export const TAB_TAGS: IEditorTab = {
   label: 'asset.asset-editor-tabs.tag',
   children: <TagsTabContainer />,
   icon: <Icon name={ 'tag-two-tone' } />,
-  isDetachable: true
-}
-
-export const TAB_WORKFLOW: IEditorTab = {
-  key: 'workflow',
-  label: 'asset.asset-editor-tabs.workflow',
-  children: <WorkflowTabContainer />,
-  icon: <Icon name={ 'workflow' } />,
   isDetachable: true
 }

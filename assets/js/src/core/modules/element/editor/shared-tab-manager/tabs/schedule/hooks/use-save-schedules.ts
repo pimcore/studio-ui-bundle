@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 import {
   type UpdateSchedule,
   useScheduleUpdateForElementByTypeAndIdMutation
-} from '@Pimcore/modules/element/editor/schedule-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced'
 import { type ElementType } from 'types/element-type.d'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'

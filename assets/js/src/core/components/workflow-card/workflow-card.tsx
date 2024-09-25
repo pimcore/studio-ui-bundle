@@ -13,7 +13,7 @@
 
 import React, { type ReactNode, useEffect } from 'react'
 import { Badge, Button, Card, Tag } from 'antd'
-import { type WorkflowDetails } from '@Pimcore/modules/element/editor/workflow-api-slice.gen'
+import { type WorkflowDetails } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'

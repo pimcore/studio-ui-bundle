@@ -21,6 +21,9 @@ import { ScheduleTabContainer } from '@Pimcore/modules/element/editor/shared-tab
 import {
   DependenciesTabContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
+import {
+  WorkflowTabContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-container'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
@@ -41,5 +44,12 @@ export const TAB_DEPENDENCIES: IEditorTab = {
   label: 'dependencies.label',
   children: <DependenciesTabContainer />,
   icon: <Icon name={ 'hierarchy' } />,
+  isDetachable: true
+}
+export const TAB_WORKFLOW: IEditorTab = {
+  key: 'workflow',
+  label: 'workflow.label',
+  children: <WorkflowTabContainer />,
+  icon: <Icon name={ 'workflow' } />,
   isDetachable: true
 }

@@ -36,7 +36,7 @@ const config: ConfigFile = {
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/properties/i)
     },
-    '../../js/src/core/modules/element/editor/workflow-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/workflow/i)
     },
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
@@ -45,7 +45,7 @@ const config: ConfigFile = {
     '../../js/src/core/modules/element/editor/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/version/i)
     },
-    '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/editor/shared-tab-manager/tabs/schedule/schedule-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/schedule/i)
     },
     '../../js/src/core/modules/element/element-api-slice.gen.ts': {

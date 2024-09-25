@@ -7,14 +7,14 @@ asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
 asset.asset-editor-tabs.notes-events: Notes & Events
 asset.asset-editor-tabs.tag: Tags
-asset.asset-editor-tabs.workflow.text: Workflow Details
-asset.asset-editor-tabs.workflow: Workflow
 asset.asset-editor-tabs.list.columns.preview: Preview
 asset.asset-editor-tabs.list.columns.id: ID
 asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
+workflow.label: Workflow
+workflow.headline: Workflow Details
 folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
 toolbar.reload.confirmation: Are you sure you want to reload this tab? All unsaved changes will be lost.

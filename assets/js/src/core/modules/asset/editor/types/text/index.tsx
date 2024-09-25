@@ -21,13 +21,12 @@ import {
   TAB_CUSTOM_METADATA,
   TAB_NOTES_AND_EVENTS,
   TAB_TAGS,
-  TAB_VERSIONS,
-  TAB_WORKFLOW
+  TAB_VERSIONS
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 import { EditContainer } from '@Pimcore/modules/asset/editor/types/text/tab-manager/tabs/edit/edit-container'
 import {
   TAB_DEPENDENCIES,
-  TAB_PROPERTIES, TAB_SCHEDULE
+  TAB_PROPERTIES, TAB_SCHEDULE, TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({

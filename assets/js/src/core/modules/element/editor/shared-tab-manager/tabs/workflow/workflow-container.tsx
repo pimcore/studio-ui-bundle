@@ -12,19 +12,19 @@
 */
 
 import React from 'react'
-import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/workflow-api-slice-enhanced'
+import { useWorkflowGetDetailsQuery } from './workflow-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { Space } from 'antd'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useAsset()
+  const { id, elementType } = useElementContext()
 
-  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType: 'asset', elementId: id! })
+  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType: elementType!, elementId: id! })
 
   return (
     <Content
@@ -32,7 +32,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
       padded
     >
       <Header
-        title={ t('asset.asset-editor-tabs.workflow.text') }
+        title={ t('workflow.headline') }
       />
 
       <Space direction="vertical">

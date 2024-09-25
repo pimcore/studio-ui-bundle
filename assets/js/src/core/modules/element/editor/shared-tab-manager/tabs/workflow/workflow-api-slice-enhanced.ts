@@ -13,24 +13,17 @@
 
 import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './workflow-api-slice.gen'
-
-function getWorkflowTagForElement (elementType: string, elementId: number): any {
-  const tag = providingTags.ASSET_WORKFLOW(elementId)
-
-  // @todo add element type for tags
-
-  return tag
-}
+import { type ElementType } from 'types/element-type.d'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.WORKFLOW],
+  addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.WORKFLOW],
 
   endpoints: {
     workflowGetDetails: {
-      providesTags: (result, error, args) => getWorkflowTagForElement(args.elementType, args.elementId)
+      providesTags: (result, error, args) => providingTags.ELEMENT_WORKFLOW(args.elementType, args.elementId)
     },
     workflowActionSubmit: {
-      invalidatesTags: (result, error, args) => getWorkflowTagForElement(args.submitAction.elementType, args.submitAction.elementId)
+      invalidatesTags: (result, error, args) => providingTags.ELEMENT_WORKFLOW(args.submitAction.elementType as ElementType, args.submitAction.elementId)
     }
   }
 })
