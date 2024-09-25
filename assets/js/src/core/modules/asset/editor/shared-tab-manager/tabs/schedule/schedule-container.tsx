@@ -34,6 +34,10 @@ import {
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { Space } from '@Pimcore/components/space/space'
+import { Box } from '@Pimcore/components/box/box'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { styles } = useStyles()
@@ -136,7 +140,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         />
       </Header>
 
-      <div className={ 'pimcore-schedule-toolbar__filters' }>
+      <Flex
+        className={ 'pimcore-schedule-toolbar__filters' }
+        justify='space-between'
+      >
         <Segmented
           onChange={ setScheduleTab }
           options={ [
@@ -144,14 +151,18 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             { label: t('asset.asset-editor-tabs.schedule.all'), value: 'all' }
           ] }
         />
-        <div className={ 'pimcore-schedule-toolbar__filters__active-switch' }>
-          <p>{t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch')}</p>
+
+        <Space
+          className={ 'pimcore-schedule-toolbar__filters__active-switch' }
+          size='extra-small'
+        >
+          <Text>{t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch')}</Text>
           <Switch
             onChange={ setActiveOnly }
             value={ activeOnly }
           />
-        </div>
-      </div>
+        </Space>
+      </Flex>
 
       <div
         className={ 'pimcore-schedule-content' }
@@ -161,25 +172,27 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
 
         {scheduleTab === 'all' && (
-        <>
-          <div className={ 'pimcore-schedule-content__archive__toolbar' }>
-            <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
-              {t('asset.asset-editor-tabs.schedule.archived')}
-            </p>
+          <>
+            <Box padding={ { y: 'small' } }>
+              <Space>
+                <Text strong>
+                  {t('asset.asset-editor-tabs.schedule.archived')}
+                </Text>
 
-            <IconTextButton
-              disabled={ gridDataArchive.length === 0 }
-              icon={ 'trash' }
-              onClick={ cleanupArchivedVersions }
-            >
-              {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
-            </IconTextButton>
-          </div>
+                <IconTextButton
+                  disabled={ gridDataArchive.length === 0 }
+                  icon={ 'trash' }
+                  onClick={ cleanupArchivedVersions }
+                >
+                  {t('asset.asset-editor-tabs.schedule.archived.cleanup-all')}
+                </IconTextButton>
+              </Space>
+            </Box>
 
-          <Table
-            data={ filterSchedules(gridDataArchive ?? []) }
-          />
-        </>
+            <Table
+              data={ filterSchedules(gridDataArchive ?? []) }
+            />
+          </>
         )}
       </div>
     </Content>

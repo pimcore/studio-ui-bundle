@@ -13,7 +13,6 @@
 
 import React from 'react'
 import i18n from '@Pimcore/app/i18n'
-import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view.style'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
@@ -40,7 +39,6 @@ export const DetailsVersionView = ({
   onClickPrevious,
   onClickNext
 }: DetailsVersionViewProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
@@ -49,49 +47,52 @@ export const DetailsVersionView = ({
   ]
 
   return (
-    <div className={ styles['right-side'] }>
-      <Space
+    <Space
+      align="center"
+      direction="vertical"
+      size="large"
+      style={ { maxWidth: 600 } }
+    >
+      <Flex
         align="center"
-        direction="vertical"
-        size="large"
-        style={ { maxWidth: 600 } }
+        gap="small"
+        justify="center"
+        style={ { minHeight: 100 } }
       >
-        <Flex
-          align="center"
-          gap="small"
-          justify="center"
-          style={ { minHeight: 100 } }
-        >
-          <IconButton
-            disabled={ firstVersion }
-            icon={ 'left-outlined' }
-            onClick={ onClickPrevious }
-            type={ 'text' }
-          />
-          {imgSrc !== null
-            ? (
-              <PimcoreImage
-                className={ 'image-slider__image' }
-                src={ imgSrc }
-                style={ { maxHeight: 500, maxWidth: 500 } }
-              />
-              )
-            : null}
+        <IconButton
+          disabled={ firstVersion }
+          icon={ 'left-outlined' }
+          onClick={ onClickPrevious }
+          type={ 'text' }
+        />
+        {imgSrc !== null
+          ? (
+            <PimcoreImage
+              className={ 'image-slider__image' }
+              src={ imgSrc }
+              style={ { maxHeight: 500, maxWidth: 500 } }
+            />
+            )
+          : null}
 
-          <IconButton
-            disabled={ lastVersion }
-            icon={ 'right-outlined' }
-            onClick={ onClickNext }
-            type={ 'text' }
-          />
+        <IconButton
+          disabled={ lastVersion }
+          icon={ 'right-outlined' }
+          onClick={ onClickNext }
+          type={ 'text' }
+        />
+      </Flex>
 
-        </Flex>
+      <Flex
+        className="w-full"
+        justify='center'
+      >
         <Grid
           autoWidth
           columns={ columns }
           data={ data }
         />
-      </Space>
-    </div>
+      </Flex>
+    </Space>
   )
 }

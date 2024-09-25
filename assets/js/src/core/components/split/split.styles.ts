@@ -17,8 +17,19 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     split: css`
       .ant-divider {
-        height: 24px; 
         margin-inline: 0;
+      }
+
+      &.split--theme-secondary {
+        .ant-divider {
+          border-color: ${token.colorTextSecondary};
+        }
+      }
+
+      &.split--divider-size-large {
+        .ant-divider {
+          height: 24px;
+        }
       }
     `
   }

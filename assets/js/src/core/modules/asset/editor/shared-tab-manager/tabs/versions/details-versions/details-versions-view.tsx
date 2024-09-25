@@ -93,6 +93,7 @@ export const DetailsVersionsView = ({
 
         <Flex
           align="center"
+          className='w-full'
         >
           <Grid
             autoWidth
@@ -100,9 +101,7 @@ export const DetailsVersionsView = ({
             data={ gridData }
           />
         </Flex>
-
       </Space>
-
     </div>
   )
 }

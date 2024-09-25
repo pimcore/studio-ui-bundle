@@ -17,17 +17,7 @@ export const useStyles = createStyles(({ token, css }) => {
   const versionToken = { versionsLeftSideWidth: '395', ...token }
 
   return {
-    'right-side': css`
-      overflow: auto;
-      padding: ${token.paddingSM}px;
-      text-align: center;
-      display: ruby;
-
-      & > div {
-        display: flex;
-        flex-direction: row;
-      }
-      
+    'right-side': css`      
       & .highlight-cell {
         background-color: ${versionToken.colorWarningBg};
         font-weight: bold;

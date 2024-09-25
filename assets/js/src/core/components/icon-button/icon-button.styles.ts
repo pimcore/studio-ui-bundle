@@ -17,7 +17,8 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
       padding: 6px;
-      height: auto;
+      height: 32px;
+      width: 32px;
       line-height: 0;
 
       &.icon-button--theme-secondary {
@@ -26,6 +27,8 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.icon-button--minimal {
         padding: 0;
+        width: auto;
+        height: auto;
       }
     `
   }

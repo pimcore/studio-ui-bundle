@@ -20,6 +20,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 type ScheduleTable = Schedule & {
   actions: React.ReactNode
@@ -75,7 +76,11 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       header: t('asset.asset-editor-tabs.schedule.columns.actions'),
       cell: (info) => {
         return (
-          <div className={ 'schedule-table--actions-column' }>
+          <Flex
+            align='center'
+            className='w-full h-full'
+            justify='center'
+          >
             <IconButton
               icon={ 'trash' }
               onClick={ (): void => {
@@ -83,7 +88,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
               } }
               type="link"
             />
-          </div>
+          </Flex>
         )
       },
       size: 70
