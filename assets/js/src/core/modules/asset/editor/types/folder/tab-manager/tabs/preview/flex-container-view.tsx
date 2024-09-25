@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { Flex } from '@Pimcore/components/flex/flex'
 import React, { type ReactNode } from 'react'
-import { useStyles } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container-view.styles'
 
 interface FlexContainerProps {
   renderElements: ReactNode[]
@@ -20,11 +20,13 @@ interface FlexContainerProps {
 }
 
 const FlexContainerView = (props: FlexContainerProps): React.JSX.Element => {
-  const { styles } = useStyles()
   return (
-    <div className={ styles.flexContainer + ' ' + props.className ?? '' }>
+    <Flex
+      gap={ 'extra-small' }
+      wrap
+    >
       {props.renderElements}
-    </div>
+    </Flex>
   )
 }
 

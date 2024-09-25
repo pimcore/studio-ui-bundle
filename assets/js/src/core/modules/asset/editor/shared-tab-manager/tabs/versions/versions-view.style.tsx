@@ -14,8 +14,6 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
-  const versionToken = { versionsLeftSideWidth: '395', ...token }
-
   const themeToken = {
     highlightBackgroundColor: '#F6FFED',
     highlightBorderColor: '#B7EB8F',
@@ -28,47 +26,16 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     versions: css`
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-
       .title-tag__own-draft {
-            color: ${themeToken.signalColor};
-            border-color: ${themeToken.signalBorderColor};
-            background-color: ${themeToken.signalBackgroundColor};
+        color: ${themeToken.signalColor};
+        border-color: ${themeToken.signalBorderColor};
+        background-color: ${themeToken.signalBackgroundColor};
       }
 
       .title-tag__published {
         color: ${themeToken.highlightColor};
         border-color: ${themeToken.highlightBorderColor};
         background-color: ${themeToken.highlightBackgroundColor};
-      }
-      
-      .btn-publish {
-        margin-right: ${themeToken.marginXXS}px;
-      }
-
-      .row-margin {
-        margin-top: ${themeToken.marginXS}px;
-      }
-
-      .date-container {
-        margin-top: 3px;
-      }
-
-      .scheduled-date {
-        margin-left: ${themeToken.marginXXS}px;
-        color: ${themeToken.colorTextDescription};
-      }
-
-      & input.ant-input {
-        margin-top: 5px;
-      }
-
-      & .ant-checkbox-wrapper {
-        margin-right: 6px;
       }
 
       .ant-card-extra {
@@ -91,12 +58,6 @@ export const useStyles = createStyles(({ token, css }) => {
         bottom: 1px;
       }
 
-      .flexbox-start-end {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
       .id-tag {
         width: 56px;
         height: 22px;
@@ -108,48 +69,6 @@ export const useStyles = createStyles(({ token, css }) => {
         font-size: 12px;
         line-height: 20px;
       }
-      
-      & .left-side {
-            overflow: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 4px;
-
-            height: 100%;
-            width: ${versionToken.versionsLeftSideWidth}px;
-        }
-
-      .flexbox-start-end {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-      }
-
-        & .ant-btn-icon {
-            vertical-align: text-bottom;
-        }
-
-        & .compare-button {
-            background-color: ${versionToken.colorFillAlter};
-        }
-    `,
-    noContent: css`
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      
-          &:hover {
-              color: ${token.colorPrimaryHover};
-          }
-      }
-        
-        .empty-container {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
     `
   }
 }, { hashPriority: 'low' })

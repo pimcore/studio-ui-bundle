@@ -19,13 +19,13 @@ import {
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { useStyle } from './assigned-tags.styles'
 import {
   useOptimisticUpdate
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Flex } from 'antd'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -35,7 +35,6 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   const { t } = useTranslation()
   const [loadingRows, setLoadingRows] = useState({})
   const { id } = useContext(AssetContext)
-  const { styles } = useStyle()
   const [unassignTag] = useTagUnassignFromElementMutation()
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
@@ -85,7 +84,11 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
         }
 
         return (
-          <div className={ 'tags-table--actions-column' }>
+          <Flex
+            align='center'
+            className='w-full h-full'
+            justify='center'
+          >
             <IconButton
               disabled={ isLoading }
               icon={ 'trash' }
@@ -93,7 +96,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
               onClick={ handleClick }
               type="link"
             />
-          </div>
+          </Flex>
         )
       },
       size: 60
@@ -101,13 +104,11 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   ]
 
   return (
-    <div className={ styles.table }>
-      <Grid
-        columns={ columns }
-        data={ Object.values(tags) }
-        initialState={ { sorting: [{ id: 'path', desc: false }] } }
-        isLoading={ isLoading }
-      />
-    </div>
+    <Grid
+      columns={ columns }
+      data={ Object.values(tags) }
+      initialState={ { sorting: [{ id: 'path', desc: false }] } }
+      isLoading={ isLoading }
+    />
   )
 }

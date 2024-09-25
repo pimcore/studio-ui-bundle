@@ -16,14 +16,22 @@ import { Space, type SpaceProps } from '../space/space'
 import { Divider } from 'antd'
 import { useStyles } from '@Pimcore/components/split/split.styles'
 
-export interface SplitProps extends Omit<SpaceProps, 'split'> {}
+export interface SplitProps extends Omit<SpaceProps, 'split'> {
+  theme?: 'primary' | 'secondary'
+  dividerSize?: 'small' | 'large'
+}
 
-export const Split = (props: SplitProps): React.JSX.Element => {
+export const Split = ({ theme = 'primary', dividerSize = 'large', ...props }: SplitProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const classes = [
+    styles.split,
+    'split--theme-' + theme,
+    'split--divider-size-' + dividerSize
+  ].join(' ')
 
   return (
     <Space
-      className={ styles.split }
+      className={ classes }
       split={ <Divider type="vertical" /> }
       { ...props }
     />

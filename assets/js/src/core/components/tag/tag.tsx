@@ -12,12 +12,12 @@
 */
 
 import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { useStyles } from './tag.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface TagProps extends AntTagPropsProps {
-  children: React.JSX.Element | string
+  children: ReactNode
   iconName?: string
   className?: string
   theme?: TagTheme

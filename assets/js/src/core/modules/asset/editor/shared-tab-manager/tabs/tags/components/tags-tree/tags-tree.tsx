@@ -22,12 +22,10 @@ import {
   useCreateTreeStructure
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
 import {
-  useStyle
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree.styles'
-import {
   useOptimisticUpdate
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface TagsTreeProps {
   elementId: number
@@ -40,7 +38,6 @@ export interface TagsTreeProps {
 }
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
-  const { styles } = useStyle()
   const { Search } = Input
   const { createTreeStructure } = useCreateTreeStructure()
   const [replaceTagsMutation] = useTagBatchReplaceForElementsByTypeMutation()
@@ -76,9 +73,11 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   }
 
   return (
-    <>
+    <Flex
+      gap={ 'small' }
+      vertical
+    >
       <Search
-        className={ styles.search }
         loading={ isLoading }
         onChange={ (e) => {
           const { value } = e.target
@@ -86,19 +85,17 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
           setFilter(value)
         } }
         placeholder="Search"
-        style={ { marginBottom: 8 } }
       />
 
       <Tree
         checkStrictly
         checkable
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
-        className={ styles.tree }
         defaultExpandedKeys={ ['root'] }
         onCheck={ onCheck }
         showIcon
         treeData={ treeData }
       />
-    </>
+    </Flex>
   )
 }

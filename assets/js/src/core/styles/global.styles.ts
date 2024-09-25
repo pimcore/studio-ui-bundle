@@ -616,4 +616,20 @@ export const GlobalStyles = createGlobalStyle`
     // @todo check missing margin token
     margin-right: ${props => props.theme.sizeXXL}px;
   }
+
+  .relative {
+    position: relative;
+  }
+
+  .absolute {
+    position: absolute;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  .h-full {
+    height: 100%;
+  }
 `
