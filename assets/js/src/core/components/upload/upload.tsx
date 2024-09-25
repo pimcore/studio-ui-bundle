@@ -30,10 +30,6 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
         if (props.onChange !== undefined) {
           props.onChange(changeProps)
 
-          // Filter out files that are done uploading
-          const doneFiles = changeProps.fileList.filter((item) => item.status === 'done')
-          console.log(doneFiles)
-
           setFileList(changeProps.fileList.filter((item) => item.status !== 'done'))
         }
       } }
