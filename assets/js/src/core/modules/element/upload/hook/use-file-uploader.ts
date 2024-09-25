@@ -31,19 +31,18 @@ interface UseFileUploaderReturn {
   uploadZip: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
 }
 
+let zipUploadFirstRun: string[] = []
+
 export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
   const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!
-  let firstRun = true
   let promiseResolve: (value: number | PromiseLike<number>) => void = () => {}
   const promise: Promise<number> | undefined = new Promise(resolve => {
     promiseResolve = resolve
   })
 
   const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
-    console.log({ file, fileList })
-
     if (parentId === undefined) {
       throw new Error('Parent ID is required')
     }
@@ -62,8 +61,9 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
   }
 
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
-    if (firstRun) {
-      firstRun = false
+    if (!zipUploadFirstRun.includes(props.file.uid)) {
+      console.log('uuid', props.file.uid)
+      zipUploadFirstRun = [...zipUploadFirstRun, props.file.uid]
       addJob(createJob({
         title: 'Upload Zip',
         topics: [topics['asset-upload-finished'], ...defaultTopics],
@@ -84,7 +84,9 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
         promiseResolve(props.file.response.id as number)
       }
 
-      firstRun = true
+      // setZipUploadFirstRun(
+      //  zipUploadFirstRun.filter((item) => item !== props.file.uid)
+      // )
     }
   }
 

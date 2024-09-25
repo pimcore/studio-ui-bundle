@@ -25,8 +25,6 @@ export interface ZipUploadJobProps extends JobProps {
 }
 
 export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.Element => {
-  console.log('NotificationJobContainer')
-
   const { id, topics, status, action } = props
   const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
   const [progress, setProgress] = useState<number>(0)
@@ -74,7 +72,7 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
     action().then(actionJobId => {
       console.log('actionJobId', actionJobId)
 
-      jobId.current = actionJobId
+      jobId.current = actionJobId + 1
     }).catch(console.error)
   }
 
