@@ -13,7 +13,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import cn from 'classnames'
-import { Icon } from '@Pimcore/components/icon/icon'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyles } from './divider.styles'
 
 interface DividerProps {
@@ -96,13 +96,13 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
       />
 
       {isButtonVisible && (
-        <div className={ styles.iconContainer }>
-          <Icon
-            className={ styles.icon }
-            name={ 'chevron-selector-horizontal' }
-            options={ { height: 14, width: 14 } }
-          />
-        </div>
+        <IconButton
+          className={ styles.iconContainer }
+          hideShadow
+          icon={ 'chevron-selector-horizontal' }
+          iconOptions={ { height: 14, width: 14 } }
+          type="default"
+        />
       )}
     </div>
   )

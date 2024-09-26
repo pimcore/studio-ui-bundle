@@ -30,6 +30,10 @@ export const useStyles = createStyles(({ token, css }) => {
         width: auto;
         height: auto;
       }
+      
+      &.icon-button--hide-shadow {
+        box-shadow: none;
+      }
     `
   }
 })

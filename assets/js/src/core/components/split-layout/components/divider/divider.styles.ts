@@ -40,13 +40,18 @@ export const useStyles = createStyles(({ css, token }) => ({
     width: 24px;
     height: 24px;
     padding: 4px;
-    display: flex;
     border: 1px solid ${token.colorBorderContainer};
     background-color: ${token.Divider.colorBgContainer};
     border-radius: ${token.Divider.borderRadiusSM};
-  `,
-
-  icon: css`
-    color: ${token.colorPrimary};
+    cursor: col-resize;
+    
+    &:hover, &:disabled, &:active {
+      border-color: ${token.colorBorderContainer} !important;
+    }
+    
+    &:focus-visible {
+      outline: none !important;
+      outline-offset: 0 !important;
+    }
   `
 }))
