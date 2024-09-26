@@ -17,7 +17,8 @@ export const topics: Record<string, string> = {
   'handler-progress': 'handler-progress',
   'job-finished-with-errors': 'job-finished-with-errors',
   'job-failed': 'job-failed',
-  'asset-upload-finished': 'asset-upload-finished'
+  'asset-upload-finished': 'asset-upload-finished',
+  'zip-upload-finished': 'zip-upload-finished'
 }
 
 export const defaultTopics: string[] = [
