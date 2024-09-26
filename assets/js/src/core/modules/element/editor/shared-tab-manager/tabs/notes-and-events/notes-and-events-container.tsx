@@ -30,7 +30,6 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
 
-
   const [deleteNote] = useNoteDeleteByIdMutation()
 
   const { isLoading, data } = useNoteElementGetCollectionQuery({
