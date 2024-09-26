@@ -16,18 +16,20 @@ import React, { type ReactNode } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface ModalTitleProps {
-  iconName: string
+  iconName?: string
   children: ReactNode
 }
 
-export const ModalTitle = (props: ModalTitleProps): React.JSX.Element => {
+export const ModalTitle = ({ iconName, ...props }: ModalTitleProps): React.JSX.Element => {
   return (
     <Flex gap={ 'small' }>
+      {iconName !== undefined && (
       <Icon
-        name={ props.iconName }
+        name={ iconName }
         options={ { width: 20, height: 20 } }
       />
-
+      )
+            }
       <span>
         {props.children}
       </span>
