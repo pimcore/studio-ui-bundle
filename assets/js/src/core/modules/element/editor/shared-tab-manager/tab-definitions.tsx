@@ -25,6 +25,7 @@ import { WorkflowTabContainer } from '@Pimcore/modules/element/editor/shared-tab
 import {
   NotesAndEventsTabContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
+import { TagsTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-container'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
@@ -59,5 +60,12 @@ export const TAB_NOTES_AND_EVENTS: IEditorTab = {
   label: 'notes-and-events.label',
   children: <NotesAndEventsTabContainer />,
   icon: <Icon name={ 'view-details' } />,
+  isDetachable: true
+}
+export const TAB_TAGS: IEditorTab = {
+  key: 'tags',
+  label: 'tags.label',
+  children: <TagsTabContainer />,
+  icon: <Icon name={ 'tag-two-tone' } />,
   isDetachable: true
 }

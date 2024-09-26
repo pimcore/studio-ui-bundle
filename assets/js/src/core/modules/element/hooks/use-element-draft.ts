@@ -23,6 +23,7 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
+  parentId: number
   fullPath?: string
   type?: string
 }

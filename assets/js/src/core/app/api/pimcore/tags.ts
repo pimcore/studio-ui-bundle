@@ -53,7 +53,7 @@ export const providingTags = {
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }, tagNames.SCHEDULES],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.WORKFLOW],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
-  ASSET_NOTES_AND_EVENTS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.NOTES_AND_EVENTS],
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }]
 }
 
@@ -65,7 +65,6 @@ export const invalidatingTags = {
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_LIST: () => [tagNames.ASSET_LIST],
-  ASSET_WORKFLOW: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT_DETAIL],
@@ -75,9 +74,10 @@ export const invalidatingTags = {
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }],
+  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
-  ASSET_NOTES_AND_EVENTS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }]
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)]
 }
 
 const getElementDetailTag = (elementType: ElementType, id: number): Tag => {

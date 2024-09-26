@@ -11,11 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { api as tagsApi, type Tag } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useContext } from 'react'
+import { api as tagsApi, type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 interface UseShortcutActionsReturn {
   applyFolderTags: () => Promise<void>
@@ -23,32 +22,23 @@ interface UseShortcutActionsReturn {
 }
 
 export const useShortcutActions = (): UseShortcutActionsReturn => {
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
-  const assetInfo = dispatch(assetApi.endpoints.assetGetById.initiate({ id: id! }))
+  const { element } = useElementDraft(id!, elementType!)
+  const parentId = element?.parentId
 
   const getCurrentAndParentTags = async (): Promise<Awaited<any>> => {
-    return await Promise.resolve(assetInfo)
-      .then(({ data }) => {
-        if (data !== undefined) {
-          return data.parentId
-        }
+    const parentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
+      elementType: elementType!,
+      id: parentId!
+    }))
 
-        throw new Error(`Asset with ID "${id}" not found`)
-      })
-      .then(async (parentId: number) => {
-        const parentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
-          elementType: 'asset',
-          id: parentId
-        }))
+    const currentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
+      elementType: elementType!,
+      id: id!
+    }))
 
-        const currentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
-          elementType: 'asset',
-          id: id!
-        }))
-
-        return { parentTags, currentTags }
-      })
+    return { parentTags, currentTags }
   }
 
   const applyFolderTags = async (): Promise<void> => {
@@ -57,14 +47,14 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         const saveParentTags = parentTags.data?.items ?? []
         const saveChildrenTags = currentTags.data?.items ?? []
         const items: Tag[] = { ...saveParentTags, ...saveChildrenTags }
-        console.log('items', items)
+
         const tagIds = Object.keys(items).map(Number)
 
         const cacheUpdate = dispatch(
           tagsApi.util.updateQueryData(
             'tagGetCollectionForElementByTypeAndId',
             {
-              elementType: 'asset',
+              elementType: elementType!,
               id: id!
             },
             (draft): any => {
@@ -78,7 +68,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         try {
           void await dispatch(tagsApi.endpoints.tagBatchAssignToElementsByType.initiate({
-            elementType: 'asset',
+            elementType: elementType!,
             elementTagIdCollection: {
               elementIds: [id!],
               tagIds
@@ -103,7 +93,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
           tagsApi.util.updateQueryData(
             'tagGetCollectionForElementByTypeAndId',
             {
-              elementType: 'asset',
+              elementType: elementType!,
               id: id!
             },
             (draft): any => {
@@ -117,7 +107,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         try {
           void await dispatch(tagsApi.endpoints.tagBatchReplaceForElementsByType.initiate({
-            elementType: 'asset',
+            elementType: elementType!,
             elementTagIdCollection: {
               elementIds: [id!],
               tagIds

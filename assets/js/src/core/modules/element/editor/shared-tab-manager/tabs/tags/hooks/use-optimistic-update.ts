@@ -12,9 +12,11 @@
 */
 
 import {
-  api, type TagGetCollectionForElementByTypeAndIdApiArg,
-  type TagGetCollectionForElementByTypeAndIdApiResponse, type Tag
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+  api,
+  type Tag,
+  type TagGetCollectionForElementByTypeAndIdApiArg,
+  type TagGetCollectionForElementByTypeAndIdApiResponse
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type Key } from 'react'
 import { type PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks'

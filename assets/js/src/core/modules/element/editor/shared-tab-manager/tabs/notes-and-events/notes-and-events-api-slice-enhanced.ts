@@ -15,7 +15,7 @@ import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/ap
 import { api as baseApi } from './notes-and-events-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.NOTES_AND_EVENTS, tagNames.ASSET_DETAIL],
+  addTagTypes: [tagNames.NOTES_AND_EVENTS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     noteGetCollection: {
       providesTags: (result, error, args) => {
@@ -32,10 +32,10 @@ export const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_ID(args.id)
     },
     noteElementGetCollection: {
-      providesTags: (result, error, args) => providingTags.ASSET_NOTES_AND_EVENTS(args.id)
+      providesTags: (result, error, args) => providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
     },
     noteElementCreate: {
-      invalidatesTags: (result, error, args) => providingTags.ASSET_NOTES_AND_EVENTS(args.id)
+      invalidatesTags: (result, error, args) => providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
     }
   }
 })

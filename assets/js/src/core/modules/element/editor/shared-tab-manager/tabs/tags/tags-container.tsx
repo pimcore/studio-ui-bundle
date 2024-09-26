@@ -11,31 +11,33 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React from 'react'
 import { Dropdown } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   AssignedTagsTable
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/assigned-tags/assigned-tags'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/assigned-tags/assigned-tags'
 import {
   TagsTreeContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import {
   useTagGetCollectionForElementByTypeAndIdQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { useShortcutActions } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import {
+  useShortcutActions
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
-    elementType: 'asset',
+    elementType: elementType!,
     id: id!
   })
 
@@ -63,7 +65,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
         size: 75,
         children: (
           <Content padded>
-            <Header title={ t('element.element-editor-tabs.tags.assigned-tags-text') }>
+            <Header title={ t('tags.assigned-tags-text') }>
               <Dropdown.Button
                 menu={ {
                   items: [{
@@ -74,7 +76,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
                 } }
                 onClick={ applyFolderTags }
               >
-                {t('element.element-editor-tabs.tags.apply-folder-tags')}
+                {t('tags.apply-folder-tags')}
               </Dropdown.Button>
             </Header>
 

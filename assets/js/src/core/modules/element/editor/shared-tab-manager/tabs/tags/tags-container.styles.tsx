@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import {createStyles} from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {

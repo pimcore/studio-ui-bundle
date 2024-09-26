@@ -20,7 +20,6 @@ import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
 import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 
 export const TAB_EMBEDDED_METADATA: IEditorTab = {
@@ -44,13 +43,5 @@ export const TAB_VERSIONS: IEditorTab = {
   label: 'asset.asset-editor-tabs.versions',
   children: <VersionsTabContainer />,
   icon: <Icon name={ 'history-outlined' } />,
-  isDetachable: true
-}
-
-export const TAB_TAGS: IEditorTab = {
-  key: 'tags',
-  label: 'asset.asset-editor-tabs.tag',
-  children: <TagsTabContainer />,
-  icon: <Icon name={ 'tag-two-tone' } />,
   isDetachable: true
 }

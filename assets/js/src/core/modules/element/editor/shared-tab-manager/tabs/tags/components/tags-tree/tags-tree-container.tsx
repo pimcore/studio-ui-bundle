@@ -11,17 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  type TagAssignToElementApiArg,
-  useTagGetCollectionQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { useTagGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   TagsTree,
   type TagsTreeProps
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
-import React, { useContext, useEffect, useState } from 'react'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree'
+import React, { useEffect, useState } from 'react'
 import { Content } from '@Pimcore/components/content/content'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 type TagsTreeContainerProps = NonNullable<Pick<TagsTreeProps, 'tags' | 'isLoading'>>
 
@@ -30,7 +27,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
   const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
     Object.keys(props.tags).map(String)
   )
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
 
   useEffect(() => {
     setDefaultCheckedTags(Object.keys(props.tags).map(String))
@@ -55,7 +52,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
       <TagsTree
         defaultCheckedTags={ defaultCheckedTags }
         elementId={ id! }
-        elementType={ 'asset' as TagAssignToElementApiArg['elementType'] }
+        elementType={ elementType! }
         isLoading={ tagsLoading }
         setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }

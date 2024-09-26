@@ -11,21 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key, useContext, useState } from 'react'
+import React, { type Key, useState } from 'react'
 import {
   type Tag,
   useTagUnassignFromElementMutation
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyle } from './assigned-tags.styles'
 import {
   useOptimisticUpdate
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
-import { flattenArray } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
+import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -34,7 +34,7 @@ type TagWithActions = Tag & {
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
   const [loadingRows, setLoadingRows] = useState({})
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
   const { styles } = useStyle()
   const [unassignTag] = useTagUnassignFromElementMutation()
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
@@ -46,7 +46,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       .filter((key: number) => tag.id !== key)
 
     updateTagsForElementByTypeAndId({
-      elementType: 'asset',
+      elementType: elementType!,
       id: id!,
       flatTags,
       checkedTags: futureCheckedKeys as Key[]
@@ -54,7 +54,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
 
     try {
       await unassignTag({
-        elementType: 'asset',
+        elementType: elementType!,
         id: id!,
         tagId: tag.id!
       }).unwrap()
@@ -66,7 +66,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
     columnHelper.accessor('path', {
-      header: t('asset.asset-editor-tabs.tags.columns.path'),
+      header: t('tags.columns.path'),
       meta: {
         type: 'text'
       },
@@ -74,7 +74,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       sortDescFirst: false
     }),
     columnHelper.accessor('actions', {
-      header: t('asset.asset-editor-tabs.tags.columns.actions'),
+      header: t('tags.columns.actions'),
       cell: (info) => {
         const isLoading = loadingRows[info.row.id]
 

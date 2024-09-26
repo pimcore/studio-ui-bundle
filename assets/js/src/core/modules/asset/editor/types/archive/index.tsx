@@ -17,12 +17,11 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import {
   TAB_CUSTOM_METADATA,
-  TAB_TAGS,
   TAB_VERSIONS
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 import {
   TAB_DEPENDENCIES, TAB_NOTES_AND_EVENTS,
-  TAB_PROPERTIES, TAB_SCHEDULE, TAB_WORKFLOW
+  TAB_PROPERTIES, TAB_SCHEDULE, TAB_TAGS, TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
