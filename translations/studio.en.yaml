@@ -244,6 +244,9 @@ jobs.job.button-download: download
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
 batch-edit.modal-title: Batch Edit Column
+batch-edit.modal-footer.apply-changes: Apply changes
+batch-edit.modal-footer.discard-all-changes: Discard All Changes
+batch-edit.modal-footer.add-a-column: Add a column
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter

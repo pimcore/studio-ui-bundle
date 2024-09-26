@@ -27,9 +27,10 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import {
-  BatchEditModal
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
+import { useModal } from '@Pimcore/components/modal/useModal'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Button } from '@Pimcore/components/button/button'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
@@ -41,8 +42,14 @@ export const GridActions = (): React.JSX.Element => {
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const { addJob } = useJobs()
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
-  const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const { t } = useTranslation()
+  const {
+    showModal: showBatchEditModal,
+    closeModal: closeBatchEditModal,
+    renderModal: BatchEditModal
+  } = useModal({
+    type: 'basic'
+  })
 
   useEffect(() => {
     if (data !== undefined) {
@@ -57,7 +64,7 @@ export const GridActions = (): React.JSX.Element => {
         label: t('listing.actions.batch-edit'),
         icon: <Icon name={ 'grid' } />,
         onClick: () => {
-          setBatchEditModalOpen(true)
+          showBatchEditModal()
         }
       },
       {
@@ -69,7 +76,9 @@ export const GridActions = (): React.JSX.Element => {
             key: '2.1',
             label: t('listing.actions.csv-export'),
             icon: <Icon name={ 'export' } />,
-            onClick: () => { setCsvModalOpen(true) }
+            onClick: () => {
+              setCsvModalOpen(true)
+            }
           }
         ]
       },
@@ -99,9 +108,29 @@ export const GridActions = (): React.JSX.Element => {
       />
 
       <BatchEditModal
-        open={ batchEditModalOpen }
-        setOpen={ setBatchEditModalOpen }
-      />
+        footer={ <ModalFooter>
+          <Dropdown menu={ { items: [] } }>
+            <IconTextButton
+              icon='PlusCircleOutlined'
+              type='link'
+            >
+              {t('listing.add-column')}
+            </IconTextButton>
+          </Dropdown>
+          <IconTextButton
+            icon='close'
+            type='link'
+          >
+            {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+          <Button
+            onClick={ closeBatchEditModal }
+            type='primary'
+          >{t('batch-edit.modal-footer.apply-changes')}</Button>
+        </ModalFooter> }
+        title={ t('batch-edit.modal-title') }
+      >
+        Lorem ipsum
+      </BatchEditModal>
     </>
   )
 

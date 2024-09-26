@@ -168,3 +168,25 @@ export const SpaceBetweenFooterButtons = {
     </ModalFooter>
   }
 }
+
+export const Simple = {
+  args: {
+    title: 'Batch Edit',
+    content: <SpaceBetweenFooterButtonsContent />,
+    footer: <ModalFooter buttonAlignment={ 'space-between' }>
+      <Button
+          key="cancel"
+          type="link"
+      >
+        Read the technical instructions
+      </Button>
+
+      <Button
+          key="details"
+          type={ 'primary' }
+      >
+        See details
+      </Button>
+    </ModalFooter>
+  }
+}

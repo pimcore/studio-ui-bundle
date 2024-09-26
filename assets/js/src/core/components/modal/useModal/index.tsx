@@ -58,6 +58,9 @@ export const useModal = (config = { type: 'default' }): useModalReturnType => {
       case 'warn':
         component = withWarn(Modal)
         break
+      case 'basic':
+        component = withBasic(Modal)
+        break
     }
 
     return component
@@ -164,4 +167,21 @@ export const withWarn = (Component: typeof Modal): typeof Modal => {
   }
 
   return modalWithWarn
+}
+
+export const withBasic = (Component: typeof Modal): typeof Modal => {
+  const modalWithBasic = (props: IModalProps): React.JSX.Element => {
+    const { children, ...inlineProps } = props
+
+    return (
+      <Component
+        title={ props.title }
+        { ...inlineProps }
+      >
+        {children}
+      </Component>
+    )
+  }
+
+  return modalWithBasic
 }
