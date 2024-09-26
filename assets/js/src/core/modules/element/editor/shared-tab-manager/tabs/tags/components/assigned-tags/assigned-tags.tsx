@@ -35,7 +35,6 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   const { t } = useTranslation()
   const [loadingRows, setLoadingRows] = useState({})
   const { id, elementType } = useElementContext()
-  const { styles } = useStyle()
 
   const [unassignTag] = useTagUnassignFromElementMutation()
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()

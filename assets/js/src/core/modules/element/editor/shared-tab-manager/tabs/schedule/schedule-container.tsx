@@ -12,8 +12,6 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { useStyles } from './schedule-container.styles'
-import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Button } from '@Pimcore/components/button/button'
@@ -24,23 +22,15 @@ import {
 import {
   Table
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/table'
-import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useSaveSchedules } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
-import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
-import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Space } from '@Pimcore/components/space/space'
@@ -156,7 +146,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             { label: t('schedule.all'), value: 'all' }
           ] }
         />
-
 
         <Space
           className={ 'pimcore-schedule-toolbar__filters__active-switch' }
