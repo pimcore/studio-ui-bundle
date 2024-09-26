@@ -48,12 +48,12 @@ export const Table = ({
   const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
   const { id, elementType } = useElementContext()
-  const { element, properties, setProperties, updateProperty, removeProperty } = useElementDraft(id!, elementType!)
+  const { element, properties, setProperties, updateProperty, removeProperty } = useElementDraft(id, elementType)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
-    elementType: elementType!,
-    id: id!
+    elementType,
+    id
   })
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])

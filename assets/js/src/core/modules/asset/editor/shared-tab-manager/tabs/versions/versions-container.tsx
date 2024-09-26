@@ -31,7 +31,7 @@ export const VersionsTabContainer = (): React.JSX.Element => {
   const [updateVersion] = useVersionUpdateByIdMutation()
 
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
-    id: id!,
+    id,
     elementType: 'asset',
     page: 1,
     pageSize: 9999

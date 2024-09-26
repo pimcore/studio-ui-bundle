@@ -26,17 +26,17 @@ import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const imageData = data! as Image
 
   return (
     <AssetEditorSidebarDetailsView
       height={ imageData.height ?? 0 }
       onClickCustomDownload={ async (customDownloadProps) => {
-        downloadImageByCustomSettings(assetContext.id!, customDownloadProps)
+        downloadImageByCustomSettings(assetContext.id, customDownloadProps)
       } }
       onClickDownloadByFormat={ async (format) => {
-        downloadImageByFormat(assetContext.id!, format)
+        downloadImageByFormat(assetContext.id, format)
       } }
       width={ imageData.width ?? 0 }
     />

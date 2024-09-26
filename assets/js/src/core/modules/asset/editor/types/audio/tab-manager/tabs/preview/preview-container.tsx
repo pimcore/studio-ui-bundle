@@ -19,7 +19,7 @@ import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar
 
 const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetByIdQuery({ id: assetContext.id })
 
   return (
     <ContentToolbarSidebarLayout>

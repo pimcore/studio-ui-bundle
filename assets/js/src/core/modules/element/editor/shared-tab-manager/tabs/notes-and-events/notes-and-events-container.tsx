@@ -30,12 +30,11 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
 
-
   const [deleteNote] = useNoteDeleteByIdMutation()
 
   const { isLoading, data } = useNoteElementGetCollectionQuery({
-    id: id!,
-    elementType: elementType!,
+    id,
+    elementType,
     page,
     pageSize
   })
@@ -46,8 +45,8 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   return (
     <NotesAndEventsTabView
-      elementId={ id! }
-      elementType={ elementType! }
+      elementId={ id }
+      elementType={ elementType }
       notes={ data!.items }
       onClickTrash={ onClickTrash }
       pagination={

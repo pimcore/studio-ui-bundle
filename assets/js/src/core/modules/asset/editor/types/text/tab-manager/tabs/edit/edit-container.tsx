@@ -20,7 +20,7 @@ import { isSet } from '@Pimcore/utils/helpers'
 
 const EditContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id })
   const { styles } = useStyle()
 
   return (

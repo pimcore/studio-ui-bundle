@@ -36,8 +36,8 @@ interface CustomMetadataTableProps {
 export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModal }: CustomMetadataTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
-  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id: id! })
+  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id)
+  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {

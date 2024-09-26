@@ -31,7 +31,7 @@ export const ZoomContext = createContext<IZoomContext>({ zoom: 100, setZoom: () 
 const PreviewContainer = (): React.JSX.Element => {
   const [zoom, setZoom] = useState<number>(100)
   const assetContext = useContext(AssetContext)
-  const { data, isLoading } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data, isLoading } = useAssetGetByIdQuery({ id: assetContext.id })
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
 

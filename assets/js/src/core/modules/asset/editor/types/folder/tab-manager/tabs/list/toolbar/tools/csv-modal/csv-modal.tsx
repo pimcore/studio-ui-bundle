@@ -33,7 +33,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [form] = useForm()
   const { addJob } = useJobs()
   const { id } = useAsset()
-  const { data } = useAssetGetByIdQuery({ id: id! })
+  const { data } = useAssetGetByIdQuery({ id })
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const [fetchCreateCsv] = useAssetCreateCsvMutation()
   const { selectedRows } = useListSelectedRows()

@@ -33,7 +33,7 @@ const DetailContainer = (): React.JSX.Element => {
   useMemo(() => {
     setImagePreviewFromBackend(200, 119)
   }, [])
-  const { data: assetData } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data: assetData } = useAssetGetByIdQuery({ id: assetContext.id })
   const videoData = assetData! as Video
   const { data: thumbnailsData } = useThumbnailVideoGetCollectionQuery()
   const videoThumbnails = thumbnailsData?.items
@@ -56,7 +56,7 @@ const DetailContainer = (): React.JSX.Element => {
   )
 
   function setImagePreviewFromBackend (width: number, height: number): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}/video/stream/image-thumbnail?width=${width}&height=${height}`
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}`
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {
@@ -77,7 +77,7 @@ const DetailContainer = (): React.JSX.Element => {
   }
 
   function setImagePreviewByToBackend (key: string, value: number): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}`
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}`
     fetch(
       url,
       {
@@ -105,7 +105,7 @@ const DetailContainer = (): React.JSX.Element => {
   }
 
   function downloadVideoByFormat (format: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}/video/download/${format}`
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/download/${format}`
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {
@@ -118,7 +118,7 @@ const DetailContainer = (): React.JSX.Element => {
   }
 
   function setThumbnailByThumbnailName (name: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id!}/video/stream/${name}`
+    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/stream/${name}`
 
     fetch(url)
       .then(async (response) => await response.blob())

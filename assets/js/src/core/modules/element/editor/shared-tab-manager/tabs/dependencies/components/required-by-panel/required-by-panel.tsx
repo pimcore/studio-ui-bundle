@@ -34,8 +34,8 @@ export const RequiredByPanel = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(20)
 
   const { data, isLoading } = useDependencyGetCollectionByElementTypeQuery({
-    elementType: elementType!,
-    id: id!,
+    elementType,
+    id,
     page,
     pageSize,
     dependencyMode: 'required_by'

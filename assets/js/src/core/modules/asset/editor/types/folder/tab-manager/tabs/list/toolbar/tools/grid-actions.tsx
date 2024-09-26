@@ -30,7 +30,7 @@ export const GridActions = (): React.JSX.Element => {
   const hasSelectedItems = Object.keys(selectedRows).length > 0
   const [fetchCreateZip] = useAssetCreateZipMutation()
   const { id } = useAsset()
-  const { data } = useAssetGetByIdQuery({ id: id! })
+  const { data } = useAssetGetByIdQuery({ id })
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const { addJob } = useJobs()
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)

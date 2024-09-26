@@ -38,7 +38,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
   const { id, elementType } = useElementContext()
 
-  const { addProperty, properties } = useElementDraft(id!, elementType!)
+  const { addProperty, properties } = useElementDraft(id, elementType)
   const {
     showModal: showDuplicatePropertyModal,
     closeModal: closeDuplicatePropertyModal,

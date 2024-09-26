@@ -118,8 +118,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         onTabClick={ onChange }
         tabBarExtraContent={ {
           left: <ElementToolbar
-            elementType={ elementType! }
-            id={ id! }
+            elementType={ elementType }
+            id={ id }
                 />
         } }
       />

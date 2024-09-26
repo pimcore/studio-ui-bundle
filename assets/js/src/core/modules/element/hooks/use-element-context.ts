@@ -17,8 +17,8 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 
 interface UseElementContextReturn {
-  id?: number
-  elementType?: ElementType
+  id: number
+  elementType: ElementType
 }
 
 export const useElementContext = (): UseElementContextReturn => {
@@ -31,5 +31,5 @@ export const useElementContext = (): UseElementContextReturn => {
     return { id: dataObjectId, elementType: 'data-object' }
   }
 
-  return { }
+  throw new Error('No element context found')
 }

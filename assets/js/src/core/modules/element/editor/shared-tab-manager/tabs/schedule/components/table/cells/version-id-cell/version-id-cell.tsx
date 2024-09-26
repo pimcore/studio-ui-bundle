@@ -24,8 +24,8 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useVersionGetCollectionForElementByTypeAndIdQuery({
-    elementType: elementType!,
-    id: id!,
+    elementType,
+    id,
     page: 1,
     pageSize: 9999
   })

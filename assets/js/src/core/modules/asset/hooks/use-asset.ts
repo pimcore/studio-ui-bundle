@@ -15,7 +15,7 @@ import { useContext } from 'react'
 import { AssetContext } from '../asset-provider'
 
 export interface UseAssetReturn {
-  id: number | undefined
+  id: number
 }
 
 export const useAsset = (): UseAssetReturn => {

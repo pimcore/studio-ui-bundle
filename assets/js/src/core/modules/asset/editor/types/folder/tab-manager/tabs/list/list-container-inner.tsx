@@ -39,7 +39,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { filterOptions } = useListFilterOptions()
   const { columns, setGridColumns } = useListColumns()
   const { gridConfig, setGridConfig } = useListGridConfig()
-  const assetId = assetContext.id!
+  const assetId = assetContext.id
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
   const [fetchListing] = useAssetGetGridMutation()
   const [patchAsset] = useAssetPatchByIdMutation()

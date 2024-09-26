@@ -24,7 +24,7 @@ const PreviewContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const assetId = assetContext.id!
+  const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
 
   const { data, isLoading } = useAssetGetTreeQuery({

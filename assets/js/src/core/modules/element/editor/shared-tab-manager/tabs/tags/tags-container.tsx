@@ -37,8 +37,8 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
-    elementType: elementType!,
-    id: id!
+    elementType,
+    id
   })
 
   return (

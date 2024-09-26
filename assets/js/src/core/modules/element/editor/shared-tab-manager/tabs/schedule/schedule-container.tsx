@@ -41,12 +41,12 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { id, elementType } = useElementContext()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
   const [activeOnly, setActiveOnly] = useState<boolean>(false)
-  const { element, schedules, setSchedules, addSchedule, removeSchedule } = useElementDraft(id!, elementType!)
-  const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules(elementType!, id!)
+  const { element, schedules, setSchedules, addSchedule, removeSchedule } = useElementDraft(id, elementType)
+  const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules(elementType, id)
 
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
-    elementType: elementType!,
-    id: id!
+    elementType,
+    id
   })
 
   useEffect(() => {

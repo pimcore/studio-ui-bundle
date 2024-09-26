@@ -24,18 +24,18 @@ interface UseShortcutActionsReturn {
 export const useShortcutActions = (): UseShortcutActionsReturn => {
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
-  const { element } = useElementDraft(id!, elementType!)
+  const { element } = useElementDraft(id, elementType)
   const parentId = element?.parentId
 
   const getCurrentAndParentTags = async (): Promise<Awaited<any>> => {
     const parentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
-      elementType: elementType!,
+      elementType,
       id: parentId!
     }))
 
     const currentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
-      elementType: elementType!,
-      id: id!
+      elementType,
+      id
     }))
 
     return { parentTags, currentTags }
@@ -54,8 +54,8 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
           tagsApi.util.updateQueryData(
             'tagGetCollectionForElementByTypeAndId',
             {
-              elementType: elementType!,
-              id: id!
+              elementType,
+              id
             },
             (draft): any => {
               return {
@@ -68,9 +68,9 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         try {
           void await dispatch(tagsApi.endpoints.tagBatchAssignToElementsByType.initiate({
-            elementType: elementType!,
+            elementType,
             elementTagIdCollection: {
-              elementIds: [id!],
+              elementIds: [id],
               tagIds
             }
           }))
@@ -93,8 +93,8 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
           tagsApi.util.updateQueryData(
             'tagGetCollectionForElementByTypeAndId',
             {
-              elementType: elementType!,
-              id: id!
+              elementType,
+              id
             },
             (draft): any => {
               return {
@@ -107,9 +107,9 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
 
         try {
           void await dispatch(tagsApi.endpoints.tagBatchReplaceForElementsByType.initiate({
-            elementType: elementType!,
+            elementType,
             elementTagIdCollection: {
-              elementIds: [id!],
+              elementIds: [id],
               tagIds
             }
           }))

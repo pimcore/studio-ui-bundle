@@ -34,10 +34,10 @@ import { container } from '@Pimcore/app/depency-injection'
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id!)
+  const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess, isError }] = useAssetUpdateByIdMutation()
-  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id!, false)
+  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuAsset')
@@ -105,7 +105,7 @@ export const Toolbar = (): React.JSX.Element => {
     }
 
     const saveAssetPromise = saveAsset({
-      id: id!,
+      id,
       body: {
         data: {
           ...update

@@ -14,7 +14,7 @@
 import React, { createContext, useMemo } from 'react'
 
 export interface IDataObjectContext {
-  id?: number
+  id: number
 }
 
 export interface IDataObjectProviderProps {
@@ -22,7 +22,7 @@ export interface IDataObjectProviderProps {
   children: React.ReactNode
 }
 
-export const DataObjectContext = createContext<IDataObjectContext>({})
+export const DataObjectContext = createContext<IDataObjectContext>({ id: 0 })
 
 export const DataObjectProvider = ({ id, children }: IDataObjectProviderProps): React.JSX.Element => {
   return useMemo(() => (

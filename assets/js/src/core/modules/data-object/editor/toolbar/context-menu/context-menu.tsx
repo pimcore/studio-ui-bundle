@@ -26,7 +26,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeDataObjectFromState } = useDataObjectDraft(id!)
+  const { dataObject, removeDataObjectFromState } = useDataObjectDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
 
   return (
@@ -71,6 +71,6 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
   function refreshDataObject (): void {
     removeDataObjectFromState()
-    dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id!)))
+    dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
   }
 }

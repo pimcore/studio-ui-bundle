@@ -46,16 +46,16 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       .filter((key: number) => tag.id !== key)
 
     updateTagsForElementByTypeAndId({
-      elementType: elementType!,
-      id: id!,
+      elementType,
+      id,
       flatTags,
       checkedTags: futureCheckedKeys as Key[]
     })
 
     try {
       await unassignTag({
-        elementType: elementType!,
-        id: id!,
+        elementType,
+        id,
         tagId: tag.id!
       }).unwrap()
     } catch (error) {

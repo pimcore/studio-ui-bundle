@@ -30,7 +30,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-  const { element, updateSchedule, removeSchedule } = useElementDraft(id!, elementType!)
+  const { element, updateSchedule, removeSchedule } = useElementDraft(id, elementType)
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: string, columnId: string }>>([])
 
   const columnHelper = createColumnHelper<ScheduleTable>()
