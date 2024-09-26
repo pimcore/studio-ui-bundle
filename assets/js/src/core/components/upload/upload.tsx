@@ -26,30 +26,46 @@ export interface UploadProps extends Omit<AntUploadProps, 'beforeUpload'> {
   onChange?: (info: UploadChangeParam) => void
 }
 
+type PromiseType = Pick<UploadChangeParam, 'promise' | 'promiseResolve'>
+type PromiseHolder = Record<string, Pick<UploadChangeParam, 'promise' | 'promiseResolve'>>
+
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [promise, setPromise] = useState<Promise<number> | undefined>(undefined)
-  const [promiseResolve, setPromiseResolve] = useState<(value: number | PromiseLike<number>) => void>(() => {})
+  // const [promise, setPromise] = useState<Promise<number> | undefined>(undefined)
+  // const [promiseResolve, setPromiseResolve] = useState<(value: number | PromiseLike<number>) => void>(() => {})
+  const [promiseCollection, setPromiseCollection] = useState<PromiseHolder>({})
 
   return (
     <AntUpload
       className={ styles.upload }
       { ...props }
-      beforeUpload={ () => {
-        const freshPromise: Promise<number> | undefined = new Promise(resolve => {
-          setPromiseResolve(resolve)
-        })
-
-        setPromise(freshPromise)
-      } }
       fileList={ fileList }
       onChange={ (changeProps) => {
+        let promiseTmpHolder: PromiseType | undefined = promiseCollection[changeProps.file.uid]
+        if (promiseTmpHolder === undefined) {
+          console.log('promiseCollection', promiseCollection)
+          let freshResolve: UploadChangeParam['promiseResolve'] = () => {}
+          const freshPromise: Promise<number> | undefined = new Promise(resolve => {
+            freshResolve = resolve
+          })
+
+          promiseTmpHolder = { promise: freshPromise, promiseResolve: freshResolve }
+
+          // promiseCollection[changeProps.file.uid] = {
+          //  promise: freshPromise,
+          //  promiseResolve: freshResolve
+          // }
+        }
+
         if (props.onChange !== undefined) {
-          props.onChange({ ...changeProps, promise, promiseResolve })
+          console.log('here i am')
+          props.onChange({ ...changeProps, ...promiseTmpHolder })
 
           setFileList(changeProps.fileList.filter((item) => item.status !== 'done'))
         }
+
+        setPromiseCollection({ ...promiseCollection, [changeProps.file.uid]: promiseTmpHolder })
       } }
     >
       {props.children}
