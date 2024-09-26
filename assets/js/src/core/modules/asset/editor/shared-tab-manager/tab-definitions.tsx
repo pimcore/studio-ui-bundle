@@ -19,8 +19,14 @@ import {
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
-import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import {
+  VersionsTabContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+import {
+  ComparisonView
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/comparison-view/comparison-view'
+import { SingleView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/single-view/single-view'
 
 export const TAB_EMBEDDED_METADATA: IEditorTab = {
   key: 'embedded-metadata',
@@ -40,8 +46,11 @@ export const TAB_CUSTOM_METADATA: IEditorTab = {
 
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
-  label: 'asset.asset-editor-tabs.versions',
-  children: <VersionsTabContainer />,
+  label: 'version.label',
+  children: <VersionsTabContainer
+    ComparisonViewComponent={ ComparisonView }
+    SingleViewComponent={ SingleView }
+            />,
   icon: <Icon name={ 'history-outlined' } />,
   isDetachable: true
 }

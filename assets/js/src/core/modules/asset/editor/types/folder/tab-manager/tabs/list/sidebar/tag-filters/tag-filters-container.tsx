@@ -16,7 +16,9 @@ import React, { useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 

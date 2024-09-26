@@ -18,7 +18,9 @@ import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointProvider } from '@Pimcore/components/focal-point/provider/focal-point-provider'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
 
 export interface IZoomContext {

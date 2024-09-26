@@ -21,7 +21,9 @@ import { useGridConfig } from './hooks/use-grid-config'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'

@@ -12,13 +12,11 @@
 */
 
 import React, { useContext } from 'react'
-import {
-  type Image,
-  useAssetGetByIdQuery
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
-  AssetEditorSidebarDetailsView, type CustomDownloadProps
+  AssetEditorSidebarDetailsView,
+  type CustomDownloadProps
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'

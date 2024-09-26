@@ -65,6 +65,7 @@ unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 save-success: Successfully saved
 save-failed: Save failed
+version.label: Versions
 version.versions: Versions
 version.version: Version
 version.publish: Publish

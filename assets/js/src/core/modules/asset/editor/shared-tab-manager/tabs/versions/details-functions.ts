@@ -23,7 +23,7 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import i18n from 'i18next'
 import {
   type PreviewFieldLabelCellValue
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/table/cells/preview-field-label-cell/preview-field-label-cell'
+} from './table/cells/preview-field-label-cell/preview-field-label-cell'
 
 export interface AssetVersionData {
   versionCount: number

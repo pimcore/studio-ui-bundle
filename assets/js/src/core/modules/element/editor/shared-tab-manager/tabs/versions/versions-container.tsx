@@ -18,12 +18,27 @@ import {
   useVersionGetCollectionForElementByTypeAndIdQuery,
   useVersionPublishByIdMutation, useVersionUpdateByIdMutation
 } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
-import { VersionsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { VersionsView } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
 import { Content } from '@Pimcore/components/content/content'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import {
+  type SingleVersionViewProps,
+  type VersionComparisonViewProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
 
-export const VersionsTabContainer = (): React.JSX.Element => {
-  const { id } = useAsset()
+export interface VersionTabContainerProps extends VersionDetailViewsProps {
+}
+
+export interface VersionDetailViewsProps {
+  SingleViewComponent: React.ComponentType<SingleVersionViewProps>
+  ComparisonViewComponent: React.ComponentType<VersionComparisonViewProps>
+}
+
+export const VersionsTabContainer = ({
+  SingleViewComponent,
+  ComparisonViewComponent
+}: VersionTabContainerProps): React.JSX.Element => {
+  const { id, elementType } = useElementContext()
 
   const [deleteVersion] = useVersionDeleteByIdMutation()
   const [publishVersion] = useVersionPublishByIdMutation()
@@ -32,7 +47,7 @@ export const VersionsTabContainer = (): React.JSX.Element => {
 
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
     id,
-    elementType: 'asset',
+    elementType,
     page: 1,
     pageSize: 9999
   })
@@ -43,6 +58,8 @@ export const VersionsTabContainer = (): React.JSX.Element => {
 
   return (
     <VersionsView
+      ComparisonViewComponent={ ComparisonViewComponent }
+      SingleViewComponent={ SingleViewComponent }
       onBlurNote={
         async (id, note): Promise<void> => {
           await updateVersion({

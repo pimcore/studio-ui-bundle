@@ -12,9 +12,7 @@
 */
 
 import React, { useContext, useMemo, useState } from 'react'
-import {
-  useAssetGetByIdQuery, type Video
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { useAssetGetByIdQuery, type Video } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   VideoEditorSidebarDetailsTab

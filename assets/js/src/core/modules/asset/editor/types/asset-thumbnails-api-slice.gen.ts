@@ -1,4 +1,5 @@
-import { api } from "../../../../app/api/pimcore/index";
+import {api} from "../../../../app/api/pimcore/index";
+
 export const addTagTypes = ["Asset Thumbnails"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({

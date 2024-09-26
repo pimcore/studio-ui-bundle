@@ -16,24 +16,22 @@ import {
   api, type AssetVersion
 } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import {
-  DetailsVersionsView
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-view'
-import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+  ComparisonViewUi
+} from './comparison-view-ui'
 import {
   type AssetVersionData,
   hydrateVersionData, loadPreviewImage,
   versionsDataToTableData
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+} from '../details-functions'
 import { store } from '@Pimcore/app/store'
 import { Content } from '@Pimcore/components/content/content'
+import {
+  type VersionComparisonViewProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
 
-export interface DetailsVersionsContainerProps {
-  versionIds: VersionIdentifiers[]
-}
-
-export const DetailsVersionsContainer = ({
+export const ComparisonView = ({
   versionIds
-}: DetailsVersionsContainerProps): React.JSX.Element => {
+}: VersionComparisonViewProps): React.JSX.Element => {
   const [gridData, setGridData] = useState([] as object[])
   const [versions, setVersions] = useState<AssetVersionData[]>([])
 
@@ -77,7 +75,7 @@ export const DetailsVersionsContainer = ({
   }
 
   return (
-    <DetailsVersionsView
+    <ComparisonViewUi
       gridData={ gridData }
       versions={ versions }
     />

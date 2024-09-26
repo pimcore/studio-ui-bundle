@@ -12,18 +12,13 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view.style'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
 import {
   type Version,
   type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
-import {
-  DetailsVersionsContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-container'
-import {
-  DetailsVersionContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-container'
+
 import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -34,8 +29,11 @@ import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { createVersionAccordionItem } from './create-version-accordion-item-functions'
 import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { Flex } from '@Pimcore/components/flex/flex'
+import {
+  type VersionDetailViewsProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
 
-interface VersionsViewProps {
+interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
   onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
   onClickPublish: (id: number) => Promise<void>
@@ -53,7 +51,9 @@ export const VersionsView = ({
   onClickDelete,
   onClickPublish,
   onClickClearAll,
-  onBlurNote
+  onBlurNote,
+  SingleViewComponent,
+  ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -179,11 +179,11 @@ export const VersionsView = ({
             <Content padded>
               <Flex justify='center' >
                 {detailedVersions.length > 0 && comparingActive && (
-                  <DetailsVersionsContainer versionIds={ detailedVersions } />
+                  <ComparisonViewComponent versionIds={ detailedVersions } />
                 )}
 
                 {detailedVersions.length > 0 && !comparingActive && (
-                  <DetailsVersionContainer
+                  <SingleViewComponent
                     setDetailedVersions={ setDetailedVersions }
                     versionId={ detailedVersions[0] }
                     versions={ versions }

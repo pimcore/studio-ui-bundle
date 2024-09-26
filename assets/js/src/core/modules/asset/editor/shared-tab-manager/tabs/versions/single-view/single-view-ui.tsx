@@ -17,10 +17,10 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'
-import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
-interface DetailsVersionViewProps {
+interface SingleVersionViewUiProps {
   versionId: VersionIdentifiers
   data: any[]
   imgSrc: string | null
@@ -30,7 +30,7 @@ interface DetailsVersionViewProps {
   onClickNext: () => void
 }
 
-export const DetailsVersionView = ({
+export const SingleViewUi = ({
   versionId,
   data,
   imgSrc,
@@ -38,11 +38,11 @@ export const DetailsVersionView = ({
   lastVersion,
   onClickPrevious,
   onClickNext
-}: DetailsVersionViewProps): React.JSX.Element => {
+}: SingleVersionViewUiProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
-    columnHelper.accessor(i18n.t('field'), { size: 162, meta: { type: 'version-preview-field-label' } }),
+    columnHelper.accessor(i18n.t('field'), { size: 162, meta: { type: 'asset-version-preview-field-label' } }),
     columnHelper.accessor(i18n.t('version.version') + ' ' + versionId.count, { size: 180 })
   ]
 

@@ -13,26 +13,26 @@
 
 import React from 'react'
 import i18n from '@Pimcore/app/i18n'
-import { useStyles } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-versions/details-versions-view.style'
+import { useStyles } from './comparison-view-ui.style'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
 import {
   type PreviewFieldLabelCellValue
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/table/cells/preview-field-label-cell/preview-field-label-cell'
-import { type AssetVersionData } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+} from '../table/cells/preview-field-label-cell/preview-field-label-cell'
+import { type AssetVersionData } from '../details-functions'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'
 
-interface DetailsVersionsViewProps {
+interface ComparisonViewUiProps {
   versions: AssetVersionData[]
   gridData: any[]
 }
 
-export const DetailsVersionsView = ({
+export const ComparisonViewUi = ({
   versions,
   gridData
-}: DetailsVersionsViewProps): React.JSX.Element => {
+}: ComparisonViewUiProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const columnHelper = createColumnHelper<any>()
@@ -56,7 +56,7 @@ export const DetailsVersionsView = ({
   })
 
   const columns = [
-    columnHelper.accessor(i18n.t('field'), { meta: { type: 'version-preview-field-label' } }),
+    columnHelper.accessor(i18n.t('field'), { meta: { type: 'asset-version-preview-field-label' } }),
     ...versionColumns
   ]
 

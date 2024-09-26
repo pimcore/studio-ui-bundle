@@ -11,16 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
+import React from 'react'
 import {
-  type IElementEditorTabManager
-} from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
-import { injectable } from 'inversify'
+  type VersionComparisonViewProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
 
-@injectable()
-export class DocumentTabManager extends TabManager implements IElementEditorTabManager {
-  constructor () {
-    super()
-    this.type = 'document'
-  }
+export const ComparisonView = ({
+  versionIds
+}: VersionComparisonViewProps): React.JSX.Element => {
+  return (
+    <div>
+      <p><strong>TODO: implement data object comparison view for versionIds:</strong></p>
+      {versionIds.map(v => v.id).join(', ')}
+    </div>
+  )
 }

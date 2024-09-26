@@ -13,29 +13,25 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  api, type AssetVersion, type Version
+  api, type AssetVersion
 } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
 import { store } from '@Pimcore/app/store'
 import {
   hydrateVersionData, versionsDataToTableData
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-functions'
+} from '../details-functions'
 import {
-  DetailsVersionView
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/details-version/details-version-view'
-import { type VersionIdentifiers } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-view'
+  SingleViewUi
+} from './single-view-ui'
 import { Content } from '@Pimcore/components/content/content'
+import {
+  type SingleVersionViewProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
 
-export interface DetailsVersionsContainerProps {
-  versions: Version[]
-  versionId: VersionIdentifiers
-  setDetailedVersions: (vIds: VersionIdentifiers[]) => void
-}
-
-export const DetailsVersionContainer = ({
+export const SingleView = ({
   versions,
   versionId,
   setDetailedVersions
-}: DetailsVersionsContainerProps): React.JSX.Element => {
+}: SingleVersionViewProps): React.JSX.Element => {
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
   const [versionPreviewImageUrl, setVersionPreviewImageUrl] = useState<string | null>(null)
@@ -62,7 +58,7 @@ export const DetailsVersionContainer = ({
   }
 
   return (
-    <DetailsVersionView
+    <SingleViewUi
       data={ versionData }
       firstVersion={ versions[0].id === vId.id }
       imgSrc={ versionPreviewImageUrl }
