@@ -32,8 +32,6 @@ type PromiseHolder = Record<string, Pick<UploadChangeParam, 'promise' | 'promise
 export const Upload = (props: UploadProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  // const [promise, setPromise] = useState<Promise<number> | undefined>(undefined)
-  // const [promiseResolve, setPromiseResolve] = useState<(value: number | PromiseLike<number>) => void>(() => {})
   const [promiseCollection, setPromiseCollection] = useState<PromiseHolder>({})
 
   return (
@@ -51,15 +49,9 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
           })
 
           promiseTmpHolder = { promise: freshPromise, promiseResolve: freshResolve }
-
-          // promiseCollection[changeProps.file.uid] = {
-          //  promise: freshPromise,
-          //  promiseResolve: freshResolve
-          // }
         }
 
         if (props.onChange !== undefined) {
-          console.log('here i am')
           props.onChange({ ...changeProps, ...promiseTmpHolder })
 
           setFileList(changeProps.fileList.filter((item) => item.status !== 'done'))

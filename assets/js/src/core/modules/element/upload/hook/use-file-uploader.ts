@@ -65,7 +65,6 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
 
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (!zipUploadFirstRun.includes(props.file.uid)) {
-      console.log('uuid', props.file.uid)
       zipUploadFirstRun = [...zipUploadFirstRun, props.file.uid]
       addJob(createJob({
         title: 'Upload Zip',
@@ -79,19 +78,9 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
 
     await uploadFile(props)
 
-    const fileStates = props.fileList.map((file) => file.status)
-    const allFullFilled = fileStates.every(item => item === 'done')
-
-    console.log('test', props.file.response)
     if (props.file.response !== undefined) {
       console.log('promise resolved! - yey')
       props.promiseResolve(props.file.response.id as number)
-    }
-
-    if (allFullFilled) {
-      // setZipUploadFirstRun(
-      //  zipUploadFirstRun.filter((item) => item !== props.file.uid)
-      // )
     }
   }
 
