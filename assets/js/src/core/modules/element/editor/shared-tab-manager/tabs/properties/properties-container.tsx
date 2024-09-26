@@ -110,7 +110,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
             </MandatoryModal>
 
             {createManualPropertyMode && (
-            <div className={ 'pimcore-properties-toolbar__predefined-properties__manual' }>
+            <Space
+              size="extra-small"
+            >
               <Button
                 onClick={ () => {
                   setCreateManualPropertyMode(false)
@@ -146,7 +148,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
               >
                 {t('properties.add-custom-property.add')}
               </IconTextButton>
-            </div>
+            </Space>
             )}
 
             {!createManualPropertyMode && (

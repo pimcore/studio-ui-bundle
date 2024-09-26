@@ -19,13 +19,11 @@ export const useStyle = createStyles(({ token, css }) => {
     `,
     toolbar: css`
       .pimcore-properties-toolbar__predefined-properties {        
-        // @todo remove this once the antd select is fixed
-        .pimcore-properties-toolbar__predefined-properties__manual {          
+        // @todo remove this once the antd select is fixed       
           .ant-select {
             min-width: 100px;
           }
-        }
-        
+ 
         .ant-select {
           .ant-select-selection-placeholder,
           .ant-select-arrow {
