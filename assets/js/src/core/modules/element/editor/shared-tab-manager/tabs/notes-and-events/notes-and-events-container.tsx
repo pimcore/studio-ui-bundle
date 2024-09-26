@@ -11,23 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import {
   NotesAndEventsTabView
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
 import {
   useNoteDeleteByIdMutation,
   useNoteElementGetCollectionQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { Result } from 'antd'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
+  const { id, elementType } = useElementContext()
 
   if (id === undefined) {
     return <Result title="No id" />
@@ -40,7 +40,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   const { isLoading, data } = useNoteElementGetCollectionQuery({
     id,
-    elementType: 'asset',
+    elementType: elementType!,
     page,
     pageSize
   })
@@ -52,7 +52,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   return (
     <NotesAndEventsTabView
       elementId={ id }
-      elementType="asset"
+      elementType={ elementType! }
       notes={ data!.items }
       onClickTrash={ onClickTrash }
       pagination={

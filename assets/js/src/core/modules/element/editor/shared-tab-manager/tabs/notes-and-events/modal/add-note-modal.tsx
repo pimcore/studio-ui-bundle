@@ -15,12 +15,12 @@ import React from 'react'
 import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
-import { AddNoteForm } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
+import { AddNoteForm } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
 import { useForm } from 'antd/es/form/Form'
 import {
   useNoteElementCreateMutation
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { type ElementType } from 'types/element-type.d'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { type ElementType } from '../../../../../../../../../types/element-type.d'
 
 export interface AddNoteFormValues {
   type: string

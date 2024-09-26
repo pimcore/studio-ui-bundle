@@ -17,7 +17,7 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DetachedTab } from '@Pimcore/modules/data-object/editor/detached-tab/detached-tab'
 import {
-  TAB_DEPENDENCIES,
+  TAB_DEPENDENCIES, TAB_NOTES_AND_EVENTS,
   TAB_PROPERTIES,
   TAB_SCHEDULE,
   TAB_WORKFLOW
@@ -30,6 +30,7 @@ moduleSystem.registerModule({
 
     objectEditorTabManager.register(TAB_PROPERTIES)
     objectEditorTabManager.register(TAB_SCHEDULE)
+    objectEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     objectEditorTabManager.register(TAB_DEPENDENCIES)
     objectEditorTabManager.register(TAB_WORKFLOW)
 

@@ -24,12 +24,11 @@ import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached
 import {
   TAB_CUSTOM_METADATA,
   TAB_EMBEDDED_METADATA,
-  TAB_NOTES_AND_EVENTS,
   TAB_TAGS,
   TAB_VERSIONS
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 import {
-  TAB_DEPENDENCIES,
+  TAB_DEPENDENCIES, TAB_NOTES_AND_EVENTS,
   TAB_PROPERTIES, TAB_SCHEDULE, TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 

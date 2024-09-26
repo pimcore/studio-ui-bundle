@@ -5,7 +5,6 @@ asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata
 asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
-asset.asset-editor-tabs.notes-events: Notes & Events
 asset.asset-editor-tabs.tag: Tags
 asset.asset-editor-tabs.list.columns.preview: Preview
 asset.asset-editor-tabs.list.columns.id: ID
@@ -178,6 +177,7 @@ button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
 component.no-content.no-content-available: No content available
+notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
 notes-and-events.name: name

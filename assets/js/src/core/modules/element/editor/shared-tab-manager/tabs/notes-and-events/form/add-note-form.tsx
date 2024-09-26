@@ -17,8 +17,8 @@ import TextArea from 'antd/es/input/TextArea'
 import { useTranslation } from 'react-i18next'
 import {
   useNoteElementGetTypeCollectionQuery
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { type ElementType } from 'types/element-type.d'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { type ElementType } from '../../../../../../../../../types/element-type.d'
 import { Content } from '@Pimcore/components/content/content'
 
 export interface AddNoteFormValues {

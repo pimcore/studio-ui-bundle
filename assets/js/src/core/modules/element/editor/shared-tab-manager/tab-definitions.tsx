@@ -21,9 +21,10 @@ import { ScheduleTabContainer } from '@Pimcore/modules/element/editor/shared-tab
 import {
   DependenciesTabContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
+import { WorkflowTabContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import {
-  WorkflowTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-container'
+  NotesAndEventsTabContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
@@ -51,5 +52,12 @@ export const TAB_WORKFLOW: IEditorTab = {
   label: 'workflow.label',
   children: <WorkflowTabContainer />,
   icon: <Icon name={ 'workflow' } />,
+  isDetachable: true
+}
+export const TAB_NOTES_AND_EVENTS: IEditorTab = {
+  key: 'notes-events',
+  label: 'notes-and-events.label',
+  children: <NotesAndEventsTabContainer />,
+  icon: <Icon name={ 'view-details' } />,
   isDetachable: true
 }
