@@ -19,7 +19,6 @@ import {
   useNoteDeleteByIdMutation,
   useNoteElementGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { Result } from 'antd'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
@@ -28,18 +27,14 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-
-  if (id === undefined) {
-    return <Result title="No id" />
-  }
-
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
+
 
   const [deleteNote] = useNoteDeleteByIdMutation()
 
   const { isLoading, data } = useNoteElementGetCollectionQuery({
-    id,
+    id: id!,
     elementType: elementType!,
     page,
     pageSize
@@ -51,7 +46,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   return (
     <NotesAndEventsTabView
-      elementId={ id }
+      elementId={ id! }
       elementType={ elementType! }
       notes={ data!.items }
       onClickTrash={ onClickTrash }
