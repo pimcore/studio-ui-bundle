@@ -25,9 +25,9 @@ export const useElementContext = (): UseElementContextReturn => {
   const { id: assetId } = useContext(AssetContext)
   const { id: dataObjectId } = useContext(DataObjectContext)
 
-  if (assetId !== undefined) {
+  if (assetId !== 0) {
     return { id: assetId, elementType: 'asset' }
-  } else if (dataObjectId !== undefined) {
+  } else if (dataObjectId !== 0) {
     return { id: dataObjectId, elementType: 'data-object' }
   }
 
