@@ -29,6 +29,10 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
   return (
     <Content
       loading={ isLoading }
+      none={ data?.items === undefined || data?.items.length === 0 }
+      noneOptions={ {
+        text: t('workflow.no-workflows-found')
+      } }
       padded
     >
       <Header

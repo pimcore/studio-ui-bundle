@@ -13,6 +13,7 @@ asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 workflow.label: Workflow
 workflow.headline: Workflow Details
+workflow.no-workflows-found: No workflows found
 folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
 toolbar.reload.confirmation: Are you sure you want to reload this tab? All unsaved changes will be lost.
