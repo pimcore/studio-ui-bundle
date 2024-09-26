@@ -1,4 +1,4 @@
-import { api } from "@Pimcore/app/api/pimcore";
+import { api } from "../../../../../../app/api/pimcore/index";
 export const addTagTypes = ["Workflows"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
