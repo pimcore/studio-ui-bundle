@@ -19,7 +19,6 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
-import { useStyle } from './table.styles'
 
 type DependencyTable = Dependency & {
   actions: React.JSX.Element
@@ -32,7 +31,6 @@ interface TableProps {
 
 export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyle()
 
   const columnHelper = createColumnHelper<DependencyTable>()
   const columns = [
@@ -60,14 +58,12 @@ export const Table = ({ items, isLoading }: TableProps): React.JSX.Element => {
   ]
 
   return (
-    <div className={ styles.table }>
-      <Grid
-        autoWidth
-        columns={ columns }
-        data={ items }
-        isLoading={ isLoading }
-        resizable
-      />
-    </div>
+    <Grid
+      autoWidth
+      columns={ columns }
+      data={ items }
+      isLoading={ isLoading }
+      resizable
+    />
   )
 }

@@ -13,6 +13,7 @@
 
 import { createStyles } from 'antd-style'
 
+// @todo move to components
 export const useStyle = createStyles(({ token, css }) => {
   return {
     skeleton: css`

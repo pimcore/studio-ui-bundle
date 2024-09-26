@@ -21,6 +21,7 @@ import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { useMercureCreateCookieMutation } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
+import { GlobalStyles } from '@Pimcore/styles/global.styles'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -83,15 +84,12 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     }).catch(() => {})
   }, [])
 
-  if (isLoading) {
-    return (
-      <Content loading />
-    )
-  }
-
   return (
     <>
-      {props.children}
+      <GlobalStyles />
+
+      {isLoading && <Content loading />}
+      {!isLoading && props.children}
     </>
   )
 }

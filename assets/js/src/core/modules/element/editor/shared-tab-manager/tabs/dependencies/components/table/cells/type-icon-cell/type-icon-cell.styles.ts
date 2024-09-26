@@ -11,15 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import React from 'react'
+import { Form, type FormItemProps } from 'antd'
 
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    typeIconCell: css`
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    `
-  }
-})
+interface FormItemWrapperProps extends FormItemProps {
+  children?: React.JSX.Element
+}
+
+export const FormItemWrapper = ({
+  children,
+  ...props
+}: FormItemWrapperProps): React.JSX.Element => {
+  return (
+    <Form.Item
+      { ...props }
+    >
+      {children}
+    </Form.Item>
+  )
+}

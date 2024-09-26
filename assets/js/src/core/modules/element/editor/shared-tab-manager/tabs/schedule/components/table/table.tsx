@@ -20,6 +20,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 type ScheduleTable = Schedule & {
   actions: React.ReactNode
@@ -75,7 +76,11 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
       header: t('schedule.columns.actions'),
       cell: (info) => {
         return (
-          <div className={ 'schedule-table--actions-column' }>
+          <Flex
+            align='center'
+            className='w-full h-full'
+            justify='center'
+          >
             <IconButton
               icon={ 'trash' }
               onClick={ (): void => {
@@ -83,7 +88,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
               } }
               type="link"
             />
-          </div>
+          </Flex>
         )
       },
       size: 70

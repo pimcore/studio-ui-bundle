@@ -35,6 +35,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
+import { Space } from '@Pimcore/components/space/space'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -125,10 +126,14 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
         title={ t('asset.asset-editor-tabs.custom-metadata.text') }
       >
         <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
-          <div className={ 'pimcore-custom-metadata-toolbar__manual' }>
+          <Space
+            size='extra-small'
+          >
             {editmode && (
             <>
-              <div className={ 'pimcore-custom-metadata-toolbar__manual__editmode' }>
+              <Space
+                size="extra-small"
+              >
                 <Button
                   onClick={ () => {
                     setEditMode(false)
@@ -169,7 +174,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 >
                   {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
                 </IconTextButton>
-              </div>
+              </Space>
 
               <DuplicateEntryModal
                 footer={ <ModalFooter>
@@ -217,7 +222,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
               </IconTextButton>] }
             />
             )}
-          </div>
+          </Space>
         </div>
       </Header>
 

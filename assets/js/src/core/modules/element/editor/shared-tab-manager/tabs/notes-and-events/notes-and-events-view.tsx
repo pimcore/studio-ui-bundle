@@ -24,15 +24,17 @@ import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Space, Tag } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from '@Pimcore/components/button/button'
+import { Tag } from 'antd'
+import { Space } from '@Pimcore/components/space/space'
 import i18n from 'i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { useStyles } from './notes-and-events-view.style'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Text } from '@Pimcore/components/text/text'
+import { Split } from '@Pimcore/components/split/split'
+import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -51,8 +53,6 @@ export const NotesAndEventsTabView = ({
 }: NotesAndEventsTabViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [addNoteModalOpen, setAddNoteModalOpen] = useState<boolean>(false)
-
-  const { styles } = useStyles()
 
   const NotesAndEvents: Array<{
     children: React.JSX.Element
@@ -80,21 +80,21 @@ export const NotesAndEventsTabView = ({
       const type = note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined
 
       return (
-        <div>
+        <Space
+          align='center'
+          size="extra-small"
+        >
           {type !== undefined && <Tag>{type}</Tag>}
           <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
-          <Button
+          <IconButton
             aria-label={ i18n.t('aria.notes-and-events.delete') }
-            icon={ <Icon
-              className={ 'panel-extra__trash-icon' }
-              name={ 'trash' }
-                   /> }
+            icon='trash'
             onClick={ () => {
               onClickTrash(note.id)
             } }
-            type={ 'text' }
+            theme='primary'
           />
-        </div>
+        </Space>
       )
     }
 
@@ -111,7 +111,7 @@ export const NotesAndEventsTabView = ({
         <><span
           className={ 'panel-body__description ' + (showDetails ? 'panel-body__description-padding' : '') }
           >
-          {respectLineBreak(note.description)}
+          <Paragraph>{respectLineBreak(note.description)}</Paragraph>
         </span>
           {showDetails && (
           <div>
@@ -132,15 +132,20 @@ export const NotesAndEventsTabView = ({
 
     return ({
       key: note.id.toString(),
-      title: <Space>
+      title: <Split
+        dividerSize='small'
+        size='extra-small'
+        theme='secondary'
+             >
         {note.title !== '' && (
         <>
-          <span className={ 'panel-title' }>{note.title}</span>
-          <span className={ 'panel-title__divider' }>|</span>
+          <Text
+            strong
+          >{note.title}</Text>
         </>
         )}
-        <span className={ 'panel-title__user' }>{note.userName}</span>
-      </Space>,
+        <Text type='secondary'>{note.userName}</Text>
+      </Split>,
       extra: extra(),
       children: children(),
       ...(note.description.length === 0 && collapseDisabled)
@@ -191,13 +196,11 @@ export const NotesAndEventsTabView = ({
             text: t('notes-and-events.no-notes-and-events-to-show')
           } }
         >
-          <div className={ styles['notes-and-events'] }>
-            <Accordion
-              accordion={ false }
-              items={ NotesAndEvents }
-              spaced
-            />
-          </div>
+          <Accordion
+            accordion={ false }
+            items={ NotesAndEvents }
+            spaced
+          />
         </Content>
       </Content>
     </ContentToolbarSidebarLayout>

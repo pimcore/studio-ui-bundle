@@ -38,3 +38,42 @@ export const _default = {
     )
   }
 }
+
+export const SecondaryTheme = {
+  args: {
+    children: (
+      <>
+        <Button>Button 1</Button>
+        <div>Content 2</div>
+        <div>Content 3</div>
+      </>
+    ),
+    theme: 'secondary'
+  }
+}
+
+export const LargeDivider = {
+  args: {
+    children: (
+      <>
+        <Button>Button 1</Button>
+        <div>Content 2</div>
+        <div>Content 3</div>
+      </>
+    ),
+    dividerSize: 'large'
+  }
+}
+
+export const SmallDivider = {
+  args: {
+    children: (
+      <>
+        <Button>Button 1</Button>
+        <div>Content 2</div>
+        <div>Content 3</div>
+      </>
+    ),
+    dividerSize: 'small'
+  }
+}

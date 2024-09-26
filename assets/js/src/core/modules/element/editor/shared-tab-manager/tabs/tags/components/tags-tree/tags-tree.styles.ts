@@ -13,20 +13,25 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
-    search: css`
-      padding-top: ${token.paddingXS}px;
+    tag: css`
+      &.ant-tag {
+        &.ant-tag-default {
+            background-color: ${token.colorFillTertiary};
+            color: ${token.colorTextLabel};
+            border-color: ${token.Tag.colorBorder};
+        }
         
-      .ant-input-group-addon {        
-        > .ant-btn {
-            border-color: #d9d9d9;
-           color: ${token.colorPrimary} !important; 
+        &.theme-transparent {
+          background-color: ${token.colorFillTertiary};
+          border-color: ${token.colorBorder};
+        }
+
+        .anticon + span {
+          margin-inline-start: 4px;
         }
       }
-    `,
-    tree: css`
-      padding-top: ${token.paddingXS}px;
     `
   }
 })

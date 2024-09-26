@@ -13,8 +13,9 @@
 
 import React, { useEffect, useState } from 'react'
 import { useStyles } from './schedule-container.styles'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Switch } from 'antd'
+import { Switch } from '@Pimcore/components/switch/switch'
 import { Button } from '@Pimcore/components/button/button'
 import {
   type Schedule as ApiSchedule,
@@ -23,6 +24,7 @@ import {
 import {
   Table
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/table'
+import { Table } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
@@ -34,9 +36,17 @@ import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedule
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import { useSaveSchedules } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { Space } from '@Pimcore/components/space/space'
+import { Box } from '@Pimcore/components/box/box'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
-  const { styles } = useStyles()
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const [scheduleTab, setScheduleTab] = useState<string>('upcoming')
@@ -98,7 +108,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
   return (
     <Content
-      className={ styles.tab }
       padded
     >
       <Header title={ t('schedule.headline') }>
@@ -136,7 +145,10 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         />
       </Header>
 
-      <div className={ 'pimcore-schedule-toolbar__filters' }>
+      <Flex
+        align={ 'center' }
+        justify={ 'space-between' }
+      >
         <Segmented
           onChange={ setScheduleTab }
           options={ [
@@ -144,14 +156,21 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
             { label: t('schedule.all'), value: 'all' }
           ] }
         />
-        <div className={ 'pimcore-schedule-toolbar__filters__active-switch' }>
-          <p>{t('schedule.toolbar.filters.active-switch')}</p>
+
+
+        <Space
+          className={ 'pimcore-schedule-toolbar__filters__active-switch' }
+          size='extra-small'
+        >
+          <Text>{t('schedule.toolbar.filters.active-switch')}</Text>
           <Switch
+            label={ t('schedule.toolbar.filters.active-switch') }
+            labelPosition={ 'start' }
             onChange={ setActiveOnly }
             value={ activeOnly }
           />
-        </div>
-      </div>
+        </Space>
+      </Flex>
 
       <div
         className={ 'pimcore-schedule-content' }
@@ -161,25 +180,26 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <Table data={ filterSchedules(gridDataUpcoming ?? []) } />
 
         {scheduleTab === 'all' && (
-        <>
-          <div className={ 'pimcore-schedule-content__archive__toolbar' }>
-            <p className={ 'pimcore-schedule-content__archive__toolbar__headline' }>
-              {t('schedule.archived')}
-            </p>
+          <>
+            <Box padding={ { y: 'small' } }>
+              <Space>
+                <Text strong>
+                  {t('schedule.archived')}
+                </Text>
 
-            <IconTextButton
-              disabled={ gridDataArchive.length === 0 }
-              icon={ 'trash' }
-              onClick={ cleanupArchivedVersions }
-            >
-              {t('schedule.archived.cleanup-all')}
-            </IconTextButton>
-          </div>
-
-          <Table
-            data={ filterSchedules(gridDataArchive ?? []) }
-          />
-        </>
+                <IconTextButton
+                  disabled={ gridDataArchive.length === 0 }
+                  icon={ 'trash' }
+                  onClick={ cleanupArchivedVersions }
+                >
+                  {t('archived.cleanup-all')}
+                </IconTextButton>
+              </Space>
+            </Box>
+            <Table
+              data={ filterSchedules(gridDataArchive ?? []) }
+            />
+          </>
         )}
       </div>
     </Content>

@@ -26,6 +26,8 @@ import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { Text } from '@Pimcore/components/text/text'
+import { Box } from '@Pimcore/components/box/box'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -211,9 +213,10 @@ export const Table = ({
 
           {propertiesTableTab === 'all' && (
             <>
-              <p className={ 'headline' }>
-                {t('properties.inherited.properties')}
-              </p>
+              <Box padding={ { y: 'small' } }>
+                <Text strong>{t('properties.inherited.properties')}
+                </Text>
+              </Box>
               <Grid
                 autoWidth
                 columns={ allTableColumns }

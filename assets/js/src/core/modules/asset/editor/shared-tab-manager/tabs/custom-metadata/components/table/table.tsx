@@ -17,11 +17,12 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata as CustomMetadataApi, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
-import { useStyle } from './table.styles'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
+import { Box } from '@Pimcore/components/box/box'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -35,7 +36,6 @@ interface CustomMetadataTableProps {
 export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModal }: CustomMetadataTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { styles } = useStyle()
   const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
   const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id: id! })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
@@ -98,15 +98,21 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       header: t('asset.asset-editor-tabs.custom-metadata.columns.actions'),
       cell: (info) => {
         return (
-          <div className={ 'custom-metadata-table--actions-column' }>
-            <IconButton
-              icon={ 'trash' }
-              onClick={ () => {
-                removeCustomMetadata(info.row.original)
-              } }
-              type="link"
-            />
-          </div>
+          <Box padding={ 'mini' }>
+            <Flex
+              align='center'
+              className='w-full h-full'
+              justify='center'
+            >
+              <IconButton
+                icon={ 'trash' }
+                onClick={ () => {
+                  removeCustomMetadata(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+          </Box>
         )
       },
       size: 60
@@ -127,16 +133,14 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   }
 
   return (
-    <div className={ styles.table }>
-      <Grid
-        autoWidth
-        columns={ columns }
-        data={ customMetadata! }
-        isLoading={ isLoading }
-        modifiedCells={ modifiedCells }
-        onUpdateCellData={ onUpdateCellData }
-        setRowId={ (row: CustomMetadata) => row.rowId }
-      />
-    </div>
+    <Grid
+      autoWidth
+      columns={ columns }
+      data={ customMetadata! }
+      isLoading={ isLoading }
+      modifiedCells={ modifiedCells }
+      onUpdateCellData={ onUpdateCellData }
+      setRowId={ (row: CustomMetadata) => row.rowId }
+    />
   )
 }

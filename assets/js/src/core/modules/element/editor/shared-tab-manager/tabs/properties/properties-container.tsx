@@ -22,13 +22,14 @@ import { Table } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/p
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { Space } from '@Pimcore/components/space/space'
+import { Split } from '@Pimcore/components/split/split'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -71,7 +72,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
       padded
     >
       <Header title={ t('properties.label') }>
-        <div className={ ['pimcore-properties-toolbar', styles.toolbar].join(' ') }>
+        <Space
+          className={ [styles.toolbar].join(' ') }
+          size='small'
+        >
           <Segmented
             onChange={ setPropertiesTableTab }
             options={ [
@@ -146,8 +150,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
             )}
 
             {!createManualPropertyMode && (
-            <ButtonGroup
-              items={ [
+              <Split size='mini'>
                 <Select
                   filterOption={ (input, option) => {
                     return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
@@ -166,7 +169,8 @@ export const PropertiesContainer = (): React.JSX.Element => {
                       {item.name}
                     </Select.Option>
                   ))}
-                </Select>,
+                </Select>
+
                 <IconTextButton
                   icon={ 'PlusCircleOutlined' }
                   key={ t('properties.add-custom-property') }
@@ -176,12 +180,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 >
                   {t('properties.add-custom-property')}
                 </IconTextButton>
-              ] }
-              withSeparator
-            />
+              </Split>
             )}
           </div>
-        </div>
+        </Space>
       </Header>
 
       <Table

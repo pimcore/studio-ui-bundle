@@ -16,14 +16,10 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     tab: css`
-        display: flex;
-        flex-direction: column;
+        
     `,
     toolbar: css`
-      display: flex;
-      gap: 10px;
-      align-items: center;
-        
+      // @todo: remove after replacement with centralized select component
       .ant-select {
         .ant-select-selector {
           min-width: 100px;
@@ -38,16 +34,6 @@ export const useStyle = createStyles(({ token, css }) => {
           color: ${token.Button.defaultColor} !important;
         }
       }
-        
-        .pimcore-custom-metadata-toolbar__manual {
-            display: flex;
-            gap: 10px;
-
-            .pimcore-custom-metadata-toolbar__manual__editmode {
-                display: flex;
-                gap: 10px;
-            }
-        }
     `
   }
 })

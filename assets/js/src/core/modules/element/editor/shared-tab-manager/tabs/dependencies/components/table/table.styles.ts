@@ -13,13 +13,11 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css }) => {
   return {
-    table: css`
-      .ant-table {
-        .ant-table-cell {
-          padding: ${token.paddingXS}px
-        }
+    box: css`
+      &.box--inline {
+        display: inline-block;
       }
     `
   }
