@@ -31,6 +31,7 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
+  const [title, setTitle] = useState(props.title)
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -64,6 +65,7 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
       { ...props }
       progress={ progress }
+      title={ title }
     />
   )
 
@@ -72,7 +74,7 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
     action().then(actionJobId => {
       console.log('actionJobId', actionJobId)
 
-      jobId.current = actionJobId + 1
+      jobId.current = actionJobId
     }).catch(console.error)
   }
 
@@ -80,23 +82,51 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
     const data: any = JSON.parse(event.data as string)
     console.log('messageHandler', data)
 
+    console.log('compare', data.jobRunId, jobId.current)
     if (data.jobRunId !== jobId.current) {
       return
     }
 
     if (data.progress !== undefined) {
+      console.log('progress', data.progress)
+
       setProgress(data.progress as number)
     }
 
     if (data.status !== undefined) {
       if (data.status === 'finished') {
+        if (data.messages !== undefined) {
+          const messages: { jobRunChildId?: number } = data.messages
+
+          if (messages.jobRunChildId !== undefined) {
+            const childId = messages.jobRunChildId
+
+            // do something awesome
+            jobId.current = childId
+            setTitle('Creating assets')
+            setProgress(0)
+          }
+
+          if (messages.jobRunChildId === undefined) {
+            updateJob(id, {
+              status: JobStatus.SUCCESS
+            })
+
+            closeSEEvent()
+
+            // und dann wär gut ...
+          }
+        }
+      }
+
+      if (data.status === 'finished_with_errors') {
         updateJob(id, {
           status: JobStatus.SUCCESS
         })
 
         closeSEEvent()
 
-        // TODO: clear folder cache
+        // und dann wär gut ...
       }
 
       if (data.status === 'failed') {

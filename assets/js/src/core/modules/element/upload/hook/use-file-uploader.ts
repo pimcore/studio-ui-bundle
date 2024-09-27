@@ -38,13 +38,6 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
   const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!
 
-  // let promiseResolve: (value: number | PromiseLike<number>) => void = () => {}
-  // const promise: Promise<number> | undefined = new Promise(resolve => {
-  //  promiseResolve = resolve
-  // })
-
-  // console.log('promise', promise)
-
   const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (parentId === undefined) {
       throw new Error('Parent ID is required')
@@ -62,6 +55,14 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
       uploadContext.setUploadingNode(null)
     }
   }
+
+  /*
+
+  progress = handler-progress (message holds childJobRunnerId)
+  unpack process = zip-upload-finished (message holds childJobRunnerId)
+  creation of assets = asset-upload-finished
+
+  */
 
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (!zipUploadFirstRun.includes(props.file.uid)) {
