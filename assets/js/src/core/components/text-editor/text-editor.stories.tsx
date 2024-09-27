@@ -29,6 +29,6 @@ export default config
 export const _default = {
   args: {
     defaultText: 'I am a default text',
-    lineNumbers: false,
+    lineNumbers: false
   }
 }
