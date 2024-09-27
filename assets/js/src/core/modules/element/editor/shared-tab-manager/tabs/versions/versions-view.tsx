@@ -17,7 +17,7 @@ import { Button } from '@Pimcore/components/button/button'
 import {
   type Version,
   type VersionGetCollectionForElementByTypeAndIdApiArg
-} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 
 import { useTranslation } from 'react-i18next'
 import { useModal } from '@Pimcore/components/modal/useModal'

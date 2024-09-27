@@ -1,5 +1,5 @@
 import type {VersionIdentifiers} from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view";
-import type {Version} from "@Pimcore/modules/element/editor/version-api-slice.gen";
+import type {Version} from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen";
 
 export interface VersionComparisonViewProps {
     versionIds: VersionIdentifiers[]

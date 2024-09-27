@@ -17,7 +17,7 @@ import {
   useVersionDeleteByIdMutation,
   useVersionGetCollectionForElementByTypeAndIdQuery,
   useVersionPublishByIdMutation, useVersionUpdateByIdMutation
-} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { VersionsView } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
 import { Content } from '@Pimcore/components/content/content'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'

@@ -1,4 +1,4 @@
-import { api } from "../../../app/api/pimcore/index";
+import { api } from "@Pimcore/app/api/pimcore";
 export const addTagTypes = ["Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({

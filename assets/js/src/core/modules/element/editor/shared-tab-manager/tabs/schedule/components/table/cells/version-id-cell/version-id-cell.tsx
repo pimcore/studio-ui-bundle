@@ -13,7 +13,7 @@
 
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { useVersionGetCollectionForElementByTypeAndIdQuery, type Version } from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
+import { useVersionGetCollectionForElementByTypeAndIdQuery, type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
 import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'

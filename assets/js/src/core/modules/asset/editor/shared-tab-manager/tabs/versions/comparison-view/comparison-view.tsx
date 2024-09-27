@@ -14,7 +14,7 @@
 import React, { useEffect, useState } from 'react'
 import {
   api, type AssetVersion
-} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import {
   ComparisonViewUi
 } from './comparison-view-ui'
