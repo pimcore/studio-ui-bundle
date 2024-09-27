@@ -17,6 +17,7 @@ import { type WorkflowDetails } from '@Pimcore/modules/element/editor/workflow-a
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
+import { Tag as TagLocal } from '@Pimcore/components/tag/tag'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -60,46 +61,57 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   }
 
   return (
-    <Card
-      className={ styles.workflowCard }
-      extra={ <DropdownButton /> }
-      title={ (
-        <>
-          <p>{workflow.workflowName}</p>
+    <>
+      <Card
+        className={ styles.workflowCard }
+        extra={ <DropdownButton /> }
+        title={ (
+          <>
+            <p>{workflow.workflowName}</p>
 
-          {workflow.workflowStatus !== undefined && workflow.workflowStatus?.length > 0 && (
-            workflow.workflowStatus.map((status, index) => (
-              <Tag
-                className={ status.colorInverted ? 'color-inverted' : '' }
-                icon={
-                  <Badge
-                    color={ status.color }
-                    styles={ status.colorInverted
-                      ? { indicator: { outline: `1px solid ${status.color}4D` } }
-                      : {}
+            {workflow.workflowStatus !== undefined && workflow.workflowStatus?.length > 0 && (
+              workflow.workflowStatus.map((status, index) => (
+                <Tag
+                  className={ status.colorInverted ? 'color-inverted' : '' }
+                  icon={
+                    <Badge
+                      color={ status.color }
+                      styles={ status.colorInverted
+                        ? { indicator: { outline: `1px solid ${status.color}4D` } }
+                        : {}
                     }
-                  />
+                    />
                 }
-                key={ index }
-                style={ status.colorInverted
-                  ? { backgroundColor: `${status.color}33` }
-                  : {}
+                  key={ index }
+                  style={ status.colorInverted
+                    ? { backgroundColor: `${status.color}33` }
+                    : {}
                 }
-                title={ status.title }
-              >
-                {status.label}
-              </Tag>
-            ))
-          )}
-        </>
+                  title={ status.title }
+                >
+                  {status.label}
+                </Tag>
+              ))
+            )}
+          </>
       ) }
-    >
-      {workflow.graph !== undefined && (
-        <img
-          alt={ 'workflow' }
-          src={ `data:image/svg+xml;utf8,${encodeURIComponent(workflow.graph)}` }
-        />
-      )}
-    </Card>
+      >
+        {workflow.graph !== undefined && (
+          <img
+            alt={ 'workflow' }
+            src={ `data:image/svg+xml;utf8,${encodeURIComponent(workflow.graph)}` }
+          />
+        )}
+      </Card>
+      <div>
+        <TagLocal
+          color="default"
+          iconName={ 'user-01' }
+          maxLength={ 25 }
+        >
+          Martin Alexander Feldkircher
+        </TagLocal>
+      </div>
+    </>
   )
 }
