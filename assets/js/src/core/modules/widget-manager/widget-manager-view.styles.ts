@@ -85,13 +85,13 @@ export const useStlyes = createStyles(({ token, css }) => {
   
         .flexlayout__tab_button {
           margin: 0;
-          padding: ${tabToken.tabsCardPadding};
+          padding: ${token.paddingSM}px ${token.paddingSM}px;
           background: ${token.colorFillAlter};
           transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
           font-size: ${token.fontSize}px;
           color: ${tabToken.itemColor};
           outline: none;
-          gap: ${token.marginXS}px;
+          gap: ${token.marginXXS}px;
         
           &:hover {
             background: ${token.Tabs.colorBgHoverUnselectedTab};
@@ -139,7 +139,7 @@ export const useStlyes = createStyles(({ token, css }) => {
         }
   
         .flexlayout__tab_button_top {
-          border-radius: ${token.borderRadius}px ${token.borderRadius}px 0 0;
+          border-radius: ${token.borderRadiusLG}px ${token.borderRadiusLG}px 0 0;
           border-bottom: 0;
         }
   
