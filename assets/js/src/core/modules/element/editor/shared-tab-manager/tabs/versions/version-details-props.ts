@@ -11,15 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type {VersionIdentifiers} from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view";
-import type {Version} from "@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen";
+import type { VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
+import type { Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 
 export interface VersionComparisonViewProps {
-    versionIds: VersionIdentifiers[]
+  versionIds: VersionIdentifiers[]
 }
 
 export interface SingleVersionViewProps {
-    versions: Version[]
-    versionId: VersionIdentifiers
-    setDetailedVersions: (vIds: VersionIdentifiers[]) => void
+  versions: Version[]
+  versionId: VersionIdentifiers
+  setDetailedVersions: (vIds: VersionIdentifiers[]) => void
 }
