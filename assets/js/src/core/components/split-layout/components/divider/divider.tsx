@@ -102,6 +102,7 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
           icon={ 'chevron-selector-horizontal' }
           iconOptions={ { height: 14, width: 14 } }
           type="default"
+          variant="static"
         />
       )}
     </div>

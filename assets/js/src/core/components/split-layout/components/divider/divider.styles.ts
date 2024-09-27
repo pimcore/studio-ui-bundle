@@ -37,21 +37,6 @@ export const useStyles = createStyles(({ css, token }) => ({
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
-    padding: 4px;
-    border: 1px solid ${token.colorBorderContainer};
-    background-color: ${token.Divider.colorBgContainer};
-    border-radius: ${token.Divider.borderRadiusSM};
     cursor: col-resize;
-    
-    &:hover, &:disabled, &:active {
-      border-color: ${token.colorBorderContainer} !important;
-    }
-    
-    &:focus-visible {
-      outline: none !important;
-      outline-offset: 0 !important;
-    }
   `
 }))

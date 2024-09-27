@@ -93,7 +93,9 @@ const defaultTheme = {
       circleTextColor: 'rgba(0, 0, 0, 0.25)'
     },
     Divider: {
-      colorSplit: '#d3adf7',
+      colorSplit: '#d3adf7'
+    },
+    IconButton: {
       colorBgContainer: '#ffffff',
       borderRadiusSM: '4px'
     },

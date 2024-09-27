@@ -21,7 +21,7 @@ export interface IconButtonProps extends ButtonProps {
   icon: string
   iconOptions?: IconProps['options']
   theme?: 'primary' | 'secondary'
-  minimal?: boolean
+  variant?: 'minimal' | 'static'
   hideShadow?: boolean
 }
 
@@ -32,8 +32,8 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     iconOptions,
     type = 'link',
     theme = 'primary',
-    minimal = false,
     hideShadow = false,
+    variant,
     className,
     ...buttonProps
   } = props
@@ -43,8 +43,8 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
   const iconButtonClassNames = cn(
     styles.button,
     `icon-button--theme-${theme}`,
+    `icon-button--variant-${variant}`,
     {
-      'icon-button--minimal': minimal,
       'icon-button--hide-shadow': hideShadow
     },
     className

@@ -24,15 +24,33 @@ export const useStyles = createStyles(({ token, css }) => {
       &.icon-button--theme-secondary {
         color: ${token.colorText};
       }
+      
+      &.icon-button--hide-shadow {
+        box-shadow: none;
+      }
 
-      &.icon-button--minimal {
+      &.icon-button--variant-minimal {
         padding: 0;
         width: auto;
         height: auto;
       }
-      
-      &.icon-button--hide-shadow {
-        box-shadow: none;
+
+      &.icon-button--variant-static {
+        width: 24px;
+        height: 24px;
+        padding: 4px;
+        border: 1px solid ${token.colorBorderContainer};
+        background-color: ${token.IconButton.colorBgContainer};
+        border-radius: ${token.IconButton.borderRadiusSM};
+
+        &:hover, &:disabled, &:active {
+          border-color: ${token.colorBorderContainer} !important;
+        }
+
+        &:focus-visible {
+          outline: none !important;
+          outline-offset: 0 !important;
+        }
       }
     `
   }
