@@ -95,6 +95,10 @@ const defaultTheme = {
     Divider: {
       colorSplit: '#d3adf7'
     },
+    IconButton: {
+      colorBgContainer: '#ffffff',
+      borderRadiusSM: '4px'
+    },
     Button: {
       defaultBorderColor: '#d3adf7',
       defaultColor: '#722ed1',
