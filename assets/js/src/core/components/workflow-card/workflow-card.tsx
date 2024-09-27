@@ -111,6 +111,13 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         >
           Martin Alexander Feldkircher
         </TagLocal>
+        <TagLocal
+          color="default"
+          iconName={ 'user-01' }
+          maxLength={ 25 }
+        >
+          Martin Alexander
+        </TagLocal>
       </div>
     </>
   )

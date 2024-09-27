@@ -187,6 +187,11 @@ const defaultTheme = {
       fontSizeSM: 12,
       defaultBg: '#fafafa',
       defaultColor: 'rgba(0, 0, 0, 0.88)'
+    },
+
+    Tooltip: {
+      colorBgSpotlight: 'rgba(0, 0, 0, 0.85)',
+      borderRadiusLG: 6
     }
   }
 }

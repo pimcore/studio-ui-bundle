@@ -32,6 +32,10 @@ export const useStyles = createStyles(({ css, token }) => {
           margin-inline-start: 4px;
         }
       }
+    `,
+
+    tooltip: css`
+      background-color: ${token.Tooltip.colorBgSpotlight};
     `
   }
 })

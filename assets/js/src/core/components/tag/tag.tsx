@@ -12,7 +12,8 @@
 */
 
 import React, { type ReactNode } from 'react'
-import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
+import { Tag as AntTag, type TagProps as AntTagPropsProps, Tooltip } from 'antd'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { isNumber, isString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './tag.styles'
@@ -32,11 +33,15 @@ export const Tag = ({ children, icon, iconName, theme, maxLength, className, ...
 
   const isLimitedCharNumber = maxLength != null && isNumber(maxLength)
   const shouldTruncateText = isLimitedCharNumber && isString(children) && (children as string)?.length > maxLength
+  const shouldShowTooltip = isLimitedCharNumber && shouldTruncateText
 
   const displayText = shouldTruncateText ? `${(children as string)?.substring(0, maxLength)}...` : children
 
-  const classes = [styles.tag, className].filter(Boolean)
-  theme !== undefined && classes.push(`theme-${theme}`)
+  const tagClassNames = cn(
+    styles.tag,
+    className,
+    { [`theme-${theme}`]: theme }
+  )
 
   const renderIcon = (name: string): React.JSX.Element => (
     <Icon
@@ -46,19 +51,34 @@ export const Tag = ({ children, icon, iconName, theme, maxLength, className, ...
     />
   )
 
-  const getIcon = (): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | Iterable<React.ReactNode> | React.ReactPortal | null | boolean => {
-    if (iconName !== undefined) return renderIcon(iconName)
-    else if (icon !== undefined) return icon
-    else return null
+  const getIcon = (): React.ReactNode => {
+    if (iconName !== undefined) {
+      return renderIcon(iconName)
+    }
+
+    return icon ?? null
   }
 
-  return (
+  const renderTag = (): JSX.Element => (
     <AntTag
-      className={ classes.join(' ') }
+      className={ tagClassNames }
       icon={ getIcon() }
       { ...props }
     >
       {displayText}
     </AntTag>
+  )
+
+  return (
+    <>
+      {shouldShowTooltip
+        ? (
+          <Tooltip title={ children }>
+            {renderTag()}
+          </Tooltip>
+          )
+        : (<>{renderTag()}</>)
+      }
+    </>
   )
 }
