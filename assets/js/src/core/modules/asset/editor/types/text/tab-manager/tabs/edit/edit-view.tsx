@@ -14,19 +14,22 @@
 import React from 'react'
 import { useStyle } from './edit-view.styles'
 import { TextEditor } from '@Pimcore/components/text-editor/text-editor'
+import { type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
 
 interface PreviewViewProps {
   src: string | undefined
+  language?: SupportedLanguage
 }
 
 const EditView = (props: PreviewViewProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const { src } = props
+  const { src, language } = props
 
   return (
     <div className={ styles.preview }>
       <TextEditor
         defaultText={ src }
+        language={ language }
       />
     </div>
   )
