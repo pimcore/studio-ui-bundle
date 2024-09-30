@@ -34,10 +34,29 @@ import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-s
 
 export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void
+  dropDownMenu: Record<string, GridColumnConfiguration[]>
 }
 
 export const useListColumns = (): UseListColumnsHookReturn => {
   const { columns, setColumns } = useContext(ListColumnsContext)
+
+  const dropDownMenu = useMemo(() => {
+    const _dropDownMenu = {}
+
+    if (columns.length === 0) {
+      return _dropDownMenu
+    }
+
+    columns.forEach((column) => {
+      if (_dropDownMenu[column.group] === undefined) {
+        _dropDownMenu[column.group] = []
+      }
+
+      _dropDownMenu[column.group].push(column)
+    })
+
+    return _dropDownMenu
+  }, [columns])
 
   function setGridColumns (columns: GridColumnConfiguration[]): void {
     setColumns(columns)
@@ -46,7 +65,8 @@ export const useListColumns = (): UseListColumnsHookReturn => {
   return {
     columns,
     setGridColumns,
-    setColumns
+    setColumns,
+    dropDownMenu
   }
 }
 
