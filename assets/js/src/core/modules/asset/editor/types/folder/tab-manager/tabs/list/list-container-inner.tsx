@@ -13,7 +13,7 @@
 
 import { useAssetGetGridMutation, type GridFilter, api, type AssetGetGridApiResponse, useAssetPatchByIdMutation, type AssetPatchByIdApiArg, type AssetGetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { GridContainer } from './grid-container'
+import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar/sidebar-container'
@@ -89,6 +89,8 @@ export const ListContainerInner = (): React.JSX.Element => {
     })
   }, [])
 
+  console.log({ data })
+
   return useMemo(() => (
     <ListDataProvider data={ data }>
       <Content loading={ isLoading }>
@@ -122,7 +124,8 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
-    const column = columns.find((column) => column.key === columnId)
+    const columnIdentifier = encodeColumnIdentifier(columnId)
+    const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
 
     if (column === undefined) {
       return
@@ -132,7 +135,7 @@ export const ListContainerInner = (): React.JSX.Element => {
       return [
         ...oldPatches,
         {
-          columnId,
+          columnId: columnIdentifier.key,
           rowIndex: rowData.id,
           value
         }
@@ -162,7 +165,8 @@ export const ListContainerInner = (): React.JSX.Element => {
             id: rowData.id,
             metadata: [
               {
-                name: column.key,
+                name: columnIdentifier.key,
+                language: columnIdentifier.locale,
                 data: value
               }
             ]
@@ -232,7 +236,8 @@ export const ListContainerInner = (): React.JSX.Element => {
         columns: columnsToRequest.map((column) => ({
           config: [],
           key: column.key,
-          type: column.type
+          type: column.type,
+          locale: column.locale
         })),
         filters: {
           page,

@@ -11,43 +11,59 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
-import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
+import { Space } from '@Pimcore/components/space/space'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { uuid } from '@Pimcore/utils/uuid'
+import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 
 interface GridConfigListProps {
   columns: GridColumnConfiguration[]
 }
 
+interface ColumnStackListItemProps extends StackListItemProps {
+  meta: GridColumnConfiguration
+}
+
+interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
+  items: ColumnStackListItemProps[]
+}
+
 /* eslint-disable react/jsx-key */
 export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
-  const { removeColumn, setColumns } = useGridConfig()
+  const { setColumns } = useGridConfig()
+  const settings = useSettings()
   const { t } = useTranslation()
 
-  const stackListItems: StackListProps['items'] = columns.map((column) => ({
-    id: column.key,
-    sortable: true,
+  const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
+    const uniqueId = uuid()
 
-    children: <Tag>{t(`asset.listing.column.${column.key}`)}</Tag>,
+    return {
+      id: uniqueId,
+      sortable: true,
+      meta: column,
 
-    renderRightToolbar: (
-      <ButtonGroup items={ [
-        <IconButton
-          icon='trash'
-          onClick={ () => { removeColumn(column) } }
-          theme='secondary'
-        />,
-        ...getLanguageSelection(column)
-      ] }
-      />
-    )
-  }))
+      children: <Tag>{t(`asset.listing.column.${column.key}`)}</Tag>,
+
+      renderRightToolbar: (
+        <Space size='mini'>
+          { getLanguageSelection(uniqueId, column) }
+          <IconButton
+            icon='trash'
+            onClick={ () => { onRemoveColumn(uniqueId) } }
+            theme='secondary'
+          />
+        </Space>
+      )
+    }
+  })
 
   return (
     <>
@@ -61,23 +77,52 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
     </>
   )
 
-  function getLanguageSelection (column: GridColumnConfiguration): React.JSX.Element[] {
+  function getLanguageSelection (uniqueId: string, column: GridColumnConfiguration): ReactNode {
     if (!column.localizable) {
-      return []
+      return <></>
     }
 
-    // @todo implement language selection with actual data
-    return [
-      <LanguageSelection
-        languages={ ['EN', 'FR'] }
-        onSelectLanguage={ () => {} }
-        selectedLanguage={ 'EN' }
-      />
+    const languages = [
+      '-',
+      ...settings.requiredLanguages
     ]
+
+    return (
+      <LanguageSelection
+        languages={ languages }
+        onSelectLanguage={ (language) => { onLanguageSelection(uniqueId, column, language) } }
+        selectedLanguage={ column.locale ?? '-' }
+      />
+    )
   }
 
-  function onItemsChange (items: StackListProps['items']): void {
-    const newColumns = items.map((item) => columns.find((column) => column.key === item.id)) as GridColumnConfiguration[]
+  function onRemoveColumn (uniqueId: string): void {
+    const itemList = stackListItems.filter((item) => item.id !== uniqueId)
+    const newColumns = itemList.map((item) => item.meta)
+    setColumns(newColumns)
+  }
+
+  function onLanguageSelection (uniqueId: string, column: GridColumnConfiguration, locale: string): void {
+    const itemList = stackListItems.map((item) => {
+      if (item.id === uniqueId) {
+        return {
+          ...item,
+          meta: {
+            ...item.meta,
+            locale
+          }
+        }
+      }
+
+      return item
+    })
+
+    const newColumns = itemList.map((item) => item.meta)
+    setColumns(newColumns)
+  }
+
+  function onItemsChange (items: ColumnStackListProps['items']): void {
+    const newColumns = items.map((item) => item.meta)
     setColumns(newColumns)
   }
 }
