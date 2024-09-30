@@ -17,7 +17,7 @@ import { type WorkflowDetails } from '@Pimcore/modules/element/editor/workflow-a
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
-import { Tag as TagLocal } from '@Pimcore/components/tag/tag'
+import { TagList } from '@Pimcore/components/tag-list/tag-list'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -103,22 +103,19 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           />
         )}
       </Card>
-      <div>
-        <TagLocal
-          color="default"
-          iconName={ 'user-01' }
-          maxLength={ 25 }
-        >
-          Martin Alexander Feldkircher
-        </TagLocal>
-        <TagLocal
-          color="default"
-          iconName={ 'user-01' }
-          maxLength={ 25 }
-        >
-          Martin Alexander
-        </TagLocal>
-      </div>
+      <TagList
+        itemCharMaxLength={ 25 }
+        list={ [
+          [
+            { children: 'Martin Alexander', iconName: 'user-01', color: 'default' },
+            { children: 'Martin Alexander Feldkirchner', iconName: 'user-01', color: 'default' }
+          ],
+          [
+            { children: 'John Doe', iconName: 'user-01', color: 'default' },
+            { children: 'Jane Doe', iconName: 'user-01', color: 'default' }
+          ]
+        ] }
+      />
     </>
   )
 }

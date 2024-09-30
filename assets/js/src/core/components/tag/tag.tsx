@@ -77,7 +77,7 @@ export const Tag = ({ children, icon, iconName, theme, maxLength, className, ...
             {renderTag()}
           </Tooltip>
           )
-        : (<>{renderTag()}</>)
+        : renderTag()
       }
     </>
   )
