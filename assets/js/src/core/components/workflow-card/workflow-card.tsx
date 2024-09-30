@@ -105,6 +105,8 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       </Card>
       <TagList
         itemCharMaxLength={ 25 }
+        itemColGap={ 10 }
+        itemRowGap={ 4 }
         list={ [
           [
             { children: 'Martin Alexander', iconName: 'user-01', color: 'default' },

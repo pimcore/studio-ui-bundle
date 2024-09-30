@@ -182,6 +182,8 @@ const defaultTheme = {
       lineWidth: 1,
       marginXS: 8,
       paddingXXS: 4,
+      colGapXXS: 4,
+      rowGapXXS: 4,
       fontSize: 12,
       fontSizeIcon: 12,
       fontSizeSM: 12,

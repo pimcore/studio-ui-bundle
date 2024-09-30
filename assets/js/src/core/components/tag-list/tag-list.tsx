@@ -12,23 +12,35 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import { Tag, type TagProps } from '@Pimcore/components/tag/tag'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from '@Pimcore/components/tag-list/tag-list.styles'
 
 export interface TagListProps {
   list: TagProps[][]
   itemCharMaxLength?: number
+  itemRowGap?: number
+  itemColGap?: number
+  tagListClassNames?: string
+  tagListItemClassNames?: string
 }
 
-export const TagList = ({ list, itemCharMaxLength }: TagListProps): React.JSX.Element => {
-  const { styles } = useStyles()
+export const TagList = ({ list, itemCharMaxLength, itemRowGap, itemColGap, tagListClassNames, tagListItemClassNames }: TagListProps): React.JSX.Element => {
+  const { styles } = useStyles({ itemRowGap, itemColGap })
 
   return (
-    <div>
+    <Flex
+      gap="small"
+      rootClassName={ cn(tagListClassNames) }
+      vertical
+    >
       {list.map((group, groupIndex) => (
-        <div
+        <Flex
           className={ styles.tagListGroup }
           key={ groupIndex }
+          rootClassName={ cn(tagListItemClassNames) }
+          wrap
         >
           {group.map((item, itemIndex) => (
             <Tag
@@ -40,8 +52,8 @@ export const TagList = ({ list, itemCharMaxLength }: TagListProps): React.JSX.El
               {item.children}
             </Tag>
           ))}
-        </div>
+        </Flex>
       ))}
-    </div>
+    </Flex>
   )
 }

@@ -13,10 +13,11 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ css, token }, props: { itemRowGap?: number, itemColGap?: number }) => {
   return {
     tagListGroup: css`
-      margin-bottom: 30px;
+      row-gap: ${props.itemRowGap ?? token.Tag.rowGapXXS}px;
+      column-gap: ${props.itemColGap ?? token.Tag.colGapXXS}px;
     `
   }
 })

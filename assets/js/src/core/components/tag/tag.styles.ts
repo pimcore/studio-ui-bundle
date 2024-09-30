@@ -17,6 +17,8 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     tag: css`
       &.ant-tag {
+        margin-inline-end: 0;
+        
         &.ant-tag-default {
             background-color: ${token.colorFillTertiary};
             color: ${token.colorTextLabel};
