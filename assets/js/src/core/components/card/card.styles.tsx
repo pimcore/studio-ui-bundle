@@ -46,6 +46,15 @@ export const useStyles = createStyles(({ token, css }) => {
       
       .ant-card-actions {
         border-radius: 0 0 ${token.borderRadius}px ${token.borderRadius}px;
+        
+        //todo should we use the card actions ? or should we build our own? cause antd is setting inline styles to the li
+        li {
+          width: auto !important;
+        }
+        
+        li:not(:last-child) {
+          border: none;
+        }
       }
     `
   }

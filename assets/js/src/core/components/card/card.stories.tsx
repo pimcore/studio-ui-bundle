@@ -91,8 +91,33 @@ export const Image = {
   }
 }
 
-// export const Actions = {
-//   args: {
-//     ..._default.args
-//   }
+
+// const renderAction = (): React.ReactElement => {
+//   return (
+//       <Fragment>
+//         <IconButton icon={'eye-outlined'} onClick={() => console.log('click button')} />
+//       </Fragment>
+//   )
 // }
+export const Actions = {
+  args: {
+    ..._default.args,
+      cardActions: [
+          {
+              icon: 'eye-outlined',
+              title: 'View',
+              onClick: () => console.log('click view button')
+          },
+            {
+                icon: 'edit',
+                title: 'Edit',
+                onClick: () => console.log('click edit button')
+            },
+            {
+                icon: 'trash',
+                title: 'Delete',
+                onClick: () => console.log('click delete button')
+            }
+      ]
+  }
+}
