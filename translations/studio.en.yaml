@@ -240,6 +240,7 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
+jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
