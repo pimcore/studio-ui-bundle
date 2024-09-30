@@ -19,6 +19,9 @@ import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
 import { type ZipUploadJob } from './factory'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export interface ZipUploadJobProps extends JobProps {
   config: ZipUploadJob['config']
@@ -32,6 +35,7 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
   const jobId = useRef<number>()
   const { t } = useTranslation()
   const [title, setTitle] = useState(props.title)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -58,8 +62,12 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide'),
-          handler: () => { removeJob(id) }
+          label: t('jobs.job.button-hide-and-reload'),
+          handler: () => {
+            console.log('parentFolder', parseInt(props.config.parentFolder))
+            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
+            removeJob(id)
+          }
         }
       ] }
 
