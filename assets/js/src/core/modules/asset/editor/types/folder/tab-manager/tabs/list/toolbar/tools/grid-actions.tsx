@@ -14,7 +14,7 @@
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { getFormattedDropDownMenu, useListColumns, useListSelectedRows } from '../../hooks/use-list'
+import { useListSelectedRows } from '../../hooks/use-list'
 import {
   type AssetCreateZipApiResponse,
   useAssetCreateZipMutation,
@@ -28,14 +28,16 @@ import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useModal } from '@Pimcore/components/modal/useModal'
-import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Button } from '@Pimcore/components/button/button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import {
+  BatchEditProvider
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import {
+  BatchEditModal
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
   const numberedSelectedRows = Object.keys(selectedRows).map(Number)
-  const { dropDownMenu } = useListColumns()
   const hasSelectedItems = Object.keys(selectedRows).length > 0
   const [fetchCreateZip] = useAssetCreateZipMutation()
   const { id } = useAsset()
@@ -47,10 +49,12 @@ export const GridActions = (): React.JSX.Element => {
   const {
     showModal: showBatchEditModal,
     closeModal: closeBatchEditModal,
-    renderModal: BatchEditModal
+    renderModal
   } = useModal({
     type: 'basic'
   })
+
+  console.log('----> updatedXXX')
 
   useEffect(() => {
     if (data !== undefined) {
@@ -108,30 +112,12 @@ export const GridActions = (): React.JSX.Element => {
         setOpen={ setCsvModalOpen }
       />
 
-      <BatchEditModal
-        footer={ <ModalFooter>
-          <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, (column) => { alert(column) }) } }>
-            <IconTextButton
-              icon='PlusCircleOutlined'
-              type='link'
-            >
-              {t('listing.add-column')}
-            </IconTextButton>
-          </Dropdown>
-          <IconTextButton
-            icon='close'
-            type='link'
-          >
-            {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
-          <Button
-            onClick={ closeBatchEditModal }
-            type='primary'
-          >{t('batch-edit.modal-footer.apply-changes')}</Button>
-        </ModalFooter> }
-        title={ t('batch-edit.modal-title') }
-      >
-        Lorem ipsum
-      </BatchEditModal>
+      <BatchEditProvider>
+        <BatchEditModal
+          BatchEditModal={ renderModal }
+          closeModal={ closeBatchEditModal }
+        />
+      </BatchEditProvider>
     </>
   )
 

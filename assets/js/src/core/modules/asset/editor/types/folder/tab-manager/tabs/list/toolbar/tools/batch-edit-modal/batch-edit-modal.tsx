@@ -12,31 +12,56 @@
 */
 
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Modal } from 'antd'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import {
+  getFormattedDropDownMenu,
+  useListColumns
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Button } from '@Pimcore/components/button/button'
+import { t } from 'i18next'
+import type { IModalProps } from '@Pimcore/components/modal/modal'
 
 export interface BatchEditModalProps {
-  open: boolean
-  setOpen: (open: boolean) => void
+  closeModal: () => void
+  BatchEditModal: (props: IModalProps) => React.JSX.Element
 }
 
-export const BatchEditModal = (props: BatchEditModalProps): React.JSX.Element => {
-  const { t } = useTranslation()
+export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalProps): React.JSX.Element => {
+  const { dropDownMenu } = useListColumns()
 
   return (
-    <Modal
-      onCancel={ () => {
-        props.setOpen(false)
-      } }
-      onOk={ () => {
-      } }
-      open={ props.open }
-      title={ (
-        <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle>
-            ) }
-    >
-
-    </Modal>
+    <>
+      <BatchEditModal
+        footer={ <ModalFooter>
+          <Dropdown menu={ {
+            items: getFormattedDropDownMenu(dropDownMenu, (column) => {
+              alert(column)
+            })
+          } }
+          >
+            <IconTextButton
+              icon='PlusCircleOutlined'
+              type='link'
+            >
+              {t('listing.add-column')}
+            </IconTextButton>
+          </Dropdown>
+          <IconTextButton
+            icon='close'
+            type='link'
+          >
+            {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+          <Button
+            onClick={ closeModal }
+            type='primary'
+          >{t('batch-edit.modal-footer.apply-changes')}</Button>
+        </ModalFooter> }
+        title={ t('batch-edit.modal-title') }
+      >
+        Lorem ipsum
+      </BatchEditModal>
+    </>
   )
 }
