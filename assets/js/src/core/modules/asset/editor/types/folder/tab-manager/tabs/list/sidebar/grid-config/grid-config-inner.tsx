@@ -13,7 +13,7 @@
 
 import { Title } from '@Pimcore/components/title/title'
 import React, { useEffect } from 'react'
-import { useListColumns, useListGridConfig } from '../../hooks/use-list'
+import { getFormattedDropDownMenu, useListColumns, useListGridConfig } from '../../hooks/use-list'
 import { Space } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { GridConfigList } from './grid-config-list'
@@ -21,10 +21,12 @@ import { useGridConfig } from './hooks/use-grid-config'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridConfig()
@@ -44,20 +46,20 @@ export const GridConfigInner = (): React.JSX.Element => {
             onClick={ onCancelClick }
             type='default'
           >
-            { t('button.cancel') }
+            {t('button.cancel')}
           </Button>
 
           <Button
             onClick={ onApplyClick }
             type='primary'
           >
-            { t('button.apply') }
+            {t('button.apply')}
           </Button>
         </Toolbar>
-      }
+            }
     >
       <Content padded>
-        <Title level={ 1 }>{ t('listing.grid-config.title') }</Title>
+        <Title level={ 1 }>{t('listing.grid-config.title')}</Title>
 
         <Space
           direction='vertical'
@@ -65,12 +67,12 @@ export const GridConfigInner = (): React.JSX.Element => {
         >
           <GridConfigList columns={ columns } />
 
-          <Dropdown menu={ { items: getFormattedDropDownMenu() } }>
+          <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, onColumnClick) } }>
             <IconTextButton
               icon='PlusCircleOutlined'
               type='link'
             >
-              { t('listing.add-column') }
+              {t('listing.add-column')}
             </IconTextButton>
           </Dropdown>
         </Space>
@@ -84,25 +86,6 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   function onApplyClick (): void {
     setGridColumns(columns)
-  }
-
-  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
-    const formattedDropDownMenu: DropdownMenuProps['items'] = []
-    let index = 0
-
-    for (const [key, value] of Object.entries(dropDownMenu)) {
-      formattedDropDownMenu.push({
-        key: index++,
-        label: t(`asset.listing.groups.${key}`),
-        children: value.map((column) => ({
-          key: column.key,
-          label: t(`asset.listing.column.${column.key}`),
-          onClick: () => { onColumnClick(column) }
-        }))
-      })
-    }
-
-    return formattedDropDownMenu
   }
 
   function onColumnClick (column: GridColumnConfiguration): void {

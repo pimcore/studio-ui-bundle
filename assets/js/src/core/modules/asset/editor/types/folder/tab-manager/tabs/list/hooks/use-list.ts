@@ -31,10 +31,31 @@ import {
   ListDataContext
 } from '../list-provider'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import type { DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { t } from 'i18next'
 
 export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void
   dropDownMenu: Record<string, GridColumnConfiguration[]>
+}
+
+export const getFormattedDropDownMenu = (dropDownMenu: Record<string, GridColumnConfiguration[]>, onColumnClick: (column: GridColumnConfiguration) => void): DropdownMenuProps['items'] => {
+  const formattedDropDownMenu: DropdownMenuProps['items'] = []
+  let index = 0
+
+  for (const [key, value] of Object.entries(dropDownMenu)) {
+    formattedDropDownMenu.push({
+      key: index++,
+      label: t(`asset.listing.groups.${key}`),
+      children: value.map((column) => ({
+        key: column.key,
+        label: t(`asset.listing.column.${column.key}`),
+        onClick: () => { onColumnClick(column) }
+      }))
+    })
+  }
+
+  return formattedDropDownMenu
 }
 
 export const useListColumns = (): UseListColumnsHookReturn => {

@@ -14,7 +14,7 @@
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useListColumns, useListSelectedRows } from '../../hooks/use-list'
+import { getFormattedDropDownMenu, useListColumns, useListSelectedRows } from '../../hooks/use-list'
 import {
   type AssetCreateZipApiResponse,
   useAssetCreateZipMutation,
@@ -57,25 +57,6 @@ export const GridActions = (): React.JSX.Element => {
       setJobTitle(`${data.filename}`)
     }
   }, [data])
-
-  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
-    const formattedDropDownMenu: DropdownMenuProps['items'] = []
-    let index = 0
-
-    for (const [key, value] of Object.entries(dropDownMenu)) {
-      formattedDropDownMenu.push({
-        key: index++,
-        label: t(`asset.listing.groups.${key}`),
-        children: value.map((column) => ({
-          key: column.key,
-          label: t(`asset.listing.column.${column.key}`),
-          onClick: () => { alert('column') }
-        }))
-      })
-    }
-
-    return formattedDropDownMenu
-  }
 
   const menu: DropdownMenuProps = {
     items: [
@@ -129,7 +110,7 @@ export const GridActions = (): React.JSX.Element => {
 
       <BatchEditModal
         footer={ <ModalFooter>
-          <Dropdown menu={ { items: getFormattedDropDownMenu() } }>
+          <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, (column) => { alert(column) }) } }>
             <IconTextButton
               icon='PlusCircleOutlined'
               type='link'
