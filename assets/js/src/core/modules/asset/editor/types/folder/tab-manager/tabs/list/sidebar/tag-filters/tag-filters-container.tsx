@@ -26,7 +26,6 @@ interface TagFiltersContainerProps {
 
 export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContainerProps): React.JSX.Element => {
   const [selectedTags, setSelectedTags] = useState<React.Key[]>([])
-  console.log({ selectedTags, _onSelectedTagsChange })
 
   return (
     <ContentToolbarSidebarLayout

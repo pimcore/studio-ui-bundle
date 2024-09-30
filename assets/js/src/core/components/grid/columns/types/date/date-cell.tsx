@@ -53,7 +53,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
 
   function getCellContent (): React.JSX.Element {
     if (!isInEditMode) {
-      if (value === null) {
+      if (value === null || isNaN(Number(props.getValue()))) {
         return <></>
       }
       return (

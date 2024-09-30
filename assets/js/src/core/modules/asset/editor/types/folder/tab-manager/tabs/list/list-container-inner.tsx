@@ -89,8 +89,6 @@ export const ListContainerInner = (): React.JSX.Element => {
     })
   }, [])
 
-  console.log({ data })
-
   return useMemo(() => (
     <ListDataProvider data={ data }>
       <Content loading={ isLoading }>
@@ -184,7 +182,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         })
 
         setDataPatches((oldPatches) => {
-          return oldPatches.filter((patch) => !(patch.columnId === columnId && patch.rowIndex === rowData.id))
+          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && patch.rowIndex === rowData.id))
         })
       }).catch((error) => {
         console.error(error)

@@ -60,10 +60,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     setSelectedRows(rows)
   }, [])
 
-  console.log('test')
-
   const [columns, columnIdentifiers] = useMemo(() => {
-    console.log('test2')
     const columns: Array<ColumnDef<unknown, never>> = []
     const columnIdentifiers: ColumnIdentifier[] = []
 
@@ -83,8 +80,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
           }
         })
       )
-
-      console.log('test3')
     })
 
     columns.push(
@@ -107,8 +102,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     }
 
     const transformedData: AssetRow[] = []
-    console.log('test 4')
-    console.log({ assets })
 
     assets.items.forEach((item) => {
       const row: AssetRow = {}
@@ -128,10 +121,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       transformedData.push(row)
     })
 
-    console.log({ transformedData })
-
     return transformedData
-  }, [assets])
+  }, [assets, columnIdentifiers])
 
   return useMemo(() => {
     if (data === undefined) {
@@ -154,7 +145,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         sorting={ sorting }
       />
     )
-  }, [data, columns, selectedRows, onSelectedRowsChange, onUpdateCellData, sorting])
+  }, [data, columnIdentifiers, selectedRows, onSelectedRowsChange, onUpdateCellData, sorting])
 }
 
 export { GridContainer }
