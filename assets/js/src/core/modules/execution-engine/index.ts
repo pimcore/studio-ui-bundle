@@ -25,7 +25,7 @@ export const executionEngineModule: AbstractModule = {
 
     jobComponentRegistry.registerComponent('default', DefaultJobContainer)
     jobComponentRegistry.registerComponent('download', DownloadJobContainer)
-    jobComponentRegistry.registerComponent('unpack', ZipUploadJobContainer)
+    jobComponentRegistry.registerComponent('zip-upload', ZipUploadJobContainer)
   }
 }
 

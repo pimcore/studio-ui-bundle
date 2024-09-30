@@ -15,7 +15,7 @@ import { type AbstractJob, JobStatus } from '../abstact-job'
 import { getUniqueId } from '../factory-helper'
 
 export interface ZipUploadJob extends AbstractJob {
-  type: 'unpack'
+  type: 'zip-upload'
   config: {
     parentFolder: string
   }
@@ -32,7 +32,7 @@ export const createJob = (job: ZipUploadFactoryArgs): ZipUploadJob => {
   return {
     id: getUniqueId(),
     action: job.action,
-    type: 'unpack',
+    type: 'zip-upload',
     title: job.title,
     status: JobStatus.QUEUED,
     topics: job.topics,
