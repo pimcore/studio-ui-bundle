@@ -175,15 +175,15 @@ export const Simple = {
     content: <SpaceBetweenFooterButtonsContent />,
     footer: <ModalFooter buttonAlignment={ 'space-between' }>
       <Button
-          key="cancel"
-          type="link"
+        key="cancel"
+        type="link"
       >
         Read the technical instructions
       </Button>
 
       <Button
-          key="details"
-          type={ 'primary' }
+        key="details"
+        type={ 'primary' }
       >
         See details
       </Button>
