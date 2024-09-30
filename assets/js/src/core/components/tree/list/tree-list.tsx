@@ -16,22 +16,22 @@ import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
-import { type UploadFile } from 'antd/es/upload/interface'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
+import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 
 interface TreeListProps {
   node: TreeNodeProps
-  uploadFileList: UploadFile[]
 }
 
 const { useToken } = theme
 
-export const TreeList = ({ node, uploadFileList }: TreeListProps): React.JSX.Element => {
+export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode, nodeApiHook } = useContext(TreeContext)
   const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
   const { isLoading, isError, data } = apiHookResult
+  const { uploadFileList, uploadingNode } = useContext(UploadContext)!
 
   if (isLoading === true) {
     return <></>
@@ -59,7 +59,7 @@ export const TreeList = ({ node, uploadFileList }: TreeListProps): React.JSX.Ele
       )}
 
       <div className='tree-list'>
-        {uploadFileList.length > 0 && (
+        {uploadFileList.length > 0 && node.id === uploadingNode && (
           <div
             className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
             style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }

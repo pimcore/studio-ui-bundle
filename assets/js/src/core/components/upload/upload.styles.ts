@@ -15,12 +15,8 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    uploadList: css`
-      margin-top: ${token.paddingSM}px;
-      margin-bottom: ${token.paddingSM}px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    upload: css`
+      display: none
     `
   }
 })

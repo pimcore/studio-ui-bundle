@@ -103,6 +103,7 @@ import uploadCloud01 from '@Pimcore/assets/icons/upload-cloud-01.inline.svg'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg'
 import grid from '@Pimcore/assets/icons/grid.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
+import uploadZip from '@Pimcore/assets/icons/file-download-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -470,6 +471,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'spinner',
       component: spinner
+    })
+
+    iconLibrary.register({
+      name: 'upload-zip',
+      component: uploadZip
     })
   }
 })
