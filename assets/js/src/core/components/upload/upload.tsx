@@ -42,7 +42,6 @@ export const Upload = (props: UploadProps): React.JSX.Element => {
       onChange={ (changeProps) => {
         let promiseTmpHolder: PromiseType | undefined = promiseCollection[changeProps.file.uid]
         if (promiseTmpHolder === undefined) {
-          console.log('promiseCollection', promiseCollection)
           let freshResolve: UploadChangeParam['promiseResolve'] = () => {}
           const freshPromise: Promise<number> | undefined = new Promise(resolve => {
             freshResolve = resolve

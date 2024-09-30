@@ -70,26 +70,18 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
   )
 
   function openHandler (): void {
-    console.log('openHandler')
     action().then(actionJobId => {
-      console.log('actionJobId', actionJobId)
-
       jobId.current = actionJobId
     }).catch(console.error)
   }
 
   function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
-    console.log('messageHandler', data)
-
-    console.log('compare', data.jobRunId, jobId.current)
     if (data.jobRunId !== jobId.current) {
       return
     }
 
     if (data.progress !== undefined) {
-      console.log('progress', data.progress)
-
       setProgress(data.progress as number)
     }
 

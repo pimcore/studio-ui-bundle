@@ -56,14 +56,6 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
     }
   }
 
-  /*
-
-  progress = handler-progress (message holds childJobRunnerId)
-  unpack process = zip-upload-finished (message holds childJobRunnerId)
-  creation of assets = asset-upload-finished
-
-  */
-
   const uploadZip = async (props: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (!zipUploadFirstRun.includes(props.file.uid)) {
       zipUploadFirstRun = [...zipUploadFirstRun, props.file.uid]
@@ -80,7 +72,6 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
     await uploadFile(props)
 
     if (props.file.response !== undefined) {
-      console.log('promise resolved! - yey')
       props.promiseResolve(props.file.response.id as number)
     }
   }
