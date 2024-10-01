@@ -44,10 +44,9 @@ export const TagList = ({ list, itemCharMaxLength, itemRowGap, itemColGap, tagLi
         >
           {group.map((item, itemIndex) => (
             <Tag
-              color={ item?.color }
-              iconName={ item?.iconName }
               key={ `${groupIndex}-${itemIndex}` }
               maxLength={ itemCharMaxLength }
+              { ...item }
             >
               {item.children}
             </Tag>

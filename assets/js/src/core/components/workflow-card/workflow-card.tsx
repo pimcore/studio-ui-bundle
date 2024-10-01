@@ -17,7 +17,6 @@ import { type WorkflowDetails } from '@Pimcore/modules/element/editor/workflow-a
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
-import { TagList } from '@Pimcore/components/tag-list/tag-list'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -103,29 +102,6 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           />
         )}
       </Card>
-      <TagList
-        itemCharMaxLength={ 25 }
-        itemColGap={ 10 }
-        itemRowGap={ 4 }
-        list={ [
-          [
-            { children: 'Patrick Heigl', iconName: 'user-01', color: 'default' },
-            { children: 'Patrick Heigl', iconName: 'user-01', color: 'default' },
-            { children: 'Marvin Bertram', iconName: 'user-01', color: 'default' },
-            { children: 'Martin Alexander Feldkirchner', iconName: 'user-01', color: 'default' },
-            { children: 'Ida Ivanova', iconName: 'user-01', color: 'default' },
-            { children: 'Niklas Purnhagen', iconName: 'user-01', color: 'default' },
-            { children: 'Christian Fasching', iconName: 'user-01', color: 'default' },
-            { children: 'Christine Altmann', iconName: 'user-01', color: 'default' },
-            { children: 'Valeriia Maltseva', iconName: 'user-01', color: 'default' },
-            { children: 'Martin Alexander Feldkirchner', iconName: 'user-01', color: 'default' }
-          ],
-          [
-            { children: 'John Doe', iconName: 'user-01', color: 'default' },
-            { children: 'Jane Doe', iconName: 'user-01', color: 'default' }
-          ]
-        ] }
-      />
     </>
   )
 }
