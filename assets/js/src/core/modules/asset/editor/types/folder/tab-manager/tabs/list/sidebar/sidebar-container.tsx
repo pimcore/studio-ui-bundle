@@ -41,8 +41,6 @@ export const SidebarContainer = (): React.JSX.Element => {
   ], [])
 
   return useMemo(() => {
-    console.log('rerendered')
-
     return (
       <Sidebar
         entries={ entries }
