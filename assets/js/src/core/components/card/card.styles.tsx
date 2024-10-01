@@ -28,7 +28,7 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-card-head-title {
         display: flex;
         align-items: center;
-        gap: ${token.marginXXS}px;
+        gap: ${token.marginXS}px;
         font-size: ${token.fontSize}px;
       }
       
@@ -45,11 +45,12 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       
       .ant-card-actions {
+        padding: ${token.paddingXXS}px;
         border-radius: 0 0 ${token.borderRadius}px ${token.borderRadius}px;
         
-        //todo should we use the card actions ? or should we build our own? cause antd is setting inline styles to the li
         li {
-          width: auto !important;
+          margin: 0;
+          max-width: fit-content;
         }
         
         li:not(:last-child) {

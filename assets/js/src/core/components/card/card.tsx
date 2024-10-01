@@ -13,18 +13,18 @@
 
 import React, {Fragment, type RefObject} from 'react'
 import {Card as AntdCard, type CardProps as AntdCardProps } from 'antd'
-import { PimcoreImage as Image } from "@Pimcore/components/pimcore-image/pimcore-image";
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import i18n from "i18next";
 import {useStyles} from "@Pimcore/components/card/card.styles";
-import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { PimcoreImage as Image } from "@Pimcore/components/pimcore-image/pimcore-image";
 
 export interface CardProps extends AntdCardProps {
   loading?: boolean,
   onClose?: () => void,
-  titleIcon?: string,
-  image?: object & { src: string, alt?: string }
-  cardActions?: object & { icon: IconProps, onClick: () => void, title: string }[]
+  icon?: string,
+  image?: object & { src: string, alt?: string },
+  cardActions?: object & { icon: string, onClick: () => void, title: string }[]
 }
 
 const Component = ({ loading, children, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
@@ -32,27 +32,35 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
   const classNames = [styles.card, className]
 
   const renderExtraContent = (): React.ReactElement => {
-    if (props.onClose === undefined && !props.date && !props.extra) {
+    if (props.onClose === undefined && !props.extra) {
       return
     }
 
     return (
         <Fragment>
           {props.extra ? (
-              <span>
-                {...props.extra}
-              </span>
+              <div>
+                  {props.extra.map((extra) => (
+                        extra.icon ? (
+                            <IconButton
+                                icon={extra.icon}
+                                onClick={extra.onClick}
+                                title={extra.title}
+                                type={extra.type ? extra.type : 'text'}
+                                role={ 'button' } />
+                        ) : (<>{extra}</>)
+                  ))}
+              </div>
           ) : null}
 
           {props.onClose !== undefined ? (
               <IconButton
                   aria-label={ i18n.t('aria.card.close') }
-                  className={ 'ant-card-extra__close-btn' }
                   icon={ 'close' }
-                  onClick={ () => console.log('click close') }
                   role={ 'button' }
                   size="small"
                   type={ 'text' }
+                  onClick={ () => props.onClose?.() }
               />
           ) : null}
         </Fragment>
@@ -60,43 +68,29 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
     }
 
     const renderTitle = (): React.ReactElement => {
-      return (
-          <Fragment>
-            {props.titleIcon ? (<Icon name={props.titleIcon} className={'ant-card-head-title__icon'}/>):null}
+        return <Fragment>
+            {props.icon ? <Icon name={props.icon} /> : null}
             {props.title}
-          </Fragment>
-      )
-    }
+        </Fragment>;
+    };
 
     return (
         <AntdCard
+            className={classNames.join(' ')}
             title={props.title ? renderTitle() : null}
             extra={renderExtraContent()}
-            className={classNames.join(' ')}
             cover={props.image ? <Image src={props.image.src} alt={props.image.alt} /> : null}
-            actions={[props.cardActions.map((action, index) => (
-                <IconButton
-                    key={index}
-                    icon={action.icon}
-                    onClick={action.onClick}
-                    title={action.title}
-                />
-            ))]}
-        >
+            actions={[
+                ...props.cardActions ? props.cardActions.map((action) => (
+                    <IconButton
+                        icon={action.icon}
+                        onClick={action.onClick}
+                        title={action.title}
+                        role={ 'button' }
+                    />
+                )) : []
+            ]}>
           {children}
-
-          {/*{props.cardActions ? (*/}
-          {/*    <div>*/}
-          {/*      {props.cardActions.map((action, index) => (*/}
-          {/*          <IconButton*/}
-          {/*              key={index}*/}
-          {/*              icon={action.icon}*/}
-          {/*              onClick={action.onClick}*/}
-          {/*              title={action.title}*/}
-          {/*          />*/}
-          {/*      ))}*/}
-          {/*    </div>*/}
-          {/*) : null}*/}
         </AntdCard>
     )
 }
