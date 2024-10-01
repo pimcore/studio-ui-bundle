@@ -24,7 +24,6 @@ export interface CardProps extends AntdCardProps {
   onClose?: () => void,
   icon?: string,
   image?: object & { src: string, alt?: string },
-  cardActions?: object & { icon: string, onClick: () => void, title: string }[]
 }
 
 const Component = ({ loading, children, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
@@ -32,13 +31,9 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
   const classNames = [styles.card, className]
 
   const renderExtraContent = (): React.ReactElement => {
-    if (props.onClose === undefined && !props.extra) {
-      return
-    }
-
     return (
         <Fragment>
-          {props.extra ? (
+          {Array.isArray(props.extra) ? (
               <div>
                   {props.extra.map((extra) => (
                         extra.icon ? (
@@ -78,18 +73,10 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
         <AntdCard
             className={classNames.join(' ')}
             title={props.title ? renderTitle() : null}
-            extra={renderExtraContent()}
+            extra={props.extra ? renderExtraContent() : null}
             cover={props.image ? <Image src={props.image.src} alt={props.image.alt} /> : null}
-            actions={[
-                ...props.cardActions ? props.cardActions.map((action) => (
-                    <IconButton
-                        icon={action.icon}
-                        onClick={action.onClick}
-                        title={action.title}
-                        role={ 'button' }
-                    />
-                )) : []
-            ]}>
+            actions={props.actions}
+        >
           {children}
         </AntdCard>
     )
