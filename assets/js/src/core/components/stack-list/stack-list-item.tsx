@@ -25,6 +25,7 @@ export interface StackListItemProps {
   children: React.ReactNode
   renderRightToolbar?: React.ReactNode
   body?: React.ReactNode
+  meta?: unknown
 }
 
 export const StackListItem = ({ id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar }: StackListItemProps): React.JSX.Element => {

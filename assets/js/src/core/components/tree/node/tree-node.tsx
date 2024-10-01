@@ -17,10 +17,7 @@ import { useStyles } from './tree-node.styles'
 import { type nodeRef, TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
-import { type UploadFile } from 'antd/es/upload/interface'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 
 export interface TreeNodeProps {
   id: string
@@ -63,11 +60,10 @@ const TreeNode = ({
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const dispatch = useAppDispatch()
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
-  const [uploadFileList, setUploadFileList] = React.useState<UploadFile[]>([])
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
+  const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 
   useEffect(() => {
     return () => {
@@ -179,16 +175,7 @@ const TreeNode = ({
     multiple: true,
     openFileDialogOnClick: false,
     showUploadList: false,
-    onChange: ({ fileList }) => {
-      const fileStates = fileList.map((file) => file.status)
-      const allFullFilled = fileStates.every(item => item === 'done')
-
-      if (allFullFilled) {
-        dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(id))))
-      }
-
-      setUploadFileList(fileList.filter((file) => file.status === 'uploading'))
-    }
+    onChange: uploadFileProcessor
   }
 
   return (
@@ -225,10 +212,7 @@ const TreeNode = ({
       </Flex>
 
       {isExpanded && (
-        <TreeList
-          node={ treeNodeProps }
-          uploadFileList={ uploadFileList }
-        />
+        <TreeList node={ treeNodeProps } />
       )}
     </div>
   )

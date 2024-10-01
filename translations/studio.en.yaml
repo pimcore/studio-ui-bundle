@@ -242,6 +242,7 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
+jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
@@ -253,10 +254,13 @@ export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
-
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
 current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 apply: Apply
+asset.tree.context-menu.add-assets: Add Asset(s)
+asset.tree.context-menu.add-assets.upload-files: Upload Files
+asset.tree.context-menu.add-assets.upload-zip: Upload Zip
+

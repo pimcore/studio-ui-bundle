@@ -79,6 +79,7 @@ import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
+import ChevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
@@ -102,6 +103,7 @@ import uploadCloud01 from '@Pimcore/assets/icons/upload-cloud-01.inline.svg'
 import exportIcon from '@Pimcore/assets/icons/export.inline.svg'
 import grid from '@Pimcore/assets/icons/grid.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
+import uploadZip from '@Pimcore/assets/icons/file-download-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -380,6 +382,10 @@ moduleSystem.registerModule({
       component: ChevronSelectorVertical
     })
     iconLibrary.register({
+      name: 'chevron-selector-horizontal',
+      component: ChevronSelectorHorizontal
+    })
+    iconLibrary.register({
       name: 'trash',
       component: Trash
     })
@@ -465,6 +471,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'spinner',
       component: spinner
+    })
+
+    iconLibrary.register({
+      name: 'upload-zip',
+      component: uploadZip
     })
   }
 })

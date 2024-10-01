@@ -15,8 +15,9 @@ import React, { useCallback, useMemo } from 'react'
 import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration, type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -26,6 +27,26 @@ interface GridContainerProps {
 
 type AssetRow = Record<string, any>
 type TransformedGridData = AssetRow[] | undefined
+
+export interface ColumnIdentifier extends Pick<GridColumnConfiguration, 'key' | 'locale'> {
+  id: string
+}
+
+export const createColumnIdentifier = (column: GridColumnConfiguration): ColumnIdentifier => {
+  return {
+    id: uuid(),
+    key: column.key,
+    locale: column.locale
+  }
+}
+
+export const decodeColumnIdentifier = (columnIdentifier: ColumnIdentifier): string => {
+  return JSON.stringify(columnIdentifier)
+}
+
+export const encodeColumnIdentifier = (columnIdentifier: string): ColumnIdentifier => {
+  return JSON.parse(columnIdentifier)
+}
 
 const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { assets, onUpdateCellData } = props
@@ -39,13 +60,18 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     setSelectedRows(rows)
   }, [])
 
-  const columns = useMemo(() => {
+  const [columns, columnIdentifiers] = useMemo(() => {
     const columns: Array<ColumnDef<unknown, never>> = []
+    const columnIdentifiers: ColumnIdentifier[] = []
 
     GridColumns.forEach((column) => {
+      const columnIdentifier = createColumnIdentifier(column)
+      columnIdentifiers.push(columnIdentifier)
+      const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
+
       columns.push(
-        columnHelper.accessor(column.key, {
-          header: t(`asset.listing.column.${column.key}`),
+        columnHelper.accessor(columnIdentifierString, {
+          header: t(`asset.listing.column.${column.key}`).concat(column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
           enableSorting: column.sortable,
           meta: {
             type: column.frontendType,
@@ -67,18 +93,36 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       })
     )
 
-    return columns
+    return [columns, columnIdentifiers]
   }, [GridColumns])
 
   const data: TransformedGridData = useMemo(() => {
-    return assets?.items.map(item => {
-      const row = {}
-      item?.columns?.forEach(column => {
-        row[column.key!] = column.value
+    if (assets === undefined) {
+      return undefined
+    }
+
+    const transformedData: AssetRow[] = []
+
+    assets.items.forEach((item) => {
+      const row: AssetRow = {}
+      columnIdentifiers.forEach((columnIdentifier) => {
+        const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
+
+        item.columns?.forEach((column) => {
+          if (column.key === 'id') {
+            row.id = column.value
+          }
+
+          if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
+            row[columnIdentifierString] = column.value
+          }
+        })
       })
-      return row
+      transformedData.push(row)
     })
-  }, [assets])
+
+    return transformedData
+  }, [assets, columnIdentifiers])
 
   return useMemo(() => {
     if (data === undefined) {
@@ -101,7 +145,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         sorting={ sorting }
       />
     )
-  }, [columns, data, selectedRows, onSelectedRowsChange, onUpdateCellData, sorting])
+  }, [data, columnIdentifiers, selectedRows, onSelectedRowsChange, onUpdateCellData, sorting])
 }
 
 export { GridContainer }

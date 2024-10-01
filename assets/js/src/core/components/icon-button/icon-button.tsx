@@ -12,35 +12,54 @@
 */
 
 import React, { forwardRef } from 'react'
+import cn from 'classnames'
+import { Button, type ButtonProps } from '../button/button'
 import { Icon, type IconProps } from '../icon/icon'
 import { useStyles } from './icon-button.styles'
-import { Button, type ButtonProps } from '../button/button'
 
 export interface IconButtonProps extends ButtonProps {
   icon: string
   iconOptions?: IconProps['options']
   theme?: 'primary' | 'secondary'
-  minimal?: boolean
+  variant?: 'minimal' | 'static'
+  hideShadow?: boolean
 }
 
-const Component = ({ icon, children, className, minimal = false, type = 'link', theme = 'primary', iconOptions, ...buttonProps }: IconButtonProps, ref): React.JSX.Element => {
-  const { styles } = useStyles()
-  const buttonClasses = [styles.button, className, `icon-button--theme-${theme}`]
+const Component = (props: IconButtonProps, ref): React.JSX.Element => {
+  const {
+    children,
+    icon,
+    iconOptions,
+    type = 'link',
+    theme = 'primary',
+    hideShadow = false,
+    variant,
+    className,
+    ...buttonProps
+  } = props
 
-  if (minimal) {
-    buttonClasses.push('icon-button--minimal')
-  }
+  const { styles } = useStyles()
+
+  const iconButtonClassNames = cn(
+    styles.button,
+    `icon-button--theme-${theme}`,
+    `icon-button--variant-${variant}`,
+    {
+      'icon-button--hide-shadow': hideShadow
+    },
+    className
+  )
 
   return (
     <Button
       type={ type }
       { ...buttonProps }
-      className={ buttonClasses.join(' ') }
+      className={ iconButtonClassNames }
       ref={ ref }
     >
       <Icon
         name={ icon }
-        { ...iconOptions }
+        options={ iconOptions }
       />
     </Button>
   )

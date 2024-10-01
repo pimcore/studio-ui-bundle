@@ -14,28 +14,29 @@
 import React, { type RefObject, useEffect, useImperativeHandle, useRef } from 'react'
 import { Button as AntdButton, type ButtonProps as AntdButtonProps } from 'antd'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useStyles } from './button.styles'
+import cn from 'classnames'
 import { Spin } from '../spin/spin'
+import { useStyles } from './button.styles'
 
 export interface ButtonProps extends AntdButtonProps {
   loading?: boolean
-};
+}
 
 const Component = ({ loading, children, className, ...props }: ButtonProps, ref: RefObject<HTMLButtonElement | null>): React.JSX.Element => {
-  const { styles } = useStyles()
   const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const { styles } = useStyles()
 
   useImperativeHandle(ref, () => buttonRef.current)
 
-  const classes = [
+  const buttonClassNames = cn(
+    'button',
     styles.button,
-    className,
-    'button'
-  ]
-
-  if (loading === true) {
-    classes.push('ant-btn-loading')
-  }
+    {
+      'ant-btn-loading': loading
+    },
+    className
+  )
 
   useEffect(() => {
     if (loading === true && buttonRef.current !== null) {
@@ -53,7 +54,7 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
 
   return (
     <AntdButton
-      className={ classes.join(' ') }
+      className={ buttonClassNames }
       ref={ buttonRef }
       { ...props }
     >
@@ -61,7 +62,7 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
         <motion.div
           animate={ { opacity: 1 } }
           exit={ { opacity: 0 } }
-          initial={ { opacity: 0 } }
+          initial={ { opacity: loading === true ? 0 : 1 } }
           key={ loading === true ? 'loading' : 'loaded' }
         >
           {loading === true && (

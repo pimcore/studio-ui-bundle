@@ -14,13 +14,29 @@
 import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => ({
+  dividerContainer: css`
+    position: relative;
+    min-width: 24px;
+    outline: none;
+  `,
+
+  resizable: css`
+    cursor: col-resize;
+  `,
+
   divider: css`
     position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -2px;
-    width: 4px;
+    left: 50%;
+    width: 1px;
+    height: 100%;
     overflow: hidden;
     background-color: ${token.Divider.colorSplit};
+  `,
+
+  iconContainer: css`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: col-resize;
   `
 }))

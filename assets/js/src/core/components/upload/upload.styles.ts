@@ -15,28 +15,8 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    languageSelect: css`
-      display: flex;
-      gap: 2px;
-      align-items: center;
-      justify-content: center;
-      height: 32px;
-
-      button {
-        width: 20px;
-        height: 20px;
-        color: ${token.colorText};
-        padding: 2px;
-      }
-
-      .language-select__current-value {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-transform: uppercase;
-        gap: 2px;
-        width: 45px;
-      }
+    upload: css`
+      display: none
     `
   }
 })
