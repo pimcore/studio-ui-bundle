@@ -17,11 +17,8 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     card: css`
-      border-radius: ${token.borderRadius}px;
-      
       .ant-card-head {
         min-height: 38px;
-        border-radius: ${token.borderRadius}px ${token.borderRadius}px 0 0 ;
         padding: ${token.paddingXXS}px ${token.paddingSM}px;
       }
       
@@ -40,13 +37,11 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       
       .ant-card-body {
-        border-radius: 0 0 ${token.borderRadius}px ${token.borderRadius}px;
         padding: ${token.paddingSM}px;
       }
       
       .ant-card-actions {
         padding: ${token.paddingXXS}px;
-        border-radius: 0 0 ${token.borderRadius}px ${token.borderRadius}px;
         
         li {
           margin: 0;
