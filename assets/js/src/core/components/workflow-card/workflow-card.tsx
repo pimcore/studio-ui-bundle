@@ -109,7 +109,15 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         itemRowGap={ 4 }
         list={ [
           [
-            { children: 'Martin Alexander', iconName: 'user-01', color: 'default' },
+            { children: 'Patrick Heigl', iconName: 'user-01', color: 'default' },
+            { children: 'Patrick Heigl', iconName: 'user-01', color: 'default' },
+            { children: 'Marvin Bertram', iconName: 'user-01', color: 'default' },
+            { children: 'Martin Alexander Feldkirchner', iconName: 'user-01', color: 'default' },
+            { children: 'Ida Ivanova', iconName: 'user-01', color: 'default' },
+            { children: 'Niklas Purnhagen', iconName: 'user-01', color: 'default' },
+            { children: 'Christian Fasching', iconName: 'user-01', color: 'default' },
+            { children: 'Christine Altmann', iconName: 'user-01', color: 'default' },
+            { children: 'Valeriia Maltseva', iconName: 'user-01', color: 'default' },
             { children: 'Martin Alexander Feldkirchner', iconName: 'user-01', color: 'default' }
           ],
           [

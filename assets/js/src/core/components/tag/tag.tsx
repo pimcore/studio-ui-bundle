@@ -73,7 +73,11 @@ export const Tag = ({ children, icon, iconName, theme, maxLength, className, ...
     <>
       {shouldShowTooltip
         ? (
-          <Tooltip title={ children }>
+          <Tooltip
+            align={ { offset: [20, -4] } }
+            overlayClassName={ styles.tooltip }
+            title={ children }
+          >
             {renderTag()}
           </Tooltip>
           )

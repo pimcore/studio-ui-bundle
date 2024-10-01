@@ -38,6 +38,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
     tooltip: css`
       background-color: ${token.Tooltip.colorBgSpotlight};
+      border-radius: ${token.Tooltip.borderRadiusLG}px;
     `
   }
 })
