@@ -13,7 +13,12 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css, token }, props: { itemRowGap?: number, itemColGap?: number }) => {
+interface StylesProps {
+  itemRowGap?: number
+  itemColGap?: number
+}
+
+export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
   return {
     tagListGroup: css`
       row-gap: ${props.itemRowGap ?? token.Tag.rowGapXXS}px;
