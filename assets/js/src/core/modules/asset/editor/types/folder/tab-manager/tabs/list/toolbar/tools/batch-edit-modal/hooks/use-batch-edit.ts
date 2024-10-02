@@ -12,14 +12,12 @@
 */
 
 import { useContext } from 'react'
-import { type GridColumnConfiguration } from 'src/sdk/main'
 import {
   type BatchContext, BatchEditContext
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
-import { t } from 'i18next'
 
 interface UseBatchEditHookReturn extends BatchContext {
-  addOrUpdateBatchEdit: (column: GridColumnConfiguration, value: string) => void
+  addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnValue: string) => void
   resetBatchEdits: () => void
   removeBatchEdit: (key: string) => void
 }
@@ -37,16 +35,16 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits([])
   }
 
-  const addOrUpdateBatchEdit = (column: GridColumnConfiguration, value: string): void => {
+  const addOrUpdateBatchEdit = (columnKey: string, columnType: string, value: string): void => {
     const newEdit: BatchEdit = {
-      key: t(`asset.listing.column.${column.key}`),
-      type: column.type,
+      key: columnKey,
+      type: columnType,
       value
     }
 
     const updatedEdits: BatchEdit[] = [...batchEdits]
 
-    const existingIndex = updatedEdits.findIndex(edit => edit.key === newEdit.key)
+    const existingIndex = batchEdits.findIndex(edit => edit.key === columnKey)
 
     if (existingIndex !== -1) {
       updatedEdits[existingIndex] = newEdit

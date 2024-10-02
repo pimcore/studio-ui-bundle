@@ -37,12 +37,10 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalProps): React.JSX.Element => {
   const { dropDownMenu } = useListColumns()
-  const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
-
-  console.log('----> batchEdits', batchEdits)
+  const { addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
-    addOrUpdateBatchEdit(column, '')
+    addOrUpdateBatchEdit(column.key, column.type, '')
   }
 
   return (

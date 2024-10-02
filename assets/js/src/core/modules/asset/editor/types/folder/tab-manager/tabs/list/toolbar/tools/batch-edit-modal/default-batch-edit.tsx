@@ -11,18 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, type ComponentType, useState, useEffect, type ChangeEvent } from 'react'
+import React, { useMemo, type ComponentType, useState, useEffect } from 'react'
 import {
   type BatchEdit
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
 import { Input } from 'antd'
-
+import {
+  useBatchEdit
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
 export interface DefaultBatchEditProps {
   batchEdit: BatchEdit
 }
 
 export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JSX.Element => {
-  const { type, value: batchEditValue } = batchEdit
+  const { key, type, value: batchEditValue } = batchEdit
+  const { addOrUpdateBatchEdit } = useBatchEdit()
 
   const TextFilter = (): React.JSX.Element => {
     const [_value, setValue] = useState(batchEditValue)
@@ -31,9 +34,8 @@ export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JS
       setValue(batchEditValue)
     }, [batchEditValue])
 
-    const onBlur = (event: ChangeEvent<HTMLInputElement>): void => {
-    // add function to update column edit
-      console.log('----> event', event)
+    const onBlur = (): void => {
+      addOrUpdateBatchEdit(key, type, _value)
     }
 
     return (
