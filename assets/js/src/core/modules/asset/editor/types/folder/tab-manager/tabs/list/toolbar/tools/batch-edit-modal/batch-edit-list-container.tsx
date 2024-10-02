@@ -16,13 +16,15 @@ import {
   type BatchEdit,
   useBatchEdit
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
-import { Empty, Tag } from 'antd'
+import { Tag } from 'antd'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import {
   DefaultBatchEdit
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/default-batch-edit'
+import { NoContent } from '@Pimcore/components/no-content/no-content'
+import { t } from 'i18next'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits } = useBatchEdit()
@@ -50,7 +52,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
 
   return (
     <>
-      {items.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />}
+      {items.length === 0 && <NoContent text={ t('batch-edit.no-content') } />}
       {items.length > 0 && <StackList items={ items } />}
     </>
   )
