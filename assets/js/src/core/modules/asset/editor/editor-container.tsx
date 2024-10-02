@@ -17,9 +17,9 @@ import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '../asset-provider'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type ComponentRegistry } from '@Pimcore/modules/element/editor/services/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { Content } from '@Pimcore/components/content/content'
+import { type ComponentRegistryInterface } from '@Pimcore/modules/app/component-registry/component-registry'
 
 export interface EditorContainerProps {
   id: number
@@ -30,7 +30,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { isLoading, isError, asset, removeAssetFromState } = useAssetDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
-  const componentRegistryService = useInjection<ComponentRegistry>(serviceIds['Asset/Editor/ComponentRegistry'])
+  const typeComponentRegistry = useInjection<ComponentRegistryInterface>(serviceIds['Asset/Editor/TypeComponentRegistry'])
 
   useEffect(() => {
     return () => {
@@ -63,13 +63,11 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     return <></>
   }
 
-  let definition = componentRegistryService.getComponent(asset.type!)
+  let Component = typeComponentRegistry.get(asset.type!)
 
-  if (definition === undefined) {
-    definition = componentRegistryService.getComponent('unknown')!
+  if (Component === undefined) {
+    Component = typeComponentRegistry.get('unknown')!
   }
-
-  const Component = definition.component
 
   return (
     <AssetProvider id={ id }>

@@ -13,7 +13,6 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
-import { ComponentRegistryService } from '@Pimcore/modules/element/editor/services/component-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/image-tab-manager'
@@ -34,7 +33,7 @@ export const serviceIds = {
   widgetManager: 'WidgetManagerService',
 
   // Assets
-  'Asset/Editor/ComponentRegistry': 'Asset/Editor/ComponentRegistry',
+  'Asset/Editor/TypeComponentRegistry': 'Asset/Editor/TypeComponentRegistry',
   'Asset/Editor/DocumentTabManager': 'Asset/Editor/DocumentTabManager',
   'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
   'Asset/Editor/ImageTabManager': 'Asset/Editor/ImageTabManager',
@@ -46,7 +45,7 @@ export const serviceIds = {
   'Asset/MetadataTypeProvider/MetadataTypeRegistry': 'Asset/MetadataTypeProvider/MetadataTypeRegistry',
 
   // Data Objects
-  'DataObject/Editor/ComponentRegistry': 'DataObject/Editor/ComponentRegistry',
+  'DataObject/Editor/TypeComponentRegistry': 'DataObject/Editor/TypeComponentRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 
@@ -67,7 +66,7 @@ export const serviceIds = {
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 
 // Assets
-container.bind(serviceIds['Asset/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/TypeComponentRegistry']).to(ComponentRegistry).inSingletonScope()
 
 container.bind(serviceIds['Asset/Editor/DocumentTabManager']).to(DocumentTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
@@ -80,7 +79,7 @@ container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManage
 container.bind(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry']).to(MetadataTypeRegistry).inSingletonScope()
 
 // Data Objects
-container.bind(serviceIds['DataObject/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/TypeComponentRegistry']).to(ComponentRegistry).inSingletonScope()
 
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()

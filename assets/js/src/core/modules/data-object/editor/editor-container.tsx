@@ -15,11 +15,11 @@ import React, { useEffect } from 'react'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { DataObjectProvider } from '../data-object-provider'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { type ComponentRegistry } from '@Pimcore/modules/element/editor/services/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { Content } from '@Pimcore/components/content/content'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
+import type { ComponentRegistryInterface } from '@Pimcore/modules/app/component-registry/component-registry'
 
 export interface EditorContainerProps {
   id: number
@@ -30,7 +30,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { isLoading, isError, dataObject, removeDataObjectFromState } = useDataObjectDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
-  const componentRegistryService = useInjection<ComponentRegistry>(serviceIds['DataObject/Editor/ComponentRegistry'])
+  const typeComponentRegistry = useInjection<ComponentRegistryInterface>(serviceIds['DataObject/Editor/TypeComponentRegistry'])
 
   useEffect(() => {
     return () => {
@@ -63,13 +63,11 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     return <></>
   }
 
-  let definition = componentRegistryService.getComponent(dataObject.type!)
+  let Component = typeComponentRegistry.get(dataObject.type!)
 
-  if (definition === undefined) {
-    definition = componentRegistryService.getComponent('object')!
+  if (Component === undefined) {
+    Component = typeComponentRegistry.get('object')!
   }
-
-  const Component = definition.component
 
   return (
     <DataObjectProvider id={ id }>
