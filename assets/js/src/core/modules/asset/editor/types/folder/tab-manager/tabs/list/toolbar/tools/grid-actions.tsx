@@ -54,8 +54,6 @@ export const GridActions = (): React.JSX.Element => {
     type: 'basic'
   })
 
-  console.log('----> updatedXXX')
-
   useEffect(() => {
     if (data !== undefined) {
       setJobTitle(`${data.filename}`)

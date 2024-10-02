@@ -13,11 +13,10 @@
 
 import React, { useState, createContext, useMemo } from 'react'
 
-// export type AssetPatch = AssetPatchByIdApiArg['body']['data'];
-// map somehow here
-
 export interface BatchEdit {
   key: string
+  type: string
+  value: string
 }
 
 export interface BatchContext {

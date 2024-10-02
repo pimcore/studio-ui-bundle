@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import {
@@ -22,6 +22,12 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
 import type { IModalProps } from '@Pimcore/components/modal/modal'
+import {
+  useBatchEdit
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
+import {
+  BatchEditListContainer
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-list-container'
 
 export interface BatchEditModalProps {
   closeModal: () => void
@@ -30,6 +36,19 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalProps): React.JSX.Element => {
   const { dropDownMenu } = useListColumns()
+  const { batchEdits, setBatchEdits } = useBatchEdit()
+
+  const exampleBatchEdit = {
+    key: '1',
+    type: 'text',
+    value: ''
+  }
+
+  useEffect(() => {
+    setBatchEdits([exampleBatchEdit])
+  }, [])
+
+  console.log('----> batchEdits', batchEdits)
 
   return (
     <>
@@ -60,7 +79,7 @@ export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalPro
         </ModalFooter> }
         title={ t('batch-edit.modal-title') }
       >
-        Lorem ipsum
+        <BatchEditListContainer />
       </BatchEditModal>
     </>
   )
