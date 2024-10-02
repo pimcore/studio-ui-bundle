@@ -21,6 +21,7 @@ import { t } from 'i18next'
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: GridColumnConfiguration, value: string) => void
   resetBatchEdits: () => void
+  removeBatchEdit: (key: string) => void
 }
 
 export interface BatchEdit {
@@ -56,10 +57,16 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits(updatedEdits)
   }
 
+  const removeBatchEdit = (key: string): void => {
+    const updatedEdits = batchEdits.filter(edit => edit.key !== key)
+    setBatchEdits(updatedEdits)
+  }
+
   return {
     batchEdits,
     setBatchEdits,
     addOrUpdateBatchEdit,
-    resetBatchEdits
+    resetBatchEdits,
+    removeBatchEdit
   }
 }

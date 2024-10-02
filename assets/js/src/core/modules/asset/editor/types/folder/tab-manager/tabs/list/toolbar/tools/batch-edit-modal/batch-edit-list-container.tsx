@@ -13,7 +13,6 @@
 
 import React from 'react'
 import {
-  type BatchEdit,
   useBatchEdit
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
 import { Tag } from 'antd'
@@ -27,7 +26,7 @@ import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
-  const { batchEdits } = useBatchEdit()
+  const { batchEdits, removeBatchEdit } = useBatchEdit()
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => ({
     id: batchEdit.key,
@@ -37,18 +36,13 @@ export const BatchEditListContainer = (): React.JSX.Element => {
               <IconButton
                 icon='close'
                 key={ 'remove' }
-                onClick={ () => { onRemoveColumnClick(batchEdit) } }
+                onClick={ () => { removeBatchEdit(batchEdit.key) } }
               />
             ]
         }
                         />,
     body: <DefaultBatchEdit batchEdit={ batchEdit } />
   }))
-
-  const onRemoveColumnClick = (batchEdits: BatchEdit): void => {
-    alert(`batchEdits ${batchEdits.key}`)
-    // call function from inside useBatchEdit to remove batch edit instance
-  }
 
   return (
     <>
