@@ -18,11 +18,11 @@ interface StylesProps {
   itemColGap?: number
 }
 
-export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
+export const useStyles = createStyles(({ css }, props: StylesProps) => {
   return {
-    tagListGroup: css`
-      row-gap: ${props.itemRowGap ?? token.Tag.rowGapXXS}px;
-      column-gap: ${props.itemColGap ?? token.Tag.colGapXXS}px;
+    rowColGap: css`
+      row-gap: ${props.itemRowGap}px;
+      column-gap: ${props.itemColGap}px;
     `
   }
 })

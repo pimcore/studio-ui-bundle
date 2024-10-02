@@ -15,20 +15,17 @@ import React from 'react'
 import cn from 'classnames'
 import { Tag, type TagProps } from '@Pimcore/components/tag/tag'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useStyles } from '@Pimcore/components/tag-list/tag-list.styles'
+import { type GapType } from '@Pimcore/types/components/types'
 
 export interface TagListProps {
   list: TagProps[][]
   itemCharMaxLength?: number
-  itemRowGap?: number
-  itemColGap?: number
+  itemGap?: GapType
   tagListClassNames?: string
   tagListItemClassNames?: string
 }
 
-export const TagList = ({ list, itemCharMaxLength, itemRowGap, itemColGap, tagListClassNames, tagListItemClassNames }: TagListProps): React.JSX.Element => {
-  const { styles } = useStyles({ itemRowGap, itemColGap })
-
+export const TagList = ({ list, itemCharMaxLength, itemGap, tagListClassNames, tagListItemClassNames }: TagListProps): React.JSX.Element => {
   return (
     <Flex
       gap="small"
@@ -37,7 +34,7 @@ export const TagList = ({ list, itemCharMaxLength, itemRowGap, itemColGap, tagLi
     >
       {list.map((group, groupIndex) => (
         <Flex
-          className={ styles.tagListGroup }
+          gap={ itemGap }
           key={ groupIndex }
           rootClassName={ cn(tagListItemClassNames) }
           wrap
