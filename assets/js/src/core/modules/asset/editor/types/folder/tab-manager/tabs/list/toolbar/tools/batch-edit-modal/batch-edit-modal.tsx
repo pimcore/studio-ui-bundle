@@ -36,7 +36,7 @@ export interface BatchEditModalProps {
 }
 
 export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalProps): React.JSX.Element => {
-  const { dropDownMenu } = useListColumns()
+  const { batchEditDropDownMenu } = useListColumns()
   const { addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
@@ -47,7 +47,7 @@ export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalPro
     <BatchEditModal
       footer={ <ModalFooter buttonAlignment={ 'space-between' }>
         <Dropdown menu={ {
-          items: getFormattedDropDownMenu(dropDownMenu, onColumnClick)
+          items: getFormattedDropDownMenu(batchEditDropDownMenu, onColumnClick)
         } }
         >
           <IconTextButton

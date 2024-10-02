@@ -33,10 +33,13 @@ import {
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { t } from 'i18next'
+import {
+  BatchEditContext
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
 
 export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void
-  dropDownMenu: Record<string, GridColumnConfiguration[]>
+  batchEditDropDownMenu: Record<string, GridColumnConfiguration[]>
 }
 
 export const getFormattedDropDownMenu = (dropDownMenu: Record<string, GridColumnConfiguration[]>, onColumnClick: (column: GridColumnConfiguration) => void): DropdownMenuProps['items'] => {
@@ -60,8 +63,11 @@ export const getFormattedDropDownMenu = (dropDownMenu: Record<string, GridColumn
 
 export const useListColumns = (): UseListColumnsHookReturn => {
   const { columns, setColumns } = useContext(ListColumnsContext)
+  const { batchEdits } = useContext(BatchEditContext)
 
-  const dropDownMenu = useMemo(() => {
+  const batchEditDropDownMenu = useMemo(() => {
+    const columnsInBatchEdit = batchEdits.map((batchEdit) => batchEdit.key)
+
     const _dropDownMenu = {}
 
     if (columns.length === 0) {
@@ -69,15 +75,17 @@ export const useListColumns = (): UseListColumnsHookReturn => {
     }
 
     columns.forEach((column) => {
-      if (_dropDownMenu[column.group] === undefined) {
-        _dropDownMenu[column.group] = []
-      }
+      if (!columnsInBatchEdit.includes(column.key)) {
+        if (_dropDownMenu[column.group] === undefined) {
+          _dropDownMenu[column.group] = []
+        }
 
-      _dropDownMenu[column.group].push(column)
+        _dropDownMenu[column.group].push(column)
+      }
     })
 
     return _dropDownMenu
-  }, [columns])
+  }, [columns, batchEdits])
 
   function setGridColumns (columns: GridColumnConfiguration[]): void {
     setColumns(columns)
@@ -87,7 +95,7 @@ export const useListColumns = (): UseListColumnsHookReturn => {
     columns,
     setGridColumns,
     setColumns,
-    dropDownMenu
+    batchEditDropDownMenu
   }
 }
 
