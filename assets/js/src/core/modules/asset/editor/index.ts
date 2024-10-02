@@ -20,15 +20,15 @@ import '@Pimcore/modules/asset/editor/types/video'
 import '@Pimcore/modules/asset/editor/types/audio'
 import '@Pimcore/modules/asset/editor/types/archive'
 import '@Pimcore/modules/asset/editor/types/unknown'
-import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions'
-import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies'
-import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule'
+import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties'
+import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule'
+import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies'
 import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
-import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
+import { type ComponentRegistry } from '@Pimcore/modules/element/editor/services/component-registry'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -99,7 +99,7 @@ moduleSystem.registerModule({
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'editorToolbarContextMenu',
+      name: 'editorToolbarContextMenuAsset',
       component: EditorToolbarContextMenu
     })
   }

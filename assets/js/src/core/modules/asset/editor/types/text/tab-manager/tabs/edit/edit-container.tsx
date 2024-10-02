@@ -22,8 +22,8 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 const EditContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { asset } = useAssetDraft(assetContext.id!)
-  const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id! })
+  const { asset } = useAssetDraft(assetContext.id)
+  const { data } = useAssetGetTextDataByIdQuery({ id: assetContext.id })
   const { styles } = useStyle()
 
   let language: SupportedLanguage = null

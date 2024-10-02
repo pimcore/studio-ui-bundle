@@ -64,7 +64,6 @@ interface UseAssetDraftReturn extends
   asset: undefined | ReturnType<typeof selectAssetById>
 
   removeAssetFromState: () => void
-  removeTrackedChanges: () => void
 
   fetchAsset: () => void
 }
@@ -120,8 +119,6 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   }
 
   useEffect(() => {
-    console.log({ asset })
-
     if (asset === undefined) {
       fetchAsset()
     }

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, type ComponentType } from 'react'
+import React, { type ComponentType, useMemo } from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { TextFilter } from './text-filter'
 import { SelectFilter } from './select-filter'

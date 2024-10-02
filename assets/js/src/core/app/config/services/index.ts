@@ -13,7 +13,7 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
-import { ComponentRegistryService } from '@Pimcore/modules/asset/editor/services/component-registry'
+import { ComponentRegistryService } from '@Pimcore/modules/element/editor/services/component-registry'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/image-tab-manager'
@@ -27,6 +27,7 @@ import { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provi
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
 
 export const serviceIds = {
   // Widget manager
@@ -43,6 +44,11 @@ export const serviceIds = {
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
   'Asset/MetadataTypeProvider/MetadataTypeRegistry': 'Asset/MetadataTypeProvider/MetadataTypeRegistry',
+
+  // Data Objects
+  'DataObject/Editor/ComponentRegistry': 'DataObject/Editor/ComponentRegistry',
+  'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
+  'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 
   // icon library
   iconLibrary: 'IconLibrary',
@@ -72,6 +78,12 @@ container.bind(serviceIds['Asset/Editor/AudioTabManager']).to(AudioTabManager).i
 container.bind(serviceIds['Asset/Editor/ArchiveTabManager']).to(ArchiveTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry']).to(MetadataTypeRegistry).inSingletonScope()
+
+// Data Objects
+container.bind(serviceIds['DataObject/Editor/ComponentRegistry']).to(ComponentRegistryService).inSingletonScope()
+
+container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
 
 // Icon library
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()

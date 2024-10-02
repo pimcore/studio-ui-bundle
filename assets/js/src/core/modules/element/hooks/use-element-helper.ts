@@ -13,6 +13,7 @@
 
 import { type ElementType } from 'types/element-type.d'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 
 interface OpenElementWidgetProps {
   id: number
@@ -26,9 +27,16 @@ interface UseElementReturn {
 
 export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
+  const { openDataObject } = useDataObjectHelper()
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
     if (props.type === 'asset') {
       openAsset({
+        config: {
+          id: props.id
+        }
+      })
+    } else if (props.type === 'data-object') {
+      openDataObject({
         config: {
           id: props.id
         }

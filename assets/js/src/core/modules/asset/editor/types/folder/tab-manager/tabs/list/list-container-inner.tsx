@@ -11,17 +11,35 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAssetGetGridMutation, type GridFilter, api, type AssetGetGridApiResponse, useAssetPatchByIdMutation, type AssetPatchByIdApiArg, type AssetGetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  api,
+  type AssetGetGridApiArg,
+  type AssetGetGridApiResponse,
+  type AssetPatchByIdApiArg,
+  type GridFilter,
+  useAssetGetGridMutation,
+  useAssetPatchByIdMutation
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar/sidebar-container'
-import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
+import {
+  useListColumns,
+  useListFilterOptions,
+  useListGridConfig,
+  useListPage,
+  useListPageSize,
+  useListSelectedRows,
+  useListSorting
+} from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
 import { ListDataProvider } from './list-provider'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
 
 interface DataPatch {
@@ -39,7 +57,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { filterOptions } = useListFilterOptions()
   const { columns, setGridColumns } = useListColumns()
   const { gridConfig, setGridConfig } = useListGridConfig()
-  const assetId = assetContext.id!
+  const assetId = assetContext.id
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
   const [fetchListing] = useAssetGetGridMutation()
   const [patchAsset] = useAssetPatchByIdMutation()

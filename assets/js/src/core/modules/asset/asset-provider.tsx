@@ -14,7 +14,7 @@
 import React, { createContext, useMemo } from 'react'
 
 export interface IAssetContext {
-  id?: number
+  id: number
 }
 
 export interface IAssetProviderProps {
@@ -22,7 +22,7 @@ export interface IAssetProviderProps {
   children: React.ReactNode
 }
 
-export const AssetContext = createContext<IAssetContext>({})
+export const AssetContext = createContext<IAssetContext>({ id: 0 })
 
 export const AssetProvider = ({ id, children }: IAssetProviderProps): React.JSX.Element => {
   return useMemo(() => (

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type MutableRefObject, forwardRef } from 'react'
+import React, { forwardRef, type MutableRefObject } from 'react'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
