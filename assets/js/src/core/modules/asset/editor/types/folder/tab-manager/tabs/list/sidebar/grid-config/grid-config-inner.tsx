@@ -18,17 +18,17 @@ import { useAssetGetSavedGridConfigurationsQuery, useAssetSaveGridConfigurationM
 import { useTranslation } from 'react-i18next'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { EditView } from './views/edit-view'
-import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { SaveView } from './views/save-view'
 import { useForm } from 'antd/es/form/Form'
 import { defaultValues } from './forms/save-form'
+import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridAvailableColumns()
   const { columns: gridColumns, setGridColumns } = useListColumns()
   const { columns, setColumns, addColumn } = useGridConfig()
   const { id } = useAsset()
-  const { isLoading, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id! })
+  const { isLoading, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
   const { t } = useTranslation()
   const [view, setView] = useState<'edit' | 'save'>('edit')
@@ -94,7 +94,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     fetchSaveGridConfig({
       body: {
         columns: columnsToSave,
-        folderId: id!,
+        folderId: id,
         name: values.name,
         description: values.description,
         setAsFavorite: values.setAsDefault,

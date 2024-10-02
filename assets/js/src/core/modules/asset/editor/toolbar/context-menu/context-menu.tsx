@@ -26,7 +26,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { id } = useContext(AssetContext)
-  const { asset, removeAssetFromState } = useAssetDraft(id!)
+  const { asset, removeAssetFromState } = useAssetDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
 
   return (
@@ -71,6 +71,6 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
   function refreshAsset (): void {
     removeAssetFromState()
-    dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id!)))
+    dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id)))
   }
 }

@@ -15,7 +15,9 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
-import { PreviewFieldLabelCell } from './table/cells/preview-field-label-cell/preview-field-label-cell'
+import {
+  PreviewFieldLabelCell
+} from './table/cells/preview-field-label-cell/preview-field-label-cell'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -23,7 +25,7 @@ moduleSystem.registerModule({
 
     typeRegistry.registerType({
       component: PreviewFieldLabelCell,
-      type: 'version-preview-field-label'
+      type: 'asset-version-preview-field-label'
     })
   }
 })

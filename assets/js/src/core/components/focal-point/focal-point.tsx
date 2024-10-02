@@ -36,12 +36,12 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const Image = Children.only(children)
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
-  const { imageSettings, isLoading } = useAssetDraft(id!)
+  const { imageSettings, isLoading } = useAssetDraft(id)
   const mouseSensor = useSensor(MouseSensor, { activationConstraint })
   const touchSensor = useSensor(TouchSensor, { activationConstraint })
   const keyboardSensor = useSensor(KeyboardSensor, {})
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor)
-  const { addImageSettings, removeImageSetting } = useAssetDraft(id!)
+  const { addImageSettings, removeImageSetting } = useAssetDraft(id)
 
   if (focalPointContext === undefined) {
     throw new Error('FocalPoint must be used within the FocalPointProvider')

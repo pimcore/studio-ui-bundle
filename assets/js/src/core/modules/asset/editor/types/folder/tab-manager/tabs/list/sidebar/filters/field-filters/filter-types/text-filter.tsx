@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState, type ChangeEvent } from 'react'
+import React, { type ChangeEvent, useEffect, useState } from 'react'
 import { type DefaultFilterProps } from './default-filter'
 import { useFilters } from '../../hooks/use-filters'
 import { Input } from 'antd'
