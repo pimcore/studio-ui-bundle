@@ -37,8 +37,17 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     tooltip: css`
-      background-color: ${token.Tooltip.colorBgSpotlight};
-      border-radius: ${token.Tooltip.borderRadiusLG}px;
+      .ant-tooltip-inner {
+        color: ${token.colorTextLightSolid};
+        background-color: ${token.colorBgSpotlight};
+        border-radius: ${token.borderRadius}px;
+      }
+      
+      .ant-tooltip-arrow {
+        &::before {
+          background-color: ${token.colorBgSpotlight};
+        }
+      }
     `
   }
 })
