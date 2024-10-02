@@ -67,7 +67,6 @@ export const useListColumns = (): UseListColumnsHookReturn => {
 
   const batchEditDropDownMenu = useMemo(() => {
     const columnsInBatchEdit = batchEdits.map((batchEdit) => batchEdit.key)
-
     const _dropDownMenu = {}
 
     if (columns.length === 0) {

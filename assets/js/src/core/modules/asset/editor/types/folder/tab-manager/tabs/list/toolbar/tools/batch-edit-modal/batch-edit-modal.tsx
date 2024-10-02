@@ -43,6 +43,11 @@ export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalPro
     addOrUpdateBatchEdit(column.key, column.type, '')
   }
 
+  const onClose = (): void => {
+    closeModal()
+    resetBatchEdits()
+  }
+
   return (
     <BatchEditModal
       footer={ <ModalFooter buttonAlignment={ 'space-between' }>
@@ -66,7 +71,7 @@ export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalPro
           >
           {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
           <Button
-            onClick={ closeModal }
+            onClick={ onClose }
             type='primary'
           >{t('batch-edit.modal-footer.apply-changes')}</Button>
         </>

@@ -30,13 +30,15 @@ export const BatchEditListContainer = (): React.JSX.Element => {
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => ({
     id: batchEdit.key,
-    children: <Tag>{batchEdit.key}</Tag>,
+    children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
     renderRightToolbar: <ButtonGroup items={
             [
               <IconButton
                 icon='close'
                 key={ 'remove' }
-                onClick={ () => { removeBatchEdit(batchEdit.key) } }
+                onClick={ () => {
+                  removeBatchEdit(batchEdit.key)
+                } }
               />
             ]
         }

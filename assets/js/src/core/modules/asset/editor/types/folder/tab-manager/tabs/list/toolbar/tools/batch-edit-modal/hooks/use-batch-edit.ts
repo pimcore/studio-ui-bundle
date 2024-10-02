@@ -12,9 +12,7 @@
 */
 
 import { useContext } from 'react'
-import {
-  type BatchContext, BatchEditContext
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import { type BatchContext, BatchEditContext } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnValue: string) => void
