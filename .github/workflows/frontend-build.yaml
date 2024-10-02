@@ -124,10 +124,14 @@ jobs:
       contents: write
 
     steps:
+      - name: Dump GitHub context 1
+        run: echo "${{ github.event.pull_request.head.ref }}"
+      - name: Dump GitHub context 2
+        run: echo "${{ github.event.pull_request.head.repo.full_name }}"
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       - name: Set up Node.js
