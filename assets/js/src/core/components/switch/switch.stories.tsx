@@ -27,25 +27,30 @@ export default config
 
 export const TagStart = {
   args: {
-    labelLeft: 'Switch',
+    labelLeft: 'Switch'
   }
 }
 
 export const TagEnd = {
   args: {
-    labelRight: 'Switch',
+    labelRight: 'Switch'
   }
 }
 
 export const TagBoth = {
   args: {
-    labelLeft: 'Switch',
+    labelLeft: 'Switch'
   },
   render: (args) => {
     const [checked, setChecked] = React.useState(false)
 
     return (
-      <Switch { ...args } labelRight={ checked === true ? 'toggle checked' : 'toggle unchecked' } checked={checked} onChange={setChecked} />
+      <Switch
+        { ...args }
+        checked={ checked }
+        labelRight={ checked ? 'toggle checked' : 'toggle unchecked' }
+        onChange={ setChecked }
+      />
     )
   }
 }
