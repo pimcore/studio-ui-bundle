@@ -19,7 +19,7 @@ import {
 import { t } from 'i18next'
 
 interface UseBatchEditHookReturn extends BatchContext {
-  addBatchEdit: (column: GridColumnConfiguration, value: string) => void
+  addOrUpdateBatchEdit: (column: GridColumnConfiguration, value: string) => void
   resetBatchEdits: () => void
 }
 
@@ -36,24 +36,30 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits([])
   }
 
-  const addBatchEdit = (column: GridColumnConfiguration, value: string): void => {
-    let newEdits: BatchEdit[] = []
-
-    if (batchEdits.length !== null) {
-      newEdits = [{
-        key: t(`asset.listing.column.${column.key}`),
-        type: column.type,
-        value
-      }]
-
-      setBatchEdits(newEdits)
+  const addOrUpdateBatchEdit = (column: GridColumnConfiguration, value: string): void => {
+    const newEdit: BatchEdit = {
+      key: t(`asset.listing.column.${column.key}`),
+      type: column.type,
+      value
     }
+
+    const updatedEdits: BatchEdit[] = [...batchEdits]
+
+    const existingIndex = updatedEdits.findIndex(edit => edit.key === newEdit.key)
+
+    if (existingIndex !== -1) {
+      updatedEdits[existingIndex] = newEdit
+    } else {
+      updatedEdits.push(newEdit)
+    }
+
+    setBatchEdits(updatedEdits)
   }
 
   return {
     batchEdits,
     setBatchEdits,
-    addBatchEdit,
+    addOrUpdateBatchEdit,
     resetBatchEdits
   }
 }

@@ -37,45 +37,45 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalProps): React.JSX.Element => {
   const { dropDownMenu } = useListColumns()
-  const { batchEdits, addBatchEdit, resetBatchEdits } = useBatchEdit()
+  const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
 
   console.log('----> batchEdits', batchEdits)
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
-    console.log('----> column', column)
-    addBatchEdit(column, '')
+    addOrUpdateBatchEdit(column, '')
   }
 
   return (
-    <>
-      <BatchEditModal
-        footer={ <ModalFooter>
-          <Dropdown menu={ {
-            items: getFormattedDropDownMenu(dropDownMenu, onColumnClick)
-          } }
-          >
-            <IconTextButton
-              icon='PlusCircleOutlined'
-              type='link'
-            >
-              {t('listing.add-column')}
-            </IconTextButton>
-          </Dropdown>
+    <BatchEditModal
+      footer={ <ModalFooter buttonAlignment={ 'space-between' }>
+        <Dropdown menu={ {
+          items: getFormattedDropDownMenu(dropDownMenu, onColumnClick)
+        } }
+        >
           <IconTextButton
-            icon='close'
-            onClick={ () => { resetBatchEdits() } }
-            type='link'
+            icon='PlusCircleOutlined'
+            type='default'
           >
-            {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+            {t('listing.add-column')}
+          </IconTextButton>
+        </Dropdown>
+        <><IconTextButton
+          icon='close'
+          onClick={ () => {
+            resetBatchEdits()
+          } }
+          type='link'
+          >
+          {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
           <Button
             onClick={ closeModal }
             type='primary'
           >{t('batch-edit.modal-footer.apply-changes')}</Button>
-        </ModalFooter> }
-        title={ t('batch-edit.modal-title') }
-      >
-        <BatchEditListContainer />
-      </BatchEditModal>
-    </>
+        </>
+      </ModalFooter> }
+      title={ t('batch-edit.modal-title') }
+    >
+      <BatchEditListContainer />
+    </BatchEditModal>
   )
 }
