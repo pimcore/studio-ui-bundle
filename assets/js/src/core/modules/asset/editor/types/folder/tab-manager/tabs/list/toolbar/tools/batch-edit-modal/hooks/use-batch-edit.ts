@@ -16,9 +16,11 @@ import { type GridColumnConfiguration } from 'src/sdk/main'
 import {
   type BatchContext, BatchEditContext
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import { t } from 'i18next'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addBatchEdit: (column: GridColumnConfiguration, value: string) => void
+  resetBatchEdits: () => void
 }
 
 export interface BatchEdit {
@@ -30,23 +32,28 @@ export interface BatchEdit {
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
 
-  return {
-    batchEdits,
-    setBatchEdits,
-    addBatchEdit
+  const resetBatchEdits = (): void => {
+    setBatchEdits([])
   }
 
-  function addBatchEdit (column: GridColumnConfiguration, value: string): void {
+  const addBatchEdit = (column: GridColumnConfiguration, value: string): void => {
     let newEdits: BatchEdit[] = []
 
     if (batchEdits.length !== null) {
       newEdits = [{
-        key: column.key,
+        key: t(`asset.listing.column.${column.key}`),
         type: column.type,
         value
       }]
 
       setBatchEdits(newEdits)
     }
+  }
+
+  return {
+    batchEdits,
+    setBatchEdits,
+    addBatchEdit,
+    resetBatchEdits
   }
 }
