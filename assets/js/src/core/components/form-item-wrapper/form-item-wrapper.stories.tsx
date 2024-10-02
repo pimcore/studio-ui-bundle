@@ -46,8 +46,7 @@ export const ValidatedSwitch: StoryObj = {
         valuePropName="checked"
       >
         <Switch
-          label={ 'I accept the terms and conditions' }
-          labelPosition={ 'start' }
+          labelLeft={ 'I accept the terms and conditions' }
           onChange={ () => {
             const form = Form.useFormInstance()
             form.validateFields(['acceptTerms'])

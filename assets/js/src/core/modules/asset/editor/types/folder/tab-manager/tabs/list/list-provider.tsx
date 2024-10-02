@@ -12,17 +12,13 @@
 */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
-
-import {
-  type AssetGetGridApiResponse,
-  type GridColumnConfiguration
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridConfiguration, type AssetGetGridApiResponse, type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { defaultFilterOptions, type FilterOptions } from './sidebar/filters/filter-provider'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 
 export interface IListGridConfigContext {
-  gridConfig: GridColumnConfiguration[] | undefined
-  setGridConfig: React.Dispatch<React.SetStateAction<GridColumnConfiguration[] | undefined>>
+  gridConfig: GridConfiguration | undefined
+  setGridConfig: React.Dispatch<React.SetStateAction<GridConfiguration | undefined>>
 }
 
 export const ListGridConfigContext = createContext<IListGridConfigContext>({
@@ -35,13 +31,37 @@ export interface ListGridConfigProviderProps {
 }
 
 export const ListGridConfigProvider = ({ children }: ListGridConfigProviderProps): React.JSX.Element => {
-  const [gridConfig, setGridConfig] = useState<GridColumnConfiguration[] | undefined>(undefined)
+  const [gridConfig, setGridConfig] = useState<IListGridConfigContext['gridConfig'] | undefined>(undefined)
 
   return useMemo(() => (
     <ListGridConfigContext.Provider value={ { gridConfig, setGridConfig } }>
       {children}
     </ListGridConfigContext.Provider>
   ), [gridConfig, children])
+}
+
+export interface IListGridAvailableColumnsContext {
+  availableColumns: GridColumnConfiguration[] | undefined
+  setAvailableColumns: React.Dispatch<React.SetStateAction<GridColumnConfiguration[] | undefined>>
+}
+
+export const ListGridAvailableColumnsContext = createContext<IListGridAvailableColumnsContext>({
+  availableColumns: undefined,
+  setAvailableColumns: () => {}
+})
+
+export interface ListGridAvailableColumnsProviderProps {
+  children: React.ReactNode
+}
+
+export const ListGridAvailableColumnsProvider = ({ children }: ListGridAvailableColumnsProviderProps): React.JSX.Element => {
+  const [availableColumns, setAvailableColumns] = useState<GridColumnConfiguration[] | undefined>(undefined)
+
+  return useMemo(() => (
+    <ListGridAvailableColumnsContext.Provider value={ { availableColumns, setAvailableColumns } }>
+      {children}
+    </ListGridAvailableColumnsContext.Provider>
+  ), [availableColumns, children])
 }
 
 export interface IListColumnsContext {
