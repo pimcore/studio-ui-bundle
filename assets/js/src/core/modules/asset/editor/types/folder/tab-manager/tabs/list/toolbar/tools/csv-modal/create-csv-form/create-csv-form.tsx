@@ -11,7 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Input, Select, Form, type FormProps } from 'antd'
+import { Input, Select } from 'antd'
+import { Form, type FormProps } from '@Pimcore/components/form/form'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 

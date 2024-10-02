@@ -104,6 +104,7 @@ import exportIcon from '@Pimcore/assets/icons/export.inline.svg'
 import grid from '@Pimcore/assets/icons/grid.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 import uploadZip from '@Pimcore/assets/icons/file-download-01.inline.svg'
+import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -476,6 +477,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-zip',
       component: uploadZip
+    })
+
+    iconLibrary.register({
+      name: 'magic-wand-01',
+      component: magicWand01
     })
   }
 })

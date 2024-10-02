@@ -17,7 +17,7 @@ import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar/sidebar-container'
-import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
+import { useListColumns, useListFilterOptions, useListGridAvailableColumns, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
 import { ListDataProvider } from './list-provider'
@@ -38,7 +38,8 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { setSelectedRows } = useListSelectedRows()
   const { filterOptions } = useListFilterOptions()
   const { columns, setGridColumns } = useListColumns()
-  const { gridConfig, setGridConfig } = useListGridConfig()
+  const { setGridConfig } = useListGridConfig()
+  const { availableColumns, setAvailableColumns } = useListGridAvailableColumns()
   const assetId = assetContext.id!
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
   const [fetchListing] = useAssetGetGridMutation()
@@ -60,11 +61,12 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
+      const availableGridConfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
       const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId }))
 
-      Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
-        setGridConfig(availableGridConfig.data?.columns)
+      Promise.all([availableGridConfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
+        setAvailableColumns(availableGridConfig.data?.columns)
+        setGridConfig(initialGridConfig.data)
 
         const initialColumns = initialGridConfig.data!.columns!.map((column) => {
           const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
@@ -214,7 +216,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     const hasIdColumn = columns.some((column) => column.key === 'id')
 
     if (!hasIdColumn) {
-      const idColumn = gridConfig!.find((column) => column.key === 'id')!
+      const idColumn = availableColumns!.find((column) => column.key === 'id')!
       columnsToRequest.push(idColumn)
     }
 

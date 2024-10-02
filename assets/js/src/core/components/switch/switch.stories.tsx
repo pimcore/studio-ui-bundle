@@ -13,6 +13,7 @@
 
 import { type Meta } from '@storybook/react'
 import { Switch } from '@Pimcore/components/switch/switch'
+import React from 'react'
 
 const config: Meta = {
   title: 'Components/Controls/Switch',
@@ -26,14 +27,25 @@ export default config
 
 export const TagStart = {
   args: {
-    label: 'Switch',
-    labelPosition: 'start'
+    labelLeft: 'Switch',
   }
 }
 
 export const TagEnd = {
   args: {
-    label: 'Switch',
-    labelPosition: 'end'
+    labelRight: 'Switch',
+  }
+}
+
+export const TagBoth = {
+  args: {
+    labelLeft: 'Switch',
+  },
+  render: (args) => {
+    const [checked, setChecked] = React.useState(false)
+
+    return (
+      <Switch { ...args } labelRight={ checked === true ? 'toggle checked' : 'toggle unchecked' } checked={checked} onChange={setChecked} />
+    )
   }
 }
