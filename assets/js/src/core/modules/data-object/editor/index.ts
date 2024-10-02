@@ -22,24 +22,23 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TitleContainer } from './title/title-container'
-import { type ComponentRegistry } from '@Pimcore/modules/data-object/services/component-registry'
 import { ObjectContainer } from '@Pimcore/modules/data-object/editor/types/object/object-container'
 import { FolderContainer } from '@Pimcore/modules/data-object/editor/types/folder/folder-container'
 import type {
-  ComponentRegistry as GlobalComponentRegistry
+  ComponentRegistry as GlobalComponentRegistry, ComponentRegistryInterface
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const componentRegistryService = container.get<ComponentRegistry>(serviceIds['DataObject/Editor/ComponentRegistry'])
+    const typeComponentRegistry = container.get<ComponentRegistryInterface>(serviceIds['DataObject/Editor/TypeComponentRegistry'])
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'object',
       component: ObjectContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'folder',
       component: FolderContainer
     })
