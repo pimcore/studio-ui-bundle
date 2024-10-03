@@ -69,6 +69,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     return {
       label: t('asset.tree.context-menu.paste'),
       key: 'paste',
+      icon: <Icon name={ 'clipboard-check' } />,
       onClick: () => {
         console.log('paste')
       }
@@ -101,7 +102,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
-      icon: <Icon name={ 'file-upload-01' } />,
+      icon: <Icon name={ 'file-download-zip-01' } />,
       onClick: () => {
         console.log('download-as-zip')
       }

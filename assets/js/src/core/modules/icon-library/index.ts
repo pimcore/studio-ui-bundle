@@ -108,13 +108,14 @@ import typeSquare from '@Pimcore/assets/icons/type-square.inline.svg'
 import clipboard from '@Pimcore/assets/icons/clipboard.inline.svg'
 import scissorsCut from '@Pimcore/assets/icons/scissors-cut-01.inline.svg'
 import deleteOutlined from '@Pimcore/assets/icons/delete-outlined.inline.svg'
-import fileUpload01 from '@Pimcore/assets/icons/file-upload-01.svg'
+import fileDownloadZip01 from '@Pimcore/assets/icons/file-download-zip-01.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg'
 import lock01 from '@Pimcore/assets/icons/lock-01.inline.svg'
 import fileLock02 from '@Pimcore/assets/icons/file-lock-02.inline.svg'
 import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg'
 import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
+import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -510,8 +511,8 @@ moduleSystem.registerModule({
     })
 
     iconLibrary.register({
-      name: 'file-upload-01',
-      component: fileUpload01
+      name: 'file-download-zip-01',
+      component: fileDownloadZip01
     })
 
     iconLibrary.register({
@@ -542,6 +543,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'refresh-ccw-03',
       component: refreshCcw03
+    })
+
+    iconLibrary.register({
+      name: 'clipboard-check',
+      component: clipboardCheck
     })
   }
 })
