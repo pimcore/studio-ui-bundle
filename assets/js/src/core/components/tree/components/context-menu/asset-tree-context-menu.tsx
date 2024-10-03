@@ -11,13 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Dropdown, type MenuProps } from 'antd'
-import React from 'react'
+import { Button, Dropdown, type FormInstance, type MenuProps } from 'antd'
+import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
+import { api as assetApi, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { useInputModal } from '@Pimcore/components/modal/input-modal/hooks/use-input-modal'
+import { type Store } from 'antd/es/form/interface'
+import { useAssetActions } from '@Pimcore/components/tree/components/context-menu/hooks/use-asset-actions'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -26,14 +32,59 @@ export interface AssetTreeContextMenuProps {
 
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
+  const [defaultValue, setDefaultValue] = useState<Store>({})
+  const [assetRename] = useAssetPatchByIdMutation()
+  const {
+    addFolder,
+    rename,
+    cut,
+    copy,
+    paste,
+    remove,
+    downloadAsZip,
+    advanced,
+    requestTranslations
+  } = useAssetActions()
+
+  const renameSubmit = async (form: FormInstance<any>): Promise<void> => {
+    const nodeId = parseInt(props.node!.id)
+    const assetRenameTask = assetRename({
+      body: {
+        data: [{
+          id: nodeId,
+          key: form.getFieldValue('input')
+        }]
+      }
+    })
+
+    try {
+      await assetRenameTask.unwrap()
+
+      // clear cache
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(1)
+        )
+      )
+    } catch (error) {
+      console.error('Error renaming asset', error)
+    }
+  }
+
+  const {
+    showModal: showRenameModal,
+    renderModal: RenameModal
+  } = useInputModal({ type: 'input', submitCallback: renameSubmit })
 
   const items: MenuProps['items'] = [
     {
       label: t('asset.tree.context-menu.add-assets'),
       key: '1',
+      icon: <Icon name={ 'mainAsset' } />,
       children: [
         {
           icon: <Icon name={ 'upload-cloud' } />,
@@ -56,7 +107,38 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
           }
         }
       ]
-    }
+    },
+    addFolder(),
+    rename({
+      onClick: () => {
+        if (props.node !== undefined) {
+          setDefaultValue({ input: props.node?.label })
+          showRenameModal()
+        }
+      }
+    }),
+    copy({ nodeId: props.node?.id ?? null }),
+    paste(),
+    cut(),
+    remove(),
+    downloadAsZip(),
+    advanced(),
+    {
+      label: t('asset.tree.context-menu.refresh'),
+      key: '10',
+      onClick: () => {
+        if (props.node?.id !== undefined) {
+          const parentId = parseInt(props.node?.id)
+          console.log('parentId', parentId)
+          dispatch(
+            assetApi.util.invalidateTags(
+              invalidatingTags.ASSET_TREE_ID(parentId)
+            )
+          )
+        }
+      }
+    },
+    requestTranslations()
   ]
 
   const uploadFile: UploadProps = {
@@ -78,6 +160,12 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   return (
     <>
+      <RenameModal
+        initialValues={ defaultValue }
+        label={ 'Please enter the new name' }
+        title={ 'Rename' }
+      />
+
       <Upload { ...uploadFile }>
         <Button
           ref={ uploadFileRef }

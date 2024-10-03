@@ -14,64 +14,77 @@
 import type { ItemType } from 'antd/es/menu/hooks/useItems'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useState } from 'react'
+
+export interface AssetContextMenuCopy {
+  nodeId: string | null
+}
+
+export interface AssetContextMenuRename {
+  onClick: () => void
+}
 
 export interface UseAssetActionsHookReturn {
   addFolder: () => ItemType
-  rename: () => ItemType
-  copy: () => ItemType
-  paste: () => ItemType
+  rename: (props: AssetContextMenuRename) => ItemType
+  copy: (props: AssetContextMenuCopy) => ItemType
+  paste: () => ItemType | null
   cut: () => ItemType
   remove: () => ItemType
   downloadAsZip: () => ItemType
   advanced: () => ItemType
   refresh: () => ItemType
   requestTranslations: () => ItemType
+  setNodeId: (nodeId: string) => void
 }
 
 export const useAssetActions = (): UseAssetActionsHookReturn => {
   const { t } = useTranslation()
+  const [nodeId, setNodeId] = useState<string | null>(null)
 
   const addFolder = (): ItemType => {
     return {
       label: t('asset.tree.context-menu.add-folder'),
       key: 'add-folder',
       icon: <Icon name={ 'folder' } />,
+      disabled: true,
       onClick: () => {
         console.log('addFolder')
       }
     }
   }
 
-  const rename = (): ItemType => {
+  const rename: UseAssetActionsHookReturn['rename'] = ({ onClick }): ItemType => {
     return {
       label: t('asset.tree.context-menu.rename'),
       key: 'rename',
       icon: <Icon name={ 'type-square' } />,
-      onClick: () => {
-        console.log('rename')
-      }
+      onClick
     }
   }
 
-  const copy = (): ItemType => {
+  const copy: UseAssetActionsHookReturn['copy'] = ({ nodeId }): ItemType => {
     return {
       label: t('asset.tree.context-menu.copy'),
       key: 'copy',
       icon: <Icon name={ 'clipboard' } />,
       onClick: () => {
-        console.log('copy')
+        if (nodeId !== null) {
+          setNodeId(nodeId)
+        }
       }
     }
   }
 
-  const paste = (): ItemType => {
+  const paste = (): ReturnType<UseAssetActionsHookReturn['paste']> => {
+    if (nodeId === null) return null
+
     return {
       label: t('asset.tree.context-menu.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
       onClick: () => {
-        console.log('paste')
+        console.log('paste', nodeId)
       }
     }
   }
@@ -81,6 +94,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.cut'),
       key: 'cut',
       icon: <Icon name={ 'scissors-cut' } />,
+      disabled: true,
       onClick: () => {
         console.log('cut')
       }
@@ -92,6 +106,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.delete'),
       key: 'delete',
       icon: <Icon name={ 'delete-outlined' } />,
+      disabled: true,
       onClick: () => {
         console.log('delete')
       }
@@ -103,6 +118,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
       icon: <Icon name={ 'file-download-zip-01' } />,
+      disabled: true,
       onClick: () => {
         console.log('download-as-zip')
       }
@@ -115,6 +131,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon name={ 'more' } />,
+      disabled: true,
       children: [
         {
           label: t('asset.tree.context-menu.search-and-move'),
@@ -164,6 +181,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.refresh'),
       key: 'refresh',
       icon: <Icon name={ 'refresh-ccw-03' } />,
+      disabled: true,
       onClick: () => {
         console.log('refresh')
       }
@@ -175,6 +193,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.request-translations'),
       key: 'request-translations',
       icon: <Icon name={ 'translation' } />,
+      disabled: true,
       onClick: () => {
         console.log('request-translations')
       }
@@ -191,6 +210,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     downloadAsZip,
     advanced,
     refresh,
-    requestTranslations
+    requestTranslations,
+    setNodeId
   }
 }
