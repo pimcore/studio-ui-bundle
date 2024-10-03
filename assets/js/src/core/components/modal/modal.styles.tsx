@@ -16,15 +16,15 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     modal: css`
-            &.ant-modal .ant-modal-footer >.ant-btn+.ant-btn {
-                margin-inline-start: 0;
-            }
-            
-            .ant-modal-content {
-                display: inline-flex;
-                flex-direction: column;
-                align-items: start;
-                gap: ${token.marginSM}px;
+        &.ant-modal .ant-modal-footer > .ant-btn + .ant-btn {
+            margin-inline-start: 0;
+        }
+
+        .ant-modal-content {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: start;
+            gap: ${token.marginSM}px;
 
             .ant-modal-header {
                 margin-bottom: 0;
@@ -37,11 +37,13 @@ export const useStyle = createStyles(({ token, css }) => {
                     gap: 4px;
                 }
             }
-              .ant-modal-footer {
+
+            .ant-modal-footer {
                 width: 100%;
-              }
-              
+            }
+
             .ant-modal-body {
+                width: 100%;
                 line-height: 22px;
 
                 & > p {

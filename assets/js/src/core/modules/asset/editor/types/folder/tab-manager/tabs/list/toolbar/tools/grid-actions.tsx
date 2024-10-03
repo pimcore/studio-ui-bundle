@@ -27,7 +27,6 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { useModal } from '@Pimcore/components/modal/useModal'
 import {
   BatchEditProvider
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
@@ -45,14 +44,8 @@ export const GridActions = (): React.JSX.Element => {
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const { addJob } = useJobs()
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
+  const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const { t } = useTranslation()
-  const {
-    showModal: showBatchEditModal,
-    closeModal: closeBatchEditModal,
-    renderModal
-  } = useModal({
-    type: 'basic'
-  })
 
   useEffect(() => {
     if (data !== undefined) {
@@ -67,7 +60,7 @@ export const GridActions = (): React.JSX.Element => {
         label: t('listing.actions.batch-edit'),
         icon: <Icon name={ 'grid' } />,
         onClick: () => {
-          showBatchEditModal()
+          setBatchEditModalOpen(true)
         }
       },
       {
@@ -112,8 +105,8 @@ export const GridActions = (): React.JSX.Element => {
 
       <BatchEditProvider>
         <BatchEditModal
-          BatchEditModal={ renderModal }
-          closeModal={ closeBatchEditModal }
+          batchEditModalOpen={ batchEditModalOpen }
+          setBatchEditModalOpen={ setBatchEditModalOpen }
         />
       </BatchEditProvider>
     </>

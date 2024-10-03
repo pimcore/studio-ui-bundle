@@ -21,7 +21,6 @@ import {
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
-import type { IModalProps } from '@Pimcore/components/modal/modal'
 import {
   useBatchEdit
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
@@ -29,13 +28,14 @@ import {
   BatchEditListContainer
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-list-container'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { Modal } from '@Pimcore/components/modal/modal'
 
 export interface BatchEditModalProps {
-  closeModal: () => void
-  BatchEditModal: (props: IModalProps) => React.JSX.Element
+  batchEditModalOpen: boolean
+  setBatchEditModalOpen: (showBatchEditModal: boolean) => void
 }
 
-export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalProps): React.JSX.Element => {
+export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEditDropDownMenu } = useListColumns()
   const { addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
 
@@ -44,12 +44,12 @@ export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalPro
   }
 
   const onClose = (): void => {
-    closeModal()
+    setBatchEditModalOpen(false)
     resetBatchEdits()
   }
 
   return (
-    <BatchEditModal
+    <Modal
       footer={ <ModalFooter buttonAlignment={ 'space-between' }>
         <Dropdown menu={ {
           items: getFormattedDropDownMenu(batchEditDropDownMenu, onColumnClick)
@@ -76,9 +76,12 @@ export const BatchEditModal = ({ closeModal, BatchEditModal }: BatchEditModalPro
           >{t('batch-edit.modal-footer.apply-changes')}</Button>
         </>
       </ModalFooter> }
+      onCancel={ () => { setBatchEditModalOpen(false) } }
+      open={ batchEditModalOpen }
+      size={ 'M' }
       title={ t('batch-edit.modal-title') }
     >
       <BatchEditListContainer />
-    </BatchEditModal>
+    </Modal>
   )
 }
