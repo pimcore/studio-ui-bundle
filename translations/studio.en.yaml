@@ -261,4 +261,17 @@ apply: Apply
 asset.tree.context-menu.add-assets: Add Asset(s)
 asset.tree.context-menu.add-assets.upload-files: Upload Files
 asset.tree.context-menu.add-assets.upload-zip: Upload Zip
-
+asset.tree.context-menu.add-folder: Add Folder
+asset.tree.context-menu.rename: Rename
+asset.tree.context-menu.copy: Copy
+asset.tree.context-menu.paste: Paste
+asset.tree.context-menu.cut: Cut
+asset.tree.context-menu.delete: Delete
+asset.tree.context-menu.download-as-zip: Download as ZIP
+asset.tree.context-menu.advanced: Advanced
+asset.tree.context-menu.search-and-move: Search & Move
+asset.tree.context-menu.lock: Lock
+asset.tree.context-menu.lock-and-propagate-to-children: Lock and propagate to children
+asset.tree.context-menu.expand-children: Expand Children
+asset.tree.context-menu.refresh: Refresh
+asset.tree.context-menu.request-translations: Request Translations
