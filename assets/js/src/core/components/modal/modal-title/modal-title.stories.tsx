@@ -12,7 +12,7 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { ModalTitle } from "@Pimcore/components/modal/modal-title/modal-title";
+import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 
 const config: Meta = {
   title: 'Components/Feedback/ModalTitle',
