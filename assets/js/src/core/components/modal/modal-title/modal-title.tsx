@@ -24,12 +24,11 @@ export const ModalTitle = ({ iconName, ...props }: ModalTitleProps): React.JSX.E
   return (
     <Flex gap={ 'small' }>
       {iconName !== undefined && (
-      <Icon
-        name={ iconName }
-        options={ { width: 20, height: 20 } }
-      />
-      )
-            }
+        <Icon
+          name={ iconName }
+          options={ { width: 24, height: 24 } }
+        />
+      )}
       <span>
         {props.children}
       </span>
