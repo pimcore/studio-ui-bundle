@@ -151,9 +151,8 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
           className={ 'pimcore-schedule-toolbar__filters__active-switch' }
           size='extra-small'
         >
-          <Text>{t('schedule.toolbar.filters.active-switch')}</Text>
           <Switch
-            labelLeft={ t('asset.asset-editor-tabs.schedule.toolbar.filters.active-switch') }
+            labelLeft={ t('schedule.toolbar.filters.active-switch') }
             onChange={ setActiveOnly }
             value={ activeOnly }
           />
@@ -180,7 +179,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
                   icon={ 'trash' }
                   onClick={ cleanupArchivedVersions }
                 >
-                  {t('archived.cleanup-all')}
+                  {t('schedule.archived.cleanup-all')}
                 </IconTextButton>
               </Space>
             </Box>
