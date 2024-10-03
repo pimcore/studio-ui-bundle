@@ -16,6 +16,16 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     footer: css`
+            .ant-btn-link {
+                color: ${token.colorPrimary};
+                margin: 0;
+                padding: 0;
+
+                &:hover {
+                    color: ${token.colorPrimaryHover};
+                }
+            }
+        
             .ant-btn {
                 &.ant-btn-text {
                     color: ${token.colorPrimary};

@@ -26,7 +26,7 @@ export const ModalTitle = ({ iconName, ...props }: ModalTitleProps): React.JSX.E
       {iconName !== undefined && (
         <Icon
           name={ iconName }
-          options={ { width: 24, height: 24 } }
+          options={ { width: 20, height: 20 } }
         />
       )}
       <span>

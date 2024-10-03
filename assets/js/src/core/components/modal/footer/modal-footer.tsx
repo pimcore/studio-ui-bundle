@@ -13,22 +13,31 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/modal/footer/modal-footer.styles'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface IModalFooterProps {
   children?: React.ReactNode
   buttonAlignment?: 'space-between' | 'end'
 }
 
-export const ModalFooter = (props: IModalFooterProps): React.JSX.Element => {
+export const ModalFooter = ({ buttonAlignment = 'end', ...props }: IModalFooterProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { children, ...inlineProps } = props
 
+  const justify = {
+    'space-between': 'space-between',
+    end: 'flex-end'
+  }[buttonAlignment]
+
   return (
-    <div
-      className={ `ant-modal-footer-container ${props.buttonAlignment} ${styles.footer}` }
+    <Flex
+      align={ 'center' }
+      className={ `ant-modal-footer-container ${styles.footer}` }
+      gap={ 'extra-small' }
+      justify={ justify }
       { ...inlineProps }
     >
       {children}
-    </div>
+    </Flex>
   )
 }

@@ -17,23 +17,35 @@ import { useStyle } from '@Pimcore/components/modal/modal.styles'
 import type useModal from 'antd/es/modal/useModal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 
+type ModalSize = 'M' | 'L'
+
 export interface IModalProps extends AntModalProps {
   icon?: React.JSX.Element
   iconName?: string
+  size?: ModalSize
+  className?: string
   footer?: React.JSX.Element
   useModal?: typeof useModal
   children: React.ReactNode
 }
 
-export const Modal = ({ iconName, title, children, ...props }: IModalProps): React.JSX.Element => {
+export const Modal = ({ iconName, size = 'M', className, title, children, ...props }: IModalProps): React.JSX.Element => {
   const { styles } = useStyle()
+
+  const classes = [styles.modal, className].filter(Boolean)
+
+  const sizeBasedWidth = {
+    L: 700,
+    M: 530
+  }[size]
 
   return (
     <AntModal
-      className={ styles.modal }
+      className={ classes.join(' ') }
       title={ (
         <ModalTitle iconName={ iconName }>{title}</ModalTitle>
-      ) }
+        ) }
+      width={ sizeBasedWidth }
       { ...props }
     >
       {children}
