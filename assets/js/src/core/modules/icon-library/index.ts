@@ -104,6 +104,17 @@ import exportIcon from '@Pimcore/assets/icons/export.inline.svg'
 import grid from '@Pimcore/assets/icons/grid.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 import uploadZip from '@Pimcore/assets/icons/file-download-01.inline.svg'
+import typeSquare from '@Pimcore/assets/icons/type-square.inline.svg'
+import clipboard from '@Pimcore/assets/icons/clipboard.inline.svg'
+import scissorsCut from '@Pimcore/assets/icons/scissors-cut-01.inline.svg'
+import deleteOutlined from '@Pimcore/assets/icons/delete-outlined.inline.svg'
+import fileUpload01 from '@Pimcore/assets/icons/file-upload-01.svg'
+import more from '@Pimcore/assets/icons/more.inline.svg'
+import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg'
+import lock01 from '@Pimcore/assets/icons/lock-01.inline.svg'
+import fileLock02 from '@Pimcore/assets/icons/file-lock-02.inline.svg'
+import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg'
+import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -476,6 +487,61 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-zip',
       component: uploadZip
+    })
+
+    iconLibrary.register({
+      name: 'type-square',
+      component: typeSquare
+    })
+
+    iconLibrary.register({
+      name: 'clipboard',
+      component: clipboard
+    })
+
+    iconLibrary.register({
+      name: 'scissors-cut',
+      component: scissorsCut
+    })
+
+    iconLibrary.register({
+      name: 'delete-outlined',
+      component: deleteOutlined
+    })
+
+    iconLibrary.register({
+      name: 'file-upload-01',
+      component: fileUpload01
+    })
+
+    iconLibrary.register({
+      name: 'more',
+      component: more
+    })
+
+    iconLibrary.register({
+      name: 'folder-search',
+      component: folderSearch
+    })
+
+    iconLibrary.register({
+      name: 'lock-01',
+      component: lock01
+    })
+
+    iconLibrary.register({
+      name: 'file-lock-02',
+      component: fileLock02
+    })
+
+    iconLibrary.register({
+      name: 'expand-01',
+      component: expand01
+    })
+
+    iconLibrary.register({
+      name: 'refresh-ccw-03',
+      component: refreshCcw03
     })
   }
 })
