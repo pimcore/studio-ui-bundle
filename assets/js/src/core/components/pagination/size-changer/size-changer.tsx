@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Select } from 'antd'
 import React from 'react'
+import { Select } from '@Pimcore/components/select/select'
 import type { DefaultOptionType } from 'rc-select/lib/Select'
 
 interface SizeChangerProps {
-  sizeOptions: number[] | string []
+  sizeOptions: Array<number | string>
   defaultSize: number
-  handleChange: (pageSize) => void
+  handleChange: (pageSize: number) => void
   label: string
 }
 
