@@ -13,9 +13,10 @@
 
 import React, { useContext, useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type InputRef, Select } from 'antd'
+import { type InputRef } from 'antd'
 import Input from 'antd/es/input/Input'
 import { Button } from '@Pimcore/components/button/button'
+import { Select } from '@Pimcore/components/select/select'
 import {
   CustomMetadataTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
@@ -68,7 +69,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     return { value: type, label: t('data-type.' + type) }
   })
 
-  function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
+  const onNameInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     nameInputValue.current = event.target.value
   }
 
@@ -78,7 +79,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
   const onLanguageSelectClear = (): void => { languageSelectValue.current = '' }
 
-  function onAddPropertyClick (): void {
+  const onAddPropertyClick = (): void => {
     const isValidNameInput = nameInputValue.current !== undefined && nameInputValue.current.length > 0
     const isValidTypeSelectValue = typeSelectValue.current !== undefined
 
