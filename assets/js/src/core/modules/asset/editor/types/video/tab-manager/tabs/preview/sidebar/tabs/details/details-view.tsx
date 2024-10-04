@@ -12,12 +12,12 @@
 */
 
 import React, { useState } from 'react'
-import { useStyle } from './details.styles'
-import { Button, Card, Divider, Select } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
+import { Button, Card, Divider } from 'antd'
 import ButtonGroup from 'antd/es/button/button-group'
 import Meta from 'antd/es/card/Meta'
+import { Select } from '@Pimcore/components/select/select'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import {
@@ -28,6 +28,7 @@ import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbn
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
+import { useStyle } from './details.styles'
 
 interface VideoEditorSidebarDetailsViewProps {
   width: number
@@ -38,6 +39,11 @@ interface VideoEditorSidebarDetailsViewProps {
   onDropImage: (id: number) => void
   onChangeThumbnail: (thumbnail: string) => void
   onClickDownloadByFormat: (format: string) => void
+}
+
+interface DataType {
+  value: string
+  label: string
 }
 
 export const VideoEditorSidebarDetailsTab = ({
@@ -54,57 +60,72 @@ export const VideoEditorSidebarDetailsTab = ({
   const { t } = useTranslation()
   const [imageSource, setImageSource] = useState('media')
   const [customMode, setCustomMode] = useState('pimcore-system-treepreview')
-  const [downloadFormat, setDownloadFormat] = useState('pimcore-system-treepreview')
+  const [downloadFormat, setDownloadFormat] = useState<string>('pimcore-system-treepreview')
 
-  const modes = thumbnails.map(thumbnail => {
+  const getThumbnails = (): DataType[] => thumbnails.map(thumbnail => {
     return {
       value: thumbnail.id,
       label: thumbnail.text
     }
   })
 
-  const downloadFormats = modes
+  const modes = getThumbnails()
+  const downloadFormats = getThumbnails()
 
-  let cardContent
-  if (imageSource === 'media') {
-    cardContent = (
-      <>
-        <Droppable
-          isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
-          onDrop={ onDropAsset }
-        >
-          <DroppableContent imgSrc={ imagePreview } />
-        </Droppable>
-        <Meta
-          title={
-            <Toolbar theme={ 'secondary' }>
-              <div></div>
-            </Toolbar>
-        }
-        />
-      </>
-    )
-  } else {
-    cardContent = (
-      <>
-        <div className={ 'image-preview-container' }>
-          <PimcoreImage
-            src={ imagePreview }
-          />
-        </div>
-        <Meta
-          title={
-            <Toolbar
-              justify={ 'flex-end' }
-              theme={ 'secondary' }
-            >
-              <Button onClick={ onClickApply }>{t('apply')}</Button>
-            </Toolbar>
-          }
-        />
-      </>
-    )
+  const onChangeMode = (mode: string): void => {
+    setCustomMode(mode)
+    onChangeThumbnail(mode)
   }
+
+  const onClickDownload = (): void => { onClickDownloadByFormat(downloadFormat) }
+
+  const onClickCurrentPlayerPosition = (): void => { setImageSource('player') }
+
+  const onClickChooseMedia = (): void => { setImageSource('media') }
+
+  const onDropAsset = (e): void => { onDropImage(e.data.id as number) }
+
+  const onClickApply = (): void => { onApplyPlayerPosition() }
+
+  const getCardContent = (): React.JSX.Element => (
+    imageSource === 'media'
+      ? (
+        <>
+          <Droppable
+            isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
+            onDrop={ onDropAsset }
+          >
+            <DroppableContent imgSrc={ imagePreview } />
+          </Droppable>
+          <Meta
+            title={
+              <Toolbar theme={ 'secondary' }>
+                <div></div>
+              </Toolbar>
+              }
+          />
+        </>
+        )
+      : (
+        <>
+          <div className={ 'image-preview-container' }>
+            <PimcoreImage
+              src={ imagePreview }
+            />
+          </div>
+          <Meta
+            title={
+              <Toolbar
+                justify={ 'flex-end' }
+                theme={ 'secondary' }
+              >
+                <Button onClick={ onClickApply }>{t('apply')}</Button>
+              </Toolbar>
+                  }
+          />
+        </>
+        )
+  )
 
   return (
     <Content
@@ -134,15 +155,8 @@ export const VideoEditorSidebarDetailsTab = ({
                 aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
                 defaultValue={ customMode }
                 onChange={ onChangeMode }
-              >
-                {modes.map((mode) => (
-                  <Select.Option
-                    key={ mode.value }
-                    value={ mode.value }
-                  >{mode.label}</Select.Option>
-                ))
-                }
-              </Select>
+                options={ modes }
+              />
             </div>
 
             <p className={ 'sidebar__content-label' }>{t('download')}</p>
@@ -151,18 +165,9 @@ export const VideoEditorSidebarDetailsTab = ({
               <Select
                 aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
                 defaultValue={ downloadFormat }
-                onChange={ format => {
-                  setDownloadFormat(format)
-                } }
-              >
-                {downloadFormats.map((mode) => (
-                  <Select.Option
-                    key={ mode.value }
-                    value={ mode.value }
-                  >{mode.label}</Select.Option>
-                ))
-                }
-              </Select>
+                onChange={ (format: string) => { setDownloadFormat(format) } }
+                options={ downloadFormats }
+              />
 
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
@@ -190,35 +195,10 @@ export const VideoEditorSidebarDetailsTab = ({
             </Button>
           </ButtonGroup>
           <Card size={ 'small' }>
-            {cardContent}
+            {getCardContent()}
           </Card>
         </div>
       </div>
     </Content>
   )
-
-  function onChangeMode (mode: string): void {
-    setCustomMode(mode)
-    onChangeThumbnail(mode)
-  }
-
-  function onClickDownload (): void {
-    onClickDownloadByFormat(downloadFormat)
-  }
-
-  function onClickCurrentPlayerPosition (): void {
-    setImageSource('player')
-  }
-
-  function onClickChooseMedia (): void {
-    setImageSource('media')
-  }
-
-  function onDropAsset (e): void {
-    onDropImage(e.data.id as number)
-  }
-
-  function onClickApply (): void {
-    onApplyPlayerPosition()
-  }
 }
