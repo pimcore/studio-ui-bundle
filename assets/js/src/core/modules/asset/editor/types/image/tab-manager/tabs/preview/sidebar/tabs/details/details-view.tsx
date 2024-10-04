@@ -20,6 +20,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { useDetailsViewData } from './helpers/config'
 import { useStyle } from './details.styles'
 
 export interface CustomDownloadProps {
@@ -62,57 +63,11 @@ export const AssetEditorSidebarDetailsView = ({
   const { styles } = useStyle()
   const { t } = useTranslation()
 
-  const MODES = [
-    {
-      value: 'resize',
-      label: t('resize')
-    },
-    {
-      value: 'scaleByWidth',
-      label: <>
-        {t('scaleByWidth') + ' '}
-        <span className={ 'entry-content__download-content-custom__default' }>
-          ({t('default')})
-        </span>
-      </>
-    },
-    {
-      value: 'scaleByHeight',
-      label: t('scaleByHeight')
-    }
-  ]
+  const { getModes, getFormats, getDownloadFormats } = useDetailsViewData()
 
-  const FORMATS = [
-    {
-      value: 'JPEG',
-      label: <>
-        {'JPEG '}
-        <span className={ 'entry-content__download-content-custom__default' }>
-          ({t('default')})
-        </span>
-      </>
-    },
-    {
-      value: 'PNG',
-      label: 'PNG'
-    }
-  ]
-
-  const DOWNLOAD_FORMATS = [
-    {
-      value: 'original',
-      label: t('asset.sidebar.original-file')
-    }, {
-      value: 'web',
-      label: t('asset.sidebar.web-format')
-    }, {
-      value: 'print',
-      label: t('asset.sidebar.print-format')
-    }, {
-      value: 'office',
-      label: t('asset.sidebar.office-format')
-    }
-  ]
+  const MODES = getModes()
+  const FORMATS = getFormats()
+  const DOWNLOAD_FORMATS = getDownloadFormats()
 
   const CUSTOM_DOWNLOAD_OPTIONS = [
     {
