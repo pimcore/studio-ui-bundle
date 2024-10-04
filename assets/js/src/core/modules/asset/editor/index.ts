@@ -25,7 +25,7 @@ import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions'
 import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties'
 import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule'
 import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies'
-import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
+import { EditorContainer, type EditorContainerProps } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
@@ -42,6 +42,9 @@ import {
   type ComponentRegistry as GlobalComponentRegistry, type ComponentRegistryInterface
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
+import { type TabNode } from 'flexlayout-react'
+import { selectAssetById } from '@Pimcore/modules/asset/asset-draft-slice'
+import { store } from '@Pimcore/app/store'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -92,7 +95,12 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'asset-editor',
       component: EditorContainer,
-      titleComponent: TitleContainer
+      titleComponent: TitleContainer,
+      isModified: (tabNode: TabNode) => {
+        const config = tabNode.getConfig() as EditorContainerProps
+        const asset = selectAssetById(store.getState(), config.id)
+        return asset?.modified ?? false
+      }
     })
 
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])

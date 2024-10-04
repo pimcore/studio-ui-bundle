@@ -28,6 +28,10 @@ import type {
   ComponentRegistry as GlobalComponentRegistry, ComponentRegistryInterface
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
+import type { TabNode } from 'flexlayout-react'
+import type { EditorContainerProps } from '@Pimcore/modules/asset/editor/editor-container'
+import { store } from '@Pimcore/app/store'
+import { selectDataObjectById } from '@Pimcore/modules/data-object/data-object-draft-slice'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -48,7 +52,12 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'data-object-editor',
       component: EditorContainer,
-      titleComponent: TitleContainer
+      titleComponent: TitleContainer,
+      isModified: (tabNode: TabNode) => {
+        const config = tabNode.getConfig() as EditorContainerProps
+        const dataObject = selectDataObjectById(store.getState(), config.id)
+        return dataObject?.modified ?? false
+      }
     })
 
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])

@@ -14,6 +14,8 @@
 import React from 'react'
 import { Layout, type ILayoutProps } from 'flexlayout-react'
 import { useStlyes } from './widget-manager-view.styles'
+import { useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
+import { createContextMenu } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
 
 export interface WidgetManagerProps extends ILayoutProps {
   className?: string
@@ -21,10 +23,15 @@ export interface WidgetManagerProps extends ILayoutProps {
 
 export const WidgetManagerView = ({ className, ...props }: WidgetManagerProps): React.JSX.Element => {
   const { styles } = useStlyes()
+  const { showContextMenu, dropdown } = useContextMenu(createContextMenu, props.model)
 
   return (
     <div className={ ['widget-manager', className, styles.widgetManager].join(' ') }>
-      <Layout { ...props } />
+      <Layout
+        { ...props }
+        onContextMenu={ showContextMenu }
+      />
+      { dropdown }
     </div>
   )
 }
