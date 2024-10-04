@@ -46,6 +46,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         id: assetNode.id.toString(),
         icon: assetNode.icon?.value ?? 'file-question-02',
         label: assetNode.filename!,
+        type: assetNode.type,
         children: [],
         hasChildren: assetNode.hasChildren,
         metaData: {
