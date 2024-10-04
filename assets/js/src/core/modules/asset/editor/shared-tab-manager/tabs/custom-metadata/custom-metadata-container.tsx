@@ -121,18 +121,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
         className={ styles.tab }
         padded
       >
-        <Header
-          title={ t('asset.asset-editor-tabs.custom-metadata.text') }
-        >
+        <Header title={ t('asset.asset-editor-tabs.custom-metadata.text') }>
           <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
-            <Space
-              size='extra-small'
-            >
+            <Space size='extra-small'>
               {editMode && (
                 <>
-                  <Space
-                    size="extra-small"
-                  >
+                  <Space size="extra-small">
                     <Button
                       onClick={ () => { setEditMode(false) } }
                       type={ 'link' }

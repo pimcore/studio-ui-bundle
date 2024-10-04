@@ -11,14 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { forwardRef } from 'react'
+import type { RefSelectProps } from 'antd/es/select'
 import { Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 
 const { Option } = AntdSelect
 
-export const Select = ({ options, ...antdSelectProps }: AntdSelectProps): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, AntdSelectProps>(({ options, ...antdSelectProps }, ref): React.JSX.Element => {
   return (
     <AntdSelect
+      ref={ ref }
       { ...antdSelectProps }
     >
       {options?.map(option => (
@@ -31,4 +33,6 @@ export const Select = ({ options, ...antdSelectProps }: AntdSelectProps): React.
       ))}
     </AntdSelect>
   )
-}
+})
+
+Select.displayName = 'SelectComponent'
