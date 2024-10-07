@@ -25,17 +25,14 @@ export interface FlexProps extends Omit<AntFlexProps, 'gap'> {
 
 const { useToken } = theme
 
-export const Flex = ({ gap = 0, children, ...props }: FlexProps): React.JSX.Element => {
+export const Flex = ({ gap = 0, className, rootClassName, children, ...props }: FlexProps): React.JSX.Element => {
   const { token } = useToken()
 
-  const { rowGap, colGap } = calculateGap(gap)
+  const { x, y } = calculateGap(gap)
 
-  const { styles } = useStyles({
-    itemRowGap: rowGap,
-    itemColGap: colGap
-  })
+  const { styles } = useStyles({ x, y })
 
-  const flexClassNames = cn(styles.rowColGap)
+  const flexClassNames = cn(styles.rowColGap, className, rootClassName)
 
   /**
    * Calculates the row and column gaps based on the provided gap value.
@@ -44,21 +41,23 @@ export const Flex = ({ gap = 0, children, ...props }: FlexProps): React.JSX.Elem
    *  * - A numeric value (representing a direct gap size).
    *  * - An object containing specific row and column gap sizes.
    */
-  function calculateGap (gap: GapType): { rowGap: number, colGap: number } {
-    const getGapValue = (gap: GapType): number => mapGapToTokenValue({ token, gap })
+  function calculateGap (gap: GapType): { x: number, y: number } {
+    const getGapValue = (gap: GapType): number => {
+      return isNumber(gap) ? gap as number : mapGapToTokenValue({ token, gap })
+    }
 
-    if (isString(gap)) return { rowGap: getGapValue(gap), colGap: getGapValue(gap) }
+    if (isString(gap)) return { x: getGapValue(gap), y: getGapValue(gap) }
 
-    if (isNumber(gap)) return { rowGap: gap as number, colGap: gap as number }
+    if (isNumber(gap)) return { x: gap as number, y: gap as number }
 
     if (isObject(gap)) {
       return {
-        rowGap: getGapValue((gap as GapRowColGroupType).rowGap),
-        colGap: getGapValue((gap as GapRowColGroupType).colGap)
+        x: getGapValue((gap as GapRowColGroupType).x),
+        y: getGapValue((gap as GapRowColGroupType).y)
       }
     }
 
-    return { rowGap: 0, colGap: 0 }
+    return { x: 0, y: 0 }
   }
 
   return (

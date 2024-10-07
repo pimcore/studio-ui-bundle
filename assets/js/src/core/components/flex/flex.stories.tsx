@@ -140,6 +140,20 @@ export const CustomGap = {
   }
 }
 
+export const GapXYTokenValue = {
+  args: {
+    children,
+    gap: { x: 'mini', y: 'mini' }
+  }
+}
+
+export const GapXYNumberValue = {
+  args: {
+    children,
+    gap: { x: 8, y: 4 }
+  }
+}
+
 export const Vertical = {
   args: {
     children,

@@ -14,15 +14,15 @@
 import { createStyles } from 'antd-style'
 
 interface StylesProps {
-  itemRowGap?: number
-  itemColGap?: number
+  x?: number
+  y?: number
 }
 
 export const useStyles = createStyles(({ css }, props: StylesProps) => {
   return {
     rowColGap: css`
-      row-gap: ${props.itemRowGap}px;
-      column-gap: ${props.itemColGap}px;
+      column-gap: ${props.x}px;
+      row-gap: ${props.y}px;
     `
   }
 })

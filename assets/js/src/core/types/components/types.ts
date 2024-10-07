@@ -12,6 +12,6 @@
 */
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
-export interface GapRowColGroupType { colGap: GapStringType, rowGap: GapStringType }
+export interface GapRowColGroupType { x: GapStringType | number, y: GapStringType | number }
 
 export type GapType = number | GapStringType | GapRowColGroupType
