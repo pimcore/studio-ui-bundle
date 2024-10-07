@@ -19,7 +19,7 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import { type CreateContextMenuItemsProps } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { t } from 'i18next'
 
-export const createContextMenu = ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
+export const createContextMenuItems = ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
   return [
     {
       key: 'close-tab',

@@ -18,8 +18,8 @@ import type { MenuRef } from 'antd'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
 interface UseContextMenuReturn {
-  showContextMenu: (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>) => void
-  dropdown: React.ReactElement | null
+  showContextMenu?: (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>) => void
+  dropdown?: React.ReactElement | null
 }
 
 export interface ContextMenuState {
@@ -36,12 +36,16 @@ export interface CreateContextMenuItemsProps {
 }
 
 export const useContextMenu = (
-  createContextMenuItems: ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps) => DropdownProps['menu']['items'],
-  model: Model
+  model: Model,
+  createContextMenuItems?: ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps) => DropdownProps['menu']['items']
 ): UseContextMenuReturn => {
   const [contextMenuState, setContextMenuState] = useState<ContextMenuState | null>(null)
   const dropdownRef = useRef<MenuRef>(null)
   const { closeWidget } = useWidgetManager()
+
+  if (createContextMenuItems === undefined) {
+    return {}
+  }
 
   const showContextMenu = (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     if (node instanceof TabNode) {

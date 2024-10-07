@@ -13,17 +13,18 @@
 
 import React from 'react'
 import { Layout, type ILayoutProps } from 'flexlayout-react'
-import { useStlyes } from './widget-manager-view.styles'
-import { useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
-import { createContextMenu } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
+import { useStyles } from './widget-manager-view.styles'
+import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 
 export interface WidgetManagerProps extends ILayoutProps {
   className?: string
+  createContextMenuItems?: (args: CreateContextMenuItemsProps) => DropdownProps['menu']['items']
 }
 
-export const WidgetManagerView = ({ className, ...props }: WidgetManagerProps): React.JSX.Element => {
-  const { styles } = useStlyes()
-  const { showContextMenu, dropdown } = useContextMenu(createContextMenu, props.model)
+export const WidgetManagerView = ({ className, createContextMenuItems, ...props }: WidgetManagerProps): React.JSX.Element => {
+  const { styles } = useStyles()
+  const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
 
   return (
     <div className={ ['widget-manager', className, styles.widgetManager].join(' ') }>
