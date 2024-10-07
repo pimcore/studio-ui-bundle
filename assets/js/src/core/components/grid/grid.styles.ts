@@ -75,7 +75,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-table-row {
-        min-height: 42px;
+        height: 41px;
       }
 
       .ant-table-content {
