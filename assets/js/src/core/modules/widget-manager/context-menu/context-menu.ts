@@ -16,26 +16,28 @@ import { type TabNode } from 'flexlayout-react'
 import { container } from '@Pimcore/app/depency-injection'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
+import { type CreateContextMenuItemsProps } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
+import { t } from 'i18next'
 
-export const createContextMenu = ({ dropdownPosition, closeContextMenu, model, closeWidget }): DropdownProps['menu']['items'] => {
+export const createContextMenu = ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps): DropdownProps['menu']['items'] => {
   return [
     {
       key: 'close-tab',
-      label: 'Close Tab',
+      label: t('close-tab'),
       onClick: () => {
-        if (dropdownPosition !== null) {
-          closeWidget(dropdownPosition.tabNode.getId() as string)
+        if (contextMenuState !== null) {
+          closeWidget(contextMenuState.tabNode.getId())
           closeContextMenu()
         }
       }
     },
     {
       key: 'close-others',
-      label: 'Close Others',
+      label: t('close-others'),
       onClick: () => {
-        if (dropdownPosition !== null) {
+        if (contextMenuState !== null) {
           model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
-            if (tabNode.getId() !== dropdownPosition.tabNode.getId()) {
+            if (tabNode.getId() !== contextMenuState.tabNode.getId()) {
               closeWidget(tabNode.getId())
             }
           })
@@ -45,9 +47,9 @@ export const createContextMenu = ({ dropdownPosition, closeContextMenu, model, c
     },
     {
       key: 'close-unmodified',
-      label: 'Close Unmodified',
+      label: t('close-unmodified'),
       onClick: () => {
-        if (dropdownPosition !== null) {
+        if (contextMenuState !== null) {
           const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
           model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
@@ -65,9 +67,9 @@ export const createContextMenu = ({ dropdownPosition, closeContextMenu, model, c
     },
     {
       key: 'close-all',
-      label: 'Close All',
+      label: t('close-all'),
       onClick: () => {
-        if (dropdownPosition !== null) {
+        if (contextMenuState !== null) {
           model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
             closeWidget(tabNode.getId())
           })

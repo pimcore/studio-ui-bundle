@@ -12,7 +12,7 @@
 */
 
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
@@ -22,48 +22,60 @@ interface UseContextMenuReturn {
   dropdown: React.ReactElement | null
 }
 
+export interface ContextMenuState {
+  x: number
+  y: number
+  tabNode: TabNode
+}
+
+export interface CreateContextMenuItemsProps {
+  contextMenuState: ContextMenuState
+  closeContextMenu: () => void
+  model: Model
+  closeWidget: (id: string) => void
+}
+
 export const useContextMenu = (
-  createContextMenuItems: ({ dropdownPosition, closeContextMenu, model, closeWidget }) => DropdownProps['menu']['items'],
+  createContextMenuItems: ({ contextMenuState, closeContextMenu, model, closeWidget }: CreateContextMenuItemsProps) => DropdownProps['menu']['items'],
   model: Model
 ): UseContextMenuReturn => {
-  const [dropdownPosition, setDropdownPosition] = useState<{ x: number, y: number, tabNode: TabNode } | null>(null)
+  const [contextMenuState, setContextMenuState] = useState<ContextMenuState | null>(null)
   const dropdownRef = useRef<MenuRef>(null)
   const { closeWidget } = useWidgetManager()
 
   const showContextMenu = (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
     if (node instanceof TabNode) {
       event.preventDefault()
-      setDropdownPosition({ x: event.clientX, y: event.clientY, tabNode: node })
-      console.log('node', node)
+      setContextMenuState({ x: event.clientX, y: event.clientY, tabNode: node })
       node.getExtraData()
     }
   }
 
   const closeContextMenu = (): void => {
-    setDropdownPosition(null)
+    setContextMenuState(null)
   }
 
-  /* const handleClickOutside = (event: MouseEvent): void => {
+  const handleClickOutside = (event: MouseEvent): void => {
     if (dropdownRef.current?.menu?.list !== null && dropdownRef.current?.menu?.list !== undefined && !dropdownRef.current.menu.list.contains(event.target as Node)) {
-      hideDropdown()
+      closeContextMenu()
     }
   }
 
   useEffect(() => {
-    if (dropdownPosition !== null) {
+    if (contextMenuState !== null) {
       document.addEventListener('mousedown', handleClickOutside, true)
     } else {
       document.removeEventListener('mousedown', handleClickOutside, true)
     }
-  }, [dropdownPosition]) */
+  }, [contextMenuState])
 
-  const dropdown = dropdownPosition !== null
+  const dropdown = contextMenuState !== null
     ? (
       <Dropdown
-        menu={ { items: createContextMenuItems({ dropdownPosition, closeContextMenu, model, closeWidget }) } }
+        menu={ { items: createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget }) } }
         menuRef={ dropdownRef }
         open
-        overlayStyle={ { position: 'absolute', left: dropdownPosition.x, top: dropdownPosition.y } }
+        overlayStyle={ { position: 'absolute', left: contextMenuState.x, top: contextMenuState.y } }
       ><span></span></Dropdown>
       )
     : null
