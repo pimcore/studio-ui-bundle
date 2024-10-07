@@ -43,7 +43,6 @@ const defaultTheme = {
     colorFill: 'rgba(215, 199, 236, 0.6)',
     colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
     colorBgLayout: '#fcfcfc',
-    colorBgSpotlight: 'rgba(0, 0, 0, 0.85)',
     colorPrimary: '#722ed1',
     fontSize: 12,
     fontSizeHeading1: 35,
