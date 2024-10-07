@@ -12,6 +12,7 @@
 */
 
 export const topics: Record<string, string> = {
+  'asset-patch-finished': 'asset-patch-finished',
   'zip-download-ready': 'zip-download-ready',
   'csv-download-ready': 'csv-download-ready',
   'handler-progress': 'handler-progress',

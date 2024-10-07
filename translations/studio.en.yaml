@@ -245,6 +245,7 @@ jobs.job.button-hide: hide
 jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.zip-job.title: "ZIP of {{title}}"
+jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
 batch-edit.modal-title: Batch Edit Column
 batch-edit.no-content: There are no added columns yet

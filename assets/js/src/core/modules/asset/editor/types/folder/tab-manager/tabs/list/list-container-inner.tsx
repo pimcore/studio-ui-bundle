@@ -143,6 +143,8 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
+    console.log('----> updating cell data ')
+
     const columnIdentifier = encodeColumnIdentifier(columnId)
     const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
 

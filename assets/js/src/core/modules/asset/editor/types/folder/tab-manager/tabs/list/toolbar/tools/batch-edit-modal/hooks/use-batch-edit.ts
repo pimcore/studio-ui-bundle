@@ -38,7 +38,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
 
   const transformToAssetPatch = (rowId: string): DataArrayType => {
     const metaData: PatchCustomMetadata[] = batchEdits.map(batchEdit => ({
-      name: batchEdit.type,
+      name: batchEdit.key,
       data: batchEdit.value
     }))
 

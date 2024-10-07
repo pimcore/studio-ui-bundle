@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import {
   getFormattedDropDownMenu,
-  useListColumns
+  useListColumns, useListSelectedRows
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -27,8 +27,15 @@ import {
 import {
   BatchEditListContainer
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-list-container'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import {
+  type AssetCreateZipApiResponse,
+  type GridColumnConfiguration,
+  useAssetPatchByIdMutation
+} from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Modal } from '@Pimcore/components/modal/modal'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { createJob } from '@Pimcore/modules/execution-engine/jobs/default/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -37,46 +44,48 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEditDropDownMenu } = useListColumns()
-  // const [patchAsset] = useAssetPatchByIdMutation()
+  const [patchAsset] = useAssetPatchByIdMutation()
   const { addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
-  // const { addJob } = useJobs()
-  // const [jobTitle, setJobTitle] = useState<string>('Asset')
+  const { addJob } = useJobs()
+  const { selectedRows } = useListSelectedRows()
+  const [jobTitle, setJobTitle] = useState<string>('Asset')
 
-  // useEffect(() => {
-  //   setJobTitle(batchEdits.length.toString())
-  // }, [batchEdits])
+  useEffect(() => {
+    setJobTitle(Object.keys(selectedRows).length.toString())
+  }, [selectedRows])
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
     addOrUpdateBatchEdit(column.key, column.type, '')
   }
 
-  const onClose = (): void => {
+  const afterClose = (): void => {
     console.log('---> assetPatchForUpdate', assetPatchForUpdate())
-    setBatchEditModalOpen(false)
     resetBatchEdits()
   }
 
-  // const onApplyChanges = (): void => {
-  //   addJob(createJob({
-  //     title: t('jobs.batch-edit-job.title', { title: jobTitle }),
-  //     topics: [topics['asset-patch-finished'], ...defaultTopics],
-  //     patchedAsset: '/studio/api/assets/download/zip/{jobRunId}',
-  //     action: async () => {
-  //       const promise = patchAsset({ body: { items: numberedSelectedRows } })
-  //
-  //       promise.catch(() => {
-  //         console.error('Failed to patch assets')
-  //       })
-  //
-  //       const response = (await promise) as any
-  //       const data = response.data as AssetCreateZipApiResponse
-  //       return data.jobRunId
-  //     }
-  //   }))
-  // }
+  const onApplyChanges = (): void => {
+    console.log('---> assetPatchForUpdate', assetPatchForUpdate())
+
+    addJob(createJob({
+      title: t('jobs.batch-edit-job.title', { title: jobTitle }),
+      topics: [topics['asset-patch-finished'], ...defaultTopics],
+      action: async () => {
+        const promise = patchAsset(assetPatchForUpdate())
+
+        promise.catch(() => {
+          console.error('Failed to patch assets')
+        })
+
+        const response = (await promise) as any
+        const data = response.data as AssetCreateZipApiResponse
+        return data.jobRunId
+      }
+    }))
+  }
 
   return (
     <Modal
+      afterClose={ () => { afterClose() } }
       footer={ <ModalFooter buttonAlignment={ 'space-between' }>
         <Dropdown menu={ {
           items: getFormattedDropDownMenu(batchEditDropDownMenu, onColumnClick)
@@ -98,7 +107,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           >
           {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
           <Button
-            onClick={ () => { onClose() } }
+            onClick={ () => { onApplyChanges() } }
             type='primary'
           >{t('batch-edit.modal-footer.apply-changes')}</Button>
         </>
