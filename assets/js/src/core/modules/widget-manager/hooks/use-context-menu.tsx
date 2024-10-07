@@ -12,10 +12,11 @@
 */
 
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { useClickOutside } from '@Pimcore/utils/hooks/use-click-outside'
 
 interface UseContextMenuReturn {
   showContextMenu?: (node: any, event: React.MouseEvent<HTMLElement, MouseEvent>) => void
@@ -59,19 +60,7 @@ export const useContextMenu = (
     setContextMenuState(null)
   }
 
-  const handleClickOutside = (event: MouseEvent): void => {
-    if (dropdownRef.current?.menu?.list !== null && dropdownRef.current?.menu?.list !== undefined && !dropdownRef.current.menu.list.contains(event.target as Node)) {
-      closeContextMenu()
-    }
-  }
-
-  useEffect(() => {
-    if (contextMenuState !== null) {
-      document.addEventListener('mousedown', handleClickOutside, true)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside, true)
-    }
-  }, [contextMenuState])
+  useClickOutside(dropdownRef, closeContextMenu)
 
   const dropdown = contextMenuState !== null
     ? (
