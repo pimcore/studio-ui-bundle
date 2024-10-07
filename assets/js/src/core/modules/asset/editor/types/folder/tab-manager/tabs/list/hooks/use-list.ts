@@ -41,7 +41,6 @@ import {
 
 export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void
-  batchEditDropDownMenu: Record<string, GridColumnConfiguration[]>
 }
 
 export const getFormattedDropDownMenu = (dropDownMenu: Record<string, GridColumnConfiguration[]>, onColumnClick: (column: GridColumnConfiguration) => void): DropdownMenuProps['items'] => {
@@ -65,28 +64,6 @@ export const getFormattedDropDownMenu = (dropDownMenu: Record<string, GridColumn
 
 export const useListColumns = (): UseListColumnsHookReturn => {
   const { columns, setColumns } = useContext(ListColumnsContext)
-  const { batchEdits } = useContext(BatchEditContext)
-
-  const batchEditDropDownMenu = useMemo(() => {
-    const columnsInBatchEdit = batchEdits.map((batchEdit) => batchEdit.key)
-    const _dropDownMenu = {}
-
-    if (columns.length === 0) {
-      return _dropDownMenu
-    }
-
-    columns.forEach((column) => {
-      if (!columnsInBatchEdit.includes(column.key)) {
-        if (_dropDownMenu[column.group] === undefined) {
-          _dropDownMenu[column.group] = []
-        }
-
-        _dropDownMenu[column.group].push(column)
-      }
-    })
-
-    return _dropDownMenu
-  }, [columns, batchEdits])
 
   function setGridColumns (columns: GridColumnConfiguration[]): void {
     setColumns(columns)
@@ -95,8 +72,7 @@ export const useListColumns = (): UseListColumnsHookReturn => {
   return {
     columns,
     setGridColumns,
-    setColumns,
-    batchEditDropDownMenu
+    setColumns
   }
 }
 
@@ -114,10 +90,33 @@ export const useListFilterOptions = (): UseListFilterOptionsHookReturn => {
 
 export interface UseListGridAvailableColumnsHookReturn extends IListGridAvailableColumnsContext {
   dropDownMenu: Record<string, GridColumnConfiguration[]>
+  editableColumnsDropDownMenu: Record<string, GridColumnConfiguration[]>
 }
 
 export const useListGridAvailableColumns = (): UseListGridAvailableColumnsHookReturn => {
   const { availableColumns, setAvailableColumns } = useContext(ListGridAvailableColumnsContext)
+  const { batchEdits } = useContext(BatchEditContext)
+
+  const editableColumnsDropDownMenu = useMemo(() => {
+    const columnsInBatchEdit = batchEdits.map((batchEdit) => batchEdit.key)
+    const _dropDownMenu = {}
+
+    if (availableColumns === undefined) {
+      return _dropDownMenu
+    }
+
+    availableColumns.forEach((column) => {
+      if (!columnsInBatchEdit.includes(column.key) && column.editable) {
+        if (_dropDownMenu[column.group] === undefined) {
+          _dropDownMenu[column.group] = []
+        }
+
+        _dropDownMenu[column.group].push(column)
+      }
+    })
+
+    return _dropDownMenu
+  }, [availableColumns, batchEdits])
 
   const dropDownMenu = useMemo(() => {
     const _dropDownMenu = {}
@@ -140,7 +139,8 @@ export const useListGridAvailableColumns = (): UseListGridAvailableColumnsHookRe
   return {
     availableColumns,
     setAvailableColumns,
-    dropDownMenu
+    dropDownMenu,
+    editableColumnsDropDownMenu
   }
 }
 

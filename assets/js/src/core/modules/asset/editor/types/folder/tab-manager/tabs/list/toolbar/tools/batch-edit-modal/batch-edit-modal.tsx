@@ -16,7 +16,8 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import {
   getFormattedDropDownMenu,
-  useListColumns, useListSelectedRows
+  useListGridAvailableColumns,
+  useListSelectedRows
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -43,7 +44,7 @@ export interface BatchEditModalProps {
 }
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
-  const { batchEditDropDownMenu } = useListColumns()
+  const { editableColumnsDropDownMenu } = useListGridAvailableColumns()
   const [patchAsset] = useAssetPatchByIdMutation()
   const { addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
   const { addJob } = useJobs()
@@ -85,7 +86,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       afterClose={ () => { afterClose() } }
       footer={ <ModalFooter buttonAlignment={ 'space-between' }>
         <Dropdown menu={ {
-          items: getFormattedDropDownMenu(batchEditDropDownMenu, onColumnClick)
+          items: getFormattedDropDownMenu(editableColumnsDropDownMenu, onColumnClick)
         } }
         >
           <IconTextButton
