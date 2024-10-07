@@ -12,25 +12,52 @@
 */
 
 import { useContext } from 'react'
-import { type BatchContext, BatchEditContext } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import {
+  type BatchContext, type BatchEdit,
+  BatchEditContext
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import { type AssetPatchByIdApiArg, type PatchCustomMetadata } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useListSelectedRows } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnValue: string) => void
   resetBatchEdits: () => void
   removeBatchEdit: (key: string) => void
+  assetPatchForUpdate: () => AssetPatchByIdApiArg
 }
 
-export interface BatchEdit {
-  key: string
-  type: string
-  value: string
-}
+type DataArrayType = AssetPatchByIdApiArg['body']['data']
 
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
+  const { selectedRows } = useListSelectedRows()
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
+  }
+
+  const transformToAssetPatch = (rowId: string): DataArrayType => {
+    const metaData: PatchCustomMetadata[] = batchEdits.map(batchEdit => ({
+      name: batchEdit.type,
+      data: batchEdit.value
+    }))
+
+    return ([{
+      metadata: metaData,
+      id: Number(rowId)
+    }])
+  }
+
+  const assetPatchForUpdate = (): AssetPatchByIdApiArg => {
+    const assetPatches = Object.keys(selectedRows)
+      .map(rowId => transformToAssetPatch(rowId))
+      .flat()
+
+    return ({
+      body: {
+        data: assetPatches
+      }
+    })
   }
 
   const addOrUpdateBatchEdit = (columnKey: string, columnType: string, value: string): void => {
@@ -63,6 +90,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     setBatchEdits,
     addOrUpdateBatchEdit,
     resetBatchEdits,
-    removeBatchEdit
+    removeBatchEdit,
+    assetPatchForUpdate
   }
 }

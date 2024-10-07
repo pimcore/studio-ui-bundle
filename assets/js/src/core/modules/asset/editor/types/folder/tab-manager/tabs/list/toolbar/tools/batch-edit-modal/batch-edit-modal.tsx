@@ -37,16 +37,43 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEditDropDownMenu } = useListColumns()
-  const { addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
+  // const [patchAsset] = useAssetPatchByIdMutation()
+  const { addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
+  // const { addJob } = useJobs()
+  // const [jobTitle, setJobTitle] = useState<string>('Asset')
+
+  // useEffect(() => {
+  //   setJobTitle(batchEdits.length.toString())
+  // }, [batchEdits])
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
     addOrUpdateBatchEdit(column.key, column.type, '')
   }
 
   const onClose = (): void => {
+    console.log('---> assetPatchForUpdate', assetPatchForUpdate())
     setBatchEditModalOpen(false)
     resetBatchEdits()
   }
+
+  // const onApplyChanges = (): void => {
+  //   addJob(createJob({
+  //     title: t('jobs.batch-edit-job.title', { title: jobTitle }),
+  //     topics: [topics['asset-patch-finished'], ...defaultTopics],
+  //     patchedAsset: '/studio/api/assets/download/zip/{jobRunId}',
+  //     action: async () => {
+  //       const promise = patchAsset({ body: { items: numberedSelectedRows } })
+  //
+  //       promise.catch(() => {
+  //         console.error('Failed to patch assets')
+  //       })
+  //
+  //       const response = (await promise) as any
+  //       const data = response.data as AssetCreateZipApiResponse
+  //       return data.jobRunId
+  //     }
+  //   }))
+  // }
 
   return (
     <Modal
@@ -71,7 +98,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           >
           {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
           <Button
-            onClick={ onClose }
+            onClick={ () => { onClose() } }
             type='primary'
           >{t('batch-edit.modal-footer.apply-changes')}</Button>
         </>
