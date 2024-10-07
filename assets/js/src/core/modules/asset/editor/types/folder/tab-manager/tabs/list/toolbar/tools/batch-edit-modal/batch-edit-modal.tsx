@@ -28,7 +28,7 @@ import {
   BatchEditListContainer
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-list-container'
 import {
-  type AssetCreateZipApiResponse,
+  type AssetPatchByIdApiResponse,
   type GridColumnConfiguration,
   useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -59,16 +59,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   }
 
   const afterClose = (): void => {
-    console.log('---> assetPatchForUpdate', assetPatchForUpdate())
     resetBatchEdits()
   }
 
   const onApplyChanges = (): void => {
-    console.log('---> assetPatchForUpdate', assetPatchForUpdate())
-
     addJob(createJob({
       title: t('jobs.batch-edit-job.title', { title: jobTitle }),
-      topics: [topics['asset-patch-finished'], ...defaultTopics],
+      topics: [topics['patch-finished'], ...defaultTopics],
       action: async () => {
         const promise = patchAsset(assetPatchForUpdate())
 
@@ -77,7 +74,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         })
 
         const response = (await promise) as any
-        const data = response.data as AssetCreateZipApiResponse
+        const data = response.data as AssetPatchByIdApiResponse
         return data.jobRunId
       }
     }))

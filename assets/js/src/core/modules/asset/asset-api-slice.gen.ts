@@ -509,8 +509,7 @@ export type AssetImageDownloadByThumbnailApiArg = {
     thumbnailName: string;
 };
 export type AssetPatchByIdApiResponse =
-    /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
-        /** ID of created jobRun */
+    {
         jobRunId: number;
     };
 export type AssetPatchByIdApiArg = {

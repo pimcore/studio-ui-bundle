@@ -51,6 +51,7 @@ export const JobList = (): React.JSX.Element => {
   return (
     <>
       <Accordion
+        activeKey={ item.key }
         className={ styles.jobList }
         ghost
         items={ [item] }
