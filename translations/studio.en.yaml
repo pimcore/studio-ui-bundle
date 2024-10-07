@@ -263,4 +263,7 @@ apply: Apply
 asset.tree.context-menu.add-assets: Add Asset(s)
 asset.tree.context-menu.add-assets.upload-files: Upload Files
 asset.tree.context-menu.add-assets.upload-zip: Upload Zip
-
+close-tab: Close Tab
+close-others: Close Others
+close-unmodified: Close Unmodified
+close-all: Close All

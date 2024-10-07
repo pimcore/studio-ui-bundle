@@ -16,15 +16,17 @@ import { type MutableRefObject, useEffect } from 'react'
 export const useClickOutside = (
   ref: MutableRefObject<any>,
   handler: (event: MouseEvent) => void,
-  selectors: string
+  selectors?: string
 ): void => {
   useEffect(() => {
     const listener = (event: MouseEvent): void => {
-      const domElements = document.querySelectorAll(selectors)
+      if (selectors !== undefined) {
+        const domElements = document.querySelectorAll(selectors)
 
-      for (const item of domElements) {
-        if (item.contains(event.target as HTMLElement)) {
-          return
+        for (const item of domElements) {
+          if (item.contains(event.target as HTMLElement)) {
+            return
+          }
         }
       }
 
