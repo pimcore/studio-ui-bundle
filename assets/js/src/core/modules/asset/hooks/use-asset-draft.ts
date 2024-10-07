@@ -121,6 +121,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   useEffect(() => {
     if (asset === undefined) {
       fetchAsset()
+    } else {
+      setIsLoading(false)
     }
   }, [asset])
 

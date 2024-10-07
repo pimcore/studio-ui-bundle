@@ -38,7 +38,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
   const { id, elementType } = useElementContext()
 
-  const { addProperty, properties } = useElementDraft(id, elementType)
+  const { addProperty, properties, isLoading: isElementDraftLoading } = useElementDraft(id, elementType)
   const {
     showModal: showDuplicatePropertyModal,
     closeModal: closeDuplicatePropertyModal,
@@ -69,6 +69,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   return (
     <Content
       className={ styles.tab }
+      loading={ isElementDraftLoading || isLoading }
       padded
     >
       <Header title={ t('properties.label') }>

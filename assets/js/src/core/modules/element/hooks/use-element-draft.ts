@@ -33,6 +33,8 @@ interface UseElementDraftReturn extends
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn {
   element: IElementDraft | undefined
+  isLoading: boolean
+  isError: boolean
 }
 
 export const useElementDraft = (id: number, elementType: ElementType): UseElementDraftReturn => {
