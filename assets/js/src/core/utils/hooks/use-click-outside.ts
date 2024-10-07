@@ -30,7 +30,11 @@ export const useClickOutside = (
         }
       }
 
-      if (ref.current === null || ref.current.nativeElement.contains(event.target) === true) {
+      if (ref.current?.menu?.list?.contains(event.target as Node) === true) {
+        return
+      }
+
+      if (ref.current?.nativeElement?.contains(event.target) === true) {
         return
       }
 
