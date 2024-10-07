@@ -15,42 +15,47 @@ import React from 'react'
 import { Form, type FormInstance, Modal, Space } from 'antd'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useForm } from 'antd/es/form/Form'
-import { useStyle } from './input-modal.styles'
+import { useStyle } from './form-modal.styles'
 import { type Store } from 'antd/es/form/interface'
+import type { ModalProps as AntModalProps } from 'antd/es/modal/interface'
 
-export interface InputModalProps {
+export type FormModalProps = AntModalProps & {
   title?: string
   label?: string
-  open: boolean
   initialValues?: Store
   icon?: string
-  children?: React.ReactNode
-  onOk: (form: FormInstance<any>) => void
-  onCancel: () => void
+  onSubmit?: (form: FormInstance<any>) => void
 }
 
-export const InputModal = (props: InputModalProps): React.JSX.Element => {
+export const FormModal = (props: FormModalProps): React.JSX.Element => {
   const { styles } = useStyle()
   const [form] = useForm()
   const {
     title,
     icon,
-    onOk,
+    open = false,
     ...inlineProps
   } = props
 
   return (
     <Modal
-      className={ styles.inputModal }
-      onOk={ () => {
-        props.onOk(form)
+      { ...inlineProps }
+      className={ styles.formModal }
+      onOk={ (onOkProps) => {
+        if (props.onOk !== undefined) {
+          props.onOk(onOkProps)
+        }
+
+        if (props.onSubmit !== undefined) {
+          props.onSubmit(form)
+        }
       } }
+      open={ open }
       title={ (
         <ModalTitle iconName={ icon }>
           { title }
         </ModalTitle>
       ) }
-      { ...inlineProps }
     >
       <Space
         size={ 10 }

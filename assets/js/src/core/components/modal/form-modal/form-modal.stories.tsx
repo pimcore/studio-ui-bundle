@@ -13,7 +13,7 @@
 import type {Meta} from "@storybook/react";
 import {Button} from "@Pimcore/components/button/button";
 import React, {useState} from "react";
-import {useInputModal} from "@Pimcore/components/modal/input-modal/hooks/use-input-modal";
+import {useFormModal} from "@Pimcore/components/modal/form-modal/hooks/use-form-modal";
 import {FormInstance} from "antd";
 
 const config: Meta = {
@@ -26,18 +26,17 @@ const config: Meta = {
       }
     }
 
-    const { renderModal: RenderModal, showModal } = useInputModal({
-      type: args.type,
-      submitCallback: callback
+    const { renderModal: RenderModal, showModal } = useFormModal({
+      type: args.type
     })
 
     return (
       <>
         <Button onClick={ showModal }>Open modal</Button>
         <RenderModal
-          title={ args.title }
-          label={ args.label }
+          {...args}
           initialValues={args.initialValues ?? {}}
+          onSubmit={callback}
         />
 
         <p>Form Value: {value}</p>
@@ -46,8 +45,9 @@ const config: Meta = {
   },
   argTypes: {
     type: {
-      options: ['input'],
-      control: { type: 'select' }
+      table: {
+        disable: true
+      }
     }
   },
   parameters: {
@@ -66,13 +66,23 @@ export const Input = {
   }
 }
 
-export const WithInitialValue = {
+export const InputWithInitialValue = {
   args: {
+    icon: 'exclamation-circle-filled',
     type: 'input',
     title: 'Rename',
     label: 'Please enter the new name',
     initialValues: {
       input: 'initial value'
     }
+  }
+}
+
+export const Confirmation = {
+  args: {
+    icon: 'exclamation-circle-filled',
+    type: 'confirmation',
+    title: 'Confirmation',
+    text: 'Are you sure that you are sure?'
   }
 }

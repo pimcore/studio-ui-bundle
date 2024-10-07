@@ -15,7 +15,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    inputModal: css`
+    formModal: css`
       .ant-space {
         width: 100%;
         
