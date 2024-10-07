@@ -19,13 +19,12 @@ import { type GapType } from '@Pimcore/types/components/types'
 
 export interface TagListProps {
   list: TagProps[][]
-  itemCharMaxLength?: number
   itemGap?: GapType
   tagListClassNames?: string
   tagListItemClassNames?: string
 }
 
-export const TagList = ({ list, itemCharMaxLength, itemGap, tagListClassNames, tagListItemClassNames }: TagListProps): React.JSX.Element => {
+export const TagList = ({ list, itemGap, tagListClassNames, tagListItemClassNames }: TagListProps): React.JSX.Element => {
   return (
     <Flex
       gap="small"
@@ -42,7 +41,6 @@ export const TagList = ({ list, itemCharMaxLength, itemGap, tagListClassNames, t
           {group.map((item, itemIndex) => (
             <Tag
               key={ `${groupIndex}-${itemIndex}` }
-              maxLength={ itemCharMaxLength }
               { ...item }
             >
               {item.children}

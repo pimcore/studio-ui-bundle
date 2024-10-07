@@ -95,10 +95,10 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       ) }
     >
       {workflow.graph !== undefined && (
-      <img
-        alt={ 'workflow' }
-        src={ `data:image/svg+xml;utf8,${encodeURIComponent(workflow.graph)}` }
-      />
+        <img
+          alt={ 'workflow' }
+          src={ `data:image/svg+xml;utf8,${encodeURIComponent(workflow.graph)}` }
+        />
       )}
     </Card>
   )

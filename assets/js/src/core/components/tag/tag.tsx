@@ -12,10 +12,9 @@
 */
 
 import React, { type ReactNode } from 'react'
-import { Tag as AntTag, type TagProps as AntTagPropsProps, Tooltip } from 'antd'
+import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { isNumber, isString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './tag.styles'
 
 export interface TagProps extends AntTagPropsProps {
@@ -23,19 +22,12 @@ export interface TagProps extends AntTagPropsProps {
   iconName?: string
   className?: string
   theme?: TagTheme
-  maxLength?: number
 }
 
 export type TagTheme = 'transparent'
 
-export const Tag = ({ children, icon, iconName, theme, maxLength, className, ...props }: TagProps): React.JSX.Element => {
+export const Tag = ({ children, icon, iconName, theme, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
-
-  const isLimitedCharNumber = maxLength != null && isNumber(maxLength)
-  const shouldTruncateText = isLimitedCharNumber && isString(children) && (children as string)?.length > maxLength
-  const shouldShowTooltip = isLimitedCharNumber && shouldTruncateText
-
-  const displayText = shouldTruncateText ? `${(children as string)?.substring(0, maxLength)}...` : children
 
   const tagClassNames = cn(
     styles.tag,
@@ -59,30 +51,13 @@ export const Tag = ({ children, icon, iconName, theme, maxLength, className, ...
     return icon ?? null
   }
 
-  const renderTag = (): JSX.Element => (
+  return (
     <AntTag
       className={ tagClassNames }
       icon={ getIcon() }
       { ...props }
     >
-      {displayText}
+      {children}
     </AntTag>
-  )
-
-  return (
-    <>
-      {shouldShowTooltip
-        ? (
-          <Tooltip
-            align={ { offset: [20, -4] } }
-            overlayClassName={ styles.tooltip }
-            title={ children }
-          >
-            {renderTag()}
-          </Tooltip>
-          )
-        : renderTag()
-      }
-    </>
   )
 }
