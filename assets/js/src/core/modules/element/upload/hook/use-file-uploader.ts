@@ -72,7 +72,7 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
     await uploadFile(props)
 
     if (props.file.response !== undefined) {
-      props.promiseResolve(props.file.response.id as number)
+      props.promiseResolve(props.file.response.jobRunId as number)
     }
   }
 

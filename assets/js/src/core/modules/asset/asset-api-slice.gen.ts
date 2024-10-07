@@ -268,7 +268,7 @@ export { injectedRtkApi as api };
 export type AssetCloneApiResponse =
     /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
-        id: number;
+        jobRunId: number;
     };
 export type AssetCloneApiArg = {
     /** Id of the asset */
@@ -363,7 +363,7 @@ export type AssetDownloadByIdApiArg = {
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
     | Image
-    | Document
+    | AssetDocument
     | Audio
     | Video
     | Archive
@@ -376,7 +376,7 @@ export type AssetGetByIdApiArg = {
 };
 export type AssetUpdateByIdApiResponse = /** status 200 One of asset types */
     | Image
-    | Document
+    | AssetDocument
     | Audio
     | Video
     | Archive
@@ -511,7 +511,7 @@ export type AssetImageDownloadByThumbnailApiArg = {
 export type AssetPatchByIdApiResponse =
     /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
         /** ID of created jobRun */
-        id: number;
+        jobRunId: number;
     };
 export type AssetPatchByIdApiArg = {
     body: {
@@ -527,7 +527,7 @@ export type AssetPatchByIdApiArg = {
 };
 export type AssetGetTreeApiResponse = /** status 200 asset_get_tree_success_description */ {
     totalItems: number;
-    items: (Image | Document | Audio | Video | Archive | Text | AssetFolder | Unknown)[];
+    items: (Image | AssetDocument | Audio | Video | Archive | Text | AssetFolder | Unknown)[];
 };
 export type AssetGetTreeApiArg = {
     /** Page number */
@@ -581,7 +581,7 @@ export type AssetReplaceApiArg = {
 };
 export type AssetUploadZipApiResponse = /** status 201 Successfully created jobRun ID to upload multiple assets */ {
     /** ID of created jobRun */
-    id: number;
+    jobRunId: number;
 };
 export type AssetUploadZipApiArg = {
     /** ParentId of the asset */
@@ -773,7 +773,7 @@ export type Image = Asset & {
     /** path to thumbnail */
     imageThumbnailPath?: string;
 };
-export type Document = Asset & {
+export type AssetDocument = Asset & {
     /** Page count */
     pageCount?: number | null;
     /** Path to image thumbnail */
