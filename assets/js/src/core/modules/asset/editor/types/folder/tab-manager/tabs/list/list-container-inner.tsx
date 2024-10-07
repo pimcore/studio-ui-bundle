@@ -11,17 +11,36 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAssetGetGridMutation, type GridFilter, api, type AssetGetGridApiResponse, useAssetPatchByIdMutation, type AssetPatchByIdApiArg, type AssetGetGridApiArg } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  api,
+  type AssetGetGridApiArg,
+  type AssetGetGridApiResponse,
+  type AssetPatchByIdApiArg,
+  type GridFilter,
+  useAssetGetGridMutation,
+  useAssetPatchByIdMutation
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { GridContainer } from './grid-container'
+import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { SidebarContainer } from './sidebar/sidebar-container'
-import { useListColumns, useListFilterOptions, useListGridConfig, useListPage, useListPageSize, useListSelectedRows, useListSorting } from './hooks/use-list'
+import {
+  useListColumns,
+  useListFilterOptions,
+  useListGridConfig,
+  useListPage,
+  useListPageSize,
+  useListSelectedRows,
+  useListSorting,
+  useListGridAvailableColumns
+} from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
 import { ListDataProvider } from './list-provider'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
 
 interface DataPatch {
@@ -38,8 +57,9 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { setSelectedRows } = useListSelectedRows()
   const { filterOptions } = useListFilterOptions()
   const { columns, setGridColumns } = useListColumns()
-  const { gridConfig, setGridConfig } = useListGridConfig()
-  const assetId = assetContext.id!
+  const { setGridConfig } = useListGridConfig()
+  const { availableColumns, setAvailableColumns } = useListGridAvailableColumns()
+  const assetId = assetContext.id
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
   const [fetchListing] = useAssetGetGridMutation()
   const [patchAsset] = useAssetPatchByIdMutation()
@@ -60,11 +80,12 @@ export const ListContainerInner = (): React.JSX.Element => {
 
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
-      const availableGridCOnfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
+      const availableGridConfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
       const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId }))
 
-      Promise.all([availableGridCOnfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
-        setGridConfig(availableGridConfig.data?.columns)
+      Promise.all([availableGridConfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
+        setAvailableColumns(availableGridConfig.data?.columns)
+        setGridConfig(initialGridConfig.data)
 
         const initialColumns = initialGridConfig.data!.columns!.map((column) => {
           const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
@@ -122,7 +143,8 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
-    const column = columns.find((column) => column.key === columnId)
+    const columnIdentifier = encodeColumnIdentifier(columnId)
+    const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
 
     if (column === undefined) {
       return
@@ -132,7 +154,7 @@ export const ListContainerInner = (): React.JSX.Element => {
       return [
         ...oldPatches,
         {
-          columnId,
+          columnId: columnIdentifier.key,
           rowIndex: rowData.id,
           value
         }
@@ -162,7 +184,8 @@ export const ListContainerInner = (): React.JSX.Element => {
             id: rowData.id,
             metadata: [
               {
-                name: column.key,
+                name: columnIdentifier.key,
+                language: columnIdentifier.locale,
                 data: value
               }
             ]
@@ -180,7 +203,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         })
 
         setDataPatches((oldPatches) => {
-          return oldPatches.filter((patch) => !(patch.columnId === columnId && patch.rowIndex === rowData.id))
+          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && patch.rowIndex === rowData.id))
         })
       }).catch((error) => {
         console.error(error)
@@ -212,7 +235,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     const hasIdColumn = columns.some((column) => column.key === 'id')
 
     if (!hasIdColumn) {
-      const idColumn = gridConfig!.find((column) => column.key === 'id')!
+      const idColumn = availableColumns!.find((column) => column.key === 'id')!
       columnsToRequest.push(idColumn)
     }
 
@@ -232,7 +255,8 @@ export const ListContainerInner = (): React.JSX.Element => {
         columns: columnsToRequest.map((column) => ({
           config: [],
           key: column.key,
-          type: column.type
+          type: column.type,
+          locale: column.locale
         })),
         filters: {
           page,

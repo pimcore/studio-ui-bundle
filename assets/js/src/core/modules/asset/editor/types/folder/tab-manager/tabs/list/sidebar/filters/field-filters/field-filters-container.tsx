@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { getFormattedDropDownMenu, useListGridConfig } from '../../../hooks/use-list'
+import { useListGridAvailableColumns, getFormattedDropDownMenu } from '../../../hooks/use-list'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -23,7 +23,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { dropDownMenu } = useListGridConfig()
+  const { dropDownMenu } = useListGridAvailableColumns()
   const { columns, addColumn } = useFilters()
 
   return (

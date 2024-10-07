@@ -19,20 +19,14 @@ import {
 import {
   CustomMetadataTabContainer
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/custom-metadata-container'
-import {
-  PropertiesContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties/properties-container'
-import { VersionsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/versions-container'
-import { ScheduleTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule/schedule-container'
-import {
-  DependenciesTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-container'
-import {
-  NotesAndEventsTabContainer
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
-import { TagsTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/tags-container'
-import { WorkflowTabContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/workflow/workflow-container'
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
+import {
+  VersionsTabContainer
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+import {
+  ComparisonView
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/comparison-view/comparison-view'
+import { SingleView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/single-view/single-view'
 
 export const TAB_EMBEDDED_METADATA: IEditorTab = {
   key: 'embedded-metadata',
@@ -50,58 +44,13 @@ export const TAB_CUSTOM_METADATA: IEditorTab = {
   isDetachable: true
 }
 
-export const TAB_PROPERTIES: IEditorTab = {
-  key: 'properties',
-  label: 'asset.asset-editor-tabs.properties.text',
-  children: <PropertiesContainer />,
-  icon: <Icon name={ 'settings2' } />,
-  isDetachable: true
-}
-
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
-  label: 'asset.asset-editor-tabs.versions',
-  children: <VersionsTabContainer />,
+  label: 'version.label',
+  children: <VersionsTabContainer
+    ComparisonViewComponent={ ComparisonView }
+    SingleViewComponent={ SingleView }
+            />,
   icon: <Icon name={ 'history-outlined' } />,
-  isDetachable: true
-}
-
-export const TAB_SCHEDULE: IEditorTab = {
-  key: 'schedule',
-  label: 'asset.asset-editor-tabs.schedule',
-  children: <ScheduleTabContainer />,
-  icon: <Icon name={ 'schedule-outlined' } />,
-  isDetachable: true
-}
-
-export const TAB_DEPENDENCIES: IEditorTab = {
-  key: 'dependencies',
-  label: 'asset.asset-editor-tabs.dependencies',
-  children: <DependenciesTabContainer />,
-  icon: <Icon name={ 'hierarchy' } />,
-  isDetachable: true
-}
-
-export const TAB_NOTES_AND_EVENTS: IEditorTab = {
-  key: 'notes-events',
-  label: 'asset.asset-editor-tabs.notes-events',
-  children: <NotesAndEventsTabContainer />,
-  icon: <Icon name={ 'view-details' } />,
-  isDetachable: true
-}
-
-export const TAB_TAGS: IEditorTab = {
-  key: 'tags',
-  label: 'asset.asset-editor-tabs.tag',
-  children: <TagsTabContainer />,
-  icon: <Icon name={ 'tag-two-tone' } />,
-  isDetachable: true
-}
-
-export const TAB_WORKFLOW: IEditorTab = {
-  key: 'workflow',
-  label: 'asset.asset-editor-tabs.workflow',
-  children: <WorkflowTabContainer />,
-  icon: <Icon name={ 'workflow' } />,
   isDetachable: true
 }

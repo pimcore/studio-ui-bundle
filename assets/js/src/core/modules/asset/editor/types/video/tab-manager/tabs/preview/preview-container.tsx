@@ -43,7 +43,7 @@ const PreviewContainer = (): React.JSX.Element => {
   const [thumbnail, setThumbnail] = useState<string>('')
   const [playerPosition, setPlayerPosition] = useState<number>(0)
   const assetContext = useContext(AssetContext)
-  const { data } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
 

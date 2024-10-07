@@ -65,7 +65,9 @@ export const {
   useAssetGetGridMutation,
   useAssetPatchByIdMutation,
   useAssetCreateZipMutation,
-  useAssetCreateCsvMutation
+  useAssetCreateCsvMutation,
+  useAssetGetSavedGridConfigurationsQuery,
+  useAssetSaveGridConfigurationMutation
 } = api
 
 export { api }

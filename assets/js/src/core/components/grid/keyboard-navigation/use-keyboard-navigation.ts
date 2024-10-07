@@ -24,7 +24,7 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
 
   function handleArrowNavigation (event: KeyboardEvent): void {
     let rowId = props.row.index
-    let columnId = props.column.id
+    let columnId = props.column.getIndex()
     const isArrowKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)
 
     if (!isArrowKey) {
@@ -68,28 +68,22 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
     }
   }
 
-  function findNextColumn (columnId: string): string | undefined {
+  function findNextColumn (columnId: number): number | undefined {
     const columns = props.table.getAllColumns()
 
-    for (let i = 0; i < columns.length; i++) {
-      if (columns[i].id === columnId) {
-        return columns[i + 1]?.id
-      }
+    if (columnId === columns.length - 1) {
+      return undefined
     }
 
-    return undefined
+    return columnId + 1
   }
 
-  function findPrevColumn (columnId: string): string | undefined {
-    const columns = props.table.getAllColumns()
-
-    for (let i = 0; i < columns.length; i++) {
-      if (columns[i].id === columnId) {
-        return columns[i - 1]?.id
-      }
+  function findPrevColumn (columnId: number): number | undefined {
+    if (columnId === 0) {
+      return undefined
     }
 
-    return undefined
+    return columnId - 1
   }
 
   return { handleArrowNavigation }

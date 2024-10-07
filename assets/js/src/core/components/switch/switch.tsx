@@ -11,21 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import type { SwitchProps as AntdSwitchProps } from 'antd/es/switch/index'
 import { Switch as AntdSwitch } from 'antd'
 import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface SwitchProps extends AntdSwitchProps {
-  label: string
-  labelPosition: LabelPosition
+  labelLeft?: ReactNode
+  labelRight?: ReactNode
 }
 
-export type LabelPosition = 'start' | 'end'
-
 export const Switch = ({
-  label,
-  labelPosition,
+  labelLeft,
+  labelRight,
   ...props
 }: SwitchProps): React.JSX.Element => {
   return (
@@ -33,11 +31,11 @@ export const Switch = ({
       align={ 'center' }
       gap={ 'extra-small' }
     >
-      {labelPosition === 'start' && <p>{label}</p>}
+      {labelLeft}
       <AntdSwitch
         { ...props }
       />
-      {labelPosition === 'end' && <p>{label}</p>}
+      {labelRight}
     </Flex>
   )
 }

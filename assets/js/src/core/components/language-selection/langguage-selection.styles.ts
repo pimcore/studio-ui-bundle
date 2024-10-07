@@ -33,6 +33,7 @@ export const useStyles = createStyles(({ token, css }) => {
         display: flex;
         align-items: center;
         justify-content: center;
+        text-transform: uppercase;
         gap: 2px;
         width: 45px;
       }

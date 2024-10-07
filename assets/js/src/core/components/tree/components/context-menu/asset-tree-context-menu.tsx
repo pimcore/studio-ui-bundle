@@ -11,41 +11,47 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Dropdown, type MenuProps } from 'antd'
+import { Button, Dropdown, type MenuProps } from 'antd'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
+import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
+import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 
 export interface AssetTreeContextMenuProps {
+  node: TreeContextMenuProps['node']
   children: React.ReactNode
-  uploadFiles: (event: any) => Promise<void>
-  fileInputRef: React.RefObject<HTMLInputElement>
-  uploadArchive: (event: any) => Promise<void>
-  archiveInputRef: React.RefObject<HTMLInputElement>
 }
 
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
+  const uploadFileRef = React.useRef<HTMLButtonElement>(null)
+  const uploadZipRef = React.useRef<HTMLButtonElement>(null)
+
   const items: MenuProps['items'] = [
     {
-      label: 'Add Asset(s)',
+      label: t('asset.tree.context-menu.add-assets'),
       key: '1',
       children: [
         {
           icon: <Icon name={ 'upload-cloud' } />,
-          label: 'Upload Files',
+          label: t('asset.tree.context-menu.add-assets.upload-files'),
           key: '1-1',
           onClick: () => {
-            if (props.fileInputRef.current !== null) {
-              props.fileInputRef.current?.click()
+            if (uploadFileRef.current !== null) {
+              uploadFileRef.current?.click()
             }
           }
         },
         {
-          icon: <Icon name={ 'upload-cloud' } />,
-          label: 'Upload Zip',
+          icon: <Icon name={ 'upload-zip' } />,
+          label: t('asset.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
-            if (props.archiveInputRef.current !== null) {
-              props.archiveInputRef.current?.click()
+            if (uploadZipRef.current !== null) {
+              uploadZipRef.current?.click()
             }
           }
         }
@@ -53,24 +59,38 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   ]
 
+  const uploadFile: UploadProps = {
+    action: `/studio/api/assets/add/${props.node?.id}`,
+    name: 'file',
+    multiple: true,
+    showUploadList: false,
+    onChange: uploadFileProcessor
+  }
+
+  const uploadZip: UploadProps = {
+    action: `/studio/api/assets/add-zip/${props.node?.id}`,
+    accept: '.zip, .rar, .7zip',
+    name: 'zipFile',
+    multiple: true,
+    showUploadList: false,
+    onChange: uploadZipProcessor
+  }
+
   return (
     <>
-      <input
-        hidden
-        multiple
-        onChange={ props.uploadFiles }
-        ref={ props.fileInputRef }
-        type="file"
-      />
+      <Upload { ...uploadFile }>
+        <Button
+          ref={ uploadFileRef }
+          style={ { display: 'none' } }
+        ></Button>
+      </Upload>
 
-      <input
-        accept={ '.zip, .rar, .7zip' }
-        hidden
-        multiple
-        onChange={ props.uploadArchive }
-        ref={ props.archiveInputRef }
-        type="file"
-      />
+      <Upload{ ...uploadZip }>
+        <Button
+          ref={ uploadZipRef }
+          style={ { display: 'none' } }
+        ></Button>
+      </Upload>
 
       <Dropdown
         menu={ { items } }

@@ -17,24 +17,17 @@ import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type ITabRenderValues, Model, type TabNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store/index'
 import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
-import { getTabTokens } from './widget-manager-view.styles'
-import { theme } from 'antd'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
-
-const { useToken } = theme
 
 const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
   const dispatch = useAppDispatch()
   const model = Model.fromJson(modelJson)
-  const { token } = useToken()
 
   useEffect(() => {
-    const tabToken = getTabTokens(token)
-
     model.doAction(Actions.updateModelAttributes({
-      tabSetTabStripHeight: tabToken.cardHeight,
-      tabSetTabHeaderHeight: tabToken.cardHeight,
+      tabSetTabStripHeight: 34,
+      tabSetTabHeaderHeight: 34,
       borderBarSize: 50
     }))
   }, [])

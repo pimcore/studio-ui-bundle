@@ -11,16 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React, { useEffect, useMemo, useState } from 'react'
+import { useListColumns, useListGridAvailableColumns, getFormattedDropDownMenu, useListGridConfig } from '../../hooks/use-list'
 import { Title } from '@Pimcore/components/title/title'
-import React, { useEffect } from 'react'
-import { getFormattedDropDownMenu, useListColumns, useListGridConfig } from '../../hooks/use-list'
 import { Space } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { GridConfigList } from './grid-config-list'
 import { useGridConfig } from './hooks/use-grid-config'
-import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { useAssetGetSavedGridConfigurationsQuery, useAssetSaveGridConfigurationMutation, type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { EditView } from './views/edit-view'
+import { SaveView } from './views/save-view'
+import { useForm } from 'antd/es/form/Form'
+import { defaultValues } from './forms/save-form'
+import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
@@ -29,56 +34,90 @@ import { Content } from '@Pimcore/components/content/content'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
 export const GridConfigInner = (): React.JSX.Element => {
-  const { dropDownMenu } = useListGridConfig()
+  const { dropDownMenu } = useListGridAvailableColumns()
   const { columns: gridColumns, setGridColumns } = useListColumns()
   const { columns, setColumns, addColumn } = useGridConfig()
+  const { id } = useAsset()
+  const { isLoading, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
+  const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
   const { t } = useTranslation()
+  const [view, setView] = useState<'edit' | 'save'>('edit')
+  const [form] = useForm()
+
+  const savedGridConfigurations: DropdownMenuProps['items'] = useMemo(() => {
+    if (data !== undefined) {
+      return data?.items?.map((item) => {
+        return {
+          key: item.id,
+          label: item.name,
+          onClick: () => {
+            console.log('load grid configuration', item)
+          }
+        }
+      }) ?? []
+    }
+
+    return []
+  }, [data])
 
   useEffect(() => {
     setColumns(gridColumns)
   }, [gridColumns])
 
   return (
-    <ContentToolbarSidebarLayout
-      renderToolbar={
-        <Toolbar theme='secondary'>
-          <Button
-            onClick={ onCancelClick }
-            type='default'
-          >
-            {t('button.cancel')}
-          </Button>
+    <>
+      { view === 'edit' && (
+        <EditView
+          addColumnMenu={ getFormattedDropDownMenu() }
+          columns={ columns }
+          isLoading={ isLoading }
+          onApplyClick={ onApplyClick }
+          onCancelClick={ onCancelClick }
+          onSaveConfigurationClick={ () => { setView('save') } }
+          savedGridConfigurations={ savedGridConfigurations }
+        />
+      ) }
 
-          <Button
-            onClick={ onApplyClick }
-            type='primary'
-          >
-            {t('button.apply')}
-          </Button>
-        </Toolbar>
+      { view === 'save' && (
+        <SaveView
+          formProps={ {
+            form,
+            onFinish: onFormFinish,
+            initialValues: {
+              ...defaultValues
             }
-    >
-      <Content padded>
-        <Title level={ 1 }>{t('listing.grid-config.title')}</Title>
-
-        <Space
-          direction='vertical'
-          style={ { width: '100%' } }
-        >
-          <GridConfigList columns={ columns } />
-
-          <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, onColumnClick) } }>
-            <IconTextButton
-              icon='PlusCircleOutlined'
-              type='link'
-            >
-              {t('listing.add-column')}
-            </IconTextButton>
-          </Dropdown>
-        </Space>
-      </Content>
-    </ContentToolbarSidebarLayout>
+          } }
+          isLoading={ isSaveLoading }
+          onCancelClick={ () => { setView('edit') } }
+        />
+      ) }
+    </>
   )
+
+  function onFormFinish (values: any): void {
+    const columnsToSave = columns.map((column) => ({
+      key: column.key,
+      locale: column.locale ?? null,
+      group: column.group
+    }))
+
+    fetchSaveGridConfig({
+      body: {
+        columns: columnsToSave,
+        folderId: id,
+        name: values.name,
+        description: values.description,
+        setAsFavorite: values.setAsDefault,
+        shareGlobal: values.shareGlobally,
+        sharedRoles: [],
+        sharedUsers: [],
+        saveFilter: false,
+        pageSize: 0
+      }
+    }).catch((error) => {
+      console.error('Failed to save grid configuration', error)
+    })
+  }
 
   function onCancelClick (): void {
     setColumns(gridColumns)
@@ -86,6 +125,25 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   function onApplyClick (): void {
     setGridColumns(columns)
+  }
+
+  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
+    const formattedDropDownMenu: DropdownMenuProps['items'] = []
+    let index = 0
+
+    for (const [key, value] of Object.entries(dropDownMenu)) {
+      formattedDropDownMenu.push({
+        key: index++,
+        label: t(`asset.listing.groups.${key}`),
+        children: value.map((column) => ({
+          key: column.key,
+          label: t(`asset.listing.column.${column.key}`),
+          onClick: () => { onColumnClick(column) }
+        }))
+      })
+    }
+
+    return formattedDropDownMenu
   }
 
   function onColumnClick (column: GridColumnConfiguration): void {

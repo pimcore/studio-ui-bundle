@@ -12,11 +12,12 @@
 */
 
 import { Icon } from '@Pimcore/components/icon/icon'
-import { Popconfirm, Space } from 'antd'
+import { Popconfirm } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import React, { type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
+import { Space } from '@Pimcore/components/space/space'
 
 interface TabTitleViewProps {
   icon: string
@@ -38,7 +39,10 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
   }
 
   return (
-    <Space className={ ['widget-manager-tab-title', styles.title].join(' ') }>
+    <Space
+      className={ ['widget-manager-tab-title', styles.title].join(' ') }
+      size='mini'
+    >
       <Icon
         name={ icon }
         options={ { width: 16, height: 16 } }
@@ -68,7 +72,7 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
       >
         <Icon
           name='close'
-          options={ { width: 10, height: 10 } }
+          options={ { width: 14, height: 14 } }
         />
       </Button>
     )

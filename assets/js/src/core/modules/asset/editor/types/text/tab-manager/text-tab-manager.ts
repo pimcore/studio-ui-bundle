@@ -12,11 +12,13 @@
 */
 
 import { TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
-import { type IAssetEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IAssetEditorTabManager'
+import {
+  type IElementEditorTabManager
+} from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 import { injectable } from 'inversify'
 
 @injectable()
-export class TextTabManager extends TabManager implements IAssetEditorTabManager {
+export class TextTabManager extends TabManager implements IElementEditorTabManager {
   constructor () {
     super()
     this.type = 'text'
