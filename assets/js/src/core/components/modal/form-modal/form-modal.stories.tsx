@@ -20,9 +20,28 @@ const config: Meta = {
   title: 'Components/Data Entry/Input Modal',
   component: (args) => {
     const [value, setValue] = useState<string>('')
-    const callback = (form: FormInstance<any>) => {
+    const [confirmed, setConfirmed] = useState<boolean>(false)
+
+    const callbackInput = (form: FormInstance<any>) => {
       if(form.getFieldValue(args.type)) {
         setValue(form.getFieldValue(args.type))
+      }
+    }
+
+    const callbackConfirmation = () => {
+      setConfirmed(true)
+    }
+
+    const callbackManager = (props: {form?: FormInstance<any>}) => {
+      console.log('now', args.type)
+
+      switch (args.type) {
+        case 'input':
+          callbackInput(props.form!)
+          break
+        case 'confirmation':
+          callbackConfirmation()
+          break
       }
     }
 
@@ -36,10 +55,16 @@ const config: Meta = {
         <RenderModal
           {...args}
           initialValues={args.initialValues ?? {}}
-          onSubmit={callback}
+          onSubmit={callbackManager}
         />
 
-        <p>Form Value: {value}</p>
+        {args.type === 'input' && (
+          <p>Form Value: {value}</p>
+        )}
+
+        {args.type === 'confirmation' && (
+          <p>Confirmed: {confirmed ? 'yes' : 'no'}</p>
+        )}
       </>
     )
   },

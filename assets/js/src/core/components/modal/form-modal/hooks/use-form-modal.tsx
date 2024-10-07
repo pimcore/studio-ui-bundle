@@ -128,14 +128,7 @@ export const withConfirmation = (Component: typeof FormModal): typeof FormModal 
     return (
       <Component
         { ...inlineProps }
-        footer={(_, { CancelBtn }) => (
-          <>
-          <CancelBtn/>
-          <Button onClick={props.onOk} type={'primary'}>
-            Yes
-          </Button>
-          </>
-        )}
+        okText={'Yes'}
       >
         { text }
       </Component>
