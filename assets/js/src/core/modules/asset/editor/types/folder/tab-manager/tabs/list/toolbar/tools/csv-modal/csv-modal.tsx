@@ -18,7 +18,11 @@ import { useForm } from 'antd/es/form/Form'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
-import { type AssetCreateCsvApiResponse, useAssetCreateCsvMutation, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type AssetCreateCsvApiResponse,
+  useAssetCreateCsvMutation,
+  useAssetGetByIdQuery
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useListColumns, useListSelectedRows } from '../../../hooks/use-list'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
@@ -33,7 +37,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [form] = useForm()
   const { addJob } = useJobs()
   const { id } = useAsset()
-  const { data } = useAssetGetByIdQuery({ id: id! })
+  const { data } = useAssetGetByIdQuery({ id })
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const [fetchCreateCsv] = useAssetCreateCsvMutation()
   const { selectedRows } = useListSelectedRows()

@@ -5,17 +5,15 @@ asset.asset-editor-tabs.edit: Edit
 asset.asset-editor-tabs.embedded-metadata: Embedded Metadata
 asset.asset-editor-tabs.custom-metadata: Custom Metadata
 asset.asset-editor-tabs.versions: Versions
-asset.asset-editor-tabs.schedule: Schedule
-asset.asset-editor-tabs.dependencies: Dependencies
-asset.asset-editor-tabs.notes-events: Notes & Events
-asset.asset-editor-tabs.tag: Tags
-asset.asset-editor-tabs.workflow: Workflow
 asset.asset-editor-tabs.list.columns.preview: Preview
 asset.asset-editor-tabs.list.columns.id: ID
 asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
+workflow.label: Workflow
+workflow.headline: Workflow Details
+workflow.no-workflows-found: No workflows found
 folder.folder-editor-tabs.preview: Preview
 folder.folder-editor-tabs.view: List
 toolbar.reload.confirmation: Are you sure you want to reload this tab? All unsaved changes will be lost.
@@ -53,24 +51,6 @@ aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels s
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
-asset.asset-editor-tabs.properties.text: Properties
-asset.asset-editor-tabs.properties.editable-properties: Editable Properties
-asset.asset-editor-tabs.properties.all-properties: All Properties
-asset.asset-editor-tabs.properties.predefined-properties: Predefined Properties
-asset.asset-editor-tabs.properties.add-custom-property: Add a custom property
-asset.asset-editor-tabs.properties.columns.type: Type
-asset.asset-editor-tabs.properties.columns.key: Key
-asset.asset-editor-tabs.properties.columns.name: Name
-asset.asset-editor-tabs.properties.columns.description: Description
-asset.asset-editor-tabs.properties.columns.data: Value
-asset.asset-editor-tabs.properties.columns.inheritable: Inheritable
-asset.asset-editor-tabs.properties.columns.actions: Actions
-asset.asset-editor-tabs.properties.inherited.properties: Inherited Properties
-asset.asset-editor-tabs.properties.add-custom-property.cancel: Cancel
-asset.asset-editor-tabs.properties.add-custom-property.key: Key
-asset.asset-editor-tabs.properties.add-custom-property.add: Add
-asset.asset-editor-tabs.properties.add-custom-property.type: Type
-asset.asset-editor-tabs.workflow.text: Workflow Details
 component.workflow-card.action-btn: Workflow Actions
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
@@ -85,6 +65,7 @@ unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 save-success: Successfully saved
 save-failed: Save failed
+version.label: Versions
 version.versions: Versions
 version.version: Version
 version.publish: Publish
@@ -113,28 +94,30 @@ no: No
 by: By
 field: Field
 no-data-available-yet: No data available yet.
-asset.asset-editor-tabs.schedule.headline: Schedule
-asset.asset-editor-tabs.schedule.columns.datetime: Date & Time
-asset.asset-editor-tabs.schedule.columns.action: Action
-asset.asset-editor-tabs.schedule.columns.version: Version
-asset.asset-editor-tabs.schedule.columns.active: Active
-asset.asset-editor-tabs.schedule.columns.actions: Delete
-asset.asset-editor-tabs.schedule.upcoming: Upcoming
-asset.asset-editor-tabs.schedule.all: All scheduled (upcoming & archive)
-asset.asset-editor-tabs.schedule.toolbar.filters.active-switch: Active only
-asset.asset-editor-tabs.schedule.toolbar.add: Add
-asset.asset-editor-tabs.schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
-asset.asset-editor-tabs.schedule.version.delete: Delete version
-asset.asset-editor-tabs.schedule.version.publish: Publish version
-asset.asset-editor-tabs.schedule.select-an-action: Action
-asset.asset-editor-tabs.schedule.select-a-version: Version
-asset.asset-editor-tabs.schedule.archived: Archived
-asset.asset-editor-tabs.schedule.archived.cleanup-all: Clean up all
-asset.asset-editor-tabs.dependencies.requires: Requires
-asset.asset-editor-tabs.dependencies.required-by: Required by
-asset.asset-editor-tabs.dependencies.columns.subtype: Subtype
-asset.asset-editor-tabs.dependencies.columns.path: Path
-asset.asset-editor-tabs.dependencies.columns.open: Open
+schedule.label: Schedule
+schedule.headline: Schedule
+schedule.columns.datetime: Date & Time
+schedule.columns.action: Action
+schedule.columns.version: Version
+schedule.columns.active: Active
+schedule.columns.actions: Delete
+schedule.upcoming: Upcoming
+schedule.all: All scheduled (upcoming & archive)
+schedule.toolbar.filters.active-switch: Active only
+schedule.toolbar.add: Add
+schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
+schedule.version.delete: Delete version
+schedule.version.publish: Publish version
+schedule.select-an-action: Action
+schedule.select-a-version: Version
+schedule.archived: Archived
+schedule.archived.cleanup-all: Clean up all
+dependencies.label: Dependencies
+dependencies.requires: Requires
+dependencies.required-by: Required by
+dependencies.columns.subtype: Subtype
+dependencies.columns.path: Path
+dependencies.columns.open: Open
 asset.listing.groups.system: System
 asset.listing.groups.default_metadata: Default Metadata
 asset.listing.groups.predefined_metadata: Predefined Metadata
@@ -169,6 +152,23 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
+properties.label: Properties
+properties.editable-properties: Editable Properties
+properties.all-properties: All Properties
+properties.predefined-properties: Predefined Properties
+properties.add-custom-property: Add a custom property
+properties.columns.type: Type
+properties.columns.key: Key
+properties.columns.name: Name
+properties.columns.description: Description
+properties.columns.data: Value
+properties.columns.inheritable: Inheritable
+properties.columns.actions: Actions
+properties.inherited.properties: Inherited Properties
+properties.add-custom-property.cancel: Cancel
+properties.add-custom-property.key: Key
+properties.add-custom-property.add: Add
+properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
 properties.add-property-mandatory-fields-missing.title: Mandatory fields missing
@@ -178,6 +178,7 @@ button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
 component.no-content.no-content-available: No content available
+notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
 notes-and-events.name: name
@@ -190,16 +191,17 @@ notes-and-events.warning: warning
 notes-and-events.notice: notice
 notes-and-events.erp_import: erp_import
 notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
+tags.label: Tags
+tags.assigned-tags-text: Assigned Tags
+tags.apply-folder-tags: Apply folder tags
+tags.columns.path: Path
+tags.columns.actions: Remove
 add: Add
 save: Save
 type: Type
 title: Title
 description: Description
 select: Select
-element.element-editor-tabs.tags.assigned-tags-text: Assigned Tags
-element.element-editor-tabs.tags.apply-folder-tags: Apply folder tags
-asset.asset-editor-tabs.tags.columns.path: Path
-asset.asset-editor-tabs.tags.columns.actions: Remove
 asset.asset-editor-tabs.custom-metadata.text: Custom Metadata
 asset.asset-editor-tabs.custom-metadata.add-custom-definition.add: Add custom definition
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
@@ -240,6 +242,7 @@ jobs.job.finished: "{{title}} finished"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
+jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
@@ -251,10 +254,16 @@ export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
-
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
 current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 apply: Apply
+asset.tree.context-menu.add-assets: Add Asset(s)
+asset.tree.context-menu.add-assets.upload-files: Upload Files
+asset.tree.context-menu.add-assets.upload-zip: Upload Zip
+close-tab: Close Tab
+close-others: Close Others
+close-unmodified: Close Unmodified
+close-all: Close All

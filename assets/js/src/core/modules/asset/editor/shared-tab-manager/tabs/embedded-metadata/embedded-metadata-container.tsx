@@ -24,7 +24,7 @@ export const EmbeddedMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useAsset()
 
-  const { data, isLoading, isError } = useAssetCustomSettingsGetByIdQuery({ id: id! })
+  const { data, isLoading, isError } = useAssetCustomSettingsGetByIdQuery({ id })
 
   if (isLoading || data === undefined) {
     return <Content loading />

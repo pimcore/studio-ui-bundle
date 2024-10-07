@@ -27,35 +27,37 @@ const config: ConfigFile = {
   outputFiles: {
     '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/assets?/i)
+    },'../../js/src/core/modules/data-object/data-object-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/data-object?/i)
     },
     '../../js/src/core/modules/app/translations/translations-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/translation/i)
     },
-    '../../js/src/core/modules/asset/properties-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/properties/i)
     },
-    '../../js/src/core/modules/element/editor/workflow-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/workflow/i)
     },
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/user/i)
     },
-    '../../js/src/core/modules/element/editor/version-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/version/i)
     },
-    '../../js/src/core/modules/element/editor/schedule-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/schedule/i)
     },
     '../../js/src/core/modules/element/element-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/path/i)
     },
-    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/dependencies/i)
     },
-    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/tags/i)
     },
-    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
+    '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/note/i)
     },
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen.ts': {

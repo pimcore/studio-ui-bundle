@@ -15,23 +15,22 @@ import React, { forwardRef, type MutableRefObject } from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useStyle } from './element-cell.styles'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 
 export const ElementCellContent = forwardRef(function ElementCellContent (props: DefaultCellProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { styles } = useStyle()
-  const { openAsset } = useAssetHelper()
+  const { openElement } = useElementHelper()
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
 
-  function openAssetWidget (): void {
+  function openElementWidget (): void {
     if (props !== undefined) {
-      openAsset({
-        config: {
-          id: propertyData.data.id
-        }
-      })
+      openElement({
+        id: propertyData.data.id,
+        type: 'data-object'
+      }).catch(() => {})
     }
   }
 
@@ -46,7 +45,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
         <Tag
           bordered={ false }
           color="processing"
-          onClick={ openAssetWidget }
+          onClick={ openElementWidget }
         >
           {tagText}
         </Tag>

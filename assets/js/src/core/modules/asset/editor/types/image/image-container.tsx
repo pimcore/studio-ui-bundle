@@ -16,7 +16,7 @@ import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type ImageTabManager } from './tab-manager/image-tab-manager'
 import { serviceIds } from '@Pimcore/app/config/services'
-import { TabsContainer } from '../../shared-tab-manager/tabs-container'
+import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const ImageContainer = (): React.JSX.Element => {

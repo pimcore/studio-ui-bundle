@@ -13,7 +13,7 @@
 
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { TabsContainer } from '../../shared-tab-manager/tabs-container'
+import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DocumentTabManager } from './tab-manager/document-tab-manager'
 import { serviceIds } from '@Pimcore/app/config/services'

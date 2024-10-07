@@ -29,7 +29,7 @@ import {
   TAB_PROPERTIES,
   TAB_TAGS,
   TAB_WORKFLOW
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {

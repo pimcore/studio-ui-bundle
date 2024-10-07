@@ -20,15 +20,14 @@ import '@Pimcore/modules/asset/editor/types/video'
 import '@Pimcore/modules/asset/editor/types/audio'
 import '@Pimcore/modules/asset/editor/types/archive'
 import '@Pimcore/modules/asset/editor/types/unknown'
-import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/properties'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata'
 import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions'
-import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/dependencies'
-import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/schedule'
-import { EditorContainer } from '@Pimcore/modules/asset/editor/editor-container'
+import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties'
+import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule'
+import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies'
+import { EditorContainer, type EditorContainerProps } from '@Pimcore/modules/asset/editor/editor-container'
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
-import { type ComponentRegistry } from '@Pimcore/modules/asset/editor/services/component-registry'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -40,50 +39,53 @@ import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-
 import { UnknownContainer } from '@Pimcore/modules/asset/editor/types/unknown/unknown-container'
 import { ArchiveContainer } from '@Pimcore/modules/asset/editor/types/archive/archive-container'
 import {
-  type ComponentRegistry as GlobalComponentRegistry
+  type ComponentRegistry as GlobalComponentRegistry, type ComponentRegistryInterface
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
+import { type TabNode } from 'flexlayout-react'
+import { selectAssetById } from '@Pimcore/modules/asset/asset-draft-slice'
+import { store } from '@Pimcore/app/store'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const componentRegistryService = container.get<ComponentRegistry>(serviceIds['Asset/Editor/ComponentRegistry'])
+    const typeComponentRegistry = container.get<ComponentRegistryInterface>(serviceIds['Asset/Editor/TypeComponentRegistry'])
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'image',
       component: ImageContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'video',
       component: VideoContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'audio',
       component: AudioContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'document',
       component: DocumentContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'text',
       component: TextContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'folder',
       component: FolderContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'archive',
       component: ArchiveContainer
     })
 
-    componentRegistryService.registerComponent({
+    typeComponentRegistry.register({
       name: 'unknown',
       component: UnknownContainer
     })
@@ -93,13 +95,18 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'asset-editor',
       component: EditorContainer,
-      titleComponent: TitleContainer
+      titleComponent: TitleContainer,
+      isModified: (tabNode: TabNode) => {
+        const config = tabNode.getConfig() as EditorContainerProps
+        const asset = selectAssetById(store.getState(), config.id)
+        return asset?.modified ?? false
+      }
     })
 
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 
     componentRegistry.register({
-      name: 'editorToolbarContextMenu',
+      name: 'editorToolbarContextMenuAsset',
       component: EditorToolbarContextMenu
     })
   }
