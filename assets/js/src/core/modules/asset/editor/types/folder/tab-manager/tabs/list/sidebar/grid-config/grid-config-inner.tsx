@@ -12,26 +12,19 @@
 */
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { useListColumns, useListGridAvailableColumns, getFormattedDropDownMenu, useListGridConfig } from '../../hooks/use-list'
-import { Title } from '@Pimcore/components/title/title'
-import { Space } from 'antd'
-import { Button } from '@Pimcore/components/button/button'
-import { GridConfigList } from './grid-config-list'
+import { getFormattedDropDownMenu, useListColumns, useListGridAvailableColumns } from '../../hooks/use-list'
 import { useGridConfig } from './hooks/use-grid-config'
-import { useAssetGetSavedGridConfigurationsQuery, useAssetSaveGridConfigurationMutation, type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { useTranslation } from 'react-i18next'
+import {
+  type GridColumnConfiguration,
+  useAssetGetSavedGridConfigurationsQuery,
+  useAssetSaveGridConfigurationMutation
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { EditView } from './views/edit-view'
 import { SaveView } from './views/save-view'
 import { useForm } from 'antd/es/form/Form'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Content } from '@Pimcore/components/content/content'
-import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridAvailableColumns()
@@ -40,7 +33,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { id } = useAsset()
   const { isLoading, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
-  const { t } = useTranslation()
   const [view, setView] = useState<'edit' | 'save'>('edit')
   const [form] = useForm()
 
@@ -68,7 +60,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     <>
       { view === 'edit' && (
         <EditView
-          addColumnMenu={ getFormattedDropDownMenu() }
+          addColumnMenu={ getFormattedDropDownMenu(dropDownMenu, onColumnClick) }
           columns={ columns }
           isLoading={ isLoading }
           onApplyClick={ onApplyClick }
@@ -125,25 +117,6 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   function onApplyClick (): void {
     setGridColumns(columns)
-  }
-
-  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
-    const formattedDropDownMenu: DropdownMenuProps['items'] = []
-    let index = 0
-
-    for (const [key, value] of Object.entries(dropDownMenu)) {
-      formattedDropDownMenu.push({
-        key: index++,
-        label: t(`asset.listing.groups.${key}`),
-        children: value.map((column) => ({
-          key: column.key,
-          label: t(`asset.listing.column.${column.key}`),
-          onClick: () => { onColumnClick(column) }
-        }))
-      })
-    }
-
-    return formattedDropDownMenu
   }
 
   function onColumnClick (column: GridColumnConfiguration): void {
