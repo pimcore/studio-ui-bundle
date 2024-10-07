@@ -18,6 +18,7 @@ import { Actions, type ITabRenderValues, Model, type TabNode } from 'flexlayout-
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store/index'
 import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
+import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
 
 const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
@@ -56,6 +57,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   return (
     <WidgetManagerView
       className='widget-manager--inner'
+      createContextMenuItems={ createContextMenuItems }
       factory={ widgetManagerFactory }
       model={ model }
       onModelChange={ onModelChange }

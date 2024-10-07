@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode } from 'react'
-import { type DropdownProps as AntdDropdownProps, type MenuProps } from 'antd'
+import React, { type ReactNode, type Ref } from 'react'
+import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef } from 'antd'
 import { DropdownInner } from './dropdown-inner'
 import { SelectionProvider, SelectionType } from './selection/selection-provider'
 
@@ -47,6 +47,7 @@ export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
 
 export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'> {
   menu: DropdownMenuProps
+  menuRef?: Ref<MenuRef>
   selectedKeys?: React.Key[]
   onSelect?: (keys: React.Key[]) => void
 }

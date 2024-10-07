@@ -248,7 +248,9 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
             <ListPageSizeProvider>
               <ListSelectedRowsProvider>
                 <ListSortingProvider>
-                  {children}
+                  <ListGridAvailableColumnsProvider>
+                    {children}
+                  </ListGridAvailableColumnsProvider>
                 </ListSortingProvider>
               </ListSelectedRowsProvider>
             </ListPageSizeProvider>

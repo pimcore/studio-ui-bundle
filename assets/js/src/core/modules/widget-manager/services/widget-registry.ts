@@ -14,11 +14,13 @@
 import { injectable } from 'inversify'
 import { type ComponentType, memo } from 'react'
 import { type TabTitleOuterContainerProps } from '../title/tab-title-outer-container'
+import { type TabNode } from 'flexlayout-react'
 
 export interface Widget {
   name: string
   component: ComponentType
   titleComponent?: ComponentType<TabTitleOuterContainerProps>
+  isModified?: (tabNode: TabNode) => boolean
 }
 
 @injectable()

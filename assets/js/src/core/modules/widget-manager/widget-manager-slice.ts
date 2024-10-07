@@ -29,7 +29,8 @@ export interface WidgetManagerState {
   mainWidgetContext: MainWidgetContext
 }
 
-export interface WidgetManagerTabConfig extends IJsonTabNode {}
+export interface WidgetManagerTabConfig extends IJsonTabNode {
+}
 
 export const initialState: WidgetManagerState = {
   outerModel: getInitialOuterModelJson(),

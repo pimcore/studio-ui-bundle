@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Data Objects"] as const;
+export const addTagTypes = ["Data Objects", "Data Object Grid"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -33,6 +33,17 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectGetAvailableGridColumns: build.query<
+                DataObjectGetAvailableGridColumnsApiResponse,
+                DataObjectGetAvailableGridColumnsApiArg
+            >({
+                query: (queryArg) => ({ url: `/studio/api/data-object/grid/available-columns/${queryArg.className}` }),
+                providesTags: ["Data Object Grid"],
+            }),
+            dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/data-objects/grid`, method: "POST", body: queryArg.body }),
+                invalidatesTags: ["Data Object Grid"],
             }),
             dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/data-objects`, method: "PATCH", body: queryArg.body }),
@@ -116,6 +127,27 @@ export type DataObjectUpdateByIdApiArg = {
         };
     };
 };
+export type DataObjectGetAvailableGridColumnsApiResponse =
+    /** status 200 List of available grid columns for data objects */ {
+        columns?: GridColumnConfiguration[];
+    };
+export type DataObjectGetAvailableGridColumnsApiArg = {
+    /** Itentifies the class name for which the columns should be retrieved. */
+    className: string;
+};
+export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
+    totalItems: number;
+    items: {
+        columns?: GridColumnData[];
+    }[];
+};
+export type DataObjectGetGridApiArg = {
+    body: {
+        folderId: number;
+        columns: GridColumnRequest[];
+        filters?: GridFilter;
+    };
+};
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
         /** ID of created jobRun */
@@ -168,20 +200,16 @@ export type DataObjectGetTreeApiArg = {
     /** Filter by class. */
     className?:
         | "AccessoryPart"
-        | "asdf"
         | "BodyStyle"
         | "Car"
         | "Category"
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
-        | "datetest"
         | "Event"
         | "FilterDefinition"
-        | "foo5"
         | "LinkActivityDefinition"
         | "Manufacturer"
-        | "mappingTest"
         | "News"
         | "OfferToolCustomProduct"
         | "OfferToolOffer"
@@ -193,10 +221,7 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "simple"
-        | "TermSegmentBuilderDefinition"
-        | "Test"
-        | "unittest";
+        | "TermSegmentBuilderDefinition";
 };
 export type Error = {
     /** Message */
@@ -328,11 +353,73 @@ export type UpdateDataProperty = {
     /** inheritable */
     inheritable: boolean;
 };
+export type GridColumnConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key: string;
+    /** Group */
+    group: string;
+    /** Sortable */
+    sortable: boolean;
+    /** Editable */
+    editable: boolean;
+    /** Localizable */
+    localizable: boolean;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Frontend Type */
+    frontendType?: string;
+    /** Config */
+    config: object;
+};
+export type GridColumnData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key?: string;
+    /** Locale */
+    locale?: string | null;
+    /** Value */
+    value?: any | null;
+};
+export type GridColumnRequest = {
+    /** Key */
+    key: string;
+    /** Locale */
+    locale?: string | null;
+    /** Type */
+    type: string;
+    /** Group */
+    group?: string | null;
+    /** Config */
+    config: string[];
+};
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
+};
 export const {
     useDataObjectAddMutation,
     useDataObjectCloneMutation,
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
+    useDataObjectGetAvailableGridColumnsQuery,
+    useDataObjectGetGridMutation,
     useDataObjectPatchByIdMutation,
     useDataObjectReplaceContentMutation,
     useDataObjectGetTreeQuery,
