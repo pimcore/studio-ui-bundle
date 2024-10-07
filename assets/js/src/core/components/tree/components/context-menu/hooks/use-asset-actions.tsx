@@ -15,14 +15,33 @@ import type { ItemType } from 'antd/es/menu/hooks/useItems'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
+import {
+  api as assetApi,
+  type AssetCreateZipApiResponse,
+  useAssetCreateZipMutation
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 
-export interface AssetContextMenuCopy {
+export interface NodeAware {
+  node: TreeNodeProps | null
+}
+
+export interface NodeIdAware {
   nodeId: string | null
 }
 
 export interface AssetContextMenuRename {
   onClick: () => void
 }
+
+export interface AssetContextMenuCopy extends NodeIdAware {}
+export interface AssetContextMenuRefresh extends NodeIdAware {}
+export interface AssetContextMenuDownloadAsZip extends NodeAware {}
 
 export interface UseAssetActionsHookReturn {
   addFolder: () => ItemType
@@ -31,16 +50,19 @@ export interface UseAssetActionsHookReturn {
   paste: () => ItemType | null
   cut: () => ItemType
   remove: () => ItemType
-  downloadAsZip: () => ItemType
+  downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
   advanced: () => ItemType
-  refresh: () => ItemType
+  refresh: (props: AssetContextMenuRefresh) => ItemType
   requestTranslations: () => ItemType
   setNodeId: (nodeId: string) => void
 }
 
 export const useAssetActions = (): UseAssetActionsHookReturn => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const { addJob } = useJobs()
   const [nodeId, setNodeId] = useState<string | null>(null)
+  const [fetchCreateZip] = useAssetCreateZipMutation()
 
   const addFolder = (): ItemType => {
     return {
@@ -83,6 +105,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('asset.tree.context-menu.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
+      disabled: true,
       onClick: () => {
         console.log('paste', nodeId)
       }
@@ -113,14 +136,32 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const downloadAsZip = (): ItemType => {
+  const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = ({ node }): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
+    if (node === null || node.type !== 'folder') return null
+
+    // todo: move that to download (downloadAsZip) is only for folders
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
       icon: <Icon name={ 'file-download-zip-01' } />,
-      disabled: true,
       onClick: () => {
-        console.log('download-as-zip')
+        addJob(createDownloadJob({
+          // @todo add api domain
+          title: t('jobs.zip-job.title', { title: node.label }),
+          topics: [topics['zip-download-ready'], ...defaultTopics],
+          downloadUrl: '/studio/api/assets/download/zip/{jobRunId}',
+          action: async () => {
+            const promise = fetchCreateZip({ body: { items: [parseInt(node.id)] } })
+
+            promise.catch(() => {
+              console.error('Failed to create zip')
+            })
+
+            const response = (await promise) as any
+            const data = response.data as AssetCreateZipApiResponse
+            return data.jobRunId
+          }
+        }))
       }
     }
   }
@@ -176,14 +217,19 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const refresh = (): ItemType => {
+  const refresh: UseAssetActionsHookReturn['copy'] = ({ nodeId }): ItemType => {
     return {
       label: t('asset.tree.context-menu.refresh'),
       key: 'refresh',
       icon: <Icon name={ 'refresh-ccw-03' } />,
-      disabled: true,
       onClick: () => {
-        console.log('refresh')
+        if (nodeId !== null) {
+          dispatch(
+            assetApi.util.invalidateTags(
+              invalidatingTags.ASSET_TREE_ID(parseInt(nodeId))
+            )
+          )
+        }
       }
     }
   }

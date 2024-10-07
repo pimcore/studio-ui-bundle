@@ -47,8 +47,11 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     remove,
     downloadAsZip,
     advanced,
+    refresh,
     requestTranslations
   } = useAssetActions()
+
+  console.log('node', props.node)
 
   const renameSubmit = async (form: FormInstance<any>): Promise<void> => {
     const nodeId = parseInt(props.node!.id)
@@ -65,9 +68,11 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       await assetRenameTask.unwrap()
 
       // clear cache
+      console.log('cacheClear')
       dispatch(
         assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(1)
+          invalidatingTags.ASSET_TREE_ID(15833)
+          // invalidatingTags.ASSET_LIST()
         )
       )
     } catch (error) {
@@ -121,23 +126,11 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     paste(),
     cut(),
     remove(),
-    downloadAsZip(),
+    downloadAsZip({
+      node: props.node ?? null
+    }),
     advanced(),
-    {
-      label: t('asset.tree.context-menu.refresh'),
-      key: '10',
-      onClick: () => {
-        if (props.node?.id !== undefined) {
-          const parentId = parseInt(props.node?.id)
-          console.log('parentId', parentId)
-          dispatch(
-            assetApi.util.invalidateTags(
-              invalidatingTags.ASSET_TREE_ID(parentId)
-            )
-          )
-        }
-      }
-    },
+    refresh({ nodeId: props.node?.id ?? null }),
     requestTranslations()
   ]
 
@@ -173,7 +166,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         ></Button>
       </Upload>
 
-      <Upload{ ...uploadZip }>
+      <Upload { ...uploadZip }>
         <Button
           ref={ uploadZipRef }
           style={ { display: 'none' } }
