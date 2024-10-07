@@ -27,7 +27,7 @@ export const LinkContainer = (props: DefaultCellProps): React.JSX.Element => {
 
       openAsset({
         config: {
-          id: asset.id!
+          id: asset.id
         }
       })
     }

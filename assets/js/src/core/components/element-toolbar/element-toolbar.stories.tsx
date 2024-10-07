@@ -15,6 +15,7 @@ import type { Meta } from '@storybook/react'
 import React from 'react'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { ElementToolbarSkeleton } from '@Pimcore/components/element-toolbar/element-toolbar.skeleton'
+import { type ElementType } from 'types/element-type.d'
 
 const config: Meta = {
   title: 'Components/__Refactor__/Element Toolbar',
@@ -44,6 +45,7 @@ const config: Meta = {
 
     return (
       <ElementToolbar
+        elementType={ elementType as ElementType }
         id={ elementId }
       />
     )

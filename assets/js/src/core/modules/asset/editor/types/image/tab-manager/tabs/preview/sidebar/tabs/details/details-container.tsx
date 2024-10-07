@@ -12,13 +12,11 @@
 */
 
 import React, { useContext } from 'react'
-import {
-  type Image,
-  useAssetGetByIdQuery
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
-  AssetEditorSidebarDetailsView, type CustomDownloadProps
+  AssetEditorSidebarDetailsView,
+  type CustomDownloadProps
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
@@ -26,17 +24,17 @@ import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { data } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const imageData = data! as Image
 
   return (
     <AssetEditorSidebarDetailsView
       height={ imageData.height ?? 0 }
       onClickCustomDownload={ async (customDownloadProps) => {
-        downloadImageByCustomSettings(assetContext.id!, customDownloadProps)
+        downloadImageByCustomSettings(assetContext.id, customDownloadProps)
       } }
       onClickDownloadByFormat={ async (format) => {
-        downloadImageByFormat(assetContext.id!, format)
+        downloadImageByFormat(assetContext.id, format)
       } }
       width={ imageData.width ?? 0 }
     />

@@ -16,14 +16,14 @@ import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import {
   type CustomMetadataVersion,
   type AssetVersion
-} from '@Pimcore/modules/element/editor/version-api-slice-enhanced'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { container } from '@Pimcore/app/depency-injection'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import i18n from 'i18next'
 import {
   type PreviewFieldLabelCellValue
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/table/cells/preview-field-label-cell/preview-field-label-cell'
+} from './table/cells/preview-field-label-cell/preview-field-label-cell'
 
 export interface AssetVersionData {
   versionCount: number

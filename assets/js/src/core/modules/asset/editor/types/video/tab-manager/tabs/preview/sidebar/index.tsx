@@ -11,7 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { VideoEditorSidebarManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/sidebar-manager'
+import {
+  VideoEditorSidebarManager
+} from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import {

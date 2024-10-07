@@ -15,7 +15,7 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services'
-import { TabsContainer } from '../../shared-tab-manager/tabs-container'
+import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
 import { type VideoTabManager } from './tab-manager/video-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'
 

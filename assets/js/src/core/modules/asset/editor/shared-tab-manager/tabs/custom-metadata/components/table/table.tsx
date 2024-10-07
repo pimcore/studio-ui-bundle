@@ -19,7 +19,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { verifyUpdate } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/verify-cell-update'
+import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Box } from '@Pimcore/components/box/box'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -36,8 +36,8 @@ interface CustomMetadataTableProps {
 export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModal }: CustomMetadataTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id!)
-  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id: id! })
+  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id)
+  const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id })
   const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
 
   const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {

@@ -18,7 +18,9 @@ import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointProvider } from '@Pimcore/components/focal-point/provider/focal-point-provider'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import {
+  ContentToolbarSidebarLayout
+} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
 
 export interface IZoomContext {
@@ -31,7 +33,7 @@ export const ZoomContext = createContext<IZoomContext>({ zoom: 100, setZoom: () 
 const PreviewContainer = (): React.JSX.Element => {
   const [zoom, setZoom] = useState<number>(100)
   const assetContext = useContext(AssetContext)
-  const { data, isLoading } = useAssetGetByIdQuery({ id: assetContext.id! })
+  const { data, isLoading } = useAssetGetByIdQuery({ id: assetContext.id })
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
 

@@ -23,15 +23,17 @@ import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { DetachedTab } from '@Pimcore/modules/asset/editor/detached-tab/detached-tab'
 import {
   TAB_CUSTOM_METADATA,
-  TAB_DEPENDENCIES,
   TAB_EMBEDDED_METADATA,
+  TAB_VERSIONS
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
+import {
+  TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
   TAB_PROPERTIES,
   TAB_SCHEDULE,
   TAB_TAGS,
-  TAB_VERSIONS,
   TAB_WORKFLOW
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 
 moduleSystem.registerModule({
   onInit: () => {

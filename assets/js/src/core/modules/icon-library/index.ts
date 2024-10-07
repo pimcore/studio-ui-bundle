@@ -116,6 +116,7 @@ import fileLock02 from '@Pimcore/assets/icons/file-lock-02.inline.svg'
 import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg'
 import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
 import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
+import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -548,6 +549,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'clipboard-check',
       component: clipboardCheck
+    })
+
+    iconLibrary.register({
+      name: 'magic-wand-01',
+      component: magicWand01
     })
   }
 })

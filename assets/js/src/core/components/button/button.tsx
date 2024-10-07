@@ -62,7 +62,7 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
         <motion.div
           animate={ { opacity: 1 } }
           exit={ { opacity: 0 } }
-          initial={ { opacity: 0 } }
+          initial={ { opacity: loading === true ? 0 : 1 } }
           key={ loading === true ? 'loading' : 'loaded' }
         >
           {loading === true && (
