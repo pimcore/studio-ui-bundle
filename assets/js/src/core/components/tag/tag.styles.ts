@@ -17,6 +17,8 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     tag: css`
       &.ant-tag {
+        margin-inline-end: 0;
+        
         &.ant-tag-default {
             background-color: ${token.colorFillTertiary};
             color: ${token.colorTextLabel};
@@ -30,6 +32,20 @@ export const useStyles = createStyles(({ css, token }) => {
 
         .anticon + span {
           margin-inline-start: 4px;
+        }
+      }
+    `,
+
+    tooltip: css`
+      .ant-tooltip-inner {
+        color: ${token.colorTextLightSolid};
+        background-color: ${token.colorBgSpotlight};
+        border-radius: ${token.borderRadius}px;
+      }
+      
+      .ant-tooltip-arrow {
+        &::before {
+          background-color: ${token.colorBgSpotlight};
         }
       }
     `
