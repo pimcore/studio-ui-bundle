@@ -30,8 +30,7 @@ const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element =>
         items?.push({
             key: action.key,
             label: t(`tree.actions.${action.key}`),
-            onClick: () => { props.onContextMenuClick?.(action.key); },
-            ...(action.icon ? { icon: <Icon name={action.icon} /> } : {})
+            onClick: () => { props.onContextMenuClick?.(action.key); }
         });
     });
 
