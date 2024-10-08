@@ -17,16 +17,23 @@ import { Flex, type FlexProps } from '@Pimcore/components/flex/flex'
 
 interface IModalFooterProps extends FlexProps {
   children: React.ReactNode
+  divider?: boolean
 }
 
-export const ModalFooter = ({ justify = 'flex-end', ...props }: IModalFooterProps): React.JSX.Element => {
+export const ModalFooter = ({ justify = 'flex-end', divider = false, ...props }: IModalFooterProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { children, ...inlineProps } = props
+
+  const classes = [`ant-modal-footer-container ${styles.footer}`].filter(Boolean)
+
+  if (divider) {
+    classes.push('--divider')
+  }
 
   return (
     <Flex
       align={ 'center' }
-      className={ `ant-modal-footer-container ${styles.footer}` }
+      className={ classes.join(' ') }
       gap={ 'extra-small' }
       justify={ justify }
       { ...inlineProps }

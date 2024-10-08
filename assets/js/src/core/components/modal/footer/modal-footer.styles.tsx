@@ -16,6 +16,12 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     footer: css`
+        &.--divider {
+            padding-top: 10px;
+            border-top: 1px solid ${token.Divider.colorSplit}
+        };
+        }
+        
             .ant-btn-link {
                 color: ${token.colorPrimary};
                 margin: 0;

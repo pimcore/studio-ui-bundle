@@ -37,6 +37,7 @@ import { Modal } from '@Pimcore/components/modal/modal'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/default/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -83,8 +84,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   return (
     <Modal
-      afterClose={ () => { afterClose() } }
-      footer={ <ModalFooter justify={ 'space-between' }>
+      afterClose={ () => {
+        afterClose()
+      } }
+      footer={ <ModalFooter
+        divider
+        justify={ 'space-between' }
+               >
         <Dropdown menu={ {
           items: getFormattedDropDownMenu(editableColumnsDropDownMenu, onColumnClick)
         } }
@@ -96,21 +102,29 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
             {t('listing.add-column')}
           </IconTextButton>
         </Dropdown>
-        <><IconTextButton
-          icon='close'
-          onClick={ () => {
-            resetBatchEdits()
-          } }
-          type='link'
+        <Flex
+          align={ 'center' }
+          gap={ 'extra-small' }
+        >
+          <IconTextButton
+            icon='close'
+            onClick={ () => {
+              resetBatchEdits()
+            } }
+            type='link'
           >
-          {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+            {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
           <Button
-            onClick={ () => { onApplyChanges() } }
+            onClick={ () => {
+              onApplyChanges()
+            } }
             type='primary'
           >{t('batch-edit.modal-footer.apply-changes')}</Button>
-        </>
+        </Flex>
       </ModalFooter> }
-      onCancel={ () => { setBatchEditModalOpen(false) } }
+      onCancel={ () => {
+        setBatchEditModalOpen(false)
+      } }
       open={ batchEditModalOpen }
       size={ 'M' }
       title={ t('batch-edit.modal-title') }

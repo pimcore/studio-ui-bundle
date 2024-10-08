@@ -21,7 +21,7 @@ const config: Meta = {
     component: (args) => {
         return (
             <ModalFooter
-                justify={args.justify}
+                {...args}
             >
                 {args.children}
             </ModalFooter>
@@ -54,6 +54,25 @@ export const DefaultModalFooter = {
 
 export const ModalFooterSpaceBetween = {
     args: {
+        justify: 'space-between',
+        children: [<Button
+            key="cancel"
+            type="link"
+        >
+            Read the technical instructions
+        </Button>,
+            <Button
+                key="details"
+                type={'primary'}
+            >
+                See details
+            </Button>]
+    }
+}
+
+export const ModalFooterDivider = {
+    args: {
+        divider: true,
         justify: 'space-between',
         children: [<Button
             key="cancel"
