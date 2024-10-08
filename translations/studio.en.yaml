@@ -140,6 +140,7 @@ asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
 listing.actions: Apply to selection
+listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export

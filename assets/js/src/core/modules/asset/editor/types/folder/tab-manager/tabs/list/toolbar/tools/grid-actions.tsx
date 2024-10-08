@@ -92,10 +92,9 @@ export const GridActions = (): React.JSX.Element => {
   return (
     <>
       <Dropdown
-        disabled={ !hasSelectedItems }
         menu={ menu }
       >
-        <DropdownButton key={ 'dropdown-button' }>{t('listing.actions')}</DropdownButton>
+        <DropdownButton key={ 'dropdown-button' }>{hasSelectedItems ? t('listing.actions') : t('listing.non-selected.actions')}</DropdownButton>
       </Dropdown>
 
       <CsvModal
