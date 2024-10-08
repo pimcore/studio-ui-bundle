@@ -32,11 +32,11 @@ interface SimpleTreeProps {
 
 const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element => {
     const { styles } = useStyles();
-    const classNames = [styles.tree, className]
+    const classNames = [styles.tree, className];
     const [selectedKeys, setSelectedKeys] = React.useState<any[]>([]);
 
-    if (props.searchable) {
-
+    if (props.searchable != null && props.searchable) {
+        // Handle searchable logic here
     }
 
     return (
@@ -70,7 +70,6 @@ const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element
             )}
             treeData={props.treeData}
         />
-    )
-}
-
+    );
+};
 export { SimpleTree }
