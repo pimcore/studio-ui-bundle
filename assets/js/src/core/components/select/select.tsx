@@ -11,16 +11,47 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { isEmptyValue, isString } from '@Pimcore/utils/type-utils'
+import { useStyles } from './select.styles'
 
 const { Option } = AntdSelect
 
-export const Select = forwardRef<RefSelectProps, AntdSelectProps>(({ options, ...antdSelectProps }, ref): React.JSX.Element => {
+interface SelectProps extends AntdSelectProps {
+  customArrowIcon?: string
+}
+
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, customArrowIcon, ...antdSelectProps }, ref): React.JSX.Element => {
+  const selectRef = useRef<RefSelectProps>(null)
+
+  const [isActive, setIsActive] = useState(false)
+
+  useImperativeHandle(ref, () => selectRef.current!)
+
+  const { styles } = useStyles()
+
+  const handleClick = (): void => { setIsActive(!isActive) }
+
+  const getSuffixIcon = (): React.JSX.Element => {
+    const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
+    const iconToShow = isShowCustomIcon ? customArrowIcon! : (isActive ? 'chevron-up' : 'chevron-down')
+
+    return (
+      <Icon
+        className={ styles.arrowIcon }
+        name={ iconToShow }
+      />
+    )
+  }
+
   return (
     <AntdSelect
-      ref={ ref }
+      onClick={ handleClick }
+      ref={ selectRef }
+      suffixIcon={ getSuffixIcon() }
       { ...antdSelectProps }
     >
       {options?.map(option => (
