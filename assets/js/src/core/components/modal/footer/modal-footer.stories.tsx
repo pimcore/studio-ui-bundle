@@ -22,7 +22,7 @@ const config: Meta = {
     component: (args) => {
         return (
             <ModalFooter
-                buttonAlignment={args.buttonAlignment}
+                justify={args.justify}
             >
                 {args.children}
             </ModalFooter>
@@ -55,7 +55,7 @@ export const DefaultModalFooter = {
 
 export const ModalFooterSpaceBetween = {
     args: {
-        buttonAlignment: 'space-between',
+        justify: 'space-between',
         children: [<Button
             key="cancel"
             type="link"

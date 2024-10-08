@@ -151,7 +151,7 @@ export const SpaceBetweenFooterButtons = {
     type: 'error',
     title: 'Media Player can’t play this file',
     content: <SpaceBetweenFooterButtonsContent />,
-    footer: <ModalFooter buttonAlignment={ 'space-between' }>
+    footer: <ModalFooter justify={ 'space-between' }>
       <Button
         key="cancel"
         type="link"
@@ -173,7 +173,7 @@ export const Simple = {
   args: {
     title: 'Batch Edit',
     content: <SpaceBetweenFooterButtonsContent />,
-    footer: <ModalFooter buttonAlignment={ 'space-between' }>
+    footer: <ModalFooter justify={ 'space-between' }>
       <Button
         key="cancel"
         type="link"

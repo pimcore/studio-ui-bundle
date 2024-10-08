@@ -84,7 +84,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   return (
     <Modal
       afterClose={ () => { afterClose() } }
-      footer={ <ModalFooter buttonAlignment={ 'space-between' }>
+      footer={ <ModalFooter justify={ 'space-between' }>
         <Dropdown menu={ {
           items: getFormattedDropDownMenu(editableColumnsDropDownMenu, onColumnClick)
         } }
