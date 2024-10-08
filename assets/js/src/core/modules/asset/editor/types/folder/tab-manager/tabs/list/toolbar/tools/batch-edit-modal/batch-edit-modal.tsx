@@ -38,6 +38,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/default/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -47,7 +48,7 @@ export interface BatchEditModalProps {
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { editableColumnsDropDownMenu } = useListGridAvailableColumns()
   const [patchAsset] = useAssetPatchByIdMutation()
-  const { addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
+  const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
   const { addJob } = useJobs()
   const { selectedRows } = useListSelectedRows()
   const [jobTitle, setJobTitle] = useState<string>('Asset')
@@ -58,10 +59,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
     addOrUpdateBatchEdit(column.key, column.type, '')
-  }
-
-  const afterClose = (): void => {
-    resetBatchEdits()
   }
 
   const onApplyChanges = (): void => {
@@ -80,12 +77,15 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         return data.jobRunId
       }
     }))
+
+    resetBatchEdits()
+    setBatchEditModalOpen(false)
   }
 
   return (
     <Modal
       afterClose={ () => {
-        afterClose()
+        resetBatchEdits()
       } }
       footer={ <ModalFooter
         divider
@@ -102,32 +102,35 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
             {t('listing.add-column')}
           </IconTextButton>
         </Dropdown>
-        <Flex
-          align={ 'center' }
-          gap={ 'extra-small' }
-        >
-          <IconTextButton
-            icon='close'
-            onClick={ () => {
-              resetBatchEdits()
-            } }
-            type='link'
-          >
-            {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
-          <Button
-            onClick={ () => {
-              onApplyChanges()
-            } }
-            type='primary'
-          >{t('batch-edit.modal-footer.apply-changes')}</Button>
-        </Flex>
+        {batchEdits.length > 0 &&
+            (
+            <Flex
+              align={ 'center' }
+              gap={ 'extra-small' }
+            >
+              <IconTextButton
+                icon='close'
+                onClick={ () => {
+                  resetBatchEdits()
+                } }
+                type='link'
+              >
+                {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
+              <Button
+                onClick={ () => {
+                  onApplyChanges()
+                } }
+                type='primary'
+              >{t('batch-edit.modal-footer.apply-changes')}</Button>
+            </Flex>
+            )}
       </ModalFooter> }
       onCancel={ () => {
         setBatchEditModalOpen(false)
       } }
       open={ batchEditModalOpen }
       size={ 'M' }
-      title={ t('batch-edit.modal-title') }
+      title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
     >
       <BatchEditListContainer />
     </Modal>
