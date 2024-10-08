@@ -17,55 +17,55 @@ import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 
 const config: Meta = {
-    title: 'Components/Feedback/ModalFooter',
-    component: (args) => {
-        return (
-            <ModalFooter
-                justify={args.justify}
-            >
-                {args.children}
-            </ModalFooter>
-        )
-    },
-    parameters: {
-        layout: 'fullscreen'
-    },
-    tags: ['autodocs']
+  title: 'Components/Feedback/ModalFooter',
+  component: (args) => {
+    return (
+      <ModalFooter
+        justify={ args.justify }
+      >
+        {args.children}
+      </ModalFooter>
+    )
+  },
+  parameters: {
+    layout: 'fullscreen'
+  },
+  tags: ['autodocs']
 }
 
 export default config
 
 export const DefaultModalFooter = {
-    args: {
-        children: [<Button
-            key="cancel"
-            type="link"
-        >
-            Read the technical instructions
-        </Button>,
-            <Button
-                key="details"
-                type={'primary'}
-            >
-                See details
-            </Button>]
-    }
+  args: {
+    children: [<Button
+      key="cancel"
+      type="link"
+               >
+      Read the technical instructions
+    </Button>,
+      <Button
+        key="details"
+        type={ 'primary' }
+      >
+        See details
+      </Button>]
+  }
 }
 
 export const ModalFooterSpaceBetween = {
-    args: {
-        justify: 'space-between',
-        children: [<Button
-            key="cancel"
-            type="link"
-        >
-            Read the technical instructions
-        </Button>,
-            <Button
-                key="details"
-                type={'primary'}
-            >
-                See details
-            </Button>]
-    }
+  args: {
+    justify: 'space-between',
+    children: [<Button
+      key="cancel"
+      type="link"
+               >
+      Read the technical instructions
+    </Button>,
+      <Button
+        key="details"
+        type={ 'primary' }
+      >
+        See details
+      </Button>]
+  }
 }
