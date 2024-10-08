@@ -29,7 +29,6 @@ import {
   BatchEditListContainer
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-list-container'
 import {
-  type AssetPatchByIdApiResponse,
   type GridColumnConfiguration,
   useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice.gen'

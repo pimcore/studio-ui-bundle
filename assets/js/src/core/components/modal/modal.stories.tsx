@@ -16,10 +16,10 @@ const config: Meta = {
 
 export default config;
 
-export const Large = () => {
+export const Large = (): React.JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClose = () => {
+    const handleClose = (): void => {
         setIsOpen(false);
     };
 
@@ -54,10 +54,10 @@ export const Large = () => {
     );
 };
 
-export const Medium = () => {
+export const Medium = (): React.JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleClose = () => {
+    const handleClose = (): void => {
         setIsOpen(false);
     };
 
