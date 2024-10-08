@@ -13,7 +13,6 @@
 
 import React, {Fragment, type RefObject} from 'react'
 import {Card as AntdCard, type CardProps as AntdCardProps } from 'antd'
-import i18n from "i18next";
 import {useStyles} from "@Pimcore/components/card/card.styles";
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
