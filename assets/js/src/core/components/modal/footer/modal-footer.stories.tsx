@@ -11,62 +11,61 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {type Meta} from '@storybook/react'
-import {ModalFooter} from "@Pimcore/components/modal/footer/modal-footer";
-import {Button} from "@Pimcore/components/button/button";
-import React from "react";
-
+import { type Meta } from '@storybook/react'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Button } from '@Pimcore/components/button/button'
+import React from 'react'
 
 const config: Meta = {
-    title: 'Components/Feedback/ModalFooter',
-    component: (args) => {
-        return (
-            <ModalFooter
-                buttonAlignment={args.buttonAlignment}
-            >
-                {args.children}
-            </ModalFooter>
-        )
-    },
-    parameters: {
-        layout: 'fullscreen'
-    },
-    tags: ['autodocs']
+  title: 'Components/Feedback/ModalFooter',
+  component: (args) => {
+    return (
+      <ModalFooter
+        buttonAlignment={ args.buttonAlignment }
+      >
+        {args.children}
+      </ModalFooter>
+    )
+  },
+  parameters: {
+    layout: 'fullscreen'
+  },
+  tags: ['autodocs']
 }
 
 export default config
 
 export const DefaultModalFooter = {
-    args: {
-        children: [<Button
-            key="cancel"
-            type="link"
-        >
-            Read the technical instructions
-        </Button>,
-            <Button
-                key="details"
-                type={'primary'}
-            >
-                See details
-            </Button>]
-    }
+  args: {
+    children: [<Button
+      key="cancel"
+      type="link"
+               >
+      Read the technical instructions
+    </Button>,
+      <Button
+        key="details"
+        type={ 'primary' }
+      >
+        See details
+      </Button>]
+  }
 }
 
 export const ModalFooterSpaceBetween = {
-    args: {
-        buttonAlignment: 'space-between',
-        children: [<Button
-            key="cancel"
-            type="link"
-        >
-            Read the technical instructions
-        </Button>,
-            <Button
-                key="details"
-                type={'primary'}
-            >
-                See details
-            </Button>]
-    }
+  args: {
+    buttonAlignment: 'space-between',
+    children: [<Button
+      key="cancel"
+      type="link"
+               >
+      Read the technical instructions
+    </Button>,
+      <Button
+        key="details"
+        type={ 'primary' }
+      >
+        See details
+      </Button>]
+  }
 }
