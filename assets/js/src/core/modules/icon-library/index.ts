@@ -71,6 +71,7 @@ import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
 import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
 import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
+import Copy03 from '@Pimcore/assets/icons/copy-03.inline.svg'
 import Copy07 from '@Pimcore/assets/icons/copy-07.inline.svg'
 import Group from '@Pimcore/assets/icons/group.inline.svg'
 import Note from '@Pimcore/assets/icons/note.inline.svg'
@@ -361,6 +362,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'share-03',
       component: Share03
+    })
+    iconLibrary.register({
+      name: 'copy-03',
+      component: Copy03
     })
     iconLibrary.register({
       name: 'copy-07',

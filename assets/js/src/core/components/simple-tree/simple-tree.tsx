@@ -23,6 +23,7 @@ interface ExtendedTreeDataNode extends TreeDataNode {
 interface SimpleTreeProps {
     treeData: ExtendedTreeDataNode[];
     className?: string;
+    searchable?: boolean;
     onCheck?: (checkedKeys: any) => void;
     onContextMenuClick?: (key: any, action: string) => void;
     onDragAndDrop?: (params: { node: ExtendedTreeDataNode; dragNode: ExtendedTreeDataNode; dropPosition: number }) => void;
@@ -33,6 +34,10 @@ const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element
     const { styles } = useStyles();
     const classNames = [styles.tree, className]
     const [selectedKeys, setSelectedKeys] = React.useState<any[]>([]);
+
+    if (props.searchable) {
+
+    }
 
     return (
         <Tree

@@ -27,7 +27,6 @@ const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element =>
 
     let items: MenuProps['items'] = [];
     props.actions?.forEach((action) => {
-
         items?.push({
             key: action.key,
             label: t(`tree.actions.${action.key}`),
@@ -36,7 +35,7 @@ const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element =>
         });
     });
 
-    return props.actions ? (
+    return props.actions && props.actions.length > 0 ? (
         <Dropdown menu={{ items }} trigger={['contextMenu']}>
             <button
                 className={'ant-tree-title__btn'}
