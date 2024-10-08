@@ -21,6 +21,7 @@ export const useStyle = createStyles(({ token, css }) => {
         }
 
         .ant-modal-content {
+            width: 100%;
             display: inline-flex;
             flex-direction: column;
             align-items: start;
