@@ -11,11 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {type Meta} from '@storybook/react'
-import {ModalFooter} from "@Pimcore/components/modal/footer/modal-footer";
-import {Button} from "@Pimcore/components/button/button";
-import React from "react";
-
+import { type Meta } from '@storybook/react'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Button } from '@Pimcore/components/button/button'
+import React from 'react'
 
 const config: Meta = {
     title: 'Components/Feedback/ModalFooter',
