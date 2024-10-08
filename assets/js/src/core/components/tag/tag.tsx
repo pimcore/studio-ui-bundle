@@ -11,10 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import React, { type ReactNode } from 'react'
-import { useStyles } from './tag.styles'
+import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useStyles } from './tag.styles'
 
 export interface TagProps extends AntTagPropsProps {
   children: ReactNode
@@ -27,8 +28,12 @@ export type TagTheme = 'transparent'
 
 export const Tag = ({ children, icon, iconName, theme, className, ...props }: TagProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = [styles.tag, className].filter(Boolean)
-  theme !== undefined && classes.push(`theme-${theme}`)
+
+  const tagClassNames = cn(
+    styles.tag,
+    className,
+    { [`theme-${theme}`]: theme }
+  )
 
   const renderIcon = (name: string): React.JSX.Element => (
     <Icon
@@ -38,15 +43,17 @@ export const Tag = ({ children, icon, iconName, theme, className, ...props }: Ta
     />
   )
 
-  const getIcon = (): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | Iterable<React.ReactNode> | React.ReactPortal | null | boolean => {
-    if (iconName !== undefined) return renderIcon(iconName)
-    else if (icon !== undefined) return icon
-    else return null
+  const getIcon = (): React.ReactNode => {
+    if (iconName !== undefined) {
+      return renderIcon(iconName)
+    }
+
+    return icon ?? null
   }
 
   return (
     <AntTag
-      className={ classes.join(' ') }
+      className={ tagClassNames }
       icon={ getIcon() }
       { ...props }
     >
