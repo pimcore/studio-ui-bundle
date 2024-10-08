@@ -33,15 +33,15 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
   const classNames = [styles.card, className]
 
   const renderExtraContent = (): React.ReactElement | null => {
-    return (
+      return (
         <Fragment>
           {Array.isArray(props.extra) ? (
               <div>
                   {props.extra.map((extra, index) => (
-                      typeof extra === 'object' && extra !== null && 'icon' in extra ? (
+                      typeof extra === 'object' && extra.icon && extra !== null ? (
                           <IconButton
                               key={index}
-                              icon={extra.icon}
+                              icon={extra.icon as string}
                               onClick={extra.onClick}
                               title={extra.title}
                               type={extra.type ? extra.type : 'text'}
@@ -67,7 +67,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
 
     const renderTitle = (): React.ReactElement => {
         return <Fragment>
-            {props.icon ? <Icon name={props.icon} /> : null}
+            {props.icon && props.icon.length ? <Icon name={props.icon} /> : null}
             {props.title}
         </Fragment>
     };
@@ -77,7 +77,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
             className={classNames.join(' ')}
             title={props.title ? renderTitle() : null}
             extra={props.extra ? renderExtraContent() : null}
-            cover={props.image ? <Image src={props.image.src} alt={props.image.alt} /> : null}
+            cover={props.image?.src ? <Image src={props.image.src} alt={props.image.alt} /> : null}
             actions={props.actions}
         >
           {children}

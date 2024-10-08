@@ -69,7 +69,7 @@ export const HeadWithIcon = {
 export const ToggleButton = {
   args: {
     title: 'Manufacturer Uppercase',
-    extra: [<Switch labelPosition={'start'} label={'Toggle'} onChange={() => console.log('change')} />]
+    extra: [<Switch key="toggle-switch" labelPosition={'start'} label={'Toggle'} onChange={() => console.log('change')} />]
   }
 }
 
