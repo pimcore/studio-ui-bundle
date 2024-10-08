@@ -73,7 +73,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         })
 
         const response = (await promise) as any
-        const data = response.data as AssetPatchByIdApiResponse
+        const data = response.data
         return data.jobRunId
       }
     }))
