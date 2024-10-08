@@ -14,6 +14,7 @@
 import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { isEmptyValue, isString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './select.styles'
@@ -33,6 +34,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, custom
 
   const { styles } = useStyles()
 
+  const selectorClassNames = cn(styles.select)
+
   const handleClick = (): void => { setIsActive(!isActive) }
 
   const getSuffixIcon = (): React.JSX.Element => {
@@ -49,7 +52,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, custom
 
   return (
     <AntdSelect
-      onClick={ handleClick }
+      className={ selectorClassNames }
+      onDropdownVisibleChange={ handleClick }
       ref={ selectRef }
       suffixIcon={ getSuffixIcon() }
       { ...antdSelectProps }

@@ -13,8 +13,40 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
+    select: css`
+      .ant-select-selector {
+        padding: 0 ${token.controlPaddingHorizontal}px !important;
+      }
+
+      .ant-select-arrow {
+        color: ${token.colorIcon} !important;
+      }
+
+      &.ant-select-open, &.ant-select-focused {
+        .ant-select-selection-item,
+        .ant-select-selection-placeholder {
+          color: ${token.colorPrimary} !important;
+        }
+
+        .ant-select-arrow {
+          color: ${token.colorPrimary} !important;
+        }
+      }
+
+      &:hover {
+        .ant-select-selection-item,
+        .ant-select-selection-placeholder {
+          color: ${token.colorPrimary} !important;
+        }
+
+        .ant-select-arrow {
+          color: ${token.colorPrimary} !important;
+        }
+      }
+    `,
+
     arrowIcon: css`
       pointer-events: none !important
     `
