@@ -18,7 +18,7 @@ import {Icon} from "@Pimcore/components/icon/icon";
 
 export interface SimpleTreeItemProps {
     title: string
-    actions?: Array<{ key: string; icon?: string }>;
+    actions?: Array<{ key: string; icon: string }>;
     onSelected?: () => void
     onContextMenuClick?: (action: string) => void
 }
@@ -30,8 +30,8 @@ const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element =>
         items?.push({
             key: action.key,
             label: t(`tree.actions.${action.key}`),
+            icon: <Icon name={action.icon} />,
             onClick: () => { props.onContextMenuClick?.(action.key); },
-            ...(action.icon ? { icon: <Icon name={action.icon} /> } : {})
         });
     });
 
