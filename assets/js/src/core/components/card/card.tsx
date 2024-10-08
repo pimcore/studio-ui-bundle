@@ -18,39 +18,43 @@ import {useStyles} from "@Pimcore/components/card/card.styles";
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { PimcoreImage as Image } from "@Pimcore/components/pimcore-image/pimcore-image";
+import {useTranslation} from "react-i18next";
 
 export interface CardProps extends AntdCardProps {
   loading?: boolean,
   onClose?: () => void,
   icon?: string,
   image?: object & { src: string, alt?: string },
+  extra?: Array<any>,
 }
 
 const Component = ({ loading, children, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStyles()
   const classNames = [styles.card, className]
 
-  const renderExtraContent = (): React.ReactElement => {
+  const renderExtraContent = (): React.ReactElement | null => {
     return (
         <Fragment>
           {Array.isArray(props.extra) ? (
               <div>
-                  {props.extra.map((extra) => (
-                        extra.icon ? (
-                            <IconButton
-                                icon={extra.icon}
-                                onClick={extra.onClick}
-                                title={extra.title}
-                                type={extra.type ? extra.type : 'text'}
-                                role={ 'button' } />
-                        ) : (<>{extra}</>)
+                  {props.extra.map((extra, index) => (
+                      typeof extra === 'object' && extra !== null && 'icon' in extra ? (
+                          <IconButton
+                              key={index}
+                              icon={extra.icon}
+                              onClick={extra.onClick}
+                              title={extra.title}
+                              type={extra.type ? extra.type : 'text'}
+                              role={ 'button' } />
+                      ) : (<Fragment key={index}>{extra}</Fragment>)
                   ))}
               </div>
           ) : null}
 
           {props.onClose !== undefined ? (
               <IconButton
-                  aria-label={ i18n.t('aria.card.close') }
+                  aria-label={ t('aria.card.close') }
                   icon={ 'close' }
                   role={ 'button' }
                   size="small"
@@ -66,7 +70,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
         return <Fragment>
             {props.icon ? <Icon name={props.icon} /> : null}
             {props.title}
-        </Fragment>;
+        </Fragment>
     };
 
     return (

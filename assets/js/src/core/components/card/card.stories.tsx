@@ -15,7 +15,6 @@ import { type Meta } from '@storybook/react'
 import {Card} from "./card";
 import {Switch} from "../switch/switch";
 import React, {Fragment} from "react";
-import {Icon} from "@Pimcore/components/icon/icon";
 import {IconButton} from "@Pimcore/components/icon-button/icon-button";
 import {IconTextButton} from "@Pimcore/components/icon-text-button/icon-text-button";
 import {Flex} from "antd";
@@ -86,7 +85,7 @@ export const Image = {
                 <div>Lorem ipsum dolor</div>
                 <IconButton icon={'eye-outlined'} onClick={() => console.log('click button')} />
             </Flex>
-        </Fragment>,
+        </Fragment>
   }
 }
 
