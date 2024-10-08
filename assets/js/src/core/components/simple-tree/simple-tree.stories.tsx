@@ -36,7 +36,7 @@ export const _default = {
                     {
                         title: 'Admins',
                         key: '0-0-0',
-                        actions: [{key: 'add', icon: 'PlusCircleOutlined'}],
+                        actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
                         icon: <Icon name={ 'folder' } />,
                         children: [
                             {
@@ -44,33 +44,33 @@ export const _default = {
                                 key: '2',
                                 type: 'user',
                                 icon: <Icon name={ 'user-01' } />,
-                                actions: [{key: 'clone', icon: 'copy-07'}, {key: 'remove', icon: 'trash'}]
+                                actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
                             }
                         ]
                     },
                     {
                         title: 'Portal Engine',
                         key: '0-0-1',
-                        actions: [{key: 'add', icon: 'PlusCircleOutlined'}],
+                        actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
                         icon: <Icon name={ 'folder' } />,
                         children: [
                             {
                                 title: 'All rights',
                                 key: '0-0-1-0',
-                                actions: [{key: 'add', icon: 'PlusCircleOutlined'}],
+                                actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
                                 icon: <Icon name={ 'folder' } />,
                                 children: [
                                     {
                                         title: 'Jack',
                                         key: '0-0-1-0-0',
                                         icon: <Icon name={ 'user-01' } />,
-                                        actions: [{key: 'clone', icon: 'copy-07'}, {key: 'remove', icon: 'trash'}]
+                                        actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
                                     },
                                     {
                                         title: 'John',
                                         key: '0-0-1-0-1',
                                         icon: <Icon name={ 'user-01' } />,
-                                        actions: [{key: 'clone', icon: 'copy-07'}, {key: 'remove', icon: 'trash'}]
+                                        actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
                                     }
                                 ]
                             }
@@ -154,5 +154,54 @@ export const Checkable = {
         onDragAndDrop: ({node, dragNode, dropPosition}) => {
             console.log('drag:', dragNode, 'drop to:', node, 'at position', dropPosition)
         },
+    }
+}
+
+export const Searchable = {
+    args: {
+        treeData: [
+            {
+                title: 'All Tags',
+                key: '0',
+                icon: <Icon name={ 'folder' } />,
+                children: [
+                    {
+                        title: 'Countries',
+                        key: '0-0',
+                        icon: <Icon name={ 'tag-02' } />,
+                        children: [
+                            {
+                                title: 'Australia',
+                                key: '0-0-0',
+                                icon: <Icon name={ 'tag-02' } />
+                            },
+                            {
+                                title: 'Mongolia',
+                                key: '0-0-1',
+                                icon: <Icon name={ 'tag-02' } />
+                            },
+                            {
+                                title: 'Kenya',
+                                key: '0-0-2',
+                                icon: <Icon name={ 'tag-02' } />
+                            }
+                        ]
+                    },
+                    {
+                        title: 'Print',
+                        key: '0-1',
+                        icon: <Icon name={ 'tag-02' } />,
+                        children: [
+                            {
+                                title: 'A4',
+                                key: '0-1-0',
+                                icon: <Icon name={ 'tag-02' } />
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        searchable: true
     }
 }
