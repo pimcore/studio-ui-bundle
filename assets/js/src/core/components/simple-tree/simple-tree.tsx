@@ -11,7 +11,6 @@
  *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
-
 import React from 'react';
 import { Tree, type TreeDataNode } from 'antd';
 import { Icon } from '@Pimcore/components/icon/icon';
@@ -21,7 +20,6 @@ import { useStyles } from './simple-tree.styles';
 interface ExtendedTreeDataNode extends TreeDataNode {
     actions?: Array<{ key: string; icon: string }>;
 }
-
 interface SimpleTreeProps {
     treeData: ExtendedTreeDataNode[];
     className?: string;
@@ -34,13 +32,7 @@ interface SimpleTreeProps {
 const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element => {
     const { styles } = useStyles();
     const classNames = [styles.tree, className]
-
     const [selectedKeys, setSelectedKeys] = React.useState<any[]>([]);
-
-    const handleSelected = (node): void => {
-        setSelectedKeys([node.key]);
-        props.onSelected?.(node.key);
-    };
 
     return (
         <Tree
@@ -63,7 +55,8 @@ const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element
             titleRender={(node) => (
                 <SimpleTreeItem
                     onSelected={() => {
-                        handleSelected(node);
+                        setSelectedKeys([node.key]);
+                        props.onSelected?.(node.key);
                     }}
                     title={node.title as string}
                     actions={node.actions}
