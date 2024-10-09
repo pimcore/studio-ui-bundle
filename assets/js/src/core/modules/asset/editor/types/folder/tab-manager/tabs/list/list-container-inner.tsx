@@ -245,8 +245,11 @@ export const ListContainerInner = (): React.JSX.Element => {
 
     if (sorting.length > 0) {
       const currentSorting = sorting[0]
+      const identifier = encodeColumnIdentifier(currentSorting.id)
+
       sortFilter = {
-        key: currentSorting.id,
+        key: identifier.key,
+        locale: identifier.locale,
         direction: currentSorting.desc ? 'DESC' : 'ASC'
       }
     }
