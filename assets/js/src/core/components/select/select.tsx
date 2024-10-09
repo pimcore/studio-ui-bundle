@@ -35,18 +35,20 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const { styles } = useStyles()
 
   const withCustomIcon = !isEmptyValue(customIcon)
+  const isStatusWarning = status === 'warning'
+  const isStatusError = status === 'error'
 
   const selectContainerClassNames = cn(styles.selectContainer, {
-    [styles.selectContainerWarning]: status === 'warning',
-    [styles.selectContainerError]: status === 'error'
+    [styles.selectContainerWarning]: isStatusWarning,
+    [styles.selectContainerError]: isStatusError
   })
   const selectClassNames = cn(styles.select, {
     [styles.selectWithCustomIcon]: withCustomIcon
   })
   const customIconClassNames = cn(styles.customIcon, 'custom-select-icon', {
     [styles.customIconActive]: isActive || isFocus,
-    [styles.customIconWarning]: (isActive || isFocus) && status === 'warning',
-    [styles.customIconError]: (isActive || isFocus) && status === 'error'
+    [styles.customIconWarning]: (isActive || isFocus) && isStatusWarning,
+    [styles.customIconError]: (isActive || isFocus) && isStatusError
   })
 
   const handleClick = (): void => { setIsActive(!isActive) }
