@@ -89,7 +89,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 align='center'
                 gap={ 'small' }
               >
-                <Icon name='check-circle-filled' /><span>{ t('jobs.job.finished', { title: props.title }) }</span>
+                <Icon name='exclamation-circle-filled' /><span>{ t('jobs.job.finished-with-errors', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
