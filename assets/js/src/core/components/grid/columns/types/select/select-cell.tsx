@@ -14,10 +14,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { type RefSelectProps, type DefaultOptionType } from 'antd/es/select'
 import cn from 'classnames'
-import { Select } from '@Pimcore/components/select/select'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { useStyles } from './select-cell.styles'
+import { Select } from '@Pimcore/components/select/select'
 import { type DefaultCellProps } from '../../default-cell'
+import { useStyles } from './select-cell.styles'
 
 export interface SelectCellConfig {
   options: string[] | SelectOptionType[]
@@ -28,21 +28,17 @@ export type SelectOptionType = DefaultOptionType & {
 }
 
 export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
-  const { column, getValue } = props
-
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-
-  const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const { styles } = useStyles()
-
+  const { column, getValue } = props
+  const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
+  const [open, setOpen] = useState<boolean>(false)
   const config = column.columnDef.meta?.config as SelectCellConfig | undefined
   const element = useRef<RefSelectProps>(null)
 
   useEffect(() => {
     if (isInEditMode) {
       element.current?.focus()
-
-      setIsOpen(true)
+      setOpen(true)
     }
   }, [isInEditMode])
 
@@ -57,26 +53,30 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   const displayOption = options.find((option: SelectOptionType) => option.value === getValue())
   const displayValue = displayOption?.displayValue ?? displayOption?.label ?? getValue()
 
-  const onChange = (value: string): void => {
-    fireOnUpdateCellDataEvent(value)
-    disableEditMode()
+  if (!isInEditMode) {
+    return (
+      <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
+        { displayValue }
+      </div>
+    )
   }
 
   return (
     <div className={ cn(styles['select-cell'], 'default-cell__content') }>
-      {isInEditMode
-        ? (
-          <Select
-            onBlur={ disableEditMode }
-            onChange={ onChange }
-            open={ isOpen }
-            options={ options }
-            popupMatchSelectWidth={ false }
-            ref={ element }
-            value={ getValue() }
-          />
-          )
-        : displayValue}
+      <Select
+        onBlur={ disableEditMode }
+        onChange={ onChange }
+        open={ open }
+        options={ options }
+        popupMatchSelectWidth={ false }
+        ref={ element }
+        value={ getValue() }
+      />
     </div>
   )
+
+  function onChange (value: string): void {
+    fireOnUpdateCellDataEvent(value)
+    disableEditMode()
+  }
 }
