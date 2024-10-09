@@ -239,6 +239,7 @@ jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"
 jobs.job.failed: "{{title}} failed"
 jobs.job.finished: "{{title}} finished"
+jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
