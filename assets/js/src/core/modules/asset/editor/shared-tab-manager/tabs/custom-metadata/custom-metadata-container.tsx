@@ -14,9 +14,8 @@
 import React, { useContext, useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type InputRef } from 'antd'
-import Input from 'antd/es/input/Input'
 import { Button } from '@Pimcore/components/button/button'
-import { Select } from '@Pimcore/components/select/select'
+import Input from 'antd/es/input/Input'
 import {
   CustomMetadataTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
@@ -36,16 +35,15 @@ import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Space } from '@Pimcore/components/space/space'
+import { Select } from '@Pimcore/components/select/select'
 import { useStyle } from './custom-metadata-container.styles'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
-  const { id } = useContext(AssetContext)
-  const [editMode, setEditMode] = useState<boolean>(false)
-
   const { t } = useTranslation()
-
+  const [editmode, setEditMode] = useState<boolean>(false)
   const { styles } = useStyle()
   const settings = useSettings()
+  const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
   const {
     showModal: showDuplicateEntryModal,
@@ -60,7 +58,6 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
   const nameInputValue = useRef<string>('')
   const nameInputRef = useRef<InputRef>(null)
-
   const typeSelectValue = useRef<string>('input')
   const languageSelectValue = useRef<string>('')
 
@@ -69,17 +66,23 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     return { value: type, label: t('data-type.' + type) }
   })
 
-  const onNameInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
     nameInputValue.current = event.target.value
   }
 
-  const onTypeSelectChange = (value: string): void => { typeSelectValue.current = value }
+  function onTypeSelectChange (value: string): void {
+    typeSelectValue.current = value
+  }
 
-  const onLanguageSelectChange = (value: string): void => { languageSelectValue.current = value }
+  function onLanguageSelectChange (value: string): void {
+    languageSelectValue.current = value
+  }
 
-  const onLanguageSelectClear = (): void => { languageSelectValue.current = '' }
+  function onLanguageSelectClear (): void {
+    languageSelectValue.current = ''
+  }
 
-  const onAddPropertyClick = (): void => {
+  function onAddPropertyClick (): void {
     const isValidNameInput = nameInputValue.current !== undefined && nameInputValue.current.length > 0
     const isValidTypeSelectValue = typeSelectValue.current !== undefined
 
@@ -105,123 +108,128 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     addCustomMetadata(newCustomMetadata)
   }
 
-  const resetFormValues = (): void => {
-    typeSelectValue.current = 'input'
-    nameInputValue.current = ''
-    languageSelectValue.current = ''
-  }
-
   useEffect(() => {
-    editMode ? nameInputRef.current?.focus() : resetFormValues()
-  }, [editMode])
+    if (editmode) {
+      nameInputRef.current?.focus()
+    } else {
+      typeSelectValue.current = 'input'
+      nameInputValue.current = ''
+      languageSelectValue.current = ''
+    }
+  }, [editmode])
 
   return (
-    <>
-      <Content
-        className={ styles.tab }
-        padded
+    <Content padded>
+      <Header
+        title={ t('asset.asset-editor-tabs.custom-metadata.text') }
       >
-        <Header title={ t('asset.asset-editor-tabs.custom-metadata.text') }>
-          <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
-            <Space size='extra-small'>
-              {editMode && (
-                <>
-                  <Space size="extra-small">
-                    <Button
-                      onClick={ () => { setEditMode(false) } }
-                      type={ 'link' }
-                    >
-                      {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel')}
-                    </Button>
-
-                    <Input
-                      onChange={ onNameInputChange }
-                      placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name') }
-                      ref={ nameInputRef }
-                    />
-
-                    <Select
-                      defaultValue={ typeSelectValue.current }
-                      onSelect={ onTypeSelectChange }
-                      options={ typeSelectOptions }
-                      placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type') }
-                    />
-
-                    <Select
-                      allowClear
-                      onClear={ onLanguageSelectClear }
-                      onSelect={ onLanguageSelectChange }
-                      options={ settings.requiredLanguages.map((value: string) => {
-                        return { value, label: value }
-                      }) }
-                      placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language') }
-                    />
-
-                    <IconTextButton
-                      icon={ 'PlusCircleOutlined' }
-                      onClick={ () => {
-                        onAddPropertyClick()
-                      } }
-                    >
-                      {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
-                    </IconTextButton>
-                  </Space>
-                </>
-              )}
-
-              {!editMode && (
-                <ButtonGroup items={ [<Button
-                  key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
+        <div className='pimcore-custom-metadata-toolbar'>
+          <Space
+            size='extra-small'
+          >
+            {editmode && (
+            <>
+              <Space
+                size="extra-small"
+              >
+                <Button
                   onClick={ () => {
-                    console.log('clicked')
+                    setEditMode(false)
                   } }
-                                      >
-                  {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
-                </Button>,
-                  <IconTextButton
-                    icon={ 'PlusCircleOutlined' }
-                    key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
-                    onClick={ () => {
-                      setEditMode(true)
-                    } }
-                  >
-                    {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
-                  </IconTextButton>] }
+                  type={ 'link' }
+                >
+                  {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel')}
+                </Button>
+
+                <Input
+                  onChange={ onNameInputChange }
+                  placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name') }
+                  ref={ nameInputRef }
                 />
-              )}
-            </Space>
-          </div>
-        </Header>
 
-        <CustomMetadataTable
-          showDuplicateEntryModal={ showDuplicateEntryModal }
-          showMandatoryModal={ showMandatoryModal }
-        />
-      </Content>
+                <Select
+                  className={ styles.customMetadataSelect }
+                  defaultValue={ typeSelectValue.current }
+                  onSelect={ onTypeSelectChange }
+                  options={ typeSelectOptions }
+                  placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type') }
+                />
 
-      <MandatoryModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeMandatoryModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
-        title={ t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title') }
-      >
-        {t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error')}
-      </MandatoryModal>
+                <Select
+                  allowClear
+                  className={ styles.customMetadataSelect }
+                  onClear={ onLanguageSelectClear }
+                  onSelect={ onLanguageSelectChange }
+                  options={ settings.requiredLanguages.map((value: string) => {
+                    return { value, label: value }
+                  }) }
+                  placeholder={ t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language') }
+                />
 
-      <DuplicateEntryModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeDuplicateEntryModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
-        title={ t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title') }
-      >
-        {t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error')}
-      </DuplicateEntryModal>
-    </>
+                <IconTextButton
+                  icon={ 'PlusCircleOutlined' }
+                  onClick={ () => {
+                    onAddPropertyClick()
+                  } }
+                >
+                  {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
+                </IconTextButton>
+              </Space>
+
+              <DuplicateEntryModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeDuplicateEntryModal }
+                    type='primary'
+                  >{t('button.ok')}</Button>
+                </ModalFooter> }
+                title={ t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title') }
+              >
+                {t('asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error')}
+              </DuplicateEntryModal>
+
+              <MandatoryModal
+                footer={ <ModalFooter>
+                  <Button
+                    onClick={ closeMandatoryModal }
+                    type='primary'
+                  >{t('button.ok')}</Button>
+                </ModalFooter> }
+                title={ t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title') }
+              >
+                {t('asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error')}
+              </MandatoryModal>
+            </>
+            )}
+
+            {!editmode && (
+            <ButtonGroup items={ [<Button
+              key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
+              onClick={ () => {
+                console.log('clicked')
+              } }
+                                  >
+              {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
+            </Button>,
+              <IconTextButton
+                icon={ 'PlusCircleOutlined' }
+                key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
+                onClick={ () => {
+                  setEditMode(true)
+                } }
+              >
+                {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
+              </IconTextButton>] }
+            />
+            )}
+          </Space>
+        </div>
+      </Header>
+
+      <CustomMetadataTable
+        showDuplicateEntryModal={ showDuplicateEntryModal }
+        showMandatoryModal={ showMandatoryModal }
+      />
+    </Content>
   )
 }

@@ -24,7 +24,7 @@ interface SelectProps extends AntdSelectProps {
   customIcon?: string
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -42,7 +42,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     [styles.selectContainerWarning]: isStatusWarning,
     [styles.selectContainerError]: isStatusError
   })
-  const selectClassNames = cn(styles.select, {
+  const selectClassNames = cn(className, styles.select, {
     [styles.selectWithCustomIcon]: withCustomIcon
   })
   const customIconClassNames = cn(styles.customIcon, 'custom-select-icon', {

@@ -13,27 +13,10 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyle = createStyles(({ css }) => {
   return {
-    tab: css`
-        
-    `,
-    toolbar: css`
-      // @todo: remove after replacement with centralized select component
-      .ant-select {
-        .ant-select-selector {
-          min-width: 100px;
-          border: 1px solid ${token.Button.defaultBorderColor};
-          
-          .ant-select-selection-placeholder {
-            color: ${token.Button.defaultColor} !important;
-          }
-        }
-          
-        .ant-select-arrow {
-          color: ${token.Button.defaultColor} !important;
-        }
-      }
+    customMetadataSelect: css`
+        min-width: 100px;
     `
   }
 })
