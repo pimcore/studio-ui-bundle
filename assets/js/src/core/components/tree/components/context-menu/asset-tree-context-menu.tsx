@@ -17,7 +17,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
-import { Upload, type UploadChangeParam, type UploadProps } from '@Pimcore/components/upload/upload'
+import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import { api as assetApi, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -89,11 +89,6 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   const onConfirmation = async (): Promise<void> => {
     const isFolder = props.node!.type === 'folder'
-    let promiseResolve: UploadChangeParam['promiseResolve'] = () => {}
-    const promise: Promise<number> | undefined = new Promise(resolve => {
-      promiseResolve = resolve
-    })
-    const promiseTmpHolder = { promise, promiseResolve }
 
     // TODO: add multiple deletion // this also requires mercure
     if (isFolder) {
@@ -101,34 +96,43 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         title: 'Deleting Folder',
         topics: [topics['deletion-finished'], ...defaultTopics],
         action: async () => {
-          return await promiseTmpHolder.promise
+          const promise = assetDelete({
+            id: parseInt(props.node!.id),
+            elementType: 'asset'
+          })
+
+          promise.catch(() => {
+            console.error('Error deleting asset')
+          })
+
+          const response = (await promise) as any
+
+          if (response.error !== undefined || response.data === undefined || response.data === null) {
+            console.error(response.error.data.message)
+            throw new Error(response.error.data.message as string ?? 'Error deleting Asset')
+          }
+
+          const data = response.data as { id: number }
+          return data.id
         },
         parentFolder: props.node!.parentId!
       }))
     }
 
-    if (!isFolder) {
-      // instand clear
-    }
-
     try {
-      const nodeId = parseInt(props.node!.id)
-      const response = await assetDelete({
-        id: nodeId,
+      await assetDelete({
+        id: parseInt(props.node!.id),
         elementType: 'asset'
       })
 
-      if (isFolder && response !== undefined) {
-        // @ts-expect-error expected issue - response.data is there
-        promiseTmpHolder.promiseResolve(response.data.id as number)
-      }
-
-      console.log(response)
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(parseInt(props.node!.parentId!))
+        )
+      )
     } catch (error) {
       console.error('Error deleting asset', error)
     }
-
-    console.log(props.node)
   }
 
   const {
