@@ -24,7 +24,7 @@ interface SelectProps extends AntdSelectProps {
   customIcon?: string
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -36,11 +36,17 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const withCustomIcon = !isEmptyValue(customIcon)
 
+  const selectContainerClassNames = cn(styles.selectContainer, {
+    [styles.selectContainerWarning]: status === 'warning',
+    [styles.selectContainerError]: status === 'error'
+  })
   const selectClassNames = cn(styles.select, {
     [styles.selectWithCustomIcon]: withCustomIcon
   })
-  const customIconClassNames = cn(styles.customIcon, {
-    [styles.customIconActive]: isActive || isFocus
+  const customIconClassNames = cn(styles.customIcon, 'custom-select-icon', {
+    [styles.customIconActive]: isActive || isFocus,
+    [styles.customIconWarning]: (isActive || isFocus) && status === 'warning',
+    [styles.customIconError]: (isActive || isFocus) && status === 'error'
   })
 
   const handleClick = (): void => { setIsActive(!isActive) }
@@ -66,7 +72,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   }
 
   return (
-    <div className={ styles.selectContainer }>
+    <div className={ selectContainerClassNames }>
       {withCustomIcon && (
         <Icon
           className={ customIconClassNames }
@@ -81,6 +87,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         onDropdownVisibleChange={ handleClick }
         onFocus={ () => { setIsFocus(true) } }
         ref={ selectRef }
+        status={ status }
         suffixIcon={ getSuffixIcon() }
         { ...antdSelectProps }
       />

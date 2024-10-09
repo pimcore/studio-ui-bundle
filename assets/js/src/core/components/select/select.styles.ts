@@ -20,9 +20,91 @@ export const useStyles = createStyles(({ css, token }) => {
     selectContainer: css`
       position: relative;
       
-      &:hover, &:focus {
-        .pimcore-icon {
-          color: ${token.colorPrimary} !important;
+      &:hover {
+        .custom-select-icon {
+          color: ${token.colorPrimary};
+        }
+      }
+    `,
+
+    // WARNING state
+    selectContainerWarning: css`
+      &:hover {
+        .custom-select-icon {
+          color: ${token.colorWarningHover} !important;
+        }
+      }
+      
+      .ant-select-status-warning {
+        &.ant-select-open, &.ant-select-focused {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorWarningHover} !important;
+          }
+        }
+
+        &.ant-select-show-search, &.ant-select-multiple {
+          &:hover {
+            .ant-select-selection-placeholder {
+              color: ${token.colorTextPlaceholder} !important;
+            }
+          }
+        }
+
+        &:hover {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorWarningHover} !important;
+          }
+        }
+       }
+    `,
+
+    // ERROR state
+    selectContainerError: css`
+      &:hover {
+        .custom-select-icon {
+          color: ${token.colorErrorHover} !important;
+        }
+      }
+      
+      .ant-select-status-error {
+        &.ant-select-open, &.ant-select-focused {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorErrorHover} !important;
+          }
+        }
+
+        &.ant-select-show-search, &.ant-select-multiple {
+          &:hover {
+            .ant-select-selection-placeholder {
+              color: ${token.colorTextPlaceholder} !important;
+            }
+          }
+        }
+
+        &:hover {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorErrorHover} !important;
+          }
         }
       }
     `,
@@ -81,72 +163,6 @@ export const useStyles = createStyles(({ css, token }) => {
         }
       }
 
-      // WARNING state
-      &.ant-select-status-warning {
-        &.ant-select-open, &.ant-select-focused {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
-            color: ${token.colorText} !important;
-          }
-
-          .ant-select-arrow {
-            color: ${token.colorWarningHover} !important;
-          }
-        }
-        
-        &.ant-select-show-search, &.ant-select-multiple {
-          &:hover {
-            .ant-select-selection-placeholder {
-              color: ${token.colorTextPlaceholder} !important;
-            }
-          }
-        }
-        
-        &:hover {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
-            color: ${token.colorText} !important;
-          }
-
-          .ant-select-arrow {
-            color: ${token.colorWarningHover} !important;
-          }
-        }
-      }
-
-      // ERROR state
-      &.ant-select-status-error {
-        &.ant-select-open, &.ant-select-focused {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
-            color: ${token.colorText} !important;
-          }
-
-          .ant-select-arrow {
-            color: ${token.colorErrorHover} !important;
-          }
-        }
-
-        &.ant-select-show-search, &.ant-select-multiple {
-          &:hover {
-            .ant-select-selection-placeholder {
-              color: ${token.colorTextPlaceholder} !important;
-            }
-          }
-        }
-
-        &:hover {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
-            color: ${token.colorText} !important;
-          }
-
-          .ant-select-arrow {
-            color: ${token.colorErrorHover} !important;
-          }
-        }
-      }
-
       // DISABLED state
       &.ant-select.ant-select-disabled {
         .ant-select-selector {
@@ -183,7 +199,15 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     customIconActive: css`
-      color: ${token.colorPrimary} !important;
-    `
+       color: ${token.colorPrimary} !important;
+     `,
+
+    customIconWarning: css`
+       color: ${token.colorWarningHover} !important;
+     `,
+
+    customIconError: css`
+       color: ${token.colorErrorHover} !important;
+     `
   }
 })
