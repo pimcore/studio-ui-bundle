@@ -42,6 +42,7 @@ import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { eventBus } from '@Pimcore/lib/event-bus'
 
 interface DataPatch {
   columnId: string
@@ -76,6 +77,16 @@ export const ListContainerInner = (): React.JSX.Element => {
     prepareAndFetchListing()?.catch((error) => {
       console.log(error)
     })
+
+    const subscriber = eventBus.subscribe({ type: 'asset:listing:refresh', id: assetId }, () => {
+      prepareAndFetchListing()?.catch((error) => {
+        console.log(error)
+      })
+    })
+
+    return () => {
+      eventBus.unsubscribe(subscriber)
+    }
   }, [columns, filterOptions, page, pageSize, sorting])
 
   useEffect(() => {
@@ -143,8 +154,6 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
-    console.log('----> updating cell data ')
-
     const columnIdentifier = encodeColumnIdentifier(columnId)
     const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
 
