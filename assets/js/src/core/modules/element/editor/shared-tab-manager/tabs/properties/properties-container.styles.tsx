@@ -13,27 +13,14 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyle = createStyles(({ css }) => {
   return {
-    tab: css`
+    propertiesDataSelect: css`
+      min-width: 100px;
     `,
-    toolbar: css`
-      .pimcore-properties-toolbar__predefined-properties {        
-        // @todo remove this once the antd select is fixed       
-          .ant-select {
-            min-width: 100px;
-          }
- 
-        .ant-select {
-          .ant-select-selection-placeholder,
-          .ant-select-arrow {
-            color: rgba(0, 0, 0, 0.88)   
-          }
-        }
 
-      }
-    `,
-    content: css`
+    propertiesDataPropsSelect: css`
+      min-width: 100px;
     `
   }
 })

@@ -68,15 +68,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
   }, [createManualPropertyMode])
 
   return (
-    <Content
-      className={ styles.tab }
-      padded
-    >
+    <Content padded>
       <Header title={ t('properties.label') }>
-        <Space
-          className={ [styles.toolbar].join(' ') }
-          size='small'
-        >
+        <Space size='small'>
           <Segmented
             onChange={ setPropertiesTableTab }
             options={ [
@@ -128,6 +122,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
               />
 
               <Select
+                className={ styles.propertiesDataSelect }
                 onSelect={ onTypeSelect }
                 options={ [
                   { value: 'text', label: t('data-type.text') },
@@ -153,6 +148,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
             {!createManualPropertyMode && (
               <Split size='mini'>
                 <Select
+                  className={ styles.propertiesDataPropsSelect }
                   filterOption={ (input, option) => {
                     return (option?.label as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
                   } }
