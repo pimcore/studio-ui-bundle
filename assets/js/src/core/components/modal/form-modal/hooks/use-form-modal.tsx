@@ -14,31 +14,30 @@
 import React, { useState } from 'react'
 import { FormModal, type FormModalProps } from '@Pimcore/components/modal/form-modal/form-modal'
 import { Form, type FormInstance, Input } from 'antd'
-import {Button} from "@Pimcore/components/button/button";
 
-type RenderModalProps = Omit<FormModalProps, 'children' | 'open'>
+export type InputModal = Omit<FormModalProps, 'children'> & {
+  label: string
+}
 
-interface UseInputModalReturn {
-  renderModal: (props: RenderModalProps) => React.JSX.Element
+export type ConfirmationModal = Omit<FormModalProps, 'children'> & {
+  text: string | React.JSX.Element
+}
+
+type RenderModalProps = InputModal | ConfirmationModal
+
+interface UseInputModalReturn<T> {
+  renderModal: (props: T) => React.JSX.Element
   showModal: () => void
   handleOk: (form: FormInstance<any>) => void
   handleCancel: () => void
   closeModal: () => void
 }
 
-type InputModal = Omit<FormModalProps, 'children'> & {
-  label: string
+interface UseFormModalProps {
+  type: 'input' | 'confirmation'
 }
 
-type ConfirmationModal = Omit<FormModalProps, 'children'> & {
-  text: string
-}
-
-interface UseInputModalProps {
-  type: 'input'
-}
-
-export const useFormModal = (config: UseInputModalProps): UseInputModalReturn => {
+export const useFormModal = <T extends RenderModalProps>(config: UseFormModalProps): UseInputModalReturn<T> => {
   const { type = 'input' } = config
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
@@ -58,7 +57,7 @@ export const useFormModal = (config: UseInputModalProps): UseInputModalReturn =>
     closeModal()
   }
 
-  function getModalComponent (type: string): typeof FormModal {
+  function getModalComponent (type: UseFormModalProps['type']): typeof FormModal {
     let component = FormModal
 
     switch (type) {
@@ -73,7 +72,7 @@ export const useFormModal = (config: UseInputModalProps): UseInputModalReturn =>
     return component
   }
 
-  function renderModal (props: RenderModalProps): React.JSX.Element {
+  function renderModal (props: T): React.JSX.Element {
     const ModalComponent = getModalComponent(type)
 
     return (
@@ -128,7 +127,7 @@ export const withConfirmation = (Component: typeof FormModal): typeof FormModal 
     return (
       <Component
         { ...inlineProps }
-        okText={'Yes'}
+        okText={ 'Yes' }
       >
         { text }
       </Component>

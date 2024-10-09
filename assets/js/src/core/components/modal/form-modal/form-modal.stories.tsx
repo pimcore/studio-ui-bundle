@@ -27,14 +27,10 @@ const config: Meta = {
         setValue(form.getFieldValue(args.type))
       }
     }
-
     const callbackConfirmation = () => {
       setConfirmed(true)
     }
-
     const callbackManager = (props: {form?: FormInstance<any>}) => {
-      console.log('now', args.type)
-
       switch (args.type) {
         case 'input':
           callbackInput(props.form!)
