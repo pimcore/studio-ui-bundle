@@ -13,8 +13,9 @@
 
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type EditorContainerProps } from '../editor/editor-container'
-import { store } from '@Pimcore/app/store'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -25,10 +26,17 @@ interface UseDataObjectReturn {
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
-  const { openMainWidget } = useWidgetManager()
+  const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
+  const dispatch = useAppDispatch()
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
+    const widgetId = `data-object-${config.id}`
+
+    if (!isMainWidgetOpen(widgetId)) {
+      dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
+    }
+
     const dataObject = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
 
     if (dataObject.data?.icon?.type === 'path') {
@@ -38,7 +46,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     openMainWidget({
       name: dataObject.data?.key,
       // icon: dataObject.data?.icon?.value,
-      id: `data-object-${config.id}`,
+      id: widgetId,
       component: 'data-object-editor',
       config
     })
