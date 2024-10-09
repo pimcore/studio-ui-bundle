@@ -74,6 +74,10 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      .ant-table-row {
+        height: 41px;
+      }
+
       .ant-table-content {
         table {
           border: 1px solid #F0F0F0;

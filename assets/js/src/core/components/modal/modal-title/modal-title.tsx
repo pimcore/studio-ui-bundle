@@ -20,16 +20,15 @@ export interface ModalTitleProps {
   children: ReactNode
 }
 
-export const ModalTitle = (props: ModalTitleProps): React.JSX.Element => {
+export const ModalTitle = ({ iconName, ...props }: ModalTitleProps): React.JSX.Element => {
   return (
     <Flex gap={ 'small' }>
-      {props.iconName !== undefined && (
+      {iconName !== undefined && (
         <Icon
-          name={ props.iconName }
+          name={ iconName }
           options={ { width: 20, height: 20 } }
         />
       )}
-
       <span>
         {props.children}
       </span>

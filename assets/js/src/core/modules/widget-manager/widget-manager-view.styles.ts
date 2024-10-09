@@ -62,7 +62,7 @@ export const getTabTokens = (token): TabsToken => {
   return tabTokens
 }
 
-export const useStlyes = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ token, css }) => {
   const tabToken = getTabTokens(token)
 
   return {

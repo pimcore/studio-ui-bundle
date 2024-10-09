@@ -12,45 +12,15 @@
 */
 
 import { type Meta } from '@storybook/react'
+import React, { useState } from 'react'
 import { Button } from '@Pimcore/components/button/button'
-import React from 'react'
-import { FileList } from '@Pimcore/components/modal/file-list/file-list'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { useModal } from '@Pimcore/components/modal/useModal'
+import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Modal } from '@Pimcore/components/modal/modal'
 
 const config: Meta = {
   title: 'Components/Feedback/Modal',
-  component: (args) => {
-    const { renderModal: RenderModal, showModal } = useModal({ type: args.type })
-
-    return (
-      <>
-        <Button onClick={ showModal }>Open modal</Button>
-        <RenderModal
-          footer={ args.footer }
-          title={ args.title }
-        >
-          {args.content}
-        </RenderModal>
-      </>
-    )
-  },
-  argTypes: {
-    type: {
-      options: ['error', 'success', 'info', 'warn'],
-      control: { type: 'select' }
-    },
-    content: {
-      table: {
-        disable: true
-      }
-    },
-    footer: {
-      table: {
-        disable: true
-      }
-    }
-  },
+  component: Modal,
   parameters: {
     layout: 'centered'
   },
@@ -59,112 +29,92 @@ const config: Meta = {
 
 export default config
 
-const DefaultContent = (): React.JSX.Element => {
+export const Large = (): React.JSX.Element => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const handleClose = (): void => {
+    setIsOpen(false)
+  }
+
   return (
     <>
-      <p>The following files failed while creating their ZIPs. Pressing on See details will load additional options helping to resolve the error.</p>
+      <Button onClick={ () => { setIsOpen(!isOpen) } }>Open modal</Button>
+      <Modal
+        footer={
+          <ModalFooter justify='space-between'>
+            <Button
+              key='cancel'
+              type='link'
+            >
+              Read the technical instructions
+            </Button>
 
-      <FileList files={ ['all-catalogue-pictures.zip', 'all-catalogue-pictures-videos-content-materials.zip'] } />
+            <Button
+              key='details'
+              type='primary'
+            >
+              See details
+            </Button>
+          </ModalFooter>
+            }
+        onCancel={ handleClose }
+        open={ isOpen }
+        size='L'
+        title={
+          <ModalTitle>
+            Large Modal
+          </ModalTitle>
+            }
+      >
+        <div>
+          Content goes here. Click the close button to hide this modal.
+        </div>
+      </Modal>
     </>
   )
 }
 
-export const Error = {
-  args: {
-    type: 'error',
-    title: 'Error occurred when creating ZIP',
-    content: <DefaultContent />,
-    footer: <ModalFooter>
-      <Button
-        danger
-        key="cancel"
-      >
-        Cancel all ZIP actions
-      </Button>
-      <Button
-        key="details"
-        type={ 'primary' }
-      >
-        See details
-      </Button>
-    </ModalFooter>
-  }
-}
+export const Medium = (): React.JSX.Element => {
+  const [isOpen, setIsOpen] = useState(false)
 
-export const Success = {
-  args: {
-    type: 'success',
-    title: 'Your file is uploaded!',
-    content: '“alfa-romeo-144.jpg” is now uploaded.',
-    footer: <ModalFooter>
-      <Button
-        key="cancel"
-      >
-        Close
-      </Button>
-    </ModalFooter>
+  const handleClose = (): void => {
+    setIsOpen(false)
   }
-}
 
-export const Info = {
-  args: {
-    type: 'info',
-    title: 'Info',
-    content: 'Your Webhook has been activated.',
-    footer: <ModalFooter>
-      <Button
-        key="cancel"
-      >
-        Close
-      </Button>
-    </ModalFooter>
-  }
-}
-
-export const Warn = {
-  args: {
-    type: 'warn',
-    title: 'Warning',
-    content: 'Your Webhook has been activated.',
-    footer: <ModalFooter>
-      <Button
-        key="cancel"
-      >
-        Close
-      </Button>
-    </ModalFooter>
-  }
-}
-
-const SpaceBetweenFooterButtonsContent = (): React.JSX.Element => {
   return (
     <>
-      <p>This video format for the following file is not supported. Try converting it in MP4, MOV or AVI.</p>
+      <Button onClick={ () => { setIsOpen(!isOpen) } }>Open modal</Button>
+      <Modal
+        footer={
+          <ModalFooter justify='space-between'>
+            <Button
+              key='cancel'
+              type='link'
+            >
+              Read the technical instructions
+            </Button>
 
-      <FileList files={ ['all-catalogue-pictures.zip'] } />
+            <Button
+              key='details'
+              type='primary'
+            >
+              See details
+            </Button>
+          </ModalFooter>
+                }
+        onCancel={ handleClose }
+        open={ isOpen }
+        size='M'
+        title={
+          <ModalTitle>
+            Medium Modal
+          </ModalTitle>
+                }
+      >
+        <div>
+          Content goes here. Click the close button to hide this modal.
+        </div>
+      </Modal>
     </>
   )
-}
-
-export const SpaceBetweenFooterButtons = {
-  args: {
-    type: 'error',
-    title: 'Media Player can’t play this file',
-    content: <SpaceBetweenFooterButtonsContent />,
-    footer: <ModalFooter buttonAlignment={ 'space-between' }>
-      <Button
-        key="cancel"
-        type="link"
-      >
-        Read the technical instructions
-      </Button>
-
-      <Button
-        key="details"
-        type={ 'primary' }
-      >
-        See details
-      </Button>
-    </ModalFooter>
-  }
 }

@@ -140,6 +140,7 @@ asset.listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
 listing.actions: Apply to selection
+listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
@@ -246,7 +247,13 @@ jobs.job.button-hide: hide
 jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
 jobs.zip-job.title: "ZIP of {{title}}"
+jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
+batch-edit.modal-title: Batch Edit
+batch-edit.no-content: There are no added columns yet
+batch-edit.modal-footer.apply-changes: Apply changes
+batch-edit.modal-footer.discard-all-changes: Discard All Changes
+batch-edit.modal-footer.add-a-column: Add a column
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -264,6 +271,10 @@ apply: Apply
 asset.tree.context-menu.add-assets: Add Asset(s)
 asset.tree.context-menu.add-assets.upload-files: Upload Files
 asset.tree.context-menu.add-assets.upload-zip: Upload Zip
+close-tab: Close Tab
+close-others: Close Others
+close-unmodified: Close Unmodified
+close-all: Close All
 asset.tree.context-menu.add-folder: Add Folder
 asset.tree.context-menu.rename: Rename
 asset.tree.context-menu.copy: Copy

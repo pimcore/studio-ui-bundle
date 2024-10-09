@@ -62,6 +62,10 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
       classes.push('default-cell--modified')
     }
 
+    if (isInEditMode) {
+      classes.push('default-cell--edit-mode')
+    }
+
     return classes
   }
 

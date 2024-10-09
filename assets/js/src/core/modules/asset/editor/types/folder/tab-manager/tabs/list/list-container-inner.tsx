@@ -143,6 +143,8 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
+    console.log('----> updating cell data ')
+
     const columnIdentifier = encodeColumnIdentifier(columnId)
     const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
 
@@ -243,8 +245,11 @@ export const ListContainerInner = (): React.JSX.Element => {
 
     if (sorting.length > 0) {
       const currentSorting = sorting[0]
+      const identifier = encodeColumnIdentifier(currentSorting.id)
+
       sortFilter = {
-        key: currentSorting.id,
+        key: identifier.key,
+        locale: identifier.locale,
         direction: currentSorting.desc ? 'DESC' : 'ASC'
       }
     }
