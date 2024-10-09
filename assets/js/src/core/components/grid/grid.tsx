@@ -30,7 +30,7 @@ import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
 import { useTranslation } from 'react-i18next'
-import { Checkbox, ConfigProvider, Skeleton } from 'antd'
+import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 
@@ -204,94 +204,92 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
   const table = useReactTable(tableProps)
 
   return useMemo(() => (
-    <ConfigProvider componentSize='small'>
-      <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
-        <div className="ant-table ant-table-small">
-          <div className='ant-table-container'>
-            <div className='ant-table-content'>
-              <table
-                ref={ tableElement }
-                style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
-              >
-                <thead className='ant-table-thead'>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={ headerGroup.id }>
-                      {headerGroup.headers.map((header, index) => (
-                        <th
-                          className='ant-table-cell'
-                          key={ header.id }
-                          ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
-                          style={
-                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                                ? {
-                                    width: 'auto',
-                                    minWidth: header.column.getSize()
-                                  }
-                                : {
-                                    width: header.column.getSize(),
-                                    maxWidth: header.column.getSize()
-                                  }
-                            }
-                        >
-                          <div className='grid__cell-content'>
-                            <span>
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                            </span>
-
-                            {header.column.getCanSort() && (
-                              <div className='grid__sorter'>
-                                <SortButton
-                                  allowUnsorted={ sorting === undefined }
-                                  onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-                                  value={ getSortDirection(header.column) }
-                                />
-                              </div>
+    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
+      <div className="ant-table ant-table-small">
+        <div className='ant-table-container'>
+          <div className='ant-table-content'>
+            <table
+              ref={ tableElement }
+              style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
+            >
+              <thead className='ant-table-thead'>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={ headerGroup.id }>
+                    {headerGroup.headers.map((header, index) => (
+                      <th
+                        className='ant-table-cell'
+                        key={ header.id }
+                        ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
+                        style={
+                            header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                              ? {
+                                  width: 'auto',
+                                  minWidth: header.column.getSize()
+                                }
+                              : {
+                                  width: header.column.getSize(),
+                                  maxWidth: header.column.getSize()
+                                }
+                          }
+                      >
+                        <div className='grid__cell-content'>
+                          <span>
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
                             )}
-                          </div>
+                          </span>
 
-                          {props.resizable === true && header.column.getCanResize() && (
-                          <Resizer
-                            header={ header }
-                            isResizing={ header.column.getIsResizing() }
-                            table={ table }
-                          />
+                          {header.column.getCanSort() && (
+                            <div className='grid__sorter'>
+                              <SortButton
+                                allowUnsorted={ sorting === undefined }
+                                onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
+                                value={ getSortDirection(header.column) }
+                              />
+                            </div>
                           )}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody className="ant-table-tbody">
-                  {table.getRowModel().rows.length === 0 && (
-                  <tr className={ 'ant-table-row' }>
-                    <td
-                      className='ant-table-cell ant-table-cell__no-data'
-                      colSpan={ table.getAllColumns().length }
-                    >
-                      {t('no-data-available-yet')}
-                    </td>
+                        </div>
+
+                        {props.resizable === true && header.column.getCanResize() && (
+                        <Resizer
+                          header={ header }
+                          isResizing={ header.column.getIsResizing() }
+                          table={ table }
+                        />
+                        )}
+                      </th>
+                    ))}
                   </tr>
-                  )}
-                  {table.getRowModel().rows.map(row => (
-                    <GridRow
-                      columns={ columns }
-                      isSelected={ row.getIsSelected() }
-                      key={ row.id }
-                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                      row={ row }
-                      tableElement={ tableElement }
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </thead>
+              <tbody className="ant-table-tbody">
+                {table.getRowModel().rows.length === 0 && (
+                <tr className={ 'ant-table-row' }>
+                  <td
+                    className='ant-table-cell ant-table-cell__no-data'
+                    colSpan={ table.getAllColumns().length }
+                  >
+                    {t('no-data-available-yet')}
+                  </td>
+                </tr>
+                )}
+                {table.getRowModel().rows.map(row => (
+                  <GridRow
+                    columns={ columns }
+                    isSelected={ row.getIsSelected() }
+                    key={ row.id }
+                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                    row={ row }
+                    tableElement={ tableElement }
+                  />
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </ConfigProvider>
+    </div>
   ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
