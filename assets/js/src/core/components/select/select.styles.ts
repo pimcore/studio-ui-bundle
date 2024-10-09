@@ -24,6 +24,7 @@ export const useStyles = createStyles(({ css, token }) => {
         color: ${token.colorIcon} !important;
       }
 
+      // DEFAULT select
       &.ant-select-open, &.ant-select-focused {
         .ant-select-selection-item,
         .ant-select-selection-placeholder {
@@ -46,19 +47,22 @@ export const useStyles = createStyles(({ css, token }) => {
         }
       }
 
-      // disabled state
-      &.ant-select-disabled {
-        .ant-select-selection-item,
+      // MULTIPLE select
+      &.ant-select-multiple {
         .ant-select-selection-placeholder {
-          color: ${token.colorTextDisabled} !important;
+          color: ${token.colorTextPlaceholder} !important;
         }
-
-        .ant-select-arrow {
-          color: ${token.colorTextDisabled} !important;
+        
+        &:hover {
+          .ant-select-selection-item {
+            .ant-select-selection-item-content {
+              color: ${token.colorText} !important;
+            }
+          }
         }
       }
 
-      // warning state
+      // WARNING state
       &.ant-select-status-warning {
         &.ant-select-open, &.ant-select-focused {
           .ant-select-selection-item,
@@ -83,7 +87,7 @@ export const useStyles = createStyles(({ css, token }) => {
         }
       }
 
-      // error state
+      // ERROR state
       &.ant-select-status-error {
         &.ant-select-open, &.ant-select-focused {
           .ant-select-selection-item,
@@ -105,6 +109,22 @@ export const useStyles = createStyles(({ css, token }) => {
           .ant-select-arrow {
             color: ${token.colorErrorHover} !important;
           }
+        }
+      }
+
+      // DISABLED state
+      &.ant-select.ant-select-disabled {
+        .ant-select-selector {
+          border-color: ${token.colorBorder} !important;
+        }
+        
+        .ant-select-selection-item,
+        .ant-select-selection-placeholder {
+          color: ${token.colorTextDisabled} !important;
+        }
+
+        .ant-select-arrow {
+          color: ${token.colorTextDisabled} !important;
         }
       }
     `,

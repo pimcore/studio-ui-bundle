@@ -13,7 +13,7 @@
 
 import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
-import { Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
+import { Checkbox, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { isEmptyValue, isString } from '@Pimcore/utils/type-utils'
@@ -25,7 +25,7 @@ interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, customArrowIcon, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, customArrowIcon, mode, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -50,9 +50,19 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, custom
     )
   }
 
+  const getItemSelectedIcon = (): React.JSX.Element | null => {
+    if (mode === 'multiple') {
+      return <Checkbox checked />
+    }
+
+    return null
+  }
+
   return (
     <AntdSelect
       className={ selectorClassNames }
+      menuItemSelectedIcon={ getItemSelectedIcon() }
+      mode={ mode }
       onDropdownVisibleChange={ handleClick }
       ref={ selectRef }
       suffixIcon={ getSuffixIcon() }
