@@ -21,18 +21,27 @@ import { useStyles } from './select.styles'
 
 interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
+  customIcon?: string
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customArrowIcon, mode, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
+  const [isFocus, setIsFocus] = useState(false)
 
   useImperativeHandle(ref, () => selectRef.current!)
 
   const { styles } = useStyles()
 
-  const selectorClassNames = cn(styles.select)
+  const withCustomIcon = !isEmptyValue(customIcon)
+
+  const selectClassNames = cn(styles.select, {
+    [styles.selectWithCustomIcon]: withCustomIcon
+  })
+  const customIconClassNames = cn(styles.customIcon, {
+    [styles.customIconActive]: isActive || isFocus
+  })
 
   const handleClick = (): void => { setIsActive(!isActive) }
 
@@ -57,15 +66,25 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customArrowIcon
   }
 
   return (
-    <AntdSelect
-      className={ selectorClassNames }
-      menuItemSelectedIcon={ getItemSelectedIcon() }
-      mode={ mode }
-      onDropdownVisibleChange={ handleClick }
-      ref={ selectRef }
-      suffixIcon={ getSuffixIcon() }
-      { ...antdSelectProps }
-    />
+    <div className={ styles.selectContainer }>
+      {withCustomIcon && (
+        <Icon
+          className={ customIconClassNames }
+          name={ customIcon! }
+        />
+      )}
+      <AntdSelect
+        className={ selectClassNames }
+        menuItemSelectedIcon={ getItemSelectedIcon() }
+        mode={ mode }
+        onBlur={ () => { setIsFocus(false) } }
+        onDropdownVisibleChange={ handleClick }
+        onFocus={ () => { setIsFocus(true) } }
+        ref={ selectRef }
+        suffixIcon={ getSuffixIcon() }
+        { ...antdSelectProps }
+      />
+    </div>
   )
 })
 

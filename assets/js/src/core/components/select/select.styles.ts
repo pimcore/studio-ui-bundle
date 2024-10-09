@@ -13,8 +13,20 @@
 
 import { createStyles } from 'antd-style'
 
+const ICON_WIDTH = 16
+
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    selectContainer: css`
+      position: relative;
+      
+      &:hover, &:focus {
+        .pimcore-icon {
+          color: ${token.colorPrimary} !important;
+        }
+      }
+    `,
+
     select: css`
       .ant-select-selector {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
@@ -154,6 +166,24 @@ export const useStyles = createStyles(({ css, token }) => {
 
     arrowIcon: css`
       pointer-events: none !important
+    `,
+
+    selectWithCustomIcon: css`
+      .ant-select-selector {
+        padding: 0 ${token.controlPaddingHorizontal}px 0 ${token.controlPaddingHorizontal + ICON_WIDTH + token.marginXXS}px !important;
+      }
+    `,
+
+    customIcon: css`
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+    `,
+
+    customIconActive: css`
+      color: ${token.colorPrimary} !important;
     `
   }
 })
