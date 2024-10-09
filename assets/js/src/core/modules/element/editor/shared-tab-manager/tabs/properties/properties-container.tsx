@@ -13,7 +13,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type InputRef, Select as AntdSelect } from 'antd'
+import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { usePropertyGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
@@ -152,25 +152,20 @@ export const PropertiesContainer = (): React.JSX.Element => {
 
             {!createManualPropertyMode && (
               <Split size='mini'>
-                <AntdSelect
+                <Select
                   filterOption={ (input, option) => {
-                    return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
+                    return (option?.label as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
                   } }
                   key={ 'properties-select' }
                   loading={ isLoading }
                   onSelect={ onPredefinedPropertyChange }
+                  options={ data?.items?.map((item) => ({
+                    label: item.name,
+                    value: item.id
+                  })) }
                   placeholder={ t('properties.predefined-properties') }
                   showSearch
-                >
-                  {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
-                    <AntdSelect.Option
-                      key={ item.id }
-                      value={ item.id }
-                    >
-                      {item.name}
-                    </AntdSelect.Option>
-                  ))}
-                </AntdSelect>
+                />
 
                 <IconTextButton
                   icon={ 'PlusCircleOutlined' }

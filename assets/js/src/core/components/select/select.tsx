@@ -19,13 +19,11 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { isEmptyValue, isString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './select.styles'
 
-const { Option } = AntdSelect
-
 interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, customArrowIcon, mode, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customArrowIcon, mode, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -67,16 +65,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ options, custom
       ref={ selectRef }
       suffixIcon={ getSuffixIcon() }
       { ...antdSelectProps }
-    >
-      {options?.map(option => (
-        <Option
-          key={ option.value }
-          value={ option.value }
-        >
-          {option.label}
-        </Option>
-      ))}
-    </AntdSelect>
+    />
   )
 })
 
