@@ -39,6 +39,10 @@ export interface AssetContextMenuRename {
   onClick: () => void
 }
 
+export interface AssetContextMenuDelete {
+  onClick: () => void
+}
+
 export interface AssetContextMenuCopy extends NodeIdAware {}
 export interface AssetContextMenuRefresh extends NodeIdAware {}
 export interface AssetContextMenuDownloadAsZip extends NodeAware {}
@@ -49,7 +53,7 @@ export interface UseAssetActionsHookReturn {
   copy: (props: AssetContextMenuCopy) => ItemType
   paste: () => ItemType | null
   cut: () => ItemType
-  remove: () => ItemType
+  remove: (props: AssetContextMenuDelete) => ItemType
   downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
   advanced: () => ItemType
   refresh: (props: AssetContextMenuRefresh) => ItemType
@@ -124,15 +128,12 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const remove = (): ItemType => {
+  const remove: UseAssetActionsHookReturn['rename'] = ({ onClick }): ItemType => {
     return {
       label: t('asset.tree.context-menu.delete'),
       key: 'delete',
       icon: <Icon name={ 'delete-outlined' } />,
-      disabled: true,
-      onClick: () => {
-        console.log('delete')
-      }
+      onClick
     }
   }
 

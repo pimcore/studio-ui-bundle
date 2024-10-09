@@ -6,6 +6,19 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            elementDelete: build.mutation<ElementDeleteApiResponse, ElementDeleteApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/elements/${queryArg.elementType}/delete/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Elements"],
+            }),
+            elementGetDeleteInfo: build.query<ElementGetDeleteInfoApiResponse, ElementGetDeleteInfoApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/elements/${queryArg.elementType}/delete-info/${queryArg.id}`,
+                }),
+                providesTags: ["Elements"],
+            }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/elements/${queryArg.elementType}/path`,
@@ -17,6 +30,24 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type ElementDeleteApiResponse =
+    /** status 200 Successfully deleted element */ void | /** status 201 Successfully created jobRun for deleting element and its children */ {
+        /** ID of created jobRun */
+        id: number;
+    };
+export type ElementDeleteApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementGetDeleteInfoApiResponse = /** status 200 Get delete info for an element */ DeleteInfo;
+export type ElementGetDeleteInfoApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
 export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
     id: number;
@@ -37,4 +68,14 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export const { useElementGetIdByPathQuery } = injectedRtkApi;
+export type DeleteInfo = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** hasDependencies */
+    hasDependencies: boolean;
+    /** canUseRecycleBin */
+    canUseRecycleBin: boolean;
+};
+export const { useElementDeleteMutation, useElementGetDeleteInfoQuery, useElementGetIdByPathQuery } = injectedRtkApi;

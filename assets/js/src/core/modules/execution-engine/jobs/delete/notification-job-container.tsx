@@ -18,14 +18,24 @@ import { useJobs } from '../../hooks/useJobs'
 import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import {DeleteJob} from "@Pimcore/modules/execution-engine/jobs/delete/factory";
 
-export const NotificationJobContainer = (props: JobProps): React.JSX.Element => {
+export interface DeleteJobProps extends JobProps {
+  config: DeleteJob['config']
+}
+
+export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Element => {
   const { id, topics, status, action } = props
   const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
   const [progress, setProgress] = useState<number>(0)
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
+  const [title, setTitle] = useState(props.title)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -35,16 +45,11 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
 
       openSEEvent()
     }
-  }, [])
+  }, [props.status])
 
   return (
     <JobView
       failureButtonActions={ [
-        {
-          label: t('jobs.job.button-retry'),
-          handler: failureButtonHandler
-        },
-
         {
           label: t('jobs.job.button-hide'),
           handler: () => { removeJob(id) }
@@ -53,8 +58,12 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide'),
-          handler: () => { removeJob(id) }
+          label: t('jobs.job.button-hide-and-reload'),
+          handler: () => {
+            console.log('parentFolder', parseInt(props.config.parentFolder))
+            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
+            removeJob(id)
+          }
         }
       ] }
 
@@ -62,14 +71,6 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
       progress={ progress }
     />
   )
-
-  function failureButtonHandler (): void {
-    updateJob(id, {
-      status: JobStatus.QUEUED
-    })
-
-    openSEEvent()
-  }
 
   function openHandler (): void {
     action().then(actionJobId => {
@@ -79,14 +80,12 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
 
   function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
-    console.log(data)
 
     if (data.jobRunId !== jobId.current) {
       return
     }
 
     if (data.progress !== undefined) {
-      console.log(data.progress)
       setProgress(data.progress as number)
     }
 

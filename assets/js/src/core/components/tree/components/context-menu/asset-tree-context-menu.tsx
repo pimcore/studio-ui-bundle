@@ -17,13 +17,22 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
-import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
+import { Upload, type UploadChangeParam, type UploadProps } from '@Pimcore/components/upload/upload'
 import { api as assetApi, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { useInputModal } from '@Pimcore/components/modal/input-modal/hooks/use-input-modal'
+import {
+  type ConfirmationModal,
+  type InputModal,
+  useFormModal
+} from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type Store } from 'antd/es/form/interface'
 import { useAssetActions } from '@Pimcore/components/tree/components/context-menu/hooks/use-asset-actions'
+import { Box } from '@Pimcore/components/box/box'
+import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -33,11 +42,14 @@ export interface AssetTreeContextMenuProps {
 export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  const { addJob } = useJobs()
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
   const [defaultValue, setDefaultValue] = useState<Store>({})
+  const [confirmationText, setConfirmationText] = useState<string | React.JSX.Element>('')
   const [assetRename] = useAssetPatchByIdMutation()
+  const [assetDelete] = useElementDeleteMutation()
   const {
     addFolder,
     rename,
@@ -51,9 +63,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     requestTranslations
   } = useAssetActions()
 
-  console.log('node', props.node)
-
-  const renameSubmit = async (form: FormInstance<any>): Promise<void> => {
+  const onRenameSubmit = async (form: FormInstance<any>): Promise<void> => {
     const nodeId = parseInt(props.node!.id)
     const assetRenameTask = assetRename({
       body: {
@@ -65,14 +75,11 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     })
 
     try {
-      await assetRenameTask.unwrap()
+      await assetRenameTask
 
-      // clear cache
-      console.log('cacheClear')
       dispatch(
         assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(15833)
-          // invalidatingTags.ASSET_LIST()
+          invalidatingTags.ASSET_TREE_ID(parseInt(props.node!.parentId!))
         )
       )
     } catch (error) {
@@ -80,10 +87,53 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
+  const onConfirmation = async (): Promise<void> => {
+    let promiseResolve: UploadChangeParam['promiseResolve'] = () => {}
+    const promise: Promise<number> | undefined = new Promise(resolve => {
+      promiseResolve = resolve
+    })
+    const promiseTmpHolder = { promise, promiseResolve }
+
+    if (props.node!.type === 'folder') {
+      addJob(createDeleteJob({
+        title: 'Deleting Folder',
+        topics: [topics['deletion-finished'], ...defaultTopics],
+        action: async () => {
+          return await promiseTmpHolder.promise
+        },
+        parentFolder: props.node!.parentId!
+      }))
+    }
+
+    try {
+      const nodeId = parseInt(props.node!.id)
+      const response = await assetDelete({
+        id: nodeId,
+        elementType: 'asset'
+      })
+
+      if (response !== undefined) {
+        // @ts-expect-error expected issue - response.data is there
+        promiseTmpHolder.promiseResolve(response.data.id as number)
+      }
+
+      console.log(response)
+    } catch (error) {
+      console.error('Error deleting asset', error)
+    }
+
+    console.log(props.node)
+  }
+
   const {
-    showModal: showRenameModal,
-    renderModal: RenameModal
-  } = useInputModal({ type: 'input', submitCallback: renameSubmit })
+    showModal: showInputModal,
+    renderModal: InputModal
+  } = useFormModal<InputModal>({ type: 'input' })
+
+  const {
+    showModal: showConfirmationModal,
+    renderModal: ConfirmationModal
+  } = useFormModal<ConfirmationModal>({ type: 'confirmation' })
 
   const items: MenuProps['items'] = [
     {
@@ -118,14 +168,24 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       onClick: () => {
         if (props.node !== undefined) {
           setDefaultValue({ input: props.node?.label })
-          showRenameModal()
+          showInputModal()
         }
       }
     }),
     copy({ nodeId: props.node?.id ?? null }),
     paste(),
     cut(),
-    remove(),
+    remove({
+      onClick: () => {
+        setConfirmationText(() => (
+          <Box component={ 'center' }>
+            <span>Do you really want to delete this item?</span> <br />
+            <b>{props.node?.label}</b>
+          </Box>
+        ))
+        showConfirmationModal()
+      }
+    }),
     downloadAsZip({
       node: props.node ?? null
     }),
@@ -153,10 +213,17 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   return (
     <>
-      <RenameModal
+      <InputModal
         initialValues={ defaultValue }
         label={ 'Please enter the new name' }
+        onSubmit={ onRenameSubmit }
         title={ 'Rename' }
+      />
+
+      <ConfirmationModal
+        onSubmit={ onConfirmation }
+        text={ confirmationText }
+        title={ 'Confirmation' }
       />
 
       <Upload { ...uploadFile }>
