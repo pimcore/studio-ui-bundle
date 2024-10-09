@@ -154,8 +154,6 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function onUpdateCellData ({ value, columnId, rowData }: OnUpdateCellDataEvent): void {
-    console.log('----> updating cell data ')
-
     const columnIdentifier = encodeColumnIdentifier(columnId)
     const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
 
@@ -227,16 +225,11 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function prepareAndFetchListing (): Promise<any> | undefined {
-    console.log('preparing and fetching listing')
-    console.log({ columns })
-
     if (columns.length === 0) {
       return
     }
 
     const requestData = getQueryArgs()
-
-    console.log('should fetch listing', requestData)
 
     return fetchListing({
       ...requestData

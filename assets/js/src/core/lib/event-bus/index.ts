@@ -43,8 +43,6 @@ class EventBus implements AbstractEventBus {
 
     this.subscribers.push(newSubscriber)
 
-    console.log(this.subscribers)
-
     return newSubscriber
   }
 
@@ -55,8 +53,6 @@ class EventBus implements AbstractEventBus {
   publish (event: AbstractEvent): void {
     this.subscribers.forEach(subscriber => {
       if (subscriber.identifier.type === event.identifier.type && subscriber.identifier.id === event.identifier.id) {
-        console.log('Event published', event)
-
         subscriber.callback(event)
       }
     })
