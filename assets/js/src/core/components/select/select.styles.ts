@@ -45,6 +45,68 @@ export const useStyles = createStyles(({ css, token }) => {
           color: ${token.colorPrimary} !important;
         }
       }
+
+      // disabled state
+      &.ant-select-disabled {
+        .ant-select-selection-item,
+        .ant-select-selection-placeholder {
+          color: ${token.colorTextDisabled} !important;
+        }
+
+        .ant-select-arrow {
+          color: ${token.colorTextDisabled} !important;
+        }
+      }
+
+      // warning state
+      &.ant-select-status-warning {
+        &.ant-select-open, &.ant-select-focused {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorWarningHover} !important;
+          }
+        }
+        
+        &:hover {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorWarningHover} !important;
+          }
+        }
+      }
+
+      // error state
+      &.ant-select-status-error {
+        &.ant-select-open, &.ant-select-focused {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorErrorHover} !important;
+          }
+        }
+
+        &:hover {
+          .ant-select-selection-item,
+          .ant-select-selection-placeholder {
+            color: ${token.colorText} !important;
+          }
+
+          .ant-select-arrow {
+            color: ${token.colorErrorHover} !important;
+          }
+        }
+      }
     `,
 
     arrowIcon: css`
