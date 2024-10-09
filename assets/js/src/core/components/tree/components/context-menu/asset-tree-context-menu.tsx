@@ -88,13 +88,15 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   }
 
   const onConfirmation = async (): Promise<void> => {
+    const isFolder = props.node!.type === 'folder'
     let promiseResolve: UploadChangeParam['promiseResolve'] = () => {}
     const promise: Promise<number> | undefined = new Promise(resolve => {
       promiseResolve = resolve
     })
     const promiseTmpHolder = { promise, promiseResolve }
 
-    if (props.node!.type === 'folder') {
+    // TODO: add multiple deletion // this also requires mercure
+    if (isFolder) {
       addJob(createDeleteJob({
         title: 'Deleting Folder',
         topics: [topics['deletion-finished'], ...defaultTopics],
@@ -105,6 +107,10 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       }))
     }
 
+    if (!isFolder) {
+      // instand clear
+    }
+
     try {
       const nodeId = parseInt(props.node!.id)
       const response = await assetDelete({
@@ -112,7 +118,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         elementType: 'asset'
       })
 
-      if (response !== undefined) {
+      if (isFolder && response !== undefined) {
         // @ts-expect-error expected issue - response.data is there
         promiseTmpHolder.promiseResolve(response.data.id as number)
       }

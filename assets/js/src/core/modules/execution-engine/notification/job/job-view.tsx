@@ -29,6 +29,7 @@ interface ButtonAction {
 export interface JobViewProps extends JobProps {
   successButtonActions?: ButtonAction[]
   failureButtonActions?: ButtonAction[]
+  finishedWithErrorsButtonActions?: ButtonAction[]
   progress: number
 }
 
@@ -68,6 +69,31 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
                 { props.successButtonActions?.map((action, index) => (
+                  <Button
+                    className={ styles.buttonStyle }
+                    key={ index }
+                    onClick={ action.handler }
+                    type='link'
+                  >{action.label}</Button>
+                )) }
+              </Flex>
+            </Flex>
+          ) }
+
+          { props.status === JobStatus.FINISHED_WITH_ERRORS && (
+            <Flex
+              align='center'
+              justify='space-between'
+            >
+              <Flex
+                align='center'
+                gap={ 'small' }
+              >
+                <Icon name='check-circle-filled' /><span>{ t('jobs.job.finished', { title: props.title }) }</span>
+              </Flex>
+              <Flex gap={ 'small' }>
+                {/* todo check button type */}
+                { props.finishedWithErrorsButtonActions?.map((action, index) => (
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
