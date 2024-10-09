@@ -62,6 +62,13 @@ export const useStyles = createStyles(({ css, token }) => {
         }
       }
 
+      // SEARCH select
+      &.ant-select-show-search {
+        .ant-select-selection-placeholder {
+          color: ${token.colorTextPlaceholder} !important;
+        }
+      }
+
       // WARNING state
       &.ant-select-status-warning {
         &.ant-select-open, &.ant-select-focused {
@@ -72,6 +79,14 @@ export const useStyles = createStyles(({ css, token }) => {
 
           .ant-select-arrow {
             color: ${token.colorWarningHover} !important;
+          }
+        }
+        
+        &.ant-select-show-search, &.ant-select-multiple {
+          &:hover {
+            .ant-select-selection-placeholder {
+              color: ${token.colorTextPlaceholder} !important;
+            }
           }
         }
         
@@ -97,6 +112,14 @@ export const useStyles = createStyles(({ css, token }) => {
 
           .ant-select-arrow {
             color: ${token.colorErrorHover} !important;
+          }
+        }
+
+        &.ant-select-show-search, &.ant-select-multiple {
+          &:hover {
+            .ant-select-selection-placeholder {
+              color: ${token.colorTextPlaceholder} !important;
+            }
           }
         }
 
