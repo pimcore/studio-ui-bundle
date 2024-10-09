@@ -42,6 +42,7 @@ import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { eventBus } from '@Pimcore/lib/event-bus'
 
 interface DataPatch {
   columnId: string
@@ -76,6 +77,16 @@ export const ListContainerInner = (): React.JSX.Element => {
     prepareAndFetchListing()?.catch((error) => {
       console.log(error)
     })
+
+    const subscriber = eventBus.subscribe({ type: 'asset:listing:refresh', id: assetId }, () => {
+      prepareAndFetchListing()?.catch((error) => {
+        console.log(error)
+      })
+    })
+
+    return () => {
+      eventBus.unsubscribe(subscriber)
+    }
   }, [columns, filterOptions, page, pageSize, sorting])
 
   useEffect(() => {
@@ -216,11 +227,16 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   function prepareAndFetchListing (): Promise<any> | undefined {
+    console.log('preparing and fetching listing')
+    console.log({ columns })
+
     if (columns.length === 0) {
       return
     }
 
     const requestData = getQueryArgs()
+
+    console.log('should fetch listing', requestData)
 
     return fetchListing({
       ...requestData
