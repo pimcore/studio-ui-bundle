@@ -119,16 +119,18 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
 
     try {
-      await assetDelete({
-        id: parseInt(props.node!.id),
-        elementType: 'asset'
-      })
+      if (!isFolder) {
+        await assetDelete({
+          id: parseInt(props.node!.id),
+          elementType: 'asset'
+        })
 
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(parseInt(props.node!.parentId!))
+        dispatch(
+          assetApi.util.invalidateTags(
+            invalidatingTags.ASSET_TREE_ID(parseInt(props.node!.parentId!))
+          )
         )
-      )
+      }
     } catch (error) {
       console.error('Error deleting asset', error)
     }
