@@ -107,7 +107,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
           const response = (await promise) as any
 
-          if (response.data === undefined) {
+          if (response.data === undefined || response.data === null) {
             throw new Error(response.error.data.message as string ?? 'Error deleting Asset')
           }
 
