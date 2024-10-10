@@ -79,14 +79,12 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
 
   function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
-    console.log(data)
 
     if (data.jobRunId !== jobId.current) {
       return
     }
 
     if (data.progress !== undefined) {
-      console.log(data.progress)
       setProgress(data.progress as number)
     }
 
