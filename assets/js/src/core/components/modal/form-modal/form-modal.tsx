@@ -12,12 +12,13 @@
 */
 
 import React from 'react'
-import { Form, type FormInstance, Modal, Space } from 'antd'
+import { Form, type FormInstance, Modal } from 'antd'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useForm } from 'antd/es/form/Form'
 import { useStyle } from './form-modal.styles'
 import { type Store } from 'antd/es/form/interface'
 import type { ModalProps as AntModalProps } from 'antd/es/modal/interface'
+import { Space } from '@Pimcore/components/space/space'
 
 export type FormModalProps = AntModalProps & {
   title?: string
@@ -59,8 +60,7 @@ export const FormModal = (props: FormModalProps): React.JSX.Element => {
     >
       <Space
         className={ 'w-full' }
-        size={ 10 }
-        style={ { paddingTop: 10 } }
+        size={ 'extra-small' }
       >
         <Form
           className={ 'w-full' }
