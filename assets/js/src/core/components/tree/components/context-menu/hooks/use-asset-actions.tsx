@@ -138,7 +138,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   }
 
   const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = ({ node }): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
-    if (node === null || node.type !== 'folder') return null
+    if (node === null || node.type === 'folder') return null
 
     // todo: move that to download (downloadAsZip) is only for folders
     return {
