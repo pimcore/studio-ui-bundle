@@ -69,7 +69,6 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
         {
           label: t('jobs.job.button-hide-and-reload'),
           handler: () => {
-            console.log('parentFolder', parseInt(props.config.parentFolder))
             dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
