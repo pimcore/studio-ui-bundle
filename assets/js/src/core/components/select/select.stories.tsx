@@ -14,28 +14,30 @@
 import { type Meta } from '@storybook/react'
 import { Select } from '@Pimcore/components/select/select'
 
-const config: Meta = {
-  title: 'Components/Controls/Select',
-  component: Select,
-  tags: ['autodocs']
-}
-
 const SAMPLE_SELECT_OPTIONS = [
   { value: '1', label: 'Option 1' },
   { value: '2', label: 'Option 2' },
   { value: '3', label: 'Option 3' }
 ]
 
-export const _default = {
+const config: Meta = {
+  title: 'Components/Controls/Select',
   args: {
     options: SAMPLE_SELECT_OPTIONS,
+    width: 250
+  },
+  component: Select,
+  tags: ['autodocs']
+}
+
+export const _default = {
+  args: {
     placeholder: 'Choose an option...'
   }
 }
 
 export const Multiple = {
   args: {
-    options: SAMPLE_SELECT_OPTIONS,
     placeholder: 'Choose an option...',
     mode: 'multiple'
   }
@@ -43,28 +45,27 @@ export const Multiple = {
 
 export const WithSearch = {
   args: {
-    options: SAMPLE_SELECT_OPTIONS,
-    placeholder: 'Choose an option...'
+    placeholder: 'Choose an option...',
+    showSearch: true
   }
 }
 
 export const WithCustomIcon = {
   args: {
-    options: SAMPLE_SELECT_OPTIONS,
-    placeholder: 'Choose an option...'
+    placeholder: 'Choose an option...',
+    customIcon: 'export'
   }
 }
 
 export const WithCustomArrowIcon = {
   args: {
-    options: SAMPLE_SELECT_OPTIONS,
-    placeholder: 'Choose an option...'
+    placeholder: 'Choose an option...',
+    customArrowIcon: 'export'
   }
 }
 
 export const WithWarning = {
   args: {
-    options: SAMPLE_SELECT_OPTIONS,
     placeholder: 'Choose an option...',
     status: 'warning'
   }
@@ -72,7 +73,6 @@ export const WithWarning = {
 
 export const WithError = {
   args: {
-    options: SAMPLE_SELECT_OPTIONS,
     placeholder: 'Choose an option...',
     status: 'error'
   }

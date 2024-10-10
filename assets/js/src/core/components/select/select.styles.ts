@@ -12,10 +12,15 @@
 */
 
 import { createStyles } from 'antd-style'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+
+interface StylesProps {
+  width?: number
+}
 
 const ICON_WIDTH = 16
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
   return {
     selectContainer: css`
       position: relative;
@@ -110,6 +115,8 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     select: css`
+      width: ${!isEmptyValue(props.width) ? `${props.width}px` : 'initial'};
+      
       .ant-select-selector {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
       }
@@ -185,8 +192,10 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     selectWithCustomIcon: css`
-      .ant-select-selector {
-        padding: 0 ${token.controlPaddingHorizontal}px 0 ${token.controlPaddingHorizontal + ICON_WIDTH + token.marginXXS}px !important;
+      &.ant-select {
+        .ant-select-selector {
+          padding: 0 ${token.controlPaddingHorizontal}px 0 ${token.controlPaddingHorizontal + ICON_WIDTH + token.marginXXS}px !important;
+        }
       }
     `,
 
@@ -196,6 +205,7 @@ export const useStyles = createStyles(({ css, token }) => {
       top: 50%;
       transform: translateY(-50%);
       z-index: 1;
+      color: ${token.colorIcon};
     `,
 
     customIconActive: css`

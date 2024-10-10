@@ -22,9 +22,10 @@ import { useStyles } from './select.styles'
 interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  width?: number
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -32,7 +33,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   useImperativeHandle(ref, () => selectRef.current!)
 
-  const { styles } = useStyles()
+  const { styles } = useStyles({ width })
 
   const withCustomIcon = !isEmptyValue(customIcon)
   const isStatusWarning = status === 'warning'
