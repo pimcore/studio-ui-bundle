@@ -65,10 +65,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   }
 
   const applyUpdate = (): void => {
-    patchAsset(assetPatchForUpdate()).catch((error) => {
-      console.error(`Failed to patch assets ${error}`)
-    }).then((result) => {
-      console.log('----> then', result)
+    patchAsset(assetPatchForUpdate()).then(() => {
+      console.log('----> reload the app')
     }).catch((error) => { console.error(`Failed to patch assets ${error}`) })
   }
 
