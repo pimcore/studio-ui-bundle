@@ -14,7 +14,6 @@
 import type { Meta } from '@storybook/react'
 import React from 'react'
 import { Form } from './form'
-import { Segmented } from '../segmented/segmented'
 import { DatePicker, Input, InputNumber, Select } from 'antd'
 import { Button } from '../button/button'
 
