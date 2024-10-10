@@ -17,8 +17,6 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     formModal: css`
       .ant-space {
-        width: 100%;
-        
         .ant-space-item {
             width: 100%;
         }

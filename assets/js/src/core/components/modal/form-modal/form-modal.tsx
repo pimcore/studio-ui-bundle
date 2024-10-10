@@ -58,6 +58,7 @@ export const FormModal = (props: FormModalProps): React.JSX.Element => {
       ) }
     >
       <Space
+        className={ 'w-full' }
         size={ 10 }
         style={ { paddingTop: 10 } }
       >
