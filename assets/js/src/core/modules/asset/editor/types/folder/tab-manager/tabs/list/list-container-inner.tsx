@@ -46,6 +46,7 @@ import { eventBus } from '@Pimcore/lib/event-bus'
 
 interface DataPatch {
   columnId: string
+  locale: string | null | undefined
   rowIndex: number
   value: any
 }
@@ -166,6 +167,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         ...oldPatches,
         {
           columnId: columnIdentifier.key,
+          locale: columnIdentifier.locale,
           rowIndex: rowData.id,
           value
         }
@@ -214,7 +216,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         })
 
         setDataPatches((oldPatches) => {
-          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && patch.rowIndex === rowData.id))
+          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && column.locale === columnIdentifier.locale && patch.rowIndex === rowData.id))
         })
       }).catch((error) => {
         console.error(error)
@@ -296,7 +298,9 @@ export const ListContainerInner = (): React.JSX.Element => {
           }
 
           const patchedColumns = item.columns!.map((column) => {
-            const patch = currentDataPatches.find((patch) => patch.rowIndex === itemId && patch.columnId === column.key)
+            const patch = currentDataPatches.find((_patch) => {
+              return _patch.rowIndex === itemId && _patch.columnId === column.key && _patch.locale === column.locale
+            })
 
             if (patch === undefined) {
               return column
