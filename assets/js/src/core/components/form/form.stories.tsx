@@ -23,22 +23,26 @@ const config: Meta = {
   component: () => {
     return (
       <Form layout='vertical'>
-        <Form.Item label="Input" name="Input" rules={[{ required: true, message: 'Please input!' }]}>
+        <Form.Item
+          label="Input"
+          name="Input"
+          rules={ [{ required: true, message: 'Please input!' }] }
+        >
           <Input />
         </Form.Item>
 
         <Form.Item
           label="InputNumber"
           name="InputNumber"
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={ [{ required: true, message: 'Please input!' }] }
         >
-          <InputNumber style={{ width: '100%' }} />
+          <InputNumber style={ { width: '100%' } } />
         </Form.Item>
 
         <Form.Item
           label="TextArea"
           name="TextArea"
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={ [{ required: true, message: 'Please input!' }] }
         >
           <Input.TextArea />
         </Form.Item>
@@ -46,7 +50,7 @@ const config: Meta = {
         <Form.Item
           label="Select"
           name="Select"
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={ [{ required: true, message: 'Please input!' }] }
         >
           <Select />
         </Form.Item>
@@ -54,13 +58,16 @@ const config: Meta = {
         <Form.Item
           label="DatePicker"
           name="DatePicker"
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={ [{ required: true, message: 'Please input!' }] }
         >
           <DatePicker />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button
+            htmlType="submit"
+            type="primary"
+          >
             Submit
           </Button>
         </Form.Item>
