@@ -240,6 +240,7 @@ jobs.notification.jobs_other: "{{count}} Actions"
 jobs.job.in-progress: "{{title}} in progress"
 jobs.job.failed: "{{title}} failed"
 jobs.job.finished: "{{title}} finished"
+jobs.job.finished-with-errors: "{{title}} finished with errors"
 jobs.job.progress: "{{progress}}% completed"
 jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
@@ -267,10 +268,24 @@ choose-media: Choose Media
 current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
 apply: Apply
-asset.tree.context-menu.add-assets: Add Asset(s)
-asset.tree.context-menu.add-assets.upload-files: Upload Files
-asset.tree.context-menu.add-assets.upload-zip: Upload Zip
 close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+element.tree.context-menu.add-assets: Add Asset(s)
+element.tree.context-menu.add-assets.upload-files: Upload Files
+element.tree.context-menu.add-assets.upload-zip: Upload Zip
+element.tree.context-menu.add-folder: Add Folder
+element.tree.context-menu.rename: Rename
+element.tree.context-menu.copy: Copy
+element.tree.context-menu.paste: Paste
+element.tree.context-menu.cut: Cut
+element.tree.context-menu.delete: Delete
+element.tree.context-menu.download-as-zip: Download as ZIP
+element.tree.context-menu.advanced: Advanced
+element.tree.context-menu.search-and-move: Search & Move
+element.tree.context-menu.lock: Lock
+element.tree.context-menu.lock-and-propagate-to-children: Lock and propagate to children
+element.tree.context-menu.expand-children: Expand Children
+element.tree.context-menu.refresh: Refresh
+element.tree.context-menu.request-translations: Request Translations

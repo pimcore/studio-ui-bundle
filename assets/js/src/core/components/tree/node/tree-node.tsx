@@ -28,6 +28,8 @@ export interface TreeNodeProps {
   level: number
   hasChildren?: boolean
   metaData?: any
+  type?: string
+  parentId?: string
 }
 
 const defaultProps: TreeNodeProps = {

@@ -19,7 +19,8 @@ export const topics: Record<string, string> = {
   'job-finished-with-errors': 'job-finished-with-errors',
   'job-failed': 'job-failed',
   'asset-upload-finished': 'asset-upload-finished',
-  'zip-upload-finished': 'zip-upload-finished'
+  'zip-upload-finished': 'zip-upload-finished',
+  'deletion-finished': 'deletion-finished'
 }
 
 export const defaultTopics: string[] = [
