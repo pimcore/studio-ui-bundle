@@ -19,6 +19,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementFolderCreate: build.mutation<ElementFolderCreateApiResponse, ElementFolderCreateApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/elements/${queryArg.elementType}/folder/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.folderData,
+                }),
+                invalidatesTags: ["Elements"],
+            }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/studio/api/elements/${queryArg.elementType}/path`,
@@ -47,6 +55,14 @@ export type ElementGetDeleteInfoApiArg = {
     id: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
+};
+export type ElementFolderCreateApiResponse = /** status 200 Successfully created folder */ void;
+export type ElementFolderCreateApiArg = {
+    /** ParentId of the element */
+    parentId: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    folderData: FolderData;
 };
 export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
@@ -78,4 +94,13 @@ export type DeleteInfo = {
     /** canUseRecycleBin */
     canUseRecycleBin: boolean;
 };
-export const { useElementDeleteMutation, useElementGetDeleteInfoQuery, useElementGetIdByPathQuery } = injectedRtkApi;
+export type FolderData = {
+    /** Folder Name */
+    folderName: string;
+};
+export const {
+    useElementDeleteMutation,
+    useElementGetDeleteInfoQuery,
+    useElementFolderCreateMutation,
+    useElementGetIdByPathQuery,
+} = injectedRtkApi;
