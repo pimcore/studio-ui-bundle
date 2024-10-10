@@ -70,7 +70,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const addFolder = (): ItemType => {
     return {
-      label: t('asset.tree.context-menu.add-folder'),
+      label: t('element.tree.context-menu.add-folder'),
       key: 'add-folder',
       icon: <Icon name={ 'folder' } />,
       disabled: true,
@@ -82,7 +82,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const rename: UseAssetActionsHookReturn['rename'] = ({ onClick }): ItemType => {
     return {
-      label: t('asset.tree.context-menu.rename'),
+      label: t('element.tree.context-menu.rename'),
       key: 'rename',
       icon: <Icon name={ 'type-square' } />,
       onClick
@@ -91,7 +91,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const copy: UseAssetActionsHookReturn['copy'] = ({ nodeId }): ItemType => {
     return {
-      label: t('asset.tree.context-menu.copy'),
+      label: t('element.tree.context-menu.copy'),
       key: 'copy',
       icon: <Icon name={ 'clipboard' } />,
       onClick: () => {
@@ -106,7 +106,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     if (nodeId === null) return null
 
     return {
-      label: t('asset.tree.context-menu.paste'),
+      label: t('element.tree.context-menu.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
       disabled: true,
@@ -118,7 +118,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const cut = (): ItemType => {
     return {
-      label: t('asset.tree.context-menu.cut'),
+      label: t('element.tree.context-menu.cut'),
       key: 'cut',
       icon: <Icon name={ 'scissors-cut' } />,
       disabled: true,
@@ -130,7 +130,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const remove: UseAssetActionsHookReturn['rename'] = ({ onClick }): ItemType => {
     return {
-      label: t('asset.tree.context-menu.delete'),
+      label: t('element.tree.context-menu.delete'),
       key: 'delete',
       icon: <Icon name={ 'delete-outlined' } />,
       onClick
@@ -142,7 +142,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
     // todo: move that to download (downloadAsZip) is only for folders
     return {
-      label: t('asset.tree.context-menu.download-as-zip'),
+      label: t('element.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
       icon: <Icon name={ 'file-download-zip-01' } />,
       onClick: () => {
@@ -170,13 +170,13 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   // TODO: this should go to a separate hook
   const advanced = (): ItemType => {
     return {
-      label: t('asset.tree.context-menu.advanced'),
+      label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon name={ 'more' } />,
       disabled: true,
       children: [
         {
-          label: t('asset.tree.context-menu.search-and-move'),
+          label: t('element.tree.context-menu.search-and-move'),
           key: 'advanced-search-and-move',
           icon: <Icon name={ 'folder-search' } />,
           onClick: () => {
@@ -184,12 +184,12 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
           }
         },
         {
-          label: t('asset.tree.context-menu.lock'),
+          label: t('element.tree.context-menu.lock'),
           key: 'advanced-lock',
           icon: <Icon name={ 'lock-01' } />,
           children: [
             {
-              label: t('asset.tree.context-menu.lock'),
+              label: t('element.tree.context-menu.lock'),
               key: 'advanced.lock.lock',
               icon: <Icon name={ 'lock-01' } />,
               onClick: () => {
@@ -197,7 +197,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
               }
             },
             {
-              label: t('asset.tree.context-menu.lock-and-propagate-to-children'),
+              label: t('element.tree.context-menu.lock-and-propagate-to-children'),
               key: 'advanced.lock.lock-and-propagate-to-children',
               icon: <Icon name={ 'file-lock-02' } />,
               onClick: () => {
@@ -207,7 +207,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
           ]
         },
         {
-          label: t('asset.tree.context-menu.expand-children'),
+          label: t('element.tree.context-menu.expand-children'),
           key: 'advanced.expand-children',
           icon: <Icon name={ 'expand-01' } />,
           onClick: () => {
@@ -220,7 +220,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const refresh: UseAssetActionsHookReturn['copy'] = ({ nodeId }): ItemType => {
     return {
-      label: t('asset.tree.context-menu.refresh'),
+      label: t('element.tree.context-menu.refresh'),
       key: 'refresh',
       icon: <Icon name={ 'refresh-ccw-03' } />,
       onClick: () => {
@@ -237,7 +237,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
 
   const requestTranslations = (): ItemType => {
     return {
-      label: t('asset.tree.context-menu.request-translations'),
+      label: t('element.tree.context-menu.request-translations'),
       key: 'request-translations',
       icon: <Icon name={ 'translation' } />,
       disabled: true,

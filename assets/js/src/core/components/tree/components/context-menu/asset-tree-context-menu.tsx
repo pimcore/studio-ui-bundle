@@ -148,13 +148,13 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   const items: MenuProps['items'] = [
     {
-      label: t('asset.tree.context-menu.add-assets'),
+      label: t('element.tree.context-menu.add-assets'),
       key: '1',
       icon: <Icon name={ 'mainAsset' } />,
       children: [
         {
           icon: <Icon name={ 'upload-cloud' } />,
-          label: t('asset.tree.context-menu.add-assets.upload-files'),
+          label: t('element.tree.context-menu.add-assets.upload-files'),
           key: '1-1',
           onClick: () => {
             if (uploadFileRef.current !== null) {
@@ -164,7 +164,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         },
         {
           icon: <Icon name={ 'upload-zip' } />,
-          label: t('asset.tree.context-menu.add-assets.upload-zip'),
+          label: t('element.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
             if (uploadZipRef.current !== null) {
