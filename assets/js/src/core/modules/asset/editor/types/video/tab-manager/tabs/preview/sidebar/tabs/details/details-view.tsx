@@ -12,12 +12,12 @@
 */
 
 import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useStyle } from './details.styles'
 import { Button, Card, Divider } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
 import ButtonGroup from 'antd/es/button/button-group'
 import Meta from 'antd/es/card/Meta'
-import { Select } from '@Pimcore/components/select/select'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import {
@@ -28,7 +28,7 @@ import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbn
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
-import { useStyle } from './details.styles'
+import { Select } from '@Pimcore/components/select/select'
 
 interface VideoEditorSidebarDetailsViewProps {
   width: number
@@ -39,11 +39,6 @@ interface VideoEditorSidebarDetailsViewProps {
   onDropImage: (id: number) => void
   onChangeThumbnail: (thumbnail: string) => void
   onClickDownloadByFormat: (format: string) => void
-}
-
-interface DataType {
-  value: string
-  label: string
 }
 
 export const VideoEditorSidebarDetailsTab = ({
@@ -60,72 +55,57 @@ export const VideoEditorSidebarDetailsTab = ({
   const { t } = useTranslation()
   const [imageSource, setImageSource] = useState('media')
   const [customMode, setCustomMode] = useState('pimcore-system-treepreview')
-  const [downloadFormat, setDownloadFormat] = useState<string>('pimcore-system-treepreview')
+  const [downloadFormat, setDownloadFormat] = useState('pimcore-system-treepreview')
 
-  const getThumbnails = (): DataType[] => thumbnails.map(thumbnail => {
+  const modes = thumbnails.map(thumbnail => {
     return {
       value: thumbnail.id,
       label: thumbnail.text
     }
   })
 
-  const modes = getThumbnails()
-  const downloadFormats = getThumbnails()
+  const downloadFormats = modes
 
-  const onChangeMode = (mode: string): void => {
-    setCustomMode(mode)
-    onChangeThumbnail(mode)
+  let cardContent
+  if (imageSource === 'media') {
+    cardContent = (
+      <>
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
+          onDrop={ onDropAsset }
+        >
+          <DroppableContent imgSrc={ imagePreview } />
+        </Droppable>
+        <Meta
+          title={
+            <Toolbar theme={ 'secondary' }>
+              <div></div>
+            </Toolbar>
+        }
+        />
+      </>
+    )
+  } else {
+    cardContent = (
+      <>
+        <div className={ 'image-preview-container' }>
+          <PimcoreImage
+            src={ imagePreview }
+          />
+        </div>
+        <Meta
+          title={
+            <Toolbar
+              justify={ 'flex-end' }
+              theme={ 'secondary' }
+            >
+              <Button onClick={ onClickApply }>{t('apply')}</Button>
+            </Toolbar>
+          }
+        />
+      </>
+    )
   }
-
-  const onClickDownload = (): void => { onClickDownloadByFormat(downloadFormat) }
-
-  const onClickCurrentPlayerPosition = (): void => { setImageSource('player') }
-
-  const onClickChooseMedia = (): void => { setImageSource('media') }
-
-  const onDropAsset = (e): void => { onDropImage(e.data.id as number) }
-
-  const onClickApply = (): void => { onApplyPlayerPosition() }
-
-  const getCardContent = (): React.JSX.Element => (
-    imageSource === 'media'
-      ? (
-        <>
-          <Droppable
-            isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
-            onDrop={ onDropAsset }
-          >
-            <DroppableContent imgSrc={ imagePreview } />
-          </Droppable>
-          <Meta
-            title={
-              <Toolbar theme={ 'secondary' }>
-                <div></div>
-              </Toolbar>
-              }
-          />
-        </>
-        )
-      : (
-        <>
-          <div className={ 'image-preview-container' }>
-            <PimcoreImage
-              src={ imagePreview }
-            />
-          </div>
-          <Meta
-            title={
-              <Toolbar
-                justify={ 'flex-end' }
-                theme={ 'secondary' }
-              >
-                <Button onClick={ onClickApply }>{t('apply')}</Button>
-              </Toolbar>
-                  }
-          />
-        </>
-        )
-  )
 
   return (
     <Content
@@ -195,10 +175,35 @@ export const VideoEditorSidebarDetailsTab = ({
             </Button>
           </ButtonGroup>
           <Card size={ 'small' }>
-            {getCardContent()}
+            {cardContent}
           </Card>
         </div>
       </div>
     </Content>
   )
+
+  function onChangeMode (mode: string): void {
+    setCustomMode(mode)
+    onChangeThumbnail(mode)
+  }
+
+  function onClickDownload (): void {
+    onClickDownloadByFormat(downloadFormat)
+  }
+
+  function onClickCurrentPlayerPosition (): void {
+    setImageSource('player')
+  }
+
+  function onClickChooseMedia (): void {
+    setImageSource('media')
+  }
+
+  function onDropAsset (e): void {
+    onDropImage(e.data.id as number)
+  }
+
+  function onClickApply (): void {
+    onApplyPlayerPosition()
+  }
 }
