@@ -38,7 +38,7 @@ export const _default = {
 
 export const Multiple = {
   args: {
-    placeholder: 'Choose an option...',
+    defaultValue: 'Default value',
     mode: 'multiple'
   }
 }
@@ -46,7 +46,9 @@ export const Multiple = {
 export const WithSearch = {
   args: {
     placeholder: 'Choose an option...',
-    showSearch: true
+    showSearch: true,
+    filterOption: (input: any, option) =>
+      option.label.toLowerCase().includes(input.toLowerCase())
   }
 }
 
