@@ -13,18 +13,16 @@
 
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
-import { type ArchiveTabManager } from './tab-manager/archive-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const ArchiveContainer = (): React.JSX.Element => {
-  const archiveTabManager = useInjection<ArchiveTabManager>(serviceIds['Asset/Editor/ArchiveTabManager'])
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ archiveTabManager } />
+        <TabsContainer
+          tabManagerServiceId={ 'Asset/Editor/ArchiveTabManager' }
+        />
       }
 
       renderToolbar={

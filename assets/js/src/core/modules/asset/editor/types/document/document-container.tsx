@@ -14,18 +14,15 @@
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { type DocumentTabManager } from './tab-manager/document-tab-manager'
-import { serviceIds } from '@Pimcore/app/config/services'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const DocumentContainer = (): React.JSX.Element => {
-  const documentTabManager = useInjection<DocumentTabManager>(serviceIds['Asset/Editor/DocumentTabManager'])
-
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ documentTabManager } />
+        <TabsContainer
+          tabManagerServiceId={ 'Asset/Editor/DocumentTabManager' }
+        />
       }
 
       renderToolbar={

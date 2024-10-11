@@ -13,19 +13,16 @@
 
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
-import { type UnknownTabManager } from './tab-manager/unknown-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const UnknownContainer = (): React.JSX.Element => {
-  const unknownTabManager = useInjection<UnknownTabManager>(serviceIds['Asset/Editor/UnknownTabManager'])
-
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ unknownTabManager } />
+        <TabsContainer
+          tabManagerServiceId={ 'Asset/Editor/UnknownTabManager' }
+        />
       }
 
       renderToolbar={

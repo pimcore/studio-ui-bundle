@@ -13,19 +13,16 @@
 
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
-import { type AudioTabManager } from './tab-manager/audio-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const AudioContainer = (): React.JSX.Element => {
-  const audioTabManager = useInjection<AudioTabManager>(serviceIds['Asset/Editor/AudioTabManager'])
-
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ audioTabManager } />
+        <TabsContainer
+          tabManagerServiceId={ 'Asset/Editor/AudioTabManager' }
+        />
       }
 
       renderToolbar={

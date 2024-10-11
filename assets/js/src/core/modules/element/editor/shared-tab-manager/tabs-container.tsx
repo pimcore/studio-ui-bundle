@@ -15,15 +15,19 @@ import React from 'react'
 import { EditorTabs as EditorTabsView } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { useTranslation } from 'react-i18next'
 import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
+import { serviceIds } from '@Pimcore/app/config/services'
+import { useInjection } from '@Pimcore/app/depency-injection'
 
-export const TabsContainer = ({ tabManager }: { tabManager: IElementEditorTabManager }): React.JSX.Element => {
+export const TabsContainer = ({ tabManagerServiceId }: { tabManagerServiceId: keyof typeof serviceIds }): React.JSX.Element => {
   const { t } = useTranslation()
+  const tabManager = useInjection<IElementEditorTabManager>(serviceIds[tabManagerServiceId])
 
   const tabs = tabManager.getTabs()
   const preparedTabs = tabs.map((tab, index) => {
     return {
       ...tabs[index],
-      label: typeof tab.label === 'string' ? t(tab.label) : tab.label
+      label: typeof tab.label === 'string' ? t(tab.label) : tab.label,
+      tabManagerServiceId
     }
   })
 

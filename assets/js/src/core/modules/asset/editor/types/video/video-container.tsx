@@ -13,19 +13,16 @@
 
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
-import { type VideoTabManager } from './tab-manager/video-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const VideoContainer = (): React.JSX.Element => {
-  const videoTabManager = useInjection<VideoTabManager>(serviceIds['Asset/Editor/VideoTabManager'])
-
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ videoTabManager } />
+        <TabsContainer
+          tabManagerServiceId={ 'Asset/Editor/VideoTabManager' }
+        />
       }
 
       renderToolbar={

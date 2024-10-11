@@ -69,6 +69,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
   useEffect(() => {
     if (dataObject === undefined) {
       getDataObject()
+    } else {
+      setIsLoading(false)
     }
   }, [dataObject])
 

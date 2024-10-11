@@ -13,19 +13,16 @@
 
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { type ObjectTabManager } from './tab-manager/object-tab-manager'
-import { serviceIds } from '@Pimcore/app/config/services'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 
 const ObjectContainer = (): React.JSX.Element => {
-  const objectEditorTabManager = useInjection<ObjectTabManager>(serviceIds['DataObject/Editor/ObjectTabManager'])
-
   return (
     <TabsToolbarView
       renderTabbar={
-        <TabsContainer tabManager={ objectEditorTabManager } />
+        <TabsContainer
+          tabManagerServiceId={ 'DataObject/Editor/ObjectTabManager' }
+        />
       }
 
       renderToolbar={
