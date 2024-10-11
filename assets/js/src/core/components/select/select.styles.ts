@@ -42,8 +42,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       
       .ant-select-status-warning {
         &.ant-select-open, &.ant-select-focused {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
+          .ant-select-selection-item {
             color: ${token.colorText} !important;
           }
 
@@ -52,17 +51,8 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
           }
         }
 
-        &.ant-select-show-search, &.ant-select-multiple {
-          &:hover {
-            .ant-select-selection-placeholder {
-              color: ${token.colorTextPlaceholder} !important;
-            }
-          }
-        }
-
         &:hover {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
+          .ant-select-selection-item {
             color: ${token.colorText} !important;
           }
 
@@ -83,8 +73,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       
       .ant-select-status-error {
         &.ant-select-open, &.ant-select-focused {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
+          .ant-select-selection-item {
             color: ${token.colorText} !important;
           }
 
@@ -93,17 +82,8 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
           }
         }
 
-        &.ant-select-show-search, &.ant-select-multiple {
-          &:hover {
-            .ant-select-selection-placeholder {
-              color: ${token.colorTextPlaceholder} !important;
-            }
-          }
-        }
-
         &:hover {
-          .ant-select-selection-item,
-          .ant-select-selection-placeholder {
+          .ant-select-selection-item {
             color: ${token.colorText} !important;
           }
 
@@ -127,8 +107,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
       // DEFAULT select
       &.ant-select-open, &.ant-select-focused {
-        .ant-select-selection-item,
-        .ant-select-selection-placeholder {
+        .ant-select-selection-item {
           color: ${token.colorPrimary} !important;
         }
 
@@ -138,8 +117,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       }
 
       &:hover {
-        .ant-select-selection-item,
-        .ant-select-selection-placeholder {
+        .ant-select-selection-item {
           color: ${token.colorPrimary} !important;
         }
 
@@ -150,8 +128,10 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
       // MULTIPLE select
       &.ant-select-multiple {
-        .ant-select-selection-placeholder {
-          color: ${token.colorTextPlaceholder} !important;
+        &.ant-select {
+          .ant-select-selector {
+            padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
+          }
         }
         
         &:hover {
@@ -163,21 +143,13 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         }
       }
 
-      // SEARCH select
-      &.ant-select-show-search {
-        .ant-select-selection-placeholder {
-          color: ${token.colorTextPlaceholder} !important;
-        }
-      }
-
       // DISABLED state
       &.ant-select.ant-select-disabled {
         .ant-select-selector {
           border-color: ${token.colorBorder} !important;
         }
         
-        .ant-select-selection-item,
-        .ant-select-selection-placeholder {
+        .ant-select-selection-item {
           color: ${token.colorTextDisabled} !important;
         }
 

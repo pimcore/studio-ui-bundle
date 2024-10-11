@@ -38,7 +38,7 @@ export const _default = {
 
 export const Multiple = {
   args: {
-    defaultValue: 'Default value',
+    placeholder: 'Choose an option...',
     mode: 'multiple'
   }
 }
@@ -54,7 +54,7 @@ export const WithSearch = {
 
 export const WithCustomIcon = {
   args: {
-    placeholder: 'Choose an option...',
+    defaultValue: 'Default value',
     customIcon: 'export'
   }
 }
