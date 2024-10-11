@@ -23,6 +23,10 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 100%;
 
+      &.image-cell.default-cell__content {
+        margin: ${token.paddingXXS}px;
+      }
+
       .ant-image {
         display: flex;
         width: 100%;

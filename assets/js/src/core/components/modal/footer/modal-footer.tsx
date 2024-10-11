@@ -13,22 +13,32 @@
 
 import React from 'react'
 import { useStyle } from '@Pimcore/components/modal/footer/modal-footer.styles'
+import { Flex, type FlexProps } from '@Pimcore/components/flex/flex'
 
-interface IModalFooterProps {
-  children?: React.ReactNode
-  buttonAlignment?: 'space-between' | 'end'
+interface IModalFooterProps extends FlexProps {
+  children: React.ReactNode
+  divider?: boolean
 }
 
-export const ModalFooter = (props: IModalFooterProps): React.JSX.Element => {
+export const ModalFooter = ({ justify = 'flex-end', divider = false, ...props }: IModalFooterProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { children, ...inlineProps } = props
 
+  const classes = [`ant-modal-footer-container ${styles.footer}`].filter(Boolean)
+
+  if (divider) {
+    classes.push('--divider')
+  }
+
   return (
-    <div
-      className={ `ant-modal-footer-container ${props.buttonAlignment} ${styles.footer}` }
+    <Flex
+      align={ 'center' }
+      className={ classes.join(' ') }
+      gap={ 'extra-small' }
+      justify={ justify }
       { ...inlineProps }
     >
       {children}
-    </div>
+    </Flex>
   )
 }

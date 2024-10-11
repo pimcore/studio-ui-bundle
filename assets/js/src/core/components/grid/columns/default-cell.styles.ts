@@ -26,10 +26,12 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .default-cell__content {
+        display: flex;
         width: 100%;
-        margin: 4px;
+        margin: 0 ${token.paddingXXS}px; 
         overflow: hidden;
         text-overflow: ellipsis;
+        align-items: center;
       }
 
       &.default-cell--modified, .default-cell--modified {

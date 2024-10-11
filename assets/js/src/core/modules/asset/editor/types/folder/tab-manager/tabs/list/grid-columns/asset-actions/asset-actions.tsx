@@ -24,6 +24,7 @@ export const AssetActions = ({ row }: DefaultCellProps): React.JSX.Element => {
   return useMemo(() => (
     <div className={ 'default-cell__content' }>
       <Flex
+        className='w-full'
         justify='center'
       >
         <IconButton

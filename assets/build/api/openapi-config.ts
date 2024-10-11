@@ -49,7 +49,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/schedule/i)
     },
     '../../js/src/core/modules/element/element-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/path/i)
+      filterEndpoints: pathMatcher(/elements/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/dependencies/i)

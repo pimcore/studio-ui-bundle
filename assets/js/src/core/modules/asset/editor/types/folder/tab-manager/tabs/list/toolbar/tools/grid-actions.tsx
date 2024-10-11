@@ -27,6 +27,12 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import {
+  BatchEditProvider
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import {
+  BatchEditModal
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
@@ -38,6 +44,7 @@ export const GridActions = (): React.JSX.Element => {
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const { addJob } = useJobs()
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
+  const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -53,7 +60,7 @@ export const GridActions = (): React.JSX.Element => {
         label: t('listing.actions.batch-edit'),
         icon: <Icon name={ 'grid' } />,
         onClick: () => {
-          console.log('Action 1')
+          setBatchEditModalOpen(true)
         }
       },
       {
@@ -65,7 +72,9 @@ export const GridActions = (): React.JSX.Element => {
             key: '2.1',
             label: t('listing.actions.csv-export'),
             icon: <Icon name={ 'export' } />,
-            onClick: () => { setCsvModalOpen(true) }
+            onClick: () => {
+              setCsvModalOpen(true)
+            }
           }
         ]
       },
@@ -73,7 +82,9 @@ export const GridActions = (): React.JSX.Element => {
         key: '3',
         label: t('listing.actions.zip-download'),
         icon: <Icon name={ 'download-02' } />,
-        onClick: () => { createZip() }
+        onClick: () => {
+          createZip()
+        }
       }
     ]
   }
@@ -81,16 +92,22 @@ export const GridActions = (): React.JSX.Element => {
   return (
     <>
       <Dropdown
-        disabled={ !hasSelectedItems }
         menu={ menu }
       >
-        <DropdownButton key={ 'dropdown-button' }>{ t('listing.actions') }</DropdownButton>
+        <DropdownButton key={ 'dropdown-button' }>{hasSelectedItems ? t('listing.actions') : t('listing.non-selected.actions')}</DropdownButton>
       </Dropdown>
 
       <CsvModal
         open={ csvModalOpen }
         setOpen={ setCsvModalOpen }
       />
+
+      <BatchEditProvider>
+        <BatchEditModal
+          batchEditModalOpen={ batchEditModalOpen }
+          setBatchEditModalOpen={ setBatchEditModalOpen }
+        />
+      </BatchEditProvider>
     </>
   )
 

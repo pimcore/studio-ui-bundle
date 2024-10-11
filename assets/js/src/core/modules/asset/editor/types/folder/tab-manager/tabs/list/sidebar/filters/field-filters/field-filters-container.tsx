@@ -12,14 +12,14 @@
 */
 
 import React from 'react'
-import { useListGridAvailableColumns } from '../../../hooks/use-list'
+import { useListGridAvailableColumns, getFormattedDropDownMenu } from '../../../hooks/use-list'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { FieldFiltersListContainer } from './field-filters-list-container'
 import { useFilters } from '../hooks/use-filters'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -33,7 +33,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     >
       <FieldFiltersListContainer columns={ columns } />
 
-      <Dropdown menu={ { items: getFormattedDropDownMenu() } }>
+      <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, onColumnClick) } }>
         <IconTextButton
           icon='PlusCircleOutlined'
           type='link'
@@ -43,25 +43,6 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       </Dropdown>
     </Space>
   )
-
-  function getFormattedDropDownMenu (): DropdownMenuProps['items'] {
-    const formattedDropDownMenu: DropdownMenuProps['items'] = []
-    let index = 0
-
-    for (const [key, value] of Object.entries(dropDownMenu)) {
-      formattedDropDownMenu.push({
-        key: index++,
-        label: t(`asset.listing.groups.${key}`),
-        children: value.map((column) => ({
-          key: column.key,
-          label: t(`asset.listing.column.${column.key}`),
-          onClick: () => { onColumnClick(column) }
-        }))
-      })
-    }
-
-    return formattedDropDownMenu
-  }
 
   function onColumnClick (column: GridColumnConfiguration): void {
     addColumn(column)

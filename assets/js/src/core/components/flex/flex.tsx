@@ -11,50 +11,61 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Flex as AntFlex, type FlexProps as AntFlexProps, theme } from 'antd'
 import React from 'react'
+import { Flex as AntFlex, type FlexProps as AntFlexProps, theme } from 'antd'
+import cn from 'classnames'
+import { mapGapToTokenValue } from '@Pimcore/components/flex/utils/mapGapToTokenValue'
+import { isString, isNumber, isObject } from '@Pimcore/utils/type-utils'
+import { useStyles } from '@Pimcore/components/flex/flex.styles'
+import { type GapRowColGroupType, type GapType } from '@Pimcore/types/components/types'
 
 export interface FlexProps extends Omit<AntFlexProps, 'gap'> {
-  gap?: number | 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
+  gap?: GapType
 }
 
 const { useToken } = theme
 
-export const Flex = ({ gap = 0, ...props }: FlexProps): React.JSX.Element => {
+export const Flex = ({ gap = 0, className, rootClassName, children, ...props }: FlexProps): React.JSX.Element => {
   const { token } = useToken()
-  let internalGap = gap
 
-  if (typeof gap === 'string') {
-    internalGap = transferSizingToToken(gap)
+  const { x, y } = calculateGap(gap)
+
+  const { styles } = useStyles({ x, y })
+
+  const flexClassNames = cn(styles.rowColGap, className, rootClassName)
+
+  /**
+   * Calculates the row and column gaps based on the provided gap value.
+   *  * The function handles three possible cases for the gap:
+   *  * - A string value (predefined gap sizes like 'small', 'normal', etc.).
+   *  * - A numeric value (representing a direct gap size).
+   *  * - An object containing specific row and column gap sizes.
+   */
+  function calculateGap (gap: GapType): { x: number, y: number } {
+    const getGapValue = (gap: GapType): number => {
+      return isNumber(gap) ? gap as number : mapGapToTokenValue({ token, gap })
+    }
+
+    if (isString(gap)) return { x: getGapValue(gap), y: getGapValue(gap) }
+
+    if (isNumber(gap)) return { x: gap as number, y: gap as number }
+
+    if (isObject(gap)) {
+      return {
+        x: getGapValue((gap as GapRowColGroupType).x),
+        y: getGapValue((gap as GapRowColGroupType).y)
+      }
+    }
+
+    return { x: 0, y: 0 }
   }
 
   return (
     <AntFlex
-      gap={ internalGap }
+      className={ flexClassNames }
       { ...props }
-    />
+    >
+      {children}
+    </AntFlex>
   )
-
-  function transferSizingToToken (sizing: string): number {
-    switch (sizing) {
-      case 'mini':
-        return token.sizeXXS
-      case 'extra-small':
-        return token.sizeXS
-      case 'small':
-        return token.sizeSM
-      case 'normal':
-        return token.size
-      case 'medium':
-        return token.sizeMD
-      case 'large':
-        return token.sizeLG
-      case 'extra-large':
-        return token.sizeXL
-      case 'maxi':
-        return token.sizeXXL
-      default:
-        return 0
-    }
-  }
 }

@@ -18,6 +18,7 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import { NotificationJobContainer as DefaultJobContainer } from './jobs/default/notification-job-container'
 import { NotificationJobContainer as DownloadJobContainer } from './jobs/download/notification-job-container'
 import { NotificationJobContainer as ZipUploadJobContainer } from './jobs/zip-upload/notification-job-container'
+import { NotificationJobContainer as DeleteJobContainer } from './jobs/delete/notification-job-container'
 
 export const executionEngineModule: AbstractModule = {
   onInit () {
@@ -26,6 +27,7 @@ export const executionEngineModule: AbstractModule = {
     jobComponentRegistry.registerComponent('default', DefaultJobContainer)
     jobComponentRegistry.registerComponent('download', DownloadJobContainer)
     jobComponentRegistry.registerComponent('zip-upload', ZipUploadJobContainer)
+    jobComponentRegistry.registerComponent('delete', DeleteJobContainer)
   }
 }
 

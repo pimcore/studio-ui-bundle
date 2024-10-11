@@ -42,9 +42,11 @@ import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { eventBus } from '@Pimcore/lib/event-bus'
 
 interface DataPatch {
   columnId: string
+  locale: string | null | undefined
   rowIndex: number
   value: any
 }
@@ -76,6 +78,16 @@ export const ListContainerInner = (): React.JSX.Element => {
     prepareAndFetchListing()?.catch((error) => {
       console.log(error)
     })
+
+    const subscriber = eventBus.subscribe({ type: 'asset:listing:refresh', id: assetId }, () => {
+      prepareAndFetchListing()?.catch((error) => {
+        console.log(error)
+      })
+    })
+
+    return () => {
+      eventBus.unsubscribe(subscriber)
+    }
   }, [columns, filterOptions, page, pageSize, sorting])
 
   useEffect(() => {
@@ -155,6 +167,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         ...oldPatches,
         {
           columnId: columnIdentifier.key,
+          locale: columnIdentifier.locale,
           rowIndex: rowData.id,
           value
         }
@@ -203,7 +216,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         })
 
         setDataPatches((oldPatches) => {
-          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && patch.rowIndex === rowData.id))
+          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && column.locale === columnIdentifier.locale && patch.rowIndex === rowData.id))
         })
       }).catch((error) => {
         console.error(error)
@@ -243,8 +256,11 @@ export const ListContainerInner = (): React.JSX.Element => {
 
     if (sorting.length > 0) {
       const currentSorting = sorting[0]
+      const identifier = encodeColumnIdentifier(currentSorting.id)
+
       sortFilter = {
-        key: currentSorting.id,
+        key: identifier.key,
+        locale: identifier.locale,
         direction: currentSorting.desc ? 'DESC' : 'ASC'
       }
     }
@@ -282,7 +298,9 @@ export const ListContainerInner = (): React.JSX.Element => {
           }
 
           const patchedColumns = item.columns!.map((column) => {
-            const patch = currentDataPatches.find((patch) => patch.rowIndex === itemId && patch.columnId === column.key)
+            const patch = currentDataPatches.find((_patch) => {
+              return _patch.rowIndex === itemId && _patch.columnId === column.key && _patch.locale === column.locale
+            })
 
             if (patch === undefined) {
               return column

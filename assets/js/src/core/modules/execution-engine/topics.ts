@@ -12,13 +12,15 @@
 */
 
 export const topics: Record<string, string> = {
+  'patch-finished': 'patch-finished',
   'zip-download-ready': 'zip-download-ready',
   'csv-download-ready': 'csv-download-ready',
   'handler-progress': 'handler-progress',
   'job-finished-with-errors': 'job-finished-with-errors',
   'job-failed': 'job-failed',
   'asset-upload-finished': 'asset-upload-finished',
-  'zip-upload-finished': 'zip-upload-finished'
+  'zip-upload-finished': 'zip-upload-finished',
+  'deletion-finished': 'deletion-finished'
 }
 
 export const defaultTopics: string[] = [
