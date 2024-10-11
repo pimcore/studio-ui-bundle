@@ -20,7 +20,7 @@ import {
   openRightWidget as openRightWidgetAction,
   selectInnerModel,
   setActiveWidgetById,
-  type WidgetManagerTabConfig,
+  type WidgetManagerTabConfig
 } from '../widget-manager-slice'
 import { Model, type TabNode } from 'flexlayout-react'
 
