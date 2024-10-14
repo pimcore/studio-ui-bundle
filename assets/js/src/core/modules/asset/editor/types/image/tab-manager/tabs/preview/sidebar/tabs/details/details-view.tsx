@@ -20,7 +20,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useDetailsViewData } from './helpers/config'
+import { useDetailsViewData } from './hooks/use-details-view-data'
 import { useStyle } from './details.styles'
 
 export interface CustomDownloadProps {
