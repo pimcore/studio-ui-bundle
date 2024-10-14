@@ -12,10 +12,11 @@
 */
 
 import React, { useEffect, useRef, useState } from 'react'
-import { type DefaultCellProps } from '../../default-cell'
-import { Select } from 'antd'
 import { type RefSelectProps, type DefaultOptionType } from 'antd/es/select'
+import cn from 'classnames'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { Select } from '@Pimcore/components/select/select'
+import { type DefaultCellProps } from '../../default-cell'
 import { useStyles } from './select-cell.styles'
 
 export interface SelectCellConfig {
@@ -61,7 +62,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   }
 
   return (
-    <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
+    <div className={ cn(styles['select-cell'], 'default-cell__content') }>
       <Select
         onBlur={ disableEditMode }
         onChange={ onChange }

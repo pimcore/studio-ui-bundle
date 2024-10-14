@@ -12,10 +12,10 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { type DefaultOptionType } from 'antd/es/select'
 import { type DefaultFilterProps } from './default-filter'
 import { useFilters } from '../../hooks/use-filters'
-import { Select } from 'antd'
-import { type DefaultOptionType } from 'antd/es/select'
+import { Select } from '@Pimcore/components/select/select'
 
 export const SelectFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
   const { addOrUpdateFieldFilter, getFieldFilter } = useFilters()
@@ -42,7 +42,7 @@ export const SelectFilter = ({ column }: DefaultFilterProps): React.JSX.Element 
   return (
     <Select
       onBlur={ onBlur }
-      onChange={ (value) => { setValue(value) } }
+      onChange={ (value: string) => { setValue(value) } }
       options={ options }
       style={ { width: '100%' } }
       value={ _value }

@@ -13,7 +13,7 @@
 
 import React, { useState } from 'react'
 import { useStyle } from './details.styles'
-import { Button, Card, Divider, Select } from 'antd'
+import { Button, Card, Divider } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import ButtonGroup from 'antd/es/button/button-group'
@@ -28,6 +28,7 @@ import { type Thumbnail } from '@Pimcore/modules/asset/editor/types/asset-thumbn
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
+import { Select } from '@Pimcore/components/select/select'
 
 interface VideoEditorSidebarDetailsViewProps {
   width: number
@@ -134,15 +135,8 @@ export const VideoEditorSidebarDetailsTab = ({
                 aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
                 defaultValue={ customMode }
                 onChange={ onChangeMode }
-              >
-                {modes.map((mode) => (
-                  <Select.Option
-                    key={ mode.value }
-                    value={ mode.value }
-                  >{mode.label}</Select.Option>
-                ))
-                }
-              </Select>
+                options={ modes }
+              />
             </div>
 
             <p className={ 'sidebar__content-label' }>{t('download')}</p>
@@ -151,18 +145,9 @@ export const VideoEditorSidebarDetailsTab = ({
               <Select
                 aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
                 defaultValue={ downloadFormat }
-                onChange={ format => {
-                  setDownloadFormat(format)
-                } }
-              >
-                {downloadFormats.map((mode) => (
-                  <Select.Option
-                    key={ mode.value }
-                    value={ mode.value }
-                  >{mode.label}</Select.Option>
-                ))
-                }
-              </Select>
+                onChange={ (format: string) => { setDownloadFormat(format) } }
+                options={ downloadFormats }
+              />
 
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }

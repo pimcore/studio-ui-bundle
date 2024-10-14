@@ -629,6 +629,10 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
   }
 
+  .min-w-100 {
+      min-width: 100px;
+  }
+
   .h-full {
     height: 100%;
   }

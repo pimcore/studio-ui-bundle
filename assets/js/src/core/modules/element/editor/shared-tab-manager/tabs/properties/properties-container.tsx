@@ -11,11 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type InputRef, Select } from 'antd'
+import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import { useStyle } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { usePropertyGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import Input from 'antd/es/input/Input'
 import { Table } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/components/table/table'
@@ -30,12 +29,12 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
+import { Select } from '@Pimcore/components/select/select'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyle()
-  const [propertiesTableTab, setPropertiesTableTab] = React.useState<string>('own')
-  const [createManualPropertyMode, setCreateManualPropertyMode] = React.useState<boolean>(false)
+  const [propertiesTableTab, setPropertiesTableTab] = useState<string>('own')
+  const [createManualPropertyMode, setCreateManualPropertyMode] = useState<boolean>(false)
   const { id, elementType } = useElementContext()
 
   const { addProperty, properties } = useElementDraft(id, elementType)
@@ -57,7 +56,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
     elementType
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (createManualPropertyMode) {
       keyInputRef.current?.focus()
     } else {
@@ -67,15 +66,9 @@ export const PropertiesContainer = (): React.JSX.Element => {
   }, [createManualPropertyMode])
 
   return (
-    <Content
-      className={ styles.tab }
-      padded
-    >
+    <Content padded>
       <Header title={ t('properties.label') }>
-        <Space
-          className={ [styles.toolbar].join(' ') }
-          size='small'
-        >
+        <Space size='small'>
           <Segmented
             onChange={ setPropertiesTableTab }
             options={ [
@@ -110,9 +103,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
             </MandatoryModal>
 
             {createManualPropertyMode && (
-            <Space
-              size="extra-small"
-            >
+            <Space size="extra-small">
               <Button
                 onClick={ () => {
                   setCreateManualPropertyMode(false)
@@ -129,6 +120,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
               />
 
               <Select
+                className='min-w-100'
                 onSelect={ onTypeSelect }
                 options={ [
                   { value: 'text', label: t('data-type.text') },
@@ -154,24 +146,20 @@ export const PropertiesContainer = (): React.JSX.Element => {
             {!createManualPropertyMode && (
               <Split size='mini'>
                 <Select
+                  className='min-w-100'
                   filterOption={ (input, option) => {
-                    return (option?.children as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
+                    return (option?.label as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
                   } }
                   key={ 'properties-select' }
                   loading={ isLoading }
                   onSelect={ onPredefinedPropertyChange }
+                  options={ data?.items?.map((item) => ({
+                    label: item.name,
+                    value: item.id
+                  })) }
                   placeholder={ t('properties.predefined-properties') }
                   showSearch
-                >
-                  {data !== undefined && Array.isArray(data.items) && data.items.map((item) => (
-                    <Select.Option
-                      key={ item.id }
-                      value={ item.id }
-                    >
-                      {item.name}
-                    </Select.Option>
-                  ))}
-                </Select>
+                />
 
                 <IconTextButton
                   icon={ 'PlusCircleOutlined' }

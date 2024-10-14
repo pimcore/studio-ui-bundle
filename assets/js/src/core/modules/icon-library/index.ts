@@ -21,9 +21,10 @@ import folder from '@Pimcore/assets/icons/folder.inline.svg'
 import widgetDefault from '@Pimcore/assets/icons/widget-default.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import chevronUpSmall from '@Pimcore/assets/icons/chevron-up-small.inline.svg'
-import chevronDownSmall from '@Pimcore/assets/icons/chevron-down-small.inline.svg'
 import chevronUpWide from '@Pimcore/assets/icons/chevron-up-wide.inline.svg'
+import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg'
 import chevronDownWide from '@Pimcore/assets/icons/chevron-down-wide.inline.svg'
+import chevronDownSmall from '@Pimcore/assets/icons/chevron-down-small.inline.svg'
 import home from '@Pimcore/assets/icons/home.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
 import iconTools from '@Pimcore/assets/icons/icon-tools.inline.svg'
@@ -153,6 +154,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'chevron-down-wide',
       component: chevronDownWide
+    })
+    iconLibrary.register({
+      name: 'chevron-down',
+      component: chevronDown
     })
     iconLibrary.register({
       name: 'home',

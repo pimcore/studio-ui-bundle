@@ -12,14 +12,16 @@
 */
 
 import React, { useState } from 'react'
-import { useStyle } from './details.styles'
-import { Form, Input, Select } from 'antd'
-import { Button } from '@Pimcore/components/button/button'
 import { useTranslation } from 'react-i18next'
+import { Form, Input } from 'antd'
+import { Select } from '@Pimcore/components/select/select'
+import { Button } from '@Pimcore/components/button/button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
+import { useDetailsViewData } from './hooks/use-details-view-data'
+import { useStyle } from './details.styles'
 
 export interface CustomDownloadProps {
   width: number
@@ -50,66 +52,24 @@ export const AssetEditorSidebarDetailsView = ({
   onClickDownloadByFormat,
   onClickCustomDownload
 }: AssetEditorSidebarDetailsViewProps): React.JSX.Element => {
-  const { styles } = useStyle()
-  const { t } = useTranslation()
-  const [downloadFormat, setDownloadFormat] = useState('original')
+  const [downloadFormat, setDownloadFormat] = useState<string>('original')
   const [customWidth, setCustomWidth] = useState(width)
   const [customHeight, setCustomHeight] = useState(height)
   const [customQuality, setCustomQuality] = useState(-1)
   const [customDPI, setCustomDPI] = useState(-1)
-  const [customMode, setCustomMode] = useState('scaleByWidth')
+  const [customMode, setCustomMode] = useState<string>('scaleByWidth')
   const [customFormat, setCustomFormat] = useState('JPEG')
 
-  const modes = [
-    {
-      value: 'resize',
-      label: t('resize')
-    }, {
-      value: 'scaleByWidth',
-      label: <>
-        {t('scaleByWidth') + ' '}
-        <span className={ 'entry-content__download-content-custom__default' }>
-          ({t('default')})
-        </span>
-      </>
-    }, {
-      value: 'scaleByHeight',
-      label: t('scaleByHeight')
-    }
-  ]
+  const { styles } = useStyle()
+  const { t } = useTranslation()
 
-  const formats = [
-    {
-      value: 'JPEG',
-      label: <>
-        {'JPEG '}
-        <span className={ 'entry-content__download-content-custom__default' }>
-          ({t('default')})
-        </span>
-      </>
-    }, {
-      value: 'PNG',
-      label: 'PNG'
-    }
-  ]
+  const { getModes, getFormats, getDownloadFormats } = useDetailsViewData()
 
-  const downloadFormats = [
-    {
-      value: 'original',
-      label: t('asset.sidebar.original-file')
-    }, {
-      value: 'web',
-      label: t('asset.sidebar.web-format')
-    }, {
-      value: 'print',
-      label: t('asset.sidebar.print-format')
-    }, {
-      value: 'office',
-      label: t('asset.sidebar.office-format')
-    }
-  ]
+  const MODES = getModes()
+  const FORMATS = getFormats()
+  const DOWNLOAD_FORMATS = getDownloadFormats()
 
-  const customDownloadOptions = [
+  const CUSTOM_DOWNLOAD_OPTIONS = [
     {
       key: 1,
       title: <span>Custom Download</span>,
@@ -175,16 +135,9 @@ export const AssetEditorSidebarDetailsView = ({
               >
                 <Select
                   aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
-                  onChange={ mode => { setCustomMode(mode as string) } }
-                >
-                  {modes.map((mode) => (
-                    <Select.Option
-                      key={ mode.value }
-                      value={ mode.value }
-                    >{mode.label}</Select.Option>
-                  ))
-                  }
-                </Select>
+                  onChange={ (mode: string) => { setCustomMode(mode) } }
+                  options={ MODES }
+                />
               </Form.Item>
             </div>
             <div>
@@ -194,16 +147,9 @@ export const AssetEditorSidebarDetailsView = ({
               >
                 <Select
                   aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format') }
-                  onChange={ format => { setCustomFormat(format as string) } }
-                >
-                  {formats.map((format) => (
-                    <Select.Option
-                      key={ format.value }
-                      value={ format.value }
-                    >{format.label}</Select.Option>
-                  ))
-                  }
-                </Select>
+                  onChange={ (format: string) => { setCustomFormat(format) } }
+                  options={ FORMATS }
+                />
               </Form.Item>
             </div>
           </div>
@@ -256,17 +202,10 @@ export const AssetEditorSidebarDetailsView = ({
             <div className={ 'entry-content__download-content-thumbnail' }>
               <Select
                 aria-label={ t('aria.asset.image-sidebar.tab.details.precreated-thumbnail') }
-                onChange={ format => { setDownloadFormat(format) } }
+                onChange={ (format: string) => { setDownloadFormat(format) } }
+                options={ DOWNLOAD_FORMATS }
                 value={ downloadFormat }
-              >
-                {downloadFormats.map((format) => (
-                  <Select.Option
-                    key={ format.value }
-                    value={ format.value }
-                  >{format.label}</Select.Option>
-                ))
-                }
-              </Select>
+              />
 
               <IconButton
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
@@ -279,7 +218,7 @@ export const AssetEditorSidebarDetailsView = ({
               <Accordion
                 defaultActiveKey={ ['1'] }
                 expandIconPosition={ 'start' }
-                items={ customDownloadOptions }
+                items={ CUSTOM_DOWNLOAD_OPTIONS }
               />
             </div>
           </div>
