@@ -111,8 +111,8 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
             throw new Error(response.error.data.message as string ?? 'Error deleting Asset')
           }
 
-          const data = response.data as { id: number }
-          return data.id
+          const data = response.data as { jobRunId: number }
+          return data.jobRunId
         },
         parentFolder: props.node!.parentId!
       }))
