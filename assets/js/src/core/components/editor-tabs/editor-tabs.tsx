@@ -20,11 +20,9 @@ import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-tool
 import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
 import { IconButton } from '../icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { type serviceIds } from '@Pimcore/app/config/services'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
-  tabManagerServiceId?: keyof typeof serviceIds
 }
 
 export interface IEditorTabsProps {
@@ -97,7 +95,6 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
             icon={ 'share-03' }
             onClick={ () => {
               openDetachedWidget({
-                tabManagerServiceId: item.tabManagerServiceId!,
                 tabKey: item.key
               })
             } }

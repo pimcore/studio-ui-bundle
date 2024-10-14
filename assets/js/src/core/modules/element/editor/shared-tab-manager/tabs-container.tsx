@@ -17,17 +17,17 @@ import { useTranslation } from 'react-i18next'
 import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { useInjection } from '@Pimcore/app/depency-injection'
+import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
 
-export const TabsContainer = ({ tabManagerServiceId }: { tabManagerServiceId: keyof typeof serviceIds }): React.JSX.Element => {
+export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
-  const tabManager = useInjection<IElementEditorTabManager>(serviceIds[tabManagerServiceId])
+  const tabManager = useInjection<IElementEditorTabManager>(serviceIds[elementEditorType.tabManagerServiceId])
 
   const tabs = tabManager.getTabs()
   const preparedTabs = tabs.map((tab, index) => {
     return {
       ...tabs[index],
-      label: typeof tab.label === 'string' ? t(tab.label) : tab.label,
-      tabManagerServiceId
+      label: typeof tab.label === 'string' ? t(tab.label) : tab.label
     }
   })
 

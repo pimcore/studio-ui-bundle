@@ -12,13 +12,11 @@
 */
 
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { type serviceIds } from '@Pimcore/app/config/services'
 import { container } from '@Pimcore/app/depency-injection'
 import { type TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
 import i18next from 'i18next'
 
 export interface IDetachTab {
-  tabManagerServiceId: keyof typeof serviceIds
   tabKey: string
   config?: any
 }
@@ -30,8 +28,8 @@ interface IUseDetachTabReturn {
 export const useDetachTab = (): IUseDetachTabReturn => {
   const { openBottomWidget } = useWidgetManager()
 
-  const detachWidget = ({ tabManagerServiceId, tabKey, config = {} }: IDetachTab): void => {
-    const tabManager = container.get<TabManager>(tabManagerServiceId)
+  const detachWidget = ({ tabKey, config = {} }: IDetachTab): void => {
+    const tabManager = container.get<TabManager>('Asset/Editor/ImageTabManager')
     const tab = tabManager.getTab(tabKey)
 
     if (tab === undefined) {
@@ -45,7 +43,6 @@ export const useDetachTab = (): IUseDetachTabReturn => {
       component: 'detachable-tab',
       config: {
         ...config,
-        tabManagerServiceId,
         tabKey
       }
     })

@@ -17,21 +17,37 @@ import { serviceIds } from '@Pimcore/app/config/services'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { type TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { Content } from '@Pimcore/components/content/content'
 
 interface IDetachedTabProps {
   tabKey: string
-  tabManagerServiceId: keyof typeof serviceIds
 }
 
-export const DetachedTab = ({ tabManagerServiceId, tabKey }: IDetachedTabProps): React.JSX.Element => {
-  const { getOpenedMainWidget } = useWidgetManager()
-  const tabManager = container.get<TabManager>(tabManagerServiceId)
+export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element => {
+  const missingContext = <div>Missing context!</div>
+  const { getOpenedMainWidget, getElementContextInformationFromOpenedMainWidget } = useWidgetManager()
+  const elementContextInformation = getElementContextInformationFromOpenedMainWidget()
+  if (elementContextInformation === undefined) {
+    return <div>miss 1</div>
+  }
+
+  const { editorType, isLoading } = useElementDraft(elementContextInformation.id, elementContextInformation.elementType)
+
+  if (isLoading) {
+    return <Content loading />
+  }
+
+  if (editorType === undefined) {
+    return <div>missing 2</div>
+  }
+
+  const openedMainWidget = getOpenedMainWidget()
+  const tabManager = container.get<TabManager>(editorType.tabManagerServiceId)
   const tab = tabManager.getTab(tabKey)
   const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
-  const openedMainWidget = getOpenedMainWidget()
-  const missingContext = <div>Missing context!</div>
 
-  if (openedMainWidget === undefined || tab === undefined) {
+  if (tab === undefined || openedMainWidget === undefined) {
     return missingContext
   }
 

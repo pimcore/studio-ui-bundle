@@ -20,26 +20,25 @@ import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { ObjectContainer } from '@Pimcore/modules/data-object/editor/types/object/object-container'
-import { FolderContainer } from '@Pimcore/modules/data-object/editor/types/folder/folder-container'
 import type {
-  ComponentRegistry as GlobalComponentRegistry, ComponentRegistryInterface
+  ComponentRegistry as GlobalComponentRegistry
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 import { DataObjectEditorWidget } from '@Pimcore/modules/data-object/editor/widget'
+import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const typeComponentRegistry = container.get<ComponentRegistryInterface>(serviceIds['DataObject/Editor/TypeComponentRegistry'])
+    const typeRegistry = container.get<TypeRegistryInterface>(serviceIds['DataObject/Editor/TypeRegistry'])
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'object',
-      component: ObjectContainer
+      tabManagerServiceId: 'DataObject/Editor/ObjectTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'folder',
-      component: FolderContainer
+      tabManagerServiceId: 'DataObject/Editor/FolderTabManager'
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

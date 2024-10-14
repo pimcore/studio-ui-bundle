@@ -25,66 +25,58 @@ import '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions'
 import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties'
 import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule'
 import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies'
-import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
-import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { VideoContainer } from '@Pimcore/modules/asset/editor/types/video/video-container'
-import { TextContainer } from '@Pimcore/modules/asset/editor/types/text/text-container'
-import { DocumentContainer } from '@Pimcore/modules/asset/editor/types/document/document-container'
-import { AudioContainer } from '@Pimcore/modules/asset/editor/types/audio/audio-container'
-import { UnknownContainer } from '@Pimcore/modules/asset/editor/types/unknown/unknown-container'
-import { ArchiveContainer } from '@Pimcore/modules/asset/editor/types/archive/archive-container'
 import {
-  type ComponentRegistry as GlobalComponentRegistry,
-  type ComponentRegistryInterface
+  type ComponentRegistry as GlobalComponentRegistry
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/asset/editor/toolbar/context-menu/context-menu'
 import { AssetEditorWidget } from '@Pimcore/modules/asset/editor/widget'
+import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const typeComponentRegistry = container.get<ComponentRegistryInterface>(serviceIds['Asset/Editor/TypeComponentRegistry'])
+    const typeRegistry = container.get<TypeRegistryInterface>(serviceIds['Asset/Editor/TypeRegistry'])
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'image',
-      component: ImageContainer
+      tabManagerServiceId: 'Asset/Editor/ImageTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'video',
-      component: VideoContainer
+      tabManagerServiceId: 'Asset/Editor/VideoTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'audio',
-      component: AudioContainer
+      tabManagerServiceId: 'Asset/Editor/AudioTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'document',
-      component: DocumentContainer
+      tabManagerServiceId: 'Asset/Editor/DocumentTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'text',
-      component: TextContainer
+      tabManagerServiceId: 'Asset/Editor/TextTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'folder',
-      component: FolderContainer
+      tabManagerServiceId: 'Asset/Editor/FolderTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'archive',
-      component: ArchiveContainer
+      tabManagerServiceId: 'Asset/Editor/ArchiveTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'unknown',
-      component: UnknownContainer
+      tabManagerServiceId: 'Asset/Editor/UnknownTabManager'
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)

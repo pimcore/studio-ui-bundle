@@ -35,6 +35,9 @@ import {
   type UseTrackableChangesDraftReturn
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services'
 
 interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
@@ -43,6 +46,7 @@ interface UseDataObjectDraftReturn extends
   isLoading: boolean
   isError: boolean
   dataObject: undefined | ReturnType<typeof selectDataObjectById>
+  editorType: ElementEditorType | undefined
 
   removeDataObjectFromState: () => void
 
@@ -54,6 +58,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
   const dataObject = useAppSelector(state => selectDataObjectById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
+  const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['DataObject/Editor/TypeRegistry'])
 
   async function fetchDataObject (): Promise<DataObjectGetByIdApiResponse> {
     const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
@@ -132,10 +137,15 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     resetSchedulesChangesForDataObject
   )
 
+  const editorType = dataObject?.type === undefined
+    ? undefined
+    : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
+
   return {
     isLoading,
     isError,
     dataObject,
+    editorType,
     removeDataObjectFromState,
     fetchDataObject,
     ...trackableChangesActions,

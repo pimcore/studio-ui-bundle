@@ -20,6 +20,9 @@ import type {
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import {
+  type ElementEditorType
+} from '@Pimcore/modules/element/editor/services/type-registry'
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
@@ -33,6 +36,7 @@ interface UseElementDraftReturn extends
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn {
   element: IElementDraft | undefined
+  editorType: ElementEditorType | undefined
   isLoading: boolean
   isError: boolean
 }
@@ -40,12 +44,12 @@ interface UseElementDraftReturn extends
 export const useElementDraft = (id: number, elementType: ElementType): UseElementDraftReturn => {
   if (elementType === 'asset') {
     const draft = useAssetDraft(id)
-    return { ...draft, element: draft.asset }
+    return { ...draft, element: draft.asset, editorType: draft.editorType }
   }
 
   if (elementType === 'data-object') {
     const draft = useDataObjectDraft(id)
-    return { ...draft, element: draft.dataObject }
+    return { ...draft, element: draft.dataObject, editorType: draft.editorType }
   }
 
   throw new Error('Element type not supported: ' + elementType)
