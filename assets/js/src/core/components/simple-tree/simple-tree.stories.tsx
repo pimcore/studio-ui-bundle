@@ -79,6 +79,7 @@ export const _default = {
                 ]
             }
         ],
+        expandedKeys: ['0-0'],
         onDragAndDrop: ({node, dragNode, dropPosition}) => {
             console.log('drag:', dragNode, 'drop to:', node, 'at position', dropPosition)
         },
@@ -87,6 +88,9 @@ export const _default = {
         },
         onContextMenuClick: (key, type) => {
             switch (type) {
+                case 'add-folder':
+                    console.log('add-folder clicked:', key)
+                    break
                 case 'add':
                     console.log('add clicked:', key)
                     break
@@ -145,6 +149,7 @@ export const Checkable = {
                 ]
             }
         ],
+        expandedKeys: ['0'],
         onSelected: (key) => {
             console.log('selected:', key)
         },
@@ -154,54 +159,5 @@ export const Checkable = {
         onDragAndDrop: ({node, dragNode, dropPosition}) => {
             console.log('drag:', dragNode, 'drop to:', node, 'at position', dropPosition)
         },
-    }
-}
-
-export const Searchable = {
-    args: {
-        treeData: [
-            {
-                title: 'All Tags',
-                key: '0',
-                icon: <Icon name={ 'folder' } />,
-                children: [
-                    {
-                        title: 'Countries',
-                        key: '0-0',
-                        icon: <Icon name={ 'tag-02' } />,
-                        children: [
-                            {
-                                title: 'Australia',
-                                key: '0-0-0',
-                                icon: <Icon name={ 'tag-02' } />
-                            },
-                            {
-                                title: 'Mongolia',
-                                key: '0-0-1',
-                                icon: <Icon name={ 'tag-02' } />
-                            },
-                            {
-                                title: 'Kenya',
-                                key: '0-0-2',
-                                icon: <Icon name={ 'tag-02' } />
-                            }
-                        ]
-                    },
-                    {
-                        title: 'Print',
-                        key: '0-1',
-                        icon: <Icon name={ 'tag-02' } />,
-                        children: [
-                            {
-                                title: 'A4',
-                                key: '0-1-0',
-                                icon: <Icon name={ 'tag-02' } />
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        searchable: true
     }
 }
