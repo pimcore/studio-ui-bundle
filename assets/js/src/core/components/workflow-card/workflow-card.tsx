@@ -13,20 +13,54 @@
 
 import React, { type ReactNode, useEffect } from 'react'
 import { Badge, Button, Card, Tag } from 'antd'
-import { type WorkflowDetails } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import {
+  useWorkflowActionSubmitMutation,
+  type WorkflowActionSubmitApiArg,
+  type WorkflowDetails
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
 }
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
+  console.log('----> workflow', workflow)
+  const { id } = useAsset()
+
+  const toSnakeCase = (str: string): string => {
+    return str
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+  }
+
+  const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
+
+  const faa: WorkflowActionSubmitApiArg = {
+    submitAction: {
+      actionType: 'transition',
+      elementId: id,
+      elementType: 'asset',
+      workflowName: toSnakeCase(workflow.workflowName),
+      transition: 'start_workflow',
+      workflowOptions: []
+    }
+  }
+
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
+
+    const submitWorkflowAction = (): void => {
+      fetchSubmitWorkflowAction(faa).then(() => {
+        console.log('----> submit workflow action')
+      }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
+    }
 
     useEffect(() => {
       const items: DropdownMenuProps['items'] = []
@@ -36,13 +70,12 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         ...workflow.globalActions ?? []
       ]
       mergedActions?.forEach((status) => {
+        console.log('----> status', status)
+
         items.push({
           key: Number(items.length + 1).toString(),
-          label: (
-            <a href={ 'https://pimcore.com' }>
-              {status.label}
-            </a>
-          )
+          label: status.label,
+          onClick: () => { submitWorkflowAction() }
         })
       })
 
