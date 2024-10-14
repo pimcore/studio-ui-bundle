@@ -18,7 +18,11 @@ import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
-import { api as assetApi, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  api as assetApi,
+  type AssetDeleteZipApiArg,
+  useAssetPatchByIdMutation
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import {
@@ -111,8 +115,8 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
             throw new Error(response.error.data.message as string ?? 'Error deleting Asset')
           }
 
-          const data = response.data as { id: number }
-          return data.id
+          const data = response.data as AssetDeleteZipApiArg
+          return data.jobRunId
         },
         parentFolder: props.node!.parentId!
       }))

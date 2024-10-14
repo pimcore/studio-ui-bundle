@@ -41,7 +41,7 @@ export { injectedRtkApi as api };
 export type ElementDeleteApiResponse =
     /** status 200 Successfully deleted element */ void | /** status 201 Successfully created jobRun for deleting element and its children */ {
         /** ID of created jobRun */
-        id: number;
+        jobRunId: number;
     };
 export type ElementDeleteApiArg = {
     /** Id of the element */
