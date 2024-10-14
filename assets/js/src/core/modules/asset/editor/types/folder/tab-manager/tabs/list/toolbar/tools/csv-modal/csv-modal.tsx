@@ -26,9 +26,10 @@ import {
   useAssetGetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { useListColumns, useListFilterOptions, useListPage, useListPageSize, useListSelectedRows } from '../../../hooks/use-list'
+import { useListColumns, useListFilterOptions, useListSelectedRows } from '../../../hooks/use-list'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export interface CsvModalProps {
   open: boolean
@@ -46,8 +47,6 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
   const numberedSelectedRows = Object.keys(selectedRows).map(Number)
   const { columns } = useListColumns()
-  const { page } = useListPage()
-  const { pageSize } = useListPageSize()
   const { filterOptions } = useListFilterOptions()
   const initialFormValues: CSVFormValues = {
     delimiter: ';',
@@ -120,8 +119,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             header
           },
           filters: {
-            page,
-            pageSize,
+            page: 1,
+            pageSize: appConfig.maxPageSize,
             ...filterOptions
           }
         }
