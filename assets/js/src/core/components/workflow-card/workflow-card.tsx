@@ -28,7 +28,8 @@ interface IWorkflowCardProps {
 }
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
-  console.log('----> workflow', workflow)
+  console.log('----> workFlow', workflow)
+
   const { id } = useAsset()
 
   const toSnakeCase = (str: string): string => {
@@ -40,24 +41,24 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
   const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
 
-  const faa: WorkflowActionSubmitApiArg = {
+  const workFlowTransition = (action: string): WorkflowActionSubmitApiArg => ({
     submitAction: {
       actionType: 'transition',
       elementId: id,
       elementType: 'asset',
       workflowName: toSnakeCase(workflow.workflowName),
-      transition: 'start_workflow',
+      transition: action,
       workflowOptions: []
     }
-  }
+  })
 
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
-    const submitWorkflowAction = (): void => {
-      fetchSubmitWorkflowAction(faa).then(() => {
+    const submitWorkflowAction = (action: string): void => {
+      fetchSubmitWorkflowAction(workFlowTransition(action)).then(() => {
         console.log('----> submit workflow action')
       }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
     }
@@ -70,12 +71,10 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         ...workflow.globalActions ?? []
       ]
       mergedActions?.forEach((status) => {
-        console.log('----> status', status)
-
         items.push({
           key: Number(items.length + 1).toString(),
           label: status.label,
-          onClick: () => { submitWorkflowAction() }
+          onClick: () => { submitWorkflowAction(status.name) }
         })
       })
 
