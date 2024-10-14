@@ -29,7 +29,7 @@ export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element =>
   const { getOpenedMainWidget, getElementContextInformationFromOpenedMainWidget } = useWidgetManager()
   const elementContextInformation = getElementContextInformationFromOpenedMainWidget()
   if (elementContextInformation === undefined) {
-    return <div>miss 1</div>
+    return missingContext
   }
 
   const { editorType, isLoading } = useElementDraft(elementContextInformation.id, elementContextInformation.elementType)
@@ -39,7 +39,7 @@ export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element =>
   }
 
   if (editorType === undefined) {
-    return <div>missing 2</div>
+    return missingContext
   }
 
   const openedMainWidget = getOpenedMainWidget()
