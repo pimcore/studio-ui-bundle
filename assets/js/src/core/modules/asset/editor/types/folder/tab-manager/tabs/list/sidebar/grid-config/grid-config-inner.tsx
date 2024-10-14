@@ -12,12 +12,14 @@
 */
 
 import React, { useEffect, useMemo, useState } from 'react'
-import { getFormattedDropDownMenu, useListColumns, useListGridAvailableColumns } from '../../hooks/use-list'
+import { getFormattedDropDownMenu, useListColumns, useListGridAvailableColumns, useListGridConfig, useListSelectedConfigId } from '../../hooks/use-list'
 import { useGridConfig } from './hooks/use-grid-config'
 import {
   type GridColumnConfiguration,
   useAssetGetSavedGridConfigurationsQuery,
-  useAssetSaveGridConfigurationMutation
+  useAssetSaveGridConfigurationMutation,
+  useAssetSetGridConfigurationAsFavoriteMutation,
+  useAssetUpdateGridConfigurationMutation
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { EditView } from './views/edit-view'
@@ -33,17 +35,27 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { id } = useAsset()
   const { isLoading, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
+  const [fetchFavorite] = useAssetSetGridConfigurationAsFavoriteMutation()
   const [view, setView] = useState<'edit' | 'save'>('edit')
   const [form] = useForm()
+  const { setSelectedGridConfigId } = useListSelectedConfigId()
+  const { gridConfig } = useListGridConfig()
+  const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useAssetUpdateGridConfigurationMutation()
 
   const savedGridConfigurations: DropdownMenuProps['items'] = useMemo(() => {
     if (data !== undefined) {
-      return data?.items?.map((item) => {
+      return data?.map((item) => {
         return {
           key: item.id,
           label: item.name,
           onClick: () => {
-            console.log('load grid configuration', item)
+            setSelectedGridConfigId(item.id)
+
+            console.log(fetchFavorite)
+            /*
+            fetchFavorite({ configurationId: item.id, folderId: id }).catch((error) => {
+              console.error('Failed to set grid configuration as favorite', error)
+            }) */
           }
         }
       }) ?? []
@@ -62,10 +74,16 @@ export const GridConfigInner = (): React.JSX.Element => {
         <EditView
           addColumnMenu={ getFormattedDropDownMenu(dropDownMenu, onColumnClick) }
           columns={ columns }
+          gridConfig={ gridConfig }
           isLoading={ isLoading }
+          isUpdating={ isUpdating }
           onApplyClick={ onApplyClick }
           onCancelClick={ onCancelClick }
           onSaveConfigurationClick={ () => { setView('save') } }
+          onUpdateConfigurationClick={ () => {
+            // @todo implement update configuration when id is available in grid config endpoint
+            console.log(fetchUpdateGridConfig)
+          } }
           savedGridConfigurations={ savedGridConfigurations }
         />
       ) }
@@ -101,13 +119,15 @@ export const GridConfigInner = (): React.JSX.Element => {
         description: values.description,
         setAsFavorite: values.setAsDefault,
         shareGlobal: values.shareGlobally,
-        sharedRoles: [],
-        sharedUsers: [],
         saveFilter: false,
         pageSize: 0
       }
     }).catch((error) => {
       console.error('Failed to save grid configuration', error)
+    }).then(() => {
+      setView('edit')
+    }).catch((error) => {
+      console.error('Failed to switch to edit view', error)
     })
   }
 

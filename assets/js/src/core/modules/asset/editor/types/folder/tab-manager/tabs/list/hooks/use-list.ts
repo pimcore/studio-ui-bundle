@@ -30,7 +30,9 @@ import {
   ListPageContext,
   ListPageSizeContext,
   ListSelectedRowsContext,
-  ListSortingContext
+  ListSortingContext,
+  type IListSelectedGridConfigIdContext,
+  ListSelectedGridConfigIdContext
 } from '../list-provider'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
@@ -212,5 +214,16 @@ export const useListData = (): UseListDataHookReturn => {
 
   return {
     data
+  }
+}
+
+export interface UseListSelectedConfigIdHookReturn extends IListSelectedGridConfigIdContext {}
+
+export const useListSelectedConfigId = (): UseListSelectedConfigIdHookReturn => {
+  const { selectedGridConfigId, setSelectedGridConfigId } = useContext(ListSelectedGridConfigIdContext)
+
+  return {
+    selectedGridConfigId,
+    setSelectedGridConfigId
   }
 }

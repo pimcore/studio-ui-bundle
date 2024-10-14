@@ -412,11 +412,7 @@ export type AssetGetGridConfigurationByFolderIdApiArg = {
     /** Configuration ID */
     configurationId?: number;
 };
-export type AssetGetSavedGridConfigurationsApiResponse =
-    /** status 200 List of saved grid configurations for the given folder */ {
-        totalItems: number;
-        items: GridConfiguration2[];
-    };
+export type AssetGetSavedGridConfigurationsApiResponse = GridConfiguration2[];
 export type AssetGetSavedGridConfigurationsApiArg = {
     /** FolderId of the folderId */
     folderId: number;

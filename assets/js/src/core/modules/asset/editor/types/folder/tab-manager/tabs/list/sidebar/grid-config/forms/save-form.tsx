@@ -56,6 +56,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
       <Form.Item
         label="Description"
         name="description"
+        rules={ [{ required: true, message: 'Please provide a description' }] }
       >
         <Input.TextArea />
       </Form.Item>

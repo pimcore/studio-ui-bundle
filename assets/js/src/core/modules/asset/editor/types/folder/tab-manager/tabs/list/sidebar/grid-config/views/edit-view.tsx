@@ -23,19 +23,28 @@ import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { GridConfigList } from '../grid-config-list'
+import { type IListGridConfigContext } from '../../../list-provider'
+import { Compact } from '@Pimcore/components/compact/compact'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface EditViewProps {
   onCancelClick: () => void
   onSaveConfigurationClick: () => void
+  onUpdateConfigurationClick: () => void
   onApplyClick: () => void
   savedGridConfigurations: DropdownMenuProps['items']
   addColumnMenu: DropdownMenuProps['items']
   isLoading: boolean
+  isUpdating: boolean
   columns: any[]
+  gridConfig: IListGridConfigContext['gridConfig']
 }
 
-export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick, savedGridConfigurations, addColumnMenu, isLoading, columns }: EditViewProps): React.JSX.Element => {
+export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConfigurationClick, isUpdating, onSaveConfigurationClick, savedGridConfigurations, addColumnMenu, isLoading, columns }: EditViewProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
+  // @todo bound it to the grid config id when the ownerId is available via api.
+  const isOwner = true
 
   return (
     <ContentToolbarSidebarLayout
@@ -49,12 +58,7 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
           </Button>
 
           <Space size="extra-small">
-            <Button
-              onClick={ onSaveConfigurationClick }
-              type='default'
-            >
-              Save as template
-            </Button>
+            { renderSaveButton() }
 
             <Button
               onClick={ onApplyClick }
@@ -78,7 +82,17 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
                 icon='magic-wand-01'
                 loading={ isLoading }
               >
-                Templates
+                { isSavedConfiguration
+                  ? (
+                    <>
+                      { gridConfig.name}
+                    </>
+                    )
+                  : (
+                    <>
+                      Template
+                    </>
+                    ) }
               </IconTextButton>
             </Tooltip>
           </Dropdown>
@@ -102,4 +116,64 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
       </Content>
     </ContentToolbarSidebarLayout>
   )
+
+  function renderSaveButton (): React.JSX.Element {
+    return (
+      <>
+        { !isSavedConfiguration && (
+          <Button
+            onClick={ onSaveConfigurationClick }
+            type='default'
+          >
+            Save as template
+          </Button>
+        ) }
+
+        { isSavedConfiguration && (
+          <>
+            { isOwner && (
+              <Compact>
+                <Button
+                  loading={ isUpdating }
+                  onClick={ onUpdateConfigurationClick }
+                  type='default'
+                >
+                  Update the template
+                </Button>
+
+                <Dropdown menu={
+                  {
+                    items: [
+                      {
+                        key: 0,
+                        label: 'Save as new template',
+                        onClick: () => {
+                          onSaveConfigurationClick()
+                        }
+                      }
+                    ]
+                  }
+                }
+                >
+                  <IconButton
+                    icon='dots-horizontal'
+                    type='default'
+                  />
+                </Dropdown>
+              </Compact>
+            )}
+
+            { !isOwner && (
+              <Button
+                onClick={ onSaveConfigurationClick }
+                type='default'
+              >
+                Save as template
+              </Button>
+            )}
+          </>
+        )}
+      </>
+    )
+  }
 }

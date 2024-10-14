@@ -38,7 +38,9 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiResponse,
                 DataObjectGetAvailableGridColumnsApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/data-object/grid/available-columns/${queryArg.className}` }),
+                query: (queryArg) => ({
+                    url: `/studio/api/data-object/grid/available-columns/${queryArg.classId}/folderId`,
+                }),
                 providesTags: ["Data Object Grid"],
             }),
             dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
@@ -92,7 +94,7 @@ export type DataObjectAddApiArg = {
 export type DataObjectCloneApiResponse =
     /** status 200 Successfully copied data object */ void | /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
         /** ID of created jobRun */
-        id: number;
+        jobRunId: number;
     };
 export type DataObjectCloneApiArg = {
     /** Id of the data-object */
@@ -132,8 +134,10 @@ export type DataObjectGetAvailableGridColumnsApiResponse =
         columns?: GridColumnConfiguration[];
     };
 export type DataObjectGetAvailableGridColumnsApiArg = {
-    /** Itentifies the class name for which the columns should be retrieved. */
-    className: string;
+    /** Identifies the class name for which the columns should be retrieved. */
+    classId: string;
+    /** FolderId of the element */
+    folderId: number;
 };
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
@@ -151,7 +155,7 @@ export type DataObjectGetGridApiArg = {
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
         /** ID of created jobRun */
-        id: number;
+        jobRunId: number;
     };
 export type DataObjectPatchByIdApiArg = {
     body: {
@@ -199,29 +203,30 @@ export type DataObjectGetTreeApiArg = {
     pathIncludeDescendants?: boolean;
     /** Filter by class. */
     className?:
+        | "CustomerSegmentGroup"
+        | "CustomerSegment"
+        | "TermSegmentBuilderDefinition"
+        | "LinkActivityDefinition"
+        | "test"
         | "AccessoryPart"
         | "BodyStyle"
-        | "Car"
         | "Category"
+        | "Car"
         | "Customer"
-        | "CustomerSegment"
-        | "CustomerSegmentGroup"
-        | "Event"
         | "FilterDefinition"
-        | "LinkActivityDefinition"
-        | "Manufacturer"
-        | "News"
-        | "OfferToolCustomProduct"
-        | "OfferToolOffer"
-        | "OfferToolOfferItem"
         | "OnlineShopOrder"
         | "OnlineShopOrderItem"
         | "OnlineShopTaxClass"
         | "OnlineShopVoucherSeries"
         | "OnlineShopVoucherToken"
+        | "OfferToolCustomProduct"
+        | "OfferToolOffer"
+        | "OfferToolOfferItem"
+        | "Event"
+        | "Manufacturer"
+        | "News"
         | "PortalUser"
-        | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition";
+        | "PortalUserGroup";
 };
 export type Error = {
     /** Message */
