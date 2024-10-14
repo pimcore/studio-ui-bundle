@@ -36,12 +36,10 @@ import { Content } from '@Pimcore/components/content/content'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
-import { useStyle } from './custom-metadata-container.styles'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [editmode, setEditMode] = useState<boolean>(false)
-  const { styles } = useStyle()
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
@@ -148,7 +146,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <Select
-                  className={ styles.customMetadataSelect }
+                  className='min-w-100'
                   defaultValue={ typeSelectValue.current }
                   onSelect={ onTypeSelectChange }
                   options={ typeSelectOptions }
@@ -157,7 +155,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
                 <Select
                   allowClear
-                  className={ styles.customMetadataSelect }
+                  className='min-w-100'
                   onClear={ onLanguageSelectClear }
                   onSelect={ onLanguageSelectChange }
                   options={ settings.requiredLanguages.map((value: string) => {

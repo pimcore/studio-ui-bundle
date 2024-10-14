@@ -15,7 +15,6 @@ import React, { useRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import { useStyle } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-container.styles'
 import { usePropertyGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import Input from 'antd/es/input/Input'
 import { Table } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/components/table/table'
@@ -34,7 +33,6 @@ import { Select } from '@Pimcore/components/select/select'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyle()
   const [propertiesTableTab, setPropertiesTableTab] = useState<string>('own')
   const [createManualPropertyMode, setCreateManualPropertyMode] = useState<boolean>(false)
   const { id, elementType } = useElementContext()
@@ -122,7 +120,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
               />
 
               <Select
-                className={ styles.propertiesDataSelect }
+                className='min-w-100'
                 onSelect={ onTypeSelect }
                 options={ [
                   { value: 'text', label: t('data-type.text') },
@@ -148,7 +146,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
             {!createManualPropertyMode && (
               <Split size='mini'>
                 <Select
-                  className={ styles.propertiesDataPropsSelect }
+                  className='min-w-100'
                   filterOption={ (input, option) => {
                     return (option?.label as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
                   } }

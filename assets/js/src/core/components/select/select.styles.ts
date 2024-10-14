@@ -43,7 +43,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       .ant-select-status-warning {
         &.ant-select-open, &.ant-select-focused {
           .ant-select-selection-item {
-            color: ${token.colorText} !important;
+            color: ${token.colorText};
           }
 
           .ant-select-arrow {
@@ -53,7 +53,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
         &:hover {
           .ant-select-selection-item {
-            color: ${token.colorText} !important;
+            color: ${token.colorText};
           }
 
           .ant-select-arrow {
@@ -74,7 +74,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       .ant-select-status-error {
         &.ant-select-open, &.ant-select-focused {
           .ant-select-selection-item {
-            color: ${token.colorText} !important;
+            color: ${token.colorText};
           }
 
           .ant-select-arrow {
@@ -84,7 +84,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
         &:hover {
           .ant-select-selection-item {
-            color: ${token.colorText} !important;
+            color: ${token.colorText};
           }
 
           .ant-select-arrow {
@@ -108,7 +108,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       // DEFAULT select
       &.ant-select-open, &.ant-select-focused {
         .ant-select-selection-item {
-          color: ${token.colorPrimary} !important;
+          color: ${token.colorPrimary};
         }
 
         .ant-select-arrow {
@@ -118,7 +118,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
       &:hover {
         .ant-select-selection-item {
-          color: ${token.colorPrimary} !important;
+          color: ${token.colorPrimary};
         }
 
         .ant-select-arrow {
@@ -150,7 +150,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         }
         
         .ant-select-selection-item {
-          color: ${token.colorTextDisabled} !important;
+          color: ${token.colorTextDisabled};
         }
 
         .ant-select-arrow {
@@ -185,11 +185,11 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
      `,
 
     customIconWarning: css`
-       color: ${token.colorWarningHover} !important;
+       color: ${token.colorWarningHover};
      `,
 
     customIconError: css`
-       color: ${token.colorErrorHover} !important;
+       color: ${token.colorErrorHover};
      `
   }
 })
