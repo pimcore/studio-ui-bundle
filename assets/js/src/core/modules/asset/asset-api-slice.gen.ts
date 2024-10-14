@@ -38,10 +38,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
                 providesTags: ["Assets"],
             }),
-            assetCreateCsv: build.mutation<AssetCreateCsvApiResponse, AssetCreateCsvApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/assets/csv/create`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Assets"],
-            }),
             assetCreateZip: build.mutation<AssetCreateZipApiResponse, AssetCreateZipApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/zip/create`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
@@ -71,6 +67,22 @@ const injectedRtkApi = api
             assetDownloadById: build.query<AssetDownloadByIdApiResponse, AssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
+            }),
+            assetExportCsvAsset: build.mutation<AssetExportCsvAssetApiResponse, AssetExportCsvAssetApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/export/csv/asset`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
+            }),
+            assetExportCsvFolder: build.mutation<AssetExportCsvFolderApiResponse, AssetExportCsvFolderApiArg>({
+                query: (queryArg) => ({
+                    url: `/studio/api/assets/export/csv/folder`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
             }),
             assetGetById: build.query<AssetGetByIdApiResponse, AssetGetByIdApiArg>({
                 query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
@@ -303,30 +315,6 @@ export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
 };
-export type AssetCreateCsvApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
-export type AssetCreateCsvApiArg = {
-    body: {
-        assets?: number[];
-        gridConfig?: GridColumnRequest[];
-        settings?: {
-            delimiter?: string;
-            header?:
-                | "asset_to_export"
-                | "asset_export_data"
-                | "settings"
-                | "configuration"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n";
-        };
-    };
-};
 export type AssetCreateZipApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
     /** ID of created jobRun */
     jobRunId: number;
@@ -360,6 +348,61 @@ export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary 
 export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
     id: number;
+};
+export type AssetExportCsvAssetApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetExportCsvAssetApiArg = {
+    body: {
+        assets?: number[];
+        columns?: GridColumnRequest[];
+        config?: {
+            delimiter?: string;
+            header?:
+                | "asset_to_export"
+                | "folder_to_export"
+                | "asset_export_data"
+                | "config"
+                | "columns"
+                | "filters"
+                | "delimiter"
+                | "header"
+                | "no_header"
+                | "title"
+                | "name"
+                | "\r\n";
+        };
+    };
+};
+export type AssetExportCsvFolderApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetExportCsvFolderApiArg = {
+    body: {
+        folders?: number[];
+        columns?: GridColumnRequest[];
+        filters?: GridFilter;
+        config?: {
+            delimiter?: string;
+            header?:
+                | "asset_to_export"
+                | "folder_to_export"
+                | "asset_export_data"
+                | "config"
+                | "columns"
+                | "filters"
+                | "delimiter"
+                | "header"
+                | "no_header"
+                | "title"
+                | "name"
+                | "\r\n";
+        };
+    };
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
     | Image
@@ -677,6 +720,18 @@ export type GridColumnRequest = {
     /** Config */
     config: string[];
 };
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
+};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -861,18 +916,6 @@ export type Column = {
     /** Group of the Column */
     group: string;
 };
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
-    /** Column Filter */
-    columnFilters?: object;
-    /** Sort Filter */
-    sortFilter?: object;
-};
 export type GridConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -937,13 +980,14 @@ export const {
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
     useAssetDocumentStreamPreviewQuery,
-    useAssetCreateCsvMutation,
     useAssetCreateZipMutation,
     useAssetDownloadCsvQuery,
     useAssetDeleteCsvMutation,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
     useAssetDownloadByIdQuery,
+    useAssetExportCsvAssetMutation,
+    useAssetExportCsvFolderMutation,
     useAssetGetByIdQuery,
     useAssetUpdateByIdMutation,
     useAssetGetAvailableGridColumnsQuery,

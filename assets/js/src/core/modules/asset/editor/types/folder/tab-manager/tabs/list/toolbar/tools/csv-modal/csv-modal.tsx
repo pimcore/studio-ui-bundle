@@ -19,14 +19,17 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import {
-  type AssetCreateCsvApiResponse,
-  useAssetCreateCsvMutation,
+  type AssetExportCsvAssetApiResponse,
+  type AssetExportCsvFolderApiResponse,
+  useAssetExportCsvAssetMutation,
+  useAssetExportCsvFolderMutation,
   useAssetGetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { useListColumns, useListSelectedRows } from '../../../hooks/use-list'
+import { useListColumns, useListFilterOptions, useListSelectedRows } from '../../../hooks/use-list'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export interface CsvModalProps {
   open: boolean
@@ -39,10 +42,12 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { id } = useAsset()
   const { data } = useAssetGetByIdQuery({ id })
   const [jobTitle, setJobTitle] = useState<string>('Asset')
-  const [fetchCreateCsv] = useAssetCreateCsvMutation()
+  const [fetchCreateCsv] = useAssetExportCsvAssetMutation()
+  const [fetchCreateFolderCsv] = useAssetExportCsvFolderMutation()
   const { selectedRows } = useListSelectedRows()
   const numberedSelectedRows = Object.keys(selectedRows).map(Number)
   const { columns } = useListColumns()
+  const { filterOptions } = useListFilterOptions()
   const initialFormValues: CSVFormValues = {
     delimiter: ';',
     header: 'name'
@@ -90,34 +95,70 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       title: t('jobs.csv-job.title', { title: jobTitle }),
       topics: [topics['csv-download-ready'], ...defaultTopics],
       downloadUrl: '/studio/api/assets/download/csv/{jobRunId}',
-      action: async () => {
-        const promise = fetchCreateCsv({
-          body: {
-            assets: numberedSelectedRows,
-            gridConfig: columns.map((column) => {
-              return {
-                key: column.key,
-                type: column.type,
-                config: [] // @todo add config after schema update
-              }
-            }),
-            settings: {
-              delimiter: values.delimiter,
-              header: values.header
-            }
-          }
-        })
-
-        promise.catch(() => {
-          console.error('Failed to create csv')
-        })
-
-        const response = (await promise) as any
-        const data = response.data as AssetCreateCsvApiResponse
-        return data.jobRunId
-      }
+      action: async () => await getDownloadAction(values.delimiter, values.header)
     }))
 
     props.setOpen(false)
+  }
+
+  async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
+    if (numberedSelectedRows.length === 0) {
+      const promise = fetchCreateFolderCsv({
+        body: {
+          folders: [id],
+          columns: columns.map((column) => {
+            return {
+              key: column.key,
+              type: column.type,
+              group: column.group,
+              config: [] // @todo add config after schema update
+            }
+          }),
+          config: {
+            delimiter,
+            header
+          },
+          filters: {
+            page: 1,
+            pageSize: appConfig.maxPageSize,
+            ...filterOptions
+          }
+        }
+      })
+
+      promise.catch(() => {
+        console.error('Failed to create csv')
+      })
+
+      const response = (await promise) as any
+      const data = response.data as AssetExportCsvFolderApiResponse
+      return data.jobRunId
+    } else {
+      const promise = fetchCreateCsv({
+        body: {
+          assets: numberedSelectedRows,
+          columns: columns.map((column) => {
+            return {
+              key: column.key,
+              type: column.type,
+              group: column.group,
+              config: [] // @todo add config after schema update
+            }
+          }),
+          config: {
+            delimiter,
+            header
+          }
+        }
+      })
+
+      promise.catch(() => {
+        console.error('Failed to create csv')
+      })
+
+      const response = (await promise) as any
+      const data = response.data as AssetExportCsvAssetApiResponse
+      return data.jobRunId
+    }
   }
 }

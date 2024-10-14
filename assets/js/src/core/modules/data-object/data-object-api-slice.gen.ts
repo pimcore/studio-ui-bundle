@@ -202,7 +202,31 @@ export type DataObjectGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
     /** Filter by class. */
-    className?;
+    className?:
+        | "CustomerSegmentGroup"
+        | "CustomerSegment"
+        | "TermSegmentBuilderDefinition"
+        | "LinkActivityDefinition"
+        | "test"
+        | "AccessoryPart"
+        | "BodyStyle"
+        | "Category"
+        | "Car"
+        | "Customer"
+        | "FilterDefinition"
+        | "OnlineShopOrder"
+        | "OnlineShopOrderItem"
+        | "OnlineShopTaxClass"
+        | "OnlineShopVoucherSeries"
+        | "OnlineShopVoucherToken"
+        | "OfferToolCustomProduct"
+        | "OfferToolOffer"
+        | "OfferToolOfferItem"
+        | "Event"
+        | "Manufacturer"
+        | "News"
+        | "PortalUser"
+        | "PortalUserGroup";
 };
 export type Error = {
     /** Message */

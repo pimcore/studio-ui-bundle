@@ -14,6 +14,7 @@
 interface AppConfig {
   baseUrl: string
   mercureUrl: string
+  maxPageSize: number
 }
 
 const appElement = document.querySelector('#app')
@@ -32,5 +33,6 @@ if (appConfigJSON !== null) {
 
 export const appConfig: AppConfig = {
   baseUrl: appConfigData?.baseUrl ?? '/pimcore-studio/',
-  mercureUrl: appConfigData?.mercureUrl ?? `${currentDomain}/.well-known/mercure`
+  mercureUrl: appConfigData?.mercureUrl ?? `${currentDomain}/.well-known/mercure`,
+  maxPageSize: appConfigData?.maxPageSize ?? 9999999
 }
