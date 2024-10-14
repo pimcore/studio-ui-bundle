@@ -19,6 +19,7 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementType } from 'types/element-type.d'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Text } from '@Pimcore/components/text/text'
 
 export const Breadcrumb = ({ path, elementType }: { path: string, elementType: ElementType }): React.JSX.Element => {
   const { styles } = useStyle()
@@ -27,8 +28,9 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
   const dispatch = useAppDispatch()
 
   function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
-    // split to check if it has more that just the key
-    const parts = path.split('/')
+    // split to check if it has more that just a single key
+    const partList = path.split('/')
+    const partListAmount = partList.length
 
     function onMenuItemClick (path: string): void {
       const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
@@ -48,25 +50,32 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
         .catch(() => {})
     }
 
-    if (parts.length > 2) {
+    if (partListAmount > 2) {
       items.push({
-        title: parts[parts.length - 2],
+        title: (
+          <Text
+            ellipsis={ { tooltip: { title: partList[partListAmount - 2], placement: 'top' } } }
+            style={ { maxWidth: '100px' } }
+          >
+            {partList[partListAmount - 2]}
+          </Text>
+        ),
         className: styles.pathItem,
         onClick: () => {
-          onMenuItemClick(parts.slice(0, parts.length - 1).join('/'))
+          onMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
         }
       })
 
-      if (parts.length > 3) {
+      if (partListAmount > 3) {
         const dotsMenuItems: MenuItemType[] = []
-        for (let i = 1; i < parts.length - 2; i++) {
+        for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
             key: i,
             label: (
-              parts[i]
+              partList[i]
             ),
             onClick: () => {
-              onMenuItemClick(parts.slice(0, i + 1).join('/'))
+              onMenuItemClick(partList.slice(0, i + 1).join('/'))
             }
           })
         }
@@ -82,7 +91,16 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
     }
 
     // key to breadcrumb
-    items.push({ title: parts[parts.length - 1] })
+    items.push({
+      title: (
+        <Text
+          ellipsis={ { tooltip: { title: partList[partListAmount - 1], placement: 'top' } } }
+          style={ { maxWidth: '150px' } }
+        >
+          {partList[partListAmount - 1]}
+        </Text>
+      )
+    })
 
     return items
   }
