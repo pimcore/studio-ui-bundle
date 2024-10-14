@@ -43,7 +43,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { styles } = useStyle()
   const settings = useSettings()
   const { id } = useContext(AssetContext)
-  const { addCustomMetadata, customMetadata, isLoading } = useAssetDraft(id)
+  const { addCustomMetadata, customMetadata } = useAssetDraft(id)
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -120,7 +120,6 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   return (
     <Content
       className={ styles.tab }
-      loading={ isLoading }
       padded
     >
       <Header
