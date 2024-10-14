@@ -14,7 +14,6 @@
 import React from 'react'
 import { Dropdown, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface SimpleTreeItemProps {
   title: string
@@ -30,7 +29,7 @@ const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element =>
     items?.push({
       key: action.key,
       label: t(`tree.actions.${action.key}`),
-      icon: <Icon name={ action.icon } />,
+      icon: action.icon,
       onClick: () => { props.onContextMenuClick?.(action.key) }
     })
   })

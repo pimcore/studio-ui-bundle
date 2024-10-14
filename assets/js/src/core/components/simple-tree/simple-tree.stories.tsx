@@ -30,13 +30,13 @@ export const _default = {
             {
                 title: 'All users',
                 key: '0-0',
-                actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
+                actions: [{key: 'add-folder', icon: <Icon name={ 'PlusCircleOutlined' } />}, {key: 'add-user', icon: <Icon name={ 'PlusCircleOutlined' } />}],
                 icon: <Icon name={ 'folder' } />,
                 children: [
                     {
                         title: 'Admins',
                         key: '0-0-0',
-                        actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
+                        actions: [{key: 'add-folder', icon: <Icon name={ 'PlusCircleOutlined' } />}, {key: 'add-user', icon: <Icon name={ 'PlusCircleOutlined' } />}],
                         icon: <Icon name={ 'folder' } />,
                         children: [
                             {
@@ -44,33 +44,33 @@ export const _default = {
                                 key: '2',
                                 type: 'user',
                                 icon: <Icon name={ 'user-01' } />,
-                                actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
+                                actions: [{key: 'clone', icon: <Icon name={ 'copy-03' } />}, {key: 'remove', icon: <Icon name={ 'trash' } />}]
                             }
                         ]
                     },
                     {
                         title: 'Portal Engine',
                         key: '0-0-1',
-                        actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
+                        actions: [{key: 'add-folder', icon: <Icon name={ 'PlusCircleOutlined' } />}, {key: 'add-user', icon: <Icon name={ 'PlusCircleOutlined' } />}],
                         icon: <Icon name={ 'folder' } />,
                         children: [
                             {
                                 title: 'All rights',
                                 key: '0-0-1-0',
-                                actions: [{key: 'add-folder', icon: 'PlusCircleOutlined'}, {key: 'add-user', icon: 'PlusCircleOutlined'}],
+                                actions: [{key: 'add-folder', icon: <Icon name={ 'PlusCircleOutlined' } />}, {key: 'add-user', icon: <Icon name={ 'PlusCircleOutlined' } />}],
                                 icon: <Icon name={ 'folder' } />,
                                 children: [
                                     {
                                         title: 'Jack',
                                         key: '0-0-1-0-0',
                                         icon: <Icon name={ 'user-01' } />,
-                                        actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
+                                        actions: [{key: 'clone', icon: <Icon name={ 'copy-03' } />}, {key: 'remove', icon: <Icon name={ 'trash' } />}]
                                     },
                                     {
                                         title: 'John',
                                         key: '0-0-1-0-1',
                                         icon: <Icon name={ 'user-01' } />,
-                                        actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
+                                        actions: [{key: 'clone', icon: <Icon name={ 'copy-03' } />}, {key: 'remove', icon: <Icon name={ 'trash' } />}]
                                     }
                                 ]
                             }
