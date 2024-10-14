@@ -14,24 +14,26 @@
 import React from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
-import { useStyle } from './breadcrumb.styles'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementType } from 'types/element-type.d'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Text } from '@Pimcore/components/text/text'
+import { type ElementType } from 'types/element-type.d'
+import { useStyle } from './breadcrumb.styles'
 
 export const Breadcrumb = ({ path, elementType }: { path: string, elementType: ElementType }): React.JSX.Element => {
   const { styles } = useStyle()
   const { openElement } = useElementHelper()
-  let items: NonNullable<BreadcrumbProps['items']> = []
   const dispatch = useAppDispatch()
 
+  let items: NonNullable<BreadcrumbProps['items']> = []
+
   function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
-    // split to check if it has more that just a single key
+    // Split to check if it has more that just a single key
     const partList = path.split('/')
     const partListAmount = partList.length
 
+    // Handle click event for intermediate parts
     function onMenuItemClick (path: string): void {
       const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType,
@@ -54,8 +56,9 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
       items.push({
         title: (
           <Text
+            className={ styles.breadcrumbLink }
             ellipsis={ { tooltip: { title: partList[partListAmount - 2], placement: 'top' } } }
-            style={ { maxWidth: '100px' } }
+            style={ { maxWidth: '150px' } }
           >
             {partList[partListAmount - 2]}
           </Text>
@@ -80,6 +83,7 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
           })
         }
 
+        // Prepend the "..." menu to the existing items array
         items = [
           {
             title: '...',
@@ -90,10 +94,11 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
       }
     }
 
-    // key to breadcrumb
+    // Add the last item of the breadcrumb
     items.push({
       title: (
         <Text
+          className={ styles.breadcrumbLinkLast }
           ellipsis={ { tooltip: { title: partList[partListAmount - 1], placement: 'top' } } }
           style={ { maxWidth: '150px' } }
         >

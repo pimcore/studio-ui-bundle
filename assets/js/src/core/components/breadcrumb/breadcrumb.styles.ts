@@ -34,11 +34,10 @@ export const useStyle = createStyles(({ token, css }) => {
 
     breadcrumbLink: css`
       color: ${token.colorTextTertiary};
-      
-      &:last-child {
-        color: ${token.colorLinkActive}
-      }
-      
+    `,
+
+    breadcrumbLinkLast: css`
+      color: ${token.colorLinkActive}
     `
   }
 })
