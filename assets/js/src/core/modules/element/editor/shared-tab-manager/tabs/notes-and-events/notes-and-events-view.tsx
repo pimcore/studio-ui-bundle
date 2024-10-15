@@ -89,7 +89,9 @@ export const NotesAndEventsTabView = ({
           <IconButton
             aria-label={ i18n.t('aria.notes-and-events.delete') }
             icon='trash'
-            onClick={ () => {
+            onClick={ (e) => {
+              e.stopPropagation()
+
               onClickTrash(note.id)
             } }
             theme='primary'
