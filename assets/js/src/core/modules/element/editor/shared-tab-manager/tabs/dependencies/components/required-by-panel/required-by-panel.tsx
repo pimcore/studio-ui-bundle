@@ -60,7 +60,7 @@ export const RequiredByPanel = (): React.JSX.Element => {
             page={ page }
           />
         </Toolbar>
-      }
+          }
     >
       <Content
         className={ 'pimcore-dependencies__required-by' }

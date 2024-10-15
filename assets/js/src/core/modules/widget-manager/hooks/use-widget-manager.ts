@@ -13,16 +13,17 @@
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
-  openMainWidget as openMainWidgetAction,
+  closeWidget as closeWidgetAction,
   openBottomWidget as openBottomWidgetAction,
   openLeftWidget as openLeftWidgetAction,
+  openMainWidget as openMainWidgetAction,
   openRightWidget as openRightWidgetAction,
-  closeWidget as closeWidgetAction,
+  selectInnerModel,
   setActiveWidgetById,
-  type WidgetManagerTabConfig,
-  selectInnerModel
+  type WidgetManagerTabConfig
 } from '../widget-manager-slice'
-import { Model } from 'flexlayout-react'
+import { Model, type TabNode } from 'flexlayout-react'
+import { type ElementType } from '../../../../../types/element-type.d'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
@@ -32,6 +33,8 @@ interface useWidgetManagerReturn {
   switchToWidget: (id: string) => void
   closeWidget: (id: string) => void
   isMainWidgetOpen: (id: string) => boolean
+  getOpenedMainWidget: () => TabNode | undefined
+  getElementContextInformationFromOpenedMainWidget: () => { id: number, elementType: ElementType } | undefined
 }
 
 export const useWidgetManager = (): useWidgetManagerReturn => {
@@ -67,5 +70,36 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     return model.getNodeById(id) !== undefined
   }
 
-  return { openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, switchToWidget, closeWidget, isMainWidgetOpen }
+  function getOpenedMainWidget (): TabNode | undefined {
+    return model.getActiveTabset()?.getSelectedNode() as TabNode | undefined
+  }
+
+  function getElementContextInformationFromOpenedMainWidget (): { id: number, elementType: ElementType } | undefined {
+    const openedMainWidget = getOpenedMainWidget()
+    if (openedMainWidget === undefined) {
+      return undefined
+    }
+
+    const component = openedMainWidget.getComponent()
+    if (component === undefined || !['asset-editor', 'data-object-editor'].includes(component)) {
+      return undefined
+    }
+
+    return {
+      id: openedMainWidget.getConfig().id as number,
+      elementType: component.replace('-editor', '') as ElementType
+    }
+  }
+
+  return {
+    openMainWidget,
+    openBottomWidget,
+    openLeftWidget,
+    openRightWidget,
+    switchToWidget,
+    closeWidget,
+    isMainWidgetOpen,
+    getOpenedMainWidget,
+    getElementContextInformationFromOpenedMainWidget
+  }
 }
