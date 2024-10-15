@@ -20,18 +20,18 @@ export interface SimpleTreeItemProps {
   title: string
   actions?: Array<{ key: string, icon: string }>
   onSelected?: () => void
-  onContextMenuClick?: (action: string) => void
+  onActionsClick?: (action: string) => void
 }
-const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element => {
+const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }: SimpleTreeItemProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const items: MenuProps['items'] = []
-  props.actions?.forEach((action) => {
+  actions?.forEach((action) => {
     items?.push({
       key: action.key,
       label: t(`tree.actions.${action.key}`),
-      icon: <Icon name={ action.icon } />,
-      onClick: () => { props.onContextMenuClick?.(action.key) }
+      icon: action.icon ? <Icon name={ action.icon } /> : null,
+      onClick: () => { onActionsClick?.(action.key) }
     })
   })
 
@@ -43,20 +43,20 @@ const SimpleTreeItem = ({ ...props }: SimpleTreeItemProps): React.JSX.Element =>
       >
         <button
           className={ 'ant-tree-title__btn' }
-          onClick={ props.onSelected }
+          onClick={ onSelected }
           type="button"
         >
-          {props.title}
+          {title}
         </button>
       </Dropdown>
       )
     : (
       <button
         className={ 'ant-tree-title__btn' }
-        onClick={ props.onSelected }
+        onClick={ onSelected }
         type="button"
       >
-        {props.title}
+        {title}
       </button>
       )
 }

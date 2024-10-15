@@ -17,40 +17,44 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { SimpleTreeItem } from './simple-tree-item'
 import { useStyles } from './simple-tree.styles'
 
-interface ExtendedTreeDataNode extends TreeDataNode {
+export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
 }
+
 interface SimpleTreeProps {
-  treeData: ExtendedTreeDataNode[]
+  treeData: TreeDataItem[]
   className?: string
-  searchable?: boolean
-  expandedKeys?: string[]
+  defaultExpandedKeys?: string[]
   onCheck?: (checkedKeys: any) => void
-  onContextMenuClick?: (key: any, action: string) => void
-  onDragAndDrop?: (params: { node: ExtendedTreeDataNode, dragNode: ExtendedTreeDataNode, dropPosition: number }) => void
+  onActionsClick?: (key: any, action: string) => void
+  onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
-  onLoadData?: (node: ExtendedTreeDataNode) => Promise<void>
+  onLoadData?: (node) => Promise<any>
 }
 
-const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element => {
+const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, ...props }: SimpleTreeProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classNames = [styles.tree, className]
   const [selectedKeys, setSelectedKeys] = React.useState<Key[]>([])
-  const [expandedKeys, setExpandedKeys] = React.useState<Key[]>(props.expandedKeys ?? [])
+  const [expandedKeys, setExpandedKeys] = React.useState<Key[]>(defaultExpandedKeys ?? [])
+
+  React.useEffect(() => {
+    setExpandedKeys(defaultExpandedKeys ?? [])
+  }, [defaultExpandedKeys])
 
   return (
     <Tree
       blockNode
-      checkable={ props.onCheck !== undefined }
+      checkable={ onCheck !== undefined }
       className={ classNames.join(' ') }
       draggable
       expandedKeys={ expandedKeys }
-      loadData={ props.onLoadData !== null ? props.onLoadData : undefined }
-      onCheck={ (checkedKeys): void => props.onCheck?.(checkedKeys) }
+      loadData={ onLoadData !== null ? onLoadData : undefined }
+      onCheck={ (checkedKeys): void => onCheck?.(checkedKeys) }
       onDrop={ (evt): void => {
-        props.onDragAndDrop?.({
-          node: evt.node as ExtendedTreeDataNode,
-          dragNode: evt.dragNode as ExtendedTreeDataNode,
+        onDragAndDrop?.({
+          node: evt.node as TreeDataItem,
+          dragNode: evt.dragNode as TreeDataItem,
           dropPosition: evt.dropPosition
         })
       } }
@@ -61,15 +65,15 @@ const SimpleTree = ({ className, ...props }: SimpleTreeProps): React.JSX.Element
       titleRender={ (node) => (
         <SimpleTreeItem
           actions={ node.actions }
-          onContextMenuClick={ (action) => props.onContextMenuClick?.(node.key, action) }
+          onActionsClick={ (action) => onActionsClick?.(node.key, action) }
           onSelected={ () => {
             setSelectedKeys([node.key])
-            props.onSelected?.(node.key)
+            onSelected?.(node.key)
           } }
           title={ node.title as string }
         />
       ) }
-      treeData={ props.treeData }
+      treeData={ treeData }
     />
   )
 }

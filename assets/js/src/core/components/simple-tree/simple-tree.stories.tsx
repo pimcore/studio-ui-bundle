@@ -44,7 +44,7 @@ export const _default = {
                                 key: '2',
                                 type: 'user',
                                 icon: <Icon name={ 'user-01' } />,
-                                actions: [{key: 'clone', icon: <Icon name={ 'copy-03' } />}, {key: 'remove', icon: 'trash'}]
+                                actions: [{key: 'clone', icon: 'copy-03'}, {key: 'remove', icon: 'trash'}]
                             }
                         ]
                     },
@@ -79,14 +79,14 @@ export const _default = {
                 ]
             }
         ],
-        expandedKeys: ['0-0'],
+        defaultExpandedKeys: ['0-0'],
         onDragAndDrop: ({node, dragNode, dropPosition}) => {
             console.log('drag:', dragNode, 'drop to:', node, 'at position', dropPosition)
         },
         onSelected: (key) => {
             console.log('selected:', key)
         },
-        onContextMenuClick: (key, type) => {
+        onActionsClick: (key, type) => {
             switch (type) {
                 case 'add-folder':
                     console.log('add-folder clicked:', key)
@@ -149,7 +149,7 @@ export const Checkable = {
                 ]
             }
         ],
-        expandedKeys: ['0'],
+        defaultExpandedKeys: ['0'],
         onSelected: (key) => {
             console.log('selected:', key)
         },
