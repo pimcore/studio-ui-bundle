@@ -27,9 +27,9 @@ interface IWorkflowCardProps {
   workflow: WorkflowDetails
 }
 
-export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
-  console.log('----> workFlow', workflow)
+type ActionType = 'transition' | 'global'
 
+export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { id } = useAsset()
 
   const toSnakeCase = (str: string): string => {
@@ -41,14 +41,14 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
   const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
 
-  const workFlowTransition = (action: string): WorkflowActionSubmitApiArg => ({
+  const workFlowTransition = (transition: string, actionType: ActionType, workFlowOptions: any[] = []): WorkflowActionSubmitApiArg => ({
     submitAction: {
-      actionType: 'transition',
+      actionType,
       elementId: id,
       elementType: 'asset',
       workflowName: toSnakeCase(workflow.workflowName),
-      transition: action,
-      workflowOptions: []
+      transition,
+      workflowOptions: workFlowOptions
     }
   })
 
@@ -56,9 +56,10 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
+    const [comment, setComment] = React.useState<string>('')
 
-    const submitWorkflowAction = (action: string): void => {
-      fetchSubmitWorkflowAction(workFlowTransition(action)).then(() => {
+    const submitWorkflowAction = (transition: string, actionType: ActionType, workFlowOptions: any[] = []): void => {
+      fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workFlowOptions)).then(() => {
         console.log('----> submit workflow action')
       }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
     }
@@ -66,15 +67,24 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
     useEffect(() => {
       const items: DropdownMenuProps['items'] = []
 
-      const mergedActions = [
-        ...workflow.allowedTransitions ?? [],
-        ...workflow.globalActions ?? []
-      ]
-      mergedActions?.forEach((status) => {
+      workflow.allowedTransitions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
           label: status.label,
-          onClick: () => { submitWorkflowAction(status.name) }
+          onClick: () => { submitWorkflowAction(status.name, 'transition') }
+        })
+      })
+
+      workflow.globalActions?.forEach((status) => {
+        const workFlowOptions = [
+          {
+            notes: comment
+          }
+        ]
+        items.push({
+          key: Number(items.length + 1).toString(),
+          label: status.label,
+          onClick: () => { submitWorkflowAction(status.name, 'global', workFlowOptions) }
         })
       })
 
