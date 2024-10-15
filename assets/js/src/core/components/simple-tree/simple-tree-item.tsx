@@ -30,7 +30,7 @@ const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }
     items?.push({
       key: action.key,
       label: t(`tree.actions.${action.key}`),
-      icon: action.icon ? <Icon name={ action.icon } /> : null,
+      icon: <Icon name={ action.icon } />,
       onClick: () => { onActionsClick?.(action.key) }
     })
   })
