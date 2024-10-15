@@ -8,14 +8,14 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             workflowGetDetails: build.query<WorkflowGetDetailsApiResponse, WorkflowGetDetailsApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/workflows/details`,
+                    url: `/pimcore-studio/api/workflows/details`,
                     params: { elementId: queryArg.elementId, elementType: queryArg.elementType },
                 }),
                 providesTags: ["Workflows"],
             }),
             workflowActionSubmit: build.mutation<WorkflowActionSubmitApiResponse, WorkflowActionSubmitApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/workflows/action`,
+                    url: `/pimcore-studio/api/workflows/action`,
                     method: "POST",
                     body: queryArg.submitAction,
                 }),

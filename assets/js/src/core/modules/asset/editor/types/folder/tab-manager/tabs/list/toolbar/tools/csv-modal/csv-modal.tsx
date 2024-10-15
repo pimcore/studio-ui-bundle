@@ -94,7 +94,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       // @todo add api domain
       title: t('jobs.csv-job.title', { title: jobTitle }),
       topics: [topics['csv-download-ready'], ...defaultTopics],
-      downloadUrl: '/studio/api/assets/download/csv/{jobRunId}',
+      downloadUrl: '/pimcore-studio/api/assets/download/csv/{jobRunId}',
       action: async () => await getDownloadAction(values.delimiter, values.header)
     }))
 

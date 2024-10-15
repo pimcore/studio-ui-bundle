@@ -68,7 +68,7 @@ export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, ver
       dimensions: dataRaw.dimensions !== null && dataRaw.dimensions !== undefined ? dataRaw.dimensions.width + ' x ' + dataRaw.dimensions.height : ''
     },
     metadata: formatMetadata(dataRaw.metadata),
-    previewImageUrl: `/studio/api/versions/${versionId}/image/stream`,
+    previewImageUrl: `/pimcore-studio/api/versions/${versionId}/image/stream`,
     dataRaw
   }
 }
@@ -107,7 +107,7 @@ export const loadPreviewImage = async (version: AssetVersion, versionId: number)
   }
   let result: string | null = null
 
-  await fetch(`/studio/api/versions/${versionId}/image/stream`, {
+  await fetch(`/pimcore-studio/api/versions/${versionId}/image/stream`, {
     cache: 'force-cache'
   })
     .then(async (response) => await response.blob())
