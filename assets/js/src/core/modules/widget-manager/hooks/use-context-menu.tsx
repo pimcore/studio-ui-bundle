@@ -12,7 +12,7 @@
 */
 
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useMemo } from 'react'
 import { type Model, TabNode } from 'flexlayout-react'
 import type { MenuRef } from 'antd'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
@@ -62,10 +62,17 @@ export const useContextMenu = (
 
   useClickOutside(dropdownRef, closeContextMenu)
 
+  const memoizedMenuItems = useMemo(() => {
+    if (contextMenuState !== null) {
+      return createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget })
+    }
+    return []
+  }, [contextMenuState, createContextMenuItems, model, closeWidget])
+
   const dropdown = contextMenuState !== null
     ? (
       <Dropdown
-        menu={ { items: createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget }) } }
+        menu={ { items: memoizedMenuItems } }
         menuRef={ dropdownRef }
         open
         overlayStyle={ { position: 'absolute', left: contextMenuState.x, top: contextMenuState.y } }
