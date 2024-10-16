@@ -62,7 +62,7 @@ export const useContextMenu = (
 
   useClickOutside(dropdownRef, closeContextMenu)
 
-  const memoizedMenuItems = useMemo(() => {
+  const menuItems = useMemo(() => {
     if (contextMenuState !== null) {
       return createContextMenuItems({ contextMenuState, closeContextMenu, model, closeWidget })
     }
@@ -72,7 +72,7 @@ export const useContextMenu = (
   const dropdown = contextMenuState !== null
     ? (
       <Dropdown
-        menu={ { items: memoizedMenuItems } }
+        menu={ { items: menuItems } }
         menuRef={ dropdownRef }
         open
         overlayStyle={ { position: 'absolute', left: contextMenuState.x, top: contextMenuState.y } }
