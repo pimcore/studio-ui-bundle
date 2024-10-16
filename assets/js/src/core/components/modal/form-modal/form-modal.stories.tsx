@@ -14,12 +14,12 @@
 import type {Meta} from '@storybook/react'
 import {Button} from '@Pimcore/components/button/button'
 import React, {useState} from 'react'
-import {InputFormModalProps, useModal} from './hooks/use-form-modal'
+import {useFormModal} from "./hooks/use-form-modal";
 
 const config: Meta = {
   title: 'Components/Data Entry/Input Modal',
   component: (args) => {
-    const [modal, contextHolder] = useModal()
+    const [modal, contextHolder] = useFormModal()
     const [value, setValue] = useState('')
     const [confirmed, setConfirmed] = useState(false)
 
