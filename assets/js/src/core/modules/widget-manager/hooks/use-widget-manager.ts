@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import {
   closeWidget as closeWidgetAction,
   openBottomWidget as openBottomWidgetAction,
@@ -20,10 +20,12 @@ import {
   openRightWidget as openRightWidgetAction,
   selectInnerModel,
   setActiveWidgetById,
+  type widgetManagerSliceName,
+  type WidgetManagerState,
   type WidgetManagerTabConfig
 } from '../widget-manager-slice'
 import { Model, type TabNode } from 'flexlayout-react'
-import { type ElementType } from '../../../../../types/element-type.d'
+import { type ElementType } from 'types/element-type.d'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
@@ -39,8 +41,6 @@ interface useWidgetManagerReturn {
 
 export const useWidgetManager = (): useWidgetManagerReturn => {
   const dispatch = useAppDispatch()
-  const modelJson = useAppSelector(selectInnerModel)
-  const model = Model.fromJson(modelJson)
 
   function openMainWidget (tabConfig: WidgetManagerTabConfig): void {
     dispatch(openMainWidgetAction(tabConfig))
@@ -66,12 +66,18 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     dispatch(closeWidgetAction(id))
   }
 
+  function getInnerModel (): Model {
+    const state = store.getState()
+    const modelJson = selectInnerModel(state as { [widgetManagerSliceName]: WidgetManagerState })
+    return Model.fromJson(modelJson)
+  }
+
   function isMainWidgetOpen (id: string): boolean {
-    return model.getNodeById(id) !== undefined
+    return getInnerModel().getNodeById(id) !== undefined
   }
 
   function getOpenedMainWidget (): TabNode | undefined {
-    return model.getActiveTabset()?.getSelectedNode() as TabNode | undefined
+    return getInnerModel().getActiveTabset()?.getSelectedNode() as TabNode | undefined
   }
 
   function getElementContextInformationFromOpenedMainWidget (): { id: number, elementType: ElementType } | undefined {
