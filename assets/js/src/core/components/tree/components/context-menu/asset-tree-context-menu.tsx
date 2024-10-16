@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Dropdown, type FormInstance, type MenuProps } from 'antd'
-import React, { useState } from 'react'
+import { Button, Dropdown, type MenuProps } from 'antd'
+import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
@@ -25,18 +25,12 @@ import {
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
-import {
-  type ConfirmationModal,
-  type InputModal,
-  useFormModal
-} from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { type Store } from 'antd/es/form/interface'
 import { useAssetActions } from '@Pimcore/components/tree/components/context-menu/hooks/use-asset-actions'
-import { Box } from '@Pimcore/components/box/box'
-import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useElementDeleteMutation, useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -47,13 +41,13 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
+  const [modal, contextHolder] = useFormModal()
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-  const [defaultValue, setDefaultValue] = useState<Store>({})
-  const [confirmationText, setConfirmationText] = useState<string | React.JSX.Element>('')
   const [assetRename] = useAssetPatchByIdMutation()
   const [assetDelete] = useElementDeleteMutation()
+  const [elementAddFolder] = useElementFolderCreateMutation()
   const {
     addFolder,
     rename,
@@ -67,13 +61,13 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     requestTranslations
   } = useAssetActions()
 
-  const onRenameSubmit = async (form: FormInstance<any>): Promise<void> => {
+  const renameAssetOrElement = async (value: string): Promise<void> => {
     const nodeId = parseInt(props.node!.id)
     const assetRenameTask = assetRename({
       body: {
         data: [{
           id: nodeId,
-          key: form.getFieldValue('input')
+          key: value
         }]
       }
     })
@@ -91,7 +85,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
-  const onConfirmation = async (): Promise<void> => {
+  const removeAssetOrFolder = async (): Promise<void> => {
     const isFolder = props.node!.type === 'folder'
 
     // TODO: add multiple deletion // this also requires mercure
@@ -140,15 +134,28 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
-  const {
-    showModal: showInputModal,
-    renderModal: InputModal
-  } = useFormModal<InputModal>({ type: 'input' })
+  const addElementFolder = async (value: string): Promise<void> => {
+    const parentId = parseInt(props.node!.id ?? 1)
+    const elementAddFolderTask = elementAddFolder({
+      parentId,
+      elementType: 'asset',
+      folderData: {
+        folderName: value
+      }
+    })
 
-  const {
-    showModal: showConfirmationModal,
-    renderModal: ConfirmationModal
-  } = useFormModal<ConfirmationModal>({ type: 'confirmation' })
+    try {
+      await elementAddFolderTask
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(parentId)
+        )
+      )
+    } catch (error) {
+      console.error('Error creating folder', error)
+    }
+  }
 
   const items: MenuProps['items'] = [
     {
@@ -178,12 +185,34 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         }
       ]
     },
-    addFolder(),
+    addFolder({
+      onClick: () => {
+        if (props.node !== undefined) {
+          modal.input({
+            title: 'Add Folder',
+            label: 'Enter the name of the new item',
+            rule: {
+              required: true,
+              message: 'Enter the name of the new item'
+            },
+            onOk: addElementFolder
+          })
+        }
+      }
+    }),
     rename({
       onClick: () => {
         if (props.node !== undefined) {
-          setDefaultValue({ input: props.node?.label })
-          showInputModal()
+          modal.input({
+            title: 'Rename',
+            label: 'Please enter the new name',
+            initialValue: props.node?.label,
+            rule: {
+              required: true,
+              message: 'Please enter a value'
+            },
+            onOk: renameAssetOrElement
+          })
         }
       }
     }),
@@ -192,13 +221,14 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     cut(),
     remove({
       onClick: () => {
-        setConfirmationText(() => (
-          <Box component={ 'center' }>
-            <span>Do you really want to delete this item?</span> <br />
+        modal.confirm({
+          title: 'Delete',
+          content: <>
+            <p>Do you really want to delete this item?</p>
             <b>{props.node?.label}</b>
-          </Box>
-        ))
-        showConfirmationModal()
+          </>,
+          onOk: removeAssetOrFolder
+        })
       }
     }),
     downloadAsZip({
@@ -228,18 +258,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   return (
     <>
-      <InputModal
-        initialValues={ defaultValue }
-        label={ 'Please enter the new name' }
-        onSubmit={ onRenameSubmit }
-        title={ 'Rename' }
-      />
-
-      <ConfirmationModal
-        onSubmit={ onConfirmation }
-        text={ confirmationText }
-        title={ 'Confirmation' }
-      />
+      {contextHolder}
 
       <Upload { ...uploadFile }>
         <Button

@@ -48,7 +48,7 @@ export interface AssetContextMenuRefresh extends NodeIdAware {}
 export interface AssetContextMenuDownloadAsZip extends NodeAware {}
 
 export interface UseAssetActionsHookReturn {
-  addFolder: () => ItemType
+  addFolder: (props: AssetContextMenuDelete) => ItemType
   rename: (props: AssetContextMenuRename) => ItemType
   copy: (props: AssetContextMenuCopy) => ItemType
   paste: () => ItemType | null
@@ -68,15 +68,12 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const [nodeId, setNodeId] = useState<string | null>(null)
   const [fetchCreateZip] = useAssetCreateZipMutation()
 
-  const addFolder = (): ItemType => {
+  const addFolder: UseAssetActionsHookReturn['addFolder'] = ({ onClick }): ItemType => {
     return {
       label: t('element.tree.context-menu.add-folder'),
       key: 'add-folder',
       icon: <Icon name={ 'folder' } />,
-      disabled: true,
-      onClick: () => {
-        console.log('addFolder')
-      }
+      onClick
     }
   }
 
