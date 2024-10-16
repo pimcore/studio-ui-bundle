@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-// import { TagsTreeContainer } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
+import React from 'react'
+import { TagsTreeContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -21,13 +21,18 @@ import {
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
+import { useTagGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useShortcutActions } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 
-interface TagFiltersContainerProps {
-  onSelectedTagsChange?: (tags: React.Key[]) => void
-}
+export const TagFiltersContainer = (): React.JSX.Element => {
+  const { id, elementType } = useElementContext()
 
-export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContainerProps): React.JSX.Element => {
-  const [selectedTags, setSelectedTags] = useState<React.Key[]>([])
+  const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
+  const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
+    elementType,
+    id
+  })
 
   return (
     <ContentToolbarSidebarLayout
@@ -35,14 +40,14 @@ export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContaine
         <Toolbar theme='secondary'>
           <IconTextButton
             icon='close'
-            onClick={ clearAllFilters }
+            onClick={ removeCurrentAndApplyFolderTags }
             type='link'
           >
             Clear all filters
           </IconTextButton>
 
           <Button
-            onClick={ () => { _onSelectedTagsChange(selectedTags) } }
+            onClick={ applyFolderTags }
             type='primary'
           >
             Apply
@@ -50,32 +55,18 @@ export const TagFiltersContainer = ({ onSelectedTagsChange }: TagFiltersContaine
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding="small"
+      >
         <Title>Tag Filters</Title>
+
+        <TagsTreeContainer
+          isLoading={ isLoading }
+          tags={ data?.items ?? [] }
+        />
       </Content>
 
-      {/*
-
-      <TagsTreeContainer
-        defaultCheckedTags={ selectedTags }
-        setDefaultCheckedTags={ _onSelectedTagsChange }
-      />
-
-      */}
     </ContentToolbarSidebarLayout>
   )
-
-  function clearAllFilters (): void {
-    setSelectedTags([])
-  }
-
-  function _onSelectedTagsChange (tags: React.Key[]): void {
-    setSelectedTags(() => {
-      if (onSelectedTagsChange !== undefined) {
-        onSelectedTagsChange(tags)
-      }
-
-      return tags
-    })
-  }
 }
