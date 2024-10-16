@@ -28,44 +28,50 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 
 export interface NodeAware {
-  node: TreeNodeProps | null
+  node?: TreeNodeProps
 }
 
 export interface NodeIdAware {
-  nodeId: string | null
+  nodeId: string | null // TODO: change that to string|undefined
 }
 
-export interface AssetContextMenuRename {
+export interface OnClickAware {
   onClick: () => void
 }
 
-export interface AssetContextMenuDelete {
-  onClick: () => void
+export interface AssetContextMenuRename extends OnClickAware {}
+
+export interface AssetContextMenuDelete extends OnClickAware {}
+
+export interface AssetContextMenuCopy extends NodeAware {}
+
+export interface AssetContextMenuPaste {
+  onClick: (node: TreeNodeProps) => void
 }
 
-export interface AssetContextMenuCopy extends NodeIdAware {}
 export interface AssetContextMenuRefresh extends NodeIdAware {}
+
 export interface AssetContextMenuDownloadAsZip extends NodeAware {}
 
 export interface UseAssetActionsHookReturn {
   addFolder: (props: AssetContextMenuDelete) => ItemType
   rename: (props: AssetContextMenuRename) => ItemType
   copy: (props: AssetContextMenuCopy) => ItemType
-  paste: () => ItemType | null
+  paste: (props: AssetContextMenuPaste) => ItemType | null
   cut: () => ItemType
   remove: (props: AssetContextMenuDelete) => ItemType
   downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
   advanced: () => ItemType
   refresh: (props: AssetContextMenuRefresh) => ItemType
   requestTranslations: () => ItemType
-  setNodeId: (nodeId: string) => void
+  // setNodeId: (nodeId: string) => void
 }
 
 export const useAssetActions = (): UseAssetActionsHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
-  const [nodeId, setNodeId] = useState<string | null>(null)
+  const [copyNode, setCopyNode] = useState<TreeNodeProps | undefined>()
   const [fetchCreateZip] = useAssetCreateZipMutation()
 
   const addFolder: UseAssetActionsHookReturn['addFolder'] = ({ onClick }): ItemType => {
@@ -86,29 +92,28 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const copy: UseAssetActionsHookReturn['copy'] = ({ nodeId }): ItemType => {
+  const copy: UseAssetActionsHookReturn['copy'] = ({ node }): ItemType => {
     return {
       label: t('element.tree.context-menu.copy'),
       key: 'copy',
       icon: <Icon name={ 'clipboard' } />,
       onClick: () => {
-        if (nodeId !== null) {
-          setNodeId(nodeId)
+        if (node !== null) {
+          setCopyNode(node)
         }
       }
     }
   }
 
-  const paste = (): ReturnType<UseAssetActionsHookReturn['paste']> => {
-    if (nodeId === null) return null
+  const paste: UseAssetActionsHookReturn['paste'] = (props): ItemType | null => {
+    if (copyNode === undefined) return null
 
     return {
       label: t('element.tree.context-menu.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
-      disabled: true,
       onClick: () => {
-        console.log('paste', nodeId)
+        props.onClick(copyNode)
       }
     }
   }
@@ -135,7 +140,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   }
 
   const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = ({ node }): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
-    if (node === null || node.type === 'folder') return null
+    if (node === undefined || node.type === 'folder') return null
 
     // todo: move that to download (downloadAsZip) is only for folders
     return {
@@ -215,7 +220,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const refresh: UseAssetActionsHookReturn['copy'] = ({ nodeId }): ItemType => {
+  const refresh: UseAssetActionsHookReturn['refresh'] = ({ nodeId }): ItemType => {
     return {
       label: t('element.tree.context-menu.refresh'),
       key: 'refresh',
@@ -254,7 +259,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     downloadAsZip,
     advanced,
     refresh,
-    requestTranslations,
-    setNodeId
+    requestTranslations
   }
 }

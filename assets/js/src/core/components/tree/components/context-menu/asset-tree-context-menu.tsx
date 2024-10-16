@@ -20,7 +20,7 @@ import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-u
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import {
   api as assetApi,
-  type AssetDeleteZipApiArg,
+  type AssetDeleteZipApiArg, useAssetCloneMutation,
   useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
@@ -31,6 +31,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -48,6 +49,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   const [assetRename] = useAssetPatchByIdMutation()
   const [assetDelete] = useElementDeleteMutation()
   const [elementAddFolder] = useElementFolderCreateMutation()
+  const [assetClone] = useAssetCloneMutation()
   const {
     addFolder,
     rename,
@@ -157,6 +159,35 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
+  const pasteAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
+    if (props.node !== undefined) {
+      const parentId = parseInt(props.node.id)
+      const id = parseInt(node.id)
+      const assetCloneTask = assetClone({
+        id,
+        parentId
+      })
+
+      try {
+        await assetCloneTask
+
+        dispatch(
+          assetApi.util.invalidateTags(
+            invalidatingTags.ASSET_TREE_ID(parentId)
+          )
+        )
+
+        dispatch(
+          assetApi.util.invalidateTags(
+            invalidatingTags.ASSET_TREE_ID(parseInt(node.parentId!))
+          )
+        )
+      } catch (error) {
+        console.error('Error cloning asset', error)
+      }
+    }
+  }
+
   const items: MenuProps['items'] = [
     {
       label: t('element.tree.context-menu.add-assets'),
@@ -216,8 +247,10 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         }
       }
     }),
-    copy({ nodeId: props.node?.id ?? null }),
-    paste(),
+    copy({ node: props.node }),
+    paste({
+      onClick: pasteAssetOrFolder
+    }),
     cut(),
     remove({
       onClick: () => {
@@ -232,7 +265,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       }
     }),
     downloadAsZip({
-      node: props.node ?? null
+      node: props.node
     }),
     advanced(),
     refresh({ nodeId: props.node?.id ?? null }),
