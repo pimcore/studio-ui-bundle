@@ -1,80 +1,126 @@
-import * as React from 'react';
-import {ModalFuncProps} from "antd";
-import {ConfigContext} from "antd/es/config-provider/context";
-import {useLocale} from "antd/es/locale";
-import ConfirmDialogWrapper from "antd/es/modal/ConfirmDialog";
-import localeValues from "antd/locale";
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
 
+import * as React from 'react'
+import { type ModalFuncProps } from 'antd'
+import { ConfigContext } from 'antd/es/config-provider/context'
+import { useLocale } from 'antd/es/locale'
+import ConfirmDialogWrapper from 'antd/es/modal/ConfirmDialog'
+import localeValues from 'antd/locale'
+import { type ExtModalFuncProps } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { Button } from '@Pimcore/components/button/button'
 
 export interface HookModalProps {
-  afterClose: () => void;
-  config: ModalFuncProps;
-  onConfirm?: (confirmed: boolean) => void;
+  afterClose: () => void
+  config: ExtModalFuncProps
+  onConfirm?: (confirmed: boolean) => void
   /**
    * Do not throw if is await mode
    */
-  isSilent?: () => boolean;
+  isSilent?: () => boolean
 }
 
 export interface HookModalRef {
-  destroy: () => void;
-  update: (config: ModalFuncProps) => void;
+  destroy: () => void
+  update: (config: ModalFuncProps) => void
 }
 
 const HookModal: React.ForwardRefRenderFunction<HookModalRef, HookModalProps> = (
-  { afterClose: hookAfterClose, config, ...restProps },
-  ref,
+  { afterClose: hookAfterClose, config: initConfig, ...restProps },
+  ref
 ) => {
-  const [open, setOpen] = React.useState(true);
-  const [innerConfig, setInnerConfig] = React.useState(config);
-  const { direction, getPrefixCls } = React.useContext(ConfigContext);
+  const { beforeOk, ...config } = initConfig
+  const [open, setOpen] = React.useState(true)
+  const [innerConfig, setInnerConfig] = React.useState(config)
+  const { direction, getPrefixCls } = React.useContext(ConfigContext)
 
-  const prefixCls = getPrefixCls('modal');
-  const rootPrefixCls = getPrefixCls();
+  const prefixCls = getPrefixCls('modal')
+  const rootPrefixCls = getPrefixCls()
 
-  const afterClose = () => {
-    hookAfterClose();
-    innerConfig.afterClose?.();
-  };
+  const afterClose = (): void => {
+    hookAfterClose()
+    innerConfig.afterClose?.()
+  }
 
-  const close = (...args: any[]) => {
-    setOpen(false);
-    const triggerCancel = args.some((param) => param?.triggerCancel);
+  const close = (...args: any[]): void => {
+    setOpen(false)
+    const triggerCancel = args.some((param) => param?.triggerCancel)
     if (triggerCancel) {
-      innerConfig.onCancel?.(() => {}, ...args.slice(1));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      innerConfig.onCancel?.(() => {}, ...args.slice(1))
     }
-  };
+  }
 
   React.useImperativeHandle(ref, () => ({
     destroy: close,
     update: (newConfig: ModalFuncProps) => {
       setInnerConfig((originConfig) => ({
         ...originConfig,
-        ...newConfig,
-      }));
-    },
-  }));
+        ...newConfig
+      }))
+    }
+  }))
 
-  const mergedOkCancel = innerConfig.okCancel ?? innerConfig.type === 'confirm';
+  const mergedOkCancel = innerConfig.okCancel ?? innerConfig.type === 'confirm'
 
-  const [contextLocale] = useLocale('Modal', localeValues.Modal);
+  const [contextLocale] = useLocale('Modal', localeValues.Modal)
+
+  if (beforeOk !== undefined) {
+    const handleBeforeOk = async (): Promise<any> => {
+      try {
+        beforeOk()
+          .then((value) => {
+            if (config.onOk !== undefined) {
+              config.onOk(value)
+            }
+
+            close()
+          })
+          .catch(() => {})
+      } catch (e) {}
+    }
+
+    config.footer = (_, { CancelBtn }) => {
+      return (
+        <>
+          <CancelBtn />
+          <Button
+            onClick={ handleBeforeOk }
+            type={ 'primary' }
+          >
+            {config.okText ?? '!OK!'}
+          </Button>
+        </>
+      )
+    }
+  }
 
   return (
     <ConfirmDialogWrapper
-      prefixCls={prefixCls}
-      rootPrefixCls={rootPrefixCls}
-      {...innerConfig}
-      close={close}
-      open={open}
-      afterClose={afterClose}
+      prefixCls={ prefixCls }
+      rootPrefixCls={ rootPrefixCls }
+      { ...innerConfig }
+      afterClose={ afterClose }
+      cancelText={ innerConfig.cancelText ?? contextLocale?.cancelText }
+      close={ close }
+      direction={ innerConfig.direction ?? direction }
       okText={
-        innerConfig.okText || (mergedOkCancel ? contextLocale?.okText : contextLocale?.justOkText)
+        innerConfig.okText ?? (mergedOkCancel ? contextLocale?.okText : contextLocale?.justOkText)
       }
-      direction={innerConfig.direction || direction}
-      cancelText={innerConfig.cancelText || contextLocale?.cancelText}
-      {...restProps}
+      open={ open }
+      { ...restProps }
     />
-  );
-};
+  )
+}
 
-export default React.forwardRef(HookModal);
+export default React.forwardRef(HookModal)

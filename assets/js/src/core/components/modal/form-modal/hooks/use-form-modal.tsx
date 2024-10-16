@@ -12,18 +12,22 @@
 */
 
 import React from 'react'
-import {Form, FormInstance, Input, type ModalFuncProps} from 'antd'
-import {uuid as pimcoreUUid} from '@Pimcore/utils/uuid'
-import {type HookModalRef} from 'antd/es/modal/useModal/HookModal'
-import {type ModalFuncWithPromise} from 'antd/es/modal/useModal'
+import { Form, type FormInstance, Input, type ModalFuncProps } from 'antd'
+import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
+import { type HookModalRef } from 'antd/es/modal/useModal/HookModal'
+import { type ModalFuncWithPromise } from 'antd/es/modal/useModal'
 import usePatchElement from 'antd/es/_util/hooks/usePatchElement'
-import HookModal from "@Pimcore/components/modal/form-modal/component/hook-modal/hook-modal";
-import {Rule} from 'antd/lib/form'
+import HookModal from '@Pimcore/components/modal/form-modal/component/hook-modal/hook-modal'
+import { type Rule } from 'antd/lib/form'
 
 let uuid = pimcoreUUid()
 
 interface ElementsHolderRef {
   patchElement: ReturnType<typeof usePatchElement>[1]
+}
+
+export interface ExtModalFuncProps extends ModalFuncProps {
+  beforeOk?: () => Promise<any>
 }
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
@@ -55,7 +59,7 @@ const ElementsHolder = React.memo(
 
 const destroyFns: Array<() => void> = []
 
-export function useModal (): readonly [instance: ExtHookApi, contextHolder: React.ReactElement] {
+export function useFormModal (): readonly [instance: ExtHookApi, contextHolder: React.ReactElement] {
   const holderRef = React.useRef<ElementsHolderRef>(null)
 
   // ========================== Effect ==========================
@@ -74,8 +78,8 @@ export function useModal (): readonly [instance: ExtHookApi, contextHolder: Reac
 
   // =========================== Hook ===========================
   const getConfirmFunc = React.useCallback(
-    (withFunc: (config: ModalFuncProps) => ModalFuncProps) =>
-      function hookConfirm (config: ModalFuncProps) {
+    (withFunc: (config: ExtModalFuncProps) => ExtModalFuncProps) =>
+      function hookConfirm (config: ExtModalFuncProps) {
         uuid += 1
 
         const modalRef = React.createRef<HookModalRef>()
@@ -87,6 +91,7 @@ export function useModal (): readonly [instance: ExtHookApi, contextHolder: Reac
         })
         let silent = false
 
+        // eslint-disable-next-line prefer-const
         let closeFunc: (() => void) | undefined
         const modal = (
           <HookModal
@@ -106,28 +111,28 @@ export function useModal (): readonly [instance: ExtHookApi, contextHolder: Reac
         // @ts-expect-error like ant-design
         closeFunc = holderRef.current?.patchElement(modal)
 
-        if (closeFunc) {
+        if (closeFunc !== undefined) {
           destroyFns.push(closeFunc)
         }
 
         const instance: ReturnType<ModalFuncWithPromise> = {
           destroy: () => {
-            function destroyAction () {
+            function destroyAction (): void {
               modalRef.current?.destroy()
             }
 
-            if (modalRef.current) {
+            if (modalRef.current !== undefined) {
               destroyAction()
             } else {
               setActionQueue((prev) => [...prev, destroyAction])
             }
           },
           update: (newConfig) => {
-            function updateAction () {
+            function updateAction (): void {
               modalRef.current?.update(newConfig as ModalFuncProps)
             }
 
-            if (modalRef.current) {
+            if (modalRef.current !== undefined) {
               updateAction()
             } else {
               setActionQueue((prev) => [...prev, updateAction])
@@ -147,7 +152,7 @@ export function useModal (): readonly [instance: ExtHookApi, contextHolder: Reac
   const fns = React.useMemo<ExtHookApi>(
     () => ({
       input: getConfirmFunc(withInput),
-      confirm: getConfirmFunc(withConfirm),
+      confirm: getConfirmFunc(withConfirm)
     }),
     []
   )
@@ -160,70 +165,72 @@ export function useModal (): readonly [instance: ExtHookApi, contextHolder: Reac
   ] as const
 }
 
-export function withInput (props: InputFormModalProps): ModalFuncProps {
+export function withInput (props: InputFormModalProps): ExtModalFuncProps {
   let form: FormInstance | null = null
   const {
     label,
     rule,
+    initialValue = '',
     ...modalProps
   } = props
 
   let formattedRule: Rule[] = []
-  if(rule !== undefined) {
+  if (rule !== undefined) {
     formattedRule = [rule]
   }
 
   const InputForm = (): React.ReactNode => {
-    const [tmpForm] = Form.useForm();
+    const [tmpForm] = Form.useForm()
     form = tmpForm
     return (
       <Form
-        form={form}
-        layout={'vertical'}
-        initialValues={{
-          input: props.initialValue
-        }}
+        form={ form }
+        initialValues={ {
+          input: initialValue
+        } }
+        layout={ 'vertical' }
       >
         <Form.Item
-          label={label}
+          label={ label }
           name="input"
-          rules={formattedRule}
+          rules={ formattedRule }
         >
-          <Input/>
+          <Input />
         </Form.Item>
       </Form>
     )
   }
 
-  const handleOk = (): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      // Perform some validation or async operation
-      form!.validateFields()
-        .then(() => resolve(
-          form!.getFieldValue('input')
-        ))
-        .catch(() => reject())
-    });
-  };
-
   return {
     ...modalProps,
     type: 'confirm',
     icon: null,
-    onOk: async () => {
-      const values = await handleOk()
-
-      return props.onOk?.(values)
+    beforeOk: async () => {
+      return await new Promise((resolve, reject) => {
+        // validate form
+        form!.validateFields()
+          .then(() => {
+            resolve(form!.getFieldValue('input'))
+          })
+          .catch(() => {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject('here i am')
+          })
+      })
     },
-    content: <InputForm />,
+
+    onOk: async (value) => {
+      props.onOk?.(value)
+    },
+    content: <InputForm />
   }
 }
 
-export function withConfirm (props: ModalFuncProps): ModalFuncProps {
+export function withConfirm (props: ModalFuncProps): ExtModalFuncProps {
   return {
     ...props,
     type: 'confirm',
     okText: 'Yes',
-    cancelText: 'No',
+    cancelText: 'No'
   }
 }
