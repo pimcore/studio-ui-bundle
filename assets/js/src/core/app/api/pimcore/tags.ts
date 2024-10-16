@@ -74,7 +74,7 @@ export const invalidatingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)]
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS]
 }
 
 const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
