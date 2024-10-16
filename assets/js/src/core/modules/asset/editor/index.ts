@@ -29,7 +29,7 @@ import { EditorContainer, type EditorContainerProps } from '@Pimcore/modules/ass
 import { FolderContainer } from '@Pimcore/modules/asset/editor/types/folder/folder-container'
 import { ImageContainer } from '@Pimcore/modules/asset/editor/types/image/image-container'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { VideoContainer } from '@Pimcore/modules/asset/editor/types/video/video-container'
 import { TextContainer } from '@Pimcore/modules/asset/editor/types/text/text-container'

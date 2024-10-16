@@ -16,7 +16,7 @@ import React from 'react'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DocumentTabManager } from './tab-manager/document-tab-manager'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Toolbar } from '../../toolbar/toolbar'
 
 const DocumentContainer = (): React.JSX.Element => {

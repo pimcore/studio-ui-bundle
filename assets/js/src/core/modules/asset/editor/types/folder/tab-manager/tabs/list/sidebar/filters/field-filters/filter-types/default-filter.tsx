@@ -11,35 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ComponentType, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { TextFilter } from './text-filter'
-import { SelectFilter } from './select-filter'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/listing/dynamic-type-listing-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface DefaultFilterProps {
   column: GridColumnConfiguration
 }
 
 export const DefaultFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
-  const { frontendType } = column
+  const listingRegistry = useInjection<DynamicTypeListingRegistry>(serviceIds['DynamicTypes/ListingRegistry'])
+  // @todo connect to frontend type
+  // const { frontendType } = column
 
   const Component = useMemo(() => {
-    return getComponent()
+    return listingRegistry.getDynamicType('text').getFilterComponent({ column })
   }, [])
 
   // @todo implement different filter types
   return (
-    <Component column={ column } />
+    <>
+      { Component }
+    </>
   )
-
-  function getComponent (): ComponentType<DefaultFilterProps> {
-    switch (frontendType) {
-      case 'text':
-        return TextFilter
-      case 'select':
-        return SelectFilter
-      default:
-        return TextFilter
-    }
-  }
 }

@@ -14,7 +14,7 @@
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import type { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import {
   VersionIdCell
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/components/table/cells/version-id-cell/version-id-cell'

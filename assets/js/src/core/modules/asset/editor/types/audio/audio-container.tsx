@@ -14,7 +14,7 @@
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { TabsContainer } from '../../../../element/editor/shared-tab-manager/tabs-container'
 import { type AudioTabManager } from './tab-manager/audio-tab-manager'
 import { Toolbar } from '../../toolbar/toolbar'

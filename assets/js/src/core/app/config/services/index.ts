@@ -27,40 +27,11 @@ import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
-
-export const serviceIds = {
-  // Widget manager
-  widgetManager: 'WidgetManagerService',
-
-  // Assets
-  'Asset/Editor/TypeComponentRegistry': 'Asset/Editor/TypeComponentRegistry',
-  'Asset/Editor/DocumentTabManager': 'Asset/Editor/DocumentTabManager',
-  'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
-  'Asset/Editor/ImageTabManager': 'Asset/Editor/ImageTabManager',
-  'Asset/Editor/TextTabManager': 'Asset/Editor/TextTabManager',
-  'Asset/Editor/VideoTabManager': 'Asset/Editor/VideoTabManager',
-  'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
-  'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
-  'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
-  'Asset/MetadataTypeProvider/MetadataTypeRegistry': 'Asset/MetadataTypeProvider/MetadataTypeRegistry',
-
-  // Data Objects
-  'DataObject/Editor/TypeComponentRegistry': 'DataObject/Editor/TypeComponentRegistry',
-  'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
-  'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
-
-  // icon library
-  iconLibrary: 'IconLibrary',
-
-  // Grid
-  'Grid/TypeRegistry': 'Grid/TypeRegistry',
-
-  // Execution engine
-  'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
-
-  // Component registry
-  'App/ComponentRegistry/ComponentRegistry': 'App/ComponentRegistry/ComponentRegistry'
-}
+import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/field-filters/dynamic-type-field-filter-registry'
+import { DynamicTypeListingText } from '@Pimcore/modules/element/dynamic-types/listing/text/dynamic-type-listing-text'
+import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/listing/dynamic-type-listing-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/field-filters/text/dynamic-type-field-filter-text'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -89,6 +60,14 @@ container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 
 // Grid
 container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScope()
+
+// dynamic types field filters
+container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
+
+// dynamic types listing
+container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Listing/Text']).to(DynamicTypeListingText).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

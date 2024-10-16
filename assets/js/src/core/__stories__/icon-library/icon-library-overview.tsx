@@ -12,7 +12,7 @@
 */
 
 import React, { type ChangeEvent, useMemo, useState } from 'react'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids' 
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { Icon } from '@Pimcore/components/icon/icon'

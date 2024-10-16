@@ -15,7 +15,7 @@ import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-to
 import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type FolderTabManager } from './tab-manager/folder-tab-manager'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 
