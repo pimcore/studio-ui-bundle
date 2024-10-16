@@ -207,14 +207,13 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
     icon: null,
     beforeOk: async () => {
       return await new Promise((resolve, reject) => {
-        // validate form
         form!.validateFields()
           .then(() => {
             resolve(form!.getFieldValue('input'))
           })
           .catch(() => {
             // eslint-disable-next-line prefer-promise-reject-errors
-            reject('here i am')
+            reject()
           })
       })
     },
