@@ -46,16 +46,17 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-  const [assetRename] = useAssetPatchByIdMutation()
+  const [assetPatch] = useAssetPatchByIdMutation()
   const [assetDelete] = useElementDeleteMutation()
   const [elementAddFolder] = useElementFolderCreateMutation()
   const [assetClone] = useAssetCloneMutation()
   const {
     addFolder,
     rename,
-    cut,
     copy,
     paste,
+    cut,
+    pasteCut,
     remove,
     downloadAsZip,
     advanced,
@@ -65,7 +66,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   const renameAssetOrElement = async (value: string): Promise<void> => {
     const nodeId = parseInt(props.node!.id)
-    const assetRenameTask = assetRename({
+    const assetRenameTask = assetPatch({
       body: {
         data: [{
           id: nodeId,
@@ -188,6 +189,36 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
+  const pasteCutAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
+    const nodeId = parseInt(props.node!.id)
+    const assetPasteCutTask = assetPatch({
+      body: {
+        data: [{
+          id: parseInt(node.id),
+          parentId: nodeId
+        }]
+      }
+    })
+
+    try {
+      await assetPasteCutTask
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(nodeId)
+        )
+      )
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(parseInt(node.id))
+        )
+      )
+    } catch (error) {
+      console.error('Error cutting')
+    }
+  }
+
   const items: MenuProps['items'] = [
     {
       label: t('element.tree.context-menu.add-assets'),
@@ -251,7 +282,10 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     paste({
       onClick: pasteAssetOrFolder
     }),
-    cut(),
+    cut({ node: props.node }),
+    pasteCut({
+      onClick: pasteCutAssetOrFolder
+    }),
     remove({
       onClick: () => {
         modal.confirm({

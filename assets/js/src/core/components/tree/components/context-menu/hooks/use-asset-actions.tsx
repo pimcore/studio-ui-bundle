@@ -49,6 +49,8 @@ export interface AssetContextMenuPaste {
   onClick: (node: TreeNodeProps) => void
 }
 
+export interface AssetContextMenuCut extends NodeAware {}
+
 export interface AssetContextMenuRefresh extends NodeIdAware {}
 
 export interface AssetContextMenuDownloadAsZip extends NodeAware {}
@@ -58,7 +60,8 @@ export interface UseAssetActionsHookReturn {
   rename: (props: AssetContextMenuRename) => ItemType
   copy: (props: AssetContextMenuCopy) => ItemType
   paste: (props: AssetContextMenuPaste) => ItemType | null
-  cut: () => ItemType
+  cut: (props: AssetContextMenuCut) => ItemType
+  pasteCut: (props: AssetContextMenuPaste) => ItemType | null
   remove: (props: AssetContextMenuDelete) => ItemType
   downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
   advanced: () => ItemType
@@ -71,7 +74,8 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
-  const [copyNode, setCopyNode] = useState<TreeNodeProps | undefined>()
+  const [node, setNode] = useState<TreeNodeProps | undefined>()
+  const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
   const [fetchCreateZip] = useAssetCreateZipMutation()
 
   const addFolder: UseAssetActionsHookReturn['addFolder'] = ({ onClick }): ItemType => {
@@ -99,33 +103,49 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       icon: <Icon name={ 'clipboard' } />,
       onClick: () => {
         if (node !== null) {
-          setCopyNode(node)
+          setNode(node)
+          setNodeTask('copy')
         }
       }
     }
   }
 
   const paste: UseAssetActionsHookReturn['paste'] = (props): ItemType | null => {
-    if (copyNode === undefined) return null
+    if (node === undefined || nodeTask !== 'copy') return null
 
     return {
       label: t('element.tree.context-menu.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
       onClick: () => {
-        props.onClick(copyNode)
+        props.onClick(node)
       }
     }
   }
 
-  const cut = (): ItemType => {
+  const cut: UseAssetActionsHookReturn['cut'] = ({ node }): ItemType => {
     return {
       label: t('element.tree.context-menu.cut'),
       key: 'cut',
       icon: <Icon name={ 'scissors-cut' } />,
-      disabled: true,
       onClick: () => {
-        console.log('cut')
+        if (node !== null) {
+          setNode(node)
+          setNodeTask('cut')
+        }
+      }
+    }
+  }
+
+  const pasteCut: UseAssetActionsHookReturn['pasteCut'] = (props): ItemType | null => {
+    if (node === undefined || nodeTask !== 'cut') return null
+
+    return {
+      label: t('element.tree.context-menu.pasteCut'),
+      key: 'pasteCut',
+      icon: <Icon name={ 'clipboard-check' } />,
+      onClick: () => {
+        props.onClick(node)
       }
     }
   }
@@ -255,6 +275,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     copy,
     paste,
     cut,
+    pasteCut,
     remove,
     downloadAsZip,
     advanced,

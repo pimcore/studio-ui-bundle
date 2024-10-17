@@ -280,6 +280,7 @@ element.tree.context-menu.rename: Rename
 element.tree.context-menu.copy: Copy
 element.tree.context-menu.paste: Paste
 element.tree.context-menu.cut: Cut
+element.tree.context-menu.pasteCut: Paste cut-out element
 element.tree.context-menu.delete: Delete
 element.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.advanced: Advanced
