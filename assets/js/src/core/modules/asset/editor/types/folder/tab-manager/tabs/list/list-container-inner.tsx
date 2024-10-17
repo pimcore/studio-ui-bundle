@@ -27,8 +27,6 @@ import {
   useListColumns,
   useListFilterOptions,
   useListGridConfig,
-  useListPage,
-  useListPageSize,
   useListSelectedRows,
   useListSorting,
   useListGridAvailableColumns
@@ -46,6 +44,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
+import usePagination from '@Pimcore/utils/hooks/use-pagination'
 
 interface DataPatch {
   columnId: string
@@ -58,8 +57,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
-  const { page, setPage } = useListPage()
-  const { pageSize, setPageSize } = useListPageSize()
+  const { page, pageSize, handlePageChange } = usePagination()
   const { setSelectedRows } = useListSelectedRows()
   const { filterOptions } = useListFilterOptions()
   const { columns, setGridColumns } = useListColumns()
@@ -133,11 +131,6 @@ export const ListContainerInner = (): React.JSX.Element => {
       console.error(error)
     })
   }, [])
-
-  const handlePageChange = (page: number, pageSize: number): void => {
-    setPage(page)
-    setPageSize(pageSize)
-  }
 
   const updateData = (dataUpdate: AssetGetGridApiResponse | undefined = undefined): void => {
     setDataPatches((currentDataPatches) => {
