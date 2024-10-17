@@ -289,9 +289,10 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     remove({
       onClick: () => {
         modal.confirm({
-          title: t('element.tree.context-menu.delete'),
+          title: t('element.tree.context-menu.delete.title'),
           content: <>
-            <p>{t('element.tree.context-menu.delete.text')}</p>
+            <span>{t('element.tree.context-menu.delete.text')}</span>
+            <br />
             <b>{props.node?.label}</b>
           </>,
           okText: t('element.tree.context-menu.delete.ok'),

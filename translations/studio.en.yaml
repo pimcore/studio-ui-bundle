@@ -286,6 +286,7 @@ element.tree.context-menu.paste: Paste
 element.tree.context-menu.cut: Cut
 element.tree.context-menu.pasteCut: Paste cut-out element
 element.tree.context-menu.delete: Delete
+element.tree.context-menu.delete.title: Delete item
 element.tree.context-menu.delete.text: Do you really want to delete this item?
 element.tree.context-menu.delete.ok: Delete permanently
 element.tree.context-menu.download-as-zip: Download as ZIP
