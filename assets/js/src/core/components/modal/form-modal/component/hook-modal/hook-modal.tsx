@@ -19,6 +19,7 @@ import ConfirmDialogWrapper from 'antd/es/modal/ConfirmDialog'
 import localeValues from 'antd/locale'
 import { type ExtModalFuncProps } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Button } from '@Pimcore/components/button/button'
+import { useTranslation } from 'react-i18next'
 
 export interface HookModalProps {
   afterClose: () => void
@@ -39,6 +40,7 @@ const HookModal: React.ForwardRefRenderFunction<HookModalRef, HookModalProps> = 
   { afterClose: hookAfterClose, config: initConfig, ...restProps },
   ref
 ) => {
+  const { t } = useTranslation()
   const { beforeOk, ...config } = initConfig
   const [open, setOpen] = React.useState(true)
   const [innerConfig, setInnerConfig] = React.useState(config)
@@ -98,7 +100,7 @@ const HookModal: React.ForwardRefRenderFunction<HookModalRef, HookModalProps> = 
             onClick={ handleBeforeOk }
             type={ 'primary' }
           >
-            {config.okText ?? '!OK!'}
+            {config.okText ?? t('button.ok')}
           </Button>
         </>
       )

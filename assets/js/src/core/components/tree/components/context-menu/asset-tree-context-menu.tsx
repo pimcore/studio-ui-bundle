@@ -251,11 +251,11 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       onClick: () => {
         if (props.node !== undefined) {
           modal.input({
-            title: 'Add Folder',
-            label: 'Enter the name of the new item',
+            title: t('element.tree.context-menu.add-folder'),
+            label: t('element.tree.context-menu.add-folder.label'),
             rule: {
               required: true,
-              message: 'Enter the name of the new item'
+              message: t('element.tree.context-menu.add-folder.validation')
             },
             onOk: addElementFolder
           })
@@ -266,12 +266,12 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       onClick: () => {
         if (props.node !== undefined) {
           modal.input({
-            title: 'Rename',
-            label: 'Please enter the new name',
+            title: t('element.tree.context-menu.rename'),
+            label: t('element.tree.context-menu.rename.label'),
             initialValue: props.node?.label,
             rule: {
               required: true,
-              message: 'Please enter a value'
+              message: t('element.tree.context-menu.rename.validation')
             },
             onOk: renameAssetOrElement
           })
@@ -289,11 +289,13 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     remove({
       onClick: () => {
         modal.confirm({
-          title: 'Delete',
+          title: t('element.tree.context-menu.delete'),
           content: <>
-            <p>Do you really want to delete this item?</p>
+            <p>{t('element.tree.context-menu.delete.text')}</p>
             <b>{props.node?.label}</b>
           </>,
+          okText: t('element.tree.context-menu.delete.ok'),
+          cancelText: t('button.cancel'),
           onOk: removeAssetOrFolder
         })
       }

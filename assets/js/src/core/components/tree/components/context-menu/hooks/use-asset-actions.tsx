@@ -67,7 +67,6 @@ export interface UseAssetActionsHookReturn {
   advanced: () => ItemType
   refresh: (props: AssetContextMenuRefresh) => ItemType
   requestTranslations: () => ItemType
-  // setNodeId: (nodeId: string) => void
 }
 
 export const useAssetActions = (): UseAssetActionsHookReturn => {
@@ -189,7 +188,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  // TODO: this should go to a separate hook
   const advanced = (): ItemType => {
     return {
       label: t('element.tree.context-menu.advanced'),

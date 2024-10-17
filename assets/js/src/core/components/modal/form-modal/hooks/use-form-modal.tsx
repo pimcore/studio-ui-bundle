@@ -19,6 +19,7 @@ import { type ModalFuncWithPromise } from 'antd/es/modal/useModal'
 import usePatchElement from 'antd/es/_util/hooks/usePatchElement'
 import HookModal from '@Pimcore/components/modal/form-modal/component/hook-modal/hook-modal'
 import { type Rule } from 'antd/lib/form'
+import i18n from 'i18next'
 
 let uuid = pimcoreUUid()
 
@@ -229,7 +230,7 @@ export function withConfirm (props: ModalFuncProps): ExtModalFuncProps {
   return {
     ...props,
     type: 'confirm',
-    okText: 'Yes',
-    cancelText: 'No'
+    okText: props.okText ?? i18n.t('yes'),
+    cancelText: props.cancelText ?? i18n.t('no')
   }
 }
