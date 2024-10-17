@@ -22,6 +22,7 @@ import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.style
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -40,6 +41,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   }
 
   const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
+  const { setShowWorkflowLogModal } = useWorkflow()
 
   const workFlowTransition = (transition: string, actionType: ActionType, workFlowOptions: any[] = []): WorkflowActionSubmitApiArg => ({
     submitAction: {
@@ -56,7 +58,6 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
-    const [comment, setComment] = React.useState<string>('')
 
     const submitWorkflowAction = (transition: string, actionType: ActionType, workFlowOptions: any[] = []): void => {
       fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workFlowOptions)).then(() => {
@@ -76,15 +77,15 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       })
 
       workflow.globalActions?.forEach((status) => {
-        const workFlowOptions = [
-          {
-            notes: comment
-          }
-        ]
+        // const workFlowOptions = [
+        //   {
+        //     notes: 'comment'
+        //   }
+        // ]
         items.push({
           key: Number(items.length + 1).toString(),
           label: status.label,
-          onClick: () => { submitWorkflowAction(status.name, 'global', workFlowOptions) }
+          onClick: () => { setShowWorkflowLogModal(true) }
         })
       })
 
