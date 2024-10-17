@@ -66,7 +66,6 @@ export interface UseAssetActionsHookReturn {
   downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
   advanced: () => ItemType
   refresh: (props: AssetContextMenuRefresh) => ItemType
-  requestTranslations: () => ItemType
 }
 
 export const useAssetActions = (): UseAssetActionsHookReturn => {
@@ -193,7 +192,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon name={ 'more' } />,
-      disabled: true,
       children: [
         {
           label: t('element.tree.context-menu.search-and-move'),
@@ -255,18 +253,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const requestTranslations = (): ItemType => {
-    return {
-      label: t('element.tree.context-menu.request-translations'),
-      key: 'request-translations',
-      icon: <Icon name={ 'translation' } />,
-      disabled: true,
-      onClick: () => {
-        console.log('request-translations')
-      }
-    }
-  }
-
   return {
     addFolder,
     rename,
@@ -277,7 +263,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     remove,
     downloadAsZip,
     advanced,
-    refresh,
-    requestTranslations
+    refresh
   }
 }

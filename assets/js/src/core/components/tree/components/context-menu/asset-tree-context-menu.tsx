@@ -60,8 +60,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     remove,
     downloadAsZip,
     advanced,
-    refresh,
-    requestTranslations
+    refresh
   } = useAssetActions()
 
   const renameAssetOrElement = async (value: string): Promise<void> => {
@@ -305,8 +304,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       node: props.node
     }),
     advanced(),
-    refresh({ nodeId: props.node?.id ?? null }),
-    requestTranslations()
+    refresh({ nodeId: props.node?.id ?? null })
   ]
 
   const uploadFile: UploadProps = {
