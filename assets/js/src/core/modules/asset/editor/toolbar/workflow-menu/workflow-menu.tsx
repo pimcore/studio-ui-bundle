@@ -18,7 +18,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import type { TagProps } from '@Pimcore/components/tag/tag'
-import { Badge } from 'antd'
+import { Badge } from '@Pimcore/components/badge/badge'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   // const { t } = useTranslation()
@@ -31,6 +31,8 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     if (data?.items !== undefined && data.items.length > 0) {
       const formattedStatuses = data.items.reduce((result: Array<{ children: string }>, workflow) => {
         workflow.workflowStatus.forEach((status) => {
+          console.log('----> color', status.color)
+
           if (status.visibleInDetail !== undefined && status.visibleInDetail) {
             const style = status.colorInverted
               ? { backgroundColor: `${status.color}33` }
@@ -40,10 +42,6 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
                               children: status.label,
                               icon: <Badge
                                 color={ status.color }
-                                styles={ status.colorInverted
-                                  ? { indicator: { outline: `1px solid ${status.color}4D` } }
-                                  : {}
-                                    }
                                     />,
                               style
                             }
