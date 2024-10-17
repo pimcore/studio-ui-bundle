@@ -78,7 +78,7 @@ const DetailContainer = (): React.JSX.Element => {
 
     const queryString = buildQueryString(keyValues, ['', '-1'])
 
-    fetch(`http://localhost/studio/api/assets/${id}/image/download/custom?${queryString}`)
+    fetch(`http://localhost/pimcore-studio/api/assets/${id}/image/download/custom?${queryString}`)
       .then(async (response) => await response.blob())
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)

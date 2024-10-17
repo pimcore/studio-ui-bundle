@@ -7,35 +7,35 @@ const injectedRtkApi = api
     .injectEndpoints({
         endpoints: (build) => ({
             versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
             }),
             versionImageStreamById: build.query<VersionImageStreamByIdApiResponse, VersionImageStreamByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/image/stream` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/image/stream` }),
                 providesTags: ["Versions"],
             }),
             versionPdfStreamById: build.query<VersionPdfStreamByIdApiResponse, VersionPdfStreamByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/pdf/stream` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/pdf/stream` }),
                 providesTags: ["Versions"],
             }),
             versionGetById: build.query<VersionGetByIdApiResponse, VersionGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}` }),
                 providesTags: ["Versions"],
             }),
             versionUpdateById: build.mutation<VersionUpdateByIdApiResponse, VersionUpdateByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/versions/${queryArg.id}`,
+                    url: `/pimcore-studio/api/versions/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.updateVersion,
                 }),
                 invalidatesTags: ["Versions"],
             }),
             versionPublishById: build.mutation<VersionPublishByIdApiResponse, VersionPublishByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}`, method: "POST" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}`, method: "POST" }),
                 invalidatesTags: ["Versions"],
             }),
             versionDeleteById: build.mutation<VersionDeleteByIdApiResponse, VersionDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Versions"],
             }),
             versionGetCollectionForElementByTypeAndId: build.query<
@@ -43,7 +43,7 @@ const injectedRtkApi = api
                 VersionGetCollectionForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
                     params: { page: queryArg.page, pageSize: queryArg.pageSize },
                 }),
                 providesTags: ["Versions"],
@@ -53,7 +53,7 @@ const injectedRtkApi = api
                 VersionCleanupForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Versions"],

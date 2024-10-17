@@ -8,7 +8,7 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             noteGetCollection: build.query<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/notes`,
+                    url: `/pimcore-studio/api/notes`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -21,12 +21,12 @@ const injectedRtkApi = api
                 providesTags: ["Notes"],
             }),
             noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/notes/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Notes"],
             }),
             noteElementGetCollection: build.query<NoteElementGetCollectionApiResponse, NoteElementGetCollectionApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -40,7 +40,7 @@ const injectedRtkApi = api
             }),
             noteElementCreate: build.mutation<NoteElementCreateApiResponse, NoteElementCreateApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
                     body: queryArg.createNote,
                 }),
@@ -50,7 +50,7 @@ const injectedRtkApi = api
                 NoteElementGetTypeCollectionApiResponse,
                 NoteElementGetTypeCollectionApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/notes/type/${queryArg.elementType}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/type/${queryArg.elementType}` }),
                 providesTags: ["Notes"],
             }),
         }),
