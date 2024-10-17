@@ -92,6 +92,7 @@ export const TagWithBadge = {
   args: {
     children: 'Review License',
     icon: <Badge
-        color={'lime'}/>
+      color={ 'lime' }
+          />
   }
 }
