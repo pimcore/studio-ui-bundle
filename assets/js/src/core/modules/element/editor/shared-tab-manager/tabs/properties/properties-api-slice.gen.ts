@@ -8,28 +8,28 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             propertyGetCollection: build.query<PropertyGetCollectionApiResponse, PropertyGetCollectionApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/properties`,
+                    url: `/pimcore-studio/api/properties`,
                     params: { elementType: queryArg.elementType, filter: queryArg.filter },
                 }),
                 providesTags: ["Properties"],
             }),
             propertyUpdate: build.mutation<PropertyUpdateApiResponse, PropertyUpdateApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/properties/${queryArg.id}`,
+                    url: `/pimcore-studio/api/properties/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.updatePredefinedProperty,
                 }),
                 invalidatesTags: ["Properties"],
             }),
             propertyDelete: build.mutation<PropertyDeleteApiResponse, PropertyDeleteApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/properties/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Properties"],
             }),
             propertyGetCollectionForElementByTypeAndId: build.query<
                 PropertyGetCollectionForElementByTypeAndIdApiResponse,
                 PropertyGetCollectionForElementByTypeAndIdApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/properties/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Properties"],
             }),
         }),

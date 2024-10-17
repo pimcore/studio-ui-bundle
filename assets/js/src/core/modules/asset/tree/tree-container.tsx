@@ -17,8 +17,6 @@ import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { PagerContainer } from './pager/pager-container'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { api } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { store } from '@Pimcore/app/store'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 
@@ -30,8 +28,6 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   const { openAsset } = useAssetHelper()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
-    await store.dispatch(api.endpoints.assetGetById.initiate({ id: parseInt(node.id) }))
-
     openAsset({
       config: {
         id: parseInt(node.id)

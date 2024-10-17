@@ -7,14 +7,14 @@ const injectedRtkApi = api
     .injectEndpoints({
         endpoints: (build) => ({
             scheduleDeleteById: build.mutation<ScheduleDeleteByIdApiResponse, ScheduleDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/schedules/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/schedules/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Schedule"],
             }),
             scheduleGetCollectionForElementByTypeAndId: build.query<
                 ScheduleGetCollectionForElementByTypeAndIdApiResponse,
                 ScheduleGetCollectionForElementByTypeAndIdApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/schedules/${queryArg.elementType}/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/schedules/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Schedule"],
             }),
             scheduleUpdateForElementByTypeAndId: build.mutation<
@@ -22,7 +22,7 @@ const injectedRtkApi = api
                 ScheduleUpdateForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.body,
                 }),
@@ -33,7 +33,7 @@ const injectedRtkApi = api
                 ScheduleCreateForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Schedule"],

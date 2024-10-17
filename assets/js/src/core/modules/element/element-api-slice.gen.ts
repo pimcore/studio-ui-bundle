@@ -8,20 +8,20 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             elementDelete: build.mutation<ElementDeleteApiResponse, ElementDeleteApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/elements/${queryArg.elementType}/delete/${queryArg.id}`,
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/delete/${queryArg.id}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Elements"],
             }),
             elementGetDeleteInfo: build.query<ElementGetDeleteInfoApiResponse, ElementGetDeleteInfoApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/elements/${queryArg.elementType}/delete-info/${queryArg.id}`,
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/delete-info/${queryArg.id}`,
                 }),
                 providesTags: ["Elements"],
             }),
             elementFolderCreate: build.mutation<ElementFolderCreateApiResponse, ElementFolderCreateApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/elements/${queryArg.elementType}/folder/${queryArg.parentId}`,
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/folder/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.folderData,
                 }),
@@ -29,7 +29,7 @@ const injectedRtkApi = api
             }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/elements/${queryArg.elementType}/path`,
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/path`,
                     params: { elementPath: queryArg.elementPath },
                 }),
                 providesTags: ["Elements"],

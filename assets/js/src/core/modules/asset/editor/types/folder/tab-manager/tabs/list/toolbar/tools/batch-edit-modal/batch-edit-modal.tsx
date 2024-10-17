@@ -60,7 +60,17 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     addOrUpdateBatchEdit(column.key, column.type, '')
   }
 
-  const onApplyChanges = (): void => {
+  const applyChanges = (): void => {
+    Object.keys(selectedRows).length === 1 ? applyUpdate() : applyUpdates()
+  }
+
+  const applyUpdate = (): void => {
+    patchAsset(assetPatchForUpdate()).then(() => {
+      console.log('----> reload the app')
+    }).catch((error) => { console.error(`Failed to patch assets ${error}`) })
+  }
+
+  const applyUpdates = (): void => {
     addJob(createJob({
       title: t('jobs.batch-edit-job.title', { title: jobTitle }),
       topics: [topics['patch-finished'], ...defaultTopics],
@@ -117,7 +127,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                 {t('batch-edit.modal-footer.discard-all-changes')}</IconTextButton>
               <Button
                 onClick={ () => {
-                  onApplyChanges()
+                  applyChanges()
                 } }
                 type='primary'
               >{t('batch-edit.modal-footer.apply-changes')}</Button>

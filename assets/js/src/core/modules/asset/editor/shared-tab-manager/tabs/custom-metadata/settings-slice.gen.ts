@@ -10,7 +10,7 @@ const injectedRtkApi = api
                 AssetCustomMetadataGetByIdApiResponse,
                 AssetCustomMetadataGetByIdApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-metadata` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Assets"],
             }),
         }),

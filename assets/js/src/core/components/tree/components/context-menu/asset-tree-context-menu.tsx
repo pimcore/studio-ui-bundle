@@ -310,7 +310,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   ]
 
   const uploadFile: UploadProps = {
-    action: `/studio/api/assets/add/${props.node?.id}`,
+    action: `/pimcore-studio/api/assets/add/${props.node?.id}`,
     name: 'file',
     multiple: true,
     showUploadList: false,
@@ -318,7 +318,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   }
 
   const uploadZip: UploadProps = {
-    action: `/studio/api/assets/add-zip/${props.node?.id}`,
+    action: `/pimcore-studio/api/assets/add-zip/${props.node?.id}`,
     accept: '.zip, .rar, .7zip',
     name: 'zipFile',
     multiple: true,
