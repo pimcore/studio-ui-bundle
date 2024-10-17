@@ -30,6 +30,14 @@ export const useStyle = createStyles(({ token, css }) => {
        &:hover {
          color: ${token.colorPrimaryHover};
        }
+    `,
+
+    breadcrumbLink: css`
+      color: ${token.colorTextTertiary};
+    `,
+
+    breadcrumbLinkLast: css`
+      color: ${token.colorLinkActive}
     `
   }
 })

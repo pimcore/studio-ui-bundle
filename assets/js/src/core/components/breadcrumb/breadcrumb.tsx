@@ -14,22 +14,26 @@
 import React from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
-import { useStyle } from './breadcrumb.styles'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementType } from 'types/element-type.d'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Text } from '@Pimcore/components/text/text'
+import { type ElementType } from 'types/element-type.d'
+import { useStyle } from './breadcrumb.styles'
 
 export const Breadcrumb = ({ path, elementType }: { path: string, elementType: ElementType }): React.JSX.Element => {
   const { styles } = useStyle()
   const { openElement } = useElementHelper()
-  let items: NonNullable<BreadcrumbProps['items']> = []
   const dispatch = useAppDispatch()
 
-  function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
-    // split to check if it has more that just the key
-    const parts = path.split('/')
+  let items: NonNullable<BreadcrumbProps['items']> = []
 
+  function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
+    // Split to check if it has more that just a single key
+    const partList = path.split('/')
+    const partListAmount = partList.length
+
+    // Handle click event for intermediate parts
     function onMenuItemClick (path: string): void {
       const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType,
@@ -48,29 +52,38 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
         .catch(() => {})
     }
 
-    if (parts.length > 2) {
+    if (partListAmount > 2) {
       items.push({
-        title: parts[parts.length - 2],
+        title: (
+          <Text
+            className={ styles.breadcrumbLink }
+            ellipsis={ { tooltip: { title: partList[partListAmount - 2], placement: 'top' } } }
+            style={ { maxWidth: '150px' } }
+          >
+            {partList[partListAmount - 2]}
+          </Text>
+        ),
         className: styles.pathItem,
         onClick: () => {
-          onMenuItemClick(parts.slice(0, parts.length - 1).join('/'))
+          onMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
         }
       })
 
-      if (parts.length > 3) {
+      if (partListAmount > 3) {
         const dotsMenuItems: MenuItemType[] = []
-        for (let i = 1; i < parts.length - 2; i++) {
+        for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
             key: i,
             label: (
-              parts[i]
+              partList[i]
             ),
             onClick: () => {
-              onMenuItemClick(parts.slice(0, i + 1).join('/'))
+              onMenuItemClick(partList.slice(0, i + 1).join('/'))
             }
           })
         }
 
+        // Prepend the "..." menu to the existing items array
         items = [
           {
             title: '...',
@@ -81,8 +94,18 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
       }
     }
 
-    // key to breadcrumb
-    items.push({ title: parts[parts.length - 1] })
+    // Add the last item of the breadcrumb
+    items.push({
+      title: (
+        <Text
+          className={ styles.breadcrumbLinkLast }
+          ellipsis={ { tooltip: { title: partList[partListAmount - 1], placement: 'top' } } }
+          style={ { maxWidth: '150px' } }
+        >
+          {partList[partListAmount - 1]}
+        </Text>
+      )
+    })
 
     return items
   }
