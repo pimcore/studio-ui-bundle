@@ -25,7 +25,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
 
-  console.log('----> data', data)
+  console.log('----> datax', data)
 
   const getVisibleWorkflowStatus = (): TagProps[][] => {
     if (data?.items !== undefined && data.items.length > 0) {
