@@ -14,6 +14,7 @@
 import { type Meta } from '@storybook/react'
 import { Tag } from '@Pimcore/components/tag/tag'
 import React from 'react'
+import { Badge } from '@Pimcore/components/badge/badge'
 
 const config: Meta = {
   title: 'Components/General/Tag',
@@ -84,5 +85,13 @@ export const ColorProcessingNotBordered = {
     bordered: false,
     color: 'processing',
     children: 'Car Images/BMW'
+  }
+}
+
+export const TagWithBadge = {
+  args: {
+    children: 'Review License',
+    icon: <Badge
+        color={'lime'}/>
   }
 }
