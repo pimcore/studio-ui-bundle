@@ -14,6 +14,7 @@
 import React from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
+import { CaretDownOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -21,7 +22,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { type ElementType } from 'types/element-type.d'
 import { useStyle } from './breadcrumb.styles'
 
-export const Breadcrumb = ({ path, elementType }: { path: string, elementType: ElementType }): React.JSX.Element => {
+export const Breadcrumb = ({ path, elementType, width = 'S' }: { path: string, elementType: ElementType, width?: 'S' | 'M' | 'L' }): React.JSX.Element => {
   const { styles } = useStyle()
   const { openElement } = useElementHelper()
   const dispatch = useAppDispatch()
@@ -52,7 +53,7 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
         .catch(() => {})
     }
 
-    if (partListAmount > 2) {
+    if (partListAmount > 2 && width === 'L') {
       items.push({
         title: (
           <Text
@@ -74,6 +75,7 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
         for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
             key: i,
+            className: styles.dropdownItem,
             label: (
               partList[i]
             ),
@@ -94,11 +96,41 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
       }
     }
 
+    if (partListAmount > 2 && width !== 'L') {
+      const dotsMenuItems: MenuItemType[] = []
+
+      for (let i = 1; i < partListAmount; i++) {
+        const isLastItem = i === partListAmount - 1
+        const paddingSize = 24
+
+        dotsMenuItems.push({
+          key: i,
+          className: styles.dropdownItem,
+          style: { paddingLeft: `${paddingSize * (i - 1)}px` },
+          label: (
+            partList[i]
+          ),
+          onClick: () => {
+            onMenuItemClick(partList.slice(0, i + 1).join('/'))
+          },
+          ...(!isLastItem && { icon: <CaretDownOutlined /> })
+        })
+      }
+
+      // Prepend the "..." menu to the existing items array
+      items = [
+        {
+          title: '...',
+          menu: { items: dotsMenuItems }
+        },
+        ...items
+      ]
+    }
+
     // Add the last item of the breadcrumb
     items.push({
       title: (
         <Text
-          className={ styles.breadcrumbLinkLast }
           ellipsis={ { tooltip: { title: partList[partListAmount - 1], placement: 'top' } } }
           style={ { maxWidth: '150px' } }
         >

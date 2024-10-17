@@ -24,6 +24,11 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
     `,
+
+    breadcrumbLink: css`
+      color: ${token.colorTextTertiary};
+    `,
+
     pathItem: css`
        cursor: pointer;
        
@@ -32,12 +37,10 @@ export const useStyle = createStyles(({ token, css }) => {
        }
     `,
 
-    breadcrumbLink: css`
-      color: ${token.colorTextTertiary};
-    `,
-
-    breadcrumbLinkLast: css`
-      color: ${token.colorLinkActive}
+    dropdownItem: css`
+      &:hover {
+        background-color: ${token.controlItemBgActive} !important;
+      }
     `
   }
 })
