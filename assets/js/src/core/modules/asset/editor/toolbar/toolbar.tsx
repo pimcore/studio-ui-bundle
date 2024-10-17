@@ -11,33 +11,44 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
-import { AssetContext } from '../../asset-provider'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import {
+  useSaveSchedules
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import {
   type CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
 
-import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import {
+  type DataProperty as DataPropertyApi
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services'
 import { container } from '@Pimcore/app/depency-injection'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useContext(AssetContext)
+  const { id } = useElementContext()
+
   const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id)
   const hasChanges = asset?.modified === true
   const [saveAsset, { isLoading, isSuccess, isError }] = useAssetUpdateByIdMutation()
-  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('asset', id, false)
+  const {
+    saveSchedules,
+    isLoading: isSchedulesLoading,
+    isSuccess: isSchedulesSuccess,
+    isError: isSchedulesError
+  } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuAsset')
@@ -60,7 +71,7 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <ContextMenu />
-
+      <EditorToolbarWorkflowMenu />
       <Button
         disabled={ !hasChanges || isLoading || isSchedulesLoading }
         loading={ isLoading || isSchedulesLoading }
