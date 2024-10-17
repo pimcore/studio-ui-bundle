@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Dropdown, type FormInstance, type MenuProps } from 'antd'
-import React, { useState } from 'react'
+import { Button, Dropdown, type MenuProps } from 'antd'
+import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
@@ -20,23 +20,18 @@ import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-u
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import {
   api as assetApi,
-  type AssetDeleteZipApiArg,
+  type AssetDeleteZipApiArg, useAssetCloneMutation,
   useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
-import {
-  type ConfirmationModal,
-  type InputModal,
-  useFormModal
-} from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { type Store } from 'antd/es/form/interface'
 import { useAssetActions } from '@Pimcore/components/tree/components/context-menu/hooks/use-asset-actions'
-import { Box } from '@Pimcore/components/box/box'
-import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useElementDeleteMutation, useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -47,19 +42,21 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
+  const [modal, contextHolder] = useFormModal()
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-  const [defaultValue, setDefaultValue] = useState<Store>({})
-  const [confirmationText, setConfirmationText] = useState<string | React.JSX.Element>('')
-  const [assetRename] = useAssetPatchByIdMutation()
+  const [assetPatch] = useAssetPatchByIdMutation()
   const [assetDelete] = useElementDeleteMutation()
+  const [elementAddFolder] = useElementFolderCreateMutation()
+  const [assetClone] = useAssetCloneMutation()
   const {
     addFolder,
     rename,
-    cut,
     copy,
     paste,
+    cut,
+    pasteCut,
     remove,
     downloadAsZip,
     advanced,
@@ -67,13 +64,13 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     requestTranslations
   } = useAssetActions()
 
-  const onRenameSubmit = async (form: FormInstance<any>): Promise<void> => {
+  const renameAssetOrElement = async (value: string): Promise<void> => {
     const nodeId = parseInt(props.node!.id)
-    const assetRenameTask = assetRename({
+    const assetRenameTask = assetPatch({
       body: {
         data: [{
           id: nodeId,
-          key: form.getFieldValue('input')
+          key: value
         }]
       }
     })
@@ -91,7 +88,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
-  const onConfirmation = async (): Promise<void> => {
+  const removeAssetOrFolder = async (): Promise<void> => {
     const isFolder = props.node!.type === 'folder'
 
     // TODO: add multiple deletion // this also requires mercure
@@ -140,15 +137,87 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
-  const {
-    showModal: showInputModal,
-    renderModal: InputModal
-  } = useFormModal<InputModal>({ type: 'input' })
+  const addElementFolder = async (value: string): Promise<void> => {
+    const parentId = parseInt(props.node!.id ?? 1)
+    const elementAddFolderTask = elementAddFolder({
+      parentId,
+      elementType: 'asset',
+      folderData: {
+        folderName: value
+      }
+    })
 
-  const {
-    showModal: showConfirmationModal,
-    renderModal: ConfirmationModal
-  } = useFormModal<ConfirmationModal>({ type: 'confirmation' })
+    try {
+      await elementAddFolderTask
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(parentId)
+        )
+      )
+    } catch (error) {
+      console.error('Error creating folder', error)
+    }
+  }
+
+  const pasteAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
+    if (props.node !== undefined) {
+      const parentId = parseInt(props.node.id)
+      const id = parseInt(node.id)
+      const assetCloneTask = assetClone({
+        id,
+        parentId
+      })
+
+      try {
+        await assetCloneTask
+
+        dispatch(
+          assetApi.util.invalidateTags(
+            invalidatingTags.ASSET_TREE_ID(parentId)
+          )
+        )
+
+        dispatch(
+          assetApi.util.invalidateTags(
+            invalidatingTags.ASSET_TREE_ID(parseInt(node.parentId!))
+          )
+        )
+      } catch (error) {
+        console.error('Error cloning asset', error)
+      }
+    }
+  }
+
+  const pasteCutAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
+    const nodeId = parseInt(props.node!.id)
+    const assetPasteCutTask = assetPatch({
+      body: {
+        data: [{
+          id: parseInt(node.id),
+          parentId: nodeId
+        }]
+      }
+    })
+
+    try {
+      await assetPasteCutTask
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(nodeId)
+        )
+      )
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_TREE_ID(parseInt(node.id))
+        )
+      )
+    } catch (error) {
+      console.error('Error cutting')
+    }
+  }
 
   const items: MenuProps['items'] = [
     {
@@ -178,31 +247,62 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
         }
       ]
     },
-    addFolder(),
-    rename({
+    addFolder({
       onClick: () => {
         if (props.node !== undefined) {
-          setDefaultValue({ input: props.node?.label })
-          showInputModal()
+          modal.input({
+            title: t('element.tree.context-menu.add-folder'),
+            label: t('element.tree.context-menu.add-folder.label'),
+            rule: {
+              required: true,
+              message: t('element.tree.context-menu.add-folder.validation')
+            },
+            onOk: addElementFolder
+          })
         }
       }
     }),
-    copy({ nodeId: props.node?.id ?? null }),
-    paste(),
-    cut(),
+    rename({
+      onClick: () => {
+        if (props.node !== undefined) {
+          modal.input({
+            title: t('element.tree.context-menu.rename'),
+            label: t('element.tree.context-menu.rename.label'),
+            initialValue: props.node?.label,
+            rule: {
+              required: true,
+              message: t('element.tree.context-menu.rename.validation')
+            },
+            onOk: renameAssetOrElement
+          })
+        }
+      }
+    }),
+    copy({ node: props.node }),
+    paste({
+      onClick: pasteAssetOrFolder
+    }),
+    cut({ node: props.node }),
+    pasteCut({
+      onClick: pasteCutAssetOrFolder
+    }),
     remove({
       onClick: () => {
-        setConfirmationText(() => (
-          <Box component={ 'center' }>
-            <span>Do you really want to delete this item?</span> <br />
+        modal.confirm({
+          title: t('element.tree.context-menu.delete.title'),
+          content: <>
+            <span>{t('element.tree.context-menu.delete.text')}</span>
+            <br />
             <b>{props.node?.label}</b>
-          </Box>
-        ))
-        showConfirmationModal()
+          </>,
+          okText: t('element.tree.context-menu.delete.ok'),
+          cancelText: t('button.cancel'),
+          onOk: removeAssetOrFolder
+        })
       }
     }),
     downloadAsZip({
-      node: props.node ?? null
+      node: props.node
     }),
     advanced(),
     refresh({ nodeId: props.node?.id ?? null }),
@@ -228,18 +328,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
   return (
     <>
-      <InputModal
-        initialValues={ defaultValue }
-        label={ 'Please enter the new name' }
-        onSubmit={ onRenameSubmit }
-        title={ 'Rename' }
-      />
-
-      <ConfirmationModal
-        onSubmit={ onConfirmation }
-        text={ confirmationText }
-        title={ 'Confirmation' }
-      />
+      {contextHolder}
 
       <Upload { ...uploadFile }>
         <Button
