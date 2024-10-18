@@ -24,12 +24,23 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
     `,
+
+    breadcrumbLink: css`
+      color: ${token.colorTextTertiary};
+    `,
+
     pathItem: css`
        cursor: pointer;
        
        &:hover {
          color: ${token.colorPrimaryHover};
        }
+    `,
+
+    dropdownItem: css`
+      &:hover {
+        background-color: ${token.controlItemBgActive} !important;
+      }
     `
   }
 })
