@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import { CaretDownOutlined } from '@ant-design/icons'
@@ -22,10 +22,32 @@ import { Text } from '@Pimcore/components/text/text'
 import { type ElementType } from 'types/element-type.d'
 import { useStyle } from './breadcrumb.styles'
 
-export const Breadcrumb = ({ path, elementType, width = 'S' }: { path: string, elementType: ElementType, width?: 'S' | 'M' | 'L' }): React.JSX.Element => {
+export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: string, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
+  const [size, setSize] = useState<'S' | 'M' | 'L'>('L')
+
   const { styles } = useStyle()
   const { openElement } = useElementHelper()
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (editorTabsWidth == null) return
+
+    if (editorTabsWidth < 550) {
+      setSize('S')
+
+      return
+    }
+
+    if (editorTabsWidth <= 800) {
+      setSize('M')
+
+      return
+    }
+
+    if (editorTabsWidth > 800) {
+      setSize('L')
+    }
+  }, [editorTabsWidth])
 
   let items: NonNullable<BreadcrumbProps['items']> = []
 
@@ -53,7 +75,7 @@ export const Breadcrumb = ({ path, elementType, width = 'S' }: { path: string, e
         .catch(() => {})
     }
 
-    if (partListAmount > 2 && width === 'L') {
+    if (partListAmount > 2 && size === 'L') {
       items.push({
         title: (
           <Text
@@ -96,7 +118,7 @@ export const Breadcrumb = ({ path, elementType, width = 'S' }: { path: string, e
       }
     }
 
-    if (partListAmount > 2 && width !== 'L') {
+    if (partListAmount > 2 && size !== 'L') {
       const dotsMenuItems: MenuItemType[] = []
 
       for (let i = 1; i < partListAmount; i++) {
@@ -133,7 +155,7 @@ export const Breadcrumb = ({ path, elementType, width = 'S' }: { path: string, e
       title: (
         <Text
           ellipsis={ { tooltip: { title: partList[partListAmount - 1], placement: 'top' } } }
-          style={ { maxWidth: '150px' } }
+          // style={ { maxWidth: '150px' } }
         >
           {partList[partListAmount - 1]}
         </Text>
