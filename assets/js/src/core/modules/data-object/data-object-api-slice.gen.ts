@@ -8,7 +8,7 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             dataObjectAdd: build.mutation<DataObjectAddApiResponse, DataObjectAddApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/add/${queryArg.parentId}`,
+                    url: `/studio/api/data-objects/add/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.dataObjectAddParameters,
                 }),
@@ -16,19 +16,19 @@ const injectedRtkApi = api
             }),
             dataObjectClone: build.mutation<DataObjectCloneApiResponse, DataObjectCloneApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
+                    url: `/studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.cloneParameters,
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
             dataObjectGetById: build.query<DataObjectGetByIdApiResponse, DataObjectGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/studio/api/data-objects/${queryArg.id}` }),
                 providesTags: ["Data Objects"],
             }),
             dataObjectUpdateById: build.mutation<DataObjectUpdateByIdApiResponse, DataObjectUpdateByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/${queryArg.id}`,
+                    url: `/studio/api/data-objects/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.body,
                 }),
@@ -38,25 +38,15 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiResponse,
                 DataObjectGetAvailableGridColumnsApiArg
             >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/folderId`,
-                }),
+                query: (queryArg) => ({ url: `/studio/api/data-object/grid/available-columns/${queryArg.className}` }),
                 providesTags: ["Data Object Grid"],
             }),
             dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/grid`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
+                query: (queryArg) => ({ url: `/studio/api/data-objects/grid`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Data Object Grid"],
             }),
             dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects`,
-                    method: "PATCH",
-                    body: queryArg.body,
-                }),
+                query: (queryArg) => ({ url: `/studio/api/data-objects`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Data Objects"],
             }),
             dataObjectReplaceContent: build.mutation<
@@ -64,14 +54,14 @@ const injectedRtkApi = api
                 DataObjectReplaceContentApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
+                    url: `/studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
             dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/tree`,
+                    url: `/studio/api/data-objects/tree`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -102,7 +92,7 @@ export type DataObjectAddApiArg = {
 export type DataObjectCloneApiResponse =
     /** status 200 Successfully copied data object */ void | /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
         /** ID of created jobRun */
-        jobRunId: number;
+        id: number;
     };
 export type DataObjectCloneApiArg = {
     /** Id of the data-object */
@@ -142,10 +132,8 @@ export type DataObjectGetAvailableGridColumnsApiResponse =
         columns?: GridColumnConfiguration[];
     };
 export type DataObjectGetAvailableGridColumnsApiArg = {
-    /** Identifies the class name for which the columns should be retrieved. */
-    classId: string;
-    /** FolderId of the element */
-    folderId: number;
+    /** Itentifies the class name for which the columns should be retrieved. */
+    className: string;
 };
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
@@ -163,7 +151,7 @@ export type DataObjectGetGridApiArg = {
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
         /** ID of created jobRun */
-        jobRunId: number;
+        id: number;
     };
 export type DataObjectPatchByIdApiArg = {
     body: {
@@ -233,8 +221,7 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition"
-        | "test";
+        | "TermSegmentBuilderDefinition";
 };
 export type Error = {
     /** Message */

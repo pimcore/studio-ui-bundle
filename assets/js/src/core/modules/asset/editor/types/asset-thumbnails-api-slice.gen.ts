@@ -10,14 +10,14 @@ const injectedRtkApi = api
                 ThumbnailImageGetCollectionApiResponse,
                 ThumbnailImageGetCollectionApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/thumbnails/image` }),
+                query: () => ({ url: `/studio/api/thumbnails/image` }),
                 providesTags: ["Asset Thumbnails"],
             }),
             thumbnailVideoGetCollection: build.query<
                 ThumbnailVideoGetCollectionApiResponse,
                 ThumbnailVideoGetCollectionApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/thumbnails/video` }),
+                query: () => ({ url: `/studio/api/thumbnails/video` }),
                 providesTags: ["Asset Thumbnails"],
             }),
         }),

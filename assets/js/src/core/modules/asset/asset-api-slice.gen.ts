@@ -8,7 +8,7 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             assetClone: build.mutation<AssetCloneApiResponse, AssetCloneApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
+                    url: `/studio/api/assets/${queryArg.id}/clone/${queryArg.parentId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Assets"],
@@ -17,94 +17,74 @@ const injectedRtkApi = api
                 AssetCustomMetadataGetByIdApiResponse,
                 AssetCustomMetadataGetByIdApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-metadata` }),
                 providesTags: ["Assets"],
             }),
             assetCustomSettingsGetById: build.query<
                 AssetCustomSettingsGetByIdApiResponse,
                 AssetCustomSettingsGetByIdApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-settings` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
                 providesTags: ["Assets"],
             }),
             assetGetTextDataById: build.query<AssetGetTextDataByIdApiResponse, AssetGetTextDataByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/text` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/text` }),
                 providesTags: ["Assets"],
             }),
             assetDocumentStreamPreview: build.query<
                 AssetDocumentStreamPreviewApiResponse,
                 AssetDocumentStreamPreviewApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
                 providesTags: ["Assets"],
             }),
+            assetCreateCsv: build.mutation<AssetCreateCsvApiResponse, AssetCreateCsvApiArg>({
+                query: (queryArg) => ({ url: `/studio/api/assets/csv/create`, method: "POST", body: queryArg.body }),
+                invalidatesTags: ["Assets"],
+            }),
             assetCreateZip: build.mutation<AssetCreateZipApiResponse, AssetCreateZipApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/zip/create`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
+                query: (queryArg) => ({ url: `/studio/api/assets/zip/create`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
             assetDownloadCsv: build.query<AssetDownloadCsvApiResponse, AssetDownloadCsvApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/download/csv/${queryArg.jobRunId}` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/download/csv/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
             }),
             assetDeleteCsv: build.mutation<AssetDeleteCsvApiResponse, AssetDeleteCsvApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/download/csv/${queryArg.jobRunId}`,
+                    url: `/studio/api/assets/download/csv/${queryArg.jobRunId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Assets"],
             }),
             assetDownloadZip: build.query<AssetDownloadZipApiResponse, AssetDownloadZipApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/download/zip/${queryArg.jobRunId}` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/download/zip/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
             }),
             assetDeleteZip: build.mutation<AssetDeleteZipApiResponse, AssetDeleteZipApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/download/zip/${queryArg.jobRunId}`,
+                    url: `/studio/api/assets/download/zip/${queryArg.jobRunId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Assets"],
             }),
             assetDownloadById: build.query<AssetDownloadByIdApiResponse, AssetDownloadByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/download` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
             }),
-            assetExportCsvAsset: build.mutation<AssetExportCsvAssetApiResponse, AssetExportCsvAssetApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/export/csv/asset`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Assets"],
-            }),
-            assetExportCsvFolder: build.mutation<AssetExportCsvFolderApiResponse, AssetExportCsvFolderApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/export/csv/folder`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Assets"],
-            }),
             assetGetById: build.query<AssetGetByIdApiResponse, AssetGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}` }),
                 providesTags: ["Assets"],
             }),
             assetUpdateById: build.mutation<AssetUpdateByIdApiResponse, AssetUpdateByIdApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}`,
-                    method: "PUT",
-                    body: queryArg.body,
-                }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}`, method: "PUT", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
             assetGetAvailableGridColumns: build.query<
                 AssetGetAvailableGridColumnsApiResponse,
                 AssetGetAvailableGridColumnsApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/assets/grid/available-columns` }),
+                query: () => ({ url: `/studio/api/assets/grid/available-columns` }),
                 providesTags: ["Asset Grid"],
             }),
             assetGetGridConfigurationByFolderId: build.query<
@@ -112,7 +92,7 @@ const injectedRtkApi = api
                 AssetGetGridConfigurationByFolderIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.folderId}`,
+                    url: `/studio/api/assets/grid/configuration/${queryArg.folderId}`,
                     params: { configurationId: queryArg.configurationId },
                 }),
                 providesTags: ["Asset Grid"],
@@ -121,7 +101,7 @@ const injectedRtkApi = api
                 AssetGetSavedGridConfigurationsApiResponse,
                 AssetGetSavedGridConfigurationsApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/grid/configurations/${queryArg.folderId}` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/grid/configurations/${queryArg.folderId}` }),
                 providesTags: ["Asset Grid"],
             }),
             assetSaveGridConfiguration: build.mutation<
@@ -129,7 +109,7 @@ const injectedRtkApi = api
                 AssetSaveGridConfigurationApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/save`,
+                    url: `/studio/api/assets/grid/configuration/save`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -140,7 +120,7 @@ const injectedRtkApi = api
                 AssetSetGridConfigurationAsFavoriteApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/set-as-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
+                    url: `/studio/api/assets/grid/configuration/set-as-favorite/${queryArg.configurationId}/${queryArg.folderId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Asset Grid"],
@@ -150,19 +130,19 @@ const injectedRtkApi = api
                 AssetUpdateGridConfigurationApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/grid/configuration/update/${queryArg.configurationId}`,
+                    url: `/studio/api/assets/grid/configuration/update/${queryArg.configurationId}`,
                     method: "PUT",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Asset Grid"],
             }),
             assetGetGrid: build.mutation<AssetGetGridApiResponse, AssetGetGridApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/grid`, method: "POST", body: queryArg.body }),
+                query: (queryArg) => ({ url: `/studio/api/assets/grid`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["Asset Grid"],
             }),
             assetImageDownloadCustom: build.query<AssetImageDownloadCustomApiResponse, AssetImageDownloadCustomApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/download/custom`,
+                    url: `/studio/api/assets/${queryArg.id}/image/download/custom`,
                     params: {
                         mimeType: queryArg.mimeType,
                         resizeMode: queryArg.resizeMode,
@@ -179,7 +159,7 @@ const injectedRtkApi = api
                 AssetImageDownloadByFormatApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/download/format/${queryArg.format}`,
+                    url: `/studio/api/assets/${queryArg.id}/image/download/format/${queryArg.format}`,
                 }),
                 providesTags: ["Assets"],
             }),
@@ -188,17 +168,17 @@ const injectedRtkApi = api
                 AssetImageDownloadByThumbnailApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/download/thumbnail/${queryArg.thumbnailName}`,
+                    url: `/studio/api/assets/${queryArg.id}/image/download/thumbnail/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
             }),
             assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets`, method: "PATCH", body: queryArg.body }),
+                query: (queryArg) => ({ url: `/studio/api/assets`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
             }),
             assetGetTree: build.query<AssetGetTreeApiResponse, AssetGetTreeApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/tree`,
+                    url: `/studio/api/assets/tree`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -214,7 +194,7 @@ const injectedRtkApi = api
             }),
             assetAdd: build.mutation<AssetAddApiResponse, AssetAddApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/add/${queryArg.parentId}`,
+                    url: `/studio/api/assets/add/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -222,14 +202,14 @@ const injectedRtkApi = api
             }),
             assetUploadInfo: build.query<AssetUploadInfoApiResponse, AssetUploadInfoApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/exists/${queryArg.parentId}`,
+                    url: `/studio/api/assets/exists/${queryArg.parentId}`,
                     params: { fileName: queryArg.fileName },
                 }),
                 providesTags: ["Assets"],
             }),
             assetReplace: build.mutation<AssetReplaceApiResponse, AssetReplaceApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/replace`,
+                    url: `/studio/api/assets/${queryArg.id}/replace`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -237,7 +217,7 @@ const injectedRtkApi = api
             }),
             assetUploadZip: build.mutation<AssetUploadZipApiResponse, AssetUploadZipApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/add-zip/${queryArg.parentId}`,
+                    url: `/studio/api/assets/add-zip/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -248,7 +228,7 @@ const injectedRtkApi = api
                 AssetVideoImageThumbnailStreamApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/stream/image-thumbnail`,
+                    url: `/studio/api/assets/${queryArg.id}/video/stream/image-thumbnail`,
                     params: {
                         width: queryArg.width,
                         height: queryArg.height,
@@ -264,7 +244,7 @@ const injectedRtkApi = api
                 AssetVideoDownloadByThumbnailApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/download/${queryArg.thumbnailName}`,
+                    url: `/studio/api/assets/${queryArg.id}/video/download/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
             }),
@@ -273,12 +253,12 @@ const injectedRtkApi = api
                 AssetVideoStreamByThumbnailApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/stream/${queryArg.thumbnailName}`,
+                    url: `/studio/api/assets/${queryArg.id}/video/stream/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
             }),
             versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
+                query: (queryArg) => ({ url: `/studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
             }),
         }),
@@ -323,6 +303,30 @@ export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
 };
+export type AssetCreateCsvApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
+export type AssetCreateCsvApiArg = {
+    body: {
+        assets?: number[];
+        gridConfig?: GridColumnRequest[];
+        settings?: {
+            delimiter?: string;
+            header?:
+                | "asset_to_export"
+                | "asset_export_data"
+                | "settings"
+                | "configuration"
+                | "delimiter"
+                | "header"
+                | "no_header"
+                | "title"
+                | "name"
+                | "\r\n";
+        };
+    };
+};
 export type AssetCreateZipApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
     /** ID of created jobRun */
     jobRunId: number;
@@ -356,61 +360,6 @@ export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary 
 export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
     id: number;
-};
-export type AssetExportCsvAssetApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
-export type AssetExportCsvAssetApiArg = {
-    body: {
-        assets?: number[];
-        columns?: GridColumnRequest[];
-        config?: {
-            delimiter?: string;
-            header?:
-                | "asset_to_export"
-                | "folder_to_export"
-                | "asset_export_data"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n";
-        };
-    };
-};
-export type AssetExportCsvFolderApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
-export type AssetExportCsvFolderApiArg = {
-    body: {
-        folders?: number[];
-        columns?: GridColumnRequest[];
-        filters?: GridFilter;
-        config?: {
-            delimiter?: string;
-            header?:
-                | "asset_to_export"
-                | "folder_to_export"
-                | "asset_export_data"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n";
-        };
-    };
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
     | Image
@@ -728,18 +677,6 @@ export type GridColumnRequest = {
     /** Config */
     config: string[];
 };
-export type GridFilter = {
-    /** Page */
-    page: number;
-    /** Page Size */
-    pageSize: number;
-    /** Include Descendant Items */
-    includeDescendants: boolean;
-    /** Column Filter */
-    columnFilters?: object;
-    /** Sort Filter */
-    sortFilter?: object;
-};
 export type ElementIcon = {
     /** Icon type */
     type: "name" | "path";
@@ -924,6 +861,18 @@ export type Column = {
     /** Group of the Column */
     group: string;
 };
+export type GridFilter = {
+    /** Page */
+    page: number;
+    /** Page Size */
+    pageSize: number;
+    /** Include Descendant Items */
+    includeDescendants: boolean;
+    /** Column Filter */
+    columnFilters?: object;
+    /** Sort Filter */
+    sortFilter?: object;
+};
 export type GridConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -988,14 +937,13 @@ export const {
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
     useAssetDocumentStreamPreviewQuery,
+    useAssetCreateCsvMutation,
     useAssetCreateZipMutation,
     useAssetDownloadCsvQuery,
     useAssetDeleteCsvMutation,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
     useAssetDownloadByIdQuery,
-    useAssetExportCsvAssetMutation,
-    useAssetExportCsvFolderMutation,
     useAssetGetByIdQuery,
     useAssetUpdateByIdMutation,
     useAssetGetAvailableGridColumnsQuery,

@@ -10,11 +10,11 @@ const injectedRtkApi = api
                 AssetCustomSettingsGetByIdApiResponse,
                 AssetCustomSettingsGetByIdApiArg
             >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-settings` }),
+                query: (queryArg) => ({ url: `/studio/api/assets/${queryArg.id}/custom-settings` }),
                 providesTags: ["Assets"],
             }),
             systemSettingsGet: build.query<SystemSettingsGetApiResponse, SystemSettingsGetApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/settings` }),
+                query: () => ({ url: `/studio/api/settings` }),
                 providesTags: ["Settings"],
             }),
         }),
