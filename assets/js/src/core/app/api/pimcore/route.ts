@@ -16,5 +16,5 @@ export function getDomain (): string {
 }
 
 export function getDomainWithPrefix (): string {
-  return `${getDomain()}/studio/api`
+  return `${getDomain()}/pimcore-studio/api`
 }

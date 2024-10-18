@@ -84,7 +84,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         // ]
         items.push({
           key: Number(items.length + 1).toString(),
-          label: status.label,
+          label: t(`${status.label}`),
           onClick: () => { setShowWorkflowLogModal(true) }
         })
       })

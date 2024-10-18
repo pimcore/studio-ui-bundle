@@ -28,7 +28,7 @@ export const authApi = api
     endpoints: (builder) => ({
       login: builder.mutation<IUser, ILoginRequest>({
         query: (credentials) => ({
-          url: 'studio/api/login',
+          url: 'pimcore-studio/api/login',
           method: 'POST',
           body: credentials
         })

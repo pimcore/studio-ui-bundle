@@ -7,7 +7,7 @@ const injectedRtkApi = api
     .injectEndpoints({
         endpoints: (build) => ({
             mercureCreateCookie: build.mutation<MercureCreateCookieApiResponse, MercureCreateCookieApiArg>({
-                query: () => ({ url: `/studio/api/mercure/auth`, method: "POST" }),
+                query: () => ({ url: `/pimcore-studio/api/mercure/auth`, method: "POST" }),
                 invalidatesTags: ["Mercure"],
             }),
         }),

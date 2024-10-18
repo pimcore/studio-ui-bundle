@@ -222,6 +222,8 @@ export const slice = createSlice({
   }
 })
 
+export const widgetManagerSliceName = slice.name
+
 injectSliceWithState(slice)
 
 export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions

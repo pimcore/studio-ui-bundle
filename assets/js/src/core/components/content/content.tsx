@@ -60,7 +60,7 @@ export const Content = ({
         />
       )}
 
-      {none && (
+      {none && !loading && (
         <NoContent { ...noneOptions } />
       )}
 

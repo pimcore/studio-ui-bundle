@@ -16,7 +16,7 @@ import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/image-tab-manager'
-import { TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
+import { TypeRegistry as GridTypeRegistry } from '@Pimcore/components/grid/services/type-registry'
 import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
 import { DocumentTabManager } from '@Pimcore/modules/asset/editor/types/document/tab-manager/document-tab-manager'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
@@ -27,13 +27,14 @@ import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
+import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 
 export const serviceIds = {
   // Widget manager
   widgetManager: 'WidgetManagerService',
 
   // Assets
-  'Asset/Editor/TypeComponentRegistry': 'Asset/Editor/TypeComponentRegistry',
+  'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',
   'Asset/Editor/DocumentTabManager': 'Asset/Editor/DocumentTabManager',
   'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
   'Asset/Editor/ImageTabManager': 'Asset/Editor/ImageTabManager',
@@ -45,7 +46,7 @@ export const serviceIds = {
   'Asset/MetadataTypeProvider/MetadataTypeRegistry': 'Asset/MetadataTypeProvider/MetadataTypeRegistry',
 
   // Data Objects
-  'DataObject/Editor/TypeComponentRegistry': 'DataObject/Editor/TypeComponentRegistry',
+  'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 
@@ -66,7 +67,7 @@ export const serviceIds = {
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 
 // Assets
-container.bind(serviceIds['Asset/Editor/TypeComponentRegistry']).to(ComponentRegistry).inSingletonScope()
+container.bind(serviceIds['Asset/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 
 container.bind(serviceIds['Asset/Editor/DocumentTabManager']).to(DocumentTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
@@ -79,7 +80,7 @@ container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManage
 container.bind(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry']).to(MetadataTypeRegistry).inSingletonScope()
 
 // Data Objects
-container.bind(serviceIds['DataObject/Editor/TypeComponentRegistry']).to(ComponentRegistry).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
@@ -88,7 +89,7 @@ container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabMan
 container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 
 // Grid
-container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScope()
+container.bind(serviceIds['Grid/TypeRegistry']).to(GridTypeRegistry).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

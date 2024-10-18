@@ -79,8 +79,10 @@ export const useStyles = createStyles(({ token, css }) => {
             }
 
             .accordion__chevron-btn {
-                display: flex;
-                margin: 0 ${token.marginXXS}px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 ${token.marginXXS}px;
             }
 
             .accordion__chevron {

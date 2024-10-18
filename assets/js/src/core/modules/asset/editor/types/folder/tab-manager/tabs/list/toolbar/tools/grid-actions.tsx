@@ -116,7 +116,7 @@ export const GridActions = (): React.JSX.Element => {
       // @todo add api domain
       title: t('jobs.zip-job.title', { title: jobTitle }),
       topics: [topics['zip-download-ready'], ...defaultTopics],
-      downloadUrl: '/studio/api/assets/download/zip/{jobRunId}',
+      downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
       action: async () => {
         const promise = fetchCreateZip({ body: { items: numberedSelectedRows } })
 

@@ -10,7 +10,11 @@ const injectedRtkApi = api
                 TranslationGetCollectionApiResponse,
                 TranslationGetCollectionApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/translations`, method: "POST", body: queryArg.translation }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/translations`,
+                    method: "POST",
+                    body: queryArg.translation,
+                }),
                 invalidatesTags: ["Translation"],
             }),
         }),

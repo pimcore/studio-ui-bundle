@@ -13,6 +13,7 @@
 
 import { injectable } from 'inversify'
 import { type ComponentType, memo } from 'react'
+import type React from 'react'
 import { type TabTitleOuterContainerProps } from '../title/tab-title-outer-container'
 import { type TabNode } from 'flexlayout-react'
 
@@ -21,6 +22,7 @@ export interface Widget {
   component: ComponentType
   titleComponent?: ComponentType<TabTitleOuterContainerProps>
   isModified?: (tabNode: TabNode) => boolean
+  getContextProvider?: (tabNode: TabNode, children: React.ReactNode) => React.JSX.Element
 }
 
 @injectable()

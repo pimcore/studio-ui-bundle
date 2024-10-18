@@ -8,7 +8,7 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             tagGetCollection: build.query<TagGetCollectionApiResponse, TagGetCollectionApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags`,
+                    url: `/pimcore-studio/api/tags`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -20,24 +20,24 @@ const injectedRtkApi = api
                 providesTags: ["Tags"],
             }),
             tagGetById: build.query<TagGetByIdApiResponse, TagGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}` }),
                 providesTags: ["Tags"],
             }),
             tagUpdateById: build.mutation<TagUpdateByIdApiResponse, TagUpdateByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/${queryArg.id}`,
+                    url: `/pimcore-studio/api/tags/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.updateTagParameters,
                 }),
                 invalidatesTags: ["Tags"],
             }),
             tagDeleteById: build.mutation<TagDeleteByIdApiResponse, TagDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Tags"],
             }),
             tagAssignToElement: build.mutation<TagAssignToElementApiResponse, TagAssignToElementApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/assign/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
+                    url: `/pimcore-studio/api/tags/assign/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Tags for Element"],
@@ -47,7 +47,7 @@ const injectedRtkApi = api
                 TagBatchAssignToElementsByTypeApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/batch/assign/${queryArg.elementType}`,
+                    url: `/pimcore-studio/api/tags/batch/assign/${queryArg.elementType}`,
                     method: "POST",
                     body: queryArg.elementTagIdCollection,
                 }),
@@ -58,7 +58,7 @@ const injectedRtkApi = api
                 TagBatchReplaceForElementsByTypeApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/batch/replace/${queryArg.elementType}`,
+                    url: `/pimcore-studio/api/tags/batch/replace/${queryArg.elementType}`,
                     method: "POST",
                     body: queryArg.elementTagIdCollection,
                 }),
@@ -68,12 +68,12 @@ const injectedRtkApi = api
                 TagGetCollectionForElementByTypeAndIdApiResponse,
                 TagGetCollectionForElementByTypeAndIdApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.elementType}/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Tags for Element"],
             }),
             tagUnassignFromElement: build.mutation<TagUnassignFromElementApiResponse, TagUnassignFromElementApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
+                    url: `/pimcore-studio/api/tags/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Tags for Element"],

@@ -15,7 +15,7 @@ import React, { type FocusEvent, useEffect, useState } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Tabs } from 'antd'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
+import { type IDetachTab, useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
 import { IconButton } from '../icon-button/icon-button'
@@ -65,10 +65,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
     setTabKeyOutOfFocus(findTabKey(event))
   }
 
-  const openDetachedWidget = (item: IEditorTab): void => {
-    detachWidget({
-      item
-    })
+  const openDetachedWidget = (item: IDetachTab): void => {
+    detachWidget(item)
   }
 
   items = items?.map((item) => {
@@ -96,7 +94,9 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
             className={ 'detachable-button' }
             icon={ 'share-03' }
             onClick={ () => {
-              openDetachedWidget(tmpItem)
+              openDetachedWidget({
+                tabKey: item.key
+              })
             } }
             type={ 'link' }
           />

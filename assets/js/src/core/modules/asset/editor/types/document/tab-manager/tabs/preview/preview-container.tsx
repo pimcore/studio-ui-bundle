@@ -28,7 +28,7 @@ const PreviewContainer = (): React.JSX.Element => {
       return
     }
 
-    fetch(`http://localhost/studio/api/assets/${assetContext.id}/document/stream/pdf-preview`)
+    fetch(`http://localhost/pimcore-studio/api/assets/${assetContext.id}/document/stream/pdf-preview`)
       .then(async (response) => await response.blob())
       .then((docBlob) => {
         const docURL = URL.createObjectURL(docBlob)

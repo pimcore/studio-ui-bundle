@@ -172,7 +172,7 @@ const TreeNode = ({
   }
 
   const uploadProps: UploadProps = {
-    action: `/studio/api/assets/add/${id}`,
+    action: `/pimcore-studio/api/assets/add/${id}`,
     name: 'file',
     multiple: true,
     openFileDialogOnClick: false,

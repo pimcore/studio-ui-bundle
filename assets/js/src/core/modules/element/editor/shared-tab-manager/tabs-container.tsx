@@ -15,9 +15,12 @@ import React from 'react'
 import { EditorTabs as EditorTabsView } from '@Pimcore/components/editor-tabs/editor-tabs'
 import { useTranslation } from 'react-i18next'
 import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
 
-export const TabsContainer = ({ tabManager }: { tabManager: IElementEditorTabManager }): React.JSX.Element => {
+export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
+  const tabManager = useInjection<IElementEditorTabManager>(elementEditorType.tabManagerServiceId)
 
   const tabs = tabManager.getTabs()
   const preparedTabs = tabs.map((tab, index) => {
