@@ -86,24 +86,27 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     return [[]]
   }
 
-  if (!isLoading) {
-    return (
-      <Flex
-        align={ 'center' }
-        justify={ 'space-between' }
+  return (
+    <Flex
+      align={ 'center' }
+      justify={ 'space-between' }
+    >
+      {!isLoading && (
+      <TagList
+        itemGap={ 'extra-small' }
+        list={ getVisibleWorkflowStatus() }
+      />
+      )}
+      <Dropdown
+        menu={ { items } }
       >
-        <TagList
-          itemGap={ 'extra-small' }
-          list={ getVisibleWorkflowStatus() }
-        />
-        <Dropdown
-          menu={ { items } }
+        <DropdownButton
+          disabled={ isLoading }
+          loading={ isLoading }
         >
-          <DropdownButton>
-            <Icon name={ 'workflow' } />
-          </DropdownButton>
-        </Dropdown>
-      </Flex>
-    )
-  } else return (<div> I am loading </div>)
+          <Icon name={ 'workflow' } />
+        </DropdownButton>
+      </Dropdown>
+    </Flex>
+  )
 }
