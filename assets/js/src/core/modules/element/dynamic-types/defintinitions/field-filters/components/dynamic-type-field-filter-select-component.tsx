@@ -13,11 +13,13 @@
 
 import React, { useEffect, useState } from 'react'
 import { type DefaultOptionType } from 'antd/es/select'
-import { type DefaultFilterProps } from './default-filter'
-import { useFilters } from '../../hooks/use-filters'
 import { Select } from '@Pimcore/components/select/select'
+import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
 
-export const SelectFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
+export interface DynamicTypeFieldFilterSelectProps extends AbstractFieldFilterDefinition {}
+
+export const DynamicTypeFieldFilterSelectComponent = ({ column }: DynamicTypeFieldFilterSelectProps): React.JSX.Element => {
   const { addOrUpdateFieldFilter, getFieldFilter } = useFilters()
   const fieldFilter = getFieldFilter(column)
   const value = fieldFilter !== undefined ? fieldFilter.filterValue : ''

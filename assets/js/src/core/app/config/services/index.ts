@@ -27,11 +27,13 @@ import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services
 import { ArchiveTabManager } from '@Pimcore/modules/asset/editor/types/archive/tab-manager/archive-tab-manager'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
-import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/field-filters/dynamic-type-field-filter-registry'
-import { DynamicTypeListingText } from '@Pimcore/modules/element/dynamic-types/listing/text/dynamic-type-listing-text'
-import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/listing/dynamic-type-listing-registry'
+import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-registry'
+import { DynamicTypeListingText } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/text/dynamic-type-listing-text'
+import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/field-filters/text/dynamic-type-field-filter-text'
+import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/text/dynamic-type-field-filter-text'
+import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/select/dynamic-type-field-filter-select'
+import { DynamicTypeListingSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/select/dynamic-type-listing-select'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -64,10 +66,12 @@ container.bind(serviceIds['Grid/TypeRegistry']).to(TypeRegistry).inSingletonScop
 // dynamic types field filters
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Listing/Text']).to(DynamicTypeListingText).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Listing/Select']).to(DynamicTypeListingSelect).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

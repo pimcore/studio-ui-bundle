@@ -12,18 +12,13 @@
 */
 
 import { DynamicTypeListingAbstract } from '../dynamic-type-listing-abstract'
-import { type DynamicTypeFieldFilterTextProps } from '@Pimcore/modules/element/dynamic-types/field-filters/text/dynamic-type-field-filter-text-component'
-import { type ReactElement } from 'react'
 import { inject, injectable } from 'inversify'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 @injectable()
 export class DynamicTypeListingText extends DynamicTypeListingAbstract {
-  id: string = 'text'
-  protected gridComponentType: string = 'input'
-  @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeListingAbstract["dynamicTypeFieldFilterType"]
+  id: string = 'input'
 
-  getFilterComponent (props: DynamicTypeFieldFilterTextProps): ReactElement<DynamicTypeFieldFilterTextProps> {
-    return super.getFilterComponent(props)
-  }
+  protected readonly gridComponentType: string = 'input'
+  @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeListingAbstract['dynamicTypeFieldFilterType']
 }

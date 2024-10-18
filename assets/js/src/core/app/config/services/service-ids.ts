@@ -11,6 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+export const dynamicTypeRegistriesServiceIds = {
+  'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
+  'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry'
+}
+
 export const serviceIds = {
   // Widget manager
   widgetManager: 'WidgetManagerService',
@@ -39,11 +44,13 @@ export const serviceIds = {
   'Grid/TypeRegistry': 'Grid/TypeRegistry',
 
   // dynamic types
-  'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
-  'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
+  ...dynamicTypeRegistriesServiceIds,
 
-  'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
+  'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
+  'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
+
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
+  'DynamicTypes/Listing/Select': 'DynamicTypes/Listing/Select',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
