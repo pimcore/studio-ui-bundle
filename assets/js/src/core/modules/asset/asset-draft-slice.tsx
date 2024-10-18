@@ -35,10 +35,11 @@ export const slice = createSlice({
   initialState: assetsAdapter.getInitialState({
     modified: false,
     properties: [],
-    customMetadata: undefined,
+    customMetadata: [],
     imageSettings: [],
     schedule: [],
-    changes: {}
+    changes: {},
+    modifiedCells: {}
   }),
   reducers: {
     assetReceived: assetsAdapter.upsertOne,
@@ -68,6 +69,7 @@ export const {
   resetAsset,
 
   resetChanges,
+  setModifiedCells,
 
   addImageSettings: addImageSettingsToAsset,
   removeImageSetting: removeImageSettingFromAsset,

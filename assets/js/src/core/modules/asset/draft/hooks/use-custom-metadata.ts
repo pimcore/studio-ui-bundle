@@ -35,7 +35,7 @@ export type CustomMetadata = CustomMetadataApi & {
 }
 
 export interface CustomMetadataDraft extends TrackableChangesDraft {
-  customMetadata: CustomMetadata[] | undefined
+  customMetadata: CustomMetadata[]
 }
 
 interface UseCustomMetadataReturn {

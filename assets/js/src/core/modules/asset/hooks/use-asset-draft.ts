@@ -28,6 +28,7 @@ import {
   resetSchedulesChangesForAsset,
   selectAssetById,
   setCustomMetadataForAsset,
+  setModifiedCells,
   setPropertiesForAsset,
   setSchedulesForAsset,
   updateAllCustomMetadataForAsset,
@@ -143,10 +144,11 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         id,
         modified: false,
         properties: [],
-        customMetadata: undefined,
+        customMetadata: [],
         schedules: [],
         imageSettings: customSettingsResponse,
-        changes: {}
+        changes: {},
+        modifiedCells: {}
       }
 
       if (assetData !== undefined) {
@@ -170,7 +172,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
-    resetChanges
+    resetChanges,
+    setModifiedCells
   )
 
   const propertyActions = usePropertiesDraft(
