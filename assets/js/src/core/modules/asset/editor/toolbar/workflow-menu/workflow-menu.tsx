@@ -23,37 +23,40 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
-  // const { t } = useTranslation()
+  const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
-  console.log('----> datax', data)
-
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
-      const foo = data.items.reduce((result: ItemType[], workflow) => {
+      const workFlowItems = data.items.map((workflow) => {
+        const result: ItemType[] = []
+
         const mergedActions = [
-          ...workflow.allowedTransitions ?? [],
-          ...workflow.globalActions ?? []
+          ...(workflow.allowedTransitions ?? []),
+          ...(workflow.globalActions ?? [])
         ]
+
         mergedActions?.forEach((action) => {
           result.push({
-            key: Number(result.length + 1).toString(),
-            label: (
-              <div>
-                {action.label}
-              </div>
-            )
+            key: (result.length + 1).toString(),
+            label: t(`${action.label}`)
           })
         })
-        console.log('----> formattedDropdownItems', result)
-        return result
-      }, [])
 
-      setItems(foo)
+        return {
+          key: t(`${workflow.workflowName}`),
+          type: 'group',
+          label: t(`${workflow.workflowName}`).toUpperCase(),
+          children: result
+        }
+      })
+
+      setItems(workFlowItems)
     }
   }, [data])
 
@@ -67,7 +70,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
               : {}
             const tag =
                             {
-                              children: status.label,
+                              children: t(`${status.label}`),
                               icon: <Badge
                                 color={ status.color }
                                     />,
@@ -83,23 +86,24 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     return [[]]
   }
 
-  return (
-    <Flex
-      align={ 'center' }
-      justify={ 'space-between' }
-    >
-      <TagList
-        itemGap={ 'extra-small' }
-        list={ getVisibleWorkflowStatus() }
-      />
-      <Dropdown
-        menu={ { items } }
+  if (!isLoading) {
+    return (
+      <Flex
+        align={ 'center' }
+        justify={ 'space-between' }
       >
-        <DropdownButton>
-          <Icon name={ 'workflow' } />
-        </DropdownButton>
-      </Dropdown>
-      {isLoading && <div> I am loading </div>}
-    </Flex>
-  )
+        <TagList
+          itemGap={ 'extra-small' }
+          list={ getVisibleWorkflowStatus() }
+        />
+        <Dropdown
+          menu={ { items } }
+        >
+          <DropdownButton>
+            <Icon name={ 'workflow' } />
+          </DropdownButton>
+        </Dropdown>
+      </Flex>
+    )
+  } else return (<div> I am loading </div>)
 }
