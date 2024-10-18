@@ -18,6 +18,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { type AssetUpdateByIdApiArg, useAssetUpdateByIdMutation } from '../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
@@ -82,6 +83,7 @@ export const Toolbar = (): React.JSX.Element => {
           {t('toolbar.save-and-publish')}
         </Button>
       </Flex>
+      <WorkflowLogModal />
     </ToolbarView>
   )
 
