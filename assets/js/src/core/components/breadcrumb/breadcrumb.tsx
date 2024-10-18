@@ -100,19 +100,20 @@ export const Breadcrumb = ({ path, elementType, width = 'S' }: { path: string, e
       const dotsMenuItems: MenuItemType[] = []
 
       for (let i = 1; i < partListAmount; i++) {
+        const isFirstItem = i === 1
         const isLastItem = i === partListAmount - 1
         const paddingSize = 24
 
         dotsMenuItems.push({
           key: i,
           className: styles.dropdownItem,
-          style: { paddingLeft: `${paddingSize * (i - 1)}px` },
           label: (
             partList[i]
           ),
           onClick: () => {
             onMenuItemClick(partList.slice(0, i + 1).join('/'))
           },
+          ...(!isFirstItem && { style: { paddingLeft: `${paddingSize * (i - 1)}px` } }),
           ...(!isLastItem && { icon: <CaretDownOutlined /> })
         })
       }
