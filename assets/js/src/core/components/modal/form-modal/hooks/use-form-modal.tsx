@@ -11,128 +11,226 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-import { FormModal, type FormModalProps } from '@Pimcore/components/modal/form-modal/form-modal'
-import { Form, type FormInstance, Input } from 'antd'
+import React from 'react'
+import { Form, type FormInstance, Input, type ModalFuncProps } from 'antd'
+import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
+import { type HookModalRef } from 'antd/es/modal/useModal/HookModal'
+import { type ModalFuncWithPromise } from 'antd/es/modal/useModal'
+import usePatchElement from 'antd/es/_util/hooks/usePatchElement'
+import HookModal from '@Pimcore/components/modal/form-modal/component/hook-modal/hook-modal'
+import { type Rule } from 'antd/lib/form'
+import i18n from 'i18next'
 
-export type InputModal = Omit<FormModalProps, 'children'> & {
-  label: string
+let uuid = pimcoreUUid()
+
+interface ElementsHolderRef {
+  patchElement: ReturnType<typeof usePatchElement>[1]
 }
 
-export type ConfirmationModal = Omit<FormModalProps, 'children'> & {
-  text: string | React.JSX.Element
+export interface ExtModalFuncProps extends ModalFuncProps {
+  beforeOk?: () => Promise<any>
 }
 
-type RenderModalProps = InputModal | ConfirmationModal
+type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
-interface UseInputModalReturn<T> {
-  renderModal: (props: T) => React.JSX.Element
-  showModal: () => void
-  handleOk: (form: FormInstance<any>) => void
-  handleCancel: () => void
-  closeModal: () => void
+export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
+  label?: string
+  rule?: Rule
+  initialValue?: string
 }
 
-interface UseFormModalProps {
-  type: 'input' | 'confirmation'
+export interface ExtHookApi {
+  input: (props: InputFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  confirm: (props: ModalFuncProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
-export const useFormModal = <T extends RenderModalProps>(config: UseFormModalProps): UseInputModalReturn<T> => {
-  const { type = 'input' } = config
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-
-  const showModal = (): void => {
-    setIsModalOpen(true)
-  }
-
-  const closeModal = (): void => {
-    setIsModalOpen(false)
-  }
-
-  const handleOk = (): void => {
-    closeModal()
-  }
-
-  const handleCancel = (): void => {
-    closeModal()
-  }
-
-  function getModalComponent (type: UseFormModalProps['type']): typeof FormModal {
-    let component = FormModal
-
-    switch (type) {
-      case 'input':
-        component = withInput(FormModal)
-        break
-      case 'confirmation':
-        component = withConfirmation(FormModal)
-        break
-    }
-
-    return component
-  }
-
-  function renderModal (props: T): React.JSX.Element {
-    const ModalComponent = getModalComponent(type)
-
-    return (
-      <ModalComponent
-        { ...props }
-        onCancel={ (onCancelProps) => {
-          handleCancel()
-
-          if (props.onCancel !== undefined) {
-            props.onCancel(onCancelProps)
-          }
-        } }
-        onOk={ (okProps) => {
-          handleOk()
-
-          if (props.onOk !== undefined) {
-            props.onOk(okProps)
-          }
-        } }
-        open={ isModalOpen }
-      />
+const ElementsHolder = React.memo(
+  React.forwardRef<ElementsHolderRef>((_props, ref) => {
+    const [elements, patchElement] = usePatchElement()
+    React.useImperativeHandle(
+      ref,
+      () => ({
+        patchElement
+      }),
+      []
     )
-  }
+    return <>{elements}</>
+  })
+)
 
-  return { renderModal, showModal, handleOk, handleCancel, closeModal }
+const destroyFns: Array<() => void> = []
+
+export function useFormModal (): readonly [instance: ExtHookApi, contextHolder: React.ReactElement] {
+  const holderRef = React.useRef<ElementsHolderRef>(null)
+
+  // ========================== Effect ==========================
+  const [actionQueue, setActionQueue] = React.useState<Array<() => void>>([])
+
+  React.useEffect(() => {
+    if (actionQueue.length > 0) {
+      const cloneQueue = [...actionQueue]
+      cloneQueue.forEach((action) => {
+        action()
+      })
+
+      setActionQueue([])
+    }
+  }, [actionQueue])
+
+  // =========================== Hook ===========================
+  const getConfirmFunc = React.useCallback(
+    (withFunc: (config: ExtModalFuncProps) => ExtModalFuncProps) =>
+      function hookConfirm (config: ExtModalFuncProps) {
+        uuid += 1
+
+        const modalRef = React.createRef<HookModalRef>()
+
+        // Proxy to promise with `onClose`
+        let resolvePromise: (confirmed: boolean) => void
+        const promise = new Promise<boolean>((resolve) => {
+          resolvePromise = resolve
+        })
+        let silent = false
+
+        // eslint-disable-next-line prefer-const
+        let closeFunc: (() => void) | undefined
+        const modal = (
+          <HookModal
+            afterClose={ () => {
+              closeFunc?.()
+            } }
+            config={ withFunc(config) }
+            isSilent={ () => silent }
+            key={ `modal-${uuid}` }
+            onConfirm={ (confirmed) => {
+              resolvePromise(confirmed)
+            } }
+            ref={ modalRef }
+          />
+        )
+
+        // @ts-expect-error like ant-design
+        closeFunc = holderRef.current?.patchElement(modal)
+
+        if (closeFunc !== undefined) {
+          destroyFns.push(closeFunc)
+        }
+
+        const instance: ReturnType<ModalFuncWithPromise> = {
+          destroy: () => {
+            function destroyAction (): void {
+              modalRef.current?.destroy()
+            }
+
+            if (modalRef.current !== undefined) {
+              destroyAction()
+            } else {
+              setActionQueue((prev) => [...prev, destroyAction])
+            }
+          },
+          update: (newConfig) => {
+            function updateAction (): void {
+              modalRef.current?.update(newConfig as ModalFuncProps)
+            }
+
+            if (modalRef.current !== undefined) {
+              updateAction()
+            } else {
+              setActionQueue((prev) => [...prev, updateAction])
+            }
+          },
+          then: async (resolve) => {
+            silent = true
+            return await promise.then(resolve)
+          }
+        }
+
+        return instance
+      },
+    []
+  )
+
+  const fns = React.useMemo<ExtHookApi>(
+    () => ({
+      input: getConfirmFunc(withInput),
+      confirm: getConfirmFunc(withConfirm)
+    }),
+    []
+  )
+  return [
+    fns,
+    <ElementsHolder
+      key="modal-holder"
+      ref={ holderRef }
+    />
+  ] as const
 }
 
-export const withInput = (Component: typeof FormModal): typeof FormModal => {
-  const modalWithInput = (props: InputModal): React.JSX.Element => {
-    const { label, ...inlineProps } = props
+export function withInput (props: InputFormModalProps): ExtModalFuncProps {
+  let form: FormInstance | null = null
+  const {
+    label,
+    rule,
+    initialValue = '',
+    ...modalProps
+  } = props
 
+  let formattedRule: Rule[] = []
+  if (rule !== undefined) {
+    formattedRule = [rule]
+  }
+
+  const InputForm = (): React.ReactNode => {
+    const [tmpForm] = Form.useForm()
+    form = tmpForm
     return (
-      <Component { ...inlineProps }>
+      <Form
+        form={ form }
+        initialValues={ {
+          input: initialValue
+        } }
+        layout={ 'vertical' }
+      >
         <Form.Item
-          label={ props.label }
-          name={ 'input' }
-          rules={ [{ required: true, message: 'Please input a value' }] }
+          label={ label }
+          name="input"
+          rules={ formattedRule }
         >
           <Input />
         </Form.Item>
-      </Component>
+      </Form>
     )
   }
 
-  return modalWithInput
+  return {
+    ...modalProps,
+    type: 'confirm',
+    icon: null,
+    beforeOk: async () => {
+      return await new Promise((resolve, reject) => {
+        form!.validateFields()
+          .then(() => {
+            resolve(form!.getFieldValue('input'))
+          })
+          .catch(() => {
+            // eslint-disable-next-line prefer-promise-reject-errors
+            reject()
+          })
+      })
+    },
+
+    onOk: async (value) => {
+      props.onOk?.(value)
+    },
+    content: <InputForm />
+  }
 }
 
-export const withConfirmation = (Component: typeof FormModal): typeof FormModal => {
-  const modalWithConfirmation = (props: ConfirmationModal): React.JSX.Element => {
-    const { text, ...inlineProps } = props
-
-    return (
-      <Component
-        { ...inlineProps }
-        okText={ 'Yes' }
-      >
-        { text }
-      </Component>
-    )
+export function withConfirm (props: ModalFuncProps): ExtModalFuncProps {
+  return {
+    ...props,
+    type: 'confirm',
+    okText: props.okText ?? i18n.t('yes'),
+    cancelText: props.cancelText ?? i18n.t('no')
   }
-
-  return modalWithConfirmation
 }
