@@ -24,7 +24,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
   const { showWorkflowLogModal, setShowWorkflowLogModal } = useWorkflow()
 
   useEffect(() => {
-    console.log('----> showWorkflowLogModal changed', showWorkflowLogModal
+    console.log('----> showWorkflowLogModal changed here', showWorkflowLogModal
     )
   }, [showWorkflowLogModal])
 
