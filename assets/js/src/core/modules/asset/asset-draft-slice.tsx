@@ -35,7 +35,7 @@ export const slice = createSlice({
   initialState: assetsAdapter.getInitialState({
     modified: false,
     properties: [],
-    customMetadata: [],
+    customMetadata: undefined,
     imageSettings: [],
     schedule: [],
     changes: {}

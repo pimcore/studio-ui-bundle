@@ -50,8 +50,8 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   }
 
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items)) {
-      setCustomMetadata(enrichCustomMetadata(data?.items))
+    if (customMetadata === undefined && data !== undefined && Array.isArray(data.items)) {
+      setCustomMetadata(enrichCustomMetadata(data.items))
     }
   }, [data])
 
@@ -136,7 +136,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     <Grid
       autoWidth
       columns={ columns }
-      data={ customMetadata! }
+      data={ customMetadata ?? [] }
       isLoading={ isLoading }
       modifiedCells={ modifiedCells }
       onUpdateCellData={ onUpdateCellData }

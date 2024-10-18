@@ -143,7 +143,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         id,
         modified: false,
         properties: [],
-        customMetadata: [],
+        customMetadata: undefined,
         schedules: [],
         imageSettings: customSettingsResponse,
         changes: {}

@@ -17,8 +17,10 @@ import {
   useGlobalDataObjectContext
 } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 
+export type GlobalElementContext = GlobalAssetContext | GlobalDataObjectContext
+
 interface UseGlobalElementContext {
-  context: GlobalAssetContext | GlobalDataObjectContext | undefined
+  context: GlobalElementContext | undefined
 }
 
 export const useGlobalElementContext = (): UseGlobalElementContext => {
