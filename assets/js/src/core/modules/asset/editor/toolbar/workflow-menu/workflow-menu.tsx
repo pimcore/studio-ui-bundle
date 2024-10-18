@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TagList } from '@Pimcore/components/tag-list/tag-list'
 import {
   useWorkflowGetDetailsQuery
@@ -19,20 +19,48 @@ import {
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Badge } from '@Pimcore/components/badge/badge'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   // const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
+  const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
   console.log('----> datax', data)
+
+  useEffect(() => {
+    if (data?.items !== undefined && data.items.length > 0) {
+      const foo = data.items.reduce((result: ItemType[], workflow) => {
+        const mergedActions = [
+          ...workflow.allowedTransitions ?? [],
+          ...workflow.globalActions ?? []
+        ]
+        mergedActions?.forEach((action) => {
+          result.push({
+            key: Number(result.length + 1).toString(),
+            label: (
+              <div>
+                {action.label}
+              </div>
+            )
+          })
+        })
+        console.log('----> formattedDropdownItems', result)
+        return result
+      }, [])
+
+      setItems(foo)
+    }
+  }, [data])
 
   const getVisibleWorkflowStatus = (): TagProps[][] => {
     if (data?.items !== undefined && data.items.length > 0) {
       const formattedStatuses = data.items.reduce((result: Array<{ children: string }>, workflow) => {
         workflow.workflowStatus.forEach((status) => {
-          console.log('----> color', status.color)
-
           if (status.visibleInDetail !== undefined && status.visibleInDetail) {
             const style = status.colorInverted
               ? { backgroundColor: `${status.color}33` }
@@ -55,15 +83,23 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     return [[]]
   }
 
-  console.log('----> getVisibleWorkflowStatus', getVisibleWorkflowStatus())
-
   return (
-    <div>
+    <Flex
+      align={ 'center' }
+      justify={ 'space-between' }
+    >
       <TagList
         itemGap={ 'extra-small' }
         list={ getVisibleWorkflowStatus() }
       />
+      <Dropdown
+        menu={ { items } }
+      >
+        <DropdownButton>
+          <Icon name={ 'workflow' } />
+        </DropdownButton>
+      </Dropdown>
       {isLoading && <div> I am loading </div>}
-    </div>
+    </Flex>
   )
 }
