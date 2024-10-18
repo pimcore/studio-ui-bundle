@@ -23,6 +23,7 @@ import {
   resetChanges,
   resetSchedulesChangesForDataObject,
   selectDataObjectById,
+  setModifiedCells,
   setPropertiesForDataObject,
   setSchedulesForDataObject,
   updatePropertyForDataObject,
@@ -91,7 +92,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
         modified: false,
         properties: [],
         schedules: [],
-        changes: {}
+        changes: {},
+        modifiedCells: {}
       }
 
       if (dataObjectData !== undefined) {
@@ -115,7 +117,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
-    resetChanges
+    resetChanges,
+    setModifiedCells
   )
 
   const propertyActions = usePropertiesDraft(

@@ -25,7 +25,6 @@ import {
   type WidgetManagerTabConfig
 } from '../widget-manager-slice'
 import { Model, type TabNode } from 'flexlayout-react'
-import { type ElementType } from 'types/element-type.d'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
@@ -36,7 +35,6 @@ interface useWidgetManagerReturn {
   closeWidget: (id: string) => void
   isMainWidgetOpen: (id: string) => boolean
   getOpenedMainWidget: () => TabNode | undefined
-  getElementContextInformationFromOpenedMainWidget: () => { id: number, elementType: ElementType } | undefined
 }
 
 export const useWidgetManager = (): useWidgetManagerReturn => {
@@ -80,23 +78,6 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     return getInnerModel().getActiveTabset()?.getSelectedNode() as TabNode | undefined
   }
 
-  function getElementContextInformationFromOpenedMainWidget (): { id: number, elementType: ElementType } | undefined {
-    const openedMainWidget = getOpenedMainWidget()
-    if (openedMainWidget === undefined) {
-      return undefined
-    }
-
-    const component = openedMainWidget.getComponent()
-    if (component === undefined || !['asset-editor', 'data-object-editor'].includes(component)) {
-      return undefined
-    }
-
-    return {
-      id: openedMainWidget.getConfig().id as number,
-      elementType: component.replace('-editor', '') as ElementType
-    }
-  }
-
   return {
     openMainWidget,
     openBottomWidget,
@@ -105,7 +86,6 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     switchToWidget,
     closeWidget,
     isMainWidgetOpen,
-    getOpenedMainWidget,
-    getElementContextInformationFromOpenedMainWidget
+    getOpenedMainWidget
   }
 }

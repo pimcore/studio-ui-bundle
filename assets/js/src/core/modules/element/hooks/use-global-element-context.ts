@@ -16,16 +16,21 @@ import {
   type GlobalDataObjectContext,
   useGlobalDataObjectContext
 } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+
+export type GlobalElementContext = GlobalAssetContext | GlobalDataObjectContext
 
 interface UseGlobalElementContext {
-  context: GlobalAssetContext | GlobalDataObjectContext | undefined
+  context: GlobalElementContext | undefined
 }
 
 export const useGlobalElementContext = (): UseGlobalElementContext => {
+  const { getOpenedMainWidget } = useWidgetManager()
+
   const { context: assetContext } = useGlobalAssetContext()
   const { context: dataObjectContext } = useGlobalDataObjectContext()
 
   return {
-    context: assetContext ?? dataObjectContext
+    context: getOpenedMainWidget()?.getComponent() === 'asset-editor' ? assetContext : dataObjectContext
   }
 }
