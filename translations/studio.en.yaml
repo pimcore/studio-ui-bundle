@@ -294,6 +294,7 @@ element.tree.context-menu.advanced: Advanced
 element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.lock: Lock
 element.tree.context-menu.lock-and-propagate-to-children: Lock and propagate to children
+element.tree.context-menu.unlock: Unlock
+element.tree.context-menu.unlock-and-propagate-to-children: Unlock and propagate to children
 element.tree.context-menu.expand-children: Expand Children
 element.tree.context-menu.refresh: Refresh
-element.tree.context-menu.request-translations: Request Translations

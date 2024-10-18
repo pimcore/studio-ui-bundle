@@ -59,7 +59,8 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     pasteCut,
     remove,
     downloadAsZip,
-    advanced,
+    lock,
+    lockAndPropagate,
     refresh
   } = useAssetActions()
 
@@ -303,7 +304,22 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     downloadAsZip({
       node: props.node
     }),
-    advanced(),
+    {
+      label: t('element.tree.context-menu.advanced'),
+      key: 'advanced',
+      icon: <Icon name={ 'more' } />,
+      children: [
+        {
+          label: t('element.tree.context-menu.lock'),
+          key: 'advanced-lock',
+          icon: <Icon name={ 'lock-01' } />,
+          children: [
+            lock({ nodeId: props.node?.id ?? null }),
+            lockAndPropagate({ nodeId: props.node?.id ?? null })
+          ]
+        }
+      ]
+    },
     refresh({ nodeId: props.node?.id ?? null })
   ]
 

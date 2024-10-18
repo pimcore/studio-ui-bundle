@@ -18,7 +18,8 @@ import React, { useState } from 'react'
 import {
   api as assetApi,
   type AssetCreateZipApiResponse,
-  useAssetCreateZipMutation
+  useAssetCreateZipMutation,
+  useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -55,6 +56,8 @@ export interface AssetContextMenuRefresh extends NodeIdAware {}
 
 export interface AssetContextMenuDownloadAsZip extends NodeAware {}
 
+export interface AssetContextMenuLock extends NodeIdAware {}
+
 export interface UseAssetActionsHookReturn {
   addFolder: (props: AssetContextMenuDelete) => ItemType
   rename: (props: AssetContextMenuRename) => ItemType
@@ -64,7 +67,12 @@ export interface UseAssetActionsHookReturn {
   pasteCut: (props: AssetContextMenuPaste) => ItemType | null
   remove: (props: AssetContextMenuDelete) => ItemType
   downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
-  advanced: () => ItemType
+  lock: (props: AssetContextMenuLock) => ItemType
+  lockAndPropagate: (props: AssetContextMenuLock) => ItemType
+  unlock: (props: AssetContextMenuLock) => ItemType
+  unlockAndPropagate: (props: AssetContextMenuLock) => ItemType
+  searchAndMove: () => ItemType
+  expandChildren: () => ItemType
   refresh: (props: AssetContextMenuRefresh) => ItemType
 }
 
@@ -75,6 +83,24 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const [node, setNode] = useState<TreeNodeProps | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
   const [fetchCreateZip] = useAssetCreateZipMutation()
+  const [assetPatch] = useAssetPatchByIdMutation()
+
+  const lockAssetOrFolder = async ({ nodeId, lockType }: { nodeId: string, lockType: 'self' | 'propagate' | '' }): Promise<void> => {
+    const assetLockTask = assetPatch({
+      body: {
+        data: [{
+          id: parseInt(nodeId),
+          locked: lockType
+        }]
+      }
+    })
+
+    try {
+      await assetLockTask
+    } catch (error) {
+      console.error('Error cutting')
+    }
+  }
 
   const addFolder: UseAssetActionsHookReturn['addFolder'] = ({ onClick }): ItemType => {
     return {
@@ -187,52 +213,84 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const advanced = (): ItemType => {
+  const lock: UseAssetActionsHookReturn['lock'] = ({ nodeId }): ItemType => {
     return {
-      label: t('element.tree.context-menu.advanced'),
-      key: 'advanced',
-      icon: <Icon name={ 'more' } />,
-      children: [
-        {
-          label: t('element.tree.context-menu.search-and-move'),
-          key: 'advanced-search-and-move',
-          icon: <Icon name={ 'folder-search' } />,
-          onClick: () => {
-            console.log('advanced-search-and-move')
-          }
-        },
-        {
-          label: t('element.tree.context-menu.lock'),
-          key: 'advanced-lock',
-          icon: <Icon name={ 'lock-01' } />,
-          children: [
-            {
-              label: t('element.tree.context-menu.lock'),
-              key: 'advanced.lock.lock',
-              icon: <Icon name={ 'lock-01' } />,
-              onClick: () => {
-                console.log('advanced-lock-lock')
-              }
-            },
-            {
-              label: t('element.tree.context-menu.lock-and-propagate-to-children'),
-              key: 'advanced.lock.lock-and-propagate-to-children',
-              icon: <Icon name={ 'file-lock-02' } />,
-              onClick: () => {
-                console.log('advanced-lock-lock')
-              }
-            }
-          ]
-        },
-        {
-          label: t('element.tree.context-menu.expand-children'),
-          key: 'advanced.expand-children',
-          icon: <Icon name={ 'expand-01' } />,
-          onClick: () => {
-            console.log('expand-children')
-          }
-        }
-      ]
+      label: t('element.tree.context-menu.lock'),
+      key: 'advanced.lock.lock',
+      icon: <Icon name={ 'lock-01' } />,
+      onClick: async () => {
+        await lockAssetOrFolder({
+          nodeId: nodeId!,
+          lockType: 'self'
+        })
+      }
+    }
+  }
+
+  const lockAndPropagate: UseAssetActionsHookReturn['lockAndPropagate'] = ({ nodeId }): ItemType => {
+    return {
+      label: t('element.tree.context-menu.lock-and-propagate-to-children'),
+      key: 'advanced.lock.lock-and-propagate-to-children',
+      icon: <Icon name={ 'file-lock-02' } />,
+      onClick: async () => {
+        await lockAssetOrFolder({
+          nodeId: nodeId!,
+          lockType: 'propagate'
+        })
+      }
+    }
+  }
+
+  const unlock: UseAssetActionsHookReturn['unlock'] = ({ nodeId }): ItemType => {
+    return {
+      label: t('element.tree.context-menu.unlock'),
+      key: 'advanced.lock.unlock',
+      icon: <Icon name={ 'lock-01' } />,
+      onClick: async () => {
+        await lockAssetOrFolder({
+          nodeId: nodeId!,
+          lockType: ''
+        })
+      }
+    }
+  }
+
+  const unlockAndPropagate: UseAssetActionsHookReturn['unlockAndPropagate'] = ({ nodeId }): ItemType => {
+    return {
+      label: t('element.tree.context-menu.unlock-and-propagate-to-children'),
+      key: 'advanced.lock.unlock-and-propagate-to-children',
+      icon: <Icon name={ 'file-lock-02' } />,
+      disabled: true,
+      onClick: async () => {
+        await lockAssetOrFolder({
+          nodeId: nodeId!,
+          lockType: 'propagate'
+        })
+      }
+    }
+  }
+
+  const searchAndMove = (): ItemType => {
+    return {
+      label: t('element.tree.context-menu.search-and-move'),
+      key: 'advanced-search-and-move',
+      icon: <Icon name={ 'folder-search' } />,
+      disabled: true,
+      onClick: () => {
+        console.log('advanced-search-and-move')
+      }
+    }
+  }
+
+  const expandChildren = (): ItemType => {
+    return {
+      label: t('element.tree.context-menu.expand-children'),
+      key: 'advanced.expand-children',
+      disabled: true,
+      icon: <Icon name={ 'expand-01' } />,
+      onClick: () => {
+        console.log('expand-children')
+      }
     }
   }
 
@@ -262,7 +320,12 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     pasteCut,
     remove,
     downloadAsZip,
-    advanced,
+    lock,
+    lockAndPropagate,
+    unlock,
+    unlockAndPropagate,
+    searchAndMove,
+    expandChildren,
     refresh
   }
 }
