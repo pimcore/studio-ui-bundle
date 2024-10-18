@@ -13,9 +13,21 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ token, css }, { scrollWidth }) => {
   return {
+    scrollContainer: css`
+      display: flex;
+      align-items: center;
+    `,
     scroll: css`
+      width: ${scrollWidth}px;
+      overflow-x: auto;
+      white-space: nowrap;
+      height: 33px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     `
   }
 })
