@@ -35,7 +35,6 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     if (data?.items !== undefined && data.items.length > 0) {
       const workFlowItems = data.items.map((workflow) => {
         const result: ItemType[] = []
-
         const mergedActions = [
           ...(workflow.allowedTransitions ?? []),
           ...(workflow.globalActions ?? [])
@@ -55,7 +54,6 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
           children: result
         }
       })
-
       setItems(workFlowItems)
     }
   }, [data])
@@ -92,10 +90,10 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       justify={ 'space-between' }
     >
       {!isLoading && (
-      <TagList
-        itemGap={ 'extra-small' }
-        list={ getVisibleWorkflowStatus() }
-      />
+        <TagList
+          itemGap={ 'extra-small' }
+          list={ getVisibleWorkflowStatus() }
+        />
       )}
       <Dropdown
         menu={ { items } }
