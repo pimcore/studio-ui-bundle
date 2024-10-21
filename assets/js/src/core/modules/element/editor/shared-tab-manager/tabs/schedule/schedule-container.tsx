@@ -48,9 +48,9 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     elementType,
     id
   })
-
+  console.log('rerender?', data, schedules, id, elementType)
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items)) {
+    if (data !== undefined && element?.changes.schedules === undefined && Array.isArray(data.items)) {
       const currentDate = Math.floor(Date.now() / 1000)
 
       const schedules = data.items.map((item: ApiSchedule): Schedule => {
@@ -63,7 +63,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const [gridDataUpcoming, setGridDataUpcoming] = useState<Schedule[]>([])
   const [gridDataArchive, setGridDataArchive] = useState<Schedule[]>([])
   useEffect(() => {
-    if (schedules !== undefined && schedules.length > 0) {
+    if (schedules !== undefined) {
       setGridDataUpcoming(schedules.filter((item) => {
         return !item.archived
       }))
