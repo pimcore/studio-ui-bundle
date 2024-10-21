@@ -42,6 +42,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
 
   const elementRef = useRef<HTMLDivElement>(null)
+
+  const [editorRightWidth, setEditorRightWidth] = useState<number>(0)
   const editorTabsWidth = useElementResize(elementRef)
 
   useEffect(() => {
@@ -49,6 +51,14 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
       setActiveTabKey(items[0].key)
     }
   }, [items])
+
+  useEffect(() => {
+    if (elementRef.current != null) {
+      const childElement = elementRef.current.querySelectorAll('.ant-tabs-nav-list')
+
+      setEditorRightWidth(childElement[0]?.getBoundingClientRect().width)
+    }
+  }, [])
 
   const onChange = (key: string): void => {
     setActiveTabKey(key)
@@ -127,6 +137,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         tabBarExtraContent={ {
           left: (
             <ElementToolbar
+              editorRightWidth={ editorRightWidth }
               editorTabsWidth={ editorTabsWidth }
               elementType={ elementType }
               id={ id }
