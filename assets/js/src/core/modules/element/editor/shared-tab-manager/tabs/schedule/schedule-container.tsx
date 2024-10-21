@@ -48,7 +48,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     elementType,
     id
   })
-  console.log('rerender?', data, schedules, id, elementType)
   useEffect(() => {
     if (data !== undefined && element?.changes.schedules === undefined && Array.isArray(data.items)) {
       const currentDate = Math.floor(Date.now() / 1000)

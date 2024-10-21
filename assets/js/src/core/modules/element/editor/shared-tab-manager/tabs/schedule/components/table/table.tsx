@@ -33,7 +33,6 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { element, updateSchedule, removeSchedule, setModifiedCells } = useElementDraft(id, elementType)
   const modifiedCellsType = 'schedules'
   const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
-  console.log('does it rerender??', id, elementType, data)
   const columnHelper = createColumnHelper<ScheduleTable>()
   const columns = [
     columnHelper.accessor('date', {
