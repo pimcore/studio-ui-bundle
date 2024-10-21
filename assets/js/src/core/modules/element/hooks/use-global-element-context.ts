@@ -30,7 +30,13 @@ export const useGlobalElementContext = (): UseGlobalElementContext => {
   const { context: assetContext } = useGlobalAssetContext()
   const { context: dataObjectContext } = useGlobalDataObjectContext()
 
-  return {
-    context: getOpenedMainWidget()?.getComponent() === 'asset-editor' ? assetContext : dataObjectContext
+  const openedMainWidgetComponent = getOpenedMainWidget()?.getComponent()
+
+  if (openedMainWidgetComponent === 'asset-editor') {
+    return { context: assetContext }
+  } else if (openedMainWidgetComponent === 'data-object-editor') {
+    return { context: dataObjectContext }
+  } else {
+    return { context: undefined }
   }
 }
