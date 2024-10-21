@@ -35,35 +35,45 @@ export const useBreadcrumbSize = (editorTabsWidth?: number, initialBreadcrumbLas
 
     if (editorTabsWidth > 450 && editorTabsWidth <= 550) {
       setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(100)
+      setCurrentBreadcrumbWidth(85)
     }
 
     if (editorTabsWidth > 550 && editorTabsWidth <= 700) {
       setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(150)
+      setCurrentBreadcrumbWidth(100)
     }
 
     if (editorTabsWidth > 700 && editorTabsWidth <= 800) {
       setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(200)
+      setCurrentBreadcrumbWidth(150)
     }
 
     if (editorTabsWidth > 800 && editorTabsWidth <= 900) {
       setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(300)
+      setCurrentBreadcrumbWidth(200)
     }
 
     if (editorTabsWidth > 900 && editorTabsWidth <= 1000) {
       setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(400)
+      setCurrentBreadcrumbWidth(300)
     }
 
     if (editorTabsWidth > 1000 && editorTabsWidth <= 1100) {
       setIsHideBreadcrumb(true)
+      setCurrentBreadcrumbWidth(400)
+    }
+
+    if (editorTabsWidth > 1100 && editorTabsWidth <= 1200) {
+      setIsHideBreadcrumb(true)
       setCurrentBreadcrumbWidth(500)
     }
 
-    if (editorTabsWidth > 1100) {
+    if (editorTabsWidth > 1200 && editorTabsWidth <= 1300) {
+      setIsHideBreadcrumb(true)
+      setCurrentBreadcrumbWidth(600)
+    }
+
+    if (editorTabsWidth > 1300) {
       setIsHideBreadcrumb(false)
       setCurrentBreadcrumbWidth(initialBreadcrumbLastElementWidth)
     }
