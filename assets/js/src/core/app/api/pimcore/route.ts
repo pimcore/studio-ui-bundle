@@ -15,6 +15,10 @@ export function getDomain (): string {
   return 'http://localhost'
 }
 
+export function getPrefix (): string {
+  return '/pimcore-studio/api'
+}
+
 export function getDomainWithPrefix (): string {
-  return `${getDomain()}/pimcore-studio/api`
+  return `${getDomain()}${getPrefix()}`
 }

@@ -19,6 +19,7 @@ import {
 import { Content } from '@Pimcore/components/content/content'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const PreviewContainer = (): React.JSX.Element => {
   const { id } = useAsset()
@@ -31,7 +32,7 @@ const PreviewContainer = (): React.JSX.Element => {
     }
     const checkUrlStatus = async (): Promise<void> => {
       try {
-        const response = await fetch(`http://localhost/pimcore-studio/api/assets/${id}/document/stream/pdf-preview`, { method: 'GET' })
+        const response = await fetch(`${getPrefix()}/assets/${id}/document/stream/pdf-preview`, { method: 'GET' })
         if (response.status === 200) {
           const docBlob = await response.blob()
           setDocURL(URL.createObjectURL(docBlob))

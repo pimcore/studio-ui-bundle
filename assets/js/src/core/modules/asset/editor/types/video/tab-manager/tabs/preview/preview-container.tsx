@@ -11,15 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
+import { Content } from '@Pimcore/components/content/content'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 export interface IVideoContext {
   thumbnail: string
@@ -40,10 +42,11 @@ export const VideoContext =
   })
 
 const PreviewContainer = (): React.JSX.Element => {
-  const [thumbnail, setThumbnail] = useState<string>('')
+  const [thumbnail, setThumbnail] = useState<string>('pimcore-system-treepreview')
+  const [url, setUrl] = useState<string>('')
   const [playerPosition, setPlayerPosition] = useState<number>(0)
-  const assetContext = useContext(AssetContext)
-  const { data } = useAssetGetByIdQuery({ id: assetContext.id })
+  const { id } = useContext(AssetContext)
+  const { isLoading } = useAssetDraft(id)
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
 
@@ -53,6 +56,31 @@ const PreviewContainer = (): React.JSX.Element => {
     playerPosition,
     setPlayerPosition
   }), [thumbnail, playerPosition])
+
+  const setUrlByThumbnail = (name: string): void => {
+    const url = `${getPrefix()}/assets/${id}/video/stream/${name}`
+
+    fetch(url)
+      .then(async (response) => await response.blob())
+      .then((blob) => {
+        const url = URL.createObjectURL(blob)
+        setUrl(url)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    if (isLoading) {
+      return
+    }
+    setUrlByThumbnail(thumbnail)
+  }, [thumbnail, isLoading])
+
+  if (url === '' || isLoading) {
+    return <Content loading />
+  }
 
   return (
     <VideoContext.Provider value={ contextValue }>
@@ -64,7 +92,7 @@ const PreviewContainer = (): React.JSX.Element => {
       }
       >
         <PreviewView
-          src={ thumbnail === '' ? data!.fullPath! : thumbnail }
+          src={ url }
         />
       </ContentToolbarSidebarLayout>
     </VideoContext.Provider>

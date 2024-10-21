@@ -45,7 +45,7 @@ const DetailContainer = (): React.JSX.Element => {
       height={ videoData.height ?? 0 }
       imagePreview={ imagePreview }
       onApplyPlayerPosition={ onApplyPlayerPosition }
-      onChangeThumbnail={ setThumbnailByThumbnailName }
+      onChangeThumbnail={ setThumbnail }
       onClickDownloadByFormat={ downloadVideoByFormat }
       onDropImage={ onDropImage }
       thumbnails={ videoThumbnails }
@@ -109,20 +109,6 @@ const DetailContainer = (): React.JSX.Element => {
       .then((blob) => {
         const url = URL.createObjectURL(blob)
         saveFileLocal(videoData.filename!, url)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
-
-  function setThumbnailByThumbnailName (name: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/stream/${name}`
-
-    fetch(url)
-      .then(async (response) => await response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob)
-        setThumbnail(url)
       })
       .catch((err) => {
         console.error(err)
