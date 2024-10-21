@@ -37,10 +37,8 @@ export const useStyle = createStyles(({ token, css }) => {
        }
     `,
 
-    dropdownItem: css`
-      &:hover {
-        background-color: ${token.controlItemBgActive} !important;
-      }
+    dropdownMenu: css`
+      max-width: 400px;
     `
   }
 })

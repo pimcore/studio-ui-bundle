@@ -14,7 +14,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
-import { CaretDownOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -98,7 +97,6 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
         for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
             key: i,
-            className: styles.dropdownItem,
             label: (
               partList[i]
             ),
@@ -112,7 +110,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
         items = [
           {
             title: '...',
-            menu: { items: dotsMenuItems }
+            menu: { items: dotsMenuItems, className: styles.dropdownMenu }
           },
           ...items
         ]
@@ -123,21 +121,14 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
       const dotsMenuItems: MenuItemType[] = []
 
       for (let i = 1; i < partListAmount; i++) {
-        const isFirstItem = i === 1
-        const isLastItem = i === partListAmount - 1
-        const paddingSize = 24
-
         dotsMenuItems.push({
           key: i,
-          className: styles.dropdownItem,
           label: (
             partList[i]
           ),
           onClick: () => {
             onMenuItemClick(partList.slice(0, i + 1).join('/'))
-          },
-          ...(!isFirstItem && { style: { paddingLeft: `${paddingSize * (i - 1)}px` } }),
-          ...(!isLastItem && { icon: <CaretDownOutlined /> })
+          }
         })
       }
 
@@ -145,7 +136,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
       items = [
         {
           title: '...',
-          menu: { items: dotsMenuItems }
+          menu: { items: dotsMenuItems, className: styles.dropdownMenu }
         },
         ...items
       ]
