@@ -12,29 +12,38 @@
 */
 
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { type IAdvancedEditorTab } from '@Pimcore/components/editor-tabs/editor-tabs'
+import { container } from '@Pimcore/app/depency-injection'
+import { type TabManager } from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
+import i18next from 'i18next'
 
-interface IDetachTab {
-  item: IAdvancedEditorTab
+export interface IDetachTab {
+  tabKey: string
   config?: any
 }
 
 interface IUseDetachTabReturn {
-  detachWidget: ({ item, config }: IDetachTab) => void
+  detachWidget: (args: IDetachTab) => void
 }
 
 export const useDetachTab = (): IUseDetachTabReturn => {
   const { openBottomWidget } = useWidgetManager()
 
-  const detachWidget = ({ item, config = {} }: IDetachTab): void => {
+  const detachWidget = ({ tabKey, config = {} }: IDetachTab): void => {
+    const tabManager = container.get<TabManager>('Asset/Editor/ImageTabManager')
+    const tab = tabManager.getTab(tabKey)
+
+    if (tab === undefined) {
+      return
+    }
+
     openBottomWidget({
-      name: item.originalLabel,
-      icon: item.icon.props.name,
-      id: `${item.key}-detached`,
+      name: i18next.t(String(tab.label)),
+      icon: String(tab.icon.props.name),
+      id: `${tabKey}-detached`,
       component: 'detachable-tab',
       config: {
         ...config,
-        children: item.children
+        tabKey
       }
     })
   }

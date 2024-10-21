@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata as CustomMetadataApi, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -36,9 +36,10 @@ interface CustomMetadataTableProps {
 export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModal }: CustomMetadataTableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
-  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata } = useAssetDraft(id)
+  const { asset, customMetadata, setCustomMetadata, removeCustomMetadata, updateAllCustomMetadata, setModifiedCells } = useAssetDraft(id)
   const { data, isLoading } = useAssetCustomMetadataGetByIdQuery({ id })
-  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: number, columnId: string }>>([])
+  const modifiedCellsType = 'customMetadata'
+  const modifiedCells = asset?.modifiedCells[modifiedCellsType] ?? []
 
   const enrichCustomMetadata = (data: CustomMetadataApi[]): CustomMetadata[] => {
     return data.map((item) => {
@@ -62,14 +63,14 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   }), [customMetadata])
 
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items)) {
-      setCustomMetadata(enrichCustomMetadata(data?.items))
+    if (data !== undefined && asset?.changes.customMetadata === undefined && Array.isArray(data.items)) {
+      setCustomMetadata(enrichCustomMetadata(data.items))
     }
   }, [data])
 
   useEffect(() => {
     if (modifiedCells.length > 0 && asset?.changes.customMetadata === undefined) {
-      setModifiedCells([])
+      setModifiedCells(modifiedCellsType, [])
     }
   }, [asset])
 
@@ -145,7 +146,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       }))
 
       updateAllCustomMetadata(customMetaDataUpdate)
-      setModifiedCells([...modifiedCells, { rowIndex: rowData.rowId, columnId }])
+      setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
 
@@ -153,7 +154,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     <Grid
       autoWidth
       columns={ columns }
-      data={ formattedCustomMetadata! }
+      data={ formattedCustomMetadata ?? [] }
       isLoading={ isLoading }
       modifiedCells={ modifiedCells }
       onUpdateCellData={ onUpdateCellData }

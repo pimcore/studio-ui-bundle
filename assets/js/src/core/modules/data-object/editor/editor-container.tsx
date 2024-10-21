@@ -14,12 +14,12 @@
 import React, { useEffect } from 'react'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { DataObjectProvider } from '../data-object-provider'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Content } from '@Pimcore/components/content/content'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
-import type { ComponentRegistryInterface } from '@Pimcore/modules/app/component-registry/component-registry'
+import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
+import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
+import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 
 export interface EditorContainerProps {
   id: number
@@ -27,10 +27,9 @@ export interface EditorContainerProps {
 
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, dataObject, removeDataObjectFromState } = useDataObjectDraft(id)
+  const { isLoading, isError, dataObject, removeDataObjectFromState, editorType } = useDataObjectDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
-  const typeComponentRegistry = useInjection<ComponentRegistryInterface>(serviceIds['DataObject/Editor/TypeComponentRegistry'])
 
   useEffect(() => {
     return () => {
@@ -59,19 +58,23 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     return <Content loading />
   }
 
-  if (dataObject === undefined) {
+  if (dataObject === undefined || editorType === undefined) {
     return <></>
-  }
-
-  let Component = typeComponentRegistry.get(dataObject.type!)
-
-  if (Component === undefined) {
-    Component = typeComponentRegistry.get('object')!
   }
 
   return (
     <DataObjectProvider id={ id }>
-      <Component />
+      <TabsToolbarView
+        renderTabbar={
+          <TabsContainer
+            elementEditorType={ editorType }
+          />
+          }
+
+        renderToolbar={
+          <Toolbar />
+          }
+      />
     </DataObjectProvider>
   )
 }

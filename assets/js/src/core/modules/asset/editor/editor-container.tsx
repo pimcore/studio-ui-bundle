@@ -16,10 +16,10 @@ import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 import { AssetProvider } from '../asset-provider'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Content } from '@Pimcore/components/content/content'
-import { type ComponentRegistryInterface } from '@Pimcore/modules/app/component-registry/component-registry'
+import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
+import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
+import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 
 export interface EditorContainerProps {
   id: number
@@ -27,10 +27,9 @@ export interface EditorContainerProps {
 
 const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { id } = props
-  const { isLoading, isError, asset, removeAssetFromState } = useAssetDraft(id)
+  const { isLoading, isError, asset, removeAssetFromState, editorType } = useAssetDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
-  const typeComponentRegistry = useInjection<ComponentRegistryInterface>(serviceIds['Asset/Editor/TypeComponentRegistry'])
 
   useEffect(() => {
     return () => {
@@ -59,19 +58,23 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
     return <Content loading />
   }
 
-  if (asset === undefined) {
+  if (asset === undefined || editorType === undefined) {
     return <></>
-  }
-
-  let Component = typeComponentRegistry.get(asset.type!)
-
-  if (Component === undefined) {
-    Component = typeComponentRegistry.get('unknown')!
   }
 
   return (
     <AssetProvider id={ id }>
-      <Component />
+      <TabsToolbarView
+        renderTabbar={
+          <TabsContainer
+            elementEditorType={ editorType }
+          />
+          }
+
+        renderToolbar={
+          <Toolbar />
+          }
+      />
     </AssetProvider>
   )
 }

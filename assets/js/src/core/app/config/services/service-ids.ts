@@ -23,6 +23,7 @@ export const serviceIds = {
   widgetManager: 'WidgetManagerService',
 
   // Assets
+  'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',
   'Asset/Editor/TypeComponentRegistry': 'Asset/Editor/TypeComponentRegistry',
   'Asset/Editor/DocumentTabManager': 'Asset/Editor/DocumentTabManager',
   'Asset/Editor/FolderTabManager': 'Asset/Editor/FolderTabManager',
@@ -35,7 +36,7 @@ export const serviceIds = {
   'Asset/MetadataTypeProvider/MetadataTypeRegistry': 'Asset/MetadataTypeProvider/MetadataTypeRegistry',
 
   // Data Objects
-  'DataObject/Editor/TypeComponentRegistry': 'DataObject/Editor/TypeComponentRegistry',
+  'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
   'DataObject/Editor/ObjectTabManager': 'DataObject/Editor/ObjectTabManager',
   'DataObject/Editor/FolderTabManager': 'DataObject/Editor/FolderTabManager',
 

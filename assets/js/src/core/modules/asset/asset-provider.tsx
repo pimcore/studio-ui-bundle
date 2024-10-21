@@ -19,7 +19,7 @@ export interface IAssetContext {
 
 export interface IAssetProviderProps {
   id: number
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const AssetContext = createContext<IAssetContext>({ id: 0 })

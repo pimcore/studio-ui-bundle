@@ -55,7 +55,7 @@ export const Toolbar = (): React.JSX.Element => {
       messageApi.error(t('save-failed'))
     }
   }, [isError, isSchedulesError])
-
+  console.log('hasChanges', hasChanges)
   return (
     <ToolbarView>
       <ContextMenu />

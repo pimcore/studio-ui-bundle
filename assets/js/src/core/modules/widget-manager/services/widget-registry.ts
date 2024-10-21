@@ -13,14 +13,17 @@
 
 import { injectable } from 'inversify'
 import { type ComponentType, memo } from 'react'
+import type React from 'react'
 import { type TabTitleOuterContainerProps } from '../title/tab-title-outer-container'
 import { type TabNode } from 'flexlayout-react'
+import { type GlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice'
 
 export interface Widget {
   name: string
   component: ComponentType
   titleComponent?: ComponentType<TabTitleOuterContainerProps>
   isModified?: (tabNode: TabNode) => boolean
+  getContextProvider?: (context: GlobalContext, children: React.ReactNode) => React.JSX.Element
 }
 
 @injectable()

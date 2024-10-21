@@ -14,8 +14,6 @@
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { DetachedTab } from '@Pimcore/modules/data-object/editor/detached-tab/detached-tab'
 import {
   TAB_DEPENDENCIES, TAB_NOTES_AND_EVENTS,
   TAB_PROPERTIES, TAB_TAGS,
@@ -32,11 +30,5 @@ moduleSystem.registerModule({
     folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     folderEditorTabManager.register(TAB_TAGS)
     folderEditorTabManager.register(TAB_WORKFLOW)
-
-    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
-    widgetRegistryService.registerWidget({
-      name: 'detachable-tab',
-      component: DetachedTab
-    })
   }
 })

@@ -62,13 +62,13 @@ import { DynamicTypeMetaDataInput } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeMetaDataObject } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-object'
 import { DynamicTypeMetaDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-select'
 import { DynamicTypeMetaDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-textarea'
+import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
 
 // Assets
-container.bind(serviceIds['Asset/Editor/TypeComponentRegistry']).to(ComponentRegistry).inSingletonScope()
-
+container.bind(serviceIds['Asset/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/DocumentTabManager']).to(DocumentTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()
 container.bind(serviceIds['Asset/Editor/ImageTabManager']).to(ImageTabManager).inSingletonScope()
@@ -80,7 +80,7 @@ container.bind(serviceIds['Asset/Editor/UnknownTabManager']).to(UnknownTabManage
 container.bind(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry']).to(MetadataTypeRegistry).inSingletonScope()
 
 // Data Objects
-container.bind(serviceIds['DataObject/Editor/TypeComponentRegistry']).to(ComponentRegistry).inSingletonScope()
+container.bind(serviceIds['DataObject/Editor/TypeRegistry']).to(TypeRegistry).inSingletonScope()
 
 container.bind(serviceIds['DataObject/Editor/ObjectTabManager']).to(ObjectTabManager).inSingletonScope()
 container.bind(serviceIds['DataObject/Editor/FolderTabManager']).to(FolderTabManager).inSingletonScope()

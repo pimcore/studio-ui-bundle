@@ -12,50 +12,35 @@
 */
 
 import { container } from '@Pimcore/app/depency-injection'
-import { EditorContainer } from './editor-container'
 import '@Pimcore/modules/data-object/editor/types/object'
 import '@Pimcore/modules/data-object/editor/types/folder'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { TitleContainer } from './title/title-container'
-import { ObjectContainer } from '@Pimcore/modules/data-object/editor/types/object/object-container'
-import { FolderContainer } from '@Pimcore/modules/data-object/editor/types/folder/folder-container'
 import type {
-  ComponentRegistry as GlobalComponentRegistry, ComponentRegistryInterface
+  ComponentRegistry as GlobalComponentRegistry
 } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
-import type { TabNode } from 'flexlayout-react'
-import type { EditorContainerProps } from '@Pimcore/modules/asset/editor/editor-container'
-import { store } from '@Pimcore/app/store'
-import { selectDataObjectById } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { DataObjectEditorWidget } from '@Pimcore/modules/data-object/editor/widget'
+import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
-    const typeComponentRegistry = container.get<ComponentRegistryInterface>(serviceIds['DataObject/Editor/TypeComponentRegistry'])
+    const typeRegistry = container.get<TypeRegistryInterface>(serviceIds['DataObject/Editor/TypeRegistry'])
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'object',
-      component: ObjectContainer
+      tabManagerServiceId: 'DataObject/Editor/ObjectTabManager'
     })
 
-    typeComponentRegistry.register({
+    typeRegistry.register({
       name: 'folder',
-      component: FolderContainer
+      tabManagerServiceId: 'DataObject/Editor/FolderTabManager'
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
-    widgetRegistryService.registerWidget({
-      name: 'data-object-editor',
-      component: EditorContainer,
-      titleComponent: TitleContainer,
-      isModified: (tabNode: TabNode) => {
-        const config = tabNode.getConfig() as EditorContainerProps
-        const dataObject = selectDataObjectById(store.getState(), config.id)
-        return dataObject?.modified ?? false
-      }
-    })
+    widgetRegistryService.registerWidget(DataObjectEditorWidget)
 
     const componentRegistry = container.get<GlobalComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
 

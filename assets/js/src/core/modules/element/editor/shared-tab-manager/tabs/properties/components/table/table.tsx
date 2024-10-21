@@ -48,7 +48,7 @@ export const Table = ({
   const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
   const { id, elementType } = useElementContext()
-  const { element, properties, setProperties, updateProperty, removeProperty } = useElementDraft(id, elementType)
+  const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
   const arePropertiesAvailable = properties !== undefined && properties.length >= 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
@@ -58,7 +58,8 @@ export const Table = ({
 
   const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
   const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
-  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: string, columnId: string }>>([])
+  const modifiedCellsType = 'properties'
+  const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
 
   const enrichProperties = (data: DataPropertyApi[]): DataProperty[] => {
     return data.map((item) => {
@@ -70,7 +71,7 @@ export const Table = ({
   }
 
   useEffect(() => {
-    if (data !== undefined && Array.isArray(data.items)) {
+    if (data !== undefined && element?.changes.properties === undefined && Array.isArray(data.items)) {
       setProperties(enrichProperties(data?.items))
     }
   }, [data])
@@ -89,9 +90,9 @@ export const Table = ({
 
   useEffect(() => {
     if (modifiedCells.length > 0 && element?.changes.properties === undefined) {
-      setModifiedCells([])
+      setModifiedCells(modifiedCellsType, [])
     }
-  }, [element])
+  }, [element, modifiedCells])
 
   const columnHelper = createColumnHelper<DataPropertyWithActions>()
   const createColumns = (tableType: 'own' | 'inherited'): any => [
@@ -190,7 +191,7 @@ export const Table = ({
 
     if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
       updateProperty(rowData.key as string, updatedProperty)
-      setModifiedCells([...modifiedCells, { rowIndex: rowData.rowId, columnId }])
+      setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
 
