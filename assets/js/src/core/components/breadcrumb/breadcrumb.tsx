@@ -19,100 +19,36 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { Text } from '@Pimcore/components/text/text'
+import { useBreadcrumbSize } from './hooks/use-breadcrumb-size'
 import { type ElementType } from 'types/element-type.d'
 import { useStyle } from './breadcrumb.styles'
 
 export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: string, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
-  const [size, setSize] = useState<'S' | 'M' | 'L'>('L')
-
-  const [isHideBreadcrumb, setIsHideBreadcrumb] = useState(false)
-  const [initialBreadcrumbLastElementWidth, setInitialBreadcrumbLastElementWidth] = useState<number>(0)
-  const [currentBreadcrumbWidth, setCurrentBreadcrumbWidth] = useState<number>(0)
-
-  const breadcrumbElementRef = useRef<HTMLSpanElement>(null)
-
-  console.log('----->>>> INITIAL: ', initialBreadcrumbLastElementWidth)
-  console.log('----->>>> CURRENT: ', currentBreadcrumbWidth)
-  console.log('----->>>> isHideBreadcrumb: ', isHideBreadcrumb)
-
-  const { styles } = useStyle()
-  const { openElement } = useElementHelper()
   const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    if (editorTabsWidth == null) return
+  const [pageSize, setPageSize] = useState<'S' | 'L'>('L')
+  const [initialBreadcrumbLastElementWidth, setInitialBreadcrumbLastElementWidth] = useState<number>(0)
 
+  const breadcrumbElementRef = useRef<HTMLSpanElement>(null)
+  const { openElement } = useElementHelper()
+
+  const { styles } = useStyle()
+
+  useEffect(() => {
     if (initialBreadcrumbLastElementWidth === 0) {
       const initialBreadcrumbWidth = breadcrumbElementRef?.current?.offsetWidth ?? 0
 
       setInitialBreadcrumbLastElementWidth(initialBreadcrumbWidth)
     }
+  }, [])
 
-    console.log('----- editorTabsWidth: ', editorTabsWidth)
+  useEffect(() => {
+    if (editorTabsWidth == null) return
 
-    if (editorTabsWidth <= 375) {
-      console.log('------ 111111 -------')
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(50)
-    }
-
-    if (editorTabsWidth > 375 && editorTabsWidth <= 450) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(70)
-    }
-
-    if (editorTabsWidth > 450 && editorTabsWidth <= 550) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(100)
-    }
-
-    if (editorTabsWidth > 550 && editorTabsWidth <= 700) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(150)
-    }
-
-    if (editorTabsWidth > 700 && editorTabsWidth <= 800) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(200)
-    }
-
-    if (editorTabsWidth > 800 && editorTabsWidth <= 900) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(300)
-    }
-
-    if (editorTabsWidth > 900 && editorTabsWidth <= 1000) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(400)
-    }
-
-    if (editorTabsWidth > 1000 && editorTabsWidth <= 1100) {
-      setIsHideBreadcrumb(true)
-      setCurrentBreadcrumbWidth(500)
-    }
-
-    if (editorTabsWidth > 1100) {
-      console.log('------ 333333333 -------')
-      setIsHideBreadcrumb(false)
-      setCurrentBreadcrumbWidth(initialBreadcrumbLastElementWidth)
-    }
-
-    if (editorTabsWidth < 550) {
-      setSize('S')
-
-      return
-    }
-
-    if (editorTabsWidth <= 800) {
-      setSize('M')
-
-      return
-    }
-
-    if (editorTabsWidth > 800) {
-      setSize('L')
-    }
+    editorTabsWidth <= 800 ? setPageSize('S') : setPageSize('L')
   }, [editorTabsWidth])
+
+  const { isHideBreadcrumb, currentBreadcrumbWidth } = useBreadcrumbSize(editorTabsWidth, initialBreadcrumbLastElementWidth)
 
   let items: NonNullable<BreadcrumbProps['items']> = []
 
@@ -140,7 +76,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
         .catch(() => {})
     }
 
-    if (partListAmount > 2 && size === 'L') {
+    if (partListAmount > 2 && pageSize === 'L') {
       items.push({
         title: (
           <Text
@@ -183,7 +119,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
       }
     }
 
-    if (partListAmount > 2 && size !== 'L') {
+    if (partListAmount > 2 && pageSize !== 'L') {
       const dotsMenuItems: MenuItemType[] = []
 
       for (let i = 1; i < partListAmount; i++) {
