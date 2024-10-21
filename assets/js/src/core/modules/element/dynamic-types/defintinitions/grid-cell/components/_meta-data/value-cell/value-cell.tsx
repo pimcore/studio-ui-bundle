@@ -15,13 +15,21 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { Alert } from 'antd'
+import { type DynamicTypeMetaDataRegistry } from '../../../../meta-data/dynamic-type-metadata-registry'
+import { type DynamicTypeMetadataAbstract } from '../../../../meta-data/dynamic-type-metadata-abstract'
 
 export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
-  const propertyType = props.row.original.type
-  const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
-  const metadataType = metadataTypeRegistry.getComponentByType(String(propertyType))
+  const propertyType = props.row.original.type as unknown as string
+  const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
+
+  let metadataType: undefined | DynamicTypeMetadataAbstract
+
+  try {
+    metadataType = metadataTypeRegistry.getDynamicType(propertyType)
+  } catch (error) {
+    console.warn(error)
+  }
 
   function renderCell (): React.JSX.Element {
     if (metadataType === undefined) {
@@ -32,7 +40,7 @@ export const ValueCell = (props: DefaultCellProps): React.JSX.Element => {
         />
       )
     }
-    return metadataType.getGridCell(props)
+    return metadataType.getGridCellComponent(props)
   }
 
   return (

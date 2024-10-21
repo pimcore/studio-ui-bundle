@@ -20,20 +20,7 @@ export abstract class DynamicTypeAbstract {
 
 @injectable()
 export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract extends DynamicTypeAbstract> {
-  static readonly subclasses: Array<typeof DynamicTypeRegistryAbstract> = []
-
-  static {
-    const originalExtend = Object.setPrototypeOf
-
-    Object.setPrototypeOf = function (subclass: typeof DynamicTypeRegistryAbstract, superclass: typeof DynamicTypeRegistryAbstract) {
-      if (superclass === DynamicTypeRegistryAbstract) {
-        DynamicTypeRegistryAbstract.subclasses.push(subclass)
-      }
-      return originalExtend(subclass, superclass)
-    }
-  }
-
-  private readonly dynamicTypes = new Map<string, GenericDynamicTypeAbstract>()
+  protected readonly dynamicTypes = new Map<string, GenericDynamicTypeAbstract>()
 
   registerDynamicType (type: GenericDynamicTypeAbstract): void {
     if (this.dynamicTypes.has(type.id)) {

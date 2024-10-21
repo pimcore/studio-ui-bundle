@@ -14,7 +14,8 @@
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
-  'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry'
+  'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
+  'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry'
 }
 
 export const serviceIds = {
@@ -74,6 +75,15 @@ export const serviceIds = {
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
   'DynamicTypes/Listing/Select': 'DynamicTypes/Listing/Select',
+
+  'DynamicTypes/Metadata/Asset': 'DynamicTypes/Metadata/Asset',
+  'DynamicTypes/Metadata/Document': 'DynamicTypes/Metadata/Document',
+  'DynamicTypes/Metadata/Object': 'DynamicTypes/Metadata/Object',
+  'DynamicTypes/Metadata/Input': 'DynamicTypes/Metadata/Input',
+  'DynamicTypes/Metadata/Textarea': 'DynamicTypes/Metadata/Textarea',
+  'DynamicTypes/Metadata/Checkbox': 'DynamicTypes/Metadata/Checkbox',
+  'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
+  'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

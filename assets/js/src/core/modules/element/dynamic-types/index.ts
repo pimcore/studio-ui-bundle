@@ -39,6 +39,15 @@ import { type DynamicTypeGridCellPropertyValue } from './defintinitions/grid-cel
 import { type DynamicTypeGridCellScheduleActionsSelect } from './defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { type DynamicTypeGridCellVersionIdSelect } from './defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './defintinitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
+import { type DynamicTypeMetaDataRegistry } from './defintinitions/meta-data/dynamic-type-metadata-registry'
+import { type DynamicTypeMetaDataAsset } from './defintinitions/meta-data/types/dynamic-type-meta-data-asset'
+import { type DynamicTypeMetaDataCheckbox } from './defintinitions/meta-data/types/dynamic-type-meta-data-checkbox'
+import { type DynamicTypeMetaDataDate } from './defintinitions/meta-data/types/dynamic-type-meta-data-date'
+import { type DynamicTypeMetaDataDocument } from './defintinitions/meta-data/types/dynamic-type-meta-data-document'
+import { type DynamicTypeMetaDataInput } from './defintinitions/meta-data/types/dynamic-type-meta-data-input'
+import { type DynamicTypeMetaDataObject } from './defintinitions/meta-data/types/dynamic-type-meta-data-object'
+import { type DynamicTypeMetaDataSelect } from './defintinitions/meta-data/types/dynamic-type-meta-data-select'
+import { type DynamicTypeMetaDataTextarea } from './defintinitions/meta-data/types/dynamic-type-meta-data-textarea'
 
 moduleSystem.registerModule({
   onInit () {
@@ -70,5 +79,16 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellScheduleActionsSelect>(serviceIds['DynamicTypes/GridCell/ScheduleActionsSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellVersionIdSelect>(serviceIds['DynamicTypes/GridCell/VersionsIdSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetVersionPreviewFieldLabel>(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']))
+
+    const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
+
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataAsset>(serviceIds['DynamicTypes/Metadata/Asset']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataCheckbox>(serviceIds['DynamicTypes/Metadata/Checkbox']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataDate>(serviceIds['DynamicTypes/Metadata/Date']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataDocument>(serviceIds['DynamicTypes/Metadata/Document']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataInput>(serviceIds['DynamicTypes/Metadata/Input']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataObject>(serviceIds['DynamicTypes/Metadata/Object']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataSelect>(serviceIds['DynamicTypes/Metadata/Select']))
+    metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataTextarea>(serviceIds['DynamicTypes/Metadata/Textarea']))
   }
 })

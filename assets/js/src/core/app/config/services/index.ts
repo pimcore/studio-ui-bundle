@@ -53,6 +53,15 @@ import { DynamicTypeGridCellPropertyValue } from '@Pimcore/modules/element/dynam
 import { DynamicTypeGridCellScheduleActionsSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { DynamicTypeGridCellVersionIdSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { DynamicTypeGridCellAssetVersionPreviewFieldLabel } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
+import { DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
+import { DynamicTypeMetaDataAsset } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-asset'
+import { DynamicTypeMetaDataCheckbox } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-checkbox'
+import { DynamicTypeMetaDataDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-date'
+import { DynamicTypeMetaDataDocument } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-document'
+import { DynamicTypeMetaDataInput } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-input'
+import { DynamicTypeMetaDataObject } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-object'
+import { DynamicTypeMetaDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-select'
+import { DynamicTypeMetaDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-textarea'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -110,6 +119,17 @@ container.bind(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
+
+// Metadata registry
+container.bind(serviceIds['DynamicTypes/MetadataRegistry']).to(DynamicTypeMetaDataRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Asset']).to(DynamicTypeMetaDataAsset).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Checkbox']).to(DynamicTypeMetaDataCheckbox).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Date']).to(DynamicTypeMetaDataDate).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Document']).to(DynamicTypeMetaDataDocument).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Input']).to(DynamicTypeMetaDataInput).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Object']).to(DynamicTypeMetaDataObject).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Select']).to(DynamicTypeMetaDataSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaDataTextarea).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

@@ -20,20 +20,20 @@ export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
 
   function renderCell (): React.JSX.Element {
     switch (propertyType) {
-      case 'input':
+      case 'metadata.input':
         return <IconView name={ 'text-input' } />
-      case 'textarea':
+      case 'metadata.textarea':
         return <IconView name={ 'note' } />
-      case 'document':
+      case 'metadata.document':
         return <IconView name={ 'mainDocument' } />
-      case 'asset':
+      case 'metadata.asset':
         return <IconView name={ 'mainAsset' } />
-      case 'object':
-      case 'dataObject':
+      case 'metadata.object':
+      case 'metadata.dataObject':
         return <IconView name={ 'mainObject' } />
-      case 'date':
+      case 'metadata.date':
         return <IconView name={ 'calendar-date' } />
-      case 'checkbox':
+      case 'metadata.checkbox':
         return <IconView name={ 'check-done-02' } />
       default:
         return <span></span>

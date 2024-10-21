@@ -28,7 +28,6 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
@@ -36,6 +35,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
+import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -59,9 +59,9 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const typeSelectValue = useRef<string>('input')
   const languageSelectValue = useRef<string>('')
 
-  const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
+  const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
   const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
-    return { value: type, label: t('data-type.' + type) }
+    return { value: type, label: t('data-type.' + type.split('.')[1]) }
   })
 
   function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
