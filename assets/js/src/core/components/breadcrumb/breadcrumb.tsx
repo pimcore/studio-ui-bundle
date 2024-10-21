@@ -22,7 +22,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { type ElementType } from 'types/element-type.d'
 import { useStyle } from './breadcrumb.styles'
 
-export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: string, elementType: ElementType, editorTabsWidth?: number, toolbarWidth?: number, editorRightWidth?: number }): React.JSX.Element => {
+export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: string, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const [size, setSize] = useState<'S' | 'M' | 'L'>('L')
 
   const [isHideBreadcrumb, setIsHideBreadcrumb] = useState(false)
@@ -30,8 +30,6 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
   const [currentBreadcrumbWidth, setCurrentBreadcrumbWidth] = useState<number>(0)
 
   const breadcrumbElementRef = useRef<HTMLSpanElement>(null)
-
-  console.warn(setCurrentBreadcrumbWidth, setIsHideBreadcrumb, setInitialBreadcrumbLastElementWidth)
 
   console.log('----->>>> INITIAL: ', initialBreadcrumbLastElementWidth)
   console.log('----->>>> CURRENT: ', currentBreadcrumbWidth)
@@ -83,7 +81,17 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
       setCurrentBreadcrumbWidth(300)
     }
 
-    if (editorTabsWidth > 900) {
+    if (editorTabsWidth > 900 && editorTabsWidth <= 1000) {
+      setIsHideBreadcrumb(true)
+      setCurrentBreadcrumbWidth(400)
+    }
+
+    if (editorTabsWidth > 1000 && editorTabsWidth <= 1100) {
+      setIsHideBreadcrumb(true)
+      setCurrentBreadcrumbWidth(500)
+    }
+
+    if (editorTabsWidth > 1100) {
       console.log('------ 333333333 -------')
       setIsHideBreadcrumb(false)
       setCurrentBreadcrumbWidth(initialBreadcrumbLastElementWidth)

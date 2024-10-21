@@ -19,11 +19,9 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { type ElementType } from 'types/element-type.d'
-import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 
-export const ElementToolbar = ({ id, elementType, editorTabsWidth, editorRightWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number, editorRightWidth?: number }): React.JSX.Element => {
+export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const elementRef = useRef<HTMLDivElement>(null)
-  const toolbarWidth = useElementResize(elementRef)
 
   const { styles } = useStyle()
 
@@ -71,11 +69,9 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth, editorRightWi
     >
 
       <Breadcrumb
-        editorRightWidth={ editorRightWidth }
         editorTabsWidth={ editorTabsWidth }
         elementType={ elementType }
         path={ element.fullPath! }
-        toolbarWidth={ toolbarWidth }
       />
 
       <div className={ 'element-toolbar__info-dropdown' }>
