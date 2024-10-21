@@ -33,8 +33,9 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
+
       setIsAtStart(scrollLeft === 0)
-      setIsAtEnd(scrollLeft + clientWidth + 2 >= scrollWidth)
+      setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
     }
   }
 
@@ -78,6 +79,22 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
     }
   }
 
+  const handleKeyUp = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      stopScrolling()
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent, direction: 'left' | 'right'): void => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      if (direction === 'left') {
+        startScrollingLeft()
+      } else if (direction === 'right') {
+        startScrollingRight()
+      }
+    }
+  }
+
   return (
     <Flex
       align={ 'center' }
@@ -88,6 +105,8 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
         disabled={ isAtStart }
         icon={ 'chevron-left' }
         iconOptions={ { height: 18, width: 18 } }
+        onKeyDown={ (e) => { handleKeyDown(e, 'left') } }
+        onKeyUp={ handleKeyUp }
         onMouseDown={ startScrollingLeft }
         onMouseLeave={ stopScrolling }
         onMouseUp={ stopScrolling }
@@ -105,6 +124,8 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
         disabled={ isAtEnd }
         icon={ 'chevron-right' }
         iconOptions={ { height: 18, width: 18 } }
+        onKeyDown={ (e) => { handleKeyDown(e, 'right') } }
+        onKeyUp={ handleKeyUp }
         onMouseDown={ startScrollingRight }
         onMouseLeave={ stopScrolling }
         onMouseUp={ stopScrolling }
