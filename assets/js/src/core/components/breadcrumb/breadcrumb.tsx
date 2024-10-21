@@ -31,10 +31,9 @@ interface BreadcrumbProps {
   pageSize?: 'S' | 'L'
 }
 
-export const Breadcrumb = ({ path, elementType, editorTabsWidth }: BreadcrumbProps): React.JSX.Element => {
+export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: BreadcrumbProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
-  const [pageSize, setPageSize] = useState<'S' | 'L'>('L')
   const [initialBreadcrumbLastElementWidth, setInitialBreadcrumbLastElementWidth] = useState<number>(0)
 
   const breadcrumbElementRef = useRef<HTMLSpanElement>(null)
@@ -49,12 +48,6 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: BreadcrumbPro
       setInitialBreadcrumbLastElementWidth(initialBreadcrumbWidth)
     }
   }, [])
-
-  useEffect(() => {
-    if (editorTabsWidth == null) return
-
-    editorTabsWidth <= 800 ? setPageSize('S') : setPageSize('L')
-  }, [editorTabsWidth])
 
   const { isHideBreadcrumb, currentBreadcrumbWidth } = useBreadcrumbSize(editorTabsWidth, initialBreadcrumbLastElementWidth)
 

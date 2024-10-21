@@ -20,7 +20,14 @@ const useElementResize = (ref: RefObject<HTMLDivElement>): number => {
     if (ref.current == null) return
 
     const resizeObserver = new ResizeObserver(([entry]) => {
-      setWidth(entry.contentRect.width)
+      const newWidth = entry.contentRect.width
+
+      setWidth((prevWidth) => {
+        if (newWidth !== 0 && prevWidth !== newWidth) {
+          return newWidth
+        }
+        return prevWidth
+      })
     })
 
     resizeObserver.observe(ref.current)
