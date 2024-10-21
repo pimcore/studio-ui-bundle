@@ -13,6 +13,7 @@
 
 import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
+import { type BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import cn from 'classnames'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -87,6 +88,15 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
       </Text>
     )
 
+    // Prepend the "..." menu to the existing items array
+    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemType[], items: BreadcrumbItemType[] }): any => [
+      {
+        title: '...',
+        menu: { items: dotsMenuItems, className: styles.dropdownMenu }
+      },
+      ...items
+    ]
+
     if (partListAmount > 2 && pageSize === 'L') {
       items.push({
         title: generateBreadcrumbText({ content: partList[partListAmount - 2], style: { maxWidth: '150px' } }),
@@ -110,14 +120,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
           })
         }
 
-        // Prepend the "..." menu to the existing items array
-        items = [
-          {
-            title: '...',
-            menu: { items: dotsMenuItems, className: styles.dropdownMenu }
-          },
-          ...items
-        ]
+        items = addDotsMenu({ dotsMenuItems, items })
       }
     }
 
@@ -136,14 +139,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
         })
       }
 
-      // Prepend the "..." menu to the existing items array
-      items = [
-        {
-          title: '...',
-          menu: { items: dotsMenuItems, className: styles.dropdownMenu }
-        },
-        ...items
-      ]
+      items = addDotsMenu({ dotsMenuItems, items })
     }
 
     // Add the last item of the breadcrumb
