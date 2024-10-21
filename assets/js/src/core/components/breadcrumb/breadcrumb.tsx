@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
-import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
+import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
 import { type BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import cn from 'classnames'
@@ -24,7 +24,14 @@ import { useBreadcrumbSize } from './hooks/use-breadcrumb-size'
 import { type ElementType } from 'types/element-type.d'
 import { useStyle } from './breadcrumb.styles'
 
-export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: string, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
+interface BreadcrumbProps {
+  path: string
+  elementType: ElementType
+  editorTabsWidth?: number
+  pageSize?: 'S' | 'L'
+}
+
+export const Breadcrumb = ({ path, elementType, editorTabsWidth }: BreadcrumbProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const [pageSize, setPageSize] = useState<'S' | 'L'>('L')
@@ -51,9 +58,9 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
 
   const { isHideBreadcrumb, currentBreadcrumbWidth } = useBreadcrumbSize(editorTabsWidth, initialBreadcrumbLastElementWidth)
 
-  let items: NonNullable<BreadcrumbProps['items']> = []
+  let items: NonNullable<AntBreadcrumbProps['items']> = []
 
-  function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
+  function getBreadcrumbItems (path: string): AntBreadcrumbProps['items'] {
     // Split to check if it has more that just a single key
     const partList = path.split('/')
     const partListAmount = partList.length
