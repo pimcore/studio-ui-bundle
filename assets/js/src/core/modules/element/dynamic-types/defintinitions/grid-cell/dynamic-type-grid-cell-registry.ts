@@ -12,13 +12,13 @@
 */
 
 import { type ReactElement } from 'react'
-import { type AbstractGridCellDefinition, type DynamicTypeCellColumnAbstract } from './dynamic-type-grid-cell-abstract'
+import { type AbstractGridCellDefinition, type DynamicTypeGridCellAbstract } from './dynamic-type-grid-cell-abstract'
 import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '../../registry/dynamic-type-registry-abstract'
 
 @injectable()
-export class DynamicTypeFieldFilterRegistry extends DynamicTypeRegistryAbstract<DynamicTypeCellColumnAbstract> {
-  getComponent (id: string, props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
-    return this.getDynamicType(id).getGridColumnComponent(props)
+export class DynamicTypeGridCellRegistry extends DynamicTypeRegistryAbstract<DynamicTypeGridCellAbstract> {
+  getGridCellComponent (id: string, props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
+    return this.getDynamicType(id).getGridCellComponent(props)
   }
 }

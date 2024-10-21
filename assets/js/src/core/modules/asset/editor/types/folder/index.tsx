@@ -16,13 +16,9 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type FolderTabManager } from './tab-manager/folder-tab-manager'
 import { ListContainer } from './tab-manager/tabs/list/list-container'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
-import { PreviewContainer as PreviewColumn } from './tab-manager/tabs/list/grid-columns/preview/preview-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
-import { LinkContainer } from './tab-manager/tabs/list/grid-columns/link/link-container'
-import { AssetActions } from './tab-manager/tabs/list/grid-columns/asset-actions/asset-actions'
 import {
   TAB_DEPENDENCIES,
   TAB_NOTES_AND_EVENTS,
@@ -54,22 +50,5 @@ moduleSystem.registerModule({
     folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     folderEditorTabManager.register(TAB_TAGS)
     folderEditorTabManager.register(TAB_WORKFLOW)
-
-    const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
-
-    gridTypeRegistry.registerType({
-      component: PreviewColumn,
-      type: 'asset-preview'
-    })
-
-    gridTypeRegistry.registerType({
-      component: LinkContainer,
-      type: 'asset-link'
-    })
-
-    gridTypeRegistry.registerType({
-      component: AssetActions,
-      type: 'asset-actions'
-    })
   }
 })

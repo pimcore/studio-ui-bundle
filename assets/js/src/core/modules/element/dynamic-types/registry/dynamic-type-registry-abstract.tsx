@@ -13,6 +13,7 @@
 
 import { injectable } from 'inversify'
 
+@injectable()
 export abstract class DynamicTypeAbstract {
   abstract readonly id: string
 }

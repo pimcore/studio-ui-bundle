@@ -21,12 +21,12 @@ export interface DefaultFilterProps {
 }
 
 export const DefaultFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
-  // @todo connect to frontend type
   const { frontendType, type } = column
   const { ComponentRenderer } = useDynamicTypeResolver<AbstractFieldFilterDefinition>({ target: 'FIELD_FILTER', dynamicTypeIds: [type, frontendType!] })
 
   if (ComponentRenderer === null) {
-    return <>Field filter not defined</>
+    // @todo implement error handling
+    return <>Dynamic Field Filter not supported</>
   }
 
   // @todo implement different filter types

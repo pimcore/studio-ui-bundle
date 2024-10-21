@@ -15,12 +15,12 @@ import { type ReactElement } from 'react'
 import { type DynamicTypeAbstract } from '../registry/dynamic-type-registry-abstract'
 
 export const DynamicTypesResolverTargets = {
-  GRID_COLUMN: 'GRID_COLUMN',
+  GRID_CELL: 'GRID_CELL',
   FIELD_FILTER: 'FIELD_FILTER'
 }
 
 export const targetCallbackNameMap = {
-  [DynamicTypesResolverTargets.GRID_COLUMN]: 'getGridCellComponent',
+  [DynamicTypesResolverTargets.GRID_CELL]: 'getGridCellComponent',
   [DynamicTypesResolverTargets.FIELD_FILTER]: 'getFieldFilterComponent'
 }
 

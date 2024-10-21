@@ -21,9 +21,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import i18n from 'i18next'
-import {
-  type PreviewFieldLabelCellValue
-} from './table/cells/preview-field-label-cell/preview-field-label-cell'
+import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
 
 export interface AssetVersionData {
   versionCount: number

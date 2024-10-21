@@ -17,9 +17,7 @@ import { useStyles } from './comparison-view-ui.style'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
-import {
-  type PreviewFieldLabelCellValue
-} from '../table/cells/preview-field-label-cell/preview-field-label-cell'
+import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
 import { type AssetVersionData } from '../details-functions'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'

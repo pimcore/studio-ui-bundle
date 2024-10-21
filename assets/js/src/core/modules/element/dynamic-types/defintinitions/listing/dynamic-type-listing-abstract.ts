@@ -12,14 +12,14 @@
 */
 
 import { container } from '@Pimcore/app/depency-injection'
-import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { type TypeRegistry } from '@Pimcore/components/grid/services/type-registry'
-import { type ComponentType, type ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-registry'
 import { type AbstractFieldFilterDefinition, type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-abstract'
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
+import { type AbstractGridCellDefinition, type DynamicTypeGridCellAbstract } from '../grid-cell/dynamic-type-grid-cell-abstract'
+import { type DynamicTypeGridCellRegistry } from '../grid-cell/dynamic-type-grid-cell-registry'
 
 // @todo move to corresponding file
 export interface DefaultBatchEditComponentProps {
@@ -29,18 +29,12 @@ export interface DefaultBatchEditComponentProps {
 @injectable()
 export abstract class DynamicTypeListingAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
-  protected abstract gridComponentType: string
+  protected readonly abstract dynamicTypeGridCellType: InstanceType<typeof DynamicTypeGridCellAbstract>
   protected readonly abstract dynamicTypeFieldFilterType: InstanceType<typeof DynamicTypeFieldFilterAbstract>
 
-  getGridCellComponent (): ComponentType<DefaultCellProps> {
-    const gridTypeRegistry = container.get<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
-    const component = gridTypeRegistry.getComponentByType(this.gridComponentType)
-
-    if (component === undefined) {
-      throw new Error(`Grid component "${this.gridComponentType}" not found`)
-    }
-
-    return component
+  getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
+    const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
+    return GridCellRegistry.getGridCellComponent(this.dynamicTypeGridCellType.id, props)
   }
 
   getFieldFilterComponent (props: AbstractFieldFilterDefinition): ReactElement<AbstractFieldFilterDefinition> {
