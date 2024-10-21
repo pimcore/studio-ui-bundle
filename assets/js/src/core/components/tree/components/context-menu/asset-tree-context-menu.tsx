@@ -215,7 +215,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
 
       dispatch(
         assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(parseInt(node.id))
+          invalidatingTags.ASSET_TREE_ID(parseInt(node.parentId!))
         )
       )
     } catch (error) {
