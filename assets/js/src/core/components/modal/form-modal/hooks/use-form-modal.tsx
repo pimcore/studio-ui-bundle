@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { Form, type FormInstance, Input, type ModalFuncProps } from 'antd'
+import { type FormInstance, Input, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type HookModalRef } from 'antd/es/modal/useModal/HookModal'
 import { type ModalFuncWithPromise } from 'antd/es/modal/useModal'
@@ -20,6 +20,7 @@ import usePatchElement from 'antd/es/_util/hooks/usePatchElement'
 import HookModal from '@Pimcore/components/modal/form-modal/component/hook-modal/hook-modal'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
+import { Form } from '@Pimcore/components/form/form'
 
 let uuid = pimcoreUUid()
 
