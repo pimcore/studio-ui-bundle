@@ -15,6 +15,7 @@ import React, { type ReactNode, type Ref } from 'react'
 import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef } from 'antd'
 import { DropdownInner } from './dropdown-inner'
 import { SelectionProvider, SelectionType } from './selection/selection-provider'
+import { useStyle } from './dropdown.styles'
 
 export type OldItemType = Extract<MenuProps['items'], any[]>[0]
 export type OldMenuItemType = Extract<OldItemType, { danger?: boolean }>
@@ -54,6 +55,7 @@ export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'>
 }
 
 export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownProps): React.JSX.Element => {
+  const { styles } = useStyle()
   const { selectable, multiple, items } = menu
   let selectionType = SelectionType.Disabled
 
@@ -88,6 +90,7 @@ export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownPro
           items: filteredItems
         } }
         onSelect={ onSelect }
+        overlayClassName={ styles.dropdown }
       />
     </SelectionProvider>
   )
