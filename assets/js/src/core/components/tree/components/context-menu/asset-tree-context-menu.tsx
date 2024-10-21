@@ -327,19 +327,19 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
           icon: <Icon name={ 'lock-01' } />,
           children: [
             lock({
-              hidden: true,
+              hidden: props.node?.isLocked === true,
               nodeId: props.node?.id
             }),
             lockAndPropagate({
-              hidden: props.node?.isLocked,
+              hidden: props.node?.isLocked === true,
               nodeId: props.node?.id
             }),
             unlock({
-              hidden: props.node?.isLocked !== true,
+              hidden: props.node?.isLocked === false,
               nodeId: props.node?.id
             }),
             unlockAndPropagate({
-              hidden: props.node?.isLocked !== true,
+              hidden: props.node?.isLocked === false,
               nodeId: props.node?.id
             })
           ]
