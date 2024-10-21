@@ -15,7 +15,7 @@ import React from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type WidgetRegistry } from '../services/widget-registry'
 import { TabTitleContainer, type TabTitleContainerProps } from './tab-title-container'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface TabTitleOuterContainerProps {
   node: TabTitleContainerProps['node']

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type CustomMetadata as CustomMetadataApi, useAssetCustomMetadataGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -49,6 +49,18 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       }
     })
   }
+
+  // @todo check if the type could be delivered that way directly via the api
+  const formattedCustomMetadata = useMemo(() => customMetadata?.map((item) => {
+    if (item.type.includes('metadata.')) {
+      return item
+    }
+
+    return {
+      ...item,
+      type: `metadata.${item.type}`
+    }
+  }), [customMetadata])
 
   useEffect(() => {
     if (data !== undefined && asset?.changes.customMetadata === undefined && Array.isArray(data.items)) {
@@ -128,7 +140,12 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     const hasDuplicate = updatedCustomMetadataEntries.filter(cm => cm.name === updatedCustomMetadata.name && cm.language === updatedCustomMetadata.language).length > 1
 
     if (verifyUpdate(value, columnId, 'name', hasDuplicate, showMandatoryModal, showDuplicateEntryModal)) {
-      updateAllCustomMetadata(updatedCustomMetadataEntries)
+      const customMetaDataUpdate = updatedCustomMetadataEntries.map(item => ({
+        ...item,
+        type: item.type.split('.')[1] ?? item.type
+      }))
+
+      updateAllCustomMetadata(customMetaDataUpdate)
       setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
     }
   }
@@ -137,7 +154,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     <Grid
       autoWidth
       columns={ columns }
-      data={ customMetadata ?? [] }
+      data={ formattedCustomMetadata ?? [] }
       isLoading={ isLoading }
       modifiedCells={ modifiedCells }
       onUpdateCellData={ onUpdateCellData }
