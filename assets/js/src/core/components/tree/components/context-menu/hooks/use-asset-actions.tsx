@@ -277,7 +277,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     return {
       label: t('element.tree.context-menu.unlock'),
       key: 'advanced.lock.unlock',
-      icon: <Icon name={ 'lock-01' } />,
+      icon: <Icon name={ 'lock-unlock-01' } />,
       onClick: async () => {
         await lockAssetOrFolder({
           nodeId: nodeId!,
@@ -294,7 +294,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     return {
       label: t('element.tree.context-menu.unlock-and-propagate-to-children'),
       key: 'advanced.lock.unlock-and-propagate-to-children',
-      icon: <Icon name={ 'file-lock-02' } />,
+      icon: <Icon name={ 'lock-unlock-01' } />,
       disabled: true,
       onClick: async () => {
         await lockAssetOrFolder({
