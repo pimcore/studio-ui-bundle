@@ -71,8 +71,6 @@ moduleSystem.registerModule({
       component: TimeCell
     })
 
-    console.log(DateCell, TimeCell)
-
     typeRegistry.registerType({
       type: 'select',
       component: SelectCell
