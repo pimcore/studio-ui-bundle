@@ -29,6 +29,10 @@ export const useStyle = createStyles(({ token, css }) => {
       color: ${token.colorTextTertiary};
     `,
 
+    breadcrumbLinkLast: css`
+      color: ${token.colorText};
+    `,
+
     pathItem: css`
        cursor: pointer;
        

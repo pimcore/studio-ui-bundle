@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
 import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
+import cn from 'classnames'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -57,7 +58,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
     const partListAmount = partList.length
 
     // Handle click event for intermediate parts
-    function onMenuItemClick (path: string): void {
+    const onMenuItemClick = (path: string): void => {
       const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType,
         elementPath: path
@@ -75,17 +76,20 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
         .catch(() => {})
     }
 
+    // Generate the breadcrumb text with ellipsis
+    const generateBreadcrumbText = ({ content, style, className }: { content: string, style?: CSSProperties, className?: string }): ReactElement => (
+      <Text
+        className={ cn(styles.breadcrumbLink, className) }
+        ellipsis={ { tooltip: { title: content, placement: 'top' } } }
+        style={ style }
+      >
+        {content}
+      </Text>
+    )
+
     if (partListAmount > 2 && pageSize === 'L') {
       items.push({
-        title: (
-          <Text
-            className={ styles.breadcrumbLink }
-            ellipsis={ { tooltip: { title: partList[partListAmount - 2], placement: 'top' } } }
-            style={ { maxWidth: '150px' } }
-          >
-            {partList[partListAmount - 2]}
-          </Text>
-        ),
+        title: generateBreadcrumbText({ content: partList[partListAmount - 2], style: { maxWidth: '150px' } }),
         className: styles.pathItem,
         onClick: () => {
           onMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
@@ -146,12 +150,11 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth }: { path: strin
     items.push({
       title: (
         <span ref={ breadcrumbElementRef }>
-          <Text
-            ellipsis={ { tooltip: { title: partList[partListAmount - 1], placement: 'top' } } }
-            style={ { ...(isHideBreadcrumb && { maxWidth: `${currentBreadcrumbWidth}px` }) } }
-          >
-            {partList[partListAmount - 1]}
-          </Text>
+          {generateBreadcrumbText({
+            content: partList[partListAmount - 1],
+            style: { ...(isHideBreadcrumb && { maxWidth: `${currentBreadcrumbWidth}px` }) },
+            className: styles.breadcrumbLinkLast
+          })}
         </span>
       )
     })
