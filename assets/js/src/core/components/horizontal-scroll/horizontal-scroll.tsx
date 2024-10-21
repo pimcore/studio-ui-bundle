@@ -29,6 +29,7 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
   const [scrollInterval, setScrollInterval] = useState<NodeJS.Timeout | null>(null)
   const [isAtStart, setIsAtStart] = useState(true)
   const [isAtEnd, setIsAtEnd] = useState(false)
+  const [scrollRequired, setScrollRequired] = useState(false)
 
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
@@ -36,6 +37,7 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
 
       setIsAtStart(scrollLeft === 0)
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
+      setScrollRequired(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth)
     }
   }
 
@@ -60,7 +62,6 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
       setScrollInterval(interval)
     }
   }
-
   const startScrollingRight = (): void => {
     if (scrollInterval === null) {
       const interval = setInterval(() => {
@@ -101,6 +102,7 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
       className={ styles.scrollContainer }
       justify={ 'center' }
     >
+      { scrollRequired && (
       <IconButton
         disabled={ isAtStart }
         icon={ 'chevron-left' }
@@ -112,6 +114,7 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
         onMouseUp={ stopScrolling }
         theme="secondary"
       />
+      )}
       <Flex
         align={ 'center' }
         className={ styles.scroll }
@@ -120,6 +123,7 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
       >
         {children}
       </Flex>
+      {scrollRequired && (
       <IconButton
         disabled={ isAtEnd }
         icon={ 'chevron-right' }
@@ -131,6 +135,7 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
         onMouseUp={ stopScrolling }
         theme="secondary"
       />
+      )}
     </Flex>
   )
 }
