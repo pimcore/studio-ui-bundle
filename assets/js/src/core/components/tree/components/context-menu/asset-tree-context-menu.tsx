@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Dropdown, type MenuProps } from 'antd'
+import { Button } from 'antd'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,8 @@ import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-u
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import {
   api as assetApi,
-  type AssetDeleteZipApiArg, useAssetCloneMutation,
+  type AssetDeleteZipApiArg,
+  useAssetCloneMutation,
   useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
@@ -32,6 +33,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export interface AssetTreeContextMenuProps {
   node: TreeContextMenuProps['node']
@@ -61,6 +63,8 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     downloadAsZip,
     lock,
     lockAndPropagate,
+    unlock,
+    unlockAndPropagate,
     refresh
   } = useAssetActions()
 
@@ -219,11 +223,12 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     }
   }
 
-  const items: MenuProps['items'] = [
+  const items: DropdownMenuProps['items'] = [
     {
       label: t('element.tree.context-menu.add-assets'),
       key: '1',
       icon: <Icon name={ 'mainAsset' } />,
+      hidden: props.node?.type !== 'folder',
       children: [
         {
           icon: <Icon name={ 'upload-cloud' } />,
@@ -248,6 +253,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       ]
     },
     addFolder({
+      hidden: props.node?.type !== 'folder',
       onClick: () => {
         if (props.node !== undefined) {
           modal.input({
@@ -263,6 +269,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       }
     }),
     rename({
+      hidden: props.node?.isLocked,
       onClick: () => {
         if (props.node !== undefined) {
           modal.input({
@@ -282,11 +289,15 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
     paste({
       onClick: pasteAssetOrFolder
     }),
-    cut({ node: props.node }),
+    cut({
+      hidden: props.node?.isLocked,
+      node: props.node
+    }),
     pasteCut({
       onClick: pasteCutAssetOrFolder
     }),
     remove({
+      hidden: props.node?.isLocked,
       onClick: () => {
         modal.confirm({
           title: t('element.tree.context-menu.delete.title'),
@@ -302,6 +313,7 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
       }
     }),
     downloadAsZip({
+      hidden: props.node?.type !== 'folder',
       node: props.node
     }),
     {
@@ -314,13 +326,27 @@ export const AssetTreeContextMenu = (props: AssetTreeContextMenuProps): React.JS
           key: 'advanced-lock',
           icon: <Icon name={ 'lock-01' } />,
           children: [
-            lock({ nodeId: props.node?.id ?? null }),
-            lockAndPropagate({ nodeId: props.node?.id ?? null })
+            lock({
+              hidden: true,
+              nodeId: props.node?.id
+            }),
+            lockAndPropagate({
+              hidden: props.node?.isLocked,
+              nodeId: props.node?.id
+            }),
+            unlock({
+              hidden: props.node?.isLocked !== true,
+              nodeId: props.node?.id
+            }),
+            unlockAndPropagate({
+              hidden: props.node?.isLocked !== true,
+              nodeId: props.node?.id
+            })
           ]
         }
       ]
     },
-    refresh({ nodeId: props.node?.id ?? null })
+    refresh({ nodeId: props.node?.id })
   ]
 
   const uploadFile: UploadProps = {

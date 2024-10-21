@@ -11,7 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { ItemType } from 'antd/es/menu/hooks/useItems'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
@@ -27,52 +26,59 @@ import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engin
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 
 export interface NodeAware {
   node?: TreeNodeProps
 }
 
 export interface NodeIdAware {
-  nodeId: string | null // TODO: change that to string|undefined
+  nodeId: string | undefined
 }
 
 export interface OnClickAware {
   onClick: () => void
 }
 
-export interface AssetContextMenuRename extends OnClickAware {}
+export interface AssetContextMenuBase {
+  hidden?: boolean
+}
 
-export interface AssetContextMenuDelete extends OnClickAware {}
+export interface AssetContextMenuRename extends AssetContextMenuBase, OnClickAware {}
 
-export interface AssetContextMenuCopy extends NodeAware {}
+export interface AssetContextMenuDelete extends AssetContextMenuBase, OnClickAware {}
+
+export interface AssetContextMenuCopy extends AssetContextMenuBase, NodeAware {}
 
 export interface AssetContextMenuPaste {
   onClick: (node: TreeNodeProps) => void
 }
 
-export interface AssetContextMenuCut extends NodeAware {}
+export interface AssetContextMenuCut extends AssetContextMenuBase, NodeAware {}
 
-export interface AssetContextMenuRefresh extends NodeIdAware {}
+export interface AssetContextMenuRefresh extends AssetContextMenuBase, NodeIdAware {}
 
-export interface AssetContextMenuDownloadAsZip extends NodeAware {}
+export interface AssetContextMenuDownloadAsZip extends AssetContextMenuBase, NodeAware {}
 
-export interface AssetContextMenuLock extends NodeIdAware {}
+export interface AssetContextMenuLock extends AssetContextMenuBase, NodeIdAware {}
+
+export interface AssetExpandChildren extends AssetContextMenuBase, OnClickAware {}
 
 export interface UseAssetActionsHookReturn {
   addFolder: (props: AssetContextMenuDelete) => ItemType
   rename: (props: AssetContextMenuRename) => ItemType
   copy: (props: AssetContextMenuCopy) => ItemType
-  paste: (props: AssetContextMenuPaste) => ItemType | null
+  paste: (props: AssetContextMenuPaste) => ItemType
   cut: (props: AssetContextMenuCut) => ItemType
-  pasteCut: (props: AssetContextMenuPaste) => ItemType | null
+  pasteCut: (props: AssetContextMenuPaste) => ItemType
   remove: (props: AssetContextMenuDelete) => ItemType
-  downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType | null
+  downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType
   lock: (props: AssetContextMenuLock) => ItemType
   lockAndPropagate: (props: AssetContextMenuLock) => ItemType
   unlock: (props: AssetContextMenuLock) => ItemType
   unlockAndPropagate: (props: AssetContextMenuLock) => ItemType
   searchAndMove: () => ItemType
-  expandChildren: () => ItemType
+  expandChildren: (props: AssetExpandChildren) => ItemType
   refresh: (props: AssetContextMenuRefresh) => ItemType
 }
 
@@ -102,118 +108,138 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const addFolder: UseAssetActionsHookReturn['addFolder'] = ({ onClick }): ItemType => {
+  const addFolder: UseAssetActionsHookReturn['addFolder'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.add-folder'),
       key: 'add-folder',
       icon: <Icon name={ 'folder' } />,
-      onClick
+      ...props
     }
   }
 
-  const rename: UseAssetActionsHookReturn['rename'] = ({ onClick }): ItemType => {
+  const rename: UseAssetActionsHookReturn['rename'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.rename'),
       key: 'rename',
       icon: <Icon name={ 'type-square' } />,
-      onClick
+      ...props
     }
   }
 
-  const copy: UseAssetActionsHookReturn['copy'] = ({ node }): ItemType => {
+  const copy: UseAssetActionsHookReturn['copy'] = (props): ItemType => {
+    const { node, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.copy'),
       key: 'copy',
       icon: <Icon name={ 'clipboard' } />,
       onClick: () => {
-        if (node !== null) {
+        if (node !== undefined) {
           setNode(node)
           setNodeTask('copy')
         }
-      }
+      },
+      ...someProps
     }
   }
 
-  const paste: UseAssetActionsHookReturn['paste'] = (props): ItemType | null => {
-    if (node === undefined || nodeTask !== 'copy') return null
+  const paste: UseAssetActionsHookReturn['paste'] = (props): ItemType => {
+    const { onClick, ...someProps } = props
 
     return {
       label: t('element.tree.context-menu.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
+      hidden: (node === undefined || nodeTask !== 'copy'),
       onClick: () => {
-        props.onClick(node)
-      }
+        if (node !== undefined) {
+          onClick(node)
+        }
+      },
+      ...someProps
     }
   }
 
-  const cut: UseAssetActionsHookReturn['cut'] = ({ node }): ItemType => {
+  const cut: UseAssetActionsHookReturn['cut'] = (props): ItemType => {
+    const { node, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.cut'),
       key: 'cut',
       icon: <Icon name={ 'scissors-cut' } />,
       onClick: () => {
-        if (node !== null) {
+        if (node !== undefined) {
           setNode(node)
           setNodeTask('cut')
         }
-      }
+      },
+      ...someProps
     }
   }
 
-  const pasteCut: UseAssetActionsHookReturn['pasteCut'] = (props): ItemType | null => {
-    if (node === undefined || nodeTask !== 'cut') return null
+  const pasteCut: UseAssetActionsHookReturn['pasteCut'] = (props): ItemType => {
+    const { onClick, ...someProps } = props
 
     return {
       label: t('element.tree.context-menu.pasteCut'),
       key: 'pasteCut',
       icon: <Icon name={ 'clipboard-check' } />,
+      hidden: (node === undefined || nodeTask !== 'cut'),
       onClick: () => {
-        props.onClick(node)
-      }
+        if (node !== undefined) {
+          onClick(node)
+        }
+      },
+      ...someProps
     }
   }
 
-  const remove: UseAssetActionsHookReturn['rename'] = ({ onClick }): ItemType => {
+  const remove: UseAssetActionsHookReturn['rename'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.delete'),
       key: 'delete',
       icon: <Icon name={ 'delete-outlined' } />,
-      onClick
+      ...props
     }
   }
 
-  const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = ({ node }): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
-    if (node === undefined || node.type === 'folder') return null
+  const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = (props): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
+    const { node, ...someProps } = props
 
     // todo: move that to download (downloadAsZip) is only for folders
     return {
       label: t('element.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
       icon: <Icon name={ 'file-download-zip-01' } />,
+      hidden: (node === undefined || node.type === 'folder'),
       onClick: () => {
-        addJob(createDownloadJob({
-          // @todo add api domain
-          title: t('jobs.zip-job.title', { title: node.label }),
-          topics: [topics['zip-download-ready'], ...defaultTopics],
-          downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
-          action: async () => {
-            const promise = fetchCreateZip({ body: { items: [parseInt(node.id)] } })
+        if (node !== undefined) {
+          addJob(createDownloadJob({
+            // @todo add api domain
+            title: t('jobs.zip-job.title', { title: node.label }),
+            topics: [topics['zip-download-ready'], ...defaultTopics],
+            downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
+            action: async () => {
+              const promise = fetchCreateZip({ body: { items: [parseInt(node.id)] } })
 
-            promise.catch(() => {
-              console.error('Failed to create zip')
-            })
+              promise.catch(() => {
+                console.error('Failed to create zip')
+              })
 
-            const response = (await promise) as any
-            const data = response.data as AssetCreateZipApiResponse
-            return data.jobRunId
-          }
-        }))
-      }
+              const response = (await promise) as any
+              const data = response.data as AssetCreateZipApiResponse
+              return data.jobRunId
+            }
+          }))
+        }
+      },
+      ...someProps
     }
   }
 
-  const lock: UseAssetActionsHookReturn['lock'] = ({ nodeId }): ItemType => {
+  const lock: UseAssetActionsHookReturn['lock'] = (props): ItemType => {
+    const { nodeId, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.lock'),
       key: 'advanced.lock.lock',
@@ -223,11 +249,14 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
           nodeId: nodeId!,
           lockType: 'self'
         })
-      }
+      },
+      ...someProps
     }
   }
 
-  const lockAndPropagate: UseAssetActionsHookReturn['lockAndPropagate'] = ({ nodeId }): ItemType => {
+  const lockAndPropagate: UseAssetActionsHookReturn['lockAndPropagate'] = (props): ItemType => {
+    const { nodeId, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.lock-and-propagate-to-children'),
       key: 'advanced.lock.lock-and-propagate-to-children',
@@ -237,11 +266,14 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
           nodeId: nodeId!,
           lockType: 'propagate'
         })
-      }
+      },
+      ...someProps
     }
   }
 
-  const unlock: UseAssetActionsHookReturn['unlock'] = ({ nodeId }): ItemType => {
+  const unlock: UseAssetActionsHookReturn['unlock'] = (props): ItemType => {
+    const { nodeId, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.unlock'),
       key: 'advanced.lock.unlock',
@@ -251,11 +283,14 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
           nodeId: nodeId!,
           lockType: ''
         })
-      }
+      },
+      ...someProps
     }
   }
 
-  const unlockAndPropagate: UseAssetActionsHookReturn['unlockAndPropagate'] = ({ nodeId }): ItemType => {
+  const unlockAndPropagate: UseAssetActionsHookReturn['unlockAndPropagate'] = (props): ItemType => {
+    const { nodeId, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.unlock-and-propagate-to-children'),
       key: 'advanced.lock.unlock-and-propagate-to-children',
@@ -266,7 +301,8 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
           nodeId: nodeId!,
           lockType: 'propagate'
         })
-      }
+      },
+      ...someProps
     }
   }
 
@@ -282,32 +318,33 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const expandChildren = (): ItemType => {
+  const expandChildren: UseAssetActionsHookReturn['expandChildren'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.expand-children'),
       key: 'advanced.expand-children',
       disabled: true,
       icon: <Icon name={ 'expand-01' } />,
-      onClick: () => {
-        console.log('expand-children')
-      }
+      ...props
     }
   }
 
-  const refresh: UseAssetActionsHookReturn['refresh'] = ({ nodeId }): ItemType => {
+  const refresh: UseAssetActionsHookReturn['refresh'] = (props): ItemType => {
+    const { nodeId, ...someProps } = props
+
     return {
       label: t('element.tree.context-menu.refresh'),
       key: 'refresh',
       icon: <Icon name={ 'refresh-ccw-03' } />,
       onClick: () => {
-        if (nodeId !== null) {
+        if (nodeId !== undefined) {
           dispatch(
             assetApi.util.invalidateTags(
               invalidatingTags.ASSET_TREE_ID(parseInt(nodeId))
             )
           )
         }
-      }
+      },
+      ...someProps
     }
   }
 
