@@ -25,7 +25,7 @@ export class DynamicTypeMetaDataTextarea extends DynamicTypeMetadataAbstract {
   visibleInTypeSelection: boolean = true
 
   @inject(serviceIds['DynamicTypes/GridCell/Textarea']) protected dynamicTypeGridCellType: DynamicTypeGridCellAbstract
-  @inject(serviceIds['DynamicTypes/FieldFilter/Select']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
+  @inject(serviceIds['DynamicTypes/FieldFilter/Text']) protected dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract
 
   getVersionPreviewComponent (data: string): JSX.Element {
     return respectLineBreak(data, false)
