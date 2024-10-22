@@ -91,7 +91,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const [fetchCreateZip] = useAssetCreateZipMutation()
   const [assetPatch] = useAssetPatchByIdMutation()
 
-  const lockAssetOrFolder = async ({ nodeId, lockType }: { nodeId: string, lockType: 'self' | 'propagate' | '' }): Promise<void> => {
+  const lockAssetOrFolder = async ({ nodeId, lockType }: { nodeId: string, lockType: 'self' | 'propagate' | '' | 'unlockPropagate' }): Promise<void> => {
     const assetLockTask = assetPatch({
       body: {
         data: [{
@@ -295,11 +295,10 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       label: t('element.tree.context-menu.unlock-and-propagate-to-children'),
       key: 'advanced.lock.unlock-and-propagate-to-children',
       icon: <Icon name={ 'lock-unlock-01' } />,
-      disabled: true,
       onClick: async () => {
         await lockAssetOrFolder({
           nodeId: nodeId!,
-          lockType: 'propagate'
+          lockType: 'unlockPropagate'
         })
       },
       ...someProps
