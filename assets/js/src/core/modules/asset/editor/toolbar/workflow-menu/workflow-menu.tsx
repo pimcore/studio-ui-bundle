@@ -88,8 +88,8 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
+      className='overflow-x-auto'
       justify={ 'flex-end' }
-      style={ { width: '100%' } }
     >
       {!isLoading && (
       <HorizontalScroll>

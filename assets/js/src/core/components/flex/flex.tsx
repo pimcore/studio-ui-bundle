@@ -32,7 +32,7 @@ export const Flex = ({ gap = 0, className, rootClassName, children, ...props }: 
 
   const { styles } = useStyles({ x, y })
 
-  const flexClassNames = cn(styles.rowColGap, styles.flex, className, rootClassName)
+  const flexClassNames = cn(styles.rowColGap, className, rootClassName)
 
   /**
    * Calculates the row and column gaps based on the provided gap value.
