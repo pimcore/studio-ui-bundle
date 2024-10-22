@@ -27,12 +27,12 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
 
   const { element } = useElementDraft(id, elementType)
 
-  const [pageSize, setPageSize] = useState<'S' | 'L' | null>(null)
+  const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
 
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
 
-    editorTabsWidth <= 800 ? setPageSize('S') : setPageSize('L')
+    editorTabsWidth <= 800 ? setEditorTabsBlockSize('S') : setEditorTabsBlockSize('L')
   }, [editorTabsWidth])
 
   if (element === undefined) {
@@ -79,7 +79,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
       <Breadcrumb
         editorTabsWidth={ editorTabsWidth }
         elementType={ elementType }
-        pageSize={ pageSize }
+        pageSize={ editorTabsBlockSize }
         path={ element.fullPath! }
       />
 
