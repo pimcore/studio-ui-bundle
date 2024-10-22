@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { store, useAppDispatch } from '@Pimcore/app/store'
 import {
   closeWidget as closeWidgetAction,
   openBottomWidget as openBottomWidgetAction,
@@ -20,10 +20,11 @@ import {
   openRightWidget as openRightWidgetAction,
   selectInnerModel,
   setActiveWidgetById,
+  type widgetManagerSliceName,
+  type WidgetManagerState,
   type WidgetManagerTabConfig
 } from '../widget-manager-slice'
 import { Model, type TabNode } from 'flexlayout-react'
-import { type ElementType } from '../../../../../types/element-type.d'
 
 interface useWidgetManagerReturn {
   openMainWidget: (tabConfig: WidgetManagerTabConfig) => void
@@ -34,13 +35,10 @@ interface useWidgetManagerReturn {
   closeWidget: (id: string) => void
   isMainWidgetOpen: (id: string) => boolean
   getOpenedMainWidget: () => TabNode | undefined
-  getElementContextInformationFromOpenedMainWidget: () => { id: number, elementType: ElementType } | undefined
 }
 
 export const useWidgetManager = (): useWidgetManagerReturn => {
   const dispatch = useAppDispatch()
-  const modelJson = useAppSelector(selectInnerModel)
-  const model = Model.fromJson(modelJson)
 
   function openMainWidget (tabConfig: WidgetManagerTabConfig): void {
     dispatch(openMainWidgetAction(tabConfig))
@@ -66,29 +64,18 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     dispatch(closeWidgetAction(id))
   }
 
+  function getInnerModel (): Model {
+    const state = store.getState()
+    const modelJson = selectInnerModel(state as { [widgetManagerSliceName]: WidgetManagerState })
+    return Model.fromJson(modelJson)
+  }
+
   function isMainWidgetOpen (id: string): boolean {
-    return model.getNodeById(id) !== undefined
+    return getInnerModel().getNodeById(id) !== undefined
   }
 
   function getOpenedMainWidget (): TabNode | undefined {
-    return model.getActiveTabset()?.getSelectedNode() as TabNode | undefined
-  }
-
-  function getElementContextInformationFromOpenedMainWidget (): { id: number, elementType: ElementType } | undefined {
-    const openedMainWidget = getOpenedMainWidget()
-    if (openedMainWidget === undefined) {
-      return undefined
-    }
-
-    const component = openedMainWidget.getComponent()
-    if (component === undefined || !['asset-editor', 'data-object-editor'].includes(component)) {
-      return undefined
-    }
-
-    return {
-      id: openedMainWidget.getConfig().id as number,
-      elementType: component.replace('-editor', '') as ElementType
-    }
+    return getInnerModel().getActiveTabset()?.getSelectedNode() as TabNode | undefined
   }
 
   return {
@@ -99,7 +86,6 @@ export const useWidgetManager = (): useWidgetManagerReturn => {
     switchToWidget,
     closeWidget,
     isMainWidgetOpen,
-    getOpenedMainWidget,
-    getElementContextInformationFromOpenedMainWidget
+    getOpenedMainWidget
   }
 }

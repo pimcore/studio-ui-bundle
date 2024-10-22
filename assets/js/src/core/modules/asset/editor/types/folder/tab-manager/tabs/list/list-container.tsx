@@ -14,11 +14,18 @@
 import React from 'react'
 import { ListContainerInner } from './list-container-inner'
 import { ListProvider } from './list-provider'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 const ListContainer = (): React.JSX.Element => {
   return (
     <ListProvider>
-      <ListContainerInner />
+      <DynamicTypeRegistryProvider serviceIds={ [
+        'DynamicTypes/MetadataRegistry',
+        'DynamicTypes/ListingRegistry'
+      ] }
+      >
+        <ListContainerInner />
+      </DynamicTypeRegistryProvider>
     </ListProvider>
   )
 }

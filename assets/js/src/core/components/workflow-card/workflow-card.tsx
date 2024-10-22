@@ -38,11 +38,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       mergedActions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          label: (
-            <a href={ 'https://pimcore.com' }>
-              {status.label}
-            </a>
-          )
+          label: t(`${status.label}`)
         })
       })
 

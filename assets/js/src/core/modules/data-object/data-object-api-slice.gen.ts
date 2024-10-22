@@ -133,6 +133,7 @@ export type DataObjectUpdateByIdApiArg = {
             childrenSortBy?: string | null;
             childrenSortOrder?: string | null;
             published?: boolean | null;
+            editableData?: object | null;
             properties?: UpdateDataProperty[] | null;
         };
     };
@@ -218,6 +219,7 @@ export type DataObjectGetTreeApiArg = {
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
+        | "Eierlegenedewollmilchsau"
         | "Event"
         | "FilterDefinition"
         | "LinkActivityDefinition"

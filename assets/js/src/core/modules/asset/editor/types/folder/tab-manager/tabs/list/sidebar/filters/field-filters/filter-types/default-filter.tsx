@@ -11,35 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ComponentType, useMemo } from 'react'
+import React from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { TextFilter } from './text-filter'
-import { SelectFilter } from './select-filter'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
 export interface DefaultFilterProps {
   column: GridColumnConfiguration
 }
 
 export const DefaultFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
-  const { frontendType } = column
+  const { frontendType, type } = column
+  const { getComponentRenderer } = useDynamicTypeResolver()
+  const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [type, frontendType!] })
 
-  const Component = useMemo(() => {
-    return getComponent()
-  }, [])
-
-  // @todo implement different filter types
-  return (
-    <Component column={ column } />
-  )
-
-  function getComponent (): ComponentType<DefaultFilterProps> {
-    switch (frontendType) {
-      case 'text':
-        return TextFilter
-      case 'select':
-        return SelectFilter
-      default:
-        return TextFilter
-    }
+  if (ComponentRenderer === null) {
+    // @todo implement error handling
+    return <>Dynamic Field Filter not supported</>
   }
+
+  return (
+    <>
+      { ComponentRenderer({ column }) }
+    </>
+  )
 }

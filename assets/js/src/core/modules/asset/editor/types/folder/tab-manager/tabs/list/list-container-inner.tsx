@@ -109,7 +109,7 @@ export const ListContainerInner = (): React.JSX.Element => {
         setAvailableColumns(availableGridConfig.data?.columns)
         setGridConfig(initialGridConfig.data)
 
-        const initialColumns = initialGridConfig.data!.columns!.map((column) => {
+        const initialColumns = initialGridConfig.data!.columns.map((column) => {
           const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
 
           if (availableColumn === undefined) {

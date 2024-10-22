@@ -44,12 +44,12 @@ interface UseElementDraftReturn extends
 export const useElementDraft = (id: number, elementType: ElementType): UseElementDraftReturn => {
   if (elementType === 'asset') {
     const draft = useAssetDraft(id)
-    return { ...draft, element: draft.asset, editorType: draft.editorType }
+    return { ...draft, element: draft.asset }
   }
 
   if (elementType === 'data-object') {
     const draft = useDataObjectDraft(id)
-    return { ...draft, element: draft.dataObject, editorType: draft.editorType }
+    return { ...draft, element: draft.dataObject }
   }
 
   throw new Error('Element type not supported: ' + elementType)

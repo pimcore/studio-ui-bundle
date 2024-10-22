@@ -26,7 +26,7 @@ import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-
 import { useStyles } from './tree.styles'
 import { container } from '@Pimcore/app/depency-injection'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 
