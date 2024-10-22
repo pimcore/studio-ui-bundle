@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useState, useEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 
 export const useBreadcrumbSize = (editorTabsWidth?: number, initialBreadcrumbLastElementWidth?: number): {
   isHideBreadcrumb: boolean
@@ -20,7 +20,7 @@ export const useBreadcrumbSize = (editorTabsWidth?: number, initialBreadcrumbLas
   const [isHideBreadcrumb, setIsHideBreadcrumb] = useState(false)
   const [currentBreadcrumbWidth, setCurrentBreadcrumbWidth] = useState<number>(0)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (editorTabsWidth == null || initialBreadcrumbLastElementWidth == null) return
 
     if (editorTabsWidth <= 375) {

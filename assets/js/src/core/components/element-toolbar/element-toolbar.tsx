@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
 import { Button, Space } from 'antd'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
@@ -27,9 +27,9 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
 
   const { element } = useElementDraft(id, elementType)
 
-  const [pageSize, setPageSize] = useState<'S' | 'L'>('L')
+  const [pageSize, setPageSize] = useState<'S' | 'L' | null>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (editorTabsWidth == null) return
 
     editorTabsWidth <= 800 ? setPageSize('S') : setPageSize('L')

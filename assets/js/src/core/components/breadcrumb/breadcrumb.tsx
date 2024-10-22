@@ -28,7 +28,7 @@ interface BreadcrumbProps {
   path: string
   elementType: ElementType
   editorTabsWidth?: number
-  pageSize?: 'S' | 'L'
+  pageSize?: 'S' | 'L' | null
 }
 
 export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: BreadcrumbProps): React.JSX.Element => {

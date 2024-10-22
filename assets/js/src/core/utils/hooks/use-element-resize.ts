@@ -11,10 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useState, useEffect, type RefObject } from 'react'
+import { useState, useEffect, type RefObject, useLayoutEffect } from 'react'
 
 const useElementResize = (ref: RefObject<HTMLDivElement>): number => {
   const [width, setWidth] = useState(0)
+
+  // Get initial width before the render phase
+  useLayoutEffect(() => {
+    setWidth(ref.current?.getBoundingClientRect().width ?? 0)
+  }, [])
 
   useEffect(() => {
     if (ref.current == null) return
