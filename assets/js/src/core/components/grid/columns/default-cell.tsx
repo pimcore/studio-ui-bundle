@@ -24,7 +24,6 @@ import { useKeyboardNavigation } from '../keyboard-navigation/use-keyboard-navig
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { type AbstractGridCellDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/dynamic-type-grid-cell-abstract'
 
 export interface DefaultCellProps extends ExtendedCellContext {
   fallbackType?: ComponentType<DefaultCellProps>
@@ -55,11 +54,12 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
   }, [isInEditMode])
 
   const editableCellContextValue = useMemo(() => ({ isInEditMode, setIsInEditMode }), [isInEditMode])
+  const { getComponentRenderer } = useDynamicTypeResolver()
 
-  let { ComponentRenderer } = useDynamicTypeResolver<AbstractGridCellDefinition>({ dynamicTypeIds: [cellType], target: 'GRID_CELL' })
+  let { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [cellType], target: 'GRID_CELL' })
 
   if (ComponentRenderer === null) {
-    ComponentRenderer = useDynamicTypeResolver<AbstractGridCellDefinition>({ dynamicTypeIds: ['input'], target: 'GRID_CELL' }).ComponentRenderer
+    ComponentRenderer = getComponentRenderer({ dynamicTypeIds: ['input'], target: 'GRID_CELL' }).ComponentRenderer
   }
 
   return useMemo(() => {

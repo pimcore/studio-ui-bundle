@@ -11,32 +11,38 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ReactElement, useContext, useMemo } from 'react'
+import { type ReactElement, useContext } from 'react'
 import { type DynamicTypeAbstract, type DynamicTypeRegistryAbstract } from '../../registry/dynamic-type-registry-abstract'
 import { DynamicTypeResolver, type DynamicTypesResolverTargets } from '../dynamic-type-resolver'
 import { DynamicTypeRegistryContext } from '../../registry/provider/dynamic-type-registry-provider'
 import { container } from '@Pimcore/app/depency-injection'
 
-export interface UseDynamicTypeResolverReturnType<T> {
-  ComponentRenderer: null | ((props: T) => ReactElement<T>)
+export interface IComponentRenderer {
+  ComponentRenderer: ((props: unknown) => ReactElement<unknown>) | null
 }
 
-export interface UseDynamicTypeResolverProps {
+export interface typeProps {
   target: keyof typeof DynamicTypesResolverTargets
   dynamicTypeIds: Array<DynamicTypeAbstract['id']>
 }
 
-export const useDynamicTypeResolver = <T>({ target, dynamicTypeIds }: UseDynamicTypeResolverProps): UseDynamicTypeResolverReturnType<T> => {
+export interface UseDynamicTypeResolverReturnType {
+  getComponentRenderer: (props: typeProps) => IComponentRenderer
+  hasType: (props: typeProps) => boolean
+}
+
+export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
   const context = useContext(DynamicTypeRegistryContext)
 
   if (context === undefined || context === null) {
     throw new Error('useDynamicTypeResolver must be used within a DynamicTypeRegistryProvider')
   }
 
-  return useMemo(() => {
-    const { serviceIds } = context
-    const registries = serviceIds.map(serviceId => container.get<InstanceType<typeof DynamicTypeRegistryAbstract>>(serviceId))
+  const { serviceIds } = context
+  const registries = serviceIds.map(serviceId => container.get<InstanceType<typeof DynamicTypeRegistryAbstract>>(serviceId))
 
+  function getComponentRenderer <T> (props: typeProps): IComponentRenderer {
+    const { target, dynamicTypeIds } = props
     const dynamicTypeResolver = new DynamicTypeResolver()
 
     for (const dynamicTypeId of dynamicTypeIds) {
@@ -46,15 +52,37 @@ export const useDynamicTypeResolver = <T>({ target, dynamicTypeIds }: UseDynamic
 
           if (dynamicTypeResolver.hasCallable(target, dynamicType)) {
             return {
-              ComponentRenderer: dynamicTypeResolver.resolve<T>({ target, dynamicType })
+              ComponentRenderer: dynamicTypeResolver.resolve<T>({ target, dynamicType }) as (props: T) => ReactElement<T>
             }
           }
         }
       }
     }
 
-    return {
-      ComponentRenderer: null
+    return { ComponentRenderer: null }
+  }
+
+  function hasType (props: typeProps): boolean {
+    const { target, dynamicTypeIds } = props
+    const dynamicTypeResolver = new DynamicTypeResolver()
+
+    for (const dynamicTypeId of dynamicTypeIds) {
+      for (const registry of registries) {
+        if (registry.hasDynamicType(dynamicTypeId)) {
+          const dynamicType = registry.getDynamicType(dynamicTypeId)
+
+          if (dynamicTypeResolver.hasCallable(target, dynamicType)) {
+            return true
+          }
+        }
+      }
     }
-  }, [context, target, dynamicTypeIds])
+
+    return false
+  }
+
+  return {
+    getComponentRenderer,
+    hasType
+  }
 }
