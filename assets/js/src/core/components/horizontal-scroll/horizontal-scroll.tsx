@@ -46,8 +46,15 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
       updateScrollState()
       scrollContainerRef.current.addEventListener('scroll', updateScrollState)
 
+      const resizeObserver = new ResizeObserver(() => {
+        updateScrollState()
+      })
+
+      resizeObserver.observe(scrollContainerRef.current)
+
       return () => {
         scrollContainerRef.current?.removeEventListener('scroll', updateScrollState)
+        resizeObserver.disconnect()
       }
     }
   }, [])
