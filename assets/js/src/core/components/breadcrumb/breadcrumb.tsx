@@ -99,7 +99,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
 
     if (partListAmount > 2 && pageSize === 'L') {
       items.push({
-        title: generateBreadcrumbText({ content: partList[partListAmount - 2], style: { maxWidth: '150px' } }),
+        title: generateBreadcrumbText({ content: partList[partListAmount - 2], style: { maxWidth: '100px' } }),
         className: styles.pathItem,
         onClick: () => {
           onMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
