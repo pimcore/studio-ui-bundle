@@ -20,7 +20,7 @@ import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { type ElementType } from 'types/element-type.d'
 
-export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: any }): React.JSX.Element => {
+export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const elementRef = useRef<HTMLDivElement>(null)
 
   const { styles } = useStyle()
