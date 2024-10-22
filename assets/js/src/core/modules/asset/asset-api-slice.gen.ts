@@ -100,6 +100,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
+            assetDeleteGridConfigurationByConfigurationId: build.mutation<
+                AssetDeleteGridConfigurationByConfigurationIdApiResponse,
+                AssetDeleteGridConfigurationByConfigurationIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.folderId}/${queryArg.configurationId}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Asset Grid"],
+            }),
             assetGetAvailableGridColumns: build.query<
                 AssetGetAvailableGridColumnsApiResponse,
                 AssetGetAvailableGridColumnsApiArg
@@ -183,6 +193,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamPreview: build.query<AssetImageStreamPreviewApiResponse, AssetImageStreamPreviewApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/preview` }),
+                providesTags: ["Assets"],
+            }),
             assetImageDownloadByThumbnail: build.query<
                 AssetImageDownloadByThumbnailApiResponse,
                 AssetImageDownloadByThumbnailApiArg
@@ -194,6 +208,14 @@ const injectedRtkApi = api
             }),
             assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets`, method: "PATCH", body: queryArg.body }),
+                invalidatesTags: ["Assets"],
+            }),
+            assetPatchFolderById: build.mutation<AssetPatchFolderByIdApiResponse, AssetPatchFolderByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/folder`,
+                    method: "PATCH",
+                    body: queryArg.body,
+                }),
                 invalidatesTags: ["Assets"],
             }),
             assetGetTree: build.query<AssetGetTreeApiResponse, AssetGetTreeApiArg>({
@@ -380,7 +402,8 @@ export type AssetExportCsvAssetApiArg = {
                 | "no_header"
                 | "title"
                 | "name"
-                | "\r\n";
+                | "\r\n"
+                | "array";
         };
     };
 };
@@ -408,7 +431,8 @@ export type AssetExportCsvFolderApiArg = {
                 | "no_header"
                 | "title"
                 | "name"
-                | "\r\n";
+                | "\r\n"
+                | "array";
         };
     };
 };
@@ -450,13 +474,21 @@ export type AssetUpdateByIdApiArg = {
         };
     };
 };
+export type AssetDeleteGridConfigurationByConfigurationIdApiResponse =
+    /** status 200 Success */ GridDetailedConfiguration;
+export type AssetDeleteGridConfigurationByConfigurationIdApiArg = {
+    /** FolderId of the element */
+    folderId: number;
+    /** ConfigurationId of the element */
+    configurationId: number;
+};
 export type AssetGetAvailableGridColumnsApiResponse =
     /** status 200 All available grid column configurations for assets */ {
         columns?: GridColumnConfiguration[];
     };
 export type AssetGetAvailableGridColumnsApiArg = void;
 export type AssetGetGridConfigurationByFolderIdApiResponse =
-    /** status 200 Asset grid configuration */ GridConfiguration;
+    /** status 200 Asset grid configuration */ GridDetailedConfiguration;
 export type AssetGetGridConfigurationByFolderIdApiArg = {
     /** FolderId of the element */
     folderId: number;
@@ -466,13 +498,14 @@ export type AssetGetGridConfigurationByFolderIdApiArg = {
 export type AssetGetSavedGridConfigurationsApiResponse =
     /** status 200 List of saved grid configurations for the given folder */ {
         totalItems: number;
-        items: GridConfiguration2[];
+        items: GridConfiguration[];
     };
 export type AssetGetSavedGridConfigurationsApiArg = {
     /** FolderId of the folderId */
     folderId: number;
 };
-export type AssetSaveGridConfigurationApiResponse = /** status 200 Asset grid configuration saved successfully */ void;
+export type AssetSaveGridConfigurationApiResponse =
+    /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
     body: {
         folderId: number;
@@ -551,6 +584,11 @@ export type AssetImageDownloadByFormatApiArg = {
     /** Find asset by matching format type. */
     format: "office" | "print" | "web";
 };
+export type AssetImageStreamPreviewApiResponse = /** status 200 Image preview stream */ Blob;
+export type AssetImageStreamPreviewApiArg = {
+    /** Id of the image */
+    id: number;
+};
 export type AssetImageDownloadByThumbnailApiResponse =
     /** status 200 Image asset binary file based on thumbnail name */ Blob;
 export type AssetImageDownloadByThumbnailApiArg = {
@@ -574,6 +612,24 @@ export type AssetPatchByIdApiArg = {
             locked?: string | null;
             metadata?: PatchCustomMetadata[] | null;
         }[];
+    };
+};
+export type AssetPatchFolderByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple assets */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetPatchFolderByIdApiArg = {
+    body: {
+        data: {
+            /** Folder ID */
+            folderId: number;
+            parentId?: number | null;
+            key?: string | null;
+            locked?: string | null;
+            metadata?: PatchCustomMetadata[] | null;
+        }[];
+        filters?: GridFilter;
     };
 };
 export type AssetGetTreeApiResponse = /** status 200 asset_get_tree_success_description */ {
@@ -892,6 +948,48 @@ export type FocalPoint = {
 export type ImageData = {
     focalPoint?: FocalPoint;
 };
+export type Column = {
+    /** Key of the Column */
+    key: string;
+    /** Locale of the Column */
+    locale: string | null;
+    /** Group of the Column */
+    group: string;
+};
+export type GridDetailedConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Description */
+    description: string;
+    /** shareGlobal */
+    shareGlobal: boolean;
+    /** saveFilter */
+    saveFilter: boolean;
+    /** setAsFavorite */
+    setAsFavorite: boolean;
+    /** sharedUsers */
+    sharedUsers: object;
+    /** sharedRoles */
+    sharedRoles: object;
+    /** columns */
+    columns: Column[];
+    /** filter */
+    filter: GridFilter[];
+    /** Page Size */
+    pageSize: number;
+    /** Modification Date */
+    modificationDate?: number | null;
+    /** Creation Date */
+    creationDate?: number | null;
+    /** ID of the owner */
+    ownerId?: number | null;
+    /** ID of the configuration */
+    id?: number | null;
+};
 export type GridColumnConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -916,41 +1014,7 @@ export type GridColumnConfiguration = {
     /** Config */
     config: object;
 };
-export type Column = {
-    /** Key of the Column */
-    key: string;
-    /** Locale of the Column */
-    locale: string | null;
-    /** Group of the Column */
-    group: string;
-};
 export type GridConfiguration = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Name */
-    name: string;
-    /** Description */
-    description: string;
-    /** shareGlobal */
-    shareGlobal?: boolean;
-    /** saveFilter */
-    saveFilter?: boolean;
-    /** setAsFavorite */
-    setAsFavorite?: boolean;
-    /** sharedUsers */
-    sharedUsers?: object;
-    /** sharedRoles */
-    sharedRoles?: object;
-    /** columns */
-    columns?: Column[];
-    /** filter */
-    filter?: GridFilter[];
-    /** Page Size */
-    pageSize?: number;
-};
-export type GridConfiguration2 = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
@@ -998,6 +1062,7 @@ export const {
     useAssetExportCsvFolderMutation,
     useAssetGetByIdQuery,
     useAssetUpdateByIdMutation,
+    useAssetDeleteGridConfigurationByConfigurationIdMutation,
     useAssetGetAvailableGridColumnsQuery,
     useAssetGetGridConfigurationByFolderIdQuery,
     useAssetGetSavedGridConfigurationsQuery,
@@ -1007,8 +1072,10 @@ export const {
     useAssetGetGridMutation,
     useAssetImageDownloadCustomQuery,
     useAssetImageDownloadByFormatQuery,
+    useAssetImageStreamPreviewQuery,
     useAssetImageDownloadByThumbnailQuery,
     useAssetPatchByIdMutation,
+    useAssetPatchFolderByIdMutation,
     useAssetGetTreeQuery,
     useAssetAddMutation,
     useAssetUploadInfoQuery,

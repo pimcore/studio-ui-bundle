@@ -133,6 +133,7 @@ export type DataObjectUpdateByIdApiArg = {
             childrenSortBy?: string | null;
             childrenSortOrder?: string | null;
             published?: boolean | null;
+            editableData?: object | null;
             properties?: UpdateDataProperty[] | null;
         };
     };
@@ -233,8 +234,7 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition"
-        | "test";
+        | "TermSegmentBuilderDefinition";
 };
 export type Error = {
     /** Message */

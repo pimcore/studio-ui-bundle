@@ -115,6 +115,6 @@ export type SubmitAction = {
     /** transition */
     transition: string;
     /** workflowOptions */
-    workflowOptions: any[];
+    workflowOptions: object;
 };
 export const { useWorkflowGetDetailsQuery, useWorkflowActionSubmitMutation } = injectedRtkApi;
