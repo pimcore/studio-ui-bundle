@@ -89,6 +89,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     <Flex
       align={ 'center' }
       justify={ 'space-between' }
+      style={ { width: '100%' } }
     >
       {!isLoading && (
       <HorizontalScroll>
