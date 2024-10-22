@@ -20,6 +20,9 @@ interface StylesProps {
 
 export const useStyles = createStyles(({ css }, props: StylesProps) => {
   return {
+    flex: css`
+      overflow: auto;
+    `,
     rowColGap: css`
       column-gap: ${props.x}px;
       row-gap: ${props.y}px;

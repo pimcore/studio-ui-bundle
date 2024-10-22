@@ -88,7 +88,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
-      justify={ 'space-between' }
+      justify={ 'flex-end' }
       style={ { width: '100%' } }
     >
       {!isLoading && (

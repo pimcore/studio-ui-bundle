@@ -16,12 +16,10 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }, { scrollWidth }) => {
   return {
     scrollContainer: css`
-      width: 100%;
       display: flex;
-      align-items: center;
+      overflow-x: auto;
     `,
     scroll: css`
-      width: 100%;
       overflow-x: auto;
       white-space: nowrap;
       height: 33px;

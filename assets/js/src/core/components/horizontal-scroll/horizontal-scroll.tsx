@@ -118,7 +118,6 @@ export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScro
       <Flex
         align={ 'center' }
         className={ styles.scroll }
-        justify={ 'center' }
         ref={ scrollContainerRef }
       >
         {children}
