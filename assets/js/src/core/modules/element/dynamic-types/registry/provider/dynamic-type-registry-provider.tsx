@@ -27,15 +27,15 @@ interface DynamicTypeRegistryProviderProps extends IDynamicTypeRegistryContext {
 
 export const DynamicTypeRegistryProvider = ({ children, serviceIds }: DynamicTypeRegistryProviderProps): React.JSX.Element => {
   const context = useContext(DynamicTypeRegistryContext)
-  const _serviceIds: IDynamicTypeRegistryContext['serviceIds'] = [
-    ...serviceIds
-  ]
-
-  _serviceIds.unshift(...context?.serviceIds ?? [])
+  const cachedServiceIds: IDynamicTypeRegistryContext['serviceIds'] = useMemo(() => {
+    const _serviceIds: IDynamicTypeRegistryContext['serviceIds'] = [...serviceIds]
+    _serviceIds.unshift(...context?.serviceIds ?? [])
+    return _serviceIds
+  }, [serviceIds, context?.serviceIds])
 
   return useMemo(() => {
     return (
-      <DynamicTypeRegistryContext.Provider value={ { serviceIds: _serviceIds } }>
+      <DynamicTypeRegistryContext.Provider value={ { serviceIds: cachedServiceIds } }>
         {children}
       </DynamicTypeRegistryContext.Provider>
     )
