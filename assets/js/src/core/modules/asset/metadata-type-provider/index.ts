@@ -13,7 +13,7 @@
 
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem, type AbstractModule } from '@Pimcore/app/module-system/module-system'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type MetadataTypeRegistry } from './services/metadata-type-registry'
 import { Input } from './metadata-types/input'
 import { Textarea } from './metadata-types/textarea'

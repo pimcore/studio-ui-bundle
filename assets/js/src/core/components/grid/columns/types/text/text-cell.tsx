@@ -17,7 +17,9 @@ import { Input, type InputRef } from 'antd'
 import { useStyle } from './text-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
-export const TextCell = (props: DefaultCellProps): React.JSX.Element => {
+export interface TextCellProps extends DefaultCellProps {}
+
+export const TextCell = (props: TextCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const { styles } = useStyle()
   const element = useRef<InputRef>(null)

@@ -15,7 +15,7 @@ import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { type TabNode } from 'flexlayout-react'
 import { container } from '@Pimcore/app/depency-injection'
 import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type CreateContextMenuItemsProps } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { t } from 'i18next'
 

@@ -16,7 +16,7 @@ import { type TabNode } from 'flexlayout-react'
 import { WidgetContainer } from '@Pimcore/modules/widget-manager/widget/widget-container'
 import { WidgetManagerInnerContainer } from '../widget-manager-inner-container'
 import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type WidgetRegistry } from '../services/widget-registry'
 
 export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
