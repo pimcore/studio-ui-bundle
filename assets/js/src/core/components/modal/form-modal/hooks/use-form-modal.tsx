@@ -173,10 +173,14 @@ export function useFormModal (): readonly [instance: ExtHookApi, contextHolder: 
 
 interface InputFormProps {
   form: FormInstance<any>
+  initialValues: object
+  fieldName: string
 }
 
 export function withInput (props: InputFormModalProps): ExtModalFuncProps {
   const inputRef = React.createRef<InputRef>()
+  const uuid = pimcoreUUid()
+  const fieldName = `input-${uuid}`
   const {
     label,
     rule,
@@ -193,14 +197,12 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
     return (
       <Form
         form={ props.form }
-        initialValues={ {
-          input: initialValue
-        } }
+        initialValues={ props.initialValues }
         layout={ 'vertical' }
       >
         <Form.Item
           label={ label }
-          name="input"
+          name={ props.fieldName }
           rules={ formattedRule }
         >
           <Input ref={ ref } />
@@ -217,7 +219,7 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
       return await new Promise((resolve, reject) => {
         form!.validateFields()
           .then(() => {
-            resolve(form!.getFieldValue('input'))
+            resolve(form!.getFieldValue(fieldName))
           })
           .catch(() => {
             // eslint-disable-next-line prefer-promise-reject-errors
@@ -234,7 +236,9 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
       }
     },
     content: <InputForm
+      fieldName={ fieldName }
       form={ form! }
+      initialValues={ { [fieldName]: initialValue } }
       key={ 'input-form' }
       ref={ inputRef }
              />
