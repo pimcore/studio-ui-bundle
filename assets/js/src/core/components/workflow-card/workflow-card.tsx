@@ -28,6 +28,13 @@ interface IWorkflowCardProps {
   workflow: WorkflowDetails
 }
 
+interface WorkflowOptions {
+  notes?: string
+  additional?: {
+    timeWorked: string
+  }
+}
+
 type ActionType = 'transition' | 'global'
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
@@ -43,7 +50,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
   const { setShowWorkflowLogModal } = useWorkflow()
 
-  const workFlowTransition = (transition: string, actionType: ActionType, workFlowOptions: any[] = []): WorkflowActionSubmitApiArg => ({
+  const workFlowTransition = (transition: string, actionType: ActionType, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
     submitAction: {
       actionType,
       elementId: id,
@@ -59,9 +66,8 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
-    const submitWorkflowAction = (transition: string, actionType: ActionType, workFlowOptions: any[] = []): void => {
+    const submitWorkflowAction = (transition: string, actionType: ActionType, workFlowOptions: WorkflowOptions): void => {
       fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workFlowOptions)).then(() => {
-        console.log('----> submit workflow action')
       }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
     }
 
@@ -72,20 +78,25 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         items.push({
           key: Number(items.length + 1).toString(),
           label: status.label,
-          onClick: () => { submitWorkflowAction(status.name, 'transition') }
+          onClick: () => { submitWorkflowAction(status.name, 'transition', {}) }
         })
       })
 
       workflow.globalActions?.forEach((status) => {
-        // const workFlowOptions = [
-        //   {
-        //     notes: 'comment'
-        //   }
-        // ]
+        const workflowOptions: WorkflowOptions = {
+          notes: 'comment',
+          additional: {
+            timeWorked: '11'
+          }
+        }
+
         items.push({
           key: Number(items.length + 1).toString(),
           label: t(`${status.label}`),
-          onClick: () => { setShowWorkflowLogModal(true) }
+          onClick: () => {
+            setShowWorkflowLogModal(true)
+            submitWorkflowAction(status.name, 'global', workflowOptions)
+          }
         })
       })
 
