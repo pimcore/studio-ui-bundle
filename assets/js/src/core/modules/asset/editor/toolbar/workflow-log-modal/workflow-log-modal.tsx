@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -21,13 +21,16 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
-  const { isModalOpen, closeModal } = useWorkflow()
+  const { showWorkflowLogModal, setShowWorkflowLogModal } = useWorkflow()
 
-  console.log('----> isModalOpen in Modal', isModalOpen)
+  useEffect(() => {
+    console.log('----> showWorkflowLogModal changed here', showWorkflowLogModal
+    )
+  }, [showWorkflowLogModal])
 
   return (
     <Modal
-      afterClose={ () => { closeModal() } }
+      afterClose={ () => { alert('closed') } }
       footer={ <ModalFooter
         divider
         justify={ 'space-between' }
@@ -38,24 +41,26 @@ export const WorkflowLogModal = (): React.JSX.Element => {
         >
           <IconTextButton
             icon='close'
-            onClick={ () => { closeModal() } }
+            onClick={ () => {
+              alert('closed')
+            } }
             type='link'
           >
-            Close</IconTextButton>
+            Hi</IconTextButton>
           <Button
             onClick={ () => {
               alert('changed')
             } }
             type='primary'
-          >Save</Button>
+          >Bye</Button>
         </Flex>
       </ModalFooter> }
       onCancel={ () => {
-        closeModal()
+        setShowWorkflowLogModal(false)
       } }
-      open={ isModalOpen }
+      open={ showWorkflowLogModal }
       size={ 'M' }
-      title={ <ModalTitle>Log Time</ModalTitle> }
+      title={ <ModalTitle>Test</ModalTitle> }
     >
       Content
     </Modal>

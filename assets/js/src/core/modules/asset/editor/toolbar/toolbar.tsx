@@ -36,7 +36,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -72,21 +71,19 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <ToolbarView>
-      <WorkFlowProvider>
-        <ContextMenu />
-        <Flex vertical={ false }>
-          <EditorToolbarWorkflowMenu />
-          <Button
-            disabled={ !hasChanges || isLoading || isSchedulesLoading }
-            loading={ isLoading || isSchedulesLoading }
-            onClick={ onSaveClick }
-            type="primary"
-          >
-            {t('toolbar.save-and-publish')}
-          </Button>
-        </Flex>
-        <WorkflowLogModal />
-      </WorkFlowProvider>
+      <ContextMenu />
+      <Flex vertical={ false }>
+        <EditorToolbarWorkflowMenu />
+        <Button
+          disabled={ !hasChanges || isLoading || isSchedulesLoading }
+          loading={ isLoading || isSchedulesLoading }
+          onClick={ onSaveClick }
+          type="primary"
+        >
+          {t('toolbar.save-and-publish')}
+        </Button>
+      </Flex>
+      <WorkflowLogModal />
     </ToolbarView>
   )
 
