@@ -15,11 +15,9 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
 import {
-  api as assetApi,
-  type AssetCreateZipApiResponse,
-  useAssetCreateZipMutation,
+  AssetDownloadZipApiArg,
   useAssetPatchByIdMutation
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+} from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
@@ -27,6 +25,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import {api as assetApi, useAssetCreateZipMutation} from "@Pimcore/modules/asset/asset-api-slice-enhanced";
 
 export interface NodeAware {
   node?: TreeNodeProps
@@ -227,7 +226,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
               })
 
               const response = (await promise) as any
-              const data = response.data as AssetCreateZipApiResponse
+              const data = response.data as AssetDownloadZipApiArg
               return data.jobRunId
             }
           }))
