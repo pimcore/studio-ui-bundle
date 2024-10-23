@@ -58,17 +58,27 @@ const PreviewContainer = (): React.JSX.Element => {
   }), [thumbnail, playerPosition])
 
   const setUrlByThumbnail = (name: string): void => {
+    setUrl('')
     const url = `${getPrefix()}/assets/${id}/video/stream/${name}`
 
-    fetch(url)
-      .then(async (response) => await response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob)
-        setUrl(url)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    const fetchUrl = async (): Promise<void> => {
+      try {
+        const response = await fetch(url)
+        if (response.status === 200) {
+          const blob = await response.blob()
+          const objectUrl = URL.createObjectURL(blob)
+          setUrl(objectUrl)
+        } else if (response.status === 202) {
+          setTimeout(fetchUrl, 3000)
+        } else {
+          console.error(`Unexpected response status: ${response.status}`)
+        }
+      } catch (err) {
+        console.error('Error fetching URL:', err)
+      }
+    }
+
+    fetchUrl().catch(console.error)
   }
 
   useEffect(() => {
@@ -78,7 +88,7 @@ const PreviewContainer = (): React.JSX.Element => {
     setUrlByThumbnail(thumbnail)
   }, [thumbnail, isLoading])
 
-  if (url === '' || isLoading) {
+  if (isLoading) {
     return <Content loading />
   }
 
@@ -91,9 +101,14 @@ const PreviewContainer = (): React.JSX.Element => {
         />
       }
       >
-        <PreviewView
-          src={ url }
-        />
+        {url === ''
+          ? (
+            <Content loading />
+            )
+          : (
+            <PreviewView src={ url } />
+            )}
+
       </ContentToolbarSidebarLayout>
     </VideoContext.Provider>
   )
