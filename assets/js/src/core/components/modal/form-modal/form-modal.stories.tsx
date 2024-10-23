@@ -11,10 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type {Meta} from '@storybook/react'
-import {Button} from '@Pimcore/components/button/button'
-import React, {useState} from 'react'
-import {useFormModal} from "./hooks/use-form-modal";
+import type { Meta } from '@storybook/react'
+import { Button } from '@Pimcore/components/button/button'
+import React, { useState } from 'react'
+import { useFormModal } from './hooks/use-form-modal'
 
 const config: Meta = {
   title: 'Components/Data Entry/Input Modal',
@@ -31,7 +31,7 @@ const config: Meta = {
             label: args.label,
             rule: args.rule,
             initialValue: args.initialValue,
-            onOk: (value) => {
+            onOk: (value: string) => {
               setValue(value ?? 'n/a')
             }
           })
