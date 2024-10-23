@@ -22,6 +22,7 @@ import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Content } from '@Pimcore/components/content/content'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 
 export interface IVideoContext {
   thumbnail: string
@@ -61,24 +62,13 @@ const PreviewContainer = (): React.JSX.Element => {
     setUrl('')
     const url = `${getPrefix()}/assets/${id}/video/stream/${name}`
 
-    const fetchUrl = async (): Promise<void> => {
-      try {
-        const response = await fetch(url)
-        if (response.status === 200) {
-          const blob = await response.blob()
-          const objectUrl = URL.createObjectURL(blob)
-          setUrl(objectUrl)
-        } else if (response.status === 202) {
-          setTimeout(fetchUrl, 3000)
-        } else {
-          console.error(`Unexpected response status: ${response.status}`)
-        }
-      } catch (err) {
-        console.error('Error fetching URL:', err)
+    fetchBlobWithPolling({
+      url,
+      onSuccess: (blob) => {
+        const objectUrl = URL.createObjectURL(blob)
+        setUrl(objectUrl)
       }
-    }
-
-    fetchUrl().catch(console.error)
+    }).catch(console.error)
   }
 
   useEffect(() => {

@@ -20,6 +20,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 
 const PreviewContainer = (): React.JSX.Element => {
   const { id } = useAsset()
@@ -30,23 +31,13 @@ const PreviewContainer = (): React.JSX.Element => {
     if (isLoading) {
       return
     }
-    const checkUrlStatus = async (): Promise<void> => {
-      try {
-        const response = await fetch(`${getPrefix()}/assets/${id}/document/stream/pdf-preview`, { method: 'GET' })
-        if (response.status === 200) {
-          const docBlob = await response.blob()
-          setDocURL(URL.createObjectURL(docBlob))
-        } else if (response.status === 202) {
-          setTimeout(checkUrlStatus, 3000)
-        } else {
-          console.error(`Unexpected response status: ${response.status}`)
-        }
-      } catch (error) {
-        console.error('Error fetching URL:', error)
-      }
-    }
 
-    checkUrlStatus().catch(console.error)
+    fetchBlobWithPolling({
+      url: `${getPrefix()}/assets/${id}/document/stream/pdf-preview`,
+      onSuccess: (blob) => {
+        setDocURL(URL.createObjectURL(blob))
+      }
+    }).catch(console.error)
   }, [id, isLoading])
 
   if (docURL === '' || isLoading) {

@@ -22,6 +22,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 import { Content } from '@Pimcore/components/content/content'
+import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 
 const DetailContainer = (): React.JSX.Element => {
   const [isDownloading, setIsDownloading] = useState(false)
@@ -98,7 +99,9 @@ const DetailContainer = (): React.JSX.Element => {
         })
       }
     )
-      .then(() => { setImagePreviewFromBackend(200, 119) })
+      .then(() => {
+        setImagePreviewFromBackend(200, 119)
+      })
       .catch((err) => {
         console.error(err)
       })
@@ -108,30 +111,17 @@ const DetailContainer = (): React.JSX.Element => {
     setIsDownloading(true)
     const url = `${getPrefix()}/assets/${assetContext.id}/video/download/${format}`
 
-    const fetchUrl = async (): Promise<void> => {
-      try {
-        const response = await fetch(url)
-        if (response.status === 200) {
-          const blob = await response.blob()
-          const objectUrl = URL.createObjectURL(blob)
-          saveFileLocal(videoData.filename!, objectUrl)
-          setIsDownloading(false)
-        } else if (response.status === 202) {
-          setTimeout(fetchUrl, 3000)
-        } else {
-          console.error(`Unexpected response status: ${response.status}`)
-          setIsDownloading(false)
-        }
-      } catch (err) {
-        console.error('Error fetching URL:', err)
-        setIsDownloading(false)
+    fetchBlobWithPolling({
+      url,
+      onSuccess: (blob) => {
+        const objectUrl = URL.createObjectURL(blob)
+        saveFileLocal(videoData.filename!, objectUrl)
       }
-    }
-
-    fetchUrl().catch((err) => {
-      console.error('Error initiating download:', err)
-      setIsDownloading(false)
     })
+      .catch(console.error)
+      .finally(() => {
+        setIsDownloading(false)
+      })
   }
 }
 
