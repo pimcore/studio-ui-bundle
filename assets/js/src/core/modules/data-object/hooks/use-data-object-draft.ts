@@ -23,6 +23,7 @@ import {
   resetChanges,
   resetSchedulesChangesForDataObject,
   selectDataObjectById,
+  setModifiedCells,
   setPropertiesForDataObject,
   setSchedulesForDataObject,
   updatePropertyForDataObject,
@@ -37,7 +38,7 @@ import {
 import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
@@ -91,7 +92,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
         modified: false,
         properties: [],
         schedules: [],
-        changes: {}
+        changes: {},
+        modifiedCells: {}
       }
 
       if (dataObjectData !== undefined) {
@@ -115,7 +117,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
-    resetChanges
+    resetChanges,
+    setModifiedCells
   )
 
   const propertyActions = usePropertiesDraft(

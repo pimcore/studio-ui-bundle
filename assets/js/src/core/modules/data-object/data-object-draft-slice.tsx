@@ -32,10 +32,9 @@ export const slice = createSlice({
   initialState: dataObjectsAdapter.getInitialState({
     modified: false,
     properties: [],
-    customMetadata: [],
-    imageSettings: [],
     schedule: [],
-    changes: {}
+    changes: {},
+    modifiedCells: {}
   }),
   reducers: {
     dataObjectReceived: dataObjectsAdapter.upsertOne,
@@ -63,6 +62,7 @@ export const {
   resetDataObject,
 
   resetChanges,
+  setModifiedCells,
 
   addProperty: addPropertyToDataObject,
   removeProperty: removePropertyFromDataObject,

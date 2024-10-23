@@ -18,7 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
-import { Toolbar } from '@Pimcore/modules/asset/editor/toolbar/toolbar'
+import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 
 export interface EditorContainerProps {

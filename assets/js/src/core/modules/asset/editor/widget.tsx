@@ -18,6 +18,7 @@ import { store } from '@Pimcore/app/store'
 import React from 'react'
 import { AssetProvider } from '@Pimcore/modules/asset/asset-provider'
 import { type Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { type GlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
 export const AssetEditorWidget: Widget = {
   name: 'asset-editor',
@@ -28,8 +29,8 @@ export const AssetEditorWidget: Widget = {
     const asset = selectAssetById(store.getState(), config.id)
     return asset?.modified ?? false
   },
-  getContextProvider: (tabNode, children) => {
-    const config = tabNode.getConfig() as EditorContainerProps
+  getContextProvider: (context: GlobalAssetContext, children) => {
+    const config = context.config
     return (
       <AssetProvider id={ config.id }>
         {children}

@@ -15,14 +15,15 @@ import React, { type ComponentType, useEffect, useMemo, useRef, useState } from 
 import { TextCell } from './types/text/text-cell'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
-import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
-import { type TypeRegistry } from '../services/type-registry'
+// import { useInjection } from '@Pimcore/app/depency-injection'
+// import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+// import { type TypeRegistry } from '../services/type-registry'
 import { useKeyboardNavigation } from '../keyboard-navigation/use-keyboard-navigation'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useTranslation } from 'react-i18next'
+// import { useMessage } from '@Pimcore/components/message/useMessage'
+// import { useTranslation } from 'react-i18next'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
 export interface DefaultCellProps extends ExtendedCellContext {
   fallbackType?: ComponentType<DefaultCellProps>
@@ -35,10 +36,11 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
   const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
-  const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
+  // @todo move to new dynamic type system
+  // const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
   const { handleArrowNavigation } = useKeyboardNavigation(props)
-  const messageAPi = useMessage()
-  const { t } = useTranslation()
+  // const messageAPi = useMessage()
+  // const { t } = useTranslation()
   const oldInEditMode = usePrevious(isInEditMode)
 
   useEffect(() => {
@@ -52,8 +54,36 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
   }, [isInEditMode])
 
   const editableCellContextValue = useMemo(() => ({ isInEditMode, setIsInEditMode }), [isInEditMode])
+  const { getComponentRenderer } = useDynamicTypeResolver()
 
-  const Component = useMemo(() => typeRegistry.getComponentByType(cellType) ?? fallbackType, [cellType])
+  let { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [cellType], target: 'GRID_CELL' })
+
+  if (ComponentRenderer === null) {
+    ComponentRenderer = getComponentRenderer({ dynamicTypeIds: ['input'], target: 'GRID_CELL' }).ComponentRenderer
+  }
+
+  return useMemo(() => {
+    return (
+      <div
+        className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
+        data-grid-column={ column.getIndex() }
+        data-grid-row={ row.index }
+        // @todo move to new dynamic type system
+        // onCopy={ onCopy }
+        onDoubleClick={ onDoubleClick }
+        onKeyDown={ onKeyDown }
+        // @todo move to new dynamic type system
+        // onPaste={ onPaste }
+        ref={ element }
+        role='button'
+        tabIndex={ 0 }
+      >
+        <EditableCellContextProvider value={ editableCellContextValue }>
+          {ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>}
+        </EditableCellContextProvider>
+      </div>
+    )
+  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable])
 
   function getCssClasses (): string[] {
     const classes: string[] = []
@@ -95,6 +125,8 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
     enableEditMode()
   }
 
+  // @todo move to new dynamic type system
+  /*
   function onCopy (_event): void {
     const event = _event as ClipboardEvent
     const copyHandler = typeRegistry.getCopyHandlerByType(cellType)
@@ -119,26 +151,5 @@ export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellPr
     if (pasteHandler !== undefined && isEditable) {
       pasteHandler(event, props)
     }
-  }
-
-  return useMemo(() => {
-    return (
-      <div
-        className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
-        data-grid-column={ column.getIndex() }
-        data-grid-row={ row.index }
-        onCopy={ onCopy }
-        onDoubleClick={ onDoubleClick }
-        onKeyDown={ onKeyDown }
-        onPaste={ onPaste }
-        ref={ element }
-        role='button'
-        tabIndex={ 0 }
-      >
-        <EditableCellContextProvider value={ editableCellContextValue }>
-          <Component { ...props } />
-        </EditableCellContextProvider>
-      </div>
-    )
-  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable])
+  } */
 }

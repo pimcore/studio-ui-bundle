@@ -14,7 +14,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem, type AbstractModule } from '@Pimcore/app/module-system/module-system'
 import { type JobComponentRegistry } from './services/job-component-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { NotificationJobContainer as DefaultJobContainer } from './jobs/default/notification-job-container'
 import { NotificationJobContainer as DownloadJobContainer } from './jobs/download/notification-job-container'
 import { NotificationJobContainer as ZipUploadJobContainer } from './jobs/zip-upload/notification-job-container'

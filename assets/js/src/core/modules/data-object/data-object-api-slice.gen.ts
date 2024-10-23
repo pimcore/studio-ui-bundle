@@ -219,6 +219,7 @@ export type DataObjectGetTreeApiArg = {
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
+        | "Eierlegenedewollmilchsau"
         | "Event"
         | "FilterDefinition"
         | "LinkActivityDefinition"

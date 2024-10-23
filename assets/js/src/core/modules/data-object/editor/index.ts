@@ -14,11 +14,8 @@
 import { container } from '@Pimcore/app/depency-injection'
 import '@Pimcore/modules/data-object/editor/types/object'
 import '@Pimcore/modules/data-object/editor/types/folder'
-import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties'
-import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule'
-import '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import type {
   ComponentRegistry as GlobalComponentRegistry

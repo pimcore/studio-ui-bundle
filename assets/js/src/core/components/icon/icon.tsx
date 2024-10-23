@@ -14,7 +14,7 @@
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import React from 'react'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface IconProps {
   name: string

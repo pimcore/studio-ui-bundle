@@ -31,7 +31,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'

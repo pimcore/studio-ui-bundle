@@ -13,7 +13,7 @@
 
 import { container } from '../depency-injection'
 import { pluginSystem } from '../plugin-system/plugin-system'
-import { serviceIds } from '../config/services'
+import { serviceIds } from '../config/services/service-ids'
 
 export interface PublicApi {
   container: typeof container
