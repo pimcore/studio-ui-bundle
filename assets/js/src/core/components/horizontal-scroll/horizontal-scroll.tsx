@@ -21,7 +21,7 @@ export interface HorizontalScrollProps {
   scrollWidth?: number
 }
 
-export const HorizontalScroll = ({ children, scrollWidth = 200 }: HorizontalScrollProps): React.JSX.Element => {
+export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProps): React.JSX.Element => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollAmount = 50
   const scrollSpeed = 30

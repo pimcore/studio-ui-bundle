@@ -13,17 +13,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }, { hideElement }) => {
+export const useStyles = createStyles(({ css }, { scrollWidth, hideElement }) => {
   return {
     scrollContainer: css`
-      visibility: ${hideElement === true ? 'hidden' : 'visible'};
-      display: flex;
-      overflow-x: auto;
+        visibility: ${hideElement === true ? 'hidden' : 'visible'};
+        display: flex;
+        overflow-x: auto;
     `,
 
     scroll: css`
         overflow-x: auto;
         white-space: nowrap;
+      ${typeof scrollWidth !== 'undefined' && scrollWidth !== null ? `width: ${scrollWidth}px;` : ''}
 
         &::-webkit-scrollbar {
             display: none;
