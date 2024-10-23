@@ -15,16 +15,22 @@ import {type Meta} from '@storybook/react'
 import {HorizontalScroll} from './horizontal-scroll'
 import {TagList} from "@Pimcore/components/tag-list/tag-list";
 import React from "react";
-import type {TagProps} from "@Pimcore/components/tag/tag";
+import { TagProps} from "@Pimcore/components/tag/tag";
+import {SplitLayout} from "@Pimcore/components/split-layout/split-layout";
+import {Content} from "@Pimcore/components/content/content";
 
 const config: Meta = {
     title: 'Components/layout/HorizontalScroll',
     component: HorizontalScroll,
+    tags: ['autodocs'],
     parameters: {
-        layout: 'centered'
-    },
-
-    tags: ['autodocs']
+        layout: 'centered',
+        docs: {
+            source: {
+                type: 'code'
+            }
+        }
+    }
 }
 
 export default config
@@ -47,18 +53,44 @@ const exampleSmallTagList: TagProps[][] = [
         {children: 'Tag 3'}
     ]
 ]
-
 export const _default = {
     args: {
         children: <TagList
             itemGap={'extra-small'}
             list={exampleLargeTagList}
             wrap={false}
-        />,
-        scrollWidth: 150
+        />
     }
 }
 
+export const resizeable = {
+    args: {
+        children: <TagList
+            itemGap={'extra-small'}
+            list={exampleLargeTagList}
+            wrap={false}
+        />
+    },
+        render: (args) => (
+            <SplitLayout
+                withDivider={true}
+                resizeAble={true}
+                leftItem={{
+                    size: 25,
+                    minSize: 20,
+                    children: (
+                <HorizontalScroll>
+                    {args.children}
+                </HorizontalScroll>)
+                }}
+                rightItem={{
+                    size: 75,
+                    minSize: 600,
+                    children: <Content none />
+                }}
+            />
+        )
+    }
 export const ScrollNotRequired = {
     args: {
         children: <TagList
