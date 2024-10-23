@@ -42,6 +42,9 @@ const DetailContainer = (): React.JSX.Element => {
     return <Content loading />
   }
 
+  type Callback = () => void
+  const noop = (): void => {}
+
   return (
     <VideoEditorSidebarDetailsTab
       height={ videoData.height ?? 0 }
@@ -56,8 +59,8 @@ const DetailContainer = (): React.JSX.Element => {
     />
   )
 
-  function setImagePreviewFromBackend (width: number, height: number): void {
-    const url = `${getPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}`
+  function setImagePreviewFromBackend (width: number, height: number, then: Callback = noop): void {
+    const url = `${getPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}&aspectRatio=true`
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {
@@ -66,18 +69,18 @@ const DetailContainer = (): React.JSX.Element => {
       })
       .catch((err) => {
         console.error(err)
-      })
+      }).finally(then)
   }
 
-  function onDropImage (id: number): void {
-    setImagePreviewByToBackend('image_thumbnail_asset', id)
+  function onDropImage (id: number, callback: Callback = noop): void {
+    setImagePreviewByToBackend('image_thumbnail_asset', id, callback)
   }
 
-  function onApplyPlayerPosition (): void {
-    setImagePreviewByToBackend('image_thumbnail_time', playerPosition)
+  function onApplyPlayerPosition (callback: Callback = noop): void {
+    setImagePreviewByToBackend('image_thumbnail_time', playerPosition, callback)
   }
 
-  function setImagePreviewByToBackend (key: string, value: number): void {
+  function setImagePreviewByToBackend (key: string, value: number, callback: Callback = noop): void {
     const url = `${getPrefix()}/assets/${assetContext.id}`
     fetch(
       url,
@@ -100,10 +103,11 @@ const DetailContainer = (): React.JSX.Element => {
       }
     )
       .then(() => {
-        setImagePreviewFromBackend(200, 119)
+        setImagePreviewFromBackend(200, 119, callback)
       })
       .catch((err) => {
         console.error(err)
+        callback()
       })
   }
 

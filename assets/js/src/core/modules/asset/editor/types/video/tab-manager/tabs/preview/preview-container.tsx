@@ -82,6 +82,8 @@ const PreviewContainer = (): React.JSX.Element => {
     return <Content loading />
   }
 
+  const poster = `${getPrefix()}/assets/${id}/video/stream/image-thumbnail?width=500&height=500&aspectRatio=true`
+
   return (
     <VideoContext.Provider value={ contextValue }>
       <ContentToolbarSidebarLayout renderSidebar={
@@ -96,7 +98,10 @@ const PreviewContainer = (): React.JSX.Element => {
             <Content loading />
             )
           : (
-            <PreviewView src={ url } />
+            <PreviewView
+              poster={ poster }
+              src={ url }
+            />
             )}
 
       </ContentToolbarSidebarLayout>

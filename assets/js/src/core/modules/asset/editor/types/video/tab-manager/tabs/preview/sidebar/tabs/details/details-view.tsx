@@ -35,8 +35,8 @@ interface VideoEditorSidebarDetailsViewProps {
   height: number
   thumbnails: Thumbnail[]
   imagePreview: string
-  onApplyPlayerPosition: () => void
-  onDropImage: (id: number) => void
+  onApplyPlayerPosition: (then: () => void) => void
+  onDropImage: (id: number, then: () => void) => void
   onChangeThumbnail: (thumbnail: string) => void
   onClickDownloadByFormat: (format: string) => void
   isDownloading: boolean
@@ -57,6 +57,8 @@ export const VideoEditorSidebarDetailsTab = ({
   const { t } = useTranslation()
   const [imageSource, setImageSource] = useState('media')
   const [customMode, setCustomMode] = useState('pimcore-system-treepreview')
+  const [applyLoading, setApplyLoading] = useState(false)
+  const [dropAssetLoading, setDropAssetLoading] = useState(false)
   const [downloadFormat, setDownloadFormat] = useState('pimcore-system-treepreview')
 
   const modes = thumbnails.map(thumbnail => {
@@ -72,12 +74,19 @@ export const VideoEditorSidebarDetailsTab = ({
   if (imageSource === 'media') {
     cardContent = (
       <>
-        <Droppable
-          isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
-          onDrop={ onDropAsset }
-        >
-          <DroppableContent imgSrc={ imagePreview } />
-        </Droppable>
+        {dropAssetLoading
+          ? (
+            <Content loading />
+            )
+          : (
+            <Droppable
+              isValidContext={ (info: DragAndDropInfo) => info.type === 'asset' }
+              onDrop={ onDropAsset }
+            >
+              <DroppableContent imgSrc={ imagePreview } />
+            </Droppable>
+            )}
+
         <Meta
           title={
             <Toolbar theme={ 'secondary' }>
@@ -101,7 +110,10 @@ export const VideoEditorSidebarDetailsTab = ({
               justify={ 'flex-end' }
               theme={ 'secondary' }
             >
-              <Button onClick={ onClickApply }>{t('apply')}</Button>
+              <Button
+                loading={ applyLoading }
+                onClick={ onClickApply }
+              >{t('apply')}</Button>
             </Toolbar>
           }
         />
@@ -203,10 +215,16 @@ export const VideoEditorSidebarDetailsTab = ({
   }
 
   function onDropAsset (e): void {
-    onDropImage(e.data.id as number)
+    setDropAssetLoading(true)
+    onDropImage(e.data.id as number, () => {
+      setDropAssetLoading(false)
+    })
   }
 
   function onClickApply (): void {
-    onApplyPlayerPosition()
+    setApplyLoading(true)
+    onApplyPlayerPosition(() => {
+      setApplyLoading(false)
+    })
   }
 }
