@@ -24,12 +24,14 @@ import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/compon
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
+import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
+  const { openModal } = useWorkflow()
 
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
@@ -43,7 +45,8 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         mergedActions?.forEach((action) => {
           result.push({
             key: (result.length + 1).toString(),
-            label: t(`${action.label}`)
+            label: t(`${action.label}`),
+            onClick: () => { openModal() }
           })
         })
 

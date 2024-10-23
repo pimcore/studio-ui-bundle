@@ -14,7 +14,6 @@
 import React from 'react'
 import { useGlobalAssetContext } from '../../hooks/use-global-asset-context'
 import { AssetProvider } from '../../asset-provider'
-import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 
 interface IDetachedTabProps {
   children: React.ReactNode
@@ -29,9 +28,7 @@ export const DetachedTab = ({ children }: IDetachedTabProps): React.JSX.Element 
 
   return (
     <AssetProvider id={ context.config.id }>
-      <WorkFlowProvider>
         {children}
-      </WorkFlowProvider>
     </AssetProvider>
   )
 }

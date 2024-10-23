@@ -14,13 +14,15 @@
 import React, { useState, createContext, useMemo } from 'react'
 
 export interface IWorkflowContext {
-  showWorkflowLogModal: boolean
-  setShowWorkflowLogModal: (showWorkflowLog: boolean) => void
+  isModalOpen: boolean
+  openModal: () => void
+  closeModal: () => void
 }
 
 export const WorkflowContext = createContext<IWorkflowContext>({
-  showWorkflowLogModal: false,
-  setShowWorkflowLogModal: () => {}
+  isModalOpen: false,
+  openModal: () => {},
+  closeModal: () => {}
 })
 
 export interface WorkFlowProviderProps {
@@ -28,11 +30,14 @@ export interface WorkFlowProviderProps {
 }
 
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
-  const [showWorkflowLogModal, setShowWorkflowLogModal] = useState<boolean>(false)
+  const [isModalOpen, setModalOpen] = useState<boolean>(false)
+
+  const openModal = (): void => { setModalOpen(true) }
+  const closeModal = (): void => { setModalOpen(false) }
 
   return useMemo(() => (
-    <WorkflowContext.Provider value={ { showWorkflowLogModal, setShowWorkflowLogModal } }>
+    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal } }>
       {children}
     </WorkflowContext.Provider>
-  ), [showWorkflowLogModal, children])
+  ), [isModalOpen, children])
 }
