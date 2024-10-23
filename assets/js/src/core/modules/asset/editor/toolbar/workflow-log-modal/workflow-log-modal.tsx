@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -21,16 +21,13 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
-  const { showWorkflowLogModal, setShowWorkflowLogModal } = useWorkflow()
+  const { isModalOpen, closeModal } = useWorkflow()
 
-  useEffect(() => {
-    console.log('----> showWorkflowLogModal changed here', showWorkflowLogModal
-    )
-  }, [showWorkflowLogModal])
+  console.log('----> isModalOpen in Modal', isModalOpen)
 
   return (
     <Modal
-      afterClose={ () => { alert('closed') } }
+      afterClose={ () => { closeModal() } }
       footer={ <ModalFooter
         divider
         justify={ 'space-between' }
@@ -41,26 +38,24 @@ export const WorkflowLogModal = (): React.JSX.Element => {
         >
           <IconTextButton
             icon='close'
-            onClick={ () => {
-              alert('closed')
-            } }
+            onClick={ () => { closeModal() } }
             type='link'
           >
-            Hi</IconTextButton>
+            Close</IconTextButton>
           <Button
             onClick={ () => {
               alert('changed')
             } }
             type='primary'
-          >Bye</Button>
+          >Save</Button>
         </Flex>
       </ModalFooter> }
       onCancel={ () => {
-        setShowWorkflowLogModal(false)
+        closeModal()
       } }
-      open={ showWorkflowLogModal }
+      open={ isModalOpen }
       size={ 'M' }
-      title={ <ModalTitle>Test</ModalTitle> }
+      title={ <ModalTitle>Log Time</ModalTitle> }
     >
       Content
     </Modal>

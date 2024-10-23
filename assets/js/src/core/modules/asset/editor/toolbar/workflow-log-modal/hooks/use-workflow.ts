@@ -12,18 +12,32 @@
 */
 
 import { useContext } from 'react'
-import { WorkflowContext } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import {
+  type IWorkflowContext,
+  WorkflowContext
+} from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 
-interface UseWorkflowHookReturn {
-  showWorkflowLogModal: boolean
-  setShowWorkflowLogModal: (showWorkflowLogModal: boolean) => void
-}
+// import { useContext } from 'react'
+// import { WorkflowContext } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+//
+// interface UseWorkflowHookReturn {
+//   showWorkflowLogModal: boolean
+//   setShowWorkflowLogModal: (showWorkflowLogModal: boolean) => void
+// }
+//
+// export const useWorkflow = (): UseWorkflowHookReturn => {
+//   const { showWorkflowLogModal, setShowWorkflowLogModal } = useContext(WorkflowContext)
+//
+//   const openShowWorkflowLogModal = () => {
+//     setShowWorkflowLogModal(true)
+//   }
+//
+//   return {
+//     showWorkflowLogModal,
+//     openShowWorkflowLogModal
+//   }
+// }
 
-export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { showWorkflowLogModal, setShowWorkflowLogModal } = useContext(WorkflowContext)
-
-  return {
-    showWorkflowLogModal,
-    setShowWorkflowLogModal
-  }
+export const useWorkflow: () => IWorkflowContext = () => {
+  return useContext(WorkflowContext)
 }

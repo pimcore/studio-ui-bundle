@@ -19,6 +19,8 @@ import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { Space } from 'antd'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -42,10 +44,13 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
       <Space direction="vertical">
         {data?.items !== undefined && data?.items.length > 0 && (
           data.items.map((workflow, index) => (
-            <WorkflowCard
-              key={ index }
-              workflow={ workflow }
-            />
+            <WorkFlowProvider key={ index }>
+              <WorkflowCard
+                key={ index }
+                workflow={ workflow }
+              />
+              <WorkflowLogModal />
+            </WorkFlowProvider>
           ))
         )}
       </Space>

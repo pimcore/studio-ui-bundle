@@ -48,7 +48,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   }
 
   const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
-  const { setShowWorkflowLogModal } = useWorkflow()
+  const { openModal } = useWorkflow()
 
   const workFlowTransition = (transition: string, actionType: ActionType, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
     submitAction: {
@@ -94,7 +94,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           key: Number(items.length + 1).toString(),
           label: t(`${status.label}`),
           onClick: () => {
-            setShowWorkflowLogModal(true)
+            openModal()
             submitWorkflowAction(status.name, 'global', workflowOptions)
           }
         })
