@@ -30,6 +30,8 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
 
+  console.log('------ FilterContainerInner filterOptions: ', filterOptions)
+
   return (
     <ContentToolbarSidebarLayout
       renderToolbar={

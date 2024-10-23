@@ -39,10 +39,6 @@ import {
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
-import {
-  useTagGetCollectionForElementByTypeAndIdQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
 import usePagination from '@Pimcore/utils/hooks/use-pagination'
 
@@ -55,7 +51,6 @@ interface DataPatch {
 
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
-  const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
   const { page, pageSize, handlePageChange } = usePagination()
   const { setSelectedRows } = useListSelectedRows()
@@ -71,14 +66,6 @@ export const ListContainerInner = (): React.JSX.Element => {
   const [, setDataPatches] = useState<DataPatch[]>([])
   const { sorting } = useListSorting()
   const [isLoading, setIsLoading] = useState(true)
-  const { data: tagData } = useTagGetCollectionForElementByTypeAndIdQuery({
-    elementType,
-    id
-  })
-
-  console.log('======= gridData: ', data)
-  console.log('--------------------------')
-  console.log('======= tagData: ', tagData)
 
   useEffect(() => {
     setSelectedRows({})
