@@ -193,6 +193,10 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamPreview: build.query<AssetImageStreamPreviewApiResponse, AssetImageStreamPreviewApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/preview` }),
+                providesTags: ["Assets"],
+            }),
             assetImageDownloadByThumbnail: build.query<
                 AssetImageDownloadByThumbnailApiResponse,
                 AssetImageDownloadByThumbnailApiArg
@@ -579,6 +583,11 @@ export type AssetImageDownloadByFormatApiArg = {
     id: number;
     /** Find asset by matching format type. */
     format: "office" | "print" | "web";
+};
+export type AssetImageStreamPreviewApiResponse = /** status 200 Image preview stream */ Blob;
+export type AssetImageStreamPreviewApiArg = {
+    /** Id of the image */
+    id: number;
 };
 export type AssetImageDownloadByThumbnailApiResponse =
     /** status 200 Image asset binary file based on thumbnail name */ Blob;
@@ -1063,6 +1072,7 @@ export const {
     useAssetGetGridMutation,
     useAssetImageDownloadCustomQuery,
     useAssetImageDownloadByFormatQuery,
+    useAssetImageStreamPreviewQuery,
     useAssetImageDownloadByThumbnailQuery,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,

@@ -14,7 +14,6 @@
 import React from 'react'
 import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { type AbstractFieldFilterDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-abstract'
 
 export interface DefaultFilterProps {
   column: GridColumnConfiguration
@@ -22,14 +21,14 @@ export interface DefaultFilterProps {
 
 export const DefaultFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
   const { frontendType, type } = column
-  const { ComponentRenderer } = useDynamicTypeResolver<AbstractFieldFilterDefinition>({ target: 'FIELD_FILTER', dynamicTypeIds: [type, frontendType!] })
+  const { getComponentRenderer } = useDynamicTypeResolver()
+  const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [type, frontendType!] })
 
   if (ComponentRenderer === null) {
     // @todo implement error handling
     return <>Dynamic Field Filter not supported</>
   }
 
-  // @todo implement different filter types
   return (
     <>
       { ComponentRenderer({ column }) }
