@@ -74,7 +74,7 @@ export const Toolbar = (): React.JSX.Element => {
       <ContextMenu />
       <Flex
         className='overflow-x-auto'
-        style={ { width: '100%' } }
+        style={ { height: '32px' } }
         vertical={ false }
       >
         <EditorToolbarWorkflowMenu />
