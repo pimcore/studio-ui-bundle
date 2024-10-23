@@ -39,6 +39,7 @@ interface VideoEditorSidebarDetailsViewProps {
   onDropImage: (id: number) => void
   onChangeThumbnail: (thumbnail: string) => void
   onClickDownloadByFormat: (format: string) => void
+  isDownloading: boolean
 }
 
 export const VideoEditorSidebarDetailsTab = ({
@@ -49,7 +50,8 @@ export const VideoEditorSidebarDetailsTab = ({
   onApplyPlayerPosition,
   onChangeThumbnail,
   onClickDownloadByFormat,
-  onDropImage
+  onDropImage,
+  isDownloading
 }: VideoEditorSidebarDetailsViewProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
@@ -152,6 +154,7 @@ export const VideoEditorSidebarDetailsTab = ({
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
                 icon={ <Icon name={ 'download-02' } /> }
+                loading={ isDownloading }
                 onClick={ onClickDownload }
               />
             </div>

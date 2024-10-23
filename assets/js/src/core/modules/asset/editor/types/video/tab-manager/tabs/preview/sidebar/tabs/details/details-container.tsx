@@ -18,12 +18,13 @@ import {
   VideoEditorSidebarDetailsTab
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { useThumbnailVideoGetCollectionQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 import { Content } from '@Pimcore/components/content/content'
 
 const DetailContainer = (): React.JSX.Element => {
+  const [isDownloading, setIsDownloading] = useState(false)
   const { playerPosition, setThumbnail } = React.useContext(VideoContext)
   const assetContext = useContext(AssetContext)
   const [imagePreview, setImagePreview] = useState('')
@@ -44,6 +45,7 @@ const DetailContainer = (): React.JSX.Element => {
     <VideoEditorSidebarDetailsTab
       height={ videoData.height ?? 0 }
       imagePreview={ imagePreview }
+      isDownloading={ isDownloading }
       onApplyPlayerPosition={ onApplyPlayerPosition }
       onChangeThumbnail={ setThumbnail }
       onClickDownloadByFormat={ downloadVideoByFormat }
@@ -54,7 +56,7 @@ const DetailContainer = (): React.JSX.Element => {
   )
 
   function setImagePreviewFromBackend (width: number, height: number): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}`
+    const url = `${getPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}`
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {
@@ -75,7 +77,7 @@ const DetailContainer = (): React.JSX.Element => {
   }
 
   function setImagePreviewByToBackend (key: string, value: number): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}`
+    const url = `${getPrefix()}/assets/${assetContext.id}`
     fetch(
       url,
       {
@@ -103,16 +105,33 @@ const DetailContainer = (): React.JSX.Element => {
   }
 
   function downloadVideoByFormat (format: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/download/${format}`
-    fetch(url)
-      .then(async (response) => await response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob)
-        saveFileLocal(videoData.filename!, url)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+    setIsDownloading(true)
+    const url = `${getPrefix()}/assets/${assetContext.id}/video/download/${format}`
+
+    const fetchUrl = async (): Promise<void> => {
+      try {
+        const response = await fetch(url)
+        if (response.status === 200) {
+          const blob = await response.blob()
+          const objectUrl = URL.createObjectURL(blob)
+          saveFileLocal(videoData.filename!, objectUrl)
+          setIsDownloading(false)
+        } else if (response.status === 202) {
+          setTimeout(fetchUrl, 3000)
+        } else {
+          console.error(`Unexpected response status: ${response.status}`)
+          setIsDownloading(false)
+        }
+      } catch (err) {
+        console.error('Error fetching URL:', err)
+        setIsDownloading(false)
+      }
+    }
+
+    fetchUrl().catch((err) => {
+      console.error('Error initiating download:', err)
+      setIsDownloading(false)
+    })
   }
 }
 
