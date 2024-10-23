@@ -20,6 +20,7 @@ import localeValues from 'antd/locale'
 import { type ExtModalFuncProps } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Button } from '@Pimcore/components/button/button'
 import { useTranslation } from 'react-i18next'
+import { useEffect } from 'react'
 
 export interface HookModalProps {
   afterClose: () => void
@@ -37,17 +38,27 @@ export interface HookModalRef {
 }
 
 const HookModal: React.ForwardRefRenderFunction<HookModalRef, HookModalProps> = (
-  { afterClose: hookAfterClose, config: initConfig, ...restProps },
+  {
+    afterClose: hookAfterClose,
+    config: initConfig,
+    ...restProps
+  },
   ref
 ) => {
   const { t } = useTranslation()
-  const { beforeOk, ...config } = initConfig
+  const { beforeOk, afterOpen, ...config } = initConfig
   const [open, setOpen] = React.useState(true)
   const [innerConfig, setInnerConfig] = React.useState(config)
   const { direction, getPrefixCls } = React.useContext(ConfigContext)
 
   const prefixCls = getPrefixCls('modal')
   const rootPrefixCls = getPrefixCls()
+
+  useEffect(() => {
+    if (open && afterOpen !== undefined) {
+      afterOpen()
+    }
+  }, [open])
 
   const afterClose = (): void => {
     hookAfterClose()

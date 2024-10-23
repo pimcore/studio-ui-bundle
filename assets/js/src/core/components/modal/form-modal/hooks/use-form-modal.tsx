@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { type FormInstance, Input, type ModalFuncProps } from 'antd'
+import React, { forwardRef, type RefObject } from 'react'
+import { type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type HookModalRef } from 'antd/es/modal/useModal/HookModal'
 import { type ModalFuncWithPromise } from 'antd/es/modal/useModal'
@@ -23,6 +23,7 @@ import i18n from 'i18next'
 import { Form } from '@Pimcore/components/form/form'
 
 let uuid = pimcoreUUid()
+let form: FormInstance<any> | null = null
 
 interface ElementsHolderRef {
   patchElement: ReturnType<typeof usePatchElement>[1]
@@ -30,6 +31,7 @@ interface ElementsHolderRef {
 
 export interface ExtModalFuncProps extends ModalFuncProps {
   beforeOk?: () => Promise<any>
+  afterOpen?: () => void
 }
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
@@ -63,6 +65,8 @@ const destroyFns: Array<() => void> = []
 
 export function useFormModal (): readonly [instance: ExtHookApi, contextHolder: React.ReactElement] {
   const holderRef = React.useRef<ElementsHolderRef>(null)
+  const [tmpForm] = Form.useForm()
+  form = tmpForm
 
   // ========================== Effect ==========================
   const [actionQueue, setActionQueue] = React.useState<Array<() => void>>([])
@@ -167,8 +171,12 @@ export function useFormModal (): readonly [instance: ExtHookApi, contextHolder: 
   ] as const
 }
 
+interface InputFormProps {
+  form: FormInstance<any>
+}
+
 export function withInput (props: InputFormModalProps): ExtModalFuncProps {
-  let form: FormInstance | null = null
+  const inputRef = React.createRef<InputRef>()
   const {
     label,
     rule,
@@ -181,12 +189,10 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
     formattedRule = [rule]
   }
 
-  const InputForm = (): React.ReactNode => {
-    const [tmpForm] = Form.useForm()
-    form = tmpForm
+  const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
     return (
       <Form
-        form={ form }
+        form={ props.form }
         initialValues={ {
           input: initialValue
         } }
@@ -197,11 +203,11 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
           name="input"
           rules={ formattedRule }
         >
-          <Input />
+          <Input ref={ ref } />
         </Form.Item>
       </Form>
     )
-  }
+  })
 
   return {
     ...modalProps,
@@ -219,11 +225,19 @@ export function withInput (props: InputFormModalProps): ExtModalFuncProps {
           })
       })
     },
-
     onOk: async (value) => {
       props.onOk?.(value)
     },
-    content: <InputForm />
+    afterOpen: () => {
+      if (inputRef.current !== null) {
+        inputRef.current.focus()
+      }
+    },
+    content: <InputForm
+      form={ form! }
+      key={ 'input-form' }
+      ref={ inputRef }
+             />
   }
 }
 
