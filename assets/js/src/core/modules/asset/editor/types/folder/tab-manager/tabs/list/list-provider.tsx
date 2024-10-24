@@ -12,13 +12,13 @@
 */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
-import { type GridConfiguration, type AssetGetGridApiResponse, type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { defaultFilterOptions, type FilterOptions } from './sidebar/filters/filter-provider'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 
 export interface IListGridConfigContext {
-  gridConfig: GridConfiguration | undefined
-  setGridConfig: React.Dispatch<React.SetStateAction<GridConfiguration | undefined>>
+  gridConfig: GridDetailedConfiguration | undefined
+  setGridConfig: React.Dispatch<React.SetStateAction<GridDetailedConfiguration | undefined>>
 }
 
 export const ListGridConfigContext = createContext<IListGridConfigContext>({

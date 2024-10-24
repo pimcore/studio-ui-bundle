@@ -14,7 +14,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type TypeRegistry } from './services/type-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { TextCell } from './columns/types/text/text-cell'
 import { DateCell } from './columns/types/date/date-cell'
 import { CheckboxCell } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell'
@@ -70,8 +70,6 @@ moduleSystem.registerModule({
       type: 'time',
       component: TimeCell
     })
-
-    console.log(DateCell, TimeCell)
 
     typeRegistry.registerType({
       type: 'select',

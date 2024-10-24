@@ -16,7 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type VideoTabManager } from './tab-manager/video-tab-manager'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import {
   TAB_CUSTOM_METADATA,

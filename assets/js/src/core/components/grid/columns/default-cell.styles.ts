@@ -28,6 +28,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .default-cell__content {
         display: flex;
         width: 100%;
+        height: 100%;
         margin: 0 ${token.paddingXXS}px; 
         overflow: hidden;
         text-overflow: ellipsis;

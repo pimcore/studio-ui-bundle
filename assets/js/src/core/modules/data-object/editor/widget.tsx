@@ -18,6 +18,7 @@ import React from 'react'
 import { type Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'
 import { selectDataObjectById } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { type GlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 
 export const DataObjectEditorWidget: Widget = {
   name: 'data-object-editor',
@@ -28,8 +29,8 @@ export const DataObjectEditorWidget: Widget = {
     const dataObject = selectDataObjectById(store.getState(), config.id)
     return dataObject?.modified ?? false
   },
-  getContextProvider: (tabNode, children) => {
-    const config = tabNode.getConfig() as EditorContainerProps
+  getContextProvider: (context: GlobalDataObjectContext, children) => {
+    const config = context.config
     return (
       <DataObjectProvider id={ config.id }>
         {children}

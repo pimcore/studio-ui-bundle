@@ -18,12 +18,10 @@ import {
   type AssetVersion
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { container } from '@Pimcore/app/depency-injection'
-import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import i18n from 'i18next'
-import {
-  type PreviewFieldLabelCellValue
-} from './table/cells/preview-field-label-cell/preview-field-label-cell'
+import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
+import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
 
 export interface AssetVersionData {
   versionCount: number
@@ -73,7 +71,7 @@ export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, ver
   }
 }
 const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<string, AssetVersionMetadata> => {
-  const metadataTypeRegistry = container.get<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
+  const metadataTypeRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 
   const map = new Map<string, AssetVersionMetadata>()
 
@@ -82,14 +80,14 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
   }
 
   for (const meta of metadata) {
-    const metadataType = metadataTypeRegistry.getTypeSelectionTypes().get(meta.type)
+    const metadataType = metadataTypeRegistry.getTypeSelectionTypes().get(`metadata.${meta.type}`)
     const metaKey = meta.language !== null ? `meta.${meta.name}.${meta.language}` : meta.name
     map.set(metaKey, {
       key: metaKey,
       field: meta.name,
       language: meta.language,
       metadataType: meta.type,
-      displayValue: metadataType !== undefined ? metadataType.formatVersionPreview(meta.data) : 'Metadata type not supported',
+      displayValue: metadataType !== undefined ? metadataType.getVersionPreviewComponent(meta.data) : 'Metadata type not supported',
       raw: meta
     })
   }
