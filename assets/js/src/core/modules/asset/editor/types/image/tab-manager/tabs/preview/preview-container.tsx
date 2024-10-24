@@ -13,7 +13,6 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -22,6 +21,8 @@ import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 export interface IZoomContext {
   zoom: number
@@ -32,8 +33,8 @@ export const ZoomContext = createContext<IZoomContext>({ zoom: 100, setZoom: () 
 
 const PreviewContainer = (): React.JSX.Element => {
   const [zoom, setZoom] = useState<number>(100)
-  const assetContext = useContext(AssetContext)
-  const { data, isLoading } = useAssetGetByIdQuery({ id: assetContext.id })
+  const { id } = useContext(AssetContext)
+  const { isLoading } = useAssetDraft(id)
   const sidebarEntries = sidebarManager.getEntries()
   const sidebarButtons = sidebarManager.getButtons()
 
@@ -41,7 +42,11 @@ const PreviewContainer = (): React.JSX.Element => {
     zoom,
     setZoom
   }), [zoom])
-  const imageData = data as Image
+  const previewImgUrl = `${getPrefix()}/assets/${id}/image/stream/preview`
+  console.log('isLoading', isLoading)
+  if (isLoading) {
+    return <Content loading />
+  }
 
   return (
     <FocalPointProvider>
@@ -53,9 +58,9 @@ const PreviewContainer = (): React.JSX.Element => {
           />
           }
         >
-          <Content loading={ isLoading }>
+          <Content>
             <PreviewView
-              src={ imageData.imageThumbnailPath! }
+              src={ previewImgUrl }
             />
           </Content>
         </ContentToolbarSidebarLayout>
