@@ -64,6 +64,8 @@ export const {
   useAssetGetTextDataByIdQuery,
   useAssetGetGridMutation,
   useAssetPatchByIdMutation,
+  useAssetExportZipAssetMutation,
+  useAssetExportZipFolderMutation,
   useAssetExportCsvAssetMutation,
   useAssetExportCsvFolderMutation,
   useAssetGetSavedGridConfigurationsQuery,
