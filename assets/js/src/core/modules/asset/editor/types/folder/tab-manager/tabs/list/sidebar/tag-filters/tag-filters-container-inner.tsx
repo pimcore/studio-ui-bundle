@@ -27,12 +27,16 @@ import { useListFilterOptions } from '@Pimcore/modules/asset/editor/types/folder
 export const TagFiltersContainerInner = (): React.JSX.Element => {
   const [checkedTagList, setCheckedTagList] = useState<string[]>([])
 
+  const { resetFilters, filterOptions, addOrUpdateFieldFilter } = useTagFilters()
   const { setFilterOptions } = useListFilterOptions()
-  const { resetFilters, filterOptions } = useTagFilters()
 
   const handleApplyClick = (): void => {
-    console.log('------ checkedTagList: ', checkedTagList)
+    const filterValue = {
+      considerChildTags: true,
+      tags: checkedTagList
+    }
 
+    addOrUpdateFieldFilter(filterValue)
     setFilterOptions(filterOptions)
   }
 

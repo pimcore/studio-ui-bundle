@@ -14,14 +14,11 @@
 import React from 'react'
 import { TagFiltersContainerInner } from './tag-filters-container-inner'
 import { TagFiltersProvider } from './tag-filters-provider'
-import { GridConfigProvider } from '../grid-config/grid-config-provider'
 
 export const TagFiltersContainer = (): React.JSX.Element => {
   return (
     <TagFiltersProvider>
-      <GridConfigProvider>
-        <TagFiltersContainerInner />
-      </GridConfigProvider>
+      <TagFiltersContainerInner />
     </TagFiltersProvider>
   )
 }

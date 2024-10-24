@@ -39,7 +39,9 @@ export const TagsTreeFiltersContainer = ({ setCheckedTagList }: { setCheckedTagL
   const treeData = createTreeStructure({ tags: tags.items })
 
   const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {
-    setCheckedTagList(checkedKeys.checked)
+    const formattedValue = checkedKeys.checked.map(Number)
+
+    setCheckedTagList(formattedValue)
   }
 
   return (
