@@ -15,6 +15,7 @@ import React, { type ReactNode, type Ref } from 'react'
 import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef } from 'antd'
 import { DropdownInner } from './dropdown-inner'
 import { SelectionProvider, SelectionType } from './selection/selection-provider'
+import { useStyle } from './dropdown.styles'
 
 export type OldItemType = Extract<MenuProps['items'], any[]>[0]
 export type OldMenuItemType = Extract<OldItemType, { danger?: boolean }>
@@ -37,6 +38,7 @@ export interface MenuItemGroupType extends Omit<OldMenuItemGroupType, 'children'
 export interface MenuItemCustomType extends Pick<MenuItemType, 'key'> {
   type: 'custom'
   component: ReactNode
+  hidden?: boolean
 }
 
 export type ItemType = MenuItemType | MenuItemGroupType | SubMenuItemType | MenuDividerType | MenuItemCustomType
@@ -53,12 +55,28 @@ export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'>
 }
 
 export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownProps): React.JSX.Element => {
-  const { selectable, multiple } = menu
+  const { styles } = useStyle()
+  const { selectable, multiple, items } = menu
   let selectionType = SelectionType.Disabled
 
   if (selectable === true) {
     selectionType = multiple === true ? SelectionType.Multiple : SelectionType.Single
   }
+
+  const filteredItems = items?.filter(function filterItems (item: ItemType) {
+    // @ts-expect-error - the prop exists trust me bro ;)
+    if (item?.hidden === true) {
+      return false
+    }
+
+    // @ts-expect-error - the prop exists trust me bro ;)
+    if (item?.children !== undefined) {
+      // @ts-expect-error - the prop exists trust me bro ;)
+      return (item.children = item.children.filter(filterItems)).length
+    }
+
+    return true
+  })
 
   return (
     <SelectionProvider
@@ -67,8 +85,12 @@ export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownPro
     >
       <DropdownInner
         { ...props }
-        menu={ menu }
+        menu={ {
+          ...menu,
+          items: filteredItems
+        } }
         onSelect={ onSelect }
+        overlayClassName={ styles.dropdown }
       />
     </SelectionProvider>
   )
