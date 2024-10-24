@@ -22,6 +22,7 @@ export const useStyle = createStyles(({ token, css }) => {
       align-items: center;
       height: 100%;
       width: 100%;
+      max-height: 100%;
       object-fit: contain;
 
       .ant-image {
@@ -46,6 +47,9 @@ export const useStyle = createStyles(({ token, css }) => {
       justify-content: flex-end;
       padding-left: 15px;
       padding-right: 15px;
+    `,
+    imageContainer: css`
+      max-height: 100%;
     `
   }
 }, { hashPriority: 'low' })
