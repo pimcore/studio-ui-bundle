@@ -15,8 +15,9 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
 import {
-  AssetDownloadZipApiArg,
-  useAssetPatchByIdMutation
+  type AssetDownloadZipApiArg,
+  useAssetPatchByIdMutation,
+  useAssetExportZipFolderMutation
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -25,7 +26,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import {api as assetApi, useAssetCreateZipMutation} from "@Pimcore/modules/asset/asset-api-slice-enhanced";
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export interface NodeAware {
   node?: TreeNodeProps
@@ -87,7 +88,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const { addJob } = useJobs()
   const [node, setNode] = useState<TreeNodeProps | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
-  const [fetchCreateZip] = useAssetCreateZipMutation()
+  const [exportZipFolder] = useAssetExportZipFolderMutation()
   const [assetPatch] = useAssetPatchByIdMutation()
 
   const lockAssetOrFolder = async ({ nodeId, lockType }: { nodeId: string, lockType: 'self' | 'propagate' | '' | 'unlockPropagate' }): Promise<void> => {
@@ -219,7 +220,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
             topics: [topics['zip-download-ready'], ...defaultTopics],
             downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
             action: async () => {
-              const promise = fetchCreateZip({ body: { items: [parseInt(node.id)] } })
+              const promise = exportZipFolder({ body: { folders: [parseInt(node.id)] } })
 
               promise.catch(() => {
                 console.error('Failed to create zip')
