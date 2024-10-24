@@ -206,7 +206,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       hidden: (node === undefined || node.type === 'folder'),
       onClick: () => {
         createZipDownload({
-          jobTitle: t('jobs.zip-job.title', { title: node!.label }),
+          jobTitle: node!.label,
           requestData: { body: { folders: [parseInt(node!.id)] } }
         })
       },
