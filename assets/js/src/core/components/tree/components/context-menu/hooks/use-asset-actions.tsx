@@ -14,12 +14,7 @@
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import {
-  type AssetDownloadZipApiArg,
-  useAssetPatchByIdMutation,
-  useAssetExportZipFolderMutation
-} from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
@@ -86,7 +81,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const dispatch = useAppDispatch()
   const [node, setNode] = useState<TreeNodeProps | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
-  const [exportZipFolder] = useAssetExportZipFolderMutation()
   const [assetPatch] = useAssetPatchByIdMutation()
   const { createZipDownload } = useZipDownload({ type: 'folder' })
 
@@ -205,7 +199,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
   const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = (props): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
     const { node, ...someProps } = props
 
-    // todo: move that to download (downloadAsZip) is only for folders
     return {
       label: t('element.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
@@ -213,10 +206,11 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       hidden: (node === undefined || node.type === 'folder'),
       onClick: () => {
         createZipDownload({
-          jobTitle: t('jobs.zip-job.title', { title: node.label }),
-          requestData: { body: { folders: [parseInt(node.id)] } }
+          jobTitle: t('jobs.zip-job.title', { title: node!.label }),
+          requestData: { body: { folders: [parseInt(node!.id)] } }
         })
-      }
+      },
+      ...someProps
     }
   }
 
