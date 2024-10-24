@@ -18,6 +18,7 @@ import { type nodeRef, TreeContext } from '../tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { type AssetPermissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface TreeNodeProps {
   id: string
@@ -26,6 +27,7 @@ export interface TreeNodeProps {
   internalKey: string
   children: TreeNodeProps[]
   level: number
+  permissions: AssetPermissions
   hasChildren?: boolean
   metaData?: any
   type?: string
@@ -38,6 +40,17 @@ const defaultProps: TreeNodeProps = {
   icon: 'folder',
   label: 'Node',
   children: [],
+  permissions: {
+    list: false,
+    view: false,
+    publish: false,
+    delete: false,
+    rename: false,
+    create: false,
+    settings: false,
+    versions: false,
+    properties: false
+  },
   level: 0
 }
 

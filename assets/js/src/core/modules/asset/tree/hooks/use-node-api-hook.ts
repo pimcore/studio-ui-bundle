@@ -53,6 +53,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         metaData: {
           asset: assetNode
         },
+        permissions: assetNode.permissions!,
         level: node.level + 1,
         ...(() => {
           if (node.level === -1) {
