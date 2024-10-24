@@ -16,16 +16,12 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
 import {
-  api as assetApi,
-  type AssetCreateZipApiResponse,
-  useAssetCreateZipMutation
+  api as assetApi
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 
 export interface NodeAware {
   node: TreeNodeProps | null
@@ -64,9 +60,8 @@ export interface UseAssetActionsHookReturn {
 export const useAssetActions = (): UseAssetActionsHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { addJob } = useJobs()
   const [nodeId, setNodeId] = useState<string | null>(null)
-  const [fetchCreateZip] = useAssetCreateZipMutation()
+  const { createZipDownload } = useZipDownload({ type: 'folder' })
 
   const addFolder = (): ItemType => {
     return {
@@ -146,23 +141,10 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       key: 'download-as-zip',
       icon: <Icon name={ 'file-download-zip-01' } />,
       onClick: () => {
-        addJob(createDownloadJob({
-          // @todo add api domain
-          title: t('jobs.zip-job.title', { title: node.label }),
-          topics: [topics['zip-download-ready'], ...defaultTopics],
-          downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
-          action: async () => {
-            const promise = fetchCreateZip({ body: { items: [parseInt(node.id)] } })
-
-            promise.catch(() => {
-              console.error('Failed to create zip')
-            })
-
-            const response = (await promise) as any
-            const data = response.data as AssetCreateZipApiResponse
-            return data.jobRunId
-          }
-        }))
+        createZipDownload({
+          jobTitle: t('jobs.zip-job.title', { title: node.label }),
+          requestData: { body: { folders: [parseInt(node.id)] } }
+        })
       }
     }
   }
