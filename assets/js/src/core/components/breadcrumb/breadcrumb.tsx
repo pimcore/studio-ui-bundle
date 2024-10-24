@@ -11,26 +11,55 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd'
+import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
+import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
+import { type BreadcrumbItemType, type ItemType } from 'antd/es/breadcrumb/Breadcrumb'
 import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
-import { useStyle } from './breadcrumb.styles'
+import cn from 'classnames'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
-import { type ElementType } from 'types/element-type.d'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Text } from '@Pimcore/components/text/text'
+import { useBreadcrumbSize } from './hooks/use-breadcrumb-size'
+import { type ElementType } from 'types/element-type.d'
+import { useStyle } from './breadcrumb.styles'
 
-export const Breadcrumb = ({ path, elementType }: { path: string, elementType: ElementType }): React.JSX.Element => {
-  const { styles } = useStyle()
-  const { openElement } = useElementHelper()
-  let items: NonNullable<BreadcrumbProps['items']> = []
+interface BreadcrumbProps {
+  path: string
+  elementType: ElementType
+  editorTabsWidth?: number
+  pageSize?: 'S' | 'L' | null
+}
+
+export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: BreadcrumbProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
-  function getBreadcrumbItems (path: string): BreadcrumbProps['items'] {
-    // split to check if it has more that just the key
-    const parts = path.split('/')
+  const [initialBreadcrumbLastElementWidth, setInitialBreadcrumbLastElementWidth] = useState<number>(0)
 
-    function onMenuItemClick (path: string): void {
+  const breadcrumbElementRef = useRef<HTMLSpanElement>(null)
+  const { openElement } = useElementHelper()
+
+  const { styles } = useStyle()
+
+  useEffect(() => {
+    if (initialBreadcrumbLastElementWidth === 0) {
+      const initialBreadcrumbWidth = breadcrumbElementRef?.current?.offsetWidth ?? 0
+
+      setInitialBreadcrumbLastElementWidth(initialBreadcrumbWidth)
+    }
+  }, [])
+
+  const { isHideBreadcrumb, currentBreadcrumbWidth } = useBreadcrumbSize(editorTabsWidth, initialBreadcrumbLastElementWidth)
+
+  let items: NonNullable<AntBreadcrumbProps['items']> = []
+
+  function getBreadcrumbItems (path: string): AntBreadcrumbProps['items'] {
+    // Split to check if it has more that just a single key
+    const partList = path.split('/')
+    const partListAmount = partList.length
+
+    // Handle click event for intermediate parts
+    const onMenuItemClick = (path: string): void => {
       const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
         elementType,
         elementPath: path
@@ -48,41 +77,83 @@ export const Breadcrumb = ({ path, elementType }: { path: string, elementType: E
         .catch(() => {})
     }
 
-    if (parts.length > 2) {
+    // Generate the breadcrumb text with ellipsis
+    const generateBreadcrumbText = ({ content, style, className }: { content: string, style?: CSSProperties, className?: string }): ReactElement => (
+      <Text
+        className={ cn(styles.breadcrumbLink, className) }
+        ellipsis={ { tooltip: { title: content, placement: 'top' } } }
+        style={ style }
+      >
+        {content}
+      </Text>
+    )
+
+    // Prepend the "..." menu to the existing items array
+    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemType[], items: BreadcrumbItemType[] }): ItemType[] => [
+      {
+        title: '...',
+        menu: { items: dotsMenuItems, className: styles.dropdownMenu }
+      },
+      ...items
+    ]
+
+    if (partListAmount > 2 && pageSize === 'L') {
       items.push({
-        title: parts[parts.length - 2],
+        title: generateBreadcrumbText({ content: partList[partListAmount - 2], style: { maxWidth: '100px' } }),
         className: styles.pathItem,
         onClick: () => {
-          onMenuItemClick(parts.slice(0, parts.length - 1).join('/'))
+          onMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
         }
       })
 
-      if (parts.length > 3) {
+      if (partListAmount > 3) {
         const dotsMenuItems: MenuItemType[] = []
-        for (let i = 1; i < parts.length - 2; i++) {
+        for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
             key: i,
             label: (
-              parts[i]
+              partList[i]
             ),
             onClick: () => {
-              onMenuItemClick(parts.slice(0, i + 1).join('/'))
+              onMenuItemClick(partList.slice(0, i + 1).join('/'))
             }
           })
         }
 
-        items = [
-          {
-            title: '...',
-            menu: { items: dotsMenuItems }
-          },
-          ...items
-        ]
+        items = addDotsMenu({ dotsMenuItems, items })
       }
     }
 
-    // key to breadcrumb
-    items.push({ title: parts[parts.length - 1] })
+    if (partListAmount > 2 && pageSize !== 'L') {
+      const dotsMenuItems: MenuItemType[] = []
+
+      for (let i = 1; i < partListAmount; i++) {
+        dotsMenuItems.push({
+          key: i,
+          label: (
+            partList[i]
+          ),
+          onClick: () => {
+            onMenuItemClick(partList.slice(0, i + 1).join('/'))
+          }
+        })
+      }
+
+      items = addDotsMenu({ dotsMenuItems, items })
+    }
+
+    // Add the last item of the breadcrumb
+    items.push({
+      title: (
+        <span ref={ breadcrumbElementRef }>
+          {generateBreadcrumbText({
+            content: partList[partListAmount - 1],
+            style: { ...(isHideBreadcrumb && { maxWidth: `${currentBreadcrumbWidth}px` }) },
+            className: styles.breadcrumbLinkLast
+          })}
+        </span>
+      )
+    })
 
     return items
   }
