@@ -57,30 +57,25 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
       return () => {
         scrollContainerRef.current?.removeEventListener('scroll', updateScrollState)
         resizeObserver.disconnect()
+        setScrollInterval(null)
       }
     }
   }, [])
 
-  const startScrollingLeft = (): void => {
+  const startScrolling = (direction: 'left' | 'right'): void => {
     if (scrollInterval === null) {
       const interval = setInterval(() => {
         if (scrollContainerRef.current !== null) {
-          scrollContainerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
+          const scrollOffset = direction === 'left' ? -scrollAmount : scrollAmount
+          scrollContainerRef.current.scrollBy({ left: scrollOffset, behavior: 'smooth' })
         }
       }, scrollSpeed)
       setScrollInterval(interval)
     }
   }
-  const startScrollingRight = (): void => {
-    if (scrollInterval === null) {
-      const interval = setInterval(() => {
-        if (scrollContainerRef.current !== null) {
-          scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' })
-        }
-      }, scrollSpeed)
-      setScrollInterval(interval)
-    }
-  }
+
+  const startScrollingLeft = (): void => { startScrolling('left') }
+  const startScrollingRight = (): void => { startScrolling('right') }
 
   const stopScrolling = (): void => {
     if (scrollInterval !== null) {
@@ -131,7 +126,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
         className={ styles.scroll }
         ref={ scrollContainerRef }
       >
-        {hideElement ? children : children}
+        {children}
       </Flex>
       {
                 scrollRequired && (
