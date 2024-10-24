@@ -20,7 +20,7 @@ import {
   useCreateTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
 
-export const TagsTreeFiltersContainer = ({ setCheckedTagList }: { setCheckedTagList: any }): React.JSX.Element => {
+export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, setCheckedKeys }: { addOrUpdateFieldFilter: (value: any) => void, checkedKeys: any, setCheckedKeys: any }): React.JSX.Element => {
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
     pageSize: 9999
@@ -39,9 +39,11 @@ export const TagsTreeFiltersContainer = ({ setCheckedTagList }: { setCheckedTagL
   const treeData = createTreeStructure({ tags: tags.items })
 
   const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {
-    const formattedValue = checkedKeys.checked.map(Number)
+    const checkedKeysList = checkedKeys.checked
+    const formattedValue = checkedKeysList.map(Number)
 
-    setCheckedTagList(formattedValue)
+    setCheckedKeys(checkedKeysList)
+    addOrUpdateFieldFilter(formattedValue)
   }
 
   return (
@@ -53,6 +55,7 @@ export const TagsTreeFiltersContainer = ({ setCheckedTagList }: { setCheckedTagL
         <Tree
           checkStrictly
           checkable
+          checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
           defaultExpandedKeys={ ['root'] }
           onCheck={ handleCheck }
           showIcon

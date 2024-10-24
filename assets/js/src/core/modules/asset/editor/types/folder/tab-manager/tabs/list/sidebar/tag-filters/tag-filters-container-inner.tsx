@@ -25,22 +25,22 @@ import { useTagFilters } from './hooks/use-tag-filters'
 import { useListFilterOptions } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 export const TagFiltersContainerInner = (): React.JSX.Element => {
-  const [checkedTagList, setCheckedTagList] = useState<string[]>([])
+  const [checkedKeys, setCheckedKeys] = useState([])
 
-  const { resetFilters, filterOptions, addOrUpdateFieldFilter } = useTagFilters()
-  const { setFilterOptions } = useListFilterOptions()
+  const { resetFilters, filterOptions: tagFilterOptions, addOrUpdateFieldFilter } = useTagFilters()
+  const { filterOptions, setFilterOptions } = useListFilterOptions()
+
+  console.log('----- GENERAL filterOptions: ', filterOptions)
+  console.log('----- tagFilterOptions: ', tagFilterOptions)
 
   const handleApplyClick = (): void => {
-    const filterValue = {
-      considerChildTags: true,
-      tags: checkedTagList
-    }
-
-    addOrUpdateFieldFilter(filterValue)
-    setFilterOptions(filterOptions)
+    setFilterOptions(tagFilterOptions)
   }
 
-  const handleResetAllFiltersClick = (): void => { resetFilters() }
+  const handleResetAllFiltersClick = (): void => {
+    setCheckedKeys([])
+    resetFilters()
+  }
 
   return (
     <ContentToolbarSidebarLayout
@@ -69,7 +69,11 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
       >
         <Title>Tag Filters</Title>
 
-        <TagsTreeFiltersContainer setCheckedTagList={ setCheckedTagList } />
+        <TagsTreeFiltersContainer
+          addOrUpdateFieldFilter={ addOrUpdateFieldFilter }
+          checkedKeys={ checkedKeys }
+          setCheckedKeys={ setCheckedKeys }
+        />
       </Content>
 
     </ContentToolbarSidebarLayout>

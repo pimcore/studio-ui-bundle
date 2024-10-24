@@ -13,19 +13,10 @@
 
 import { useContext } from 'react'
 import { defaultTagFiltersOptions, TagFiltersContext, type ITagFiltersContext } from '../tag-filters-provider'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface UseFiltersHookReturn extends ITagFiltersContext {
   addOrUpdateFieldFilter: (value: any) => void
   resetFilters: () => void
-}
-
-export interface FieldFilter {
-  type: string
-  filterValue: {
-    considerChildTags: boolean
-    tags: string[]
-  }
 }
 
 const TYPE = 'system.tag'
@@ -33,34 +24,19 @@ const TYPE = 'system.tag'
 export const useTagFilters = (): UseFiltersHookReturn => {
   const { filterOptions, setFilterOptions } = useContext(TagFiltersContext)
 
-  function resetFilters (): void {
-    setFilterOptions(defaultTagFiltersOptions)
-  }
+  const resetFilters = (): void => { setFilterOptions(defaultTagFiltersOptions) }
 
-  function addOrUpdateFieldFilter (value: any): void {
-    const fieldFilters = filterOptions.columnFilters
-    let newFilters: FieldFilter[] = []
-
-    if (isEmptyValue(fieldFilters)) {
-      newFilters = [{
-        type: TYPE,
-        filterValue: value
-      }]
-
-      setFilterOptions((filterOptions) => {
-        return {
-          ...filterOptions,
-          columnFilters: newFilters
-        }
-      })
-
-      return
-    }
-
+  const addOrUpdateFieldFilter = (value: any): void => {
     setFilterOptions((filterOptions) => {
       return {
         ...filterOptions,
-        columnFilters: newFilters
+        columnFilters: [{
+          type: TYPE,
+          filterValue: {
+            considerChildTags: true,
+            tags: value
+          }
+        }]
       }
     })
   }
