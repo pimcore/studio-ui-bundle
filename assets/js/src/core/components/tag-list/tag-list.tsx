@@ -22,9 +22,16 @@ export interface TagListProps {
   itemGap?: GapType
   tagListClassNames?: string
   tagListItemClassNames?: string
+  wrap?: boolean
 }
 
-export const TagList = ({ list, itemGap, tagListClassNames, tagListItemClassNames }: TagListProps): React.JSX.Element => {
+export const TagList = ({
+  list,
+  itemGap,
+  tagListClassNames,
+  tagListItemClassNames,
+  wrap = true
+}: TagListProps): React.JSX.Element => {
   return (
     <Flex
       gap="small"
@@ -36,7 +43,7 @@ export const TagList = ({ list, itemGap, tagListClassNames, tagListItemClassName
           gap={ itemGap }
           key={ groupIndex }
           rootClassName={ cn(tagListItemClassNames) }
-          wrap
+          wrap={ wrap }
         >
           {group.map((item, itemIndex) => (
             <Tag
