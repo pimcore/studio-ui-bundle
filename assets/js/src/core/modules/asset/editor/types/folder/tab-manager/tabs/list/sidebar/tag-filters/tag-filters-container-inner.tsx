@@ -25,14 +25,13 @@ import { useTagFilters } from './hooks/use-tag-filters'
 import { useListFilterOptions } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 export const TagFiltersContainerInner = (): React.JSX.Element => {
+  // Set state to visualize it in the Tree
   const [checkedKeys, setCheckedKeys] = useState([])
 
-  const { resetFilters, filterOptions: tagFilterOptions, addOrUpdateFieldFilter } = useTagFilters()
+  const { filterOptions, addOrUpdateFieldFilter, resetFilters } = useTagFilters()
   const { setFilterOptions } = useListFilterOptions()
 
-  const handleApplyClick = (): void => {
-    setFilterOptions('tags', tagFilterOptions)
-  }
+  const handleApplyClick = (): void => { setFilterOptions('tags', filterOptions) }
 
   const handleResetAllFiltersClick = (): void => {
     setCheckedKeys([])

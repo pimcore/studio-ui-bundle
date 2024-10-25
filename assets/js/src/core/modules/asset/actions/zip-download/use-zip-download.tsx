@@ -12,7 +12,7 @@
 */
 
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { type AssetExportZipAssetApiArg, type AssetExportZipAssetApiResponse, type AssetExportZipFolderApiArg, type AssetExportZipFolderApiResponse, useAssetExportZipAssetMutation, useAssetExportZipFolderMutation } from '../../asset-api-slice-enhanced'
+import { type AssetExportZipAssetApiArg, type AssetExportZipFolderApiArg, useAssetExportZipAssetMutation, useAssetExportZipFolderMutation } from '../../asset-api-slice-enhanced'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { useTranslation } from 'react-i18next'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
@@ -67,6 +67,8 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
         })
 
         const response = (await promise)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const data = response.data
         return data.jobRunId
       }

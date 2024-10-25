@@ -30,9 +30,9 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
 
-  const onApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
+  const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
-  const onResetAllFiltersClick = (): void => { resetFilters() }
+  const handleResetAllFiltersClick = (): void => { resetFilters() }
 
   return (
     <ContentToolbarSidebarLayout
@@ -40,14 +40,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
         <Toolbar theme='secondary'>
           <IconTextButton
             icon='close'
-            onClick={ onResetAllFiltersClick }
+            onClick={ handleResetAllFiltersClick }
             type='link'
           >
             Clear all filters
           </IconTextButton>
 
           <Button
-            onClick={ onApplyClick }
+            onClick={ handleApplyClick }
             type='primary'
           >
             Apply

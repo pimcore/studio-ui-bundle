@@ -25,7 +25,6 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
     page: 1,
     pageSize: 9999
   })
-
   const { createTreeStructure } = useCreateTreeStructure()
 
   if (tagsLoading) {
@@ -40,9 +39,14 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
 
   const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {
     const checkedKeysList = checkedKeys.checked
-    const formattedValue = checkedKeysList.map(Number)
 
+    // Remove the parent element in the Tree
+    const filteredList = checkedKeysList.filter(item => item !== 'root')
+    const formattedValue = filteredList?.map(Number)
+
+    // Set state for visualization in the Tree
     setCheckedKeys(checkedKeysList)
+    // Set state for filtering in the Grid
     addOrUpdateFieldFilter(formattedValue)
   }
 
