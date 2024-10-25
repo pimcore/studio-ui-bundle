@@ -42,12 +42,13 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
 
     // Remove the parent element in the Tree
     const filteredList = checkedKeysList.filter(item => item !== 'root')
+    const isEmptyList = filteredList.length === 0
     const formattedValue = filteredList?.map(Number)
 
     // Set state for visualization in the Tree
     setCheckedKeys(checkedKeysList)
     // Set state for filtering in the Grid
-    addOrUpdateFieldFilter(formattedValue)
+    !isEmptyList && addOrUpdateFieldFilter(formattedValue)
   }
 
   return (
