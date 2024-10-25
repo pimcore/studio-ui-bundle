@@ -13,7 +13,8 @@
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { defaultFilterOptions, type FilterOptions } from './sidebar/filters/filter-provider'
+import { type FilterOptions } from './types/filterTypes'
+import { defaultFilterOptions } from './constants/filters'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 
 export interface IListGridConfigContext {

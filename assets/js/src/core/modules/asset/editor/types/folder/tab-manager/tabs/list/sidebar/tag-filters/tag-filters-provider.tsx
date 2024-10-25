@@ -12,31 +12,20 @@
 */
 
 import React, { createContext, useMemo, useState } from 'react'
-import { type GridFilter } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type FilterOptions, type IFilterContext } from '../../types/filterTypes'
+import { defaultFilterOptions } from '../../constants/filters'
 
-export type TagFiltersOptions = Pick<GridFilter, 'columnFilters' | 'includeDescendants'>
-
-export interface ITagFiltersContext {
-  filterOptions: TagFiltersOptions
-  setFilterOptions: React.Dispatch<React.SetStateAction<TagFiltersOptions>>
-}
-
-export const defaultTagFiltersOptions: TagFiltersOptions = {
-  columnFilters: [],
-  includeDescendants: true
-}
-
-export const TagFiltersContext = createContext<ITagFiltersContext>({
-  filterOptions: defaultTagFiltersOptions,
+export const TagFiltersContext = createContext<IFilterContext>({
+  filterOptions: defaultFilterOptions,
   setFilterOptions: () => {}
 })
 
-export interface FilterProviderProps {
+interface FilterProviderProps {
   children: React.ReactNode
 }
 
 export const TagFiltersProvider = ({ children }: FilterProviderProps): React.JSX.Element => {
-  const [filterOptions, setFilterOptions] = useState<TagFiltersOptions>(defaultTagFiltersOptions)
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
 
   return useMemo(() => (
     <TagFiltersContext.Provider value={ { filterOptions, setFilterOptions } }>
