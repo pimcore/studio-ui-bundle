@@ -43,7 +43,7 @@ const PreviewContainer = (): React.JSX.Element => {
     setZoom
   }), [zoom])
   const previewImgUrl = `${getPrefix()}/assets/${id}/image/stream/preview`
-  console.log('isLoading', isLoading)
+
   if (isLoading) {
     return <Content loading />
   }
