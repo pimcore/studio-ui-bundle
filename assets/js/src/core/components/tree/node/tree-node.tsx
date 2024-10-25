@@ -26,6 +26,7 @@ export interface TreeNodeProps {
   internalKey: string
   children: TreeNodeProps[]
   level: number
+  isLocked: boolean
   hasChildren?: boolean
   metaData?: any
   type?: string
@@ -38,7 +39,8 @@ const defaultProps: TreeNodeProps = {
   icon: 'folder',
   label: 'Node',
   children: [],
-  level: 0
+  level: 0,
+  isLocked: false
 }
 
 const { useToken } = theme

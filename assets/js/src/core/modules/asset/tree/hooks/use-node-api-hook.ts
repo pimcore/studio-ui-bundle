@@ -50,6 +50,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         parentId: assetNode.parentId.toString(),
         children: [],
         hasChildren: assetNode.hasChildren,
+        isLocked: assetNode.isLocked,
         metaData: {
           asset: assetNode
         },
