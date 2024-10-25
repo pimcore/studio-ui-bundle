@@ -72,7 +72,11 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <ContextMenu />
-      <Flex vertical={ false }>
+      <Flex
+        className='overflow-x-auto'
+        style={ { height: '32px' } }
+        vertical={ false }
+      >
         <EditorToolbarWorkflowMenu />
         <Button
           disabled={ !hasChanges || isLoading || isSchedulesLoading }

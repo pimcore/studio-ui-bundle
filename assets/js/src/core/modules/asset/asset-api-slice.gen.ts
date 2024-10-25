@@ -38,14 +38,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
                 providesTags: ["Assets"],
             }),
-            assetCreateZip: build.mutation<AssetCreateZipApiResponse, AssetCreateZipApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/zip/create`,
-                    method: "POST",
-                    body: queryArg.body,
-                }),
-                invalidatesTags: ["Assets"],
-            }),
             assetDownloadCsv: build.query<AssetDownloadCsvApiResponse, AssetDownloadCsvApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/download/csv/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
@@ -83,6 +75,22 @@ const injectedRtkApi = api
             assetExportCsvFolder: build.mutation<AssetExportCsvFolderApiResponse, AssetExportCsvFolderApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/export/csv/folder`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
+            }),
+            assetExportZipAsset: build.mutation<AssetExportZipAssetApiResponse, AssetExportZipAssetApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/export/zip/asset`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Assets"],
+            }),
+            assetExportZipFolder: build.mutation<AssetExportZipFolderApiResponse, AssetExportZipFolderApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/export/zip/folder`,
                     method: "POST",
                     body: queryArg.body,
                 }),
@@ -345,15 +353,6 @@ export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
 };
-export type AssetCreateZipApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
-export type AssetCreateZipApiArg = {
-    body: {
-        items?: number[];
-    };
-};
 export type AssetDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
 export type AssetDownloadCsvApiArg = {
     /** JobRunId of the JobRun */
@@ -434,6 +433,27 @@ export type AssetExportCsvFolderApiArg = {
                 | "\r\n"
                 | "array";
         };
+    };
+};
+export type AssetExportZipAssetApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetExportZipAssetApiArg = {
+    body: {
+        assets?: number[];
+    };
+};
+export type AssetExportZipFolderApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type AssetExportZipFolderApiArg = {
+    body: {
+        folders?: number[];
+        filters?: GridFilter;
     };
 };
 export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
@@ -1052,7 +1072,6 @@ export const {
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
     useAssetDocumentStreamPreviewQuery,
-    useAssetCreateZipMutation,
     useAssetDownloadCsvQuery,
     useAssetDeleteCsvMutation,
     useAssetDownloadZipQuery,
@@ -1060,6 +1079,8 @@ export const {
     useAssetDownloadByIdQuery,
     useAssetExportCsvAssetMutation,
     useAssetExportCsvFolderMutation,
+    useAssetExportZipAssetMutation,
+    useAssetExportZipFolderMutation,
     useAssetGetByIdQuery,
     useAssetUpdateByIdMutation,
     useAssetDeleteGridConfigurationByConfigurationIdMutation,

@@ -16,13 +16,8 @@ import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useListSelectedRows } from '../../hooks/use-list'
 import {
-  type AssetCreateZipApiResponse,
-  useAssetCreateZipMutation,
   useAssetGetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { createJob as createDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
@@ -33,16 +28,17 @@ import {
 import {
   BatchEditModal
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
   const numberedSelectedRows = Object.keys(selectedRows).map(Number)
   const hasSelectedItems = Object.keys(selectedRows).length > 0
-  const [fetchCreateZip] = useAssetCreateZipMutation()
+  const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
+  const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
   const { id } = useAsset()
   const { data } = useAssetGetByIdQuery({ id })
   const [jobTitle, setJobTitle] = useState<string>('Asset')
-  const { addJob } = useJobs()
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const { t } = useTranslation()
@@ -112,22 +108,10 @@ export const GridActions = (): React.JSX.Element => {
   )
 
   function createZip (): void {
-    addJob(createDownloadJob({
-      // @todo add api domain
-      title: t('jobs.zip-job.title', { title: jobTitle }),
-      topics: [topics['zip-download-ready'], ...defaultTopics],
-      downloadUrl: '/pimcore-studio/api/assets/download/zip/{jobRunId}',
-      action: async () => {
-        const promise = fetchCreateZip({ body: { items: numberedSelectedRows } })
-
-        promise.catch(() => {
-          console.error('Failed to create zip')
-        })
-
-        const response = (await promise) as any
-        const data = response.data as AssetCreateZipApiResponse
-        return data.jobRunId
-      }
-    }))
+    if (hasSelectedItems) {
+      createZipAssetListDownload({ jobTitle, requestData: { body: { assets: numberedSelectedRows } } })
+    } else {
+      createZipFolderDownload({ jobTitle, requestData: { body: { folders: [id] } } })
+    }
   }
 }

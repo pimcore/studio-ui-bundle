@@ -15,34 +15,13 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    breadcrumb: css`
-      .ant-dropdown-trigger {
-        cursor: pointer;
-        
-        > span[role="img"] {
-          display: none
-        }
+    dropdown: css`
+      .ant-dropdown-menu-submenu {
+          .ant-dropdown-menu-submenu-title {
+              display: flex;
+              align-items: center;
+          }
       }
-    `,
-
-    breadcrumbLink: css`
-      color: ${token.colorTextTertiary};
-    `,
-
-    breadcrumbLinkLast: css`
-      color: ${token.colorText};
-    `,
-
-    pathItem: css`
-       cursor: pointer;
-       
-       &:hover {
-         color: ${token.colorPrimaryHover};
-       }
-    `,
-
-    dropdownMenu: css`
-      max-width: 400px;
     `
   }
 })

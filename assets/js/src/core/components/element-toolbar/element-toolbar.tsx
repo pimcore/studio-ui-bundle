@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useStyle } from '@Pimcore/components/element-toolbar/element-toolbar.styles'
 import { Button, Space } from 'antd'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
@@ -20,10 +20,20 @@ import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { type ElementType } from 'types/element-type.d'
 
-export const ElementToolbar = ({ id, elementType }: { id: number, elementType: ElementType }): React.JSX.Element => {
+export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
+  const elementRef = useRef<HTMLDivElement>(null)
+
   const { styles } = useStyle()
 
   const { element } = useElementDraft(id, elementType)
+
+  const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
+
+  useLayoutEffect(() => {
+    if (editorTabsWidth == null) return
+
+    editorTabsWidth <= 800 ? setEditorTabsBlockSize('S') : setEditorTabsBlockSize('L')
+  }, [editorTabsWidth])
 
   if (element === undefined) {
     return <></>
@@ -61,10 +71,15 @@ export const ElementToolbar = ({ id, elementType }: { id: number, elementType: E
   ]
 
   return (
-    <div className={ styles.toolbar }>
+    <div
+      className={ styles.toolbar }
+      ref={ elementRef }
+    >
 
       <Breadcrumb
+        editorTabsWidth={ editorTabsWidth }
         elementType={ elementType }
+        pageSize={ editorTabsBlockSize }
         path={ element.fullPath! }
       />
 

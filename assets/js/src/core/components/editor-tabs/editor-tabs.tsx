@@ -11,15 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type FocusEvent, useEffect, useState } from 'react'
+import React, { type FocusEvent, useEffect, useState, useRef } from 'react'
 import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
 import { Tabs } from 'antd'
+import cn from 'classnames'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { type IDetachTab, useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
 import { IconButton } from '../icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -38,6 +40,10 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
+
+  const elementRef = useRef<HTMLDivElement>(null)
+
+  const editorTabsWidth = useElementResize(elementRef)
 
   useEffect(() => {
     if (activeTabKey === null && items.length > 0) {
@@ -108,21 +114,27 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   })
 
   return (
-    <>
+    <div
+      className={ styles.editorTabsContainer }
+      ref={ elementRef }
+    >
       <Tabs
-        className={ `${styles.editorTabs} ${(showLabelIfActive === true) ? styles.onlyActiveLabel : ''}` }
+        className={ cn(styles.editorTabs, { [styles.onlyActiveLabel]: showLabelIfActive }) }
         defaultActiveKey={ defaultActiveKey }
         items={ items }
         onBlur={ onBlur }
         onFocus={ onFocus }
         onTabClick={ onChange }
         tabBarExtraContent={ {
-          left: <ElementToolbar
-            elementType={ elementType }
-            id={ id }
-                />
+          left: (
+            <ElementToolbar
+              editorTabsWidth={ editorTabsWidth }
+              elementType={ elementType }
+              id={ id }
+            />
+          )
         } }
       />
-    </>
+    </div>
   )
 }
