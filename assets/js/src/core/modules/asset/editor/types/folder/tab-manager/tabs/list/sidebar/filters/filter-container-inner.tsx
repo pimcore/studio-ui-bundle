@@ -30,6 +30,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
 
+  const onApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
+
+  const onResetAllFiltersClick = (): void => { resetFilters() }
+
   return (
     <ContentToolbarSidebarLayout
       renderToolbar={
@@ -88,12 +92,4 @@ export const FilterContainerInner = (): React.JSX.Element => {
       </Content>
     </ContentToolbarSidebarLayout>
   )
-
-  function onApplyClick (): void {
-    setFilterOptions(filterOptions)
-  }
-
-  function onResetAllFiltersClick (): void {
-    resetFilters()
-  }
 }

@@ -28,13 +28,10 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
   const [checkedKeys, setCheckedKeys] = useState([])
 
   const { resetFilters, filterOptions: tagFilterOptions, addOrUpdateFieldFilter } = useTagFilters()
-  const { filterOptions, setFilterOptions } = useListFilterOptions()
-
-  console.log('----- GENERAL filterOptions: ', filterOptions)
-  console.log('----- tagFilterOptions: ', tagFilterOptions)
+  const { setFilterOptions } = useListFilterOptions()
 
   const handleApplyClick = (): void => {
-    setFilterOptions(tagFilterOptions)
+    setFilterOptions('tags', tagFilterOptions)
   }
 
   const handleResetAllFiltersClick = (): void => {

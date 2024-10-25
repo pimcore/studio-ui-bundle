@@ -88,10 +88,14 @@ export const ListColumnsProvider = ({ children }: ListColumnsProviderProps): Rea
   ), [columns, children])
 }
 
+type FilterOptionsMap = Record<string, FilterOptions>
+
 export interface IListFilterOptionsContext {
   filterOptions: FilterOptions
-  setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
+  setFilterOptions: (key: string, filterOptions: FilterOptions) => void
 }
+
+const defaultFilterOptionsMap: FilterOptionsMap = {}
 
 export const ListFilterOptionsContext = createContext<IListFilterOptionsContext>({
   filterOptions: defaultFilterOptions,
@@ -103,7 +107,20 @@ export interface ListFilterOptionsProviderProps {
 }
 
 export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProviderProps): React.JSX.Element => {
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
+  const [filterOptionsMap, setFilterOptionsMap] = useState<FilterOptionsMap>(defaultFilterOptionsMap)
+
+  const setFilterOptions = (key: string, newFilterOptions: FilterOptions): void => {
+    setFilterOptionsMap((prev) => ({
+      ...prev,
+      [key]: newFilterOptions
+    }))
+  }
+
+  const filterOptions = useMemo(() => Object.values(filterOptionsMap).reduce((acc, curr) => {
+    acc.columnFilters = [...acc.columnFilters as [], ...curr.columnFilters as []]
+
+    return acc
+  }, { columnFilters: [], includeDescendants: true }), [filterOptionsMap])
 
   return useMemo(() => (
     <ListFilterOptionsContext.Provider value={ { filterOptions, setFilterOptions } }>
