@@ -18,9 +18,7 @@ import {
   type GridColumnConfiguration,
   type GridFilter
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import {
-  type FilterOptions
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/filter-provider'
+import { type FilterOptions } from '../types/filterTypes'
 
 interface GenerateQueryArgsForGridProps {
   columns: GridColumnConfiguration[]
