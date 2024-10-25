@@ -15,7 +15,9 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
-  'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry'
+  'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
+  'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
+  'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry'
 }
 
 export const serviceIds = {
@@ -85,6 +87,12 @@ export const serviceIds = {
   'DynamicTypes/Metadata/Checkbox': 'DynamicTypes/Metadata/Checkbox',
   'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
   'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
+
+  // Object layout
+  'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',
+
+  // Object data
+  'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

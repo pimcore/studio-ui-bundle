@@ -48,6 +48,10 @@ import { type DynamicTypeMetaDataInput } from './defintinitions/meta-data/types/
 import { type DynamicTypeMetaDataObject } from './defintinitions/meta-data/types/dynamic-type-meta-data-object'
 import { type DynamicTypeMetaDataSelect } from './defintinitions/meta-data/types/dynamic-type-meta-data-select'
 import { type DynamicTypeMetaDataTextarea } from './defintinitions/meta-data/types/dynamic-type-meta-data-textarea'
+import { type DynamicTypeObjectLayoutRegistry } from './defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
+import { type DynamicTypeObjectLayoutPanel } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-panel'
+import { type DynamicTypeObjectDataRegistry } from './defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-related/types/dynamic-type-object-layout-input'
 
 moduleSystem.registerModule({
   onInit () {
@@ -90,5 +94,13 @@ moduleSystem.registerModule({
     metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataObject>(serviceIds['DynamicTypes/Metadata/Object']))
     metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataSelect>(serviceIds['DynamicTypes/Metadata/Select']))
     metadataRegistry.registerDynamicType(container.get<DynamicTypeMetaDataTextarea>(serviceIds['DynamicTypes/Metadata/Textarea']))
+
+    const objectLayoutRegistry = container.get<DynamicTypeObjectLayoutRegistry>(serviceIds['DynamicTypes/ObjectLayoutRegistry'])
+
+    objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutPanel>(serviceIds['DynamicTypes/ObjectLayout/Panel']))
+
+    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
   }
 })
