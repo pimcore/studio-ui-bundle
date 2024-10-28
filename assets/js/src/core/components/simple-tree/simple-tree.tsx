@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key } from 'react'
+import React, { useEffect, useState, type Key } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -25,23 +25,37 @@ export interface TreeDataItem extends TreeDataNode {
 interface SimpleTreeProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  defaultExpandedKeys?: string[]
   onCheck?: (checkedKeys: any) => void
   onActionsClick?: (key: any, action: string) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
-  onLoadData?: (node) => Promise<any>
+  onLoadData?: (node: any) => Promise<any>
   withCustomSwitcherIcon?: boolean
   isHideRootChecker?: boolean
 }
 
-const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, withCustomSwitcherIcon, isHideRootChecker = true, ...props }: SimpleTreeProps): React.JSX.Element => {
+const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
+  const {
+    checkStrictly,
+    checkedKeys,
+    treeData,
+    className,
+    defaultExpandedKeys,
+    onCheck,
+    onActionsClick,
+    onDragAndDrop,
+    onSelected,
+    onLoadData,
+    withCustomSwitcherIcon,
+    isHideRootChecker = true
+  } = props
+
   const { styles } = useStyles({ isHideRootChecker })
 
-  const [selectedKeys, setSelectedKeys] = React.useState<Key[]>([])
-  const [expandedKeys, setExpandedKeys] = React.useState<Key[]>(defaultExpandedKeys ?? [])
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     setExpandedKeys(defaultExpandedKeys ?? [])
   }, [defaultExpandedKeys])
 
@@ -62,7 +76,9 @@ const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActio
   return (
     <Tree
       blockNode
+      checkStrictly={ checkStrictly }
       checkable={ onCheck !== undefined }
+      checkedKeys={ checkedKeys }
       className={ cn(styles.treeContainer, className) }
       draggable
       expandedKeys={ expandedKeys }

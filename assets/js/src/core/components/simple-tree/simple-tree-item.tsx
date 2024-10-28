@@ -41,23 +41,39 @@ const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }
         menu={ { items } }
         trigger={ ['contextMenu'] }
       >
-        <button
+        <span
           className={ 'ant-tree-title__btn' }
           onClick={ onSelected }
-          type="button"
+          onKeyDown={ (event) => {
+            if (event.key === 'Enter' || event.key === 'Escape') {
+              if (onSelected != null) {
+                onSelected()
+              }
+            }
+          } }
+          role="button"
+          tabIndex={ 0 }
         >
           {title}
-        </button>
+        </span>
       </Dropdown>
       )
     : (
-      <button
+      <span
         className={ 'ant-tree-title__btn' }
         onClick={ onSelected }
-        type="button"
+        onKeyDown={ (event) => {
+          if (event.key === 'Enter' || event.key === 'Escape') {
+            if (onSelected != null) {
+              onSelected()
+            }
+          }
+        } }
+        role="button"
+        tabIndex={ 0 }
       >
         {title}
-      </button>
+      </span>
       )
 }
 

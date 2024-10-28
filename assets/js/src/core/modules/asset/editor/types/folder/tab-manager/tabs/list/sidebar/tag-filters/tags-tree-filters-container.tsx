@@ -55,7 +55,6 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
       >
         <SimpleTree
           checkStrictly
-          checkable
           checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
           defaultExpandedKeys={ ['root'] }
           onCheck={ handleCheck }
