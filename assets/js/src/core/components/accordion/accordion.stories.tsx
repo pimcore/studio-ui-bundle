@@ -102,6 +102,19 @@ export const CollapseDisabled = {
   }
 }
 
+export const Bordered = {
+  args: {
+    bordered: true,
+    size: 'small',
+    items: [{
+      key: '1',
+      title: <>Lorem ipsum</>,
+      info: 'ID: 3',
+      children: <p>aasdf</p>,
+    }]
+  }
+}
+
 export const Ghost = {
   args: {
     items,
