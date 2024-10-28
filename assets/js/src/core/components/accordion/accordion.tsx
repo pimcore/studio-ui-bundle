@@ -114,7 +114,7 @@ export const Accordion = ({
           {expandIconPosition === 'after-title' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}
 
-          <span className="accordion-item__header-info">{item.info && item.info}</span>
+          <span className="accordion-item__header-info">{item.info !== null && item.info}</span>
         </Flex>
         {item.subtitle}
       </>,
