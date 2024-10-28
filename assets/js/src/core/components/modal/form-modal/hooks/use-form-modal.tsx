@@ -106,10 +106,9 @@ export function withInput (props: InputFormModalProps): ModalFuncProps {
             resolve(value)
           })
           .catch(() => {
-            reject(new Error('Form validation failed'))
+            reject(new Error('Invalid form'))
           })
       })
-      // props.onOk?.(value)
     },
     modalRender: (node) => {
       if (inputRef.current !== null) {
