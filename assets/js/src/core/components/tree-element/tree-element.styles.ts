@@ -13,14 +13,18 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }) => {
+interface IStylesProps {
+  isHideRootChecker?: boolean
+}
+
+export const useStyles = createStyles(({ css }, props: IStylesProps) => {
   return {
     treeContainer: css`
       .ant-tree-list-holder-inner {
         .ant-tree-treenode-leaf-last {
           &:first-child {
             .ant-tree-checkbox {
-              display: none;
+              display: ${(props.isHideRootChecker === true) ? 'none' : 'block'};
             }
           }
         }
@@ -30,6 +34,22 @@ export const useStyles = createStyles(({ css }) => {
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      
+      .ant-tree-switcher_close {
+        .ant-tree-switcher-icon {
+          svg {
+            transform: rotate(0deg);
+          }
+        }
+      }
+
+      .ant-tree-switcher_open {
+        .ant-tree-switcher-icon {
+          svg {
+            transform: rotate(-180deg);
+          }
+        }
       }
     `
   }
