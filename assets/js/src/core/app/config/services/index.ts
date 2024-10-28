@@ -67,6 +67,9 @@ import { DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynami
 import { DynamicTypeObjectLayoutPanel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-panel'
 import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { DynamicTypeObjectDataInput } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-layout-input'
+import { DynamicTypeObjectLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
+import { DynamicTypeObjectLayoutAccordion } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
+import { DynamicTypeObjectLayoutRegion } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-region'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -138,6 +141,9 @@ container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaD
 // Object layout
 container.bind(serviceIds['DynamicTypes/ObjectLayoutRegistry']).to(DynamicTypeObjectLayoutRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectLayout/Panel']).to(DynamicTypeObjectLayoutPanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Tabpanel']).to(DynamicTypeObjectLayoutTabpanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Accordion']).to(DynamicTypeObjectLayoutAccordion).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Region']).to(DynamicTypeObjectLayoutRegion).inSingletonScope()
 
 container.bind(serviceIds['DynamicTypes/ObjectDataRegistry']).to(DynamicTypeObjectDataRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Input']).to(DynamicTypeObjectDataInput).inSingletonScope()

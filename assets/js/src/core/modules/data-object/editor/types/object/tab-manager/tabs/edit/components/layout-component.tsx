@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type React from 'react'
+import React from 'react'
 import { type ObjectComponentProps } from './object-component'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -20,13 +20,18 @@ import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/d
 export interface LayoutComponentProps extends ObjectComponentProps {
   name: string
   datatype: 'layout'
+  fieldtype: string
   [p: string]: any
 }
 
 export const LayoutComponent = (props: LayoutComponentProps): React.JSX.Element => {
   const layoutTypeRegistry = useInjection<DynamicTypeObjectLayoutRegistry>(serviceIds['DynamicTypes/ObjectLayoutRegistry'])
-  // @todo handle all the different layout types here
-  const layoutType = layoutTypeRegistry.getDynamicType('panel')
 
+  if (!layoutTypeRegistry.hasDynamicType(props.fieldtype)) {
+    // @todo should throw an error in the future after the implementation of all layout types
+    return (<div>Unknown layout type: {props.fieldtype}</div>)
+  }
+
+  const layoutType = layoutTypeRegistry.getDynamicType(props.fieldtype)
   return layoutType.getObjectLayoutComponent(props)
 }

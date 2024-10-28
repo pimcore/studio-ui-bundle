@@ -13,20 +13,31 @@
 
 import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
+import { Accordion as BaseAccordion, type AccordionProps as BaseAccordionProps } from '@Pimcore/components/accordion/accordion'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Box } from '@Pimcore/components/box/box'
 
-export interface PanelProps extends AbstractObjectLayoutDefinition {}
+export interface AccordionProps extends AbstractObjectLayoutDefinition {}
 
-export const Panel = ({ children, name }: PanelProps): React.JSX.Element => {
+export const Accordion = ({ children, name }: AccordionProps): React.JSX.Element => {
+  const items: BaseAccordionProps['items'] = children.map((child, index) => ({
+    key: child.name,
+    title: child.title,
+    forceRender: true,
+    children: (
+      <ObjectComponent
+        { ...child }
+        key={ child.name }
+      />
+    )
+  }))
+
   return (
-    <Box padding={ name !== 'pimcore_root' ? { x: 'small', y: 'small' } : undefined }>
-      {children.map((child, index) => (
-        <ObjectComponent
-          { ...child }
-          key={ child.name }
-        />
-      ))}
+    <Box padding={ { x: 'small', y: 'small' } }>
+      <BaseAccordion
+        items={ items }
+        spaced
+      />
     </Box>
   )
 }

@@ -23,14 +23,17 @@ interface RootComponentProps {
 
 export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element => {
   return (
-    <Form onFinish={ onFinish }>
+    <Form
+      layout='vertical'
+      onFinish={ onFinish }
+    >
       <ObjectComponent { ...layout } />
 
-      <Form.Item>
+      <Form.Item style={ { margin: 12 } }>
         <Button
           htmlType="submit"
           type="primary"
-        >Submit</Button>
+        >Test submission</Button>
       </Form.Item>
     </Form>
   )

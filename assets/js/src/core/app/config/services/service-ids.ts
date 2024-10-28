@@ -90,6 +90,9 @@ export const serviceIds = {
 
   // Object layout
   'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',
+  'DynamicTypes/ObjectLayout/Tabpanel': 'DynamicTypes/ObjectLayout/Tabpanel',
+  'DynamicTypes/ObjectLayout/Accordion': 'DynamicTypes/ObjectLayout/Accordion',
+  'DynamicTypes/ObjectLayout/Region': 'DynamicTypes/ObjectLayout/Region',
 
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
