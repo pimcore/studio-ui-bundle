@@ -32,17 +32,12 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
   const [hideElement, setHideElement] = useState(false)
   const { styles } = useStyles({ scrollWidth, hideElement, scrollRequired })
 
-  console.log('----> scrollReyyquired', scrollRequired)
-
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
 
       setIsAtStart(scrollLeft === 0)
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
-      console.log('----> scrollContainerRef.current.scrollWidth ', scrollContainerRef.current.scrollWidth)
-      console.log('----> scrollContainerRef.current.clientWidth ', scrollContainerRef.current.clientWidth)
-
       setScrollRequired(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth)
       setHideElement(scrollContainerRef.current.clientWidth < 50)
     }

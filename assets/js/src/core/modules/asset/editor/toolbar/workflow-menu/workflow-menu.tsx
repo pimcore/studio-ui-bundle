@@ -90,13 +90,11 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       justify={ 'flex-end' }
     >
       {!isLoading && (
-      // <HorizontalScroll>
-        <TagList
-          itemGap={ 'extra-small' }
-          list={ getVisibleWorkflowStatus() }
-          wrap={ false }
-        />
-      // </HorizontalScroll>
+      <TagList
+        itemGap={ 'extra-small' }
+        list={ getVisibleWorkflowStatus() }
+        wrap={ false }
+      />
       )}
       <Dropdown
         menu={ { items } }
