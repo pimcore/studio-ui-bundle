@@ -14,7 +14,6 @@
 import React from 'react'
 import { Tree as AntTree, type TreeProps } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useStyles } from './tree-element.styles'
 
 interface ITreeElementProps extends TreeProps {
   withCustomSwitcherIcon?: boolean
@@ -22,8 +21,6 @@ interface ITreeElementProps extends TreeProps {
 }
 
 export const TreeElement = ({ isHideRootChecker = true, withCustomSwitcherIcon = false, ...props }: ITreeElementProps): React.JSX.Element => {
-  const { styles } = useStyles({ isHideRootChecker })
-
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (!withCustomSwitcherIcon) return undefined
 
@@ -40,7 +37,6 @@ export const TreeElement = ({ isHideRootChecker = true, withCustomSwitcherIcon =
 
   return (
     <AntTree
-      className={ styles.treeContainer }
       showIcon
       switcherIcon={ handleCustomSwitcherIcon }
       { ...props }

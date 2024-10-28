@@ -32,10 +32,11 @@ interface SimpleTreeProps extends TreeProps {
   onSelected?: (key: any) => void
   onLoadData?: (node) => Promise<any>
   withCustomSwitcherIcon?: boolean
+  isHideRootChecker?: boolean
 }
 
-const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, withCustomSwitcherIcon, ...props }: SimpleTreeProps): React.JSX.Element => {
-  const { styles } = useStyles()
+const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, withCustomSwitcherIcon, isHideRootChecker = true, ...props }: SimpleTreeProps): React.JSX.Element => {
+  const { styles } = useStyles({ isHideRootChecker })
 
   const [selectedKeys, setSelectedKeys] = React.useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = React.useState<Key[]>(defaultExpandedKeys ?? [])
@@ -62,7 +63,7 @@ const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActio
     <Tree
       blockNode
       checkable={ onCheck !== undefined }
-      className={ cn(styles.tree, className) }
+      className={ cn(styles.treeContainer, className) }
       draggable
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
