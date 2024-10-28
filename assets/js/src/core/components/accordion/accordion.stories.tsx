@@ -110,7 +110,7 @@ export const Bordered = {
       key: '1',
       title: <>Lorem ipsum</>,
       info: 'ID: 3',
-      children: <p>aasdf</p>,
+      children: <p>aasdf</p>
     }]
   }
 }
