@@ -46,7 +46,12 @@ export function useFormModal (): UseFormModalHookResponse {
 
   return React.useMemo<UseFormModalHookResponse>(
     () => ({
-      input: (props) => modal.confirm(withInput(props)),
+      input: (props) => {
+        const modalResult = modal.confirm(withInput(props))
+        // avoid that errors are logged in the console
+        modalResult.then(() => {}, () => {})
+        return modalResult
+      },
       confirm: (props) => modal.confirm(withConfirm(props))
     }),
     []
