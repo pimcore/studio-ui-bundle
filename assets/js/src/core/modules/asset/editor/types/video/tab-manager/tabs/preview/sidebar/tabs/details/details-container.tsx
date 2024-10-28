@@ -18,12 +18,14 @@ import {
   VideoEditorSidebarDetailsTab
 } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { useThumbnailVideoGetCollectionQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
-import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import { VideoContext } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/preview-container'
 import { Content } from '@Pimcore/components/content/content'
+import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 
 const DetailContainer = (): React.JSX.Element => {
+  const [isDownloading, setIsDownloading] = useState(false)
   const { playerPosition, setThumbnail } = React.useContext(VideoContext)
   const assetContext = useContext(AssetContext)
   const [imagePreview, setImagePreview] = useState('')
@@ -40,12 +42,16 @@ const DetailContainer = (): React.JSX.Element => {
     return <Content loading />
   }
 
+  type Callback = () => void
+  const noop = (): void => {}
+
   return (
     <VideoEditorSidebarDetailsTab
       height={ videoData.height ?? 0 }
       imagePreview={ imagePreview }
+      isDownloading={ isDownloading }
       onApplyPlayerPosition={ onApplyPlayerPosition }
-      onChangeThumbnail={ setThumbnailByThumbnailName }
+      onChangeThumbnail={ setThumbnail }
       onClickDownloadByFormat={ downloadVideoByFormat }
       onDropImage={ onDropImage }
       thumbnails={ videoThumbnails }
@@ -53,8 +59,8 @@ const DetailContainer = (): React.JSX.Element => {
     />
   )
 
-  function setImagePreviewFromBackend (width: number, height: number): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}`
+  function setImagePreviewFromBackend (width: number, height: number, then: Callback = noop): void {
+    const url = `${getPrefix()}/assets/${assetContext.id}/video/stream/image-thumbnail?width=${width}&height=${height}&aspectRatio=true`
     fetch(url)
       .then(async (response) => await response.blob())
       .then((blob) => {
@@ -63,19 +69,19 @@ const DetailContainer = (): React.JSX.Element => {
       })
       .catch((err) => {
         console.error(err)
-      })
+      }).finally(then)
   }
 
-  function onDropImage (id: number): void {
-    setImagePreviewByToBackend('image_thumbnail_asset', id)
+  function onDropImage (id: number, callback: Callback = noop): void {
+    setImagePreviewByToBackend('image_thumbnail_asset', id, callback)
   }
 
-  function onApplyPlayerPosition (): void {
-    setImagePreviewByToBackend('image_thumbnail_time', playerPosition)
+  function onApplyPlayerPosition (callback: Callback = noop): void {
+    setImagePreviewByToBackend('image_thumbnail_time', playerPosition, callback)
   }
 
-  function setImagePreviewByToBackend (key: string, value: number): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}`
+  function setImagePreviewByToBackend (key: string, value: number, callback: Callback = noop): void {
+    const url = `${getPrefix()}/assets/${assetContext.id}`
     fetch(
       url,
       {
@@ -96,36 +102,29 @@ const DetailContainer = (): React.JSX.Element => {
         })
       }
     )
-      .then(() => { setImagePreviewFromBackend(200, 119) })
+      .then(() => {
+        setImagePreviewFromBackend(200, 119, callback)
+      })
       .catch((err) => {
         console.error(err)
+        callback()
       })
   }
 
   function downloadVideoByFormat (format: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/download/${format}`
-    fetch(url)
-      .then(async (response) => await response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob)
-        saveFileLocal(videoData.filename!, url)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
+    setIsDownloading(true)
+    const url = `${getPrefix()}/assets/${assetContext.id}/video/download/${format}`
 
-  function setThumbnailByThumbnailName (name: string): void {
-    const url = `${getDomainWithPrefix()}/assets/${assetContext.id}/video/stream/${name}`
-
-    fetch(url)
-      .then(async (response) => await response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob)
-        setThumbnail(url)
-      })
-      .catch((err) => {
-        console.error(err)
+    fetchBlobWithPolling({
+      url,
+      onSuccess: (blob) => {
+        const objectUrl = URL.createObjectURL(blob)
+        saveFileLocal(videoData.filename!, objectUrl)
+      }
+    })
+      .catch(console.error)
+      .finally(() => {
+        setIsDownloading(false)
       })
   }
 }

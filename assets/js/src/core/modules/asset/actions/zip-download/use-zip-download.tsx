@@ -67,8 +67,6 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
         })
 
         const response = (await promise)
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         const data = response.data
         return data.jobRunId
       }

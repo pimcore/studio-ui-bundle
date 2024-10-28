@@ -11,36 +11,37 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PreviewView } from './preview-view'
-import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { fetchBlobWithPolling } from '@Pimcore/utils/polling-helper'
 
 const PreviewContainer = (): React.JSX.Element => {
-  const assetContext = useContext(AssetContext)
+  const { id } = useAsset()
+  const { isLoading } = useAssetDraft(id)
   const [docURL, setDocURL] = useState('')
 
   useEffect(() => {
-    if (docURL !== '') {
+    if (isLoading) {
       return
     }
 
-    fetch(`http://localhost/pimcore-studio/api/assets/${assetContext.id}/document/stream/pdf-preview`)
-      .then(async (response) => await response.blob())
-      .then((docBlob) => {
-        const docURL = URL.createObjectURL(docBlob)
-        setDocURL(docURL)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  })
+    fetchBlobWithPolling({
+      url: `${getPrefix()}/assets/${id}/document/stream/pdf-preview`,
+      onSuccess: (blob) => {
+        setDocURL(URL.createObjectURL(blob))
+      }
+    }).catch(console.error)
+  }, [id, isLoading])
 
-  if (docURL === '') {
-    <Content loading />
+  if (docURL === '' || isLoading) {
+    return <Content loading />
   }
 
   return (
