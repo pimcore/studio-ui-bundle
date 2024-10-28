@@ -30,7 +30,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
   const [isAtEnd, setIsAtEnd] = useState(false)
   const [scrollRequired, setScrollRequired] = useState(false)
   const [hideElement, setHideElement] = useState(false)
-  const { styles } = useStyles({ scrollWidth, hideElement })
+  const { styles } = useStyles({ scrollWidth, hideElement, scrollRequired })
 
   console.log('----> scrollReyyquired', scrollRequired)
 
@@ -40,6 +40,9 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
 
       setIsAtStart(scrollLeft === 0)
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
+      console.log('----> scrollContainerRef.current.scrollWidth ', scrollContainerRef.current.scrollWidth)
+      console.log('----> scrollContainerRef.current.clientWidth ', scrollContainerRef.current.clientWidth)
+
       setScrollRequired(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth)
       setHideElement(scrollContainerRef.current.clientWidth < 50)
     }
@@ -111,10 +114,9 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
       >
         {children}
       </Flex>
+      {scrollRequired && (
       <div
-          // align={ 'center' }
         className={ styles.buttonContainer }
-        id={ '444' }
       >
         <IconButton
           className={ 'button-left' }
@@ -145,6 +147,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
           theme="secondary"
         />
       </div>
+      )}
     </>
   )
 }

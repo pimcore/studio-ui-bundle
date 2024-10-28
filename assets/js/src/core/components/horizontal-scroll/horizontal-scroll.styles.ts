@@ -13,7 +13,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }, { scrollWidth, hideElement }) => {
+export const useStyles = createStyles(({ css }, { scrollWidth, hideElement, scrollRequired }) => {
   return {
     buttonContainer: css`
         // visibility: ${hideElement === true ? 'hidden' : 'visible'};
@@ -36,9 +36,9 @@ export const useStyles = createStyles(({ css }, { scrollWidth, hideElement }) =>
     `,
 
     scroll: css`
-    margin-left: 20px;
-    margin-right: 20px;
-    min-width: calc(100% - 40px);
+    margin-left: ${scrollRequired === true ? '20px' : 0};
+    margin-right: ${scrollRequired === true ? '20px' : 0};
+    min-width: ${scrollRequired === true ? 'calc(100% - 40px)' : '100%'};
     height: 102%; // to make up for added height from scroll bar flex combination
         overflow-x: auto;
         white-space: nowrap;

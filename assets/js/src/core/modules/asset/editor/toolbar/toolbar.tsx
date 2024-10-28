@@ -36,6 +36,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -72,16 +73,23 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <HorizontalScroll>
-        <ContextMenu />
-        <EditorToolbarWorkflowMenu />
-        <Button
-          disabled={ !hasChanges || isLoading || isSchedulesLoading }
-          loading={ isLoading || isSchedulesLoading }
-          onClick={ onSaveClick }
-          type="primary"
+        <Flex
+          justify={ 'space-between' }
+          style={ { width: '100%' } }
         >
-          {t('toolbar.save-and-publish')}
-        </Button>
+          <ContextMenu />
+          <Flex>
+            <EditorToolbarWorkflowMenu />
+            <Button
+              disabled={ !hasChanges || isLoading || isSchedulesLoading }
+              loading={ isLoading || isSchedulesLoading }
+              onClick={ onSaveClick }
+              type="primary"
+            >
+              {t('toolbar.save-and-publish')}
+            </Button>
+          </Flex>
+        </Flex>
       </HorizontalScroll>
     </ToolbarView>
   )
