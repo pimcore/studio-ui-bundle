@@ -37,18 +37,14 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
 
   const treeData = createTreeStructure({ tags: tags.items })
 
-  const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {
-    const checkedKeysList = checkedKeys.checked
-
-    // Remove the parent element in the Tree
-    const filteredList = checkedKeysList.filter(item => item !== 'root')
-    const isEmptyList = filteredList.length === 0
-    const formattedValue = filteredList?.map(Number)
+  const handleCheck = (currentCheckedKeys: { checked: Key[], halfChecked: Key[] }): void => {
+    const checkedKeysList = currentCheckedKeys.checked
+    const formattedValue = checkedKeysList?.map(Number)
 
     // Set state for visualization in the Tree
     setCheckedKeys(checkedKeysList)
     // Set state for filtering in the Grid
-    !isEmptyList && addOrUpdateFieldFilter(formattedValue)
+    addOrUpdateFieldFilter(formattedValue)
   }
 
   return (
