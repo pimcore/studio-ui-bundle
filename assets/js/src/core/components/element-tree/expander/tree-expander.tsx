@@ -13,7 +13,7 @@
 
 import React, { type MouseEvent, useContext } from 'react'
 import { type TreeNodeProps } from '../node/tree-node'
-import { TreeContext } from '../tree'
+import { TreeContext } from '../element-tree'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 

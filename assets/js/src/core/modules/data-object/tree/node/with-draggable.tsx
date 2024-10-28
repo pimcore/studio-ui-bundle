@@ -13,14 +13,14 @@
 
 import React, { type ElementType, type ReactElement } from 'react'
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
-import { type Asset } from '../../asset-api-slice-enhanced'
+import { type DataObject } from '../../data-object-api-slice-enhanced'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 
 export const withDraggable = (Component: ElementType<TreeNodeProps>): ElementType<TreeNodeProps> => {
   const DraggableNodeContent = (props: TreeNodeProps): ReactElement => {
-    const metaData: Asset | undefined = props.metaData.asset
+    const metaData: DataObject | undefined = props.metaData.dataObject
 
-    if (props.metaData?.asset === undefined) {
+    if (props.metaData?.dataObject === undefined) {
       return (
         <Component { ...props } />
       )
@@ -28,7 +28,7 @@ export const withDraggable = (Component: ElementType<TreeNodeProps>): ElementTyp
 
     return (
       <Draggable
-        info={ { icon: metaData!.icon!.value, title: metaData!.filename!, type: 'asset', data: { ...metaData } } }
+        info={ { icon: metaData!.icon!.value, title: metaData!.key!, type: 'data-object', data: { ...metaData } } }
       >
         <Component { ...props } />
       </Draggable>

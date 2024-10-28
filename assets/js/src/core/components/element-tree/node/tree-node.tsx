@@ -14,7 +14,7 @@
 import { Flex, theme, Upload, type UploadProps } from 'antd'
 import React, { type KeyboardEvent, type MouseEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { type nodeRef, TreeContext } from '../tree'
+import { type nodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'

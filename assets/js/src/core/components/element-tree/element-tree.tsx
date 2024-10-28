@@ -23,11 +23,7 @@ import React, {
 } from 'react'
 import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
-import { useStyles } from './tree.styles'
-import { container } from '@Pimcore/app/depency-injection'
-import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type TreeContextMenuProps } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
+import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 
 export interface TreeSearchProps {
@@ -42,6 +38,11 @@ export interface TreePagerProps {
   total: number
 }
 
+export interface TreeContextMenuProps {
+  children: React.ReactNode
+  node: TreeNodeProps
+}
+
 export interface TreeProps {
   nodeId: number
   nodeApiHook: any
@@ -49,6 +50,7 @@ export interface TreeProps {
 
   renderNode: ElementType<TreeNodeProps>
   renderNodeContent: ElementType<TreeNodeContentProps>
+  contextMenu?: ElementType<TreeContextMenuProps>
   renderFilter?: ElementType<TreeSearchProps>
   renderPager?: ElementType<TreePagerProps>
 
@@ -80,12 +82,13 @@ export const TreeContext = createContext<ITreeContext>({
   ...defaultProps
 })
 
-const Tree = (
+const ElementTree = (
   {
     maxItemsPerNode = defaultProps.maxItemsPerNode,
     nodeApiHook = defaultProps.nodeApiHook,
     renderNode = defaultProps.renderNode,
     renderNodeContent = defaultProps.renderNodeContent,
+    contextMenu: ContextMenu,
     ...props
   }: TreeProps
 ): React.JSX.Element => {
@@ -116,8 +119,6 @@ const Tree = (
     })
   }, [nodesRefs.current])
   const [rightClickedNode, setRightClickedNode] = useState<TreeNodeProps | undefined>(undefined)
-  const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
-  const ContextMenu = componentRegistry.get<TreeContextMenuProps>('assetTreeContextMenu')
 
   async function onRightClick (event: React.MouseEvent, node: TreeNodeProps): Promise<void> {
     event.preventDefault()
@@ -140,25 +141,35 @@ const Tree = (
 
   const TreeNode = renderNode
 
+  const treeContent = (
+    <div className={ ['tree', styles.tree].join(' ') }>
+      <TreeContext.Provider value={ treeContextValue }>
+        {items.map((item, index) => (
+          <TreeNode
+            internalKey={ `${index}` }
+            key={ item.id }
+            { ...item }
+          />
+        ))}
+      </TreeContext.Provider>
+    </div>
+  )
+
   return (
     <UploadProvider>
       {isLoading === false && items.length !== 0 && (
-        <ContextMenu node={ rightClickedNode }>
-          <div className={ ['tree', styles.tree].join(' ') }>
-            <TreeContext.Provider value={ treeContextValue }>
-              {items.map((item, index) => (
-                <TreeNode
-                  internalKey={ `${index}` }
-                  key={ item.id }
-                  { ...item }
-                />
-              ))}
-            </TreeContext.Provider>
-          </div>
-        </ContextMenu>
+        ContextMenu !== undefined && rightClickedNode !== undefined
+          ? (
+            <ContextMenu node={ rightClickedNode }>
+              {treeContent}
+            </ContextMenu>
+            )
+          : (
+              treeContent
+            )
       )}
     </UploadProvider>
   )
 }
 
-export { Tree }
+export { ElementTree }

@@ -13,7 +13,7 @@
 
 import React, { useContext } from 'react'
 import { type TreeNodeProps } from '../node/tree-node'
-import { TreeContext } from '../tree'
+import { TreeContext } from '../element-tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'

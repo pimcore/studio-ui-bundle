@@ -13,11 +13,11 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
-import { type AssetGetTreeApiResponse, useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type DataObjectGetTreeApiResponse, useDataObjectGetTreeQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
-interface AssetTreeAdditionalTreeProps {
+interface DataObjectTreeAdditionalTreeProps {
   pager?: number
 }
 
@@ -28,39 +28,40 @@ interface DataTransformerReturnType {
 
 interface NodeApiHookReturnType {
   apiHookResult: UseQueryHookResult<any>
-  dataTransformer: (data: AssetGetTreeApiResponse) => DataTransformerReturnType
-  mergeAdditionalQueryParams: Dispatch<SetStateAction<AssetTreeAdditionalTreeProps | undefined>>
+  dataTransformer: (data: DataObjectGetTreeApiResponse) => DataTransformerReturnType
+  mergeAdditionalQueryParams: Dispatch<SetStateAction<DataObjectTreeAdditionalTreeProps | undefined>>
 }
 
 export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
-  const [additionalQueryParams, setAdditionalQueryParams] = useState<AssetTreeAdditionalTreeProps>()
+  const [additionalQueryParams, setAdditionalQueryParams] = useState<DataObjectTreeAdditionalTreeProps>()
   const { maxItemsPerNode } = useContext(TreeContext)
-  const apiHookResult = useAssetGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode, page: 1, ...additionalQueryParams })
+  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode, page: 1, ...additionalQueryParams })
 
-  function dataTransformer (data: AssetGetTreeApiResponse): DataTransformerReturnType {
+  function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
     const nodes: TreeNodeProps[] = []
 
-    const assetData = data.items
-    assetData.forEach((assetNode) => {
+    const dataObjectData = data.items
+    dataObjectData.forEach((dataObjectNode) => {
+      const icon = dataObjectNode.icon?.type === 'name' ? dataObjectNode.icon?.value : 'mainObject'
       nodes.push({
-        id: assetNode.id.toString(),
-        icon: assetNode.icon?.value ?? 'file-question-02',
-        label: assetNode.filename!,
-        type: assetNode.type,
-        parentId: assetNode.parentId.toString(),
+        id: dataObjectNode.id.toString(),
+        icon: icon !== 'vector' ? icon : 'mainObject', // todo remove this when icons are fixed
+        label: dataObjectNode.key!,
+        type: dataObjectNode.type,
+        parentId: dataObjectNode.parentId.toString(),
         children: [],
-        hasChildren: assetNode.hasChildren,
-        isLocked: assetNode.isLocked,
+        hasChildren: dataObjectNode.hasChildren,
+        isLocked: dataObjectNode.isLocked,
         metaData: {
-          asset: assetNode
+          dataObject: dataObjectNode
         },
         level: node.level + 1,
         ...(() => {
           if (node.level === -1) {
-            return { internalKey: `${assetNode.id}` }
+            return { internalKey: `${dataObjectNode.id}` }
           }
 
-          return { internalKey: `${node.internalKey}-${assetNode.id}` }
+          return { internalKey: `${node.internalKey}-${dataObjectNode.id}` }
         })()
       })
     })
@@ -70,7 +71,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
     return { nodes, total }
   }
 
-  function mergeAdditionalQueryParams (newParams: AssetTreeAdditionalTreeProps): void {
+  function mergeAdditionalQueryParams (newParams: DataObjectTreeAdditionalTreeProps): void {
     const params = { ...additionalQueryParams, ...newParams }
 
     setAdditionalQueryParams(params)

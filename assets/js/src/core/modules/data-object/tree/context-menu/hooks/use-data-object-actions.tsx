@@ -17,8 +17,7 @@ import React, { useState } from 'react'
 import { useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
-import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
@@ -52,8 +51,6 @@ export interface AssetContextMenuCut extends AssetContextMenuBase, NodeAware {}
 
 export interface AssetContextMenuRefresh extends AssetContextMenuBase, NodeIdAware {}
 
-export interface AssetContextMenuDownloadAsZip extends AssetContextMenuBase, NodeAware {}
-
 export interface AssetContextMenuLock extends AssetContextMenuBase, NodeIdAware {}
 
 export interface AssetExpandChildren extends AssetContextMenuBase, OnClickAware {}
@@ -66,7 +63,6 @@ export interface UseAssetActionsHookReturn {
   cut: (props: AssetContextMenuCut) => ItemType
   pasteCut: (props: AssetContextMenuPaste) => ItemType
   remove: (props: AssetContextMenuDelete) => ItemType
-  downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType
   lock: (props: AssetContextMenuLock) => ItemType
   lockAndPropagate: (props: AssetContextMenuLock) => ItemType
   unlock: (props: AssetContextMenuLock) => ItemType
@@ -76,13 +72,12 @@ export interface UseAssetActionsHookReturn {
   refresh: (props: AssetContextMenuRefresh) => ItemType
 }
 
-export const useAssetActions = (): UseAssetActionsHookReturn => {
+export const useDataObjectActions = (): UseAssetActionsHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [node, setNode] = useState<TreeNodeProps | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
   const [assetPatch] = useAssetPatchByIdMutation()
-  const { createZipDownload } = useZipDownload({ type: 'folder' })
 
   const lockAssetOrFolder = async ({ nodeId, lockType }: { nodeId: string, lockType: 'self' | 'propagate' | '' | 'unlockPropagate' }): Promise<void> => {
     const assetLockTask = assetPatch({
@@ -193,24 +188,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
       key: 'delete',
       icon: <Icon name={ 'delete-outlined' } />,
       ...props
-    }
-  }
-
-  const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = (props): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
-    const { node, ...someProps } = props
-
-    return {
-      label: t('element.tree.context-menu.download-as-zip'),
-      key: 'download-as-zip',
-      icon: <Icon name={ 'file-download-zip-01' } />,
-      hidden: (node === undefined || node.type === 'folder'),
-      onClick: () => {
-        createZipDownload({
-          jobTitle: node!.label,
-          requestData: { body: { folders: [parseInt(node!.id)] } }
-        })
-      },
-      ...someProps
     }
   }
 
@@ -332,7 +309,6 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     cut,
     pasteCut,
     remove,
-    downloadAsZip,
     lock,
     lockAndPropagate,
     unlock,
