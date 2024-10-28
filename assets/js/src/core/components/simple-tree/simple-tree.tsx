@@ -12,7 +12,8 @@
 */
 
 import React, { type Key } from 'react'
-import { Tree, type TreeDataNode } from 'antd'
+import { Tree, type TreeDataNode, type TreeProps } from 'antd'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { SimpleTreeItem } from './simple-tree-item'
 import { useStyles } from './simple-tree.styles'
@@ -21,7 +22,7 @@ export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
 }
 
-interface SimpleTreeProps {
+interface SimpleTreeProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
   defaultExpandedKeys?: string[]
@@ -30,11 +31,12 @@ interface SimpleTreeProps {
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
   onLoadData?: (node) => Promise<any>
+  withCustomSwitcherIcon?: boolean
 }
 
-const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, ...props }: SimpleTreeProps): React.JSX.Element => {
+const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, withCustomSwitcherIcon, ...props }: SimpleTreeProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classNames = [styles.tree, className]
+
   const [selectedKeys, setSelectedKeys] = React.useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = React.useState<Key[]>(defaultExpandedKeys ?? [])
 
@@ -42,11 +44,25 @@ const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActio
     setExpandedKeys(defaultExpandedKeys ?? [])
   }, [defaultExpandedKeys])
 
+  const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
+    if (withCustomSwitcherIcon === false) return undefined
+
+    return (
+      <Icon
+        name="chevron-down-small"
+        options={ {
+          width: 12,
+          height: 12
+        } }
+      />
+    )
+  }
+
   return (
     <Tree
       blockNode
       checkable={ onCheck !== undefined }
-      className={ classNames.join(' ') }
+      className={ cn(styles.tree, className) }
       draggable
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
@@ -61,7 +77,7 @@ const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActio
       onExpand={ (keys): void => { setExpandedKeys(keys) } }
       selectedKeys={ selectedKeys }
       showIcon
-      switcherIcon={ <Icon name={ 'chevron-down-small' } /> }
+      switcherIcon={ handleCustomSwitcherIcon }
       titleRender={ (node) => (
         <SimpleTreeItem
           actions={ node.actions }
