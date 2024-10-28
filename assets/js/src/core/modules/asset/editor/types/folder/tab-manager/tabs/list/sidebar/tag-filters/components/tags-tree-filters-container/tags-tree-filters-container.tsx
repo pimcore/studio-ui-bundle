@@ -16,9 +16,11 @@ import { Tree } from 'antd'
 import React, { type Key } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
 import {
   useCreateTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
+import { useStyles } from './tags-tree-filters-container.styles'
 
 export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, setCheckedKeys }: { addOrUpdateFieldFilter: (value: any) => void, checkedKeys: any, setCheckedKeys: any }): React.JSX.Element => {
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
@@ -26,6 +28,7 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
     pageSize: 9999
   })
   const { createTreeStructure } = useCreateTreeStructure()
+  const { styles } = useStyles()
 
   if (tagsLoading) {
     return <Content loading />
@@ -61,9 +64,19 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
           checkStrictly
           checkable
           checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
+          className={ styles.treeContainer }
           defaultExpandedKeys={ ['root'] }
           onCheck={ handleCheck }
           showIcon
+          switcherIcon={ (
+            <Icon
+              name="chevron-down"
+              options={ {
+                width: 12,
+                height: 12
+              } }
+            />
+          ) }
           treeData={ treeData }
         />
       </Flex>

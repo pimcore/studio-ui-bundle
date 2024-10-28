@@ -12,7 +12,6 @@
 */
 
 import React, { useState } from 'react'
-import { TagsTreeFiltersContainer } from './tags-tree-filters-container'
 import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
@@ -21,6 +20,7 @@ import {
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
+import { TagsTreeFiltersContainer } from './components/tags-tree-filters-container/tags-tree-filters-container'
 import { useTagFilters } from './hooks/use-tag-filters'
 import { useListFilterOptions } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
