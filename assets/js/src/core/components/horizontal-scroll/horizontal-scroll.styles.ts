@@ -15,13 +15,31 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css }, { scrollWidth, hideElement }) => {
   return {
-    scrollContainer: css`
-        visibility: ${hideElement === true ? 'hidden' : 'visible'};
-        display: flex;
-        overflow-x: auto;
+    buttonContainer: css`
+        // visibility: ${hideElement === true ? 'hidden' : 'visible'};
+        overflow: hidden;
+        background-color: cyan;
+        width: 100%;
+       
+.button-left {
+       position: absolute;
+       left: 0;
+       top: 50%; 
+       transform: translate(0, -50%);
+       }
+       .button-right {
+       position: absolute;
+       right: 0;
+       top: 50%; 
+       transform: translate(0, -50%);
+       }
     `,
 
     scroll: css`
+    margin-left: 20px;
+    margin-right: 20px;
+    min-width: calc(100% - 40px);
+    height: 102%; // to make up for added height from scroll bar flex combination
         overflow-x: auto;
         white-space: nowrap;
       ${typeof scrollWidth !== 'undefined' && scrollWidth !== null ? `width: ${scrollWidth}px;` : ''}
@@ -29,6 +47,10 @@ export const useStyles = createStyles(({ css }, { scrollWidth, hideElement }) =>
         &::-webkit-scrollbar {
             display: none;
         }
+    `,
+
+    childrenContainer: css`
+    width: 80%
     `
   }
 })

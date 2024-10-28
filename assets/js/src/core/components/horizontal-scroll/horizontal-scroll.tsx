@@ -32,6 +32,8 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
   const [hideElement, setHideElement] = useState(false)
   const { styles } = useStyles({ scrollWidth, hideElement })
 
+  console.log('----> scrollReyyquired', scrollRequired)
+
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
@@ -101,13 +103,21 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
   }
 
   return (
-    <Flex
-      align={ 'center' }
-      className={ styles.scrollContainer }
-      justify={ 'center' }
-    >
-      {scrollRequired && (
+    <>
+      <Flex
+        align={ 'center' }
+        className={ styles.scroll }
+        ref={ scrollContainerRef }
+      >
+        {children}
+      </Flex>
+      <div
+          // align={ 'center' }
+        className={ styles.buttonContainer }
+        id={ '444' }
+      >
         <IconButton
+          className={ 'button-left' }
           disabled={ isAtStart }
           icon={ 'chevron-left' }
           iconOptions={ { height: 18, width: 18 } }
@@ -120,30 +130,21 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
           onMouseUp={ stopScrolling }
           theme="secondary"
         />
-      )}
-      <Flex
-        align={ 'center' }
-        className={ styles.scroll }
-        ref={ scrollContainerRef }
-      >
-        {children}
-      </Flex>
-      {
-                scrollRequired && (
-                <IconButton
-                  disabled={ isAtEnd }
-                  icon={ 'chevron-right' }
-                  iconOptions={ { height: 18, width: 18 } }
-                  onKeyDown={ (e) => {
-                    handleKeyDown(e, 'right')
-                  } }
-                  onKeyUp={ handleKeyUp }
-                  onMouseDown={ startScrollingRight }
-                  onMouseLeave={ stopScrolling }
-                  onMouseUp={ stopScrolling }
-                  theme="secondary"
-                />
-                )}
-    </Flex>
+        <IconButton
+          className={ 'button-right' }
+          disabled={ isAtEnd }
+          icon={ 'chevron-right' }
+          iconOptions={ { height: 18, width: 18 } }
+          onKeyDown={ (e) => {
+            handleKeyDown(e, 'right')
+          } }
+          onKeyUp={ handleKeyUp }
+          onMouseDown={ startScrollingRight }
+          onMouseLeave={ stopScrolling }
+          onMouseUp={ stopScrolling }
+          theme="secondary"
+        />
+      </div>
+    </>
   )
 }

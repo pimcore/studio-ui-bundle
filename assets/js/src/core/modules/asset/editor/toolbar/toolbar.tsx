@@ -35,7 +35,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
-import { Flex } from '@Pimcore/components/flex/flex'
+import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -71,12 +71,8 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <ToolbarView>
-      <ContextMenu />
-      <Flex
-        className='overflow-x-auto'
-        style={ { height: '32px' } }
-        vertical={ false }
-      >
+      <HorizontalScroll>
+        <ContextMenu />
         <EditorToolbarWorkflowMenu />
         <Button
           disabled={ !hasChanges || isLoading || isSchedulesLoading }
@@ -86,7 +82,7 @@ export const Toolbar = (): React.JSX.Element => {
         >
           {t('toolbar.save-and-publish')}
         </Button>
-      </Flex>
+      </HorizontalScroll>
     </ToolbarView>
   )
 

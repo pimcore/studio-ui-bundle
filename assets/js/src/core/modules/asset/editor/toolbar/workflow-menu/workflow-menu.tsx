@@ -24,7 +24,7 @@ import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/compon
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
-import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
+// import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -92,13 +92,13 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       justify={ 'flex-end' }
     >
       {!isLoading && (
-      <HorizontalScroll>
+      // <HorizontalScroll>
         <TagList
           itemGap={ 'extra-small' }
           list={ getVisibleWorkflowStatus() }
           wrap={ false }
         />
-      </HorizontalScroll>
+      // </HorizontalScroll>
       )}
       <Dropdown
         menu={ { items } }
