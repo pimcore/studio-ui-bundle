@@ -22,10 +22,11 @@ export interface SimpleTreeItemProps {
   onSelected?: () => void
   onActionsClick?: (action: string) => void
 }
-const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }: SimpleTreeItemProps): React.JSX.Element => {
+const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick }: SimpleTreeItemProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const items: MenuProps['items'] = []
+
   actions?.forEach((action) => {
     items?.push({
       key: action.key,
@@ -35,46 +36,34 @@ const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }
     })
   })
 
+  const renderTitle = (): React.JSX.Element => (
+    <span
+      className={ 'ant-tree-title__btn' }
+      onClick={ onSelected }
+      onKeyDown={ (event) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+          if (onSelected != null) {
+            onSelected()
+          }
+        }
+      } }
+      role="button"
+      tabIndex={ 0 }
+    >
+      {title}
+    </span>
+  )
+
   return items?.length > 0
     ? (
       <Dropdown
         menu={ { items } }
         trigger={ ['contextMenu'] }
       >
-        <span
-          className={ 'ant-tree-title__btn' }
-          onClick={ onSelected }
-          onKeyDown={ (event) => {
-            if (event.key === 'Enter' || event.key === 'Escape') {
-              if (onSelected != null) {
-                onSelected()
-              }
-            }
-          } }
-          role="button"
-          tabIndex={ 0 }
-        >
-          {title}
-        </span>
+        {renderTitle()}
       </Dropdown>
       )
-    : (
-      <span
-        className={ 'ant-tree-title__btn' }
-        onClick={ onSelected }
-        onKeyDown={ (event) => {
-          if (event.key === 'Enter' || event.key === 'Escape') {
-            if (onSelected != null) {
-              onSelected()
-            }
-          }
-        } }
-        role="button"
-        tabIndex={ 0 }
-      >
-        {title}
-      </span>
-      )
+    : renderTitle()
 }
 
 export { SimpleTreeItem }

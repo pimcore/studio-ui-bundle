@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState, type Key } from 'react'
+import React, { useState, type Key } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -54,10 +54,6 @@ const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
-
-  useEffect(() => {
-    setExpandedKeys(defaultExpandedKeys ?? [])
-  }, [defaultExpandedKeys])
 
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (withCustomSwitcherIcon === false) return undefined
