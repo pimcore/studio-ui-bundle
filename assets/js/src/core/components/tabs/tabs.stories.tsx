@@ -29,7 +29,7 @@ export const _default = {
       {
         key: 'tab-1',
         label: 'Tab 1',
-        children: <>Tab 1 content</>,
+        children: <>Tab 1 content</>
       },
       {
         key: 'tab-2',
@@ -49,7 +49,6 @@ export const _default = {
     ]
   }
 }
-
 
 export const ActiveKey = {
   args: {
