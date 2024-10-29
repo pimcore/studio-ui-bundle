@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type FilterOptions } from './types/filterTypes'

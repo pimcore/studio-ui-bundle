@@ -40,11 +40,16 @@ module.exports = {
         sourceType: 'script'
       }
     },
-
     {
       files: ['*.spec.ts', '*.spec.tsx', '*.test.ts', '*.test.tsx'],
       env: {
         jest: true
+      }
+    },
+    {
+      files: ['*.stories.tsx'],
+      rules: {
+        'max-lines': 'off'
       }
     }
   ],
@@ -90,6 +95,7 @@ module.exports = {
         prop: 'ignore'
       }
     ],
+    'max-lines': ['error', { max: 250 }],
     'header/header': [2, 'block', [
       '*',
       '* Pimcore',
