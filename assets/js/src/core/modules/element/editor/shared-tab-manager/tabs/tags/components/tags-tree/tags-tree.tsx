@@ -12,7 +12,7 @@
 */
 
 import React, { type Key } from 'react'
-import { Input, type TreeProps } from 'antd'
+import { Input } from 'antd'
 import {
   type Tag,
   type TagAssignToElementApiArg,
@@ -26,7 +26,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { SimpleTree } from '@Pimcore/components/simple-tree/simple-tree'
 
 export interface TagsTreeProps {
   elementId: number
@@ -69,7 +69,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
     }
   }
 
-  const onCheck: TreeProps['onCheck'] = (checkedKeys: { checked: Key[], halfChecked: Key[] }, info) => {
+  const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {
     void applyTagsToElement(checkedKeys.checked)
   }
 
@@ -88,13 +88,11 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
         placeholder="Search"
       />
 
-      <TreeElement
+      <SimpleTree
         checkStrictly
-        checkable
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         defaultExpandedKeys={ ['root'] }
-        onCheck={ onCheck }
-        showIcon
+        onCheck={ handleCheck }
         treeData={ treeData }
         withCustomSwitcherIcon
       />

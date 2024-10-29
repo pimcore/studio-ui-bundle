@@ -25,7 +25,7 @@ export interface TreeDataItem extends TreeDataNode {
 interface SimpleTreeProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  onCheck?: (checkedKeys: any) => void
+  onCheck?: (checkedKeys: { checked: Key[], halfChecked: Key[] } | Key[]) => void
   onActionsClick?: (key: any, action: string) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
