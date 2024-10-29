@@ -14,8 +14,8 @@
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import {
   type AssetExportZipAssetApiArg,
-  AssetExportZipAssetApiResponse,
-  type AssetExportZipFolderApiArg, AssetExportZipFolderApiResponse,
+  type AssetExportZipAssetApiResponse,
+  type AssetExportZipFolderApiArg, type AssetExportZipFolderApiResponse,
   useAssetExportZipAssetMutation,
   useAssetExportZipFolderMutation
 } from '../../asset-api-slice-enhanced'
