@@ -26,7 +26,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { SimpleTree } from '@Pimcore/components/simple-tree/simple-tree'
+import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 
 export interface TagsTreeProps {
   elementId: number
@@ -88,7 +88,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
         placeholder="Search"
       />
 
-      <SimpleTree
+      <TreeElement
         checkStrictly
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         defaultExpandedKeys={ ['root'] }

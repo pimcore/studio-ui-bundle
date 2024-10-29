@@ -16,13 +16,13 @@ import { Dropdown, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-export interface SimpleTreeItemProps {
+export interface ITreeElementItemProps {
   title: string
   actions?: Array<{ key: string, icon: string }>
   onSelected?: () => void
   onActionsClick?: (action: string) => void
 }
-const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick }: SimpleTreeItemProps): React.JSX.Element => {
+const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeElementItemProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const items: MenuProps['items'] = []
@@ -66,4 +66,4 @@ const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick }: SimpleTr
     : renderTitle()
 }
 
-export { SimpleTreeItem }
+export { TreeElementItem }

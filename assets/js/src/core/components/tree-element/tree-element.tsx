@@ -15,14 +15,14 @@ import React, { useState, type Key } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { SimpleTreeItem } from './simple-tree-item'
-import { useStyles } from './simple-tree.styles'
+import { TreeElementItem } from './tree-element-item'
+import { useStyles } from './tree-element.styles'
 
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
 }
 
-interface SimpleTreeProps extends TreeProps {
+interface ITreeElementProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
   onCheck?: (checkedKeys: { checked: Key[], halfChecked: Key[] } | Key[]) => void
@@ -34,7 +34,7 @@ interface SimpleTreeProps extends TreeProps {
   isHideRootChecker?: boolean
 }
 
-const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
+const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
   const {
     checkStrictly,
     checkedKeys,
@@ -94,7 +94,7 @@ const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
       showIcon
       switcherIcon={ handleCustomSwitcherIcon }
       titleRender={ (node) => (
-        <SimpleTreeItem
+        <TreeElementItem
           actions={ node.actions }
           onActionsClick={ (action) => onActionsClick?.(node.key, action) }
           onSelected={ () => {
@@ -108,4 +108,4 @@ const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
     />
   )
 }
-export { SimpleTree }
+export { TreeElement }

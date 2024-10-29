@@ -15,7 +15,7 @@ import { useTagGetCollectionQuery } from '@Pimcore/modules/element/editor/shared
 import React, { type Key } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { SimpleTree } from '@Pimcore/components/simple-tree/simple-tree'
+import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   useCreateTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
@@ -53,7 +53,7 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
         gap={ 'small' }
         vertical
       >
-        <SimpleTree
+        <TreeElement
           checkStrictly
           checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
           defaultExpandedKeys={ ['root'] }
