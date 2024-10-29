@@ -14,25 +14,19 @@
 import { useTranslation } from 'react-i18next'
 import {ElementType} from "types/element-type.d";
 
-export interface AddFolderProps {
-  elementType: ElementType
-}
-
-export type addFolder = (props: AddFolderProps) => void
-
 export interface UseAddFolderProps {
   elementType: ElementType
 }
 
 export interface UseAddFolderHookReturn {
-  addFolder: addFolder
+  addFolder: (parentId: number) => void
 }
 
 export const useAddFolder = (props: UseAddFolderProps): UseAddFolderHookReturn => {
 
   const { t } = useTranslation()
 
-  const addFolder = ({ elementType }: AddFolderProps ): void => {
+  const addFolder = (parentId: number): void => {
 
   }
 

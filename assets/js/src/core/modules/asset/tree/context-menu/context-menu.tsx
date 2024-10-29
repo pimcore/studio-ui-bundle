@@ -26,7 +26,7 @@ import {
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useAssetActions } from './hooks/use-asset-actions'
-import { useElementDeleteMutation, useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
@@ -35,6 +35,7 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
+import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -46,10 +47,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
   const [assetPatch] = useAssetPatchByIdMutation()
   const [assetDelete] = useElementDeleteMutation()
-  const [elementAddFolder] = useElementFolderCreateMutation()
   const [assetClone] = useAssetCloneMutation()
   const {
-    addFolder,
     rename,
     copy,
     paste,
@@ -64,6 +63,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     refresh
   } = useAssetActions()
   const uploadContext = React.useContext(UploadContext)!
+  const { addFolderContextMenuItem } = useAddFolder('asset')
   const node = props.node
 
   useEffect(() => {
@@ -142,29 +142,6 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       }
     } catch (error) {
       console.error('Error deleting asset', error)
-    }
-  }
-
-  const addElementFolder = async (value: string): Promise<void> => {
-    const parentId = parseInt(props.node.id ?? 1)
-    const elementAddFolderTask = elementAddFolder({
-      parentId,
-      elementType: 'asset',
-      folderData: {
-        folderName: value
-      }
-    })
-
-    try {
-      await elementAddFolderTask
-
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(parentId)
-        )
-      )
-    } catch (error) {
-      console.error('Error creating folder', error)
     }
   }
 
@@ -256,22 +233,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
         }
       ]
     },
-    addFolder({
-      hidden: props.node?.type !== 'folder',
-      onClick: () => {
-        if (props.node !== undefined) {
-          modal.input({
-            title: t('element.tree.context-menu.add-folder'),
-            label: t('element.tree.context-menu.add-folder.label'),
-            rule: {
-              required: true,
-              message: t('element.tree.context-menu.add-folder.validation')
-            },
-            onOk: addElementFolder
-          })
-        }
-      }
-    }),
+    addFolderContextMenuItem(props.node),
     rename({
       hidden: props.node?.isLocked,
       onClick: () => {

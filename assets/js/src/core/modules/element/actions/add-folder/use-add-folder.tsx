@@ -12,39 +12,73 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import {ElementType} from "types/element-type.d";
-
-export interface AddFolderProps {
-  elementType: ElementType
-}
-
-export type addFolder = (props: AddFolderProps) => void
-
-export interface UseAddFolderProps {
-  elementType: ElementType
-}
+import { type ElementType } from 'types/element-type.d'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
+import React from 'react'
+import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/add-folder/use-refresh-tree'
 
 export interface UseAddFolderHookReturn {
-  addFolder: addFolder
+  addFolder: (parentId: number) => void
+  addFolderContextMenuItem: (node: TreeNodeProps) => ItemType
+  addFolderMutation: (parentId: number, value: string) => Promise<void>
 }
 
-export const useAddFolder = (props: UseAddFolderProps): UseAddFolderHookReturn => {
-
+export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn => {
   const { t } = useTranslation()
+  const modal = useFormModal()
+  const { refreshTree } = useRefreshTree(elementType)
+  const [elementFolderCreateMutation] = useElementFolderCreateMutation()
 
-  const addFolder = ({ elementType }: AddFolderProps ): void => {
-   /* modal.input({
-      title: t('element.tree.context-menu.add-folder'),
-      label: t('element.tree.context-menu.add-folder.label'),
+  const addFolder = (parentId: number): void => {
+    modal.input({
+      title: t('element.add-folder'),
+      label: t('element.add-folder.label'),
       rule: {
         required: true,
-        message: t('element.tree.context-menu.add-folder.validation')
+        message: t('element.add-folder.validation')
       },
-      onOk: addElementFolder
-    })*/
+      onOk: async (value: string) => { await addFolderMutation(parentId, value) }
+    })
+  }
+
+  const addFolderContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.add-folder'),
+      key: 'add-folder',
+      icon: <Icon name={ 'folder' } />,
+      hidden: node.type !== 'folder',
+      onClick: () => {
+        const parentId = parseInt(node.id)
+        addFolder(parentId)
+      }
+    }
+  }
+
+  const addFolderMutation = async (parentId: number, value: string): Promise<void> => {
+    const elementFolderCreateMutationTask = elementFolderCreateMutation({
+      parentId,
+      elementType,
+      folderData: {
+        folderName: value
+      }
+    })
+
+    try {
+      await elementFolderCreateMutationTask
+
+      refreshTree(parentId)
+    } catch (error) {
+      console.error('Error creating folder', error)
+    }
   }
 
   return {
-    addFolder: addFolder
+    addFolder,
+    addFolderContextMenuItem,
+    addFolderMutation
   }
 }
