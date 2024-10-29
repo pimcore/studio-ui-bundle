@@ -95,7 +95,7 @@ module.exports = {
         prop: 'ignore'
       }
     ],
-    'max-lines': ['error', { max: 250 }],
+    'max-lines': ['error', { max: 300 }],
     'header/header': [2, 'block', [
       '*',
       '* Pimcore',

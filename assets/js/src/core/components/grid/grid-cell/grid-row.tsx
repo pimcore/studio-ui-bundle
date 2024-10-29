@@ -15,7 +15,7 @@ import { type Row } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
-import { type GridProps } from '../grid'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 export interface GridRowProps {
   row: Row<any>

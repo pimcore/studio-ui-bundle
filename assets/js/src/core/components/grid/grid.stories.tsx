@@ -13,9 +13,10 @@
 
 import React, { useState } from 'react'
 import { type Meta } from '@storybook/react'
-import { Grid, type GridProps } from './grid'
+import { Grid } from './grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { DefaultCell } from './columns/default-cell'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 const config: Meta = {
   title: 'Components/Data Display/Grid',

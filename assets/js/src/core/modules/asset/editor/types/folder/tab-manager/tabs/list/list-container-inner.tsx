@@ -11,13 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  api,
-  type AssetGetGridApiResponse,
-  type AssetPatchByIdApiArg,
-  useAssetGetGridMutation,
-  useAssetPatchByIdMutation
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
@@ -32,11 +26,9 @@ import {
   useListGridAvailableColumns
 } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/components/grid/grid'
+import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { ListDataProvider } from './list-provider'
-import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'

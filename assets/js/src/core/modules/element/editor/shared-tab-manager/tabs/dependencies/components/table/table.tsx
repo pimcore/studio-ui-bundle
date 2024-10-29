@@ -18,7 +18,8 @@ import {
   type DependencyGetCollectionByElementTypeApiResponse
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/dependencies-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
-import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 type DependencyTable = Dependency & {
   actions: React.JSX.Element
