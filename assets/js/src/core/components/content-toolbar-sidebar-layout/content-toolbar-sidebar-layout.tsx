@@ -14,6 +14,7 @@
 import React, { memo, type ReactNode } from 'react'
 import { useStyles } from './content-toolbar-sidebar-layout.styles'
 import { Content } from '../content/content'
+import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
 
 interface ContentToolbarViewProps {
   children: ReactNode
@@ -36,15 +37,17 @@ const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
       </Content>
 
       { props.renderToolbar !== undefined && (
-        <div className='content-toolbar-sidebar-layout__toolbar'>
+      <div className='content-toolbar-sidebar-layout__toolbar'>
+        <HorizontalScroll>
           {props.renderToolbar}
-        </div>
+        </HorizontalScroll>
+      </div>
       )}
 
-      { props.renderSidebar !== undefined && (
-        <div className='content-toolbar-sidebar-layout__sidebar'>
-          {props.renderSidebar}
-        </div>
+      {props.renderSidebar !== undefined && (
+      <div className='content-toolbar-sidebar-layout__sidebar'>
+        {props.renderSidebar}
+      </div>
       )}
     </div>
   )

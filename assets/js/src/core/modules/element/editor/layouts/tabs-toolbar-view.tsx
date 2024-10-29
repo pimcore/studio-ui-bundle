@@ -13,6 +13,7 @@
 
 import React, { type ReactNode } from 'react'
 import { useStyles } from './tabs-toolbar-view.styles'
+import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
 
 export interface TabbarToolbarViewProps {
   renderTabbar: ReactNode
@@ -28,8 +29,10 @@ const TabsToolbarView = (props: TabbarToolbarViewProps): React.JSX.Element => {
         {props.renderTabbar}
       </div>
 
-      <div className='tabs-toolbar-layout__toolbar'>
-        {props.renderToolbar}
+      <div className={ 'tabs-toolbar-layout__toolbar' }>
+        <HorizontalScroll>
+          {props.renderToolbar}
+        </HorizontalScroll>
       </div>
     </div>
   )

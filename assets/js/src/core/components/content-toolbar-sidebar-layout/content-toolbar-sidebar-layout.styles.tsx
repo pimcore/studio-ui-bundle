@@ -39,9 +39,15 @@ export const useStyles = createStyles(({ token, css }) => {
         border-top: 1px solid ${token.colorBorderTertiary};
         grid-column: 1 / 2;
         grid-row: 2 / 3;
-        position: sticky;
+        position: relative;
+        overflow-x: auto;
+        overflow-y: clip;
         bottom: 0;
         height: ${token.sizeXXL}px; 
+        
+         &::-webkit-scrollbar {
+            display: none;
+        }
       }
 
       .content-toolbar-sidebar-layout__sidebar {

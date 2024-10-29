@@ -35,7 +35,6 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
-import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
 import { Flex } from '@Pimcore/components/flex/flex'
 
 export const Toolbar = (): React.JSX.Element => {
@@ -72,25 +71,23 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <ToolbarView>
-      <HorizontalScroll>
-        <Flex
-          justify={ 'space-between' }
-          style={ { width: '100%' } }
-        >
-          <ContextMenu />
-          <Flex>
-            <EditorToolbarWorkflowMenu />
-            <Button
-              disabled={ !hasChanges || isLoading || isSchedulesLoading }
-              loading={ isLoading || isSchedulesLoading }
-              onClick={ onSaveClick }
-              type="primary"
-            >
-              {t('toolbar.save-and-publish')}
-            </Button>
-          </Flex>
+      <Flex
+        justify={ 'space-between' }
+        style={ { width: '100%' } }
+      >
+        <ContextMenu />
+        <Flex>
+          <EditorToolbarWorkflowMenu />
+          <Button
+            disabled={ !hasChanges || isLoading || isSchedulesLoading }
+            loading={ isLoading || isSchedulesLoading }
+            onClick={ onSaveClick }
+            type="primary"
+          >
+            {t('toolbar.save-and-publish')}
+          </Button>
         </Flex>
-      </HorizontalScroll>
+      </Flex>
     </ToolbarView>
   )
 

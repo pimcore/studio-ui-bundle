@@ -15,13 +15,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useStyles } from './horizontal-scroll.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
+import cn from 'classnames'
 
 export interface HorizontalScrollProps {
   children: React.ReactNode
   scrollWidth?: number
+  className?: string
 }
 
-export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProps): React.JSX.Element => {
+export const HorizontalScroll = ({ className, children, scrollWidth }: HorizontalScrollProps): React.JSX.Element => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollAmount = 50
   const scrollSpeed = 30
@@ -39,7 +41,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
       setIsAtStart(scrollLeft === 0)
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
       setScrollRequired(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth)
-      setHideElement(scrollContainerRef.current.clientWidth < 50)
+      setHideElement(scrollContainerRef.current.clientWidth < 10)
     }
   }
 
@@ -104,7 +106,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
     <>
       <Flex
         align={ 'center' }
-        className={ styles.scroll }
+        className={ cn(styles.scroll, className) }
         ref={ scrollContainerRef }
       >
         {children}

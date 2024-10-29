@@ -34,7 +34,7 @@ export const useStyles = createStyles(({ token, css }) => {
       .tabs-toolbar-layout__toolbar {
         display: flex;
         position: relative;
-        overflow: hidden;
+        overflow-y: clip;
         height: ${token.sizeXXL}px;
         width: 100%;
       }
