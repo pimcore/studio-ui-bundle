@@ -636,4 +636,8 @@ export const GlobalStyles = createGlobalStyle`
   .h-full {
     height: 100%;
   }
+
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
 `

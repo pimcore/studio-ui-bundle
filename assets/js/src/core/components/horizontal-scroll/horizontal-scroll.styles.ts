@@ -13,42 +13,22 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }, { hideElement, scrollRequired }) => {
+export const useStyles = createStyles(({ css }, { scrollWidth, hideElement }) => {
   return {
-    buttonContainer: css`
+    scrollContainer: css`
         visibility: ${hideElement === true ? 'hidden' : 'visible'};
-        overflow: hidden;
-        background-color: cyan;
-        width: 100%;
-       
-.button-left {
-       position: absolute;
-       left: 0;
-       top: 50%; 
-       transform: translate(0, -50%);
-       }
-       .button-right {
-       position: absolute;
-       right: 0;
-       top: 50%; 
-       transform: translate(0, -50%);
-       }
+        display: flex;
+        overflow-x: auto;
     `,
 
     scroll: css`
-    margin-left: ${scrollRequired === true ? '25px' : 0};
-    margin-right: ${scrollRequired === true ? '25px' : 0};
-    min-width: ${scrollRequired === true ? 'calc(100% - 50px)' : '100%'};
-    height: 102%; // to make up for added height from scroll bar flex combination
         overflow-x: auto;
         white-space: nowrap;
+      ${typeof scrollWidth !== 'undefined' && scrollWidth !== null ? `width: ${scrollWidth}px;` : ''}
+
         &::-webkit-scrollbar {
             display: none;
         }
-    `,
-
-    childrenContainer: css`
-    width: 80%
     `
   }
 })

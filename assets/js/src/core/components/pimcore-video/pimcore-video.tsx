@@ -33,6 +33,7 @@ interface PimcoreVideoProps {
   width?: number
   height?: number
   className?: string
+  poster?: string
 }
 
 export const PimcoreVideo = ({
@@ -40,7 +41,8 @@ export const PimcoreVideo = ({
   tracks,
   width,
   height,
-  className
+  className,
+  poster
 }: PimcoreVideoProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { setPlayerPosition } = useContext(VideoContext)
@@ -53,6 +55,7 @@ export const PimcoreVideo = ({
       height={ height }
       key={ sources[0].src }
       onTimeUpdate={ onPlayerTimeUpdate }
+      poster={ poster }
       width={ width }
     >
       {sources.map((source, index) => (

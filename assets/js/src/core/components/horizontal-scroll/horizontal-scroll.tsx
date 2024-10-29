@@ -15,14 +15,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useStyles } from './horizontal-scroll.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
-import cn from 'classnames'
 
 export interface HorizontalScrollProps {
   children: React.ReactNode
-  className?: string
+  scrollWidth?: number
 }
 
-export const HorizontalScroll = ({ className, children }: HorizontalScrollProps): React.JSX.Element => {
+export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProps): React.JSX.Element => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollAmount = 50
   const scrollSpeed = 30
@@ -31,7 +30,7 @@ export const HorizontalScroll = ({ className, children }: HorizontalScrollProps)
   const [isAtEnd, setIsAtEnd] = useState(false)
   const [scrollRequired, setScrollRequired] = useState(false)
   const [hideElement, setHideElement] = useState(false)
-  const { styles } = useStyles({ hideElement, scrollRequired })
+  const { styles } = useStyles({ scrollWidth, hideElement })
 
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
@@ -40,7 +39,7 @@ export const HorizontalScroll = ({ className, children }: HorizontalScrollProps)
       setIsAtStart(scrollLeft === 0)
       setIsAtEnd(scrollLeft + clientWidth >= scrollWidth)
       setScrollRequired(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth)
-      setHideElement(scrollContainerRef.current.clientWidth < 10)
+      setHideElement(scrollContainerRef.current.clientWidth < 50)
     }
   }
 
@@ -102,20 +101,13 @@ export const HorizontalScroll = ({ className, children }: HorizontalScrollProps)
   }
 
   return (
-    <>
-      <Flex
-        align={ 'center' }
-        className={ cn(styles.scroll, className) }
-        ref={ scrollContainerRef }
-      >
-        {children}
-      </Flex>
+    <Flex
+      align={ 'center' }
+      className={ styles.scrollContainer }
+      justify={ 'center' }
+    >
       {scrollRequired && (
-      <div
-        className={ styles.buttonContainer }
-      >
         <IconButton
-          className={ 'button-left' }
           disabled={ isAtStart }
           icon={ 'chevron-left' }
           iconOptions={ { height: 18, width: 18 } }
@@ -128,22 +120,30 @@ export const HorizontalScroll = ({ className, children }: HorizontalScrollProps)
           onMouseUp={ stopScrolling }
           theme="secondary"
         />
-        <IconButton
-          className={ 'button-right' }
-          disabled={ isAtEnd }
-          icon={ 'chevron-right' }
-          iconOptions={ { height: 18, width: 18 } }
-          onKeyDown={ (e) => {
-            handleKeyDown(e, 'right')
-          } }
-          onKeyUp={ handleKeyUp }
-          onMouseDown={ startScrollingRight }
-          onMouseLeave={ stopScrolling }
-          onMouseUp={ stopScrolling }
-          theme="secondary"
-        />
-      </div>
       )}
-    </>
+      <Flex
+        align={ 'center' }
+        className={ styles.scroll }
+        ref={ scrollContainerRef }
+      >
+        {children}
+      </Flex>
+      {
+                scrollRequired && (
+                <IconButton
+                  disabled={ isAtEnd }
+                  icon={ 'chevron-right' }
+                  iconOptions={ { height: 18, width: 18 } }
+                  onKeyDown={ (e) => {
+                    handleKeyDown(e, 'right')
+                  } }
+                  onKeyUp={ handleKeyUp }
+                  onMouseDown={ startScrollingRight }
+                  onMouseLeave={ stopScrolling }
+                  onMouseUp={ stopScrolling }
+                  theme="secondary"
+                />
+                )}
+    </Flex>
   )
 }
