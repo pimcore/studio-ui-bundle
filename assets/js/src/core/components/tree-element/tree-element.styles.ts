@@ -34,7 +34,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           
           @media (hover: hover) {
             &:hover {
-              background-color: ${token.controlItemBgActiveHover};
+              background-color: ${token.controlItemBgHover};
             }
           }
 
