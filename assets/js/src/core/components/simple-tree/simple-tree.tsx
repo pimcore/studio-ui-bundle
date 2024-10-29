@@ -41,6 +41,7 @@ const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
     treeData,
     className,
     defaultExpandedKeys,
+    draggable,
     onCheck,
     onActionsClick,
     onDragAndDrop,
@@ -76,7 +77,8 @@ const SimpleTree = (props: SimpleTreeProps): React.JSX.Element => {
       checkable={ onCheck !== undefined }
       checkedKeys={ checkedKeys }
       className={ cn(styles.treeContainer, className) }
-      draggable
+      draggable={ draggable }
+      expandAction='click'
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
       onCheck={ (checkedKeys): void => onCheck?.(checkedKeys) }

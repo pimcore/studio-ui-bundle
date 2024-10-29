@@ -28,12 +28,48 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
             }
           }
         }
+
+        .ant-tree-treenode {
+          padding: 0;
+          
+          @media (hover: hover) {
+            &:hover {
+              background-color: ${token.controlItemBgActiveHover};
+            }
+          }
+
+          &:focus {
+            outline: none;
+            background-color: ${token.controlItemBgActiveHover};
+          }
+
+          .ant-tree-node-content-wrapper {
+            padding: 0;
+            background: none;
+
+            &:hover {
+              background: none;
+            }
+          }
+        }
+
+        .ant-tree-treenode-selected {
+          background-color: ${token.controlItemBgActive};
+        }
       }
       
       .ant-tree-switcher {
         display: flex;
         align-items: center;
         justify-content: center;
+        
+        &:hover {
+          background-color: transparent !important;
+        }
+      }
+
+      .ant-tree-switcher-noop {
+        pointer-events: none;
       }
       
       .ant-tree-switcher_close {
@@ -55,83 +91,6 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
       .ant-tree-draggable-icon {
         display: none;
       }
-      
-      // .ant-tree-treenode {
-      //   padding: 2px ${token.paddingSM}px 2px 0;
-      //   position: relative;
-      //   gap: 8px;
-      //  
-      //   @media (hover: hover) {
-      //     &:hover {
-      //       background-color: ${token.controlItemBgActiveHover};
-      //     }
-      //   }
-      //  
-      //   &:focus {
-      //     outline: none;
-      //     background-color: ${token.controlItemBgActiveHover};
-      //   }
-      // }
-            
-      // .ant-tree-treenode-selected {
-      //   background-color: ${token.controlItemBgActive};
-      // }
-
-      //.ant-tree-list .ant-tree-node-content-wrapper {
-      //  background: none;
-      //  position: static;
-      //  padding: 0;
-      //  line-height: 20px;
-      //  min-height: 20px;
-      //  display: flex;
-      //  gap: 8px;
-      //
-      //  &:hover {
-      //      background: none;
-      //  }
-      //}
-            
-      // .ant-tree-list .ant-tree-switcher {
-      //   position: relative;
-      //   z-index: 1;
-      //   width: 16px;
-      //   height: 16px;
-      //   background: none;
-      // } 
-      //      
-      // .ant-tree-title__btn {
-      //   background: transparent;
-      //   border: none;
-      //   color: ${token.colorTextTreeElement};
-      //   cursor: pointer;
-      //   padding: 0;
-      //   font-size: ${token.fontSize}px; 
-      //  
-      //   &:after {
-      //     content: '';
-      //     position: absolute;
-      //     top: 0;
-      //     left: 0;
-      //     right: 0;
-      //     bottom: 0;
-      //   }
-      // }
-
-      //.ant-tree-list .ant-tree-iconEle.ant-tree-iconEle {
-      //  width: 16px;
-      //  height: 16px;
-      //  line-height: 22px;
-      //} 
-      //
-      //.ant-tree-checkbox {
-      //  margin: 1px 0 0 0;
-      //  z-index: 1;
-      //}
-      //
-      //  
-      //.ant-tree-switcher-noop {
-      //  pointer-events: none;
-      //}
     `
   }
 }, { hashPriority: 'high' })
