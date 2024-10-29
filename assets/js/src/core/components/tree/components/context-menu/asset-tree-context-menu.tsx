@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import { Button } from 'antd'
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
