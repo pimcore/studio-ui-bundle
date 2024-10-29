@@ -36,6 +36,8 @@ export const useStyles = createStyles(({ token, css }) => {
         position: relative;
         overflow-y: clip;
         height: ${token.sizeXXL}px;
+        background-color: ${token.colorBgToolbar};
+        border-top: 1px solid ${token.colorBorder};
         width: 100%;
       }
     `

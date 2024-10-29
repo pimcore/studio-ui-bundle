@@ -17,14 +17,11 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     toolbar: css`
       width: 100%;
-      height: 48px;
-      border-top: 1px solid ${token.colorBorder};
-      
+      height: 48px;      
       padding: ${token.paddingXS}px;
 
       &.toolbar--theme-primary {
-        // @todo: use token
-        background-color: #F5F3FA;
+        background-color: ${token.colorBgToolbar};
       }
 
       &.toolbar--theme-secondary {
