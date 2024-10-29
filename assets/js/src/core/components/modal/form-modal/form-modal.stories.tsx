@@ -19,7 +19,7 @@ import { useFormModal } from './hooks/use-form-modal'
 const config: Meta = {
   title: 'Components/Data Entry/Input Modal',
   component: (args) => {
-    const [modal, contextHolder] = useFormModal()
+    const modal = useFormModal()
     const [value, setValue] = useState('')
     const [confirmed, setConfirmed] = useState(false)
 
@@ -54,7 +54,6 @@ const config: Meta = {
     return (
       <>
         <Button onClick={ callbackManager }>Open modal</Button>
-        {contextHolder}
 
         {args.type === 'input' && (
           <p>Form Value: {value}</p>
