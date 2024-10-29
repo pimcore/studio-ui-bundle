@@ -45,25 +45,7 @@ const exampleLargeTagList: TagProps[][] = [
     { children: 'Tag 6' }
   ]
 ]
-
-const exampleSmallTagList: TagProps[][] = [
-  [
-    { children: 'Tag 1' },
-    { children: 'Tag 2' },
-    { children: 'Tag 3' }
-  ]
-]
 export const _default = {
-  args: {
-    children: <TagList
-      itemGap={ 'extra-small' }
-      list={ exampleLargeTagList }
-      wrap={ false }
-              />
-  }
-}
-
-export const resizeable = {
   args: {
     children: <TagList
       itemGap={ 'extra-small' }
@@ -90,14 +72,4 @@ export const resizeable = {
       withDivider
     />
   )
-}
-export const ScrollNotRequired = {
-  args: {
-    children: <TagList
-      itemGap={ 'extra-small' }
-      list={ exampleSmallTagList }
-      wrap={ false }
-              />,
-    scrollWidth: 150
-  }
 }

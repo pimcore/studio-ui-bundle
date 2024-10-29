@@ -19,11 +19,10 @@ import cn from 'classnames'
 
 export interface HorizontalScrollProps {
   children: React.ReactNode
-  scrollWidth?: number
   className?: string
 }
 
-export const HorizontalScroll = ({ className, children, scrollWidth }: HorizontalScrollProps): React.JSX.Element => {
+export const HorizontalScroll = ({ className, children }: HorizontalScrollProps): React.JSX.Element => {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollAmount = 50
   const scrollSpeed = 30
@@ -32,7 +31,7 @@ export const HorizontalScroll = ({ className, children, scrollWidth }: Horizonta
   const [isAtEnd, setIsAtEnd] = useState(false)
   const [scrollRequired, setScrollRequired] = useState(false)
   const [hideElement, setHideElement] = useState(false)
-  const { styles } = useStyles({ scrollWidth, hideElement, scrollRequired })
+  const { styles } = useStyles({ hideElement, scrollRequired })
 
   const updateScrollState = (): void => {
     if (scrollContainerRef.current !== null) {
