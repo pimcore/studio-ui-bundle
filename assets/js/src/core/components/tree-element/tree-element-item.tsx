@@ -38,7 +38,6 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
 
   const renderTitle = (): React.JSX.Element => (
     <span
-      className={ 'ant-tree-title__btn' }
       onClick={ onSelected }
       onKeyDown={ (event) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
