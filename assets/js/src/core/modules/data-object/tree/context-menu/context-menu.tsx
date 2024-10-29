@@ -40,14 +40,8 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
-<<<<<<< HEAD:assets/js/src/core/modules/data-object/tree/context-menu/context-menu.tsx
-  const [modal, contextHolder] = useFormModal()
-=======
+
   const modal = useFormModal()
-  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
-  const uploadFileRef = React.useRef<HTMLButtonElement>(null)
-  const uploadZipRef = React.useRef<HTMLButtonElement>(null)
->>>>>>> origin/1.x:assets/js/src/core/components/tree/components/context-menu/asset-tree-context-menu.tsx
   const [assetPatch] = useAssetPatchByIdMutation()
   const [assetDelete] = useElementDeleteMutation()
   const [elementAddFolder] = useElementFolderCreateMutation()
@@ -319,24 +313,6 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
 
   return (
     <>
-<<<<<<< HEAD:assets/js/src/core/modules/data-object/tree/context-menu/context-menu.tsx
-      {contextHolder}
-=======
-      <Upload { ...uploadFile }>
-        <Button
-          ref={ uploadFileRef }
-          style={ { display: 'none' } }
-        ></Button>
-      </Upload>
-
-      <Upload { ...uploadZip }>
-        <Button
-          ref={ uploadZipRef }
-          style={ { display: 'none' } }
-        ></Button>
-      </Upload>
->>>>>>> origin/1.x:assets/js/src/core/components/tree/components/context-menu/asset-tree-context-menu.tsx
-
       <Dropdown
         menu={ { items } }
         trigger={ ['contextMenu'] }

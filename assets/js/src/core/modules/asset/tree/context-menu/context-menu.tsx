@@ -40,7 +40,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { addJob } = useJobs()
-  const [modal, contextHolder] = useFormModal()
+  const modal = useFormModal()
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
@@ -372,8 +372,6 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
 
   return (
     <>
-      {contextHolder}
-
       <Upload { ...uploadFile }>
         <Button
           ref={ uploadFileRef }
