@@ -19,42 +19,34 @@ import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-u
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import {
   api as assetApi,
-  type AssetDeleteZipApiArg,
   useAssetCloneMutation,
   useAssetPatchByIdMutation
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useAssetActions } from './hooks/use-asset-actions'
-import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { addJob } = useJobs()
-  const modal = useFormModal()
+
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
   const [assetPatch] = useAssetPatchByIdMutation()
-  const [assetDelete] = useElementDeleteMutation()
   const [assetClone] = useAssetCloneMutation()
   const {
-    rename,
     copy,
     paste,
     cut,
     pasteCut,
-    remove,
     downloadAsZip,
     lock,
     lockAndPropagate,
@@ -64,6 +56,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   } = useAssetActions()
   const uploadContext = React.useContext(UploadContext)!
   const { addFolderContextMenuItem } = useAddFolder('asset')
+  const { renameContextMenuItem } = useRename('asset')
+  const { deleteContextMenuItem } = useDelete('asset')
   const node = props.node
 
   useEffect(() => {
@@ -71,79 +65,6 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       uploadContext.setUploadingNode(node.id)
     }
   }, [node])
-
-  const renameAssetOrElement = async (value: string): Promise<void> => {
-    const nodeId = parseInt(props.node.id)
-    const assetRenameTask = assetPatch({
-      body: {
-        data: [{
-          id: nodeId,
-          key: value
-        }]
-      }
-    })
-
-    try {
-      await assetRenameTask
-
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(parseInt(props.node.parentId!))
-        )
-      )
-    } catch (error) {
-      console.error('Error renaming asset', error)
-    }
-  }
-
-  const removeAssetOrFolder = async (): Promise<void> => {
-    const isFolder = props.node.type === 'folder'
-
-    // TODO: add multiple deletion // this also requires mercure
-    if (isFolder) {
-      addJob(createDeleteJob({
-        title: 'Deleting Folder',
-        topics: [topics['deletion-finished'], ...defaultTopics],
-        action: async () => {
-          const promise = assetDelete({
-            id: parseInt(props.node.id),
-            elementType: 'asset'
-          })
-
-          promise.catch(() => {
-            console.error('Error deleting asset')
-          })
-
-          const response = (await promise) as any
-
-          if (response.data === undefined || response.data === null) {
-            throw new Error(response.error.data.message as string ?? 'Error deleting Asset')
-          }
-
-          const data = response.data as AssetDeleteZipApiArg
-          return data.jobRunId
-        },
-        parentFolder: props.node.parentId!
-      }))
-    }
-
-    try {
-      if (!isFolder) {
-        await assetDelete({
-          id: parseInt(props.node.id),
-          elementType: 'asset'
-        })
-
-        dispatch(
-          assetApi.util.invalidateTags(
-            invalidatingTags.ASSET_TREE_ID(parseInt(props.node.parentId!))
-          )
-        )
-      }
-    } catch (error) {
-      console.error('Error deleting asset', error)
-    }
-  }
 
   const pasteAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
     if (props.node !== undefined) {
@@ -234,23 +155,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       ]
     },
     addFolderContextMenuItem(props.node),
-    rename({
-      hidden: props.node?.isLocked,
-      onClick: () => {
-        if (props.node !== undefined) {
-          modal.input({
-            title: t('element.tree.context-menu.rename'),
-            label: t('element.tree.context-menu.rename.label'),
-            initialValue: props.node?.label,
-            rule: {
-              required: true,
-              message: t('element.tree.context-menu.rename.validation')
-            },
-            onOk: renameAssetOrElement
-          })
-        }
-      }
-    }),
+    renameContextMenuItem(props.node),
     copy({ node: props.node }),
     paste({
       onClick: pasteAssetOrFolder
@@ -262,22 +167,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     pasteCut({
       onClick: pasteCutAssetOrFolder
     }),
-    remove({
-      hidden: props.node?.isLocked,
-      onClick: () => {
-        modal.confirm({
-          title: t('element.tree.context-menu.delete.title'),
-          content: <>
-            <span>{t('element.tree.context-menu.delete.text')}</span>
-            <br />
-            <b>{props.node?.label}</b>
-          </>,
-          okText: t('element.tree.context-menu.delete.ok'),
-          cancelText: t('button.cancel'),
-          onOk: removeAssetOrFolder
-        })
-      }
-    }),
+    deleteContextMenuItem(props.node),
     downloadAsZip({
       hidden: props.node?.type !== 'folder',
       node: props.node
