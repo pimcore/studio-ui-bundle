@@ -46,6 +46,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
         <br />
         <b>{label}</b>
       </>,
+      okText: t('element.delete.confirmation.ok'),
       onOk: async () => { await deleteMutation(id, parentId) }
     })
   }

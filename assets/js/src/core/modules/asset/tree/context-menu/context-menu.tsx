@@ -17,47 +17,34 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
-import {
-  api as assetApi,
-  useAssetCloneMutation,
-  useAssetPatchByIdMutation
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useAssetActions } from './hooks/use-asset-actions'
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
 
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-  const [assetPatch] = useAssetPatchByIdMutation()
-  const [assetClone] = useAssetCloneMutation()
+
   const {
-    copy,
-    paste,
-    cut,
-    pasteCut,
-    downloadAsZip,
-    lock,
-    lockAndPropagate,
-    unlock,
-    unlockAndPropagate,
-    refresh
+    downloadAsZip
   } = useAssetActions()
   const uploadContext = React.useContext(UploadContext)!
   const { addFolderContextMenuItem } = useAddFolder('asset')
   const { renameContextMenuItem } = useRename('asset')
   const { deleteContextMenuItem } = useDelete('asset')
+  const { refreshTreeContextMenuItem } = useRefreshTree('asset')
+  const { copyContextMenuItem, cutContextMenuItem, pasteContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
+  const { lockContextMenuItem, lockAndPropagateContextMenuItem, unlockContextMenuItem, unlockAndPropagateContextMenuItem } = useLock('asset')
   const node = props.node
 
   useEffect(() => {
@@ -65,65 +52,6 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       uploadContext.setUploadingNode(node.id)
     }
   }, [node])
-
-  const pasteAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
-    if (props.node !== undefined) {
-      const parentId = parseInt(props.node.id)
-      const id = parseInt(node.id)
-      const assetCloneTask = assetClone({
-        id,
-        parentId
-      })
-
-      try {
-        await assetCloneTask
-
-        dispatch(
-          assetApi.util.invalidateTags(
-            invalidatingTags.ASSET_TREE_ID(parentId)
-          )
-        )
-
-        dispatch(
-          assetApi.util.invalidateTags(
-            invalidatingTags.ASSET_TREE_ID(parseInt(node.parentId!))
-          )
-        )
-      } catch (error) {
-        console.error('Error cloning asset', error)
-      }
-    }
-  }
-
-  const pasteCutAssetOrFolder = async (node: TreeNodeProps): Promise<void> => {
-    const nodeId = parseInt(props.node.id)
-    const assetPasteCutTask = assetPatch({
-      body: {
-        data: [{
-          id: parseInt(node.id),
-          parentId: nodeId
-        }]
-      }
-    })
-
-    try {
-      await assetPasteCutTask
-
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(nodeId)
-        )
-      )
-
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_TREE_ID(parseInt(node.parentId!))
-        )
-      )
-    } catch (error) {
-      console.error('Error cutting')
-    }
-  }
 
   const items: DropdownMenuProps['items'] = [
     {
@@ -156,17 +84,10 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     },
     addFolderContextMenuItem(props.node),
     renameContextMenuItem(props.node),
-    copy({ node: props.node }),
-    paste({
-      onClick: pasteAssetOrFolder
-    }),
-    cut({
-      hidden: props.node?.isLocked,
-      node: props.node
-    }),
-    pasteCut({
-      onClick: pasteCutAssetOrFolder
-    }),
+    copyContextMenuItem(props.node),
+    pasteContextMenuItem(parseInt(props.node.id)),
+    cutContextMenuItem(props.node),
+    pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteContextMenuItem(props.node),
     downloadAsZip({
       hidden: props.node?.type !== 'folder',
@@ -178,31 +99,19 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       icon: <Icon name={ 'more' } />,
       children: [
         {
-          label: t('element.tree.context-menu.lock'),
+          label: t('element.lock'),
           key: 'advanced-lock',
           icon: <Icon name={ 'lock-01' } />,
           children: [
-            lock({
-              hidden: props.node?.isLocked,
-              nodeId: props.node?.id
-            }),
-            lockAndPropagate({
-              hidden: props.node?.isLocked,
-              nodeId: props.node?.id
-            }),
-            unlock({
-              hidden: !(props.node?.isLocked),
-              nodeId: props.node?.id
-            }),
-            unlockAndPropagate({
-              hidden: !(props.node?.isLocked),
-              nodeId: props.node?.id
-            })
+            lockContextMenuItem(props.node),
+            lockAndPropagateContextMenuItem(props.node),
+            unlockContextMenuItem(props.node),
+            unlockAndPropagateContextMenuItem(props.node)
           ]
         }
       ]
     },
-    refresh({ nodeId: props.node?.id })
+    refreshTreeContextMenuItem(props.node)
   ]
 
   const uploadFile: UploadProps = {

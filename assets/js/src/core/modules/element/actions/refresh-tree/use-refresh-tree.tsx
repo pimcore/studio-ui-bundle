@@ -16,13 +16,20 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface UseRefreshTreeHookReturn {
   refreshTree: (parentId: number) => void
+  refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
   const dispatch = useAppDispatch()
+  const { t } = useTranslation()
 
   const refreshTree = (parentId: number): void => {
     if (elementType === 'asset') {
@@ -40,7 +47,19 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
     }
   }
 
+  const refreshTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.tree.refresh'),
+      key: 'refresh',
+      icon: <Icon name={ 'refresh-ccw-03' } />,
+      onClick: () => {
+        refreshTree(parseInt(node.id))
+      }
+    }
+  }
+
   return {
-    refreshTree
+    refreshTree,
+    refreshTreeContextMenuItem
   }
 }
