@@ -15,11 +15,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    formModal: css`
-      .ant-space {
-        .ant-space-item {
-            width: 100%;
-        }
+    dropdown: css`
+      .ant-dropdown-menu-submenu {
+          .ant-dropdown-menu-submenu-title {
+              display: flex;
+              align-items: center;
+          }
       }
     `
   }

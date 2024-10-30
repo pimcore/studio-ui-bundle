@@ -84,6 +84,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
       <DroppableContextProvider value={ { isDragActive: isValidContext, isOver: isOver && isValidContext, isValid: isValidData && isValidContext } }>
         <Component
           { ...Child.props }
+          key={ id }
           ref={ setNodeRef }
         />
       </DroppableContextProvider>
