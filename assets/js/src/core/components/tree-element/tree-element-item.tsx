@@ -16,16 +16,17 @@ import { Dropdown, type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 
-export interface SimpleTreeItemProps {
+export interface ITreeElementItemProps {
   title: string
   actions?: Array<{ key: string, icon: string }>
   onSelected?: () => void
   onActionsClick?: (action: string) => void
 }
-const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }: SimpleTreeItemProps): React.JSX.Element => {
+const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeElementItemProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const items: MenuProps['items'] = []
+
   actions?.forEach((action) => {
     items?.push({
       key: action.key,
@@ -35,30 +36,33 @@ const SimpleTreeItem = ({ title, actions, onSelected, onActionsClick, ...props }
     })
   })
 
+  const renderTitle = (): React.JSX.Element => (
+    <span
+      onClick={ onSelected }
+      onKeyDown={ (event) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+          if (onSelected != null) {
+            onSelected()
+          }
+        }
+      } }
+      role="button"
+      tabIndex={ 0 }
+    >
+      {title}
+    </span>
+  )
+
   return items?.length > 0
     ? (
       <Dropdown
         menu={ { items } }
         trigger={ ['contextMenu'] }
       >
-        <button
-          className={ 'ant-tree-title__btn' }
-          onClick={ onSelected }
-          type="button"
-        >
-          {title}
-        </button>
+        {renderTitle()}
       </Dropdown>
       )
-    : (
-      <button
-        className={ 'ant-tree-title__btn' }
-        onClick={ onSelected }
-        type="button"
-      >
-        {title}
-      </button>
-      )
+    : renderTitle()
 }
 
-export { SimpleTreeItem }
+export { TreeElementItem }

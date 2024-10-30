@@ -12,13 +12,13 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { SimpleTree } from './simple-tree'
+import { TreeElement } from './tree-element'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 
 const config: Meta = {
   title: 'Components/Data Display/Tree',
-  component: SimpleTree,
+  component: TreeElement,
   tags: ['autodocs']
 }
 

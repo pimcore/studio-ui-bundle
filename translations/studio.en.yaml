@@ -276,16 +276,25 @@ element.tree.context-menu.add-assets: Add Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
 element.tree.context-menu.add-assets.upload-zip: Upload Zip
 element.tree.context-menu.add-folder: Add Folder
+element.tree.context-menu.add-folder.label: 'Enter the name of the new item'
+element.tree.context-menu.add-folder.validation: 'Please enter a valid name'
 element.tree.context-menu.rename: Rename
+element.tree.context-menu.rename.label: 'Please enter the new name'
+element.tree.context-menu.rename.validation: 'Please enter a valid name'
 element.tree.context-menu.copy: Copy
 element.tree.context-menu.paste: Paste
 element.tree.context-menu.cut: Cut
+element.tree.context-menu.pasteCut: Paste cut-out element
 element.tree.context-menu.delete: Delete
+element.tree.context-menu.delete.title: Delete item
+element.tree.context-menu.delete.text: Do you really want to delete this item?
+element.tree.context-menu.delete.ok: Delete permanently
 element.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.advanced: Advanced
 element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.lock: Lock
 element.tree.context-menu.lock-and-propagate-to-children: Lock and propagate to children
+element.tree.context-menu.unlock: Unlock
+element.tree.context-menu.unlock-and-propagate-to-children: Unlock and propagate to children
 element.tree.context-menu.expand-children: Expand Children
 element.tree.context-menu.refresh: Refresh
-element.tree.context-menu.request-translations: Request Translations

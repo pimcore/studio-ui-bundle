@@ -91,7 +91,6 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
-      className='overflow-x-auto'
       justify={ 'flex-end' }
     >
       {!isLoading && (

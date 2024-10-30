@@ -11,16 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import type { FilterOptions } from '../types/filterTypes'
 
-export const useStyle = createStyles(({ token, css }) => {
-  return {
-    formModal: css`
-      .ant-space {
-        .ant-space-item {
-            width: 100%;
-        }
-      }
-    `
-  }
-})
+export const defaultFilterOptions: FilterOptions = {
+  columnFilters: [],
+  includeDescendants: true
+}
