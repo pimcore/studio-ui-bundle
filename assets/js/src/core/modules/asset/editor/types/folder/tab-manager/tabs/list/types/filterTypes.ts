@@ -15,8 +15,14 @@ import type React from 'react'
 import type { GridFilter } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export type FilterOptions = Pick<GridFilter, 'columnFilters' | 'includeDescendants'>
+export type TagFilterOptions = Pick<GridFilter, 'columnFilters'>
 
 export interface IFilterContext {
   filterOptions: FilterOptions
   setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
+}
+
+export interface ITagFilterContext {
+  filterOptions: TagFilterOptions
+  setFilterOptions: React.Dispatch<React.SetStateAction<TagFilterOptions>>
 }
