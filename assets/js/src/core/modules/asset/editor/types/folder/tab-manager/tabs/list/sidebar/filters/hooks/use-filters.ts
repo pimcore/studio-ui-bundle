@@ -12,7 +12,9 @@
 */
 
 import { useContext } from 'react'
-import { defaultFilterOptions, FilterContext, type IFilterContext } from '../filter-provider'
+import { FilterContext } from '../filter-provider'
+import { type IFilterContext } from '../../../types/filterTypes'
+import { defaultFilterOptions } from '../../../constants/filters'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
 

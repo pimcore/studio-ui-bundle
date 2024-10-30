@@ -15,7 +15,7 @@ import React, { createContext, useMemo, useState } from 'react'
 import { type FilterOptions, type IFilterContext } from '../../types/filterTypes'
 import { defaultFilterOptions } from '../../constants/filters'
 
-export const FilterContext = createContext<IFilterContext>({
+export const TagFiltersContext = createContext<IFilterContext>({
   filterOptions: defaultFilterOptions,
   setFilterOptions: () => {}
 })
@@ -24,12 +24,12 @@ interface FilterProviderProps {
   children: React.ReactNode
 }
 
-export const FilterProvider = ({ children }: FilterProviderProps): React.JSX.Element => {
+export const TagFiltersProvider = ({ children }: FilterProviderProps): React.JSX.Element => {
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
 
   return useMemo(() => (
-    <FilterContext.Provider value={ { filterOptions, setFilterOptions } }>
+    <TagFiltersContext.Provider value={ { filterOptions, setFilterOptions } }>
       {children}
-    </FilterContext.Provider>
+    </TagFiltersContext.Provider>
   ), [filterOptions, children])
 }

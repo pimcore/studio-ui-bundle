@@ -42,6 +42,7 @@ export const useStyles = createStyles(({ token, css }) => {
         position: sticky;
         bottom: 0;
         height: ${token.sizeXXL}px; 
+        overflow: hidden;
       }
 
       .content-toolbar-sidebar-layout__sidebar {

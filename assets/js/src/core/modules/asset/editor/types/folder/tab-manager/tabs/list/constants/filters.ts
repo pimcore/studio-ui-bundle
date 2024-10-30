@@ -11,14 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { TagFiltersContainerInner } from './tag-filters-container-inner'
-import { TagFiltersProvider } from './tag-filters-provider'
+import type { FilterOptions } from '../types/filterTypes'
 
-export const TagFiltersContainer = (): React.JSX.Element => {
-  return (
-    <TagFiltersProvider>
-      <TagFiltersContainerInner />
-    </TagFiltersProvider>
-  )
+export const defaultFilterOptions: FilterOptions = {
+  columnFilters: [],
+  includeDescendants: true
 }

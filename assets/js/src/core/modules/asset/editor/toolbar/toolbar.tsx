@@ -73,7 +73,6 @@ export const Toolbar = (): React.JSX.Element => {
     <ToolbarView>
       <ContextMenu />
       <Flex
-        className='overflow-x-auto'
         style={ { height: '32px' } }
         vertical={ false }
       >
