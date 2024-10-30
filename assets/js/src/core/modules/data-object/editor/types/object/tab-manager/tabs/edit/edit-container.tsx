@@ -14,14 +14,20 @@
 import React from 'react'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { _layout } from './data/layout'
 import { RootComponent } from './components/root-component'
+import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { Content } from '@Pimcore/components/content/content'
 
 export const EditContainer = (): React.JSX.Element => {
-  // @todo bind to api data
-  const layout = _layout
+  const { id } = useElementContext()
+  const { data, isLoading } = useDataObjectGetLayoutByIdQuery({ id })
 
-  return <RootComponent layout={ layout } />
+  if (data === undefined || isLoading) {
+    return <Content loading />
+  }
+
+  return <RootComponent layout={ data } />
 }
 
 export const TAB_EDIT: IEditorTab = {

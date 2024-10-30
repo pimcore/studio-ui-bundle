@@ -21,17 +21,28 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 export interface DataComponentProps extends ObjectComponentProps {
   name: string
   datatype: 'data'
+  fieldType?: string
+  fieldtype?: string
   [p: string]: any
 }
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
-  const { name, title } = props
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-  // @todo handle all the different data types here
-  const objectDataType = objectDataRegistry.getDynamicType('input')
+  const { name, title } = props
+  const { fieldType, fieldtype } = props
+
+  // @todo unify to one fieldType after api is updated completely
+  const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
+
+  if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
+    // @todo should throw an error in the future after the implementation of all data types
+    return (<div>Unknown data type: {currentFieldType}</div>)
+  }
+  const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
   return (
     <Form.Item
+      className='w-full'
       label={ title }
       name={ name }
     >

@@ -17,20 +17,24 @@ import { DataComponent, type DataComponentProps } from './data-component'
 
 export interface ObjectComponentProps {
   name: string
-  datatype: string
+  className?: string
+  dataType?: string
+  datatype?: string
   [p: string]: any
 }
 
 export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element => {
-  const { datatype } = props
+  const { dataType, datatype } = props
 
-  if (datatype === 'data') {
+  const currentDataType = dataType ?? datatype
+
+  if (currentDataType === 'data') {
     return <DataComponent { ...props as DataComponentProps } />
   }
 
-  if (datatype === 'layout') {
+  if (currentDataType === 'layout') {
     return <LayoutComponent { ...props as LayoutComponentProps } />
   }
 
-  throw new Error(`Unknown datatype: ${datatype}`)
+  throw new Error(`Unknown datatype: ${currentDataType}`)
 }

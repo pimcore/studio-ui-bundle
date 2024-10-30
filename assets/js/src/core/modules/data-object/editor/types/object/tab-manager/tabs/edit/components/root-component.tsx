@@ -12,13 +12,13 @@
 */
 
 import React from 'react'
-import { type _layout } from '../data/layout'
 import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { Button } from 'antd'
+import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 interface RootComponentProps {
-  layout: typeof _layout
+  layout: DataObjectGetLayoutByIdApiResponse
 }
 
 export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element => {

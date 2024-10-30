@@ -93,6 +93,9 @@ export const serviceIds = {
   'DynamicTypes/ObjectLayout/Tabpanel': 'DynamicTypes/ObjectLayout/Tabpanel',
   'DynamicTypes/ObjectLayout/Accordion': 'DynamicTypes/ObjectLayout/Accordion',
   'DynamicTypes/ObjectLayout/Region': 'DynamicTypes/ObjectLayout/Region',
+  'DynamicTypes/ObjectLayout/Text': 'DynamicTypes/ObjectLayout/Text',
+  'DynamicTypes/ObjectLayout/Fieldset': 'DynamicTypes/ObjectLayout/Fieldset',
+  'DynamicTypes/ObjectLayout/FieldContainer': 'DynamicTypes/ObjectLayout/FieldContainer',
 
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',

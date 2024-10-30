@@ -20,18 +20,23 @@ import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/d
 export interface LayoutComponentProps extends ObjectComponentProps {
   name: string
   datatype: 'layout'
-  fieldtype: string
+  fieldType?: string
+  fieldtype?: string
   [p: string]: any
 }
 
 export const LayoutComponent = (props: LayoutComponentProps): React.JSX.Element => {
   const layoutTypeRegistry = useInjection<DynamicTypeObjectLayoutRegistry>(serviceIds['DynamicTypes/ObjectLayoutRegistry'])
+  const { fieldType, fieldtype } = props
 
-  if (!layoutTypeRegistry.hasDynamicType(props.fieldtype)) {
+  // @todo unify to one fieldType after api is updated completely
+  const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
+
+  if (!layoutTypeRegistry.hasDynamicType(currentFieldType)) {
     // @todo should throw an error in the future after the implementation of all layout types
-    return (<div>Unknown layout type: {props.fieldtype}</div>)
+    return (<div>Unknown layout type: {currentFieldType}</div>)
   }
 
-  const layoutType = layoutTypeRegistry.getDynamicType(props.fieldtype)
+  const layoutType = layoutTypeRegistry.getDynamicType(currentFieldType)
   return layoutType.getObjectLayoutComponent(props)
 }

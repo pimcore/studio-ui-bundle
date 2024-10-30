@@ -55,6 +55,9 @@ import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-r
 import { type DynamicTypeObjectLayoutTabpanel } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
 import { type DynamicTypeObjectLayoutAccordion } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
 import { type DynamicTypeObjectLayoutRegion } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-region'
+import { type DynamicTypeObjectLayoutText } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-text'
+import { type DynamicTypeObjectLayoutFieldset } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
+import { type DynamicTypeObjectLayoutFieldContainer } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
 
 moduleSystem.registerModule({
   onInit () {
@@ -104,6 +107,9 @@ moduleSystem.registerModule({
     objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutTabpanel>(serviceIds['DynamicTypes/ObjectLayout/Tabpanel']))
     objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutAccordion>(serviceIds['DynamicTypes/ObjectLayout/Accordion']))
     objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutRegion>(serviceIds['DynamicTypes/ObjectLayout/Region']))
+    objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutText>(serviceIds['DynamicTypes/ObjectLayout/Text']))
+    objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutFieldset>(serviceIds['DynamicTypes/ObjectLayout/Fieldset']))
+    objectLayoutRegistry.registerDynamicType(container.get<DynamicTypeObjectLayoutFieldContainer>(serviceIds['DynamicTypes/ObjectLayout/FieldContainer']))
 
     const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
