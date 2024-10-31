@@ -235,7 +235,8 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition";
+        | "TermSegmentBuilderDefinition"
+        | "test";
 };
 export type Error = {
     /** Message */
