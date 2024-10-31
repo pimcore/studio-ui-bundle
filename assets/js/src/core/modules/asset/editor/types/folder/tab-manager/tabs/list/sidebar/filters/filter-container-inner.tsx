@@ -16,6 +16,9 @@ import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Form, Space } from 'antd'
 import { type CheckboxChangeEvent } from 'antd/es/checkbox'
 import { Button } from '@Pimcore/components/button/button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { Switch } from '@Pimcore/components/switch/switch'
 import Search from 'antd/es/input/Search'
 import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
@@ -32,6 +35,7 @@ import {
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
+  const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
   const { resetFilters, filterOptions, updateIsIncludeDescendants } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
@@ -72,39 +76,59 @@ export const FilterContainerInner = (): React.JSX.Element => {
        }
     >
       <Content padded>
-        <Title>Search & Filter</Title>
-
-        <Form>
-          <Space
-            direction='vertical'
-            style={ { width: '100%' } }
-          >
-            <Search
-              placeholder='Search'
-              value={ '' }
+        <Flex
+          align='center'
+          justify='space-between'
+        >
+          <Title>Search & Filter</Title>
+          <Flex gap='extra-small'>
+            <Text>Advanced Mode</Text>
+            <Switch
+              checked={ isAdvancedMode }
+              onChange={ () => { setIsAdvancedMode(!isAdvancedMode) } }
             />
+          </Flex>
+        </Flex>
 
-            <Checkbox
-              checked={ isIncludeDescendants }
-              onChange={ handleChangeIsIncludeDescendants }
-            >
-              only direct children
-            </Checkbox>
+        {isAdvancedMode
+          ? (
+            <div>PQL Query</div>
+            )
+          : (
+            <>
+              <Form>
+                <Space
+                  direction='vertical'
+                  style={ { width: '100%' } }
+                >
+                  <Search
+                    placeholder='Search'
+                    value={ '' }
+                  />
 
-            {/* <Checkbox */}
-            {/*  checked={ false } */}
-            {/*  value={ 'referenced' } */}
-            {/* > */}
-            {/*  only unreferenced */}
-            {/* </Checkbox> */}
-          </Space>
-        </Form>
+                  <Checkbox
+                    checked={ isIncludeDescendants }
+                    onChange={ handleChangeIsIncludeDescendants }
+                  >
+                    only direct children
+                  </Checkbox>
 
-        <Title>
-          Field filters
-        </Title>
+                  {/* <Checkbox */}
+                  {/*  checked={ false } */}
+                  {/*  value={ 'referenced' } */}
+                  {/* > */}
+                  {/*  only unreferenced */}
+                  {/* </Checkbox> */}
+                </Space>
+              </Form>
 
-        <FieldFiltersContainer />
+              <Title>
+                Field filters
+              </Title>
+
+              <FieldFiltersContainer />
+            </>
+            )}
       </Content>
     </ContentToolbarSidebarLayout>
   )
