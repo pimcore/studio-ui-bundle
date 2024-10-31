@@ -15,9 +15,10 @@
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { type FilterOptions } from './types/filterTypes'
+import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
 import { defaultFilterOptions } from './constants/filters'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface ICommonListProviderProps {
   children: React.ReactNode
@@ -93,7 +94,7 @@ type FilterOptionsMap = Record<string, FilterOptions>
 
 export interface IListFilterOptionsContext {
   filterOptions: FilterOptions
-  setFilterOptions: (key: string, filterOptions: FilterOptions) => void
+  setFilterOptions: (key: string, filterOptions: FilterOptions | TagFilterOptions) => void
 }
 
 const defaultFilterOptionsMap: FilterOptionsMap = {}
@@ -121,8 +122,12 @@ export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProvide
   const filterOptions = useMemo(() => Object.values(filterOptionsMap).reduce((acc, curr) => {
     acc.columnFilters = [...acc.columnFilters as [], ...curr.columnFilters as []]
 
+    if (!isEmptyValue(curr.includeDescendants)) {
+      acc.includeDescendants = curr.includeDescendants
+    }
+
     return acc
-  }, { columnFilters: [], includeDescendants: true }), [filterOptionsMap])
+  }, { columnFilters: [], includeDescendants: false }), [filterOptionsMap])
 
   return useMemo(() => (
     <ListFilterOptionsContext.Provider value={ { filterOptions, setFilterOptions } }>

@@ -13,10 +13,10 @@
 
 import { useContext } from 'react'
 import { TagFiltersContext } from '../tag-filters-provider'
-import { type IFilterContext } from '../../../types/filterTypes'
-import { defaultFilterOptions } from '../../../constants/filters'
+import { type ITagFilterContext } from '../../../types/filterTypes'
+import { defaultTagFilterOptions } from '../../../constants/filters'
 
-interface UseFiltersHookReturn extends IFilterContext {
+interface UseFiltersHookReturn extends ITagFilterContext {
   addOrUpdateFieldFilter: (value: any) => void
   resetFilters: () => void
 }
@@ -26,7 +26,7 @@ const TYPE = 'system.tag'
 export const useTagFilters = (): UseFiltersHookReturn => {
   const { filterOptions, setFilterOptions } = useContext(TagFiltersContext)
 
-  const resetFilters = (): void => { setFilterOptions(defaultFilterOptions) }
+  const resetFilters = (): void => { setFilterOptions(defaultTagFilterOptions) }
 
   const addOrUpdateFieldFilter = (value: any): void => {
     setFilterOptions((filterOptions) => {

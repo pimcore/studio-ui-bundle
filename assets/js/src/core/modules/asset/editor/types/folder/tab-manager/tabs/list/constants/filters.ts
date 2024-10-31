@@ -11,9 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { FilterOptions } from '../types/filterTypes'
+import type { FilterOptions, TagFilterOptions } from '../types/filterTypes'
+
+export const DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE: boolean = false
 
 export const defaultFilterOptions: FilterOptions = {
   columnFilters: [],
-  includeDescendants: true
+  includeDescendants: DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
+}
+
+export const defaultTagFilterOptions: TagFilterOptions = {
+  columnFilters: []
 }
