@@ -32,7 +32,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
-  const { openModal } = useWorkflow()
+  const { openModal, submitWorkflowAction } = useWorkflow()
 
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
@@ -44,8 +44,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             key: (result.length + 1).toString(),
             label: t(`${status.label}`),
             onClick: () => {
-              // submitAction(status.transition, 'transition', workflow.workflowName, {})
-              alert('submit')
+              submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
             }
           })
         })

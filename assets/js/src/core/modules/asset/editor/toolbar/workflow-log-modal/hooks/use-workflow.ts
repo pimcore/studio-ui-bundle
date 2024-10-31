@@ -55,6 +55,7 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
       workflowOptions: workFlowOptions
     }
   })
+
   const submitWorkflowAction = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): void => {
     fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workFlowName, workFlowOptions)).then(() => {
     }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
