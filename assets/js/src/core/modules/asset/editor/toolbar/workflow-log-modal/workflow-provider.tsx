@@ -47,7 +47,8 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
     setModalOpen(true)
   }
   const closeModal = (): void => {
-    setWorkflowDetails(null)
+    console.log('----> workflowDetails', workflowDetails)
+
     setModalOpen(false)
   }
 
