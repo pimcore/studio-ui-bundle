@@ -27,7 +27,6 @@ import {
 import {
   type CustomMetadata as CustomMetadataApi
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen'
-import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
@@ -88,7 +87,7 @@ export const Toolbar = (): React.JSX.Element => {
             {t('toolbar.save-and-publish')}
           </Button>
         </Flex>
-        <WorkflowLogModal />
+        {/* <WorkflowLogModal workflow={workflow}/> */}
       </WorkFlowProvider>
     </ToolbarView>
   )

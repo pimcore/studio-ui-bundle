@@ -21,9 +21,15 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from 'antd'
+import type {
+  WorkflowDetails
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
-export const WorkflowLogModal = (): React.JSX.Element => {
-  const { isModalOpen, closeModal } = useWorkflow()
+interface WorkflowModalProps {
+  workflow: WorkflowDetails
+}
+export const WorkflowLogModal = ({ workflow }: WorkflowModalProps): React.JSX.Element => {
+  const { submitWorkflowAction, isModalOpen, closeModal } = useWorkflow()
   const [form] = Form.useForm<FormValues>()
 
   interface FormValues {
@@ -32,8 +38,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
   }
 
   const onFinish = (values: FormValues): void => {
-    console.log('----> formvalues', values)
-
+    submitWorkflowAction('log_time', 'global', workflow.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
     closeModal()
   }
 
@@ -77,14 +82,14 @@ export const WorkflowLogModal = (): React.JSX.Element => {
         <Form.Item
           label="Time spent"
           name="timeSpent"
-          rules={ [{ required: false, message: '' }] }
+          rules={ [{ required: true, message: 'Please enter the Time you have spent' }] }
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Notes"
           name="notes"
-          rules={ [{ required: true, message: 'Please enter your Notes above or Cancel' }] }
+          rules={ [{ required: true, message: 'Please enter your Notes' }] }
         >
           <Input.TextArea rows={ 4 } />
         </Form.Item>

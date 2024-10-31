@@ -35,7 +35,6 @@ interface WorkflowOptions {
   }
 }
 
-// more
 type ActionType = 'transition' | 'global'
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {

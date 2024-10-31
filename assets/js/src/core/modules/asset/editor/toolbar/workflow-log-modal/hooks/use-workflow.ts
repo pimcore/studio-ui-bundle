@@ -16,14 +16,50 @@ import {
   type IWorkflowContext,
   WorkflowContext
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import {
+  useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 interface UseWorkflowHookReturn extends IWorkflowContext {
+  submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
 }
 
+export type ActionType = 'transition' | 'global'
+
+export interface WorkflowOptions {
+  notes?: string
+  additional?: {
+    timeWorked: string
+  }
+}
 export const useWorkflow = (): UseWorkflowHookReturn => {
   const { openModal, closeModal, isModalOpen } = useContext(WorkflowContext)
+  const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
+  const { id } = useAsset()
+
+  const toSnakeCase = (str: string): string => {
+    return str
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+  }
+  const workFlowTransition = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
+    submitAction: {
+      actionType,
+      elementId: id,
+      elementType: 'asset',
+      workflowName: toSnakeCase(workFlowName),
+      transition,
+      workflowOptions: workFlowOptions
+    }
+  })
+  const submitWorkflowAction = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): void => {
+    fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workFlowName, workFlowOptions)).then(() => {
+    }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
+  }
 
   return {
-    openModal, closeModal, isModalOpen
+    submitWorkflowAction, openModal, closeModal, isModalOpen
   }
 }

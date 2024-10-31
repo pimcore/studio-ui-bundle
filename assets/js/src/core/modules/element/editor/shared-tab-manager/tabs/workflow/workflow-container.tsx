@@ -44,12 +44,12 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
       <Space direction="vertical">
         {data?.items !== undefined && data?.items.length > 0 && (
           data.items.map((workflow, index) => (
-            <WorkFlowProvider key={ index }>
+            <WorkFlowProvider key={ index } >
               <WorkflowCard
                 key={ index }
                 workflow={ workflow }
               />
-              <WorkflowLogModal />
+              <WorkflowLogModal workflow={ workflow } />
             </WorkFlowProvider>
           ))
         )}
