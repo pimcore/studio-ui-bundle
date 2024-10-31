@@ -39,7 +39,6 @@ type ActionType = 'transition' | 'global'
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { id } = useAsset()
-
   const toSnakeCase = (str: string): string => {
     return str
       .toLowerCase()
@@ -83,19 +82,11 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       })
 
       workflow.globalActions?.forEach((status) => {
-        const workflowOptions: WorkflowOptions = {
-          notes: 'comment',
-          additional: {
-            timeWorked: '11'
-          }
-        }
-
         items.push({
           key: Number(items.length + 1).toString(),
           label: t(`${status.label}`),
           onClick: () => {
-            openModal()
-            submitWorkflowAction(status.name, 'global', workflowOptions)
+            openModal({ transition: status.name, actionType: 'global', workflowName: workflow.workflowName })
           }
         })
       })

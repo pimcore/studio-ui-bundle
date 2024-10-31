@@ -12,17 +12,27 @@
 */
 
 import React, { useState, createContext, useMemo } from 'react'
+import { type ActionType } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
+export interface WorkflowDetails {
+  workflowName: string
+  transition: string
+  actionType: ActionType
+}
 export interface IWorkflowContext {
   isModalOpen: boolean
-  openModal: () => void
+  openModal: (workflowDetails: WorkflowDetails) => void
   closeModal: () => void
+  workflowDetails: WorkflowDetails | null
+  setWorkflowDetails: (details: WorkflowDetails | null) => void
 }
 
 export const WorkflowContext = createContext<IWorkflowContext>({
   isModalOpen: false,
   openModal: () => {},
-  closeModal: () => {}
+  closeModal: () => {},
+  workflowDetails: null,
+  setWorkflowDetails: () => {}
 })
 
 export interface WorkFlowProviderProps {
@@ -31,13 +41,20 @@ export interface WorkFlowProviderProps {
 
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails | null>(null)
 
-  const openModal = (): void => { setModalOpen(true) }
-  const closeModal = (): void => { setModalOpen(false) }
+  const openModal = (workflowDetails: WorkflowDetails): void => {
+    setWorkflowDetails(workflowDetails)
+    setModalOpen(true)
+  }
+  const closeModal = (): void => {
+    setWorkflowDetails(null)
+    setModalOpen(false)
+  }
 
   return useMemo(() => (
-    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal } }>
+    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails } }>
       {children}
     </WorkflowContext.Provider>
-  ), [isModalOpen, children])
+  ), [isModalOpen, children, workflowDetails])
 }

@@ -36,6 +36,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -87,7 +88,7 @@ export const Toolbar = (): React.JSX.Element => {
             {t('toolbar.save-and-publish')}
           </Button>
         </Flex>
-        {/* <WorkflowLogModal workflow={workflow}/> */}
+        <WorkflowLogModal />
       </WorkFlowProvider>
     </ToolbarView>
   )

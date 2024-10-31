@@ -33,8 +33,9 @@ export interface WorkflowOptions {
     timeWorked: string
   }
 }
+
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen } = useContext(WorkflowContext)
+  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
   const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
   const { id } = useAsset()
 
@@ -60,6 +61,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   }
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen
+    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails
   }
 }

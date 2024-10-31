@@ -49,7 +49,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
                 key={ index }
                 workflow={ workflow }
               />
-              <WorkflowLogModal workflow={ workflow } />
+              <WorkflowLogModal />
             </WorkFlowProvider>
           ))
         )}

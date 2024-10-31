@@ -21,15 +21,9 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from 'antd'
-import type {
-  WorkflowDetails
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
-interface WorkflowModalProps {
-  workflow: WorkflowDetails
-}
-export const WorkflowLogModal = ({ workflow }: WorkflowModalProps): React.JSX.Element => {
-  const { submitWorkflowAction, isModalOpen, closeModal } = useWorkflow()
+export const WorkflowLogModal = (): React.JSX.Element => {
+  const { submitWorkflowAction, isModalOpen, closeModal, workflowDetails } = useWorkflow()
   const [form] = Form.useForm<FormValues>()
 
   interface FormValues {
@@ -38,7 +32,7 @@ export const WorkflowLogModal = ({ workflow }: WorkflowModalProps): React.JSX.El
   }
 
   const onFinish = (values: FormValues): void => {
-    submitWorkflowAction('log_time', 'global', workflow.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
+    workflowDetails !== null && submitWorkflowAction(workflowDetails.transition, workflowDetails.actionType, workflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
     closeModal()
   }
 
@@ -70,7 +64,7 @@ export const WorkflowLogModal = ({ workflow }: WorkflowModalProps): React.JSX.El
       onCancel={ () => {
         closeModal()
       } }
-      open={ isModalOpen }
+      open={ isModalOpen && workflowDetails !== null }
       size={ 'M' }
       title={ <ModalTitle>Log Time</ModalTitle> }
     >

@@ -38,16 +38,25 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
     if (data?.items !== undefined && data.items.length > 0) {
       const workFlowItems = data.items.map((workflow) => {
         const result: ItemType[] = []
-        const mergedActions = [
-          ...(workflow.allowedTransitions ?? []),
-          ...(workflow.globalActions ?? [])
-        ]
 
-        mergedActions?.forEach((action) => {
+        workflow.allowedTransitions?.forEach((status) => {
           result.push({
             key: (result.length + 1).toString(),
-            label: t(`${action.label}`),
-            onClick: () => { openModal() }
+            label: t(`${status.label}`),
+            onClick: () => {
+              // submitAction(status.transition, 'transition', workflow.workflowName, {})
+              alert('submit')
+            }
+          })
+        })
+
+        workflow.globalActions?.forEach((status) => {
+          result.push({
+            key: (result.length + 1).toString(),
+            label: t(`${status.label}`),
+            onClick: () => {
+              openModal({ transition: status.name, actionType: 'global', workflowName: workflow.workflowName })
+            }
           })
         })
 
