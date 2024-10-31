@@ -15,6 +15,7 @@ import { useContext } from 'react'
 import { FilterContext } from '../filter-provider'
 import { type IFilterContext } from '../../../types/filterTypes'
 import { defaultFilterOptions } from '../../../constants/filters'
+import { PQL_QUERY_TYPE } from '../../../constants/systemTypes'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
 
@@ -24,6 +25,7 @@ interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
   resetFilters: () => void
   updateIsIncludeDescendants: (value: boolean) => void
+  addOrUpdatePQLQuery: (value: string) => void
 }
 
 export interface FieldFilter {
@@ -136,6 +138,18 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
+  const addOrUpdatePQLQuery = (value: string): void => {
+    setFilterOptions((filterOptions) => {
+      return {
+        ...filterOptions,
+        columnFilters: [{
+          type: PQL_QUERY_TYPE,
+          filterValue: value
+        }]
+      }
+    })
+  }
+
   return {
     filterOptions,
     setFilterOptions,
@@ -145,6 +159,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     resetFilters,
     resetColumns,
     updateIsIncludeDescendants,
+    addOrUpdatePQLQuery,
     ...gridConfigProps
   }
 }

@@ -39,10 +39,11 @@ import { useStyles } from './filter-container-inner.styles'
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+  const [pqlQueryValue, setPQLQueryValue] = useState<string>('')
 
   const { styles } = useStyles()
 
-  const { resetFilters, filterOptions, updateIsIncludeDescendants } = useFilters()
+  const { resetFilters, filterOptions, updateIsIncludeDescendants, addOrUpdatePQLQuery } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
 
   const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
@@ -52,10 +53,19 @@ export const FilterContainerInner = (): React.JSX.Element => {
     updateIsIncludeDescendants(includeDescendantsValue)
   }
 
+  const handleChangePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    setPQLQueryValue(e.target.value)
+  }
+
+  const handleSavePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    addOrUpdatePQLQuery(e.target.value)
+  }
+
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
   const handleResetAllFiltersClick = (): void => {
     setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
+    setPQLQueryValue('')
     resetFilters()
   }
 
@@ -110,8 +120,12 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 </div>
               </Flex>
               <TextArea
+                allowClear
+                onBlur={ handleSavePQLQueryValue }
+                onChange={ handleChangePQLQueryValue }
                 placeholder='Type your Query'
                 style={ { height: '150px' } }
+                value={ pqlQueryValue }
               />
             </Flex>
             )
