@@ -28,7 +28,7 @@ export const DetachedTab = ({ children }: IDetachedTabProps): React.JSX.Element 
 
   return (
     <AssetProvider id={ context.config.id }>
-        {children}
+      {children}
     </AssetProvider>
   )
 }
