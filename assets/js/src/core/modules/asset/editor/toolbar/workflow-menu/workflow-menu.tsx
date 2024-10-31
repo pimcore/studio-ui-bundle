@@ -32,7 +32,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
-  const { openModal, submitWorkflowAction } = useWorkflow()
+  const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
 
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
@@ -54,7 +54,11 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             key: (result.length + 1).toString(),
             label: t(`${status.label}`),
             onClick: () => {
-              openModal({ transition: status.name, actionType: 'global', workflowName: workflow.workflowName })
+              openModal({
+                transition: status.name,
+                actionType: 'global',
+                workflowName: workflow.workflowName
+              })
             }
           })
         })
@@ -102,20 +106,21 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       justify={ 'flex-end' }
     >
       {!isLoading && (
-      <HorizontalScroll>
-        <TagList
-          itemGap={ 'extra-small' }
-          list={ getVisibleWorkflowStatus() }
-          wrap={ false }
-        />
-      </HorizontalScroll>
+        <HorizontalScroll>
+          <TagList
+            itemGap={ 'extra-small' }
+            list={ getVisibleWorkflowStatus() }
+            wrap={ false }
+          />
+        </HorizontalScroll>
       )}
       <Dropdown
+        disabled={ isLoading || submissionLoading }
         menu={ { items } }
       >
         <DropdownButton
-          disabled={ isLoading }
-          loading={ isLoading }
+          disabled={ isLoading || submissionLoading }
+          loading={ isLoading || submissionLoading }
         >
           <Icon
             name={ 'workflow' }

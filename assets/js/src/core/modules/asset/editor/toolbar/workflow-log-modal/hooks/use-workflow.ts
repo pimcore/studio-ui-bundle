@@ -23,6 +23,7 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 
 interface UseWorkflowHookReturn extends IWorkflowContext {
   submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
+  submissionLoading: boolean
 }
 
 export type ActionType = 'transition' | 'global'
@@ -36,7 +37,7 @@ export interface WorkflowOptions {
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
   const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
-  const [fetchSubmitWorkflowAction] = useWorkflowActionSubmitMutation()
+  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading }] = useWorkflowActionSubmitMutation()
   const { id } = useAsset()
 
   const toSnakeCase = (str: string): string => {
@@ -62,6 +63,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   }
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails
+    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, submissionLoading
   }
 }

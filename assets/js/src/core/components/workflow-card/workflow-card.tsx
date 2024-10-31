@@ -26,7 +26,7 @@ interface IWorkflowCardProps {
 }
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
-  const { openModal, submitWorkflowAction } = useWorkflow()
+  const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
@@ -38,7 +38,9 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         items.push({
           key: Number(items.length + 1).toString(),
           label: status.label,
-          onClick: () => { submitWorkflowAction(status.name, 'transition', workflow.workflowName, {}) }
+          onClick: () => {
+            submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
+          }
         })
       })
 
@@ -57,10 +59,11 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
     return (
       <Dropdown
+        disabled={ submissionLoading }
         menu={ { items } }
         placement="bottom"
       >
-        <Button>{t('component.workflow-card.action-btn')}</Button>
+        <Button loading={ submissionLoading }>{t('component.workflow-card.action-btn')}</Button>
       </Dropdown>
     )
   }
@@ -83,14 +86,14 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
                     styles={ status.colorInverted
                       ? { indicator: { outline: `1px solid ${status.color}4D` } }
                       : {}
-                    }
+                                        }
                   />
-                }
+                                }
                 key={ index }
                 style={ status.colorInverted
                   ? { backgroundColor: `${status.color}33` }
                   : {}
-                }
+                                }
                 title={ status.title }
               >
                 {status.label}
@@ -98,7 +101,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
             ))
           )}
         </>
-      ) }
+            ) }
     >
       {workflow.graph !== undefined && (
         <img
