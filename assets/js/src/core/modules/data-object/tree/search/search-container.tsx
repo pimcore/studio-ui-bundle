@@ -20,7 +20,7 @@ const SearchContainer = (props: TreeSearchProps): React.JSX.Element => {
   const { t } = useTranslation()
   return (
     <BaseSearchContainer
-      label={ t('asset.asset-tree.search', { folderName: props.node.label }) }
+      label={ t('data-object.data-object-tree.search', { folderName: props.node.label }) }
       node={ props.node }
       total={ props.total }
     />

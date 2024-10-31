@@ -15,21 +15,21 @@ import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/elem
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
-import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
+import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
+import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
 
 export interface TreeContainerProps {
   id: number
 }
 
 const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
-  const { openAsset } = useAssetHelper()
+  const { openDataObject } = useDataObjectHelper()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
-    openAsset({
+    openDataObject({
       config: {
         id: parseInt(node.id)
       }
@@ -38,7 +38,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
 
   return (
     <ElementTree
-      contextMenu={ AssetTreeContextMenu }
+      contextMenu={ DataObjectTreeContextMenu }
       maxItemsPerNode={ 20 }
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }

@@ -16,6 +16,10 @@ import { type AssetExportZipAssetApiArg, type AssetExportZipAssetApiResponse, ty
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/download/factory'
 import { useTranslation } from 'react-i18next'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
+import React from 'react'
 
 export interface createZipDownloadProps {
   jobTitle: string
@@ -39,6 +43,7 @@ export interface UseZipDownloadHookProps {
 
 export interface UseZipDownloadHookReturn {
   createZipDownload: createFolderZipDownload | createAssetListZipDownload
+  createZipDownloadContextMeuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHookReturn => {
@@ -73,13 +78,30 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     }))
   }
 
+  const createZipDownloadContextMeuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('asset.tree.context-menu.download-as-zip'),
+      key: 'download-as-zip',
+      icon: <Icon name={ 'file-download-zip-01' } />,
+      hidden: node.type !== 'folder',
+      onClick: () => {
+        createZipDownload({
+          jobTitle: node.label,
+          requestData: { body: { folders: [parseInt(node.id)] } }
+        })
+      }
+    }
+  }
+
   if (props.type === 'folder') {
     return {
-      createZipDownload: createZipDownload as createFolderZipDownload
+      createZipDownload: createZipDownload as createFolderZipDownload,
+      createZipDownloadContextMeuItem
     }
   }
 
   return {
-    createZipDownload: createZipDownload as createAssetListZipDownload
+    createZipDownload: createZipDownload as createAssetListZipDownload,
+    createZipDownloadContextMeuItem
   }
 }

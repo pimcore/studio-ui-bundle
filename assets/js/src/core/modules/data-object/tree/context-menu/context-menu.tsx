@@ -1,0 +1,84 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
+
+export interface DataObjectTreeContextMenuProps {
+  node: TreeNodeProps
+  children: React.ReactNode
+}
+
+export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
+  const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
+  const { addFolderContextMenuItem } = useAddFolder('data-object')
+  const { renameContextMenuItem } = useRename('data-object')
+  const { deleteContextMenuItem } = useDelete('data-object')
+  const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
+  const { copyContextMenuItem, cutContextMenuItem, pasteContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
+  const { lockContextMenuItem, lockAndPropagateContextMenuItem, unlockContextMenuItem, unlockAndPropagateContextMenuItem } = useLock('data-object')
+
+  const items: DropdownMenuProps['items'] = [
+    addFolderContextMenuItem(props.node),
+    renameContextMenuItem(props.node),
+    copyContextMenuItem(props.node),
+    pasteContextMenuItem(parseInt(props.node.id)),
+    cutContextMenuItem(props.node),
+    pasteCutContextMenuItem(parseInt(props.node.id)),
+    deleteContextMenuItem(props.node),
+    createZipDownloadContextMeuItem(props.node),
+
+    {
+      label: t('element.tree.context-menu.advanced'),
+      key: 'advanced',
+      icon: <Icon name={ 'more' } />,
+      children: [
+        {
+          label: t('element.lock'),
+          key: 'advanced-lock',
+          icon: <Icon name={ 'lock-01' } />,
+          children: [
+            lockContextMenuItem(props.node),
+            lockAndPropagateContextMenuItem(props.node),
+            unlockContextMenuItem(props.node),
+            unlockAndPropagateContextMenuItem(props.node)
+          ]
+        }
+      ]
+    },
+    refreshTreeContextMenuItem(props.node)
+  ]
+
+  return (
+    <>
+      <Dropdown
+        menu={ { items } }
+        trigger={ ['contextMenu'] }
+      >
+        {props.children}
+      </Dropdown>
+    </>
+  )
+}
