@@ -12,7 +12,7 @@
 */
 
 import type { Meta, StoryObj } from '@storybook/react'
-import { SanitizeHtml, SanitizeHtmlProps } from './sanitize-html'
+import { SanitizeHtml, type SanitizeHtmlProps } from './sanitize-html'
 
 const config: Meta = {
   title: 'Components/Security/Sanitize HTML',

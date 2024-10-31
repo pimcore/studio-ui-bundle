@@ -13,7 +13,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import { Region, RegionProps } from './region'
+import { Region, type RegionProps } from './region'
 import { Box } from '../box/box'
 
 const config: Meta = {
@@ -53,7 +53,7 @@ export const _default: StoryObj<RegionProps> = {
       {
         region: 'south',
         component: <Box padding={ { x: 'small', y: 'small' } }>south</Box>
-      },
+      }
     ],
 
     layoutDefinition: [
@@ -85,7 +85,7 @@ export const NoCenterColumn: StoryObj<RegionProps> = {
       {
         region: 'south',
         component: <Box padding={ { x: 'small', y: 'small' } }>south</Box>
-      },
+      }
     ],
 
     layoutDefinition: [
@@ -127,7 +127,7 @@ export const MultipleEastColumns: StoryObj<RegionProps> = {
       {
         region: 'south',
         component: <Box padding={ { x: 'small', y: 'small' } }>south</Box>
-      },
+      }
     ],
 
     layoutDefinition: [
@@ -137,4 +137,3 @@ export const MultipleEastColumns: StoryObj<RegionProps> = {
     ]
   }
 }
-
