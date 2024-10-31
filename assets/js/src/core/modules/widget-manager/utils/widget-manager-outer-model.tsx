@@ -65,19 +65,18 @@ export const getInitialModelJson = (): IJsonModel => {
         children: [
           {
             type: 'tab',
-            icon: 'mainObject',
-            name: 'data-object.data-object-tree.title',
-            component: 'data-object-tree',
-            enableClose: false
-          },
-          {
-            type: 'tab',
             icon: 'camera',
             name: 'asset.asset-tree.title',
             component: 'asset-tree',
             enableClose: false
+          },
+          {
+            type: 'tab',
+            icon: 'mainObject',
+            name: 'data-object.data-object-tree.title',
+            component: 'data-object-tree',
+            enableClose: false
           }
-
         ]
       },
 
