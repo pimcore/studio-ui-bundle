@@ -17,7 +17,6 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
-import { useAssetActions } from './hooks/use-asset-actions'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
@@ -27,6 +26,7 @@ import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -35,10 +35,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 
-  const {
-    downloadAsZip
-  } = useAssetActions()
   const uploadContext = React.useContext(UploadContext)!
+  const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
   const { addFolderContextMenuItem } = useAddFolder('asset')
   const { renameContextMenuItem } = useRename('asset')
   const { deleteContextMenuItem } = useDelete('asset')
@@ -89,10 +87,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     cutContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteContextMenuItem(props.node),
-    downloadAsZip({
-      hidden: props.node?.type !== 'folder',
-      node: props.node
-    }),
+    createZipDownloadContextMeuItem(props.node),
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
