@@ -15,11 +15,11 @@ import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/elem
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { PagerContainer } from './pager/pager-container'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
+import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
 
 export interface TreeContainerProps {
   id: number

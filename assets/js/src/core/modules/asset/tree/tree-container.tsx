@@ -15,7 +15,7 @@ import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/elem
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
 import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { PagerContainer } from './pager/pager-container'
+import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'

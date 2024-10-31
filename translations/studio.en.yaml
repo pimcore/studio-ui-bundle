@@ -11,6 +11,8 @@ asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
+data-object.data-object-tree.title: Data Object Tree
+data-object.data-object-tree.search: Search in {{folderName}}
 workflow.label: Workflow
 workflow.headline: Workflow Details
 workflow.no-workflows-found: No workflows found
