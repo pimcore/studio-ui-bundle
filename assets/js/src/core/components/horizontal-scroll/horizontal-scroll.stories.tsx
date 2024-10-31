@@ -63,7 +63,7 @@ export const _default = {
   }
 }
 
-export const resizeable = {
+export const Resizeable = {
   args: {
     children: <TagList
       itemGap={ 'extra-small' }

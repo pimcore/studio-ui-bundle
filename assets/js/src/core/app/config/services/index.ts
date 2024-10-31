@@ -63,6 +63,16 @@ import { DynamicTypeMetaDataObject } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeMetaDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-select'
 import { DynamicTypeMetaDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/types/dynamic-type-meta-data-textarea'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
+import { DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
+import { DynamicTypeObjectLayoutPanel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-panel'
+import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { DynamicTypeObjectDataInput } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-layout-input'
+import { DynamicTypeObjectLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
+import { DynamicTypeObjectLayoutAccordion } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
+import { DynamicTypeObjectLayoutRegion } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-region'
+import { DynamicTypeObjectLayoutText } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-text'
+import { DynamicTypeObjectLayoutFieldset } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
+import { DynamicTypeObjectLayoutFieldContainer } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -130,6 +140,19 @@ container.bind(serviceIds['DynamicTypes/Metadata/Input']).to(DynamicTypeMetaData
 container.bind(serviceIds['DynamicTypes/Metadata/Object']).to(DynamicTypeMetaDataObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Metadata/Select']).to(DynamicTypeMetaDataSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Metadata/Textarea']).to(DynamicTypeMetaDataTextarea).inSingletonScope()
+
+// Object layout
+container.bind(serviceIds['DynamicTypes/ObjectLayoutRegistry']).to(DynamicTypeObjectLayoutRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Panel']).to(DynamicTypeObjectLayoutPanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Tabpanel']).to(DynamicTypeObjectLayoutTabpanel).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Accordion']).to(DynamicTypeObjectLayoutAccordion).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Region']).to(DynamicTypeObjectLayoutRegion).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Text']).to(DynamicTypeObjectLayoutText).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/Fieldset']).to(DynamicTypeObjectLayoutFieldset).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectLayout/FieldContainer']).to(DynamicTypeObjectLayoutFieldContainer).inSingletonScope()
+
+container.bind(serviceIds['DynamicTypes/ObjectDataRegistry']).to(DynamicTypeObjectDataRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Input']).to(DynamicTypeObjectDataInput).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
