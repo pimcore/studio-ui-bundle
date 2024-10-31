@@ -19,19 +19,32 @@ import { Modal } from '@Pimcore/components/modal/modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { Form } from '@Pimcore/components/form/form'
+import { Input } from 'antd'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
   const { isModalOpen, closeModal } = useWorkflow()
+  const [form] = Form.useForm<FormValues>()
 
-  console.log('----> isModalOpen in Modal', isModalOpen)
+  interface FormValues {
+    timeSpent: string
+    notes: string
+  }
+
+  const onFinish = (values: FormValues): void => {
+    console.log('----> formvalues', values)
+
+    closeModal()
+  }
 
   return (
     <Modal
-      afterClose={ () => { closeModal() } }
+      afterClose={ () => {
+        form.resetFields()
+        closeModal()
+      } }
       footer={ <ModalFooter
-        divider
-        justify={ 'space-between' }
-               >
+        divider>
         <Flex
           align={ 'center' }
           gap={ 'extra-small' }
@@ -41,13 +54,12 @@ export const WorkflowLogModal = (): React.JSX.Element => {
             onClick={ () => { closeModal() } }
             type='link'
           >
-            Close</IconTextButton>
+            Cancel</IconTextButton>
           <Button
-            onClick={ () => {
-              alert('changed')
-            } }
-            type='primary'
-          >Save</Button>
+            key="submit"
+            onClick={ () => { form.submit() } }
+            type="primary"
+          >Perform Action</Button>
         </Flex>
       </ModalFooter> }
       onCancel={ () => {
@@ -57,7 +69,26 @@ export const WorkflowLogModal = (): React.JSX.Element => {
       size={ 'M' }
       title={ <ModalTitle>Log Time</ModalTitle> }
     >
-      Content
+      <Form
+        form={ form }
+        layout={ 'vertical' }
+        onFinish={ onFinish }
+      >
+        <Form.Item
+          label="Time spent"
+          name="timeSpent"
+          rules={ [{ required: false, message: '' }] }
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Notes"
+          name="notes"
+          rules={ [{ required: true, message: 'Please enter your Notes above or Cancel' }] }
+        >
+          <Input.TextArea rows={ 4 } />
+        </Form.Item>
+      </Form>
     </Modal>
   )
 }
