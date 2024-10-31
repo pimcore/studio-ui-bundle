@@ -12,7 +12,8 @@
 */
 
 import React, { useCallback, useMemo } from 'react'
-import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { type GridProps } from '@Pimcore/types/components/types'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GridColumnConfiguration, type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'

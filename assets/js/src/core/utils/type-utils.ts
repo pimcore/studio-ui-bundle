@@ -39,6 +39,10 @@ export const isEmptyValue = (value: unknown): boolean => {
     return Object.keys(value).length === 0
   }
 
+  if (typeof value === 'object' && Array.isArray(value)) {
+    return value.length === 0
+  }
+
   if (typeof value === 'string') {
     return value.trim().length === 0
   }

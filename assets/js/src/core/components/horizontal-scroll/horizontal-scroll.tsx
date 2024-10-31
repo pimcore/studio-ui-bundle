@@ -52,11 +52,17 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
         updateScrollState()
       })
 
+      const mutationObserver = new MutationObserver(() => {
+        updateScrollState()
+      })
+
       resizeObserver.observe(scrollContainerRef.current)
+      mutationObserver.observe(scrollContainerRef.current, { childList: true, subtree: true })
 
       return () => {
         scrollContainerRef.current?.removeEventListener('scroll', updateScrollState)
         resizeObserver.disconnect()
+        mutationObserver.disconnect()
         setScrollInterval(null)
       }
     }
@@ -103,8 +109,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
   return (
     <Flex
       align={ 'center' }
-      className={ styles.scrollContainer }
-      justify={ 'center' }
+      className={ ['horizontal-scroll', styles.scrollContainer].join(' ') }
     >
       {scrollRequired && (
         <IconButton
@@ -123,7 +128,7 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
       )}
       <Flex
         align={ 'center' }
-        className={ styles.scroll }
+        className={ [styles.scroll, 'w-full'].join(' ') }
         ref={ scrollContainerRef }
       >
         {children}

@@ -14,6 +14,7 @@
 import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
 import { Flex, type FlexProps } from 'antd'
 import React from 'react'
+import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
 
 export interface ToolbarProps {
   children: React.ReactNode
@@ -30,13 +31,18 @@ export const Toolbar = ({ children, justify = 'space-between', theme = 'primary'
   ].join(' ')
 
   return (
-    <Flex
-      className={ classes }
-      gap={ 16 }
-      justify={ justify }
-      { ...props }
-    >
-      {children}
-    </Flex>
+    <div className={ classes }>
+      <HorizontalScroll>
+        <Flex
+          className='w-full'
+          gap={ 16 }
+          justify={ justify }
+          { ...props }
+        >
+          {children}
+        </Flex>
+      </HorizontalScroll>
+    </div>
+
   )
 }

@@ -11,43 +11,74 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key } from 'react'
-import { Tree, type TreeDataNode } from 'antd'
+import React, { useState, type Key } from 'react'
+import { Tree, type TreeDataNode, type TreeProps } from 'antd'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { SimpleTreeItem } from './simple-tree-item'
-import { useStyles } from './simple-tree.styles'
+import { TreeElementItem } from './tree-element-item'
+import { useStyles } from './tree-element.styles'
 
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
 }
 
-interface SimpleTreeProps {
+interface ITreeElementProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  defaultExpandedKeys?: string[]
-  onCheck?: (checkedKeys: any) => void
+  onCheck?: (checkedKeys: { checked: Key[], halfChecked: Key[] } | Key[]) => void
   onActionsClick?: (key: any, action: string) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
-  onLoadData?: (node) => Promise<any>
+  onLoadData?: (node: any) => Promise<any>
+  withCustomSwitcherIcon?: boolean
+  isHideRootChecker?: boolean
 }
 
-const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActionsClick, onDragAndDrop, onSelected, onLoadData, ...props }: SimpleTreeProps): React.JSX.Element => {
-  const { styles } = useStyles()
-  const classNames = [styles.tree, className]
-  const [selectedKeys, setSelectedKeys] = React.useState<Key[]>([])
-  const [expandedKeys, setExpandedKeys] = React.useState<Key[]>(defaultExpandedKeys ?? [])
+const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
+  const {
+    checkStrictly,
+    checkedKeys,
+    treeData,
+    className,
+    defaultExpandedKeys,
+    draggable,
+    onCheck,
+    onActionsClick,
+    onDragAndDrop,
+    onSelected,
+    onLoadData,
+    withCustomSwitcherIcon,
+    isHideRootChecker = true
+  } = props
 
-  React.useEffect(() => {
-    setExpandedKeys(defaultExpandedKeys ?? [])
-  }, [defaultExpandedKeys])
+  const { styles } = useStyles({ isHideRootChecker })
+
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
+
+  const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
+    if (withCustomSwitcherIcon === false) return undefined
+
+    return (
+      <Icon
+        name="chevron-down-small"
+        options={ {
+          width: 12,
+          height: 12
+        } }
+      />
+    )
+  }
 
   return (
     <Tree
       blockNode
+      checkStrictly={ checkStrictly }
       checkable={ onCheck !== undefined }
-      className={ classNames.join(' ') }
-      draggable
+      checkedKeys={ checkedKeys }
+      className={ cn(styles.treeContainer, className) }
+      draggable={ draggable }
+      expandAction='click'
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
       onCheck={ (checkedKeys): void => onCheck?.(checkedKeys) }
@@ -61,9 +92,9 @@ const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActio
       onExpand={ (keys): void => { setExpandedKeys(keys) } }
       selectedKeys={ selectedKeys }
       showIcon
-      switcherIcon={ <Icon name={ 'chevron-down-small' } /> }
+      switcherIcon={ handleCustomSwitcherIcon }
       titleRender={ (node) => (
-        <SimpleTreeItem
+        <TreeElementItem
           actions={ node.actions }
           onActionsClick={ (action) => onActionsClick?.(node.key, action) }
           onSelected={ () => {
@@ -77,4 +108,4 @@ const SimpleTree = ({ treeData, className, defaultExpandedKeys, onCheck, onActio
     />
   )
 }
-export { SimpleTree }
+export { TreeElement }
