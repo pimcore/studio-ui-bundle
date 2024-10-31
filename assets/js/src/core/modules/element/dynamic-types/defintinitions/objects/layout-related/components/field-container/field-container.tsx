@@ -17,9 +17,11 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 
 export interface FieldContainerProps extends AbstractObjectLayoutDefinition {
+  collapsible?: boolean
+  collapsed?: boolean
 }
 
-export const FieldContainer = ({ children }: FieldContainerProps): React.JSX.Element => {
+export const FieldContainer = ({ children, collapsible, collapsed }: FieldContainerProps): React.JSX.Element => {
   return (
     <Flex
       className='w-full'

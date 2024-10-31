@@ -21,6 +21,8 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition }: Reg
     region: css`
       display: grid;
       grid-template-areas: ${gridTemplateAreas};
+      // @todo make this configurable
+      gap: 12px;
     `
   }
 })

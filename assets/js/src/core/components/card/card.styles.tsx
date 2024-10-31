@@ -20,6 +20,10 @@ export const useStyles = createStyles(({ token, css }) => {
         min-height: 38px;
         padding: ${token.paddingXXS}px ${token.paddingSM}px;
       }
+
+      &.ant-card:not(.ant-card-bordered) {
+        box-shadow: none;
+      }
       
       .ant-card-head-title {
         display: flex;

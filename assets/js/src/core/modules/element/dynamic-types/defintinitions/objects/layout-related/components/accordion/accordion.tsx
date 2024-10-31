@@ -15,29 +15,40 @@ import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { Accordion as BaseAccordion, type AccordionProps as BaseAccordionProps } from '@Pimcore/components/accordion/accordion'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { Box } from '@Pimcore/components/box/box'
+import { BaseView } from '../../views/base-view'
 
-export interface AccordionProps extends AbstractObjectLayoutDefinition {}
+export interface AccordionProps extends AbstractObjectLayoutDefinition {
+  title?: string
+  border?: boolean
+  collapsible?: boolean
+  collapsed?: boolean
+}
 
-export const Accordion = ({ children, name }: AccordionProps): React.JSX.Element => {
+export const Accordion = ({ children, title, border, collapsed, collapsible }: AccordionProps): React.JSX.Element => {
   const items: BaseAccordionProps['items'] = children.map((child, index) => ({
     key: child.name,
     title: child.title,
     forceRender: true,
     children: (
       <ObjectComponent
-        { ...child }
+        { ...{ ...child, title: '' } }
         key={ child.name }
       />
     )
   }))
 
   return (
-    <Box padding={ { x: 'small', y: 'small' } }>
+    <BaseView
+      border={ border }
+      collapsed={ collapsed }
+      collapsible={ collapsible }
+      title={ title }
+    >
       <BaseAccordion
+        bordered
+        ghost
         items={ items }
-        spaced
       />
-    </Box>
+    </BaseView>
   )
 }

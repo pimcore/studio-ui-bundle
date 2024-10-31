@@ -15,21 +15,30 @@ import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Tabs, type TabsProps } from 'antd'
+import { Box } from '@Pimcore/components/box/box'
 
 export interface TabpanelProps extends AbstractObjectLayoutDefinition {}
 
 export const Tabpanel = ({ children }: TabpanelProps): React.JSX.Element => {
-  const items: TabsProps['items'] = children.map((child, index) => ({
-    key: child.name,
-    label: child.title,
-    forceRender: true,
-    children: (
-      <ObjectComponent
-        { ...child }
-        key={ child.name }
-      />
-    )
-  }))
+  const items: TabsProps['items'] = children.map((child, index) => {
+    const tabPanelChild = {
+      ...child,
+      title: undefined
+    }
+
+    return {
+      key: tabPanelChild.name,
+      label: child.title,
+      forceRender: true,
+      children: (
+        <Box padding={ 'small' }>
+          <ObjectComponent
+            { ...tabPanelChild }
+          />
+        </Box>
+      )
+    }
+  })
 
   return (
     <Tabs items={ items } />

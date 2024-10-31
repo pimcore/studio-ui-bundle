@@ -11,22 +11,61 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { Box } from '@Pimcore/components/box/box'
+import { BaseView } from '../../views/base-view'
+import { Space } from '@Pimcore/components/space/space'
 
-export interface PanelProps extends AbstractObjectLayoutDefinition {}
+export interface PanelProps extends AbstractObjectLayoutDefinition {
+  title?: string
+  border?: boolean
+  collapsible?: boolean
+  collapsed?: boolean
+}
 
-export const Panel = ({ children, name }: PanelProps): React.JSX.Element => {
+export const Panel = ({ children, name, border, collapsed, collapsible, title }: PanelProps): React.JSX.Element => {
   return (
-    <Box padding={ name !== 'pimcore_root' ? { x: 'small', y: 'small' } : undefined }>
-      {children.map((child, index) => (
-        <ObjectComponent
-          { ...child }
-          key={ child.name }
-        />
-      ))}
-    </Box>
+    <>
+      { name === 'pimcore_root'
+        ? (
+          <>
+            { getContent() }
+          </>
+          )
+        : null }
+
+      { name !== 'pimcore_root'
+        ? (
+          <BaseView
+            border={ border }
+            collapsed={ collapsed }
+            collapsible={ collapsible }
+            title={ title }
+          >
+            { getContent() }
+          </BaseView>
+          )
+        : null }
+    </>
   )
+
+  function getContent (): ReactNode {
+    return (
+      <>
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='small'
+        >
+          {children.map((child, index) => (
+            <ObjectComponent
+              { ...child }
+              key={ child.name }
+            />
+          ))}
+        </Space>
+      </>
+    )
+  }
 }
