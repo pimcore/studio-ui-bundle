@@ -34,10 +34,13 @@ import { Content } from '@Pimcore/components/content/content'
 import {
   DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
+import { useStyles } from './filter-container-inner.styles'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+
+  const { styles } = useStyles()
 
   const { resetFilters, filterOptions, updateIsIncludeDescendants } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
@@ -102,13 +105,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 <Text>PQL Query</Text>
                 <div>
                   <Tooltip title='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'>
-                    <QuestionCircleOutlined style={ { color: 'rgba(0, 0, 0, .45)', cursor: 'pointer' } } />
+                    <QuestionCircleOutlined className={ styles.infoIcon } />
                   </Tooltip>
                 </div>
               </Flex>
               <TextArea
                 placeholder='Type your Query'
-                style={ { height: '200px' } }
+                style={ { height: '150px' } }
               />
             </Flex>
             )
