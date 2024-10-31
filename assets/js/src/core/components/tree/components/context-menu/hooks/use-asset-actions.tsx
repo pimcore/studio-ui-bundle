@@ -21,62 +21,9 @@ import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type IUseAssetActionsHookReturn } from './types/assetActionsTypes'
 
-export interface NodeAware {
-  node?: TreeNodeProps
-}
-
-export interface NodeIdAware {
-  nodeId: string | undefined
-}
-
-export interface OnClickAware {
-  onClick: () => void
-}
-
-export interface AssetContextMenuBase {
-  hidden?: boolean
-}
-
-export interface AssetContextMenuRename extends AssetContextMenuBase, OnClickAware {}
-
-export interface AssetContextMenuDelete extends AssetContextMenuBase, OnClickAware {}
-
-export interface AssetContextMenuCopy extends AssetContextMenuBase, NodeAware {}
-
-export interface AssetContextMenuPaste {
-  onClick: (node: TreeNodeProps) => void
-}
-
-export interface AssetContextMenuCut extends AssetContextMenuBase, NodeAware {}
-
-export interface AssetContextMenuRefresh extends AssetContextMenuBase, NodeIdAware {}
-
-export interface AssetContextMenuDownloadAsZip extends AssetContextMenuBase, NodeAware {}
-
-export interface AssetContextMenuLock extends AssetContextMenuBase, NodeIdAware {}
-
-export interface AssetExpandChildren extends AssetContextMenuBase, OnClickAware {}
-
-export interface UseAssetActionsHookReturn {
-  addFolder: (props: AssetContextMenuDelete) => ItemType
-  rename: (props: AssetContextMenuRename) => ItemType
-  copy: (props: AssetContextMenuCopy) => ItemType
-  paste: (props: AssetContextMenuPaste) => ItemType
-  cut: (props: AssetContextMenuCut) => ItemType
-  pasteCut: (props: AssetContextMenuPaste) => ItemType
-  remove: (props: AssetContextMenuDelete) => ItemType
-  downloadAsZip: (props: AssetContextMenuDownloadAsZip) => ItemType
-  lock: (props: AssetContextMenuLock) => ItemType
-  lockAndPropagate: (props: AssetContextMenuLock) => ItemType
-  unlock: (props: AssetContextMenuLock) => ItemType
-  unlockAndPropagate: (props: AssetContextMenuLock) => ItemType
-  searchAndMove: () => ItemType
-  expandChildren: (props: AssetExpandChildren) => ItemType
-  refresh: (props: AssetContextMenuRefresh) => ItemType
-}
-
-export const useAssetActions = (): UseAssetActionsHookReturn => {
+export const useAssetActions = (): IUseAssetActionsHookReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [node, setNode] = useState<TreeNodeProps | undefined>()
@@ -101,7 +48,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const addFolder: UseAssetActionsHookReturn['addFolder'] = (props): ItemType => {
+  const addFolder: IUseAssetActionsHookReturn['addFolder'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.add-folder'),
       key: 'add-folder',
@@ -110,7 +57,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const rename: UseAssetActionsHookReturn['rename'] = (props): ItemType => {
+  const rename: IUseAssetActionsHookReturn['rename'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.rename'),
       key: 'rename',
@@ -119,7 +66,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const copy: UseAssetActionsHookReturn['copy'] = (props): ItemType => {
+  const copy: IUseAssetActionsHookReturn['copy'] = (props): ItemType => {
     const { node, ...someProps } = props
 
     return {
@@ -136,7 +83,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const paste: UseAssetActionsHookReturn['paste'] = (props): ItemType => {
+  const paste: IUseAssetActionsHookReturn['paste'] = (props): ItemType => {
     const { onClick, ...someProps } = props
 
     return {
@@ -153,7 +100,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const cut: UseAssetActionsHookReturn['cut'] = (props): ItemType => {
+  const cut: IUseAssetActionsHookReturn['cut'] = (props): ItemType => {
     const { node, ...someProps } = props
 
     return {
@@ -170,7 +117,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const pasteCut: UseAssetActionsHookReturn['pasteCut'] = (props): ItemType => {
+  const pasteCut: IUseAssetActionsHookReturn['pasteCut'] = (props): ItemType => {
     const { onClick, ...someProps } = props
 
     return {
@@ -187,7 +134,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const remove: UseAssetActionsHookReturn['rename'] = (props): ItemType => {
+  const remove: IUseAssetActionsHookReturn['rename'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.delete'),
       key: 'delete',
@@ -196,7 +143,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const downloadAsZip: UseAssetActionsHookReturn['downloadAsZip'] = (props): ReturnType<UseAssetActionsHookReturn['downloadAsZip']> => {
+  const downloadAsZip: IUseAssetActionsHookReturn['downloadAsZip'] = (props): ReturnType<IUseAssetActionsHookReturn['downloadAsZip']> => {
     const { node, ...someProps } = props
 
     return {
@@ -214,7 +161,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const lock: UseAssetActionsHookReturn['lock'] = (props): ItemType => {
+  const lock: IUseAssetActionsHookReturn['lock'] = (props): ItemType => {
     const { nodeId, ...someProps } = props
 
     return {
@@ -231,7 +178,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const lockAndPropagate: UseAssetActionsHookReturn['lockAndPropagate'] = (props): ItemType => {
+  const lockAndPropagate: IUseAssetActionsHookReturn['lockAndPropagate'] = (props): ItemType => {
     const { nodeId, ...someProps } = props
 
     return {
@@ -248,7 +195,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const unlock: UseAssetActionsHookReturn['unlock'] = (props): ItemType => {
+  const unlock: IUseAssetActionsHookReturn['unlock'] = (props): ItemType => {
     const { nodeId, ...someProps } = props
 
     return {
@@ -265,7 +212,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const unlockAndPropagate: UseAssetActionsHookReturn['unlockAndPropagate'] = (props): ItemType => {
+  const unlockAndPropagate: IUseAssetActionsHookReturn['unlockAndPropagate'] = (props): ItemType => {
     const { nodeId, ...someProps } = props
 
     return {
@@ -294,7 +241,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const expandChildren: UseAssetActionsHookReturn['expandChildren'] = (props): ItemType => {
+  const expandChildren: IUseAssetActionsHookReturn['expandChildren'] = (props): ItemType => {
     return {
       label: t('element.tree.context-menu.expand-children'),
       key: 'advanced.expand-children',
@@ -304,7 +251,7 @@ export const useAssetActions = (): UseAssetActionsHookReturn => {
     }
   }
 
-  const refresh: UseAssetActionsHookReturn['refresh'] = (props): ItemType => {
+  const refresh: IUseAssetActionsHookReturn['refresh'] = (props): ItemType => {
     const { nodeId, ...someProps } = props
 
     return {
