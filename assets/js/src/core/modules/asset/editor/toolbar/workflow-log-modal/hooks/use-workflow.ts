@@ -46,7 +46,7 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   useEffect(() => {
     if (submissionSuccess) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success('action applied successfully')
+      messageApi.success('action applied successfully, ${workflowDetails?.workflowName}')
       setWorkflowDetails(null)
     }
   }
