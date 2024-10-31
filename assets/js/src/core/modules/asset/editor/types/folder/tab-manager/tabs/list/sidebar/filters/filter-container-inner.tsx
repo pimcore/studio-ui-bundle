@@ -13,8 +13,10 @@
 
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Checkbox, Form, Space } from 'antd'
+import { Checkbox, Form, Space, Tooltip } from 'antd'
+import { QuestionCircleOutlined } from '@ant-design/icons'
 import { type CheckboxChangeEvent } from 'antd/es/checkbox'
+import TextArea from 'antd/es/input/TextArea'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -92,7 +94,23 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
         {isAdvancedMode
           ? (
-            <div>PQL Query</div>
+            <Flex
+              gap='extra-small'
+              vertical
+            >
+              <Flex gap='mini'>
+                <Text>PQL Query</Text>
+                <div>
+                  <Tooltip title='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'>
+                    <QuestionCircleOutlined style={ { color: 'rgba(0, 0, 0, .45)', cursor: 'pointer' } } />
+                  </Tooltip>
+                </div>
+              </Flex>
+              <TextArea
+                placeholder='Type your Query'
+                style={ { height: '200px' } }
+              />
+            </Flex>
             )
           : (
             <>
