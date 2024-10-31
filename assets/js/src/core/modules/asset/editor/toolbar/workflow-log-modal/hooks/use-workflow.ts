@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import {
   type IWorkflowContext,
   WorkflowContext
@@ -20,10 +20,12 @@ import {
   useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface UseWorkflowHookReturn extends IWorkflowContext {
   submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
   submissionLoading: boolean
+  submissionSuccess: boolean
 }
 
 export type ActionType = 'transition' | 'global'
@@ -37,8 +39,17 @@ export interface WorkflowOptions {
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
   const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
-  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading }] = useWorkflowActionSubmitMutation()
+  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess }] = useWorkflowActionSubmitMutation()
   const { id } = useAsset()
+  const messageApi = useMessage()
+
+  useEffect(() => {
+    if (submissionSuccess) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success('action applied successfully')
+    }
+  }
+  , [submissionSuccess])
 
   const toSnakeCase = (str: string): string => {
     return str
@@ -63,6 +74,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   }
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, submissionLoading
+    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, submissionLoading, submissionSuccess
   }
 }

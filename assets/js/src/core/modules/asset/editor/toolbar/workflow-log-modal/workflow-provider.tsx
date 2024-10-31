@@ -42,7 +42,6 @@ export interface WorkFlowProviderProps {
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails | null>(null)
-
   const openModal = (workflowDetails: WorkflowDetails): void => {
     setWorkflowDetails(workflowDetails)
     setModalOpen(true)
@@ -55,6 +54,7 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
   return useMemo(() => (
     <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails } }>
       {children}
+
     </WorkflowContext.Provider>
   ), [isModalOpen, children, workflowDetails])
 }
