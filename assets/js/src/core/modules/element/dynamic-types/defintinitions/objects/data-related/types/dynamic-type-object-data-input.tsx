@@ -19,7 +19,6 @@ import { type FormItemProps } from 'antd/es/form/FormItem'
 
 export type InputObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue: string | null
-  tooltip: string | null
   showCharCount: boolean
   columnLength: number
   regex: string | null

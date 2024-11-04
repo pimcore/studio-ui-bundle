@@ -17,26 +17,21 @@ import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { Select } from '@Pimcore/components/select/select'
 
-export type InputObjectDataDefinition = AbstractObjectDataDefinition & {
+export type SelectObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue: string | null
-  tooltip: string | null
-  showCharCount: boolean
-  columnLength: number
-  regex: string | null
-  regexFlags: string[] | null
   options: Array<{ key: string, value: string }> | null
 }
 
 export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstract {
   id: string = 'select'
-  getObjectDataComponent (props: InputObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: SelectObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const options = props.options === null ? undefined : props.options.map(option => ({ label: option.key, value: option.value }))
     return (
       <Select options={ options } />
     )
   }
 
-  getObjectDataFormItemProps (props: InputObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: SelectObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       initialValue: props.defaultValue
