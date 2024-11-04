@@ -51,7 +51,7 @@ export interface WorkFlowProviderProps {
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails | null>(null)
-  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess }] = useWorkflowActionSubmitMutation({
+  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess, isError: submissionError }] = useWorkflowActionSubmitMutation({
     fixedCacheKey: 'shared-submit-workflow-action'
   })
 
@@ -74,9 +74,17 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
         duration: 3
       })
       setWorkflowDetails(null)
+    } else if (submissionError && workflowDetails !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error({
+        content: t('action-could-not-be-applied') + ': ' + t(`workflow-transitions.${workflowDetails?.transition}`),
+        type: 'error',
+        duration: 3
+      })
+      setWorkflowDetails(null)
     }
   }
-  , [submissionSuccess, submissionLoading])
+  , [submissionSuccess, submissionError])
 
   return useMemo(() => (
     <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading } }>
