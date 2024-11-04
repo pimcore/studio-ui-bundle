@@ -106,6 +106,8 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
   'DynamicTypes/ObjectData/Firstname': 'DynamicTypes/ObjectData/Firstname',
   'DynamicTypes/ObjectData/Lastname': 'DynamicTypes/ObjectData/Lastname',
+  'DynamicTypes/ObjectData/Email': 'DynamicTypes/ObjectData/Email',
+  'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

@@ -15,6 +15,6 @@ import {
   DynamicTypeObjectDataAbstractSelect
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
 
-export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstractSelect {
-  id: string = 'select'
+export class DynamicTypeObjectDataGender extends DynamicTypeObjectDataAbstractSelect {
+  id: string = 'gender'
 }

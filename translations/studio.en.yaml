@@ -301,3 +301,7 @@ element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
+male: Male
+female: Female
+other: Other
+unknown: Unknown

@@ -11,29 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { FormItemProps } from 'antd/es/form/FormItem'
+import type React from 'react'
+
+import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import {
   DynamicTypeObjectDataAbstractSelect, type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
-import type React from 'react'
-import type {
-  AbstractObjectDataDefinition
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 
-export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
-  id: string = 'booleanSelect'
-
+export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTypeObjectDataAbstractSelect {
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
       ...props,
-      allowClear: false
-    })
-  }
-
-  getObjectDataFormItemProps (props: SelectProps): FormItemProps {
-    return super.getObjectDataFormItemProps({
-      ...props,
-      defaultValue: 0
+      multiSelect: true
     })
   }
 }

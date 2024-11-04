@@ -11,39 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import {
+  DynamicTypeObjectDataAbstractMultiSelect
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-multiselect'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { type FormItemProps } from 'antd/es/form/FormItem'
-import { Select } from '@Pimcore/components/select/select'
-
-export type MultiSelectObjectDataDefinition = AbstractObjectDataDefinition & {
-  defaultValue: string | null
-  options: Array<{ key: string, value: string }> | null
-  maxItems: number | null
-}
-
-export class DynamicTypeObjectDataMultiSelect extends DynamicTypeObjectDataAbstract {
+export class DynamicTypeObjectDataMultiSelect extends DynamicTypeObjectDataAbstractMultiSelect {
   id: string = 'multiselect'
-  getObjectDataComponent (props: MultiSelectObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    const options = props.options === null ? undefined : props.options.map(option => ({ label: option.key, value: option.value }))
-    return (
-      <Select
-        allowClear
-        disabled={ props.noteditable === true }
-        maxCount={ props.maxItems ?? undefined }
-        mode="multiple"
-        optionFilterProp="label"
-        options={ options }
-        showSearch
-      />
-    )
-  }
-
-  getObjectDataFormItemProps (props: MultiSelectObjectDataDefinition): FormItemProps {
-    return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: props.defaultValue
-    }
-  }
 }

@@ -12,9 +12,9 @@
 */
 
 import {
-  DynamicTypeObjectDataAbstractSelect
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
+  DynamicTypeObjectDataAbstractInput
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-input'
 
-export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstractSelect {
-  id: string = 'select'
+export class DynamicTypeObjectDataEmail extends DynamicTypeObjectDataAbstractInput {
+  id: string = 'email'
 }

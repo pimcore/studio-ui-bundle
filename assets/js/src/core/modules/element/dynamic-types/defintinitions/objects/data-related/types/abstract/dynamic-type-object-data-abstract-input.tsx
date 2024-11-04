@@ -16,8 +16,7 @@ import React from 'react'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
 import { Input } from 'antd'
 
-export interface InputProps {
-  noteditable?: boolean | null
+export type InputProps = AbstractObjectDataDefinition & {
   columnLength?: number
   showCharCount?: boolean
 }
