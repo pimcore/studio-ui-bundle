@@ -76,14 +76,14 @@ export const WorkflowLogModal = (): React.JSX.Element => {
         <Form.Item
           label="Time spent"
           name="timeSpent"
-          rules={ [{ required: true, message: 'Please enter the Time you have spent' }] }
+          rules={ [{ required: true, message: 'Please enter the duration of time spent' }] }
         >
           <Input />
         </Form.Item>
         <Form.Item
           label="Notes"
           name="notes"
-          rules={ [{ required: true, message: 'Please enter your Notes' }] }
+          rules={ [{ required: true, message: 'Please enter your notes' }] }
         >
           <Input.TextArea rows={ 4 } />
         </Form.Item>
