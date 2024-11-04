@@ -68,6 +68,7 @@ import { type DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dy
 import { type DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-lastname'
 import { type DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-email'
 import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-gender'
+import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
 
 moduleSystem.registerModule({
   onInit () {
@@ -134,5 +135,6 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLastname>(serviceIds['DynamicTypes/ObjectData/Lastname']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataEmail>(serviceIds['DynamicTypes/ObjectData/Email']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGender>(serviceIds['DynamicTypes/ObjectData/Gender']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataRgbaColor>(serviceIds['DynamicTypes/ObjectData/RgbaColor']))
   }
 })
