@@ -75,6 +75,7 @@ export const Toolbar = (): React.JSX.Element => {
       <WorkFlowProvider>
         <ContextMenu />
         <Flex
+          gap={ 'extra-small' }
           style={ { height: '32px' } }
           vertical={ false }
         >
