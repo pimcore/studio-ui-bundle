@@ -13,7 +13,11 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
-import { type AssetGetTreeApiResponse, useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type AssetGetTreeApiResponse,
+  type AssetPermissions,
+  useAssetGetTreeQuery
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
@@ -54,7 +58,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         metaData: {
           asset: assetNode
         },
-        permissions: assetNode.permissions!,
+        permissions: assetNode.permissions ?? [] as AssetPermissions,
         level: node.level + 1,
         ...(() => {
           if (node.level === -1) {
