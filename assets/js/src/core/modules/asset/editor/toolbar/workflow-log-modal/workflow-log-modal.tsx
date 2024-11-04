@@ -21,10 +21,13 @@ import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from 'antd'
 import { t } from 'i18next'
+import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
-  const { submitWorkflowAction, isModalOpen, closeModal, workflowDetails } = useWorkflow()
+  const { isModalOpen, closeModal, workflowDetails } = useWorkflow()
   const [form] = Form.useForm<FormValues>()
+
+  const { submitWorkflowAction } = useSubmitWorkflow(workflowDetails?.workflowName ?? '')
 
   interface FormValues {
     timeSpent: string
@@ -32,7 +35,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
   }
 
   const onFinish = (values: FormValues): void => {
-    workflowDetails !== null && submitWorkflowAction(workflowDetails.transition, workflowDetails.actionType, workflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
+    workflowDetails !== null && submitWorkflowAction(workflowDetails.transition, workflowDetails.action, workflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
     closeModal()
   }
 

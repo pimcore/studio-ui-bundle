@@ -16,49 +16,16 @@ import {
   type IWorkflowContext,
   WorkflowContext
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
-import _ from 'lodash'
-import {
-  type WorkflowActionSubmitApiArg
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
 interface UseWorkflowHookReturn extends Omit<IWorkflowContext, 'fetchSubmitWorkflowAction'> {
-  submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
-  submissionLoading: boolean
 }
 
-export type ActionType = 'transition' | 'global'
-
-export interface WorkflowOptions {
-  notes?: string
-  additional?: {
-    timeWorked: string
-  }
-}
+export type TransitionType = 'transition' | 'global'
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading } = useContext(WorkflowContext)
-  const { id } = useAsset()
-
-  const workFlowTransition = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
-    submitAction: {
-      actionType,
-      elementId: id,
-      elementType: 'asset',
-      workflowName: _.snakeCase(workFlowName),
-      transition,
-      workflowOptions: workFlowOptions
-    }
-  })
-
-  const submitWorkflowAction = (transition: string, actionType: ActionType, workflowName: string, workFlowOptions: WorkflowOptions): void => {
-    setWorkflowDetails({ transition, actionType, workflowName })
-
-    fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then(() => {
-    }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
-  }
+  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, submissionLoading
+    openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails
   }
 }

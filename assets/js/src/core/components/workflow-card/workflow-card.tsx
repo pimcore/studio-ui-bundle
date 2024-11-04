@@ -19,14 +19,12 @@ import {
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
-import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
-import _ from 'lodash'
+import { WorkflowItem } from '@Pimcore/components/workflow-card/workflow-item'
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
 }
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
-  const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
@@ -38,20 +36,24 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       workflow.allowedTransitions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
-          onClick: () => {
-            submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
-          }
+          type: 'custom',
+          component: (<WorkflowItem
+            actionType={ status.name }
+            transition={ 'transition' }
+            workflowName={ workflow.workflowName }
+                      />)
         })
       })
 
       workflow.globalActions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
-          onClick: () => {
-            openModal({ transition: status.name, actionType: 'global', workflowName: workflow.workflowName })
-          }
+          type: 'custom',
+          component: (<WorkflowItem
+            actionType={ status.name }
+            transition={ 'global' }
+            workflowName={ workflow.workflowName }
+                      />)
         })
       })
 
@@ -60,11 +62,11 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
     return (
       <Dropdown
-        disabled={ submissionLoading }
+        // disabled={ submissionLoading }
         menu={ { items } }
         placement="bottom"
       >
-        <Button loading={ submissionLoading }>{t('component.workflow-card.action-btn')}</Button>
+        <Button>{t('component.workflow-card.action-btn')}</Button>
       </Dropdown>
     )
   }

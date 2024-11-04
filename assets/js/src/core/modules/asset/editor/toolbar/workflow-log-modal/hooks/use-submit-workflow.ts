@@ -1,0 +1,87 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import {
+  useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { t } from 'i18next'
+import _ from 'lodash'
+import {
+  type TransitionType,
+  useWorkflow
+} from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+
+interface UseSubmitWorkflowReturn {
+  submitWorkflowAction: (transition: string, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions) => void
+  submissionLoading: boolean
+  submissionSuccess: boolean
+  submissionError: boolean
+}
+
+export interface WorkflowOptions {
+  notes?: string
+  additional?: {
+    timeWorked: string
+  }
+}
+export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn => {
+  const { id } = useAsset()
+  const messageApi = useMessage()
+  const { setWorkflowDetails } = useWorkflow()
+  const [fetchSubmitWorkflowActionMutation, { isLoading: submissionLoading, isSuccess: submissionSuccess, isError: submissionError }] = useWorkflowActionSubmitMutation(
+    { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
+  )
+
+  const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
+    submitAction: {
+      actionType,
+      elementId: id,
+      elementType: 'asset',
+      workflowName: _.snakeCase(workFlowName),
+      transition,
+      workflowOptions: workFlowOptions
+    }
+  })
+
+  const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
+    console.log('----> here')
+
+    setWorkflowDetails({ transition, action: actionType, workflowName })
+
+    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success({
+        content: t('action-applied-successfully') + ': ' + t(`workflow-transitions.${workflowName}`),
+        type: 'success',
+        duration: 3
+      })
+    }).catch((error) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error({
+        content: t('action-could-not-be-applied') + ': ' + t(`workflow-transitions.${workflowName}`),
+        type: 'error',
+        duration: 3
+      })
+      console.error(`Failed to submit workflow action ${error}`)
+    })
+  }
+
+  return {
+    submitWorkflowAction,
+    submissionLoading,
+    submissionSuccess,
+    submissionError
+  }
+}

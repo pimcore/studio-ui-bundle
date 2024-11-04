@@ -24,16 +24,13 @@ import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/compon
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
-import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
-import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
-import _ from 'lodash'
+import { WorkflowItem } from '@Pimcore/components/workflow-card/workflow-item'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
-  const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
 
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
@@ -43,24 +40,24 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         workflow.allowedTransitions?.forEach((status) => {
           result.push({
             key: (result.length + 1).toString(),
-            label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
-            onClick: () => {
-              submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
-            }
+            type: 'custom',
+            component: <WorkflowItem
+              actionType={ status.name }
+              transition={ 'transition' }
+              workflowName={ workflow.workflowName }
+                       />
           })
         })
 
         workflow.globalActions?.forEach((status) => {
           result.push({
             key: (result.length + 1).toString(),
-            label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
-            onClick: () => {
-              openModal({
-                transition: status.name,
-                actionType: 'global',
-                workflowName: workflow.workflowName
-              })
-            }
+            type: 'custom',
+            component: <WorkflowItem
+              actionType={ status.name }
+              transition={ 'global' }
+              workflowName={ workflow.workflowName }
+                       />
           })
         })
 
@@ -104,25 +101,19 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
+      gap={ 'extra-small' }
       justify={ 'flex-end' }
     >
-      {!isLoading && (
-        <HorizontalScroll>
-          <TagList
-            itemGap={ 'extra-small' }
-            list={ getVisibleWorkflowStatus() }
-            wrap={ false }
-          />
-        </HorizontalScroll>
-      )}
+      <TagList
+        itemGap={ 'extra-small' }
+        list={ getVisibleWorkflowStatus() }
+        wrap={ false }
+      />
       <Dropdown
-        disabled={ isLoading || submissionLoading }
+        disabled={ isLoading }
         menu={ { items } }
       >
-        <DropdownButton
-          disabled={ isLoading || submissionLoading }
-          loading={ isLoading || submissionLoading }
-        >
+        <DropdownButton >
           <Icon
             name={ 'workflow' }
             options={ { height: 16, width: 16 } }
