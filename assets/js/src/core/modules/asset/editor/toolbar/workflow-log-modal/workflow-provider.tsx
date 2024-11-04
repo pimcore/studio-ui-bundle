@@ -11,11 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, createContext, useMemo } from 'react'
+import React, { useState, createContext, useMemo, useEffect } from 'react'
 import { type ActionType } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import {
   useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { t } from 'i18next'
 
 export interface WorkflowDetails {
   workflowName: string
@@ -30,7 +32,6 @@ export interface IWorkflowContext {
   setWorkflowDetails: (details: WorkflowDetails | null) => void
   fetchSubmitWorkflowAction: (args: WorkflowActionSubmitApiArg) => Promise<any>
   submissionLoading: boolean
-  submissionSuccess: boolean
 }
 
 export const WorkflowContext = createContext<IWorkflowContext>({
@@ -40,8 +41,7 @@ export const WorkflowContext = createContext<IWorkflowContext>({
   workflowDetails: null,
   setWorkflowDetails: () => {},
   fetchSubmitWorkflowAction: async () => { await Promise.resolve() },
-  submissionLoading: false,
-  submissionSuccess: false
+  submissionLoading: false
 })
 
 export interface WorkFlowProviderProps {
@@ -61,10 +61,25 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
     setModalOpen(false)
   }
 
+  const messageApi = useMessage()
+
+  useEffect(() => {
+    if (submissionSuccess && workflowDetails !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success({
+        content: t('action-applied-successfully') + ': ' + t(`workflow-transitions.${workflowDetails?.transition}`),
+        type: 'success',
+        duration: 3
+      })
+      setWorkflowDetails(null)
+    }
+  }
+  , [submissionSuccess, submissionLoading])
+
   return useMemo(() => (
-    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess } }>
+    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading } }>
       {children}
 
     </WorkflowContext.Provider>
-  ), [isModalOpen, children, workflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess])
+  ), [isModalOpen, children, workflowDetails, fetchSubmitWorkflowAction, submissionLoading])
 }

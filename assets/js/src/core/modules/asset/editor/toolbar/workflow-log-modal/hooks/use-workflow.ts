@@ -11,14 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import {
   type IWorkflowContext,
   WorkflowContext
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { t } from 'i18next'
 import _ from 'lodash'
 import {
   type WorkflowActionSubmitApiArg
@@ -42,20 +40,6 @@ export interface WorkflowOptions {
 export const useWorkflow = (): UseWorkflowHookReturn => {
   const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess } = useContext(WorkflowContext)
   const { id } = useAsset()
-  const messageApi = useMessage()
-
-  useEffect(() => {
-    if (submissionSuccess && workflowDetails !== null) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success({
-        content: t('action-applied-successfully') + ': ' + t(`workflow-transitions.${workflowDetails?.transition}`),
-        type: 'success',
-        duration: 3
-      })
-      setWorkflowDetails(null)
-    }
-  }
-  , [submissionSuccess, submissionLoading])
 
   const workFlowTransition = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
     submitAction: {

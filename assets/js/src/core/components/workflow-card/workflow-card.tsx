@@ -26,7 +26,8 @@ interface IWorkflowCardProps {
 }
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
-  const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
+  const { openModal, submitWorkflowAction, submissionLoading, workflowDetails } = useWorkflow()
+  const currentWorkflowSubmissionLoading = workflowDetails?.workflowName === workflow.workflowName && submissionLoading
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
@@ -59,11 +60,11 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
     return (
       <Dropdown
-        disabled={ submissionLoading }
+        disabled={ currentWorkflowSubmissionLoading }
         menu={ { items } }
         placement="bottom"
       >
-        <Button loading={ submissionLoading }>{t('component.workflow-card.action-btn')}</Button>
+        <Button loading={ currentWorkflowSubmissionLoading }>{t('component.workflow-card.action-btn')}</Button>
       </Dropdown>
     )
   }

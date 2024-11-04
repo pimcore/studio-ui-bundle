@@ -25,7 +25,6 @@ import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-
   const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
 
   return (
