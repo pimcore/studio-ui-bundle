@@ -24,18 +24,19 @@ const config: Meta = {
 
 export const _default = {
   args: {
-    description: 'Error Description'
+    description: 'Error Description',
+    showIcon: true
   }
 }
 
-export const ErrorType = {
+export const Error = {
   args: {
     ..._default.args,
     type: 'error'
   }
 }
 
-export const WarningType = {
+export const Warning = {
   args: {
     ..._default.args,
     type: 'warning'
