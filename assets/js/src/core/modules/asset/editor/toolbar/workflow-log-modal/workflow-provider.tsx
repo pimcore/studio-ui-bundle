@@ -13,6 +13,9 @@
 
 import React, { useState, createContext, useMemo } from 'react'
 import { type ActionType } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import {
+  useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 
 export interface WorkflowDetails {
   workflowName: string
@@ -25,6 +28,9 @@ export interface IWorkflowContext {
   closeModal: () => void
   workflowDetails: WorkflowDetails | null
   setWorkflowDetails: (details: WorkflowDetails | null) => void
+  fetchSubmitWorkflowAction: (args: WorkflowActionSubmitApiArg) => Promise<any>
+  submissionLoading: boolean
+  submissionSuccess: boolean
 }
 
 export const WorkflowContext = createContext<IWorkflowContext>({
@@ -32,7 +38,10 @@ export const WorkflowContext = createContext<IWorkflowContext>({
   openModal: () => {},
   closeModal: () => {},
   workflowDetails: null,
-  setWorkflowDetails: () => {}
+  setWorkflowDetails: () => {},
+  fetchSubmitWorkflowAction: async () => { await Promise.resolve() },
+  submissionLoading: false,
+  submissionSuccess: false
 })
 
 export interface WorkFlowProviderProps {
@@ -42,20 +51,20 @@ export interface WorkFlowProviderProps {
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails | null>(null)
+  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess }] = useWorkflowActionSubmitMutation()
+
   const openModal = (workflowDetails: WorkflowDetails): void => {
     setWorkflowDetails(workflowDetails)
     setModalOpen(true)
   }
   const closeModal = (): void => {
-    console.log('----> workflowDetails', workflowDetails)
-
     setModalOpen(false)
   }
 
   return useMemo(() => (
-    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails } }>
+    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess } }>
       {children}
 
     </WorkflowContext.Provider>
-  ), [isModalOpen, children, workflowDetails])
+  ), [isModalOpen, children, workflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess])
 }

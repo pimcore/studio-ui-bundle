@@ -16,13 +16,13 @@ import {
   type IWorkflowContext,
   WorkflowContext
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
-import {
-  useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { t } from 'i18next'
 import _ from 'lodash'
+import {
+  type WorkflowActionSubmitApiArg
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
 interface UseWorkflowHookReturn extends IWorkflowContext {
   submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
@@ -40,8 +40,7 @@ export interface WorkflowOptions {
 }
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
-  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess }] = useWorkflowActionSubmitMutation()
+  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess } = useContext(WorkflowContext)
   const { id } = useAsset()
   const messageApi = useMessage()
 
@@ -56,7 +55,7 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
       setWorkflowDetails(null)
     }
   }
-  , [submissionSuccess])
+  , [submissionSuccess, submissionLoading])
 
   const workFlowTransition = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
     submitAction: {
@@ -76,6 +75,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   }
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, submissionLoading, submissionSuccess
+    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess
   }
 }

@@ -34,6 +34,8 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
   const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
 
+  console.log('----> submissionLoading', submissionLoading)
+
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
       const workFlowItems = data.items.map((workflow) => {
