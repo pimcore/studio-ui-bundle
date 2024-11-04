@@ -208,9 +208,10 @@ export interface UseListDataHookReturn extends IListDataContext {
 }
 
 export const useListData = (): UseListDataHookReturn => {
-  const { data } = useContext(ListDataContext)
+  const { data, errorData } = useContext(ListDataContext)
 
   return {
-    data
+    data,
+    errorData
   }
 }

@@ -14,6 +14,8 @@
 /* eslint-disable max-lines */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { type SerializedError } from '@reduxjs/toolkit'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
 import { defaultFilterOptions } from './constants/filters'
@@ -225,26 +227,34 @@ export const ListSortingProvider = ({ children }: ListSortingProviderProps): Rea
 }
 
 export interface IListDataContext {
-  data: AssetGetGridApiResponse | undefined
+  data?: AssetGetGridApiResponse
+  errorData?: FetchBaseQueryError | SerializedError
 }
 
 export const ListDataContext = createContext<IListDataContext>({
-  data: undefined
+  data: undefined,
+  errorData: undefined
 })
 
 export interface ListDataProviderProps extends ICommonListProviderProps {
   data: IListDataContext['data']
+  errorData: IListDataContext['errorData']
 }
 
-export const ListDataProvider = ({ children, data }: ListDataProviderProps): React.JSX.Element => {
+export const ListDataProvider = ({ children, data, errorData }: ListDataProviderProps): React.JSX.Element => {
   const [internalData, setData] = useState<IListDataContext['data']>(undefined)
+  const [internalErrorData, setInternalErrorData] = useState<IListDataContext['errorData']>(undefined)
 
   useEffect(() => {
     setData(data)
   }, [data])
 
+  useEffect(() => {
+    setInternalErrorData(errorData)
+  }, [errorData])
+
   return useMemo(() => (
-    <ListDataContext.Provider value={ { data: internalData } }>
+    <ListDataContext.Provider value={ { data: internalData, errorData: internalErrorData } }>
       {children}
     </ListDataContext.Provider>
   ), [internalData, children])

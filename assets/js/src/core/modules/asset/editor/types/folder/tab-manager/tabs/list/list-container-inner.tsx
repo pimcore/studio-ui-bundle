@@ -52,7 +52,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { availableColumns, setAvailableColumns } = useListGridAvailableColumns()
   const assetId = assetContext.id
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
-  const [fetchListing] = useAssetGetGridMutation()
+  const [fetchListing, fetchListingResult] = useAssetGetGridMutation()
   const [patchAsset] = useAssetPatchByIdMutation()
   const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
   const [, setDataPatches] = useState<DataPatch[]>([])
@@ -241,7 +241,10 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   return useMemo(() => (
-    <ListDataProvider data={ data }>
+    <ListDataProvider
+      data={ data }
+      errorData={ fetchListingResult.error }
+    >
       <Content loading={ isLoading }>
         <ContentToolbarSidebarLayout
           renderSidebar={ <SidebarContainer /> }

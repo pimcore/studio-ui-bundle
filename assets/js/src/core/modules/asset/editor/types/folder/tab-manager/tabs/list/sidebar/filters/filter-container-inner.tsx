@@ -25,7 +25,7 @@ import Search from 'antd/es/input/Search'
 import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
-import { useListFilterOptions } from '../../hooks/use-list'
+import { useListData, useListFilterOptions } from '../../hooks/use-list'
 import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
@@ -43,8 +43,11 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   const { styles } = useStyles()
 
+  const { errorData } = useListData()
   const { resetFilters, filterOptions, updateIsIncludeDescendants, addOrUpdatePQLQuery } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
+
+  console.log('------>>>> errorData: ', errorData)
 
   const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
     const includeDescendantsValue = e.target.checked
