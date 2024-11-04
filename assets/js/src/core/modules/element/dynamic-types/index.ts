@@ -51,13 +51,15 @@ import { type DynamicTypeMetaDataTextarea } from './defintinitions/meta-data/typ
 import { type DynamicTypeObjectLayoutRegistry } from './defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
 import { type DynamicTypeObjectLayoutPanel } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-panel'
 import { type DynamicTypeObjectDataRegistry } from './defintinitions/objects/data-related/dynamic-type-object-data-registry'
-import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-related/types/dynamic-type-object-layout-input'
 import { type DynamicTypeObjectLayoutTabpanel } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
 import { type DynamicTypeObjectLayoutAccordion } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
 import { type DynamicTypeObjectLayoutRegion } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-region'
 import { type DynamicTypeObjectLayoutText } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-text'
 import { type DynamicTypeObjectLayoutFieldset } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
 import { type DynamicTypeObjectLayoutFieldContainer } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
+import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-related/types/dynamic-type-object-data-input'
+import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-textarea'
+import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
 
 moduleSystem.registerModule({
   onInit () {
@@ -114,5 +116,7 @@ moduleSystem.registerModule({
     const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTextarea>(serviceIds['DynamicTypes/ObjectData/Textarea']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSelect>(serviceIds['DynamicTypes/ObjectData/Select']))
   }
 })

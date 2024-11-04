@@ -99,6 +99,8 @@ export const serviceIds = {
 
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
+  'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
+  'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

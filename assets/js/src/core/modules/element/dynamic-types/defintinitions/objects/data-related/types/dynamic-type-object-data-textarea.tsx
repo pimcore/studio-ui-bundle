@@ -14,12 +14,23 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { Input } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
 
-export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstract {
-  id: string = 'input'
+export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
+  showCharCount: boolean
+  maxLength: number | null
+}
 
-  getObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return <Input />
+export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract {
+  id: string = 'textarea'
+
+  getObjectDataComponent (props: TextareaObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return (
+      <TextArea
+        autoSize={ { minRows: 3 } }
+        maxLength={ props.maxLength ?? undefined }
+        showCount={ props.showCharCount }
+      />
+    )
   }
 }

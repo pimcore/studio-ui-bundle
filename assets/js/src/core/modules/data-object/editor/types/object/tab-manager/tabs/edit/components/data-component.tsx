@@ -20,6 +20,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export interface DataComponentProps extends ObjectComponentProps {
   name: string
+  title: string | null
   datatype: 'data'
   fieldType?: string
   fieldtype?: string
@@ -28,7 +29,6 @@ export interface DataComponentProps extends ObjectComponentProps {
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-  const { name, title } = props
   const { fieldType, fieldtype } = props
 
   // @todo unify to one fieldType after api is updated completely
@@ -42,9 +42,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   return (
     <Form.Item
-      className='w-full'
-      label={ title }
-      name={ name }
+      { ...objectDataType.getObjectDataFormItemProps(props) }
     >
       {objectDataType.getObjectDataComponent(props)}
     </Form.Item>

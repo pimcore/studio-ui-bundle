@@ -66,13 +66,15 @@ import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-regi
 import { DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
 import { DynamicTypeObjectLayoutPanel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-panel'
 import { DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
-import { DynamicTypeObjectDataInput } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-layout-input'
 import { DynamicTypeObjectLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-tabpanel'
 import { DynamicTypeObjectLayoutAccordion } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-accordion'
 import { DynamicTypeObjectLayoutRegion } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-region'
 import { DynamicTypeObjectLayoutText } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-text'
 import { DynamicTypeObjectLayoutFieldset } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
 import { DynamicTypeObjectLayoutFieldContainer } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
+import { DynamicTypeObjectDataInput } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input'
+import { DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-textarea'
+import { DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -153,6 +155,8 @@ container.bind(serviceIds['DynamicTypes/ObjectLayout/FieldContainer']).to(Dynami
 
 container.bind(serviceIds['DynamicTypes/ObjectDataRegistry']).to(DynamicTypeObjectDataRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Input']).to(DynamicTypeObjectDataInput).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Textarea']).to(DynamicTypeObjectDataTextarea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Select']).to(DynamicTypeObjectDataSelect).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
