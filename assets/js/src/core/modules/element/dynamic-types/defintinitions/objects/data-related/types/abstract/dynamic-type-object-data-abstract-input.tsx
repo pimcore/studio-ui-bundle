@@ -25,6 +25,7 @@ export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObje
   getObjectDataComponent (props: InputProps): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Input
+        autoComplete="off"
         disabled={ props.noteditable === true }
         maxLength={ props.columnLength ?? undefined }
         showCount={ props.showCharCount }
