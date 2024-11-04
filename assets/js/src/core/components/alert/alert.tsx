@@ -12,16 +12,17 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import { Alert as AntAlert, type AlertProps as AntAlertProps } from 'antd'
 import { useStyles } from './alert.styles'
 
-export const Alert = ({ className, ...props }: AntAlertProps): React.JSX.Element => {
+export const Alert = ({ className, rootClassName, ...props }: AntAlertProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
     <AntAlert
       className={ className }
-      rootClassName={ styles.alert }
+      rootClassName={ cn(styles.alert, rootClassName) }
       { ...props }
     />
   )
