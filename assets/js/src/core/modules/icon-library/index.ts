@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -119,6 +121,7 @@ import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg'
 import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
 import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
 import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
+import LockUnlock01 from '@Pimcore/assets/icons/lock-unlocked-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -564,6 +567,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'magic-wand-01',
       component: magicWand01
+    })
+
+    iconLibrary.register({
+      name: 'lock-unlock-01',
+      component: LockUnlock01
     })
   }
 })

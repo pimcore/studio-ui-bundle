@@ -87,12 +87,13 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
-      justify={ 'space-between' }
+      justify={ 'flex-end' }
     >
       {!isLoading && (
         <TagList
           itemGap={ 'extra-small' }
           list={ getVisibleWorkflowStatus() }
+          wrap={ false }
         />
       )}
       <Dropdown
@@ -102,7 +103,10 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
           disabled={ isLoading }
           loading={ isLoading }
         >
-          <Icon name={ 'workflow' } />
+          <Icon
+            name={ 'workflow' }
+            options={ { height: 16, width: 16 } }
+          />
         </DropdownButton>
       </Dropdown>
     </Flex>

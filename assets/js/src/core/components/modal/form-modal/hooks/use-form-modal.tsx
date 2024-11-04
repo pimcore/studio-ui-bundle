@@ -11,128 +11,131 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-import { FormModal, type FormModalProps } from '@Pimcore/components/modal/form-modal/form-modal'
-import { Form, type FormInstance, Input } from 'antd'
+import React, { forwardRef, type RefObject } from 'react'
+import { App, type FormInstance, Input, type InputRef, type ModalFuncProps } from 'antd'
+import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
+import { type Rule } from 'antd/lib/form'
+import i18n from 'i18next'
+import { Form } from '@Pimcore/components/form/form'
 
-export type InputModal = Omit<FormModalProps, 'children'> & {
-  label: string
+let form: FormInstance<any> | null = null
+
+export interface ExtModalFuncProps extends ModalFuncProps {
+  beforeOk?: () => Promise<any>
+  afterOpen?: () => void
 }
 
-export type ConfirmationModal = Omit<FormModalProps, 'children'> & {
-  text: string | React.JSX.Element
+type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
+
+export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
+  label?: string
+  rule?: Rule
+  initialValue?: string
 }
 
-type RenderModalProps = InputModal | ConfirmationModal
-
-interface UseInputModalReturn<T> {
-  renderModal: (props: T) => React.JSX.Element
-  showModal: () => void
-  handleOk: (form: FormInstance<any>) => void
-  handleCancel: () => void
-  closeModal: () => void
+export interface UseFormModalHookResponse {
+  input: (props: InputFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  confirm: (props: ModalFuncProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
-interface UseFormModalProps {
-  type: 'input' | 'confirmation'
+export function useFormModal (): UseFormModalHookResponse {
+  const { modal } = App.useApp()
+
+  const [tmpForm] = Form.useForm()
+  form = tmpForm
+
+  return React.useMemo<UseFormModalHookResponse>(
+    () => ({
+      input: (props) => {
+        const modalResult = modal.confirm(withInput(props))
+        // avoid that errors are logged in the console
+        modalResult.then(() => {}, () => {})
+        return modalResult
+      },
+      confirm: (props) => modal.confirm(withConfirm(props))
+    }),
+    []
+  )
 }
 
-export const useFormModal = <T extends RenderModalProps>(config: UseFormModalProps): UseInputModalReturn<T> => {
-  const { type = 'input' } = config
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+interface InputFormProps {
+  form: FormInstance<any>
+  initialValues: object
+  fieldName: string
+}
 
-  const showModal = (): void => {
-    setIsModalOpen(true)
+export function withInput (props: InputFormModalProps): ModalFuncProps {
+  const inputRef = React.createRef<InputRef>()
+  const uuid = pimcoreUUid()
+  const fieldName = `input-${uuid}`
+  const {
+    label,
+    rule,
+    initialValue = '',
+    ...modalProps
+  } = props
+
+  let formattedRule: Rule[] = []
+  if (rule !== undefined) {
+    formattedRule = [rule]
   }
 
-  const closeModal = (): void => {
-    setIsModalOpen(false)
-  }
-
-  const handleOk = (): void => {
-    closeModal()
-  }
-
-  const handleCancel = (): void => {
-    closeModal()
-  }
-
-  function getModalComponent (type: UseFormModalProps['type']): typeof FormModal {
-    let component = FormModal
-
-    switch (type) {
-      case 'input':
-        component = withInput(FormModal)
-        break
-      case 'confirmation':
-        component = withConfirmation(FormModal)
-        break
-    }
-
-    return component
-  }
-
-  function renderModal (props: T): React.JSX.Element {
-    const ModalComponent = getModalComponent(type)
-
+  const InputForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
     return (
-      <ModalComponent
-        { ...props }
-        onCancel={ (onCancelProps) => {
-          handleCancel()
-
-          if (props.onCancel !== undefined) {
-            props.onCancel(onCancelProps)
-          }
-        } }
-        onOk={ (okProps) => {
-          handleOk()
-
-          if (props.onOk !== undefined) {
-            props.onOk(okProps)
-          }
-        } }
-        open={ isModalOpen }
-      />
-    )
-  }
-
-  return { renderModal, showModal, handleOk, handleCancel, closeModal }
-}
-
-export const withInput = (Component: typeof FormModal): typeof FormModal => {
-  const modalWithInput = (props: InputModal): React.JSX.Element => {
-    const { label, ...inlineProps } = props
-
-    return (
-      <Component { ...inlineProps }>
-        <Form.Item
-          label={ props.label }
-          name={ 'input' }
-          rules={ [{ required: true, message: 'Please input a value' }] }
-        >
-          <Input />
-        </Form.Item>
-      </Component>
-    )
-  }
-
-  return modalWithInput
-}
-
-export const withConfirmation = (Component: typeof FormModal): typeof FormModal => {
-  const modalWithConfirmation = (props: ConfirmationModal): React.JSX.Element => {
-    const { text, ...inlineProps } = props
-
-    return (
-      <Component
-        { ...inlineProps }
-        okText={ 'Yes' }
+      <Form
+        form={ props.form }
+        initialValues={ props.initialValues }
+        layout={ 'vertical' }
       >
-        { text }
-      </Component>
+        <Form.Item
+          label={ label }
+          name={ props.fieldName }
+          rules={ formattedRule }
+        >
+          <Input ref={ ref } />
+        </Form.Item>
+      </Form>
     )
-  }
+  })
 
-  return modalWithConfirmation
+  return {
+    ...modalProps,
+    type: props.type ?? 'confirm',
+    icon: props.icon ?? null,
+    onOk: async () => {
+      return await new Promise((resolve, reject) => {
+        form!.validateFields()
+          .then(() => {
+            const value = form!.getFieldValue(fieldName)
+            props.onOk?.(value)
+            resolve(value)
+          })
+          .catch(() => {
+            reject(new Error('Invalid form'))
+          })
+      })
+    },
+    modalRender: (node) => {
+      if (inputRef.current !== null) {
+        inputRef.current.focus()
+      }
+      return node
+    },
+    content: <InputForm
+      fieldName={ fieldName }
+      form={ form! }
+      initialValues={ { [fieldName]: initialValue } }
+      key={ 'input-form' }
+      ref={ inputRef }
+             />
+  }
+}
+
+export function withConfirm (props: ModalFuncProps): ModalFuncProps {
+  return {
+    ...props,
+    type: props.type ?? 'confirm',
+    okText: props.okText ?? i18n.t('yes'),
+    cancelText: props.cancelText ?? i18n.t('no')
+  }
 }

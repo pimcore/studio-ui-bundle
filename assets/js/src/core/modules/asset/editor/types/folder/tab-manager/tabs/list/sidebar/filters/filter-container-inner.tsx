@@ -14,9 +14,10 @@
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Form, Space } from 'antd'
+import { type CheckboxChangeEvent } from 'antd/es/checkbox'
 import { Button } from '@Pimcore/components/button/button'
 import Search from 'antd/es/input/Search'
-import React from 'react'
+import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
 import { useListFilterOptions } from '../../hooks/use-list'
@@ -25,10 +26,29 @@ import {
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
+import {
+  DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
 
 export const FilterContainerInner = (): React.JSX.Element => {
-  const { resetFilters, filterOptions } = useFilters()
+  const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
+
+  const { resetFilters, filterOptions, updateIsIncludeDescendants } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
+
+  const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
+    const includeDescendantsValue = e.target.checked
+
+    setIsIncludeDescendants(includeDescendantsValue)
+    updateIsIncludeDescendants(includeDescendantsValue)
+  }
+
+  const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
+
+  const handleResetAllFiltersClick = (): void => {
+    setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
+    resetFilters()
+  }
 
   return (
     <ContentToolbarSidebarLayout
@@ -36,14 +56,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
         <Toolbar theme='secondary'>
           <IconTextButton
             icon='close'
-            onClick={ onResetAllFiltersClick }
+            onClick={ handleResetAllFiltersClick }
             type='link'
           >
             Clear all filters
           </IconTextButton>
 
           <Button
-            onClick={ onApplyClick }
+            onClick={ handleApplyClick }
             type='primary'
           >
             Apply
@@ -65,18 +85,18 @@ export const FilterContainerInner = (): React.JSX.Element => {
             />
 
             <Checkbox
-              checked={ false }
-              value={ 'direct-children' }
+              checked={ isIncludeDescendants }
+              onChange={ handleChangeIsIncludeDescendants }
             >
               only direct children
             </Checkbox>
 
-            <Checkbox
-              checked={ false }
-              value={ 'referenced' }
-            >
-              only unreferenced
-            </Checkbox>
+            {/* <Checkbox */}
+            {/*  checked={ false } */}
+            {/*  value={ 'referenced' } */}
+            {/* > */}
+            {/*  only unreferenced */}
+            {/* </Checkbox> */}
           </Space>
         </Form>
 
@@ -88,12 +108,4 @@ export const FilterContainerInner = (): React.JSX.Element => {
       </Content>
     </ContentToolbarSidebarLayout>
   )
-
-  function onApplyClick (): void {
-    setFilterOptions(filterOptions)
-  }
-
-  function onResetAllFiltersClick (): void {
-    resetFilters()
-  }
 }

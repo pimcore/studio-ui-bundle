@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import { createGlobalStyle } from 'antd-style'
 
 export const GlobalStyles = createGlobalStyle`
@@ -635,5 +637,9 @@ export const GlobalStyles = createGlobalStyle`
 
   .h-full {
     height: 100%;
+  }
+
+  .overflow-x-auto {
+    overflow-x: auto;
   }
 `

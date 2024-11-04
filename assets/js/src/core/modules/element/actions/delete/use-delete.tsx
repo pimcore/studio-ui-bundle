@@ -1,0 +1,104 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import { useTranslation } from 'react-i18next'
+import { type ElementType } from 'types/element-type.d'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
+import React from 'react'
+import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import type { AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+
+export interface UseDeleteHookReturn {
+  deleteElement: (id: number, label: string, parentId?: number) => void
+  deleteContextMenuItem: (node: TreeNodeProps) => ItemType
+  deleteMutation: (id: number, parentId?: number) => Promise<void>
+}
+
+export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
+  const { t } = useTranslation()
+  const modal = useFormModal()
+  const { addJob } = useJobs()
+  const { refreshTree } = useRefreshTree(elementType)
+  const [elementDelete] = useElementDeleteMutation()
+
+  const deleteElement = (id: number, label: string, parentId?: number): void => {
+    modal.confirm({
+      title: t('element.delete.confirmation.title'),
+      content: <>
+        <span>{t('element.delete.confirmation.text')}</span>
+        <br />
+        <b>{label}</b>
+      </>,
+      okText: t('element.delete.confirmation.ok'),
+      onOk: async () => { await deleteMutation(id, parentId) }
+    })
+  }
+
+  const deleteContextMenuItem = (node: TreeNodeProps): ItemType => {
+    return {
+      label: t('element.delete'),
+      key: 'delete',
+      icon: <Icon name={ 'delete-outlined' } />,
+      onClick: () => {
+        const id = parseInt(node.id)
+        const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
+        deleteElement(id, node.label, parentId)
+      }
+    }
+  }
+
+  const deleteMutation = async (id: number, parentId?: number): Promise<void> => {
+    const promise = elementDelete({
+      id,
+      elementType
+    })
+
+    promise.catch(() => {
+      console.error('Error deleting ' + elementType)
+    })
+
+    const response = (await promise) as any
+
+    let jobRunId: any = null
+    if ((response.data ?? false) !== false) {
+      const data = response.data as AssetDeleteZipApiArg
+      jobRunId = data.jobRunId ?? null
+    }
+
+    if (jobRunId !== null) {
+      addJob(createDeleteJob({
+        title: 'Deleting Folder',
+        topics: [topics['deletion-finished'], ...defaultTopics],
+        action: async () => {
+          return jobRunId
+        },
+        parentFolder: String(parentId)
+      }))
+    } else if (parentId !== undefined) {
+      refreshTree(parentId)
+    }
+  }
+
+  return {
+    deleteElement,
+    deleteContextMenuItem,
+    deleteMutation
+  }
+}

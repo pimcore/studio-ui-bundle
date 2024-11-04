@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import {
   type CellContext,
@@ -34,6 +36,7 @@ import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,33 +55,6 @@ declare module '@tanstack/react-table' {
 
 export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
-}
-
-export interface OnUpdateCellDataEvent {
-  rowIndex: number
-  columnId: string
-  value: any
-  rowData: any
-}
-
-export interface GridProps {
-  data: any[]
-  columns: Array<ColumnDef<any>>
-  resizable?: boolean
-  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
-  modifiedCells?: Array<{ rowIndex: number | string, columnId: string }>
-  isLoading?: boolean
-  initialState?: TableOptions<any>['initialState']
-  enableRowSelection?: boolean
-  enableMultipleRowSelection?: boolean
-  selectedRows?: RowSelectionState
-  enableSorting?: boolean
-  manualSorting?: boolean
-  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
-  sorting?: SortingState
-  onSortingChange?: (sorting: SortingState) => void
-  setRowId?: (originalRow: any, index: number, parent: any) => string
-  autoWidth?: boolean
 }
 
 export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
