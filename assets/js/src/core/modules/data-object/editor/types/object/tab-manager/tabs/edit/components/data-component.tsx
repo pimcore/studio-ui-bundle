@@ -17,6 +17,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { Alert } from 'antd'
 
 export interface DataComponentProps extends ObjectComponentProps {
   name: string
@@ -35,8 +36,12 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
   if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
-    // @todo should throw an error in the future after the implementation of all data types
-    return (<div>Unknown data type: {currentFieldType}</div>)
+    return (
+      <Alert
+        message={ `Unknown data type: ${currentFieldType}` }
+        type="warning"
+      />
+    )
   }
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
