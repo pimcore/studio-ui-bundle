@@ -13,6 +13,7 @@
 
 import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -243,7 +244,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   return useMemo(() => (
     <ListDataProvider
       data={ data }
-      errorData={ fetchListingResult.error }
+      errorData={ fetchListingResult.error as FetchBaseQueryError }
     >
       <Content loading={ isLoading }>
         <ContentToolbarSidebarLayout

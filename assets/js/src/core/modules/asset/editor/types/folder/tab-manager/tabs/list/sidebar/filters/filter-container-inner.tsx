@@ -21,6 +21,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { Alert } from '@Pimcore/components/alert/alert'
 import Search from 'antd/es/input/Search'
 import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
@@ -35,6 +36,7 @@ import {
   DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
 import { useStyles } from './filter-container-inner.styles'
+import { isEmptyValue, isObject } from '@Pimcore/utils/type-utils'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
@@ -46,8 +48,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { errorData } = useListData()
   const { resetFilters, filterOptions, updateIsIncludeDescendants, addOrUpdatePQLQuery } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
-
-  console.log('------>>>> errorData: ', errorData)
 
   const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
     const includeDescendantsValue = e.target.checked
@@ -70,6 +70,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
     setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
     setPQLQueryValue('')
     resetFilters()
+  }
+
+  const getDescription = (): string => {
+    if (errorData?.data !== null && isObject(errorData?.data) && 'message' in (errorData?.data as object)) {
+      return (errorData?.data as { message: string }).message
+    }
+
+    return 'Something went wrong.'
   }
 
   return (
@@ -130,6 +138,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 style={ { height: '150px' } }
                 value={ pqlQueryValue }
               />
+              {!isEmptyValue(errorData) && (
+                <Alert
+                  description={ getDescription() }
+                  showIcon
+                  type="error"
+                />
+              )}
             </Flex>
             )
           : (

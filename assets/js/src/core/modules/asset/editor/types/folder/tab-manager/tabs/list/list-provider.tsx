@@ -15,7 +15,6 @@
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { type SerializedError } from '@reduxjs/toolkit'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
 import { defaultFilterOptions } from './constants/filters'
@@ -228,7 +227,7 @@ export const ListSortingProvider = ({ children }: ListSortingProviderProps): Rea
 
 export interface IListDataContext {
   data?: AssetGetGridApiResponse
-  errorData?: FetchBaseQueryError | SerializedError
+  errorData?: FetchBaseQueryError
 }
 
 export const ListDataContext = createContext<IListDataContext>({
