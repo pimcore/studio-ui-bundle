@@ -29,6 +29,7 @@ export class DynamicTypeObjectDataMultiSelect extends DynamicTypeObjectDataAbstr
     const options = props.options === null ? undefined : props.options.map(option => ({ label: option.key, value: option.value }))
     return (
       <Select
+        allowClear
         disabled={ props.noteditable === true }
         maxCount={ props.maxItems ?? undefined }
         mode="multiple"

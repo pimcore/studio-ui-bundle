@@ -14,25 +14,25 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { type FormItemProps } from 'antd/es/form/FormItem'
 import { Select } from '@Pimcore/components/select/select'
+import { t } from 'i18next'
+import type { FormItemProps } from 'antd/es/form/FormItem'
+import {
+  type SelectObjectDataDefinition
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
 
-export type SelectObjectDataDefinition = AbstractObjectDataDefinition & {
-  defaultValue: string | null
+export type BooleanSelectObjectDataDefinition = AbstractObjectDataDefinition & {
   options: Array<{ key: string, value: string }> | null
 }
 
-export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstract {
-  id: string = 'select'
-  getObjectDataComponent (props: SelectObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    const options = props.options === null ? undefined : props.options.map(option => ({ label: option.key, value: option.value }))
+export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstract {
+  id: string = 'booleanSelect'
+  getObjectDataComponent (props: BooleanSelectObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
     return (
       <Select
-        allowClear
         disabled={ props.noteditable === true }
-        optionFilterProp="label"
         options={ options }
-        showSearch
       />
     )
   }
@@ -40,7 +40,7 @@ export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstract {
   getObjectDataFormItemProps (props: SelectObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
-      initialValue: props.defaultValue
+      initialValue: 0
     }
   }
 }

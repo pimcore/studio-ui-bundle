@@ -91,6 +91,7 @@ version.confirm-clear-unpublished: Are you sure you want to clear all unpublishe
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
+empty: Empty
 yes: Yes
 no: No
 by: By
