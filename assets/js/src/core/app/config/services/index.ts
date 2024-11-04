@@ -78,6 +78,8 @@ import { DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-ty
 import { DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-multiselect'
 import { DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-boolean-select'
 import { DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
+import { DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-firstname'
+import { DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-lastname'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -163,6 +165,8 @@ container.bind(serviceIds['DynamicTypes/ObjectData/Select']).to(DynamicTypeObjec
 container.bind(serviceIds['DynamicTypes/ObjectData/MultiSelect']).to(DynamicTypeObjectDataMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/BooleanSelect']).to(DynamicTypeObjectDataBooleanSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Numeric']).to(DynamicTypeObjectDataNumeric).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Firstname']).to(DynamicTypeObjectDataFirstname).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Lastname']).to(DynamicTypeObjectDataLastname).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

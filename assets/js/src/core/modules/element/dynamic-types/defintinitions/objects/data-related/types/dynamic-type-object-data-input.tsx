@@ -11,31 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { Input } from 'antd'
+import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 
-export type InputObjectDataDefinition = AbstractObjectDataDefinition & {
+import {
+  DynamicTypeObjectDataAbstractInput, type InputProps
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-input'
+
+export type InputObjectDataDefinition = AbstractObjectDataDefinition & InputProps & {
   defaultValue: string | null
-  showCharCount: boolean
-  columnLength: number
   regex: string | null
   regexFlags: string[] | null
 }
 
-export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstract {
+export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInput {
   id: string = 'input'
-  getObjectDataComponent (props: InputObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return (
-      <Input
-        disabled={ props.noteditable === true }
-        maxLength={ props.columnLength }
-        showCount={ props.showCharCount }
-      />
-    )
-  }
 
   getObjectDataFormItemProps (props: InputObjectDataDefinition): FormItemProps {
     return {

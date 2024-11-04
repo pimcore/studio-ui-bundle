@@ -104,6 +104,8 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/MultiSelect': 'DynamicTypes/ObjectData/MultiSelect',
   'DynamicTypes/ObjectData/BooleanSelect': 'DynamicTypes/ObjectData/BooleanSelect',
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
+  'DynamicTypes/ObjectData/Firstname': 'DynamicTypes/ObjectData/Firstname',
+  'DynamicTypes/ObjectData/Lastname': 'DynamicTypes/ObjectData/Lastname',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

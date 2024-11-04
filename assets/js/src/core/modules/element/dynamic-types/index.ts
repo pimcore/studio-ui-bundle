@@ -63,6 +63,8 @@ import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynam
 import { type DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-multiselect'
 import { type DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-boolean-select'
 import { type DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
+import { type DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-firstname'
+import { type DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-lastname'
 
 moduleSystem.registerModule({
   onInit () {
@@ -124,5 +126,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataMultiSelect>(serviceIds['DynamicTypes/ObjectData/MultiSelect']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBooleanSelect>(serviceIds['DynamicTypes/ObjectData/BooleanSelect']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumeric>(serviceIds['DynamicTypes/ObjectData/Numeric']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFirstname>(serviceIds['DynamicTypes/ObjectData/Firstname']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLastname>(serviceIds['DynamicTypes/ObjectData/Lastname']))
   }
 })
