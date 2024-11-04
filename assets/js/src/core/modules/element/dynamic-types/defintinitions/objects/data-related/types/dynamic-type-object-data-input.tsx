@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstract {
   getObjectDataComponent (props: InputObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Input
+        disabled={ props.noteditable === true }
         maxLength={ props.columnLength }
         showCount={ props.showCharCount }
       />

@@ -101,6 +101,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
   'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
   'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',
+  'DynamicTypes/ObjectData/MultiSelect': 'DynamicTypes/ObjectData/MultiSelect',
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
 
   // Execution engine

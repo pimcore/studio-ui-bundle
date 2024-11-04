@@ -22,6 +22,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
   tooltip?: string | null
   invisible?: boolean | null
+  noteditable?: boolean | null
 }
 
 @injectable()

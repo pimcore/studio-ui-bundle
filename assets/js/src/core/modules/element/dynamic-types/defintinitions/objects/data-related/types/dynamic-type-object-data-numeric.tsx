@@ -48,6 +48,7 @@ export class DynamicTypeObjectDataNumeric extends DynamicTypeObjectDataAbstract 
     return (
       <InputNumber
         className="w-full"
+        disabled={ props.noteditable === true }
         max={ fixUnsigned(props.unsigned, props.maxValue, true) ?? undefined }
         min={ fixUnsigned(props.unsigned, props.minValue, false) ?? undefined }
         precision={ props.integer ? 0 : (props.decimalPrecision ?? undefined) }

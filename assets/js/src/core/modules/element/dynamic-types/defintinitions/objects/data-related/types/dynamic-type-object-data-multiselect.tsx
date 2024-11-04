@@ -17,18 +17,21 @@ import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { Select } from '@Pimcore/components/select/select'
 
-export type SelectObjectDataDefinition = AbstractObjectDataDefinition & {
+export type MultiSelectObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue: string | null
   options: Array<{ key: string, value: string }> | null
+  maxItems: number | null
 }
 
-export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstract {
-  id: string = 'select'
-  getObjectDataComponent (props: SelectObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+export class DynamicTypeObjectDataMultiSelect extends DynamicTypeObjectDataAbstract {
+  id: string = 'multiselect'
+  getObjectDataComponent (props: MultiSelectObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const options = props.options === null ? undefined : props.options.map(option => ({ label: option.key, value: option.value }))
     return (
       <Select
         disabled={ props.noteditable === true }
+        maxCount={ props.maxItems ?? undefined }
+        mode="multiple"
         optionFilterProp="label"
         options={ options }
         showSearch
@@ -36,7 +39,7 @@ export class DynamicTypeObjectDataSelect extends DynamicTypeObjectDataAbstract {
     )
   }
 
-  getObjectDataFormItemProps (props: SelectObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: MultiSelectObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       initialValue: props.defaultValue
