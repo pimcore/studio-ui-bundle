@@ -55,7 +55,6 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
     fixedCacheKey: 'shared-submit-workflow-action'
   })
 
-
   const openModal = (workflowDetails: WorkflowDetails): void => {
     setWorkflowDetails(workflowDetails)
     setModalOpen(true)
