@@ -22,7 +22,7 @@ import {
   type WorkflowActionSubmitApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
-interface UseWorkflowHookReturn extends IWorkflowContext {
+interface UseWorkflowHookReturn extends Omit<IWorkflowContext, 'fetchSubmitWorkflowAction'> {
   submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
   submissionLoading: boolean
 }
@@ -53,11 +53,12 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
 
   const submitWorkflowAction = (transition: string, actionType: ActionType, workflowName: string, workFlowOptions: WorkflowOptions): void => {
     setWorkflowDetails({ transition, actionType, workflowName })
+
     fetchSubmitWorkflowAction(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then(() => {
     }).catch((error) => { console.error(`Failed to submit workflow action ${error}`) })
   }
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading
+    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, submissionLoading
   }
 }

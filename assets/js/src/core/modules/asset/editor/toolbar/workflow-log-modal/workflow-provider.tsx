@@ -51,7 +51,10 @@ export interface WorkFlowProviderProps {
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails | null>(null)
-  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess }] = useWorkflowActionSubmitMutation()
+  const [fetchSubmitWorkflowAction, { isLoading: submissionLoading, isSuccess: submissionSuccess }] = useWorkflowActionSubmitMutation({
+    fixedCacheKey: 'shared-submit-workflow-action'
+  })
+
 
   const openModal = (workflowDetails: WorkflowDetails): void => {
     setWorkflowDetails(workflowDetails)
