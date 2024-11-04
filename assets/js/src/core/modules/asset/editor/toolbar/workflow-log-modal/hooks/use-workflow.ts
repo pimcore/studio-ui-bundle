@@ -25,7 +25,6 @@ import {
 interface UseWorkflowHookReturn extends IWorkflowContext {
   submitWorkflowAction: (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
   submissionLoading: boolean
-  submissionSuccess: boolean
 }
 
 export type ActionType = 'transition' | 'global'
@@ -38,7 +37,7 @@ export interface WorkflowOptions {
 }
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess } = useContext(WorkflowContext)
+  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading } = useContext(WorkflowContext)
   const { id } = useAsset()
 
   const workFlowTransition = (transition: string, actionType: ActionType, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
@@ -59,6 +58,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   }
 
   return {
-    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading, submissionSuccess
+    submitWorkflowAction, openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, fetchSubmitWorkflowAction, submissionLoading
   }
 }
