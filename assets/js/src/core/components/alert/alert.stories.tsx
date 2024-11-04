@@ -17,8 +17,6 @@ import { Alert } from './alert'
 const config: Meta = {
   title: 'Components/Feedback/Alert',
   component: Alert,
-  parameters: {
-  },
   tags: ['autodocs']
 }
 
