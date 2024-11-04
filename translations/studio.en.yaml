@@ -65,8 +65,17 @@ unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 action-applied-successfully: Action applied successfully
 action-could-not-be-applied: Action could not be applied
-workflow-transitions.log_time: Log Time
+workflow-modal.perform-action: Perform Action
+workflow-modal.cancel: Cancel
+workflow-modal.log-time: Log Time
+workflow-modal.timeSpent: Time spent
+workflow-modal.notes: Notes
+workflow-modal.timeSpent-required: Please enter the duration of time spent
+workflow-modal.notes-required: Please enter your notes
+workflow-transitions.log-time: Log Time
 workflow-transitions.start-workflow: Start Workflow
+workflow-transitions.finish-review: Finish Review
+workflow-transitions.restart-review: Restart Review
 save-success: Successfully saved
 save-failed: Save failed
 version.label: Versions

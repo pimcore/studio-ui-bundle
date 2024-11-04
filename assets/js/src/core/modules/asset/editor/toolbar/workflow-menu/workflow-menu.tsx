@@ -26,6 +26,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { HorizontalScroll } from '@Pimcore/components/horizontal-scroll/horizontal-scroll'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import _ from 'lodash'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -42,7 +43,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         workflow.allowedTransitions?.forEach((status) => {
           result.push({
             key: (result.length + 1).toString(),
-            label: t(`${status.label}`),
+            label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
             onClick: () => {
               submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
             }
@@ -52,7 +53,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         workflow.globalActions?.forEach((status) => {
           result.push({
             key: (result.length + 1).toString(),
-            label: t(`${status.label}`),
+            label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
             onClick: () => {
               openModal({
                 transition: status.name,

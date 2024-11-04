@@ -20,25 +20,25 @@ import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.style
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
-
+import _ from 'lodash'
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
 }
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { openModal, submitWorkflowAction, submissionLoading } = useWorkflow()
-
   const { styles } = useStyles()
   const { t } = useTranslation()
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
+
     useEffect(() => {
       const items: DropdownMenuProps['items'] = []
 
       workflow.allowedTransitions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          label: status.label,
+          label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
           onClick: () => {
             submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
           }
@@ -48,7 +48,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       workflow.globalActions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          label: t(`${status.label}`),
+          label: t(`workflow-transitions.${_.kebabCase(_.snakeCase(status.name))}`),
           onClick: () => {
             openModal({ transition: status.name, actionType: 'global', workflowName: workflow.workflowName })
           }

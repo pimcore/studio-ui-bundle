@@ -13,7 +13,6 @@
 
 import React from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -21,6 +20,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from 'antd'
+import { t } from 'i18next'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
   const { submitWorkflowAction, isModalOpen, closeModal, workflowDetails } = useWorkflow()
@@ -48,17 +48,15 @@ export const WorkflowLogModal = (): React.JSX.Element => {
           align={ 'center' }
           gap={ 'extra-small' }
         >
-          <IconTextButton
-            icon='close'
+          <Button
             onClick={ () => { closeModal() } }
-            type='link'
-          >
-            Cancel</IconTextButton>
+            type='default'
+          >{t('workflow-modal.cancel')}</Button>
           <Button
             key="submit"
             onClick={ () => { form.submit() } }
             type="primary"
-          >Perform Action</Button>
+          >{t('workflow-modal.perform-action')}</Button>
         </Flex>
       </ModalFooter> }
       onCancel={ () => {
@@ -66,7 +64,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
       } }
       open={ isModalOpen && workflowDetails !== null }
       size={ 'M' }
-      title={ <ModalTitle>Log Time</ModalTitle> }
+      title={ <ModalTitle>{t('workflow-modal.log-time')}</ModalTitle> }
     >
       <Form
         form={ form }
@@ -74,16 +72,16 @@ export const WorkflowLogModal = (): React.JSX.Element => {
         onFinish={ onFinish }
       >
         <Form.Item
-          label="Time spent"
+          label={ t('workflow-modal.timeSpent') }
           name="timeSpent"
-          rules={ [{ required: true, message: 'Please enter the duration of time spent' }] }
+          rules={ [{ required: true, message: t('workflow-modal.timeSpent-required') }] }
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Notes"
+          label={ t('workflow-modal.notes') }
           name="notes"
-          rules={ [{ required: true, message: 'Please enter your notes' }] }
+          rules={ [{ required: true, message: t('workflow-modal.notes-required') }] }
         >
           <Input.TextArea rows={ 4 } />
         </Form.Item>
