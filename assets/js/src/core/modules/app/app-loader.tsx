@@ -12,17 +12,18 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { api, api as userApi } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
-import { useMercureCreateCookieMutation } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
+import {
+  useMercureCreateCookieMutation
+} from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
-import { setPermissions } from '@Pimcore/modules/app/permissions/permissions-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -64,20 +65,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     return await settingsFetcher
   }
 
-  async function initPermissions (): Promise<any> {
-    const permissionsFetcher = dispatch(userApi.endpoints.userGetAvailablePermissions.initiate())
-
-    permissionsFetcher
-      .then(({ data, isSuccess }) => {
-        if (isSuccess && data !== undefined) {
-          dispatch(setPermissions(data.items))
-        }
-      })
-      .catch(() => {})
-
-    return await permissionsFetcher
-  }
-
   async function loadTranslations (): Promise<any> {
     await translations({ translation: { locale: 'en', keys: [] } })
       .unwrap()
@@ -93,7 +80,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     Promise.all([
       initLoadUser(),
       initSettings(),
-      initPermissions(),
       loadTranslations()
     ]).then(() => {
       setIsLoading(false)
