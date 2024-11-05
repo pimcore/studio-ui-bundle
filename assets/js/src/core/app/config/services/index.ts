@@ -89,6 +89,7 @@ import { DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-
 import { DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-email'
 import { DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-gender'
 import { DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
+import { DynamicTypeObjectDataDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -185,6 +186,7 @@ container.bind(serviceIds['DynamicTypes/ObjectData/Lastname']).to(DynamicTypeObj
 container.bind(serviceIds['DynamicTypes/ObjectData/Email']).to(DynamicTypeObjectDataEmail).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Gender']).to(DynamicTypeObjectDataGender).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/RgbaColor']).to(DynamicTypeObjectDataRgbaColor).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Date']).to(DynamicTypeObjectDataDate).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

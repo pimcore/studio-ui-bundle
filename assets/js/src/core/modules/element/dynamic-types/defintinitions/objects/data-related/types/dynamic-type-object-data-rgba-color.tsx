@@ -16,9 +16,6 @@ import React from 'react'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ColorPicker } from 'antd'
 import type { FormItemProps } from 'antd/es/form/FormItem'
-import {
-  type NumberObjectDataDefinition
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
 import { type Color } from 'antd/es/color-picker'
 import { t } from 'i18next'
 
@@ -51,7 +48,7 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
     )
   }
 
-  getObjectDataFormItemProps (props: NumberObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: RgbaColorObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       getValueFromEvent: formatColor
