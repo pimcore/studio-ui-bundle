@@ -156,6 +156,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
               />
               {isShowPQLQueryError && (
                 <Alert
+                  banner
                   description={ getDescription() }
                   showIcon
                   type="error"
