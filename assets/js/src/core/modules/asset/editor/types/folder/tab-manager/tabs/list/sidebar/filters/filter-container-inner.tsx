@@ -15,7 +15,6 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Form, Space, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { type CheckboxChangeEvent } from 'antd/es/checkbox'
 import TextArea from 'antd/es/input/TextArea'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -23,9 +22,11 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Alert } from '@Pimcore/components/alert/alert'
 import Search from 'antd/es/input/Search'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
+import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
+import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
 import { useListData, useListFilterOptions } from '../../hooks/use-list'
 import {
   ContentToolbarSidebarLayout
@@ -38,37 +39,40 @@ import {
 import { useStyles } from './filter-container-inner.styles'
 import { isEmptyValue, isObject } from '@Pimcore/utils/type-utils'
 
+const PQL_DOCUMENTATION_LINK = 'https://pimcore.com/docs/platform/Generic_Data_Index/Searching_For_Data_In_Index/Pimcore_Query_Language/'
+
 export const FilterContainerInner = (): React.JSX.Element => {
-  const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
+  const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
-  const [pqlQueryValue, setPQLQueryValue] = useState<string>('')
+
+  const { errorData } = useListData()
+  const { resetFilters, filterOptions } = useFilters()
+  const { setFilterOptions } = useListFilterOptions()
+  const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
+  const {
+    pqlQueryValue,
+    setPQLQueryValue,
+    handleChangePQLQueryValue,
+    handleSavePQLQueryValue,
+    isShowPQLQueryError,
+    setIsShowPQLQueryError
+  } = usePQLQueryFilter()
 
   const { styles } = useStyles()
 
-  const { errorData } = useListData()
-  const { resetFilters, filterOptions, updateIsIncludeDescendants, addOrUpdatePQLQuery } = useFilters()
-  const { setFilterOptions } = useListFilterOptions()
-
-  const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
-    const includeDescendantsValue = e.target.checked
-
-    setIsIncludeDescendants(includeDescendantsValue)
-    updateIsIncludeDescendants(includeDescendantsValue)
-  }
-
-  const handleChangePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setPQLQueryValue(e.target.value)
-  }
-
-  const handleSavePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    addOrUpdatePQLQuery(e.target.value)
-  }
+  useEffect(() => {
+    if (!isEmptyValue(errorData)) {
+      setIsShowPQLQueryError(true)
+    }
+  }, [errorData])
 
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
   const handleResetAllFiltersClick = (): void => {
     setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
     setPQLQueryValue('')
+    setIsShowPQLQueryError(false)
+
     resetFilters()
   }
 
@@ -125,7 +129,21 @@ export const FilterContainerInner = (): React.JSX.Element => {
               <Flex gap='mini'>
                 <Text>PQL Query</Text>
                 <div>
-                  <Tooltip title='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'>
+                  <Tooltip
+                    onOpenChange={ () => { setIsShowTooltip(!isShowTooltip) } }
+                    open={ isShowTooltip }
+                    title={ (
+                      <a
+                        className={ styles.link }
+                        href={ PQL_DOCUMENTATION_LINK }
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {PQL_DOCUMENTATION_LINK}
+                      </a>
+                    ) }
+                    trigger="click"
+                  >
                     <QuestionCircleOutlined className={ styles.infoIcon } />
                   </Tooltip>
                 </div>
@@ -138,8 +156,9 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 style={ { height: '150px' } }
                 value={ pqlQueryValue }
               />
-              {!isEmptyValue(errorData) && (
+              {isShowPQLQueryError && (
                 <Alert
+                  banner
                   description={ getDescription() }
                   showIcon
                   type="error"

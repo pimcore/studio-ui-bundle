@@ -27,6 +27,13 @@ export const _default = {
   }
 }
 
+export const Success = {
+  args: {
+    ..._default.args,
+    type: 'success'
+  }
+}
+
 export const Error = {
   args: {
     ..._default.args,
@@ -38,6 +45,31 @@ export const Warning = {
   args: {
     ..._default.args,
     type: 'warning'
+  }
+}
+
+export const Closable = {
+  args: {
+    ..._default.args,
+    type: 'info',
+    closable: true
+  }
+}
+
+export const Banner = {
+  args: {
+    ..._default.args,
+    type: 'info',
+    banner: true
+  }
+}
+
+export const ClosableBanner = {
+  args: {
+    ..._default.args,
+    type: 'info',
+    banner: true,
+    closable: true
   }
 }
 

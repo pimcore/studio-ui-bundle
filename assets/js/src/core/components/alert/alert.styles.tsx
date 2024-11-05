@@ -16,11 +16,9 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     alert: css`
-      display: flex;
-      align-items: center;
-      padding: ${token.paddingContentVerticalSM}px ${token.paddingSM}px;
-      border: none;
-      border-radius: 0;
+      &.ant-alert-banner {
+        padding: ${token.paddingContentVerticalSM}px ${token.paddingSM}px;
+      }
     `
   }
 })
