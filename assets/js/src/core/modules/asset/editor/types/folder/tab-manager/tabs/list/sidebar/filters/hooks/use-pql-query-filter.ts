@@ -18,17 +18,22 @@ import { useFilters } from './use-filters'
 interface IUsePQLQueryFilterHookReturn {
   pqlQueryValue: string
   setPQLQueryValue: (value: string) => void
+  isShowPQLQueryError: boolean
+  setIsShowPQLQueryError: (value: boolean) => void
   handleChangePQLQueryValue: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
   handleSavePQLQueryValue: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
 }
 
 export const usePQLQueryFilter = (): IUsePQLQueryFilterHookReturn => {
+  const [isShowPQLQueryError, setIsShowPQLQueryError] = useState(false)
   const [pqlQueryValue, setPQLQueryValue] = useState<string>('')
 
   const { addOrUpdatePQLQuery } = useFilters()
 
   const handleChangePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setPQLQueryValue(e.target.value)
+
+    setIsShowPQLQueryError(false)
   }
 
   const handleSavePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -39,6 +44,8 @@ export const usePQLQueryFilter = (): IUsePQLQueryFilterHookReturn => {
     pqlQueryValue,
     setPQLQueryValue,
     handleChangePQLQueryValue,
-    handleSavePQLQueryValue
+    handleSavePQLQueryValue,
+    isShowPQLQueryError,
+    setIsShowPQLQueryError
   }
 }

@@ -22,7 +22,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Alert } from '@Pimcore/components/alert/alert'
 import Search from 'antd/es/input/Search'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
 import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
@@ -49,9 +49,22 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { resetFilters, filterOptions } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
   const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
-  const { pqlQueryValue, setPQLQueryValue, handleChangePQLQueryValue, handleSavePQLQueryValue } = usePQLQueryFilter()
+  const {
+    pqlQueryValue,
+    setPQLQueryValue,
+    handleChangePQLQueryValue,
+    handleSavePQLQueryValue,
+    isShowPQLQueryError,
+    setIsShowPQLQueryError
+  } = usePQLQueryFilter()
 
   const { styles } = useStyles()
+
+  useEffect(() => {
+    if (!isEmptyValue(errorData)) {
+      setIsShowPQLQueryError(true)
+    }
+  }, [errorData])
 
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
@@ -141,7 +154,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 style={ { height: '150px' } }
                 value={ pqlQueryValue }
               />
-              {!isEmptyValue(errorData) && (
+              {isShowPQLQueryError && (
                 <Alert
                   description={ getDescription() }
                   showIcon
