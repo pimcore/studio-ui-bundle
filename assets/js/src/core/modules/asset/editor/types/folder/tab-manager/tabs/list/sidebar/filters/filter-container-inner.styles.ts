@@ -13,11 +13,16 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
     infoIcon: css`
       color: rgba(0, 0, 0, 0.45);
       cursor: pointer;
+    `,
+
+    link: css`
+      color: ${token.colorTextLightSolid};
+    }
     `
   }
 })

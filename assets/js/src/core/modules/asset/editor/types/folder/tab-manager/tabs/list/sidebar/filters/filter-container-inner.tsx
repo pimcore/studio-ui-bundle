@@ -38,9 +38,13 @@ import {
 import { useStyles } from './filter-container-inner.styles'
 import { isEmptyValue, isObject } from '@Pimcore/utils/type-utils'
 
+const PQL_DOCUMENTATION_LINK = 'https://pimcore.com/docs/platform/Generic_Data_Index/Searching_For_Data_In_Index/Pimcore_Query_Language/'
+
 export const FilterContainerInner = (): React.JSX.Element => {
-  const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
+  const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+
+  const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
   const [pqlQueryValue, setPQLQueryValue] = useState<string>('')
 
   const { styles } = useStyles()
@@ -125,7 +129,21 @@ export const FilterContainerInner = (): React.JSX.Element => {
               <Flex gap='mini'>
                 <Text>PQL Query</Text>
                 <div>
-                  <Tooltip title='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'>
+                  <Tooltip
+                    onOpenChange={ () => { setIsShowTooltip(!isShowTooltip) } }
+                    open={ isShowTooltip }
+                    title={ (
+                      <a
+                        className={ styles.link }
+                        href={ PQL_DOCUMENTATION_LINK }
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        {PQL_DOCUMENTATION_LINK}
+                      </a>
+                    ) }
+                    trigger="click"
+                  >
                     <QuestionCircleOutlined className={ styles.infoIcon } />
                   </Tooltip>
                 </div>
