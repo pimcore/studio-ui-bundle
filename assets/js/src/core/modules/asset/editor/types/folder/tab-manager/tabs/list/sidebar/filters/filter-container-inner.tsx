@@ -26,6 +26,7 @@ import Search from 'antd/es/input/Search'
 import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
+import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
 import { useListData, useListFilterOptions } from '../../hooks/use-list'
 import {
   ContentToolbarSidebarLayout
@@ -45,27 +46,19 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
   const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
-  const [pqlQueryValue, setPQLQueryValue] = useState<string>('')
 
   const { styles } = useStyles()
 
   const { errorData } = useListData()
-  const { resetFilters, filterOptions, updateIsIncludeDescendants, addOrUpdatePQLQuery } = useFilters()
+  const { resetFilters, filterOptions, updateIsIncludeDescendants } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
+  const { pqlQueryValue, setPQLQueryValue, handleChangePQLQueryValue, handleSavePQLQueryValue } = usePQLQueryFilter()
 
   const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
     const includeDescendantsValue = e.target.checked
 
     setIsIncludeDescendants(includeDescendantsValue)
     updateIsIncludeDescendants(includeDescendantsValue)
-  }
-
-  const handleChangePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setPQLQueryValue(e.target.value)
-  }
-
-  const handleSavePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    addOrUpdatePQLQuery(e.target.value)
   }
 
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
