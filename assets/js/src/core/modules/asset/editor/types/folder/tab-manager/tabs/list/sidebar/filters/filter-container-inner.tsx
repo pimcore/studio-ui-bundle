@@ -15,7 +15,6 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Form, Space, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { type CheckboxChangeEvent } from 'antd/es/checkbox'
 import TextArea from 'antd/es/input/TextArea'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -27,6 +26,7 @@ import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
 import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
+import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
 import { useListData, useListFilterOptions } from '../../hooks/use-list'
 import {
   ContentToolbarSidebarLayout
@@ -45,21 +45,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
-  const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
-
-  const { styles } = useStyles()
-
   const { errorData } = useListData()
-  const { resetFilters, filterOptions, updateIsIncludeDescendants } = useFilters()
+  const { resetFilters, filterOptions } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
+  const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
   const { pqlQueryValue, setPQLQueryValue, handleChangePQLQueryValue, handleSavePQLQueryValue } = usePQLQueryFilter()
 
-  const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
-    const includeDescendantsValue = e.target.checked
-
-    setIsIncludeDescendants(includeDescendantsValue)
-    updateIsIncludeDescendants(includeDescendantsValue)
-  }
+  const { styles } = useStyles()
 
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
