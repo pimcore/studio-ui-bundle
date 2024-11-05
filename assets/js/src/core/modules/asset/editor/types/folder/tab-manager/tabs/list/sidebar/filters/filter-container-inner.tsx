@@ -71,6 +71,8 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const handleResetAllFiltersClick = (): void => {
     setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
     setPQLQueryValue('')
+    setIsShowPQLQueryError(false)
+
     resetFilters()
   }
 
