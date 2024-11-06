@@ -17,6 +17,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { Alert } from 'antd'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
 
 export interface DataComponentProps extends ObjectComponentProps {
@@ -29,8 +30,7 @@ export interface DataComponentProps extends ObjectComponentProps {
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-  const { name, title } = props
-  const { fieldType, fieldtype } = props
+  const { name, fieldType, fieldtype } = props
   const context = useFormList()
   const formFieldName = context !== undefined ? [context.field.name, name] : [name]
 
@@ -38,8 +38,12 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
   if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
-    // @todo should throw an error in the future after the implementation of all data types
-    return (<div>Unknown data type: {currentFieldType}</div>)
+    return (
+      <Alert
+        message={ `Unknown data type: ${currentFieldType}` }
+        type="warning"
+      />
+    )
   }
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
@@ -47,8 +51,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   if (!objectDataType.isCollectionType) {
     return (
       <Form.Item
-        className='w-full'
-        label={ title }
+        { ...objectDataType.getObjectDataFormItemProps(props) }
         name={ formFieldName }
       >
         {objectDataType.getObjectDataComponent(props)}

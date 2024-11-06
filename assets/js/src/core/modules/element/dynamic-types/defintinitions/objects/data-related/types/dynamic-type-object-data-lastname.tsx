@@ -11,15 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import {
+  DynamicTypeObjectDataAbstractInput
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-input'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { Input } from 'antd'
-
-export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstract {
-  id: string = 'input'
-
-  getObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return <Input />
-  }
+export class DynamicTypeObjectDataLastname extends DynamicTypeObjectDataAbstractInput {
+  id: string = 'lastname'
 }
