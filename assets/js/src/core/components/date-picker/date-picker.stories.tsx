@@ -10,12 +10,13 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import React, {useState} from 'react'
-import {type Meta, StoryObj} from '@storybook/react'
-import {DatePicker, DatePickerProps} from "./date-picker";
-import dayjs from "dayjs";
-import {Form} from "@Pimcore/components/form/form";
-import FormItem from "antd/es/form/FormItem";
+
+import React, { useState } from 'react'
+import { type Meta, type StoryObj } from '@storybook/react'
+import { DatePicker, type DatePickerProps } from './date-picker'
+import dayjs from 'dayjs'
+import { Form } from '@Pimcore/components/form/form'
+import FormItem from 'antd/es/form/FormItem'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
@@ -37,24 +38,24 @@ const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
   }
 
   return (
-      <Form>
-        <FormItem>
-          <DatePicker
-              {...props}
-              onChange={handleDateChange}
-          />
-        </FormItem>
-        <div>
-            <strong>Selected Date:</strong>
-            <pre>{date !== null && date !== undefined ? (dayjs.isDayjs(date) ? 'dayjs object: ' + date.toString() : date.toString()) : 'null'}</pre>
-        </div>
-      </Form>
+    <Form>
+      <FormItem>
+        <DatePicker
+          { ...props }
+          onChange={ handleDateChange }
+        />
+      </FormItem>
+      <div>
+        <strong>Selected Date:</strong>
+        <pre>{date !== null && date !== undefined ? (dayjs.isDayjs(date) ? 'dayjs object: ' + date.toString() : date.toString()) : 'null'}</pre>
+      </div>
+    </Form>
   )
 }
 
-type Story = StoryObj<typeof DatePicker>;
+type Story = StoryObj<typeof DatePicker>
 export const _default: Story = {
   args: {
   },
-  render: (props: DatePickerProps) => <ExampleForm {...props} />
+  render: (props: DatePickerProps) => <ExampleForm { ...props } />
 }
