@@ -1,0 +1,74 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import React, { useEffect } from 'react'
+import { type RangePickerProps as OriginalRangePickerProps } from 'antd/lib/date-picker/generatePicker/interface'
+import { DatePicker as OriginalDatePicker } from 'antd'
+import { type Dayjs } from 'dayjs'
+import {
+  toDayJs,
+  type DatePickerValueType,
+  fromDayJs,
+  type OutputType
+} from './utils/date-picker-utils'
+
+type DateRange = [start: Dayjs | null, end: Dayjs | null]
+type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
+
+type RangePickerProps = OriginalRangePickerProps & {
+  value?: DateRangeTargetValue
+  onChange?: (dates: DateRangeTargetValue | null) => void
+  outputType?: OutputType
+  outputFormat?: string
+}
+
+const valueToDayJs = (value?: DateRangeTargetValue | any): DateRange | null => {
+  if (Array.isArray(value)) {
+    return [
+      toDayJs(value[0]),
+      toDayJs(value[1])
+    ]
+  }
+
+  return null
+}
+
+const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, outputFormat?: string): DateRangeTargetValue | null => {
+  if (value === null) {
+    return null
+  }
+  return [
+    fromDayJs(value[0], outputType, outputFormat),
+    fromDayJs(value[1], outputType, outputFormat)
+  ]
+}
+
+export const RangePicker = (props: RangePickerProps): React.JSX.Element => {
+  const [value, setValue] = React.useState<DateRange | null>(valueToDayJs(props.value))
+
+  useEffect(() => {
+    if (props.onChange !== undefined) {
+      props.onChange(valueFromDayJs(value, props.outputType, props.outputFormat))
+    }
+  }, [value, props.outputType, props.outputFormat])
+
+  return (
+    <OriginalDatePicker.RangePicker
+      { ...props }
+      onChange={ (dates: DateRange | null) => {
+        setValue(dates)
+      } }
+      value={ value }
+    />
+  )
+}
