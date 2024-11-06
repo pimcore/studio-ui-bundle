@@ -49,6 +49,7 @@ export const DatePicker = (props: DatePickerProps): React.JSX.Element => {
     return null
   }
 
+  const outputFormat = (props as DatePickerPropsDateString)?.outputFormat
   const valueToTargetFormat = (value: Dayjs | null): DatePickerValueType => {
     if (value === null) {
       return null
@@ -57,7 +58,6 @@ export const DatePicker = (props: DatePickerProps): React.JSX.Element => {
       return value.unix()
     }
     if (props.outputType === 'dateString') {
-      const outputFormat = (props as DatePickerPropsDateString)?.outputFormat
       return outputFormat !== undefined ? value.format(outputFormat) : value.format()
     }
     return value
@@ -69,7 +69,7 @@ export const DatePicker = (props: DatePickerProps): React.JSX.Element => {
     if (props.onChange !== undefined) {
       props.onChange(valueToTargetFormat(value))
     }
-  }, [value, props])
+  }, [value, props.outputType, outputFormat])
 
   return (
     <OriginalDatePicker
