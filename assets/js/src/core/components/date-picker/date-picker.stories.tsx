@@ -10,7 +10,7 @@
 *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {type Meta, StoryObj} from '@storybook/react'
 import {DatePicker, DatePickerProps} from "./date-picker";
 import dayjs from "dayjs";
