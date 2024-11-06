@@ -35,6 +35,7 @@ export const DropdownInner = ({ selectedKeys, onSelect, menu, menuRef, ...props 
           </>
         )
       } }
+      trigger={ ['click'] }
     >
       {props.children}
     </AntdDropdown>
