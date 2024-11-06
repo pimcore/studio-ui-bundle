@@ -242,13 +242,10 @@ export const ListContainerInner = (): React.JSX.Element => {
   }
 
   return useMemo(() => (
-    <ListDataProvider
-      data={ data }
-      errorData={ fetchListingResult.error as FetchBaseQueryError }
-    >
+    <ListDataProvider data={ data }>
       <Content loading={ isLoading }>
         <ContentToolbarSidebarLayout
-          renderSidebar={ <SidebarContainer /> }
+          renderSidebar={ <SidebarContainer errorData={ fetchListingResult.error as FetchBaseQueryError } /> }
           renderToolbar={
             <GridToolbarContainer
               pager={ {

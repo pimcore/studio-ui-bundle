@@ -27,7 +27,7 @@ import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
 import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
 import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
-import { useListData, useListFilterOptions } from '../../hooks/use-list'
+import { useListFilterOptions } from '../../hooks/use-list'
 import {
   ContentToolbarSidebarLayout
 } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
@@ -45,8 +45,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
-  const { errorData } = useListData()
-  const { resetFilters, filterOptions } = useFilters()
+  const { resetFilters, filterOptions, filterError } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
   const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
   const {
@@ -61,10 +60,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { styles } = useStyles()
 
   useEffect(() => {
-    if (!isEmptyValue(errorData)) {
+    if (!isEmptyValue(filterError)) {
       setIsShowPQLQueryError(true)
     }
-  }, [errorData])
+  }, [filterError])
 
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
@@ -77,8 +76,8 @@ export const FilterContainerInner = (): React.JSX.Element => {
   }
 
   const getDescription = (): string => {
-    if (errorData?.data !== null && isObject(errorData?.data) && 'message' in (errorData?.data as object)) {
-      return (errorData?.data as { message: string }).message
+    if (filterError?.data !== null && isObject(filterError?.data) && 'message' in (filterError?.data as object)) {
+      return (filterError?.data as { message: string }).message
     }
 
     return 'Something went wrong.'

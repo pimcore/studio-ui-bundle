@@ -39,7 +39,7 @@ type ColumnFiltersList = Array<FilterOptions['columnFilters']> | []
 
 export const useFilters = (): UseFiltersHookReturn => {
   const { resetColumns, ...gridConfigProps } = useGridConfig()
-  const { filterOptions, setFilterOptions } = useContext(FilterContext)
+  const { filterOptions, setFilterOptions, filterError } = useContext(FilterContext)
 
   const resetFilters = (): void => {
     resetColumns()
@@ -171,6 +171,7 @@ export const useFilters = (): UseFiltersHookReturn => {
   return {
     filterOptions,
     setFilterOptions,
+    filterError,
     addOrUpdateFieldFilter,
     removeFieldFilter,
     getFieldFilter,
