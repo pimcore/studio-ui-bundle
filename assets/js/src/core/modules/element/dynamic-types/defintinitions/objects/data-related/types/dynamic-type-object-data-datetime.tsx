@@ -20,19 +20,19 @@ import {
   type AbstractObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 
-export type DateObjectDataDefinition = AbstractDateObjectDataDefinition & {
+export type DatetimeObjectDataDefinition = AbstractDateObjectDataDefinition & {
   columnType: 'date' | 'bigint(20)'
 }
 
-export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstractDate {
-  id: string = 'date'
+export class DynamicTypeObjectDataDatetime extends DynamicTypeObjectDataAbstractDate {
+  id: string = 'datetime'
 
-  getObjectDataComponent (props: DateObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: DatetimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
       ...props,
-      timezoneEnabled: props.columnType === 'bigint(20)',
       outputType: 'dateString',
-      outputFormat: 'YYYY-MM-DD'
+      outputFormat: 'YYYY-MM-DD HH:mm:ss',
+      showTime: true
     })
   }
 }

@@ -22,6 +22,7 @@ type DatePickerPropsBase = PickerProps & {
   value?: DatePickerValueType
   onChange?: (date: string | number | Dayjs | null) => void
   outputType?: 'dateString' | 'timestamp' | 'dayjs'
+  outputFormat?: string
 }
 
 type DatePickerPropsDateString = DatePickerPropsBase & {
@@ -49,7 +50,7 @@ export const DatePicker = (props: DatePickerProps): React.JSX.Element => {
     return null
   }
 
-  const outputFormat = (props as DatePickerPropsDateString)?.outputFormat
+  const outputFormat = props?.outputFormat
   const valueToTargetFormat = (value: Dayjs | null): DatePickerValueType => {
     if (value === null) {
       return null

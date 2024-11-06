@@ -116,6 +116,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
+  'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
