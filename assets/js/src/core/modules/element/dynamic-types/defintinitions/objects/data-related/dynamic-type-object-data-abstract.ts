@@ -21,6 +21,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {}
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
+  isCollectionType: boolean = false
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 }
