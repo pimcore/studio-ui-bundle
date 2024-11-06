@@ -22,7 +22,6 @@ import { useFormList } from '../providers/form-list-provider/use-form-list'
 
 export interface DataComponentProps extends ObjectComponentProps {
   name: string
-  title: string | null
   datatype: 'data'
   fieldType?: string
   fieldtype?: string
@@ -52,7 +51,8 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   if (!objectDataType.isCollectionType) {
     return (
       <Form.Item
-          { ...objectDataType.getObjectDataFormItemProps(props) }
+        { ...objectDataType.getObjectDataFormItemProps(props) }
+        name={ formFieldName }
       >
         {objectDataType.getObjectDataComponent(props)}
       </Form.Item>

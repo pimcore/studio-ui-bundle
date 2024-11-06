@@ -23,6 +23,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   tooltip?: string | null
   invisible?: boolean | null
   noteditable?: boolean | null
+  title?: string
 }
 
 @injectable()
@@ -35,7 +36,6 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
     return {
       className: 'w-full',
-      name: props.name,
       label: props.title,
       required: props.mandatory === true,
       hidden: props.invisible === true,
