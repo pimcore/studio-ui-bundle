@@ -16,7 +16,7 @@ import React from 'react'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import dayjs from 'dayjs'
-import { DatePickerDataComponent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/date-picker/date-picker'
+import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 
 export type DateObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue: number | null
@@ -44,9 +44,10 @@ export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstract {
 
   getObjectDataComponent (props: DateObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <DatePickerDataComponent
+      <DatePicker
         allowClear
-        targetFormat={ isTimezoneEnabled(props) ? undefined : 'YYYY-MM-DD' }
+        outputFormat={ isTimezoneEnabled(props) ? undefined : 'YYYY-MM-DD' }
+        outputType="dateString"
       />
     )
   }
