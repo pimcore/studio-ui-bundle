@@ -106,7 +106,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
         {isAdvancedMode
           ? (
             <PQLQueryInput
-              error={ filterError }
+              errorData={ filterError }
               handleBlur={ handleSavePQLQueryValue }
               handleChange={ handleChangePQLQueryValue }
               isShowError={ isShowPQLQueryError }

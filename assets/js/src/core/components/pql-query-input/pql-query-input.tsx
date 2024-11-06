@@ -28,18 +28,20 @@ interface IPQLQueryInputProps {
   value: string
   handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
   handleBlur: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  error?: FetchBaseQueryError
+  errorData?: FetchBaseQueryError
   isShowError: boolean
 }
 
-export const PQLQueryInput = ({ value, handleChange, handleBlur, error, isShowError }: IPQLQueryInputProps): React.JSX.Element => {
+export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isShowError }: IPQLQueryInputProps): React.JSX.Element => {
   const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
 
   const { styles } = useStyles()
 
   const getDescription = (): string => {
-    if (error?.data !== null && isObject(error?.data) && 'message' in (error?.data as object)) {
-      return (error?.data as { message: string }).message
+    const error = errorData?.data
+
+    if (error !== null && isObject(error) && 'message' in (error as object)) {
+      return (error as { message: string }).message
     }
 
     return 'Something went wrong.'
