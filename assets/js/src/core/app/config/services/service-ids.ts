@@ -117,6 +117,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
+  'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

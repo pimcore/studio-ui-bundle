@@ -18,6 +18,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
+import { useFormList } from '../providers/form-list-provider/use-form-list'
 
 export interface DataComponentProps extends ObjectComponentProps {
   name: string
@@ -31,6 +32,8 @@ export interface DataComponentProps extends ObjectComponentProps {
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { fieldType, fieldtype } = props
+  const context = useFormList()
+  const formFieldName = context !== undefined ? [context.field.name, name] : [name]
 
   // @todo unify to one fieldType after api is updated completely
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
@@ -43,13 +46,22 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
       />
     )
   }
+
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
+  if (!objectDataType.isCollectionType) {
+    return (
+      <Form.Item
+          { ...objectDataType.getObjectDataFormItemProps(props) }
+      >
+        {objectDataType.getObjectDataComponent(props)}
+      </Form.Item>
+    )
+  }
+
   return (
-    <Form.Item
-      { ...objectDataType.getObjectDataFormItemProps(props) }
-    >
+    <>
       {objectDataType.getObjectDataComponent(props)}
-    </Form.Item>
+    </>
   )
 }

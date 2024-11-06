@@ -16,43 +16,42 @@ import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-l
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { BaseView } from '../../views/base-view'
 import { Space } from '@Pimcore/components/space/space'
+import { Box } from '@Pimcore/components/box/box'
 
 export interface PanelProps extends AbstractObjectLayoutDefinition {
   title?: string
   border?: boolean
   collapsible?: boolean
   collapsed?: boolean
+  children: AbstractObjectLayoutDefinition[]
 }
 
 export const Panel = ({ children, name, border, collapsed, collapsible, title }: PanelProps): React.JSX.Element => {
+  const isMainPanel = name === 'pimcore_root'
+  const hasTabPanel = children.find((child) => child.fieldType === 'tabpanel' || child.fieldtype === 'tabpanel') !== undefined
+
+  if (isMainPanel && !hasTabPanel) {
+    return (
+      <Box padding={ 'small' }>
+        { getContent() }
+      </Box>
+    )
+  }
+
   return (
     <>
-      { name === 'pimcore_root'
-        ? (
-          <>
-            { getContent() }
-          </>
-          )
-        : null }
-
-      { name !== 'pimcore_root'
-        ? (
-          <BaseView
-            border={ border }
-            collapsed={ collapsed }
-            collapsible={ collapsible }
-            title={ title }
-          >
-            { getContent() }
-          </BaseView>
-          )
-        : null }
+      { getContent() }
     </>
   )
 
   function getContent (): ReactNode {
     return (
-      <>
+      <BaseView
+        border={ border }
+        collapsed={ collapsed }
+        collapsible={ collapsible }
+        title={ title }
+      >
         <Space
           className='w-full'
           direction='vertical'
@@ -65,7 +64,7 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title }:
             />
           ))}
         </Space>
-      </>
+      </BaseView>
     )
   }
 }
