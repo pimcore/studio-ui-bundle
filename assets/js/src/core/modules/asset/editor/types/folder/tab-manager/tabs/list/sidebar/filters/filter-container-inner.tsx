@@ -13,14 +13,12 @@
 
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Checkbox, Form, Space, Tooltip } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
-import TextArea from 'antd/es/input/TextArea'
+import { Checkbox, Form, Space } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { Alert } from '@Pimcore/components/alert/alert'
+import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
 import Search from 'antd/es/input/Search'
 import React, { useEffect, useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
@@ -36,13 +34,9 @@ import { Content } from '@Pimcore/components/content/content'
 import {
   DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
-import { useStyles } from './filter-container-inner.styles'
-import { isEmptyValue, isObject } from '@Pimcore/utils/type-utils'
-
-const PQL_DOCUMENTATION_LINK = 'https://pimcore.com/docs/platform/Generic_Data_Index/Searching_For_Data_In_Index/Pimcore_Query_Language/'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const FilterContainerInner = (): React.JSX.Element => {
-  const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
   const { resetFilters, filterOptions, filterError } = useFilters()
@@ -56,8 +50,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
     isShowPQLQueryError,
     setIsShowPQLQueryError
   } = usePQLQueryFilter()
-
-  const { styles } = useStyles()
 
   useEffect(() => {
     if (!isEmptyValue(filterError)) {
@@ -73,14 +65,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
     setIsShowPQLQueryError(false)
 
     resetFilters()
-  }
-
-  const getDescription = (): string => {
-    if (filterError?.data !== null && isObject(filterError?.data) && 'message' in (filterError?.data as object)) {
-      return (filterError?.data as { message: string }).message
-    }
-
-    return 'Something went wrong.'
   }
 
   return (
@@ -121,49 +105,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
         {isAdvancedMode
           ? (
-            <Flex
-              gap='extra-small'
-              vertical
-            >
-              <Flex gap='mini'>
-                <Text>PQL Query</Text>
-                <div>
-                  <Tooltip
-                    onOpenChange={ () => { setIsShowTooltip(!isShowTooltip) } }
-                    open={ isShowTooltip }
-                    title={ (
-                      <a
-                        className={ styles.link }
-                        href={ PQL_DOCUMENTATION_LINK }
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        {PQL_DOCUMENTATION_LINK}
-                      </a>
-                    ) }
-                    trigger="click"
-                  >
-                    <QuestionCircleOutlined className={ styles.infoIcon } />
-                  </Tooltip>
-                </div>
-              </Flex>
-              <TextArea
-                allowClear
-                onBlur={ handleSavePQLQueryValue }
-                onChange={ handleChangePQLQueryValue }
-                placeholder='Type your Query'
-                style={ { height: '150px' } }
-                value={ pqlQueryValue }
-              />
-              {isShowPQLQueryError && (
-                <Alert
-                  banner
-                  description={ getDescription() }
-                  showIcon
-                  type="error"
-                />
-              )}
-            </Flex>
+            <PQLQueryInput
+              error={ filterError }
+              handleBlur={ handleSavePQLQueryValue }
+              handleChange={ handleChangePQLQueryValue }
+              isShowError={ isShowPQLQueryError }
+              value={ pqlQueryValue }
+            />
             )
           : (
             <>
