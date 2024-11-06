@@ -47,11 +47,34 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
   }
 
   const renameContextMenuItem = (node: TreeNodeProps): ItemType => {
+    console.log('permission', node.permissions.rename)
+
+    /**
+     * IDEAS (permissions):
+     * user related -> modules/auth/hooks/useXY.ts
+     * element related -> modules/element/permissions/helperWTF.ts
+     *
+     *  create class (maybe "permission" array) // no use hook!
+     *  provide checkElementPermission(node.permissions, ['rename']) -> isLocked is not a permission topic
+     *  provide isAllowed('objects') -> should check user based permissions (always true by admin -> else check string)
+     *
+     * Tabs:
+     * add isHidden -> check if tab is hidden
+     *
+     * TODO:
+     *  move /modules/permission/* to /modules/auth/permissions/* - DONE
+     *
+     *
+     *  Backend:
+     * /pimcore-studio/api/user/current-user-information -> roles = useles -> return permissions of user + isAdmin flag
+     * /pimcore-studio/api/user/available-permissions -> return all available permissions (only with "user")
+     */
+
     return {
       label: t('element.rename'),
       key: 'rename',
       icon: <Icon name={ 'type-square' } />,
-      hidden: node.isLocked,
+      hidden: node.permissions.rename === false && node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined

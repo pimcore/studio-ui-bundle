@@ -18,5 +18,7 @@ export interface IEditorTab {
   label: string | React.JSX.Element
   children: React.JSX.Element
   icon: React.JSX.Element
+  permission?: string
+  hidden?: () => boolean
   isDetachable?: boolean
 }

@@ -22,6 +22,7 @@ import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wr
 import { IconButton } from '../icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -40,6 +41,9 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
+  const elementDraft = useElementDraft(id, elementType) // IMPORTANT!
+
+  console.log(elementDraft)
 
   const elementRef = useRef<HTMLDivElement>(null)
 
@@ -74,6 +78,32 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const openDetachedWidget = (item: IDetachTab): void => {
     detachWidget(item)
   }
+
+  items = items.filter((item) => {
+    if (item.hidden && !item.hidden()) {
+      return false
+    }
+
+    if (item.permission) {
+      // check if elementDraft has the permission
+    }
+
+    return true
+
+    /**
+     * if "hidden" is available -> execute it (bool)
+     *
+     * item.hidden(elementDraft) -> true/false
+     *
+     * optional:
+     * item.permissions -> holds string (e.g. "properties")
+     *
+     * if 1 item.permissions
+     * if 2 hidden
+     *
+     * makes it easier to check -> you dont need to implement a function
+     */
+  })
 
   items = items?.map((item) => {
     const tmpItem = {
