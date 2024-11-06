@@ -52,13 +52,9 @@ const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
   )
 }
 
-const demoData = {
-
-}
 type Story = StoryObj<typeof DatePicker>;
 export const _default: Story = {
   args: {
-    ...demoData
   },
   render: (props: DatePickerProps) => <ExampleForm {...props} />
 }
