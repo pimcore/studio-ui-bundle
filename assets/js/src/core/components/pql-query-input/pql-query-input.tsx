@@ -20,6 +20,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { isObject } from '@Pimcore/utils/type-utils'
+import { useStyles } from './pql-query-input.styles'
 
 const PQL_DOCUMENTATION_LINK = 'https://pimcore.com/docs/platform/Generic_Data_Index/Searching_For_Data_In_Index/Pimcore_Query_Language/'
 
@@ -33,6 +34,8 @@ interface IPQLQueryInputProps {
 
 export const PQLQueryInput = ({ value, handleChange, handleBlur, error, isShowError }: IPQLQueryInputProps): React.JSX.Element => {
   const [isShowTooltip, setIsShowTooltip] = useState<boolean>(false)
+
+  const { styles } = useStyles()
 
   const getDescription = (): string => {
     if (error?.data !== null && isObject(error?.data) && 'message' in (error?.data as object)) {
@@ -55,7 +58,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, error, isShowEr
             open={ isShowTooltip }
             title={ (
               <a
-                // className={ styles.link }
+                className={ styles.link }
                 href={ PQL_DOCUMENTATION_LINK }
                 rel="noreferrer"
                 target="_blank"
@@ -65,8 +68,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, error, isShowEr
                 ) }
             trigger="click"
           >
-            {/* <QuestionCircleOutlined className={ styles.infoIcon } /> */}
-            <QuestionCircleOutlined />
+            <QuestionCircleOutlined className={ styles.infoIcon } />
           </Tooltip>
         </div>
       </Flex>
