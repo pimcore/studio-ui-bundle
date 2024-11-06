@@ -30,7 +30,7 @@ export interface DataComponentProps extends ObjectComponentProps {
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-  const { fieldType, fieldtype } = props
+  const { name, fieldType, fieldtype } = props
   const context = useFormList()
   const formFieldName = context !== undefined ? [context.field.name, name] : [name]
 
