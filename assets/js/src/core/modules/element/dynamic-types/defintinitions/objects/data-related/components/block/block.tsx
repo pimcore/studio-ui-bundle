@@ -19,7 +19,6 @@ import { BlockContent } from './block-content'
 
 export interface BlockProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
-  title?: string
 }
 
 export const Block = (props: BlockProps): React.JSX.Element => {

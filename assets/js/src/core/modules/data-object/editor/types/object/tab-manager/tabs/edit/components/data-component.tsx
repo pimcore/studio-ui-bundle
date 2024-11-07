@@ -17,6 +17,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { Alert } from 'antd'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
 import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
 
@@ -30,7 +31,7 @@ export interface DataComponentProps extends ObjectComponentProps {
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const localizedFields = useLocalizedFields()
-  const { name, title } = props
+  const { name } = props
   const { fieldType, fieldtype } = props
   const formList = useFormList()
   const hasFormList = formList !== undefined
@@ -50,8 +51,12 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
   if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
-    // @todo should throw an error in the future after the implementation of all data types
-    return (<div>Unknown data type: {currentFieldType}</div>)
+    return (
+      <Alert
+        message={ `Unknown data type: ${currentFieldType}` }
+        type="warning"
+      />
+    )
   }
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
@@ -59,8 +64,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   if (!objectDataType.isCollectionType) {
     return (
       <Form.Item
-        className='w-full'
-        label={ title }
+        { ...objectDataType.getObjectDataFormItemProps(props) }
         name={ formFieldName }
       >
         {objectDataType.getObjectDataComponent(props)}
