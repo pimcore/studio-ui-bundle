@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
-import { TreeContext } from '@Pimcore/components/tree/tree'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
 import { type AssetGetTreeApiResponse, useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'

@@ -36,6 +36,10 @@ const api = baseApi.enhanceEndpoints({
 
     dataObjectAdd: {
       invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_TREE_ID(args.parentId)
+    },
+
+    dataObjectGetLayoutById: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.id)
     }
   }
 })
@@ -48,7 +52,8 @@ export const {
   useDataObjectGetByIdQuery,
   useDataObjectUpdateByIdMutation,
   useDataObjectPatchByIdMutation,
-  useDataObjectGetTreeQuery
+  useDataObjectGetTreeQuery,
+  useDataObjectGetLayoutByIdQuery
 } = api
 
 export { api }

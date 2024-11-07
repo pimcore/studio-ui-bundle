@@ -11,42 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext, useEffect, useState } from 'react'
-import { TreeContext, type TreeSearchProps } from '@Pimcore/components/tree/tree'
-import { Input } from 'antd'
+import React from 'react'
+import { SearchContainer as BaseSearchContainer } from '@Pimcore/modules/element/tree/search/search-container'
+import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 import { useTranslation } from 'react-i18next'
-
-const { Search } = Input
 
 const SearchContainer = (props: TreeSearchProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { node, mergeAdditionalQueryParams, total } = props
-  const [searchActive, setSearchActive] = useState(false)
-  const { maxItemsPerNode } = useContext(TreeContext)
-
-  useEffect(() => {
-    if (total > maxItemsPerNode) {
-      setSearchActive(true)
-    }
-  }, [total])
-
-  function onSearch (searchTerm: string): void {
-    mergeAdditionalQueryParams!({
-      idSearchTerm: searchTerm,
-      page: 1
-    })
-  }
-
-  if (!searchActive) {
-    return <></>
-  }
-
   return (
-    <Search
-      aria-label={ t('asset.asset-tree.search', { folderName: node.label }) }
-      onSearch={ onSearch }
-      placeholder={ t('asset.asset-tree.search', { folderName: node.label }) }
-      size='small'
+    <BaseSearchContainer
+      label={ t('asset.asset-tree.search', { folderName: props.node.label }) }
+      node={ props.node }
+      total={ props.total }
     />
   )
 }
