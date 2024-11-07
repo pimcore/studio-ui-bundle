@@ -16,7 +16,7 @@ import { type Meta, type StoryObj } from '@storybook/react'
 import { Form } from '@Pimcore/components/form/form'
 import FormItem from 'antd/es/form/FormItem'
 import {DateRangePicker, DateRangePickerProps} from "@Pimcore/components/date-picker/date-range-picker";
-import {formatDatePickerDate} from "@Pimcore/components/date-picker/utils/date-picker-utils";
+import {DatePickerValueType, formatDatePickerDate} from "@Pimcore/components/date-picker/utils/date-picker-utils";
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
@@ -50,10 +50,10 @@ const ExampleForm = (props: DateRangePickerProps): React.JSX.Element => {
         <pre>{dates !== null && dates !== undefined ? (
           <>
             <div>
-              <strong>Start: </strong> {formatDatePickerDate(dates[0])}
+              <strong>Start: </strong> {formatDatePickerDate(dates[0] as DatePickerValueType)}
             </div>
             <div>
-              <strong>End: </strong> {formatDatePickerDate(dates[1])}
+              <strong>End: </strong> {formatDatePickerDate(dates[1] as DatePickerValueType)}
             </div>
           </>
         ) : 'null'
