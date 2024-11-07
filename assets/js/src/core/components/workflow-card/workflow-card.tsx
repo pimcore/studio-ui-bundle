@@ -12,7 +12,7 @@
 */
 
 import React, { type ReactNode, useEffect } from 'react'
-import { Badge, Button, Card, Tag } from 'antd'
+import { Badge, Card, Tag } from 'antd'
 import {
   type WorkflowDetails
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
 import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
 import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { Button } from '@Pimcore/components/button/button'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -31,6 +32,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
   const { t } = useTranslation()
   const { openModal } = useWorkflow()
   const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow(workflow.workflowName)
+
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
@@ -62,7 +64,6 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
     return (
       <Dropdown
-        disabled={ submissionLoading }
         menu={ { items } }
         placement="bottom"
       >

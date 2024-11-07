@@ -19,12 +19,12 @@ import {
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Badge } from '@Pimcore/components/badge/badge'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
-import { WorkflowItem } from '@Pimcore/components/workflow-card/workflow-item'
+import { WorkflowTransitionGroup } from '@Pimcore/components/workflow-card/workflow-transition-group'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -34,35 +34,12 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
 
   useEffect(() => {
     if (data?.items !== undefined && data.items.length > 0) {
-      const workFlowItems = data.items.map((workflow) => {
+      const workFlowItems: ItemType[] = data.items.flatMap((workflow) => {
         const result: ItemType[] = []
-
-        workflow.allowedTransitions?.forEach((status) => {
-          result.push({
-            key: (result.length + 1).toString(),
-            type: 'custom',
-            component: <WorkflowItem
-              actionType={ t(`${status.label}`) }
-              buttonType={ 'text' }
-              isFirst={ result.length === 0 }
-              transition={ 'transition' }
-              workflowName={ workflow.workflowName }
-                       />
-          })
-        })
-
-        workflow.globalActions?.forEach((status) => {
-          result.push({
-            key: (result.length + 1).toString(),
-            type: 'custom',
-            component: <WorkflowItem
-              actionType={ t(`${status.label}`) }
-              buttonType={ 'text' }
-              isFirst={ result.length === 0 }
-              transition={ 'global' }
-              workflowName={ workflow.workflowName }
-                       />
-          })
+        result.push({
+          key: ((data?.items?.length ?? 0) + 1).toString(),
+          type: 'custom',
+          component: <WorkflowTransitionGroup workflow={ workflow } />
         })
 
         return {
@@ -85,13 +62,13 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
               ? { backgroundColor: `${status.color}33` }
               : {}
             const tag =
-                            {
-                              children: t(`${status.label}`),
-                              icon: <Badge
-                                color={ status.color }
-                                    />,
-                              style
-                            }
+                {
+                  children: t(`${status.label}`),
+                  icon: <Badge
+                    color={ status.color }
+                        />,
+                  style
+                }
             result.push(tag)
           }
         })

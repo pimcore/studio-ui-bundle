@@ -25,11 +25,11 @@ import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
+  const { data, isFetching } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
 
   return (
     <Content
-      loading={ isLoading }
+      loading={ isFetching }
       none={ data?.items === undefined || data?.items.length === 0 }
       noneOptions={ {
         text: t('workflow.no-workflows-found')
