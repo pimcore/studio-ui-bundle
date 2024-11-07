@@ -15,8 +15,8 @@ import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
 import { Form } from '@Pimcore/components/form/form'
 import FormItem from 'antd/es/form/FormItem'
-import {DatePickerValueType, formatDatePickerDate} from "@Pimcore/components/date-picker/utils/date-picker-utils";
-import {TimePicker, TimePickerProps} from "@Pimcore/components/date-picker/time-picker";
+import { type DatePickerValueType, formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
+import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
