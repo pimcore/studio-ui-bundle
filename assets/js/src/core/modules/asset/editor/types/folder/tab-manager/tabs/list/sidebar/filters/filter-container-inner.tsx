@@ -18,8 +18,8 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
-import Search from 'antd/es/input/Search'
 import React, { useEffect, useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
@@ -123,7 +123,8 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   direction='vertical'
                   style={ { width: '100%' } }
                 >
-                  <Search
+                  <SearchInput
+                    allowClear
                     onBlur={ handleSaveSearchValue }
                     onChange={ handleChangeSearchValue }
                     placeholder='Search'
