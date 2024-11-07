@@ -14,6 +14,7 @@
 import type React from 'react'
 import { useState } from 'react'
 import { useFilters } from './use-filters'
+import { FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface IUseSearchFilterHookReturn {
   searchValue: string
@@ -25,14 +26,14 @@ interface IUseSearchFilterHookReturn {
 export const useSearchFilter = (): IUseSearchFilterHookReturn => {
   const [searchValue, setSearchValue] = useState<string>('')
 
-  const { addOrUpdateSearchFilter } = useFilters()
+  const { addOrUpdateFilterValue } = useFilters()
 
   const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(e.target.value)
   }
 
   const handleSaveSearchValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    addOrUpdateSearchFilter(e.target.value)
+    addOrUpdateFilterValue({ type: FILTER_TYPE.FULL_TEXT_TYPE, value: e.target.value })
   }
 
   return {

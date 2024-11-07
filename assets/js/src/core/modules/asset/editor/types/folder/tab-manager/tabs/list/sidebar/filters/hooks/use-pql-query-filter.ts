@@ -14,6 +14,7 @@
 import type React from 'react'
 import { useState } from 'react'
 import { useFilters } from './use-filters'
+import { FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface IUsePQLQueryFilterHookReturn {
   pqlQueryValue: string
@@ -28,7 +29,7 @@ export const usePQLQueryFilter = (): IUsePQLQueryFilterHookReturn => {
   const [isShowPQLQueryError, setIsShowPQLQueryError] = useState(false)
   const [pqlQueryValue, setPQLQueryValue] = useState<string>('')
 
-  const { addOrUpdatePQLQuery } = useFilters()
+  const { addOrUpdateFilterValue } = useFilters()
 
   const handleChangePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setPQLQueryValue(e.target.value)
@@ -37,7 +38,7 @@ export const usePQLQueryFilter = (): IUsePQLQueryFilterHookReturn => {
   }
 
   const handleSavePQLQueryValue = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    addOrUpdatePQLQuery(e.target.value)
+    addOrUpdateFilterValue({ type: FILTER_TYPE.PQL_QUERY_TYPE, value: e.target.value })
   }
 
   return {
