@@ -17,15 +17,17 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 
-export type DateRangeObjectDataDefinition = AbstractObjectDataDefinition
+export type TimeObjectDataDefinition = AbstractObjectDataDefinition
 
-export class DynamicTypeObjectDataDateRange extends DynamicTypeObjectDataAbstract {
-  id: string = 'dateRange'
+export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
+  id: string = 'time'
 
-  getObjectDataComponent (props: DateRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: TimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <DatePicker.RangePicker
-        outputType={ 'dateString' }
+      <DatePicker.TimePicker
+        outputFormat={ 'HH:mm' }
+        outputType="dateString"
+        showSecond={ false }
       />
     )
   }

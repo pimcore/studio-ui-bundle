@@ -13,15 +13,15 @@
 
 import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
-import { DatePicker, type DatePickerProps } from './date-picker'
 import { Form } from '@Pimcore/components/form/form'
 import FormItem from 'antd/es/form/FormItem'
 import {formatDatePickerDate} from "@Pimcore/components/date-picker/utils/date-picker-utils";
+import {TimePicker, TimePickerProps} from "@Pimcore/components/date-picker/time-picker";
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Components/Data Entry/DatePicker',
-  component: DatePicker,
+  title: 'Components/Data Entry/TimePicker',
+  component: TimePicker,
   parameters: {
 
   },
@@ -30,7 +30,7 @@ const config: Meta = {
 
 export default config
 
-const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
+const ExampleForm = (props: TimePickerProps): React.JSX.Element => {
   const [date, setDate] = useState<any>(props.value)
 
   const handleDateChange = (value: any): void => {
@@ -40,7 +40,7 @@ const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
   return (
     <Form>
       <FormItem>
-        <DatePicker
+        <TimePicker
           { ...props }
           onChange={ handleDateChange }
         />
@@ -53,9 +53,9 @@ const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
   )
 }
 
-type Story = StoryObj<typeof DatePicker>
+type Story = StoryObj<typeof TimePicker>
 export const _default: Story = {
   args: {
   },
-  render: (props: DatePickerProps) => <ExampleForm { ...props } />
+  render: (props: TimePickerProps) => <ExampleForm { ...props } />
 }
