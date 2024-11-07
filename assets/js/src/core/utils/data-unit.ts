@@ -11,15 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-const unitFactors = {
-  KB: 1000
-}
+export function formatDataUnit (bytes: number, precision: number = 2): string {
+  if (bytes === 0) return '0 B'
 
-interface IFormatDataProps {
-  bytes: number
-  targetDataUnit?: 'KB'
-}
+  const units: string[] = ['B', 'KB', 'MB', 'GB', 'TB']
 
-export function formatDataUnit ({ bytes, targetDataUnit = 'KB' }: IFormatDataProps): string {
-  return (bytes / unitFactors[targetDataUnit]) + ' ' + targetDataUnit
+  let pow: number = Math.floor(Math.log(bytes) / Math.log(1000))
+  pow = Math.min(pow, units.length - 1)
+
+  bytes /= Math.pow(1000, pow)
+
+  return `${bytes.toFixed(precision)} ${units[pow]}`
 }
