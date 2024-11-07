@@ -21,15 +21,15 @@ import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { type DeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
+import { type CloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
 
-export interface DeleteJobProps extends JobProps {
-  config: DeleteJob['config']
+export interface CloneJobProps extends JobProps {
+  config: CloneJob['config']
 }
 
-export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Element => {
+export const NotificationJobContainer = (props: CloneJobProps): React.JSX.Element => {
   const { id, topics, status, action } = props
-  const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
+  const { open: openSSEvent, close: closeSSEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
   const [progress, setProgress] = useState<number>(0)
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
@@ -42,7 +42,7 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
         status: JobStatus.RUNNING
       })
 
-      openSEEvent()
+      openSSEvent()
     }
   }, [props.status])
 
@@ -103,7 +103,7 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
           status: JobStatus.SUCCESS
         })
 
-        closeSEEvent()
+        closeSSEvent()
       }
 
       if (data.status === 'finished_with_errors') {
@@ -111,7 +111,7 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
           status: JobStatus.FINISHED_WITH_ERRORS
         })
 
-        closeSEEvent()
+        closeSSEvent()
       }
 
       if (data.status === 'failed') {
@@ -119,7 +119,7 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
           status: JobStatus.FAILED
         })
 
-        closeSEEvent()
+        closeSSEvent()
       }
     }
   }

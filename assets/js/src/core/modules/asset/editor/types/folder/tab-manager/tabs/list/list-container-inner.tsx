@@ -13,6 +13,7 @@
 
 import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -52,7 +53,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { availableColumns, setAvailableColumns } = useListGridAvailableColumns()
   const assetId = assetContext.id
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
-  const [fetchListing] = useAssetGetGridMutation()
+  const [fetchListing, fetchListingResult] = useAssetGetGridMutation()
   const [patchAsset] = useAssetPatchByIdMutation()
   const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
   const [, setDataPatches] = useState<DataPatch[]>([])
@@ -244,7 +245,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     <ListDataProvider data={ data }>
       <Content loading={ isLoading }>
         <ContentToolbarSidebarLayout
-          renderSidebar={ <SidebarContainer /> }
+          renderSidebar={ <SidebarContainer errorData={ fetchListingResult.error as FetchBaseQueryError } /> }
           renderToolbar={
             <GridToolbarContainer
               pager={ {

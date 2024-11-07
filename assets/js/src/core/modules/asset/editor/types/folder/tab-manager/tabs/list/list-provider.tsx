@@ -225,7 +225,7 @@ export const ListSortingProvider = ({ children }: ListSortingProviderProps): Rea
 }
 
 export interface IListDataContext {
-  data: AssetGetGridApiResponse | undefined
+  data?: AssetGetGridApiResponse
 }
 
 export const ListDataContext = createContext<IListDataContext>({
