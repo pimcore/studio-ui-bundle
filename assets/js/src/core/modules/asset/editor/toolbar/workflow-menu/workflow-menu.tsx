@@ -42,8 +42,9 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             key: (result.length + 1).toString(),
             type: 'custom',
             component: <WorkflowItem
-              actionType={ status.name }
+              actionType={ t(`${status.label}`) }
               buttonType={ 'text' }
+              isFirst={ result.length === 0 }
               transition={ 'transition' }
               workflowName={ workflow.workflowName }
                        />
@@ -55,8 +56,9 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             key: (result.length + 1).toString(),
             type: 'custom',
             component: <WorkflowItem
-              actionType={ status.name }
+              actionType={ t(`${status.label}`) }
               buttonType={ 'text' }
+              isFirst={ result.length === 0 }
               transition={ 'global' }
               workflowName={ workflow.workflowName }
                        />

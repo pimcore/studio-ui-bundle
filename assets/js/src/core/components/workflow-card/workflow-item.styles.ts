@@ -16,7 +16,12 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
-          margin-top: ${token.marginXXS}px;
+              min-width: 100%;
+              height: 32px;
+              justify-items: flex-start;
+    `,
+    'not-first': css`
+              margin-top: ${token.marginXXS}px;
     `
   }
 }, { hashPriority: 'low' })

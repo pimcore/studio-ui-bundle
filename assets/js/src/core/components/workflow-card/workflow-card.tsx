@@ -19,7 +19,9 @@ import {
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
-import { WorkflowItem } from '@Pimcore/components/workflow-card/workflow-item'
+import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
+import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
 }
@@ -27,6 +29,8 @@ interface IWorkflowCardProps {
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+  const { openModal } = useWorkflow()
+  const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow(workflow.workflowName)
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
@@ -36,26 +40,20 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
       workflow.allowedTransitions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          type: 'custom',
-          component: (<WorkflowItem
-            actionType={ status.name }
-            isFirst={ items.length === 0 }
-            transition={ 'transition' }
-            workflowName={ workflow.workflowName }
-                      />)
+          label: t(`${status.label}`),
+          onClick: () => {
+            submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
+          }
         })
       })
 
       workflow.globalActions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          type: 'custom',
-          component: (<WorkflowItem
-            actionType={ status.name }
-            isFirst={ items.length === 0 }
-            transition={ 'global' }
-            workflowName={ workflow.workflowName }
-                      />)
+          label: t(`${status.label}`),
+          onClick: () => {
+            openModal({ transition: 'global', action: status.name, workflowName: workflow.workflowName })
+          }
         })
       })
 
@@ -64,11 +62,14 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
 
     return (
       <Dropdown
-        // disabled={ submissionLoading }
+        disabled={ submissionLoading }
         menu={ { items } }
         placement="bottom"
       >
-        <Button>{t('component.workflow-card.action-btn')}</Button>
+        <Button
+          loading={ submissionLoading }
+        >
+          {t('component.workflow-card.action-btn')}</Button>
       </Dropdown>
     )
   }

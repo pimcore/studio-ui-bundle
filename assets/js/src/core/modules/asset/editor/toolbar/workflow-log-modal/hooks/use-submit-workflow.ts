@@ -56,21 +56,19 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   })
 
   const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
-    console.log('----> here')
-
     setWorkflowDetails({ transition, action: actionType, workflowName })
 
     fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then(() => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success({
-        content: t('action-applied-successfully') + ': ' + t(`workflow-transitions.${workflowName}`),
+        content: t('action-applied-successfully') + ': ' + t(`${workflowName}`),
         type: 'success',
         duration: 3
       })
     }).catch((error) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({
-        content: t('action-could-not-be-applied') + ': ' + t(`workflow-transitions.${workflowName}`),
+        content: t('action-could-not-be-applied') + ': ' + t(`${workflowName}`),
         type: 'error',
         duration: 3
       })

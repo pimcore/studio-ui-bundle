@@ -20,6 +20,7 @@ import {
 import { Button, type ButtonProps } from '@Pimcore/components/button/button'
 import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-item.styles'
+import cn from 'classnames'
 
 interface WorkflowItemProps {
   workflowName: string
@@ -44,7 +45,7 @@ export const WorkflowItem = ({ workflowName, transition, actionType, isFirst = f
 
   return (
     <Button
-      className={ isFirst ? undefined : `${styles.button}` }
+      className={ isFirst ? `${styles.button}` : cn(`${styles.button}`, `${styles['not-first']}`) }
       loading={ submissionLoading }
       onClick={ () => {
         onClick(actionType, transition, workflowName)
