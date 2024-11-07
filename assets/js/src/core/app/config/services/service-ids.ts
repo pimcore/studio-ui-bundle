@@ -118,6 +118,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
+  'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
