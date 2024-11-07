@@ -12,7 +12,7 @@
 */
 
 import { type ElementType } from 'types/element-type.d'
-import { useAssetCloneMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type AssetCloneApiResponse, useAssetCloneMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -20,6 +20,9 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 
 export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
@@ -39,6 +42,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const [assetClone] = useAssetCloneMutation()
   const { elementPatch } = useElementApi(elementType)
   const { t } = useTranslation()
+  const { addJob } = useJobs()
 
   const copy = (node: TreeNodeProps): void => {
     setNode(node)
@@ -57,13 +61,36 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
 
     const id = parseInt(node.id)
 
-    try {
-      await assetClone({
-        id,
-        parentId
-      })
+    const promise = assetClone({
+      id,
+      parentId
+    })
 
-      refreshTree(parentId)
+    promise.catch(() => {
+      console.error('Error copying element')
+    })
+
+    try {
+      const response = (await promise) as any
+
+      let jobRunId: any = null
+      if ((response.data ?? false) !== false) {
+        const data = response.data as Exclude<AssetCloneApiResponse, void>
+        jobRunId = data.jobRunId ?? null
+      }
+
+      if (jobRunId !== null) {
+        addJob(createCloneJob({
+          title: 'Cloning Folder',
+          topics: [topics['cloning-finished'], ...defaultTopics],
+          action: async () => {
+            return jobRunId
+          },
+          parentFolder: String(parentId)
+        }))
+      } else if (parentId !== undefined) {
+        refreshTree(parentId)
+      }
     } catch (error) {
       console.error('Error cloning element', error)
     }
