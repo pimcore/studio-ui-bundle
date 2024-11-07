@@ -24,6 +24,7 @@ import React, { useEffect, useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
 import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
+import { useSearchFilter } from './hooks/use-search-filter'
 import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
 import { useListFilterOptions } from '../../hooks/use-list'
 import {
@@ -50,6 +51,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
     isShowPQLQueryError,
     setIsShowPQLQueryError
   } = usePQLQueryFilter()
+  const { searchValue, setSearchValue, handleChangeSearchValue, handleSaveSearchValue } = useSearchFilter()
 
   useEffect(() => {
     if (!isEmptyValue(filterError)) {
@@ -62,6 +64,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const handleResetAllFiltersClick = (): void => {
     setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
     setPQLQueryValue('')
+    setSearchValue('')
     setIsShowPQLQueryError(false)
 
     resetFilters()
@@ -121,8 +124,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   style={ { width: '100%' } }
                 >
                   <Search
+                    onBlur={ handleSaveSearchValue }
+                    onChange={ handleChangeSearchValue }
                     placeholder='Search'
-                    value={ '' }
+                    value={ searchValue }
                   />
 
                   <Checkbox

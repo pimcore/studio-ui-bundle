@@ -13,3 +13,4 @@
 
 export const TAG_TYPE = 'system.tag'
 export const PQL_QUERY_TYPE = 'system.pql'
+export const FULL_TEXT_TYPE = 'system.fulltext'

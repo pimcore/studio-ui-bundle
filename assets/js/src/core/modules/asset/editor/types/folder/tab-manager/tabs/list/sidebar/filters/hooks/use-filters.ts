@@ -15,7 +15,7 @@ import { useContext } from 'react'
 import { FilterContext } from '../filter-provider'
 import { type FilterOptions, type IFilterContext } from '../../../types/filterTypes'
 import { defaultFilterOptions } from '../../../constants/filters'
-import { PQL_QUERY_TYPE } from '../../../constants/systemTypes'
+import { PQL_QUERY_TYPE, FULL_TEXT_TYPE } from '../../../constants/systemTypes'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -27,6 +27,7 @@ interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   resetFilters: () => void
   updateIsIncludeDescendants: (value: boolean) => void
   addOrUpdatePQLQuery: (value: string) => void
+  addOrUpdateSearchFilter: (value: string) => void
 }
 
 export interface FieldFilter {
@@ -168,6 +169,33 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
+  const addOrUpdateSearchFilter = (value: string): void => {
+    setFilterOptions((filterOptions) => {
+      const prevColumnFilters = filterOptions.columnFilters
+
+      const filterColumnFiltersList = (): ColumnFiltersList => {
+        return (prevColumnFilters as ColumnFiltersList).filter(
+          (item: any) => item.type !== FULL_TEXT_TYPE
+        )
+      }
+
+      const newColumnFilters = !isEmptyValue(value)
+        ? [
+            ...(filterColumnFiltersList()),
+            {
+              type: FULL_TEXT_TYPE,
+              filterValue: value
+            }
+          ]
+        : filterColumnFiltersList()
+
+      return {
+        ...filterOptions,
+        columnFilters: newColumnFilters
+      }
+    })
+  }
+
   return {
     filterOptions,
     setFilterOptions,
@@ -179,6 +207,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     resetColumns,
     updateIsIncludeDescendants,
     addOrUpdatePQLQuery,
+    addOrUpdateSearchFilter,
     ...gridConfigProps
   }
 }
