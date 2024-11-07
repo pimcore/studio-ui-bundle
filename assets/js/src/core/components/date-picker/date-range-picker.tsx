@@ -25,7 +25,7 @@ import {
 type DateRange = [start: Dayjs | null, end: Dayjs | null]
 type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
 
-type RangePickerProps = OriginalRangePickerProps & {
+export type DateRangePickerProps = OriginalRangePickerProps & {
   value?: DateRangeTargetValue
   onChange?: (dates: DateRangeTargetValue | null) => void
   outputType?: OutputType
@@ -53,7 +53,7 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
   ]
 }
 
-export const RangePicker = (props: RangePickerProps): React.JSX.Element => {
+export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
   const [value, setValue] = React.useState<DateRange | null>(valueToDayJs(props.value))
 
   useEffect(() => {

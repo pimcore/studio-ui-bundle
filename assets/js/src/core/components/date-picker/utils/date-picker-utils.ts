@@ -40,3 +40,10 @@ export const fromDayJs = (value: Dayjs | null, outputType?: OutputType, outputFo
   }
   return value
 }
+
+export const formatDatePickerDate = (date?: DatePickerValueType): string => {
+  if (date === null || date === undefined) {
+    return ''
+  }
+  return dayjs.isDayjs(date) ? '[dayjs object]: ' + date.toString() : date.toString()
+}

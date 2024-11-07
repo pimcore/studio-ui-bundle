@@ -15,16 +15,16 @@ import React from 'react'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
-import { RangePicker } from '@Pimcore/components/date-picker/range-picker'
+import { DateRangePicker } from '@Pimcore/components/date-picker/date-range-picker'
 
-export type DaterangeObjectDataDefinition = AbstractObjectDataDefinition
+export type DateRangeObjectDataDefinition = AbstractObjectDataDefinition
 
 export class DynamicTypeObjectDataDateRange extends DynamicTypeObjectDataAbstract {
   id: string = 'dateRange'
 
-  getObjectDataComponent (props: DaterangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: DateRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <RangePicker
+      <DateRangePicker
         outputType={ 'dateString' }
       />
     )
