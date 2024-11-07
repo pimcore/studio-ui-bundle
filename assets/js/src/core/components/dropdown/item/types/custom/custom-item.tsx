@@ -16,8 +16,8 @@ import { type MenuItemCustomType } from '../../../dropdown'
 
 export const CustomItem = ({ component }: MenuItemCustomType): React.JSX.Element => {
   return (
-    <>
+    <div style={ { height: '33px' } }>
       {component}
-    </>
+    </div>
   )
 }
