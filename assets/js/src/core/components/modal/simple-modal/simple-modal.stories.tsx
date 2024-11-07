@@ -1,8 +1,20 @@
-import type {Meta} from "@storybook/react";
-import {Modal} from "@Pimcore/components/modal/modal";
-import {useSimpleModal} from "@Pimcore/components/modal/simple-modal/hooks/use-simple-modal";
-import {Button} from "@Pimcore/components/button/button";
-import React from "react";
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import type { Meta } from '@storybook/react'
+import { useSimpleModal } from '@Pimcore/components/modal/simple-modal/hooks/use-simple-modal'
+import { Button } from '@Pimcore/components/button/button'
+import React from 'react'
 
 const config: Meta = {
   title: 'Components/Feedback/SimpleModal',
@@ -45,7 +57,7 @@ const config: Meta = {
           open: 'info'
         }
       }
-    },
+    }
   },
   tags: ['autodocs']
 }
@@ -54,21 +66,21 @@ export default config
 
 export const Info = {
   args: {
-    type: "info",
-    content: "This is an info message"
+    type: 'info',
+    content: 'This is an info message'
   }
 }
 
 export const Error = {
   args: {
-    type: "error",
-    content: "This is an info message"
+    type: 'error',
+    content: 'This is an info message'
   }
 }
 
 export const Warn = {
   args: {
-    type: "warn",
-    content: "This is an info message"
+    type: 'warn',
+    content: 'This is an info message'
   }
 }
