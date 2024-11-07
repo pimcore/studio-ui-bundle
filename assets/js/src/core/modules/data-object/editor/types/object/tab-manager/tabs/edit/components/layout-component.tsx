@@ -18,7 +18,6 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeObjectLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/layout-related/dynamic-type-object-layout-registry'
 
 export interface LayoutComponentProps extends ObjectComponentProps {
-  name: string
   datatype: 'layout'
   fieldType?: string
   fieldtype?: string

@@ -100,6 +100,7 @@ export const serviceIds = {
   // Object data
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
+  'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

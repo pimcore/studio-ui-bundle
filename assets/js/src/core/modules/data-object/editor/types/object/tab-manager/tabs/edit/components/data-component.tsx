@@ -18,9 +18,9 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
+import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
 
 export interface DataComponentProps extends ObjectComponentProps {
-  name: string
   datatype: 'data'
   fieldType?: string
   fieldtype?: string
@@ -29,10 +29,22 @@ export interface DataComponentProps extends ObjectComponentProps {
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+  const localizedFields = useLocalizedFields()
   const { name, title } = props
   const { fieldType, fieldtype } = props
-  const context = useFormList()
-  const formFieldName = context !== undefined ? [context.field.name, name] : [name]
+  const formList = useFormList()
+  const hasFormList = formList !== undefined
+  const hasLocalizedFields = localizedFields !== undefined && !hasFormList
+  let formFieldName: Array<number | string> = [name]
+
+  if (hasFormList) {
+    formFieldName = [formList.field.name, name]
+  }
+
+  if (hasLocalizedFields) {
+    // @todo should handle multiple locales
+    formFieldName = ['localizedfields', localizedFields.locales[0], name]
+  }
 
   // @todo unify to one fieldType after api is updated completely
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
@@ -58,7 +70,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   return (
     <>
-      {objectDataType.getObjectDataComponent(props)}
+      {objectDataType.getObjectDataComponent({ ...props, name: hasLocalizedFields ? formFieldName : name })}
     </>
   )
 }

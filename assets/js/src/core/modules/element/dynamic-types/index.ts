@@ -59,6 +59,7 @@ import { type DynamicTypeObjectLayoutText } from './defintinitions/objects/layou
 import { type DynamicTypeObjectLayoutFieldset } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-fieldset'
 import { type DynamicTypeObjectLayoutFieldContainer } from './defintinitions/objects/layout-related/types/dynamic-type-object-layout-field-container'
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
+import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
 
 moduleSystem.registerModule({
   onInit () {
@@ -116,5 +117,6 @@ moduleSystem.registerModule({
 
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
   }
 })
