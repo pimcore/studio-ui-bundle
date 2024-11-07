@@ -305,3 +305,6 @@ male: Male
 female: Female
 other: Other
 unknown: Unknown
+warning: Warning
+error: Error
+info: Info
