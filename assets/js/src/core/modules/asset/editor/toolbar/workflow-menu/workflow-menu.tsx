@@ -43,6 +43,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             type: 'custom',
             component: <WorkflowItem
               actionType={ status.name }
+              buttonType={ 'text' }
               transition={ 'transition' }
               workflowName={ workflow.workflowName }
                        />
@@ -55,6 +56,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
             type: 'custom',
             component: <WorkflowItem
               actionType={ status.name }
+              buttonType={ 'text' }
               transition={ 'global' }
               workflowName={ workflow.workflowName }
                        />
@@ -113,7 +115,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         disabled={ isLoading }
         menu={ { items } }
       >
-        <DropdownButton >
+        <DropdownButton>
           <Icon
             name={ 'workflow' }
             options={ { height: 16, width: 16 } }

@@ -39,6 +39,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           type: 'custom',
           component: (<WorkflowItem
             actionType={ status.name }
+            isFirst={ items.length === 0 }
             transition={ 'transition' }
             workflowName={ workflow.workflowName }
                       />)
@@ -51,6 +52,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           type: 'custom',
           component: (<WorkflowItem
             actionType={ status.name }
+            isFirst={ items.length === 0 }
             transition={ 'global' }
             workflowName={ workflow.workflowName }
                       />)
