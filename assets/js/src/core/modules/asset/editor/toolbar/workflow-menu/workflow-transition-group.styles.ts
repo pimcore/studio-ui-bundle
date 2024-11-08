@@ -13,25 +13,14 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyle = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
-    dropdown: css`
-    .ant-dropdown-menu {
-    display: flex;
-    flex-direction: column;
-    }
-    
-    .ant-dropdown-menu-item-group-list {
-    display: flex;
-    flex-direction: column;
-    }
-    
-      .ant-dropdown-menu-submenu {
-          .ant-dropdown-menu-submenu-title {
-              display: flex;
-              align-items: center;
-          }
-      }
+    button: css`
+              min-width: 100%;
+              justify-items: flex-start;
+    `,
+    'not-first': css`
+              margin-top: ${token.marginXXS}px;
     `
   }
-})
+}, { hashPriority: 'low' })
