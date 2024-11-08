@@ -25,6 +25,7 @@ export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
   getObjectDataComponent (props: TimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <DatePicker.TimePicker
+        disabled={ props.noteditable === true }
         outputFormat={ 'HH:mm' }
         outputType="dateString"
         showSecond={ false }

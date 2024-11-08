@@ -25,6 +25,7 @@ export class DynamicTypeObjectDataDateRange extends DynamicTypeObjectDataAbstrac
   getObjectDataComponent (props: DateRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <DatePicker.RangePicker
+        disabled={ props.noteditable === true }
         outputType={ 'dateString' }
       />
     )
