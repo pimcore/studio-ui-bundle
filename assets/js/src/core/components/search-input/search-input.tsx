@@ -13,11 +13,21 @@
 
 import React from 'react'
 import Search, { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
+import cn from 'classnames'
+import { useStyles } from './search-input.styles'
 
-interface ISearchInputProps extends AntSearchProps {}
+interface ISearchInputProps extends AntSearchProps {
+  className?: string
+  withoutAddon?: boolean
+}
 
-export const SearchInput = (props: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon, ...props }: ISearchInputProps): React.JSX.Element => {
+  const { styles } = useStyles()
+
   return (
-    <Search { ...props } />
+    <Search
+      className={ cn({ className, [styles.searchWithoutAddon]: withoutAddon }) }
+      { ...props }
+    />
   )
 }
