@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { GridConfigList } from '../grid-config-list'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -90,14 +91,16 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
         >
           <GridConfigList columns={ columns } />
 
-          <Dropdown menu={ { items: addColumnMenu } }>
-            <IconTextButton
-              icon='PlusCircleOutlined'
-              type='link'
-            >
-              { t('listing.add-column') }
-            </IconTextButton>
-          </Dropdown>
+          {!isEmptyValue(addColumnMenu) && (
+            <Dropdown menu={ { items: addColumnMenu } }>
+              <IconTextButton
+                icon='PlusCircleOutlined'
+                type='link'
+              >
+                { t('listing.add-column') }
+              </IconTextButton>
+            </Dropdown>
+          )}
         </Space>
       </Content>
     </ContentToolbarSidebarLayout>
