@@ -17,6 +17,7 @@ import { LocalizedFieldsProvider } from './provider/localized-fields-provider/lo
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { Space } from '@Pimcore/components/space/space'
 
 export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
@@ -30,12 +31,18 @@ export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.E
 
   return (
     <LocalizedFieldsProvider locales={ [locale] }>
-      {children?.map((child, index) => (
-        <ObjectComponent
-          key={ index }
-          { ...child }
-        />
-      ))}
+      <Space
+        className="w-full"
+        direction='vertical'
+        size='small'
+      >
+        {children?.map((child, index) => (
+          <ObjectComponent
+            key={ index }
+            { ...child }
+          />
+        ))}
+      </Space>
     </LocalizedFieldsProvider>
   )
 }

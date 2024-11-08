@@ -11,15 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export function formatDataUnit (bytes: number, precision: number = 2): string {
-  if (bytes === 0) return '0 B'
+import { createStyles } from 'antd-style'
+import { type UseCssContainerProps } from './use-css-container'
 
-  const units: string[] = ['B', 'KB', 'MB', 'GB', 'TB']
-
-  let pow: number = Math.floor(Math.log(bytes) / Math.log(1000))
-  pow = Math.min(pow, units.length - 1)
-
-  bytes /= Math.pow(1000, pow)
-
-  return `${bytes.toFixed(precision)} ${units[pow]}`
-}
+export const useCssContainerStyles = createStyles(({ token, css }, props: UseCssContainerProps) => {
+  return {
+    container: css`
+      container: ${props.name} / ${props.type};
+    `
+  }
+})

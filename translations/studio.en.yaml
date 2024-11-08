@@ -27,7 +27,6 @@ example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
 preview-card.locate-in-tree: Locate in Tree
-preview-card.info: Info
 preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
@@ -306,3 +305,6 @@ male: Male
 female: Female
 other: Other
 unknown: Unknown
+warning: Warning
+error: Error
+info: Info
