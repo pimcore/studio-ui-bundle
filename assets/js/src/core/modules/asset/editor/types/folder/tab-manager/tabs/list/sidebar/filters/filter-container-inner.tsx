@@ -129,6 +129,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                     onChange={ handleChangeSearchValue }
                     placeholder='Search'
                     value={ searchValue }
+                    withPrefix
                     withoutAddon
                   />
 

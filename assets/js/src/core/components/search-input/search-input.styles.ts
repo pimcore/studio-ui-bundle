@@ -15,6 +15,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    search: css`
+      .anticon-search {
+        color: ${token.colorTextPlaceholder};
+      }
+    `,
+
     searchWithoutAddon: css`
       .ant-input-group-addon {
         display: none;

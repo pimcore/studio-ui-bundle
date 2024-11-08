@@ -14,19 +14,30 @@
 import React from 'react'
 import Search, { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
 import cn from 'classnames'
+import { SearchOutlined } from '@ant-design/icons'
 import { useStyles } from './search-input.styles'
 
 interface ISearchInputProps extends AntSearchProps {
   className?: string
   withoutAddon?: boolean
+  withPrefix?: boolean
 }
 
-export const SearchInput = ({ className, withoutAddon, ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon, withPrefix, ...props }: ISearchInputProps): React.JSX.Element => {
   const { styles } = useStyles()
+
+  const searchClassNames = cn(
+    styles.search,
+    {
+      [styles.searchWithoutAddon]: withoutAddon,
+      className
+    }
+  )
 
   return (
     <Search
-      className={ cn({ className, [styles.searchWithoutAddon]: withoutAddon }) }
+      className={ searchClassNames }
+      prefix={ (withPrefix === true) && <SearchOutlined /> }
       { ...props }
     />
   )
