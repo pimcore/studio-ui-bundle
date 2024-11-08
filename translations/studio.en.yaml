@@ -265,6 +265,9 @@ export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+form.validation.numeric-range.first-value-missing: First value is missing
+form.validation.numeric-range.second-value-missing: Second value is missing
+form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -308,3 +311,5 @@ unknown: Unknown
 warning: Warning
 error: Error
 info: Info
+no-value-set: No value set
+set-to-null: Empty (set to null)
