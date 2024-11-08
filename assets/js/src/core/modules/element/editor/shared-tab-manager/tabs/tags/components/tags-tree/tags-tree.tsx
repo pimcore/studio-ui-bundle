@@ -85,9 +85,6 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
           setFilter(value)
         } }
         placeholder="Search"
-        withClear
-        withPrefix
-        withoutAddon
       />
 
       <TreeElement

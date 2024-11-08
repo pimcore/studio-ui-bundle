@@ -17,7 +17,7 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     search: css`
       .ant-input-prefix {
-        margin-inline-end: 6px;
+        margin-inline-end: ${token.marginXS}px;
       }
       
       .ant-input-clear-icon {

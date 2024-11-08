@@ -128,9 +128,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
                     onChange={ handleChangeSearchValue }
                     placeholder='Search'
                     value={ searchValue }
-                    withClear
-                    withPrefix
-                    withoutAddon
                   />
 
                   <Checkbox
