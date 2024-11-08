@@ -15,10 +15,10 @@ import { useContext } from 'react'
 import { FilterContext } from '../filter-provider'
 import { type FilterOptions, type IFilterContext } from '../../../types/filterTypes'
 import { defaultFilterOptions } from '../../../constants/filters'
-import { PQL_QUERY_TYPE } from '../../../constants/systemTypes'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string) => void
@@ -26,7 +26,7 @@ interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
   resetFilters: () => void
   updateIsIncludeDescendants: (value: boolean) => void
-  addOrUpdatePQLQuery: (value: string) => void
+  addOrUpdateFilterValue: ({ type, value }: { type: FILTER_TYPE, value: string }) => void
 }
 
 export interface FieldFilter {
@@ -141,13 +141,13 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
-  const addOrUpdatePQLQuery = (value: string): void => {
+  const addOrUpdateFilterValue = ({ type, value }: { type: FILTER_TYPE, value: string }): void => {
     setFilterOptions((filterOptions) => {
       const prevColumnFilters = filterOptions.columnFilters
 
       const filterColumnFiltersList = (): ColumnFiltersList => {
         return (prevColumnFilters as ColumnFiltersList).filter(
-          (item: any) => item.type !== PQL_QUERY_TYPE
+          (item: any) => item.type !== type
         )
       }
 
@@ -155,7 +155,7 @@ export const useFilters = (): UseFiltersHookReturn => {
         ? [
             ...(filterColumnFiltersList()),
             {
-              type: PQL_QUERY_TYPE,
+              type,
               filterValue: value
             }
           ]
@@ -178,7 +178,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     resetFilters,
     resetColumns,
     updateIsIncludeDescendants,
-    addOrUpdatePQLQuery,
+    addOrUpdateFilterValue,
     ...gridConfigProps
   }
 }

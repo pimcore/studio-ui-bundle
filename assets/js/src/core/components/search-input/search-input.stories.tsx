@@ -11,8 +11,25 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export enum FILTER_TYPE {
-  TAG_TYPE = 'system.tag',
-  PQL_QUERY_TYPE = 'system.pql',
-  FULL_TEXT_TYPE = 'system.fulltext'
+import type { Meta } from '@storybook/react'
+import { SearchInput } from './search-input'
+
+const config: Meta = {
+  title: 'Components/Controls/SearchInput',
+  component: SearchInput,
+  tags: ['autodocs']
 }
+
+export const _default = {
+  args: {
+    placeholder: 'Search'
+  }
+}
+
+export const Filled = {
+  args: {
+    value: 'Filled value'
+  }
+}
+
+export default config
