@@ -22,17 +22,17 @@ interface ContentAware {
   content: string
 }
 
-export interface UseSimpleModalResponse {
+export interface UseAlertModalResponse {
   info: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
   error: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
   warn: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
-export const useSimpleModal = (): UseSimpleModalResponse => {
+export const useAlertModal = (): UseAlertModalResponse => {
   const { modal } = App.useApp()
   const { t } = useTranslation()
 
-  return useMemo<UseSimpleModalResponse>(
+  return useMemo<UseAlertModalResponse>(
     () => ({
       info: ({ content }) => (
         modal.info({

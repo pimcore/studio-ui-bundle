@@ -12,14 +12,14 @@
 */
 
 import type { Meta } from '@storybook/react'
-import { useSimpleModal } from '@Pimcore/components/modal/simple-modal/hooks/use-simple-modal'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 
 const config: Meta = {
-  title: 'Components/Feedback/SimpleModal',
+  title: 'Components/Feedback/AlertModal',
   component: (args) => {
-    const modal = useSimpleModal()
+    const modal = useAlertModal()
 
     const callbackManager = (): void => {
       switch (args.type) {
