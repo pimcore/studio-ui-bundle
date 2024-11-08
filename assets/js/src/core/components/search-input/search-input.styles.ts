@@ -16,8 +16,12 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     search: css`
-      .anticon-search {
-        color: ${token.colorTextPlaceholder};
+      .ant-input-prefix {
+        margin-inline-end: 6px;
+      }
+      
+      .ant-input-clear-icon {
+        display: flex;
       }
     `,
 
@@ -26,9 +30,18 @@ export const useStyles = createStyles(({ css, token }) => {
         display: none;
       }
       
-      .ant-input-affix-wrapper {
+      .ant-input-affix-wrapper,
+      .ant-input {
         border-radius: ${token.borderRadius}px !important;
       }
+    `,
+
+    searchIcon: css`
+      color: ${token.colorTextPlaceholder};
+    `,
+
+    closeIcon: css`
+      color: ${token.colorIcon};
     `
   }
 })

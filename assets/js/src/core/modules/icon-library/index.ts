@@ -122,6 +122,7 @@ import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
 import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
 import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
 import LockUnlock01 from '@Pimcore/assets/icons/lock-unlocked-01.inline.svg'
+import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -572,6 +573,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'lock-unlock-01',
       component: LockUnlock01
+    })
+
+    iconLibrary.register({
+      name: 'search-sm',
+      component: searchSM
     })
   }
 })

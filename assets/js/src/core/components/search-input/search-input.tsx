@@ -14,30 +14,45 @@
 import React from 'react'
 import Search, { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
 import cn from 'classnames'
-import { SearchOutlined } from '@ant-design/icons'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './search-input.styles'
 
 interface ISearchInputProps extends AntSearchProps {
   className?: string
   withoutAddon?: boolean
   withPrefix?: boolean
+  withClear?: boolean
 }
 
-export const SearchInput = ({ className, withoutAddon, withPrefix, ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon, withPrefix, withClear, ...props }: ISearchInputProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const searchClassNames = cn(
     styles.search,
     {
-      [styles.searchWithoutAddon]: withoutAddon,
-      className
-    }
+      [styles.searchWithoutAddon]: withoutAddon
+    },
+    className
   )
 
   return (
     <Search
+      allowClear={ (withClear === true) && {
+        clearIcon: (
+          <Icon
+            className={ styles.closeIcon }
+            name='close'
+          />
+        )
+      } }
       className={ searchClassNames }
-      prefix={ (withPrefix === true) && <SearchOutlined /> }
+      prefix={ (withPrefix === true) && (
+        <Icon
+          className={ styles.searchIcon }
+          name='search-sm'
+          options={ { width: 12, height: 12 } }
+        />
+      ) }
       { ...props }
     />
   )

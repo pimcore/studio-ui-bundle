@@ -124,11 +124,11 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   style={ { width: '100%' } }
                 >
                   <SearchInput
-                    allowClear
                     onBlur={ handleSaveSearchValue }
                     onChange={ handleChangeSearchValue }
                     placeholder='Search'
                     value={ searchValue }
+                    withClear
                     withPrefix
                     withoutAddon
                   />
