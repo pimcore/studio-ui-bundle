@@ -19,7 +19,7 @@ import {
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 import { Button } from '@Pimcore/components/button/button'
 import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
-import { useStyles } from '@Pimcore/components/workflow-card/workflow-transition-group.styles'
+import { useStyles } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-transition-group.styles'
 import cn from 'classnames'
 import type {
   WorkflowDetails
