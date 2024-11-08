@@ -13,6 +13,8 @@
 
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import { Tooltip } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 interface BorderTitleViewProps {
   icon: string
@@ -20,12 +22,19 @@ interface BorderTitleViewProps {
 }
 
 export const BorderTitleView = ({ icon, title }: BorderTitleViewProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   return (
-    <div>
-      <Icon
-        name={ icon }
-        options={ { width: 16, height: 16 } }
-      />
-    </div>
+    <Tooltip
+      placement={ 'right' }
+      title={ t(title) }
+    >
+      <div>
+        <Icon
+          name={ icon }
+          options={ { width: 16, height: 16 } }
+        />
+      </div>
+    </Tooltip>
   )
 }
