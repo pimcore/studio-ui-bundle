@@ -26,7 +26,7 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { data, isFetching } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
-
+// improve api handling
   return (
     <Content
       loading={ isFetching }
