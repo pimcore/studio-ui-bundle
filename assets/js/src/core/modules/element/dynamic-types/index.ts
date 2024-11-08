@@ -16,6 +16,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type DynamicTypeFieldFilterRegistry } from './defintinitions/field-filters/dynamic-type-field-filter-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeFieldFilterText } from './defintinitions/field-filters/types/text/dynamic-type-field-filter-text'
+import { type DynamicTypeFieldFilterNumber } from './defintinitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { type DynamicTypeFieldFilterSelect } from './defintinitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { type DynamicTypeGridCellText } from './defintinitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { type DynamicTypeGridCellRegistry } from './defintinitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -84,6 +85,7 @@ moduleSystem.registerModule({
     const fieldFilterRegistry = container.get<DynamicTypeFieldFilterRegistry>(serviceIds['DynamicTypes/FieldFilterRegistry'])
 
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterText>(serviceIds['DynamicTypes/FieldFilter/Text']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
 
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])

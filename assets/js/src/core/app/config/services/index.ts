@@ -30,6 +30,7 @@ import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/types/text/dynamic-type-field-filter-text'
+import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/types/select/dynamic-type-field-filter-select'
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -121,6 +122,7 @@ container.bind(serviceIds.iconLibrary).to(IconLibrary).inSingletonScope()
 // dynamic types field filters
 container.bind(serviceIds['DynamicTypes/FieldFilterRegistry']).to(DynamicTypeFieldFilterRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldFilterText).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
 
 // dynamic types grid cells
