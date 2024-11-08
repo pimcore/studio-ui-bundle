@@ -37,7 +37,7 @@ export const _default: StoryObj<SanitizeHtmlProps> = {
   }
 }
 
-export const withOptions: StoryObj<SanitizeHtmlProps> = {
+export const WithOptions: StoryObj<SanitizeHtmlProps> = {
   args: {
     html: `
       <div>
