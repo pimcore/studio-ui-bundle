@@ -15,12 +15,12 @@ import React, { useState } from 'react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Tooltip } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { QuestionCircleOutlined } from '@ant-design/icons'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { isObject } from '@Pimcore/utils/type-utils'
 import { useStyles } from './pql-query-input.styles'
+import { Icon } from '../icon/icon'
 
 const PQL_DOCUMENTATION_LINK = 'https://pimcore.com/docs/platform/Generic_Data_Index/Searching_For_Data_In_Index/Pimcore_Query_Language/'
 
@@ -70,7 +70,10 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
                 ) }
             trigger="click"
           >
-            <QuestionCircleOutlined className={ styles.infoIcon } />
+            <Icon
+              className={ styles.infoIcon }
+              name='question-circle-outlined'
+            />
           </Tooltip>
         </div>
       </Flex>

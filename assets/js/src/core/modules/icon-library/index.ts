@@ -21,6 +21,8 @@ import camera from '@Pimcore/assets/icons/camera.inline.svg'
 import close from '@Pimcore/assets/icons/close.inline.svg'
 import folder from '@Pimcore/assets/icons/folder.inline.svg'
 import widgetDefault from '@Pimcore/assets/icons/widget-default.inline.svg'
+import caretUpOutlined from '@Pimcore/assets/icons/caret-up-outlined.inline.svg'
+import caretDownOutlined from '@Pimcore/assets/icons/caret-down-outlined.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import chevronUpSmall from '@Pimcore/assets/icons/chevron-up-small.inline.svg'
 import chevronUpWide from '@Pimcore/assets/icons/chevron-up-wide.inline.svg'
@@ -122,6 +124,7 @@ import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
 import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
 import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
 import LockUnlock01 from '@Pimcore/assets/icons/lock-unlocked-01.inline.svg'
+import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlined.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -138,6 +141,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'widget-default',
       component: widgetDefault
+    })
+    iconLibrary.register({
+      name: 'caret-up-outlined',
+      component: caretUpOutlined
+    })
+    iconLibrary.register({
+      name: 'caret-down-outlined',
+      component: caretDownOutlined
     })
     iconLibrary.register({
       name: 'chevron-up',
@@ -572,6 +583,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'lock-unlock-01',
       component: LockUnlock01
+    })
+    iconLibrary.register({
+      name: 'question-circle-outlined',
+      component: questionCircleOutlined
     })
   }
 })

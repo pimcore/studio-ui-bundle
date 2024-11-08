@@ -20,6 +20,11 @@ export class DynamicTypeObjectLayoutFieldset extends DynamicTypeObjectLayoutAbst
   readonly id = 'fieldset'
 
   getObjectLayoutComponent (props: PanelProps): React.ReactElement<PanelProps> {
-    return <Panel { ...props } />
+    return (
+      <Panel
+        { ...props }
+        border
+      />
+    )
   }
 }
