@@ -13,11 +13,7 @@
 
 import { createStyles } from 'antd-style'
 import { type RegionProps } from './region'
-import { type UseCssContainerProps } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
-
-export const regionCssContainer: UseCssContainerProps = {
-  name: 'region'
-}
+import { cssContainerWidget } from '@Pimcore/modules/widget-manager/widget/widget-view'
 
 export const useStyles = createStyles(({ token, css }, { layoutDefinition, items }: RegionProps) => {
   const gridTemplateAreas = layoutDefinition.map((row) => `"${row}"`).join(' ')
@@ -65,7 +61,7 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
       gap: 12px;
 
       // @todo we should introduce a predefined set of breakpoints
-      @container ${regionCssContainer.name} (min-width: 768px) {
+      @container ${cssContainerWidget.name} (min-width: 768px) {
         display: grid;
         grid-template-areas: ${gridTemplateAreas};
         grid-template-columns: ${gridTemplateColumns};

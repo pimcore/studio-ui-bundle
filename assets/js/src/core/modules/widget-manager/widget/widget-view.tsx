@@ -15,6 +15,7 @@ import React from 'react'
 import { TitleView } from './title/title-view'
 import { useStyles } from './widget-view.styles'
 import { useTranslation } from 'react-i18next'
+import { useCssContainer, type UseCssContainerProps } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
 
 interface WidgetViewProps {
   title: string
@@ -23,13 +24,18 @@ interface WidgetViewProps {
   children: React.ReactNode
 }
 
+export const cssContainerWidget: UseCssContainerProps = {
+  name: 'widget'
+}
+
 const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
+  const { styleDefinition } = useCssContainer(cssContainerWidget)
   const { styles } = useStyles()
   const { title, showTitle, icon, children } = props
   const { t } = useTranslation()
 
   return (
-    <div className={ ['widget', styles.Widget].join(' ') }>
+    <div className={ ['widget', styles.Widget, styleDefinition.styles.container].join(' ') }>
       {showTitle === true && (
         <TitleView
           className={ 'widget__title' }
