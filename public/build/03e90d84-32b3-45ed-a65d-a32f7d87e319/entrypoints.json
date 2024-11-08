@@ -1,9 +1,0 @@
-{
-  "entrypoints": {
-    "main": {
-      "js": [
-        "/bundles/pimcorestudioui/build/03e90d84-32b3-45ed-a65d-a32f7d87e319/main.js"
-      ]
-    }
-  }
-}
