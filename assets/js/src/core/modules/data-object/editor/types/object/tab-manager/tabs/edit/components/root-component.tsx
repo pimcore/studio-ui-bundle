@@ -16,12 +16,16 @@ import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { useCssContainer } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
+import { regionCssContainer } from '@Pimcore/components/region/region.styles'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
 }
 
 export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element => {
+  const { styleDefinition } = useCssContainer(regionCssContainer)
+
   return (
     <ConfigProvider theme={ {
       components: {
@@ -31,19 +35,21 @@ export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element
       }
     } }
     >
-      <Form
-        layout='vertical'
-        onFinish={ onFinish }
-      >
-        <ObjectComponent { ...layout } />
+      <div className={ styleDefinition.styles.container }>
+        <Form
+          layout='vertical'
+          onFinish={ onFinish }
+        >
+          <ObjectComponent { ...layout } />
 
-        <Form.Item style={ { margin: 12 } }>
-          <Button
-            htmlType="submit"
-            type="primary"
-          >Test submission</Button>
-        </Form.Item>
-      </Form>
+          <Form.Item style={ { margin: 12 } }>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >Test submission</Button>
+          </Form.Item>
+        </Form>
+      </div>
     </ConfigProvider>
   )
 

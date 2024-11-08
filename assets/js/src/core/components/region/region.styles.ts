@@ -13,6 +13,11 @@
 
 import { createStyles } from 'antd-style'
 import { type RegionProps } from './region'
+import { type UseCssContainerProps } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
+
+export const regionCssContainer: UseCssContainerProps = {
+  name: 'region'
+}
 
 export const useStyles = createStyles(({ token, css }, { layoutDefinition, items }: RegionProps) => {
   const gridTemplateAreas = layoutDefinition.map((row) => `"${row}"`).join(' ')
@@ -33,8 +38,6 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
 
       const maxWidthAsNumber = Number(maxWidth ?? '0')
       const isValidNumber = !isNaN(maxWidthAsNumber)
-      console.log({ maxWidthAsNumber })
-      console.log({ maxWidth })
 
       if (maxWidth !== undefined && ((maxWidth !== '' && maxWidth !== '0' && !isValidNumber) || (isValidNumber && maxWidthAsNumber > 0))) {
         if (isValidNumber) {
@@ -56,11 +59,17 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
 
   return {
     region: css`
-      display: grid;
-      grid-template-areas: ${gridTemplateAreas};
-      grid-template-columns: ${gridTemplateColumns};
+      display: flex;
+      flex-direction: column;
       // @todo make this configurable
       gap: 12px;
+
+      // @todo we should introduce a predefined set of breakpoints
+      @container ${regionCssContainer.name} (min-width: 768px) {
+        display: grid;
+        grid-template-areas: ${gridTemplateAreas};
+        grid-template-columns: ${gridTemplateColumns};
+      }
     `
   }
 })
