@@ -5,10 +5,10 @@ interface UseIsAllowedReturn {
 }
 
 export const useIsAllowed = (): UseIsAllowedReturn => {
-  const user = useUser()
+  const user = useUser()!
 
   const isAllowed = (permission: string) => {
-    if(user.isAdmin()) {
+    if(user.isAdmin) {
       return true
     }
 

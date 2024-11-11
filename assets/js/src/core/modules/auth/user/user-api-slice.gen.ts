@@ -188,10 +188,16 @@ export type DevError = {
     details: string;
 };
 export type UserInformation = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** Username */
     username: string;
-    /** Roles */
-    roles: string[];
+    /** Permissions */
+    permissions: string[];
+    /** If user is an admin user */
+    isAdmin: boolean;
 };
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
@@ -246,6 +252,8 @@ export type User = {
     lastname?: string | null;
     /** If a User is active */
     active: boolean;
+    /** If User is admin */
+    admin: boolean;
     /** Classes the user is allows to see */
     classes: object;
     closeWarning: boolean;

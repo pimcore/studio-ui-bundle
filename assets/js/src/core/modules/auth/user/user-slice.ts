@@ -11,19 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
-import { type IUser } from '@Pimcore/modules/auth/auth-api-slice'
+import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
-interface AuthState {
-  username: string | null
-  roles: string[] | []
-}
-
-const initialState: AuthState = {
-  username: null,
-  roles: []
+const initialState: UserInformation = {
+  username: '',
+  permissions: [],
+  isAdmin: false
 }
 
 const slice = createSlice({
@@ -32,12 +28,9 @@ const slice = createSlice({
   reducers: {
     setUser: (
       state,
-      {
-        payload: { username, roles }
-      }: PayloadAction<IUser>
+      { payload }: PayloadAction<UserInformation>
     ) => {
-      state.username = username
-      state.roles = roles
+      return { ...state, ...payload }
     }
   }
 })
@@ -46,6 +39,4 @@ injectSliceWithState(slice)
 
 export const { setUser } = slice.actions
 
-// export const authReducer = slice.reducer
-
-export const selectCurrentUser = (state: RootState): IUser | null => state.auth
+export const selectCurrentUser = (state: RootState): UserInformation => state.auth
