@@ -47,7 +47,6 @@ export const WorkflowTransitionGroup = ({ workflow }: WorkflowItemProps): React.
     return (
       <Button
         className={ isFirst ? `${styles.button}` : cn(`${styles.button}`, `${styles['not-first']}`) }
-        loading={ submissionLoading }
         onClick={ () => {
           onClick(actionType, transition, workflow.workflowName)
         } }
@@ -58,8 +57,14 @@ export const WorkflowTransitionGroup = ({ workflow }: WorkflowItemProps): React.
     )
   }
 
-  if (submissionLoading) return <Button loading={ submissionLoading } />
-  else {
+  if (submissionLoading) {
+    return (
+      <Button
+        loading={ submissionLoading }
+        type={ 'link' }
+      />
+    )
+  } else {
     return (
       <div>
         {workflow.allowedTransitions?.map((status) => renderButton(status.label, 'transition'))}
