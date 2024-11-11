@@ -882,6 +882,8 @@ export type Asset = Element & {
         [key: string]: string | number | boolean | object | any[];
     };
     customAttributes?: CustomAttributes;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
     /** Has children */
     hasChildren?: boolean;
     /** Type */

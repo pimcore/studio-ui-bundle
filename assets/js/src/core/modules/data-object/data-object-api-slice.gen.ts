@@ -229,7 +229,6 @@ export type DataObjectGetTreeApiArg = {
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
-        | "Eierlegenedewollmilchsau"
         | "Event"
         | "FilterDefinition"
         | "LinkActivityDefinition"
@@ -245,8 +244,7 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition"
-        | "test";
+        | "TermSegmentBuilderDefinition";
 };
 export type Error = {
     /** Message */
@@ -349,6 +347,8 @@ export type DataObject = Element & {
         [key: string]: string | number | boolean | object | any[];
     };
     customAttributes?: CustomAttributes;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
     /** Key */
     key?: string;
     /** Class name */
