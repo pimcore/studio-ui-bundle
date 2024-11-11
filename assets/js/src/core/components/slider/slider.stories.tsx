@@ -11,10 +11,26 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  DynamicTypeObjectDataAbstractNumeric
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
+import { type Meta } from '@storybook/react'
+import { Slider } from './slider'
 
-export class DynamicTypeObjectDataNumeric extends DynamicTypeObjectDataAbstractNumeric {
-  id: string = 'numeric'
+const config: Meta = {
+  title: 'Components/Data Entry/Slider',
+  component: Slider,
+  argTypes: {
+    value: { control: 'array' },
+    onChange: { action: 'changed' }
+  }
+}
+
+export default config
+
+export const _default = {
+  args: {
+    value: 35,
+    min: 0,
+    max: 100,
+    allowClear: true,
+    showValue: true
+  }
 }

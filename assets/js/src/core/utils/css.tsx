@@ -11,10 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  DynamicTypeObjectDataAbstractNumeric
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
+export const toCssDimension = (value?: number | string | null, fallback?: number | string): string | undefined => {
+  if (value === null || value === undefined || value === '') {
+    if (fallback === undefined) {
+      return undefined
+    }
+    value = fallback
+  }
 
-export class DynamicTypeObjectDataNumeric extends DynamicTypeObjectDataAbstractNumeric {
-  id: string = 'numeric'
+  return typeof value === 'number' ? `${value}px` : value
 }
