@@ -12,25 +12,23 @@
 */
 
 import React from 'react'
-import { useWorkflowGetDetailsQuery } from './workflow-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { WorkflowCard } from '@Pimcore/components/workflow-card/workflow-card'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { Space } from 'antd'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
+import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id, elementType } = useElementContext()
-  const { data, isFetching } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
-// improve api handling
+  const { workflowDetailsData, isFetchingWorkflowDetails } = useWorkflow()
+
   return (
     <Content
-      loading={ isFetching }
-      none={ data?.items === undefined || data?.items.length === 0 }
+      loading={ isFetchingWorkflowDetails }
+      none={ workflowDetailsData?.items === undefined || workflowDetailsData?.items.length === 0 }
       noneOptions={ {
         text: t('workflow.no-workflows-found')
       } }
@@ -42,8 +40,8 @@ export const WorkflowTabContainer = (): React.JSX.Element => {
 
       <Space direction="vertical">
         <WorkFlowProvider>
-          {data?.items !== undefined && data?.items.length > 0 && (
-            data.items.map((workflow, index) => (
+          {workflowDetailsData?.items !== undefined && workflowDetailsData?.items.length > 0 && (
+            workflowDetailsData.items.map((workflow, index) => (
               <WorkflowCard
                 key={ index }
                 workflow={ workflow }
