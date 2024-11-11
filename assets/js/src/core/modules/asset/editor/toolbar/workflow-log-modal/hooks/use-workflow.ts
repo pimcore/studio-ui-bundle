@@ -16,16 +16,28 @@ import {
   type IWorkflowContext,
   WorkflowContext
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import {
+  useWorkflowGetDetailsQuery, type WorkflowGetDetailsApiResponse
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 
 interface UseWorkflowHookReturn extends Omit<IWorkflowContext, 'fetchSubmitWorkflowAction'> {
+  workflowDetailsData: WorkflowGetDetailsApiResponse | undefined
+  isFetchingWorkflowDetails: boolean
 }
 
 export type TransitionType = 'transition' | 'global'
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
+  const { openModal, closeModal, isModalOpen, contextWorkflowDetails, setContextWorkflowDetails } = useContext(WorkflowContext)
+  const { id, elementType } = useElementContext()
+  const { asset } = useAssetDraft(id)
+
+  const hasWorkflowAvailable = asset?.hasWorkflowAvailable ?? false
+  const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType, elementId: id }, { skip: !hasWorkflowAvailable })
 
   return {
-    openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails
+    openModal, closeModal, isModalOpen, contextWorkflowDetails, setContextWorkflowDetails, workflowDetailsData, isFetchingWorkflowDetails
   }
 }
