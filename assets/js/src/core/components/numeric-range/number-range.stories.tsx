@@ -1,14 +1,16 @@
 import { Meta } from '@storybook/react'
 import { NumericRange } from './numeric-range'
 
-export default {
+const config: Meta = {
     title: 'Components/Data Entry/NumericRange',
     component: NumericRange,
     argTypes: {
         value: { control: 'array' },
         onChange: { action: 'changed' }
     }
-} as Meta
+}
+
+export default config
 
 export const _default = {
     args: {
