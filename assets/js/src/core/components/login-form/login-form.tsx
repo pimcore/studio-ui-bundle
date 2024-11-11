@@ -57,8 +57,6 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
       event.preventDefault()
       const response = (await loginTask) as any
 
-      console.log(response)
-
       if (response.error !== undefined) {
         throw new Error(response.error.data.error as string)
       }
