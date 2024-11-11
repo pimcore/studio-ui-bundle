@@ -14,9 +14,10 @@
 import React from 'react'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
+import { type FormItemProps } from 'antd'
 
 export interface ObjectComponentProps {
-  name: string
+  name: FormItemProps['name']
   className?: string
   dataType?: string
   datatype?: string

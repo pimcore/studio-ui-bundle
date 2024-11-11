@@ -12,6 +12,7 @@
 */
 
 import React, { useMemo } from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -19,11 +20,15 @@ import { GridConfig } from './grid-config/grid-config'
 import { TagFiltersContainer } from './tag-filters/tag-filters-container'
 import { FilterContainer } from './filters/filter-container'
 
-export const SidebarContainer = (): React.JSX.Element => {
+interface ISidebarContainerProps {
+  errorData?: FetchBaseQueryError
+}
+
+export const SidebarContainer = ({ errorData }: ISidebarContainerProps): React.JSX.Element => {
   const entries: ISidebarEntry[] = useMemo(() => [
     {
       key: 'filter',
-      component: <FilterContainer />,
+      component: <FilterContainer errorData={ errorData } />,
       icon: <Icon name="filter-outlined" />
     },
 
@@ -38,7 +43,7 @@ export const SidebarContainer = (): React.JSX.Element => {
       component: <GridConfig />,
       icon: <Icon name="settings-outlined" />
     }
-  ], [])
+  ], [errorData])
 
   return useMemo(() => {
     return (
@@ -47,5 +52,5 @@ export const SidebarContainer = (): React.JSX.Element => {
         sizing='large'
       />
     )
-  }, [entries])
+  }, [entries, errorData])
 }

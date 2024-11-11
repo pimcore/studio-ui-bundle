@@ -34,6 +34,7 @@ export const Region = (props: RegionProps): React.JSX.Element => {
           <RegionItem
             component={ item.component }
             key={ item.region }
+            maxWidth={ item.maxWidth }
             region={ item.region }
           />
         )

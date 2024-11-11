@@ -16,10 +16,17 @@ import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-l
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Tabs, type TabsProps } from 'antd'
 import { Box } from '@Pimcore/components/box/box'
+import { BaseView } from '../../views/base-view'
 
-export interface TabpanelProps extends AbstractObjectLayoutDefinition {}
+export interface TabpanelProps extends AbstractObjectLayoutDefinition {
+  title?: string
+  border?: boolean
+  collapsible?: boolean
+  collapsed?: boolean
+  children: AbstractObjectLayoutDefinition[]
+}
 
-export const Tabpanel = ({ children }: TabpanelProps): React.JSX.Element => {
+export const Tabpanel = ({ children, border, collapsed, collapsible, title }: TabpanelProps): React.JSX.Element => {
   const items: TabsProps['items'] = children.map((child, index) => {
     const tabPanelChild = {
       ...child,
@@ -41,6 +48,13 @@ export const Tabpanel = ({ children }: TabpanelProps): React.JSX.Element => {
   })
 
   return (
-    <Tabs items={ items } />
+    <BaseView
+      border={ border }
+      collapsed={ collapsed }
+      collapsible={ collapsible }
+      title={ title }
+    >
+      <Tabs items={ items } />
+    </BaseView>
   )
 }

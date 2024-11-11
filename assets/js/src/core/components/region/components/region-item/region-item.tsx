@@ -17,6 +17,7 @@ import cn from 'classnames'
 
 export interface RegionItemProps extends React.HTMLAttributes<HTMLDivElement> {
   region: string
+  maxWidth?: string
   component: ReactNode
 }
 

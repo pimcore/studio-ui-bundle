@@ -14,7 +14,7 @@
 import React from 'react'
 import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
-import { Button } from 'antd'
+import { Button, ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 interface RootComponentProps {
@@ -23,19 +23,28 @@ interface RootComponentProps {
 
 export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element => {
   return (
-    <Form
-      layout='vertical'
-      onFinish={ onFinish }
+    <ConfigProvider theme={ {
+      components: {
+        Form: {
+          itemMarginBottom: 0
+        }
+      }
+    } }
     >
-      <ObjectComponent { ...layout } />
+      <Form
+        layout='vertical'
+        onFinish={ onFinish }
+      >
+        <ObjectComponent { ...layout } />
 
-      <Form.Item style={ { margin: 12 } }>
-        <Button
-          htmlType="submit"
-          type="primary"
-        >Test submission</Button>
-      </Form.Item>
-    </Form>
+        <Form.Item style={ { margin: 12 } }>
+          <Button
+            htmlType="submit"
+            type="primary"
+          >Test submission</Button>
+        </Form.Item>
+      </Form>
+    </ConfigProvider>
   )
 
   function onFinish (values: any): void {

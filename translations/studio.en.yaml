@@ -27,7 +27,6 @@ example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
 preview-card.locate-in-tree: Locate in Tree
-preview-card.info: Info
 preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
@@ -65,6 +64,19 @@ aria.login-form-additional-logins.additional-login-provider: "Additional login p
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
+action-applied-successfully: Action applied successfully
+action-could-not-be-applied: Action could not be applied
+workflow-modal.perform-action: Perform Action
+workflow-modal.cancel: Cancel
+workflow-modal.log-time: Log Time
+workflow-modal.timeSpent: Time spent
+workflow-modal.notes: Notes
+workflow-modal.timeSpent-required: Please enter the duration of time spent
+workflow-modal.notes-required: Please enter your notes
+workflow-transitions.log-time: Log Time
+workflow-transitions.start-workflow: Start Workflow
+workflow-transitions.finish-review: Finish Review
+workflow-transitions.restart-review: Restart Review
 save-success: Successfully saved
 save-failed: Save failed
 version.label: Versions
@@ -91,6 +103,7 @@ version.confirm-clear-unpublished: Are you sure you want to clear all unpublishe
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
+empty: Empty
 yes: Yes
 no: No
 by: By
@@ -248,6 +261,7 @@ jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
 jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
+jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
@@ -300,3 +314,10 @@ element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
+male: Male
+female: Female
+other: Other
+unknown: Unknown
+warning: Warning
+error: Error
+info: Info

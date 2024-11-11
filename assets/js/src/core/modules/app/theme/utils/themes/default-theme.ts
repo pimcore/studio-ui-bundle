@@ -147,6 +147,11 @@ const defaultTheme = {
     Modal: {
       colorTextSecondary: 'rgba(0, 0, 0, 0.6)'
     },
+    Alert: {
+      colorInfo: '#722ed1',
+      colorInfoBg: '#f9f0ff',
+      colorInfoBorder: '#d3adf7'
+    },
     Empty: {
       colorTextDisabled: 'rgba(0, 0, 0, 0.25)'
     },

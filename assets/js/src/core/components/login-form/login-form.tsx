@@ -14,13 +14,14 @@
 import { Checkbox, Input } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
-import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons'
+// import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
 import { type ILoginRequest, useLoginMutation } from '@Pimcore/modules/auth/auth-api-slice'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
+import { Icon } from '../icon/icon'
 
 export interface IAdditionalLogins {
   key: string
@@ -65,10 +66,10 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
         <Input
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
           placeholder="Username"
-          prefix={ <UserOutlined /> }
+          prefix={ <Icon name="user-01" /> }
         />
         <Input.Password
-          iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
+          // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }
           onChange={ (e) => { setFormState({ ...formState, password: e.target.value }) } }
           placeholder="Password"
         />

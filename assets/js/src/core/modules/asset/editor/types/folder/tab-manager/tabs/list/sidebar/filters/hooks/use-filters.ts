@@ -13,10 +13,12 @@
 
 import { useContext } from 'react'
 import { FilterContext } from '../filter-provider'
-import { type IFilterContext } from '../../../types/filterTypes'
+import { type FilterOptions, type IFilterContext } from '../../../types/filterTypes'
 import { defaultFilterOptions } from '../../../constants/filters'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string) => void
@@ -24,6 +26,7 @@ interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
   resetFilters: () => void
   updateIsIncludeDescendants: (value: boolean) => void
+  addOrUpdateFilterValue: ({ type, value }: { type: FILTER_TYPE, value: string }) => void
 }
 
 export interface FieldFilter {
@@ -32,9 +35,11 @@ export interface FieldFilter {
   filterValue: string
 }
 
+type ColumnFiltersList = Array<FilterOptions['columnFilters']> | []
+
 export const useFilters = (): UseFiltersHookReturn => {
   const { resetColumns, ...gridConfigProps } = useGridConfig()
-  const { filterOptions, setFilterOptions } = useContext(FilterContext)
+  const { filterOptions, setFilterOptions, filterError } = useContext(FilterContext)
 
   const resetFilters = (): void => {
     resetColumns()
@@ -136,15 +141,44 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
+  const addOrUpdateFilterValue = ({ type, value }: { type: FILTER_TYPE, value: string }): void => {
+    setFilterOptions((filterOptions) => {
+      const prevColumnFilters = filterOptions.columnFilters
+
+      const filterColumnFiltersList = (): ColumnFiltersList => {
+        return (prevColumnFilters as ColumnFiltersList).filter(
+          (item: any) => item.type !== type
+        )
+      }
+
+      const newColumnFilters = !isEmptyValue(value)
+        ? [
+            ...(filterColumnFiltersList()),
+            {
+              type,
+              filterValue: value
+            }
+          ]
+        : filterColumnFiltersList()
+
+      return {
+        ...filterOptions,
+        columnFilters: newColumnFilters
+      }
+    })
+  }
+
   return {
     filterOptions,
     setFilterOptions,
+    filterError,
     addOrUpdateFieldFilter,
     removeFieldFilter,
     getFieldFilter,
     resetFilters,
     resetColumns,
     updateIsIncludeDescendants,
+    addOrUpdateFilterValue,
     ...gridConfigProps
   }
 }

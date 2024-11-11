@@ -42,6 +42,7 @@ export const Region = ({ children }: RegionProps): React.JSX.Element => {
 
     items.push({
       region: `${region}${regionIndex}`,
+      // maxWidth: @todo field for the max width needs to be defined,
       component: <ObjectComponent
         { ...child }
         key={ child.name }

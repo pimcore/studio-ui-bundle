@@ -12,14 +12,19 @@
 */
 
 import React from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { FilterContainerInner } from './filter-container-inner'
 import { FilterProvider } from './filter-provider'
 import { GridConfigProvider } from '../grid-config/grid-config-provider'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
-export const FilterContainer = (): React.JSX.Element => {
+interface IFilterContainerProps {
+  errorData?: FetchBaseQueryError
+}
+
+export const FilterContainer = ({ errorData }: IFilterContainerProps): React.JSX.Element => {
   return (
-    <FilterProvider>
+    <FilterProvider errorData={ errorData }>
       <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/ListingRegistry'] }>
         <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
           <GridConfigProvider>
