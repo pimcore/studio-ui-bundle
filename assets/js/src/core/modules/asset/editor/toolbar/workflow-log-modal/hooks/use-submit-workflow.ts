@@ -39,7 +39,7 @@ export interface WorkflowOptions {
 export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn => {
   const { id } = useAsset()
   const messageApi = useMessage()
-  const { setWorkflowDetails } = useWorkflow()
+  const { setContextWorkflowDetails } = useWorkflow()
   const [fetchSubmitWorkflowActionMutation, { isLoading: submissionLoading, isSuccess: submissionSuccess, isError: submissionError }] = useWorkflowActionSubmitMutation(
     { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
   )
@@ -56,7 +56,7 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   })
 
   const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
-    setWorkflowDetails({ transition, action: actionType, workflowName })
+    setContextWorkflowDetails({ transition, action: actionType, workflowName })
 
     fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then(() => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises

@@ -24,10 +24,10 @@ import { t } from 'i18next'
 import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
 
 export const WorkflowLogModal = (): React.JSX.Element => {
-  const { isModalOpen, closeModal, workflowDetails } = useWorkflow()
+  const { isModalOpen, closeModal, contextWorkflowDetails } = useWorkflow()
   const [form] = Form.useForm<FormValues>()
 
-  const { submitWorkflowAction } = useSubmitWorkflow(workflowDetails?.workflowName ?? '')
+  const { submitWorkflowAction } = useSubmitWorkflow(contextWorkflowDetails?.workflowName ?? '')
 
   interface FormValues {
     timeSpent: string
@@ -35,7 +35,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
   }
 
   const onFinish = (values: FormValues): void => {
-    workflowDetails !== null && submitWorkflowAction(workflowDetails.transition, workflowDetails.action, workflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
+    contextWorkflowDetails !== null && submitWorkflowAction(contextWorkflowDetails.transition, contextWorkflowDetails.action, contextWorkflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
     closeModal()
   }
 
@@ -65,7 +65,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
       onCancel={ () => {
         closeModal()
       } }
-      open={ isModalOpen && workflowDetails !== null }
+      open={ isModalOpen && contextWorkflowDetails !== null }
       size={ 'M' }
       title={ <ModalTitle>{t('workflow-modal.log-time')}</ModalTitle> }
     >

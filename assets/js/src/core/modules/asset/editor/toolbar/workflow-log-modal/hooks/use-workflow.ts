@@ -30,7 +30,7 @@ interface UseWorkflowHookReturn extends Omit<IWorkflowContext, 'fetchSubmitWorkf
 export type TransitionType = 'transition' | 'global'
 
 export const useWorkflow = (): UseWorkflowHookReturn => {
-  const { openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails } = useContext(WorkflowContext)
+  const { openModal, closeModal, isModalOpen, contextWorkflowDetails, setContextWorkflowDetails } = useContext(WorkflowContext)
   const { id, elementType } = useElementContext()
   const { asset } = useAssetDraft(id)
 
@@ -38,6 +38,6 @@ export const useWorkflow = (): UseWorkflowHookReturn => {
   const { data: workflowDetailsData, isFetching: isFetchingWorkflowDetails } = useWorkflowGetDetailsQuery({ elementType, elementId: id }, { skip: !hasWorkflowAvailable })
 
   return {
-    openModal, closeModal, isModalOpen, workflowDetails, setWorkflowDetails, workflowDetailsData, isFetchingWorkflowDetails
+    openModal, closeModal, isModalOpen, contextWorkflowDetails, setContextWorkflowDetails, workflowDetailsData, isFetchingWorkflowDetails
   }
 }
