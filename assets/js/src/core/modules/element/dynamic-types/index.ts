@@ -78,6 +78,8 @@ import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynam
 import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
 import { type DynamicTypeObjectDataDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date'
 import { type DynamicTypeObjectDataDatetime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-datetime'
+import { type DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date-range'
+import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-time'
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
 import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
 
@@ -156,6 +158,8 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataRgbaColor>(serviceIds['DynamicTypes/ObjectData/RgbaColor']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDate>(serviceIds['DynamicTypes/ObjectData/Date']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDatetime>(serviceIds['DynamicTypes/ObjectData/Datetime']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDateRange>(serviceIds['DynamicTypes/ObjectData/DateRange']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTime>(serviceIds['DynamicTypes/ObjectData/Time']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
   }
