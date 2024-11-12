@@ -24,6 +24,7 @@ import {
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/default-batch-edit'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
@@ -33,6 +34,13 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
     renderRightToolbar: <ButtonGroup items={
             [
+              <LanguageSelection
+                key={ 'language-selection' }
+                languages={ ['EN', 'FR'] }
+                onSelectLanguage={ () => {
+                } }
+                selectedLanguage={ 'EN' }
+              />,
               <IconButton
                 icon='close'
                 key={ 'remove' }
