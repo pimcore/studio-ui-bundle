@@ -26,7 +26,7 @@ export type PanelTheme = 'theme-success' | 'theme-primary' | 'theme-default'
 export interface AccordionItemType extends ItemType {
   title: React.ReactElement
   subtitle?: React.ReactElement
-  info?: string
+  info?: React.ReactElement | string
   disabled?: boolean
   theme?: PanelTheme
 }
@@ -35,6 +35,7 @@ export interface AccordionProps extends Omit<CollapseProps, 'expandIconPosition'
   items: AccordionItemType[]
   spaced?: boolean
   bordered?: boolean
+  table?: boolean
   expandIconPosition?: CustomExpandIconPosition
 }
 
@@ -43,6 +44,7 @@ export const Accordion = ({
   accordion = false,
   spaced = false,
   bordered = false,
+  table = false,
   className,
   activeKey,
   expandIconPosition = 'after-title',
@@ -136,6 +138,11 @@ export const Accordion = ({
   if (bordered) {
     allClassNames.push('accordion--bordered', styles.bordered)
     allClassNames.push(styles.bordered)
+  }
+
+  if (table) {
+    allClassNames.push('accordion--table', styles.table)
+    allClassNames.push(styles.table)
   }
 
   return (

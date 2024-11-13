@@ -38,5 +38,12 @@ export const useStyles = createStyles(({ css, token }) => ({
     top: 50%;
     transform: translateY(-50%);
     cursor: col-resize;
+  `,
+
+  withToolbar: css`
+    min-width: 1px;
+    top: ${token.paddingSM}px;
+    height: calc(100% - ${token.paddingSM}px);
+    z-index: 1;
   `
 }))

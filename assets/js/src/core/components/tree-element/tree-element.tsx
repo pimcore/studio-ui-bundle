@@ -20,6 +20,7 @@ import { useStyles } from './tree-element.styles'
 
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
+  allowDrop?: boolean
 }
 
 interface ITreeElementProps extends TreeProps {
@@ -72,6 +73,9 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
 
   return (
     <Tree
+      allowDrop={ ({ dropNode, dropPosition }): boolean => {
+        return dropNode.allowDrop !== false && dropPosition === 0
+      } }
       blockNode
       checkStrictly={ checkStrictly }
       checkable={ onCheck !== undefined }

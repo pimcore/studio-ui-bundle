@@ -1,0 +1,79 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import React, { useState } from 'react'
+import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { UserOutlined } from '@ant-design/icons'
+
+interface ITreeAutocompleteProps {
+  loading?: boolean
+}
+
+const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { openUser, fetchUserList } = useUserHelper()
+  const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
+  const [searchValue, setSearchValue] = useState<string>('')
+  const { Text } = Typography
+
+  const onSearch = (value: string): void => {
+    setSearchValue(value)
+
+    fetchUserList().then(response => {
+      setSearchOptions(response.items.map((item) => ({
+        value: item.id.toString(),
+        label: (
+          <Row
+            gutter={ 8 }
+            wrap={ false }
+          >
+            <Col flex="none">
+              <Avatar
+                icon={ <UserOutlined /> }
+                size={ 26 }
+              />
+            </Col>
+            <Col flex="auto">
+              <div>{ item.username }</div>
+              <Text strong>{t('user-management.search.id')}: </Text> { item.id }
+            </Col>
+          </Row>
+        )
+      })))
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
+  return (
+    <AutoComplete
+      className={ 'simple-tree--search' }
+      onSearch={ onSearch }
+      onSelect={ (id, option) => {
+        openUser(id)
+        setSearchValue('')
+      } }
+      options={ searchOptions }
+      value={ searchValue }
+    >
+      <Input.Search
+        allowClear
+        placeholder={ t('user-management.search') }
+      />
+    </AutoComplete>
+  )
+}
+
+export { TreeAutocomplete }
