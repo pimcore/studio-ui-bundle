@@ -32,8 +32,12 @@ export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element
     } }
     >
       <Form
+        initialValues={ {
+          myRandomTestValue: 'Hello World'
+        } }
         layout='vertical'
         onFinish={ onFinish }
+        preserve
       >
         <ObjectComponent { ...layout } />
 
