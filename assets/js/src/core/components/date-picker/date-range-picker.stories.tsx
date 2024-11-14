@@ -13,15 +13,15 @@
 
 import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
-import { DatePicker, type DatePickerProps } from './date-picker'
 import { Form } from '@Pimcore/components/form/form'
 import FormItem from 'antd/es/form/FormItem'
+import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
 import { type DatePickerValueType, formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Components/Data Entry/DatePicker',
-  component: DatePicker,
+  title: 'Components/Data Entry/DateRangePicker',
+  component: DateRangePicker,
   parameters: {
 
   },
@@ -30,32 +30,44 @@ const config: Meta = {
 
 export default config
 
-const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
-  const [date, setDate] = useState<any>(props.value)
+const ExampleForm = (props: DateRangePickerProps): React.JSX.Element => {
+  const [dates, setDates] = useState<any>(props.value)
 
   const handleDateChange = (value: any): void => {
-    setDate(value)
+    setDates(value)
   }
 
   return (
     <Form>
       <FormItem>
-        <DatePicker
+        <DateRangePicker
           { ...props }
           onChange={ handleDateChange }
         />
       </FormItem>
       <div>
-        <strong>Selected Date:</strong>
-        <pre>{date !== null && date !== undefined ? formatDatePickerDate(date as DatePickerValueType) : 'null'}</pre>
+        <strong>Selected Dates:</strong>
+        <pre>{dates !== null && dates !== undefined
+          ? (
+            <>
+              <div>
+                <strong>Start: </strong> {formatDatePickerDate(dates[0] as DatePickerValueType)}
+              </div>
+              <div>
+                <strong>End: </strong> {formatDatePickerDate(dates[1] as DatePickerValueType)}
+              </div>
+            </>
+            )
+          : 'null'
+        }</pre>
       </div>
     </Form>
   )
 }
 
-type Story = StoryObj<typeof DatePicker>
+type Story = StoryObj<typeof DateRangePicker>
 export const _default: Story = {
   args: {
   },
-  render: (props: DatePickerProps) => <ExampleForm { ...props } />
+  render: (props: DateRangePickerProps) => <ExampleForm { ...props } />
 }

@@ -67,10 +67,14 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         menu={ { items } }
         placement="bottom"
       >
-        <Button
-          loading={ submissionLoading }
-        >
-          {t('component.workflow-card.action-btn')}</Button>
+        {submissionLoading
+          ? (
+            <Button
+              loading
+              type={ 'link' }
+            />
+            )
+          : <Button>{t('component.workflow-card.action-btn')}</Button>}
       </Dropdown>
     )
   }

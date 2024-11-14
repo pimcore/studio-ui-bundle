@@ -21,7 +21,6 @@ import { t } from 'i18next'
 
 export type RgbaColorObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
-
 }
 
 const formatColor = (color: Color): string | null | false => {
@@ -42,6 +41,7 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
     return (
       <ColorPicker
         allowClear
+        disabled={ props.noteditable === true }
         format={ 'hex' }
         showText={ formatColorShowText }
       />

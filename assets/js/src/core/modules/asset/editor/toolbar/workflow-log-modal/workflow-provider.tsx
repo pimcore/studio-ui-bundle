@@ -23,16 +23,16 @@ export interface IWorkflowContext {
   isModalOpen: boolean
   openModal: (workflowDetails: WorkflowDetails) => void
   closeModal: () => void
-  workflowDetails: WorkflowDetails | null
-  setWorkflowDetails: (details: WorkflowDetails | null) => void
+  contextWorkflowDetails: WorkflowDetails | null
+  setContextWorkflowDetails: (details: WorkflowDetails | null) => void
 }
 
 export const WorkflowContext = createContext<IWorkflowContext>({
   isModalOpen: false,
   openModal: () => {},
   closeModal: () => {},
-  workflowDetails: null,
-  setWorkflowDetails: () => {}
+  contextWorkflowDetails: null,
+  setContextWorkflowDetails: () => {}
 })
 
 export interface WorkFlowProviderProps {
@@ -41,10 +41,10 @@ export interface WorkFlowProviderProps {
 
 export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX.Element => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
-  const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails | null>(null)
+  const [contextWorkflowDetails, setContextWorkflowDetails] = useState<WorkflowDetails | null>(null)
 
   const openModal = (workflowDetails: WorkflowDetails): void => {
-    setWorkflowDetails(workflowDetails)
+    setContextWorkflowDetails(workflowDetails)
     setModalOpen(true)
   }
   const closeModal = (): void => {
@@ -52,8 +52,8 @@ export const WorkFlowProvider = ({ children }: WorkFlowProviderProps): React.JSX
   }
 
   return useMemo(() => (
-    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, workflowDetails, setWorkflowDetails } }>
+    <WorkflowContext.Provider value={ { isModalOpen, openModal, closeModal, contextWorkflowDetails, setContextWorkflowDetails } }>
       {children}
     </WorkflowContext.Provider>
-  ), [isModalOpen, children, workflowDetails])
+  ), [isModalOpen, children, contextWorkflowDetails])
 }

@@ -12,8 +12,6 @@
 */
 
 import React, { useEffect } from 'react'
-import { type PickerProps } from 'antd/lib/date-picker/generatePicker/interface'
-import { DatePicker as OriginalDatePicker } from 'antd'
 import { type Dayjs } from 'dayjs'
 import {
   type DatePickerValueType,
@@ -21,29 +19,31 @@ import {
   fromDayJs,
   type OutputType
 } from './utils/date-picker-utils'
-import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
-import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
+import { DatePicker } from 'antd'
+import { type GenericTimePickerProps } from 'antd/es/date-picker/generatePicker/interface'
 
-export type DatePickerProps = PickerProps & {
+export type TimePickerProps = GenericTimePickerProps & {
   value?: DatePickerValueType
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
 }
 
-const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
+export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat
 
   const [value, setValue] = React.useState<Dayjs | null>(toDayJs(props.value))
 
   useEffect(() => {
     if (props.onChange !== undefined) {
-      props.onChange(fromDayJs(value, props.outputType, props.outputFormat))
+      props.onChange(fromDayJs(value, props.outputType, props.outputFormat ?? 'HH:mm:ss'))
     }
   }, [value, props.outputType, outputFormat])
 
+  const OriginalTimePicker = DatePicker.TimePicker
+
   return (
-    <OriginalDatePicker
+    <OriginalTimePicker
       { ...props }
       onChange={ (date: Dayjs | null) => {
         setValue(date)
@@ -52,13 +52,3 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
     />
   )
 }
-
-interface DatePickerReturn extends React.FC<DatePickerProps> {
-  RangePicker: React.FC<DateRangePickerProps>
-  TimePicker: React.FC<TimePickerProps>
-}
-
-export const DatePicker = Object.assign(DatePickerComponent, {
-  RangePicker: DateRangePicker,
-  TimePicker
-}) as DatePickerReturn
