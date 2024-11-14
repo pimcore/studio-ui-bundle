@@ -12,7 +12,7 @@
 */
 
 import type React from 'react'
-import {ElementPermissions} from "@Pimcore/modules/element/element-api-slice-enhanced";
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
 export interface IEditorTab {
   key: string
