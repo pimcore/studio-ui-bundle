@@ -35,6 +35,8 @@ const slice = createSlice({
   }
 })
 
+export const userSliceName = slice.name
+
 injectSliceWithState(slice)
 
 export const { setUser } = slice.actions

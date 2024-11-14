@@ -23,6 +23,8 @@ import { IconButton } from '../icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -41,9 +43,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
-  const elementDraft = useElementDraft(id, elementType) // IMPORTANT!
-
-  console.log(elementDraft)
+  const elementDraft = useElementDraft(id, elementType)
+  const element = elementDraft.element!
 
   const elementRef = useRef<HTMLDivElement>(null)
 
@@ -80,29 +81,21 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   }
 
   items = items.filter((item) => {
-    if (item.hidden && !item.hidden()) {
+    if (item.hidden !== undefined && !item.hidden()) {
       return false
     }
 
-    if (item.permission) {
-      // check if elementDraft has the permission
+    if (item.workspacePermission !== undefined && element?.permissions !== undefined) {
+      if (!checkElementPermission(element.permissions, item.workspacePermission as string)) {
+        return false
+      }
+    }
+
+    if (item.userPermission !== undefined && !isAllowed(item.userPermission)) {
+      return false
     }
 
     return true
-
-    /**
-     * if "hidden" is available -> execute it (bool)
-     *
-     * item.hidden(elementDraft) -> true/false
-     *
-     * optional:
-     * item.permissions -> holds string (e.g. "properties")
-     *
-     * if 1 item.permissions
-     * if 2 hidden
-     *
-     * makes it easier to check -> you dont need to implement a function
-     */
   })
 
   items = items?.map((item) => {
