@@ -86,7 +86,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
     }
 
     if (item.workspacePermission !== undefined && element?.permissions !== undefined) {
-      if (!checkElementPermission(element.permissions, item.workspacePermission as string)) {
+      if (!checkElementPermission(element.permissions, item.workspacePermission)) {
         return false
       }
     }
