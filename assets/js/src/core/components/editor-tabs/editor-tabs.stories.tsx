@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { EditorTabs, type IEditorTabsProps } from '@Pimcore/modules/element/editor/editor-tabs'
+import { EditorTabs, type IEditorTabsProps } from '@Pimcore/modules/element/editor/tabs/editor-tabs'
 import { type Meta } from '@storybook/react'
 import { PictureOutlined, TagOutlined } from '@ant-design/icons'
 import { Icon } from '@Pimcore/components/icon/icon'

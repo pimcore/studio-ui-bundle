@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { EditorTabs as EditorTabsView } from '@Pimcore/modules/element/editor/editor-tabs'
+import { EditorTabs as EditorTabsView } from '@Pimcore/modules/element/editor/tabs/editor-tabs'
 import { useTranslation } from 'react-i18next'
 import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 import { useInjection } from '@Pimcore/app/depency-injection'

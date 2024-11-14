@@ -24,7 +24,7 @@ import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
-import {IconButton} from "@Pimcore/components/icon-button/icon-button";
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
