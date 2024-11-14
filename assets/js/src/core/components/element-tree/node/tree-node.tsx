@@ -18,7 +18,7 @@ import { type nodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
-import { type AssetPermissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
 export interface TreeNodeProps {
   id: string
@@ -27,7 +27,7 @@ export interface TreeNodeProps {
   internalKey: string
   children: TreeNodeProps[]
   level: number
-  permissions: AssetPermissions
+  permissions: ElementPermissions
   isLocked: boolean
   hasChildren?: boolean
   metaData?: any

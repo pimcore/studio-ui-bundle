@@ -21,14 +21,14 @@ import type {
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
-import { type Permissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
   parentId: number
   fullPath?: string
   type?: string
-  permissions?: Permissions
+  permissions?: ElementPermissions
 }
 
 interface UseElementDraftReturn extends

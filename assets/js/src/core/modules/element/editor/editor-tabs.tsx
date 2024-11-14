@@ -19,12 +19,12 @@ import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/int
 import { type IDetachTab, useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
-import { IconButton } from '../icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import {IconButton} from "@Pimcore/components/icon-button/icon-button";
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -81,7 +81,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   }
 
   items = items.filter((item) => {
-    if (item.hidden !== undefined && !item.hidden()) {
+    if (item.hidden !== undefined && item.hidden()) {
       return false
     }
 

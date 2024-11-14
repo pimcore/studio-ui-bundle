@@ -12,14 +12,14 @@
 */
 
 import type React from 'react'
-import { type Permissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import {ElementPermissions} from "@Pimcore/modules/element/element-api-slice-enhanced";
 
 export interface IEditorTab {
   key: string
   label: string | React.JSX.Element
   children: React.JSX.Element
   icon: React.JSX.Element
-  workspacePermission?: keyof Permissions | string
+  workspacePermission?: keyof ElementPermissions | string
   userPermission?: string
   hidden?: () => boolean
   isDetachable?: boolean
