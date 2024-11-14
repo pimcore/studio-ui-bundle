@@ -16,7 +16,7 @@ import React, { useState, createContext, useMemo } from 'react'
 export interface BatchEdit {
   key: string
   type: string
-  locale: string
+  locale: string | null
   value: string
 }
 

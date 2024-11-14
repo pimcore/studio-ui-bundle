@@ -22,6 +22,8 @@ interface LanguageSelectionProps {
   onSelectLanguage: (language: string) => void
 }
 
+export const transformLanguage = (language: string): string | null => language === '-' ? null : language
+
 export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [language, setLanguage] = useState<string>(selectedLanguage)

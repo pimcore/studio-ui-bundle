@@ -24,7 +24,7 @@ import {
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/default-batch-edit'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
@@ -38,6 +38,8 @@ export const BatchEditListContainer = (): React.JSX.Element => {
   ]
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
+    const selectedLanguage = batchEdit.locale ?? '-'
+
     return ({
       id: batchEdit.key,
       children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
@@ -46,8 +48,8 @@ export const BatchEditListContainer = (): React.JSX.Element => {
           <LanguageSelection
             key={ 'language-selection' }
             languages={ languages }
-            onSelectLanguage={ (language) => { updateLocale(batchEdit.key, language) } }
-            selectedLanguage={ batchEdit.locale }
+            onSelectLanguage={ (language) => { updateLocale(batchEdit.key, transformLanguage(language)) } }
+            selectedLanguage={ selectedLanguage }
           />,
           <IconButton
             icon='close'

@@ -59,7 +59,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   }, [selectedRows])
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
-    const locale = column.locale ?? '-'
+    const locale = column.locale ?? null
     addOrUpdateBatchEdit(column.key, column.type, locale, '')
   }
 

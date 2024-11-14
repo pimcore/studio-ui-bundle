@@ -20,8 +20,8 @@ import { type AssetPatchByIdApiArg, type PatchCustomMetadata } from '@Pimcore/mo
 import { useListSelectedRows } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 interface UseBatchEditHookReturn extends BatchContext {
-  addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnLocale: string, columnValue: string) => void
-  updateLocale: (columnKey: string, locale: string | null) => void
+  addOrUpdateBatchEdit: (key: string, type: string, locale: string | null, value: string) => void
+  updateLocale: (key: string, locale: string | null) => void
   resetBatchEdits: () => void
   removeBatchEdit: (key: string) => void
   assetPatchForUpdate: () => AssetPatchByIdApiArg
@@ -64,7 +64,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     })
   }
 
-  const updateLocale = (columnKey: string, locale: string): void => {
+  const updateLocale = (columnKey: string, locale: string | null): void => {
     const updatedEdits = batchEdits.map(edit => {
       if (edit.key === columnKey) {
         return {
