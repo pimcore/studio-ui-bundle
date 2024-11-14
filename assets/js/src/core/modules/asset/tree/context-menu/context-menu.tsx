@@ -27,6 +27,7 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -56,7 +57,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       label: t('element.tree.context-menu.add-assets'),
       key: '1',
       icon: <Icon name={ 'mainAsset' } />,
-      hidden: props.node?.type !== 'folder',
+      hidden: !checkElementPermission(props.node.permissions, 'create') || props.node?.type !== 'folder',
       children: [
         {
           icon: <Icon name={ 'upload-cloud' } />,

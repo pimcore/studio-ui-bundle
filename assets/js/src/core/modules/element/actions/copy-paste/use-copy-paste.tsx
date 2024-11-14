@@ -23,6 +23,7 @@ import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
@@ -127,6 +128,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.copy'),
       key: 'copy',
       icon: <Icon name={ 'clipboard' } />,
+      hidden: !checkElementPermission(node.permissions, 'view') || node.isLocked,
       onClick: () => {
         copy(node)
       }
@@ -138,6 +140,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.cut'),
       key: 'cut',
       icon: <Icon name={ 'scissors-cut' } />,
+      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         cut(node)
       }
