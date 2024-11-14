@@ -25,34 +25,42 @@ import {
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
+  const { updateLocale } = useBatchEdit()
+  const settings = useSettings()
 
-  const items: StackListProps['items'] = batchEdits.map((batchEdit) => ({
-    id: batchEdit.key,
-    children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
-    renderRightToolbar: <ButtonGroup items={
-            [
-              <LanguageSelection
-                key={ 'language-selection' }
-                languages={ ['EN', 'FR'] }
-                onSelectLanguage={ () => {
-                } }
-                selectedLanguage={ 'EN' }
-              />,
-              <IconButton
-                icon='close'
-                key={ 'remove' }
-                onClick={ () => {
-                  removeBatchEdit(batchEdit.key)
-                } }
-              />
-            ]
-        }
-                        />,
-    body: <DefaultBatchEdit batchEdit={ batchEdit } />
-  }))
+  const languages = [
+    '-',
+    ...settings.requiredLanguages
+  ]
+
+  const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
+    return ({
+      id: batchEdit.key,
+      children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
+      renderRightToolbar: <ButtonGroup items={
+        [
+          <LanguageSelection
+            key={ 'language-selection' }
+            languages={ languages }
+            onSelectLanguage={ (language) => { updateLocale(batchEdit.key, language) } }
+            selectedLanguage={ batchEdit.locale }
+          />,
+          <IconButton
+            icon='close'
+            key={ 'remove' }
+            onClick={ () => {
+              removeBatchEdit(batchEdit.key)
+            } }
+          />
+        ]
+      }/>,
+      body: <DefaultBatchEdit batchEdit={ batchEdit } />
+    })
+  })
 
   return (
     <>

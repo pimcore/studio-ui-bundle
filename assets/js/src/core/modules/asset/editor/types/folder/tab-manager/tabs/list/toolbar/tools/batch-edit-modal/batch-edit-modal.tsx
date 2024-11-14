@@ -54,13 +54,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { addJob } = useJobs()
   const { selectedRows } = useListSelectedRows()
   const [jobTitle, setJobTitle] = useState<string>('Asset')
-
   useEffect(() => {
     setJobTitle(Object.keys(selectedRows).length.toString())
   }, [selectedRows])
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
-    addOrUpdateBatchEdit(column.key, column.type, '')
+    const locale = column.locale ?? '-'
+    addOrUpdateBatchEdit(column.key, column.type, locale, '')
   }
 
   const applyChanges = (): void => {

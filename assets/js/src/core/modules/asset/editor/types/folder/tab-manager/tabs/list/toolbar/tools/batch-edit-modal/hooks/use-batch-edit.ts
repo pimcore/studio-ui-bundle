@@ -20,7 +20,8 @@ import { type AssetPatchByIdApiArg, type PatchCustomMetadata } from '@Pimcore/mo
 import { useListSelectedRows } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 interface UseBatchEditHookReturn extends BatchContext {
-  addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnValue: string) => void
+  addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnLocale: string, columnValue: string) => void
+  updateLocale: (columnKey: string, locale: string | null) => void
   resetBatchEdits: () => void
   removeBatchEdit: (key: string) => void
   assetPatchForUpdate: () => AssetPatchByIdApiArg
@@ -37,10 +38,13 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   }
 
   const transformToAssetPatch = (rowId: string): DataArrayType => {
-    const metaData: PatchCustomMetadata[] = batchEdits.map(batchEdit => ({
-      name: batchEdit.key,
-      data: batchEdit.value
-    }))
+    const metaData: PatchCustomMetadata[] = batchEdits.map(batchEdit => {
+      return ({
+        name: batchEdit.key,
+        data: batchEdit.value,
+        language: batchEdit.locale
+      })
+    })
 
     return ([{
       metadata: metaData,
@@ -60,10 +64,25 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     })
   }
 
-  const addOrUpdateBatchEdit = (columnKey: string, columnType: string, value: string): void => {
+  const updateLocale = (columnKey: string, locale: string): void => {
+    const updatedEdits = batchEdits.map(edit => {
+      if (edit.key === columnKey) {
+        return {
+          ...edit,
+          locale
+        }
+      }
+
+      return edit
+    })
+    setBatchEdits(updatedEdits)
+  }
+
+  const addOrUpdateBatchEdit = (columnKey: string, columnType: string, columnLocale: string, value: string): void => {
     const newEdit: BatchEdit = {
       key: columnKey,
       type: columnType,
+      locale: columnLocale,
       value
     }
 
@@ -89,6 +108,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     batchEdits,
     setBatchEdits,
     addOrUpdateBatchEdit,
+    updateLocale,
     resetBatchEdits,
     removeBatchEdit,
     assetPatchForUpdate
