@@ -44,13 +44,18 @@ export const BatchEditListContainer = (): React.JSX.Element => {
       id: batchEdit.key,
       children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
-        [
-          <LanguageSelection
-            key={ 'language-selection' }
-            languages={ languages }
-            onSelectLanguage={ (language) => { updateLocale(batchEdit.key, transformLanguage(language)) } }
-            selectedLanguage={ selectedLanguage }
-          />,
+        [...(batchEdit.localizable
+          ? [
+            <LanguageSelection
+              key="language-selection"
+              languages={ languages }
+              onSelectLanguage={ (language) => {
+                updateLocale(batchEdit.key, transformLanguage(language))
+              } }
+              selectedLanguage={ selectedLanguage }
+            />
+            ]
+          : []),
           <IconButton
             icon='close'
             key={ 'remove' }
