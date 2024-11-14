@@ -64,7 +64,8 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             } }
           />
         ]
-      }/>,
+      }
+                          />,
       body: <DefaultBatchEdit batchEdit={ batchEdit } />
     })
   })

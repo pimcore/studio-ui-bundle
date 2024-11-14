@@ -112,6 +112,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
   'DynamicTypes/ObjectData/NumericRange': 'DynamicTypes/ObjectData/NumericRange',
   'DynamicTypes/ObjectData/Slider': 'DynamicTypes/ObjectData/Slider',
+  'DynamicTypes/ObjectData/Consent': 'DynamicTypes/ObjectData/Consent',
   'DynamicTypes/ObjectData/Firstname': 'DynamicTypes/ObjectData/Firstname',
   'DynamicTypes/ObjectData/Lastname': 'DynamicTypes/ObjectData/Lastname',
   'DynamicTypes/ObjectData/Email': 'DynamicTypes/ObjectData/Email',
