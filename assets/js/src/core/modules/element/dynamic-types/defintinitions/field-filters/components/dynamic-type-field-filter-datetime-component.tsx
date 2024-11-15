@@ -11,25 +11,25 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
-import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
-import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import React, { useState } from 'react'
+import { Select } from '@Pimcore/components/select/select'
+import { Flex } from '@Pimcore/components/flex/flex'
 
-export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilterDefinition {}
+type DatePickerSettingValue = 'on' | 'between'
 
-export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
-  const { getFieldFilter } = useFilters()
+const SETTING_OPTIONS = [{ label: 'On', value: 'on' }, { label: 'Between', value: 'between' }]
 
-  const fieldFilter = getFieldFilter(column)
-  const value = fieldFilter?.filterValue ?? ''
-
-  const [_value, setValue] = useState(value)
-
-  useEffect(() => {
-    setValue(value)
-  }, [value])
+export const DynamicTypeFieldFilterDatetimeComponent = (): React.JSX.Element => {
+  const [settingValue, setSettingValue] = useState<DatePickerSettingValue>('on')
 
   return (
-    <div>Datetime: {_value}</div>
+    <Flex>
+      <Select
+        onChange={ (value: DatePickerSettingValue) => { setSettingValue(value) } }
+        options={ SETTING_OPTIONS }
+        value={ settingValue }
+        width={ 90 }
+      />
+    </Flex>
   )
 }
