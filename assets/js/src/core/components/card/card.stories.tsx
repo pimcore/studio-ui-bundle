@@ -18,8 +18,8 @@ import React, { Fragment } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from 'antd'
-import Input from "antd/es/input/Input";
-import {Button} from "@Pimcore/components/button/button";
+import Input from 'antd/es/input/Input'
+import { Button } from '@Pimcore/components/button/button'
 
 const config: Meta = {
   title: 'Components/Data Display/Card',
@@ -127,6 +127,6 @@ export const Actions = {
 export const Footer = {
   args: {
     ..._default.args,
-    footer: <Flex gap="small"><Input/><Button>ok</Button></Flex>
+    footer: <Flex gap="small"><Input /><Button>ok</Button></Flex>
   }
 }
