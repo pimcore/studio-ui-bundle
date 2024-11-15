@@ -14,6 +14,9 @@
 import React, { useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
+import { type DateRange, DateRangePicker } from '@Pimcore/components/date-picker/date-range-picker'
+import type { Dayjs } from 'dayjs'
 
 enum DatePickerSettingValue {
   ON = 'on',
@@ -25,8 +28,18 @@ const SETTING_OPTIONS = [
   { label: 'Between', value: DatePickerSettingValue.BETWEEN }
 ]
 
+const DATE_FORMAT = 'YYYY-MM-DD'
+
 export const DynamicTypeFieldFilterDatetimeComponent = (): React.JSX.Element => {
   const [settingValue, setSettingValue] = useState<DatePickerSettingValue>(DatePickerSettingValue.ON)
+
+  const handleChangeDateOnValue = (date: Dayjs): void => {
+    console.log('---->>> handleChangeDateOnValue: ', date)
+  }
+
+  const handleChangeDateBetweenValue = (date: DateRange): void => {
+    console.log('---->>> handleChangeDateBetweenValue: ', date)
+  }
 
   return (
     <Flex
@@ -40,9 +53,19 @@ export const DynamicTypeFieldFilterDatetimeComponent = (): React.JSX.Element => 
         width={ 90 }
       />
 
-      {settingValue === DatePickerSettingValue.ON && 1}
+      {settingValue === DatePickerSettingValue.ON && (
+        <DatePicker
+          format={ DATE_FORMAT }
+          onChange={ (date: Dayjs) => { handleChangeDateOnValue(date) } }
+        />
+      )}
 
-      {settingValue === DatePickerSettingValue.BETWEEN && 2}
+      {settingValue === DatePickerSettingValue.BETWEEN && (
+        <DateRangePicker
+          format={ DATE_FORMAT }
+          onChange={ (date: DateRange) => { handleChangeDateBetweenValue(date) } }
+        />
+      )}
     </Flex>
   )
 }

@@ -22,7 +22,7 @@ import {
   type OutputType
 } from './utils/date-picker-utils'
 
-type DateRange = [start: Dayjs | null, end: Dayjs | null]
+export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
 
 export type DateRangePickerProps = OriginalRangePickerProps & {
