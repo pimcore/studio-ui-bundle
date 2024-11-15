@@ -152,7 +152,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
-      hidden: (node === undefined || nodeTask !== 'copy'),
+      hidden: (node === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
       onClick: async () => {
         await paste(parentId)
       }
