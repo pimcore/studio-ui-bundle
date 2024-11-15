@@ -47,6 +47,7 @@ export const TAB_CUSTOM_METADATA: IEditorTab = {
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
   label: 'version.label',
+  workspacePermission: 'versions',
   children: <VersionsTabContainer
     ComparisonViewComponent={ ComparisonView }
     SingleViewComponent={ SingleView }

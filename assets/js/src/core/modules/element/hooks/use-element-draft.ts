@@ -20,15 +20,15 @@ import type {
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import {
-  type ElementEditorType
-} from '@Pimcore/modules/element/editor/services/type-registry'
+import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
   parentId: number
   fullPath?: string
   type?: string
+  permissions?: ElementPermissions
 }
 
 interface UseElementDraftReturn extends

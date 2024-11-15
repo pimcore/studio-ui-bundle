@@ -12,11 +12,15 @@
 */
 
 import type React from 'react'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
 export interface IEditorTab {
   key: string
   label: string | React.JSX.Element
   children: React.JSX.Element
   icon: React.JSX.Element
+  workspacePermission?: keyof ElementPermissions | string
+  userPermission?: string
+  hidden?: () => boolean
   isDetachable?: boolean
 }

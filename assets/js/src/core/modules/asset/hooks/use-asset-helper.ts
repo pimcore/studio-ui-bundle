@@ -16,6 +16,7 @@ import { api } from '../asset-api-slice-enhanced'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface OpenAssetWidgetProps {
   config: EditorContainerProps
@@ -37,15 +38,18 @@ export const useAssetHelper = (): UseAssetReturn => {
       dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(config.id)))
     }
 
-    const asset = await store.dispatch(api.endpoints.assetGetById.initiate({ id: config.id }))
+    const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id: config.id }))
 
-    if (asset.data?.icon?.type === 'path') {
+    if (
+      data === undefined ||
+      data.icon?.type === 'path' ||
+      !checkElementPermission(data.permissions!, 'view')) {
       return
     }
 
     openMainWidget({
-      name: asset.data?.filename,
-      icon: asset.data?.icon?.value,
+      name: data?.filename,
+      icon: data?.icon?.value,
       id: widgetId,
       component: 'asset-editor',
       config

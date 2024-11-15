@@ -68,6 +68,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            pimcoreStudioApiUserSearch: build.query<
+                PimcoreStudioApiUserSearchApiResponse,
+                PimcoreStudioApiUserSearchApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/search`,
+                    params: { searchQuery: queryArg.searchQuery },
+                }),
+                providesTags: ["User Management"],
+            }),
             userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/${queryArg.id}/password`,
@@ -146,6 +156,14 @@ export type UserResetPasswordApiResponse = /** status 200 Success */ void;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
+export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_summary_response */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type PimcoreStudioApiUserSearchApiArg = {
+    /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
+    searchQuery?: string;
+};
 export type UserUpdatePasswordByIdApiResponse = /** status 200 Success */ void;
 export type UserUpdatePasswordByIdApiArg = {
     /** Id of the User */
@@ -188,10 +206,16 @@ export type DevError = {
     details: string;
 };
 export type UserInformation = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** Username */
     username: string;
-    /** Roles */
-    roles: string[];
+    /** Permissions */
+    permissions: string[];
+    /** If user is an admin user */
+    isAdmin: boolean;
 };
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
@@ -352,6 +376,7 @@ export const {
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
     useUserResetPasswordMutation,
+    usePimcoreStudioApiUserSearchQuery,
     useUserUpdatePasswordByIdMutation,
     useUserGetTreeQuery,
 } = injectedRtkApi;

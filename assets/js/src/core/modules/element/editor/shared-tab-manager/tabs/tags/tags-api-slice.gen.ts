@@ -42,25 +42,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
-            tagBatchAssignToElementsByType: build.mutation<
-                TagBatchAssignToElementsByTypeApiResponse,
-                TagBatchAssignToElementsByTypeApiArg
+            tagBatchOperationToElementsByTypeAndId: build.mutation<
+                TagBatchOperationToElementsByTypeAndIdApiResponse,
+                TagBatchOperationToElementsByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/tags/batch/assign/${queryArg.elementType}`,
+                    url: `/pimcore-studio/api/tags/batch/${queryArg.operation}/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
-                    body: queryArg.elementTagIdCollection,
-                }),
-                invalidatesTags: ["Tags for Element"],
-            }),
-            tagBatchReplaceForElementsByType: build.mutation<
-                TagBatchReplaceForElementsByTypeApiResponse,
-                TagBatchReplaceForElementsByTypeApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/tags/batch/replace/${queryArg.elementType}`,
-                    method: "POST",
-                    body: queryArg.elementTagIdCollection,
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
@@ -126,17 +114,18 @@ export type TagAssignToElementApiArg = {
     /** TagId of the tag */
     tagId: number;
 };
-export type TagBatchAssignToElementsByTypeApiResponse = unknown;
-export type TagBatchAssignToElementsByTypeApiArg = {
+export type TagBatchOperationToElementsByTypeAndIdApiResponse =
+    /** status 201 Successfully created jobRun for batch tag assignment/replacement */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type TagBatchOperationToElementsByTypeAndIdApiArg = {
+    /** Id of the element */
+    id: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
-    elementTagIdCollection: CollectionOfElementAndTagIds;
-};
-export type TagBatchReplaceForElementsByTypeApiResponse = unknown;
-export type TagBatchReplaceForElementsByTypeApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-    elementTagIdCollection: CollectionOfElementAndTagIds;
+    /** Execute operation based on provided type. */
+    operation: "assign" | "replace";
 };
 export type TagGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Paginated tags for element */ {
     totalItems: number;
@@ -193,20 +182,13 @@ export type ChangeTagParameters = {
     /** Tag name */
     name?: string | null;
 };
-export type CollectionOfElementAndTagIds = {
-    /** element ids */
-    elementIds?: number[];
-    /** tag ids */
-    tagIds?: number[];
-};
 export const {
     useTagGetCollectionQuery,
     useTagGetByIdQuery,
     useTagUpdateByIdMutation,
     useTagDeleteByIdMutation,
     useTagAssignToElementMutation,
-    useTagBatchAssignToElementsByTypeMutation,
-    useTagBatchReplaceForElementsByTypeMutation,
+    useTagBatchOperationToElementsByTypeAndIdMutation,
     useTagGetCollectionForElementByTypeAndIdQuery,
     useTagUnassignFromElementMutation,
 } = injectedRtkApi;

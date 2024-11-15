@@ -14,8 +14,7 @@
 import React, { type Key } from 'react'
 import {
   type Tag,
-  type TagAssignToElementApiArg,
-  useTagBatchReplaceForElementsByTypeMutation
+  type TagAssignToElementApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   useCreateTreeStructure
@@ -40,13 +39,12 @@ export interface TagsTreeProps {
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { createTreeStructure } = useCreateTreeStructure()
-  const [replaceTagsMutation] = useTagBatchReplaceForElementsByTypeMutation()
   const treeData = createTreeStructure({ tags })
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
-    const cacheUpdate = updateTagsForElementByTypeAndId({
+    updateTagsForElementByTypeAndId({
       elementType,
       id: elementId,
       flatTags,
@@ -54,18 +52,6 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
     })
 
     setDefaultCheckedTags(checkedTags)
-
-    try {
-      void replaceTagsMutation({
-        elementType,
-        elementTagIdCollection: {
-          elementIds: [elementId],
-          tagIds: checkedTags.map(Number)
-        }
-      }).unwrap()
-    } catch (error) {
-      cacheUpdate.undo()
-    }
   }
 
   const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {

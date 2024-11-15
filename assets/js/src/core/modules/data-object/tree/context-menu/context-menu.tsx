@@ -44,7 +44,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     addFolderContextMenuItem(props.node),
     renameContextMenuItem(props.node),
     copyContextMenuItem(props.node),
-    pasteContextMenuItem(parseInt(props.node.id)),
+    pasteContextMenuItem(props.node),
     cutContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteContextMenuItem(props.node),

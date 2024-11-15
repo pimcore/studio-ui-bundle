@@ -12,16 +12,19 @@
 */
 
 import React, { type FocusEvent, useEffect, useState, useRef } from 'react'
-import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
+import { useStyle } from '@Pimcore/modules/element/editor/tabs/editor-tabs.styles'
 import { Tabs } from 'antd'
 import cn from 'classnames'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { type IDetachTab, useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
+import { type IDetachTab, useDetachTab } from '@Pimcore/modules/element/editor/tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
-import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
-import { IconButton } from '../icon-button/icon-button'
+import { IconWrapper } from '@Pimcore/modules/element/editor/tabs/editor-tabs.icon-wrapper'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -40,6 +43,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
+  const elementDraft = useElementDraft(id, elementType)
+  const element = elementDraft.element!
 
   const elementRef = useRef<HTMLDivElement>(null)
 
@@ -74,6 +79,24 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const openDetachedWidget = (item: IDetachTab): void => {
     detachWidget(item)
   }
+
+  items = items.filter((item) => {
+    if (item.hidden !== undefined && item.hidden()) {
+      return false
+    }
+
+    if (item.workspacePermission !== undefined && element?.permissions !== undefined) {
+      if (!checkElementPermission(element.permissions, item.workspacePermission as keyof typeof element.permissions)) {
+        return false
+      }
+    }
+
+    if (item.userPermission !== undefined && !isAllowed(item.userPermission)) {
+      return false
+    }
+
+    return true
+  })
 
   items = items?.map((item) => {
     const tmpItem = {

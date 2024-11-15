@@ -11,11 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useMemo } from 'react'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { type AssetPermissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type DataObjectPermissions } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
-export const useIsAuthenticated = (): boolean => {
-  const user = useUser()
-
-  return useMemo(() => (user.username !== ''), [user])
-}
+export type ElementPermissions = AssetPermissions | DataObjectPermissions
