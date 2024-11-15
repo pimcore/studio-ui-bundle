@@ -24,33 +24,47 @@ export const useStyles = createStyles(({ token, css }) => {
       &.ant-card:not(.ant-card-bordered) {
         box-shadow: none;
       }
-      
+
       .ant-card-head-title {
         display: flex;
         align-items: center;
         gap: ${token.marginXS}px;
         font-size: ${token.fontSize}px;
       }
-      
+
       .ant-card-extra {
         display: flex;
         align-items: center;
         gap: ${token.marginXXS}px;
         color: ${token.colorTextSecondary};
       }
-      
+
       .ant-card-body {
         padding: ${token.paddingSM}px;
+      }
+
+      &.card-with-footer {
+          .ant-card-body {
+              padding: 0;
+          }
+
+          .card-body-inner {
+              padding: ${token.paddingSM}px
+          }
+         .card-footer {
+             padding: ${token.paddingXXS}px ${token.paddingXS}px;
+             border-top: 1px solid ${token.colorBorderSecondary};
+         }
       }
       
       .ant-card-actions {
         padding: ${token.paddingXXS}px;
-        
+
         li {
           margin: 0;
           max-width: fit-content;
         }
-        
+
         li:not(:last-child) {
           border: none;
         }

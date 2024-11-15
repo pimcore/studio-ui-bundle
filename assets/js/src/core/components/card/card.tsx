@@ -25,12 +25,13 @@ export interface CardProps extends AntdCardProps {
   icon?: string
   image?: { src: string, alt?: string } | null
   extra?: any[]
+  footer?: React.ReactNode
 }
 
-const Component = ({ loading, children, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ loading, children, footer, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const classNames = [styles.card, className]
+  const classNames = [styles.card, className, footer !== undefined ? 'card-with-footer' : ''].filter(Boolean)
 
   const renderExtraContent = (): React.ReactElement | null => {
     return (
@@ -97,7 +98,20 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
       extra={ props.extra !== undefined && props.extra !== null ? renderExtraContent() : null }
       title={ props.title !== undefined && props.title !== null ? renderTitle() : null }
     >
-      {children}
+      {footer !== undefined
+        ? (
+          <div className="card-body-inner">
+            {children}
+          </div>
+          )
+        : children}
+
+      {footer !== undefined && (
+      <div className="card-footer">
+        {footer}
+      </div>
+      )}
+
     </AntdCard>
   )
 }
