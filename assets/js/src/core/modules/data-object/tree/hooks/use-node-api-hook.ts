@@ -42,10 +42,15 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
 
     const dataObjectData = data.items
     dataObjectData.forEach((dataObjectNode) => {
-      const icon = dataObjectNode.icon?.type === 'name' ? dataObjectNode.icon?.value : 'mainObject'
+      console.log('icon', dataObjectNode.icon)
+
+      const icon = dataObjectNode.icon?.value === '' || dataObjectNode.icon?.value === 'vector'
+        ? 'mainObject'
+        : dataObjectNode.icon?.value
+
       nodes.push({
         id: dataObjectNode.id.toString(),
-        icon: icon !== 'vector' ? icon : 'mainObject', // todo remove this when icons are fixed
+        icon: icon!,
         label: dataObjectNode.key!,
         type: dataObjectNode.type,
         parentId: dataObjectNode.parentId.toString(),

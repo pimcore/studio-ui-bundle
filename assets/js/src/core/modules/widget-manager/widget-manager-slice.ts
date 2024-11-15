@@ -85,6 +85,8 @@ export const slice = createSlice({
       const model = Model.fromJson(state.innerModel)
       let node: Node | undefined
 
+      console.log('data', action.payload)
+
       if (action.payload.id !== undefined) {
         node = model.getNodeById(action.payload.id)
       }

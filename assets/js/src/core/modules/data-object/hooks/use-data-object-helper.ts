@@ -37,15 +37,11 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
     }
 
-    const dataObject = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
-
-    if (dataObject.data?.icon?.type === 'path') {
-    //  return
-    }
+    const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
 
     openMainWidget({
-      name: dataObject.data?.key,
-      // icon: dataObject.data?.icon?.value,
+      name: data?.key,
+      icon: data?.icon?.value,
       id: widgetId,
       component: 'data-object-editor',
       config

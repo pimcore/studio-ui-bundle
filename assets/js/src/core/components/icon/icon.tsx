@@ -24,12 +24,35 @@ export interface IconProps {
 
 export const Icon = ({ name, options, className }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
-  const SvgIcon = iconLibrary.get(name)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
 
-  if (SvgIcon === undefined) {
-    return <div style={ { width, height } } />
+  const renderIcon = (): React.JSX.Element => {
+    const isFile = name.endsWith('.svg')
+
+    if (isFile) {
+      return (
+        <img
+          alt={ 'foo' }
+          src={ name }
+          style={ { width, height } }
+        />
+      )
+    }
+
+    const SvgIcon = iconLibrary.get(name)
+
+    if (SvgIcon === undefined) {
+      return <div style={ { width, height } } />
+    }
+
+    return (
+      <SvgIcon
+        height={ height }
+        width={ width }
+        { ...options }
+      />
+    )
   }
 
   return (
@@ -37,11 +60,7 @@ export const Icon = ({ name, options, className }: IconProps): React.JSX.Element
       className={ `pimcore-icon pimcore-icon-${name} anticon ${className}` }
       style={ { width, height } }
     >
-      <SvgIcon
-        height={ height }
-        width={ width }
-        { ...options }
-      />
+      {renderIcon()}
     </div>
   )
 }
