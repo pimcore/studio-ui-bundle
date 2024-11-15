@@ -12,13 +12,13 @@
 */
 
 import React, { type FocusEvent, useEffect, useState, useRef } from 'react'
-import { useStyle } from '@Pimcore/components/editor-tabs/editor-tabs.styles'
+import { useStyle } from '@Pimcore/modules/element/editor/tabs/editor-tabs.styles'
 import { Tabs } from 'antd'
 import cn from 'classnames'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { type IDetachTab, useDetachTab } from '@Pimcore/components/editor-tabs/hooks/use-detach-tab'
+import { type IDetachTab, useDetachTab } from '@Pimcore/modules/element/editor/tabs/hooks/use-detach-tab'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
-import { IconWrapper } from '@Pimcore/components/editor-tabs/editor-tabs.icon-wrapper'
+import { IconWrapper } from '@Pimcore/modules/element/editor/tabs/editor-tabs.icon-wrapper'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'

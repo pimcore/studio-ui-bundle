@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Permissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
-export const checkElementPermission = (permissions: Permissions, permission: string): boolean => {
+export const checkElementPermission = (permissions: ElementPermissions, permission: string): boolean => {
   return Object.keys(permissions).includes(permission) && permissions[permission]
 }
