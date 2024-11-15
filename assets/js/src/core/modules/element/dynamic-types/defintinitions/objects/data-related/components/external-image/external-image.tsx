@@ -21,6 +21,7 @@ import { Image } from 'antd'
 export interface ExternalImageProps {
   previewWidth: number | null
   previewHeight: number | null
+  inputWidth: number | null
   value?: string | null
   onChange?: (value: string | null) => void
 }
@@ -36,10 +37,14 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
     props.onChange?.(value)
   }, [value])
 
+  const previewWidth = props.previewWidth ?? 300
+  const previewHeight = props.previewHeight ?? 300
+  console.log('inpu tWidth', props.inputWidth)
   return (
     <>
       <Card
         footer={ <ExternalImageFooter
+          inputWidth={ props.inputWidth ?? undefined }
           key="external-image-footer"
           onChange={ onChange }
           value={ value ?? undefined }
@@ -48,10 +53,11 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
         { value !== null && value !== '' && (
         <Image
           fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-          height={ props.previewHeight ?? 300 }
+          height={ previewHeight }
           preview={ false }
           src={ value }
-          width={ props.previewWidth ?? 300 }
+          style={ { maxHeight: previewHeight + 'px', maxWidth: previewWidth + 'px' } }
+          width={ '100%' }
         />
         )}
       </Card>

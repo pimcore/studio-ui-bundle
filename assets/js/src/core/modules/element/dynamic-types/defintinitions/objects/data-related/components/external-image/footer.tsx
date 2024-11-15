@@ -20,6 +20,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 interface ExternalImageFooterProps {
   value?: string
   onChange?: (value?: string) => void
+  inputWidth?: number
 }
 
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
@@ -41,7 +42,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
     props.onChange?.(value)
     setOpenUrlDisabled(value === undefined || value === '')
   }, [value])
-
+  console.log('inputWidth', props.inputWidth)
   return (
     <Flex
       className="w-full"
@@ -50,6 +51,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       <Input
         onChange={ onChange }
         value={ value }
+        width={ props.inputWidth }
       />
       <ButtonGroup
         items={ [

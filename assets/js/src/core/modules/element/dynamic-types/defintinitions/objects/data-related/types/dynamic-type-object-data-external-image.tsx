@@ -22,6 +22,7 @@ import {
 export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
   previewWidth: number | null
   previewHeight: number | null
+  inputWidth: number | null
 }
 
 export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbstract {
@@ -30,6 +31,7 @@ export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbs
   getObjectDataComponent (props: ExternalImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <ExternalImage
+        inputWidth={ props.inputWidth }
         previewHeight={ props.previewHeight }
         previewWidth={ props.previewWidth }
       />
