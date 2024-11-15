@@ -15,21 +15,34 @@ import React, { useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 
-type DatePickerSettingValue = 'on' | 'between'
+enum DatePickerSettingValue {
+  ON = 'on',
+  BETWEEN = 'between'
+}
 
-const SETTING_OPTIONS = [{ label: 'On', value: 'on' }, { label: 'Between', value: 'between' }]
+const SETTING_OPTIONS = [
+  { label: 'On', value: DatePickerSettingValue.ON },
+  { label: 'Between', value: DatePickerSettingValue.BETWEEN }
+]
 
 export const DynamicTypeFieldFilterDatetimeComponent = (): React.JSX.Element => {
-  const [settingValue, setSettingValue] = useState<DatePickerSettingValue>('on')
+  const [settingValue, setSettingValue] = useState<DatePickerSettingValue>(DatePickerSettingValue.ON)
 
   return (
-    <Flex>
+    <Flex
+      align="center"
+      gap="extra-small"
+    >
       <Select
         onChange={ (value: DatePickerSettingValue) => { setSettingValue(value) } }
         options={ SETTING_OPTIONS }
         value={ settingValue }
         width={ 90 }
       />
+
+      {settingValue === DatePickerSettingValue.ON && 1}
+
+      {settingValue === DatePickerSettingValue.BETWEEN && 2}
     </Flex>
   )
 }
