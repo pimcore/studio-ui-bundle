@@ -244,7 +244,6 @@ export const ListContainerInner = (): React.JSX.Element => {
   return useMemo(() => (
     <ListDataProvider
       data={ data }
-      errorData={ fetchListingResult.error as FetchBaseQueryError }
     >
       <Content loading={ isLoading }>
         <ContentToolbarSidebarLayout
