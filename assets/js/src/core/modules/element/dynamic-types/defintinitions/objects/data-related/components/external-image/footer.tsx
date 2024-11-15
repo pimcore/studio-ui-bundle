@@ -42,7 +42,9 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
     props.onChange?.(value)
     setOpenUrlDisabled(value === undefined || value === '')
   }, [value])
-  console.log('inputWidth', props.inputWidth)
+
+  const inputWidth = props.inputWidth !== undefined ? props.inputWidth + 'px' : undefined
+
   return (
     <Flex
       className="w-full"
@@ -50,8 +52,8 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
     >
       <Input
         onChange={ onChange }
+        style={ { maxWidth: inputWidth, width: inputWidth } }
         value={ value }
-        width={ props.inputWidth }
       />
       <ButtonGroup
         items={ [

@@ -43,6 +43,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   return (
     <>
       <Card
+        fitContent={ props.inputWidth !== undefined }
         footer={ <ExternalImageFooter
           inputWidth={ props.inputWidth ?? undefined }
           key="external-image-footer"
