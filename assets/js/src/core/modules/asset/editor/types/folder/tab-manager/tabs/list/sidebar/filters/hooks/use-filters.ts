@@ -21,7 +21,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
-  addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string) => void
+  addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string | number | null) => void
   removeFieldFilter: (column: GridColumnConfiguration) => void
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
   resetFilters: () => void

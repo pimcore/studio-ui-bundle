@@ -52,6 +52,7 @@ export const serviceIds = {
   ...dynamicTypeRegistriesServiceIds,
 
   'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
+  'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
