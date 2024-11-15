@@ -11,11 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useMemo } from 'react'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
-export const useIsAuthenticated = (): boolean => {
-  const user = useUser()
-
-  return useMemo(() => (user.username !== ''), [user])
+export const checkElementPermission = (permissions: ElementPermissions, permission: keyof ElementPermissions): boolean => {
+  return permissions[permission] === true
 }
