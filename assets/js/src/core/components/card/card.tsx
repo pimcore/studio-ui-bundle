@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 
 export interface CardProps extends AntdCardProps {
   loading?: boolean
+  fitContent?: boolean
   onClose?: () => void
   icon?: string
   image?: { src: string, alt?: string } | null
@@ -28,10 +29,15 @@ export interface CardProps extends AntdCardProps {
   footer?: React.ReactNode
 }
 
-const Component = ({ loading, children, footer, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ loading, children, footer, fitContent, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const classNames = [styles.card, className, footer !== undefined ? 'card-with-footer' : ''].filter(Boolean)
+  const classNames = [
+    styles.card,
+    className,
+    footer !== undefined ? 'card-with-footer' : '',
+    fitContent === true ? 'card-fit-content' : ''
+  ].filter(Boolean)
 
   const renderExtraContent = (): React.ReactElement | null => {
     return (

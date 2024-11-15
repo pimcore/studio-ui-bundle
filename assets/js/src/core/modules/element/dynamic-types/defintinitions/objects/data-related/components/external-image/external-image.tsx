@@ -17,6 +17,9 @@ import {
   ExternalImageFooter
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/footer'
 import { Image } from 'antd'
+import { ImageTarget } from '@Pimcore/components/image-target/image-target'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { useTranslation } from 'react-i18next'
 
 export interface ExternalImageProps {
   previewWidth: number | null
@@ -28,6 +31,7 @@ export interface ExternalImageProps {
 
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   const [value, setValue] = React.useState<string | null>(props.value ?? null)
+  const { t } = useTranslation()
 
   const onChange = (value?: string): void => {
     setValue(value !== '' && value !== undefined ? value : null)
@@ -39,11 +43,10 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
 
   const previewWidth = props.previewWidth ?? 300
   const previewHeight = props.previewHeight ?? 300
-  console.log('inpu tWidth', props.inputWidth)
   return (
     <>
       <Card
-        fitContent={ props.inputWidth !== undefined }
+        fitContent={ props.inputWidth !== null }
         footer={ <ExternalImageFooter
           inputWidth={ props.inputWidth ?? undefined }
           key="external-image-footer"
@@ -51,16 +54,24 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
           value={ value ?? undefined }
                  /> }
       >
-        { value !== null && value !== '' && (
-        <Image
-          fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-          height={ previewHeight }
-          preview={ false }
-          src={ value }
-          style={ { maxHeight: previewHeight + 'px', maxWidth: previewWidth + 'px' } }
-          width={ '100%' }
-        />
-        )}
+        { value !== null && value !== ''
+          ? (
+            <Image
+              fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+              height={ previewHeight }
+              preview={ false }
+              src={ value }
+              style={ { maxHeight: toCssDimension(previewHeight), maxWidth: toCssDimension(previewWidth) } }
+              width={ '100%' }
+            />
+            )
+          : (
+            <ImageTarget
+              height={ previewHeight }
+              title={ t('data-object.editor.external-image.preview-placeholder') }
+              width={ previewWidth }
+            />
+            )}
       </Card>
     </>
   )

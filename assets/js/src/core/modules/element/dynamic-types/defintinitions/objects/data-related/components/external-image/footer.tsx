@@ -13,9 +13,10 @@
 
 import React, { useEffect } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Input } from 'antd'
+import { Input, Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { useTranslation } from 'react-i18next'
 
 interface ExternalImageFooterProps {
   value?: string
@@ -26,6 +27,7 @@ interface ExternalImageFooterProps {
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
   const [value, setValue] = React.useState<string | undefined>(props.value)
   const [openUrlDisabled, setOpenUrlDisabled] = React.useState<boolean>(props.value !== null && props.value !== '')
+  const { t } = useTranslation()
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(e.target.value)
   }
@@ -57,17 +59,25 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       />
       <ButtonGroup
         items={ [
-          <IconButton
-            disabled={ openUrlDisabled }
-            icon={ 'group' }
+          <Tooltip
             key="open-url"
-            onClick={ openUrl }
-          />,
-          <IconButton
-            icon={ 'delete-outlined' }
+            title={ t('open') }
+          >
+            <IconButton
+              disabled={ openUrlDisabled }
+              icon={ 'group' }
+              onClick={ openUrl }
+            />
+          </Tooltip>,
+          <Tooltip
             key="delete"
-            onClick={ emptyValue }
-          />
+            title={ t('set-to-null') }
+          >
+            <IconButton
+              icon={ 'delete-outlined' }
+              onClick={ emptyValue }
+            />
+          </Tooltip>
         ] }
         noSpacing
       />

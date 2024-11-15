@@ -57,6 +57,10 @@ export const useStyles = createStyles(({ token, css }) => {
          }
       }
       
+      &.card-fit-content {
+        width: fit-content;
+      }
+      
       .ant-card-actions {
         padding: ${token.paddingXXS}px;
 
