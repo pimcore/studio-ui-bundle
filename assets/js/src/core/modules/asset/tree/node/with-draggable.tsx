@@ -14,7 +14,7 @@
 import React, { type ElementType, type ReactElement } from 'react'
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type Asset } from '../../asset-api-slice-enhanced'
-import { type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 
 export const withDraggable = (Component: ElementType<TreeNodeProps>): ElementType<TreeNodeProps> => {
   const DraggableNodeContent = (props: TreeNodeProps): ReactElement => {

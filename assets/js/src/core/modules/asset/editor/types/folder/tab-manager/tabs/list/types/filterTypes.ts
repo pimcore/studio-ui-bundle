@@ -12,6 +12,7 @@
 */
 
 import type React from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import type { GridFilter } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export type FilterOptions = Pick<GridFilter, 'columnFilters' | 'includeDescendants'>
@@ -20,6 +21,7 @@ export type TagFilterOptions = Pick<GridFilter, 'columnFilters'>
 export interface IFilterContext {
   filterOptions: FilterOptions
   setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
+  filterError?: FetchBaseQueryError
 }
 
 export interface ITagFilterContext {

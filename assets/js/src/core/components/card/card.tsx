@@ -83,6 +83,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
 
   return (
     <AntdCard
+      { ...props }
       actions={ props.actions }
       className={ classNames.join(' ') }
       cover={ props.image !== null && props.image?.src !== undefined

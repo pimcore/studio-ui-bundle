@@ -12,7 +12,6 @@
 */
 
 import React, { type Key } from 'react'
-import { Input } from 'antd'
 import {
   type Tag,
   type TagAssignToElementApiArg,
@@ -27,6 +26,7 @@ import {
 import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 
 export interface TagsTreeProps {
   elementId: number
@@ -39,7 +39,6 @@ export interface TagsTreeProps {
 }
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
-  const { Search } = Input
   const { createTreeStructure } = useCreateTreeStructure()
   const [replaceTagsMutation] = useTagBatchReplaceForElementsByTypeMutation()
   const treeData = createTreeStructure({ tags })
@@ -78,7 +77,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
       gap={ 'small' }
       vertical
     >
-      <Search
+      <SearchInput
         loading={ isLoading }
         onChange={ (e) => {
           const { value } = e.target

@@ -61,7 +61,7 @@ export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, ver
       fileName: dataRaw.fileName,
       creationDate: formatDateTime({ timestamp: dataRaw.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
       modificationDate: formatDateTime({ timestamp: dataRaw.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
-      fileSize: dataRaw.fileSize !== undefined ? formatDataUnit({ bytes: dataRaw.fileSize }) : '',
+      fileSize: dataRaw.fileSize !== undefined ? formatDataUnit(dataRaw.fileSize) : '',
       mimeType: dataRaw.mimeType,
       dimensions: dataRaw.dimensions !== null && dataRaw.dimensions !== undefined ? dataRaw.dimensions.width + ' x ' + dataRaw.dimensions.height : ''
     },

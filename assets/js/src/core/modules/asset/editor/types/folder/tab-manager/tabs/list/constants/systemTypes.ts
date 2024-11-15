@@ -11,5 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const TAG_TYPE = 'system.tag'
-export const PQL_QUERY_TYPE = 'system.pql'
+export enum FILTER_TYPE {
+  TAG_TYPE = 'system.tag',
+  PQL_QUERY_TYPE = 'system.pql',
+  FULL_TEXT_TYPE = 'system.fulltext'
+}

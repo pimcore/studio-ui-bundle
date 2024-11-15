@@ -31,13 +31,6 @@ export const useStyle = createStyles(({ token, css }) => {
                     color: ${token.colorPrimaryHover};
                 }
             }
-        
-            .ant-btn {
-                &.ant-btn-text {
-                    color: ${token.colorPrimary};
-                    padding: 0;
-                }
-            }
         `
   }
 }, { hashPriority: 'low' })

@@ -13,38 +13,29 @@
 
 import React, { useEffect } from 'react'
 import { TagList } from '@Pimcore/components/tag-list/tag-list'
-import {
-  useWorkflowGetDetailsQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Badge } from '@Pimcore/components/badge/badge'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
+import { WorkflowTransitionGroup } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-transition-group'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
+import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id, elementType } = useElementContext()
-  const { data, isLoading } = useWorkflowGetDetailsQuery({ elementType, elementId: id })
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
+  const { workflowDetailsData, isFetchingWorkflowDetails } = useWorkflow()
 
   useEffect(() => {
-    if (data?.items !== undefined && data.items.length > 0) {
-      const workFlowItems = data.items.map((workflow) => {
+    if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
+      const workFlowItems: ItemType[] = workflowDetailsData.items.flatMap((workflow) => {
         const result: ItemType[] = []
-        const mergedActions = [
-          ...(workflow.allowedTransitions ?? []),
-          ...(workflow.globalActions ?? [])
-        ]
-
-        mergedActions?.forEach((action) => {
-          result.push({
-            key: (result.length + 1).toString(),
-            label: t(`${action.label}`)
-          })
+        result.push({
+          key: ((workflowDetailsData?.items?.length ?? 0) + 1).toString(),
+          type: 'custom',
+          component: <WorkflowTransitionGroup workflow={ workflow } />
         })
 
         return {
@@ -56,24 +47,24 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       })
       setItems(workFlowItems)
     }
-  }, [data])
+  }, [workflowDetailsData])
 
   const getVisibleWorkflowStatus = (): TagProps[][] => {
-    if (data?.items !== undefined && data.items.length > 0) {
-      const formattedStatuses = data.items.reduce((result: Array<{ children: string }>, workflow) => {
+    if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
+      const formattedStatuses = workflowDetailsData.items.reduce((result: Array<{ children: string }>, workflow) => {
         workflow.workflowStatus.forEach((status) => {
           if (status.visibleInDetail !== undefined && status.visibleInDetail) {
             const style = status.colorInverted
               ? { backgroundColor: `${status.color}33` }
               : {}
             const tag =
-                            {
-                              children: t(`${status.label}`),
-                              icon: <Badge
-                                color={ status.color }
-                                    />,
-                              style
-                            }
+                {
+                  children: t(`${status.label}`),
+                  icon: <Badge
+                    color={ status.color }
+                        />,
+                  style
+                }
             result.push(tag)
           }
         })
@@ -87,22 +78,19 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
+      gap={ 'extra-small' }
       justify={ 'flex-end' }
     >
-      {!isLoading && (
-        <TagList
-          itemGap={ 'extra-small' }
-          list={ getVisibleWorkflowStatus() }
-          wrap={ false }
-        />
-      )}
+      <TagList
+        itemGap={ 'extra-small' }
+        list={ getVisibleWorkflowStatus() }
+        wrap={ false }
+      />
       <Dropdown
+        disabled={ isFetchingWorkflowDetails }
         menu={ { items } }
       >
-        <DropdownButton
-          disabled={ isLoading }
-          loading={ isLoading }
-        >
+        <DropdownButton>
           <Icon
             name={ 'workflow' }
             options={ { height: 16, width: 16 } }

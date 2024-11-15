@@ -15,7 +15,9 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
-  'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry'
+  'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
+  'DynamicTypes/ObjectLayoutRegistry': 'DynamicTypes/ObjectLayoutRegistry',
+  'DynamicTypes/ObjectDataRegistry': 'DynamicTypes/ObjectDataRegistry'
 }
 
 export const serviceIds = {
@@ -50,6 +52,7 @@ export const serviceIds = {
   ...dynamicTypeRegistriesServiceIds,
 
   'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
+  'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
   'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
 
@@ -86,6 +89,43 @@ export const serviceIds = {
   'DynamicTypes/Metadata/Checkbox': 'DynamicTypes/Metadata/Checkbox',
   'DynamicTypes/Metadata/Select': 'DynamicTypes/Metadata/Select',
   'DynamicTypes/Metadata/Date': 'DynamicTypes/Metadata/Date',
+
+  // Object layout
+  'DynamicTypes/ObjectLayout/Panel': 'DynamicTypes/ObjectLayout/Panel',
+  'DynamicTypes/ObjectLayout/Tabpanel': 'DynamicTypes/ObjectLayout/Tabpanel',
+  'DynamicTypes/ObjectLayout/Accordion': 'DynamicTypes/ObjectLayout/Accordion',
+  'DynamicTypes/ObjectLayout/Region': 'DynamicTypes/ObjectLayout/Region',
+  'DynamicTypes/ObjectLayout/Text': 'DynamicTypes/ObjectLayout/Text',
+  'DynamicTypes/ObjectLayout/Fieldset': 'DynamicTypes/ObjectLayout/Fieldset',
+  'DynamicTypes/ObjectLayout/FieldContainer': 'DynamicTypes/ObjectLayout/FieldContainer',
+
+  // Object data
+  'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
+  'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
+  'DynamicTypes/ObjectData/Password': 'DynamicTypes/ObjectData/Password',
+  'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',
+  'DynamicTypes/ObjectData/MultiSelect': 'DynamicTypes/ObjectData/MultiSelect',
+  'DynamicTypes/ObjectData/Language': 'DynamicTypes/ObjectData/Language',
+  'DynamicTypes/ObjectData/LanguageMultiSelect': 'DynamicTypes/ObjectData/LanguageMultiSelect',
+  'DynamicTypes/ObjectData/Country': 'DynamicTypes/ObjectData/Country',
+  'DynamicTypes/ObjectData/CountryMultiSelect': 'DynamicTypes/ObjectData/CountryMultiSelect',
+  'DynamicTypes/ObjectData/User': 'DynamicTypes/ObjectData/User',
+  'DynamicTypes/ObjectData/BooleanSelect': 'DynamicTypes/ObjectData/BooleanSelect',
+  'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
+  'DynamicTypes/ObjectData/NumericRange': 'DynamicTypes/ObjectData/NumericRange',
+  'DynamicTypes/ObjectData/Slider': 'DynamicTypes/ObjectData/Slider',
+  'DynamicTypes/ObjectData/Consent': 'DynamicTypes/ObjectData/Consent',
+  'DynamicTypes/ObjectData/Firstname': 'DynamicTypes/ObjectData/Firstname',
+  'DynamicTypes/ObjectData/Lastname': 'DynamicTypes/ObjectData/Lastname',
+  'DynamicTypes/ObjectData/Email': 'DynamicTypes/ObjectData/Email',
+  'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
+  'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
+  'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
+  'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
+  'DynamicTypes/ObjectData/DateRange': 'DynamicTypes/ObjectData/DateRange',
+  'DynamicTypes/ObjectData/Time': 'DynamicTypes/ObjectData/Time',
+  'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
+  'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

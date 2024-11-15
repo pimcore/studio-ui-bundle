@@ -12,10 +12,20 @@
 */
 
 import '@Pimcore/modules/data-object/editor'
+import '@Pimcore/modules/data-object/tree'
+import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { TreeContainer } from '@Pimcore/modules/data-object/tree/tree-container'
 
 moduleSystem.registerModule({
   onInit: () => {
+    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
+    widgetRegistryService.registerWidget({
+      name: 'data-object-tree',
+      component: TreeContainer
+    })
   }
 })

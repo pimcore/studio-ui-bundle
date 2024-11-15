@@ -51,6 +51,10 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Object Grid"],
             }),
+            dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout` }),
+                providesTags: ["Data Objects"],
+            }),
             dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects`,
@@ -161,6 +165,12 @@ export type DataObjectGetGridApiArg = {
         filters?: GridFilter;
     };
 };
+export type DataObjectGetLayoutByIdApiResponse =
+    /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
+export type DataObjectGetLayoutByIdApiArg = {
+    /** Id of the data-object */
+    id: number;
+};
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
         /** ID of created jobRun */
@@ -219,7 +229,6 @@ export type DataObjectGetTreeApiArg = {
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
-        | "Eierlegenedewollmilchsau"
         | "Event"
         | "FilterDefinition"
         | "LinkActivityDefinition"
@@ -235,8 +244,7 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition"
-        | "test";
+        | "TermSegmentBuilderDefinition";
 };
 export type Error = {
     /** Message */
@@ -339,6 +347,8 @@ export type DataObject = Element & {
         [key: string]: string | number | boolean | object | any[];
     };
     customAttributes?: CustomAttributes;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
     /** Key */
     key?: string;
     /** Class name */
@@ -428,6 +438,48 @@ export type GridFilter = {
     /** Sort Filter */
     sortFilter?: object;
 };
+export type Layout = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Data Type */
+    dataType: string;
+    /** Field Type */
+    fieldType: string;
+    /** Type */
+    type: string | null;
+    /** Layout */
+    layout: string | null;
+    /** Region */
+    region: string | null;
+    /** Title */
+    title: string | null;
+    /** Width */
+    width: number;
+    /** Height */
+    height: number;
+    /** Collapsible */
+    collapsible: boolean;
+    /** Collapsed */
+    collapsed: boolean;
+    /** Body Style */
+    bodyStyle: string | null;
+    /** Locked */
+    locked: boolean;
+    /** Children */
+    children: any[];
+    /** Icon */
+    icon: ElementIcon | null;
+    /** Label Align */
+    labelAlign: string;
+    /** Label Width */
+    labelWidth: number;
+    /** Border */
+    border: boolean;
+};
 export const {
     useDataObjectAddMutation,
     useDataObjectCloneMutation,
@@ -435,6 +487,7 @@ export const {
     useDataObjectUpdateByIdMutation,
     useDataObjectGetAvailableGridColumnsQuery,
     useDataObjectGetGridMutation,
+    useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectReplaceContentMutation,
     useDataObjectGetTreeQuery,

@@ -57,7 +57,7 @@ export const NotificationJobContainer = (props: DeleteJobProps): React.JSX.Eleme
 
       finishedWithErrorsButtonActions={ [
         {
-          label: t('ignore and reload'),
+          label: t('jobs.job.button-ignore-and-reload'),
           handler: () => {
             dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)

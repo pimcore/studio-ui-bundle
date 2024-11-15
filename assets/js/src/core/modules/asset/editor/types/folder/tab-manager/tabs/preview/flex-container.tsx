@@ -40,7 +40,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
     {
       key: 'info',
       icon: <Icon name="info-circle-outlined" />,
-      label: t('preview-card.info')
+      label: t('info')
     },
     {
       key: 'rename',

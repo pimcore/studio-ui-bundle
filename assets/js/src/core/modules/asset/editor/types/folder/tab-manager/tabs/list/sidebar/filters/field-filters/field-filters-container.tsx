@@ -20,11 +20,16 @@ import { type GridColumnConfiguration } from 'src/sdk/main'
 import { FieldFiltersListContainer } from './field-filters-list-container'
 import { useFilters } from '../hooks/use-filters'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { dropDownMenu } = useListGridAvailableColumns()
   const { columns, addColumn } = useFilters()
+
+  const handleColumnClick = (column: GridColumnConfiguration): void => {
+    addColumn(column)
+  }
 
   return (
     <Space
@@ -33,18 +38,16 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     >
       <FieldFiltersListContainer columns={ columns } />
 
-      <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, onColumnClick) } }>
-        <IconTextButton
-          icon='PlusCircleOutlined'
-          type='link'
-        >
-          { t('listing.add-column') }
-        </IconTextButton>
-      </Dropdown>
+      {!isEmptyValue(dropDownMenu) && (
+        <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, handleColumnClick) } }>
+          <IconTextButton
+            icon='PlusCircleOutlined'
+            type='link'
+          >
+            { t('listing.add-column') }
+          </IconTextButton>
+        </Dropdown>
+      )}
     </Space>
   )
-
-  function onColumnClick (column: GridColumnConfiguration): void {
-    addColumn(column)
-  }
 }

@@ -11,14 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { defaultProps, Tree } from '@Pimcore/components/tree/tree'
+import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
-import { TreeNode, type TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
-import { PagerContainer } from './pager/pager-container'
+import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
+import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 
 export interface TreeContainerProps {
   id: number
@@ -36,7 +37,8 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   }
 
   return (
-    <Tree
+    <ElementTree
+      contextMenu={ AssetTreeContextMenu }
       maxItemsPerNode={ 20 }
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }

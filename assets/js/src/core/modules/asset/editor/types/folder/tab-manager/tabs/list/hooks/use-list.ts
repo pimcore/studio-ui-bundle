@@ -38,6 +38,9 @@ import { t } from 'i18next'
 import {
   BatchEditContext
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
+import {
+  GridConfigContext
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/grid-config/grid-config-provider'
 
 export interface UseListColumnsHookReturn extends IListColumnsContext {
   setGridColumns: (columns: GridColumnConfiguration[]) => void
@@ -96,6 +99,11 @@ export interface UseListGridAvailableColumnsHookReturn extends IListGridAvailabl
 export const useListGridAvailableColumns = (): UseListGridAvailableColumnsHookReturn => {
   const { availableColumns, setAvailableColumns } = useContext(ListGridAvailableColumnsContext)
   const { batchEdits } = useContext(BatchEditContext)
+  const { columns } = useContext(GridConfigContext)
+
+  const checkIsFilterItemChosen = (key: string): boolean => {
+    return columns !== null && columns?.some((item) => item.key === key)
+  }
 
   const editableColumnsDropDownMenu = useMemo(() => {
     const columnsInBatchEdit = batchEdits.map((batchEdit) => batchEdit.key)
@@ -126,15 +134,19 @@ export const useListGridAvailableColumns = (): UseListGridAvailableColumnsHookRe
     }
 
     availableColumns.forEach((column) => {
-      if (_dropDownMenu[column.group] === undefined) {
-        _dropDownMenu[column.group] = []
-      }
+      const isFilterItemChosen = checkIsFilterItemChosen(column.key)
 
-      _dropDownMenu[column.group].push(column)
+      if (!isFilterItemChosen) {
+        if (_dropDownMenu[column.group] === undefined) {
+          _dropDownMenu[column.group] = []
+        }
+
+        _dropDownMenu[column.group].push(column)
+      }
     })
 
     return _dropDownMenu
-  }, [availableColumns])
+  }, [availableColumns, columns])
 
   return {
     availableColumns,

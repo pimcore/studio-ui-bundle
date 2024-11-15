@@ -16,6 +16,16 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     dropdown: css`
+    .ant-dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    }
+    
+    .ant-dropdown-menu-item-group-list {
+    display: flex;
+    flex-direction: column;
+    }
+    
       .ant-dropdown-menu-submenu {
           .ant-dropdown-menu-submenu-title {
               display: flex;

@@ -248,7 +248,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     >
       <Content loading={ isLoading }>
         <ContentToolbarSidebarLayout
-          renderSidebar={ <SidebarContainer /> }
+          renderSidebar={ <SidebarContainer errorData={ fetchListingResult.error as FetchBaseQueryError } /> }
           renderToolbar={
             <GridToolbarContainer
               pager={ {
