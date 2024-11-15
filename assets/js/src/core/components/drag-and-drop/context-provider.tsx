@@ -15,6 +15,7 @@ import React, { type MutableRefObject, createContext, useRef, type ReactNode, us
 import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
 import { type Callback, CallbackRegistry, type ICallbackRegistry } from './callback-registry'
 import { DragOverlay as StyledDragOverlay } from './drag-overlay'
+import { boundingRectIntersection } from './collision-detection/boundingRectIntersection'
 
 export interface DragAndDropInfo {
   type: string
@@ -82,12 +83,17 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
 
   return useMemo(() => (
     <DndContext
+      autoScroll={ false }
+      collisionDetection={ boundingRectIntersection }
       onDragCancel={ onDragCancel }
       onDragEnd={ onDragEnd }
       onDragStart={ onDragStart }
       sensors={ sensors }
     >
-      <DragOverlay>
+      <DragOverlay
+        className='dnd-overlay'
+        style={ { width: 'max-content' } }
+      >
         <StyledDragOverlay info={ info } />
       </DragOverlay>
 

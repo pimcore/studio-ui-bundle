@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, isValidElement, useState } from 'react'
+import React, { Children, isValidElement, useMemo, useState } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { type DragAndDropInfo } from './context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
@@ -22,7 +22,7 @@ interface DraggableProps {
   info: DragAndDropInfo
 }
 
-export function Draggable (props: DraggableProps): React.JSX.Element {
+function Draggable (props: DraggableProps): React.JSX.Element {
   const [id] = useState(uuid())
   const { attributes, listeners, setNodeRef } = useDraggable({
     id,
@@ -37,7 +37,7 @@ export function Draggable (props: DraggableProps): React.JSX.Element {
 
   const Component = Child.type
 
-  return (
+  return useMemo(() => (
     <div
       ref={ setNodeRef }
       { ...listeners }
@@ -48,5 +48,9 @@ export function Draggable (props: DraggableProps): React.JSX.Element {
         { ...Child.props }
       />
     </div>
-  )
+  ), [])
 }
+
+const DraggableMemo = React.memo(Draggable)
+
+export { DraggableMemo as Draggable }
