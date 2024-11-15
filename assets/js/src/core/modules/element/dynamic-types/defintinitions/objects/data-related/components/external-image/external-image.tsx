@@ -25,6 +25,7 @@ export interface ExternalImageProps {
   previewWidth: number | null
   previewHeight: number | null
   inputWidth: number | null
+  disabled?: boolean
   value?: string | null
   onChange?: (value: string | null) => void
 }
@@ -41,13 +42,15 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
     props.onChange?.(value)
   }, [value])
 
-  const previewWidth = props.previewWidth ?? 300
-  const previewHeight = props.previewHeight ?? 300
+  const previewWidth = Math.max(props.previewWidth ?? 300, 70)
+  const previewHeight = Math.max(props.previewHeight ?? 300, 70)
+
   return (
     <>
       <Card
-        fitContent={ props.inputWidth !== null }
+        fitContent={ Boolean(props.inputWidth) }
         footer={ <ExternalImageFooter
+          disabled={ props.disabled }
           inputWidth={ props.inputWidth ?? undefined }
           key="external-image-footer"
           onChange={ onChange }

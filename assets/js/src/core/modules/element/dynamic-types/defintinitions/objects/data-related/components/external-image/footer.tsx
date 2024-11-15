@@ -17,16 +17,18 @@ import { Input, Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useTranslation } from 'react-i18next'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 interface ExternalImageFooterProps {
   value?: string
   onChange?: (value?: string) => void
   inputWidth?: number
+  disabled?: boolean
 }
 
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
   const [value, setValue] = React.useState<string | undefined>(props.value)
-  const [openUrlDisabled, setOpenUrlDisabled] = React.useState<boolean>(props.value !== null && props.value !== '')
+  const [openUrlDisabled, setOpenUrlDisabled] = React.useState<boolean>(props.value === '' || props.value === undefined)
   const { t } = useTranslation()
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setValue(e.target.value)
@@ -45,7 +47,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
     setOpenUrlDisabled(value === undefined || value === '')
   }, [value])
 
-  const inputWidth = props.inputWidth !== undefined ? props.inputWidth + 'px' : undefined
+  const inputWidth = toCssDimension(props.inputWidth)
 
   return (
     <Flex
@@ -53,6 +55,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       gap="extra-small"
     >
       <Input
+        disabled={ props.disabled }
         onChange={ onChange }
         style={ { maxWidth: inputWidth, width: inputWidth } }
         value={ value }
@@ -60,7 +63,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       <ButtonGroup
         items={ [
           <Tooltip
-            key="open-url"
+            key="external-image-open-url"
             title={ t('open') }
           >
             <IconButton
@@ -70,10 +73,11 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
             />
           </Tooltip>,
           <Tooltip
-            key="delete"
+            key="external-image-delete"
             title={ t('set-to-null') }
           >
             <IconButton
+              disabled={ props.disabled }
               icon={ 'delete-outlined' }
               onClick={ emptyValue }
             />

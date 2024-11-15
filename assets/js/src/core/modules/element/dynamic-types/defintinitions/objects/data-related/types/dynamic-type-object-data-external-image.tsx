@@ -31,6 +31,7 @@ export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbs
   getObjectDataComponent (props: ExternalImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <ExternalImage
+        disabled={ props.noteditable === true }
         inputWidth={ props.inputWidth }
         previewHeight={ props.previewHeight }
         previewWidth={ props.previewWidth }

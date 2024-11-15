@@ -32,7 +32,7 @@ export const ImageTarget = ({ title, width, height, className }: ImageTargetProp
       align="center"
       className={ cn(className, styles.imageTargetContainer) }
       justify="center"
-      style={ { maxWidth: toCssDimension(width), height: toCssDimension(width) } }
+      style={ { maxWidth: toCssDimension(width), height: toCssDimension(height) } }
     >
       <div className="image-target-title">{ title }</div>
     </Flex>
