@@ -13,6 +13,6 @@
 
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 
-export const checkElementPermission = (permissions: ElementPermissions, permission: string): boolean => {
-  return Object.keys(permissions).includes(permission) && permissions[permission]
+export const checkElementPermission = (permissions: ElementPermissions, permission: keyof ElementPermissions): boolean => {
+  return permissions[permission] === true
 }

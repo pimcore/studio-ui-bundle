@@ -32,12 +32,12 @@ export interface UseCopyPasteHookReturn {
   pasteCut: (parentId: number) => Promise<void>
   copyContextMenuItem: (node: TreeNodeProps) => ItemType
   cutContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteContextMenuItem: (parentId: number) => ItemType
+  pasteContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteCutContextMenuItem: (parentId: number) => ItemType
 }
 
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
-  const [node, setNode] = useState<TreeNodeProps | undefined>()
+  const [storedNode, setStoredNode] = useState<TreeNodeProps | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
   const { refreshTree } = useRefreshTree(elementType)
   const [assetClone] = useAssetCloneMutation()
@@ -46,21 +46,21 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const { addJob } = useJobs()
 
   const copy = (node: TreeNodeProps): void => {
-    setNode(node)
+    setStoredNode(node)
     setNodeTask('copy')
   }
 
   const cut = (node: TreeNodeProps): void => {
-    setNode(node)
+    setStoredNode(node)
     setNodeTask('cut')
   }
 
   const paste = async (parentId: number): Promise<void> => {
-    if (node === undefined) {
+    if (storedNode === undefined) {
       return
     }
 
-    const id = parseInt(node.id)
+    const id = parseInt(storedNode.id)
 
     const promise = assetClone({
       id,
@@ -97,11 +97,11 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
   const pasteCut = async (parentId: number): Promise<void> => {
-    if (node === undefined) {
+    if (storedNode === undefined) {
       return
     }
 
-    const id = parseInt(node.id)
+    const id = parseInt(storedNode.id)
 
     try {
       await elementPatch({
@@ -113,8 +113,8 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      if (node.parentId !== undefined) {
-        refreshTree(parseInt(node.parentId))
+      if (storedNode.parentId !== undefined) {
+        refreshTree(parseInt(storedNode.parentId))
       }
 
       refreshTree(parentId)
@@ -147,14 +147,14 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
-  const pasteContextMenuItem = (parentId: number): ItemType => {
+  const pasteContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.tree.paste'),
       key: 'paste',
       icon: <Icon name={ 'clipboard-check' } />,
-      hidden: (node === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
+      hidden: (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
       onClick: async () => {
-        await paste(parentId)
+        await paste(parseInt(node.id))
       }
     }
   }
@@ -163,7 +163,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.paste-cut'),
       key: 'paste-cut',
       icon: <Icon name={ 'clipboard-check' } />,
-      hidden: (node === undefined || nodeTask !== 'cut'),
+      hidden: (storedNode === undefined || nodeTask !== 'cut'),
       onClick: async () => {
         await pasteCut(parentId)
       }
