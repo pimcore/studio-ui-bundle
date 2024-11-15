@@ -82,8 +82,6 @@ const TreeNode = ({
   const treeNodeProps = { id, icon, label, internalKey, level, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 
-  console.log('icon', icon)
-
   useEffect(() => {
     return () => {
       if (nodesRefs !== undefined) {

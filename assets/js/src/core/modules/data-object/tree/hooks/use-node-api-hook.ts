@@ -46,8 +46,6 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
 
     const dataObjectData = data.items
     dataObjectData.forEach((dataObjectNode) => {
-      console.log('icon', dataObjectNode.icon)
-
       const icon = dataObjectNode.icon?.value === '' || dataObjectNode.icon?.value === 'vector'
         ? 'mainObject'
         : dataObjectNode.icon?.value
