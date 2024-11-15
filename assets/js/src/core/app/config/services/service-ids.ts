@@ -123,6 +123,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
   'DynamicTypes/ObjectData/DateRange': 'DynamicTypes/ObjectData/DateRange',
   'DynamicTypes/ObjectData/Time': 'DynamicTypes/ObjectData/Time',
+  'DynamicTypes/ObjectData/ExternalImage': 'DynamicTypes/ObjectData/ExternalImage',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 

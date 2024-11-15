@@ -193,6 +193,7 @@ button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
+open: Open
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
@@ -326,3 +327,4 @@ error: Error
 info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
+data-object.editor.external-image.preview-placeholder: Add an external image
