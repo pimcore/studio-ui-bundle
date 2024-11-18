@@ -21,7 +21,7 @@ import {
   type TransitionType,
   useWorkflow
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (transition: string, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions) => void
@@ -37,18 +37,17 @@ export interface WorkflowOptions {
   }
 }
 export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn => {
-  const { id } = useAsset()
+  const { id, elementType } = useElementContext()
   const messageApi = useMessage()
   const { setContextWorkflowDetails } = useWorkflow()
   const [fetchSubmitWorkflowActionMutation, { isLoading: submissionLoading, isSuccess: submissionSuccess, isError: submissionError }] = useWorkflowActionSubmitMutation(
     { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
   )
-
   const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
     submitAction: {
       actionType,
       elementId: id,
-      elementType: 'asset',
+      elementType: elementType === 'data-object' ? 'object' : elementType,
       workflowName: _.snakeCase(workFlowName),
       transition,
       workflowOptions: workFlowOptions
