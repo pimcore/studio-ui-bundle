@@ -26,7 +26,7 @@ export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
 
 export type DateRangePickerProps = OriginalRangePickerProps & {
-  value?: DateRangeTargetValue
+  value?: DateRangeTargetValue | null
   onChange?: (dates: DateRangeTargetValue | null) => void
   outputType?: OutputType
   outputFormat?: string
@@ -47,6 +47,7 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
   if (value === null) {
     return null
   }
+
   return [
     fromDayJs(value[0], outputType, outputFormat),
     fromDayJs(value[1], outputType, outputFormat)

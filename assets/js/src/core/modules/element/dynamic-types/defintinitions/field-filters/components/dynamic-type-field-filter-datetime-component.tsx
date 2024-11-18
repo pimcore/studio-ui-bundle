@@ -77,11 +77,11 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
     return null
   }
 
-  const valueOn = useMemo(() => getDateValue(DatePickerSettingValue.ON), [fieldFilter])
-  const valueBetween = useMemo(() => getDateValue(DatePickerSettingValue.BETWEEN), [fieldFilter])
+  const valueOn = useMemo(() => getDateValue(DatePickerSettingValue.ON) as number | null, [fieldFilter])
+  const valueBetween = useMemo(() => getDateValue(DatePickerSettingValue.BETWEEN) as DateRangeTargetValue | null, [fieldFilter])
 
-  const [dateOnValue, setDateOnValue] = useState<null | number | any>(valueOn)
-  const [dateBetweenValue, setDateBetweenValue] = useState<null | number | any>(valueBetween)
+  const [dateOnValue, setDateOnValue] = useState<null | number>(valueOn)
+  const [dateBetweenValue, setDateBetweenValue] = useState<null | DateRangeTargetValue>(valueBetween)
 
   const handleChangeDateOnValue = (date: number): void => {
     setDateOnValue(date)
