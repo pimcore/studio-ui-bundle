@@ -78,7 +78,6 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   return (
     <Flex
       align={ 'center' }
-      gap={ 'extra-small' }
       justify={ 'flex-end' }
     >
       <TagList

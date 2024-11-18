@@ -19,7 +19,6 @@ export const useStyle = createStyles(({ token, css }) => {
         &.--divider {
             padding-top: 10px;
             border-top: 1px solid ${token.Divider.colorSplit}
-        };
         }
         
             .ant-btn-link {
