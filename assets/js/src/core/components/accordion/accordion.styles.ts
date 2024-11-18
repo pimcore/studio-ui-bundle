@@ -64,6 +64,10 @@ export const useStyles = createStyles(({ token, css }) => {
         }
 
         .accordion__item {
+          + .accordion__item {
+            margin-top: ${token.marginXS}px;
+          }
+          
             > .ant-collapse-header {
                 display: inline-flex;
                 width: 100%;
@@ -102,13 +106,11 @@ export const useStyles = createStyles(({ token, css }) => {
         }
     `,
     table: css`
-      //width: min-content;
-      //min-width: 100%;
+      width: min-content;
+      min-width: 100%;
 
       .ant-collapse-item .ant-collapse-content .ant-collapse-content-box {
         padding: 0;
-        overflow: hidden;
-        overflow-x: auto;
       }
 
       .ant-table {
@@ -155,6 +157,8 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
     bordered: css`
+      background: ${token.colorBgContainer};
+      
       &.accordion--bordered {
         .ant-collapse-item {
           background: ${token.colorBgContainer};

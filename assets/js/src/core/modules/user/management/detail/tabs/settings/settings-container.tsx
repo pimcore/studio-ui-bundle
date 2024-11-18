@@ -23,9 +23,10 @@ import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
 import { Content } from '@Pimcore/components/content/content'
 import { Button } from '@Pimcore/components/button/button'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
-import { type UserPermission } from '@Pimcore/modules/user/user-api-slice.gen'
 import { LanguageTable } from '@Pimcore/modules/user/management/detail/tabs/settings/components/table/language-table'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
+import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
@@ -34,19 +35,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { id } = useUserContext()
   const { user, isLoading, changeUserInState } = useUserDraft(id)
   const { availablePermissions } = useUserHelper()
-
-  const permissions = {
-    default: [] as UserPermission[],
-    bundles: [] as UserPermission[]
-  }
-
-  availablePermissions.forEach((permission) => {
-    if (permission.category !== null && permission.category.length !== 0) {
-      permissions.bundles.push(permission as UserPermission)
-    } else {
-      permissions.default.push(permission as UserPermission)
-    }
-  })
+  const permissions = getGroupedPermissions(availablePermissions)
 
   useEffect(() => {
     if (!isLoading) {
@@ -80,10 +69,47 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     }, 300),
     [changeUserInState]
   )
+
   if (isLoading) {
     return <Content loading></Content>
   }
-  const generalFields = [{ name: 'name', component: 'input', disabled: true }, { name: 'password', component: 'input', type: 'password' }, { name: 'twoFactorAuthenticationEnabled', component: 'switch' }]
+
+  const renderInputFields = (fields: any[]): React.ReactNode[] => fields.map((field) => (
+    <Form.Item
+      key={ field.name }
+      label={ field.component === 'input' ? t(`user-management.${field.name}`) : '' }
+      name={ field.name }
+      rules={ field.rules ?? [] }
+    >
+      {field.component === 'input'
+        ? (
+          <Input
+            disabled={ field.disabled ?? false }
+            suffix={ field.suffix ?? '' }
+            type={ field?.type ?? '' }
+          />
+          )
+        : <Switch labelRight={ t(`user-management.${field.name}`) } />}
+    </Form.Item>
+  ))
+
+  const generalFields = [{ name: 'name', component: 'input', disabled: true },
+    {
+      name: 'password',
+      component: 'input',
+      type: 'text',
+      rules: [{ min: 10 }],
+      suffix: <IconButton
+        icon={ 'lightning-01' }
+        onClick={ () => {
+          const newPassword = generatePassword()
+          form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+        } }
+        title={ t('user-management.generate-password') }
+              />
+    },
+    { name: 'twoFactorAuthenticationEnabled', component: 'switch' }]
+
   const generalAccordion = [
     {
       key: '1',
@@ -107,22 +133,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
               : null}
           </Flex>
         </Form.Item>
-        {generalFields.map((field) => (
-          <Form.Item
-            key={ field.name }
-            label={ field.component === 'input' ? t(`user-management.${field.name}`) : '' }
-            name={ field.name as any }
-          >
-            {field.component === 'input'
-              ? (
-                <Input
-                  disabled={ field.disabled ?? false }
-                  type={ field?.type ?? '' }
-                />
-                )
-              : <Switch labelRight={ t(`user-management.${field.name}`) } />}
-          </Form.Item>
-        ))}
+
+        {renderInputFields(generalFields)}
       </>
     }
   ]
@@ -131,17 +143,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     {
       key: '1',
       title: <>{ t('user-management.customisation') }</>,
-      children: <>
-        {cutomisastionFields.map((field) => (
-          <Form.Item
-            key={ field.name }
-            label={ field.component === 'input' ? t(`user-management.${field.name}`) : '' }
-            name={ field.name as any }
-          >
-            {field.component === 'input' ? <Input /> : <Switch labelRight={ t(`user-management.${field.name}`) } />}
-          </Form.Item>
-        ))}
-      </>
+      children: renderInputFields(cutomisastionFields)
     }
   ]
   const permissionsAccordion = [
@@ -215,7 +217,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         <LanguageTable
           data={ user?.contentLanguages as any[] }
           onChange={ (languages) => {
-            console.log('onChange', languages)
             changeUserInState({
               sharedTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
               sharedTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
@@ -296,5 +297,4 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     </Form>
   )
 }
-
 export { SettingsContainer }
