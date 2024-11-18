@@ -35,6 +35,10 @@ export const useStyle = createStyles(({ token, css }) => {
         .ant-tabs-content {
           display: flex;
           height: 100%;
+          margin-left: -${token.paddingXS}px;
+          margin-right: -${token.paddingXS}px;
+          padding-left: ${token.paddingXS}px;
+          padding-right: ${token.paddingXS}px;
         }
 
         .ant-tabs-tabpane {
@@ -46,7 +50,6 @@ export const useStyle = createStyles(({ token, css }) => {
 
         .ant-tabs-content-holder {
           overflow: auto;
-          //overflow-x: hidden;
         }
       }
     `

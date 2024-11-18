@@ -42,7 +42,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
       form.setFieldsValue({
         active: user?.active,
         name: user?.name,
-        password: user?.password,
         twoFactorAuthenticationEnabled: user?.twoFactorAuthenticationEnabled,
         firstname: user?.firstname,
         lastname: user?.lastname,
