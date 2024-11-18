@@ -15,21 +15,27 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    mapContainer: css`
+    container: css`
+      .ant-card-cover {
+        .leaflet-container {
+          border-radius: ${token.borderRadiusLG}px ${token.borderRadiusLG}px 0 0;
+          min-height: 120px;
+        }
+      }
       max-width: 100%;
-      
-      .leaflet-tooltip{
-        width: 100px;
-        white-space: normal;
+      min-width: 270px;
+    `,
+    footer: css`
+      .geo-search-field {
+        max-width: 300px;
       }
-      .leaflet-draw-actions-bottom li:nth-child(2) {
-        display: none;
+      .remove-button-wrapper {
+        margin-left: auto;
       }
-      .leaflet-edit-marker-selected {
-        border: 0;
-        outline: 2px dashed rgba(51, 136, 255, .5);
-        margin-left: -12px !important;
-        margin-top: -41px !important;
+    `,
+    geoForm: css`
+      .ant-input-number {
+        width: 138px !important;
       }
     `
   }

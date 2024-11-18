@@ -100,11 +100,11 @@ const Component = ({ loading, children, footer, fitContent, className, ...props 
             src={ props.image.src }
           />
           )
-        : <></> }
+        : props.cover }
       extra={ props.extra !== undefined && props.extra !== null ? renderExtraContent() : null }
       title={ props.title !== undefined && props.title !== null ? renderTitle() : null }
     >
-      {footer !== undefined
+      {footer !== undefined && children !== undefined
         ? (
           <div className="card-body-inner">
             {children}

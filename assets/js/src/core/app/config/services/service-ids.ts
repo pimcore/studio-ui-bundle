@@ -124,6 +124,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/DateRange': 'DynamicTypes/ObjectData/DateRange',
   'DynamicTypes/ObjectData/Time': 'DynamicTypes/ObjectData/Time',
   'DynamicTypes/ObjectData/ExternalImage': 'DynamicTypes/ObjectData/ExternalImage',
+  'DynamicTypes/ObjectData/GeoPoint': 'DynamicTypes/ObjectData/GeoPoint',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 

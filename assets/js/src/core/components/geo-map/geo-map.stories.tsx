@@ -27,6 +27,8 @@ export default config
 
 export const _default = {
   args: {
-    onChange: (value) => console.log('Value:', value)
+    onChange: (value: any): void => console.log('Value:', value),
+    width: "500px",
+    height: "250px"
   }
 }

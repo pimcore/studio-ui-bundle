@@ -328,3 +328,5 @@ info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
 data-object.editor.external-image.preview-placeholder: Add an external image
+latitude: Latitude
+longitude: Longitude
