@@ -15,7 +15,7 @@ import React, { useState, useMemo } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
-import { type DateRange, DateRangePicker } from '@Pimcore/components/date-picker/date-range-picker'
+import { DateRangePicker, type DateRangeTargetValue } from '@Pimcore/components/date-picker/date-range-picker'
 import type { AbstractFieldFilterDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-abstract'
 import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
 
@@ -53,7 +53,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
 
   const fieldFilter = getFieldFilter(column) as FieldFilterDatetime
 
-  const getValue = (datetimeType: DatePickerSettingValue): null | number | number[] => {
+  const getDateValue = (datetimeType: DatePickerSettingValue): null | number | number[] => {
     const currentFilterValue = fieldFilter?.filterValue
 
     if (currentFilterValue == null) return null
@@ -64,7 +64,11 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
       return currentFilterValue.on
     }
 
-    if (datetimeType === DatePickerSettingValue.BETWEEN && 'from' in currentFilterValue) {
+    if (
+      datetimeType === DatePickerSettingValue.BETWEEN &&
+      'from' in currentFilterValue &&
+      'to' in currentFilterValue
+    ) {
       setSettingValue(DatePickerSettingValue.BETWEEN)
 
       return [currentFilterValue.from, currentFilterValue.to]
@@ -73,8 +77,8 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
     return null
   }
 
-  const valueOn = useMemo(() => getValue(DatePickerSettingValue.ON), [fieldFilter])
-  const valueBetween = useMemo(() => getValue(DatePickerSettingValue.BETWEEN), [fieldFilter])
+  const valueOn = useMemo(() => getDateValue(DatePickerSettingValue.ON), [fieldFilter])
+  const valueBetween = useMemo(() => getDateValue(DatePickerSettingValue.BETWEEN), [fieldFilter])
 
   const [dateOnValue, setDateOnValue] = useState<null | number | any>(valueOn)
   const [dateBetweenValue, setDateBetweenValue] = useState<null | number | any>(valueBetween)
@@ -86,11 +90,11 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
     date !== null && addOrUpdateFieldFilter(column, { on: date })
   }
 
-  const handleChangeDateBetweenValue = (date: DateRange): void => {
-    setDateBetweenValue(date)
+  const handleChangeDateBetweenValue = (dates: DateRangeTargetValue): void => {
+    setDateBetweenValue(dates)
     setDateOnValue(null)
 
-    date !== null && addOrUpdateFieldFilter(column, { from: date[0], to: date[1] })
+    dates !== null && addOrUpdateFieldFilter(column, { from: dates?.[0], to: dates?.[1] })
   }
 
   return (
