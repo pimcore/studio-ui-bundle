@@ -68,7 +68,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
           >
             <IconButton
               disabled={ openUrlDisabled }
-              icon={ 'group' }
+              icon={ { value: 'group' } }
               onClick={ openUrl }
             />
           </Tooltip>,
@@ -78,7 +78,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
           >
             <IconButton
               disabled={ props.disabled }
-              icon={ 'delete-outlined' }
+              icon={ { value: 'delete-outlined' } }
               onClick={ emptyValue }
             />
           </Tooltip>
