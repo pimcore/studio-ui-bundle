@@ -23,6 +23,7 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import {
   type ElementEditorType
 } from '@Pimcore/modules/element/editor/services/type-registry'
+import { type UseTabsDraftReturn } from '../draft/hooks/use-tabs'
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
@@ -34,6 +35,7 @@ interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChange
 interface UseElementDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
+  UseTabsDraftReturn,
   UseTrackableChangesDraftReturn {
   element: IElementDraft | undefined
   editorType: ElementEditorType | undefined

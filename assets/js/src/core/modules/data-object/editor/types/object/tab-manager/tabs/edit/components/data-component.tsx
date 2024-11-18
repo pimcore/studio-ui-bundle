@@ -21,6 +21,7 @@ import { Alert } from 'antd'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
 import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { Text } from '@Pimcore/components/text/text'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -50,7 +51,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     formFieldName = ['localizedfields', localizedFields.locales[0], name]
     title = (
       <>
-        {title} ({currentLanguage})
+        {title}<Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
       </>
     )
   }

@@ -33,11 +33,12 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useLanguageSelection } from './language-selection/provider/use-language-selection'
+import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
@@ -67,11 +68,13 @@ export const Toolbar = (): React.JSX.Element => {
       <Flex>
         <ContextMenu />
 
-        <LanguageSelection
-          languages={ [...settings.requiredLanguages] }
-          onSelectLanguage={ setCurrentLanguage }
-          selectedLanguage={ currentLanguage }
-        />
+        {activeTab === TAB_EDIT.key && (
+          <LanguageSelection
+            languages={ [...settings.requiredLanguages] }
+            onSelectLanguage={ setCurrentLanguage }
+            selectedLanguage={ currentLanguage }
+          />
+        )}
       </Flex>
 
       <Button
