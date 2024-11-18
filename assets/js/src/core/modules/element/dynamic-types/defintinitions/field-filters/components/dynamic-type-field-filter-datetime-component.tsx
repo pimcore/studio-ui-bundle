@@ -16,11 +16,25 @@ import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { type DateRange, DateRangePicker } from '@Pimcore/components/date-picker/date-range-picker'
-import type { Dayjs } from 'dayjs'
+import type { AbstractFieldFilterDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-abstract'
+import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
 
 enum DatePickerSettingValue {
   ON = 'on',
   BETWEEN = 'between'
+}
+
+interface FieldFilterDatetimeON {
+  on?: number
+}
+
+interface FieldFilterDatetimeBetween {
+  from?: number
+  to?: number
+}
+
+interface FieldFilterDatetime {
+  filterValue?: FieldFilterDatetimeON | FieldFilterDatetimeBetween
 }
 
 const SETTING_OPTIONS = [
@@ -30,15 +44,28 @@ const SETTING_OPTIONS = [
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 
-export const DynamicTypeFieldFilterDatetimeComponent = (): React.JSX.Element => {
+export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilterDefinition {}
+
+export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
   const [settingValue, setSettingValue] = useState<DatePickerSettingValue>(DatePickerSettingValue.ON)
 
-  const handleChangeDateOnValue = (date: Dayjs): void => {
-    console.log('---->>> handleChangeDateOnValue: ', date)
+  const { getFieldFilter, addOrUpdateFieldFilter } = useFilters()
+
+  const fieldFilter = getFieldFilter(column) as FieldFilterDatetime
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const value = fieldFilter?.filterValue?.on ?? null
+
+  const [dateOnValue, setDateOnValue] = useState<null | number | any>(value)
+
+  const handleChangeDateOnValue = (date: number): void => {
+    setDateOnValue(date)
+
+    addOrUpdateFieldFilter(column, { on: date })
   }
 
   const handleChangeDateBetweenValue = (date: DateRange): void => {
-    console.log('---->>> handleChangeDateBetweenValue: ', date)
+    console.warn('---->>> handleChangeDateBetweenValue: ', date, column)
   }
 
   return (
@@ -56,7 +83,9 @@ export const DynamicTypeFieldFilterDatetimeComponent = (): React.JSX.Element => 
       {settingValue === DatePickerSettingValue.ON && (
         <DatePicker
           format={ DATE_FORMAT }
-          onChange={ (date: Dayjs) => { handleChangeDateOnValue(date) } }
+          onChange={ handleChangeDateOnValue }
+          outputType='timestamp'
+          value={ dateOnValue }
         />
       )}
 

@@ -13,16 +13,16 @@
 
 import React, { type ReactElement } from 'react'
 import { type DynamicTypeFieldFilterAbstract } from '../../dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterDatetimeComponent } from '../../components/dynamic-type-field-filter-datetime-component'
+import { DynamicTypeFieldFilterDatetimeComponent, type DynamicTypeFieldFilterDatetimeProps } from '../../components/dynamic-type-field-filter-datetime-component'
 import { injectable } from 'inversify'
 
 @injectable()
 export class DynamicTypeFieldFilterDatetime implements DynamicTypeFieldFilterAbstract {
   id = 'datetime'
 
-  getFieldFilterComponent (): ReactElement {
+  getFieldFilterComponent (props: DynamicTypeFieldFilterDatetimeProps): ReactElement<DynamicTypeFieldFilterDatetimeProps> {
     return (
-      <DynamicTypeFieldFilterDatetimeComponent />
+      <DynamicTypeFieldFilterDatetimeComponent { ...props } />
     )
   }
 }

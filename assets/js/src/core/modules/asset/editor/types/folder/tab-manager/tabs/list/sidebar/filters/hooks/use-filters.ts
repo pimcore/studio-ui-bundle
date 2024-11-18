@@ -21,7 +21,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
-  addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string | number | null) => void
+  addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string | number | object | null) => void
   removeFieldFilter: (column: GridColumnConfiguration) => void
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
   resetFilters: () => void
@@ -32,7 +32,7 @@ interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
 export interface FieldFilter {
   key: string
   type: string
-  filterValue: string
+  filterValue: string | object
 }
 
 type ColumnFiltersList = Array<FilterOptions['columnFilters']> | []
@@ -81,7 +81,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
-  const addOrUpdateFieldFilter = (column: GridColumnConfiguration, value: string): void => {
+  const addOrUpdateFieldFilter = (column: GridColumnConfiguration, value: string | object): void => {
     const fieldFilters = filterOptions.columnFilters
     let newFilters: FieldFilter[] = []
 
@@ -92,9 +92,14 @@ export const useFilters = (): UseFiltersHookReturn => {
         filterValue: value
       }]
 
-      setFilterOptions((filterOptions) => {
+      // Update only if the current filters have changed
+      setFilterOptions((prevFilterOptions) => {
+        if (JSON.stringify(prevFilterOptions.columnFilters) === JSON.stringify(newFilters)) {
+          return prevFilterOptions
+        }
+
         return {
-          ...filterOptions,
+          ...prevFilterOptions,
           columnFilters: newFilters
         }
       })
@@ -105,6 +110,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     const fieldFiltersArray = fieldFilters as FieldFilter[]
     const filterIndex = fieldFiltersArray.findIndex((filter) => filter.key === column.key)
 
+    // Check if the filter doesn't exist
     if (filterIndex === -1) {
       newFilters = [
         ...fieldFiltersArray,
@@ -124,9 +130,14 @@ export const useFilters = (): UseFiltersHookReturn => {
       newFilters = fieldFiltersArray
     }
 
-    setFilterOptions((filterOptions) => {
+    // Update only if the current filters have changed
+    setFilterOptions((prevFilterOptions) => {
+      if (JSON.stringify(prevFilterOptions.columnFilters) === JSON.stringify(newFilters)) {
+        return prevFilterOptions
+      }
+
       return {
-        ...filterOptions,
+        ...prevFilterOptions,
         columnFilters: newFilters
       }
     })
