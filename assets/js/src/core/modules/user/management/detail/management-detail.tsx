@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { UserDetailTab } from '@Pimcore/modules/user/management/detail/tabs/user-detail-tab'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { Content } from '@Pimcore/components/content/content'
@@ -26,6 +26,7 @@ import { useStyle } from '@Pimcore/modules/user/management/detail/management-det
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { Popconfirm } from 'antd'
 
 interface IManagementDetailProps {
   onUpdate: (loading: boolean) => void
@@ -39,14 +40,29 @@ const ManagementDetail = ({ onUpdate, ...props }: IManagementDetailProps): React
 
   const { openUser, closeUser, removeUser, cloneUser, getAllIds, activeId } = useUserHelper()
   const { user } = useUserDraft(activeId)
-  const [tabs, setTabs] = useState(getAllIds.map((id) => ({
-    key: id.toString(),
-    label: `${selectUserById(store.getState(), id)?.name} ${selectUserById(store.getState(), id)?.modified ? '*' : ''}`
-  })))
+  const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
-  const onClose = (key: string): void => {
-    closeUser(key)
+  const triggerConfirm = (): void => {
+    closeUser(activeId)
     openUser(getAllIds[getAllIds.length - 2])
+  }
+
+  const onHandleClose = (key: string): void => {
+    if (selectUserById(store.getState(), parseInt(key))?.modified && popConfirmOpen === null) {
+      setPopConfirmOpen(parseInt(key))
+
+      return
+    }
+
+    if (!selectUserById(store.getState(), parseInt(key))?.modified) {
+      triggerConfirm()
+
+      return
+    }
+
+    if (popConfirmOpen !== null) {
+      setPopConfirmOpen(null)
+    }
   }
 
   const handleCloneUser = (): void => {
@@ -82,11 +98,7 @@ const ManagementDetail = ({ onUpdate, ...props }: IManagementDetailProps): React
   }
 
   useEffect(() => {
-    console.log('use effect')
-    setTabs(getAllIds.map((id) => ({
-      key: id.toString(),
-      label: `${selectUserById(store.getState(), id)?.name} ${selectUserById(store.getState(), id)?.modified ? '*' : ''}`
-    })))
+    setPopConfirmOpen(null)
   }, [user])
 
   if (activeId === undefined) {
@@ -106,9 +118,20 @@ const ManagementDetail = ({ onUpdate, ...props }: IManagementDetailProps): React
       <div className={ classNames.join(' ') }>
         <Tabs
           activeKey={ activeId.toString() }
-          items={ tabs }
+          items={ getAllIds.map((id) => ({
+            key: id.toString(),
+            label: <Popconfirm
+              onCancel={ () => { setPopConfirmOpen(null) } }
+              onConfirm={ triggerConfirm }
+              open={ popConfirmOpen === id }
+              title={ t('widget-manager.tab-title.close-confirmation') }
+                   >
+              {selectUserById(store.getState(), id)?.name} {selectUserById(store.getState(), id)?.modified ? '*' : ''}
+            </Popconfirm>
+          }))
+          }
           onChange={ openUser }
-          onClose={ onClose }
+          onClose={ onHandleClose }
         />
         <Content className={ 'detail-tabs__content' }>
           <UserDetailTab id={ activeId } />
