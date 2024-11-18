@@ -69,8 +69,8 @@ const FocalPointDemoButton = ({ initialActive = false }: { initialActive?: boole
       tabIndex={ 0 }
     >
       <Icon
-        value={ 'focal-point' }
         options={ { width: '16px', height: '16px' } }
+        value={ 'focal-point' }
       />
     </div>
   )
@@ -81,8 +81,8 @@ const demoData = {
     {
       key: 'details',
       icon: <Icon
-        value={ 'view-details' }
         options={ { width: '16px', height: '16px' } }
+        value={ 'view-details' }
             />,
       component: <AssetEditorSidebarDetailsView
         height={ 185 }
@@ -99,8 +99,8 @@ const demoData = {
     {
       key: 'focal-point',
       icon: <Icon
-        value={ 'focal-point' }
         options={ { width: '16px', height: '16px' } }
+        value={ 'focal-point' }
             />,
       component: <FocalPointDemoButton />
     }
@@ -120,8 +120,8 @@ export const HighlightedEntries = {
       {
         key: 'focal-point',
         icon: <Icon
-          value={ 'focal-point' }
           options={ { width: '16px', height: '16px' } }
+          value={ 'focal-point' }
               />,
         component: <FocalPointDemoButton initialActive />
       }

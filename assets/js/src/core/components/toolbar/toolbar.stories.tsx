@@ -34,12 +34,12 @@ const demoData = {
     <>
       <ButtonGroup items={ [
         <IconButton
-          icon={{value: "trash"}}
+          icon={ { value: 'trash' } }
           key={ 'icon-button-01' }
           type='link'
         />,
         <IconButton
-          icon={{value: "refresh"}}
+          icon={ { value: 'refresh' } }
           key={ 'icon-button-02' }
           type='link'
         />
