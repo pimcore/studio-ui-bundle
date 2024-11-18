@@ -246,6 +246,8 @@ export type User = {
     lastname?: string | null;
     /** If a User is active */
     active: boolean;
+    /** If User is admin */
+    admin: boolean;
     /** Classes the user is allows to see */
     classes: object;
     closeWarning: boolean;
