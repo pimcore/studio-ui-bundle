@@ -44,11 +44,11 @@ export const CombinedButtons = {
   args: {
     items: [
       <IconTextButton
-        icon="trash"
+        icon={{value: 'trash'}}
         type="default"
       >Delete</IconTextButton>,
       <IconButton
-        icon="edit"
+        icon={{value: 'edit'}}
         type="default"
       />,
       <Button>save</Button>,
@@ -62,11 +62,11 @@ export const CombinedButtons02 = {
   args: {
     items: [
       <IconButton
-        icon="trash"
+        icon={{value: 'trash'}}
         type="primary"
       >clear</IconButton>,
       <IconButton
-        icon="edit"
+        icon={{value: 'edit'}}
         type="dashed"
       >clear</IconButton>,
       <Button type='primary'>save</Button>,
@@ -79,8 +79,8 @@ export const CombinedButtons02 = {
 export const ButtonsWithSeparator = {
   args: {
     items: [
-      <IconButton icon="trash">clear</IconButton>,
-      <IconButton icon="edit">clear</IconButton>,
+      <IconButton icon={{value: 'trash'}}>clear</IconButton>,
+      <IconButton icon={{value: 'edit'}}>clear</IconButton>,
       <Button type='link'>save</Button>,
       <Button type='link'>cancel</Button>
     ],
@@ -112,7 +112,7 @@ export const ButtonGroupNesting = {
 export const IconAndButtonGroup = {
   args: {
     items: [
-      <IconButton icon='trash' />,
+      <IconButton icon={{value: 'trash'}} />,
       <Button>delete</Button>
     ]
   }
@@ -121,8 +121,8 @@ export const IconAndButtonGroup = {
 export const IconButtonExample = {
   args: {
     items: [
-      <IconButton icon='trash' />,
-      <IconButton icon='edit' />
+      <IconButton icon={{value: 'trash'}} />,
+      <IconButton icon={{value: 'edit'}} />
     ]
   }
 }
@@ -135,7 +135,7 @@ export const LanguageSelectionExample = {
         onSelectLanguage={ () => {} }
         selectedLanguage={ 'EN' }
       />,
-      <IconButton icon='trash' />
+      <IconButton icon={{value: 'trash'}} />
     ]
   }
 }

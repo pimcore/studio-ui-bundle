@@ -105,7 +105,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         } }
         >
           <IconTextButton
-            icon='PlusCircleOutlined'
+            icon={ { value: 'PlusCircleOutlined' } }
             type='default'
           >
             {t('listing.add-column')}
@@ -118,7 +118,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
               gap={ 'extra-small' }
             >
               <IconTextButton
-                icon='close'
+                icon={ { value: 'close' } }
                 onClick={ () => {
                   resetBatchEdits()
                 } }

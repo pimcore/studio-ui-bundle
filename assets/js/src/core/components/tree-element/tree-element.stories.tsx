@@ -31,19 +31,19 @@ export const _default = {
         title: 'All users',
         key: '0-0',
         actions: [{ key: 'add-folder', icon: 'PlusCircleOutlined' }, { key: 'add-user', icon: 'PlusCircleOutlined' }],
-        icon: <Icon name={ 'folder' } />,
+        icon: <Icon value={ 'folder' } />,
         children: [
           {
             title: 'Admins',
             key: '0-0-0',
             actions: [{ key: 'add-folder', icon: 'PlusCircleOutlined' }, { key: 'add-user', icon: 'PlusCircleOutlined' }],
-            icon: <Icon name={ 'folder' } />,
+            icon: <Icon value={ 'folder' } />,
             children: [
               {
                 title: 'Superuser',
                 key: '2',
                 type: 'user',
-                icon: <Icon name={ 'user-01' } />,
+                icon: <Icon value={ 'user-01' } />,
                 actions: [{ key: 'clone', icon: 'copy-03' }, { key: 'remove', icon: 'trash' }]
               }
             ]
@@ -52,24 +52,24 @@ export const _default = {
             title: 'Portal Engine',
             key: '0-0-1',
             actions: [{ key: 'add-folder', icon: 'PlusCircleOutlined' }, { key: 'add-user', icon: 'PlusCircleOutlined' }],
-            icon: <Icon name={ 'folder' } />,
+            icon: <Icon value={ 'folder' } />,
             children: [
               {
                 title: 'All rights',
                 key: '0-0-1-0',
                 actions: [{ key: 'add-folder', icon: 'PlusCircleOutlined' }, { key: 'add-user', icon: 'PlusCircleOutlined' }],
-                icon: <Icon name={ 'folder' } />,
+                icon: <Icon value={ 'folder' } />,
                 children: [
                   {
                     title: 'Jack',
                     key: '0-0-1-0-0',
-                    icon: <Icon name={ 'user-01' } />,
+                    icon: <Icon value={ 'user-01' } />,
                     actions: [{ key: 'clone', icon: 'copy-03' }, { key: 'remove', icon: 'trash' }]
                   },
                   {
                     title: 'John',
                     key: '0-0-1-0-1',
-                    icon: <Icon name={ 'user-01' } />,
+                    icon: <Icon value={ 'user-01' } />,
                     actions: [{ key: 'clone', icon: 'copy-03' }, { key: 'remove', icon: 'trash' }]
                   }
                 ]
@@ -110,39 +110,39 @@ export const Checkable = {
       {
         title: 'All Tags',
         key: '0',
-        icon: <Icon name={ 'folder' } />,
+        icon: <Icon value={ 'folder' } />,
         children: [
           {
             title: 'Countries',
             key: '0-0',
-            icon: <Icon name={ 'tag-02' } />,
+            icon: <Icon value={ 'tag-02' } />,
             children: [
               {
                 title: 'Australia',
                 key: '0-0-0',
-                icon: <Icon name={ 'tag-02' } />
+                icon: <Icon value={ 'tag-02' } />
               },
               {
                 title: 'Mongolia',
                 key: '0-0-1',
-                icon: <Icon name={ 'tag-02' } />
+                icon: <Icon value={ 'tag-02' } />
               },
               {
                 title: 'Kenya',
                 key: '0-0-2',
-                icon: <Icon name={ 'tag-02' } />
+                icon: <Icon value={ 'tag-02' } />
               }
             ]
           },
           {
             title: 'Print',
             key: '0-1',
-            icon: <Icon name={ 'tag-02' } />,
+            icon: <Icon value={ 'tag-02' } />,
             children: [
               {
                 title: 'A4',
                 key: '0-1-0',
-                icon: <Icon name={ 'tag-02' } />
+                icon: <Icon value={ 'tag-02' } />
               }
             ]
           }

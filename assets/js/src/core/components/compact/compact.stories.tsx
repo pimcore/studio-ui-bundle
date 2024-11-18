@@ -36,7 +36,7 @@ export const _default = {
       <Button>Button 1</Button>
       <Button>Button 2</Button>
       <IconButton
-        icon='trash'
+        icon={{value: 'trash'}}
         type='primary'
       />
     </>
@@ -62,7 +62,7 @@ export const WithInputComponents = {
     children: <>
       <Input placeholder='Input 1' />
       <IconButton
-        icon='group'
+        icon={{value: 'group'}}
         type='primary'
       />
     </>,
@@ -75,7 +75,7 @@ export const WithInputComponents2 = {
     children: <>
       <Input placeholder='Input 1' />
       <IconTextButton
-        icon='group'
+        icon={{value: 'group'}}
         type='primary'
       >Choose</IconTextButton>
     </>,

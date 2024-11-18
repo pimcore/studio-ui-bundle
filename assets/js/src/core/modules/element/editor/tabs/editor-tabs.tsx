@@ -121,7 +121,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
           <span>{tmpItem.label}</span>
           <IconButton
             className={ 'detachable-button' }
-            icon={ 'share-03' }
+            icon={ { value: 'share-03' } }
             onClick={ () => {
               openDetachedWidget({
                 tabKey: item.key

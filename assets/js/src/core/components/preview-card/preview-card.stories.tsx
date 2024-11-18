@@ -32,7 +32,7 @@ export default config
 const dropdownItems: DropdownProps['menu']['items'] = [
   {
     key: 'locate-in-tree',
-    icon: <Icon name="target" />,
+    icon: <Icon value="target" />,
     label: 'preview-card.locate-in-tree'
   }
 ]

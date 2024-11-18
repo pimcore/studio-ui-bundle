@@ -60,13 +60,13 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
                   isCollapsed
                     ? (
                       <Icon
-                        name={ 'chevron-down-wide' }
+                        value={ 'chevron-down-wide' }
                         options={ { width: 22, height: 22 } }
                       />
                       )
                     : (
                       <Icon
-                        name={ 'chevron-up-wide' }
+                        value={ 'chevron-up-wide' }
                         options={ { width: 22, height: 22 } }
                       />
                       )
@@ -127,7 +127,7 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
           <div className={ 'notification-content__content__completed-actions' }>
             <div className={ 'notification-content__content__completed-actions__headline' }>
               <Icon
-                name={ 'check-circle-filled' }
+                value={ 'check-circle-filled' }
                 options={ { width: 14, height: 14 } }
               />
               <p>{t('notification.action-list.completed-actions')}</p>

@@ -56,7 +56,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
         <Space size='mini'>
           { getLanguageSelection(uniqueId, column) }
           <IconButton
-            icon='trash'
+            icon={ { value: 'trash' } }
             onClick={ () => { onRemoveColumn(uniqueId) } }
             theme='secondary'
           />

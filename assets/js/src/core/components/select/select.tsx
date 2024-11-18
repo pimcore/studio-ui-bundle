@@ -61,7 +61,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     return (
       <Icon
         className={ styles.arrowIcon }
-        name={ iconToShow }
+        value={ iconToShow }
       />
     )
   }
@@ -79,7 +79,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
       {withCustomIcon && (
         <Icon
           className={ customIconClassNames }
-          name={ customIcon! }
+          value={ customIcon! }
         />
       )}
       <AntdSelect

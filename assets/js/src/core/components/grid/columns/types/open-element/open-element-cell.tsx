@@ -35,7 +35,7 @@ export const OpenElementCell = (props: DefaultCellProps): React.JSX.Element => {
 
     return (
       <Button
-        icon={ <Icon name={ 'group' } /> }
+        icon={ <Icon value={ 'group' } /> }
         onClick={ onClick }
         onKeyDown={ onKeyEnterExecuteClick }
         type={ 'link' }

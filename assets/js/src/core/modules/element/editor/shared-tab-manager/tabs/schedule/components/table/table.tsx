@@ -82,7 +82,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
             justify='center'
           >
             <IconButton
-              icon={ 'trash' }
+              icon={ { value: 'trash' } }
               onClick={ (): void => {
                 removeSchedule(info.row.original)
               } }

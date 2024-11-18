@@ -31,8 +31,8 @@ export const BorderTitleView = ({ icon, title }: BorderTitleViewProps): React.JS
     >
       <div>
         <Icon
-          name={ icon }
           options={ { width: 16, height: 16 } }
+          value={ icon }
         />
       </div>
     </Tooltip>

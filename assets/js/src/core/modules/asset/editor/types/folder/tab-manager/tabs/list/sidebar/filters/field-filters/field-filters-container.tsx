@@ -41,7 +41,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
       {!isEmptyValue(dropDownMenu) && (
         <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, handleColumnClick) } }>
           <IconTextButton
-            icon='PlusCircleOutlined'
+            icon={ { value: 'PlusCircleOutlined' } }
             type='link'
           >
             { t('listing.add-column') }

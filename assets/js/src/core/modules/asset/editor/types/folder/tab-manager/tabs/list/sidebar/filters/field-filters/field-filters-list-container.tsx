@@ -33,7 +33,7 @@ export const FieldFiltersListContainer = ({ columns }: FieldFiltersListContainer
     renderRightToolbar: <ButtonGroup items={
         [
           <IconButton
-            icon='close'
+            icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => { onRemoveColumnClick(column) } }
           />

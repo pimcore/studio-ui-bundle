@@ -71,7 +71,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           onClick={ () => { setZoom(zoom - zoomSteps) } }
           onKeyDown={ onKeyEnterExecuteClick }
         >
-          <Icon name={ 'MinusOutlined' } />
+          <Icon value={ 'MinusOutlined' } />
         </Button>
         <Select
           aria-label={ t('aria.asset.image.editor.zoom.preconfigured-zoom-levels') }
@@ -97,7 +97,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           onClick={ () => { setZoom(zoom + zoomSteps) } }
           onKeyDown={ onKeyEnterExecuteClick }
         >
-          <Icon name={ 'PlusOutlined' } />
+          <Icon value={ 'PlusOutlined' } />
         </Button>
       </Space.Compact>
     </div>

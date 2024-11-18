@@ -29,7 +29,7 @@ export const DragOverlay = (props: DragOverlayProps): React.JSX.Element => {
       className={ ['dnd__overlay', styles.dragOverlay].join(' ') }
       ref={ ref }
     >
-      <Icon name={ props.info.icon } /> {props.info.title}
+      <Icon value={ props.info.icon } /> {props.info.title}
     </div>
   )
 }

@@ -45,7 +45,7 @@ export const _default = {
             onSelectLanguage={ () => {} }
             selectedLanguage={ 'EN' }
           />,
-          <IconButton icon='trash' />
+          <IconButton icon={{value: 'trash'}} />
         ] }
                             />
       },
@@ -60,7 +60,7 @@ export const _default = {
             onSelectLanguage={ () => {} }
             selectedLanguage={ 'EN' }
           />,
-          <IconButton icon='trash' />
+          <IconButton icon={{value: 'trash'}} />
         ] }
                             />
       },
@@ -75,7 +75,7 @@ export const _default = {
             onSelectLanguage={ () => {} }
             selectedLanguage={ 'EN' }
           />,
-          <IconButton icon='trash' />
+          <IconButton icon={{value: 'trash'}} />
         ] }
                             />
       }

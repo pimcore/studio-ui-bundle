@@ -133,7 +133,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
               />
 
               <IconTextButton
-                icon={ 'PlusCircleOutlined' }
+                icon={ { value: 'PlusCircleOutlined' } }
                 onClick={ () => {
                   onAddPropertyClick()
                 } }
@@ -162,7 +162,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ 'PlusCircleOutlined' }
+                  icon={ { value: 'PlusCircleOutlined' } }
                   key={ t('properties.add-custom-property') }
                   onClick={ () => {
                     setCreateManualPropertyMode(true)

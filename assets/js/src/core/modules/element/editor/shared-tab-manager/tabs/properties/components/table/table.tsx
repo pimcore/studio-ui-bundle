@@ -149,7 +149,7 @@ export const Table = ({
                 info.row.original.data !== null &&
               (
                 <IconButton
-                  icon={ 'group' }
+                  icon={ { value: 'group' } }
                   onClick={ async () => {
                     await openElement({
                       type: mapToElementType(info.row.original.type),
@@ -163,7 +163,7 @@ export const Table = ({
 
             {tableType === 'own' && (
               <IconButton
-                icon={ 'trash' }
+                icon={ { value: 'trash' } }
                 onClick={ () => {
                   removeProperty(info.row.original)
                 } }

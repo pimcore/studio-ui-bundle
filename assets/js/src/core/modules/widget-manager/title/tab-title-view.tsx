@@ -44,8 +44,8 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
       size='mini'
     >
       <Icon
-        name={ icon }
         options={ { width: 16, height: 16 } }
+        value={ icon }
       />
       <span>{title}</span>
 
@@ -71,8 +71,8 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
         type={ 'link' }
       >
         <Icon
-          name='close'
           options={ { width: 14, height: 14 } }
+          value='close'
         />
       </Button>
     )

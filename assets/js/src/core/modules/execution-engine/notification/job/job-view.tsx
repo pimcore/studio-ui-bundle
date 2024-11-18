@@ -64,7 +64,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 align='center'
                 gap={ 'small' }
               >
-                <Icon name='check-circle-filled' /><span>{ t('jobs.job.finished', { title: props.title }) }</span>
+                <Icon value='check-circle-filled' /><span>{ t('jobs.job.finished', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
@@ -89,7 +89,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 align='center'
                 gap={ 'small' }
               >
-                <Icon name='exclamation-circle-filled' /><span>{ t('jobs.job.finished-with-errors', { title: props.title }) }</span>
+                <Icon value='exclamation-circle-filled' /><span>{ t('jobs.job.finished-with-errors', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
                 {/* todo check button type */}
@@ -114,7 +114,7 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                 align='center'
                 gap={ 'small' }
               >
-                <Icon name='close-circle-filled' /><span>{ t('jobs.job.failed', { title: props.title }) }</span>
+                <Icon value='close-circle-filled' /><span>{ t('jobs.job.failed', { title: props.title }) }</span>
               </Flex>
               <Flex gap={ 'small' }>
                 { props.failureButtonActions?.map((action, index) => (
