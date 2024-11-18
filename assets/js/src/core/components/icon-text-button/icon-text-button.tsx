@@ -16,8 +16,8 @@ import React from 'react'
 import { Icon, type IconProps } from '../icon/icon'
 import { Flex } from 'antd'
 
-export interface IconTextButtonProps extends ButtonProps {
-  icon: string
+export interface IconTextButtonProps extends Omit<ButtonProps, 'icon'> {
+  icon: IconProps
   iconOptions?: IconProps['options']
   iconPlacement?: 'left' | 'right'
 }
@@ -33,10 +33,7 @@ export const IconTextButton = ({ icon, children, iconOptions, iconPlacement = 'l
         justify='center'
       >
         { iconPlacement === 'left' && (
-        <Icon
-          name={ icon }
-          options={ iconOptions }
-        />
+          <Icon { ...icon } />
         ) }
 
         <span>
@@ -44,10 +41,7 @@ export const IconTextButton = ({ icon, children, iconOptions, iconPlacement = 'l
         </span>
 
         { iconPlacement === 'right' && (
-        <Icon
-          name={ icon }
-          options={ iconOptions }
-        />
+          <Icon { ...icon } />
         ) }
       </Flex>
     </Button>

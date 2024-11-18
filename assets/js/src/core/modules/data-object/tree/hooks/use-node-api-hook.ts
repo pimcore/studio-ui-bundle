@@ -20,6 +20,7 @@ import {
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
+import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
 interface DataObjectTreeAdditionalTreeProps {
   pager?: number
@@ -46,13 +47,9 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
 
     const dataObjectData = data.items
     dataObjectData.forEach((dataObjectNode) => {
-      const icon = dataObjectNode.icon?.value === '' || dataObjectNode.icon?.value === 'vector'
-        ? 'mainObject'
-        : dataObjectNode.icon?.value
-
       nodes.push({
         id: dataObjectNode.id.toString(),
-        icon: icon!,
+        icon: getElementIcon(dataObjectNode, { type: 'name', value: 'mainObject' }),
         label: dataObjectNode.key!,
         type: dataObjectNode.type,
         parentId: dataObjectNode.parentId.toString(),

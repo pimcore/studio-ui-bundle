@@ -15,33 +15,31 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import React from 'react'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
-export interface IconProps {
-  name: string
+export interface IconProps extends Omit<ElementIcon, 'type'> {
+  type?: ElementIcon['type']
   options?: React.SVGProps<SVGSVGElement>
   className?: string
 }
 
-export const Icon = ({ name, options, className }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
 
   const renderIcon = (): React.JSX.Element => {
-    const isFile = name.endsWith('.svg')
-
-    if (isFile) {
+    if (type === 'path') {
       return (
         <img
           alt={ 'foo' }
-          src={ name }
+          src={ value }
           style={ { width, height } }
         />
       )
     }
 
-    const SvgIcon = iconLibrary.get(name)
-
+    const SvgIcon = iconLibrary.get(value)
     if (SvgIcon === undefined) {
       return <div style={ { width, height } } />
     }
@@ -57,7 +55,7 @@ export const Icon = ({ name, options, className }: IconProps): React.JSX.Element
 
   return (
     <div
-      className={ `pimcore-icon pimcore-icon-${name} anticon ${className}` }
+      className={ `pimcore-icon pimcore-icon-${value} anticon ${className}` }
       style={ { width, height } }
     >
       {renderIcon()}
