@@ -1,7 +1,0 @@
-{
-  "livePreview.defaultPreviewPath": "/assets/storybook-static/index.html",
-  "sonarlint.connectedMode.project": {
-    "connectionId": "Pimcore",
-    "projectKey": "pimcore_studio-ui-bundle"
-  }
-}
