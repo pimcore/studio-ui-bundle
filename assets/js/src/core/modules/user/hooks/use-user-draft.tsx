@@ -18,7 +18,8 @@ import {
   removeUser,
   changeUser,
   userUpdateWorkspaces,
-  userAvailablePermissionsFetched
+  userAvailablePermissionsFetched,
+  userReloaded
 } from '@Pimcore/modules/user/user-slice'
 import {
   api, type UserGetAvailablePermissionsApiResponse,
@@ -56,6 +57,7 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   function reloadUser (): void {
+    dispatch(userReloaded(user.id))
     getUser()
   }
 
@@ -103,7 +105,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
 
   function changeUserInState (changes: any): void {
     if (user === undefined) return
-    console.log('changeUserInState', changes)
     dispatch(changeUser({ id: user.id, changes }))
   }
 

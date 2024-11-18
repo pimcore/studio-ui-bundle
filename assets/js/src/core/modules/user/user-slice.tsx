@@ -65,6 +65,17 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
+    userReloaded: (state, action: PayloadAction<number>): void => {
+      const id: number = action.payload
+
+      const update: Update<any, any> = {
+        id,
+        changes: { modified: false }
+      }
+      state.changedIds = state.changedIds.filter((item) => item !== id)
+
+      userAdapter.updateOne(state, update)
+    },
     userUpdated: (state, action: PayloadAction<any>): void => {
       console.log('userUpdated', action)
       // todo set modified to false
@@ -112,6 +123,7 @@ export const {
   userOpened,
   userClosed,
   userFetched,
+  userReloaded,
   userAvailablePermissionsFetched,
   changeUser,
   userUpdated,
