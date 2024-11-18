@@ -47,7 +47,7 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
     submitAction: {
       actionType,
       elementId: id,
-      elementType: elementType === 'data-object' ? 'object' : elementType,
+      elementType,
       workflowName: _.snakeCase(workFlowName),
       transition,
       workflowOptions: workFlowOptions
@@ -57,17 +57,13 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
 
-    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then((response) => {
-      if ('data' in response) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        messageApi.success({
-          content: t('action-applied-successfully') + ': ' + t(`${workflowName}`),
-          type: 'success',
-          duration: 3
-        })
-      } else if ('error' in response) {
-        throw new Error(JSON.stringify(response.error))
-      }
+    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then(() => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success({
+        content: t('action-applied-successfully') + ': ' + t(`${workflowName}`),
+        type: 'success',
+        duration: 3
+      })
     }).catch((error) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({
