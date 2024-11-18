@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -25,12 +25,12 @@ enum DatePickerSettingValue {
 }
 
 interface FieldFilterDatetimeON {
-  on?: number
+  on: number
 }
 
 interface FieldFilterDatetimeBetween {
-  from?: number
-  to?: number
+  from: number
+  to: number
 }
 
 interface FieldFilterDatetime {
@@ -52,20 +52,45 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
   const { getFieldFilter, addOrUpdateFieldFilter } = useFilters()
 
   const fieldFilter = getFieldFilter(column) as FieldFilterDatetime
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const value = fieldFilter?.filterValue?.on ?? null
 
-  const [dateOnValue, setDateOnValue] = useState<null | number | any>(value)
+  const getValue = (datetimeType: DatePickerSettingValue): null | number | number[] => {
+    const currentFilterValue = fieldFilter?.filterValue
+
+    if (currentFilterValue == null) return null
+
+    if (datetimeType === DatePickerSettingValue.ON && 'on' in currentFilterValue) {
+      setSettingValue(DatePickerSettingValue.ON)
+
+      return currentFilterValue.on
+    }
+
+    if (datetimeType === DatePickerSettingValue.BETWEEN && 'from' in currentFilterValue) {
+      setSettingValue(DatePickerSettingValue.BETWEEN)
+
+      return [currentFilterValue.from, currentFilterValue.to]
+    }
+
+    return null
+  }
+
+  const valueOn = useMemo(() => getValue(DatePickerSettingValue.ON), [fieldFilter])
+  const valueBetween = useMemo(() => getValue(DatePickerSettingValue.BETWEEN), [fieldFilter])
+
+  const [dateOnValue, setDateOnValue] = useState<null | number | any>(valueOn)
+  const [dateBetweenValue, setDateBetweenValue] = useState<null | number | any>(valueBetween)
 
   const handleChangeDateOnValue = (date: number): void => {
     setDateOnValue(date)
+    setDateBetweenValue(null)
 
-    addOrUpdateFieldFilter(column, { on: date })
+    date !== null && addOrUpdateFieldFilter(column, { on: date })
   }
 
   const handleChangeDateBetweenValue = (date: DateRange): void => {
-    console.warn('---->>> handleChangeDateBetweenValue: ', date, column)
+    setDateBetweenValue(date)
+    setDateOnValue(null)
+
+    date !== null && addOrUpdateFieldFilter(column, { from: date[0], to: date[1] })
   }
 
   return (
@@ -92,7 +117,9 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
       {settingValue === DatePickerSettingValue.BETWEEN && (
         <DateRangePicker
           format={ DATE_FORMAT }
-          onChange={ (date: DateRange) => { handleChangeDateBetweenValue(date) } }
+          onChange={ handleChangeDateBetweenValue }
+          outputType='timestamp'
+          value={ dateBetweenValue }
         />
       )}
     </Flex>
