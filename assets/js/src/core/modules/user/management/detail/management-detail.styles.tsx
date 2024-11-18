@@ -19,7 +19,7 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      padding: ${token.paddingSM}px ${token.paddingSM}px 0;
+      padding: ${token.paddingSM}px ${token.paddingSM}px;
       
       .detail-tabs__content {
         height: 100%;
