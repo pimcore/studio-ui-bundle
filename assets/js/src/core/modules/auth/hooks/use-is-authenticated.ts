@@ -17,5 +17,5 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 export const useIsAuthenticated = (): boolean => {
   const user = useUser()
 
-  return useMemo(() => (user?.username !== null), [user])
+  return useMemo(() => (user.username !== ''), [user])
 }

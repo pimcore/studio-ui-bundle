@@ -15,7 +15,7 @@ import { useContext } from 'react'
 import { TagFiltersContext } from '../tag-filters-provider'
 import { type ITagFilterContext } from '../../../types/filterTypes'
 import { defaultTagFilterOptions } from '../../../constants/filters'
-import { TAG_TYPE } from '../../../constants/systemTypes'
+import { FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends ITagFilterContext {
   addOrUpdateFieldFilter: (value: any) => void
@@ -32,7 +32,7 @@ export const useTagFilters = (): UseFiltersHookReturn => {
       return {
         ...filterOptions,
         columnFilters: [{
-          type: TAG_TYPE,
+          type: FILTER_TYPE.TAG_TYPE,
           filterValue: {
             considerChildTags: true,
             tags: value

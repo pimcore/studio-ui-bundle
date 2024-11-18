@@ -13,7 +13,11 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
-import { type DataObjectGetTreeApiResponse, useDataObjectGetTreeQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import {
+  type DataObjectGetTreeApiResponse,
+  type DataObjectPermissions,
+  useDataObjectGetTreeQuery
+} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
@@ -55,6 +59,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         metaData: {
           dataObject: dataObjectNode
         },
+        permissions: dataObjectNode.permissions ?? [] as DataObjectPermissions,
         level: node.level + 1,
         ...(() => {
           if (node.level === -1) {

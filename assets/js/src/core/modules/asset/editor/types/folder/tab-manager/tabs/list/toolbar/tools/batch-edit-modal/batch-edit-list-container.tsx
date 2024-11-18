@@ -24,27 +24,51 @@ import {
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/default-batch-edit'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
+import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
+  const { updateLocale } = useBatchEdit()
+  const settings = useSettings()
 
-  const items: StackListProps['items'] = batchEdits.map((batchEdit) => ({
-    id: batchEdit.key,
-    children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
-    renderRightToolbar: <ButtonGroup items={
-            [
-              <IconButton
-                icon='close'
-                key={ 'remove' }
-                onClick={ () => {
-                  removeBatchEdit(batchEdit.key)
-                } }
-              />
+  const languages = [
+    '-',
+    ...settings.requiredLanguages
+  ]
+
+  const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
+    const selectedLanguage = batchEdit.locale ?? '-'
+
+    return ({
+      id: batchEdit.key,
+      children: <Tag>{t(`asset.listing.column.${batchEdit.key}`)}</Tag>,
+      renderRightToolbar: <ButtonGroup items={
+        [...(batchEdit.localizable
+          ? [
+            <LanguageSelection
+              key="language-selection"
+              languages={ languages }
+              onSelectLanguage={ (language) => {
+                updateLocale(batchEdit.key, transformLanguage(language))
+              } }
+              selectedLanguage={ selectedLanguage }
+            />
             ]
-        }
-                        />,
-    body: <DefaultBatchEdit batchEdit={ batchEdit } />
-  }))
+          : []),
+          <IconButton
+            icon='close'
+            key={ 'remove' }
+            onClick={ () => {
+              removeBatchEdit(batchEdit.key)
+            } }
+          />
+        ]
+      }
+                          />,
+      body: <DefaultBatchEdit batchEdit={ batchEdit } />
+    })
+  })
 
   return (
     <>

@@ -14,61 +14,31 @@
 import React, { useEffect } from 'react'
 import { type PickerProps } from 'antd/lib/date-picker/generatePicker/interface'
 import { DatePicker as OriginalDatePicker } from 'antd'
-import dayjs, { type Dayjs } from 'dayjs'
+import { type Dayjs } from 'dayjs'
+import {
+  type DatePickerValueType,
+  toDayJs,
+  fromDayJs,
+  type OutputType
+} from './utils/date-picker-utils'
+import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
+import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
 
-type DatePickerValueType = string | number | Dayjs | null
-
-type DatePickerPropsBase = PickerProps & {
+export type DatePickerProps = PickerProps & {
   value?: DatePickerValueType
-  onChange?: (date: string | number | Dayjs | null) => void
-  outputType?: 'dateString' | 'timestamp' | 'dayjs'
+  onChange?: (date: DatePickerValueType) => void
+  outputType?: OutputType
   outputFormat?: string
 }
 
-type DatePickerPropsDateString = DatePickerPropsBase & {
-  outputType: 'dateString'
-  outputFormat?: string // if not set, ISO8601 will be used
-}
-
-type DatePickerPropsTimestamp = DatePickerPropsBase & {
-  outputType: 'timestamp'
-}
-
-export type DatePickerProps = DatePickerPropsDateString | DatePickerPropsTimestamp | DatePickerPropsBase
-
-export const DatePicker = (props: DatePickerProps): React.JSX.Element => {
-  const valueToDayJs = (value?: DatePickerValueType | any): Dayjs | null => {
-    if (dayjs.isDayjs(value)) {
-      return value
-    }
-    if (typeof value === 'number') {
-      return dayjs.unix(value)
-    }
-    if (typeof value === 'string') {
-      return dayjs(value)
-    }
-    return null
-  }
-
+const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat
-  const valueToTargetFormat = (value: Dayjs | null): DatePickerValueType => {
-    if (value === null) {
-      return null
-    }
-    if (props.outputType === 'timestamp') {
-      return value.unix()
-    }
-    if (props.outputType === 'dateString') {
-      return outputFormat !== undefined ? value.format(outputFormat) : value.format()
-    }
-    return value
-  }
 
-  const [value, setValue] = React.useState<Dayjs | null>(valueToDayJs(props.value))
+  const [value, setValue] = React.useState<Dayjs | null>(toDayJs(props.value))
 
   useEffect(() => {
     if (props.onChange !== undefined) {
-      props.onChange(valueToTargetFormat(value))
+      props.onChange(fromDayJs(value, props.outputType, props.outputFormat))
     }
   }, [value, props.outputType, outputFormat])
 
@@ -82,3 +52,13 @@ export const DatePicker = (props: DatePickerProps): React.JSX.Element => {
     />
   )
 }
+
+interface DatePickerReturn extends React.FC<DatePickerProps> {
+  RangePicker: React.FC<DateRangePickerProps>
+  TimePicker: React.FC<TimePickerProps>
+}
+
+export const DatePicker = Object.assign(DatePickerComponent, {
+  RangePicker: DateRangePicker,
+  TimePicker
+}) as DatePickerReturn

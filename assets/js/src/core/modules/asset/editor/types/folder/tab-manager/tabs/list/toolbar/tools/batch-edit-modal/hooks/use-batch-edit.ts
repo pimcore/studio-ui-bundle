@@ -20,7 +20,8 @@ import { type AssetPatchByIdApiArg, type PatchCustomMetadata } from '@Pimcore/mo
 import { useListSelectedRows } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 interface UseBatchEditHookReturn extends BatchContext {
-  addOrUpdateBatchEdit: (columnKey: string, columnType: string, columnValue: string) => void
+  addOrUpdateBatchEdit: (key: string, type: string, locale: string | null, localizable: boolean, value: string) => void
+  updateLocale: (key: string, locale: string | null) => void
   resetBatchEdits: () => void
   removeBatchEdit: (key: string) => void
   assetPatchForUpdate: () => AssetPatchByIdApiArg
@@ -37,10 +38,13 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   }
 
   const transformToAssetPatch = (rowId: string): DataArrayType => {
-    const metaData: PatchCustomMetadata[] = batchEdits.map(batchEdit => ({
-      name: batchEdit.key,
-      data: batchEdit.value
-    }))
+    const metaData: PatchCustomMetadata[] = batchEdits.map(batchEdit => {
+      return ({
+        name: batchEdit.key,
+        data: batchEdit.value,
+        language: batchEdit.locale
+      })
+    })
 
     return ([{
       metadata: metaData,
@@ -60,16 +64,32 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     })
   }
 
-  const addOrUpdateBatchEdit = (columnKey: string, columnType: string, value: string): void => {
+  const updateLocale = (columnKey: string, locale: string | null): void => {
+    const updatedEdits = batchEdits.map(edit => {
+      if (edit.key === columnKey) {
+        return {
+          ...edit,
+          locale
+        }
+      }
+
+      return edit
+    })
+    setBatchEdits(updatedEdits)
+  }
+
+  const addOrUpdateBatchEdit = (key: string, type: string, locale: string, localizable: boolean, value: string): void => {
     const newEdit: BatchEdit = {
-      key: columnKey,
-      type: columnType,
+      key,
+      type,
+      locale,
+      localizable,
       value
     }
 
     const updatedEdits: BatchEdit[] = [...batchEdits]
 
-    const existingIndex = batchEdits.findIndex(edit => edit.key === columnKey)
+    const existingIndex = batchEdits.findIndex(edit => edit.key === key)
 
     if (existingIndex !== -1) {
       updatedEdits[existingIndex] = newEdit
@@ -89,6 +109,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     batchEdits,
     setBatchEdits,
     addOrUpdateBatchEdit,
+    updateLocale,
     resetBatchEdits,
     removeBatchEdit,
     assetPatchForUpdate

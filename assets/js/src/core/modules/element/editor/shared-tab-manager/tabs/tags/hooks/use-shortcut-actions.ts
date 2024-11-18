@@ -48,9 +48,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
         const saveChildrenTags = currentTags.data?.items ?? []
         const items: Tag[] = { ...saveParentTags, ...saveChildrenTags }
 
-        const tagIds = Object.keys(items).map(Number)
-
-        const cacheUpdate = dispatch(
+        dispatch(
           tagsApi.util.updateQueryData(
             'tagGetCollectionForElementByTypeAndId',
             {
@@ -65,18 +63,6 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
             }
           )
         )
-
-        try {
-          void await dispatch(tagsApi.endpoints.tagBatchAssignToElementsByType.initiate({
-            elementType,
-            elementTagIdCollection: {
-              elementIds: [id],
-              tagIds
-            }
-          }))
-        } catch (error) {
-          cacheUpdate.undo()
-        }
       })
       .catch((error) => {
         console.error(error)
@@ -87,9 +73,8 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
     Promise.resolve(getCurrentAndParentTags())
       .then(async ({ parentTags }) => {
         const items: Tag[] = parentTags.data?.items ?? []
-        const tagIds = Object.keys(items).map(Number)
 
-        const cacheUpdate = dispatch(
+        dispatch(
           tagsApi.util.updateQueryData(
             'tagGetCollectionForElementByTypeAndId',
             {
@@ -104,18 +89,6 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
             }
           )
         )
-
-        try {
-          void await dispatch(tagsApi.endpoints.tagBatchReplaceForElementsByType.initiate({
-            elementType,
-            elementTagIdCollection: {
-              elementIds: [id],
-              tagIds
-            }
-          }))
-        } catch (error) {
-          cacheUpdate.undo()
-        }
       })
       .catch((error) => {
         console.error(error)

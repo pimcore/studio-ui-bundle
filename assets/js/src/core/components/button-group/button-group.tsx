@@ -50,8 +50,8 @@ export const ButtonGroup = ({ items, noSpacing = false, withSeparator = false }:
 
       {noSpacing && (
         <Button.Group>
-          {items.map((item) => (
-            <>{item}</>
+          {items.map((item, index) => (
+            <span key={ index }>{item}</span>
           ))}
         </Button.Group>
       )}

@@ -14,9 +14,9 @@
 import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
 import { DatePicker, type DatePickerProps } from './date-picker'
-import dayjs from 'dayjs'
 import { Form } from '@Pimcore/components/form/form'
 import FormItem from 'antd/es/form/FormItem'
+import { type DatePickerValueType, formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
@@ -47,7 +47,7 @@ const ExampleForm = (props: DatePickerProps): React.JSX.Element => {
       </FormItem>
       <div>
         <strong>Selected Date:</strong>
-        <pre>{date !== null && date !== undefined ? (dayjs.isDayjs(date) ? 'dayjs object: ' + date.toString() : date.toString()) : 'null'}</pre>
+        <pre>{date !== null && date !== undefined ? formatDatePickerDate(date as DatePickerValueType) : 'null'}</pre>
       </div>
     </Form>
   )

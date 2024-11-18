@@ -24,6 +24,7 @@ import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import type { AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -56,6 +57,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       label: t('element.delete'),
       key: 'delete',
       icon: <Icon name={ 'delete-outlined' } />,
+      hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined

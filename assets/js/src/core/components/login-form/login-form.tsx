@@ -16,12 +16,12 @@ import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 // import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
-import { type ILoginRequest, useLoginMutation } from '@Pimcore/modules/auth/auth-api-slice'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { Icon } from '../icon/icon'
+import { type Credentials, useLoginMutation, type UserInformation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 
 export interface IAdditionalLogins {
   key: string
@@ -39,23 +39,33 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
   const messageApi = useMessage()
   const { t } = useTranslation()
 
-  const [formState, setFormState] = React.useState<ILoginRequest>({
+  const [formState, setFormState] = React.useState<Credentials>({
     username: '',
     password: ''
   })
 
   const [login, { isLoading }] = useLoginMutation()
 
-  const handleAuthentication = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    try {
-      e.preventDefault()
-      const user = await login(formState).unwrap()
+  const handleAuthentication = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const loginTask = login({ credentials: formState })
 
-      dispatch(setUser(user))
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error({
-        content: error.data.error
+    loginTask.catch((error) => {
+      throw new Error(error.message as string)
+    })
+
+    try {
+      event.preventDefault()
+      const response = (await loginTask) as any
+
+      if (response.error !== undefined) {
+        throw new Error(response.error.data.error as string)
+      }
+
+      const userInformation = response.data as UserInformation
+      dispatch(setUser(userInformation))
+    } catch (e: any) {
+      void messageApi.error({
+        content: e.message
       })
     }
   }

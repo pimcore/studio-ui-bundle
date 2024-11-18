@@ -11,12 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { EditorTabs, type IEditorTabsProps } from '@Pimcore/components/editor-tabs/editor-tabs'
+import { EditorTabs, type IEditorTabsProps } from '@Pimcore/modules/element/editor/tabs/editor-tabs'
 import { type Meta } from '@storybook/react'
 import { PictureOutlined, TagOutlined } from '@ant-design/icons'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { EditorTabsSkeleton } from '@Pimcore/components/editor-tabs/editor-tabs.skeleton'
+import { EditorTabsSkeleton } from '@Pimcore/modules/element/editor/tabs/editor-tabs.skeleton'
 import { useGlobalAssetContext } from '@Pimcore/modules/asset/hooks/use-global-asset-context'
 
 interface IEditorTabsStory extends IEditorTabsProps {

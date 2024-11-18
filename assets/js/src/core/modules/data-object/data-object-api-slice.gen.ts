@@ -221,32 +221,7 @@ export type DataObjectGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
     /** Filter by class. */
-    className?:
-        | "AccessoryPart"
-        | "BodyStyle"
-        | "Car"
-        | "Category"
-        | "Customer"
-        | "CustomerSegment"
-        | "CustomerSegmentGroup"
-        | "Eierlegenedewollmilchsau"
-        | "Event"
-        | "FilterDefinition"
-        | "LinkActivityDefinition"
-        | "Manufacturer"
-        | "News"
-        | "OfferToolCustomProduct"
-        | "OfferToolOffer"
-        | "OfferToolOfferItem"
-        | "OnlineShopOrder"
-        | "OnlineShopOrderItem"
-        | "OnlineShopTaxClass"
-        | "OnlineShopVoucherSeries"
-        | "OnlineShopVoucherToken"
-        | "PortalUser"
-        | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition"
-        | "test";
+    className?;
 };
 export type Error = {
     /** Message */
@@ -349,6 +324,8 @@ export type DataObject = Element & {
         [key: string]: string | number | boolean | object | any[];
     };
     customAttributes?: CustomAttributes;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
     /** Key */
     key?: string;
     /** Class name */

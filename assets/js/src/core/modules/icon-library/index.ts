@@ -125,6 +125,7 @@ import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
 import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
 import LockUnlock01 from '@Pimcore/assets/icons/lock-unlocked-01.inline.svg'
 import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlined.inline.svg'
+import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -584,9 +585,15 @@ moduleSystem.registerModule({
       name: 'lock-unlock-01',
       component: LockUnlock01
     })
+
     iconLibrary.register({
       name: 'question-circle-outlined',
       component: questionCircleOutlined
+    })
+
+    iconLibrary.register({
+      name: 'search-sm',
+      component: searchSM
     })
   }
 })

@@ -64,6 +64,19 @@ aria.login-form-additional-logins.additional-login-provider: "Additional login p
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
+action-applied-successfully: Action applied successfully
+action-could-not-be-applied: Action could not be applied
+workflow-modal.perform-action: Perform Action
+workflow-modal.cancel: Cancel
+workflow-modal.log-time: Log Time
+workflow-modal.timeSpent: Time spent
+workflow-modal.notes: Notes
+workflow-modal.timeSpent-required: Please enter the duration of time spent
+workflow-modal.notes-required: Please enter your notes
+workflow-transitions.log-time: Log Time
+workflow-transitions.start-workflow: Start Workflow
+workflow-transitions.finish-review: Finish Review
+workflow-transitions.restart-review: Restart Review
 save-success: Successfully saved
 save-failed: Save failed
 version.label: Versions
@@ -180,6 +193,7 @@ button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
+open: Open
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
@@ -265,6 +279,9 @@ export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+form.validation.numeric-range.first-value-missing: First value is missing
+form.validation.numeric-range.second-value-missing: Second value is missing
+form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -308,3 +325,6 @@ unknown: Unknown
 warning: Warning
 error: Error
 info: Info
+no-value-set: No value set
+set-to-null: Empty (set to null)
+data-object.editor.external-image.preview-placeholder: Add an external image
