@@ -13,23 +13,14 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 
-export const selectionMode = {
-  SINGLE: 'single',
-  MULTIPLE: 'multiple'
-}
-
 export interface ILanguageSelectionContext {
   currentLanguage: string
-  mode: string
-  setMode: (mode: string) => void
   setCurrentLanguage: (language: string) => void
 }
 
 export const LanguageSelectionContext = createContext<ILanguageSelectionContext>({
   currentLanguage: 'en',
-  setCurrentLanguage: () => {},
-  mode: selectionMode.SINGLE,
-  setMode: () => {}
+  setCurrentLanguage: () => {}
 })
 
 export interface LanguageSelectionProviderProps {
@@ -39,10 +30,9 @@ export interface LanguageSelectionProviderProps {
 export const LanguageSelectionProvider = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
   // @todo check for default language
   const [currentLanguage, setCurrentLanguage] = useState('en')
-  const [mode, setMode] = useState(selectionMode.SINGLE)
 
   return useMemo(() => (
-    <LanguageSelectionContext.Provider value={ { currentLanguage, mode, setMode, setCurrentLanguage } }>
+    <LanguageSelectionContext.Provider value={ { currentLanguage, setCurrentLanguage } }>
       {children}
     </LanguageSelectionContext.Provider>
   ), [currentLanguage, children])

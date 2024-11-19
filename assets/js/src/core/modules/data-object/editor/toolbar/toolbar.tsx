@@ -29,11 +29,9 @@ import {
   type DataObjectUpdateByIdApiArg,
   useDataObjectUpdateByIdMutation
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useLanguageSelection } from './language-selection/provider/use-language-selection'
 import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
+import { LanguageSelection } from './language-selection/language-selection'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -45,8 +43,6 @@ export const Toolbar = (): React.JSX.Element => {
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
-  const settings = useSettings()
-  const { currentLanguage, setCurrentLanguage } = useLanguageSelection()
 
   useEffect(() => {
     if (isSuccess && isSchedulesSuccess) {
@@ -69,11 +65,7 @@ export const Toolbar = (): React.JSX.Element => {
         <ContextMenu />
 
         {activeTab === TAB_EDIT.key && (
-          <LanguageSelection
-            languages={ [...settings.requiredLanguages] }
-            onSelectLanguage={ setCurrentLanguage }
-            selectedLanguage={ currentLanguage }
-          />
+          <LanguageSelection />
         )}
       </Flex>
 
