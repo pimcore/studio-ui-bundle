@@ -23,6 +23,8 @@ import { useFilters } from '../hooks/use-filters'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
+const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
+
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
 
@@ -38,9 +40,12 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     const dropDownMenuCopy = { ...dropDownMenu }
 
     Object.keys(dropDownMenuCopy).forEach(key => {
-      dropDownMenuCopy[key] = dropDownMenuCopy[key].filter((item) => (
-        hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] })
-      ))
+      dropDownMenuCopy[key] = dropDownMenuCopy[key].filter((item) => {
+        const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] })
+        const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(item.key)
+
+        return hasDynamicType && !isIgnoredField
+      })
     })
 
     return dropDownMenuCopy
