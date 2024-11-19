@@ -15,9 +15,10 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface BorderTitleViewProps {
-  icon: string
+  icon: ElementIcon
   title: string
 }
 
@@ -32,7 +33,7 @@ export const BorderTitleView = ({ icon, title }: BorderTitleViewProps): React.JS
       <div>
         <Icon
           options={ { width: 16, height: 16 } }
-          value={ icon }
+          { ...icon }
         />
       </div>
     </Tooltip>
