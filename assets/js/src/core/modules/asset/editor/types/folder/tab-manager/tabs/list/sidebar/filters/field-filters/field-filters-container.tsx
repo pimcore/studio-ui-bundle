@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { useListGridAvailableColumns, getFormattedDropDownMenu } from '../../../hooks/use-list'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -24,12 +25,28 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+
   const { dropDownMenu } = useListGridAvailableColumns()
   const { columns, addColumn } = useFilters()
+  const { hasType } = useDynamicTypeResolver()
 
   const handleColumnClick = (column: GridColumnConfiguration): void => {
     addColumn(column)
   }
+
+  const getFilteredDropDownMenu = (): Record<string, GridColumnConfiguration[]> => {
+    const dropDownMenuCopy = { ...dropDownMenu }
+
+    Object.keys(dropDownMenuCopy).forEach(key => {
+      dropDownMenuCopy[key] = dropDownMenuCopy[key].filter((item) => (
+        hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] })
+      ))
+    })
+
+    return dropDownMenuCopy
+  }
+
+  const filteredDropDownMenu = getFilteredDropDownMenu()
 
   return (
     <Space
@@ -38,8 +55,8 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     >
       <FieldFiltersListContainer columns={ columns } />
 
-      {!isEmptyValue(dropDownMenu) && (
-        <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, handleColumnClick) } }>
+      {!isEmptyValue(filteredDropDownMenu) && (
+        <Dropdown menu={ { items: getFormattedDropDownMenu(filteredDropDownMenu, handleColumnClick) } }>
           <IconTextButton
             icon='PlusCircleOutlined'
             type='link'
