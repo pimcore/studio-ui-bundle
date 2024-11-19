@@ -29,10 +29,12 @@ interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
   addOrUpdateFilterValue: ({ type, value }: { type: FILTER_TYPE, value: string }) => void
 }
 
+type FieldFilterValue = string | object
+
 export interface FieldFilter {
   key: string
   type: string
-  filterValue: string | object
+  filterValue: FieldFilterValue
 }
 
 type ColumnFiltersList = Array<FilterOptions['columnFilters']> | []
@@ -81,7 +83,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
-  const addOrUpdateFieldFilter = (column: GridColumnConfiguration, value: string | object): void => {
+  const addOrUpdateFieldFilter = (column: GridColumnConfiguration, value: FieldFilterValue): void => {
     const fieldFilters = filterOptions.columnFilters
     let newFilters: FieldFilter[] = []
 
@@ -92,7 +94,7 @@ export const useFilters = (): UseFiltersHookReturn => {
         filterValue: value
       }]
 
-      // Update only if the current filters have changed
+      // Update only if the current filters have changed (necessary when filter values are objects)
       setFilterOptions((prevFilterOptions) => {
         if (JSON.stringify(prevFilterOptions.columnFilters) === JSON.stringify(newFilters)) {
           return prevFilterOptions
@@ -130,7 +132,7 @@ export const useFilters = (): UseFiltersHookReturn => {
       newFilters = fieldFiltersArray
     }
 
-    // Update only if the current filters have changed
+    // Update only if the current filters have changed (necessary when filter values are objects)
     setFilterOptions((prevFilterOptions) => {
       if (JSON.stringify(prevFilterOptions.columnFilters) === JSON.stringify(newFilters)) {
         return prevFilterOptions
