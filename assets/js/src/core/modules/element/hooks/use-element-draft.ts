@@ -29,6 +29,7 @@ interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChange
   fullPath?: string
   type?: string
   permissions?: ElementPermissions
+  hasWorkflowAvailable?: boolean
 }
 
 interface UseElementDraftReturn extends
