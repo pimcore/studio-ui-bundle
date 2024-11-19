@@ -87,14 +87,14 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
     setDateOnValue(date)
     setDateBetweenValue(null)
 
-    date !== null && addOrUpdateFieldFilter(column, { on: date })
+    addOrUpdateFieldFilter(column, { on: date })
   }
 
   const handleChangeDateBetweenValue = (dates: DateRangeTargetValue): void => {
     setDateBetweenValue(dates)
     setDateOnValue(null)
 
-    dates !== null && addOrUpdateFieldFilter(column, { from: dates?.[0], to: dates?.[1] })
+    addOrUpdateFieldFilter(column, { from: dates?.[0], to: dates?.[1] })
   }
 
   return (
