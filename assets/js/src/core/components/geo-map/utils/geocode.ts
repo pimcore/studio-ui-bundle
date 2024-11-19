@@ -41,14 +41,18 @@ export const reverseGeocode = async (layerObj: L.Marker): Promise<void> => {
     .replace('{lat}', layerObj.getLatLng().lat.toString())
     .replace('{lng}', layerObj.getLatLng().lng.toString())
 
-  const response = await fetch(reverseGeocodeUrl)
-  if (!response.ok) {
-    throw new Error(`Failed to fetch reverse geocoding data: ${response.statusText}`)
-  }
-  const data = await response.json()
-  if (typeof data.display_name === 'string') {
-    const locationText: string = data.display_name
-    layerObj.bindTooltip(locationText)
-    layerObj.openTooltip()
-  }
+  await fetch(reverseGeocodeUrl).then(async (response: Response | undefined | null) => {
+    if (response === undefined || response === null) {
+      throw new Error('Failed to fetch reverse geocoding data.')
+    }
+    if (!response.ok) {
+      throw new Error(`Failed to fetch reverse geocoding data: ${response.statusText}`)
+    }
+    const data = await response.json()
+    if (typeof data.display_name === 'string') {
+      const locationText: string = data.display_name
+      layerObj.bindTooltip(locationText)
+      layerObj.openTooltip()
+    }
+  })
 }

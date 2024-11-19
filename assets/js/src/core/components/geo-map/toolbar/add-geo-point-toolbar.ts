@@ -52,7 +52,9 @@ export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGro
     featureGroup.addLayer(layer)
 
     if (featureGroup.getLayers().length === 1) {
-      await reverseGeocode(layer)
+      await reverseGeocode(layer).catch((error) => {
+        console.error(error)
+      })
       onChange?.(layer.getLatLng())
     }
   })
@@ -60,7 +62,9 @@ export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGro
   leafletMap.on('draw:editmove', async function (e) {
     const layer = e.layer as L.Marker
 
-    await reverseGeocode(layer)
+    await reverseGeocode(layer).catch((error) => {
+      console.error(error)
+    })
     onChange?.(layer.getLatLng())
   })
 }
