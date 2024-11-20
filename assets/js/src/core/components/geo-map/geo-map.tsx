@@ -11,15 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw'
 import 'leaflet-draw/dist/leaflet.draw.css'
-import { addGeoPointToolbar, type GeoPoint } from '@Pimcore/components/geo-map/toolbar/add-geo-point-toolbar'
+import { addGeoPointToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-point-toolbar'
 import cn from 'classnames'
 import { useStyles } from './geo-map.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { type GeoPolyLine, type GeoPoint, type GeoType } from '@Pimcore/components/geo-map/types/geo-types'
+import { addGeoPolyLineToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-poly-line-toolbar'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: '/bundles/pimcorestudioui/img/leaflet/marker-icon-2x.png',
@@ -27,10 +29,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: '/bundles/pimcorestudioui/img/leaflet/marker-shadow.png'
 })
 
+export type GeoMapMode = 'geoPoint' | 'geoPolyLine' | 'geoPolygon'
+
 interface GeoMapProps {
-  onChange?: (value: GeoPoint) => void
-  mode?: 'geoPoint' | 'geoLine' | 'geoPolygon'
-  value?: GeoPoint
+  onChange?: (value?: GeoType) => void
+  mode?: GeoMapMode
+  value?: GeoType
   width?: string
   height?: string
   lat?: number
@@ -38,32 +42,70 @@ interface GeoMapProps {
   zoom?: number
 }
 
-export const GeoMap = (props: GeoMapProps): React.JSX.Element => {
+export interface GeoMapAPI {
+  forceRerender: () => void
+  setLat: (lat: number) => void
+  setLng: (lng: number) => void
+  setZoom: (zoom: number) => void
+  setValue: (value?: GeoType) => void
+}
+
+export const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Element => {
   const { styles } = useStyles()
   const mapContainer = useRef<HTMLDivElement>(null)
+  const [lat, setLat] = useState<number | undefined>(props.lat)
+  const [lng, setLng] = useState<number | undefined>(props.lng)
+  const [zoom, setZoom] = useState<number | undefined>(props.zoom)
+  const [value, setValue] = useState<GeoType | undefined>(props.value)
+  const [key, setKey] = useState<number>(0)
+
+  const initializeMap = () => {
+    if (mapContainer.current) {
+      const map = L.map(mapContainer.current)
+
+      if (lat !== undefined && lng !== undefined) {
+        map.setView([lat, lng], 15)
+      } else {
+        map.setView([props.lat ?? 0, props.lng ?? 0], props.zoom ?? 1)
+      }
+
+      L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map)
+
+      const featureGroup = L.featureGroup().addTo(map)
+
+      if (props.mode === 'geoPoint') {
+        addGeoPointToolbar(map, featureGroup, value as GeoPoint, props.onChange)
+      } else if (props.mode === 'geoPolyLine') {
+        addGeoPolyLineToolbar(map, featureGroup, value as GeoPolyLine, props.onChange)
+      }
+
+      return map
+    }
+    return null
+  }
+
+  const geoMapApi: GeoMapAPI = {
+    forceRerender: () => {
+      setKey(prevKey => prevKey + 1)
+    },
+    setLat,
+    setLng,
+    setZoom,
+    setValue
+  }
+
+  useImperativeHandle(ref, () => geoMapApi)
 
   useEffect(() => {
-    const map = L.map(mapContainer.current as HTMLElement)
-    if (props.mode === 'geoPoint' && props.value !== undefined) {
-      map.setView([props.value.lat, props.value.lng], 15)
-    } else {
-      map.setView([props.lat ?? 0, props.lng ?? 0], props.zoom ?? 1)
-    }
-
-    L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map)
-
-    const featureGroup = L.featureGroup().addTo(map)
-
-    if (props.mode === 'geoPoint') {
-      addGeoPointToolbar(map, featureGroup, props.value, props.onChange)
-    }
-
+    const map = initializeMap()
     return () => {
-      map.remove()
+      if (map) {
+        map.remove()
+      }
     }
-  }, [mapContainer, props.mode, props.value, props.lat, props.lng, props.zoom])
+  }, [key, lat, lng, zoom, value, props.mode])
 
   return (
     <div
@@ -72,4 +114,4 @@ export const GeoMap = (props: GeoMapProps): React.JSX.Element => {
       style={ { height: toCssDimension(props.height, 250), width: toCssDimension(props.width, 500) } }
     />
   )
-}
+})

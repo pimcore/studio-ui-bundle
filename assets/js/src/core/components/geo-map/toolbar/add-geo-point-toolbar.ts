@@ -13,11 +13,7 @@
 
 import L from 'leaflet'
 import { reverseGeocode } from '@Pimcore/components/geo-map/utils/geocode'
-
-export interface GeoPoint {
-  lat: number
-  lng: number
-}
+import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPoint?: GeoPoint, onChange?: (geoPoint: GeoPoint) => void): void => {
   leafletMap.addLayer(featureGroup)

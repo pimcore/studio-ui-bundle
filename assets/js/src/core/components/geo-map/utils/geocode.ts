@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type GeoPoint } from '@Pimcore/components/geo-map/toolbar/add-geo-point-toolbar'
 import type L from 'leaflet'
+import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 export const ERROR_ADDRESS_NOT_FOUND = 'address_not_found'
 

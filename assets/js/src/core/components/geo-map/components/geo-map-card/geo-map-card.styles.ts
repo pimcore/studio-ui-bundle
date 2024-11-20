@@ -24,19 +24,6 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       max-width: 100%;
       min-width: 270px;
-    `,
-    footer: css`
-      .address-search-field {
-        max-width: 300px;
-      }
-      .remove-button-wrapper {
-        margin-left: auto;
-      }
-    `,
-    geoForm: css`
-      .ant-input-number {
-        width: 138px !important;
-      }
     `
   }
 }, { hashPriority: 'low' })

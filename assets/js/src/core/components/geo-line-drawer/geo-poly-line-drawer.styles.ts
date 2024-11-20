@@ -15,27 +15,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    container: css`
-      .ant-card-cover {
-        .leaflet-container {
-          border-radius: ${token.borderRadiusLG}px ${token.borderRadiusLG}px 0 0;
-          min-height: 120px;
-        }
-      }
-      max-width: 100%;
-      min-width: 270px;
-    `,
     footer: css`
       .address-search-field {
         max-width: 300px;
       }
       .remove-button-wrapper {
         margin-left: auto;
-      }
-    `,
-    geoForm: css`
-      .ant-input-number {
-        width: 138px !important;
       }
     `
   }

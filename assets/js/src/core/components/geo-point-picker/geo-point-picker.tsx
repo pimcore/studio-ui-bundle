@@ -13,11 +13,11 @@
 
 import React, { useState } from 'react'
 import { GeoMap } from '@Pimcore/components/geo-map/geo-map'
-import { type GeoPoint } from '@Pimcore/components/geo-map/toolbar/add-geo-point-toolbar'
 import { Card } from '@Pimcore/components/card/card'
 import { GeoPointPickerFooter } from '@Pimcore/components/geo-point-picker/footer'
 import { useStyles } from './geo-point-picker.styles'
 import cn from 'classnames'
+import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 export interface GeoPointPickerProps {
   onChange?: (value: GeoPoint) => void

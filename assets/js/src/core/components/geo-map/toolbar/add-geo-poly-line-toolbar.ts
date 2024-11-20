@@ -1,0 +1,85 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import L from 'leaflet'
+import { type GeoPolyLine, type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
+
+const extractLatLngs = (latlngs: L.LatLng[]): GeoPoint[] => {
+  return latlngs.map(latlng => {
+    return {
+      lat: latlng.lat,
+      lng: latlng.lng
+    }
+  })
+}
+
+export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPolyLine?: GeoPolyLine, onChange?: (geoPolyLine: GeoPolyLine | undefined) => void): void => {
+  leafletMap.addLayer(featureGroup)
+
+  const polyLine = geoPolyLine !== undefined ? L.polyline(geoPolyLine, { stroke: true, color: '#3388ff', opacity: 0.5, fillOpacity: 0.2, weight: 4 }) : undefined
+  if (polyLine !== undefined) {
+    featureGroup.addLayer(polyLine)
+  }
+
+  const drawControlFull = new L.Control.Draw({
+    position: 'topright',
+    draw: {
+      rectangle: false,
+      polygon: false,
+      circle: false,
+      marker: false,
+      circlemarker: false
+    },
+    edit: {
+      featureGroup,
+      remove: false
+    }
+  })
+  leafletMap.addControl(drawControlFull)
+
+  leafletMap.on(L.Draw.Event.CREATED, function (e) {
+    featureGroup.clearLayers()
+    if (polyLine !== undefined) {
+      polyLine.remove()
+    }
+
+    const layer = e.layer as L.Polyline
+    featureGroup.addLayer(layer)
+    if (featureGroup.getLayers().length === 1) {
+      if (onChange !== undefined) {
+        onChange(extractLatLngs(layer.getLatLngs() as L.LatLng[]))
+      }
+    }
+  })
+
+  leafletMap.on(L.Draw.Event.DELETED, function (e) {
+    if (onChange !== undefined) {
+      onChange(undefined)
+    }
+  })
+
+  leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
+    this.dirty = true
+    this.data = []
+    for (const layerId in e.target._layers) {
+      if (e.target._layers.hasOwnProperty(layerId)) {
+        const layer = e.target._layers[layerId]
+        if (layer.hasOwnProperty('edited')) {
+          if (onChange !== undefined) {
+            onChange(extractLatLngs(layer.editing.latlngs[0] as L.LatLng[]))
+          }
+        }
+      }
+    }
+  })
+}

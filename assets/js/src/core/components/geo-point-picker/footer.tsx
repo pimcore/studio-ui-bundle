@@ -12,7 +12,6 @@
 */
 
 import React, { useEffect } from 'react'
-import { type GeoPoint } from '@Pimcore/components/geo-map/toolbar/add-geo-point-toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button, InputNumber, Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -21,10 +20,9 @@ import { Form } from '@Pimcore/components/form/form'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Box } from '@Pimcore/components/box/box'
-import Search from 'antd/es/input/Search'
 import { useStyles } from '@Pimcore/components/geo-point-picker/geo-point-picker.styles'
-import { ERROR_ADDRESS_NOT_FOUND, geoCode } from '@Pimcore/components/geo-map/utils/geocode'
-import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { AddressSearchField } from '@Pimcore/components/geo-map/components/address-search-field/address-search-field'
+import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 export interface GeoPointPickerFooterProps {
   onChange?: (value?: GeoPoint) => void
@@ -41,7 +39,6 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
   const { styles } = useStyles()
   const [value, setValue] = React.useState<GeoPointFormValues>({ lat: props.value?.lat, lng: props.value?.lng })
   const [form] = Form.useForm()
-  const alertModal = useAlertModal()
 
   const valueToGeoPoint = (val: GeoPointFormValues | undefined): GeoPoint | undefined => {
     if (val?.lat === undefined || val.lng === undefined) {
@@ -72,27 +69,12 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
     }
   }
 
-  const onSearch = async (value: string): Promise<void> => {
-    await geoCode(value).then((geoPoint) => {
-      setValue(geoPoint)
-      form.setFieldsValue(geoPoint)
-      if (props.onChange !== undefined) {
-        props.onChange(geoPoint)
-      }
-    }).catch((error: Error) => {
-      if (error.message === ERROR_ADDRESS_NOT_FOUND) {
-        const errorMessage = (
-          <span>
-            <p>{t('geocode.address-not-found')}</p>
-            <strong>{t('geocode.possible-causes')}:</strong>
-            <p>{t('geocode.postal-code-format-error')}</p>
-          </span>
-        )
-        alertModal.error({ content: errorMessage })
-      } else {
-        alertModal.error({ content: error.message })
-      }
-    })
+  const onSearch = (geoPoint: GeoPoint) => {
+    setValue(geoPoint)
+    form.setFieldsValue(geoPoint)
+    if (props.onChange !== undefined) {
+      props.onChange(geoPoint)
+    }
   }
 
   useEffect(() => {
@@ -111,10 +93,8 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
         gap="mini"
       >
 
-        <Search
-          className="geo-search-field"
+        <AddressSearchField
           onSearch={ onSearch }
-          placeholder={ t('search-address') }
         />
 
         <Dropdown
@@ -162,7 +142,6 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
 
         <div className="remove-button-wrapper">
           <Tooltip
-            key="external-image-delete"
             title={ t('set-to-null') }
           >
             <IconButton
