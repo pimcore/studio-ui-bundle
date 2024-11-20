@@ -25,6 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
       .widget__content {
         flex: 1;
         overflow: auto;
+        contain: layout size;
       }
 
       .widget__title {

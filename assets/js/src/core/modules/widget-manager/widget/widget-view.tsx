@@ -51,4 +51,6 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   )
 }
 
-export { WidgetView }
+const memorizedWidgetView = React.memo(WidgetView)
+
+export { memorizedWidgetView as WidgetView }
