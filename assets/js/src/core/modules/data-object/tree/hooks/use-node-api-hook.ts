@@ -18,7 +18,7 @@ import {
   type DataObjectPermissions,
   useDataObjectGetTreeQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
@@ -32,7 +32,7 @@ interface DataTransformerReturnType {
 }
 
 interface NodeApiHookReturnType {
-  apiHookResult: UseQueryHookResult<any>
+  apiHookResult: TypedUseQueryHookResult<any, unknown, any, any>
   dataTransformer: (data: DataObjectGetTreeApiResponse) => DataTransformerReturnType
   mergeAdditionalQueryParams: Dispatch<SetStateAction<DataObjectTreeAdditionalTreeProps | undefined>>
 }

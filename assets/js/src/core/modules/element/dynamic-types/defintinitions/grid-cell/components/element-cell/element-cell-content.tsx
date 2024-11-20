@@ -42,7 +42,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     }
   }
 
-  const includesPathInformation = propertyData.data !== null
+  const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
   const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
 
   let tagText = props.getValue()
