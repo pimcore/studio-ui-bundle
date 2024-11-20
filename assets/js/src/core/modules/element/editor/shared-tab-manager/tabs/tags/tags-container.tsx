@@ -72,14 +72,14 @@ export const TagsTabContainer = (): React.JSX.Element => {
                 disabled={ data?.totalItems === 0 || element?.hasChildren !== true }
                 menu={ {
                   items: [{
-                    label: 'Remove and apply tags to children',
+                    label: t('tags.remove-and-apply-tags-to-children'),
                     key: '1',
                     onClick: removeAndApplyTagsToChildren
                   }]
                 } }
                 onClick={ applyTagsToChildren }
               >
-                {t('Apply tags to Children')}
+                {t('tags.apply-tags-to-children')}
               </Dropdown.Button>
             </Header>
 
