@@ -12,13 +12,10 @@
 */
 
 import {
-  api as tagsApi,
-  type Tag, type TagBatchOperationToElementsByTypeAndIdApiArg,
+  type TagBatchOperationToElementsByTypeAndIdApiArg,
   useTagBatchOperationToElementsByTypeAndIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
