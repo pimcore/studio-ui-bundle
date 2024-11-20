@@ -43,8 +43,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
     id
   })
 
-  console.log(element)
-
   return (
     <SplitLayout
       leftItem={ {
