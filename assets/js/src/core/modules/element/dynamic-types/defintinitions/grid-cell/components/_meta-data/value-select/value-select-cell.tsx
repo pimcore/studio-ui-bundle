@@ -13,7 +13,7 @@
 
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
-import { SelectCell, type SelectCellConfig } from '@Pimcore/components/grid/columns/types/select/select-cell'
+import { SelectCell, type SelectCellConfig } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/select/select-cell'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 export const ValueSelectCell = (props: DefaultCellProps): React.JSX.Element => {

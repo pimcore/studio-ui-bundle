@@ -15,7 +15,7 @@ import React, { useRef } from 'react'
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Checkbox, type CheckboxRef } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
-import { useStyle } from '@Pimcore/components/grid/columns/types/checkbox/checkbox-cell.styles'
+import { useStyle } from './checkbox-cell.styles'
 
 export interface CheckboxCellConfig {
   align: 'left' | 'center' | 'right'

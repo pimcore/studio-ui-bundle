@@ -14,13 +14,14 @@
 import React, { type ReactElement } from 'react'
 import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
 import { injectable } from 'inversify'
-import { LanguageCell } from '../../components/language-select/language-cell'
+import { ElementCell } from '../../components/element-cell/element-cell'
+import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
 @injectable()
-export class DynamicTypeGridCellLanguageSelect extends DynamicTypeGridCellAbstract {
-  readonly id = 'language-select'
+export class DynamicTypeGridCellDocument extends DynamicTypeGridCellAbstract {
+  readonly id = 'document'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
-    return <LanguageCell { ...props } />
+    return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['document'] }) } />
   }
 }
