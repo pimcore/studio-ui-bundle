@@ -48,7 +48,7 @@ export const useAlertModal = (): UseAlertModalResponse => {
       ),
       warn: ({ content }) => (
         modal.warning({
-          icon: <Icon name={ 'exclamation-circle-filled' } />,
+          icon: <Icon value={ 'exclamation-circle-filled' } />,
           title: t('warning'),
           content
         })

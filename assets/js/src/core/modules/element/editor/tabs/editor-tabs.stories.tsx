@@ -94,14 +94,14 @@ export const _default = {
         key: '2',
         label: 'Tab 2',
         children: 'Tab 2',
-        icon: <Icon name={ 'edit' } />,
+        icon: <Icon value={ 'edit' } />,
         isDetachable: true
       },
       {
         key: '3',
         label: 'Tab 3',
         children: 'Tab 3',
-        icon: <Icon name={ 'view-details' } />
+        icon: <Icon value={ 'view-details' } />
       },
       {
         key: '4',

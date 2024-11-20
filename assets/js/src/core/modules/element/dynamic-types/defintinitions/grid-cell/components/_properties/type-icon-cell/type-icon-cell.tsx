@@ -21,18 +21,18 @@ export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
   function renderCell (): React.JSX.Element {
     switch (propertyType) {
       case 'text':
-        return <IconView name={ 'note' } />
+        return <IconView value={ 'note' } />
       case 'document':
-        return <IconView name={ 'mainDocument' } />
+        return <IconView value={ 'mainDocument' } />
       case 'asset':
-        return <IconView name={ 'mainAsset' } />
+        return <IconView value={ 'mainAsset' } />
       case 'object':
       case 'dataObject':
-        return <IconView name={ 'mainObject' } />
+        return <IconView value={ 'mainObject' } />
       case 'bool':
-        return <IconView name={ 'check-done-02' } />
+        return <IconView value={ 'check-done-02' } />
       case 'select':
-        return <IconView name={ 'chevron-selector-vertical' } />
+        return <IconView value={ 'chevron-selector-vertical' } />
       default:
         return <span></span>
     }

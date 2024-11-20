@@ -34,6 +34,6 @@ export const TAB_EDIT: IEditorTab = {
   key: 'edit',
   label: 'Edit',
   children: <EditContainer />,
-  icon: <Icon name={ 'edit' } />,
+  icon: <Icon value={ 'edit' } />,
   isDetachable: true
 }

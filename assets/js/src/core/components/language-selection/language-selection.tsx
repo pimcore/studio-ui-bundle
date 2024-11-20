@@ -39,13 +39,13 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
         type='link'
       >
         <Icon
-          name='chevron-left'
           options={ { width: 18, height: 18 } }
+          value='chevron-left'
         />
       </Button>
 
       <div className='language-select__current-value'>
-        <Icon name='flag-outlined' /> <span>{language}</span>
+        <Icon value='flag-outlined' /> <span>{language}</span>
       </div>
 
       <Button
@@ -53,8 +53,8 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
         type='link'
       >
         <Icon
-          name='chevron-right'
           options={ { width: 18, height: 18 } }
+          value='chevron-right'
         />
       </Button>
     </div>

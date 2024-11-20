@@ -53,12 +53,12 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
-      icon: <Icon name={ 'more' } />,
+      icon: <Icon value={ 'more' } />,
       children: [
         {
           label: t('element.lock'),
           key: 'advanced-lock',
-          icon: <Icon name={ 'lock-01' } />,
+          icon: <Icon value={ 'lock-01' } />,
           children: [
             lockContextMenuItem(props.node),
             lockAndPropagateContextMenuItem(props.node),

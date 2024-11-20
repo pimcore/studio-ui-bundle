@@ -41,7 +41,7 @@ export const SearchInput = ({ className, withoutAddon = true, withPrefix = true,
         clearIcon: (
           <Icon
             className={ styles.closeIcon }
-            name='close'
+            value='close'
           />
         )
       } }
@@ -49,8 +49,8 @@ export const SearchInput = ({ className, withoutAddon = true, withPrefix = true,
       prefix={ (withPrefix) && (
         <Icon
           className={ styles.searchIcon }
-          name='search-sm'
           options={ { width: 12, height: 12 } }
+          value='search-sm'
         />
       ) }
       { ...props }

@@ -31,7 +31,7 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
     items?.push({
       key: action.key,
       label: t(`tree.actions.${action.key}`),
-      icon: <Icon name={ action.icon } />,
+      icon: <Icon value={ action.icon } />,
       onClick: () => { onActionsClick?.(action.key) }
     })
   })

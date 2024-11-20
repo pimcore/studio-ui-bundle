@@ -61,11 +61,11 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
 
     return (
       <Icon
-        name="chevron-down-small"
         options={ {
           width: 12,
           height: 12
         } }
+        value="chevron-down-small"
       />
     )
   }

@@ -114,8 +114,10 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
       {scrollRequired && (
         <IconButton
           disabled={ isAtStart }
-          icon={ 'chevron-left' }
-          iconOptions={ { height: 18, width: 18 } }
+          icon={ {
+            value: 'chevron-left',
+            options: { height: 18, width: 18 }
+          } }
           onKeyDown={ (e) => {
             handleKeyDown(e, 'left')
           } }
@@ -137,8 +139,10 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
                 scrollRequired && (
                 <IconButton
                   disabled={ isAtEnd }
-                  icon={ 'chevron-right' }
-                  iconOptions={ { height: 18, width: 18 } }
+                  icon={ {
+                    value: 'chevron-right',
+                    options: { height: 18, width: 18 }
+                  } }
                   onKeyDown={ (e) => {
                     handleKeyDown(e, 'right')
                   } }

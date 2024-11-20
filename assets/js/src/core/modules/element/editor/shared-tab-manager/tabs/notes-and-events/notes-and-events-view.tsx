@@ -88,7 +88,7 @@ export const NotesAndEventsTabView = ({
           <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
           <IconButton
             aria-label={ i18n.t('aria.notes-and-events.delete') }
-            icon='trash'
+            icon={ { value: 'trash' } }
             onClick={ (e) => {
               e.stopPropagation()
 
@@ -176,7 +176,7 @@ export const NotesAndEventsTabView = ({
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton
-            icon={ 'PlusCircleOutlined' }
+            icon={ { value: 'PlusCircleOutlined' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }

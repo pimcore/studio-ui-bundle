@@ -20,6 +20,7 @@ import {
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
+import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
 interface AssetTreeAdditionalTreeProps {
   pager?: number
@@ -48,7 +49,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
     assetData.forEach((assetNode) => {
       nodes.push({
         id: assetNode.id.toString(),
-        icon: assetNode.icon?.value ?? 'file-question-02',
+        icon: getElementIcon(assetNode, { type: 'name', value: 'file-question-02' }),
         label: assetNode.filename!,
         type: assetNode.type,
         parentId: assetNode.parentId.toString(),

@@ -28,7 +28,7 @@ export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
         key: tag.id!.toString(),
         title: tag.text,
         icon: Icon({
-          name: 'tag-02'
+          value: 'tag-02'
         }),
         children: tag.hasChildren === true ? treeWalker(tag.children!) : []
       }))
@@ -38,7 +38,7 @@ export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
       key: 'root',
       title: 'All Tags',
       icon: Icon({
-        name: 'folder'
+        value: 'folder'
       }),
       children: tags.length > 0 ? treeWalker(tags) : []
     }]

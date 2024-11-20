@@ -57,7 +57,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             ]
           : []),
           <IconButton
-            icon='close'
+            icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
               removeBatchEdit(batchEdit.key)

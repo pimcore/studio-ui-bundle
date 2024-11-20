@@ -29,6 +29,6 @@ export const TAB_VERSIONS: IEditorTab = {
     ComparisonViewComponent={ ComparisonView }
     SingleViewComponent={ SingleView }
             />,
-  icon: <Icon name={ 'history-outlined' } />,
+  icon: <Icon value={ 'history-outlined' } />,
   isDetachable: true
 }

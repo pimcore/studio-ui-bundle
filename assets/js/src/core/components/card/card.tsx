@@ -49,7 +49,7 @@ const Component = ({ loading, children, footer, fitContent, className, ...props 
                 typeof extra === 'object' && extra.icon !== undefined
                   ? (
                     <IconButton
-                      icon={ extra.icon as string }
+                      icon={ { value: extra.icon as string } }
                       key={ index }
                       onClick={ extra.onClick }
                       role={ 'button' }
@@ -67,7 +67,7 @@ const Component = ({ loading, children, footer, fitContent, className, ...props 
           ? (
             <IconButton
               aria-label={ t('aria.card.close') }
-              icon={ 'close' }
+              icon={ { value: 'close' } }
               onClick={ () => props.onClose?.() }
               role={ 'button' }
               size="small"
@@ -82,7 +82,7 @@ const Component = ({ loading, children, footer, fitContent, className, ...props 
   const renderTitle = (): React.ReactElement => {
     return (
       <>
-        {props.icon !== undefined && props.icon !== null ? <Icon name={ props.icon } /> : null}
+        {props.icon !== undefined && props.icon !== null ? <Icon value={ props.icon } /> : null}
         {props.title}
       </>
     )

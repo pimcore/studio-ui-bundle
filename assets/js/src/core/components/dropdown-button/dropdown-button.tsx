@@ -13,15 +13,19 @@
 
 import React from 'react'
 import { IconTextButton, type IconTextButtonProps } from '../icon-text-button/icon-text-button'
+import { type IconProps } from '@Pimcore/components/icon/icon'
 
 export type dropdownButtonProps = Omit<IconTextButtonProps, 'icon'> & {
-  icon?: string
+  icon?: IconProps
 }
 
-export const DropdownButton = ({ icon = 'icon-tools', ...props }: dropdownButtonProps): React.JSX.Element => {
+export const DropdownButton = ({ icon, ...props }: dropdownButtonProps): React.JSX.Element => {
   return (
     <IconTextButton
-      icon={ icon }
+      icon={ {
+        value: 'icon-tools',
+        ...icon
+      } }
       iconPlacement="right"
       type="link"
       { ...props }

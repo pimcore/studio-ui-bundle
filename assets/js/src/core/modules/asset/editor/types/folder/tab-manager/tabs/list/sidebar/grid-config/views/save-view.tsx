@@ -41,7 +41,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading }: SaveViewProps)
         >
           <Space size='mini'>
             <IconTextButton
-              icon='close'
+              icon={ { value: 'close' } }
               onClick={ onCancelClick }
               type='default'
             >Cancel</IconTextButton>
