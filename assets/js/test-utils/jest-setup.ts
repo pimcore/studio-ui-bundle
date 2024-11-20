@@ -13,7 +13,7 @@
 
 import 'whatwg-fetch'
 
-Object.defineProperty(global, 'matchMedia', {
+Object.defineProperty(globalThis, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
     matches: false,
