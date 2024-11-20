@@ -17,7 +17,7 @@ import { Button, type ButtonProps } from '../button/button'
 import { Icon, type IconProps } from '../icon/icon'
 import { useStyles } from './icon-button.styles'
 
-export interface IconButtonProps extends Omit<ButtonProps, 'icon'> {
+export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'variant'> {
   icon: IconProps
   theme?: 'primary' | 'secondary'
   variant?: 'minimal' | 'static'
