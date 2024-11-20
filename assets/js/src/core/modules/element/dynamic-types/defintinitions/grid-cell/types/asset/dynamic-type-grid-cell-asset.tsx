@@ -11,19 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type AssetMetadataTypeInterface } from '../services/metadata-type-registry'
-import React from 'react'
-import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { ElementCell } from '@Pimcore/components/grid/columns/types/element-cell/element-cell'
+import React, { type ReactElement } from 'react'
+import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
+import { injectable } from 'inversify'
+import { ElementCell } from '../../components/element-cell/element-cell'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 
-export class Asset implements AssetMetadataTypeInterface {
-  visibleInTypeSelection = true
-  formatVersionPreview (data: { path: string, filename: string }): JSX.Element {
-    return <span>{ data.path }{ data.filename }</span>
-  }
+@injectable()
+export class DynamicTypeGridCellAsset extends DynamicTypeGridCellAbstract {
+  readonly id = 'asset'
 
-  getGridCell (props: DefaultCellProps): JSX.Element {
+  getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <ElementCell { ...addColumnConfig(props, { allowedTypes: ['asset'] }) } />
   }
 }
