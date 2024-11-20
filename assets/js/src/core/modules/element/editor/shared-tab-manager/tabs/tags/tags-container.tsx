@@ -34,7 +34,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-  const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
+  const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
@@ -69,14 +69,14 @@ export const TagsTabContainer = (): React.JSX.Element => {
               <Dropdown.Button
                 menu={ {
                   items: [{
-                    label: 'Remove current element tags & Apply folder tags',
+                    label: 'Remove and apply tags to children',
                     key: '1',
-                    onClick: removeCurrentAndApplyFolderTags
+                    onClick: removeAndApplyTagsToChildren
                   }]
                 } }
-                onClick={ applyFolderTags }
+                onClick={ applyTagsToChildren }
               >
-                {t('tags.apply-folder-tags')}
+                {t('Apply tags to Children')}
               </Dropdown.Button>
             </Header>
 
