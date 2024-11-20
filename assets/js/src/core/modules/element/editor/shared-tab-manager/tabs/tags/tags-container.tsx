@@ -30,16 +30,20 @@ import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
+  const { element } = useElementDraft(id, elementType)
   const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
+
+  console.log(element)
 
   return (
     <SplitLayout
@@ -67,7 +71,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
           <Content padded>
             <Header title={ t('tags.assigned-tags-text') }>
               <Dropdown.Button
-                disabled={ data?.totalItems === 0 }
+                disabled={ data?.totalItems === 0 || element?.hasChildren !== true }
                 menu={ {
                   items: [{
                     label: 'Remove and apply tags to children',
