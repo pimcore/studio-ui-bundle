@@ -28,7 +28,6 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
-  const [title, setTitle] = useState(props.title)
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -37,10 +36,6 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
       })
 
       openSSEvent()
-    }
-
-    if (JobStatus.SUCCESS === status) {
-      // TODO: reload folder (parentFolder)
     }
   }, [props.status])
 
@@ -55,9 +50,8 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide-and-reload'),
+          label: t('jobs.job.button-hide'),
           handler: () => {
-            // dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
             removeJob(id)
           }
         }
@@ -65,7 +59,6 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
 
       { ...props }
       progress={ progress }
-      title={ title }
     />
   )
 
@@ -77,6 +70,7 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
 
   function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
+
     if (data.jobRunId !== jobId.current) {
       return
     }
@@ -87,28 +81,11 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
 
     if (data.status !== undefined) {
       if (data.status === 'finished') {
-        if (data.messages !== undefined) {
-          const messages: { jobRunChildId?: number } = data.messages
+        updateJob(id, {
+          status: JobStatus.SUCCESS
+        })
 
-          if (messages.jobRunChildId !== undefined) {
-            const childId = messages.jobRunChildId
-
-            // do something awesome
-            jobId.current = childId
-            setTitle('Creating assets')
-            setProgress(0)
-          }
-
-          if (messages.jobRunChildId === undefined) {
-            updateJob(id, {
-              status: JobStatus.SUCCESS
-            })
-
-            closeSSEvent()
-
-            // und dann wär gut ...
-          }
-        }
+        closeSSEvent()
       }
 
       if (data.status === 'finished_with_errors') {
@@ -117,8 +94,6 @@ export const NotificationJobContainer = (props: TagAssignJobProps): React.JSX.El
         })
 
         closeSSEvent()
-
-        // und dann wär gut ...
       }
 
       if (data.status === 'failed') {
