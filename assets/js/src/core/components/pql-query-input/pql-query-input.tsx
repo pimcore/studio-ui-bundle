@@ -72,6 +72,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
           >
             <Icon
               className={ styles.infoIcon }
+              options={ { width: 12, height: 12 } }
               value='question-circle-outlined'
             />
           </Tooltip>
