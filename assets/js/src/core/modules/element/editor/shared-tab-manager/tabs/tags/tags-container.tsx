@@ -67,6 +67,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
           <Content padded>
             <Header title={ t('tags.assigned-tags-text') }>
               <Dropdown.Button
+                disabled={ data?.totalItems === 0 }
                 menu={ {
                   items: [{
                     label: 'Remove and apply tags to children',
