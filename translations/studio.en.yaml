@@ -330,3 +330,7 @@ set-to-null: Empty (set to null)
 data-object.editor.external-image.preview-placeholder: Add an external image
 latitude: Latitude
 longitude: Longitude
+search-address: Search address
+geocode.address-not-found: 'The entered address was not found'
+geocode.possible-causes: 'Possible causes'
+geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'

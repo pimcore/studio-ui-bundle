@@ -83,9 +83,9 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
       if (error.message === ERROR_ADDRESS_NOT_FOUND) {
         const errorMessage = (
           <span>
-            <p>{t('address_not_found')}</p>
-            <strong>{t('possible_causes')}:</strong>
-            <p>{t('postal_code_format_error')}</p>
+            <p>{t('geocode.address-not-found')}</p>
+            <strong>{t('geocode.possible-causes')}:</strong>
+            <p>{t('geocode.postal-code-format-error')}</p>
           </span>
         )
         alertModal.error({ content: errorMessage })
@@ -114,7 +114,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
         <Search
           className="geo-search-field"
           onSearch={ onSearch }
-          placeholder="Search..."
+          placeholder={ t('search-address') }
         />
 
         <Dropdown

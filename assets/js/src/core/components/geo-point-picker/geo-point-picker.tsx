@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { GeoMap } from '@Pimcore/components/geo-map/geo-map'
 import { type GeoPoint } from '@Pimcore/components/geo-map/toolbar/add-geo-point-toolbar'
 import { Card } from '@Pimcore/components/card/card'
@@ -33,6 +33,11 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
   const { styles } = useStyles()
   const [footerValue, setFooterValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
   const [mapValue, setMapValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
+  const [mapKey, setMapKey] = useState<number>(0)
+
+  const forceMapRerender = (): void => {
+    setMapKey(prevKey => prevKey + 1)
+  }
 
   const onChangeFooter = (newValue: GeoPoint): void => {
     setFooterValue(newValue)
@@ -40,6 +45,7 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
     if (props.onChange !== undefined) {
       props.onChange(newValue)
     }
+    forceMapRerender()
   }
 
   const onChangeMap = (newValue: GeoPoint): void => {
@@ -54,6 +60,7 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
       className={ cn(styles.container) }
       cover={ <GeoMap
         height={ props.height }
+        key={ mapKey }
         lat={ props.lat }
         lng={ props.lng }
         mode="geoPoint"
