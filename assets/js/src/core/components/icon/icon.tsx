@@ -49,7 +49,6 @@ export const Icon = ({ value, type = 'name', options, className, ...props }: Ico
         height={ height }
         width={ width }
         { ...options }
-        { ...props }
       />
     )
   }
@@ -58,6 +57,7 @@ export const Icon = ({ value, type = 'name', options, className, ...props }: Ico
     <div
       className={ `pimcore-icon pimcore-icon-${value} anticon ${className}` }
       style={ { width, height } }
+      { ...props }
     >
       {renderIcon()}
     </div>
