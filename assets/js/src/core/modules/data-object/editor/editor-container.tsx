@@ -20,6 +20,7 @@ import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/u
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
+import { LanguageSelectionProvider } from './toolbar/language-selection/provider/language-selection-provider'
 
 export interface EditorContainerProps {
   id: number
@@ -64,17 +65,19 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   return (
     <DataObjectProvider id={ id }>
-      <TabsToolbarView
-        renderTabbar={
-          <TabsContainer
-            elementEditorType={ editorType }
-          />
-          }
+      <LanguageSelectionProvider>
+        <TabsToolbarView
+          renderTabbar={
+            <TabsContainer
+              elementEditorType={ editorType }
+            />
+            }
 
-        renderToolbar={
-          <Toolbar />
-          }
-      />
+          renderToolbar={
+            <Toolbar />
+            }
+        />
+      </LanguageSelectionProvider>
     </DataObjectProvider>
   )
 }

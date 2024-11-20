@@ -40,7 +40,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const { styles } = useStyle()
   const { detachWidget } = useDetachTab()
   const { id, elementType } = useElementContext()
-  const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
+  const { activeTab, setActiveTab } = useElementDraft(id, elementType)
   const [tabKeyInFocus, setTabKeyInFocus] = useState<string | undefined>(undefined)
   const [tabKeyOutOfFocus, setTabKeyOutOfFocus] = useState<string | undefined>(undefined)
   const elementDraft = useElementDraft(id, elementType)
@@ -51,13 +51,13 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const editorTabsWidth = useElementResize(elementRef)
 
   useEffect(() => {
-    if (activeTabKey === null && items.length > 0) {
-      setActiveTabKey(items[0].key)
+    if (activeTab === null && items?.length > 0) {
+      setActiveTab(items[0].key)
     }
   }, [items])
 
   const onChange = (key: string): void => {
-    setActiveTabKey(key)
+    setActiveTab(key)
   }
 
   const tabKeys: string[] = items?.map(item => item.key)
@@ -104,7 +104,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
       originalLabel: item.label as string,
       icon: (
         <IconWrapper
-          activeTabKey={ activeTabKey }
+          activeTabKey={ activeTab }
           tabKey={ item.key }
           tabKeyInFocus={ tabKeyInFocus }
           tabKeyOutOfFocus={ tabKeyOutOfFocus }

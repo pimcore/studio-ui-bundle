@@ -27,6 +27,7 @@ import {
   resetChanges,
   resetSchedulesChangesForAsset,
   selectAssetById,
+  setActiveTabForAsset,
   setCustomMetadataForAsset,
   setModifiedCells,
   setPropertiesForAsset,
@@ -56,12 +57,14 @@ import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/module
 import { type ElementEditorType, type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 
 interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn,
+  UseTabsDraftReturn,
   UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
@@ -148,7 +151,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         schedules: [],
         imageSettings: customSettingsResponse,
         changes: {},
-        modifiedCells: {}
+        modifiedCells: {},
+        ...initialTabsStateValue
       }
 
       if (assetData !== undefined) {
@@ -213,6 +217,12 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateImageSettingForAsset
   )
 
+  const tabsActions = useTabsDraft(
+    id,
+    asset,
+    setActiveTabForAsset
+  )
+
   const editorType = asset?.type === undefined
     ? undefined
     : (typeRegistry.get(asset.type) ?? typeRegistry.get('unknown'))
@@ -228,6 +238,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     ...propertyActions,
     ...schedulesActions,
     ...customMetadataActions,
-    ...imageSettingsActions
+    ...imageSettingsActions,
+    ...tabsActions
   }
 }

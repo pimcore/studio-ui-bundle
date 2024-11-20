@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./js/",
+    "rootDir": ".",
     "module": "ESNext",
     "target": "es2017",
     "moduleResolution": "Node",
