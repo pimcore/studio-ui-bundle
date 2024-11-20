@@ -25,8 +25,7 @@ export interface UseCssContainerReturn {
 
 export const useCssContainer = ({ name, type = 'size' }: UseCssContainerProps): UseCssContainerReturn => {
   const styleDefinition = useCssContainerStyles({ name, type })
-  console.log({ styleDefinition })
-
+  
   return useMemo(() => {
     return {
       styleDefinition
