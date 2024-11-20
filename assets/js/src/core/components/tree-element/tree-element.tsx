@@ -25,7 +25,6 @@ export interface TreeDataItem extends TreeDataNode {
 interface ITreeElementProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  onCheck?: (checkedKeys: { checked: Key[], halfChecked: Key[] } | Key[]) => void
   onActionsClick?: (key: any, action: string) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
@@ -81,7 +80,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       expandAction='click'
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
-      onCheck={ (checkedKeys): void => onCheck?.(checkedKeys) }
+      onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
       onDrop={ (evt): void => {
         onDragAndDrop?.({
           node: evt.node as TreeDataItem,
