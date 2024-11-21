@@ -185,6 +185,13 @@ let config = Encore.getWebpackConfig()
 config = {
   ...config,
 
+  devServer: {
+    client: {
+      overlay: false,
+      logging: 'none'
+    },
+  },
+
   output: {
     ...config.output,
     library: 'Pimcore',
