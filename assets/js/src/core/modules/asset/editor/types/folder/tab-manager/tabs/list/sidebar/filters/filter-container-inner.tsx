@@ -42,7 +42,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   const { resetFilters, filterOptions, filterError } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
-  const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
+  const { isShowOnlyDirectChildren, setIsShowOnlyDirectChildren, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
   const {
     pqlQueryValue,
     setPQLQueryValue,
@@ -62,7 +62,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
   const handleResetAllFiltersClick = (): void => {
-    setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
+    setIsShowOnlyDirectChildren(!DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
     setPQLQueryValue('')
     setSearchValue('')
     setIsShowPQLQueryError(false)
@@ -131,7 +131,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   />
 
                   <Checkbox
-                    checked={ isIncludeDescendants }
+                    checked={ isShowOnlyDirectChildren }
                     onChange={ handleChangeIsIncludeDescendants }
                   >
                     only direct children
