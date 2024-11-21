@@ -23,7 +23,7 @@ export interface DynamicTypeBatchEditTextProps extends AbstractBatchEditDefiniti
 
 export const DynamicTypeBatchEditTextComponent = ({ batchEdit }: DynamicTypeBatchEditTextProps): React.JSX.Element => {
   const { addOrUpdateBatchEdit } = useBatchEdit()
-  const { key, type, locale, localizable, value: batchEditValue } = batchEdit
+  const { key, type, frontendType, locale, localizable, value: batchEditValue } = batchEdit
   const [_value, setValue] = useState(batchEditValue)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const DynamicTypeBatchEditTextComponent = ({ batchEdit }: DynamicTypeBatc
   }, [batchEditValue])
 
   const onBlur = (): void => {
-    addOrUpdateBatchEdit(key, type, locale, localizable, _value)
+    addOrUpdateBatchEdit(key, type, frontendType, locale, localizable, _value)
   }
 
   return (

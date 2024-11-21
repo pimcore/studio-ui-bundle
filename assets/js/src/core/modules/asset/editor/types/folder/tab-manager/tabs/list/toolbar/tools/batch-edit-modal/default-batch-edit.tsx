@@ -22,11 +22,10 @@ export interface DefaultBatchEditProps {
 }
 
 export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JSX.Element => {
-  const { type } = batchEdit
-  console.log('----> type', type)
+  const { frontendType, type } = batchEdit
 
   const { getComponentRenderer } = useDynamicTypeResolver()
-  const { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [type], target: 'BATCH_EDIT' })
+  const { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [type, frontendType!], target: 'BATCH_EDIT' })
 
   if (ComponentRenderer === null) {
     return <>Dynamic Field Filter not supported</>
