@@ -24,7 +24,7 @@ export type RgbaColorObjectDataDefinition = AbstractObjectDataDefinition & {
 }
 
 const formatColor = (color: Color): string | null | false => {
-  return color.cleared || color.cleared === 'controlled'
+  return color.cleared
     ? null
     : color.toHexString()
 }

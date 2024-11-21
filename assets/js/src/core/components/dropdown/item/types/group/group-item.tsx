@@ -22,6 +22,7 @@ export const WithExtendedApi = (Component: typeof Menu.ItemGroup): ComponentType
     const { styles } = useStyles()
 
     return (
+      // @ts-expect-error ref is incompatible due to wrong typing in antd
       <Component
         title={ label }
         { ...props }

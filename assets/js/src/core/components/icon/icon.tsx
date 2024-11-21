@@ -23,7 +23,7 @@ export interface IconProps extends Omit<ElementIcon, 'type'> {
   className?: string
 }
 
-export const Icon = ({ value, type = 'name', options, className }: IconProps): React.JSX.Element => {
+export const Icon = ({ value, type = 'name', options, className, ...props }: IconProps): React.JSX.Element => {
   const iconLibrary = useInjection<IconLibrary>(serviceIds.iconLibrary)
   const width = options?.width ?? 16
   const height = options?.height ?? 16
@@ -57,6 +57,7 @@ export const Icon = ({ value, type = 'name', options, className }: IconProps): R
     <div
       className={ `pimcore-icon pimcore-icon-${value} anticon ${className}` }
       style={ { width, height } }
+      { ...props }
     >
       {renderIcon()}
     </div>

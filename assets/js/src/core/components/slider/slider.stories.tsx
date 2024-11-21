@@ -18,7 +18,6 @@ const config: Meta = {
   title: 'Components/Data Entry/Slider',
   component: Slider,
   argTypes: {
-    value: { control: 'array' },
     onChange: { action: 'changed' }
   }
 }

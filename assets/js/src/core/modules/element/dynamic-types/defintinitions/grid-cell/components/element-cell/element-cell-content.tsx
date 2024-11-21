@@ -42,11 +42,15 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
     }
   }
 
-  const includesPathInformation = propertyData.data !== null && propertyData.data?.path !== undefined && propertyData.data?.filename !== undefined
+  const includesPathInformation = propertyData.data !== null && (propertyData.data?.fullPath !== undefined || propertyData.data?.path !== undefined)
+  const hasFullPath = includesPathInformation && propertyData.data?.fullPath !== undefined
+
   let tagText = props.getValue()
 
-  if (includesPathInformation) {
-    tagText = propertyData.data !== null && `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}`
+  if (includesPathInformation && hasFullPath) {
+    tagText = propertyData.data.fullPath
+  } else if (includesPathInformation) {
+    tagText = `${propertyData.data.path}${propertyData.data.filename ?? propertyData.data.key}`
   }
 
   return (

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -82,6 +82,10 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
 
   const [dateOnValue, setDateOnValue] = useState<null | number>(valueOn)
   const [dateBetweenValue, setDateBetweenValue] = useState<null | DateRangeTargetValue>(valueBetween)
+
+  useEffect(() => {
+    setSettingValue(DatePickerSettingValue.ON)
+  }, [column])
 
   const handleChangeDateOnValue = (date: number): void => {
     setDateOnValue(date)

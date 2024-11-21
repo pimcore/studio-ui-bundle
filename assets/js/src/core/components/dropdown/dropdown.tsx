@@ -13,6 +13,11 @@
 
 import React, { type ReactNode, type Ref } from 'react'
 import { type DropdownProps as AntdDropdownProps, type MenuProps, type MenuRef } from 'antd'
+import {
+  type MenuItemType as AntdMenuType,
+  type SubMenuType as AntdSubMenuType
+
+} from 'antd/es/menu/interface'
 import { DropdownInner } from './dropdown-inner'
 import { SelectionProvider, SelectionType } from './selection/selection-provider'
 import { useStyle } from './dropdown.styles'
@@ -23,11 +28,11 @@ export type OldMenuItemGroupType = Extract<OldItemType, { type: 'group' }>
 export type OldSubMenuType = Extract<OldItemType, { children: OldItemType[] }>
 export type MenuDividerType = Extract<OldItemType, { type: 'divider' }>
 
-export interface MenuItemType extends OldMenuItemType {
+export interface MenuItemType extends AntdMenuType {
   selectable?: boolean
 }
 
-export interface SubMenuItemType extends Omit<OldSubMenuType, 'children'> {
+export interface SubMenuItemType extends Omit<AntdSubMenuType, 'children'> {
   children: ItemType[]
 }
 
@@ -41,13 +46,13 @@ export interface MenuItemCustomType extends Pick<MenuItemType, 'key'> {
   hidden?: boolean
 }
 
-export type ItemType = MenuItemType | MenuItemGroupType | SubMenuItemType | MenuDividerType | MenuItemCustomType
+export type ItemType<T extends MenuItemType = MenuItemType> = T | MenuItemGroupType | SubMenuItemType | MenuDividerType | MenuItemCustomType | null
 
 export interface DropdownMenuProps extends Omit<MenuProps, 'items'> {
   items?: ItemType[]
 }
 
-export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender'> {
+export interface DropdownProps extends Omit<AntdDropdownProps, 'dropdownRender' | 'menu'> {
   menu: DropdownMenuProps
   menuRef?: Ref<MenuRef>
   selectedKeys?: React.Key[]
