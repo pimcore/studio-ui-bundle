@@ -16,6 +16,7 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface IMainWidgetContext {
   nodeId: string
@@ -29,7 +30,11 @@ export interface WidgetManagerState {
   mainWidgetContext: MainWidgetContext
 }
 
-export interface WidgetManagerTabConfig extends IJsonTabNode {
+export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
+  config: {
+    icon?: ElementIcon
+    [key: string]: any
+  }
 }
 
 export const initialState: WidgetManagerState = {

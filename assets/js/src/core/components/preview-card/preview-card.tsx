@@ -86,7 +86,7 @@ export const PreviewCard = ({
           className={ classDotsButton }
           icon={ <Icon
             className='dropdown-menu__icon'
-            name="dots-horizontal"
+            value="dots-horizontal"
                  /> }
           onClick={ (e) => { e.stopPropagation() } }
           size="small"

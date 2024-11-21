@@ -27,13 +27,18 @@ interface FieldFiltersListContainerProps {
 export const FieldFiltersListContainer = ({ columns }: FieldFiltersListContainerProps): React.JSX.Element => {
   const { removeFieldFilter, removeColumn } = useFilters()
 
+  const onRemoveColumnClick = (column: GridColumnConfiguration): void => {
+    removeColumn(column)
+    removeFieldFilter(column)
+  }
+
   const items: StackListProps['items'] = columns.map((column) => ({
     id: column.key,
     children: <Tag>{column.key}</Tag>,
     renderRightToolbar: <ButtonGroup items={
         [
           <IconButton
-            icon='close'
+            icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => { onRemoveColumnClick(column) } }
           />
@@ -49,9 +54,4 @@ export const FieldFiltersListContainer = ({ columns }: FieldFiltersListContainer
       {items.length > 0 && <StackList items={ items } />}
     </>
   )
-
-  function onRemoveColumnClick (column: GridColumnConfiguration): void {
-    removeColumn(column)
-    removeFieldFilter(column)
-  }
 }

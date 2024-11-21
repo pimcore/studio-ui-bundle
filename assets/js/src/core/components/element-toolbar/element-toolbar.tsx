@@ -88,8 +88,8 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
           <Button
             icon={
               <Icon
-                name={ 'icon' }
                 options={ { width: 14, height: 7 } }
+                value={ 'icon' }
               />
             }
             iconPosition="end"
@@ -107,7 +107,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
         </Dropdown>
       </div>
 
-      <Icon name={ 'target' } />
+      <Icon value={ 'target' } />
     </div>
   )
 }

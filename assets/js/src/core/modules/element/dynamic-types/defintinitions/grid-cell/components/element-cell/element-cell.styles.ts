@@ -20,6 +20,8 @@ export const useStyle = createStyles(({ css, token }) => {
     `,
     link: css`
       display: flex;
+      gap: 8px;
+      width: 100%;
       
       .ant-tag {
         overflow: hidden;

@@ -16,12 +16,12 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 
 import { useAppDispatch } from '@Pimcore/app/store'
 
-interface ModifiedCell {
+export interface ModifiedCell {
   rowIndex: number | string
   columnId: string
 }
 
-type ModifiedCells = ModifiedCell[]
+export type ModifiedCells = ModifiedCell[]
 
 export interface ModifiedCellsAction {
   id: number

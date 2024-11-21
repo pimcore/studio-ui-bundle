@@ -18,6 +18,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeFieldFilterText } from './defintinitions/field-filters/types/text/dynamic-type-field-filter-text'
 import { type DynamicTypeFieldFilterNumber } from './defintinitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { type DynamicTypeFieldFilterSelect } from './defintinitions/field-filters/types/select/dynamic-type-field-filter-select'
+import { type DynamicTypeFieldFilterDatetime } from './defintinitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { type DynamicTypeGridCellText } from './defintinitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { type DynamicTypeGridCellRegistry } from './defintinitions/grid-cell/dynamic-type-grid-cell-registry'
 import { type DynamicTypeGridCellTextarea } from './defintinitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
@@ -40,6 +41,9 @@ import { type DynamicTypeGridCellPropertyValue } from './defintinitions/grid-cel
 import { type DynamicTypeGridCellScheduleActionsSelect } from './defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-schedule-actions-select'
 import { type DynamicTypeGridCellVersionIdSelect } from './defintinitions/grid-cell/types/_schedule/dynamic-type-grid-cell-version-id-select'
 import { type DynamicTypeGridCellAssetVersionPreviewFieldLabel } from './defintinitions/grid-cell/types/_versions/dynamic-type-grid-cell-asset-version-preview-field-label'
+import { type DynamicTypeGridCellAsset } from './defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
+import { type DynamicTypeGridCellObject } from './defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
+import { type DynamicTypeGridCellDocument } from './defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
 import { type DynamicTypeMetaDataRegistry } from './defintinitions/meta-data/dynamic-type-metadata-registry'
 import { type DynamicTypeMetaDataAsset } from './defintinitions/meta-data/types/dynamic-type-meta-data-asset'
 import { type DynamicTypeMetaDataCheckbox } from './defintinitions/meta-data/types/dynamic-type-meta-data-checkbox'
@@ -85,6 +89,7 @@ import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic
 import { type DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-external-image'
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
 import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
+import { type DynamicTypeGridCellLanguageSelect } from './defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 
 moduleSystem.registerModule({
   onInit () {
@@ -93,6 +98,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterText>(serviceIds['DynamicTypes/FieldFilter/Text']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDatetime>(serviceIds['DynamicTypes/FieldFilter/Datetime']))
 
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
 
@@ -117,6 +123,10 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellScheduleActionsSelect>(serviceIds['DynamicTypes/GridCell/ScheduleActionsSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellVersionIdSelect>(serviceIds['DynamicTypes/GridCell/VersionsIdSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAssetVersionPreviewFieldLabel>(serviceIds['DynamicTypes/GridCell/AssetVersionPreviewFieldLabel']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellAsset>(serviceIds['DynamicTypes/GridCell/Asset']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellObject>(serviceIds['DynamicTypes/GridCell/Object']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDocument>(serviceIds['DynamicTypes/GridCell/Document']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 

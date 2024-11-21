@@ -51,7 +51,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     return {
       label: t('element.rename'),
       key: 'rename',
-      icon: <Icon name={ 'type-square' } />,
+      icon: <Icon value={ 'type-square' } />,
       hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)

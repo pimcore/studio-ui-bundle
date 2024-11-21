@@ -30,12 +30,12 @@ export const DroppableContent = forwardRef(function DNDDemoDroppableContent (pro
     <>
       <div>
         <Icon
-          name={ 'PlusOutlined' }
           options={ options }
+          value={ 'PlusOutlined' }
         />
         <Icon
-          name={ 'copy-07' }
           options={ options }
+          value={ 'copy-07' }
         />
       </div>
       <span>{t('drag-and-drop-asset')}</span>

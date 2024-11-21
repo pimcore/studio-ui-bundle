@@ -29,19 +29,19 @@ export const SidebarContainer = ({ errorData }: ISidebarContainerProps): React.J
     {
       key: 'filter',
       component: <FilterContainer errorData={ errorData } />,
-      icon: <Icon name="filter-outlined" />
+      icon: <Icon value="filter-outlined" />
     },
 
     {
       key: 'tags',
       component: <TagFiltersContainer />,
-      icon: <Icon name="tag-two-tone" />
+      icon: <Icon value="tag-two-tone" />
     },
 
     {
       key: 'grid-config',
       component: <GridConfig />,
-      icon: <Icon name="settings-outlined" />
+      icon: <Icon value="settings-outlined" />
     }
   ], [errorData])
 

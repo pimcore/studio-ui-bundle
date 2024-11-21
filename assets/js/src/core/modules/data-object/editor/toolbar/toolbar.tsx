@@ -18,13 +18,9 @@ import { Button } from '@Pimcore/components/button/button'
 import { useDataObjectDraft } from '../../hooks/use-data-object-draft'
 import { DataObjectContext } from '../../data-object-provider'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
-import {
-  type DataProperty as DataPropertyApi
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
+import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -33,23 +29,20 @@ import {
   type DataObjectUpdateByIdApiArg,
   useDataObjectUpdateByIdMutation
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
-import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
-import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
+import { LanguageSelection } from './language-selection/language-selection'
+import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
-  const {
-    saveSchedules,
-    isLoading: isSchedulesLoading,
-    isSuccess: isSchedulesSuccess,
-    isError: isSchedulesError
-  } = useSaveSchedules('data-object', id, false)
+  const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
@@ -72,7 +65,14 @@ export const Toolbar = (): React.JSX.Element => {
   return (
     <ToolbarView>
       <WorkFlowProvider>
-        <ContextMenu />
+        <Flex>
+          <ContextMenu />
+
+          {activeTab === TAB_EDIT.key && (
+            <LanguageSelection />
+          )}
+        </Flex>
+
         <Flex
           gap={ 'extra-small' }
           style={ { height: '32px' } }

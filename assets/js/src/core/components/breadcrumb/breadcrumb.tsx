@@ -12,9 +12,8 @@
 */
 
 import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
-import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
+import { Breadcrumb as AntBreadcrumb, type MenuItemProps, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
 import { type BreadcrumbItemType, type ItemType } from 'antd/es/breadcrumb/Breadcrumb'
-import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import cn from 'classnames'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
@@ -89,7 +88,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
     )
 
     // Prepend the "..." menu to the existing items array
-    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemType[], items: BreadcrumbItemType[] }): ItemType[] => [
+    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemProps[], items: BreadcrumbItemType[] }): ItemType[] => [
       {
         title: '...',
         menu: { items: dotsMenuItems, className: styles.dropdownMenu }
@@ -107,11 +106,10 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
       })
 
       if (partListAmount > 3) {
-        const dotsMenuItems: MenuItemType[] = []
+        const dotsMenuItems: MenuItemProps[] = []
         for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
-            key: i,
-            label: (
+            title: (
               partList[i]
             ),
             onClick: () => {
@@ -125,12 +123,11 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
     }
 
     if (partListAmount > 2 && pageSize !== 'L') {
-      const dotsMenuItems: MenuItemType[] = []
+      const dotsMenuItems: MenuItemProps[] = []
 
       for (let i = 1; i < partListAmount; i++) {
         dotsMenuItems.push({
-          key: i,
-          label: (
+          title: (
             partList[i]
           ),
           onClick: () => {

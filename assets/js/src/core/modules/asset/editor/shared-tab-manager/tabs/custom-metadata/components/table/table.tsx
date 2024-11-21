@@ -118,7 +118,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
               justify='center'
             >
               <IconButton
-                icon={ 'trash' }
+                icon={ { value: 'trash' } }
                 onClick={ () => {
                   removeCustomMetadata(info.row.original)
                 } }

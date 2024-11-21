@@ -11,14 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export function getDomain (): string {
-  return 'http://localhost'
-}
-
 export function getPrefix (): string {
   return '/pimcore-studio/api'
-}
-
-export function getDomainWithPrefix (): string {
-  return `${getDomain()}${getPrefix()}`
 }

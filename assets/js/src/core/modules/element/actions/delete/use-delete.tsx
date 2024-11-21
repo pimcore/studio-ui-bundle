@@ -56,7 +56,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     return {
       label: t('element.delete'),
       key: 'delete',
-      icon: <Icon name={ 'delete-outlined' } />,
+      icon: <Icon value={ 'delete-outlined' } />,
       hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)

@@ -19,7 +19,10 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type Key } from 'react'
-import { type PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks'
+
+// @TODO: Find replacement for PatchCollection since dist imports should not be used
+// import { type PatchCollection } from '@reduxjs/toolkit/dist/query/core/buildThunks'
+type PatchCollection = any
 
 interface UpdateTagsForElementByTypeAndIdProps extends TagGetCollectionForElementByTypeAndIdApiArg {
   flatTags: Tag[]

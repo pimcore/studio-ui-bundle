@@ -43,7 +43,7 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
-            icon='close'
+            icon={ { value: 'close' } }
             onClick={ handleResetAllFiltersClick }
             type='link'
           >

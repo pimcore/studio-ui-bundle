@@ -13,7 +13,7 @@
 
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
-import { type ReactElement } from 'react'
+import { type ReactNode, type ReactElement } from 'react'
 import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
@@ -23,7 +23,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   tooltip?: string | null
   invisible?: boolean | null
   noteditable?: boolean | null
-  title?: string
+  title?: ReactNode
 }
 
 @injectable()

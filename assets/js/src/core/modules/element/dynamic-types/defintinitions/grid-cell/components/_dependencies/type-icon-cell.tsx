@@ -21,11 +21,11 @@ export const TypeIconCell = (props: DefaultCellProps): React.JSX.Element => {
   function renderCell (): React.JSX.Element {
     switch (propertyType) {
       case 'document':
-        return <IconView name={ 'mainDocument' } />
+        return <IconView value={ 'mainDocument' } />
       case 'asset':
-        return <IconView name={ 'mainAsset' } />
+        return <IconView value={ 'mainAsset' } />
       case 'dataObject':
-        return <IconView name={ 'mainObject' } />
+        return <IconView value={ 'mainObject' } />
       default:
         return <span>{ propertyType }</span>
     }

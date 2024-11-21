@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { useMemo } from 'react'
 import { useCssContainerStyles } from './use-css-container.styles'
 
 export interface UseCssContainerProps {
@@ -25,7 +26,9 @@ export interface UseCssContainerReturn {
 export const useCssContainer = ({ name, type = 'size' }: UseCssContainerProps): UseCssContainerReturn => {
   const styleDefinition = useCssContainerStyles({ name, type })
 
-  return {
-    styleDefinition
-  }
+  return useMemo(() => {
+    return {
+      styleDefinition
+    }
+  }, [])
 }

@@ -16,11 +16,12 @@ import { TitleView } from './title/title-view'
 import { useStyles } from './widget-view.styles'
 import { useTranslation } from 'react-i18next'
 import { useCssContainer, type UseCssContainerProps } from '@Pimcore/utils/hooks/use-css-container/use-css-container'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface WidgetViewProps {
   title: string
   showTitle?: boolean
-  icon: string
+  icon: ElementIcon
   children: React.ReactNode
 }
 
@@ -51,4 +52,6 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   )
 }
 
-export { WidgetView }
+const memorizedWidgetView = React.memo(WidgetView)
+
+export { memorizedWidgetView as WidgetView }

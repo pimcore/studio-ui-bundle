@@ -17,6 +17,7 @@ import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type EditorContainerProps } from '../editor/editor-container'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
 interface OpenAssetWidgetProps {
   config: EditorContainerProps
@@ -42,17 +43,18 @@ export const useAssetHelper = (): UseAssetReturn => {
 
     if (
       data === undefined ||
-      data.icon?.type === 'path' ||
       !checkElementPermission(data.permissions!, 'view')) {
       return
     }
 
     openMainWidget({
       name: data?.filename,
-      icon: data?.icon?.value,
       id: widgetId,
       component: 'asset-editor',
-      config
+      config: {
+        ...config,
+        icon: getElementIcon(data, { value: 'widget-default', type: 'name' })
+      }
     })
   }
 

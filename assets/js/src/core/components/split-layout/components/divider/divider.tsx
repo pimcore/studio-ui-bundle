@@ -99,8 +99,10 @@ export const Divider = ({ onMouseResize, onKeyboardResize }: DividerProps): Reac
         <IconButton
           className={ styles.iconContainer }
           hideShadow
-          icon={ 'chevron-selector-horizontal' }
-          iconOptions={ { height: 14, width: 14 } }
+          icon={ {
+            value: 'chevron-selector-horizontal',
+            options: { height: 14, width: 14 }
+          } }
           type="default"
           variant="static"
         />
