@@ -57,6 +57,7 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
 
   'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
+  'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
