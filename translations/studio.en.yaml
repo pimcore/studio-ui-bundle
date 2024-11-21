@@ -210,7 +210,8 @@ notes-and-events.erp_import: erp_import
 notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
 tags.label: Tags
 tags.assigned-tags-text: Assigned Tags
-tags.apply-folder-tags: Apply folder tags
+tags.apply-tags-to-children: Apply tags to children
+tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
 add: Add

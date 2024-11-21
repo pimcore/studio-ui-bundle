@@ -29,6 +29,7 @@ interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChange
   parentId: number
   fullPath?: string
   type?: string
+  hasChildren?: boolean
   permissions?: ElementPermissions
 }
 
