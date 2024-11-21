@@ -118,6 +118,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
           format={ DATE_FORMAT }
           onChange={ handleChangeDateOnValue }
           outputType='timestamp'
+          showTime
           value={ dateOnValue }
         />
       )}
@@ -127,6 +128,7 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
           format={ DATE_FORMAT }
           onChange={ handleChangeDateBetweenValue }
           outputType='timestamp'
+          showTime
           value={ dateBetweenValue }
         />
       )}
