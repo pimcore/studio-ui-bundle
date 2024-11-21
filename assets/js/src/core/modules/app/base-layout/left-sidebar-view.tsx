@@ -23,7 +23,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
     <div className={ styles.leftSidebar }>
       <Avatar
         className='left-sidebar__avatar'
-        icon={ <Icon name='user-01' /> }
+        icon={ <Icon value='user-01' /> }
         size={ 26 }
       />
     </div>

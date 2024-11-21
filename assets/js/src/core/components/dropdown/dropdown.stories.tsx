@@ -46,7 +46,7 @@ const demoData: DropdownProps = {
           {
             key: '1.0.0',
             label: 'Item 1.0.0',
-            icon: <Icon name="trash" />,
+            icon: <Icon value="trash" />,
             selectable: true,
             onClick: () => {
               console.log('Item 1.0.0 clicked')
@@ -69,7 +69,7 @@ const demoData: DropdownProps = {
           {
             key: '12.0.0',
             label: 'Item 12.0.0',
-            icon: <Icon name="trash" />,
+            icon: <Icon value="trash" />,
             selectable: true,
             onClick: () => {
               console.log('Item 1.0.0 clicked')

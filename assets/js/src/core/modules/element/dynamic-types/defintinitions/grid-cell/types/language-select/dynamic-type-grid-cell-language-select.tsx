@@ -21,7 +21,6 @@ export class DynamicTypeGridCellLanguageSelect extends DynamicTypeGridCellAbstra
   readonly id = 'language-select'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
-    // @todo create date time cell
     return <LanguageCell { ...props } />
   }
 }

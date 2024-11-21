@@ -14,10 +14,11 @@
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useStyles } from './title-view.styles'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 interface TitleViewProps {
   title: string
-  icon: string
+  icon: ElementIcon
   className?: string
 }
 
@@ -25,14 +26,16 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { title, icon, className } = props
 
+  console.log(icon)
+
   return (
-    <div className={ [styles.WidgetTitle, className].join(' ') }>
+    <div className={ [styles.WidgetTitle, className, 'foobar'].join(' ') }>
       <Icon
-        name={ icon }
         options={ {
           width: 18,
           height: 18
         } }
+        { ...icon }
       />
 
       <span>{title}</span>

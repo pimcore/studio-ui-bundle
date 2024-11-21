@@ -17,9 +17,8 @@ import { Button, type ButtonProps } from '../button/button'
 import { Icon, type IconProps } from '../icon/icon'
 import { useStyles } from './icon-button.styles'
 
-export interface IconButtonProps extends ButtonProps {
-  icon: string
-  iconOptions?: IconProps['options']
+export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'variant'> {
+  icon: IconProps
   theme?: 'primary' | 'secondary'
   variant?: 'minimal' | 'static'
   hideShadow?: boolean
@@ -29,7 +28,6 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
   const {
     children,
     icon,
-    iconOptions,
     type = 'link',
     theme = 'primary',
     hideShadow = false,
@@ -57,10 +55,7 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
       className={ iconButtonClassNames }
       ref={ ref }
     >
-      <Icon
-        name={ icon }
-        options={ iconOptions }
-      />
+      <Icon { ...icon } />
     </Button>
   )
 }

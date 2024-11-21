@@ -58,8 +58,8 @@ export const IconLibraryOverview = (): React.JSX.Element => {
               style={ { width: '100%' } }
             >
               <Icon
-                name={ name }
                 options={ { height: 60, width: 60 } }
+                value={ name }
               />
               <span>{name}</span>
             </Space>

@@ -152,7 +152,7 @@ export const VersionsView = ({
                         >{t('version.compare-versions')}</Button>
 
                         <IconTextButton
-                          icon={ 'trash' }
+                          icon={ { value: 'trash' } }
                           key={ t('version.clear-unpublished') }
                           loading={ clearingAll }
                           onClick={ showModal }

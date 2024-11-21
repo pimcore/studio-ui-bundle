@@ -125,8 +125,8 @@ export const InlineTextfield = ({
       <Button
         className={ 'inline-label-dots ' + classNameLabelDots }
         icon={ <Icon
-          name={ 'ellipsis-outlined' }
           options={ { width: '32px', height: '32px' } }
+          value={ 'ellipsis-outlined' }
                /> }
         onFocus={ onFocusDots }
         onMouseOver={ onMouseOverDots }

@@ -30,11 +30,13 @@ import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-  const { applyFolderTags, removeCurrentAndApplyFolderTags } = useShortcutActions()
+  const { element } = useElementDraft(id, elementType)
+  const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
@@ -67,16 +69,17 @@ export const TagsTabContainer = (): React.JSX.Element => {
           <Content padded>
             <Header title={ t('tags.assigned-tags-text') }>
               <Dropdown.Button
+                disabled={ data?.totalItems === 0 || element?.hasChildren !== true }
                 menu={ {
                   items: [{
-                    label: 'Remove current element tags & Apply folder tags',
+                    label: t('tags.remove-and-apply-tags-to-children'),
                     key: '1',
-                    onClick: removeCurrentAndApplyFolderTags
+                    onClick: removeAndApplyTagsToChildren
                   }]
                 } }
-                onClick={ applyFolderTags }
+                onClick={ applyTagsToChildren }
               >
-                {t('tags.apply-folder-tags')}
+                {t('tags.apply-tags-to-children')}
               </Dropdown.Button>
             </Header>
 

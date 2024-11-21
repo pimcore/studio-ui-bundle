@@ -19,10 +19,15 @@ import {
   type TrackableChangesDraft,
   useTrackableChangesReducers
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import {
+  initialTabsStateValue,
+  type TabsDraft,
+  useTabsReducers
+} from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import { type SchedulesDraft, useSchedulesReducers } from '@Pimcore/modules/element/draft/hooks/use-schedules'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
-export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
+export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft {
 }
 
 export const dataObjectsAdapter: EntityAdapter<DataObjectDraft, number> = createEntityAdapter<DataObjectDraft>({})
@@ -34,7 +39,8 @@ export const slice = createSlice({
     properties: [],
     schedule: [],
     changes: {},
-    modifiedCells: {}
+    modifiedCells: {},
+    ...initialTabsStateValue
   }),
   reducers: {
     dataObjectReceived: dataObjectsAdapter.upsertOne,
@@ -50,7 +56,8 @@ export const slice = createSlice({
     },
     ...useTrackableChangesReducers(dataObjectsAdapter),
     ...usePropertiesReducers(dataObjectsAdapter),
-    ...useSchedulesReducers(dataObjectsAdapter)
+    ...useSchedulesReducers(dataObjectsAdapter),
+    ...useTabsReducers(dataObjectsAdapter)
   }
 })
 
@@ -73,7 +80,8 @@ export const {
   removeSchedule: removeScheduleFromDataObject,
   setSchedules: setSchedulesForDataObject,
   updateSchedule: updateScheduleForDataObject,
-  resetSchedulesChanges: resetSchedulesChangesForDataObject
+  resetSchedulesChanges: resetSchedulesChangesForDataObject,
+  setActiveTab: setActiveTabForDataObject
 
 } = slice.actions
 export const { selectById: selectDataObjectById } = dataObjectsAdapter.getSelectors((state: RootState) => state['data-object-draft'])

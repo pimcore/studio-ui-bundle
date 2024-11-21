@@ -188,8 +188,8 @@ function PreviousButton (prop): React.JSX.Element {
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === 1 }
         icon={ <Icon
-          name='left-outlined'
           options={ iconOptions }
+          value='left-outlined'
                /> }
         onClick={ onClickPrev }
         size={ 'small' }
@@ -208,8 +208,8 @@ function NextButton (prop): React.JSX.Element {
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === pages }
         icon={ <Icon
-          name='right-outlined'
           options={ iconOptions }
+          value='right-outlined'
                /> }
         onClick={ onClickNext }
         size={ 'small' }

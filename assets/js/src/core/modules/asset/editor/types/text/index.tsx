@@ -36,7 +36,7 @@ moduleSystem.registerModule({
       key: 'edit',
       label: 'asset.asset-editor-tabs.edit',
       children: <EditContainer />,
-      icon: <Icon name={ 'edit' } />
+      icon: <Icon value={ 'edit' } />
     })
 
     textTabManager.register(TAB_CUSTOM_METADATA)

@@ -76,7 +76,7 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
             <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? 'No saved templates available' : '' }>
               <IconTextButton
                 disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                icon='magic-wand-01'
+                icon={ { value: 'magic-wand-01' } }
                 loading={ isLoading }
               >
                 Templates
@@ -94,7 +94,7 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
           {!isEmptyValue(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
               <IconTextButton
-                icon='PlusCircleOutlined'
+                icon={ { value: 'PlusCircleOutlined' } }
                 type='link'
               >
                 { t('listing.add-column') }

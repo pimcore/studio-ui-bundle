@@ -42,7 +42,7 @@ export const HeadWithButtons = {
     title: <Fragment>
       Card Title
       <IconTextButton
-        icon="PlusCircleOutlined"
+        icon={ { value: 'PlusCircleOutlined' } }
         type="default"
       >Add</IconTextButton>
     </Fragment>,
@@ -96,7 +96,7 @@ export const Image = {
     >
       <div>Lorem ipsum dolor</div>
       <IconButton
-        icon={ 'eye-outlined' }
+        icon={ { value: 'eye-outlined' } }
         onClick={ () => { console.log('click button') } }
       />
     </Flex>
@@ -109,13 +109,13 @@ export const Actions = {
     ..._default.args,
     actions: [
       <IconButton
-        icon="trash"
+        icon={ { value: 'trash' } }
         key={ 'icon-button-01' }
         onClick={ () => { console.log('click trash button') } }
         type='link'
       />,
       <IconButton
-        icon="refresh"
+        icon={ { value: 'refresh' } }
         key={ 'icon-button-02' }
         onClick={ () => { console.log('click refresh button') } }
         type='link'

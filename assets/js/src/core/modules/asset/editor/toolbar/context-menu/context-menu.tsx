@@ -39,7 +39,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
         title={ t('toolbar.reload.confirmation') }
       >
         <IconButton
-          icon='refresh'
+          icon={ { value: 'refresh' } }
         >
           {t('toolbar.reload')}
         </IconButton>

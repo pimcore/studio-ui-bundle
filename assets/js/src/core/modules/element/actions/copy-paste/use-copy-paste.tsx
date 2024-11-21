@@ -127,7 +127,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.copy'),
       key: 'copy',
-      icon: <Icon name={ 'clipboard' } />,
+      icon: <Icon value={ 'clipboard' } />,
       hidden: !checkElementPermission(node.permissions, 'view') || node.isLocked,
       onClick: () => {
         copy(node)
@@ -139,7 +139,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.cut'),
       key: 'cut',
-      icon: <Icon name={ 'scissors-cut' } />,
+      icon: <Icon value={ 'scissors-cut' } />,
       hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         cut(node)
@@ -151,7 +151,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.paste'),
       key: 'paste',
-      icon: <Icon name={ 'clipboard-check' } />,
+      icon: <Icon value={ 'clipboard-check' } />,
       hidden: (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
       onClick: async () => {
         await paste(parseInt(node.id))
@@ -162,7 +162,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     return {
       label: t('element.tree.paste-cut'),
       key: 'paste-cut',
-      icon: <Icon name={ 'clipboard-check' } />,
+      icon: <Icon value={ 'clipboard-check' } />,
       hidden: (storedNode === undefined || nodeTask !== 'cut'),
       onClick: async () => {
         await pasteCut(parentId)

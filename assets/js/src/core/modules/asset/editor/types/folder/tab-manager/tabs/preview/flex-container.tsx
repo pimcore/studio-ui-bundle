@@ -34,27 +34,27 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const dropdownItems: DropdownProps['menu']['items'] = [
     {
       key: 'locate-in-tree',
-      icon: <Icon name="target" />,
+      icon: <Icon value="target" />,
       label: t('preview-card.locate-in-tree')
     },
     {
       key: 'info',
-      icon: <Icon name="info-circle-outlined" />,
+      icon: <Icon value="info-circle-outlined" />,
       label: t('info')
     },
     {
       key: 'rename',
-      icon: <Icon name="rich-edit" />,
+      icon: <Icon value="rich-edit" />,
       label: t('preview-card.rename')
     },
     {
       key: 'download-zip',
-      icon: <Icon name="download-02" />,
+      icon: <Icon value="download-02" />,
       label: t('preview-card.download-zip')
     },
     {
       key: 'delete',
-      icon: <Icon name="trash" />,
+      icon: <Icon value="trash" />,
       label: t('preview-card.delete')
     }
   ]

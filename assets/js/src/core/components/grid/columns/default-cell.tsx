@@ -11,8 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ComponentType, useEffect, useMemo, useRef, useState } from 'react'
-import { TextCell } from './types/text/text-cell'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { EditableCellContextProvider } from '../edit-mode/editable-cell-context'
 import { useStyle } from './default-cell.styles'
 // import { useInjection } from '@Pimcore/app/depency-injection'
@@ -25,11 +24,9 @@ import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
-export interface DefaultCellProps extends ExtendedCellContext {
-  fallbackType?: ComponentType<DefaultCellProps>
-}
+export interface DefaultCellProps extends ExtendedCellContext {}
 
-export const DefaultCell = ({ fallbackType = TextCell, ...props }: DefaultCellProps): React.JSX.Element => {
+export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { column, table, row } = props
   const [isEditable, setIsEditable] = useState(column.columnDef.meta?.editable ?? false)
