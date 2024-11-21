@@ -33,7 +33,7 @@ export interface GeoMapCardProps extends GeoMapCardBaseProps {
   footer?: React.ReactNode
 }
 
-export const GeoMapCard = forwardRef<GeoMapAPI, GeoMapCardProps>((props, geoMapRef): React.JSX.Element => {
+const GeoMapCard = forwardRef<GeoMapAPI, GeoMapCardProps>((props, geoMapRef): React.JSX.Element => {
   const { styles } = useStyles()
 
   return (
@@ -58,3 +58,7 @@ export const GeoMapCard = forwardRef<GeoMapAPI, GeoMapCardProps>((props, geoMapR
     />
   )
 })
+
+GeoMapCard.displayName = 'GeoMapCard'
+
+export { GeoMapCard }

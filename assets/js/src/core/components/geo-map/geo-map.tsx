@@ -108,6 +108,22 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   }
 
   useEffect(() => {
+    setValue(props.value)
+  }, [props.value])
+
+  useEffect(() => {
+    setLat(props.lat)
+  }, [props.lat])
+
+  useEffect(() => {
+    setLng(props.lng)
+  }, [props.lng])
+
+  useEffect(() => {
+    setZoom(props.zoom)
+  }, [props.zoom])
+
+  useEffect(() => {
     const map = initializeMap()
     return () => {
       if (map !== null) {

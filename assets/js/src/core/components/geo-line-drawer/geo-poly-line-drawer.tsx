@@ -23,18 +23,21 @@ export interface GeoPolyLineDrawerProps extends GeoMapCardBaseProps{
 }
 
 export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<GeoPolyLine | undefined>(props.value ?? undefined)
+  const [mapValue, setMapValue] = React.useState<GeoPolyLine | undefined>(props.value ?? undefined)
+  const [footerValue, setFooterValue] = React.useState<GeoPolyLine | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null);
 
-  const onChangeFooter = (newValue: GeoPolyLine): void => {
-      setValue(newValue)
+  const onChangeFooter = (newValue?: GeoPolyLine): void => {
+    setFooterValue(newValue)
+    setMapValue(newValue)
     props.onChange?.(newValue)
     const geoMapAPI = geoMapRef.current;
     geoMapAPI?.reset()
+    geoMapAPI?.forceRerender()
   }
 
   const onChangeMap = (newValue: GeoPolyLine): void => {
-      setValue(newValue)
+    setFooterValue(newValue)
     props.onChange?.(newValue)
   }
 
@@ -42,7 +45,7 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
       <GeoMapCard
         ref={geoMapRef}
         mapMode={ 'geoPolyLine' }
-        mapValue={ value }
+        mapValue={ mapValue }
         width={ props.width }
         height={ props.height }
         lat={ props.lat }
@@ -52,7 +55,8 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
         footer={<GeoPolyLineDrawerFooter
             onChange={ onChangeFooter }
             onSearch={ (geoPoint: GeoPoint) => {
-              setValue(undefined)
+              setFooterValue(undefined)
+              setMapValue(undefined)
 
               const geoMapAPI = geoMapRef.current;
               geoMapAPI?.setValue(undefined)
@@ -62,7 +66,7 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
               geoMapAPI?.forceRerender()
               props.onChange?.(undefined)
             } }
-            value={ value }
+            value={ footerValue }
         />}
       />
   )

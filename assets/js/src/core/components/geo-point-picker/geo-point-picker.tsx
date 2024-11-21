@@ -12,7 +12,7 @@
 */
 
 import React, { useRef } from 'react'
-import { GeoMap, type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
+import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 import { GeoPointPickerFooter } from '@Pimcore/components/geo-point-picker/footer'
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { GeoMapCard } from '@Pimcore/components/geo-map/components/geo-map-card/geo-map-card'

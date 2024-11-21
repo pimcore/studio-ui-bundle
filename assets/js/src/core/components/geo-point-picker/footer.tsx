@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect } from 'react'
-import { Button, InputNumber, Tooltip } from 'antd'
+import { Button, InputNumber } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -54,25 +54,19 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
     setValue(fieldValues)
     const newValue = valueToGeoPoint(fieldValues)
 
-    if (props.onChange !== undefined) {
-      props.onChange(newValue)
-    }
+    props.onChange?.(newValue)
   }
 
   const emptyValue = (): void => {
     setValue({ lat: undefined, lng: undefined })
     form.resetFields()
-    if (props.onChange !== undefined) {
-      props.onChange(undefined)
-    }
+    props.onChange?.(undefined)
   }
 
   const onSearch = (geoPoint: GeoPoint): void => {
     setValue(geoPoint)
     form.setFieldsValue(geoPoint)
-    if (props.onChange !== undefined) {
-      props.onChange(geoPoint)
-    }
+    props.onChange?.(geoPoint)
   }
 
   useEffect(() => {
@@ -121,7 +115,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
           <Button
             icon={ <Icon
               className='dropdown-menu__icon'
-              name="dots-horizontal"
+              value="dots-horizontal"
                    /> }
             onClick={ (e) => { e.stopPropagation() } }
           />
