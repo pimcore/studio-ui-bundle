@@ -12,22 +12,23 @@
 */
 
 import React, {useRef} from 'react'
-import { GeoPolyLineDrawerFooter } from './footer'
+import { GeoPolyDrawerFooter } from './footer'
 import {GeoMapCard, GeoMapCardBaseProps} from "@Pimcore/components/geo-map/components/geo-map-card/geo-map-card";
-import {GeoPoint, GeoPolyLine} from "@Pimcore/components/geo-map/types/geo-types";
+import {GeoPoint, GeoPoints} from "@Pimcore/components/geo-map/types/geo-types";
 import {GeoMapAPI} from "@Pimcore/components/geo-map/geo-map";
 
-export interface GeoPolyLineDrawerProps extends GeoMapCardBaseProps{
-  onChange?: (value: GeoPolyLine | undefined) => void
-  value?: GeoPolyLine | null
+export interface GeoPolyDrawerProps extends GeoMapCardBaseProps{
+  onChange?: (value: GeoPoints | undefined) => void
+  value?: GeoPoints | null
+  mode: 'geoPolyLine' | 'geoPolygon'
 }
 
-export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.JSX.Element => {
-  const [mapValue, setMapValue] = React.useState<GeoPolyLine | undefined>(props.value ?? undefined)
-  const [footerValue, setFooterValue] = React.useState<GeoPolyLine | undefined>(props.value ?? undefined)
+export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
+  const [mapValue, setMapValue] = React.useState<GeoPoints | undefined>(props.value ?? undefined)
+  const [footerValue, setFooterValue] = React.useState<GeoPoints | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null);
 
-  const onChangeFooter = (newValue?: GeoPolyLine): void => {
+  const onChangeFooter = (newValue?: GeoPoints): void => {
     setFooterValue(newValue)
     setMapValue(newValue)
     props.onChange?.(newValue)
@@ -36,7 +37,7 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
     geoMapAPI?.forceRerender()
   }
 
-  const onChangeMap = (newValue: GeoPolyLine): void => {
+  const onChangeMap = (newValue: GeoPoints): void => {
     setFooterValue(newValue)
     props.onChange?.(newValue)
   }
@@ -44,7 +45,7 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
   return (
       <GeoMapCard
         ref={geoMapRef}
-        mapMode={ 'geoPolyLine' }
+        mapMode={ props.mode }
         mapValue={ mapValue }
         width={ props.width }
         height={ props.height }
@@ -52,17 +53,21 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
         lng={ props.lng }
         zoom={ props.zoom }
         onChangeMap={ onChangeMap }
-        footer={<GeoPolyLineDrawerFooter
+        footer={<GeoPolyDrawerFooter
             onChange={ onChangeFooter }
-            onSearch={ (geoPoint: GeoPoint) => {
+            onSearch={ (geoPoint?: GeoPoint) => {
               setFooterValue(undefined)
               setMapValue(undefined)
 
               const geoMapAPI = geoMapRef.current;
               geoMapAPI?.setValue(undefined)
-              geoMapAPI?.setLat(geoPoint.lat)
-              geoMapAPI?.setLng(geoPoint.lng)
-              geoMapAPI?.setZoom(15)
+              if (geoPoint === undefined) {
+                  geoMapAPI?.reset()
+              } else {
+                  geoMapAPI?.setLat(geoPoint.latitude)
+                  geoMapAPI?.setLng(geoPoint.longitude)
+                  geoMapAPI?.setZoom(15)
+              }
               geoMapAPI?.forceRerender()
               props.onChange?.(undefined)
             } }

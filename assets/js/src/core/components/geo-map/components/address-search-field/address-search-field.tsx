@@ -19,7 +19,7 @@ import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-a
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 interface AddressSearchFieldProps {
-  onSearch: (geoPoint: GeoPoint) => void
+  onSearch: (geoPoint?: GeoPoint) => void
 }
 
 export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.Element => {
@@ -27,6 +27,10 @@ export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.El
   const alertModal = useAlertModal()
 
   const onSearch = async (value: string): Promise<void> => {
+    if (value === '') {
+      props.onSearch(undefined); return
+    }
+
     await geoCode(value)
       .then(props.onSearch)
       .catch((error: Error) => {

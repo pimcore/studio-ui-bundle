@@ -20,8 +20,10 @@ import { addGeoPointToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-
 import cn from 'classnames'
 import { useStyles } from './geo-map.styles'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { type GeoPolyLine, type GeoPoint, type GeoType } from '@Pimcore/components/geo-map/types/geo-types'
+import { type GeoPoints, type GeoPoint, type GeoType, type GeoBounds } from '@Pimcore/components/geo-map/types/geo-types'
 import { addGeoPolyLineToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-poly-line-toolbar'
+import { addGeoPolygonToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-polygon-toolbar'
+import { addGeoBoundsToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-bounds-toolbar'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: '/bundles/pimcorestudioui/img/leaflet/marker-icon-2x.png',
@@ -29,7 +31,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: '/bundles/pimcorestudioui/img/leaflet/marker-shadow.png'
 })
 
-export type GeoMapMode = 'geoPoint' | 'geoPolyLine' | 'geoPolygon'
+export type GeoMapMode = 'geoPoint' | 'geoPolyLine' | 'geoPolygon' | 'geoBounds'
 
 interface GeoMapProps {
   onChange?: (value?: GeoType) => void
@@ -83,9 +85,9 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
       const map = L.map(mapContainer.current)
       if (props.mode === 'geoPoint' && props.value !== undefined) {
         const propsValue = props.value as GeoPoint
-        map.setView([propsValue.lat, propsValue.lng], 15)
-      } else if (lat !== undefined && lng !== undefined) {
-        map.setView([lat, lng], 15)
+        map.setView([propsValue.latitude, propsValue.longitude], 15)
+      } else if (lat !== props.lat && lng !== props.lng) {
+        map.setView([lat ?? 0, lng ?? 0], 15)
       } else {
         map.setView([props.lat ?? 0, props.lng ?? 0], props.zoom ?? 1)
       }
@@ -99,7 +101,11 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
       if (props.mode === 'geoPoint') {
         addGeoPointToolbar(map, featureGroup, value as GeoPoint, props.onChange)
       } else if (props.mode === 'geoPolyLine') {
-        addGeoPolyLineToolbar(map, featureGroup, value as GeoPolyLine, props.onChange)
+        addGeoPolyLineToolbar(map, featureGroup, value as GeoPoints, props.onChange)
+      } else if (props.mode === 'geoPolygon') {
+        addGeoPolygonToolbar(map, featureGroup, value as GeoPoints, props.onChange)
+      } else if (props.mode === 'geoBounds') {
+        addGeoBoundsToolbar(map, featureGroup, value as GeoBounds, props.onChange)
       }
 
       return map

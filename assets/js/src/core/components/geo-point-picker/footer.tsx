@@ -28,24 +28,24 @@ export interface GeoPointPickerFooterProps {
 }
 
 interface GeoPointFormValues {
-  lat: number | undefined
-  lng: number | undefined
+  latitude: number | undefined
+  longitude: number | undefined
 }
 
 export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const [value, setValue] = React.useState<GeoPointFormValues>({ lat: props.value?.lat, lng: props.value?.lng })
+  const [value, setValue] = React.useState<GeoPointFormValues>({ latitude: props.value?.latitude, longitude: props.value?.longitude })
   const [form] = Form.useForm()
 
   const valueToGeoPoint = (val: GeoPointFormValues | undefined): GeoPoint | undefined => {
-    if (val?.lat === undefined || val.lng === undefined) {
+    if (val?.latitude === undefined || val.longitude === undefined) {
       return undefined
     }
 
     return {
-      lat: val.lat,
-      lng: val.lng
+      latitude: val.latitude,
+      longitude: val.longitude
     }
   }
 
@@ -58,19 +58,20 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
   }
 
   const emptyValue = (): void => {
-    setValue({ lat: undefined, lng: undefined })
+    setValue({ latitude: undefined, longitude: undefined })
     form.resetFields()
     props.onChange?.(undefined)
   }
 
-  const onSearch = (geoPoint: GeoPoint): void => {
-    setValue(geoPoint)
-    form.setFieldsValue(geoPoint)
+  const onSearch = (geoPoint?: GeoPoint): void => {
+    const newValue = { latitude: geoPoint?.latitude, longitude: geoPoint?.longitude }
+    setValue(newValue)
+    form.setFieldsValue(newValue)
     props.onChange?.(geoPoint)
   }
 
   useEffect(() => {
-    const newValue = { lat: props.value?.lat, lng: props.value?.lng }
+    const newValue = { latitude: props.value?.latitude, longitude: props.value?.longitude }
     setValue(newValue)
     form.setFieldsValue(newValue)
   }, [props.value])
@@ -93,13 +94,13 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
                     >
                       <Form.Item
                         label={ t('latitude') }
-                        name="lat"
+                        name="latitude"
                       >
                         <InputNumber onChange={ onChange } />
                       </Form.Item>
                       <Form.Item
                         label={ t('longitude') }
-                        name="lng"
+                        name="longitude"
                       >
                         <InputNumber onChange={ onChange } />
                       </Form.Item>
@@ -123,7 +124,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
           }
       emptyValue={ emptyValue }
       onSearch={ onSearch }
-      removeButtonDisabled={ value.lat === undefined && value.lng === undefined }
+      removeButtonDisabled={ value.latitude === undefined && value.longitude === undefined }
     />
   )
 }

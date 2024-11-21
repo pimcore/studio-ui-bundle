@@ -12,11 +12,11 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { GeoPointPicker } from './geo-point-picker'
+import { GeoPolyDrawer } from './geo-poly-drawer'
 
 const config: Meta = {
-  title: 'Components/Data Entry/Geo Map/GeoPointPicker',
-  component: GeoPointPicker,
+  title: 'Components/Data Entry/Geo Map/GeoPolyDrawer',
+  component: GeoPolyDrawer,
   parameters: {
     layout: 'centered'
   },
@@ -28,6 +28,7 @@ export default config
 export const _default = {
   args: {
     onChange: (value) => { console.log('Value:', value) },
+    mode: 'geoPolyLine',
     width: "500px"
   }
 }

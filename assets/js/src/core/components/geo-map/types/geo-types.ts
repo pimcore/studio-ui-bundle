@@ -1,8 +1,15 @@
 export type GeoPoint = {
-    lat: number
-    lng: number
+    latitude: number
+    longitude: number
 }
 
-export type GeoPolyLine = GeoPoint[]
+export type GeoPoints = GeoPoint[]
 
-export type GeoType = GeoPoint | GeoPolyLine
+export type GeoBounds = {
+    NElongitude: number,
+    NElatitude: number,
+    SWlongitude: number,
+    SWlatitude: number
+}
+
+export type GeoType = GeoPoint | GeoPoints | GeoBounds

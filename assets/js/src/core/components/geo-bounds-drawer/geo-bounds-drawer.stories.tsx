@@ -12,12 +12,11 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { GeoPolyLineDrawer } from './geo-poly-line-drawer'
+import { GeoBoundsDrawer } from './geo-bounds-drawer'
 
-// @todo check naming and check business logic
 const config: Meta = {
-  title: 'Components/Data Entry/Geo Map/GeoPolyLineDrawer',
-  component: GeoPolyLineDrawer,
+  title: 'Components/Data Entry/Geo Map/GeoBoundsDrawer',
+  component: GeoBoundsDrawer,
   parameters: {
     layout: 'centered'
   },

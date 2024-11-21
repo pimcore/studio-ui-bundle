@@ -15,22 +15,22 @@ import L from 'leaflet'
 import { type GeoPoints } from '@Pimcore/components/geo-map/types/geo-types'
 import { convertPolyLineToLatLngs, convertLatLngsToGeoPoints } from '@Pimcore/components/geo-map/utils/lat-lng-convert'
 
-export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPolyLine?: GeoPoints, onChange?: (geoPolyLine: GeoPoints | undefined) => void): void => {
+export const addGeoPolygonToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPolygon?: GeoPoints, onChange?: (geoPolyLine: GeoPoints | undefined) => void): void => {
   leafletMap.addLayer(featureGroup)
 
-  const polyLine = geoPolyLine !== undefined ? L.polyline(convertPolyLineToLatLngs(geoPolyLine), { stroke: true, color: '#3388ff', opacity: 0.5, fillOpacity: 0.2, weight: 4 }) : undefined
-  if (polyLine !== undefined) {
-    featureGroup.addLayer(polyLine)
+  const polygon = geoPolygon !== undefined ? L.polygon(convertPolyLineToLatLngs(geoPolygon), { stroke: true, color: '#3388ff', opacity: 0.5, fillOpacity: 0.2, weight: 4 }) : undefined
+  if (polygon !== undefined) {
+    featureGroup.addLayer(polygon)
   }
 
   const drawControlFull = new L.Control.Draw({
     position: 'topright',
     draw: {
-      rectangle: false,
-      polygon: false,
       circle: false,
       marker: false,
-      circlemarker: false
+      circlemarker: false,
+      rectangle: false,
+      polyline: false
     },
     edit: {
       featureGroup,
@@ -41,15 +41,15 @@ export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.Feature
 
   leafletMap.on(L.Draw.Event.CREATED, function (e) {
     featureGroup.clearLayers()
-    if (polyLine !== undefined) {
-      polyLine.remove()
+    if (polygon !== undefined) {
+      polygon.remove()
     }
 
-    const layer = e.layer as L.Polyline
+    const layer = e.layer as L.Polygon
     featureGroup.addLayer(layer)
     if (featureGroup.getLayers().length === 1) {
       if (onChange !== undefined) {
-        onChange(convertLatLngsToGeoPoints(layer.getLatLngs() as L.LatLng[]))
+        onChange(convertLatLngsToGeoPoints(layer.getLatLngs()[0] as L.LatLng[]))
       }
     }
   })
@@ -68,7 +68,7 @@ export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.Feature
         const layer = e.target._layers[layerId]
         if (Object.prototype.hasOwnProperty.call(layer, 'edited') === true) {
           if (onChange !== undefined) {
-            onChange(convertLatLngsToGeoPoints(layer.editing.latlngs[0] as L.LatLng[]))
+            onChange(convertLatLngsToGeoPoints(layer.editing.latlngs[0][0] as L.LatLng[]))
           }
         }
       }

@@ -12,17 +12,17 @@
 */
 
 import React, { useEffect } from 'react'
-import {GeoPoint, GeoPolyLine} from "@Pimcore/components/geo-map/types/geo-types";
+import {GeoBounds, GeoPoint, GeoPoints} from "@Pimcore/components/geo-map/types/geo-types";
 import {GeoMapCardFooter} from "@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer";
 
-export interface GeoLineDrawerFooterProps {
-  onChange?: (value?: GeoPolyLine) => void
+export interface GeoBoundsDrawerFooterProps {
+  onChange?: (value?: GeoBounds) => void
   onSearch: (geoPoint: GeoPoint) => void
-  value?: GeoPolyLine
+  value?: GeoBounds
 }
 
-export const GeoPolyLineDrawerFooter = (props: GeoLineDrawerFooterProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<GeoPolyLine | undefined>(props.value)
+export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.JSX.Element => {
+  const [value, setValue] = React.useState<GeoBounds | undefined>(props.value)
 
   const emptyValue = (): void => {
     setValue(undefined)

@@ -31,8 +31,8 @@ export const geoCode = async (address: string): Promise<GeoPoint> => {
   }
 
   return {
-    lat: parseFloat(data[0].lat as string),
-    lng: parseFloat(data[0].lon as string)
+    latitude: parseFloat(data[0].lat as string),
+    longitude: parseFloat(data[0].lon as string)
   }
 }
 
