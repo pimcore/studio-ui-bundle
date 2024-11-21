@@ -83,6 +83,7 @@ import Note from '@Pimcore/assets/icons/note.inline.svg'
 import MainDocument from '@Pimcore/assets/icons/pimcore-main-icon-document.inline.svg'
 import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
+import MainObjectVariant from '@Pimcore/assets/icons/main-object-variant.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
 import ChevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
@@ -410,6 +411,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'mainObject',
       component: MainObject
+    })
+    iconLibrary.register({
+      name: 'mainObjectVariant',
+      component: MainObjectVariant
     })
     iconLibrary.register({
       name: 'check-done-02',

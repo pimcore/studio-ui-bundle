@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { type ObjectComponentProps } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -20,6 +20,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
 import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
+import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { Text } from '@Pimcore/components/text/text'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -37,6 +39,8 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const hasFormList = formList !== undefined
   const hasLocalizedFields = localizedFields !== undefined && !hasFormList
   let formFieldName: Array<number | string> = [name]
+  let title = props.title as ReactNode
+  const { currentLanguage } = useLanguageSelection()
 
   if (hasFormList) {
     formFieldName = [formList.field.name, name]
@@ -45,6 +49,11 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   if (hasLocalizedFields) {
     // @todo should handle multiple locales
     formFieldName = ['localizedfields', localizedFields.locales[0], name]
+    title = (
+      <>
+        {title}<Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
+      </>
+    )
   }
 
   // @todo unify to one fieldType after api is updated completely
@@ -61,20 +70,26 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
+  const _props = {
+    ...props,
+    title,
+    name: hasLocalizedFields ? formFieldName : name
+  }
+
   if (!objectDataType.isCollectionType) {
     return (
       <Form.Item
-        { ...objectDataType.getObjectDataFormItemProps(props) }
+        { ...objectDataType.getObjectDataFormItemProps(_props) }
         name={ formFieldName }
       >
-        {objectDataType.getObjectDataComponent(props)}
+        {objectDataType.getObjectDataComponent(_props)}
       </Form.Item>
     )
   }
 
   return (
     <>
-      {objectDataType.getObjectDataComponent({ ...props, name: hasLocalizedFields ? formFieldName : name })}
+      {objectDataType.getObjectDataComponent(_props)}
     </>
   )
 }

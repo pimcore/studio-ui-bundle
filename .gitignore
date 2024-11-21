@@ -21,6 +21,8 @@ Thumbs.db
 # PhpStorm / IDEA
 .idea
 
+# VS Code
+.vscode
 
 # Test env
 /bin

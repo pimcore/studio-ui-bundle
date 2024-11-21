@@ -41,14 +41,14 @@ moduleSystem.registerModule({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',
       children: <PreviewContainer />,
-      icon: <Icon name={ 'image-05' } />
+      icon: <Icon value={ 'image-05' } />
     })
 
     imageEditorTabManager.register({
       key: 'edit',
       label: 'asset.asset-editor-tabs.edit',
       children: <EditTabContainer />,
-      icon: <Icon name={ 'edit' } />
+      icon: <Icon value={ 'edit' } />
     })
 
     imageEditorTabManager.register(TAB_EMBEDDED_METADATA)

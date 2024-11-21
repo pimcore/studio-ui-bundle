@@ -24,7 +24,7 @@ export interface DefaultBatchEditProps {
 }
 
 export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JSX.Element => {
-  const { key, type, value: batchEditValue } = batchEdit
+  const { key, type, locale, localizable, value: batchEditValue } = batchEdit
   const { addOrUpdateBatchEdit } = useBatchEdit()
 
   const TextFilter = (): React.JSX.Element => {
@@ -35,7 +35,7 @@ export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JS
     }, [batchEditValue])
 
     const onBlur = (): void => {
-      addOrUpdateBatchEdit(key, type, _value)
+      addOrUpdateBatchEdit(key, type, locale, localizable, _value)
     }
 
     return (

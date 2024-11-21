@@ -21,7 +21,7 @@ export interface DynamicTypeFieldFilterTextProps extends AbstractFieldFilterDefi
 export const DynamicTypeFieldFilterTextComponent = ({ column }: DynamicTypeFieldFilterTextProps): React.JSX.Element => {
   const { addOrUpdateFieldFilter, getFieldFilter } = useFilters()
   const fieldFilter = getFieldFilter(column)
-  const value = fieldFilter?.filterValue ?? ''
+  const value = (fieldFilter?.filterValue ?? '') as string
   const [_value, setValue] = useState(value)
 
   useEffect(() => {

@@ -61,7 +61,7 @@ export const Slider = (props: SliderProps): React.JSX.Element => {
         <Box padding={ { x: 'mini' } }>
           <Tooltip title={ t('set-to-null') }>
             <IconButton
-              icon={ 'trash' }
+              icon={ { value: 'trash' } }
               onClick={ () => { setValue(null) } }
               type={ 'default' }
               variant={ 'static' }

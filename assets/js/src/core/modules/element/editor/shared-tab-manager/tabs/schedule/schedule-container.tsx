@@ -103,7 +103,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-            icon={ 'PlusCircleOutlined' }
+            icon={ { value: 'PlusCircleOutlined' } }
             key={ 'add' }
             onClick={ (): void => {
               addSchedule({
@@ -175,7 +175,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
 
                 <IconTextButton
                   disabled={ gridDataArchive.length === 0 }
-                  icon={ 'trash' }
+                  icon={ { value: 'trash' } }
                   onClick={ cleanupArchivedVersions }
                 >
                   {t('schedule.archived.cleanup-all')}

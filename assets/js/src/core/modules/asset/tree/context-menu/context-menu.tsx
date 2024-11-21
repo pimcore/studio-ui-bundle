@@ -56,11 +56,11 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     {
       label: t('element.tree.context-menu.add-assets'),
       key: '1',
-      icon: <Icon name={ 'mainAsset' } />,
+      icon: <Icon value={ 'mainAsset' } />,
       hidden: !checkElementPermission(props.node.permissions, 'create') || props.node?.type !== 'folder',
       children: [
         {
-          icon: <Icon name={ 'upload-cloud' } />,
+          icon: <Icon value={ 'upload-cloud' } />,
           label: t('element.tree.context-menu.add-assets.upload-files'),
           key: '1-1',
           onClick: () => {
@@ -70,7 +70,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
           }
         },
         {
-          icon: <Icon name={ 'upload-zip' } />,
+          icon: <Icon value={ 'upload-zip' } />,
           label: t('element.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
@@ -92,12 +92,12 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
-      icon: <Icon name={ 'more' } />,
+      icon: <Icon value={ 'more' } />,
       children: [
         {
           label: t('element.lock'),
           key: 'advanced-lock',
-          icon: <Icon name={ 'lock-01' } />,
+          icon: <Icon value={ 'lock-01' } />,
           hidden: !checkElementPermission(props.node.permissions, 'publish') || props.node.isLocked,
           children: [
             lockContextMenuItem(props.node),

@@ -11,26 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import React from 'react'
 import { LocalizedFieldsProvider } from './provider/localized-fields-provider/localized-fields-provider'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Space } from '@Pimcore/components/space/space'
+import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 
 export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
 }
 
 export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.Element => {
-  // @todo inject user selected locales
-  const settings = useSettings()
-  const locales = settings.requiredLanguages
-  const locale = locales[0]
+  const { currentLanguage } = useLanguageSelection()
 
   return (
-    <LocalizedFieldsProvider locales={ [locale] }>
+    <LocalizedFieldsProvider locales={ [currentLanguage] }>
       <Space
         className="w-full"
         direction='vertical'

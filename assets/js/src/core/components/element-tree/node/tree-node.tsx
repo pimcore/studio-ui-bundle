@@ -19,10 +19,11 @@ import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface TreeNodeProps {
   id: string
-  icon: string
+  icon: ElementIcon
   label: string
   internalKey: string
   children: TreeNodeProps[]
@@ -38,7 +39,10 @@ export interface TreeNodeProps {
 const defaultProps: TreeNodeProps = {
   id: Math.random().toString(16).slice(2),
   internalKey: '',
-  icon: 'folder',
+  icon: {
+    type: 'name',
+    value: 'folder'
+  },
   label: 'Node',
   children: [],
   permissions: {

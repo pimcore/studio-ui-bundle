@@ -29,11 +29,14 @@ import {
   type DataObjectUpdateByIdApiArg,
   useDataObjectUpdateByIdMutation
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
+import { LanguageSelection } from './language-selection/language-selection'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
@@ -58,7 +61,13 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <ToolbarView>
-      <ContextMenu />
+      <Flex>
+        <ContextMenu />
+
+        {activeTab === TAB_EDIT.key && (
+          <LanguageSelection />
+        )}
+      </Flex>
 
       <Button
         disabled={ !hasChanges || isLoading || isSchedulesLoading }

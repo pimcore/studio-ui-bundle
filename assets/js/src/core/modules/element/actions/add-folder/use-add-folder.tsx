@@ -50,7 +50,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
     return {
       label: t('element.add-folder'),
       key: 'add-folder',
-      icon: <Icon name={ 'folder' } />,
+      icon: <Icon value={ 'folder' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)

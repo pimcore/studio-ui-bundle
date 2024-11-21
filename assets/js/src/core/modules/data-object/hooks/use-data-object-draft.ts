@@ -23,6 +23,7 @@ import {
   resetChanges,
   resetSchedulesChangesForDataObject,
   selectDataObjectById,
+  setActiveTabForDataObject,
   setModifiedCells,
   setPropertiesForDataObject,
   setSchedulesForDataObject,
@@ -39,10 +40,12 @@ import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/module
 import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 
 interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
+  UseTabsDraftReturn,
   UseTrackableChangesDraftReturn {
   isLoading: boolean
   isError: boolean
@@ -93,7 +96,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
         properties: [],
         schedules: [],
         changes: {},
-        modifiedCells: {}
+        modifiedCells: {},
+        ...initialTabsStateValue
       }
 
       if (dataObjectData !== undefined) {
@@ -140,6 +144,12 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     resetSchedulesChangesForDataObject
   )
 
+  const tabsActions = useTabsDraft(
+    id,
+    dataObject,
+    setActiveTabForDataObject
+  )
+
   const editorType = dataObject?.type === undefined
     ? undefined
     : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
@@ -153,6 +163,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     fetchDataObject,
     ...trackableChangesActions,
     ...propertyActions,
-    ...schedulesActions
+    ...schedulesActions,
+    ...tabsActions
   }
 }
