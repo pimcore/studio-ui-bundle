@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {type ReactElement} from 'react'
-import {type DynamicTypeAbstract} from '../../registry/dynamic-type-registry-abstract'
+import { type ReactElement } from 'react'
+import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-abstract'
 import {
-  BatchEdit
-} from "@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider";
+  type BatchEdit
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
 
 export interface AbstractBatchEditDefinition {
   batchEdit: BatchEdit
