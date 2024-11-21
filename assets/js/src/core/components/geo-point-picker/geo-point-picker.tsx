@@ -11,13 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-import { GeoMap } from '@Pimcore/components/geo-map/geo-map'
-import { Card } from '@Pimcore/components/card/card'
+import React, { useRef } from 'react'
+import { GeoMap, type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 import { GeoPointPickerFooter } from '@Pimcore/components/geo-point-picker/footer'
-import { useStyles } from './geo-point-picker.styles'
-import cn from 'classnames'
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
+import { GeoMapCard } from '@Pimcore/components/geo-map/components/geo-map-card/geo-map-card'
 
 export interface GeoPointPickerProps {
   onChange?: (value: GeoPoint) => void
@@ -30,52 +28,38 @@ export interface GeoPointPickerProps {
 }
 
 export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Element => {
-  const { styles } = useStyles()
   const [footerValue, setFooterValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
   const [mapValue, setMapValue] = React.useState<GeoPoint | undefined>(props.value ?? undefined)
-  const [mapKey, setMapKey] = useState<number>(0)
-
-  const forceMapRerender = (): void => {
-    setMapKey(prevKey => prevKey + 1)
-  }
+  const geoMapRef = useRef<GeoMapAPI>(null)
 
   const onChangeFooter = (newValue: GeoPoint): void => {
     setFooterValue(newValue)
     setMapValue(newValue)
-    if (props.onChange !== undefined) {
-      props.onChange(newValue)
-    }
-    forceMapRerender()
+    props.onChange?.(newValue)
+    const geoMapAPI = geoMapRef.current
+    geoMapAPI?.forceRerender()
   }
 
   const onChangeMap = (newValue: GeoPoint): void => {
     setFooterValue(newValue)
-    if (props.onChange !== undefined) {
-      props.onChange(newValue)
-    }
+    props.onChange?.(newValue)
   }
 
   return (
-    <Card
-      className={ cn(styles.container) }
-      cover={ <GeoMap
-        height={ props.height }
-        key={ mapKey }
-        lat={ props.lat }
-        lng={ props.lng }
-        mode="geoPoint"
-        onChange={ onChangeMap }
-        value={ mapValue }
-        width={ '100%' }
-        zoom={ props.zoom }
-              /> }
-      fitContent
+    <GeoMapCard
       footer={ <GeoPointPickerFooter
         onChange={ onChangeFooter }
         value={ footerValue }
                /> }
-      style={ { width: props.width } }
-    >
-    </Card>
+      height={ props.height }
+      lat={ props.lat }
+      lng={ props.lng }
+      mapMode={ 'geoPoint' }
+      mapValue={ mapValue }
+      onChangeMap={ onChangeMap }
+      ref={ geoMapRef }
+      width={ props.width }
+      zoom={ props.zoom }
+    />
   )
 }

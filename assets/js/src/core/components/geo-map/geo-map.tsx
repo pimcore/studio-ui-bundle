@@ -44,13 +44,14 @@ interface GeoMapProps {
 
 export interface GeoMapAPI {
   forceRerender: () => void
+  reset: () => void
   setLat: (lat: number) => void
   setLng: (lng: number) => void
   setZoom: (zoom: number) => void
   setValue: (value?: GeoType) => void
 }
 
-export const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Element => {
+const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Element => {
   const { styles } = useStyles()
   const mapContainer = useRef<HTMLDivElement>(null)
   const [lat, setLat] = useState<number | undefined>(props.lat)
@@ -59,11 +60,31 @@ export const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX
   const [value, setValue] = useState<GeoType | undefined>(props.value)
   const [key, setKey] = useState<number>(0)
 
-  const initializeMap = () => {
-    if (mapContainer.current) {
-      const map = L.map(mapContainer.current)
+  const geoMapApi: GeoMapAPI = {
+    reset: () => {
+      setLat(undefined)
+      setLng(undefined)
+      setZoom(undefined)
+      setValue(undefined)
+    },
+    forceRerender: () => {
+      setKey(prevKey => prevKey + 1)
+    },
+    setLat,
+    setLng,
+    setZoom,
+    setValue
+  }
 
-      if (lat !== undefined && lng !== undefined) {
+  useImperativeHandle(ref, () => geoMapApi)
+
+  const initializeMap = (): L.Map | null => {
+    if (mapContainer.current !== null) {
+      const map = L.map(mapContainer.current)
+      if (props.mode === 'geoPoint' && props.value !== undefined) {
+        const propsValue = props.value as GeoPoint
+        map.setView([propsValue.lat, propsValue.lng], 15)
+      } else if (lat !== undefined && lng !== undefined) {
         map.setView([lat, lng], 15)
       } else {
         map.setView([props.lat ?? 0, props.lng ?? 0], props.zoom ?? 1)
@@ -86,22 +107,10 @@ export const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX
     return null
   }
 
-  const geoMapApi: GeoMapAPI = {
-    forceRerender: () => {
-      setKey(prevKey => prevKey + 1)
-    },
-    setLat,
-    setLng,
-    setZoom,
-    setValue
-  }
-
-  useImperativeHandle(ref, () => geoMapApi)
-
   useEffect(() => {
     const map = initializeMap()
     return () => {
-      if (map) {
+      if (map !== null) {
         map.remove()
       }
     }
@@ -115,3 +124,7 @@ export const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX
     />
   )
 })
+
+GeoMap.displayName = 'GeoMap'
+
+export { GeoMap }

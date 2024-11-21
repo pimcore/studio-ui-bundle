@@ -25,12 +25,12 @@ export interface GeoPolyLineDrawerProps extends GeoMapCardBaseProps{
 export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.JSX.Element => {
   const [value, setValue] = React.useState<GeoPolyLine | undefined>(props.value ?? undefined)
   const geoMapRef = useRef<GeoMapAPI>(null);
-  const geoMapAPI = geoMapRef.current;
 
   const onChangeFooter = (newValue: GeoPolyLine): void => {
       setValue(newValue)
     props.onChange?.(newValue)
-    geoMapAPI?.forceRerender()
+    const geoMapAPI = geoMapRef.current;
+    geoMapAPI?.reset()
   }
 
   const onChangeMap = (newValue: GeoPolyLine): void => {
@@ -54,12 +54,12 @@ export const GeoPolyLineDrawer = ({ ...props }: GeoPolyLineDrawerProps): React.J
             onSearch={ (geoPoint: GeoPoint) => {
               setValue(undefined)
 
+              const geoMapAPI = geoMapRef.current;
               geoMapAPI?.setValue(undefined)
               geoMapAPI?.setLat(geoPoint.lat)
               geoMapAPI?.setLng(geoPoint.lng)
               geoMapAPI?.setZoom(15)
               geoMapAPI?.forceRerender()
-
               props.onChange?.(undefined)
             } }
             value={ value }

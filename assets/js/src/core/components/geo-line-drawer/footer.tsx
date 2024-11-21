@@ -12,14 +12,8 @@
 */
 
 import React, { useEffect } from 'react'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Tooltip } from 'antd'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useTranslation } from 'react-i18next'
-import { Box } from '@Pimcore/components/box/box'
-import { useStyles } from '@Pimcore/components/geo-point-picker/geo-point-picker.styles'
-import {AddressSearchField} from "@Pimcore/components/geo-map/components/address-search-field/address-search-field";
 import {GeoPoint, GeoPolyLine} from "@Pimcore/components/geo-map/types/geo-types";
+import {GeoMapCardFooter} from "@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer";
 
 export interface GeoLineDrawerFooterProps {
   onChange?: (value?: GeoPolyLine) => void
@@ -27,12 +21,8 @@ export interface GeoLineDrawerFooterProps {
   value?: GeoPolyLine
 }
 
-
 export const GeoPolyLineDrawerFooter = (props: GeoLineDrawerFooterProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const { styles } = useStyles()
   const [value, setValue] = React.useState<GeoPolyLine | undefined>(props.value)
-
 
   const emptyValue = (): void => {
     setValue(undefined)
@@ -41,37 +31,15 @@ export const GeoPolyLineDrawerFooter = (props: GeoLineDrawerFooterProps): React.
     }
   }
 
-
   useEffect(() => {
     setValue(props.value)
   }, [props.value])
 
   return (
-    <Box
-      className={ styles.footer }
-      padding={ { y: 'mini' } }
-    >
-      <Flex
-        className="w-full"
-        gap="mini"
-      >
-
-        <AddressSearchField
-          onSearch={ props.onSearch }
-        />
-
-        <div className="remove-button-wrapper">
-          <Tooltip
-            title={ t('set-to-null') }
-          >
-            <IconButton
-              disabled={ value === undefined }
-              icon={ 'delete-outlined' }
-              onClick={ emptyValue }
-            />
-          </Tooltip>
-        </div>
-      </Flex>
-    </Box>
+      <GeoMapCardFooter
+          onSearch={props.onSearch}
+          emptyValue={emptyValue}
+          removeButtonDisabled={value === undefined}
+      />
   )
 }

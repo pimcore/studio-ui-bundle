@@ -72,9 +72,9 @@ export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.Feature
     this.dirty = true
     this.data = []
     for (const layerId in e.target._layers) {
-      if (e.target._layers.hasOwnProperty(layerId)) {
+      if (Object.prototype.hasOwnProperty.call(e.target._layers, layerId) === true) {
         const layer = e.target._layers[layerId]
-        if (layer.hasOwnProperty('edited')) {
+        if (Object.prototype.hasOwnProperty.call(layer, 'edited') === true) {
           if (onChange !== undefined) {
             onChange(extractLatLngs(layer.editing.latlngs[0] as L.LatLng[]))
           }
