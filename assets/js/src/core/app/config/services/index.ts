@@ -166,7 +166,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTyp
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Listing/Text']).to(DynamicTypeListingAssetLink).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Listing/AssetLink']).to(DynamicTypeListingAssetLink).inSingletonScope()
 
 // Metadata registry
 container.bind(serviceIds['DynamicTypes/MetadataRegistry']).to(DynamicTypeMetaDataRegistry).inSingletonScope()
