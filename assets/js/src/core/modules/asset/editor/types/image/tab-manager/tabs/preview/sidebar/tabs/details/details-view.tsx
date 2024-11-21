@@ -72,7 +72,7 @@ export const AssetEditorSidebarDetailsView = ({
   const CUSTOM_DOWNLOAD_OPTIONS = [
     {
       key: 1,
-      title: <span>Custom Download</span>,
+      title: <span>{t('image-sidebar.tab.details.custom-download')}</span>,
       children: (
         <Form
           initialValues={ {
