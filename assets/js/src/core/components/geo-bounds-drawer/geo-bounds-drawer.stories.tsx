@@ -28,6 +28,6 @@ export default config
 export const _default = {
   args: {
     onChange: (value) => { console.log('Value:', value) },
-    width: "500px"
+    width: '500px'
   }
 }
