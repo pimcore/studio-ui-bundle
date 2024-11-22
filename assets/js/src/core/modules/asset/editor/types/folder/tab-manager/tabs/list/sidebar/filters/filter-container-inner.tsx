@@ -35,7 +35,7 @@ import { Content } from '@Pimcore/components/content/content'
 import {
   DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { isEmpty } from 'lodash'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
@@ -54,7 +54,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { searchValue, setSearchValue, handleChangeSearchValue, handleSaveSearchValue } = useSearchFilter()
 
   useEffect(() => {
-    if (!isEmptyValue(filterError)) {
+    if (!isEmpty(filterError)) {
       setIsShowPQLQueryError(true)
     }
   }, [filterError])

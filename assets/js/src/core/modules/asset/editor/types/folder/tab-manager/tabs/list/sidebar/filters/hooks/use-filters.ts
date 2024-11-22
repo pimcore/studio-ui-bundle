@@ -12,12 +12,12 @@
 */
 
 import { useContext } from 'react'
+import { isEmpty } from 'lodash'
 import { FilterContext } from '../filter-provider'
 import { type FilterOptions, type IFilterContext } from '../../../types/filterTypes'
 import { defaultFilterOptions } from '../../../constants/filters'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
@@ -164,7 +164,7 @@ export const useFilters = (): UseFiltersHookReturn => {
         )
       }
 
-      const newColumnFilters = !isEmptyValue(value)
+      const newColumnFilters = !isEmpty(value)
         ? [
             ...(filterColumnFiltersList()),
             {

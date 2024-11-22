@@ -12,7 +12,7 @@
 */
 
 import { createStyles } from 'antd-style'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { isEmpty } from 'lodash'
 
 interface StylesProps {
   width?: number
@@ -95,7 +95,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
     `,
 
     select: css`
-      width: ${!isEmptyValue(props.width) ? `${props.width}px` : 'initial'};
+      width: ${!isEmpty(props.width) ? `${props.width}px` : 'initial'};
       
       .ant-select-selector {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
