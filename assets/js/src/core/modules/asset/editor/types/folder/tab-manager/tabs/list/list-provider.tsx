@@ -14,11 +14,11 @@
 /* eslint-disable max-lines */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
-import { isEmpty } from 'lodash'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
 import { defaultFilterOptions } from './constants/filters'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface ICommonListProviderProps {
   children: React.ReactNode
@@ -122,7 +122,7 @@ export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProvide
   const filterOptions = useMemo(() => Object.values(filterOptionsMap).reduce((acc, curr) => {
     acc.columnFilters = [...acc.columnFilters as [], ...curr.columnFilters as []]
 
-    if (!isEmpty(curr.includeDescendants)) {
+    if (!isEmptyValue(curr.includeDescendants)) {
       acc.includeDescendants = curr.includeDescendants
     }
 
