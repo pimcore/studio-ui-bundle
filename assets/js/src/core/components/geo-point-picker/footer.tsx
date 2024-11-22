@@ -25,6 +25,7 @@ import { GeoMapCardFooter } from '@Pimcore/components/geo-map/components/geo-map
 export interface GeoPointPickerFooterProps {
   onChange?: (value?: GeoPoint) => void
   value?: GeoPoint
+  disabled?: boolean
 }
 
 interface GeoPointFormValues {
@@ -96,13 +97,19 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
                         label={ t('latitude') }
                         name="latitude"
                       >
-                        <InputNumber onChange={ onChange } />
+                        <InputNumber
+                          disabled={ props.disabled }
+                          onChange={ onChange }
+                        />
                       </Form.Item>
                       <Form.Item
                         label={ t('longitude') }
                         name="longitude"
                       >
-                        <InputNumber onChange={ onChange } />
+                        <InputNumber
+                          disabled={ props.disabled }
+                          onChange={ onChange }
+                        />
                       </Form.Item>
                     </Form>
                   </Box>
@@ -124,7 +131,8 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
           }
       emptyValue={ emptyValue }
       onSearch={ onSearch }
-      removeButtonDisabled={ value.latitude === undefined && value.longitude === undefined }
+      removeButtonDisabled={ (value.latitude === undefined && value.longitude === undefined) || props.disabled }
+      searchDisabled={ props.disabled }
     />
   )
 }

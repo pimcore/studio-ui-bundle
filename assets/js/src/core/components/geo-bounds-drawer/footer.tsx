@@ -19,6 +19,7 @@ export interface GeoBoundsDrawerFooterProps {
   onChange?: (value?: GeoBounds) => void
   onSearch: (geoPoint: GeoPoint) => void
   value?: GeoBounds
+  disabled?: boolean
 }
 
 export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.JSX.Element => {
@@ -39,7 +40,8 @@ export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.
     <GeoMapCardFooter
       emptyValue={ emptyValue }
       onSearch={ props.onSearch }
-      removeButtonDisabled={ value === undefined }
+      removeButtonDisabled={ value === undefined || props.disabled }
+      searchDisabled={ props.disabled }
     />
   )
 }

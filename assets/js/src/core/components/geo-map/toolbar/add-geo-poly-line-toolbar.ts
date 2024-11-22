@@ -15,12 +15,16 @@ import L from 'leaflet'
 import { type GeoPoints } from '@Pimcore/components/geo-map/types/geo-types'
 import { convertPolyLineToLatLngs, convertLatLngsToGeoPoints } from '@Pimcore/components/geo-map/utils/lat-lng-convert'
 
-export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPolyLine?: GeoPoints, onChange?: (geoPolyLine: GeoPoints | undefined) => void): void => {
+export const addGeoPolyLineToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPolyLine?: GeoPoints, onChange?: (geoPolyLine: GeoPoints | undefined) => void, disabled?: boolean): void => {
   leafletMap.addLayer(featureGroup)
 
   const polyLine = geoPolyLine !== undefined ? L.polyline(convertPolyLineToLatLngs(geoPolyLine), { stroke: true, color: '#3388ff', opacity: 0.5, fillOpacity: 0.2, weight: 4 }) : undefined
   if (polyLine !== undefined) {
     featureGroup.addLayer(polyLine)
+  }
+
+  if (disabled === true) {
+    return
   }
 
   const drawControlFull = new L.Control.Draw({

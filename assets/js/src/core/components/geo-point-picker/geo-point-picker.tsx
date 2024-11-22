@@ -25,6 +25,7 @@ export interface GeoPointPickerProps {
   lat?: number
   lng?: number
   zoom?: number
+  disabled?: boolean
 }
 
 export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Element => {
@@ -47,7 +48,9 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
 
   return (
     <GeoMapCard
+      disabled={ props.disabled }
       footer={ <GeoPointPickerFooter
+        disabled={ props.disabled }
         onChange={ onChangeFooter }
         value={ footerValue }
                /> }

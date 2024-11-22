@@ -26,6 +26,7 @@ export interface GeoMapCardFooterProps {
   emptyValue: () => void
   dropdown?: React.ReactNode
   removeButtonDisabled?: boolean
+  searchDisabled?: boolean
 }
 
 export const GeoMapCardFooter = (props: GeoMapCardFooterProps): React.JSX.Element => {
@@ -43,6 +44,7 @@ export const GeoMapCardFooter = (props: GeoMapCardFooterProps): React.JSX.Elemen
       >
 
         <AddressSearchField
+          disabled={ props.searchDisabled }
           onSearch={ props.onSearch }
         />
 

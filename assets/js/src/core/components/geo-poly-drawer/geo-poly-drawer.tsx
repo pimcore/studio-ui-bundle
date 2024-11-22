@@ -21,6 +21,7 @@ export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoPoints | undefined) => void
   value?: GeoPoints | null
   mode: 'geoPolyLine' | 'geoPolygon'
+  disabled?: boolean
 }
 
 export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
@@ -44,7 +45,9 @@ export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Eleme
 
   return (
     <GeoMapCard
+      disabled={ props.disabled }
       footer={ <GeoPolyDrawerFooter
+        disabled={ props.disabled }
         onChange={ onChangeFooter }
         onSearch={ (geoPoint?: GeoPoint) => {
           setFooterValue(undefined)

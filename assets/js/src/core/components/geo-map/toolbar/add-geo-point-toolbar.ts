@@ -16,12 +16,16 @@ import { reverseGeocode } from '@Pimcore/components/geo-map/utils/geocode'
 import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 import { convertLatLngToGeoPoint } from '@Pimcore/components/geo-map/utils/lat-lng-convert'
 
-export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPoint?: GeoPoint, onChange?: (geoPoint: GeoPoint) => void): void => {
+export const addGeoPointToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoPoint?: GeoPoint, onChange?: (geoPoint: GeoPoint) => void, disabled?: boolean): void => {
   leafletMap.addLayer(featureGroup)
 
   const marker = geoPoint !== undefined ? L.marker([geoPoint.latitude, geoPoint.longitude]) : undefined
   if (marker !== undefined) {
     featureGroup.addLayer(marker)
+  }
+
+  if (disabled === true) {
+    return
   }
 
   const drawControlFull = new L.Control.Draw({

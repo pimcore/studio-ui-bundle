@@ -34,6 +34,7 @@ export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract
   getObjectDataComponent (props: GeoPointObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <GeoPointPicker
+        disabled={ props.noteditable === true }
         height={ getGeoComponentHeight(props.height) }
         lat={ props.lat }
         lng={ props.lng }

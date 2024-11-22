@@ -20,6 +20,7 @@ import { type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
 
 interface AddressSearchFieldProps {
   onSearch: (geoPoint?: GeoPoint) => void
+  disabled?: boolean
 }
 
 export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.Element => {
@@ -52,6 +53,7 @@ export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.El
   return (
     <Search
       className="address-search-field"
+      disabled={ props.disabled }
       onSearch={ onSearch }
       placeholder={ t('search-address') }
     />

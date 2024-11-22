@@ -34,6 +34,7 @@ export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstr
   getObjectDataComponent (props: GeoPolyLineObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <GeoPolyDrawer
+        disabled={ props.noteditable === true }
         height={ getGeoComponentHeight(props.height) }
         lat={ props.lat }
         lng={ props.lng }

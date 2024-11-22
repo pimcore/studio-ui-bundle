@@ -20,6 +20,7 @@ import { type GeoMapAPI } from '@Pimcore/components/geo-map/geo-map'
 export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoBounds | undefined) => void
   value?: GeoBounds | null
+  disabled?: boolean
 }
 
 export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {
@@ -43,7 +44,9 @@ export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Ele
 
   return (
     <GeoMapCard
+      disabled={ props.disabled }
       footer={ <GeoBoundsDrawerFooter
+        disabled={ props.disabled }
         onChange={ onChangeFooter }
         onSearch={ (geoPoint?: GeoPoint) => {
           setFooterValue(undefined)

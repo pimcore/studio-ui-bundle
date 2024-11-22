@@ -42,6 +42,7 @@ interface GeoMapProps {
   lat?: number
   lng?: number
   zoom?: number
+  disabled?: boolean
 }
 
 export interface GeoMapAPI {
@@ -99,13 +100,13 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
       const featureGroup = L.featureGroup().addTo(map)
 
       if (props.mode === 'geoPoint') {
-        addGeoPointToolbar(map, featureGroup, value as GeoPoint, props.onChange)
+        addGeoPointToolbar(map, featureGroup, value as GeoPoint, props.onChange, props.disabled)
       } else if (props.mode === 'geoPolyLine') {
-        addGeoPolyLineToolbar(map, featureGroup, value as GeoPoints, props.onChange)
+        addGeoPolyLineToolbar(map, featureGroup, value as GeoPoints, props.onChange, props.disabled)
       } else if (props.mode === 'geoPolygon') {
-        addGeoPolygonToolbar(map, featureGroup, value as GeoPoints, props.onChange)
+        addGeoPolygonToolbar(map, featureGroup, value as GeoPoints, props.onChange, props.disabled)
       } else if (props.mode === 'geoBounds') {
-        addGeoBoundsToolbar(map, featureGroup, value as GeoBounds, props.onChange)
+        addGeoBoundsToolbar(map, featureGroup, value as GeoBounds, props.onChange, props.disabled)
       }
 
       return map
@@ -136,7 +137,7 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
         map.remove()
       }
     }
-  }, [key, lat, lng, zoom, value, props.mode])
+  }, [key, lat, lng, zoom, value, props.mode, props.disabled])
 
   return (
     <div
