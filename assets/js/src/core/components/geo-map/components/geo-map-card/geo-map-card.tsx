@@ -50,7 +50,7 @@ const GeoMapCard = forwardRef<GeoMapAPI, GeoMapCardProps>((props, geoMapRef): Re
           onChange={ props.onChangeMap }
           ref={ geoMapRef }
           value={ props.mapValue }
-          width={ '100%' }
+          width={ props.width }
           zoom={ props.zoom }
         />
             }

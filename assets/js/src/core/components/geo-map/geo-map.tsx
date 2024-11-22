@@ -62,6 +62,8 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   const [zoom, setZoom] = useState<number | undefined>(props.zoom)
   const [value, setValue] = useState<GeoType | undefined>(props.value)
   const [key, setKey] = useState<number>(0)
+  const [isVisible, setIsVisible] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const geoMapApi: GeoMapAPI = {
     reset: () => {
@@ -131,20 +133,53 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   }, [props.zoom])
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (containerRef.current !== null) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => {
+      if (containerRef.current !== null) {
+        observer.unobserve(containerRef.current)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isVisible) {
+      geoMapApi.forceRerender()
+    }
+  }, [isVisible])
+
+  useEffect(() => {
+    if (!isVisible) {
+      return
+    }
     const map = initializeMap()
     return () => {
       if (map !== null) {
         map.remove()
       }
     }
-  }, [key, lat, lng, zoom, value, props.mode, props.disabled])
+  }, [key, isVisible, lat, lng, zoom, value, props.mode, props.disabled])
 
   return (
-    <div
-      className={ cn(styles.mapContainer) }
-      ref={ mapContainer }
-      style={ { height: toCssDimension(props.height, 250), width: toCssDimension(props.width, 500) } }
-    />
+    <div ref={ containerRef }>
+      <div
+        className={ cn(styles.mapContainer) }
+        ref={ mapContainer }
+        style={ { height: toCssDimension(props.height, 250), width: toCssDimension(props.width, 500) } }
+      />
+    </div>
   )
 })
 
