@@ -12,8 +12,8 @@
 */
 
 import React, { useEffect } from 'react'
-import {GeoBounds, GeoPoint, GeoPoints} from "@Pimcore/components/geo-map/types/geo-types";
-import {GeoMapCardFooter} from "@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer";
+import { type GeoBounds, type GeoPoint } from '@Pimcore/components/geo-map/types/geo-types'
+import { GeoMapCardFooter } from '@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer'
 
 export interface GeoBoundsDrawerFooterProps {
   onChange?: (value?: GeoBounds) => void
@@ -36,10 +36,10 @@ export const GeoBoundsDrawerFooter = (props: GeoBoundsDrawerFooterProps): React.
   }, [props.value])
 
   return (
-      <GeoMapCardFooter
-          onSearch={props.onSearch}
-          emptyValue={emptyValue}
-          removeButtonDisabled={value === undefined}
-      />
+    <GeoMapCardFooter
+      emptyValue={ emptyValue }
+      onSearch={ props.onSearch }
+      removeButtonDisabled={ value === undefined }
+    />
   )
 }

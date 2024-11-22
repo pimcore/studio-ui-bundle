@@ -15,12 +15,12 @@ import React from 'react'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
-import { GeoPointPicker } from '@Pimcore/components/geo-point-picker/geo-point-picker'
 import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
+import { GeoBoundsDrawer } from '@Pimcore/components/geo-bounds-drawer/geo-bounds-drawer'
 
-export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
+export type GeoBoundsObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
   height: string
   lat: number
@@ -28,12 +28,12 @@ export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
   zoom: number
 }
 
-export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract {
-  id: string = 'geopoint'
+export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstract {
+  id: string = 'geobounds'
 
-  getObjectDataComponent (props: GeoPointObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: GeoBoundsObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <GeoPointPicker
+      <GeoBoundsDrawer
         height={ getGeoComponentHeight(props.height) }
         lat={ props.lat }
         lng={ props.lng }

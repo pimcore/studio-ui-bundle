@@ -15,12 +15,12 @@ import React from 'react'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
-import { GeoPointPicker } from '@Pimcore/components/geo-point-picker/geo-point-picker'
 import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
+import { GeoPolyDrawer } from '@Pimcore/components/geo-poly-drawer/geo-poly-drawer'
 
-export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
+export type GeoPolygonObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
   height: string
   lat: number
@@ -28,15 +28,16 @@ export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
   zoom: number
 }
 
-export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract {
-  id: string = 'geopoint'
+export class DynamicTypeObjectDataGeoPolygon extends DynamicTypeObjectDataAbstract {
+  id: string = 'geopolygon'
 
-  getObjectDataComponent (props: GeoPointObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: GeoPolygonObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <GeoPointPicker
+      <GeoPolyDrawer
         height={ getGeoComponentHeight(props.height) }
         lat={ props.lat }
         lng={ props.lng }
+        mode={ 'geoPolygon' }
         width={ getGeoComponentWidth(props.width) }
         zoom={ props.zoom }
       />

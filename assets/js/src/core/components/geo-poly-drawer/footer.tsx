@@ -12,8 +12,8 @@
 */
 
 import React, { useEffect } from 'react'
-import {GeoPoint, GeoPoints} from "@Pimcore/components/geo-map/types/geo-types";
-import {GeoMapCardFooter} from "@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer";
+import { type GeoPoint, type GeoPoints } from '@Pimcore/components/geo-map/types/geo-types'
+import { GeoMapCardFooter } from '@Pimcore/components/geo-map/components/geo-map-card-footer/geo-map-card-footer'
 
 export interface GeoPolyDrawerFooterProps {
   onChange?: (value?: GeoPoints) => void
@@ -36,10 +36,10 @@ export const GeoPolyDrawerFooter = (props: GeoPolyDrawerFooterProps): React.JSX.
   }, [props.value])
 
   return (
-      <GeoMapCardFooter
-          onSearch={props.onSearch}
-          emptyValue={emptyValue}
-          removeButtonDisabled={value === undefined}
-      />
+    <GeoMapCardFooter
+      emptyValue={ emptyValue }
+      onSearch={ props.onSearch }
+      removeButtonDisabled={ value === undefined }
+    />
   )
 }

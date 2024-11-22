@@ -88,6 +88,9 @@ import { type DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dy
 import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-time'
 import { type DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-external-image'
 import { type DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopoint'
+import { type DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geobounds'
+import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
+import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
 import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
 import { type DynamicTypeGridCellLanguageSelect } from './defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
@@ -178,6 +181,9 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTime>(serviceIds['DynamicTypes/ObjectData/Time']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataExternalImage>(serviceIds['DynamicTypes/ObjectData/ExternalImage']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPoint>(serviceIds['DynamicTypes/ObjectData/GeoPoint']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoBounds>(serviceIds['DynamicTypes/ObjectData/GeoBounds']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolygon>(serviceIds['DynamicTypes/ObjectData/GeoPolygon']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolyLine>(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
   }
