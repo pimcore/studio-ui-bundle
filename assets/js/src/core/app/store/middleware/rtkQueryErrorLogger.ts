@@ -14,23 +14,14 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit'
 
-/**
- * Log a warning and show a toast!
- */
-
 export const rtkQueryErrorLogger: Middleware =
     (api: MiddlewareAPI) => (next) => (action) => {
-      // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
       if (isRejectedWithValue(action)) {
-        console.log('We got a rejected action! ', action)
-        // modal.error({
-        //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //   // @ts-expect-error
-        //   content:
-        //     'data' in action.error
-        //       ? (action.error.data as { message: string }).message
-        //       : action.error.message
-        // })
+        const errorPayload = 'data' in action.error
+          ? (action.error.data as { message: string }).message
+          : action.error.message
+
+        api.dispatch({ type: 'apiError/add', payload: errorPayload })
       }
 
       return next(action)
