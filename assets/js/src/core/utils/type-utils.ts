@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+// Difference from Lodash: primitive values like booleans and numbers are NOT considered empty
 export const isEmptyValue = (value: unknown): boolean => {
   if (value === null || value === undefined) {
     return true
