@@ -29,6 +29,6 @@ export const _default = {
   args: {
     onChange: (value) => { console.log('Value:', value) },
     mode: 'geoPolyLine',
-    width: "500px"
+    width: '500px'
   }
 }
