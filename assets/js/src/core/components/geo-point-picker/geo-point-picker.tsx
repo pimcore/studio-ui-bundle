@@ -47,27 +47,22 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
   }
 
   return (
-    <>
-      <ul>
-        <li>{props.width}</li>
-        <li>{props.height}</li>
-      </ul>
-      <GeoMapCard
+    <GeoMapCard
+      disabled={ props.disabled }
+      footer={ <GeoPointPickerFooter
         disabled={ props.disabled }
-        footer={ <GeoPointPickerFooter
-          disabled={ props.disabled }
-          onChange={ onChangeFooter }
-          value={ footerValue }
-                 /> }
-        height={ props.height }
-        lat={ props.lat }
-        lng={ props.lng }
-        mapMode={ 'geoPoint' }
-        mapValue={ mapValue }
-        onChangeMap={ onChangeMap }
-        ref={ geoMapRef }
-        width={ props.width }
-        zoom={ props.zoom }
-      /></>
+        onChange={ onChangeFooter }
+        value={ footerValue }
+               /> }
+      height={ props.height }
+      lat={ props.lat }
+      lng={ props.lng }
+      mapMode={ 'geoPoint' }
+      mapValue={ mapValue }
+      onChangeMap={ onChangeMap }
+      ref={ geoMapRef }
+      width={ props.width }
+      zoom={ props.zoom }
+    />
   )
 }
