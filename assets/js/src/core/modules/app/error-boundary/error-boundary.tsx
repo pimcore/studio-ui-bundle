@@ -11,11 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Component, type ErrorInfo, type ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { isEmpty } from 'lodash'
 
 interface IErrorBoundaryProps {
   children: ReactNode
   fallback?: ReactNode
+  showAlert?: (content: string) => void
 }
 
 interface IErrorBoundaryState {
@@ -46,20 +48,14 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> 
   }
 
   render (): ReactNode {
-    const { children, fallback } = this.props
+    const { children, fallback, showAlert } = this.props
 
     const { hasError, error } = this.state
 
     if (hasError) {
-      return fallback ?? (
-        <div>
-          <h1>Something went wrong.</h1>
-          {(error != null) && <p>{error.message}</p>}
-          <button onClick={ this.handleRetry }>
-            Retry
-          </button>
-        </div>
-      )
+      if (fallback !== null) return fallback
+
+      !isEmpty(showAlert) && showAlert(error?.message ?? 'Something went wrong.')
     }
 
     return children
