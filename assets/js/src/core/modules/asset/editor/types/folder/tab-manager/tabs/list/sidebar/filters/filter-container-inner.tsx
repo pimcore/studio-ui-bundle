@@ -28,21 +28,21 @@ import { useSearchFilter } from './hooks/use-search-filter'
 import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
 import { useListFilterOptions } from '../../hooks/use-list'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import {
   DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { isEmpty } from 'lodash'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
   const { resetFilters, filterOptions, filterError } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
-  const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
+  const { isShowOnlyDirectChildren, setIsShowOnlyDirectChildren, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
   const {
     pqlQueryValue,
     setPQLQueryValue,
@@ -54,7 +54,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { searchValue, setSearchValue, handleChangeSearchValue, handleSaveSearchValue } = useSearchFilter()
 
   useEffect(() => {
-    if (!isEmptyValue(filterError)) {
+    if (!isEmpty(filterError)) {
       setIsShowPQLQueryError(true)
     }
   }, [filterError])
@@ -62,7 +62,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
 
   const handleResetAllFiltersClick = (): void => {
-    setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
+    setIsShowOnlyDirectChildren(!DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
     setPQLQueryValue('')
     setSearchValue('')
     setIsShowPQLQueryError(false)
@@ -71,7 +71,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
@@ -131,7 +131,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   />
 
                   <Checkbox
-                    checked={ isIncludeDescendants }
+                    checked={ isShowOnlyDirectChildren }
                     onChange={ handleChangeIsIncludeDescendants }
                   >
                     only direct children
@@ -154,6 +154,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
             </>
             )}
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

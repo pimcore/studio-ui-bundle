@@ -21,6 +21,7 @@ export interface DefaultFilterProps {
 
 export const DefaultFilter = ({ column }: DefaultFilterProps): React.JSX.Element => {
   const { frontendType, type } = column
+
   const { getComponentRenderer } = useDynamicTypeResolver()
   const { ComponentRenderer } = getComponentRenderer({ target: 'FIELD_FILTER', dynamicTypeIds: [type, frontendType!] })
 

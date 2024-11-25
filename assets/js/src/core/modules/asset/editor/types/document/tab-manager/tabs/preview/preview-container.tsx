@@ -14,8 +14,8 @@
 import React, { useEffect, useState } from 'react'
 import { PreviewView } from './preview-view'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
@@ -45,11 +45,11 @@ const PreviewContainer = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarLayout>
+    <ContentLayout>
       <PreviewView
         src={ docURL }
       />
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }
 

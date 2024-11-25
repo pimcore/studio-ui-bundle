@@ -29,7 +29,7 @@ import {
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { ListDataProvider } from './list-provider'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
@@ -244,7 +244,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   return useMemo(() => (
     <ListDataProvider data={ data }>
       <Content loading={ isLoading }>
-        <ContentToolbarSidebarLayout
+        <ContentLayout
           renderSidebar={ <SidebarContainer errorData={ fetchListingResult.error as FetchBaseQueryError } /> }
           renderToolbar={
             <GridToolbarContainer
@@ -262,7 +262,7 @@ export const ListContainerInner = (): React.JSX.Element => {
             modifiedCells={ modifiedCells }
             onUpdateCellData={ onUpdateCellData }
           />
-        </ContentToolbarSidebarLayout>
+        </ContentLayout>
       </Content>
     </ListDataProvider>
   ), [data, page, pageSize, modifiedCells, isLoading])

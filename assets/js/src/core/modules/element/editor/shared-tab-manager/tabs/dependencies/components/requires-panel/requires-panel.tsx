@@ -23,7 +23,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/pagination/pagination'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
@@ -47,7 +47,7 @@ export const RequiresPanel = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarLayout renderToolbar={
+    <ContentLayout renderToolbar={
       <Toolbar
         justify='flex-end'
         theme='secondary'
@@ -75,6 +75,6 @@ export const RequiresPanel = (): React.JSX.Element => {
           items={ data?.items ?? [] }
         />
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

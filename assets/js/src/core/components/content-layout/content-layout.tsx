@@ -12,18 +12,19 @@
 */
 
 import React, { memo, type ReactNode } from 'react'
-import { useStyles } from './content-toolbar-sidebar-layout.styles'
+import { useStyles } from './content-layout.styles'
 import { Content } from '../content/content'
 
 interface ContentToolbarViewProps {
   children: ReactNode
-  renderToolbar?: ReactNode
+  renderTopBar?: ReactNode
   renderSidebar?: ReactNode
+  renderToolbar?: ReactNode
 }
 
 const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = ['content-toolbar-sidebar-layout', styles.ContentToolbarSidebarLayout]
+  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout]
 
   if (props.renderToolbar !== undefined) {
     classes.push('content-toolbar-sidebar-layout--with-toolbar')
@@ -31,6 +32,12 @@ const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
 
   return (
     <div className={ classes.join(' ') }>
+      { props.renderTopBar !== undefined && (
+        <div className='content-toolbar-sidebar-layout__top-bar'>
+          {props.renderTopBar}
+        </div>
+      )}
+
       <Content className='content-toolbar-sidebar-layout__content'>
         {props.children}
       </Content>
@@ -50,4 +57,4 @@ const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
   )
 }
 
-export const ContentToolbarSidebarLayout = memo(Component)
+export const ContentLayout = memo(Component)

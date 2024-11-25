@@ -21,6 +21,9 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import MissingContext from '@Pimcore/modules/element/editor/detached-tab/missing-context'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { type GlobalElementContext } from '@Pimcore/modules/element/hooks/use-global-element-context'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
 
 export interface DetachedTabContentProps {
   context: GlobalElementContext
@@ -58,5 +61,22 @@ export default function DetachedTabContent ({ context, tabKey }: DetachedTabCont
     return <MissingContext />
   }
 
-  return contextProvider
+  return (
+    <ContentLayout
+      renderTopBar={
+        <Toolbar
+          position='top'
+          size='small'
+          theme='secondary'
+        >
+          <ElementToolbar
+            elementType={ context.type }
+            id={ context.config.id }
+          />
+        </Toolbar>
+      }
+    >
+      {contextProvider}
+    </ContentLayout>
+  )
 }

@@ -17,17 +17,29 @@ import { useTranslation } from 'react-i18next'
 import { type IElementEditorTabManager } from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
   const tabManager = useInjection<IElementEditorTabManager>(elementEditorType.tabManagerServiceId)
-
+  const { id, elementType } = useElementContext()
+  const { element } = useElementDraft(id, elementType)
   const tabs = tabManager.getTabs()
+
   const preparedTabs = tabs.map((tab, index) => {
-    return {
+    const baseTab = {
       ...tabs[index],
       label: typeof tab.label === 'string' ? t(tab.label) : tab.label
     }
+
+    if (tab.key === 'workflow') {
+      return {
+        ...baseTab,
+        hidden: () => element?.hasWorkflowAvailable === false || element?.hasWorkflowAvailable === undefined
+      }
+    }
+    return baseTab
   })
 
   return (

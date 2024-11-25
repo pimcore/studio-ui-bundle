@@ -12,9 +12,9 @@
 */
 
 import React from 'react'
+import { isEmpty } from 'lodash'
 import { AccordionView } from './accordion-view'
 import { CardView } from './card-view'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface BaseViewProps {
   title?: string
@@ -25,7 +25,7 @@ export interface BaseViewProps {
 }
 
 export const BaseView = (props: BaseViewProps): React.JSX.Element => {
-  const isPaddedLayout = props.border === true || props.collapsible === true || !isEmptyValue(props.title)
+  const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
 
   if (!isPaddedLayout) {
     return (
