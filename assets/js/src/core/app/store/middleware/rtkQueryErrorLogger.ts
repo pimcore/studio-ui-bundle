@@ -28,11 +28,13 @@ export interface IApiErrorPayload {
 
 export interface IApiErrorData {
   requestUrl?: string
+  error?: string
   data?: {
     detail?: string
     message?: string
-  }
-  status?: number
+  } | string
+  status?: number | string
+  originalStatus?: number
 }
 
 export const rtkQueryErrorLogger: Middleware =

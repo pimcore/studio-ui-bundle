@@ -13,7 +13,7 @@
 
 import type React from 'react'
 import { useEffect } from 'react'
-import { isEmpty } from 'lodash'
+import { isEmpty, isObject } from 'lodash'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import type { IApiErrorData } from '@Pimcore/app/store/middleware/rtkQueryErrorLogger'
 
@@ -29,7 +29,10 @@ export const ErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData, clear }) 
 
   useEffect(() => {
     if (!isEmpty(errorData)) {
-      const errorContent = errorData?.data?.message ?? DEFAULT_ERROR_CONTENT
+      const errorInfo = isObject(errorData?.data) && 'message' in errorData.data
+        ? errorData.data.message
+        : errorData?.error
+      const errorContent = errorInfo ?? DEFAULT_ERROR_CONTENT
 
       modal.error({ content: errorContent })
 
