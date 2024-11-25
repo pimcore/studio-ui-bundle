@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { StoryObj, type Meta } from '@storybook/react'
-import { Filename, FilenameProps } from './filename'
+import { type StoryObj, type Meta } from '@storybook/react'
+import { Filename, type FilenameProps } from './filename'
 
 const config: Meta = {
   title: 'Components/Data Display/Filename',

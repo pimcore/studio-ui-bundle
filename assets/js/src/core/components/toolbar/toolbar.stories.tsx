@@ -79,7 +79,10 @@ export const Size: Story = {
   args: {
     children: (
       <>
-        <Breadcrumb { ...breadcrumbStory.args } elementType='asset' />
+        <Breadcrumb
+          { ...breadcrumbStory.args }
+          elementType='asset'
+        />
       </>
     ),
     size: 'small',
@@ -91,7 +94,10 @@ export const Position: Story = {
   args: {
     children: (
       <>
-        <Breadcrumb { ...breadcrumbStory.args } elementType='asset' />
+        <Breadcrumb
+          { ...breadcrumbStory.args }
+          elementType='asset'
+        />
       </>
     ),
     position: 'top',
