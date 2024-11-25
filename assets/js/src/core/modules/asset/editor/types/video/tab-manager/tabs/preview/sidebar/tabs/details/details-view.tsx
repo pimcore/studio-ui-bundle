@@ -126,7 +126,7 @@ export const VideoEditorSidebarDetailsTab = ({
       className={ styles.sidebarContentEntry }
       padded
     >
-      <Header title={ t('details') } />
+      <Header title={ t('asset.sidebar.details') } />
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>
