@@ -8,7 +8,7 @@
     "dev-vendor": "encore dev --config webpack.vendor.config",
     "dev-core-dll": "encore dev --config webpack.core-dll.config",
     "watch": "encore dev --watch",
-    "build": "npm run build-vendor && npm run build-core-dll && encore production && npm run build-sdk",
+    "build": "NODE_OPTIONS=--max_old_space_size=4096 npm run build-vendor && npm run build-core-dll && encore production && npm run build-sdk",
     "build-sdk": "encore production --config webpack.sdk.config && tsc-alias",
     "build-vendor": "encore production --config webpack.vendor.config",
     "build-core-dll": "encore production --config webpack.core-dll.config",

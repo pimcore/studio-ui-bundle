@@ -55,7 +55,6 @@ import rightOutlined from '@Pimcore/assets/icons/right-outlined.inline.svg'
 import richEdit from '@Pimcore/assets/icons/rich-edit.inline.svg'
 import download02 from '@Pimcore/assets/icons/download-02.inline.svg'
 import pin02 from '@Pimcore/assets/icons/pin-02.inline.svg'
-import editOutlined from '@Pimcore/assets/icons/edit-outlined.inline.svg'
 import expandAltOutlined from '@Pimcore/assets/icons/expand-alt-outlined.inline.svg'
 import eyeOutlined from '@Pimcore/assets/icons/eye-outlined.inline.svg'
 import shareAltOutlined from '@Pimcore/assets/icons/share-alt-outlined.inline.svg'
@@ -127,6 +126,8 @@ import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
 import LockUnlock01 from '@Pimcore/assets/icons/lock-unlocked-01.inline.svg'
 import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlined.inline.svg'
 import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
+import edit03 from '@Pimcore/assets/icons/edit-03.inline.svg'
+import save01 from '@Pimcore/assets/icons/save-01.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -279,10 +280,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'pin-02',
       component: pin02
-    })
-    iconLibrary.register({
-      name: 'edit-outlined',
-      component: editOutlined
     })
     iconLibrary.register({
       name: 'expand-alt-outlined',
@@ -599,6 +596,16 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'search-sm',
       component: searchSM
+    })
+
+    iconLibrary.register({
+      name: 'edit-03',
+      component: edit03
+    })
+
+    iconLibrary.register({
+      name: 'save-01',
+      component: save01
     })
   }
 })
