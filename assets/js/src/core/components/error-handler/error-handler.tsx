@@ -12,23 +12,26 @@
 */
 
 import type React from 'react'
-import { memo, useEffect } from 'react'
+import { useEffect } from 'react'
+import { isEmpty } from 'lodash'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import type { IApiErrorData } from '@Pimcore/app/store/middleware/rtkQueryErrorLogger'
 
 interface ErrorHandlerProps {
-  errorData: any
-  clear: any
+  errorData: IApiErrorData | null
+  clear: () => void
 }
 
-const ErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData, clear }) => {
+const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
+
+export const ErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData, clear }) => {
   const modal = useAlertModal()
 
   useEffect(() => {
-    if (!isEmptyValue(errorData)) {
-      const message = 'data' in errorData ? errorData.data.message : errorData.message
+    if (!isEmpty(errorData)) {
+      const errorContent = errorData?.data?.message ?? DEFAULT_ERROR_CONTENT
 
-      modal.error({ content: message })
+      modal.error({ content: errorContent })
 
       clear()
     }
@@ -36,9 +39,3 @@ const ErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData, clear }) => {
 
   return null
 }
-
-const areEqual = (prevProps: ErrorHandlerProps, nextProps: ErrorHandlerProps): boolean => {
-  return prevProps.errorData === nextProps.errorData
-}
-
-export default memo(ErrorHandler, areEqual)

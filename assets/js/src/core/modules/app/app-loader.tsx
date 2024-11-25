@@ -12,10 +12,11 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { isEmpty } from 'lodash'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import ErrorHandler from '@Pimcore/components/error-handler/error-handler'
+import { ErrorHandler } from '@Pimcore/components/error-handler/error-handler'
 import { useTranslationGetCollectionMutation } from '@Pimcore/modules/app/translations/translations-api-slice.gen'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
@@ -26,7 +27,7 @@ import {
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { clear, selectErrorData } from '@Pimcore/components/error-handler/errorSlices/api-error-slice'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type IApiErrorData } from '@Pimcore/app/store/middleware/rtkQueryErrorLogger'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -34,18 +35,19 @@ export interface IAppLoaderProps {
 
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const [translations] = useTranslationGetCollectionMutation()
   const { i18n } = useTranslation()
-  const [isLoading, setIsLoading] = useState(true)
-  const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
-  const [errorDataValue, setErrorDataValue] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [apiErrorData, setApiErrorData] = useState<IApiErrorData | null>(null)
+
+  const [translations] = useTranslationGetCollectionMutation()
+  const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
   const errorData = useAppSelector(selectErrorData)
 
   useEffect(() => {
-    if (!isEmptyValue(errorData)) {
-      setErrorDataValue(errorData)
+    if (!isEmpty(errorData)) {
+      setApiErrorData(errorData)
     }
 
     return () => { clear() }
@@ -106,8 +108,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       <GlobalStyles />
 
       <ErrorHandler
-        clear={ () => { setErrorDataValue(null) } }
-        errorData={ errorDataValue }
+        clear={ () => { setApiErrorData(null) } }
+        errorData={ apiErrorData }
       />
 
       {isLoading && <Content loading />}

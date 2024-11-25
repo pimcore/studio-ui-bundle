@@ -13,21 +13,35 @@
 
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit'
+import { isObject } from 'lodash'
+
+interface IBaseQueryMeta {
+  request: { url?: string }
+}
+
+export interface IApiErrorPayload {
+  meta: {
+    baseQueryMeta?: IBaseQueryMeta
+  }
+  payload: unknown
+}
+
+export interface IApiErrorData {
+  requestUrl?: string
+  data?: {
+    detail?: string
+    message?: string
+  }
+  status?: number
+}
 
 export const rtkQueryErrorLogger: Middleware =
-  (api: MiddlewareAPI) => (next) => (action) => {
+  (api: MiddlewareAPI) => (next) => (action: IApiErrorPayload) => {
     if (isRejectedWithValue(action)) {
-      const message =
-      'data' in action.error
-        ? (action.error.data as { message: string }).message
-        : action.error.message
+      const requestUrl = action.meta?.baseQueryMeta?.request?.url
+      const payload = isObject(action?.payload) && action.payload
 
-      const payload: Record<string, any> =
-      action.payload !== null && typeof action.payload === 'object'
-        ? action.payload
-        : {}
-
-      const errorPayload = { message, ...payload }
+      const errorPayload: IApiErrorData = { requestUrl, ...payload }
 
       api.dispatch({ type: 'apiError/add', payload: errorPayload })
     }

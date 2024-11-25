@@ -13,6 +13,11 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState } from '@Pimcore/app/store'
+import { type IApiErrorData } from '@Pimcore/app/store/middleware/rtkQueryErrorLogger'
+
+interface IPayloadData {
+  errorData: IApiErrorData
+}
 
 const INITIAL_STATE = {
   errorData: null
@@ -33,7 +38,7 @@ const slice = createSlice({
 
 injectSliceWithState(slice)
 
-export const selectErrorData = (state: { apiError: any }): any =>
+export const selectErrorData = (state: { apiError: IPayloadData }): IPayloadData['errorData'] =>
   state.apiError.errorData
 
 export const { add, clear } = slice.actions
