@@ -80,17 +80,19 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       title: t('jobs.batch-edit-job.title', { title: jobTitle }),
       topics: [topics['patch-finished'], ...defaultTopics],
       action: async () => {
-        const promise = patchAsset(assetPatchForUpdate())
-
-        promise.catch(() => {
+        try {
+          const response = await patchAsset(assetPatchForUpdate())
+          eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: assetContext.id } })
+          const data = response.data
+          if (data?.jobRunId !== undefined) {
+            return data.jobRunId
+          } else {
+            throw new Error('JobRunId is undefined')
+          }
+        } catch (error) {
           console.error('Failed to patch assets')
-        })
-
-        const response = (await promise) as any
-
-        eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: assetContext.id } })
-        const data = response.data
-        return data.jobRunId
+          throw error
+        }
       }
     }))
 
