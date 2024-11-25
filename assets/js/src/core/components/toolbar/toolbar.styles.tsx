@@ -18,8 +18,6 @@ export const useStyles = createStyles(({ token, css }) => {
     toolbar: css`
       width: 100%;
       height: 48px;
-      border-top: 1px solid ${token.colorBorder};
-      
       padding: ${token.paddingXS}px;
 
       &.toolbar--theme-primary {
@@ -29,6 +27,18 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.toolbar--theme-secondary {
         background-color: ${token.colorBgBase};
+      }
+
+      &.toolbar--position-top {
+        border-bottom: 1px solid ${token.colorBorder};
+      }
+
+      &.toolbar--position-bottom {
+        border-top: 1px solid ${token.colorBorder};
+      }
+
+      &.toolbar--size-small {
+        height: 40px;
       }
     `
   }

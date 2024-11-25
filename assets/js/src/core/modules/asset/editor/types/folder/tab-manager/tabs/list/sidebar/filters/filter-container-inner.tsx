@@ -28,8 +28,8 @@ import { useSearchFilter } from './hooks/use-search-filter'
 import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
 import { useListFilterOptions } from '../../hooks/use-list'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import {
@@ -71,7 +71,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
@@ -154,6 +154,6 @@ export const FilterContainerInner = (): React.JSX.Element => {
             </>
             )}
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

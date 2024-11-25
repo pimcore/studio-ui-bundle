@@ -11,19 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { HighlightedEntries as sidebarArgs } from '@Pimcore/components/sidebar/sidebar.stories'
 import { Toolbar, type ToolbarProps } from '@Pimcore/components/toolbar/toolbar'
-import { Secondary } from '@Pimcore/components/toolbar/toolbar.stories'
+import { Position, Secondary } from '@Pimcore/components/toolbar/toolbar.stories'
 import { type Meta } from '@storybook/react'
 import React from 'react'
 import { Content } from '../content/content'
+import { Breadcrumb } from '../breadcrumb/breadcrumb'
+import  { _default as breadcrumbStory } from '../breadcrumb/breadcrumb.stories'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
-  title: 'Components/layout/Content-Toolbar-Sidebar-Layout',
-  component: ContentToolbarSidebarLayout,
+  title: 'Components/layout/Content-Layout',
+  component: ContentLayout,
   parameters: {
     layout: 'fullscreen',
 
@@ -38,6 +40,7 @@ export default config
 
 const demoData = {
   children: <Content none />,
+  renderTopBar: <Toolbar { ...Position.args as ToolbarProps } />,
   renderToolbar: <Toolbar { ...Secondary.args as ToolbarProps } />,
   renderSidebar: <Sidebar { ...sidebarArgs.args } />
 }
@@ -59,5 +62,12 @@ export const NoSidebar = {
   args: {
     ...demoData,
     renderSidebar: undefined
+  }
+}
+
+export const NoTopBar = {
+  args: {
+    ...demoData,
+    renderTopBar: undefined
   }
 }

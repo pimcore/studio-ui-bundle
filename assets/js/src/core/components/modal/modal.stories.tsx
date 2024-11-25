@@ -40,6 +40,8 @@ export const Large = (): React.JSX.Element => {
     <>
       <Button onClick={ () => { setIsOpen(!isOpen) } }>Open modal</Button>
       <Modal
+        mask={ false }
+        maskClosable={ false }
         footer={
           <ModalFooter justify='space-between'>
             <Button

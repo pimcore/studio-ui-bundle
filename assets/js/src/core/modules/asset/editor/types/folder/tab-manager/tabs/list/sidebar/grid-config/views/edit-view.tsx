@@ -12,7 +12,7 @@
 */
 
 import { Button } from '@Pimcore/components/button/button'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { Space } from '@Pimcore/components/space/space'
@@ -39,7 +39,7 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
   const { t } = useTranslation()
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <Button
@@ -103,6 +103,6 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
           )}
         </Space>
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }
