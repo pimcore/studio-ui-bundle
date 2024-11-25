@@ -13,7 +13,7 @@
 
 import type { FilterOptions, TagFilterOptions } from '../types/filterTypes'
 
-export const DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE: boolean = false
+export const DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE: boolean = true
 
 export const defaultFilterOptions: FilterOptions = {
   columnFilters: [],
