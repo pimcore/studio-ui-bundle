@@ -19,8 +19,6 @@ import { Position, Secondary } from '@Pimcore/components/toolbar/toolbar.stories
 import { type Meta } from '@storybook/react'
 import React from 'react'
 import { Content } from '../content/content'
-import { Breadcrumb } from '../breadcrumb/breadcrumb'
-import  { _default as breadcrumbStory } from '../breadcrumb/breadcrumb.stories'
 
 /* eslint-disable react/jsx-key */
 const config: Meta = {
