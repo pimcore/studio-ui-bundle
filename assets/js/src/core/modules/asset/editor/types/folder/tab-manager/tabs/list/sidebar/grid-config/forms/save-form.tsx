@@ -15,7 +15,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Checkbox, Flex, Input } from 'antd'
 import { Form, type FormProps } from '@Pimcore/components/form/form'
 import { Switch } from '@Pimcore/components/switch/switch'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text } from '@Pimcore/components/text/text'
 
 export interface SaveFormProps extends FormProps {}
@@ -30,6 +30,10 @@ export const defaultValues = {
 
 export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
+
+  useEffect(() => {
+    props.form?.resetFields()
+  }, [])
 
   const onValuesChange = (changedValues: any, values: any): void => {
     props.onValuesChange?.(changedValues, values)

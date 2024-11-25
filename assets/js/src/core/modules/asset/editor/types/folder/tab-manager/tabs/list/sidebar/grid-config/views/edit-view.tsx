@@ -27,11 +27,13 @@ import { type IListGridConfigContext } from '../../../list-provider'
 import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface EditViewProps {
   onCancelClick: () => void
   onSaveConfigurationClick: () => void
   onUpdateConfigurationClick: () => void
+  onEditConfigurationClick: () => void
   onApplyClick: () => void
   savedGridConfigurations: DropdownMenuProps['items']
   addColumnMenu: DropdownMenuProps['items']
@@ -41,7 +43,7 @@ export interface EditViewProps {
   gridConfig: IListGridConfigContext['gridConfig']
 }
 
-export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConfigurationClick, isUpdating, onSaveConfigurationClick, savedGridConfigurations, addColumnMenu, isLoading, columns }: EditViewProps): React.JSX.Element => {
+export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfigurationClick, onUpdateConfigurationClick, isUpdating, onSaveConfigurationClick, savedGridConfigurations, addColumnMenu, isLoading, columns }: EditViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
   // @todo bound it to the grid config id when the ownerId is available via api.
@@ -149,6 +151,16 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConf
                     items: [
                       {
                         key: 0,
+                        icon: <Icon value='edit-03' />,
+                        label: 'Edit template details',
+                        onClick: () => {
+                          onEditConfigurationClick()
+                        }
+                      },
+
+                      {
+                        key: 1,
+                        icon: <Icon value='save-01' />,
                         label: 'Save as new template',
                         onClick: () => {
                           onSaveConfigurationClick()
