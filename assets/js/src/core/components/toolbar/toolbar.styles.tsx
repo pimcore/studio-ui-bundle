@@ -30,11 +30,11 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.toolbar--position-top {
-        border-bottom: 1px solid ${token.colorBorder};
+        border-bottom: 1px solid ${token.colorBorderTertiary};
       }
 
       &.toolbar--position-bottom {
-        border-top: 1px solid ${token.colorBorder};
+        border-top: 1px solid ${token.colorBorderTertiary};
       }
 
       &.toolbar--size-small {
