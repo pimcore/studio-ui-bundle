@@ -50,19 +50,16 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       {
         key: 'locate-in-tree',
         icon: <Icon value="target" />,
-        label: t('preview-card.locate-in-tree')
+        label: t('preview-card.locate-in-tree'),
+        hidden: true
       },
       {
         key: 'info',
         icon: <Icon value="info-circle-outlined" />,
-        label: t('info')
+        label: t('info'),
+        hidden: true
       },
-      renameContextMenuItem(asset as any as TreeNodeProps),
-      {
-        key: 'download-zip',
-        icon: <Icon value="download-02" />,
-        label: t('preview-card.download-zip')
-      },
+      renameContextMenuItem({ ...asset, label: asset.filename } as any as TreeNodeProps),
       deleteContextMenuItem(asset as any as TreeNodeProps)
     ]
 
