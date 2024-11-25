@@ -19,12 +19,6 @@ export const useStyle = createStyles(({ token, css }) => {
       display: flex;
       align-items: center;
       gap: 8px;
-      height: 40px;
-      border-bottom: 1px solid #DFD7EA;
-
-      .ant-breadcrumb {
-        padding-left: ${token.paddingXS}px;
-      }
 
       .element-toolbar__info-dropdown {
         .ant-dropdown-trigger {

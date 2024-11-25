@@ -15,39 +15,47 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    ContentToolbarSidebarLayout: css`
+    ContentLayout: css`
       &.content-toolbar-sidebar-layout {
         position: relative;
         display: grid;
         grid-template-columns: 1fr auto;
-        grid-template-rows: 1fr auto;
+        grid-template-rows: auto 1fr auto;
         height: 100%;
         width: 100%;
+        overflow: hidden;
+      }
+
+      .content-toolbar-sidebar-layout__top-bar {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+        position: sticky;
+        bottom: 0;
+        height: max-content; 
         overflow: hidden;
       }
 
       .content-toolbar-sidebar-layout__content {
         display: flex;
         grid-column: 1 / 2;
-        grid-row: 1 / 2;
+        grid-row: 2 / 3;
         overflow: auto;
         height: 100%;
         width: 100%;
       }
 
       .content-toolbar-sidebar-layout__toolbar {
-        border-top: 1px solid ${token.colorBorderTertiary};
         grid-column: 1 / 2;
-        grid-row: 2 / 3;
+        grid-row: 3 / 4;
         position: sticky;
         bottom: 0;
-        height: ${token.sizeXXL}px; 
+        height: max-content; 
         overflow: hidden;
       }
 
       .content-toolbar-sidebar-layout__sidebar {
         grid-column: 2 / 3;
-        grid-row: 1 / 3;
+        grid-row: 1 / 4;
       }
     `
   }
