@@ -15,14 +15,22 @@ import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { MiddlewareAPI, Middleware } from '@reduxjs/toolkit'
 
 export const rtkQueryErrorLogger: Middleware =
-    (api: MiddlewareAPI) => (next) => (action) => {
-      if (isRejectedWithValue(action)) {
-        const errorPayload = 'data' in action.error
-          ? (action.error.data as { message: string }).message
-          : action.error.message
+  (api: MiddlewareAPI) => (next) => (action) => {
+    if (isRejectedWithValue(action)) {
+      const message =
+      'data' in action.error
+        ? (action.error.data as { message: string }).message
+        : action.error.message
 
-        api.dispatch({ type: 'apiError/add', payload: errorPayload })
-      }
+      const payload: Record<string, any> =
+      action.payload !== null && typeof action.payload === 'object'
+        ? action.payload
+        : {}
 
-      return next(action)
+      const errorPayload = { message, ...payload }
+
+      api.dispatch({ type: 'apiError/add', payload: errorPayload })
     }
+
+    return next(action)
+  }

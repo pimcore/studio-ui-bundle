@@ -15,7 +15,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState } from '@Pimcore/app/store'
 
 const INITIAL_STATE = {
-  message: null
+  errorData: null
 }
 
 const slice = createSlice({
@@ -23,22 +23,18 @@ const slice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     add: (state, action) => {
-      state.message = action.payload
+      state.errorData = action.payload
     },
     clear: (state) => {
-      state.message = null
-    }
-  },
-  selectors: {
-    selectErrorMessage: (state) => {
-      return state.message
+      state.errorData = null
     }
   }
 })
 
 injectSliceWithState(slice)
 
-export const { add, clear } = slice.actions
-export const { selectErrorMessage } = slice.selectors
+export const selectErrorData = (state: { apiError: any }): any =>
+  state.apiError.errorData
 
+export const { add, clear } = slice.actions
 export default slice.reducer
