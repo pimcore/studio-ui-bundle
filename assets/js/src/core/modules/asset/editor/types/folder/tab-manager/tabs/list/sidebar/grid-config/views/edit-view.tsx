@@ -21,12 +21,12 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
+import { isEmpty } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { GridConfigList } from '../grid-config-list'
 import { type IListGridConfigContext } from '../../../list-provider'
 import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 
 export interface EditViewProps {
@@ -107,7 +107,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
         >
           <GridConfigList columns={ columns } />
 
-          {!isEmptyValue(addColumnMenu) && (
+          {!isEmpty(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
               <IconTextButton
                 icon={ { value: 'PlusCircleOutlined' } }

@@ -13,6 +13,7 @@
 
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
+  'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
@@ -55,6 +56,9 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
   'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
 
+  'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
+  'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
+
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -82,6 +86,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
+  'DynamicTypes/Listing/AssetLink': 'DynamicTypes/Listing/AssetLink',
   'DynamicTypes/Listing/Select': 'DynamicTypes/Listing/Select',
 
   'DynamicTypes/Metadata/Asset': 'DynamicTypes/Metadata/Asset',

@@ -14,11 +14,11 @@
 import React, { useState } from 'react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Tooltip } from 'antd'
+import { isObject } from 'lodash'
 import TextArea from 'antd/es/input/TextArea'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Alert } from '@Pimcore/components/alert/alert'
-import { isObject } from '@Pimcore/utils/type-utils'
 import { useStyles } from './pql-query-input.styles'
 import { Icon } from '../icon/icon'
 
@@ -40,7 +40,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
   const getDescription = (): string => {
     const error = errorData?.data
 
-    if (error !== null && isObject(error) && 'message' in (error as object)) {
+    if (error !== null && isObject(error) && 'message' in error) {
       return (error as { message: string }).message
     }
 
