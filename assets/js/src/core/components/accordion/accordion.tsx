@@ -26,6 +26,7 @@ export type PanelTheme = 'theme-success' | 'theme-primary' | 'theme-default'
 export interface AccordionItemType extends ItemType {
   title: React.ReactElement
   subtitle?: React.ReactElement
+  info?: string
   disabled?: boolean
   theme?: PanelTheme
 }
@@ -33,6 +34,7 @@ export interface AccordionItemType extends ItemType {
 export interface AccordionProps extends Omit<CollapseProps, 'expandIconPosition'> {
   items: AccordionItemType[]
   spaced?: boolean
+  bordered?: boolean
   expandIconPosition?: CustomExpandIconPosition
 }
 
@@ -40,6 +42,7 @@ export const Accordion = ({
   items,
   accordion = false,
   spaced = false,
+  bordered = false,
   className,
   activeKey,
   expandIconPosition = 'after-title',
@@ -74,8 +77,10 @@ export const Accordion = ({
         <IconButton
           aria-label={ i18n.t('aria.notes-and-events.expand') }
           className={ 'accordion__chevron-btn' }
-          icon={ 'chevron-up' }
-          iconOptions={ { className: chevronClassName } }
+          icon={ {
+            value: 'chevron-up',
+            className: chevronClassName
+          } }
           onClick={ () => {
             if (item.id != null) {
               onClickChevron(item.id)
@@ -110,6 +115,8 @@ export const Accordion = ({
           {item.title}
           {expandIconPosition === 'after-title' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}
+
+          <span className="accordion-item__header-info">{item.info !== null && item.info}</span>
         </Flex>
         {item.subtitle}
       </>,
@@ -126,6 +133,11 @@ export const Accordion = ({
   if (spaced) {
     allClassNames.push('accordion--spaced', styles.spaced)
     allClassNames.push(styles.spaced)
+  }
+
+  if (bordered) {
+    allClassNames.push('accordion--bordered', styles.bordered)
+    allClassNames.push(styles.bordered)
   }
 
   return (

@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { SaveForm, type SaveFormProps } from '../forms/save-form'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Space } from '@Pimcore/components/space/space'
@@ -33,7 +33,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading }: SaveViewProps)
   const { form } = formProps
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar
           justify='flex-end'
@@ -41,7 +41,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading }: SaveViewProps)
         >
           <Space size='mini'>
             <IconTextButton
-              icon='close'
+              icon={ { value: 'close' } }
               onClick={ onCancelClick }
               type='default'
             >Cancel</IconTextButton>
@@ -76,6 +76,6 @@ export const SaveView = ({ formProps, onCancelClick, isLoading }: SaveViewProps)
           <SaveForm { ...formProps } />
         </Flex>
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

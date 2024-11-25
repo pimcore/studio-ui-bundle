@@ -15,35 +15,75 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Form, Space } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import Search from 'antd/es/input/Search'
-import React from 'react'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { Switch } from '@Pimcore/components/switch/switch'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
+import React, { useEffect, useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
 import { useFilters } from './hooks/use-filters'
+import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
+import { useSearchFilter } from './hooks/use-search-filter'
+import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
 import { useListFilterOptions } from '../../hooks/use-list'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
+import {
+  DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/constants/filters'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export const FilterContainerInner = (): React.JSX.Element => {
-  const { resetFilters, filterOptions } = useFilters()
+  const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+
+  const { resetFilters, filterOptions, filterError } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
+  const { isIncludeDescendants, setIsIncludeDescendants, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
+  const {
+    pqlQueryValue,
+    setPQLQueryValue,
+    handleChangePQLQueryValue,
+    handleSavePQLQueryValue,
+    isShowPQLQueryError,
+    setIsShowPQLQueryError
+  } = usePQLQueryFilter()
+  const { searchValue, setSearchValue, handleChangeSearchValue, handleSaveSearchValue } = useSearchFilter()
+
+  useEffect(() => {
+    if (!isEmptyValue(filterError)) {
+      setIsShowPQLQueryError(true)
+    }
+  }, [filterError])
+
+  const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
+
+  const handleResetAllFiltersClick = (): void => {
+    setIsIncludeDescendants(DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)
+    setPQLQueryValue('')
+    setSearchValue('')
+    setIsShowPQLQueryError(false)
+
+    resetFilters()
+  }
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
-            icon='close'
-            onClick={ onResetAllFiltersClick }
+            icon={ { value: 'close' } }
+            onClick={ handleResetAllFiltersClick }
             type='link'
           >
             Clear all filters
           </IconTextButton>
 
           <Button
-            onClick={ onApplyClick }
+            onClick={ handleApplyClick }
             type='primary'
           >
             Apply
@@ -52,48 +92,68 @@ export const FilterContainerInner = (): React.JSX.Element => {
        }
     >
       <Content padded>
-        <Title>Search & Filter</Title>
-
-        <Form>
-          <Space
-            direction='vertical'
-            style={ { width: '100%' } }
-          >
-            <Search
-              placeholder='Search'
-              value={ '' }
+        <Flex
+          align='center'
+          justify='space-between'
+        >
+          <Title>Search & Filter</Title>
+          <Flex gap='extra-small'>
+            <Text>Advanced Mode</Text>
+            <Switch
+              checked={ isAdvancedMode }
+              onChange={ () => { setIsAdvancedMode(!isAdvancedMode) } }
             />
+          </Flex>
+        </Flex>
 
-            <Checkbox
-              checked={ false }
-              value={ 'direct-children' }
-            >
-              only direct children
-            </Checkbox>
+        {isAdvancedMode
+          ? (
+            <PQLQueryInput
+              errorData={ filterError }
+              handleBlur={ handleSavePQLQueryValue }
+              handleChange={ handleChangePQLQueryValue }
+              isShowError={ isShowPQLQueryError }
+              value={ pqlQueryValue }
+            />
+            )
+          : (
+            <>
+              <Form>
+                <Space
+                  direction='vertical'
+                  style={ { width: '100%' } }
+                >
+                  <SearchInput
+                    onBlur={ handleSaveSearchValue }
+                    onChange={ handleChangeSearchValue }
+                    placeholder='Search'
+                    value={ searchValue }
+                  />
 
-            <Checkbox
-              checked={ false }
-              value={ 'referenced' }
-            >
-              only unreferenced
-            </Checkbox>
-          </Space>
-        </Form>
+                  <Checkbox
+                    checked={ isIncludeDescendants }
+                    onChange={ handleChangeIsIncludeDescendants }
+                  >
+                    only direct children
+                  </Checkbox>
 
-        <Title>
-          Field filters
-        </Title>
+                  {/* <Checkbox */}
+                  {/*  checked={ false } */}
+                  {/*  value={ 'referenced' } */}
+                  {/* > */}
+                  {/*  only unreferenced */}
+                  {/* </Checkbox> */}
+                </Space>
+              </Form>
 
-        <FieldFiltersContainer />
+              <Title>
+                Field filters
+              </Title>
+
+              <FieldFiltersContainer />
+            </>
+            )}
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
-
-  function onApplyClick (): void {
-    setFilterOptions(filterOptions)
-  }
-
-  function onResetAllFiltersClick (): void {
-    resetFilters()
-  }
 }

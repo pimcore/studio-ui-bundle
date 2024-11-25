@@ -11,6 +11,8 @@ asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
+data-object.data-object-tree.title: Data Object Tree
+data-object.data-object-tree.search: Search in {{folderName}}
 workflow.label: Workflow
 workflow.headline: Workflow Details
 workflow.no-workflows-found: No workflows found
@@ -25,12 +27,12 @@ example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
 preview-card.locate-in-tree: Locate in Tree
-preview-card.info: Info
 preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
 grid.aria.column-resize: Resize column
 tree.aria.expand-and-collapse: Expand tree item or collapse it
+image-sidebar.tab.details.custom-download: Custom Download
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Custom thumbnail mode select
 aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Custom thumbnail format select
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Download custom thumbnail
@@ -63,6 +65,19 @@ aria.login-form-additional-logins.additional-login-provider: "Additional login p
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
+action-applied-successfully: Action applied successfully
+action-could-not-be-applied: Action could not be applied
+workflow-modal.perform-action: Perform Action
+workflow-modal.cancel: Cancel
+workflow-modal.log-time: Log Time
+workflow-modal.timeSpent: Time spent
+workflow-modal.notes: Notes
+workflow-modal.timeSpent-required: Please enter the duration of time spent
+workflow-modal.notes-required: Please enter your notes
+workflow-transitions.log-time: Log Time
+workflow-transitions.start-workflow: Start Workflow
+workflow-transitions.finish-review: Finish Review
+workflow-transitions.restart-review: Restart Review
 save-success: Successfully saved
 save-failed: Save failed
 version.label: Versions
@@ -89,6 +104,7 @@ version.confirm-clear-unpublished: Are you sure you want to clear all unpublishe
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
+empty: Empty
 yes: Yes
 no: No
 by: By
@@ -133,7 +149,7 @@ asset.listing.column.title: Title
 asset.listing.column.alt: Alt
 asset.listing.column.copyright: Copyright
 asset.listing.column.author: Author
-asset.listing.column.authorLink: Modification date
+asset.listing.column.authorLink: Author Link
 asset.listing.column.license: License
 asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
@@ -178,6 +194,7 @@ button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
+open: Open
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
@@ -194,7 +211,8 @@ notes-and-events.erp_import: erp_import
 notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
 tags.label: Tags
 tags.assigned-tags-text: Assigned Tags
-tags.apply-folder-tags: Apply folder tags
+tags.apply-tags-to-children: Apply tags to children
+tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
 add: Add
@@ -246,6 +264,7 @@ jobs.job.button-retry: Retry
 jobs.job.button-hide: hide
 jobs.job.button-hide-and-reload: hide and reload folder
 jobs.job.button-download: download
+jobs.job.button-ignore-and-reload: ignore and reload
 jobs.zip-job.title: "ZIP of {{title}}"
 jobs.batch-edit-job.title: "Batch Edit of {{title}}"
 jobs.csv-job.title: "CSV of {{title}}"
@@ -262,6 +281,9 @@ export-csv-form.form-field.header.option.name: System key
 export-csv-form.form-field.header.option.title: Label
 export-csv-form.form-field.header.option.no-header: No header
 form.validation.required: This field is required
+form.validation.numeric-range.first-value-missing: First value is missing
+form.validation.numeric-range.second-value-missing: Second value is missing
+form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -272,20 +294,45 @@ close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+asset.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.add-assets: Add Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
 element.tree.context-menu.add-assets.upload-zip: Upload Zip
-element.tree.context-menu.add-folder: Add Folder
-element.tree.context-menu.rename: Rename
-element.tree.context-menu.copy: Copy
-element.tree.context-menu.paste: Paste
-element.tree.context-menu.cut: Cut
-element.tree.context-menu.delete: Delete
-element.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.advanced: Advanced
 element.tree.context-menu.search-and-move: Search & Move
-element.tree.context-menu.lock: Lock
-element.tree.context-menu.lock-and-propagate-to-children: Lock and propagate to children
 element.tree.context-menu.expand-children: Expand Children
-element.tree.context-menu.refresh: Refresh
-element.tree.context-menu.request-translations: Request Translations
+element.tree.copy: Copy
+element.tree.paste: Paste
+element.tree.cut: Cut
+element.tree.paste-cut: Paste cut-out element
+element.lock: Lock
+element.lock-and-propagate-to-children: Lock and propagate to children
+element.unlock: Unlock
+element.unlock-and-propagate-to-children: Unlock and propagate to children
+element.tree.refresh: Refresh
+element.add-folder: Add Folder
+element.add-folder.label: 'Enter the name of the new item'
+element.add-folder.validation: 'Please enter a valid name'
+element.rename: Rename
+element.rename.label: 'Please enter the new name'
+element.rename.validation: 'Please enter a valid name'
+element.delete: Delete
+element.delete.confirmation.title: Delete item
+element.delete.confirmation.text: Do you really want to delete this item?
+element.delete.confirmation.ok: Delete permanently
+male: Male
+female: Female
+other: Other
+unknown: Unknown
+warning: Warning
+error: Error
+info: Info
+no-value-set: No value set
+set-to-null: Empty (set to null)
+data-object.editor.external-image.preview-placeholder: Add an external image
+latitude: Latitude
+longitude: Longitude
+search-address: Search address
+geocode.address-not-found: 'The entered address was not found'
+geocode.possible-causes: 'Possible causes'
+geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'

@@ -27,7 +27,9 @@ import {
   resetChanges,
   resetSchedulesChangesForAsset,
   selectAssetById,
+  setActiveTabForAsset,
   setCustomMetadataForAsset,
+  setModifiedCells,
   setPropertiesForAsset,
   setSchedulesForAsset,
   updateAllCustomMetadataForAsset,
@@ -52,16 +54,22 @@ import {
   type UseImageSettingsDraftReturn
 } from '@Pimcore/modules/asset/draft/hooks/use-image-settings'
 import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import { type ElementEditorType, type TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 
 interface UseAssetDraftReturn extends
   UseCustomMetadataDraftReturn,
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTrackableChangesDraftReturn,
+  UseTabsDraftReturn,
   UseImageSettingsDraftReturn {
   isLoading: boolean
   isError: boolean
   asset: undefined | ReturnType<typeof selectAssetById>
+  editorType: ElementEditorType | undefined
 
   removeAssetFromState: () => void
 
@@ -78,6 +86,7 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   const asset = useAppSelector(state => selectAssetById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
+  const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['Asset/Editor/TypeRegistry'])
 
   async function getAsset (): Promise<AssetGetByIdApiResponse> {
     const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
@@ -121,6 +130,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
   useEffect(() => {
     if (asset === undefined) {
       fetchAsset()
+    } else {
+      setIsLoading(false)
     }
   }, [asset])
 
@@ -139,7 +150,9 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
         customMetadata: [],
         schedules: [],
         imageSettings: customSettingsResponse,
-        changes: {}
+        changes: {},
+        modifiedCells: {},
+        ...initialTabsStateValue
       }
 
       if (assetData !== undefined) {
@@ -163,7 +176,8 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
-    resetChanges
+    resetChanges,
+    setModifiedCells
   )
 
   const propertyActions = usePropertiesDraft(
@@ -203,16 +217,28 @@ export const useAssetDraft = (id: number): UseAssetDraftReturn => {
     updateImageSettingForAsset
   )
 
+  const tabsActions = useTabsDraft(
+    id,
+    asset,
+    setActiveTabForAsset
+  )
+
+  const editorType = asset?.type === undefined
+    ? undefined
+    : (typeRegistry.get(asset.type) ?? typeRegistry.get('unknown'))
+
   return {
     isLoading,
     isError,
     asset,
+    editorType,
     removeAssetFromState,
     fetchAsset,
     ...trackableChangesActions,
     ...propertyActions,
     ...schedulesActions,
     ...customMetadataActions,
-    ...imageSettingsActions
+    ...imageSettingsActions,
+    ...tabsActions
   }
 }

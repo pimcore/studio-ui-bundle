@@ -12,7 +12,7 @@
 */
 
 import { Button } from '@Pimcore/components/button/button'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { Space } from '@Pimcore/components/space/space'
@@ -26,6 +26,7 @@ import { GridConfigList } from '../grid-config-list'
 import { type IListGridConfigContext } from '../../../list-provider'
 import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -47,7 +48,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConf
   const isOwner = true
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <Button
@@ -79,7 +80,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConf
             <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? 'No saved templates available' : '' }>
               <IconTextButton
                 disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                icon='magic-wand-01'
+                icon={ { value: 'magic-wand-01' } }
                 loading={ isLoading }
               >
                 { isSavedConfiguration
@@ -104,17 +105,19 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConf
         >
           <GridConfigList columns={ columns } />
 
-          <Dropdown menu={ { items: addColumnMenu } }>
-            <IconTextButton
-              icon='PlusCircleOutlined'
-              type='link'
-            >
-              { t('listing.add-column') }
-            </IconTextButton>
-          </Dropdown>
+          {!isEmptyValue(addColumnMenu) && (
+            <Dropdown menu={ { items: addColumnMenu } }>
+              <IconTextButton
+                icon={ { value: 'PlusCircleOutlined' } }
+                type='link'
+              >
+                { t('listing.add-column') }
+              </IconTextButton>
+            </Dropdown>
+          )}
         </Space>
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 
   function renderSaveButton (): React.JSX.Element {
@@ -156,7 +159,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onUpdateConf
                 }
                 >
                   <IconButton
-                    icon='dots-horizontal'
+                    icon={ { value: 'dots-horizontal' } }
                     type='default'
                   />
                 </Dropdown>

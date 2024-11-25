@@ -12,8 +12,8 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons'
 import { useStyles } from './sort-button.styles'
+import { Icon } from '../icon/icon'
 
 export enum SortDirections {
   ASC = 'asc',
@@ -44,8 +44,14 @@ export const SortButton = ({ onSortingChange, ...props }: SortButtonProps): Reac
       role="button"
       tabIndex={ 0 }
     >
-      <CaretUpOutlined className="sort-button__arrow sort-button__asc" />
-      <CaretDownOutlined className="sort-button__arrow sort-button__desc" />
+      <Icon
+        className="sort-button__arrow sort-button__asc"
+        value='caret-up-outlined'
+      />
+      <Icon
+        className="sort-button__arrow sort-button__desc"
+        value='caret-down-outlined'
+      />
     </div>
   )
 

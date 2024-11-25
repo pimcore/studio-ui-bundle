@@ -12,20 +12,15 @@
 */
 
 import React from 'react'
-import { Form, type FormProps, Input, Select } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
 import { useTranslation } from 'react-i18next'
+import { Form, type FormProps, Input } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
 import {
   useNoteElementGetTypeCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { type ElementType } from '../../../../../../../../../types/element-type.d'
 import { Content } from '@Pimcore/components/content/content'
-
-export interface AddNoteFormValues {
-  type: string
-  title: string
-  description: string
-}
+import { Select } from '@Pimcore/components/select/select'
+import { type ElementType } from '../../../../../../../../../types/element-type.d'
 
 export interface AddNoteFormProps extends FormProps {
   elementType: ElementType
@@ -69,9 +64,7 @@ export const AddNoteForm = ({ elementType, ...props }: AddNoteFormProps): React.
         label={ t('description') }
         name="description"
       >
-        <TextArea
-          autoSize={ { minRows: 3 } }
-        />
+        <TextArea autoSize={ { minRows: 3 } } />
       </Form.Item>
     </Form>
   )

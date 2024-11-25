@@ -11,10 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useStyle } from './custom-metadata-container.styles'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type InputRef, Select } from 'antd'
+import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import Input from 'antd/es/input/Input'
 import {
@@ -28,19 +27,19 @@ import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
-import type { MetadataTypeRegistry } from '@Pimcore/modules/asset/metadata-type-provider/services/metadata-type-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Space } from '@Pimcore/components/space/space'
+import { Select } from '@Pimcore/components/select/select'
+import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [editmode, setEditMode] = useState<boolean>(false)
-  const { styles } = useStyle()
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
@@ -60,9 +59,9 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const typeSelectValue = useRef<string>('input')
   const languageSelectValue = useRef<string>('')
 
-  const metadataTypeRegistry = useInjection<MetadataTypeRegistry>(serviceIds['Asset/MetadataTypeProvider/MetadataTypeRegistry'])
+  const metadataTypeRegistry = useInjection<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
   const typeSelectOptions = [...metadataTypeRegistry.getTypeSelectionTypes().keys()].map((type) => {
-    return { value: type, label: t('data-type.' + type) }
+    return { value: type, label: t('data-type.' + type.split('.')[1]) }
   })
 
   function onNameInputChange (event: React.ChangeEvent<HTMLInputElement>): void {
@@ -107,7 +106,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     addCustomMetadata(newCustomMetadata)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editmode) {
       nameInputRef.current?.focus()
     } else {
@@ -118,14 +117,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   }, [editmode])
 
   return (
-    <Content
-      className={ styles.tab }
-      padded
-    >
+    <Content padded>
       <Header
         title={ t('asset.asset-editor-tabs.custom-metadata.text') }
       >
-        <div className={ ['pimcore-custom-metadata-toolbar', styles.toolbar].join(' ') }>
+        <div className='pimcore-custom-metadata-toolbar'>
           <Space
             size='extra-small'
           >
@@ -150,6 +146,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <Select
+                  className='min-w-100'
                   defaultValue={ typeSelectValue.current }
                   onSelect={ onTypeSelectChange }
                   options={ typeSelectOptions }
@@ -158,6 +155,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
                 <Select
                   allowClear
+                  className='min-w-100'
                   onClear={ onLanguageSelectClear }
                   onSelect={ onLanguageSelectChange }
                   options={ settings.requiredLanguages.map((value: string) => {
@@ -167,7 +165,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ 'PlusCircleOutlined' }
+                  icon={ { value: 'PlusCircleOutlined' } }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
@@ -212,7 +210,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
               {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
             </Button>,
               <IconTextButton
-                icon={ 'PlusCircleOutlined' }
+                icon={ { value: 'PlusCircleOutlined' } }
                 key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
                 onClick={ () => {
                   setEditMode(true)

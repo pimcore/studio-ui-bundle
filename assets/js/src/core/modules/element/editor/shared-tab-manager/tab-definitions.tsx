@@ -30,42 +30,48 @@ import { TagsTabContainer } from '@Pimcore/modules/element/editor/shared-tab-man
 export const TAB_PROPERTIES: IEditorTab = {
   key: 'properties',
   label: 'properties.label',
+  workspacePermission: 'properties',
   children: <PropertiesContainer />,
-  icon: <Icon name={ 'settings2' } />,
+  icon: <Icon value={ 'settings2' } />,
   isDetachable: true
 }
 export const TAB_SCHEDULE: IEditorTab = {
   key: 'schedule',
   label: 'schedule.label',
+  workspacePermission: 'settings',
   children: <ScheduleTabContainer />,
-  icon: <Icon name={ 'schedule-outlined' } />,
+  icon: <Icon value={ 'schedule-outlined' } />,
   isDetachable: true
 }
 export const TAB_DEPENDENCIES: IEditorTab = {
   key: 'dependencies',
   label: 'dependencies.label',
+
   children: <DependenciesTabContainer />,
-  icon: <Icon name={ 'hierarchy' } />,
+  icon: <Icon value={ 'hierarchy' } />,
   isDetachable: true
 }
 export const TAB_WORKFLOW: IEditorTab = {
   key: 'workflow',
   label: 'workflow.label',
+  userPermission: 'workflow_details',
   children: <WorkflowTabContainer />,
-  icon: <Icon name={ 'workflow' } />,
+  icon: <Icon value={ 'workflow' } />,
   isDetachable: true
 }
 export const TAB_NOTES_AND_EVENTS: IEditorTab = {
   key: 'notes-events',
   label: 'notes-and-events.label',
+  userPermission: 'notes_events',
   children: <NotesAndEventsTabContainer />,
-  icon: <Icon name={ 'view-details' } />,
+  icon: <Icon value={ 'view-details' } />,
   isDetachable: true
 }
 export const TAB_TAGS: IEditorTab = {
   key: 'tags',
   label: 'tags.label',
+  userPermission: 'tags_assignment',
   children: <TagsTabContainer />,
-  icon: <Icon name={ 'tag-two-tone' } />,
+  icon: <Icon value={ 'tag-two-tone' } />,
   isDetachable: true
 }

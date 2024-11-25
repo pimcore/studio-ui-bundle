@@ -8,7 +8,7 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             dataObjectAdd: build.mutation<DataObjectAddApiResponse, DataObjectAddApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/data-objects/add/${queryArg.parentId}`,
+                    url: `/pimcore-studio/api/data-objects/add/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.dataObjectAddParameters,
                 }),
@@ -16,19 +16,19 @@ const injectedRtkApi = api
             }),
             dataObjectClone: build.mutation<DataObjectCloneApiResponse, DataObjectCloneApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/clone/${queryArg.parentId}`,
                     method: "POST",
                     body: queryArg.cloneParameters,
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
             dataObjectGetById: build.query<DataObjectGetByIdApiResponse, DataObjectGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/data-objects/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}` }),
                 providesTags: ["Data Objects"],
             }),
             dataObjectUpdateById: build.mutation<DataObjectUpdateByIdApiResponse, DataObjectUpdateByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/data-objects/${queryArg.id}`,
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.body,
                 }),
@@ -39,16 +39,28 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/data-object/grid/available-columns/${queryArg.classId}/folderId`,
+                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/folderId`,
                 }),
                 providesTags: ["Data Object Grid"],
             }),
             dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/data-objects/grid`, method: "POST", body: queryArg.body }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/grid`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
                 invalidatesTags: ["Data Object Grid"],
             }),
+            dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout` }),
+                providesTags: ["Data Objects"],
+            }),
             dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/data-objects`, method: "PATCH", body: queryArg.body }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects`,
+                    method: "PATCH",
+                    body: queryArg.body,
+                }),
                 invalidatesTags: ["Data Objects"],
             }),
             dataObjectReplaceContent: build.mutation<
@@ -56,14 +68,14 @@ const injectedRtkApi = api
                 DataObjectReplaceContentApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
+                    url: `/pimcore-studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
             dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/data-objects/tree`,
+                    url: `/pimcore-studio/api/data-objects/tree`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -125,6 +137,7 @@ export type DataObjectUpdateByIdApiArg = {
             childrenSortBy?: string | null;
             childrenSortOrder?: string | null;
             published?: boolean | null;
+            editableData?: object | null;
             properties?: UpdateDataProperty[] | null;
         };
     };
@@ -151,6 +164,12 @@ export type DataObjectGetGridApiArg = {
         columns: GridColumnRequest[];
         filters?: GridFilter;
     };
+};
+export type DataObjectGetLayoutByIdApiResponse =
+    /** status 200 Successfully retrieved data object layout data as JSON */ Layout;
+export type DataObjectGetLayoutByIdApiArg = {
+    /** Id of the data-object */
+    id: number;
 };
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
@@ -203,30 +222,31 @@ export type DataObjectGetTreeApiArg = {
     pathIncludeDescendants?: boolean;
     /** Filter by class. */
     className?:
-        | "CustomerSegmentGroup"
-        | "CustomerSegment"
-        | "TermSegmentBuilderDefinition"
-        | "LinkActivityDefinition"
-        | "test"
         | "AccessoryPart"
         | "BodyStyle"
-        | "Category"
         | "Car"
+        | "Category"
         | "Customer"
+        | "CustomerSegment"
+        | "CustomerSegmentGroup"
+        | "Eierlegenedewollmilchsau"
+        | "Event"
         | "FilterDefinition"
+        | "LinkActivityDefinition"
+        | "Manufacturer"
+        | "News"
+        | "OfferToolCustomProduct"
+        | "OfferToolOffer"
+        | "OfferToolOfferItem"
         | "OnlineShopOrder"
         | "OnlineShopOrderItem"
         | "OnlineShopTaxClass"
         | "OnlineShopVoucherSeries"
         | "OnlineShopVoucherToken"
-        | "OfferToolCustomProduct"
-        | "OfferToolOffer"
-        | "OfferToolOfferItem"
-        | "Event"
-        | "Manufacturer"
-        | "News"
         | "PortalUser"
-        | "PortalUserGroup";
+        | "PortalUserGroup"
+        | "TermSegmentBuilderDefinition"
+        | "test";
 };
 export type Error = {
     /** Message */
@@ -329,6 +349,8 @@ export type DataObject = Element & {
         [key: string]: string | number | boolean | object | any[];
     };
     customAttributes?: CustomAttributes;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
     /** Key */
     key?: string;
     /** Class name */
@@ -418,6 +440,48 @@ export type GridFilter = {
     /** Sort Filter */
     sortFilter?: object;
 };
+export type Layout = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Data Type */
+    dataType: string;
+    /** Field Type */
+    fieldType: string;
+    /** Type */
+    type: string | null;
+    /** Layout */
+    layout: string | null;
+    /** Region */
+    region: string | null;
+    /** Title */
+    title: string | null;
+    /** Width */
+    width: number;
+    /** Height */
+    height: number;
+    /** Collapsible */
+    collapsible: boolean;
+    /** Collapsed */
+    collapsed: boolean;
+    /** Body Style */
+    bodyStyle: string | null;
+    /** Locked */
+    locked: boolean;
+    /** Children */
+    children: any[];
+    /** Icon */
+    icon: ElementIcon | null;
+    /** Label Align */
+    labelAlign: string;
+    /** Label Width */
+    labelWidth: number;
+    /** Border */
+    border: boolean;
+};
 export const {
     useDataObjectAddMutation,
     useDataObjectCloneMutation,
@@ -425,6 +489,7 @@ export const {
     useDataObjectUpdateByIdMutation,
     useDataObjectGetAvailableGridColumnsQuery,
     useDataObjectGetGridMutation,
+    useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectReplaceContentMutation,
     useDataObjectGetTreeQuery,

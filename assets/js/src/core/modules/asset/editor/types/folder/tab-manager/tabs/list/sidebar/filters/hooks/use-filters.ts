@@ -12,44 +12,43 @@
 */
 
 import { useContext } from 'react'
-import { defaultFilterOptions, FilterContext, type IFilterContext } from '../filter-provider'
+import { FilterContext } from '../filter-provider'
+import { type FilterOptions, type IFilterContext } from '../../../types/filterTypes'
+import { defaultFilterOptions } from '../../../constants/filters'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
 interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
-  addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string) => void
+  addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string | number | object | null) => void
   removeFieldFilter: (column: GridColumnConfiguration) => void
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
   resetFilters: () => void
+  updateIsIncludeDescendants: (value: boolean) => void
+  addOrUpdateFilterValue: ({ type, value }: { type: FILTER_TYPE, value: string }) => void
 }
+
+type FieldFilterValue = string | object
 
 export interface FieldFilter {
   key: string
   type: string
-  filterValue: string
+  filterValue: FieldFilterValue
 }
+
+type ColumnFiltersList = Array<FilterOptions['columnFilters']> | []
 
 export const useFilters = (): UseFiltersHookReturn => {
   const { resetColumns, ...gridConfigProps } = useGridConfig()
-  const { filterOptions, setFilterOptions } = useContext(FilterContext)
+  const { filterOptions, setFilterOptions, filterError } = useContext(FilterContext)
 
-  return {
-    filterOptions,
-    setFilterOptions,
-    addOrUpdateFieldFilter,
-    removeFieldFilter,
-    getFieldFilter,
-    resetFilters,
-    resetColumns,
-    ...gridConfigProps
-  }
-
-  function resetFilters (): void {
+  const resetFilters = (): void => {
     resetColumns()
     setFilterOptions(defaultFilterOptions)
   }
 
-  function getFieldFilter (column: GridColumnConfiguration): FieldFilter | undefined {
+  const getFieldFilter = (column: GridColumnConfiguration): FieldFilter | undefined => {
     const fieldFilters = filterOptions.columnFilters
 
     if (fieldFilters === undefined) {
@@ -60,7 +59,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     return fieldFiltersArray.find((filter) => filter.key === column.key)
   }
 
-  function removeFieldFilter (column: GridColumnConfiguration): void {
+  const removeFieldFilter = (column: GridColumnConfiguration): void => {
     const fieldFilters = filterOptions.columnFilters
 
     if (fieldFilters === undefined) {
@@ -84,7 +83,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
-  function addOrUpdateFieldFilter (column: GridColumnConfiguration, value: string): void {
+  const addOrUpdateFieldFilter = (column: GridColumnConfiguration, value: FieldFilterValue): void => {
     const fieldFilters = filterOptions.columnFilters
     let newFilters: FieldFilter[] = []
 
@@ -95,9 +94,14 @@ export const useFilters = (): UseFiltersHookReturn => {
         filterValue: value
       }]
 
-      setFilterOptions((filterOptions) => {
+      // Update only if the current filters have changed (necessary when filter values are objects)
+      setFilterOptions((prevFilterOptions) => {
+        if (JSON.stringify(prevFilterOptions.columnFilters) === JSON.stringify(newFilters)) {
+          return prevFilterOptions
+        }
+
         return {
-          ...filterOptions,
+          ...prevFilterOptions,
           columnFilters: newFilters
         }
       })
@@ -108,6 +112,7 @@ export const useFilters = (): UseFiltersHookReturn => {
     const fieldFiltersArray = fieldFilters as FieldFilter[]
     const filterIndex = fieldFiltersArray.findIndex((filter) => filter.key === column.key)
 
+    // Check if the filter doesn't exist
     if (filterIndex === -1) {
       newFilters = [
         ...fieldFiltersArray,
@@ -127,11 +132,66 @@ export const useFilters = (): UseFiltersHookReturn => {
       newFilters = fieldFiltersArray
     }
 
-    setFilterOptions((filterOptions) => {
+    // Update only if the current filters have changed (necessary when filter values are objects)
+    setFilterOptions((prevFilterOptions) => {
+      if (JSON.stringify(prevFilterOptions.columnFilters) === JSON.stringify(newFilters)) {
+        return prevFilterOptions
+      }
+
       return {
-        ...filterOptions,
+        ...prevFilterOptions,
         columnFilters: newFilters
       }
     })
+  }
+
+  const updateIsIncludeDescendants = (value: boolean): void => {
+    setFilterOptions((filterOptions) => {
+      return {
+        ...filterOptions,
+        includeDescendants: value
+      }
+    })
+  }
+
+  const addOrUpdateFilterValue = ({ type, value }: { type: FILTER_TYPE, value: string }): void => {
+    setFilterOptions((filterOptions) => {
+      const prevColumnFilters = filterOptions.columnFilters
+
+      const filterColumnFiltersList = (): ColumnFiltersList => {
+        return (prevColumnFilters as ColumnFiltersList).filter(
+          (item: any) => item.type !== type
+        )
+      }
+
+      const newColumnFilters = !isEmptyValue(value)
+        ? [
+            ...(filterColumnFiltersList()),
+            {
+              type,
+              filterValue: value
+            }
+          ]
+        : filterColumnFiltersList()
+
+      return {
+        ...filterOptions,
+        columnFilters: newColumnFilters
+      }
+    })
+  }
+
+  return {
+    filterOptions,
+    setFilterOptions,
+    filterError,
+    addOrUpdateFieldFilter,
+    removeFieldFilter,
+    getFieldFilter,
+    resetFilters,
+    resetColumns,
+    updateIsIncludeDescendants,
+    addOrUpdateFilterValue,
+    ...gridConfigProps
   }
 }

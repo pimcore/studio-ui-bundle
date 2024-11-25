@@ -11,20 +11,40 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { Button } from 'antd'
 import React, { useEffect } from 'react'
-import type { TreeNodeProps } from '@Pimcore/components/tree/node/tree-node'
-import {
-  AssetTreeContextMenu as ContextMenu
-} from '@Pimcore/components/tree/components/context-menu/asset-tree-context-menu'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
+import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
+import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
-export interface TreeContextMenuProps {
-  children: React.ReactNode
-  node?: TreeNodeProps
-}
+export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
+  const { t } = useTranslation()
 
-export const AssetTreeContextMenu = ({ children, node }: TreeContextMenuProps): React.JSX.Element => {
+  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: props.node?.id })
+  const uploadFileRef = React.useRef<HTMLButtonElement>(null)
+  const uploadZipRef = React.useRef<HTMLButtonElement>(null)
+
   const uploadContext = React.useContext(UploadContext)!
+  const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
+  const { addFolderContextMenuItem } = useAddFolder('asset')
+  const { renameContextMenuItem } = useRename('asset')
+  const { deleteContextMenuItem } = useDelete('asset')
+  const { refreshTreeContextMenuItem } = useRefreshTree('asset')
+  const { copyContextMenuItem, cutContextMenuItem, pasteContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
+  const { lockContextMenuItem, lockAndPropagateContextMenuItem, unlockContextMenuItem, unlockAndPropagateContextMenuItem } = useLock('asset')
+  const node = props.node
 
   useEffect(() => {
     if (node !== undefined) {
@@ -32,9 +52,104 @@ export const AssetTreeContextMenu = ({ children, node }: TreeContextMenuProps): 
     }
   }, [node])
 
+  const items: DropdownMenuProps['items'] = [
+    {
+      label: t('element.tree.context-menu.add-assets'),
+      key: '1',
+      icon: <Icon value={ 'mainAsset' } />,
+      hidden: !checkElementPermission(props.node.permissions, 'create') || props.node?.type !== 'folder',
+      children: [
+        {
+          icon: <Icon value={ 'upload-cloud' } />,
+          label: t('element.tree.context-menu.add-assets.upload-files'),
+          key: '1-1',
+          onClick: () => {
+            if (uploadFileRef.current !== null) {
+              uploadFileRef.current?.click()
+            }
+          }
+        },
+        {
+          icon: <Icon value={ 'upload-zip' } />,
+          label: t('element.tree.context-menu.add-assets.upload-zip'),
+          key: '1-2',
+          onClick: () => {
+            if (uploadZipRef.current !== null) {
+              uploadZipRef.current?.click()
+            }
+          }
+        }
+      ]
+    },
+    addFolderContextMenuItem(props.node),
+    renameContextMenuItem(props.node),
+    copyContextMenuItem(props.node),
+    pasteContextMenuItem(props.node),
+    cutContextMenuItem(props.node),
+    pasteCutContextMenuItem(parseInt(props.node.id)),
+    deleteContextMenuItem(props.node),
+    createZipDownloadContextMeuItem(props.node),
+    {
+      label: t('element.tree.context-menu.advanced'),
+      key: 'advanced',
+      icon: <Icon value={ 'more' } />,
+      children: [
+        {
+          label: t('element.lock'),
+          key: 'advanced-lock',
+          icon: <Icon value={ 'lock-01' } />,
+          hidden: !checkElementPermission(props.node.permissions, 'publish') || props.node.isLocked,
+          children: [
+            lockContextMenuItem(props.node),
+            lockAndPropagateContextMenuItem(props.node),
+            unlockContextMenuItem(props.node),
+            unlockAndPropagateContextMenuItem(props.node)
+          ]
+        }
+      ]
+    },
+    refreshTreeContextMenuItem(props.node)
+  ]
+
+  const uploadFile: UploadProps = {
+    action: `/pimcore-studio/api/assets/add/${props.node?.id}`,
+    name: 'file',
+    multiple: true,
+    showUploadList: false,
+    onChange: uploadFileProcessor
+  }
+
+  const uploadZip: UploadProps = {
+    action: `/pimcore-studio/api/assets/add-zip/${props.node?.id}`,
+    accept: '.zip, .rar, .7zip',
+    name: 'zipFile',
+    multiple: true,
+    showUploadList: false,
+    onChange: uploadZipProcessor
+  }
+
   return (
-    <ContextMenu node={ node }>
-      {children}
-    </ContextMenu>
+    <>
+      <Upload { ...uploadFile }>
+        <Button
+          ref={ uploadFileRef }
+          style={ { display: 'none' } }
+        ></Button>
+      </Upload>
+
+      <Upload { ...uploadZip }>
+        <Button
+          ref={ uploadZipRef }
+          style={ { display: 'none' } }
+        ></Button>
+      </Upload>
+
+      <Dropdown
+        menu={ { items } }
+        trigger={ ['contextMenu'] }
+      >
+        {props.children}
+      </Dropdown>
+    </>
   )
 }

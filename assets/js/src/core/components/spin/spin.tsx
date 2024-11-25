@@ -29,7 +29,7 @@ export const Spin = ({ asContainer = false, tip, ...props }: SpinProps): React.J
         <AntdSpin
           indicator={ <Icon
             className={ styles.spin }
-            name='spinner'
+            value='spinner'
                       /> }
           { ...props }
         />
@@ -40,8 +40,8 @@ export const Spin = ({ asContainer = false, tip, ...props }: SpinProps): React.J
           <AntdSpin
             indicator={ <Icon
               className={ styles.spin }
-              name='spinner'
               options={ { width: 20, height: 20 } }
+              value='spinner'
                         /> }
             { ...props }
           />

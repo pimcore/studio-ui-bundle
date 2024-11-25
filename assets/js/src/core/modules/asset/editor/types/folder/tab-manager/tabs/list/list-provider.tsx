@@ -11,14 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import React, { createContext, useEffect, useMemo, useState } from 'react'
-import { type GridConfiguration, type AssetGetGridApiResponse, type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { defaultFilterOptions, type FilterOptions } from './sidebar/filters/filter-provider'
+import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
+import { defaultFilterOptions } from './constants/filters'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+
+interface ICommonListProviderProps {
+  children: React.ReactNode
+}
 
 export interface IListGridConfigContext {
-  gridConfig: GridConfiguration | undefined
-  setGridConfig: React.Dispatch<React.SetStateAction<GridConfiguration | undefined>>
+  gridConfig: GridDetailedConfiguration | undefined
+  setGridConfig: React.Dispatch<React.SetStateAction<GridDetailedConfiguration | undefined>>
 }
 
 export const ListGridConfigContext = createContext<IListGridConfigContext>({
@@ -26,9 +34,7 @@ export const ListGridConfigContext = createContext<IListGridConfigContext>({
   setGridConfig: () => {}
 })
 
-export interface ListGridConfigProviderProps {
-  children: React.ReactNode
-}
+export interface ListGridConfigProviderProps extends ICommonListProviderProps {}
 
 export const ListGridConfigProvider = ({ children }: ListGridConfigProviderProps): React.JSX.Element => {
   const [gridConfig, setGridConfig] = useState<IListGridConfigContext['gridConfig'] | undefined>(undefined)
@@ -50,9 +56,7 @@ export const ListGridAvailableColumnsContext = createContext<IListGridAvailableC
   setAvailableColumns: () => {}
 })
 
-export interface ListGridAvailableColumnsProviderProps {
-  children: React.ReactNode
-}
+export interface ListGridAvailableColumnsProviderProps extends ICommonListProviderProps {}
 
 export const ListGridAvailableColumnsProvider = ({ children }: ListGridAvailableColumnsProviderProps): React.JSX.Element => {
   const [availableColumns, setAvailableColumns] = useState<GridColumnConfiguration[] | undefined>(undefined)
@@ -74,9 +78,7 @@ export const ListColumnsContext = createContext<IListColumnsContext>({
   setColumns: () => {}
 })
 
-export interface ListColumnsProviderProps {
-  children: React.ReactNode
-}
+export interface ListColumnsProviderProps extends ICommonListProviderProps {}
 
 export const ListColumnsProvider = ({ children }: ListColumnsProviderProps): React.JSX.Element => {
   const [columns, setColumns] = useState<GridColumnConfiguration[]>([])
@@ -88,22 +90,44 @@ export const ListColumnsProvider = ({ children }: ListColumnsProviderProps): Rea
   ), [columns, children])
 }
 
+type FilterOptionsMap = Record<string, FilterOptions>
+
 export interface IListFilterOptionsContext {
   filterOptions: FilterOptions
-  setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
+  setFilterOptions: (key: string, filterOptions: FilterOptions | TagFilterOptions) => void
 }
+
+const defaultFilterOptionsMap: FilterOptionsMap = {}
 
 export const ListFilterOptionsContext = createContext<IListFilterOptionsContext>({
   filterOptions: defaultFilterOptions,
   setFilterOptions: () => {}
 })
 
-export interface ListFilterOptionsProviderProps {
-  children: React.ReactNode
-}
+export interface ListFilterOptionsProviderProps extends ICommonListProviderProps {}
 
+// Provider for managing and combining filter options into one context
 export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProviderProps): React.JSX.Element => {
-  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
+  const [filterOptionsMap, setFilterOptionsMap] = useState<FilterOptionsMap>(defaultFilterOptionsMap)
+
+  // Update filter options by key with saving previous values
+  const setFilterOptions = (key: string, newFilterOptions: FilterOptions): void => {
+    setFilterOptionsMap((prev) => ({
+      ...prev,
+      [key]: newFilterOptions
+    }))
+  }
+
+  // Combine all filter options into a single object
+  const filterOptions = useMemo(() => Object.values(filterOptionsMap).reduce((acc, curr) => {
+    acc.columnFilters = [...acc.columnFilters as [], ...curr.columnFilters as []]
+
+    if (!isEmptyValue(curr.includeDescendants)) {
+      acc.includeDescendants = curr.includeDescendants
+    }
+
+    return acc
+  }, { columnFilters: [], includeDescendants: false }), [filterOptionsMap])
 
   return useMemo(() => (
     <ListFilterOptionsContext.Provider value={ { filterOptions, setFilterOptions } }>
@@ -122,9 +146,7 @@ export const ListPageContext = createContext<IListPageContext>({
   setPage: () => {}
 })
 
-export interface ListPageProviderProps {
-  children: React.ReactNode
-}
+export interface ListPageProviderProps extends ICommonListProviderProps {}
 
 export const ListPageProvider = ({ children }: ListPageProviderProps): React.JSX.Element => {
   const [page, setPage] = useState(1)
@@ -146,9 +168,7 @@ export const ListPageSizeContext = createContext<IListPageSizeContext>({
   setPageSize: () => {}
 })
 
-export interface ListPageSizeProviderProps {
-  children: React.ReactNode
-}
+export interface ListPageSizeProviderProps extends ICommonListProviderProps {}
 
 export const ListPageSizeProvider = ({ children }: ListPageSizeProviderProps): React.JSX.Element => {
   const [pageSize, setPageSize] = useState(20)
@@ -170,9 +190,7 @@ export const ListSelectedRowsContext = createContext<IListSelectedRowsContext>({
   setSelectedRows: () => {}
 })
 
-export interface ListSelectedRowsProviderProps {
-  children: React.ReactNode
-}
+export interface ListSelectedRowsProviderProps extends ICommonListProviderProps {}
 
 export const ListSelectedRowsProvider = ({ children }: ListSelectedRowsProviderProps): React.JSX.Element => {
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
@@ -194,9 +212,7 @@ export const ListSortingContext = createContext<IListSortingContext>({
   setSorting: () => {}
 })
 
-export interface ListSortingProviderProps {
-  children: React.ReactNode
-}
+export interface ListSortingProviderProps extends ICommonListProviderProps {}
 
 export const ListSortingProvider = ({ children }: ListSortingProviderProps): React.JSX.Element => {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -209,16 +225,15 @@ export const ListSortingProvider = ({ children }: ListSortingProviderProps): Rea
 }
 
 export interface IListDataContext {
-  data: AssetGetGridApiResponse | undefined
+  data?: AssetGetGridApiResponse
 }
 
 export const ListDataContext = createContext<IListDataContext>({
   data: undefined
 })
 
-export interface ListDataProviderProps {
+export interface ListDataProviderProps extends ICommonListProviderProps {
   data: IListDataContext['data']
-  children: React.ReactNode
 }
 
 export const ListDataProvider = ({ children, data }: ListDataProviderProps): React.JSX.Element => {
@@ -259,9 +274,7 @@ export const ListSelectedGridConfigIdProvider = ({ children }: ListSelectedGridC
   ), [selectedGridConfigId, children])
 }
 
-export interface ListProviderProps {
-  children: React.ReactNode
-}
+export interface ListProviderProps extends ICommonListProviderProps {}
 
 export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element => {
   return (

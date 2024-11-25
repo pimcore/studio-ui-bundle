@@ -8,7 +8,7 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             tagGetCollection: build.query<TagGetCollectionApiResponse, TagGetCollectionApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags`,
+                    url: `/pimcore-studio/api/tags`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
@@ -20,47 +20,35 @@ const injectedRtkApi = api
                 providesTags: ["Tags"],
             }),
             tagGetById: build.query<TagGetByIdApiResponse, TagGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}` }),
                 providesTags: ["Tags"],
             }),
             tagUpdateById: build.mutation<TagUpdateByIdApiResponse, TagUpdateByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/${queryArg.id}`,
+                    url: `/pimcore-studio/api/tags/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.updateTagParameters,
                 }),
                 invalidatesTags: ["Tags"],
             }),
             tagDeleteById: build.mutation<TagDeleteByIdApiResponse, TagDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["Tags"],
             }),
             tagAssignToElement: build.mutation<TagAssignToElementApiResponse, TagAssignToElementApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/assign/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
+                    url: `/pimcore-studio/api/tags/assign/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "POST",
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
-            tagBatchAssignToElementsByType: build.mutation<
-                TagBatchAssignToElementsByTypeApiResponse,
-                TagBatchAssignToElementsByTypeApiArg
+            tagBatchOperationToElementsByTypeAndId: build.mutation<
+                TagBatchOperationToElementsByTypeAndIdApiResponse,
+                TagBatchOperationToElementsByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/batch/assign/${queryArg.elementType}`,
+                    url: `/pimcore-studio/api/tags/batch/${queryArg.operation}/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
-                    body: queryArg.elementTagIdCollection,
-                }),
-                invalidatesTags: ["Tags for Element"],
-            }),
-            tagBatchReplaceForElementsByType: build.mutation<
-                TagBatchReplaceForElementsByTypeApiResponse,
-                TagBatchReplaceForElementsByTypeApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/studio/api/tags/batch/replace/${queryArg.elementType}`,
-                    method: "POST",
-                    body: queryArg.elementTagIdCollection,
                 }),
                 invalidatesTags: ["Tags for Element"],
             }),
@@ -68,12 +56,12 @@ const injectedRtkApi = api
                 TagGetCollectionForElementByTypeAndIdApiResponse,
                 TagGetCollectionForElementByTypeAndIdApiArg
             >({
-                query: (queryArg) => ({ url: `/studio/api/tags/${queryArg.elementType}/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.elementType}/${queryArg.id}` }),
                 providesTags: ["Tags for Element"],
             }),
             tagUnassignFromElement: build.mutation<TagUnassignFromElementApiResponse, TagUnassignFromElementApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/tags/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
+                    url: `/pimcore-studio/api/tags/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "DELETE",
                 }),
                 invalidatesTags: ["Tags for Element"],
@@ -126,17 +114,18 @@ export type TagAssignToElementApiArg = {
     /** TagId of the tag */
     tagId: number;
 };
-export type TagBatchAssignToElementsByTypeApiResponse = unknown;
-export type TagBatchAssignToElementsByTypeApiArg = {
+export type TagBatchOperationToElementsByTypeAndIdApiResponse =
+    /** status 201 Successfully created jobRun for batch tag assignment/replacement */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type TagBatchOperationToElementsByTypeAndIdApiArg = {
+    /** Id of the element */
+    id: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
-    elementTagIdCollection: CollectionOfElementAndTagIds;
-};
-export type TagBatchReplaceForElementsByTypeApiResponse = unknown;
-export type TagBatchReplaceForElementsByTypeApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-    elementTagIdCollection: CollectionOfElementAndTagIds;
+    /** Execute operation based on provided type. */
+    operation: "assign" | "replace";
 };
 export type TagGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Paginated tags for element */ {
     totalItems: number;
@@ -193,20 +182,13 @@ export type ChangeTagParameters = {
     /** Tag name */
     name?: string | null;
 };
-export type CollectionOfElementAndTagIds = {
-    /** element ids */
-    elementIds?: number[];
-    /** tag ids */
-    tagIds?: number[];
-};
 export const {
     useTagGetCollectionQuery,
     useTagGetByIdQuery,
     useTagUpdateByIdMutation,
     useTagDeleteByIdMutation,
     useTagAssignToElementMutation,
-    useTagBatchAssignToElementsByTypeMutation,
-    useTagBatchReplaceForElementsByTypeMutation,
+    useTagBatchOperationToElementsByTypeAndIdMutation,
     useTagGetCollectionForElementByTypeAndIdQuery,
     useTagUnassignFromElementMutation,
 } = injectedRtkApi;

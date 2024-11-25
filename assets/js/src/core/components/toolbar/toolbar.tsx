@@ -14,29 +14,39 @@
 import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
 import { Flex, type FlexProps } from 'antd'
 import React from 'react'
+import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
 
 export interface ToolbarProps {
   children: React.ReactNode
   justify?: FlexProps['justify']
   theme?: 'primary' | 'secondary'
+  position?: 'top' | 'bottom'
+  size?: 'small' | 'default'
 }
 
-export const Toolbar = ({ children, justify = 'space-between', theme = 'primary', ...props }: ToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ children, size = 'default', justify = 'space-between', theme = 'primary', position = 'bottom', ...props }: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [
     styles.toolbar,
     'toolbar',
-    `toolbar--theme-${theme}`
+    `toolbar--theme-${theme}`,
+    `toolbar--position-${position}`,
+    `toolbar--size-${size}`
   ].join(' ')
 
   return (
-    <Flex
-      className={ classes }
-      gap={ 16 }
-      justify={ justify }
-      { ...props }
-    >
-      {children}
-    </Flex>
+    <div className={ classes }>
+      <HorizontalScroll>
+        <Flex
+          className='w-full'
+          gap={ 16 }
+          justify={ justify }
+          { ...props }
+        >
+          {children}
+        </Flex>
+      </HorizontalScroll>
+    </div>
+
   )
 }

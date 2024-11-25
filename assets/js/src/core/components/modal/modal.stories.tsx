@@ -57,6 +57,8 @@ export const Large = (): React.JSX.Element => {
             </Button>
           </ModalFooter>
             }
+        mask={ false }
+        maskClosable={ false }
         onCancel={ handleClose }
         open={ isOpen }
         size='L'

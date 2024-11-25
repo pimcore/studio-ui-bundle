@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import { useCssComponentHash } from '@Pimcore/modules/ant-design/hooks/use-css-component-hash'
 import {
   type CellContext,
@@ -33,6 +35,8 @@ import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { type GridProps } from '@Pimcore/types/components/types'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -51,33 +55,6 @@ declare module '@tanstack/react-table' {
 
 export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
-}
-
-export interface OnUpdateCellDataEvent {
-  rowIndex: number
-  columnId: string
-  value: any
-  rowData: any
-}
-
-export interface GridProps {
-  data: any[]
-  columns: Array<ColumnDef<any>>
-  resizable?: boolean
-  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
-  modifiedCells?: Array<{ rowIndex: number | string, columnId: string }>
-  isLoading?: boolean
-  initialState?: TableOptions<any>['initialState']
-  enableRowSelection?: boolean
-  enableMultipleRowSelection?: boolean
-  selectedRows?: RowSelectionState
-  enableSorting?: boolean
-  manualSorting?: boolean
-  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
-  sorting?: SortingState
-  onSortingChange?: (sorting: SortingState) => void
-  setRowId?: (originalRow: any, index: number, parent: any) => string
-  autoWidth?: boolean
 }
 
 export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
@@ -204,92 +181,94 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
   const table = useReactTable(tableProps)
 
   return useMemo(() => (
-    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
-      <div className="ant-table ant-table-small">
-        <div className='ant-table-container'>
-          <div className='ant-table-content'>
-            <table
-              ref={ tableElement }
-              style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
-            >
-              <thead className='ant-table-thead'>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={ headerGroup.id }>
-                    {headerGroup.headers.map((header, index) => (
-                      <th
-                        className='ant-table-cell'
-                        key={ header.id }
-                        ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
-                        style={
-                            header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                              ? {
-                                  width: 'auto',
-                                  minWidth: header.column.getSize()
-                                }
-                              : {
-                                  width: header.column.getSize(),
-                                  maxWidth: header.column.getSize()
-                                }
-                          }
-                      >
-                        <div className='grid__cell-content'>
-                          <span>
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
+    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
+      <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
+        <div className="ant-table ant-table-small">
+          <div className='ant-table-container'>
+            <div className='ant-table-content'>
+              <table
+                ref={ tableElement }
+                style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
+              >
+                <thead className='ant-table-thead'>
+                  {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={ headerGroup.id }>
+                      {headerGroup.headers.map((header, index) => (
+                        <th
+                          className='ant-table-cell'
+                          key={ header.id }
+                          ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
+                          style={
+                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                                ? {
+                                    width: 'auto',
+                                    minWidth: header.column.getSize()
+                                  }
+                                : {
+                                    width: header.column.getSize(),
+                                    maxWidth: header.column.getSize()
+                                  }
+                            }
+                        >
+                          <div className='grid__cell-content'>
+                            <span>
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </span>
+
+                            {header.column.getCanSort() && (
+                              <div className='grid__sorter'>
+                                <SortButton
+                                  allowUnsorted={ sorting === undefined }
+                                  onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
+                                  value={ getSortDirection(header.column) }
+                                />
+                              </div>
                             )}
-                          </span>
+                          </div>
 
-                          {header.column.getCanSort() && (
-                            <div className='grid__sorter'>
-                              <SortButton
-                                allowUnsorted={ sorting === undefined }
-                                onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-                                value={ getSortDirection(header.column) }
-                              />
-                            </div>
+                          {props.resizable === true && header.column.getCanResize() && (
+                          <Resizer
+                            header={ header }
+                            isResizing={ header.column.getIsResizing() }
+                            table={ table }
+                          />
                           )}
-                        </div>
-
-                        {props.resizable === true && header.column.getCanResize() && (
-                        <Resizer
-                          header={ header }
-                          isResizing={ header.column.getIsResizing() }
-                          table={ table }
-                        />
-                        )}
-                      </th>
-                    ))}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody className="ant-table-tbody">
+                  {table.getRowModel().rows.length === 0 && (
+                  <tr className={ 'ant-table-row' }>
+                    <td
+                      className='ant-table-cell ant-table-cell__no-data'
+                      colSpan={ table.getAllColumns().length }
+                    >
+                      {t('no-data-available-yet')}
+                    </td>
                   </tr>
-                ))}
-              </thead>
-              <tbody className="ant-table-tbody">
-                {table.getRowModel().rows.length === 0 && (
-                <tr className={ 'ant-table-row' }>
-                  <td
-                    className='ant-table-cell ant-table-cell__no-data'
-                    colSpan={ table.getAllColumns().length }
-                  >
-                    {t('no-data-available-yet')}
-                  </td>
-                </tr>
-                )}
-                {table.getRowModel().rows.map(row => (
-                  <GridRow
-                    columns={ columns }
-                    isSelected={ row.getIsSelected() }
-                    key={ row.id }
-                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                    row={ row }
-                    tableElement={ tableElement }
-                  />
-                ))}
-              </tbody>
-            </table>
+                  )}
+                  {table.getRowModel().rows.map(row => (
+                    <GridRow
+                      columns={ columns }
+                      isSelected={ row.getIsSelected() }
+                      key={ row.id }
+                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                      row={ row }
+                      tableElement={ tableElement }
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </DynamicTypeRegistryProvider>
   ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {

@@ -11,36 +11,33 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useMemo, useState } from 'react'
-import { type GridFilter } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-
-export type FilterOptions = Pick<GridFilter, 'columnFilters' | 'includeDescendants'>
-
-export interface IFilterContext {
-  filterOptions: FilterOptions
-  setFilterOptions: React.Dispatch<React.SetStateAction<FilterOptions>>
-}
-
-export const defaultFilterOptions: FilterOptions = {
-  columnFilters: [],
-  includeDescendants: true
-}
+import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { type FilterOptions, type IFilterContext } from '../../types/filterTypes'
+import { defaultFilterOptions } from '../../constants/filters'
 
 export const FilterContext = createContext<IFilterContext>({
   filterOptions: defaultFilterOptions,
-  setFilterOptions: () => {}
+  setFilterOptions: () => {},
+  filterError: undefined
 })
 
-export interface FilterProviderProps {
+interface FilterProviderProps {
   children: React.ReactNode
+  errorData?: FetchBaseQueryError
 }
 
-export const FilterProvider = ({ children }: FilterProviderProps): React.JSX.Element => {
+export const FilterProvider = ({ children, errorData }: FilterProviderProps): React.JSX.Element => {
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions)
+  const [filterError, setFilterError] = useState<IFilterContext['filterError']>(undefined)
+
+  useEffect(() => {
+    setFilterError(errorData)
+  }, [errorData])
 
   return useMemo(() => (
-    <FilterContext.Provider value={ { filterOptions, setFilterOptions } }>
+    <FilterContext.Provider value={ { filterOptions, setFilterOptions, filterError } }>
       {children}
     </FilterContext.Provider>
-  ), [filterOptions, children])
+  ), [filterOptions, filterError, children])
 }

@@ -11,12 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import './metadata-type-provider'
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import '@Pimcore/modules/asset/editor'
 import { TreeContainer } from './tree/tree-container'
 import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import '@Pimcore/modules/asset/tree'
 

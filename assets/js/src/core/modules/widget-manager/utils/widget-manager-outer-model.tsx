@@ -65,10 +65,25 @@ export const getInitialModelJson = (): IJsonModel => {
         children: [
           {
             type: 'tab',
-            icon: 'camera',
             name: 'asset.asset-tree.title',
             component: 'asset-tree',
-            enableClose: false
+            enableClose: false,
+            config: {
+              icon: {
+                value: 'camera'
+              }
+            }
+          },
+          {
+            type: 'tab',
+            name: 'data-object.data-object-tree.title',
+            component: 'data-object-tree',
+            enableClose: false,
+            config: {
+              icon: {
+                value: 'mainObject'
+              }
+            }
           }
         ]
       },
@@ -81,20 +96,15 @@ export const getInitialModelJson = (): IJsonModel => {
         children: [
           {
             type: 'tab',
-            icon: 'camera',
             name: 'asset.asset-tree.title',
             component: 'asset-tree',
             enableClose: false,
             config: {
-              id: 288
+              id: 288,
+              icon: {
+                value: 'camera'
+              }
             }
-          },
-
-          {
-            type: 'tab',
-            name: 'actions',
-            component: 'widget-manager-actions',
-            enableClose: false
           }
         ]
       }

@@ -38,8 +38,8 @@ export const Tag = ({ children, icon, iconName, theme, className, ...props }: Ta
   const renderIcon = (name: string): React.JSX.Element => (
     <Icon
       className="tag-icon"
-      name={ name }
       options={ { width: '12px', height: '12px' } }
+      value={ name }
     />
   )
 

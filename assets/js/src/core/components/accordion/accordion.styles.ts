@@ -79,8 +79,10 @@ export const useStyles = createStyles(({ token, css }) => {
             }
 
             .accordion__chevron-btn {
-                display: flex;
-                margin: 0 ${token.marginXXS}px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 ${token.marginXXS}px;
             }
 
             .accordion__chevron {
@@ -98,6 +100,38 @@ export const useStyles = createStyles(({ token, css }) => {
             order: 1;
             margin-left: 5px;
         }
+    `,
+    bordered: css`
+      &.accordion--bordered {
+        .ant-collapse-item {
+          background: ${token.colorBgContainer};
+          border: 1px solid ${token.colorBorderSecondary};
+          border-radius: ${token.borderRadius}px;
+        }
+        
+        .ant-collapse-header {
+          font-weight: ${token.fontWeightStrong};
+        }
+
+        .accordion-item__header-info {
+          font-weight: 400;
+          color: ${token.colorTextSecondary};
+        }
+
+        .ant-collapse-content {
+          border-color: ${token.colorBorderSecondary};
+        }
+        
+        &.ant-collapse-small {
+          .ant-collapse-item {
+            border-radius: ${token.borderRadiusSM}px;
+          }
+          
+          .ant-collapse-header {
+            padding: ${token.paddingXXS}px ${token.paddingSM}px;
+          }
+        }
+      }
     `,
     spaced: css`
       background: ${token.colorBgContainer};

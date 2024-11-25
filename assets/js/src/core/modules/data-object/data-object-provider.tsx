@@ -19,7 +19,7 @@ export interface IDataObjectContext {
 
 export interface IDataObjectProviderProps {
   id: number
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const DataObjectContext = createContext<IDataObjectContext>({ id: 0 })

@@ -12,11 +12,16 @@
 */
 
 import React, { type ReactNode, useEffect } from 'react'
-import { Badge, Button, Card, Tag } from 'antd'
-import { type WorkflowDetails } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
+import { Badge, Card, Tag } from 'antd'
+import {
+  type WorkflowDetails
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
+import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
+import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
+import { Button } from '@Pimcore/components/button/button'
 
 interface IWorkflowCardProps {
   workflow: WorkflowDetails
@@ -25,24 +30,32 @@ interface IWorkflowCardProps {
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+  const { openModal } = useWorkflow()
+  const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow(workflow.workflowName)
+
   const DropdownButton = (): ReactNode => {
     const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
 
     useEffect(() => {
       const items: DropdownMenuProps['items'] = []
 
-      const mergedActions = [
-        ...workflow.allowedTransitions ?? [],
-        ...workflow.globalActions ?? []
-      ]
-      mergedActions?.forEach((status) => {
+      workflow.allowedTransitions?.forEach((status) => {
         items.push({
           key: Number(items.length + 1).toString(),
-          label: (
-            <a href={ 'https://pimcore.com' }>
-              {status.label}
-            </a>
-          )
+          label: t(`${status.label}`),
+          onClick: () => {
+            submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
+          }
+        })
+      })
+
+      workflow.globalActions?.forEach((status) => {
+        items.push({
+          key: Number(items.length + 1).toString(),
+          label: t(`${status.label}`),
+          onClick: () => {
+            openModal({ transition: 'global', action: status.name, workflowName: workflow.workflowName })
+          }
         })
       })
 
@@ -54,7 +67,14 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
         menu={ { items } }
         placement="bottom"
       >
-        <Button>{t('component.workflow-card.action-btn')}</Button>
+        {submissionLoading
+          ? (
+            <Button
+              loading
+              type={ 'link' }
+            />
+            )
+          : <Button>{t('component.workflow-card.action-btn')}</Button>}
       </Dropdown>
     )
   }
@@ -77,14 +97,14 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
                     styles={ status.colorInverted
                       ? { indicator: { outline: `1px solid ${status.color}4D` } }
                       : {}
-                    }
+                                        }
                   />
-                }
+                                }
                 key={ index }
                 style={ status.colorInverted
                   ? { backgroundColor: `${status.color}33` }
                   : {}
-                }
+                                }
                 title={ status.title }
               >
                 {status.label}
@@ -92,7 +112,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
             ))
           )}
         </>
-      ) }
+            ) }
     >
       {workflow.graph !== undefined && (
         <img

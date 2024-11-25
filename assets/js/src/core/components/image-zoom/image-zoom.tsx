@@ -11,12 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Select, Space } from 'antd'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button, Space } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from '@Pimcore/components/image-zoom/image-zoom.styles'
-import { useTranslation } from 'react-i18next'
 import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
+import { Select } from '@Pimcore/components/select/select'
 
 interface IImageZoom {
   zoom: number
@@ -70,13 +71,13 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           onClick={ () => { setZoom(zoom - zoomSteps) } }
           onKeyDown={ onKeyEnterExecuteClick }
         >
-          <Icon name={ 'MinusOutlined' } />
+          <Icon value={ 'MinusOutlined' } />
         </Button>
         <Select
           aria-label={ t('aria.asset.image.editor.zoom.preconfigured-zoom-levels') }
           defaultActiveFirstOption
           defaultValue={ '100' }
-          onChange={ (value) => { setZoom(parseInt(value)) } }
+          onChange={ (value: string) => { setZoom(parseInt(value)) } }
           options={ [
             { value: '100', label: '100%' },
             { value: '125', label: '125%' },
@@ -96,7 +97,7 @@ export const ImageZoom = ({ zoom, setZoom, zoomSteps = 25 }: IImageZoom): React.
           onClick={ () => { setZoom(zoom + zoomSteps) } }
           onKeyDown={ onKeyEnterExecuteClick }
         >
-          <Icon name={ 'PlusOutlined' } />
+          <Icon value={ 'PlusOutlined' } />
         </Button>
       </Space.Compact>
     </div>

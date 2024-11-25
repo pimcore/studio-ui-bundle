@@ -11,7 +11,7 @@ const injectedRtkApi = api
                 DependencyGetCollectionByElementTypeApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/studio/api/dependencies/${queryArg.elementType}/${queryArg.id}`,
+                    url: `/pimcore-studio/api/dependencies/${queryArg.elementType}/${queryArg.id}`,
                     params: {
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,

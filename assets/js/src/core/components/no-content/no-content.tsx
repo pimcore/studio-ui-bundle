@@ -28,11 +28,11 @@ export const NoContent = ({ text }: INoContentProps): React.JSX.Element => {
       <Empty
         description={ text }
         image={ <Icon
-          name={ 'no-content' }
           options={ {
             width: 184,
             height: 123
           } }
+          value={ 'no-content' }
                 /> }
       />
     </div>

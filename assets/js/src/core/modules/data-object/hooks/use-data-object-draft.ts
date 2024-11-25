@@ -23,6 +23,8 @@ import {
   resetChanges,
   resetSchedulesChangesForDataObject,
   selectDataObjectById,
+  setActiveTabForDataObject,
+  setModifiedCells,
   setPropertiesForDataObject,
   setSchedulesForDataObject,
   updatePropertyForDataObject,
@@ -35,14 +37,20 @@ import {
   type UseTrackableChangesDraftReturn
 } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
 import { useSchedulesDraft, type UseSchedulesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-schedules'
+import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/element/editor/services/type-registry'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 
 interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
+  UseTabsDraftReturn,
   UseTrackableChangesDraftReturn {
   isLoading: boolean
   isError: boolean
   dataObject: undefined | ReturnType<typeof selectDataObjectById>
+  editorType: ElementEditorType | undefined
 
   removeDataObjectFromState: () => void
 
@@ -54,6 +62,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
   const dataObject = useAppSelector(state => selectDataObjectById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
+  const typeRegistry = useInjection<TypeRegistryInterface>(serviceIds['DataObject/Editor/TypeRegistry'])
 
   async function fetchDataObject (): Promise<DataObjectGetByIdApiResponse> {
     const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
@@ -69,6 +78,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
   useEffect(() => {
     if (dataObject === undefined) {
       getDataObject()
+    } else {
+      setIsLoading(false)
     }
   }, [dataObject])
 
@@ -84,7 +95,9 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
         modified: false,
         properties: [],
         schedules: [],
-        changes: {}
+        changes: {},
+        modifiedCells: {},
+        ...initialTabsStateValue
       }
 
       if (dataObjectData !== undefined) {
@@ -108,7 +121,8 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
 
   const trackableChangesActions = useTrackableChangesDraft(
     id,
-    resetChanges
+    resetChanges,
+    setModifiedCells
   )
 
   const propertyActions = usePropertiesDraft(
@@ -130,14 +144,26 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     resetSchedulesChangesForDataObject
   )
 
+  const tabsActions = useTabsDraft(
+    id,
+    dataObject,
+    setActiveTabForDataObject
+  )
+
+  const editorType = dataObject?.type === undefined
+    ? undefined
+    : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
+
   return {
     isLoading,
     isError,
     dataObject,
+    editorType,
     removeDataObjectFromState,
     fetchDataObject,
     ...trackableChangesActions,
     ...propertyActions,
-    ...schedulesActions
+    ...schedulesActions,
+    ...tabsActions
   }
 }

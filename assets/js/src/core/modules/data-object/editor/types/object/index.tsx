@@ -13,9 +13,7 @@
 
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
-import type { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
-import { DetachedTab } from '@Pimcore/modules/data-object/editor/detached-tab/detached-tab'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import {
   TAB_DEPENDENCIES, TAB_NOTES_AND_EVENTS,
   TAB_PROPERTIES,
@@ -23,11 +21,13 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
 import { TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
+import { TAB_EDIT } from './tab-manager/tabs/edit/edit-container'
 
 moduleSystem.registerModule({
   onInit: () => {
     const objectEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/ObjectTabManager'])
 
+    objectEditorTabManager.register(TAB_EDIT)
     objectEditorTabManager.register(TAB_PROPERTIES)
     objectEditorTabManager.register(TAB_VERSIONS)
     objectEditorTabManager.register(TAB_SCHEDULE)
@@ -35,11 +35,5 @@ moduleSystem.registerModule({
     objectEditorTabManager.register(TAB_NOTES_AND_EVENTS)
     objectEditorTabManager.register(TAB_TAGS)
     objectEditorTabManager.register(TAB_WORKFLOW)
-
-    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
-    widgetRegistryService.registerWidget({
-      name: 'detachable-tab',
-      component: DetachedTab
-    })
   }
 })

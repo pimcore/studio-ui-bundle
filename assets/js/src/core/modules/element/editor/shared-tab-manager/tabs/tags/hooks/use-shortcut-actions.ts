@@ -11,119 +11,64 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { api as tagsApi, type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
+import {
+  type TagBatchOperationToElementsByTypeAndIdApiArg,
+  useTagBatchOperationToElementsByTypeAndIdMutation
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { createJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/factory'
+import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 
 interface UseShortcutActionsReturn {
-  applyFolderTags: () => Promise<void>
-  removeCurrentAndApplyFolderTags: () => Promise<void>
+  removeAndApplyTagsToChildren: () => Promise<void>
+  applyTagsToChildren: () => Promise<void>
 }
 
 export const useShortcutActions = (): UseShortcutActionsReturn => {
   const { id, elementType } = useElementContext()
-  const dispatch = useAppDispatch()
-  const { element } = useElementDraft(id, elementType)
-  const parentId = element?.parentId
+  const [tagBatchMutation] = useTagBatchOperationToElementsByTypeAndIdMutation()
+  const { addJob } = useJobs()
 
-  const getCurrentAndParentTags = async (): Promise<Awaited<any>> => {
-    const parentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
+  const assignTags = async (operation: TagBatchOperationToElementsByTypeAndIdApiArg['operation']): Promise<number> => {
+    const assignTask = tagBatchMutation({
       elementType,
-      id: parentId!
-    }))
+      id,
+      operation
+    })
 
-    const currentTags = await dispatch(tagsApi.endpoints.tagGetCollectionForElementByTypeAndId.initiate({
-      elementType,
-      id
-    }))
+    assignTask.catch(() => {
+      console.log('Failed to apply tags to children')
+    })
 
-    return { parentTags, currentTags }
+    const response = (await assignTask) as any
+
+    if (response.error !== undefined) {
+      throw new Error(response.error.data.error as string)
+    }
+
+    const data = response.data
+    return data.jobRunId
   }
 
-  const applyFolderTags = async (): Promise<void> => {
-    Promise.resolve(getCurrentAndParentTags())
-      .then(async ({ parentTags, currentTags }) => {
-        const saveParentTags = parentTags.data?.items ?? []
-        const saveChildrenTags = currentTags.data?.items ?? []
-        const items: Tag[] = { ...saveParentTags, ...saveChildrenTags }
-
-        const tagIds = Object.keys(items).map(Number)
-
-        const cacheUpdate = dispatch(
-          tagsApi.util.updateQueryData(
-            'tagGetCollectionForElementByTypeAndId',
-            {
-              elementType,
-              id
-            },
-            (draft): any => {
-              return {
-                totalItems: items.length,
-                items
-              }
-            }
-          )
-        )
-
-        try {
-          void await dispatch(tagsApi.endpoints.tagBatchAssignToElementsByType.initiate({
-            elementType,
-            elementTagIdCollection: {
-              elementIds: [id],
-              tagIds
-            }
-          }))
-        } catch (error) {
-          cacheUpdate.undo()
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+  const applyTagsToChildren = async (): Promise<void> => {
+    addJob(createJob({
+      title: 'Assign tags to children',
+      topics: [topics['tag-assignment-finished'], ...defaultTopics],
+      action: async () => await assignTags('assign')
+    }))
   }
 
-  const removeCurrentAndApplyFolderTags = async (): Promise<void> => {
-    Promise.resolve(getCurrentAndParentTags())
-      .then(async ({ parentTags }) => {
-        const items: Tag[] = parentTags.data?.items ?? []
-        const tagIds = Object.keys(items).map(Number)
-
-        const cacheUpdate = dispatch(
-          tagsApi.util.updateQueryData(
-            'tagGetCollectionForElementByTypeAndId',
-            {
-              elementType,
-              id
-            },
-            (draft): any => {
-              return {
-                totalItems: Object.keys(items).length,
-                items
-              }
-            }
-          )
-        )
-
-        try {
-          void await dispatch(tagsApi.endpoints.tagBatchReplaceForElementsByType.initiate({
-            elementType,
-            elementTagIdCollection: {
-              elementIds: [id],
-              tagIds
-            }
-          }))
-        } catch (error) {
-          cacheUpdate.undo()
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+  const removeAndApplyTagsToChildren = async (): Promise<void> => {
+    addJob(createJob({
+      title: 'Replace and assign tags to children',
+      topics: [topics['tag-replacement-finished'], ...defaultTopics],
+      action: async () => await assignTags('replace')
+    }))
   }
 
   return {
-    applyFolderTags,
-    removeCurrentAndApplyFolderTags
+    removeAndApplyTagsToChildren,
+    applyTagsToChildren
   }
 }

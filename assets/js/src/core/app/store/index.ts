@@ -11,10 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Reducer, combineSlices, configureStore } from '@reduxjs/toolkit'
+import { type Reducer, combineSlices, configureStore, type CombinedSliceReducer } from '@reduxjs/toolkit'
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { api as pimcoreApi } from '@Pimcore/app/api/pimcore'
-import { type CombinedSliceReducer } from '@reduxjs/toolkit/dist/combineSlices'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LazyloadedSlices {};

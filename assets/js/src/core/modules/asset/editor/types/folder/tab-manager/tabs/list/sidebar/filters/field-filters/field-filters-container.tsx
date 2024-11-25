@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { useListGridAvailableColumns, getFormattedDropDownMenu } from '../../../hooks/use-list'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -20,11 +21,37 @@ import { type GridColumnConfiguration } from 'src/sdk/main'
 import { FieldFiltersListContainer } from './field-filters-list-container'
 import { useFilters } from '../hooks/use-filters'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+
+const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+
   const { dropDownMenu } = useListGridAvailableColumns()
   const { columns, addColumn } = useFilters()
+  const { hasType } = useDynamicTypeResolver()
+
+  const handleColumnClick = (column: GridColumnConfiguration): void => {
+    addColumn(column)
+  }
+
+  const getFilteredDropDownMenu = (): Record<string, GridColumnConfiguration[]> => {
+    const dropDownMenuCopy = { ...dropDownMenu }
+
+    Object.keys(dropDownMenuCopy).forEach(key => {
+      dropDownMenuCopy[key] = dropDownMenuCopy[key].filter((item) => {
+        const hasDynamicType = hasType({ target: 'FIELD_FILTER', dynamicTypeIds: [item.frontendType!] })
+        const isIgnoredField = FILTER_FIELD_KEY_IGNORE_LIST.includes(item.key)
+
+        return hasDynamicType && !isIgnoredField
+      })
+    })
+
+    return dropDownMenuCopy
+  }
+
+  const filteredDropDownMenu = getFilteredDropDownMenu()
 
   return (
     <Space
@@ -33,18 +60,16 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     >
       <FieldFiltersListContainer columns={ columns } />
 
-      <Dropdown menu={ { items: getFormattedDropDownMenu(dropDownMenu, onColumnClick) } }>
-        <IconTextButton
-          icon='PlusCircleOutlined'
-          type='link'
-        >
-          { t('listing.add-column') }
-        </IconTextButton>
-      </Dropdown>
+      {!isEmptyValue(filteredDropDownMenu) && (
+        <Dropdown menu={ { items: getFormattedDropDownMenu(filteredDropDownMenu, handleColumnClick) } }>
+          <IconTextButton
+            icon={ { value: 'PlusCircleOutlined' } }
+            type='link'
+          >
+            { t('listing.add-column') }
+          </IconTextButton>
+        </Dropdown>
+      )}
     </Space>
   )
-
-  function onColumnClick (column: GridColumnConfiguration): void {
-    addColumn(column)
-  }
 }

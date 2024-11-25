@@ -22,7 +22,7 @@ import { type ElementType } from '../../../../../../../../types/element-type.d'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Tag } from 'antd'
 import { Space } from '@Pimcore/components/space/space'
@@ -88,8 +88,10 @@ export const NotesAndEventsTabView = ({
           <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
           <IconButton
             aria-label={ i18n.t('aria.notes-and-events.delete') }
-            icon='trash'
-            onClick={ () => {
+            icon={ { value: 'trash' } }
+            onClick={ (e) => {
+              e.stopPropagation()
+
               onClickTrash(note.id)
             } }
             theme='primary'
@@ -153,7 +155,7 @@ export const NotesAndEventsTabView = ({
   })
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={ notes.length !== 0
         ? (
           <Toolbar
@@ -174,7 +176,7 @@ export const NotesAndEventsTabView = ({
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton
-            icon={ 'PlusCircleOutlined' }
+            icon={ { value: 'PlusCircleOutlined' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }
@@ -203,6 +205,6 @@ export const NotesAndEventsTabView = ({
           />
         </Content>
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

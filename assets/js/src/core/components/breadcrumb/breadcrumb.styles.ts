@@ -24,12 +24,25 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
     `,
+
+    breadcrumbLink: css`
+      color: ${token.colorTextTertiary};
+    `,
+
+    breadcrumbLinkLast: css`
+      color: ${token.colorText};
+    `,
+
     pathItem: css`
        cursor: pointer;
        
        &:hover {
          color: ${token.colorPrimaryHover};
        }
+    `,
+
+    dropdownMenu: css`
+      max-width: 400px;
     `
   }
 })

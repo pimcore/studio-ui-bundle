@@ -8,76 +8,101 @@ const injectedRtkApi = api
         endpoints: (build) => ({
             userCloneById: build.mutation<UserCloneByIdApiResponse, UserCloneByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/user/clone/${queryArg.id}`,
+                    url: `/pimcore-studio/api/user/clone/${queryArg.id}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["User Management"],
             }),
             userCreate: build.mutation<UserCreateApiResponse, UserCreateApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/user/`, method: "POST", body: queryArg.body }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["User Management"],
             }),
             userFolderCreate: build.mutation<UserFolderCreateApiResponse, UserFolderCreateApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/user/folder`, method: "POST", body: queryArg.body }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder`, method: "POST", body: queryArg.body }),
                 invalidatesTags: ["User Management"],
             }),
             userGetCurrentInformation: build.query<
                 UserGetCurrentInformationApiResponse,
                 UserGetCurrentInformationApiArg
             >({
-                query: () => ({ url: `/studio/api/user/current-user-information` }),
+                query: () => ({ url: `/pimcore-studio/api/user/current-user-information` }),
                 providesTags: ["User Management"],
             }),
             userGetById: build.query<UserGetByIdApiResponse, UserGetByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/user/${queryArg.id}` }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}` }),
                 providesTags: ["User Management"],
             }),
             userUpdateById: build.mutation<UserUpdateByIdApiResponse, UserUpdateByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/user/${queryArg.id}`,
+                    url: `/pimcore-studio/api/user/${queryArg.id}`,
                     method: "PUT",
                     body: queryArg.updateUser,
                 }),
                 invalidatesTags: ["User Management"],
             }),
             userDeleteById: build.mutation<UserDeleteByIdApiResponse, UserDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/user/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
             }),
             userFolderDeleteById: build.mutation<UserFolderDeleteByIdApiResponse, UserFolderDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
+            }),
+            userDefaultKeyBindings: build.query<UserDefaultKeyBindingsApiResponse, UserDefaultKeyBindingsApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
+                providesTags: ["User Management"],
             }),
             userGetAvailablePermissions: build.query<
                 UserGetAvailablePermissionsApiResponse,
                 UserGetAvailablePermissionsApiArg
             >({
-                query: () => ({ url: `/studio/api/user/available-permissions` }),
+                query: () => ({ url: `/pimcore-studio/api/user/available-permissions` }),
                 providesTags: ["User Management"],
             }),
             userGetCollection: build.query<UserGetCollectionApiResponse, UserGetCollectionApiArg>({
-                query: () => ({ url: `/studio/api/users` }),
+                query: () => ({ url: `/pimcore-studio/api/users` }),
                 providesTags: ["User Management"],
             }),
             userResetPassword: build.mutation<UserResetPasswordApiResponse, UserResetPasswordApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/user/reset-password`,
+                    url: `/pimcore-studio/api/user/reset-password`,
                     method: "POST",
                     body: queryArg.resetPassword,
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            pimcoreStudioApiUserSearch: build.query<
+                PimcoreStudioApiUserSearchApiResponse,
+                PimcoreStudioApiUserSearchApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/search`,
+                    params: { searchQuery: queryArg.searchQuery },
+                }),
+                providesTags: ["User Management"],
+            }),
             userUpdatePasswordById: build.mutation<UserUpdatePasswordByIdApiResponse, UserUpdatePasswordByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/studio/api/user/${queryArg.id}/password`,
+                    url: `/pimcore-studio/api/user/${queryArg.id}/password`,
                     method: "PUT",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            userUploadImage: build.mutation<UserUploadImageApiResponse, UserUploadImageApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
             userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
-                query: (queryArg) => ({ url: `/studio/api/users/tree`, params: { parentId: queryArg.parentId } }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/users/tree`,
+                    params: { parentId: queryArg.parentId },
+                }),
                 providesTags: ["User Management"],
             }),
         }),
@@ -129,6 +154,11 @@ export type UserFolderDeleteByIdApiArg = {
     /** Id of the user-folder */
     id: number;
 };
+export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
+    totalItems: number;
+    items: KeyBindingForAUser[];
+};
+export type UserDefaultKeyBindingsApiArg = void;
 export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
     totalItems: number;
     items: UserPermission[];
@@ -143,6 +173,14 @@ export type UserResetPasswordApiResponse = /** status 200 Success */ void;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
+export type PimcoreStudioApiUserSearchApiResponse = /** status 200 user_search_summary_response */ {
+    totalItems: number;
+    items: SimpleUser[];
+};
+export type PimcoreStudioApiUserSearchApiArg = {
+    /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
+    searchQuery?: string;
+};
 export type UserUpdatePasswordByIdApiResponse = /** status 200 Success */ void;
 export type UserUpdatePasswordByIdApiArg = {
     /** Id of the User */
@@ -150,6 +188,15 @@ export type UserUpdatePasswordByIdApiArg = {
     body: {
         password: string;
         passwordConfirmation: string;
+    };
+};
+export type UserUploadImageApiResponse = /** status 200 Success */ void;
+export type UserUploadImageApiArg = {
+    /** Id of the User */
+    id: number;
+    body: {
+        /** User image to upload */
+        userImage: Blob;
     };
 };
 export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
@@ -185,10 +232,16 @@ export type DevError = {
     details: string;
 };
 export type UserInformation = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
     /** Username */
     username: string;
-    /** Roles */
-    roles: string[];
+    /** Permissions */
+    permissions: string[];
+    /** If user is an admin user */
+    isAdmin: boolean;
 };
 export type KeyBindingForAUser = {
     /** ASCII Code for a key on the Keyboard */
@@ -226,6 +279,20 @@ export type UserWorkspace = {
     /** Properties Permission */
     properties: boolean;
 };
+export type DependencyToAnObject = {
+    /** ID of the object */
+    id: number;
+    /** Path to the object */
+    path: string;
+    /** Subtype of the object */
+    subtype: string;
+};
+export type UserObjectDependencies = {
+    /** Dependencies to objects */
+    dependencies: DependencyToAnObject[];
+    /** If is has hidden dependencies */
+    hasHidden: boolean;
+};
 export type User = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -243,6 +310,8 @@ export type User = {
     lastname?: string | null;
     /** If a User is active */
     active: boolean;
+    /** If User is admin */
+    admin: boolean;
     /** Classes the user is allows to see */
     classes: object;
     closeWarning: boolean;
@@ -272,6 +341,7 @@ export type User = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    objectDependencies: UserObjectDependencies;
 };
 export type User2 = {
     /** Email of the User */
@@ -344,9 +414,12 @@ export const {
     useUserUpdateByIdMutation,
     useUserDeleteByIdMutation,
     useUserFolderDeleteByIdMutation,
+    useUserDefaultKeyBindingsQuery,
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
     useUserResetPasswordMutation,
+    usePimcoreStudioApiUserSearchQuery,
     useUserUpdatePasswordByIdMutation,
+    useUserUploadImageMutation,
     useUserGetTreeQuery,
 } = injectedRtkApi;

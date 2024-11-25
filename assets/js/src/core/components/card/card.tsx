@@ -21,16 +21,23 @@ import { useTranslation } from 'react-i18next'
 
 export interface CardProps extends AntdCardProps {
   loading?: boolean
+  fitContent?: boolean
   onClose?: () => void
   icon?: string
   image?: { src: string, alt?: string } | null
   extra?: any[]
+  footer?: React.ReactNode
 }
 
-const Component = ({ loading, children, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ loading, children, footer, fitContent, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const classNames = [styles.card, className]
+  const classNames = [
+    styles.card,
+    className,
+    footer !== undefined ? 'card-with-footer' : '',
+    fitContent === true ? 'card-fit-content' : ''
+  ].filter(Boolean)
 
   const renderExtraContent = (): React.ReactElement | null => {
     return (
@@ -42,7 +49,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
                 typeof extra === 'object' && extra.icon !== undefined
                   ? (
                     <IconButton
-                      icon={ extra.icon as string }
+                      icon={ { value: extra.icon as string } }
                       key={ index }
                       onClick={ extra.onClick }
                       role={ 'button' }
@@ -60,7 +67,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
           ? (
             <IconButton
               aria-label={ t('aria.card.close') }
-              icon={ 'close' }
+              icon={ { value: 'close' } }
               onClick={ () => props.onClose?.() }
               role={ 'button' }
               size="small"
@@ -75,7 +82,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
   const renderTitle = (): React.ReactElement => {
     return (
       <>
-        {props.icon !== undefined && props.icon !== null ? <Icon name={ props.icon } /> : null}
+        {props.icon !== undefined && props.icon !== null ? <Icon value={ props.icon } /> : null}
         {props.title}
       </>
     )
@@ -83,6 +90,7 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
 
   return (
     <AntdCard
+      { ...props }
       actions={ props.actions }
       className={ classNames.join(' ') }
       cover={ props.image !== null && props.image?.src !== undefined
@@ -92,11 +100,24 @@ const Component = ({ loading, children, className, ...props }: CardProps, ref: R
             src={ props.image.src }
           />
           )
-        : <></> }
+        : props.cover }
       extra={ props.extra !== undefined && props.extra !== null ? renderExtraContent() : null }
       title={ props.title !== undefined && props.title !== null ? renderTitle() : null }
     >
-      {children}
+      {footer !== undefined && children !== undefined
+        ? (
+          <div className="card-body-inner">
+            {children}
+          </div>
+          )
+        : children}
+
+      {footer !== undefined && (
+      <div className="card-footer">
+        {footer}
+      </div>
+      )}
+
     </AntdCard>
   )
 }

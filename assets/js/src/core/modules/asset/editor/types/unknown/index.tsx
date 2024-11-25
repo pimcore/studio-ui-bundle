@@ -13,7 +13,7 @@
 
 import { type UnknownTabManager } from './tab-manager/unknown-tab-manager'
 import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TAB_CUSTOM_METADATA, TAB_VERSIONS } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab-definitions'
 import {

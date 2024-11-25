@@ -12,12 +12,14 @@
 */
 
 import React, { useCallback, useMemo } from 'react'
-import { Grid, type GridProps } from '@Pimcore/components/grid/grid'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { type GridProps } from '@Pimcore/types/components/types'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type GridColumnConfiguration, type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { uuid } from '@Pimcore/utils/uuid'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -55,6 +57,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { columns: GridColumns } = useListColumns()
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
+  const { hasType } = useDynamicTypeResolver()
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -74,7 +77,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
           header: t(`asset.listing.column.${column.key}`).concat(column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
           enableSorting: column.sortable,
           meta: {
-            type: column.frontendType,
+            type: hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.type] }) ? column.type : column.frontendType,
             editable: column.editable,
             config: column.config
           }

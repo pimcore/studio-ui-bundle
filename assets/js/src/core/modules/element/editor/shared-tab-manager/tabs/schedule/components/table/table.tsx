@@ -12,7 +12,7 @@
 */
 
 import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useStyles } from './table.styles'
@@ -30,9 +30,9 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
-  const { element, updateSchedule, removeSchedule } = useElementDraft(id, elementType)
-  const [modifiedCells, setModifiedCells] = useState<Array<{ rowIndex: string, columnId: string }>>([])
-
+  const { element, updateSchedule, removeSchedule, setModifiedCells } = useElementDraft(id, elementType)
+  const modifiedCellsType = 'schedules'
+  const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
   const columnHelper = createColumnHelper<ScheduleTable>()
   const columns = [
     columnHelper.accessor('date', {
@@ -82,7 +82,7 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
             justify='center'
           >
             <IconButton
-              icon={ 'trash' }
+              icon={ { value: 'trash' } }
               onClick={ (): void => {
                 removeSchedule(info.row.original)
               } }
@@ -108,12 +108,12 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
 
     const updatedSchedule: Schedule = { ...scheduleToUpdate, [columnId]: value }
     updateSchedule(updatedSchedule)
-    setModifiedCells([...modifiedCells, { rowIndex: getRowId(rowData), columnId }])
+    setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: getRowId(rowData), columnId }])
   }
 
   useEffect(() => {
     if (modifiedCells.length > 0 && element?.changes.schedules === undefined) {
-      setModifiedCells([])
+      setModifiedCells(modifiedCellsType, [])
     }
   }, [element])
 

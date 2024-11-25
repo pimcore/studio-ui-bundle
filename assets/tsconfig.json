@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "rootDir": "./js/",
+    "rootDir": ".",
     "module": "ESNext",
-    "target": "es2017",
+    "target": "ES2023",
     "moduleResolution": "Node",
-    "types": ["reflect-metadata", "@types/webpack-env", "jest"],
+    "types": ["reflect-metadata", "@types/webpack-env", "jest", "react", "react-dom"],
     "baseUrl": "./js/",
     "paths": {
       "@Pimcore/*": ["./src/core/*"],

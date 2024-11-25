@@ -14,7 +14,7 @@
 import React from 'react'
 import { type AbstractJob } from '../../jobs/abstact-job'
 import { useInjection } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type JobComponentRegistry } from '../../services/job-component-registry'
 import { NotificationJobContainer as DefaultComponent } from '../../jobs/default/notification-job-container'
 

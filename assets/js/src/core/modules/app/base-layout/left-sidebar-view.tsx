@@ -12,9 +12,9 @@
 */
 
 import { Avatar } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
 import React from 'react'
 import { useStlyes } from './left-sidebar-view.styles'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStlyes()
@@ -23,7 +23,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
     <div className={ styles.leftSidebar }>
       <Avatar
         className='left-sidebar__avatar'
-        icon={ <UserOutlined /> }
+        icon={ <Icon value='user-01' /> }
         size={ 26 }
       />
     </div>

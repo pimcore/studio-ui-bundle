@@ -11,19 +11,24 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
+
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { serviceIds } from '@Pimcore/app/config/services'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
 import camera from '@Pimcore/assets/icons/camera.inline.svg'
 import close from '@Pimcore/assets/icons/close.inline.svg'
 import folder from '@Pimcore/assets/icons/folder.inline.svg'
 import widgetDefault from '@Pimcore/assets/icons/widget-default.inline.svg'
+import caretUpOutlined from '@Pimcore/assets/icons/caret-up-outlined.inline.svg'
+import caretDownOutlined from '@Pimcore/assets/icons/caret-down-outlined.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import chevronUpSmall from '@Pimcore/assets/icons/chevron-up-small.inline.svg'
-import chevronDownSmall from '@Pimcore/assets/icons/chevron-down-small.inline.svg'
 import chevronUpWide from '@Pimcore/assets/icons/chevron-up-wide.inline.svg'
+import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg'
 import chevronDownWide from '@Pimcore/assets/icons/chevron-down-wide.inline.svg'
+import chevronDownSmall from '@Pimcore/assets/icons/chevron-down-small.inline.svg'
 import home from '@Pimcore/assets/icons/home.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
 import iconTools from '@Pimcore/assets/icons/icon-tools.inline.svg'
@@ -71,12 +76,14 @@ import PlusOutlined from '@Pimcore/assets/icons/PlusOutlined.inline.svg'
 import settings2 from '@Pimcore/assets/icons/settings-2.inline.svg'
 import PlusCircleOutlined from '@Pimcore/assets/icons/PlusCircleOutlined.inline.svg'
 import Share03 from '@Pimcore/assets/icons/share-03.inline.svg'
+import Copy03 from '@Pimcore/assets/icons/copy-03.inline.svg'
 import Copy07 from '@Pimcore/assets/icons/copy-07.inline.svg'
 import Group from '@Pimcore/assets/icons/group.inline.svg'
 import Note from '@Pimcore/assets/icons/note.inline.svg'
 import MainDocument from '@Pimcore/assets/icons/pimcore-main-icon-document.inline.svg'
 import MainAsset from '@Pimcore/assets/icons/pimcore-main-icon-asset.inline.svg'
 import MainObject from '@Pimcore/assets/icons/pimcore-main-icon-object.inline.svg'
+import MainObjectVariant from '@Pimcore/assets/icons/main-object-variant.inline.svg'
 import CheckDone02 from '@Pimcore/assets/icons/check-done-02.inline.svg'
 import ChevronSelectorVertical from '@Pimcore/assets/icons/chevron-selector-vertical.inline.svg'
 import ChevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
@@ -117,6 +124,9 @@ import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg'
 import refreshCcw03 from '@Pimcore/assets/icons/refresh-ccw-03.inline.svg'
 import clipboardCheck from '@Pimcore/assets/icons/clipboard-check.inline.svg'
 import magicWand01 from '@Pimcore/assets/icons/magic-wand-01.inline.svg'
+import LockUnlock01 from '@Pimcore/assets/icons/lock-unlocked-01.inline.svg'
+import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlined.inline.svg'
+import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -133,6 +143,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'widget-default',
       component: widgetDefault
+    })
+    iconLibrary.register({
+      name: 'caret-up-outlined',
+      component: caretUpOutlined
+    })
+    iconLibrary.register({
+      name: 'caret-down-outlined',
+      component: caretDownOutlined
     })
     iconLibrary.register({
       name: 'chevron-up',
@@ -153,6 +171,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'chevron-down-wide',
       component: chevronDownWide
+    })
+    iconLibrary.register({
+      name: 'chevron-down',
+      component: chevronDown
     })
     iconLibrary.register({
       name: 'home',
@@ -363,6 +385,10 @@ moduleSystem.registerModule({
       component: Share03
     })
     iconLibrary.register({
+      name: 'copy-03',
+      component: Copy03
+    })
+    iconLibrary.register({
       name: 'copy-07',
       component: Copy07
     })
@@ -385,6 +411,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'mainObject',
       component: MainObject
+    })
+    iconLibrary.register({
+      name: 'mainObjectVariant',
+      component: MainObjectVariant
     })
     iconLibrary.register({
       name: 'check-done-02',
@@ -554,6 +584,21 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'magic-wand-01',
       component: magicWand01
+    })
+
+    iconLibrary.register({
+      name: 'lock-unlock-01',
+      component: LockUnlock01
+    })
+
+    iconLibrary.register({
+      name: 'question-circle-outlined',
+      component: questionCircleOutlined
+    })
+
+    iconLibrary.register({
+      name: 'search-sm',
+      component: searchSM
     })
   }
 })

@@ -20,7 +20,7 @@ import {
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
 import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
-import { getDomainWithPrefix } from '@Pimcore/app/api/pimcore/route'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -78,7 +78,7 @@ const DetailContainer = (): React.JSX.Element => {
 
     const queryString = buildQueryString(keyValues, ['', '-1'])
 
-    fetch(`http://localhost/studio/api/assets/${id}/image/download/custom?${queryString}`)
+    fetch(`${getPrefix()}/assets/${id}/image/download/custom?${queryString}`)
       .then(async (response) => await response.blob())
       .then((imageBlob) => {
         const imageURL = URL.createObjectURL(imageBlob)
@@ -91,10 +91,10 @@ const DetailContainer = (): React.JSX.Element => {
 
   function downloadImageByFormat (id: number, format: string): void {
     if (format === 'original') {
-      prepareDownload(`${getDomainWithPrefix()}/assets/${id}/download`, format)
+      prepareDownload(`${getPrefix()}/assets/${id}/download`, format)
       return
     }
-    prepareDownload(`${getDomainWithPrefix()}/assets/${id}/image/download/format/${format}`, format)
+    prepareDownload(`${getPrefix()}/assets/${id}/image/download/format/${format}`, format)
   }
 
   function prepareDownload (url: string, format: string): void {

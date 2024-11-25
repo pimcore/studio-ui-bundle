@@ -44,7 +44,7 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const savedGridConfigurations: DropdownMenuProps['items'] = useMemo(() => {
     if (data !== undefined) {
-      return data?.map((item) => {
+      return data.items?.map((item) => {
         return {
           key: item.id,
           label: item.name,
