@@ -85,6 +85,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
         list={ getVisibleWorkflowStatus() }
         wrap={ false }
       />
+      {workflowDetailsData !== undefined && (
       <Dropdown
         disabled={ isFetchingWorkflowDetails }
         menu={ { items } }
@@ -96,6 +97,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
           />
         </DropdownButton>
       </Dropdown>
+      )}
     </Flex>
   )
 }

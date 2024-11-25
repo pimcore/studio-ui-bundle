@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { isEmpty } from 'lodash'
 import { useListGridAvailableColumns, getFormattedDropDownMenu } from '../../../hooks/use-list'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
@@ -21,7 +22,6 @@ import { type GridColumnConfiguration } from 'src/sdk/main'
 import { FieldFiltersListContainer } from './field-filters-list-container'
 import { useFilters } from '../hooks/use-filters'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 const FILTER_FIELD_KEY_IGNORE_LIST = ['size']
 
@@ -60,7 +60,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     >
       <FieldFiltersListContainer columns={ columns } />
 
-      {!isEmptyValue(filteredDropDownMenu) && (
+      {!isEmpty(filteredDropDownMenu) && (
         <Dropdown menu={ { items: getFormattedDropDownMenu(filteredDropDownMenu, handleColumnClick) } }>
           <IconTextButton
             icon={ { value: 'PlusCircleOutlined' } }

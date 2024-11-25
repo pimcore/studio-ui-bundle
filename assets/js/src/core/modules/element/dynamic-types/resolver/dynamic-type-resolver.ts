@@ -16,12 +16,14 @@ import { type DynamicTypeAbstract } from '../registry/dynamic-type-registry-abst
 
 export const DynamicTypesResolverTargets = {
   GRID_CELL: 'GRID_CELL',
-  FIELD_FILTER: 'FIELD_FILTER'
+  FIELD_FILTER: 'FIELD_FILTER',
+  BATCH_EDIT: 'BATCH_EDIT'
 }
 
 export const targetCallbackNameMap = {
   [DynamicTypesResolverTargets.GRID_CELL]: 'getGridCellComponent',
-  [DynamicTypesResolverTargets.FIELD_FILTER]: 'getFieldFilterComponent'
+  [DynamicTypesResolverTargets.FIELD_FILTER]: 'getFieldFilterComponent',
+  [DynamicTypesResolverTargets.BATCH_EDIT]: 'getBatchEditComponent'
 }
 
 export type ITargetCallbackNameMap = typeof targetCallbackNameMap

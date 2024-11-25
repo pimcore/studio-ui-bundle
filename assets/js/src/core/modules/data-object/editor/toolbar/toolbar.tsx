@@ -32,6 +32,9 @@ import {
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageSelection } from './language-selection/language-selection'
+import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -61,22 +64,32 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <ToolbarView>
-      <Flex>
-        <ContextMenu />
+      <WorkFlowProvider>
+        <Flex>
+          <ContextMenu />
 
-        {activeTab === TAB_EDIT.key && (
-          <LanguageSelection />
-        )}
-      </Flex>
+          {activeTab === TAB_EDIT.key && (
+            <LanguageSelection />
+          )}
+        </Flex>
 
-      <Button
-        disabled={ !hasChanges || isLoading || isSchedulesLoading }
-        loading={ isLoading || isSchedulesLoading }
-        onClick={ onSaveClick }
-        type="primary"
-      >
-        {t('toolbar.save-and-publish')}
-      </Button>
+        <Flex
+          gap={ 'extra-small' }
+          style={ { height: '32px' } }
+          vertical={ false }
+        >
+          <EditorToolbarWorkflowMenu />
+          <Button
+            disabled={ !hasChanges || isLoading || isSchedulesLoading }
+            loading={ isLoading || isSchedulesLoading }
+            onClick={ onSaveClick }
+            type="primary"
+          >
+            {t('toolbar.save-and-publish')}
+          </Button>
+        </Flex>
+        <WorkflowLogModal />
+      </WorkFlowProvider>
     </ToolbarView>
   )
 

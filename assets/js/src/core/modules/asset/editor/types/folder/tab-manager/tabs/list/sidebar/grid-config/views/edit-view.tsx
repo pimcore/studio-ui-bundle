@@ -12,7 +12,7 @@
 */
 
 import { Button } from '@Pimcore/components/button/button'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { Space } from '@Pimcore/components/space/space'
@@ -21,9 +21,9 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
+import { isEmpty } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { GridConfigList } from '../grid-config-list'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -39,7 +39,7 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
   const { t } = useTranslation()
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <Button
@@ -91,7 +91,7 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
         >
           <GridConfigList columns={ columns } />
 
-          {!isEmptyValue(addColumnMenu) && (
+          {!isEmpty(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
               <IconTextButton
                 icon={ { value: 'PlusCircleOutlined' } }
@@ -103,6 +103,6 @@ export const EditView = ({ onCancelClick, onApplyClick, onSaveConfigurationClick
           )}
         </Space>
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

@@ -118,15 +118,18 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
           format={ DATE_FORMAT }
           onChange={ handleChangeDateOnValue }
           outputType='timestamp'
+          showTime
           value={ dateOnValue }
         />
       )}
 
       {settingValue === DatePickerSettingValue.BETWEEN && (
         <DateRangePicker
+          allowEmpty={ [true, true] }
           format={ DATE_FORMAT }
           onChange={ handleChangeDateBetweenValue }
           outputType='timestamp'
+          showTime
           value={ dateBetweenValue }
         />
       )}

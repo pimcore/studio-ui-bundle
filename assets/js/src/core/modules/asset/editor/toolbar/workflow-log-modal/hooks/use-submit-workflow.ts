@@ -21,7 +21,7 @@ import {
   type TransitionType,
   useWorkflow
 } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
-import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (transition: string, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions) => void
@@ -36,19 +36,23 @@ export interface WorkflowOptions {
     timeWorked: string
   }
 }
+
 export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn => {
-  const { id } = useAsset()
+  const { id, elementType } = useElementContext()
   const messageApi = useMessage()
   const { setContextWorkflowDetails } = useWorkflow()
-  const [fetchSubmitWorkflowActionMutation, { isLoading: submissionLoading, isSuccess: submissionSuccess, isError: submissionError }] = useWorkflowActionSubmitMutation(
+  const [fetchSubmitWorkflowActionMutation, {
+    isLoading: submissionLoading,
+    isSuccess: submissionSuccess,
+    isError: submissionError
+  }] = useWorkflowActionSubmitMutation(
     { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
   )
-
   const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
     submitAction: {
       actionType,
       elementId: id,
-      elementType: 'asset',
+      elementType,
       workflowName: _.snakeCase(workFlowName),
       transition,
       workflowOptions: workFlowOptions
@@ -58,13 +62,17 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
 
-    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).then(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success({
-        content: t('action-applied-successfully') + ': ' + t(`${workflowName}`),
-        type: 'success',
-        duration: 3
-      })
+    fetchSubmitWorkflowActionMutation(workFlowTransition(transition, actionType, workflowName, workFlowOptions)).unwrap().then((response) => {
+      if ('data' in response) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        messageApi.success({
+          content: t('action-applied-successfully') + ': ' + t(`${workflowName}`),
+          type: 'success',
+          duration: 3
+        })
+      } else if ('error' in response) {
+        throw new Error(JSON.stringify(response.error))
+      }
     }).catch((error) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({

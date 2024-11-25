@@ -16,26 +16,27 @@ import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { useFilters } from './use-filters'
 
 interface IUseIncludeDescendantsFilterHookReturn {
-  isIncludeDescendants: boolean
-  setIsIncludeDescendants: (value: boolean) => void
+  isShowOnlyDirectChildren: boolean
+  setIsShowOnlyDirectChildren: (value: boolean) => void
   handleChangeIsIncludeDescendants: (e: CheckboxChangeEvent) => void
 }
 
 export const useIncludeDescendantsFilter = (): IUseIncludeDescendantsFilterHookReturn => {
-  const [isIncludeDescendants, setIsIncludeDescendants] = useState<boolean>(false)
+  const [isShowOnlyDirectChildren, setIsShowOnlyDirectChildren] = useState<boolean>(false)
 
   const { updateIsIncludeDescendants } = useFilters()
 
   const handleChangeIsIncludeDescendants = (e: CheckboxChangeEvent): void => {
-    const includeDescendantsValue = e.target.checked
+    const showOnlyDirectChildValue = e.target.checked
+    const includeDescendantsValue = !showOnlyDirectChildValue
 
-    setIsIncludeDescendants(includeDescendantsValue)
+    setIsShowOnlyDirectChildren(showOnlyDirectChildValue)
     updateIsIncludeDescendants(includeDescendantsValue)
   }
 
   return {
-    isIncludeDescendants,
-    setIsIncludeDescendants,
+    isShowOnlyDirectChildren,
+    setIsShowOnlyDirectChildren,
     handleChangeIsIncludeDescendants
   }
 }

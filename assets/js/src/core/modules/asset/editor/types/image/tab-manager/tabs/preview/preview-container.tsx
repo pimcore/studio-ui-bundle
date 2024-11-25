@@ -18,8 +18,8 @@ import { sidebarManager } from '@Pimcore/modules/asset/editor/types/image/tab-ma
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointProvider } from '@Pimcore/components/focal-point/provider/focal-point-provider'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
@@ -51,7 +51,7 @@ const PreviewContainer = (): React.JSX.Element => {
   return (
     <FocalPointProvider>
       <ZoomContext.Provider value={ contextValue }>
-        <ContentToolbarSidebarLayout renderSidebar={
+        <ContentLayout renderSidebar={
           <Sidebar
             buttons={ sidebarButtons }
             entries={ sidebarEntries }
@@ -63,7 +63,7 @@ const PreviewContainer = (): React.JSX.Element => {
               src={ previewImgUrl }
             />
           </Content>
-        </ContentToolbarSidebarLayout>
+        </ContentLayout>
       </ZoomContext.Provider>
     </FocalPointProvider>
   )

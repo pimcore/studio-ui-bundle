@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
 interface ContentAware {
-  content: string
+  content: string | React.ReactNode
 }
 
 export interface UseAlertModalResponse {

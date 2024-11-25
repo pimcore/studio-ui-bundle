@@ -16,7 +16,7 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
-import { defaultFilterOptions } from './constants/filters'
+import { DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE, defaultFilterOptions } from './constants/filters'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
@@ -127,7 +127,7 @@ export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProvide
     }
 
     return acc
-  }, { columnFilters: [], includeDescendants: false }), [filterOptionsMap])
+  }, { columnFilters: [], includeDescendants: DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE }), [filterOptionsMap])
 
   return useMemo(() => (
     <ListFilterOptionsContext.Provider value={ { filterOptions, setFilterOptions } }>
