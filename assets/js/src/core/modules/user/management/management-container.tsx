@@ -30,7 +30,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const treeParentItem = {
     title: t('user-management.tree.all'),
     key: '0',
-    icon: <Icon name={ 'folder' } />,
+    icon: <Icon value={ 'folder' } />,
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
@@ -45,7 +45,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'user',
       allowDrop: item.type !== 'user',
-      icon: item.type === 'user' ? <Icon name={ 'user-01' } /> : <Icon name={ 'folder' } />,
+      icon: item.type === 'user' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'user'
         ? [
             { key: 'clone-user', icon: 'copy-03' },

@@ -76,13 +76,13 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
     {
       key: '1',
       label: t('tree.actions.clone-user'),
-      icon: <Icon name='copy-03'></Icon>,
+      icon: <Icon value='copy-03'></Icon>,
       onClick: onCloneUser
     },
     {
       key: '2',
       label: t('tree.actions.remove-user'),
-      icon: <Icon name='delete-outlined'></Icon>,
+      icon: <Icon value='delete-outlined'></Icon>,
       onClick: onRemoveUser
     }
   ]
@@ -98,7 +98,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           title={ t('toolbar.reload.confirmation') }
         >
           <IconButton
-            icon='refresh-ccw-03'
+            icon={ { value: 'refresh-ccw-03' } }
           >
             {t('toolbar.reload')}
           </IconButton>

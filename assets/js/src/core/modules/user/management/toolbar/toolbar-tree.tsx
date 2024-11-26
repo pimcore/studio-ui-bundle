@@ -14,7 +14,6 @@
 import React from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
-// import { UserContext } from '@Pimcore/modules/user/user-provider'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
@@ -30,21 +29,18 @@ interface IToolbarProps {
 
 export const ToolbarTree = ({ onReload, onAddUser, onAddFolder, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
-  // const { id } = useContext(UserContext)
-  // const { user, isLoading, reloadUser } = useUserDraft(id)
-  // const { updateUserById } = useUserHelper()
 
   const items = [
     {
       key: '1',
       label: t('tree.actions.add-user'),
-      icon: <Icon name='user-plus-01'></Icon>,
+      icon: <Icon value='user-plus-01'></Icon>,
       onClick: onAddUser
     },
     {
       key: '2',
       label: t('tree.actions.add-folder'),
-      icon: <Icon name='folder-plus'></Icon>,
+      icon: <Icon value='folder-plus'></Icon>,
       onClick: onAddFolder
     }
   ]
@@ -52,7 +48,7 @@ export const ToolbarTree = ({ onReload, onAddUser, onAddFolder, ...props }: IToo
   return (
     <ToolbarView>
       <IconButton
-        icon='refresh-ccw-03'
+        icon={ { value: 'refresh-ccw-03' } }
         onClick={ onReload }
       >
         {t('toolbar.reload')}
@@ -67,8 +63,8 @@ export const ToolbarTree = ({ onReload, onAddUser, onAddFolder, ...props }: IToo
             align={ 'center' }
           >
             <Icon
-              name={ 'PlusOutlined' }
               options={ { width: 18, height: 18 } }
+              value={ 'PlusOutlined' }
             ></Icon> {t('toolbar.new')}
           </Flex>
         </DropdownButton>

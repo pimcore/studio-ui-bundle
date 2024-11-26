@@ -29,9 +29,14 @@ export const LeftSidebarView = (): React.JSX.Element => {
         onClick={ () => {
           openMainWidget({
             name: 'Users',
-            icon: 'user-01',
             id: 'user-management',
-            component: 'user-management'
+            component: 'user-management',
+            config: {
+              icon: {
+                type: 'name',
+                value: 'user-01'
+              }
+            }
           })
         } }
         size={ 26 }

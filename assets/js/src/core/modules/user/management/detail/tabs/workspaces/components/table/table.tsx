@@ -188,7 +188,7 @@ export const Table = ({
             justify='center'
           >
             <IconButton
-              icon={ 'trash' }
+              icon={ { value: 'trash' } }
               onClick={ (): void => {
                 handleRemoveRow(context.row.id)
               } }

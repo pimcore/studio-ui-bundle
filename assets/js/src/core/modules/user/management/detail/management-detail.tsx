@@ -19,8 +19,8 @@ import { selectUserById } from '@Pimcore/modules/user/user-slice'
 import { store } from '@Pimcore/app/store'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/modules/user/management/toolbar/toolbar'
 import { useStyle } from '@Pimcore/modules/user/management/detail/management-detail.styles'
 import { useTranslation } from 'react-i18next'
@@ -99,7 +99,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
   }
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar
           id={ activeId }
@@ -130,7 +130,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
           <UserDetailTab id={ activeId } />
         </Content>
       </div>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }
 

@@ -50,7 +50,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.documents') }</>,
       info: <> <IconTextButton
-        icon={ 'folder-search' }
+        icon={ { value: 'folder-search' } }
         onClick={ () => {
           setDocumentWorkspaces([...documentWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
@@ -87,7 +87,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: <> <IconTextButton
-        icon={ 'folder-search' }
+        icon={ { value: 'folder-search' } }
         onClick={ () => {
           setAssetWorkspaces([...assetWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
@@ -122,7 +122,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.objects') }</>,
       info: <> <IconTextButton
-        icon={ 'folder-search' }
+        icon={ { value: 'folder-search' } }
         onClick={ () => {
           setObjectWorkspaces([...objectWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id

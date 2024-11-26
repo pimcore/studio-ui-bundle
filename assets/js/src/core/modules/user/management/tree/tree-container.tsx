@@ -18,7 +18,7 @@ import { type TreeDataNode } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { ToolbarTree } from '@Pimcore/modules/user/management/toolbar/toolbar-tree'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { useStyle } from '@Pimcore/modules/user/management/tree/tree-container.styles'
 import { TreeAutocomplete } from '@Pimcore/modules/user/management/tree/tree-autocomplete'
@@ -67,7 +67,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
   }
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <ToolbarTree
           onAddFolder={ () => { handleAddFolder('0') } }
@@ -154,7 +154,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
           treeData={ treeData }
         />
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }
 

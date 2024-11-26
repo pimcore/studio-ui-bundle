@@ -99,7 +99,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
       type: 'text',
       rules: [{ min: 10 }],
       suffix: <IconButton
-        icon={ 'lightning-01' }
+        icon={ { value: 'lightning-01' } }
         onClick={ () => {
           const newPassword = generatePassword()
           form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })

@@ -99,12 +99,12 @@ export const LanguageTable = ({
           <div>
             <IconButton
               disabled={ context.row.index === 0 }
-              icon={ 'chevron-up' }
+              icon={ { value: 'chevron-up' } }
               onClick={ () => { hanldeOrder(context.row.index, context.row.index - 1) } }
             />
             <IconButton
               disabled={ context.row.index === tableColumns.length - 1 }
-              icon={ 'chevron-down' }
+              icon={ { value: 'chevron-down' } }
               onClick={ () => { hanldeOrder(context.row.index, context.row.index + 1) } }
             />
           </div>
