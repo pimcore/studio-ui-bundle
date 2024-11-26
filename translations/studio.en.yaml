@@ -24,6 +24,7 @@ toolbar.reload: Reload
 toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
+toolbar.new: New
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -337,6 +338,10 @@ search-address: Search address
 geocode.address-not-found: 'The entered address was not found'
 geocode.possible-causes: 'Possible causes'
 geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
+tree.actions.clone-user: Clone User
+tree.actions.remove-user: Remove User
+tree.actions.add-folder: Add Folder
+tree.actions.add-user: Add User
 user-management.tree.all: All Users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
