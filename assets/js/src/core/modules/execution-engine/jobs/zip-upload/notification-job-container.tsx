@@ -125,8 +125,6 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
         })
 
         closeSEEvent()
-
-        // und dann wär gut ...
       }
 
       if (data.status === 'failed') {
