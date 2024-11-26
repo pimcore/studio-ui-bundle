@@ -18,13 +18,13 @@ import { Checkbox, Input } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
 import { type TimeLineAccordionItemType } from '@Pimcore/components/accordion-timeline/accordion-timeline'
-import { useTranslation } from 'react-i18next'
 import { type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
+import i18n from 'i18next'
 
 interface VersionIdentifiers {
   id: number
@@ -52,10 +52,6 @@ export const createVersionAccordionItem = ({
   selectVersion,
   setDetailedVersions
 }: CreateAccordionItemProps): TimeLineAccordionItemType => {
-  const { t } = useTranslation()
-  const [deletingVersion, setDeletingVersion] = useState(false)
-  const [publishingVersion, setPublishingVersion] = useState(false)
-
   const vId = { id: version.id, count: version.versionCount }
   const selected = detailedVersions.some((v => v.id === version.id))
 
@@ -91,17 +87,18 @@ export const createVersionAccordionItem = ({
           } }
         />
       )}
-      <span className={ 'title' }>{`${t('version.version')} ${version.versionCount} | ${formatDateTime({
-                timestamp: version.date,
-                dateStyle: 'short',
-                timeStyle: 'medium'
-            })} `}</span>
+      <span className={ 'title' }>
+        {`${i18n.t('version.version')} ${version.versionCount} | ${formatDateTime({
+          timestamp: version.date,
+          dateStyle: 'short',
+          timeStyle: 'medium'
+        })}`}</span>
     </div>
   )
 
   const subtitle = (
     <div>
-      <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
+      <span className={ 'sub-title' }>{`${i18n.t('by')} ${version.user?.name ?? ''}`}</span>
       {isSet(version.autosave) && version.autosave && <Icon value="lightning-01" />}
     </div>
   )
@@ -116,7 +113,7 @@ export const createVersionAccordionItem = ({
         color="success"
         iconName={ 'world' }
       >
-        { t('version.published') }
+        { i18n.t('version.published') }
       </Tag>
     )
   } else if (isSet(ownDraft) && ownDraft) {
@@ -125,78 +122,83 @@ export const createVersionAccordionItem = ({
         color="blue"
         iconName="user"
       >
-        { t('version.own-draft') }
+        { i18n.t('version.own-draft') }
       </Tag>
     )
   }
 
-  const publishVersion = async (): Promise<void> => {
-    setPublishingVersion(true)
-    await onClickPublish(version.id)
-    setPublishingVersion(false)
-  }
+  const Component = (): React.JSX.Element => {
+    const [deletingVersion, setDeletingVersion] = useState(false)
+    const [publishingVersion, setPublishingVersion] = useState(false)
 
-  const deleteVersion = (): void => {
-    setDeletingVersion(true)
-    setDetailedVersions([])
-    onClickDelete(version.id)
-  }
+    const publishVersion = async (): Promise<void> => {
+      setPublishingVersion(true)
+      await onClickPublish(version.id)
+      setPublishingVersion(false)
+    }
 
-  const children = (
-    <Flex
-      gap={ 'extra-small' }
-      vertical
-    >
+    const deleteVersion = (): void => {
+      setDeletingVersion(true)
+      setDetailedVersions([])
+      onClickDelete(version.id)
+    }
+
+    return (
       <Flex
-        align='center'
-        justify='space-between'
+        gap={ 'extra-small' }
+        vertical
       >
-        <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
-        <Space size='mini'>
-          {!published && (
-            <IconTextButton
-              className={ 'btn-publish' }
-              disabled={ publishingVersion || deletingVersion }
-              icon={ { value: 'world' } }
-              loading={ publishingVersion }
-              onClick={ publishVersion }
-            >
-              {t('version.publish')}
-            </IconTextButton>
-          )}
-          <IconButton
-            aria-label={ t('aria.version.delete') }
-            disabled={ publishingVersion }
-            icon={ { value: 'trash' } }
-            loading={ deletingVersion }
-            onClick={ deleteVersion }
-            type={ 'default' }
+        <Flex
+          align='center'
+          justify='space-between'
+        >
+          <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
+          <Space size='mini'>
+            {!published && (
+              <IconTextButton
+                className={ 'btn-publish' }
+                disabled={ publishingVersion || deletingVersion }
+                icon={ { value: 'world' } }
+                loading={ publishingVersion }
+                onClick={ publishVersion }
+              >
+                {i18n.t('version.publish')}
+              </IconTextButton>
+            )}
+            <IconButton
+              aria-label={ i18n.t('aria.version.delete') }
+              disabled={ publishingVersion }
+              icon={ { value: 'trash' } }
+              loading={ deletingVersion }
+              onClick={ deleteVersion }
+              type={ 'default' }
+            />
+          </Space>
+        </Flex>
+        {
+          isSet(scheduledDate) && (
+            <div className={ 'row-margin' }>
+              <div>{i18n.t('version.schedule-for')}</div>
+              <div className={ 'date-container' }>
+                <Icon value="calender" />
+                <span className={ 'scheduled-date' }>{scheduledDate}</span>
+              </div>
+            </div>
+          )
+        }
+        <div className={ 'row-margin' }>
+          <span>{i18n.t('version.note')}</span>
+          <Input
+            defaultValue={ version.note }
+            onBlur={ (e): void => {
+              onBlurNote(version.id, e.target.value.toString())
+            } }
+            placeholder={ 'Add a note' }
           />
-        </Space>
+        </div>
       </Flex>
-      {
-                isSet(scheduledDate) && (
-                <div className={ 'row-margin' }>
-                  <div>{t('version.schedule-for')}</div>
-                  <div className={ 'date-container' }>
-                    <Icon value="calender" />
-                    <span className={ 'scheduled-date' }>{scheduledDate}</span>
-                  </div>
-                </div>
-                )
-            }
-      <div className={ 'row-margin' }>
-        <span>{t('version.note')}</span>
-        <Input
-          defaultValue={ version.note }
-          onBlur={ (e): void => {
-            onBlurNote(version.id, e.target.value.toString())
-          } }
-          placeholder={ 'Add a note' }
-        />
-      </div>
-    </Flex>
-  )
+    )
+  }
 
   return {
     key: String(version.id),
@@ -204,7 +206,7 @@ export const createVersionAccordionItem = ({
     title,
     subtitle,
     extra,
-    children,
+    children: <Component />,
     onClick,
     theme: themeByState
   }
