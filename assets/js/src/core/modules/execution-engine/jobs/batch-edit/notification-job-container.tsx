@@ -17,25 +17,20 @@ import { useServerSideEvent } from '@Pimcore/utils/hooks/use-server-side-event'
 import { useJobs } from '../../hooks/useJobs'
 import { JobView } from '../../notification/job/job-view'
 import { type JobProps } from '../../notification/job/job'
-import { type ZipUploadJob } from './factory'
 import { useTranslation } from 'react-i18next'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { type BatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 
-export interface ZipUploadJobProps extends JobProps {
-  config: ZipUploadJob['config']
+export interface BatchEditProps extends JobProps {
+  config: BatchEditJob['config']
 }
-
-export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.Element => {
+export const NotificationJobContainer = (props: BatchEditProps): React.JSX.Element => {
   const { id, topics, status, action } = props
   const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
   const [progress, setProgress] = useState<number>(0)
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
-  const [title, setTitle] = useState(props.title)
-  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -45,15 +40,16 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
       openSEEvent()
     }
-
-    if (JobStatus.SUCCESS === status) {
-      // TODO: reload folder (parentFolder)
-    }
-  }, [props.status])
+  }, [])
 
   return (
     <JobView
       failureButtonActions={ [
+        {
+          label: t('jobs.job.button-retry'),
+          handler: failureButtonHandler
+        },
+
         {
           label: t('jobs.job.button-hide'),
           handler: () => { removeJob(id) }
@@ -62,20 +58,23 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
       successButtonActions={ [
         {
-          label: t('jobs.job.button-hide-and-reload'),
-          handler: () => {
-            console.log('parentFolder', parseInt(props.config.parentFolder))
-            dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(props.config.parentFolder))))
-            removeJob(id)
-          }
+          label: t('jobs.job.button-hide'),
+          handler: () => { removeJob(id) }
         }
       ] }
 
       { ...props }
       progress={ progress }
-      title={ title }
     />
   )
+
+  function failureButtonHandler (): void {
+    updateJob(id, {
+      status: JobStatus.QUEUED
+    })
+
+    openSEEvent()
+  }
 
   function openHandler (): void {
     action().then(actionJobId => {
@@ -85,6 +84,7 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
   function messageHandler (event: MessageEvent): void {
     const data: any = JSON.parse(event.data as string)
+
     if (data.jobRunId !== jobId.current) {
       return
     }
@@ -95,36 +95,12 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
 
     if (data.status !== undefined) {
       if (data.status === 'finished') {
-        if (data.messages !== undefined) {
-          const messages: { jobRunChildId?: number } = data.messages
-
-          if (messages.jobRunChildId !== undefined) {
-            const childId = messages.jobRunChildId
-
-            // do something awesome
-            jobId.current = childId
-            setTitle('Creating assets')
-            setProgress(0)
-          }
-
-          if (messages.jobRunChildId === undefined) {
-            updateJob(id, {
-              status: JobStatus.SUCCESS
-            })
-
-            closeSEEvent()
-
-            // und dann wär gut ...
-          }
-        }
-      }
-
-      if (data.status === 'finished_with_errors') {
         updateJob(id, {
           status: JobStatus.SUCCESS
         })
 
         closeSEEvent()
+        eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: props.config.assetContextId } })
       }
 
       if (data.status === 'failed') {
