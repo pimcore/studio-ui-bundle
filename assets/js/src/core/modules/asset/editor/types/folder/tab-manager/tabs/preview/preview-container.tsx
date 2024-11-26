@@ -18,8 +18,8 @@ import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-ma
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 
 const PreviewContainer = (): React.JSX.Element => {
@@ -45,7 +45,7 @@ const PreviewContainer = (): React.JSX.Element => {
   }
 
   return useMemo(() => (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <GridToolbarContainer
           pager={ data !== undefined && data.totalItems > 0
@@ -67,7 +67,7 @@ const PreviewContainer = (): React.JSX.Element => {
           <FlexContainer assets={ data } />
         )}
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   ), [currentPage, pageSize, data, isLoading])
 }
 

@@ -12,9 +12,8 @@
 */
 
 import React, { useEffect, useRef, useState, type ReactElement, type CSSProperties } from 'react'
-import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
+import { Breadcrumb as AntBreadcrumb, type MenuItemProps, type BreadcrumbProps as AntBreadcrumbProps } from 'antd'
 import { type BreadcrumbItemType, type ItemType } from 'antd/es/breadcrumb/Breadcrumb'
-import { type MenuItemType } from 'antd/es/menu/hooks/useItems'
 import cn from 'classnames'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
@@ -23,6 +22,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { useBreadcrumbSize } from './hooks/use-breadcrumb-size'
 import { type ElementType } from 'types/element-type.d'
 import { useStyle } from './breadcrumb.styles'
+import { Filename } from '../filename/filename'
 
 interface BreadcrumbProps {
   path: string
@@ -33,6 +33,7 @@ interface BreadcrumbProps {
 
 export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: BreadcrumbProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
+  const hasFilename = elementType === 'asset'
 
   const [initialBreadcrumbLastElementWidth, setInitialBreadcrumbLastElementWidth] = useState<number>(0)
 
@@ -78,18 +79,31 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
     }
 
     // Generate the breadcrumb text with ellipsis
-    const generateBreadcrumbText = ({ content, style, className }: { content: string, style?: CSSProperties, className?: string }): ReactElement => (
-      <Text
-        className={ cn(styles.breadcrumbLink, className) }
-        ellipsis={ { tooltip: { title: content, placement: 'top' } } }
-        style={ style }
-      >
-        {content}
-      </Text>
-    )
+    const generateBreadcrumbText = ({ content, style, className, hasFilename = false }: { content: string, style?: CSSProperties, className?: string, hasFilename?: boolean }): ReactElement => {
+      if (hasFilename) {
+        return (
+          <Filename
+            className={ cn(styles.breadcrumbLink, className) }
+            ellipsis
+            style={ style }
+            value={ content }
+          />
+        )
+      }
+
+      return (
+        <Text
+          className={ cn(styles.breadcrumbLink, className) }
+          ellipsis={ { tooltip: { title: content } } }
+          style={ style }
+        >
+          {content}
+        </Text>
+      )
+    }
 
     // Prepend the "..." menu to the existing items array
-    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemType[], items: BreadcrumbItemType[] }): ItemType[] => [
+    const addDotsMenu = ({ dotsMenuItems, items }: { dotsMenuItems: MenuItemProps[], items: BreadcrumbItemType[] }): ItemType[] => [
       {
         title: '...',
         menu: { items: dotsMenuItems, className: styles.dropdownMenu }
@@ -107,11 +121,10 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
       })
 
       if (partListAmount > 3) {
-        const dotsMenuItems: MenuItemType[] = []
+        const dotsMenuItems: MenuItemProps[] = []
         for (let i = 1; i < partListAmount - 2; i++) {
           dotsMenuItems.push({
-            key: i,
-            label: (
+            title: (
               partList[i]
             ),
             onClick: () => {
@@ -125,12 +138,11 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
     }
 
     if (partListAmount > 2 && pageSize !== 'L') {
-      const dotsMenuItems: MenuItemType[] = []
+      const dotsMenuItems: MenuItemProps[] = []
 
       for (let i = 1; i < partListAmount; i++) {
         dotsMenuItems.push({
-          key: i,
-          label: (
+          title: (
             partList[i]
           ),
           onClick: () => {
@@ -149,7 +161,8 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
           {generateBreadcrumbText({
             content: partList[partListAmount - 1],
             style: { ...(isHideBreadcrumb && { maxWidth: `${currentBreadcrumbWidth}px` }) },
-            className: styles.breadcrumbLinkLast
+            className: styles.breadcrumbLinkLast,
+            hasFilename
           })}
         </span>
       )

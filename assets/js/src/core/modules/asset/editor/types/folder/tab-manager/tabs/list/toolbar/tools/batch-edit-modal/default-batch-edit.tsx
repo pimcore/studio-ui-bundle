@@ -11,57 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, type ComponentType, useState, useEffect } from 'react'
+import React from 'react'
 import {
   type BatchEdit
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
-import { Input } from 'antd'
-import {
-  useBatchEdit
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+
 export interface DefaultBatchEditProps {
   batchEdit: BatchEdit
 }
 
 export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JSX.Element => {
-  const { key, type, value: batchEditValue } = batchEdit
-  const { addOrUpdateBatchEdit } = useBatchEdit()
+  const { frontendType, type } = batchEdit
 
-  const TextFilter = (): React.JSX.Element => {
-    const [_value, setValue] = useState(batchEditValue)
+  const { getComponentRenderer } = useDynamicTypeResolver()
+  const { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [type, frontendType!], target: 'BATCH_EDIT' })
 
-    useEffect(() => {
-      setValue(batchEditValue)
-    }, [batchEditValue])
-
-    const onBlur = (): void => {
-      addOrUpdateBatchEdit(key, type, _value)
-    }
-
-    return (
-      <Input
-        onBlur={ onBlur }
-        onChange={ (event) => { setValue(event.target.value) } }
-        type='text'
-        value={ _value }
-      />
-    )
+  if (ComponentRenderer === null) {
+    return <>Dynamic Field Filter not supported</>
   }
-
-  const getComponent = (): ComponentType<DefaultBatchEditProps> => {
-    switch (type) {
-      case 'text':
-        return TextFilter
-      default:
-        return TextFilter
-    }
-  }
-
-  const Component = useMemo(() => {
-    return getComponent()
-  }, [])
 
   return (
-    <Component batchEdit={ batchEdit } />
+    <>
+      { ComponentRenderer({ batchEdit }) }
+    </>
   )
 }

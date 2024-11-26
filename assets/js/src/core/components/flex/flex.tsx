@@ -14,10 +14,10 @@
 import React from 'react'
 import { Flex as AntFlex, type FlexProps as AntFlexProps, theme } from 'antd'
 import cn from 'classnames'
+import { isString, isNumber, isObject } from 'lodash'
 import { mapGapToTokenValue } from '@Pimcore/components/flex/utils/mapGapToTokenValue'
-import { isString, isNumber, isObject } from '@Pimcore/utils/type-utils'
 import { useStyles } from '@Pimcore/components/flex/flex.styles'
-import { type GapRowColGroupType, type GapType } from '@Pimcore/types/components/types'
+import { type GapType } from '@Pimcore/types/components/types'
 
 export interface FlexProps extends Omit<AntFlexProps, 'gap'> {
   gap?: GapType
@@ -43,17 +43,17 @@ export const Flex = ({ gap = 0, className, rootClassName, children, ...props }: 
    */
   function calculateGap (gap: GapType): { x: number, y: number } {
     const getGapValue = (gap: GapType): number => {
-      return isNumber(gap) ? gap as number : mapGapToTokenValue({ token, gap })
+      return isNumber(gap) ? gap : mapGapToTokenValue({ token, gap })
     }
 
     if (isString(gap)) return { x: getGapValue(gap), y: getGapValue(gap) }
 
-    if (isNumber(gap)) return { x: gap as number, y: gap as number }
+    if (isNumber(gap)) return { x: gap, y: gap }
 
     if (isObject(gap)) {
       return {
-        x: getGapValue((gap as GapRowColGroupType).x),
-        y: getGapValue((gap as GapRowColGroupType).y)
+        x: getGapValue((gap).x),
+        y: getGapValue((gap).y)
       }
     }
 

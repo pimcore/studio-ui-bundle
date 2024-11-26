@@ -16,7 +16,7 @@ import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-s
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
@@ -56,7 +56,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
         <Space size='mini'>
           { getLanguageSelection(uniqueId, column) }
           <IconButton
-            icon='trash'
+            icon={ { value: 'trash' } }
             onClick={ () => { onRemoveColumn(uniqueId) } }
             theme='secondary'
           />
@@ -109,7 +109,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
           ...item,
           meta: {
             ...item.meta,
-            locale
+            locale: transformLanguage(locale)
           }
         }
       }

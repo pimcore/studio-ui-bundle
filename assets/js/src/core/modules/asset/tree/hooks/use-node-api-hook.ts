@@ -13,9 +13,14 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
-import { type AssetGetTreeApiResponse, useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import {
+  type AssetGetTreeApiResponse,
+  type AssetPermissions,
+  useAssetGetTreeQuery
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
+import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
 interface AssetTreeAdditionalTreeProps {
   pager?: number
@@ -27,7 +32,7 @@ interface DataTransformerReturnType {
 }
 
 interface NodeApiHookReturnType {
-  apiHookResult: UseQueryHookResult<any>
+  apiHookResult: TypedUseQueryHookResult<any, unknown, any, any>
   dataTransformer: (data: AssetGetTreeApiResponse) => DataTransformerReturnType
   mergeAdditionalQueryParams: Dispatch<SetStateAction<AssetTreeAdditionalTreeProps | undefined>>
 }
@@ -44,7 +49,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
     assetData.forEach((assetNode) => {
       nodes.push({
         id: assetNode.id.toString(),
-        icon: assetNode.icon?.value ?? 'file-question-02',
+        icon: getElementIcon(assetNode, { type: 'name', value: 'file-question-02' }),
         label: assetNode.filename!,
         type: assetNode.type,
         parentId: assetNode.parentId.toString(),
@@ -54,6 +59,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         metaData: {
           asset: assetNode
         },
+        permissions: assetNode.permissions ?? [] as AssetPermissions,
         level: node.level + 1,
         ...(() => {
           if (node.level === -1) {

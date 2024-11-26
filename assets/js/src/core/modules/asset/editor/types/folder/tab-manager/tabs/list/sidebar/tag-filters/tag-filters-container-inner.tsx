@@ -16,8 +16,8 @@ import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { TagsTreeFiltersContainer } from './tags-tree-filters-container'
@@ -39,11 +39,11 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
   }
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
-            icon='close'
+            icon={ { value: 'close' } }
             onClick={ handleResetAllFiltersClick }
             type='link'
           >
@@ -72,6 +72,6 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
         />
       </Content>
 
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

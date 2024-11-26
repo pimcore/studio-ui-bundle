@@ -229,6 +229,7 @@ export type DataObjectGetTreeApiArg = {
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
+        | "Eierlegenedewollmilchsau"
         | "Event"
         | "FilterDefinition"
         | "LinkActivityDefinition"
@@ -244,7 +245,8 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition";
+        | "TermSegmentBuilderDefinition"
+        | "test";
 };
 export type Error = {
     /** Message */

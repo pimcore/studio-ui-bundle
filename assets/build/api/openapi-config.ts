@@ -74,6 +74,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/asset/editor/types/asset-thumbnails-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/thumbnails/i)
+    },
+    '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/(login|logout)/i)
     }
   },
   exportName: 'api',

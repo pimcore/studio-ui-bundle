@@ -1,3 +1,4 @@
+asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
 asset.asset-editor-tabs.view: View
@@ -32,6 +33,7 @@ preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
 grid.aria.column-resize: Resize column
 tree.aria.expand-and-collapse: Expand tree item or collapse it
+image-sidebar.tab.details.custom-download: Custom Download
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Custom thumbnail mode select
 aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Custom thumbnail format select
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Download custom thumbnail
@@ -148,7 +150,7 @@ asset.listing.column.title: Title
 asset.listing.column.alt: Alt
 asset.listing.column.copyright: Copyright
 asset.listing.column.author: Author
-asset.listing.column.authorLink: Modification date
+asset.listing.column.authorLink: Author Link
 asset.listing.column.license: License
 asset.listing.column.licensePath: License Path
 asset.listing.column.source: Source
@@ -193,6 +195,7 @@ button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
+open: Open
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
@@ -209,7 +212,8 @@ notes-and-events.erp_import: erp_import
 notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
 tags.label: Tags
 tags.assigned-tags-text: Assigned Tags
-tags.apply-folder-tags: Apply folder tags
+tags.apply-tags-to-children: Apply tags to children
+tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
 add: Add
@@ -326,6 +330,13 @@ error: Error
 info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
+data-object.editor.external-image.preview-placeholder: Add an external image
+latitude: Latitude
+longitude: Longitude
+search-address: Search address
+geocode.address-not-found: 'The entered address was not found'
+geocode.possible-causes: 'Possible causes'
+geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
 user-management.tree.all: All Users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces

@@ -15,7 +15,8 @@ import React, { type Key } from 'react'
 import {
   type Tag,
   type TagAssignToElementApiArg,
-  useTagBatchReplaceForElementsByTypeMutation
+  useTagAssignToElementMutation,
+  useTagUnassignFromElementMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   useCreateTreeStructure
@@ -27,6 +28,7 @@ import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { type TreeProps } from 'antd'
 
 export interface TagsTreeProps {
   elementId: number
@@ -40,13 +42,14 @@ export interface TagsTreeProps {
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { createTreeStructure } = useCreateTreeStructure()
-  const [replaceTagsMutation] = useTagBatchReplaceForElementsByTypeMutation()
   const treeData = createTreeStructure({ tags })
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
+  const [assignTag] = useTagAssignToElementMutation()
+  const [unassignTag] = useTagUnassignFromElementMutation()
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
-    const cacheUpdate = updateTagsForElementByTypeAndId({
+    updateTagsForElementByTypeAndId({
       elementType,
       id: elementId,
       flatTags,
@@ -54,22 +57,56 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
     })
 
     setDefaultCheckedTags(checkedTags)
+  }
 
-    try {
-      void replaceTagsMutation({
-        elementType,
-        elementTagIdCollection: {
-          elementIds: [elementId],
-          tagIds: checkedTags.map(Number)
-        }
-      }).unwrap()
-    } catch (error) {
-      cacheUpdate.undo()
+  const assignTagToElement = async (tagId: number): Promise<void> => {
+    const assignTask = assignTag({
+      elementType,
+      id: elementId,
+      tagId
+    })
+
+    assignTask.catch(() => {
+      console.log('Failed to assign tag to element')
+    })
+
+    const response = (await assignTask) as any
+
+    if (response.error !== undefined) {
+      throw new Error(response.error.data.error as string)
     }
   }
 
-  const handleCheck = (checkedKeys: { checked: Key[], halfChecked: Key[] }): void => {
+  const removeTagFromElement = async (tagId: number): Promise<void> => {
+    const unassignTask = unassignTag({
+      elementType,
+      id: elementId,
+      tagId
+    })
+
+    unassignTask.catch(() => {
+      console.log('Failed to remove tag from element')
+    })
+
+    const response = (await unassignTask) as any
+
+    if (response.error !== undefined) {
+      throw new Error(response.error.data.error as string)
+    }
+  }
+
+  const handleCheck: TreeProps['onCheck'] = async (checkedKeys: { checked: Key[], halfChecked: Key[] }, info): Promise<void> => {
+    const tagId = Number(info.node.key)
+
     void applyTagsToElement(checkedKeys.checked)
+
+    try {
+      info.checked
+        ? await assignTagToElement(tagId)
+        : await removeTagFromElement(tagId)
+    } catch (e) {
+      void applyTagsToElement(checkedKeys.checked.filter((key) => key !== tagId))
+    }
   }
 
   return (

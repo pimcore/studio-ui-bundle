@@ -20,6 +20,7 @@ import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -50,8 +51,8 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     return {
       label: t('element.rename'),
       key: 'rename',
-      icon: <Icon name={ 'type-square' } />,
-      hidden: node.isLocked,
+      icon: <Icon value={ 'type-square' } />,
+      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined

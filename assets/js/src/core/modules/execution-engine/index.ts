@@ -20,6 +20,7 @@ import { NotificationJobContainer as DownloadJobContainer } from './jobs/downloa
 import { NotificationJobContainer as ZipUploadJobContainer } from './jobs/zip-upload/notification-job-container'
 import { NotificationJobContainer as DeleteJobContainer } from './jobs/delete/notification-job-container'
 import { NotificationJobContainer as CloneJobContainer } from './jobs/clone/notification-job-container'
+import { NotificationJobContainer as TagAssignJobContainer } from './jobs/tag-assign/notification-job-container'
 
 export const executionEngineModule: AbstractModule = {
   onInit () {
@@ -30,6 +31,7 @@ export const executionEngineModule: AbstractModule = {
     jobComponentRegistry.registerComponent('zip-upload', ZipUploadJobContainer)
     jobComponentRegistry.registerComponent('delete', DeleteJobContainer)
     jobComponentRegistry.registerComponent('clone', CloneJobContainer)
+    jobComponentRegistry.registerComponent('tag-assign', TagAssignJobContainer)
   }
 }
 

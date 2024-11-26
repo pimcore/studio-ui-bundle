@@ -32,7 +32,7 @@ export const TAB_EMBEDDED_METADATA: IEditorTab = {
   key: 'embedded-metadata',
   label: 'asset.asset-editor-tabs.embedded-metadata',
   children: <EmbeddedMetadataTabContainer />,
-  icon: <Icon name={ 'data-sheet' } />,
+  icon: <Icon value={ 'data-sheet' } />,
   isDetachable: true
 }
 
@@ -40,17 +40,18 @@ export const TAB_CUSTOM_METADATA: IEditorTab = {
   key: 'custom-metadata',
   label: 'asset.asset-editor-tabs.custom-metadata',
   children: <CustomMetadataTabContainer />,
-  icon: <Icon name={ 'data-management-2' } />,
+  icon: <Icon value={ 'data-management-2' } />,
   isDetachable: true
 }
 
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
   label: 'version.label',
+  workspacePermission: 'versions',
   children: <VersionsTabContainer
     ComparisonViewComponent={ ComparisonView }
     SingleViewComponent={ SingleView }
             />,
-  icon: <Icon name={ 'history-outlined' } />,
+  icon: <Icon value={ 'history-outlined' } />,
   isDetachable: true
 }

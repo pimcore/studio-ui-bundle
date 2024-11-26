@@ -18,9 +18,11 @@ import React, { type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { Filename } from '@Pimcore/components/filename/filename'
 
 interface TabTitleViewProps {
-  icon: string
+  icon: ElementIcon
   title: string
   onClose?: () => void
   onConfirm?: () => void
@@ -44,10 +46,15 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
       size='mini'
     >
       <Icon
-        name={ icon }
         options={ { width: 16, height: 16 } }
+        { ...icon }
       />
-      <span>{title}</span>
+
+      <Filename
+        ellipsis
+        style={ { maxWidth: '300px', color: 'inherit' } }
+        value={ title }
+      />
 
       {onClose !== undefined && onConfirm !== undefined && (
         <Popconfirm
@@ -71,8 +78,8 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
         type={ 'link' }
       >
         <Icon
-          name='close'
           options={ { width: 14, height: 14 } }
+          value='close'
         />
       </Button>
     )

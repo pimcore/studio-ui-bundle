@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { StackListItem, type StackListItemProps } from './stack-list-item'
 import { useStyles } from './stack-list.styles'
 import { useSortableContext } from '../drag-and-drop/hooks/use-sortable-context'
@@ -37,9 +38,9 @@ export const StackList = ({ items, onItemsChange }: StackListProps): React.JSX.E
   }, [items])
 
   return (
-    <div className={ ['stack-list', styles.stackList].join(' ') }>
+    <div className={ cn('stack-list', styles.stackList) }>
       <ContextHolder>
-        {itemsState.map((item, index) => (
+        {itemsState.map((item) => (
           <div
             className="stack-list__item"
             key={ item.id }

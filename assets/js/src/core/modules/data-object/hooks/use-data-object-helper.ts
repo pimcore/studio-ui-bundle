@@ -16,6 +16,8 @@ import { type EditorContainerProps } from '../editor/editor-container'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -37,18 +39,22 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
     }
 
-    const dataObject = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
+    const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id: config.id }))
 
-    if (dataObject.data?.icon?.type === 'path') {
-    //  return
+    if (
+      data === undefined ||
+      !checkElementPermission(data.permissions!, 'view')) {
+      return
     }
 
     openMainWidget({
-      name: dataObject.data?.key,
-      // icon: dataObject.data?.icon?.value,
+      name: data?.key,
       id: widgetId,
       component: 'data-object-editor',
-      config
+      config: {
+        ...config,
+        icon: getElementIcon(data, { value: 'widget-default', type: 'name' })
+      }
     })
   }
 

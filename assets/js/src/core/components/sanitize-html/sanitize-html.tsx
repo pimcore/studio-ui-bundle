@@ -23,7 +23,7 @@ export const SanitizeHtml = ({ html, options }: SanitizeHtmlProps): React.JSX.El
   let cleanHtml: string
 
   if (options !== undefined) {
-    cleanHtml = DOMPurify.sanitize(html, options) as string
+    cleanHtml = DOMPurify.sanitize(html, options)
   } else {
     cleanHtml = DOMPurify.sanitize(html)
   }

@@ -13,40 +13,64 @@
 
 import React from 'react'
 import { SaveForm, type SaveFormProps } from '../forms/save-form'
-import { ContentToolbarSidebarLayout } from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Space } from '@Pimcore/components/space/space'
 import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
-import { Col, Flex, Row } from 'antd'
+import { Col, Flex, Popconfirm, Row } from 'antd'
 import { Text } from '@Pimcore/components/text/text'
 
 export interface SaveViewProps {
   formProps: SaveFormProps
   onCancelClick: () => void
+  onDeleteClick?: () => void
   isLoading?: boolean
+  isDeleting?: boolean
+  saveAsNewConfiguration?: boolean
 }
 
-export const SaveView = ({ formProps, onCancelClick, isLoading }: SaveViewProps): React.JSX.Element => {
+export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration }: SaveViewProps): React.JSX.Element => {
   const { form } = formProps
 
   return (
-    <ContentToolbarSidebarLayout
+    <ContentLayout
       renderToolbar={
         <Toolbar
-          justify='flex-end'
           theme='secondary'
         >
+          { onDeleteClick !== undefined && saveAsNewConfiguration !== true
+            ? (
+              <Popconfirm
+                cancelText={ 'cancel' }
+                description="Are you sure that you want to delete this template?"
+                okText="Delete"
+                onConfirm={ onDeleteClick }
+                title="Delete this template"
+              >
+                <IconTextButton
+                  disabled={ isLoading }
+                  icon={ { value: 'trash' } }
+                  loading={ isDeleting }
+                >
+                  Delete Template
+                </IconTextButton>
+              </Popconfirm>
+
+              )
+            : (<div />)}
+
           <Space size='mini'>
             <IconTextButton
-              icon='close'
+              icon={ { value: 'close' } }
               onClick={ onCancelClick }
               type='default'
             >Cancel</IconTextButton>
 
             <Button
+              disabled={ isDeleting }
               loading={ isLoading }
               onClick={ () => form?.submit() }
               type='primary'
@@ -64,18 +88,20 @@ export const SaveView = ({ formProps, onCancelClick, isLoading }: SaveViewProps)
         >
           <Header title='Save configuration as template' />
 
-          <Row>
-            <Col span={ 6 }>
-              <Text>Owner:</Text> <Text type='secondary'>Admin</Text>
-            </Col>
-            <Col span={ 12 }>
-              <Text>Modification date:</Text> <Text type='secondary'>22.10.2024 10:11</Text>
-            </Col>
-          </Row>
+          { saveAsNewConfiguration !== true && (
+            <Row>
+              <Col span={ 6 }>
+                <Text>Owner:</Text> <Text type='secondary'>Admin</Text>
+              </Col>
+              <Col span={ 12 }>
+                <Text>Modification date:</Text> <Text type='secondary'>22.10.2024 10:11</Text>
+              </Col>
+            </Row>
+          )}
 
           <SaveForm { ...formProps } />
         </Flex>
       </Content>
-    </ContentToolbarSidebarLayout>
+    </ContentLayout>
   )
 }

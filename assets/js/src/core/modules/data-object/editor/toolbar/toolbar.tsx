@@ -29,11 +29,17 @@ import {
   type DataObjectUpdateByIdApiArg,
   useDataObjectUpdateByIdMutation
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
+import { LanguageSelection } from './language-selection/language-selection'
+import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
+import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
+import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
@@ -58,16 +64,32 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <ToolbarView>
-      <ContextMenu />
+      <WorkFlowProvider>
+        <Flex>
+          <ContextMenu />
 
-      <Button
-        disabled={ !hasChanges || isLoading || isSchedulesLoading }
-        loading={ isLoading || isSchedulesLoading }
-        onClick={ onSaveClick }
-        type="primary"
-      >
-        {t('toolbar.save-and-publish')}
-      </Button>
+          {activeTab === TAB_EDIT.key && (
+            <LanguageSelection />
+          )}
+        </Flex>
+
+        <Flex
+          gap={ 'extra-small' }
+          style={ { height: '32px' } }
+          vertical={ false }
+        >
+          <EditorToolbarWorkflowMenu />
+          <Button
+            disabled={ !hasChanges || isLoading || isSchedulesLoading }
+            loading={ isLoading || isSchedulesLoading }
+            onClick={ onSaveClick }
+            type="primary"
+          >
+            {t('toolbar.save-and-publish')}
+          </Button>
+        </Flex>
+        <WorkflowLogModal />
+      </WorkFlowProvider>
     </ToolbarView>
   )
 

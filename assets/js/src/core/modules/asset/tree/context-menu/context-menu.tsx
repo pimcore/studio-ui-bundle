@@ -27,6 +27,7 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -55,11 +56,11 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     {
       label: t('element.tree.context-menu.add-assets'),
       key: '1',
-      icon: <Icon name={ 'mainAsset' } />,
-      hidden: props.node?.type !== 'folder',
+      icon: <Icon value={ 'mainAsset' } />,
+      hidden: !checkElementPermission(props.node.permissions, 'create') || props.node?.type !== 'folder',
       children: [
         {
-          icon: <Icon name={ 'upload-cloud' } />,
+          icon: <Icon value={ 'upload-cloud' } />,
           label: t('element.tree.context-menu.add-assets.upload-files'),
           key: '1-1',
           onClick: () => {
@@ -69,7 +70,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
           }
         },
         {
-          icon: <Icon name={ 'upload-zip' } />,
+          icon: <Icon value={ 'upload-zip' } />,
           label: t('element.tree.context-menu.add-assets.upload-zip'),
           key: '1-2',
           onClick: () => {
@@ -83,7 +84,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     addFolderContextMenuItem(props.node),
     renameContextMenuItem(props.node),
     copyContextMenuItem(props.node),
-    pasteContextMenuItem(parseInt(props.node.id)),
+    pasteContextMenuItem(props.node),
     cutContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteContextMenuItem(props.node),
@@ -91,12 +92,13 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
-      icon: <Icon name={ 'more' } />,
+      icon: <Icon value={ 'more' } />,
       children: [
         {
           label: t('element.lock'),
           key: 'advanced-lock',
-          icon: <Icon name={ 'lock-01' } />,
+          icon: <Icon value={ 'lock-01' } />,
+          hidden: !checkElementPermission(props.node.permissions, 'publish') || props.node.isLocked,
           children: [
             lockContextMenuItem(props.node),
             lockAndPropagateContextMenuItem(props.node),

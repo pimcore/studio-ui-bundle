@@ -18,7 +18,6 @@ const config: Meta = {
   title: 'Components/Data Entry/NumericRange',
   component: NumericRange,
   argTypes: {
-    value: { control: 'array' },
     onChange: { action: 'changed' }
   }
 }

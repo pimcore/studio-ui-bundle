@@ -20,6 +20,7 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface createZipDownloadProps {
   jobTitle: string
@@ -82,8 +83,8 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
-      icon: <Icon name={ 'file-download-zip-01' } />,
-      hidden: node.type !== 'folder',
+      icon: <Icon value={ 'file-download-zip-01' } />,
+      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({
           jobTitle: node.label,

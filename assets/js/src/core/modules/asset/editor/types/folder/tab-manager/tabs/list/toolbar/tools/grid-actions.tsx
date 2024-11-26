@@ -54,7 +54,7 @@ export const GridActions = (): React.JSX.Element => {
       {
         key: '1',
         label: t('listing.actions.batch-edit'),
-        icon: <Icon name={ 'grid' } />,
+        icon: <Icon value={ 'grid' } />,
         onClick: () => {
           setBatchEditModalOpen(true)
         }
@@ -62,12 +62,12 @@ export const GridActions = (): React.JSX.Element => {
       {
         key: '2',
         label: t('listing.actions.export'),
-        icon: <Icon name={ 'export' } />,
+        icon: <Icon value={ 'export' } />,
         children: [
           {
             key: '2.1',
             label: t('listing.actions.csv-export'),
-            icon: <Icon name={ 'export' } />,
+            icon: <Icon value={ 'export' } />,
             onClick: () => {
               setCsvModalOpen(true)
             }
@@ -77,7 +77,7 @@ export const GridActions = (): React.JSX.Element => {
       {
         key: '3',
         label: t('listing.actions.zip-download'),
-        icon: <Icon name={ 'download-02' } />,
+        icon: <Icon value={ 'download-02' } />,
         onClick: () => {
           createZip()
         }

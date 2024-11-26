@@ -13,6 +13,7 @@
 
 export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/FieldFilterRegistry': 'DynamicTypes/FieldFilterRegistry',
+  'DynamicTypes/BatchEditRegistry': 'DynamicTypes/BatchEditRegistry',
   'DynamicTypes/GridCellRegistry': 'DynamicTypes/GridCellRegistry',
   'DynamicTypes/ListingRegistry': 'DynamicTypes/ListingRegistry',
   'DynamicTypes/MetadataRegistry': 'DynamicTypes/MetadataRegistry',
@@ -35,7 +36,6 @@ export const serviceIds = {
   'Asset/Editor/AudioTabManager': 'Asset/Editor/AudioTabManager',
   'Asset/Editor/ArchiveTabManager': 'Asset/Editor/ArchiveTabManager',
   'Asset/Editor/UnknownTabManager': 'Asset/Editor/UnknownTabManager',
-  'Asset/MetadataTypeProvider/MetadataTypeRegistry': 'Asset/MetadataTypeProvider/MetadataTypeRegistry',
 
   // Data Objects
   'DataObject/Editor/TypeRegistry': 'DataObject/Editor/TypeRegistry',
@@ -52,7 +52,12 @@ export const serviceIds = {
   ...dynamicTypeRegistriesServiceIds,
 
   'DynamicTypes/FieldFilter/Text': 'DynamicTypes/FieldFilter/Text',
+  'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
   'DynamicTypes/FieldFilter/Select': 'DynamicTypes/FieldFilter/Select',
+  'DynamicTypes/FieldFilter/Datetime': 'DynamicTypes/FieldFilter/Datetime',
+
+  'DynamicTypes/BatchEdit/Text': 'DynamicTypes/BatchEdit/Text',
+  'DynamicTypes/BatchEdit/TextArea': 'DynamicTypes/BatchEdit/TextArea',
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
@@ -75,8 +80,13 @@ export const serviceIds = {
   'DynamicTypes/GridCell/ScheduleActionsSelect': 'DynamicTypes/GridCell/ScheduleActionsSelect',
   'DynamicTypes/GridCell/VersionsIdSelect': 'DynamicTypes/GridCell/VersionsIdSelect',
   'DynamicTypes/GridCell/AssetVersionPreviewFieldLabel': 'DynamicTypes/GridCell/AssetVersionPreviewFieldLabel',
+  'DynamicTypes/GridCell/Asset': 'DynamicTypes/GridCell/Asset',
+  'DynamicTypes/GridCell/Object': 'DynamicTypes/GridCell/Object',
+  'DynamicTypes/GridCell/Document': 'DynamicTypes/GridCell/Document',
+  'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
+  'DynamicTypes/Listing/AssetLink': 'DynamicTypes/Listing/AssetLink',
   'DynamicTypes/Listing/Select': 'DynamicTypes/Listing/Select',
 
   'DynamicTypes/Metadata/Asset': 'DynamicTypes/Metadata/Asset',
@@ -112,6 +122,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
   'DynamicTypes/ObjectData/NumericRange': 'DynamicTypes/ObjectData/NumericRange',
   'DynamicTypes/ObjectData/Slider': 'DynamicTypes/ObjectData/Slider',
+  'DynamicTypes/ObjectData/Consent': 'DynamicTypes/ObjectData/Consent',
   'DynamicTypes/ObjectData/Firstname': 'DynamicTypes/ObjectData/Firstname',
   'DynamicTypes/ObjectData/Lastname': 'DynamicTypes/ObjectData/Lastname',
   'DynamicTypes/ObjectData/Email': 'DynamicTypes/ObjectData/Email',
@@ -121,6 +132,11 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
   'DynamicTypes/ObjectData/DateRange': 'DynamicTypes/ObjectData/DateRange',
   'DynamicTypes/ObjectData/Time': 'DynamicTypes/ObjectData/Time',
+  'DynamicTypes/ObjectData/ExternalImage': 'DynamicTypes/ObjectData/ExternalImage',
+  'DynamicTypes/ObjectData/GeoPoint': 'DynamicTypes/ObjectData/GeoPoint',
+  'DynamicTypes/ObjectData/GeoBounds': 'DynamicTypes/ObjectData/GeoBounds',
+  'DynamicTypes/ObjectData/GeoPolygon': 'DynamicTypes/ObjectData/GeoPolygon',
+  'DynamicTypes/ObjectData/GeoPolyLine': 'DynamicTypes/ObjectData/GeoPolyLine',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 

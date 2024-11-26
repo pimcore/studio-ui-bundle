@@ -30,7 +30,7 @@ const TreeNodeContent = forwardRef(function TreeNodeContent (props: TreeNodeCont
       ref={ ref }
     >
       <Icon
-        name={ icon }
+        { ...icon }
         options={ { width: 16, height: 16 } }
       />
       <span className="tree-node-content__label">{label}</span>

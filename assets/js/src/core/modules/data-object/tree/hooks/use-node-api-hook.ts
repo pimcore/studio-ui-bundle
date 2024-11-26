@@ -13,9 +13,14 @@
 
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
-import { type DataObjectGetTreeApiResponse, useDataObjectGetTreeQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { type UseQueryHookResult } from '@reduxjs/toolkit/dist/query/react/buildHooks'
+import {
+  type DataObjectGetTreeApiResponse,
+  type DataObjectPermissions,
+  useDataObjectGetTreeQuery
+} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
+import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 
 interface DataObjectTreeAdditionalTreeProps {
   pager?: number
@@ -27,7 +32,7 @@ interface DataTransformerReturnType {
 }
 
 interface NodeApiHookReturnType {
-  apiHookResult: UseQueryHookResult<any>
+  apiHookResult: TypedUseQueryHookResult<any, unknown, any, any>
   dataTransformer: (data: DataObjectGetTreeApiResponse) => DataTransformerReturnType
   mergeAdditionalQueryParams: Dispatch<SetStateAction<DataObjectTreeAdditionalTreeProps | undefined>>
 }
@@ -42,10 +47,9 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
 
     const dataObjectData = data.items
     dataObjectData.forEach((dataObjectNode) => {
-      const icon = dataObjectNode.icon?.type === 'name' ? dataObjectNode.icon?.value : 'mainObject'
       nodes.push({
         id: dataObjectNode.id.toString(),
-        icon: icon !== 'vector' ? icon : 'mainObject', // todo remove this when icons are fixed
+        icon: getElementIcon(dataObjectNode, { type: 'name', value: 'mainObject' }),
         label: dataObjectNode.key!,
         type: dataObjectNode.type,
         parentId: dataObjectNode.parentId.toString(),
@@ -55,6 +59,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
         metaData: {
           dataObject: dataObjectNode
         },
+        permissions: dataObjectNode.permissions ?? [] as DataObjectPermissions,
         level: node.level + 1,
         ...(() => {
           if (node.level === -1) {

@@ -24,7 +24,8 @@ export interface TabTitleContainerProps {
 
 export const TabTitleContainer = ({ node, modified }: TabTitleContainerProps): React.JSX.Element => {
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
-  const [icon] = useState(node.getIcon() ?? 'widget-default')
+  const config = node.getConfig()
+  const icon = config.icon ?? { value: 'widget-default', type: 'name' }
   const { closeWidget } = useWidgetManager()
   const isCloseable = node.isEnableClose()
 

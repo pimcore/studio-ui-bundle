@@ -92,7 +92,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
           >
             <IconButton
               disabled={ isLoading }
-              icon={ 'trash' }
+              icon={ { value: 'trash' } }
               loading={ isLoading }
               onClick={ handleClick }
               type="link"

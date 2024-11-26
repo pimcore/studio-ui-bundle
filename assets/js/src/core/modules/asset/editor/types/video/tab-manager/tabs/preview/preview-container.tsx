@@ -15,8 +15,8 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { PreviewView } from './preview-view'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
-  ContentToolbarSidebarLayout
-} from '@Pimcore/components/content-toolbar-sidebar-layout/content-toolbar-sidebar-layout'
+  ContentLayout
+} from '@Pimcore/components/content-layout/content-layout'
 import { sidebarManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/tabs/preview/sidebar'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Content } from '@Pimcore/components/content/content'
@@ -86,7 +86,7 @@ const PreviewContainer = (): React.JSX.Element => {
 
   return (
     <VideoContext.Provider value={ contextValue }>
-      <ContentToolbarSidebarLayout renderSidebar={
+      <ContentLayout renderSidebar={
         <Sidebar
           buttons={ sidebarButtons }
           entries={ sidebarEntries }
@@ -104,7 +104,7 @@ const PreviewContainer = (): React.JSX.Element => {
             />
             )}
 
-      </ContentToolbarSidebarLayout>
+      </ContentLayout>
     </VideoContext.Provider>
   )
 }

@@ -20,6 +20,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
@@ -49,8 +50,8 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
     return {
       label: t('element.add-folder'),
       key: 'add-folder',
-      icon: <Icon name={ 'folder' } />,
-      hidden: node.type !== 'folder',
+      icon: <Icon value={ 'folder' } />,
+      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
         addFolder(parentId)

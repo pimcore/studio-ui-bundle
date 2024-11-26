@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
 interface ContentAware {
-  content: string
+  content: string | React.ReactNode
 }
 
 export interface UseAlertModalResponse {
@@ -48,7 +48,7 @@ export const useAlertModal = (): UseAlertModalResponse => {
       ),
       warn: ({ content }) => (
         modal.warning({
-          icon: <Icon name={ 'exclamation-circle-filled' } />,
+          icon: <Icon value={ 'exclamation-circle-filled' } />,
           title: t('warning'),
           content
         })

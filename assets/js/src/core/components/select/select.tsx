@@ -15,8 +15,8 @@ import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react'
 import type { RefSelectProps } from 'antd/es/select'
 import { Checkbox, Select as AntdSelect, type SelectProps as AntdSelectProps } from 'antd'
 import cn from 'classnames'
+import { isString, isEmpty } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { isEmptyValue, isString } from '@Pimcore/utils/type-utils'
 import { useStyles } from './select.styles'
 
 interface SelectProps extends AntdSelectProps {
@@ -35,7 +35,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const { styles } = useStyles({ width })
 
-  const withCustomIcon = !isEmptyValue(customIcon)
+  const withCustomIcon = !isEmpty(customIcon)
   const isStatusWarning = status === 'warning'
   const isStatusError = status === 'error'
 
@@ -55,13 +55,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const handleClick = (): void => { setIsActive(!isActive) }
 
   const getSuffixIcon = (): React.JSX.Element => {
-    const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
-    const iconToShow = isShowCustomIcon ? customArrowIcon! : (isActive ? 'chevron-up' : 'chevron-down')
+    const isShowCustomIcon = !isEmpty(customArrowIcon) && isString(customArrowIcon)
+    const iconToShow = isShowCustomIcon ? customArrowIcon : (isActive ? 'chevron-up' : 'chevron-down')
 
     return (
       <Icon
         className={ styles.arrowIcon }
-        name={ iconToShow }
+        value={ iconToShow }
       />
     )
   }
@@ -79,7 +79,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
       {withCustomIcon && (
         <Icon
           className={ customIconClassNames }
-          name={ customIcon! }
+          value={ customIcon! }
         />
       )}
       <AntdSelect

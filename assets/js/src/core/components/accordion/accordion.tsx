@@ -79,8 +79,10 @@ export const Accordion = ({
         <IconButton
           aria-label={ i18n.t('aria.notes-and-events.expand') }
           className={ 'accordion__chevron-btn' }
-          icon={ 'chevron-up' }
-          iconOptions={ { className: chevronClassName } }
+          icon={ {
+            value: 'chevron-up',
+            className: chevronClassName
+          } }
           onClick={ () => {
             if (item.id != null) {
               onClickChevron(item.id)

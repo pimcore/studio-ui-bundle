@@ -72,7 +72,7 @@ export const AssetEditorSidebarDetailsView = ({
   const CUSTOM_DOWNLOAD_OPTIONS = [
     {
       key: 1,
-      title: <span>Custom Download</span>,
+      title: <span>{t('image-sidebar.tab.details.custom-download')}</span>,
       children: (
         <Form
           initialValues={ {
@@ -181,7 +181,7 @@ export const AssetEditorSidebarDetailsView = ({
       className={ styles.sidebarContentEntry }
       padded
     >
-      <Header title={ t('details') } />
+      <Header title={ t('asset.sidebar.details') } />
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>
@@ -209,7 +209,7 @@ export const AssetEditorSidebarDetailsView = ({
 
               <IconButton
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ 'download-02' }
+                icon={ { value: 'download-02' } }
                 onClick={ () => { onClickDownloadByFormat(downloadFormat) } }
               />
             </div>

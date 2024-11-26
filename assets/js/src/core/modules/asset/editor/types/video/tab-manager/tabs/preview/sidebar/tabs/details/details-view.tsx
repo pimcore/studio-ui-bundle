@@ -126,7 +126,7 @@ export const VideoEditorSidebarDetailsTab = ({
       className={ styles.sidebarContentEntry }
       padded
     >
-      <Header title={ t('details') } />
+      <Header title={ t('asset.sidebar.details') } />
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>
@@ -165,7 +165,7 @@ export const VideoEditorSidebarDetailsTab = ({
 
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ <Icon name={ 'download-02' } /> }
+                icon={ <Icon value={ 'download-02' } /> }
                 loading={ isDownloading }
                 onClick={ onClickDownload }
               />

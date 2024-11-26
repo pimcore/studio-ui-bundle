@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import {
@@ -38,6 +38,8 @@ import { createJob } from '@Pimcore/modules/execution-engine/jobs/default/factor
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -46,18 +48,19 @@ export interface BatchEditModalProps {
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { editableColumnsDropDownMenu } = useListGridAvailableColumns()
+  const assetContext = useContext(AssetContext)
   const [patchAsset] = useAssetPatchByIdMutation()
   const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
   const { addJob } = useJobs()
   const { selectedRows } = useListSelectedRows()
   const [jobTitle, setJobTitle] = useState<string>('Asset')
-
   useEffect(() => {
     setJobTitle(Object.keys(selectedRows).length.toString())
   }, [selectedRows])
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
-    addOrUpdateBatchEdit(column.key, column.type, '')
+    const locale = column.locale ?? null
+    addOrUpdateBatchEdit(column.key, column.type, column.frontendType, locale, column.localizable, '')
   }
 
   const applyChanges = (): void => {
@@ -66,8 +69,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const applyUpdate = (): void => {
     patchAsset(assetPatchForUpdate()).then(() => {
-      console.log('----> reload the app')
+      eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: assetContext.id } })
     }).catch((error) => { console.error(`Failed to patch assets ${error}`) })
+    resetBatchEdits()
+    setBatchEditModalOpen(false)
   }
 
   const applyUpdates = (): void => {
@@ -82,6 +87,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         })
 
         const response = (await promise) as any
+
+        eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: assetContext.id } })
         const data = response.data
         return data.jobRunId
       }
@@ -105,7 +112,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         } }
         >
           <IconTextButton
-            icon='PlusCircleOutlined'
+            icon={ { value: 'PlusCircleOutlined' } }
             type='default'
           >
             {t('listing.add-column')}
@@ -118,7 +125,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
               gap={ 'extra-small' }
             >
               <IconTextButton
-                icon='close'
+                icon={ { value: 'close' } }
                 onClick={ () => {
                   resetBatchEdits()
                 } }
