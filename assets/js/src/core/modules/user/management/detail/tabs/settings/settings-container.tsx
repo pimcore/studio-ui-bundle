@@ -14,7 +14,6 @@
 import { debounce } from 'lodash'
 import React, { useCallback, useEffect } from 'react'
 import { Form, Input, Col, Row, Flex, Typography } from 'antd'
-import { Select } from '@Pimcore/components/select/select'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +27,15 @@ import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/m
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { AdminAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/admin-accordion'
+import {
+  CustomisationAccordion
+} from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/customisation-accordion'
+import {
+  PermissionsAccordion
+} from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/permissions-accordion'
+import {
+  TypesAndClassesAccordion
+} from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
@@ -73,41 +81,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   if (isLoading) {
     return <Content loading></Content>
   }
-  const renderInputFields = (fields: any[]): React.ReactNode[] => fields.map((field) => (
-    <Form.Item
-      key={ field.name }
-      label={ field.component === 'input' ? t(`user-management.${field.name}`) : '' }
-      name={ field.name }
-      rules={ field.rules ?? [] }
-    >
-      {field.component === 'input'
-        ? (
-          <Input
-            disabled={ field.disabled ?? false }
-            suffix={ field.suffix ?? '' }
-            type={ field?.type ?? '' }
-          />
-          )
-        : <Switch labelRight={ t(`user-management.${field.name}`) } />}
-    </Form.Item>
-  ))
-
-  const generalFields = [{ name: 'name', component: 'input', disabled: true },
-    {
-      name: 'password',
-      component: 'input',
-      type: 'text',
-      rules: [{ min: 10 }],
-      suffix: <IconButton
-        icon={ { value: 'lightning-01' } }
-        onClick={ () => {
-          const newPassword = generatePassword()
-          form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
-        } }
-        title={ t('user-management.generate-password') }
-              />
-    },
-    { name: 'twoFactorAuthenticationEnabled', component: 'switch' }]
 
   const generalAccordion = [
     {
@@ -115,85 +88,51 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
       title: <>{ t('user-management.general') }</>,
       info: 'ID: ' + id,
       children: <>
-        <Form.Item
-          name="active"
+        <Flex
+          align="center"
+          gap="small"
         >
-          <Flex
-            align="center"
-            gap="small"
+          <Form.Item
+            name="active"
           >
             <Switch
               labelRight={ t('user-management.active') }
             />
-            { user?.lastLogin !== undefined && user?.lastLogin !== null
-              ? (
-                <Text disabled>{ t('user-management.last-login') }: { user.lastLogin }</Text>
-                )
-              : null}
-          </Flex>
+          </Form.Item>
+
+          { user?.lastLogin !== undefined && user?.lastLogin !== null
+            ? (
+              <Text disabled>{ t('user-management.last-login') }: { user.lastLogin }</Text>
+              )
+            : null}
+        </Flex>
+
+        <Form.Item
+          label={ t('user-management.name') }
+          name={ 'name' }
+        >
+          <Input disabled />
         </Form.Item>
 
-        {renderInputFields(generalFields)}
-      </>
-    }
-  ]
-  const cutomisastionFields = [{ name: 'firstname', component: 'input' }, { name: 'lastname', component: 'input' }, { name: 'email', component: 'input' }, { name: 'welcomeScreen', component: 'switch' }, { name: 'memorizeTabs', component: 'switch' }, { name: 'allowDirtyClose', component: 'switch' }, { name: 'closeWarning', component: 'switch' }]
-  const customisationAccordion = [
-    {
-      key: '1',
-      title: <>{ t('user-management.customisation') }</>,
-      children: renderInputFields(cutomisastionFields)
-    }
-  ]
-  const permissionsAccordion = [
-    {
-      key: '1',
-      title: <>{ t('user-management.permissions.default') }</>,
-      children: (
-        <>
-          <Form.Item
-            name="permissionsDefault"
-          >
-            <Select
-              mode="multiple"
-              options={ permissions.default.map((permission) => ({
-                value: permission.key,
-                label: t(`user-management.permissions.${permission.key}`)
-              })) }
-              placeholder={ t('user-management.permissions.default') }
-            ></Select>
-          </Form.Item>
-          <Form.Item
-            name="permissionsBundles"
-          >
-            <Select
-              mode="multiple"
-              options={ permissions.bundles.map((permission) => ({
-                value: permission.key,
-                label: t(`user-management.permissions.${permission.key}`)
-              })) }
-              placeholder={ t('user-management.permissions.bundles') }
-            ></Select>
-          </Form.Item>
-        </>
-      )
-    }
-  ]
-  const typesAndClassesAccordion = [
-    {
-      key: '1',
-      title: <>{ t('user-management.types-and-classes') }</>,
-      children: (
         <Form.Item
-          name="classes"
+          label={ t('user-management.password') }
+          name={ 'password' }
+          rules={ [{ min: 10 }] }
         >
-          <Select
-            mode="multiple"
-            options={ [] }
-            placeholder={ t('user-management.classes') }
-          ></Select>
+          <Input suffix={ <IconButton
+            icon={ { value: 'lightning-01' } }
+            onClick={ () => {
+              const newPassword = generatePassword()
+              form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+            } }
+            title={ t('user-management.generate-password') }
+                          /> }
+          />
         </Form.Item>
-      )
+        <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
+          <Switch labelRight={ t('user-management.two-factor-authentication') } />
+        </Form.Item>
+      </>
     }
   ]
   const editorSettingsAccordion = [
@@ -225,17 +164,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
       )
     }
   ]
-  const AccordionItem = (items): React.JSX.Element => {
-    return (
-      <Accordion
-        activeKey={ '1' }
-        bordered
-        items={ items }
-        size={ 'small' }
-      />
-    )
-  }
-
   return (
     <Form
       form={ form }
@@ -244,22 +172,27 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     >
       <Row gutter={ [10, 10] }>
         <Col span={ 8 }>
-          {AccordionItem(generalAccordion)}
+          <Accordion
+            activeKey={ '1' }
+            bordered
+            items={ generalAccordion }
+            size={ 'small' }
+          />
         </Col>
         <Col span={ 8 }>
           <UserAvatar />
         </Col>
         <Col span={ 16 }>
-          {AccordionItem(customisationAccordion)}
+          <CustomisationAccordion />
         </Col>
         <Col span={ 16 }>
           <AdminAccordion />
         </Col>
         <Col span={ 16 }>
-          {AccordionItem(permissionsAccordion)}
+          <PermissionsAccordion permissions={ permissions } />
         </Col>
         <Col span={ 16 }>
-          {AccordionItem(typesAndClassesAccordion)}
+          <TypesAndClassesAccordion />
         </Col>
         <Col span={ 16 }>
           <Accordion

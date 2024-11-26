@@ -12,34 +12,29 @@
 */
 
 import React from 'react'
-import { Form, Typography } from 'antd'
+import { Form } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@Pimcore/components/button/button'
-import { Switch } from '@Pimcore/components/switch/switch'
-const AdminAccordion = ({ ...props }): React.JSX.Element => {
+import { Select } from '@Pimcore/components/select/select'
+
+const TypesAndClassesAccordion = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { Text } = Typography
 
   const content = [
     {
       key: '1',
-      title: <>{ t('user-management.admin') }</>,
-      children: <>
+      title: <>{ t('user-management.types-and-classes') }</>,
+      children: (
         <Form.Item
-          name={ 'admin' }
+          name="classes"
         >
-          <Switch labelRight={ t('user-management.admin') } />
+          <Select
+            mode="multiple"
+            options={ [] }
+            placeholder={ t('user-management.classes') }
+          ></Select>
         </Form.Item>
-
-        <Text disabled>{ t('user-management.admin.info') }</Text>
-        <div>
-          <Button
-            onClick={ () => { console.log('login') } }
-            type="default"
-          >{t('user-management.admin.login')}</Button>
-        </div>
-      </>
+      )
     }
   ]
   return (
@@ -51,4 +46,4 @@ const AdminAccordion = ({ ...props }): React.JSX.Element => {
     />
   )
 }
-export { AdminAccordion }
+export { TypesAndClassesAccordion }

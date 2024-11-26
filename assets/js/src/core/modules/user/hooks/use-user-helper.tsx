@@ -50,7 +50,7 @@ interface UseUserReturn extends
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
   searchUserByText: (query) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id) => Promise<UserDefaultKeyBindingsApiResponse>
-  uploadUserAvatar: (props) => Promise<UserUploadImageApiResponse>
+  uploadUserAvatar: (props) => Promise<{ data: UserUploadImageApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
   availablePermissions: any[]
@@ -250,10 +250,11 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function uploadUserAvatar (props): Promise<UserUploadImageApiResponse> {
+  async function uploadUserAvatar (props): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
     const { id, file } = props
+    console.log('uploading file', id, file)
     const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id, body: { userImage: file } }))
-
+    console.log('data', data)
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
