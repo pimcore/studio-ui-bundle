@@ -22,20 +22,17 @@ import {
   type UserFolderCreateApiResponse,
   type UserFolderDeleteByIdApiResponse,
   type Error,
-  type UserGetAvailablePermissionsApiResponse, type UserGetByIdApiResponse, type UserGetCollectionApiResponse
-  // type UserWorkspace
+  type UserGetAvailablePermissionsApiResponse,
+  type UserGetByIdApiResponse,
+  type UserGetCollectionApiResponse,
+  type PimcoreStudioApiUserSearchApiResponse, type UserDefaultKeyBindingsApiResponse, type UserUploadImageApiResponse
 } from '@Pimcore/modules/user/user-api-slice.gen'
-import { userOpened, userClosed, userUpdated, userFetched } from '@Pimcore/modules/user/user-slice'
+import { userOpened, userClosed, userUpdated, changeUser } from '@Pimcore/modules/user/user-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import type {
-  // TrackableChangesDraft,
   UseTrackableChangesDraftReturn
 } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
-
-// export interface WorkspacesDraft extends TrackableChangesDraft {
-//   properties: UserWorkspace[]
-// }
 
 interface UseUserReturn extends
   UseTrackableChangesDraftReturn {
@@ -51,6 +48,9 @@ interface UseUserReturn extends
   getAvailablePermissions: (props) => Promise<{ data: UserGetAvailablePermissionsApiResponse, error: any }>
   addNewFolder: ({ parentId, name }) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
+  searchUserByText: (query) => Promise<PimcoreStudioApiUserSearchApiResponse>
+  resetUserKeyBindings: (id) => Promise<UserDefaultKeyBindingsApiResponse>
+  uploadUserAvatar: (props) => Promise<UserUploadImageApiResponse>
   activeId: number
   getAllIds: number[]
   availablePermissions: any[]
@@ -73,15 +73,24 @@ export const useUserHelper = (): UseUserReturn => {
     const { id } = props
     const { data }: any = await dispatch(api.endpoints.userGetById.initiate({ id }))
 
-    dispatch(userFetched(data))
-
     return data
   }
 
   async function fetchUserList (): Promise<UserGetCollectionApiResponse> {
     const { data }: any = await dispatch(api.endpoints.userGetCollection.initiate())
 
-    // dispatch(userFetched(data))
+    return data
+  }
+  async function searchUserByText (query): Promise<PimcoreStudioApiUserSearchApiResponse> {
+    const { data }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
+
+    return data
+  }
+
+  async function resetUserKeyBindings (id): Promise<UserDefaultKeyBindingsApiResponse> {
+    const { data }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
+
+    dispatch(changeUser({ id, changes: { keyBindings: data.items } }))
 
     return data
   }
@@ -194,10 +203,7 @@ export const useUserHelper = (): UseUserReturn => {
   async function updateUserById (props): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
 
-    // currently admin is needed but not provided
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user } }))
-
-    console.log(data, error)
 
     if (error !== undefined) {
       notificationApi.open({
@@ -221,9 +227,7 @@ export const useUserHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId: parentId as number, permissions: [] } }))
-
-    console.log(data, error)
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId: parentId as number } }))
 
     if (error !== undefined) {
       notificationApi.open({
@@ -236,8 +240,6 @@ export const useUserHelper = (): UseUserReturn => {
         type: 'success',
         message: t('user-management.save-user.success')
       })
-
-      dispatch(userUpdated(data))
     }
 
     return data
@@ -245,6 +247,26 @@ export const useUserHelper = (): UseUserReturn => {
 
   async function getAvailablePermissions (props): Promise<{ data: UserGetAvailablePermissionsApiResponse, error: Error }> {
     const { data }: any = await dispatch(api.endpoints.userGetAvailablePermissions.initiate())
+    return data
+  }
+
+  async function uploadUserAvatar (props): Promise<UserUploadImageApiResponse> {
+    const { id, file } = props
+    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id, body: { userImage: file } }))
+
+    if (error !== undefined) {
+      notificationApi.open({
+        type: 'error',
+        message: 'Error',
+        description: error.data.message
+      })
+    } else {
+      notificationApi.open({
+        type: 'success',
+        message: t('user-management.upload-avatar.success')
+      })
+    }
+
     return data
   }
 
@@ -267,6 +289,9 @@ export const useUserHelper = (): UseUserReturn => {
     moveUserById,
     getAvailablePermissions,
     fetchUserList,
+    searchUserByText,
+    resetUserKeyBindings,
+    uploadUserAvatar,
     activeId,
     getAllIds,
     availablePermissions

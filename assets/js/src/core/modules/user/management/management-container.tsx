@@ -11,13 +11,87 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { TreeContainer } from '@Pimcore/modules/user/management/tree/tree-container'
 import { ManagementDetail } from '@Pimcore/modules/user/management/detail/management-detail'
+import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useTranslation } from 'react-i18next'
+import type { TreeDataNode } from 'antd'
+import { findNodeByKey, findParentByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
+import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
-  const [loading, setLoading] = React.useState<boolean>(false)
+  const { t } = useTranslation()
+  const { getUserTree } = useUserHelper()
+  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Math.random())
+
+  const treeParentItem = {
+    title: t('user-management.tree.all'),
+    key: '0',
+    icon: <Icon name={ 'folder' } />,
+    children: [],
+    actions: [
+      { key: 'add-folder', icon: 'folder-plus' },
+      { key: 'add-user', icon: 'user-plus-01' }
+    ]
+  }
+  const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
+
+  const createNodeByResponse = useCallback((items: any): TreeDataNode[] => {
+    return items.map((item: any) => ({
+      title: item.name,
+      key: item.id,
+      selectable: item.type === 'user',
+      allowDrop: item.type !== 'user',
+      icon: item.type === 'user' ? <Icon name={ 'user-01' } /> : <Icon name={ 'folder' } />,
+      actions: item.type === 'user'
+        ? [
+            { key: 'clone-user', icon: 'copy-03' },
+            { key: 'remove-user', icon: 'delete-outlined' }
+          ]
+        : [
+            { key: 'add-folder', icon: 'folder-plus' },
+            { key: 'add-user', icon: 'user-plus-01' },
+            { key: 'remove-folder', icon: 'delete-outlined' }
+          ],
+      children: [],
+      isLeaf: item.children === false
+    }))
+  }, [treeData])
+
+  const updateTreeData = (key, items, add?): void => {
+    setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
+      const parentNode = findNodeByKey(data, key)
+      if (parentNode !== undefined) {
+        parentNode.children = parentNode.children ?? []
+
+        if (add === true) {
+          parentNode.children.push(...createNodeByResponse(items))
+          parentNode.children.sort((a, b) => (typeof a.title === 'string' ? a.title : '').localeCompare(typeof b.title === 'string' ? b.title : ''))
+        } else {
+          parentNode.children = createNodeByResponse(items)
+        }
+      }
+      return [...data]
+    })
+  }
+
+  const handleOnLoadData = async (node: TreeDataNode): Promise<void> => {
+    await getUserTree({ parentId: node.key }).then(response => {
+      updateTreeData(node.key, response.items)
+    })
+  }
+
+  const reloadTree = (): void => {
+    getUserTree({ parentId: 0 }).then((data) => {
+      updateTreeData('0', data.items)
+      setTreeKey('tree-' + Math.random())
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
 
   const sidebar = {
     id: 'user-tree',
@@ -25,8 +99,32 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        key={ 'user-tree' }
-        loading={ loading }
+        key={ treeKey }
+        onLoadTreeData={ handleOnLoadData }
+        onMoveItem={ (dragNode, dropKey) => {
+          const parent = findParentByKey(treeData, dragNode.key)
+          const newParent = findNodeByKey(treeData, dropKey)
+
+          if (parent?.children !== undefined && (newParent !== undefined)) {
+            parent.children = parent.children.filter(child => child.key !== dragNode.key)
+            newParent.children = [...(newParent.children ?? []), dragNode]
+
+            setTreeData([...treeData])
+          }
+        } }
+        onReloadTree={ reloadTree }
+        onRemoveItem={ (key) => {
+          const parent = findParentByKey(treeData, key)
+          if (parent?.children !== undefined) {
+            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== key)
+            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
+              parent.children = updatedTreeData
+              return [...data]
+            })
+          }
+        } }
+        onUpdateTreeData={ updateTreeData }
+        treeData={ treeData }
       />
     ]
   }
@@ -38,7 +136,19 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <ManagementDetail
         key="user-detail"
-        onUpdate={ (loading) => { setLoading(loading) } }
+        onCloneUser={ (data) => {
+          reloadTree()
+        } }
+        onRemoveItem={ (id) => {
+          const parent = findParentByKey(treeData, id)
+          if (parent?.children !== undefined) {
+            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== id)
+            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
+              parent.children = updatedTreeData
+              return [...data]
+            })
+          }
+        } }
       />
     ]
   }

@@ -21,14 +21,16 @@ import { useTranslation } from 'react-i18next'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
 import { Content } from '@Pimcore/components/content/content'
-import { Button } from '@Pimcore/components/button/button'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { LanguageTable } from '@Pimcore/modules/user/management/detail/tabs/settings/components/table/language-table'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { AdminAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/admin-accordion'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
+  const { validLanguages } = useSettings()
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { Text } = Typography
@@ -68,11 +70,9 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     }, 300),
     [changeUserInState]
   )
-
   if (isLoading) {
     return <Content loading></Content>
   }
-
   const renderInputFields = (fields: any[]): React.ReactNode[] => fields.map((field) => (
     <Form.Item
       key={ field.name }
@@ -214,17 +214,27 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
       title: <>{ t('user-management.shared-translation-settings') }</>,
       children: (
         <LanguageTable
-          data={ user?.contentLanguages as any[] }
+          data={ validLanguages as any[] }
           onChange={ (languages) => {
             changeUserInState({
-              sharedTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
-              sharedTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
+              websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
+              websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
             })
           } }
         />
       )
     }
   ]
+  const AccordionItem = (items): React.JSX.Element => {
+    return (
+      <Accordion
+        activeKey={ '1' }
+        bordered
+        items={ items }
+        size={ 'small' }
+      />
+    )
+  }
 
   return (
     <Form
@@ -234,47 +244,22 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     >
       <Row gutter={ [10, 10] }>
         <Col span={ 8 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ generalAccordion }
-            size={ 'small' }
-          />
+          {AccordionItem(generalAccordion)}
         </Col>
         <Col span={ 8 }>
           <UserAvatar />
         </Col>
         <Col span={ 16 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ customisationAccordion }
-            size={ 'small' }
-          />
+          {AccordionItem(customisationAccordion)}
         </Col>
         <Col span={ 16 }>
-          <Button
-            onClick={ () => {
-              console.log('login')
-            } }
-            type="default"
-          >Login as this user in a different browser</Button>
+          <AdminAccordion />
         </Col>
         <Col span={ 16 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ permissionsAccordion }
-            size={ 'small' }
-          />
+          {AccordionItem(permissionsAccordion)}
         </Col>
         <Col span={ 16 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ typesAndClassesAccordion }
-            size={ 'small' }
-          />
+          {AccordionItem(typesAndClassesAccordion)}
         </Col>
         <Col span={ 16 }>
           <Accordion
@@ -282,6 +267,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             bordered
             items={ editorSettingsAccordion }
             size={ 'small' }
+            table
           />
         </Col>
         <Col span={ 16 }>
@@ -290,6 +276,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             bordered
             items={ sharedTranslationSettingsAccordion }
             size={ 'small' }
+            table
           />
         </Col>
       </Row>

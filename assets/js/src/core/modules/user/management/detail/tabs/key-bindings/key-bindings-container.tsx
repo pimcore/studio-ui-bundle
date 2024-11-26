@@ -19,12 +19,14 @@ import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
 import { Content } from '@Pimcore/components/content/content'
 import { Button } from '@Pimcore/components/button/button'
+import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 
 const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { id } = useUserContext()
   const { user, isLoading, updateUserKeyBinding } = useUserDraft(id)
+  const { resetUserKeyBindings } = useUserHelper()
 
   const getKeyName = (key: number): string => {
     let name = ''
@@ -234,7 +236,7 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
               type={ 'info' }
             />
 
-            <Button>{ t('user-management.key-bindings.reset') }</Button>
+            <Button onClick={ async () => await resetUserKeyBindings(id) }>{ t('user-management.key-bindings.reset') }</Button>
           </Flex>
         </Col>
 

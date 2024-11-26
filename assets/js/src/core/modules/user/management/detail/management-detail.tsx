@@ -29,10 +29,11 @@ import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { Popconfirm } from 'antd'
 
 interface IManagementDetailProps {
-  onUpdate: (loading: boolean) => void
+  onRemoveItem: (id: any) => void
+  onCloneUser: (data: any) => void
 }
 
-const ManagementDetail = ({ onUpdate, ...props }: IManagementDetailProps): React.JSX.Element => {
+const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDetailProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const classNames = ['detail-tabs', styles.detailTabs]
@@ -66,33 +67,25 @@ const ManagementDetail = ({ onUpdate, ...props }: IManagementDetailProps): React
   }
 
   const handleCloneUser = (): void => {
-    onUpdate(true)
-
     modal.input({
       title: t('user-management.clone-user'),
       label: t('user-management.clone-user.label'),
       onOk: async (value: string) => {
-        // const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-        await cloneUser({ id: 0, name: value })
-
-        onUpdate(false)
+        const data = await cloneUser({ id: activeId, name: value })
+        onCloneUser(data)
       }
     })
   }
 
   const handleRemoveUser = (): void => {
-    onUpdate(true)
-
     modal.confirm({
       title: t('user-management.remove-user'),
       content: t('user-management.remove-user.text'),
       onOk: async () => {
         closeUser(activeId)
-        removeUser({ id: activeId }).then(() => {
-          onUpdate(false)
-        }).catch(() => {
-          console.log('error')
-        })
+        await removeUser({ id: activeId })
+
+        onRemoveItem(activeId)
       }
     })
   }

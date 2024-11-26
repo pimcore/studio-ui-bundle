@@ -23,7 +23,7 @@ interface ITreeAutocompleteProps {
 
 const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openUser, fetchUserList } = useUserHelper()
+  const { openUser, searchUserByText } = useUserHelper()
   const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
   const [searchValue, setSearchValue] = useState<string>('')
   const { Text } = Typography
@@ -31,7 +31,8 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
   const onSearch = (value: string): void => {
     setSearchValue(value)
 
-    fetchUserList().then(response => {
+    searchUserByText(searchValue).then(response => {
+      console.log(response)
       setSearchOptions(response.items.map((item) => ({
         value: item.id.toString(),
         label: (

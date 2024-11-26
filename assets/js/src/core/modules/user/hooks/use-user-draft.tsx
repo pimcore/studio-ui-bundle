@@ -73,7 +73,7 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   useEffect(() => {
-    if (user === undefined) {
+    if (user === undefined && id !== undefined) {
       getUser()
     } else {
       setIsLoading(false)

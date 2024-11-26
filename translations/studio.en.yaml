@@ -327,9 +327,9 @@ info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
 user-management.tree.all: All Users
-user-management.settings: Settings
-user-management.workspaces: Workspaces
-user-management.key-bindings: Key Bindings
+user-management.settings.title: Settings
+user-management.workspaces.title: Workspaces
+user-management.key-bindings.title: Key Bindings
 user-management.key-bindings.info: Please don’t forget to reload Pimcore after your modification!
 user-management.key-bindings.reset: Reset to default
 user-management.key-bindings.general: General
@@ -370,7 +370,11 @@ user-management.key-bindings.seoDocumentEditor: SEO Document Editor
 user-management.key-bindings.robots: Robots
 user-management.key-bindings.httpErrorLog: HTTP Error Log
 user-management.key-bindings.redirects: redirects
-user-management.references: References
+user-management.references.title: References
+user-management.references.documents: Documents
+user-management.references.columns.id: ID
+user-management.references.columns.cpath: Path
+user-management.references.columns.subtype: Subtype
 user-management.general: General
 user-management.active: Active
 user-management.name: Name
@@ -399,15 +403,15 @@ user-management.workspaces.documents: Documents
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
 user-management.workspaces.add: Add
-workspaces.columns.cpath: Path
-workspaces.columns.list: List
-workspaces.columns.view: View
-workspaces.columns.save: Save
-workspaces.columns.publish: Publish
-workspaces.columns.unpublish: Unpublish
-workspaces.columns.delete: Delete
-workspaces.columns.rename: Rename
-workspaces.columns.create: Create
-workspaces.columns.settings: Settings
-workspaces.columns.versions: Versions
-workspaces.columns.properties: Properties
+user-management.workspaces.columns.cpath: Path
+user-management.workspaces.columns.list: List
+user-management.workspaces.columns.view: View
+user-management.workspaces.columns.save: Save
+user-management.workspaces.columns.publish: Publish
+user-management.workspaces.columns.unpublish: Unpublish
+user-management.workspaces.columns.delete: Delete
+user-management.workspaces.columns.rename: Rename
+user-management.workspaces.columns.create: Create
+user-management.workspaces.columns.settings: Settings
+user-management.workspaces.columns.versions: Versions
+user-management.workspaces.columns.properties: Properties

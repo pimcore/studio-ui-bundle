@@ -17,6 +17,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+
 interface ITableProps {
   data: any[]
   onChangeOrder?: (data) => void
@@ -27,9 +31,27 @@ export const LanguageTable = ({
   data,
   onChangeOrder, onChange
 }: ITableProps): React.JSX.Element => {
+  const { availableAdminLanguages } = useSettings()
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const columnsData = data.map((name) => ({ name: t(`user-management.settings.language.name-${name}`), abbreviation: name, view: false, edit: false }))
+  const { id } = useUserContext()
+  const { user } = useUserDraft(id)
+
+  const getDisplyNameByAbbreviation = (abbreviation: string): string => {
+    const language = availableAdminLanguages.find((lang) => lang.language === abbreviation)
+    return language.display
+  }
+
+  const viewData = user?.websiteTranslationLanguagesView as any[]
+  const editData = user?.websiteTranslationLanguagesEdit as any[]
+  const columnsData = data.map((name: string) => (
+    {
+      name: getDisplyNameByAbbreviation(name),
+      abbreviation: name,
+      view: viewData.includes(name) || false,
+      edit: editData.includes(name) || false
+    })
+  )
   const [gridData, setGridData] = useState<any[]>(columnsData)
 
   const hanldeOrder = (currentIndex: number, newIndex: number): void => {

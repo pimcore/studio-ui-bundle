@@ -17,23 +17,42 @@ import { Card } from '@Pimcore/components/card/card'
 import { Avatar, Flex } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { Button } from '@Pimcore/components/button/button'
+import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
+
+// import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+// import {useUserContext} from "@Pimcore/modules/user/hooks/use-user-context";
 
 const UserAvatar = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyle()
+  const classNames = ['avatar--default', styles.avatar]
+
+  // const [form] = Form.useForm()
+  // const { id } = useUserContext()
+  // const { uploadUserAvatar } = useUserHelper()
+
+  // const handleUpload = async () => {
+  //   await uploadUserAvatar(id)
+  // }
 
   return (
+
     <Card title={ t('user-management.settings.avatar') }>
       <Flex
         gap={ 'middle' }
         vertical
       >
         <Avatar
+          className={ classNames.join(' ') }
           icon={ <UserOutlined /> }
           size={ 64 }
         />
 
         <div>
-          <Button type={ 'default' }>{t('user-management.settings.upload-avatar')}</Button>
+          <Button
+            onClick={ () => { console.log('adsf') } }
+            type={ 'default' }
+          >{t('user-management.settings.upload-avatar')}</Button>
         </div>
       </Flex>
     </Card>

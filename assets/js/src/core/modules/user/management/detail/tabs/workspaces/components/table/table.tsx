@@ -48,7 +48,7 @@ export const Table = ({
   const columnHelper = createColumnHelper()
   const createColumns = (): any => [
     columnHelper.accessor('cpath', {
-      header: t('workspaces.columns.cpath'),
+      header: t('user-management.workspaces.columns.cpath'),
       meta: {
         type: 'element-cell',
         editable: true,
@@ -57,7 +57,7 @@ export const Table = ({
       size: 270
     }),
     columnHelper.accessor('list', {
-      header: t('workspaces.columns.list'),
+      header: t('user-management.workspaces.columns.list'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -68,7 +68,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('view', {
-      header: t('workspaces.columns.view'),
+      header: t('user-management.workspaces.columns.view'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -79,7 +79,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('save', {
-      header: t('workspaces.columns.save'),
+      header: t('user-management.workspaces.columns.save'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -90,7 +90,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('publish', {
-      header: t('workspaces.columns.publish'),
+      header: t('user-management.workspaces.columns.publish'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -101,7 +101,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('unpublish', {
-      header: t('workspaces.columns.unpublish'),
+      header: t('user-management.workspaces.columns.unpublish'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -112,7 +112,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('delete', {
-      header: t('workspaces.columns.delete'),
+      header: t('user-management.workspaces.columns.delete'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -123,7 +123,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('rename', {
-      header: t('workspaces.columns.rename'),
+      header: t('user-management.workspaces.columns.rename'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -134,7 +134,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('create', {
-      header: t('workspaces.columns.create'),
+      header: t('user-management.workspaces.columns.create'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -145,7 +145,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('settings', {
-      header: t('workspaces.columns.settings'),
+      header: t('user-management.workspaces.columns.settings'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -156,7 +156,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('versions', {
-      header: t('workspaces.columns.versions'),
+      header: t('user-management.workspaces.columns.versions'),
       size: 76,
       meta: {
         type: 'checkbox',
@@ -167,7 +167,7 @@ export const Table = ({
       }
     }),
     columnHelper.accessor('properties', {
-      header: t('workspaces.columns.properties'),
+      header: t('user-management.workspaces.columns.properties'),
       size: 76,
       meta: {
         type: 'checkbox',
