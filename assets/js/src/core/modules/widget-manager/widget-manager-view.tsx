@@ -13,9 +13,11 @@
 
 import React from 'react'
 import { Layout, type ILayoutProps } from 'flexlayout-react'
+import { type TabNode } from 'flexlayout-react/src/model/TabNode'
 import { useStyles } from './widget-manager-view.styles'
 import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 
 export interface WidgetManagerProps extends ILayoutProps {
   className?: string
@@ -26,10 +28,17 @@ export const WidgetManagerView = ({ className, createContextMenuItems, ...props 
   const { styles } = useStyles()
   const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
 
+  const wrappedFactory = (node: TabNode): React.JSX.Element => {
+    const component = props.factory(node)
+
+    return <ErrorBoundary>{component}</ErrorBoundary>
+  }
+
   return (
     <div className={ ['widget-manager', className, styles.widgetManager].join(' ') }>
       <Layout
         { ...props }
+        factory={ wrappedFactory }
         onContextMenu={ showContextMenu }
       />
       { dropdown }
