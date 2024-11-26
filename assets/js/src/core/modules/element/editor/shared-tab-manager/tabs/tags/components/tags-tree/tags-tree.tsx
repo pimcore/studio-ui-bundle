@@ -43,10 +43,15 @@ export interface TagsTreeProps {
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { createTreeStructure } = useCreateTreeStructure()
   const treeData = createTreeStructure({ tags })
+  // const [treeData, setTreeData] = useState(createTreeStructure({ tags }))
+  // const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
+
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
-  const [assignTag] = useTagAssignToElementMutation()
+  const [assignTag, { isLoading: tagIsLoading }] = useTagAssignToElementMutation()
   const [unassignTag] = useTagUnassignFromElementMutation()
+
+  console.log('----> tagIsLoading', tagIsLoading)
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
     updateTagsForElementByTypeAndId({
