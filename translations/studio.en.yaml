@@ -329,10 +329,21 @@ error: Error
 info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
+remove: Remove
 data-object.editor.external-image.preview-placeholder: Add an external image
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
+search: Search
 geocode.address-not-found: 'The entered address was not found'
 geocode.possible-causes: 'Possible causes'
 geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
+delete-confirmation-advanced: Do you really want to delete {{type}} '{{value}}'?
+relations.id: ID
+relations.reference: Reference
+relations.type: Type
+relations.subtype: Subtype
+relations.remove-all.confirm: Do you really want to delete all relations?
+relation: relation
+items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
+actions: Actions
