@@ -15,16 +15,14 @@ import type React from 'react'
 import { useEffect } from 'react'
 import { isEmpty, isObject } from 'lodash'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import type { IApiErrorData } from '@Pimcore/app/store/middleware/rtkQueryErrorLogger'
 
 interface ErrorHandlerProps {
-  errorData: IApiErrorData | null
-  clear: () => void
+  errorData: any
 }
 
 const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
-export const ErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData, clear }) => {
+export const useApiErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData }) => {
   const modal = useAlertModal()
 
   useEffect(() => {
@@ -35,8 +33,6 @@ export const ErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData, clear }) 
       const errorContent = errorInfo ?? DEFAULT_ERROR_CONTENT
 
       modal.error({ content: errorContent })
-
-      clear()
     }
   }, [errorData, modal])
 
