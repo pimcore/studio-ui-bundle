@@ -12,7 +12,7 @@
 */
 
 import type { Meta } from '@storybook/react'
-import {UploadModalButton} from "@Pimcore/components/modal/upload-modal/upload-modal-button";
+import { UploadModalButton } from '@Pimcore/components/modal/upload-modal/upload-modal-button'
 
 const config: Meta = {
   title: 'Components/Data Entry/UploadModalButton',
@@ -24,6 +24,6 @@ export default config
 
 export const _default = {
   args: {
-    maxItems: 5,
+    maxItems: 5
   }
 }
