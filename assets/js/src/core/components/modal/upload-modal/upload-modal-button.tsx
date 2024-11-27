@@ -86,7 +86,10 @@ export const UploadModalButton = (props: UploadModalButtonProps): React.JSX.Elem
             }
           }
         }
-        await props.onSuccess(assets)
+        if (assets.length > 0) {
+          await props.onSuccess(assets)
+        }
+
         setShowProcessing(false)
         if (allFilesDone) {
           setFileList([])
