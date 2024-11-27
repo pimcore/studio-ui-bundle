@@ -11,14 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  api,
-  type AssetGetGridApiArg,
-  type AssetGetGridApiResponse,
-  type AssetPatchByIdApiArg,
-  useAssetGetGridMutation,
-  useAssetPatchByIdMutation
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
@@ -167,12 +160,10 @@ export const ListContainerInner = (): React.JSX.Element => {
     if (columns.length === 0) return
 
     const requestData = generateQueryArgsForGrid({ columns, availableColumns, assetId, page, pageSize, sorting, filterOptions })
-    const request: AssetGetGridApiArg & { isCustomError: boolean } = {
-      ...requestData,
-      isCustomError: true
-    }
 
-    return fetchListing(request).then((data: any) => {
+    return fetchListing({
+      ...requestData
+    }).then((data: any) => {
       const _data = data.data as AssetGetGridApiResponse
       updateData(_data)
     }).catch((error) => {

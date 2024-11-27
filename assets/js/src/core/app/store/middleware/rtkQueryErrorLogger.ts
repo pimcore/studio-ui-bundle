@@ -25,7 +25,6 @@ export interface IApiErrorPayload {
     arg?: {
       originalArgs?: {
         body: object
-        isCustomError?: boolean
       }
     }
   }
@@ -45,10 +44,6 @@ export interface IApiErrorData {
 
 export const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action: IApiErrorPayload) => {
-    const isCustomErrorHandler = action?.meta?.arg?.originalArgs?.isCustomError
-
-    if (isCustomErrorHandler === true) return next(action)
-
     if (isRejectedWithValue(action)) {
       const requestUrl = action.meta?.baseQueryMeta?.request?.url
       const payload = isObject(action?.payload) && action.payload
