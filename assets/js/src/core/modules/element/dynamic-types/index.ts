@@ -94,8 +94,19 @@ import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/
 import { type DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
 import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
+import {
+  type DynamicTypeBatchEditRegistry
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/dynamic-type-batch-edit-registry'
+import {
+  type DynamicTypeBatchEditText
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text'
+import {
+  type DynamicTypeBatchEditTextArea
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 import { type DynamicTypeGridCellLanguageSelect } from './defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
+import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
+import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
 
 moduleSystem.registerModule({
   onInit () {
@@ -105,6 +116,15 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterSelect>(serviceIds['DynamicTypes/FieldFilter/Select']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDatetime>(serviceIds['DynamicTypes/FieldFilter/Datetime']))
+
+    const batchEditRegistry = container.get<DynamicTypeBatchEditRegistry>(serviceIds['DynamicTypes/BatchEditRegistry'])
+
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditText>(serviceIds['DynamicTypes/BatchEdit/Text']))
+    batchEditRegistry.registerDynamicType(container.get<DynamicTypeBatchEditTextArea>(serviceIds['DynamicTypes/BatchEdit/TextArea']))
+
+    const listingRegistry = container.get<DynamicTypeListingRegistry>(serviceIds['DynamicTypes/ListingRegistry'])
+
+    listingRegistry.registerDynamicType(container.get<DynamicTypeListingAssetLink>(serviceIds['DynamicTypes/Listing/AssetLink']))
 
     const GridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/GridCellRegistry'])
 

@@ -25,6 +25,7 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Box } from '@Pimcore/components/box/box'
 
 export interface IAdvancedEditorTab extends IEditorTab {
   originalLabel?: string
@@ -150,11 +151,14 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         onTabClick={ onChange }
         tabBarExtraContent={ {
           left: (
-            <ElementToolbar
-              editorTabsWidth={ editorTabsWidth }
-              elementType={ elementType }
-              id={ id }
-            />
+            <Box padding={ { left: 'extra-small', top: 'extra-small', bottom: 'extra-small' } }>
+              <ElementToolbar
+                editorTabsWidth={ editorTabsWidth }
+                elementType={ elementType }
+                id={ id }
+              />
+            </Box>
+
           )
         } }
       />

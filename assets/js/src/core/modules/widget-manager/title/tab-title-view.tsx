@@ -19,6 +19,7 @@ import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { Filename } from '@Pimcore/components/filename/filename'
 
 interface TabTitleViewProps {
   icon: ElementIcon
@@ -48,7 +49,12 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm }: TabTitleViewPr
         options={ { width: 16, height: 16 } }
         { ...icon }
       />
-      <span>{title}</span>
+
+      <Filename
+        ellipsis
+        style={ { maxWidth: '300px', color: 'inherit' } }
+        value={ title }
+      />
 
       {onClose !== undefined && onConfirm !== undefined && (
         <Popconfirm

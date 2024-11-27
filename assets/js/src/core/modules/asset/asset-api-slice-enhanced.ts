@@ -47,6 +47,34 @@ const api = baseApi.enhanceEndpoints({
 
     assetAdd: {
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
+    },
+
+    assetGetGrid: {
+      invalidatesTags: []
+    },
+
+    assetGetGridConfigurationByFolderId: {
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
+    },
+
+    assetSaveGridConfiguration: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.body.folderId)
+    },
+
+    assetSetGridConfigurationAsFavorite: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)
+    },
+
+    assetUpdateGridConfiguration: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(undefined, args.configurationId)
+    },
+
+    assetDeleteGridConfigurationByConfigurationId: {
+      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId), ...invalidatingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)]
+    },
+
+    assetGetSavedGridConfigurations: {
+      providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST(args.folderId)
     }
   }
 })
@@ -69,7 +97,11 @@ export const {
   useAssetExportCsvAssetMutation,
   useAssetExportCsvFolderMutation,
   useAssetGetSavedGridConfigurationsQuery,
-  useAssetSaveGridConfigurationMutation
+  useAssetSaveGridConfigurationMutation,
+  useAssetSetGridConfigurationAsFavoriteMutation,
+  useAssetUpdateGridConfigurationMutation,
+  useAssetDeleteGridConfigurationByConfigurationIdMutation,
+  useAssetGetGridConfigurationByFolderIdQuery
 } = api
 
 export { api }

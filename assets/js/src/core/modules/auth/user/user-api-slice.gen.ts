@@ -49,6 +49,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/user/folder/${queryArg.id}`, method: "DELETE" }),
                 invalidatesTags: ["User Management"],
             }),
+            userDefaultKeyBindings: build.query<UserDefaultKeyBindingsApiResponse, UserDefaultKeyBindingsApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
+                providesTags: ["User Management"],
+            }),
             userGetAvailablePermissions: build.query<
                 UserGetAvailablePermissionsApiResponse,
                 UserGetAvailablePermissionsApiArg
@@ -82,6 +86,14 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/${queryArg.id}/password`,
                     method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
+            userUploadImage: build.mutation<UserUploadImageApiResponse, UserUploadImageApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/upload-image/${queryArg.id}`,
+                    method: "POST",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["User Management"],
@@ -142,6 +154,11 @@ export type UserFolderDeleteByIdApiArg = {
     /** Id of the user-folder */
     id: number;
 };
+export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default key bindings */ {
+    totalItems: number;
+    items: KeyBindingForAUser[];
+};
+export type UserDefaultKeyBindingsApiArg = void;
 export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
     totalItems: number;
     items: UserPermission[];
@@ -171,6 +188,15 @@ export type UserUpdatePasswordByIdApiArg = {
     body: {
         password: string;
         passwordConfirmation: string;
+    };
+};
+export type UserUploadImageApiResponse = /** status 200 Success */ void;
+export type UserUploadImageApiArg = {
+    /** Id of the User */
+    id: number;
+    body: {
+        /** User image to upload */
+        userImage: Blob;
     };
 };
 export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
@@ -253,6 +279,20 @@ export type UserWorkspace = {
     /** Properties Permission */
     properties: boolean;
 };
+export type DependencyToAnObject = {
+    /** ID of the object */
+    id: number;
+    /** Path to the object */
+    path: string;
+    /** Subtype of the object */
+    subtype: string;
+};
+export type UserObjectDependencies = {
+    /** Dependencies to objects */
+    dependencies: DependencyToAnObject[];
+    /** If is has hidden dependencies */
+    hasHidden: boolean;
+};
 export type User = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -301,6 +341,7 @@ export type User = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    objectDependencies: UserObjectDependencies;
 };
 export type User2 = {
     /** Email of the User */
@@ -373,10 +414,12 @@ export const {
     useUserUpdateByIdMutation,
     useUserDeleteByIdMutation,
     useUserFolderDeleteByIdMutation,
+    useUserDefaultKeyBindingsQuery,
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
     useUserUpdatePasswordByIdMutation,
+    useUserUploadImageMutation,
     useUserGetTreeQuery,
 } = injectedRtkApi;

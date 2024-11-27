@@ -11,25 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const isObject = (value: any): boolean => {
-  const type = typeof value
-
-  return value != null && (type === 'object' || type === 'function')
-}
-
-export const isString = (value: any): boolean => {
-  if (value === undefined || value === null) return false
-
-  return typeof value.valueOf() === 'string'
-}
-
-export const isNumber = (value: unknown): boolean => {
-  return (
-    typeof value === 'number' ||
-    (typeof value === 'object' && value !== null && Object.prototype.toString.call(value) === '[object Number]')
-  )
-}
-
+// Difference from Lodash: primitive values like booleans and numbers are NOT considered empty
 export const isEmptyValue = (value: unknown): boolean => {
   if (value === null || value === undefined) {
     return true

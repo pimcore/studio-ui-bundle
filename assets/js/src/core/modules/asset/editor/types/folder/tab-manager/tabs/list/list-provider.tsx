@@ -16,7 +16,7 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type AssetGetGridApiResponse, type GridColumnConfiguration, type GridDetailedConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type FilterOptions, type TagFilterOptions } from './types/filterTypes'
-import { defaultFilterOptions } from './constants/filters'
+import { DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE, defaultFilterOptions } from './constants/filters'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
@@ -127,7 +127,7 @@ export const ListFilterOptionsProvider = ({ children }: ListFilterOptionsProvide
     }
 
     return acc
-  }, { columnFilters: [], includeDescendants: false }), [filterOptionsMap])
+  }, { columnFilters: [], includeDescendants: DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE }), [filterOptionsMap])
 
   return useMemo(() => (
     <ListFilterOptionsContext.Provider value={ { filterOptions, setFilterOptions } }>
@@ -250,6 +250,30 @@ export const ListDataProvider = ({ children, data }: ListDataProviderProps): Rea
   ), [internalData, children])
 }
 
+export interface IListSelectedGridConfigIdContext {
+  selectedGridConfigId: number | undefined
+  setSelectedGridConfigId: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+export const ListSelectedGridConfigIdContext = createContext<IListSelectedGridConfigIdContext>({
+  selectedGridConfigId: undefined,
+  setSelectedGridConfigId: () => {}
+})
+
+export interface ListSelectedGridConfigIdProviderProps {
+  children: React.ReactNode
+}
+
+export const ListSelectedGridConfigIdProvider = ({ children }: ListSelectedGridConfigIdProviderProps): React.JSX.Element => {
+  const [selectedGridConfigId, setSelectedGridConfigId] = useState<number | undefined>(undefined)
+
+  return useMemo(() => (
+    <ListSelectedGridConfigIdContext.Provider value={ { selectedGridConfigId, setSelectedGridConfigId } }>
+      {children}
+    </ListSelectedGridConfigIdContext.Provider>
+  ), [selectedGridConfigId, children])
+}
+
 export interface ListProviderProps extends ICommonListProviderProps {}
 
 export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element => {
@@ -262,7 +286,9 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
               <ListSelectedRowsProvider>
                 <ListSortingProvider>
                   <ListGridAvailableColumnsProvider>
-                    {children}
+                    <ListSelectedGridConfigIdProvider>
+                      {children}
+                    </ListSelectedGridConfigIdProvider>
                   </ListGridAvailableColumnsProvider>
                 </ListSortingProvider>
               </ListSelectedRowsProvider>

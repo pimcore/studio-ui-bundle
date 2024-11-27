@@ -11,9 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Card } from '@Pimcore/components/card/card'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import React from 'react'
+import { isEmpty } from 'lodash'
+import { Card } from '@Pimcore/components/card/card'
 
 export interface CardViewProps {
   title?: string
@@ -27,7 +27,7 @@ export const CardView = (props: CardViewProps): React.JSX.Element => {
   return (
     <Card
       bordered={ props.bordered === true }
-      title={ isEmptyValue(props.title) ? undefined : props.title }
+      title={ isEmpty(props.title) ? undefined : props.title }
     >
       {props.children}
     </Card>

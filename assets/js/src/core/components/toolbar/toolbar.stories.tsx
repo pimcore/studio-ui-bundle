@@ -17,6 +17,8 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { type StoryObj, type Meta } from '@storybook/react'
 import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
+import { Breadcrumb } from '../breadcrumb/breadcrumb'
+import { _default as breadcrumbStory } from '../breadcrumb/breadcrumb.stories'
 
 const config: Meta = {
   title: 'Components/Controls/Toolbar',
@@ -69,6 +71,37 @@ export const _default: Story = {
 export const Secondary: Story = {
   args: {
     ...demoData,
+    theme: 'secondary'
+  }
+}
+
+export const Size: Story = {
+  args: {
+    children: (
+      <>
+        <Breadcrumb
+          { ...breadcrumbStory.args }
+          elementType='asset'
+        />
+      </>
+    ),
+    size: 'small',
+    theme: 'secondary'
+  }
+}
+
+export const Position: Story = {
+  args: {
+    children: (
+      <>
+        <Breadcrumb
+          { ...breadcrumbStory.args }
+          elementType='asset'
+        />
+      </>
+    ),
+    position: 'top',
+    size: 'small',
     theme: 'secondary'
   }
 }

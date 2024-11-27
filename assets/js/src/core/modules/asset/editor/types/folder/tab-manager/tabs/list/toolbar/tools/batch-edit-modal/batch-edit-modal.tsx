@@ -34,7 +34,7 @@ import {
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { createJob } from '@Pimcore/modules/execution-engine/jobs/default/factory'
+import { createJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
@@ -60,7 +60,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onColumnClick = (column: GridColumnConfiguration): void => {
     const locale = column.locale ?? null
-    addOrUpdateBatchEdit(column.key, column.type, locale, column.localizable, '')
+    addOrUpdateBatchEdit(column.key, column.type, column.frontendType, locale, column.localizable, '')
   }
 
   const applyChanges = (): void => {
@@ -79,18 +79,20 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     addJob(createJob({
       title: t('jobs.batch-edit-job.title', { title: jobTitle }),
       topics: [topics['patch-finished'], ...defaultTopics],
+      assetContextId: assetContext.id,
       action: async () => {
-        const promise = patchAsset(assetPatchForUpdate())
-
-        promise.catch(() => {
+        try {
+          const response = await patchAsset(assetPatchForUpdate())
+          const data = response.data
+          if (data?.jobRunId !== undefined) {
+            return data.jobRunId
+          } else {
+            throw new Error('JobRunId is undefined')
+          }
+        } catch (error) {
           console.error('Failed to patch assets')
-        })
-
-        const response = (await promise) as any
-
-        eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: assetContext.id } })
-        const data = response.data
-        return data.jobRunId
+          throw error
+        }
       }
     }))
 

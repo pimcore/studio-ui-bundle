@@ -27,6 +27,7 @@ import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/compo
 import { ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
 import { DynamicTypeFieldFilterRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-registry'
 import { DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
+import { DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { DynamicTypeFieldFilterText } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/types/text/dynamic-type-field-filter-text'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/types/number/dynamic-type-field-filter-number'
@@ -110,6 +111,28 @@ import { DynamicTypeGridCellObject } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeGridCellDocument } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
 import { DynamicTypeGridCellLanguageSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
 import { DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
+import {
+  DynamicTypeBatchEditRegistry
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/dynamic-type-batch-edit-registry'
+import {
+  DynamicTypeBatchEditText
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text'
+import {
+  DynamicTypeBatchEditTextArea
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
+import {
+  DynamicTypeGridCellAsset
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
+import {
+  DynamicTypeGridCellObject
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
+import {
+  DynamicTypeGridCellDocument
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
+import {
+  DynamicTypeGridCellLanguageSelect
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
+>>>>>>> origin/1.x
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -140,6 +163,11 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Text']).to(DynamicTypeFieldF
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Select']).to(DynamicTypeFieldFilterSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
+
+// dynamic types batch edit
+container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/BatchEdit/TextArea']).to(DynamicTypeBatchEditTextArea).inSingletonScope()
 
 // dynamic types grid cells
 container.bind(serviceIds['DynamicTypes/GridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
@@ -172,6 +200,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGrid
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/Listing/AssetLink']).to(DynamicTypeListingAssetLink).inSingletonScope()
 
 // Metadata registry
 container.bind(serviceIds['DynamicTypes/MetadataRegistry']).to(DynamicTypeMetaDataRegistry).inSingletonScope()
