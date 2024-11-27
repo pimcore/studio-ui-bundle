@@ -55,6 +55,9 @@ export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
           icon: Icon({
             value: 'tag-02'
           }),
+          disableCheckbox: isLoading, // Disable the checkbox if the node is loading
+          checkable: !isLoading, // Hide the checkbox if the node is loading
+          disabled: isLoading, // Disable the entire node if it is loading
           children: tag.hasChildren === true ? treeWalker(tag.children!) : []
         }
       })
