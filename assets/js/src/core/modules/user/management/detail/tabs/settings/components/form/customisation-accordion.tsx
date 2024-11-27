@@ -16,8 +16,11 @@ import { Form, Input } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { Select } from '@Pimcore/components/select/select'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
+  const { availableAdminLanguages } = useSettings()
 
   const content = [
     {
@@ -43,6 +46,32 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
           name="email"
         >
           <Input type={ 'email' } />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('user-management.language') }
+          name="language"
+        >
+          <Select
+            options={ availableAdminLanguages.map((language) => ({
+              value: language.language,
+              label: language.display
+            })) }
+            placeholder={ t('user-management.language') }
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={ 'TODO ' + t('user-management.date-time') }
+          name="dateTime"
+        >
+          <Select
+            options={ availableAdminLanguages.map((language) => ({
+              value: language.language,
+              label: language.display
+            })) }
+            placeholder={ t('user-management.language') }
+          />
         </Form.Item>
 
         <Form.Item

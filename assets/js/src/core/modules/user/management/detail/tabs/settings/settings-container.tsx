@@ -51,6 +51,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         firstname: user?.firstname,
         lastname: user?.lastname,
         email: user?.email,
+        language: user?.language,
         welcomeScreen: user?.welcomeScreen,
         memorizeTabs: user?.memorizeTabs,
         allowDirtyClose: user?.allowDirtyClose,
