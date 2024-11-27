@@ -24,7 +24,8 @@ import {
   useListGridConfig,
   useListSelectedRows,
   useListSorting,
-  useListGridAvailableColumns
+  useListGridAvailableColumns,
+  useListSelectedConfigId
 } from './hooks/use-list'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridProps, type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
@@ -52,6 +53,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { columns, setGridColumns } = useListColumns()
   const { setGridConfig } = useListGridConfig()
   const { availableColumns, setAvailableColumns } = useListGridAvailableColumns()
+  const { selectedGridConfigId } = useListSelectedConfigId()
   const assetId = assetContext.id
   const [data, setData] = useState<AssetGetGridApiResponse | undefined>()
   const [fetchListing, fetchListingResult] = useAssetGetGridMutation()
@@ -86,7 +88,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
       const availableGridConfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
-      const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId }))
+      const initialGridConfigPromise = dispatch(api.endpoints.assetGetGridConfigurationByFolderId.initiate({ folderId: assetId, configurationId: selectedGridConfigId }))
 
       Promise.all([availableGridConfigPromise, initialGridConfigPromise]).then(([availableGridConfig, initialGridConfig]) => {
         setAvailableColumns(availableGridConfig.data?.columns)
@@ -103,6 +105,8 @@ export const ListContainerInner = (): React.JSX.Element => {
         })
 
         setGridColumns(initialColumns)
+        availableGridConfigPromise.unsubscribe()
+        initialGridConfigPromise.unsubscribe()
       }).then(() => {
         setIsLoading(false)
       }).catch((error) => {
@@ -113,7 +117,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     fetchGridConfiguration().catch((error) => {
       console.error(error)
     })
-  }, [])
+  }, [selectedGridConfigId])
 
   const updateData = (dataUpdate: AssetGetGridApiResponse | undefined = undefined): void => {
     setDataPatches((currentDataPatches) => {

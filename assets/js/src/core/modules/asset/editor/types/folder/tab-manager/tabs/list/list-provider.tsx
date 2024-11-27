@@ -250,6 +250,30 @@ export const ListDataProvider = ({ children, data }: ListDataProviderProps): Rea
   ), [internalData, children])
 }
 
+export interface IListSelectedGridConfigIdContext {
+  selectedGridConfigId: number | undefined
+  setSelectedGridConfigId: React.Dispatch<React.SetStateAction<number | undefined>>
+}
+
+export const ListSelectedGridConfigIdContext = createContext<IListSelectedGridConfigIdContext>({
+  selectedGridConfigId: undefined,
+  setSelectedGridConfigId: () => {}
+})
+
+export interface ListSelectedGridConfigIdProviderProps {
+  children: React.ReactNode
+}
+
+export const ListSelectedGridConfigIdProvider = ({ children }: ListSelectedGridConfigIdProviderProps): React.JSX.Element => {
+  const [selectedGridConfigId, setSelectedGridConfigId] = useState<number | undefined>(undefined)
+
+  return useMemo(() => (
+    <ListSelectedGridConfigIdContext.Provider value={ { selectedGridConfigId, setSelectedGridConfigId } }>
+      {children}
+    </ListSelectedGridConfigIdContext.Provider>
+  ), [selectedGridConfigId, children])
+}
+
 export interface ListProviderProps extends ICommonListProviderProps {}
 
 export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element => {
@@ -262,7 +286,9 @@ export const ListProvider = ({ children }: ListProviderProps): React.JSX.Element
               <ListSelectedRowsProvider>
                 <ListSortingProvider>
                   <ListGridAvailableColumnsProvider>
-                    {children}
+                    <ListSelectedGridConfigIdProvider>
+                      {children}
+                    </ListSelectedGridConfigIdProvider>
                   </ListGridAvailableColumnsProvider>
                 </ListSortingProvider>
               </ListSelectedRowsProvider>
