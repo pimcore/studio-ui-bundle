@@ -122,7 +122,7 @@ export const useValue = (
       item.fullPath.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.id.toString().includes(searchTerm) ||
         item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (item.subType !== null && item.subType.toLowerCase().includes(searchTerm.toLowerCase()))
+        item.subType?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     setDisplayedValue(filteredValue as ManyToManyRelationValue)
