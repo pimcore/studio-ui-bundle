@@ -21,6 +21,8 @@ import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 
 interface FlexContainerProps {
   assets: AssetGetTreeApiResponse
@@ -30,34 +32,8 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const { assets } = props
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
-
-  const dropdownItems: DropdownProps['menu']['items'] = [
-    {
-      key: 'locate-in-tree',
-      icon: <Icon value="target" />,
-      label: t('preview-card.locate-in-tree')
-    },
-    {
-      key: 'info',
-      icon: <Icon value="info-circle-outlined" />,
-      label: t('info')
-    },
-    {
-      key: 'rename',
-      icon: <Icon value="rich-edit" />,
-      label: t('preview-card.rename')
-    },
-    {
-      key: 'download-zip',
-      icon: <Icon value="download-02" />,
-      label: t('preview-card.download-zip')
-    },
-    {
-      key: 'delete',
-      icon: <Icon value="trash" />,
-      label: t('preview-card.delete')
-    }
-  ]
+  const { renameContextMenuItem } = useRename('asset')
+  const { deleteContextMenuItem } = useDelete('asset')
 
   const cards: ReactNode[] = []
   assets.items.forEach((asset) => {
@@ -68,6 +44,23 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
         }
       })
     }
+
+    const dropdownItems: DropdownProps['menu']['items'] = [
+      {
+        key: 'locate-in-tree',
+        icon: <Icon value="target" />,
+        label: t('preview-card.locate-in-tree'),
+        hidden: true
+      },
+      {
+        key: 'info',
+        icon: <Icon value="info-circle-outlined" />,
+        label: t('info'),
+        hidden: true
+      },
+      renameContextMenuItem(asset),
+      deleteContextMenuItem(asset)
+    ]
 
     if ('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined && asset.imageThumbnailPath !== null) {
       cards.push(
