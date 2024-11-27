@@ -32,6 +32,7 @@ import {
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetsAllowed: boolean
+  assetUploadPath?: string | null
   assetTypes?: Array<{ assetTypes: string }>
   objectsAllowed: boolean
   classes?: Array<{ classes: string }>
@@ -91,7 +92,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
 
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? dummyValue)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? dummyValue)
-  const { onDrop, deleteItem, onSearch } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems)
+  const { onDrop, deleteItem, onSearch, addAssets, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems)
 
   useEffect(() => {
     props.onChange?.(value)
@@ -112,9 +113,14 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
         />
       </Droppable>
       <ManyToManyRelationToolbar
+        addAssets={ addAssets }
         allowClear={ props.allowToClearRelation }
+        assetUploadPath={ props.assetUploadPath }
         empty={ () => { setValue(null) } }
+        enableUpload={ props.assetsAllowed }
         onSearch={ onSearch }
+        uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
+        uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
       />
     </>
   )

@@ -19,16 +19,55 @@ import { Tooltip } from 'antd'
 import { Box } from '@Pimcore/components/box/box'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useTranslation } from 'react-i18next'
+import { UploadModalButton } from '@Pimcore/components/modal/upload-modal/upload-modal-button'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 export interface ManyToManyRelationToolbarProps {
   empty: () => void
   onSearch: (value: string) => void
   allowClear: boolean
+  enableUpload: boolean
+  addAssets: (assets: Asset[]) => Promise<void>
+  assetUploadPath?: string | null
+  uploadMaxItems?: number
+  uploadShowMaxItemsError?: boolean
 }
 
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
   const { confirm } = useFormModal()
   const { t } = useTranslation()
+
+  const buttons: React.JSX.Element[] = []
+
+  if (props.allowClear) {
+    buttons.push(
+      <Tooltip title={ t('empty') }>
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ () => {
+            confirm({
+              title: t('remove'),
+              content: t('relations.remove-all.confirm'),
+              onOk: props.empty
+            })
+          } }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (props.enableUpload) {
+    buttons.push(
+      <UploadModalButton
+        maxItems={ props.uploadMaxItems }
+        onSuccess={ props.addAssets }
+        showMaxItemsError={ props.uploadShowMaxItemsError }
+        targetFolderPath={ props.assetUploadPath ?? undefined }
+      />
+    )
+  }
 
   return (
     <Box padding="extra-small">
@@ -37,23 +76,8 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         gap="extra-small"
         justify="space-between"
       >
-        <div>
-          { props.allowClear && (
-            <Tooltip title={ t('empty') }>
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ () => {
-                  confirm({
-                    title: t('remove'),
-                    content: t('relations.remove-all.confirm'),
-                    onOk: props.empty
-                  })
-                } }
-                type="default"
-              />
-            </Tooltip>
-          ) }
-        </div>
+        <ButtonGroup items={ buttons } />
+
         <div>
           <Search
             onInput={
@@ -64,6 +88,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
           />
         </div>
       </Flex>
+
     </Box>
   )
 }

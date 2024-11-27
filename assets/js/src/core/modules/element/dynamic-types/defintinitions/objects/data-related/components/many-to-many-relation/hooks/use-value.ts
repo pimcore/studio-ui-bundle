@@ -14,6 +14,7 @@
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useTranslation } from 'react-i18next'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -29,6 +30,8 @@ interface UseValueReturn {
   onDrop: (info: DragAndDropInfo) => void
   deleteItem: (id: number, type: string) => void
   onSearch: (searchTerm: string) => void
+  addAssets: (assets: Asset[]) => Promise<void>
+  maxRemainingItems?: number
 }
 
 export const useValue = (
@@ -42,6 +45,22 @@ export const useValue = (
   const { t } = useTranslation()
   const itemIsInValue = (id: number, type: string): boolean => {
     return value?.some(item => item.id === id && item.type === type) ?? false
+  }
+
+  const addItems = (items: ManyToManyRelationValueItem[]): void => {
+    setValue([
+      ...value ?? [],
+      ...items
+    ])
+
+    setDisplayedValue([
+      ...displayedValue ?? [],
+      ...items
+    ])
+  }
+
+  const addItem = (item: ManyToManyRelationValueItem): void => {
+    addItems([item])
   }
 
   const onDrop = (info: DragAndDropInfo): void => {
@@ -80,15 +99,7 @@ export const useValue = (
       return
     }
 
-    setValue([
-      ...value ?? [],
-      newValue
-    ])
-
-    setDisplayedValue([
-      ...displayedValue ?? [],
-      newValue
-    ])
+    addItem(newValue)
   }
 
   const deleteItem = (id: number, type: string): void => {
@@ -117,9 +128,25 @@ export const useValue = (
     setDisplayedValue(filteredValue as ManyToManyRelationValue)
   }
 
+  const addAssets = async (assets: Asset[]): Promise<void> => {
+    const items = assets.map((asset): ManyToManyRelationValueItem => ({
+      id: asset.id,
+      type: 'asset',
+      subType: asset.type ?? null,
+      published: true,
+      fullPath: asset.fullPath ?? ''
+    }))
+
+    addItems(items)
+  }
+
+  const maxRemainingItems = maxItems === null ? undefined : Math.max(maxItems - (value?.length ?? 0), 0)
+
   return {
     onDrop,
     deleteItem,
-    onSearch
+    onSearch,
+    addAssets,
+    maxRemainingItems
   }
 }

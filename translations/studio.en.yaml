@@ -289,6 +289,7 @@ select-image-preview: Select Image Preview
 choose-media: Choose Media
 current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
+ok: OK
 apply: Apply
 close-tab: Close Tab
 close-others: Close Others
@@ -347,3 +348,15 @@ relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 actions: Actions
+asset: Asset
+data-object: Data Object
+document: Document
+folder: Folder
+archive: Archive
+audio: Audio
+image: Image
+text: Text
+video: Video
+processing: Processing
+upload: Upload
+upload.assets-items-failed-message: Some items could not be uploaded.

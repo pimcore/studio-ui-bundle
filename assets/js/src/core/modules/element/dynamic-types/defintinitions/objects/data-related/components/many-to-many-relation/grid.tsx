@@ -45,7 +45,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const columns = [
     columnHelper.accessor('id', {
       header: t('relations.id'),
-      size: 40
+      size: 80
     }),
     columnHelper.accessor('fullPath', {
       header: t('relations.reference'),
@@ -56,15 +56,21 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
     }),
     columnHelper.accessor('type', {
       header: t('relations.type'),
-      size: 100
+      meta: {
+        type: 'translate'
+      },
+      size: 150
     }),
-    columnHelper.accessor('subtype', {
+    columnHelper.accessor('subType', {
       header: t('relations.subtype'),
-      size: 100
+      meta: {
+        type: 'translate'
+      },
+      size: 150
     }),
     columnHelper.accessor('actions', {
       header: t('actions'),
-      size: 100,
+      size: 110,
       cell: (info) => {
         const rowValue = info.row.original as ManyToManyRelationValueItem
 

@@ -80,6 +80,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Object': 'DynamicTypes/GridCell/Object',
   'DynamicTypes/GridCell/Document': 'DynamicTypes/GridCell/Document',
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
+  'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
   'DynamicTypes/Listing/Select': 'DynamicTypes/Listing/Select',

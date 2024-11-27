@@ -109,6 +109,7 @@ import { DynamicTypeGridCellAsset } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeGridCellObject } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
 import { DynamicTypeGridCellDocument } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
 import { DynamicTypeGridCellLanguageSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
+import { DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -167,6 +168,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Asset']).to(DynamicTypeGridCell
 container.bind(serviceIds['DynamicTypes/GridCell/Object']).to(DynamicTypeGridCellObject).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Document']).to(DynamicTypeGridCellDocument).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTypeGridCellLanguageSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGridCellTranslate).inSingletonScope()
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()
