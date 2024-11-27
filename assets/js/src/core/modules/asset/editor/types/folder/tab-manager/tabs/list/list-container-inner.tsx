@@ -63,7 +63,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const { sorting } = useListSorting()
   const [isLoading, setIsLoading] = useState(true)
 
-  useApiErrorHandler({ errorData: fetchListingResult })
+  useApiErrorHandler({ errorData: fetchListingResult, withAlert: true })
 
   useEffect(() => {
     setSelectedRows({})

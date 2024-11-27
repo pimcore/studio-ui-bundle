@@ -13,26 +13,38 @@
 
 import type React from 'react'
 import { useEffect } from 'react'
-import { isEmpty, isObject } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { type MutationResultSelectorResult } from '@reduxjs/toolkit/query'
 
-interface ErrorHandlerProps {
-  errorData: any
+interface IUseApiErrorHandlerProps {
+  errorData: MutationResultSelectorResult<any>
+  withAlert?: boolean
+}
+
+interface ErrorData {
+  status: number
+  data: {
+    detail: string
+    message: string
+  }
 }
 
 const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
-export const useApiErrorHandler: React.FC<ErrorHandlerProps> = ({ errorData }) => {
+export const useApiErrorHandler: React.FC<IUseApiErrorHandlerProps> = ({ errorData, withAlert = false }) => {
   const modal = useAlertModal()
 
-  useEffect(() => {
-    if (!isEmpty(errorData)) {
-      const errorInfo = isObject(errorData?.data) && 'message' in errorData.data
-        ? errorData.data.message
-        : errorData?.error
-      const errorContent = errorInfo ?? DEFAULT_ERROR_CONTENT
+  const handleErrorData = (): void => {
+    const errorInfo = (errorData?.error as ErrorData).data?.message
+    const errorContent = errorInfo ?? DEFAULT_ERROR_CONTENT
 
-      modal.error({ content: errorContent })
+    withAlert && modal.error({ content: errorContent })
+  }
+
+  useEffect(() => {
+    if (!isEmpty(errorData) && errorData.isError) {
+      handleErrorData()
     }
   }, [errorData, modal])
 
