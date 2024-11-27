@@ -17,15 +17,13 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
-  useCreateTreeStructure
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
-
+  createTreeStructure
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, setCheckedKeys }: { addOrUpdateFieldFilter: (value: any) => void, checkedKeys: any, setCheckedKeys: any }): React.JSX.Element => {
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
     pageSize: 9999
   })
-  const { createTreeStructure } = useCreateTreeStructure()
 
   if (tagsLoading) {
     return <Content loading />

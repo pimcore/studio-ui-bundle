@@ -19,9 +19,6 @@ import {
   useTagUnassignFromElementMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
-  useCreateTreeStructure
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
-import {
   useOptimisticUpdate
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
@@ -29,6 +26,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { type TreeProps } from 'antd'
+import {
+  createTreeStructure
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 
 export interface TagsTreeProps {
   elementId: number
@@ -41,10 +41,6 @@ export interface TagsTreeProps {
 }
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
-  const { createTreeStructure } = useCreateTreeStructure()
-
-  // const [treeData, setTreeData] = useState(createTreeStructure({ tags }))
-
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
   const [assignTag] = useTagAssignToElementMutation()
