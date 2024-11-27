@@ -24,7 +24,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
-import i18n from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 interface VersionIdentifiers {
   id: number
@@ -56,7 +56,6 @@ export const createVersionAccordionItem = ({
   const selected = detailedVersions.some((v => v.id === version.id))
 
   const selectable = comparingActive
-  const ownDraft = false
   const published = version.published ?? false
   const onClick = (): void => {
     if (comparingActive) {
@@ -77,57 +76,60 @@ export const createVersionAccordionItem = ({
     })
     : undefined
 
-  const title = (
-    <div>
-      {selectable && (
-        <Checkbox
-          checked={ selected }
-          onChange={ () => {
-            selectVersion(vId)
-          } }
-        />
-      )}
-      <span className={ 'title' }>
-        {`${i18n.t('version.version')} ${version.versionCount} | ${formatDateTime({
-          timestamp: version.date,
-          dateStyle: 'short',
-          timeStyle: 'medium'
-        })}`}</span>
-    </div>
-  )
+  const Title = (): React.JSX.Element => {
+    const { t } = useTranslation()
 
-  const subtitle = (
-    <div>
-      <span className={ 'sub-title' }>{`${i18n.t('by')} ${version.user?.name ?? ''}`}</span>
-      {isSet(version.autosave) && version.autosave && <Icon value="lightning-01" />}
-    </div>
-  )
-
-  let extra
-  let themeByState: PanelTheme = selected ? 'theme-primary' : 'theme-default'
-
-  if (published) {
-    themeByState = 'theme-success'
-    extra = (
-      <Tag
-        color="success"
-        iconName={ 'world' }
-      >
-        { i18n.t('version.published') }
-      </Tag>
+    return (
+      <div>
+        {selectable && (
+          <Checkbox
+            checked={ selected }
+            onChange={ () => {
+              selectVersion(vId)
+            } }
+          />
+        )}
+        <span className={ 'title' }>
+          {`${t('version.version')} ${version.versionCount} | ${formatDateTime({
+            timestamp: version.date,
+            dateStyle: 'short',
+            timeStyle: 'medium'
+          })}`}</span>
+      </div>
     )
-  } else if (isSet(ownDraft) && ownDraft) {
-    extra = (
+  }
+
+  const Subtitle = (): React.JSX.Element => {
+    const { t } = useTranslation()
+
+    return (
+      <div>
+        <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
+        {isSet(version.autosave) && version.autosave && <Icon value="lightning-01" />}
+      </div>
+    )
+  }
+
+  let themeByState: PanelTheme = selected ? 'theme-primary' : 'theme-default'
+  themeByState = published ? 'theme-success' : themeByState
+
+  const Extra = (): React.JSX.Element => {
+    const { t } = useTranslation()
+    const color = published ? 'success' : 'blue'
+    const icon = published ? 'world' : 'user'
+
+    return (
       <Tag
-        color="blue"
-        iconName="user"
+        color={ color }
+        iconName={ icon }
       >
-        { i18n.t('version.own-draft') }
+        { published ? t('version.published') : t('version.own-draft') }
       </Tag>
     )
   }
 
   const Component = (): React.JSX.Element => {
+    const { t } = useTranslation()
     const [deletingVersion, setDeletingVersion] = useState(false)
     const [publishingVersion, setPublishingVersion] = useState(false)
 
@@ -162,11 +164,11 @@ export const createVersionAccordionItem = ({
                 loading={ publishingVersion }
                 onClick={ publishVersion }
               >
-                {i18n.t('version.publish')}
+                {t('version.publish')}
               </IconTextButton>
             )}
             <IconButton
-              aria-label={ i18n.t('aria.version.delete') }
+              aria-label={ t('aria.version.delete') }
               disabled={ publishingVersion }
               icon={ { value: 'trash' } }
               loading={ deletingVersion }
@@ -178,7 +180,7 @@ export const createVersionAccordionItem = ({
         {
           isSet(scheduledDate) && (
             <div className={ 'row-margin' }>
-              <div>{i18n.t('version.schedule-for')}</div>
+              <div>{t('version.schedule-for')}</div>
               <div className={ 'date-container' }>
                 <Icon value="calender" />
                 <span className={ 'scheduled-date' }>{scheduledDate}</span>
@@ -187,7 +189,7 @@ export const createVersionAccordionItem = ({
           )
         }
         <div className={ 'row-margin' }>
-          <span>{i18n.t('version.note')}</span>
+          <span>{t('version.note')}</span>
           <Input
             defaultValue={ version.note }
             onBlur={ (e): void => {
@@ -203,9 +205,9 @@ export const createVersionAccordionItem = ({
   return {
     key: String(version.id),
     selected,
-    title,
-    subtitle,
-    extra,
+    title: <Title />,
+    subtitle: <Subtitle />,
+    extra: <Extra />,
     children: <Component />,
     onClick,
     theme: themeByState
