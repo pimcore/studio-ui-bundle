@@ -194,10 +194,7 @@ export type UserUploadImageApiResponse = /** status 200 Success */ void;
 export type UserUploadImageApiArg = {
     /** Id of the User */
     id: number;
-    body: {
-        /** User image to upload */
-        userImage: Blob;
-    };
+    body: FormData;
 };
 export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;

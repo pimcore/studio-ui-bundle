@@ -30,22 +30,6 @@ const UserAvatar = ({ ...props }): React.JSX.Element => {
   const { id } = useUserContext()
   const { uploadUserAvatar } = useUserHelper()
 
-  // const handleUpload = async () => {
-  //   await uploadUserAvatar(id)
-  // }
-
-  const getBlobFromFile = async (file: File): Promise<Blob> => {
-    console.log('getBlobFromFile', file)
-    return await new Promise<Blob>((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        resolve(new Blob([reader.result as ArrayBuffer]))
-      }
-      reader.onerror = reject
-      reader.readAsArrayBuffer(file)
-    })
-  }
-
   return (
 
     <Card title={ t('user-management.settings.avatar') }>
@@ -61,18 +45,21 @@ const UserAvatar = ({ ...props }): React.JSX.Element => {
 
         <div>
           <Upload
-            customRequest={ async (options) => {
+            customRequest={ ({ file, onError, onSuccess }) => {
               let state = 'uploading'
-              try {
-                const blob = await getBlobFromFile(options.file as File)
-                console.log(blob)
-                await uploadUserAvatar({ id, blob })
+              uploadUserAvatar({ id, file }).then(response => {
                 state = 'done'
-              } catch {
+              }).catch(error => {
+                console.log(error)
                 state = 'error'
-              }
+              })
+
               return state
             } }
+            headers={ {
+              'Content-Type': 'multipart/form-data'
+            } }
+            name={ 'userImage' }
             onChange={ (info) => {
               if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList)

@@ -251,10 +251,11 @@ export const useUserHelper = (): UseUserReturn => {
   }
 
   async function uploadUserAvatar (props): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
-    const { id, file } = props
-    console.log('uploading file', id, file)
-    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id, body: { userImage: file } }))
-    console.log('data', data)
+    const formData = new FormData()
+    formData.append('userImage', props.file as File)
+
+    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: formData }))
+
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
@@ -267,7 +268,6 @@ export const useUserHelper = (): UseUserReturn => {
         message: t('user-management.upload-avatar.success')
       })
     }
-
     return data
   }
 

@@ -62,7 +62,7 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
         </Form.Item>
 
         <Form.Item
-          label={ 'TODO ' + t('user-management.date-time') }
+          label={ 'TODO ' + t('user-management.dateTime') }
           name="dateTime"
         >
           <Select
@@ -70,7 +70,7 @@ const CustomisationAccordion = ({ ...props }): React.JSX.Element => {
               value: language.language,
               label: language.display
             })) }
-            placeholder={ t('user-management.language') }
+            placeholder={ t('user-management.dateTime') }
           />
         </Form.Item>
 

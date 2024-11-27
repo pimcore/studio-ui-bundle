@@ -399,10 +399,14 @@ user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enable
 user-management.firstname: Firstname
 user-management.lastname: Lastname
 user-management.email: Email
+user-management.language: Language
+user-management.dateTime: Date Time Locale
 user-management.welcomeScreen: Show welcome screen on startup
 user-management.memorizeTabs: Memorize open tabs
 user-management.allowDirtyClose: Disable unsaved content warning
 user-management.closeWarning: Show close warning
+user-management.admin.info: Admin users do not only automatically gain all permissions listed below, they are also allowed to perform all actions on documents, assets and objects without any restrictions.
+user-management.admin.login: Login as this user in a different browser
 user-management.customisation: Customisation
 user-management.permissions.default: Permissions
 user-management.permissions.bundles: Permissions Bundles
