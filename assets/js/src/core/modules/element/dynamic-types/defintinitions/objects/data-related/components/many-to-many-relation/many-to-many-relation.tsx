@@ -52,46 +52,8 @@ export interface ManyToManyRelationProps extends ManyToManyRelationClassDefiniti
 }
 
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
-  const dummyValue: ManyToManyRelationValue = [
-    {
-      id: 35,
-      type: 'asset',
-      subType: 'image',
-      published: true,
-      fullPath: '/Car Images/buick/buick-1400243.jpg'
-    },
-    {
-      id: 772,
-      type: 'data-object',
-      subType: 'News',
-      published: true,
-      fullPath: '/News/Lor separat existentie es un myth'
-    },
-    {
-      id: 765,
-      type: 'data-object',
-      subType: 'News',
-      published: true,
-      fullPath: '/News/Montery Car Week Spring Edition'
-    },
-    {
-      id: 766,
-      type: 'data-object',
-      subType: 'News',
-      published: true,
-      fullPath: '/News/Vintage Car Auction Detroit'
-    },
-    {
-      id: 562,
-      type: 'data-object',
-      subType: null,
-      fullPath: '/Shop',
-      published: true
-    }
-  ]
-
-  const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? dummyValue)
-  const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? dummyValue)
+  const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
+  const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const { onDrop, deleteItem, onSearch, addAssets, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems)
 
   useEffect(() => {

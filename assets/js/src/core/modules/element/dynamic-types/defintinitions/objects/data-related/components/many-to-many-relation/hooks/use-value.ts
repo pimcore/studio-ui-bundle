@@ -19,7 +19,7 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 export interface ManyToManyRelationValueItem {
   id: number
   type: string
-  subType: string | null
+  subtype: string | null
   fullPath: string
   published: boolean
 }
@@ -81,7 +81,7 @@ export const useValue = (
       newValue = {
         id: info.data.id,
         type: info.type,
-        subType: info.data.className ?? info.data.type,
+        subtype: info.data.className ?? info.data.type,
         published: info.data.published,
         fullPath: info.data.fullPath
       }
@@ -89,7 +89,7 @@ export const useValue = (
       newValue = {
         id: info.data.id,
         type: info.type,
-        subType: info.data.type,
+        subtype: info.data.type,
         published: info.data.published,
         fullPath: info.data.fullPath
       }
@@ -122,7 +122,7 @@ export const useValue = (
       item.fullPath.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.id.toString().includes(searchTerm) ||
         item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.subType?.toLowerCase().includes(searchTerm.toLowerCase())
+        item.subtype?.toLowerCase().includes(searchTerm.toLowerCase())
     )
 
     setDisplayedValue(filteredValue as ManyToManyRelationValue)
@@ -132,7 +132,7 @@ export const useValue = (
     const items = assets.map((asset): ManyToManyRelationValueItem => ({
       id: asset.id,
       type: 'asset',
-      subType: asset.type ?? null,
+      subtype: asset.type ?? null,
       published: true,
       fullPath: asset.fullPath ?? ''
     }))

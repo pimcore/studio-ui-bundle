@@ -61,7 +61,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       },
       size: 150
     }),
-    columnHelper.accessor('subType', {
+    columnHelper.accessor('subtype', {
       header: t('relations.subtype'),
       meta: {
         type: 'translate'
