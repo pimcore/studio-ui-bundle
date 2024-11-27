@@ -21,10 +21,25 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import {
+  type Archive,
+  type AssetDocument,
+  type AssetFolder,
+  type Audio,
+  type Image,
+  type Text,
+  type Unknown,
+  type Video
+} from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+
+export type Asset = (Image | AssetDocument | Audio | Video | Archive | Text | AssetFolder | Unknown)
+export type Element = Asset | DataObject
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
-  renameContextMenuItem: (node: TreeNodeProps) => ItemType
+  renameTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  renameContextMenuItem: (node: Element) => ItemType
   renameMutation: (parentId: number, value: string) => Promise<void>
 }
 
@@ -34,7 +49,24 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
   const { refreshTree } = useRefreshTree(elementType)
   const { elementPatch } = useElementApi(elementType)
 
-  const rename = (id: number, currentLabel: string, parentId?: number): void => {
+  const getRenameString = (node: Element): string => {
+    if (elementType === 'asset') {
+      return (node as Asset).filename ?? ''
+    }
+
+    if (elementType === 'data-object') {
+      return (node as DataObject).key ?? ''
+    }
+
+    return ''
+  }
+
+  const rename = (
+    id: number,
+    currentLabel: string,
+    parentId?: number,
+    postRename?: (newName: string) => void
+  ): void => {
     modal.input({
       title: t('element.rename'),
       label: t('element.rename.label'),
@@ -43,11 +75,30 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
         required: true,
         message: t('element.rename.validation')
       },
-      onOk: async (value: string) => { await renameMutation(id, value, parentId) }
+      onOk: async (value: string) => {
+        await renameMutation(id, value, parentId)
+        postRename?.(value)
+      }
     })
   }
 
-  const renameContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const renameContextMenuItem = (
+    node: Element,
+    postRename?: (newName: string) => void
+  ): ItemType => {
+    return {
+      label: t('element.rename'),
+      key: 'rename',
+      icon: <Icon value={ 'type-square' } />,
+      hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
+      onClick: () => {
+        const parentId = node.parentId ?? undefined
+        rename(node.id, getRenameString(node), parentId, postRename)
+      }
+    }
+  }
+
+  const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.rename'),
       key: 'rename',
@@ -84,6 +135,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
 
   return {
     rename,
+    renameTreeContextMenuItem,
     renameContextMenuItem,
     renameMutation
   }

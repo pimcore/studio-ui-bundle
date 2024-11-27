@@ -25,10 +25,13 @@ import type { AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slic
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { type Asset, type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
+import type { DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
-  deleteContextMenuItem: (node: TreeNodeProps) => ItemType
+  deleteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  deleteContextMenuItem: (node: Element, postDelete?: () => void) => ItemType
   deleteMutation: (id: number, parentId?: number) => Promise<void>
 }
 
@@ -52,7 +55,20 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     })
   }
 
-  const deleteContextMenuItem = (node: TreeNodeProps): ItemType => {
+  // TODO: merge with useRename -> in global space
+  const getRenameString = (node: Element): string => {
+    if (elementType === 'asset') {
+      return (node as Asset).filename ?? ''
+    }
+
+    if (elementType === 'data-object') {
+      return (node as DataObject).key ?? ''
+    }
+
+    return ''
+  }
+
+  const deleteTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.delete'),
       key: 'delete',
@@ -62,6 +78,21 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
         deleteElement(id, node.label, parentId)
+      }
+    }
+  }
+
+  const deleteContextMenuItem = (node: Element, postDelete?: () => void): ItemType => {
+    return {
+      label: t('element.delete'),
+      key: 'delete',
+      icon: <Icon value={ 'delete-outlined' } />,
+      hidden: !checkElementPermission(node.permissions!, 'delete') || node.isLocked,
+      onClick: () => {
+        const id = node.id
+        const parentId = node.parentId ?? undefined
+        deleteElement(id, getRenameString(node), parentId)
+        // TODO: add postDelete method - check how to fire it after delete is done
       }
     }
   }
@@ -100,6 +131,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
 
   return {
     deleteElement,
+    deleteTreeContextMenuItem,
     deleteContextMenuItem,
     deleteMutation
   }

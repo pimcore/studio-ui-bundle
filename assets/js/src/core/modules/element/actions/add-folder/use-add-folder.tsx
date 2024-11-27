@@ -21,10 +21,12 @@ import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
-  addFolderContextMenuItem: (node: TreeNodeProps) => ItemType
+  addFolderTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  addFolderContextMenuItem: (node: Element, postAddFolder?: () => void) => ItemType
   addFolderMutation: (parentId: number, value: string) => Promise<void>
 }
 
@@ -46,7 +48,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
     })
   }
 
-  const addFolderContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const addFolderTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.add-folder'),
       key: 'add-folder',
@@ -55,6 +57,18 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
       onClick: () => {
         const parentId = parseInt(node.id)
         addFolder(parentId)
+      }
+    }
+  }
+
+  const addFolderContextMenuItem = (node: Element): ItemType => {
+    return {
+      label: t('element.add-folder'),
+      key: 'add-folder',
+      icon: <Icon value={ 'folder' } />,
+      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions!, 'create'),
+      onClick: () => {
+        addFolder(node.id)
       }
     }
   }
@@ -79,6 +93,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
 
   return {
     addFolder,
+    addFolderTreeContextMenuItem,
     addFolderContextMenuItem,
     addFolderMutation
   }

@@ -18,16 +18,21 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
   lockAndPropagate: (id: number) => Promise<void>
   unlock: (id: number) => Promise<void>
   unlockAndPropagate: (id: number) => Promise<void>
-  lockContextMenuItem: (node: TreeNodeProps) => ItemType
-  lockAndPropagateContextMenuItem: (node: TreeNodeProps) => ItemType
-  unlockContextMenuItem: (node: TreeNodeProps) => ItemType
-  unlockAndPropagateContextMenuItem: (node: TreeNodeProps) => ItemType
+  lockTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  lockContextMenuItem: (node: Element, postLock?: () => void) => ItemType
+  lockAndPropagateTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  lockAndPropagateContextMenuItem: (node: Element, postLockAndPropagate?: () => void) => ItemType
+  unlockTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  unlockContextMenuItem: (node: Element, postUnlock?: () => void) => ItemType
+  unlockAndPropagateTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  unlockAndPropagateContextMenuItem: (node: Element, postUnlockAndPropagate?: () => void) => ItemType
 }
 
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
@@ -63,7 +68,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const lockContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const lockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.lock'),
       key: 'lock',
@@ -74,7 +79,21 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       }
     }
   }
-  const lockAndPropagateContextMenuItem = (node: TreeNodeProps): ItemType => {
+
+  const lockContextMenuItem = (node: Element, postLock?: () => void): ItemType => {
+    return {
+      label: t('element.lock'),
+      key: 'lock',
+      icon: <Icon value={ 'lock-01' } />,
+      hidden: node.isLocked,
+      onClick: async () => {
+        await lock(node.id)
+        postLock?.()
+      }
+    }
+  }
+
+  const lockAndPropagateTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.lock-and-propagate-to-children'),
       key: 'lock-and-propagate-to-children',
@@ -86,7 +105,20 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const unlockContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const lockAndPropagateContextMenuItem = (node: Element, postLockAndPropagate?: () => void): ItemType => {
+    return {
+      label: t('element.lock-and-propagate-to-children'),
+      key: 'lock-and-propagate-to-children',
+      icon: <Icon value={ 'file-lock-02' } />,
+      hidden: node.isLocked,
+      onClick: async () => {
+        await lockAndPropagate(node.id)
+        postLockAndPropagate?.()
+      }
+    }
+  }
+
+  const unlockTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.unlock'),
       key: 'unlock',
@@ -98,7 +130,20 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const unlockAndPropagateContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const unlockContextMenuItem = (node: Element, postUnlock?: () => void): ItemType => {
+    return {
+      label: t('element.unlock'),
+      key: 'unlock',
+      icon: <Icon value={ 'lock-unlock-01' } />,
+      hidden: !node.isLocked,
+      onClick: async () => {
+        await unlock(node.id)
+        postUnlock?.()
+      }
+    }
+  }
+
+  const unlockAndPropagateTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.unlock-and-propagate-to-children'),
       key: 'unlock-and-propagate-to-children',
@@ -110,14 +155,31 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
+  const unlockAndPropagateContextMenuItem = (node: Element, postUnlockAndPropagate?: () => void): ItemType => {
+    return {
+      label: t('element.unlock-and-propagate-to-children'),
+      key: 'unlock-and-propagate-to-children',
+      icon: <Icon value={ 'lock-unlock-01' } />,
+      hidden: !node.isLocked,
+      onClick: async () => {
+        await unlockAndPropagate(node.id)
+        postUnlockAndPropagate?.()
+      }
+    }
+  }
+
   return {
     lock,
     lockAndPropagate,
     unlock,
     unlockAndPropagate,
+    lockTreeContextMenuItem,
     lockContextMenuItem,
+    lockAndPropagateTreeContextMenuItem,
     lockAndPropagateContextMenuItem,
+    unlockTreeContextMenuItem,
     unlockContextMenuItem,
+    unlockAndPropagateTreeContextMenuItem,
     unlockAndPropagateContextMenuItem
   }
 }

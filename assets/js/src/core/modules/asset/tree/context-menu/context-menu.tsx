@@ -38,12 +38,12 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
 
   const uploadContext = React.useContext(UploadContext)!
   const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
-  const { addFolderContextMenuItem } = useAddFolder('asset')
-  const { renameContextMenuItem } = useRename('asset')
-  const { deleteContextMenuItem } = useDelete('asset')
+  const { addFolderTreeContextMenuItem } = useAddFolder('asset')
+  const { renameTreeContextMenuItem } = useRename('asset')
+  const { deleteTreeContextMenuItem } = useDelete('asset')
   const { refreshTreeContextMenuItem } = useRefreshTree('asset')
-  const { copyContextMenuItem, cutContextMenuItem, pasteContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
-  const { lockContextMenuItem, lockAndPropagateContextMenuItem, unlockContextMenuItem, unlockAndPropagateContextMenuItem } = useLock('asset')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
+  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem } = useLock('asset')
   const node = props.node
 
   useEffect(() => {
@@ -81,13 +81,13 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
         }
       ]
     },
-    addFolderContextMenuItem(props.node),
-    renameContextMenuItem(props.node),
-    copyContextMenuItem(props.node),
-    pasteContextMenuItem(props.node),
-    cutContextMenuItem(props.node),
+    addFolderTreeContextMenuItem(props.node),
+    renameTreeContextMenuItem(props.node),
+    copyTreeContextMenuItem(props.node),
+    pasteTreeContextMenuItem(props.node),
+    cutTreeContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
-    deleteContextMenuItem(props.node),
+    deleteTreeContextMenuItem(props.node),
     createZipDownloadContextMeuItem(props.node),
     {
       label: t('element.tree.context-menu.advanced'),
@@ -100,10 +100,10 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
           icon: <Icon value={ 'lock-01' } />,
           hidden: !checkElementPermission(props.node.permissions, 'publish') || props.node.isLocked,
           children: [
-            lockContextMenuItem(props.node),
-            lockAndPropagateContextMenuItem(props.node),
-            unlockContextMenuItem(props.node),
-            unlockAndPropagateContextMenuItem(props.node)
+            lockTreeContextMenuItem(props.node),
+            lockAndPropagateTreeContextMenuItem(props.node),
+            unlockTreeContextMenuItem(props.node),
+            unlockAndPropagateTreeContextMenuItem(props.node)
           ]
         }
       ]

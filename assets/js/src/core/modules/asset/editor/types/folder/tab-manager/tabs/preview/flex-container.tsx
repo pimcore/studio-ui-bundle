@@ -22,7 +22,6 @@ import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-s
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 
 interface FlexContainerProps {
@@ -59,8 +58,8 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
         label: t('info'),
         hidden: true
       },
-      renameContextMenuItem({ ...asset, label: asset.filename } as any as TreeNodeProps),
-      deleteContextMenuItem(asset as any as TreeNodeProps)
+      renameContextMenuItem(asset),
+      deleteContextMenuItem(asset)
     ]
 
     if ('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined && asset.imageThumbnailPath !== null) {
