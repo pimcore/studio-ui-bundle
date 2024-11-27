@@ -18,7 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
-import { type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -26,13 +26,13 @@ export interface UseLockHookReturn {
   unlock: (id: number) => Promise<void>
   unlockAndPropagate: (id: number) => Promise<void>
   lockTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  lockContextMenuItem: (node: Element, postLock?: () => void) => ItemType
+  lockContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   lockAndPropagateTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  lockAndPropagateContextMenuItem: (node: Element, postLockAndPropagate?: () => void) => ItemType
+  lockAndPropagateContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   unlockTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  unlockContextMenuItem: (node: Element, postUnlock?: () => void) => ItemType
+  unlockContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   unlockAndPropagateTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  unlockAndPropagateContextMenuItem: (node: Element, postUnlockAndPropagate?: () => void) => ItemType
+  unlockAndPropagateContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
 }
 
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
@@ -80,7 +80,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const lockContextMenuItem = (node: Element, postLock?: () => void): ItemType => {
+  const lockContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.lock'),
       key: 'lock',
@@ -88,7 +88,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       hidden: node.isLocked,
       onClick: async () => {
         await lock(node.id)
-        postLock?.()
+        onFinish?.()
       }
     }
   }
@@ -105,7 +105,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const lockAndPropagateContextMenuItem = (node: Element, postLockAndPropagate?: () => void): ItemType => {
+  const lockAndPropagateContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.lock-and-propagate-to-children'),
       key: 'lock-and-propagate-to-children',
@@ -113,7 +113,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       hidden: node.isLocked,
       onClick: async () => {
         await lockAndPropagate(node.id)
-        postLockAndPropagate?.()
+        onFinish?.()
       }
     }
   }
@@ -130,7 +130,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const unlockContextMenuItem = (node: Element, postUnlock?: () => void): ItemType => {
+  const unlockContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unlock'),
       key: 'unlock',
@@ -138,7 +138,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       hidden: !node.isLocked,
       onClick: async () => {
         await unlock(node.id)
-        postUnlock?.()
+        onFinish?.()
       }
     }
   }
@@ -155,7 +155,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     }
   }
 
-  const unlockAndPropagateContextMenuItem = (node: Element, postUnlockAndPropagate?: () => void): ItemType => {
+  const unlockAndPropagateContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.unlock-and-propagate-to-children'),
       key: 'unlock-and-propagate-to-children',
@@ -163,7 +163,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       hidden: !node.isLocked,
       onClick: async () => {
         await unlockAndPropagate(node.id)
-        postUnlockAndPropagate?.()
+        onFinish?.()
       }
     }
   }
