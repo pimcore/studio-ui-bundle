@@ -16,9 +16,13 @@ import React from 'react'
 import { useStlyes } from './main-nav.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 // import type { MenuProps } from 'antd'
+import { useMainNav } from './hooks/use-main-nav'
 
 export const MainNav = (): React.JSX.Element => {
   const { styles } = useStlyes()
+  const { getNavItems } = useMainNav()
+
+  console.log(getNavItems)
 
   return (
     <div className={ ['main-nav', styles.mainNav].join(' ') }>

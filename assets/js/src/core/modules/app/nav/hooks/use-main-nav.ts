@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch } from '@Pimcore/app/store'
+import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
   addNavItem as addNavItemAction,
   type IMainNavItem
@@ -19,6 +19,7 @@ import {
 
 interface useMainNavReturn {
   addNavItem: (item: IMainNavItem) => void
+  getNavItems: IMainNavItem[]
 }
 
 export const useMainNav = (): useMainNavReturn => {
@@ -28,7 +29,10 @@ export const useMainNav = (): useMainNavReturn => {
     dispatch(addNavItemAction(item))
   }
 
+  const getNavItems = useAppSelector(state => state['main-nav'].items)
+
   return {
-    addNavItem
+    addNavItem,
+    getNavItems
   }
 }

@@ -18,8 +18,9 @@ export interface IMainNavItem {
   id?: string
   icon: string
   path: string
-  title?: string
+  label?: string
   children?: IMainNavItem[]
+  key?: string
 }
 
 export interface IMainNavState {
@@ -44,7 +45,8 @@ export const slice = createSlice({
         if (existingItem === undefined) {
           existingItem = {
             id: level,
-            title: level,
+            label: level,
+            key: `${index}-${index}`,
             icon: 'DataObjectOutlined',
             path: levels.slice(0, index + 1).join('/'),
             children: []
@@ -68,4 +70,3 @@ export const mainNavSliceName = slice.name
 injectSliceWithState(slice)
 
 export const { addNavItem } = slice.actions
-export const { getNavItems } = slice.selectors
