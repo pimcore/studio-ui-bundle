@@ -21,21 +21,16 @@ import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
 import { Content } from '@Pimcore/components/content/content'
 import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
-import { LanguageTable } from '@Pimcore/modules/user/management/detail/tabs/settings/components/table/language-table'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { AdminAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/admin-accordion'
-import {
-  CustomisationAccordion
-} from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/customisation-accordion'
-import {
-  PermissionsAccordion
-} from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/permissions-accordion'
-import {
-  TypesAndClassesAccordion
-} from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
+import { CustomisationAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/customisation-accordion'
+import { PermissionsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/permissions-accordion'
+import { TypesAndClassesAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
+import { EditorSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion'
+import { SharedTranslationSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/shared-translation-settings-accordion'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
@@ -82,88 +77,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     return <Content loading></Content>
   }
 
-  const generalAccordion = [
-    {
-      key: '1',
-      title: <>{ t('user-management.general') }</>,
-      info: 'ID: ' + id,
-      children: <>
-        <Flex
-          align="center"
-          gap="small"
-        >
-          <Form.Item
-            name="active"
-          >
-            <Switch
-              labelRight={ t('user-management.active') }
-            />
-          </Form.Item>
-
-          { user?.lastLogin !== undefined && user?.lastLogin !== null
-            ? (
-              <Text disabled>{ t('user-management.last-login') }: { user.lastLogin }</Text>
-              )
-            : null}
-        </Flex>
-
-        <Form.Item
-          label={ t('user-management.name') }
-          name={ 'name' }
-        >
-          <Input disabled />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('user-management.password') }
-          name={ 'password' }
-          rules={ [{ min: 10 }] }
-        >
-          <Input suffix={ <IconButton
-            icon={ { value: 'lightning-01' } }
-            onClick={ () => {
-              const newPassword = generatePassword()
-              form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
-            } }
-            title={ t('user-management.generate-password') }
-                          /> }
-          />
-        </Form.Item>
-        <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
-          <Switch labelRight={ t('user-management.two-factor-authentication') } />
-        </Form.Item>
-      </>
-    }
-  ]
-  const editorSettingsAccordion = [
-    {
-      key: '1',
-      title: <>{ t('user-management.editor-settings') }</>,
-      children: (
-        <LanguageTable
-          data={ user?.contentLanguages as any[] }
-          onChangeOrder={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
-        />
-      )
-    }
-  ]
-  const sharedTranslationSettingsAccordion = [
-    {
-      key: '1',
-      title: <>{ t('user-management.shared-translation-settings') }</>,
-      children: (
-        <LanguageTable
-          data={ validLanguages as any[] }
-          onChange={ (languages) => {
-            changeUserInState({
-              websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
-              websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
-            })
-          } }
-        />
-      )
-    }
-  ]
   return (
     <Form
       form={ form }
@@ -175,7 +88,60 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           <Accordion
             activeKey={ '1' }
             bordered
-            items={ generalAccordion }
+            items={ [
+              {
+                key: '1',
+                title: <>{ t('user-management.general') }</>,
+                info: 'ID: ' + id,
+                children: <>
+                  <Flex
+                    align="center"
+                    gap="small"
+                  >
+                    <Form.Item
+                      name="active"
+                    >
+                      <Switch
+                        labelRight={ t('user-management.active') }
+                      />
+                    </Form.Item>
+
+                    { user?.lastLogin !== undefined && user?.lastLogin !== null
+                      ? (
+                        <Text disabled>{ t('user-management.last-login') }: { user.lastLogin }</Text>
+                        )
+                      : null}
+                  </Flex>
+
+                  <Form.Item
+                    label={ t('user-management.name') }
+                    name={ 'name' }
+                  >
+                    <Input disabled />
+                  </Form.Item>
+
+                  <Form.Item
+                    label={ t('user-management.password') }
+                    name={ 'password' }
+                    rules={ [{ min: 10 }] }
+                  >
+                    <Input suffix={ <IconButton
+                      icon={ { value: 'lightning-01' } }
+                      onClick={ () => {
+                        const newPassword = generatePassword()
+                        form.setFieldValue('password', newPassword); changeUserInState({ password: newPassword })
+                      } }
+                      title={ t('user-management.generate-password') }
+                                    /> }
+                    />
+                  </Form.Item>
+                  <Form.Item name={ 'twoFactorAuthenticationEnabled' }>
+                    <Switch labelRight={ t('user-management.two-factor-authentication') } />
+                  </Form.Item>
+                </>
+              }
+            ]
+          }
             size={ 'small' }
           />
         </Col>
@@ -195,21 +161,20 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           <TypesAndClassesAccordion />
         </Col>
         <Col span={ 16 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ editorSettingsAccordion }
-            size={ 'small' }
-            table
+          <EditorSettingsAccordion
+            data={ user?.contentLanguages }
+            onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
           />
         </Col>
         <Col span={ 16 }>
-          <Accordion
-            activeKey={ '1' }
-            bordered
-            items={ sharedTranslationSettingsAccordion }
-            size={ 'small' }
-            table
+          <SharedTranslationSettingsAccordion
+            data={ validLanguages }
+            onChange={ (languages) => {
+              changeUserInState({
+                websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
+                websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
+              })
+            } }
           />
         </Col>
       </Row>
