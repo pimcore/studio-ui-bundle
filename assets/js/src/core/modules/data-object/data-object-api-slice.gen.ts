@@ -348,6 +348,14 @@ export type DataObject = Element & {
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
+    /** Inheritance allowed */
+    allowInheritance?: boolean;
+    /** Variants allowed */
+    allowVariants?: boolean;
+    /** Show variants */
+    showVariants?: boolean;
+    /** Has preview */
+    hasPreview?: boolean;
     customAttributes?: CustomAttributes;
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
@@ -368,6 +376,8 @@ export type DataObject = Element & {
     permissions?: DataObjectPermissions;
     /** Custom index */
     index?: number;
+    /** Detail object data */
+    objectData?: object;
 };
 export type DataObjectFolder = DataObject;
 export type UpdateDataProperty = {
