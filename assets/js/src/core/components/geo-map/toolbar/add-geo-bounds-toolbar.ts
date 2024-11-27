@@ -17,7 +17,7 @@ import { type GeoBounds } from '@Pimcore/components/geo-map/types/geo-types'
 export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoBounds?: GeoBounds, onChange?: (geoBounds: GeoBounds | undefined) => void, disabled?: boolean): void => {
   leafletMap.addLayer(featureGroup)
 
-  const bounds = geoBounds !== undefined ? L.latLngBounds(L.latLng(geoBounds.NElatitude, geoBounds.NElongitude), L.latLng(geoBounds.SWlatitude, geoBounds.SWlongitude)) : undefined
+  const bounds = geoBounds !== undefined ? L.latLngBounds(L.latLng(geoBounds.northEast.latitude as number, geoBounds.northEast.longitude as number), L.latLng(geoBounds.southWest.latitude as number, geoBounds.southWest.longitude as number)) : undefined
   let rectangle: L.Rectangle | undefined
 
   if (bounds !== undefined) {
@@ -61,10 +61,14 @@ export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGr
         const ne = layer.getBounds().getNorthEast()
         const sw = layer.getBounds().getSouthWest()
         onChange({
-          NElatitude: ne.lat,
-          NElongitude: ne.lng,
-          SWlatitude: sw.lat,
-          SWlongitude: sw.lng
+          northEast: {
+            latitude: ne.lat,
+            longitude: ne.lng
+          },
+          southWest: {
+            latitude: sw.lat,
+            longitude: sw.lng
+          }
         })
       }
     }
@@ -82,10 +86,14 @@ export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGr
       const sw = e.layer.getBounds().getSouthWest()
 
       onChange({
-        NElatitude: ne.lat,
-        NElongitude: ne.lng,
-        SWlatitude: sw.lat,
-        SWlongitude: sw.lng
+        northEast: {
+          latitude: ne.lat,
+          longitude: ne.lng
+        },
+        southWest: {
+          latitude: sw.lat,
+          longitude: sw.lng
+        }
       })
     }
   })

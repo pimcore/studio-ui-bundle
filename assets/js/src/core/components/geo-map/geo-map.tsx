@@ -150,20 +150,16 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
     return () => {
       if (containerRef.current !== null) {
         observer.unobserve(containerRef.current)
+        observer.disconnect()
       }
     }
   }, [])
 
   useEffect(() => {
-    if (isVisible) {
-      geoMapApi.forceRerender()
-    }
-  }, [isVisible])
-
-  useEffect(() => {
     if (!isVisible) {
       return
     }
+
     const map = initializeMap()
     return () => {
       if (map !== null) {
