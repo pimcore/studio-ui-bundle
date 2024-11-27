@@ -18,6 +18,7 @@ import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { Skeleton } from './../skeleton/skeleton'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -30,11 +31,13 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode, nodeApiHook } = useContext(TreeContext)
   const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
-  const { isLoading, isError, data } = apiHookResult
+  const { isLoading, isFetching, isError, data } = apiHookResult
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
 
-  if (isLoading === true) {
-    return <></>
+  if (isLoading === true || isFetching === true) {
+    return (
+      <Skeleton style={ { paddingLeft: token.paddingSM + (node.level + 1.5) * 24 } } />
+    )
   }
 
   if (isError === true) {
