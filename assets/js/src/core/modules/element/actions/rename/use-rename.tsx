@@ -21,26 +21,12 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import {
-  type Archive,
-  type AssetDocument,
-  type AssetFolder,
-  type Audio,
-  type Image,
-  type Text,
-  type Unknown,
-  type Video
-} from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import { getElementKey } from '@Pimcore/modules/element/element-helper'
-
-export type Asset = (Image | AssetDocument | Audio | Video | Archive | Text | AssetFolder | Unknown)
-export type Element = Asset | DataObject
+import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
   renameTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  renameContextMenuItem: (node: Element) => ItemType
+  renameContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   renameMutation: (parentId: number, value: string) => Promise<void>
 }
 
@@ -54,7 +40,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     id: number,
     currentLabel: string,
     parentId?: number,
-    postRename?: (newName: string) => void
+    onFinish?: (newName: string) => void
   ): void => {
     modal.input({
       title: t('element.rename'),
@@ -66,14 +52,14 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
       },
       onOk: async (value: string) => {
         await renameMutation(id, value, parentId)
-        postRename?.(value)
+        onFinish?.(value)
       }
     })
   }
 
   const renameContextMenuItem = (
     node: Element,
-    postRename?: (newName: string) => void
+    onFinish?: (newName: string) => void
   ): ItemType => {
     return {
       label: t('element.rename'),
@@ -82,7 +68,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
       hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
       onClick: () => {
         const parentId = node.parentId ?? undefined
-        rename(node.id, getElementKey(node, elementType), parentId, postRename)
+        rename(node.id, getElementKey(node, elementType), parentId, onFinish)
       }
     }
   }

@@ -20,7 +20,7 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { UseRenameHookReturn } from '@Pimcore/modules/element/actions/rename/use-rename'
 
-type Element = Asset | DataObject
+export type Element = Asset | DataObject
 
 export const getElementIcon = (element: Element, defaultIcon: ElementIcon): ElementIcon => {
   if (
