@@ -24,7 +24,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 
 export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
@@ -32,11 +32,11 @@ export interface UseCopyPasteHookReturn {
   paste: (parentId: number) => Promise<void>
   pasteCut: (parentId: number) => Promise<void>
   copyTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  copyContextMenuItem: (node: Element, postCopy?: () => void) => ItemType
+  copyContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   cutTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  cutContextMenuItem: (node: Element, postCut?: () => void) => ItemType
+  cutContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteContextMenuItem: (node: Element, postPaste?: () => void) => ItemType
+  pasteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   pasteCutContextMenuItem: (parentId: number) => ItemType
 }
 
@@ -148,7 +148,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
-  const copyContextMenuItem = (node: Element, postCopy?: () => void): ItemType => {
+  const copyContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.tree.copy'),
       key: 'copy',
@@ -156,7 +156,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       hidden: !checkElementPermission(node.permissions!, 'view') || node.isLocked,
       onClick: () => {
         copy(node)
-        // TODO: check how to fire after copy is done
+        onFinish?.()
       }
     }
   }
@@ -173,7 +173,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
-  const cutContextMenuItem = (node: Element, postCut?: () => void): ItemType => {
+  const cutContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.tree.cut'),
       key: 'cut',
@@ -181,7 +181,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
       onClick: () => {
         cut(node)
-        // TODO: check how to fire after cut is done
+        onFinish?.()
       }
     }
   }
@@ -198,7 +198,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
-  const pasteContextMenuItem = (node: Element, postPaste?: () => void): ItemType => {
+  const pasteContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.tree.paste'),
       key: 'paste',
@@ -206,7 +206,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       hidden: (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions!, 'create'),
       onClick: async () => {
         await paste(node.id)
-        // TODO: check how to fire after paste is done
+        onFinish?.()
       }
     }
   }
