@@ -15,9 +15,22 @@ import { Avatar } from 'antd'
 import React from 'react'
 import { useStlyes } from './left-sidebar-view.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
+import { useMainNav } from '@Pimcore/modules/app/nav/hooks/use-main-nav'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStlyes()
+
+  const { addNavItem } = useMainNav()
+  addNavItem({
+    path: 'Settings/User & Roles/Users',
+    icon: 'DataObjectOutlined'
+  })
+
+  addNavItem({
+    path: 'Settings/User & Roles/Roles',
+    icon: 'DataObjectOutlined'
+  })
 
   return (
     <div className={ styles.leftSidebar }>
@@ -26,6 +39,22 @@ export const LeftSidebarView = (): React.JSX.Element => {
         icon={ <Icon value='user-01' /> }
         size={ 26 }
       />
+
+      <ul className='left-sidebar__nav'>
+        <li>
+          <button
+            className='left-sidebar__nav-item'
+            type='button'
+          >
+            <Icon
+              options={ { width: 21, height: 21 } }
+              value={ 'AppstoreOutlined' }
+            />
+          </button>
+
+          <MainNav />
+        </li>
+      </ul>
     </div>
   )
 }
