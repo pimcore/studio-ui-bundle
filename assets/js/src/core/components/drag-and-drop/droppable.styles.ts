@@ -15,24 +15,36 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    droppable: css`
+    default: css`
       & .dnd--drag-active {
         background: ${token.colorBgContainerDisabled};
         border: 1px dashed ${token.colorBorder};
-        border-radius: ${token.borderRadius}px;
       }
-
+      
       & .dnd--drag-valid {
         background: ${token.colorBgTextActive};
         border: 1px dashed ${token.colorInfoBorder};
-        border-radius: ${token.borderRadius}px;
       }
 
       & .dnd--drag-error {
         background: ${token.colorErrorBg};
         border: 1px dashed ${token.colorErrorActive};
-        border-radius: ${token.borderRadius}px;
       }
+    `,
+    outline: css`
+      
+      & .dnd--drag-valid {
+        outline: 1px dashed ${token.colorInfoBorder};
+      }
+
+      & .dnd--drag-error {
+        outline: 1px dashed ${token.colorErrorActive};
+      }
+    `,
+    round: css`
+        & .dnd--drag-active, & .dnd--drag-valid, & .dnd--drag-error {
+          border-radius: ${token.borderRadius}px;
+        }
     `
   }
 })

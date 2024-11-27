@@ -84,6 +84,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Object': 'DynamicTypes/GridCell/Object',
   'DynamicTypes/GridCell/Document': 'DynamicTypes/GridCell/Document',
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
+  'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
   'DynamicTypes/Listing/AssetLink': 'DynamicTypes/Listing/AssetLink',
@@ -137,6 +138,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/GeoBounds': 'DynamicTypes/ObjectData/GeoBounds',
   'DynamicTypes/ObjectData/GeoPolygon': 'DynamicTypes/ObjectData/GeoPolygon',
   'DynamicTypes/ObjectData/GeoPolyLine': 'DynamicTypes/ObjectData/GeoPolyLine',
+  'DynamicTypes/ObjectData/ManyToManyRelation': 'DynamicTypes/ObjectData/ManyToManyRelation',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
 
