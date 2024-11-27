@@ -35,7 +35,7 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
     return <div>Failed to load tags</div>
   }
 
-  const treeData = createTreeStructure({ tags: tags.items })
+  const treeData = createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
 
   const handleCheck = (currentCheckedKeys: { checked: Key[], halfChecked: Key[] }): void => {
     const checkedKeysList = currentCheckedKeys.checked

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key } from 'react'
+import React, { type Key, useState } from 'react'
 import {
   type Tag,
   type TagAssignToElementApiArg,
@@ -42,16 +42,15 @@ export interface TagsTreeProps {
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { createTreeStructure } = useCreateTreeStructure()
-  const treeData = createTreeStructure({ tags })
+
   // const [treeData, setTreeData] = useState(createTreeStructure({ tags }))
-  // const [expandedKeys, setExpandedKeys] = useState<Key[]>([])
 
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const flatTags = flattenArray(tags)
-  const [assignTag, { isLoading: tagIsLoading }] = useTagAssignToElementMutation()
+  const [assignTag] = useTagAssignToElementMutation()
+  const [loadingNodes, setLoadingNodes] = useState<Set<string>>(new Set())
   const [unassignTag] = useTagUnassignFromElementMutation()
-
-  console.log('----> tagIsLoading', tagIsLoading)
+  const treeData = createTreeStructure({ tags, loadingNodes })
 
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
     updateTagsForElementByTypeAndId({
@@ -80,6 +79,12 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
     if (response.error !== undefined) {
       throw new Error(response.error.data.error as string)
     }
+
+    setLoadingNodes((prev) => {
+      const newSet = new Set(prev)
+      newSet.delete(String(tagId))
+      return newSet
+    })
   }
 
   const removeTagFromElement = async (tagId: number): Promise<void> => {
@@ -98,10 +103,17 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
     if (response.error !== undefined) {
       throw new Error(response.error.data.error as string)
     }
+
+    setLoadingNodes((prev) => {
+      const newSet = new Set(prev)
+      newSet.delete(String(tagId))
+      return newSet
+    })
   }
 
   const handleCheck: TreeProps['onCheck'] = async (checkedKeys: { checked: Key[], halfChecked: Key[] }, info): Promise<void> => {
     const tagId = Number(info.node.key)
+    setLoadingNodes((prev) => new Set(prev).add(String(tagId)))
 
     void applyTagsToElement(checkedKeys.checked)
 

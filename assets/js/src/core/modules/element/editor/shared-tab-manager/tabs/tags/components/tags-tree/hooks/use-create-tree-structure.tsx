@@ -1,0 +1,74 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import {
+  type TagGetCollectionApiResponse
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import type { TreeDataNode } from 'antd'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { LoadingOutlined } from '@ant-design/icons'
+import React from 'react'
+
+interface UseCreateTreeStructureReturn {
+  createTreeStructure: ({ tags, loadingNodes }: { tags: NonNullable<TagGetCollectionApiResponse['items']>, loadingNodes: Set<string> }) => TreeDataNode[]
+}
+
+export const useCreateTreeStructure = (): UseCreateTreeStructureReturn => {
+  const createTreeStructure = ({ tags, loadingNodes }: { tags: NonNullable<TagGetCollectionApiResponse['items']>, loadingNodes: Set<string> }): TreeDataNode[] => {
+    const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
+      if (tagText === undefined || tagText === null || tagText.trim() === '') {
+        return isLoading
+          ? (
+            <span>
+              <LoadingOutlined style={ { marginLeft: 8 } } />
+            </span>
+            )
+          : null
+      }
+
+      return (
+        <React.Fragment>
+          <span>{tagText}</span>
+          {isLoading && (
+            <LoadingOutlined style={ { marginLeft: 8 } } />
+          )}
+        </React.Fragment>
+      )
+    }
+
+    function treeWalker (tags: NonNullable<TagGetCollectionApiResponse['items']>): TreeDataNode[] {
+      return tags.map((tag) => {
+        const isLoading = loadingNodes.has(tag.id!.toString())
+        return {
+          key: tag.id!.toString(),
+          title: getTitle(tag.text, isLoading),
+          icon: Icon({
+            value: 'tag-02'
+          }),
+          children: tag.hasChildren === true ? treeWalker(tag.children!) : []
+        }
+      })
+    }
+
+    return [{
+      key: 'root',
+      title: 'All Tags',
+      icon: Icon({
+        value: 'folder'
+      }),
+      children: tags.length > 0 ? treeWalker(tags) : []
+    }]
+  }
+
+  return { createTreeStructure }
+}
