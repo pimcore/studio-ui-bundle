@@ -27,6 +27,7 @@ import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-s
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Asset, type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
 import type { DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { getElementKey } from '@Pimcore/modules/element/element-helper'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -55,19 +56,6 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     })
   }
 
-  // TODO: merge with useRename -> in global space
-  const getRenameString = (node: Element): string => {
-    if (elementType === 'asset') {
-      return (node as Asset).filename ?? ''
-    }
-
-    if (elementType === 'data-object') {
-      return (node as DataObject).key ?? ''
-    }
-
-    return ''
-  }
-
   const deleteTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.delete'),
@@ -91,7 +79,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       onClick: () => {
         const id = node.id
         const parentId = node.parentId ?? undefined
-        deleteElement(id, getRenameString(node), parentId)
+        deleteElement(id, getElementKey(node, elementType), parentId)
         // TODO: add postDelete method - check how to fire it after delete is done
       }
     }

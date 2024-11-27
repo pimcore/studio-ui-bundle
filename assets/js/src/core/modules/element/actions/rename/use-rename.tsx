@@ -32,6 +32,7 @@ import {
   type Video
 } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { getElementKey } from '@Pimcore/modules/element/element-helper'
 
 export type Asset = (Image | AssetDocument | Audio | Video | Archive | Text | AssetFolder | Unknown)
 export type Element = Asset | DataObject
@@ -48,18 +49,6 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
   const { elementPatch } = useElementApi(elementType)
-
-  const getRenameString = (node: Element): string => {
-    if (elementType === 'asset') {
-      return (node as Asset).filename ?? ''
-    }
-
-    if (elementType === 'data-object') {
-      return (node as DataObject).key ?? ''
-    }
-
-    return ''
-  }
 
   const rename = (
     id: number,
@@ -93,7 +82,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
       hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
       onClick: () => {
         const parentId = node.parentId ?? undefined
-        rename(node.id, getRenameString(node), parentId, postRename)
+        rename(node.id, getElementKey(node, elementType), parentId, postRename)
       }
     }
   }
