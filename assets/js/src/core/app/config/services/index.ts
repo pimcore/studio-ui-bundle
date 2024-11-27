@@ -120,19 +120,7 @@ import {
 import {
   DynamicTypeBatchEditTextArea
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
-import {
-  DynamicTypeGridCellAsset
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
-import {
-  DynamicTypeGridCellObject
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/object/dynamic-type-grid-cell-object'
-import {
-  DynamicTypeGridCellDocument
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/document/dynamic-type-grid-cell-document'
-import {
-  DynamicTypeGridCellLanguageSelect
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
->>>>>>> origin/1.x
+
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
