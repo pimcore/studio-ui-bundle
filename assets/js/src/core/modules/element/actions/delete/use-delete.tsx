@@ -25,14 +25,13 @@ import type { AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slic
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Asset, type Element } from '@Pimcore/modules/element/actions/rename/use-rename'
-import type { DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 import { getElementKey } from '@Pimcore/modules/element/element-helper'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
   deleteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  deleteContextMenuItem: (node: Element, postDelete?: () => void) => ItemType
+  deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   deleteMutation: (id: number, parentId?: number) => Promise<void>
 }
 
@@ -43,7 +42,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const { refreshTree } = useRefreshTree(elementType)
   const [elementDelete] = useElementDeleteMutation()
 
-  const deleteElement = (id: number, label: string, parentId?: number): void => {
+  const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({
       title: t('element.delete.confirmation.title'),
       content: <>
@@ -52,7 +51,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
         <b>{label}</b>
       </>,
       okText: t('element.delete.confirmation.ok'),
-      onOk: async () => { await deleteMutation(id, parentId) }
+      onOk: async () => { await deleteMutation(id, parentId, onFinish) }
     })
   }
 
@@ -70,7 +69,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     }
   }
 
-  const deleteContextMenuItem = (node: Element, postDelete?: () => void): ItemType => {
+  const deleteContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
       label: t('element.delete'),
       key: 'delete',
@@ -79,13 +78,12 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       onClick: () => {
         const id = node.id
         const parentId = node.parentId ?? undefined
-        deleteElement(id, getElementKey(node, elementType), parentId)
-        // TODO: add postDelete method - check how to fire it after delete is done
+        deleteElement(id, getElementKey(node, elementType), parentId, onFinish)
       }
     }
   }
 
-  const deleteMutation = async (id: number, parentId?: number): Promise<void> => {
+  const deleteMutation = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
     const promise = elementDelete({
       id,
       elementType
@@ -115,6 +113,8 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     } else if (parentId !== undefined) {
       refreshTree(parentId)
     }
+
+    onFinish?.()
   }
 
   return {
