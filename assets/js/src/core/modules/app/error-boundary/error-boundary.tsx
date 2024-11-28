@@ -25,6 +25,13 @@ interface IErrorBoundaryState {
   error: Error | null
 }
 
+const ErrorRegistry = {
+  hasShownError: false,
+  setErrorShown (status: boolean) {
+    this.hasShownError = status
+  }
+}
+
 class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> {
   constructor (props: IErrorBoundaryProps) {
     super(props)
@@ -43,25 +50,34 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> 
     console.error('Error caught by ErrorBoundary:', error, errorInfo)
   }
 
+  componentDidMount (): void {
+    ErrorRegistry.setErrorShown(false)
+  }
+
   handleRetry = (): void => {
     this.setState({ hasError: false, error: null })
+
+    ErrorRegistry.setErrorShown(false)
   }
 
   render (): ReactNode {
     const { children, fallback, showAlert } = this.props
-
     const { hasError, error } = this.state
 
     if (hasError) {
-      if (!isEmpty(fallback)) return fallback
+      if (!ErrorRegistry.hasShownError) {
+        ErrorRegistry.setErrorShown(true)
 
-      isFunction(showAlert) && showAlert(error?.message ?? 'Something went wrong.')
+        if (!isEmpty(fallback)) return fallback
 
-      return (
-        <div>
-          <div>{error?.message ?? 'Something went wrong.'}</div>
-        </div>
-      )
+        isFunction(showAlert) && showAlert(error?.message ?? 'Something went wrong.')
+
+        return (
+          <div>
+            <div>{error?.message ?? 'Something went wrong.'}</div>
+          </div>
+        )
+      }
     }
 
     return children
