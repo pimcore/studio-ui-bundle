@@ -12,24 +12,16 @@
 */
 
 import React, { Component, type ErrorInfo, type ReactNode } from 'react'
-import { isEmpty, isFunction } from 'lodash'
+import { isEmpty } from 'lodash'
 
 interface IErrorBoundaryProps {
   children: ReactNode
   fallback?: ReactNode
-  showAlert?: (content: string) => void
 }
 
 interface IErrorBoundaryState {
   hasError: boolean
   error: Error | null
-}
-
-const ErrorRegistry = {
-  hasShownError: false,
-  setErrorShown (status: boolean) {
-    this.hasShownError = status
-  }
 }
 
 class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> {
@@ -47,37 +39,25 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> 
   }
 
   componentDidCatch (error: Error, errorInfo: ErrorInfo): void {
-    console.error('Error caught by ErrorBoundary:', error, errorInfo)
-  }
-
-  componentDidMount (): void {
-    ErrorRegistry.setErrorShown(false)
+    console.log('Error caught by ErrorBoundary:', error, errorInfo)
   }
 
   handleRetry = (): void => {
     this.setState({ hasError: false, error: null })
-
-    ErrorRegistry.setErrorShown(false)
   }
 
   render (): ReactNode {
-    const { children, fallback, showAlert } = this.props
+    const { children, fallback } = this.props
     const { hasError, error } = this.state
 
     if (hasError) {
-      if (!ErrorRegistry.hasShownError) {
-        ErrorRegistry.setErrorShown(true)
+      if (!isEmpty(fallback)) return fallback
 
-        if (!isEmpty(fallback)) return fallback
-
-        isFunction(showAlert) && showAlert(error?.message ?? 'Something went wrong.')
-
-        return (
-          <div>
-            <div>{error?.message ?? 'Something went wrong.'}</div>
-          </div>
-        )
-      }
+      return (
+        <div>
+          <div>{error?.message ?? 'Something went wrong.'}</div>
+        </div>
+      )
     }
 
     return children

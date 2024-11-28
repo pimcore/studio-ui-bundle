@@ -14,7 +14,7 @@
 import React, { createContext, type ComponentType, useState, useMemo } from 'react'
 import { BorderNode, type TabNode } from 'flexlayout-react'
 import { WidgetView } from '@Pimcore/modules/widget-manager/widget/widget-view'
-import { ErrorBoundaryWithAlert } from '@Pimcore/modules/app/error-boundary/error-boundary-with-alert'
+import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 
 interface WidgetContainerProps {
   node: TabNode
@@ -35,7 +35,7 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
   const icon = config.icon ?? { value: 'widget-default', type: 'name' }
 
   return useMemo(() => (
-    <ErrorBoundaryWithAlert>
+    <ErrorBoundary>
       <WidgetContext.Provider value={ { nodeId } }>
         <WidgetView
           icon={ icon }
@@ -45,7 +45,7 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
           <Component { ...node.getConfig() } />
         </WidgetView>
       </WidgetContext.Provider>
-    </ErrorBoundaryWithAlert>
+    </ErrorBoundary>
   ), [nodeId, isBorderNode])
 }
 
