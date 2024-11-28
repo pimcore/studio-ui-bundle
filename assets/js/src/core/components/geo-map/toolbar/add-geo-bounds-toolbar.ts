@@ -17,7 +17,7 @@ import { type GeoBounds } from '@Pimcore/components/geo-map/types/geo-types'
 export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGroup, geoBounds?: GeoBounds, onChange?: (geoBounds: GeoBounds | undefined) => void, disabled?: boolean): void => {
   leafletMap.addLayer(featureGroup)
 
-  const bounds = geoBounds !== undefined ? L.latLngBounds(L.latLng(geoBounds.northEast.latitude as number, geoBounds.northEast.longitude as number), L.latLng(geoBounds.southWest.latitude as number, geoBounds.southWest.longitude as number)) : undefined
+  const bounds = geoBounds !== undefined ? L.latLngBounds(L.latLng(geoBounds.northEast.latitude, geoBounds.northEast.longitude), L.latLng(geoBounds.southWest.latitude, geoBounds.southWest.longitude)) : undefined
   let rectangle: L.Rectangle | undefined
 
   if (bounds !== undefined) {
