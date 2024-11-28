@@ -33,22 +33,26 @@ export interface DataComponentProps extends ObjectComponentProps {
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const localizedFields = useLocalizedFields()
-  const { name } = props
-  const { fieldType, fieldtype } = props
+  const { name, fieldType, fieldtype } = props
   const formList = useFormList()
   const hasFormList = formList !== undefined
-  const hasLocalizedFields = localizedFields !== undefined && !hasFormList
+  const hasLocalizedFields = localizedFields !== undefined
   let formFieldName: Array<number | string> = [name]
   let title = props.title as ReactNode
   const { currentLanguage } = useLanguageSelection()
 
   if (hasFormList) {
-    formFieldName = [formList.field.name, name]
+    formFieldName = [...formList.getComputedFieldName(), name]
   }
 
   if (hasLocalizedFields) {
     // @todo should handle multiple locales
     formFieldName = ['localizedfields', name, localizedFields.locales[0]]
+
+    if (hasFormList) {
+      formFieldName = [...formList.getComputedFieldName(), ...formFieldName]
+    }
+
     title = (
       <>
         {title}<Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
@@ -73,7 +77,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const _props = {
     ...props,
     title,
-    name: hasLocalizedFields ? formFieldName : name
+    name: formFieldName
   }
 
   if (!objectDataType.isCollectionType) {

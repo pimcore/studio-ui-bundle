@@ -107,6 +107,7 @@ import { type DynamicTypeGridCellLanguageSelect } from './defintinitions/grid-ce
 import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
 import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
 import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
+import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 
 moduleSystem.registerModule({
   onInit () {
@@ -210,5 +211,6 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
   }
 })
