@@ -14,34 +14,36 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import {
-  InputQuantityValue
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/input-quantity-value/input-quantity-value'
-import type { FormItemProps } from 'antd/es/form/FormItem'
 
-export type InputQuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
+import type { FormItemProps } from 'antd/es/form/FormItem'
+import {
+  QuantityValueRange
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/quantity-value-range/quantity-value-range'
+
+export type QuantityValueRangeObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
-  defaultValue: string | null
   validUnits: string[] | null
+  unitWidth: string | null
+  decimalPrecision: number | null
   width: string | null
 }
 
-export class DynamicTypeObjectDataInputQuantityValue extends DynamicTypeObjectDataAbstract {
-  id: string = 'inputQuantityValue'
+export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDataAbstract {
+  id: string = 'quantityValueRange'
 
-  getObjectDataComponent (props: InputQuantityValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: QuantityValueRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <InputQuantityValue { ...props } />
+      <QuantityValueRange { ...props } />
     )
   }
 
-  getObjectDataFormItemProps (props: InputQuantityValueObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: QuantityValueRangeObjectDataDefinition): FormItemProps {
     return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: {
+      ...super.getObjectDataFormItemProps(props)
+      /* initialValue: {
         value: props.defaultValue,
         unitId: props.defaultUnit
-      }
+      } */
     }
   }
 }
