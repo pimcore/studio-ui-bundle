@@ -13,6 +13,7 @@
 
 import React, { Component, type ErrorInfo, type ReactNode } from 'react'
 import { isEmpty } from 'lodash'
+import { Flex, Typography } from 'antd'
 
 interface IErrorBoundaryProps {
   children: ReactNode
@@ -42,10 +43,6 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> 
     console.log('Error caught by ErrorBoundary:', error, errorInfo)
   }
 
-  handleRetry = (): void => {
-    this.setState({ hasError: false, error: null })
-  }
-
   render (): ReactNode {
     const { children, fallback } = this.props
     const { hasError, error } = this.state
@@ -54,9 +51,14 @@ class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundaryState> 
       if (!isEmpty(fallback)) return fallback
 
       return (
-        <div>
-          <div>{error?.message ?? 'Something went wrong.'}</div>
-        </div>
+        <Flex
+          align='center'
+          gap={ 10 }
+          justify='center'
+          style={ { position: 'absolute', inset: 0 } }
+        >
+          <Typography>{error?.message ?? 'Something went wrong.'}</Typography>
+        </Flex>
       )
     }
 
