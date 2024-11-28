@@ -65,6 +65,7 @@ import { type DynamicTypeObjectLayoutFieldContainer } from './defintinitions/obj
 import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-related/types/dynamic-type-object-data-input'
 import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-textarea'
 import { type DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-password'
+import { type DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
 import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
 import { type DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-multiselect'
 import { type DynamicTypeObjectDataLanguage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-language'
@@ -181,6 +182,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTextarea>(serviceIds['DynamicTypes/ObjectData/Textarea']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataPassword>(serviceIds['DynamicTypes/ObjectData/Password']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInputQuantityValue>(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSelect>(serviceIds['DynamicTypes/ObjectData/Select']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataMultiSelect>(serviceIds['DynamicTypes/ObjectData/MultiSelect']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLanguage>(serviceIds['DynamicTypes/ObjectData/Language']))

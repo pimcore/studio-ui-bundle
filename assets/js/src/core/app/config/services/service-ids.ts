@@ -112,6 +112,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
   'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
   'DynamicTypes/ObjectData/Password': 'DynamicTypes/ObjectData/Password',
+  'DynamicTypes/ObjectData/InputQuantityValue': 'DynamicTypes/ObjectData/InputQuantityValue',
   'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',
   'DynamicTypes/ObjectData/MultiSelect': 'DynamicTypes/ObjectData/MultiSelect',
   'DynamicTypes/ObjectData/Language': 'DynamicTypes/ObjectData/Language',

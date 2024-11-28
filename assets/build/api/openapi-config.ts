@@ -74,6 +74,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/(login|logout)/i)
+    },
+    '../../js/src/core/modules/data-object/quantity-value-units-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/quantity-value/i)
     }
   },
   exportName: 'api',
