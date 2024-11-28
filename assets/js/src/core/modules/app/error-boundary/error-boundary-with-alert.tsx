@@ -15,16 +15,16 @@ import React, { type ReactNode } from 'react'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 
-interface IErrorBoundaryContainerProps {
+interface ErrorBoundaryWithAlertProps {
   children: ReactNode
 }
 
-export const ErrorBoundaryContainer = ({ children }: IErrorBoundaryContainerProps): React.JSX.Element => {
+export const ErrorBoundaryWithAlert = ({ children }: ErrorBoundaryWithAlertProps): React.JSX.Element => {
   const alertModal = useAlertModal()
 
   return (
     <ErrorBoundary
-      showAlert={ (message: string) => alertModal.error({ content: message }) }
+      showAlert={ (content: string | ReactNode) => alertModal.error({ content }) }
     >
       {children}
     </ErrorBoundary>
