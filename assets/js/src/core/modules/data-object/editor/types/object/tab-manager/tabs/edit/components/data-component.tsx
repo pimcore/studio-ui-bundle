@@ -48,7 +48,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   if (hasLocalizedFields) {
     // @todo should handle multiple locales
-    formFieldName = ['localizedfields', localizedFields.locales[0], name]
+    formFieldName = ['localizedfields', name, localizedFields.locales[0]]
     title = (
       <>
         {title}<Text type='secondary'>({currentLanguage.toUpperCase()})</Text>

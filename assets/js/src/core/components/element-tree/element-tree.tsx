@@ -25,6 +25,8 @@ import { TreeNode, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
+import { Skeleton } from './skeleton/skeleton'
+import { Box } from '../box/box'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -157,6 +159,12 @@ const ElementTree = (
 
   return (
     <UploadProvider>
+      {isLoading === true && (
+        <Box padding={ { left: 'extra-small' } }>
+          <Skeleton />
+        </Box>
+      )}
+
       {isLoading === false && items.length !== 0 && (
         ContextMenu !== undefined && rightClickedNode !== undefined
           ? (
