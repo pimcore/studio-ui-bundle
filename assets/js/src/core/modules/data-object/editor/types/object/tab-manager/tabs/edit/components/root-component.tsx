@@ -19,9 +19,10 @@ import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-o
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
+  data: any
 }
 
-export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element => {
+export const RootComponent = ({ layout, data }: RootComponentProps): React.JSX.Element => {
   return (
     <ConfigProvider theme={ {
       components: {
@@ -32,9 +33,7 @@ export const RootComponent = ({ layout }: RootComponentProps): React.JSX.Element
     } }
     >
       <Form
-        initialValues={ {
-          myRandomTestValue: 'Hello World'
-        } }
+        initialValues={ data }
         layout='vertical'
         onFinish={ onFinish }
         preserve

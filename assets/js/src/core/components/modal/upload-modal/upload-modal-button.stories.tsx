@@ -11,21 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { NumericRange } from './numeric-range'
+import type { Meta } from '@storybook/react'
+import { UploadModalButton } from '@Pimcore/components/modal/upload-modal/upload-modal-button'
 
 const config: Meta = {
-  title: 'Components/Data Entry/NumericRange',
-  component: NumericRange,
-  argTypes: {
-    onChange: { action: 'changed' }
-  }
+  title: 'Components/Data Entry/UploadModalButton',
+  component: UploadModalButton,
+  tags: ['autodocs']
 }
 
 export default config
 
 export const _default = {
   args: {
-    value: [0, 100]
+    maxItems: 5
   }
 }
