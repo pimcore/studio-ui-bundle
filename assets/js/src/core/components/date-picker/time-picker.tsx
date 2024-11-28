@@ -32,8 +32,6 @@ export type TimePickerProps = GenericTimePickerProps & {
 export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
   const outputFormat = props?.outputFormat ?? 'HH:mm:ss'
 
-  console.log('timepicker', props.value, toDayJs(props.value))
-
   const [value, setValue] = React.useState<Dayjs | null>(toDayJs(props.value, outputFormat))
 
   useEffect(() => {
