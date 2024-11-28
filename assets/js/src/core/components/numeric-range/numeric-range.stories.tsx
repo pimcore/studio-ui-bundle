@@ -26,6 +26,6 @@ export default config
 
 export const _default = {
   args: {
-    value: [0, 100]
+    value: { minimum: 3, maximum: 10 }
   }
 }
