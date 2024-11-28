@@ -20,6 +20,7 @@ import { useMainNav } from '@Pimcore/modules/app/nav/hooks/use-main-nav'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStlyes()
+  const [mainNavOpen, setMainNavOpen] = React.useState(false)
 
   const { addNavItem } = useMainNav()
   addNavItem({
@@ -44,6 +45,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
         <li>
           <button
             className='left-sidebar__nav-item'
+            onClick={ () => { setMainNavOpen(!mainNavOpen) } }
             type='button'
           >
             <Icon
@@ -52,7 +54,11 @@ export const LeftSidebarView = (): React.JSX.Element => {
             />
           </button>
 
-          <MainNav />
+          { mainNavOpen
+            ? (
+              <MainNav />
+              )
+            : null}
         </li>
       </ul>
     </div>
