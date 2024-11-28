@@ -35,7 +35,6 @@ import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
 import usePagination from '@Pimcore/utils/hooks/use-pagination'
-import { useApiErrorHandler } from '@Pimcore/hooks/use-api-error-handler'
 
 interface DataPatch {
   columnId: string
@@ -62,8 +61,6 @@ export const ListContainerInner = (): React.JSX.Element => {
   const [, setDataPatches] = useState<DataPatch[]>([])
   const { sorting } = useListSorting()
   const [isLoading, setIsLoading] = useState(true)
-
-  useApiErrorHandler({ errorData: fetchListingResult, withAlert: true })
 
   useEffect(() => {
     setSelectedRows({})

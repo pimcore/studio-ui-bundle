@@ -11,42 +11,48 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type React from 'react'
 import { useEffect } from 'react'
-import { isEmpty } from 'lodash'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { type SerializedError } from '@reduxjs/toolkit'
+import { isEmpty, isString } from 'lodash'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { type MutationResultSelectorResult } from '@reduxjs/toolkit/query'
 
-interface IUseApiErrorHandlerProps {
-  errorData: MutationResultSelectorResult<any>
-  withAlert?: boolean
-}
+type UseApiErrorHandler = (errorData: FetchBaseQueryError | SerializedError | undefined | null) => void
 
-interface ErrorData {
-  status: number
-  data: {
-    detail: string
-    message: string
-  }
+interface IErrorData {
+  detail: string
+  message: string
 }
 
 const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
-export const useApiErrorHandler: React.FC<IUseApiErrorHandlerProps> = ({ errorData, withAlert = false }) => {
+export const useApiErrorHandler: UseApiErrorHandler = (errorData) => {
   const modal = useAlertModal()
 
+  const getErrorContent = (): string | null => {
+    if (!isEmpty(errorData)) {
+      if ('data' in errorData && !isEmpty((errorData.data as IErrorData)?.message)) {
+        return (errorData.data as IErrorData)?.message
+      }
+
+      if ('error' in errorData && isString(errorData.error)) {
+        return errorData.error
+      }
+    }
+
+    return null
+  }
+
   const handleErrorData = (): void => {
-    const errorInfo = (errorData?.error as ErrorData).data?.message
+    const errorInfo = getErrorContent()
     const errorContent = errorInfo ?? DEFAULT_ERROR_CONTENT
 
-    withAlert && modal.error({ content: errorContent })
+    modal.error({ content: errorContent })
   }
 
   useEffect(() => {
-    if (!isEmpty(errorData) && errorData.isError) {
+    if (!isEmpty(errorData)) {
       handleErrorData()
     }
   }, [errorData, modal])
-
-  return null
 }

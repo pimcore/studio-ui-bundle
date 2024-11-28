@@ -12,6 +12,8 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { type SerializedError } from '@reduxjs/toolkit'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -23,6 +25,7 @@ import {
   useMercureCreateCookieMutation
 } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
+import { useApiErrorHandler } from '@Pimcore/hooks/use-api-error-handler'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 
 export interface IAppLoaderProps {
@@ -34,16 +37,23 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { i18n } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(true)
+  const [errorData, setErrorData] = useState<FetchBaseQueryError | SerializedError | null | undefined>(null)
 
   const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
+
+  useApiErrorHandler(errorData)
 
   async function initLoadUser (): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
     await fetchMercureCookie()
 
     userFetcher
-      .then(({ data, isSuccess }) => {
+      .then(({ data, isSuccess, isError, error }) => {
+        if (isError) {
+          setErrorData(error)
+        }
+
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
         }
@@ -57,7 +67,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     const settingsFetcher = dispatch(settingsApi.endpoints.systemSettingsGet.initiate())
 
     settingsFetcher
-      .then(({ data, isSuccess }) => {
+      .then(({ data, isSuccess, isError, error }) => {
+        if (isError) {
+          setErrorData(error)
+        }
+
         if (isSuccess && data !== undefined) {
           dispatch(setSettings(data))
         }
