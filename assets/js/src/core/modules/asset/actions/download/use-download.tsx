@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {type ItemType} from '@Pimcore/components/dropdown/dropdown'
-import {type Asset} from '@Pimcore/modules/asset/asset-api-slice.gen'
-import {type TreeNodeProps} from '@Pimcore/components/element-tree/node/tree-node'
-import {Icon} from '@Pimcore/components/icon/icon'
+import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
-import {useTranslation} from 'react-i18next'
-import {getPrefix} from '@Pimcore/app/api/pimcore/route'
-import {saveFileLocal} from '@Pimcore/utils/files'
+import { useTranslation } from 'react-i18next'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { saveFileLocal } from '@Pimcore/utils/files'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => Promise<void>
@@ -47,7 +47,7 @@ export const useDownload = (): UseDownloadReturn => {
       key: 'download',
       icon: <Icon value={ 'download-02' } />,
       hidden: node.type === 'folder',
-      onClick: () => handleDownload(node, onFinish)
+      onClick: () => { handleDownload(node, onFinish) }
     }
   }
 
@@ -57,7 +57,7 @@ export const useDownload = (): UseDownloadReturn => {
       key: 'download',
       icon: <Icon value={ 'download-02' } />,
       hidden: node.type === 'folder',
-      onClick: () => handleDownload(node, onFinish)
+      onClick: () => { handleDownload(node) }
     }
   }
 
