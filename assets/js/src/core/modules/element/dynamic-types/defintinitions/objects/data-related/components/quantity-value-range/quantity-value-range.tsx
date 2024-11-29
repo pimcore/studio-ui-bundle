@@ -20,6 +20,8 @@ import { Select } from '@Pimcore/components/select/select'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { type ValueType } from '@rc-component/mini-decimal/es/interface'
+import { useStyles } from './quantity-value-range.styles'
+import cn from 'classnames'
 
 export interface QuantityValueRangeProps {
   value?: QuantityValueRangeValue | null
@@ -41,6 +43,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
   const [value, setValue] = useState<QuantityValueRangeValue>(props.value ?? { minimum: null, maximum: null, unitId: null })
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const onChangeMinimum = (newValue: ValueType | null): void => {
     setValue({
@@ -78,16 +81,16 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
         align="center"
         className="w-full"
         gap="small"
-        style={ { maxWidth: toCssDimension(props.width, 300), minWidth: '100px' } }
+        style={ { maxWidth: toCssDimension(props.width, 310) } }
       >
         <InputNumber
-          className="w-full"
+          className={ cn(styles.input, 'w-full') }
           onChange={ onChangeMinimum }
           precision={ props.decimalPrecision ?? undefined }
           value={ value?.minimum ?? undefined }
         />
         <InputNumber
-          className="w-full"
+          className={ cn(styles.input, 'w-full') }
           onChange={ onChangeMaximum }
           precision={ props.decimalPrecision ?? undefined }
           value={ value?.maximum ?? undefined }

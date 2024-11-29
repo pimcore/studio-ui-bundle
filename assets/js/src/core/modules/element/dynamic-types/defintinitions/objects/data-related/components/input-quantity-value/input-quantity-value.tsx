@@ -19,6 +19,7 @@ import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-qu
 import { Select } from '@Pimcore/components/select/select'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { useStyles } from './input-quantity-value.styles'
 
 export interface InputQuantityValueProps {
   value?: InputQuantityValueValue | null
@@ -37,6 +38,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
   const [value, setValue] = useState<InputQuantityValueValue>(props.value ?? { value: null, unitId: null })
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = e.target.value
@@ -65,20 +67,21 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
       align="center"
       className={ props.className }
       gap="small"
-      style={ { maxWidth: toCssDimension(props.width, 400) } }
     >
       <Input
+        className={ styles.input }
         onChange={ onChangeInput }
+        style={ { maxWidth: toCssDimension(props.width, 150) } }
         value={ value?.value ?? undefined }
       />
       <Select
         allowClear
+        className={ styles.select }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         showSearch
-        style={ { minWidth: '100px' } }
         value={ value?.unitId ?? undefined }
       />
     </Flex>

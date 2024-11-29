@@ -21,6 +21,8 @@ import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { QuantityValueCalculatorButton } from './components/calculator/calculator-button'
+import { useStyles } from './quantity-value.styles'
+import cn from 'classnames'
 
 export interface QuantityValueProps {
   value?: QuantityValueValue | null
@@ -43,6 +45,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { convertValue } = useQuantityValueUnits()
+  const { styles } = useStyles()
 
   const onChangeNumber = (newValue: ValueType | null): void => {
     setValue({
@@ -84,7 +87,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
       gap="small"
     >
       <InputNumber
-        className="w-full"
+        className={ cn(styles.input, 'w-full') }
         onChange={ onChangeNumber }
         precision={ props.decimalPrecision ?? undefined }
         style={ { maxWidth: toCssDimension(props.width, 150) } }
