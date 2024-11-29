@@ -23,8 +23,10 @@ import {
   useMercureCreateCookieMutation
 } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
-import { useApiErrorHandler } from '@Pimcore/hooks/use-api-error-handler'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+import { trackError } from '@Pimcore/modules/app/error-handler/error-handler'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -39,7 +41,10 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
-  const { track } = useApiErrorHandler()
+  const modal = useAlertModal()
+
+  // Register the modal instance to allow centralized error message display throughout the project
+  ErrorModalService.setModalInstance(modal)
 
   async function initLoadUser (): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
@@ -47,7 +52,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     userFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && track(error)
+        isError && trackError({ errorType: 'API_ERROR', errorData: error })
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
@@ -63,7 +68,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     settingsFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && track(error)
+        isError && trackError({ errorType: 'API_ERROR', errorData: error })
 
         if (isSuccess && data !== undefined) {
           dispatch(setSettings(data))
