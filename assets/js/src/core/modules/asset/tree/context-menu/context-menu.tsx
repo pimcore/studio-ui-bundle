@@ -28,6 +28,7 @@ import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-co
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -42,6 +43,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { renameTreeContextMenuItem } = useRename('asset')
   const { deleteTreeContextMenuItem } = useDelete('asset')
   const { refreshTreeContextMenuItem } = useRefreshTree('asset')
+  const { downloadTreeContextMenuItem } = useDownload()
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem } = useLock('asset')
   const node = props.node
@@ -89,6 +91,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteTreeContextMenuItem(props.node),
     createZipDownloadContextMeuItem(props.node),
+    downloadTreeContextMenuItem(props.node),
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
