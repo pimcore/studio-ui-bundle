@@ -12,8 +12,6 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { type SerializedError } from '@reduxjs/toolkit'
-import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { api } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { api as settingsApi } from '@Pimcore/modules/app/settings/settings-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
@@ -37,12 +35,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { i18n } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(true)
-  const [errorData, setErrorData] = useState<FetchBaseQueryError | SerializedError | null | undefined>(null)
 
   const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
 
-  useApiErrorHandler(errorData)
+  const { track } = useApiErrorHandler()
 
   async function initLoadUser (): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
@@ -50,9 +47,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     userFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        if (isError) {
-          setErrorData(error)
-        }
+        isError && track(error)
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
@@ -68,9 +63,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     settingsFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        if (isError) {
-          setErrorData(error)
-        }
+        isError && track(error)
 
         if (isSuccess && data !== undefined) {
           dispatch(setSettings(data))
