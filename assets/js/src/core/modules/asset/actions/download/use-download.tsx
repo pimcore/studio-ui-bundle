@@ -62,7 +62,7 @@ export const useDownload = (): UseDownloadReturn => {
       link.href = window.URL.createObjectURL(blob)
       link.click()
     } catch (e: any) {
-      void messageApi.error({
+      await messageApi.error({
         content: e.message
       })
     }
