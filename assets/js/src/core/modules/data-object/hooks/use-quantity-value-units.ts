@@ -11,16 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useClassQuantityValueUnitListQuery } from '@Pimcore/modules/data-object/quantity-value-units-api-slice.gen'
+import {
+  useClassQuantityValueUnitConvertMutation,
+  useClassQuantityValueUnitListQuery
+} from '@Pimcore/modules/data-object/quantity-value-units-api-slice.gen'
 import { type DefaultOptionType } from 'rc-select/lib/Select'
 import { useTranslation } from 'react-i18next'
+import _ from 'lodash'
 
 interface UseQuantityValueUnitsReturn {
   getSelectOptions: (validUnits?: string[]) => DefaultOptionType[]
+  convertValue: (fromUnitId: string, toUnitId: string, value: number) => Promise<number | null>
+  getAbbreviation: (unitId: string) => string
 }
 
 export const useQuantityValueUnits = (): UseQuantityValueUnitsReturn => {
   const { data: units } = useClassQuantityValueUnitListQuery()
+  const [convertQuantityValue] = useClassQuantityValueUnitConvertMutation()
   const { t } = useTranslation()
 
   const getSelectOptions = (validUnits?: string[]): DefaultOptionType[] => {
@@ -37,5 +44,47 @@ export const useQuantityValueUnits = (): UseQuantityValueUnitsReturn => {
       }))
   }
 
-  return { getSelectOptions }
+  const convertValue = async (fromUnitId: string, toUnitId: string, value: number): Promise<number | null> => {
+    if (units?.items === undefined) {
+      return null
+    }
+    const fromUnit = units.items.find(unit => unit.id === fromUnitId)
+    const toUnit = units.items.find(unit => unit.id === toUnitId)
+    if (fromUnit === undefined || toUnit === undefined) {
+      return null
+    }
+    if (fromUnit.baseUnit === null || fromUnit.baseUnit !== toUnit.baseUnit) {
+      return null
+    }
+
+    const { data } = await convertQuantityValue({
+      convertParameters: {
+        fromUnitId,
+        toUnitId,
+        value
+      }
+    }).catch(() => {
+      throw new Error('Error converting quantity value.')
+    })
+
+    return data?.data ?? null
+  }
+
+  const getAbbreviation = (unitId: string): string => {
+    if (units?.items === undefined) {
+      return ''
+    }
+
+    const unit = units.items.find(unit => unit.id === unitId)
+    if (typeof unit?.abbreviation === 'string' && !_.isEmpty(unit.abbreviation)) {
+      return t(unit.abbreviation)
+    }
+    return unitId
+  }
+
+  return {
+    getSelectOptions,
+    convertValue,
+    getAbbreviation
+  }
 }

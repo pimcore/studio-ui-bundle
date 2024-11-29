@@ -77,6 +77,7 @@ import { type DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/elemen
 import { type DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
 import { type DynamicTypeObjectDataNumericRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric-range'
 import { type DynamicTypeObjectDataSlider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-slider'
+import { type DynamicTypeObjectDataQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value'
 import { type DynamicTypeObjectDataQuantityValueRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value-range'
 import { type DynamicTypeObjectDataConsent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-consent'
 import { type DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-firstname'
@@ -195,6 +196,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumeric>(serviceIds['DynamicTypes/ObjectData/Numeric']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumericRange>(serviceIds['DynamicTypes/ObjectData/NumericRange']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSlider>(serviceIds['DynamicTypes/ObjectData/Slider']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataQuantityValue>(serviceIds['DynamicTypes/ObjectData/QuantityValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataQuantityValueRange>(serviceIds['DynamicTypes/ObjectData/QuantityValueRange']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataConsent>(serviceIds['DynamicTypes/ObjectData/Consent']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFirstname>(serviceIds['DynamicTypes/ObjectData/Firstname']))

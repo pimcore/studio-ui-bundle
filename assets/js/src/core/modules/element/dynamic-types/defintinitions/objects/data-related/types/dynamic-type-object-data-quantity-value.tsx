@@ -17,32 +17,33 @@ import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from
 
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
-  QuantityValueRange
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/quantity-value-range/quantity-value-range'
+  QuantityValue
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/quantity-value/quantity-value'
 
-export type QuantityValueRangeObjectDataDefinition = AbstractObjectDataDefinition & {
+export type QuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
+  defaultValue: number | null
   validUnits: string[] | null
   unitWidth: string | null
   decimalPrecision: number | null
   width: string | null
+  autoConvert: boolean
 }
 
-export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDataAbstract {
-  id: string = 'quantityValueRange'
+export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbstract {
+  id: string = 'quantityValue'
 
-  getObjectDataComponent (props: QuantityValueRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: QuantityValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <QuantityValueRange { ...props } />
+      <QuantityValue { ...props } />
     )
   }
 
-  getObjectDataFormItemProps (props: QuantityValueRangeObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: QuantityValueObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       initialValue: {
-        minimum: null,
-        maximum: null,
+        value: props.defaultValue,
         unitId: props.defaultUnit
       }
     }
