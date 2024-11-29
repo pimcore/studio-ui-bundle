@@ -120,6 +120,7 @@ import {
 import {
   DynamicTypeBatchEditTextArea
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
+import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -243,6 +244,7 @@ container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']).to(DynamicTypeObjectDataManyToManyRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Block']).to(DynamicTypeObjectDataBlock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/LocalizedFields']).to(DynamicTypeObjectDataLocalizedFields).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/FieldCollection']).to(DynamicTypeObjectDataFieldCollection).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
