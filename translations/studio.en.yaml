@@ -296,6 +296,7 @@ close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.add-assets: Add Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
