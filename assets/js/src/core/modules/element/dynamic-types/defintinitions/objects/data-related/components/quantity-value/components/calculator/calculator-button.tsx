@@ -58,7 +58,7 @@ export const QuantityValueCalculatorButton = (props: QuantityValueCalculatorButt
       trigger="click"
     >
       <IconButton
-        icon={ { value: 'mainObject' } }
+        icon={ { value: 'calculator' } }
         type="default"
       />
     </Popover>
