@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { Icon } from '@Pimcore/components/icon/icon'
+import {type ItemType} from '@Pimcore/components/dropdown/dropdown'
+import {type Asset} from '@Pimcore/modules/asset/asset-api-slice.gen'
+import {type TreeNodeProps} from '@Pimcore/components/element-tree/node/tree-node'
+import {Icon} from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import {useTranslation} from 'react-i18next'
+import {getPrefix} from '@Pimcore/app/api/pimcore/route'
+import {saveFileLocal} from '@Pimcore/utils/files'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => Promise<void>
@@ -28,50 +28,15 @@ export interface UseDownloadReturn {
 
 export const useDownload = (): UseDownloadReturn => {
   const { t } = useTranslation()
-  const messageApi = useMessage()
 
-  const download = async (id: string, label?: string): Promise<void> => {
+  const download = (id: string, label?: string): void => {
     const downloadUrl = `${getPrefix()}/assets/${id}/download`
-
-    try {
-      const response = await fetch(downloadUrl)
-
-      if (label === undefined) {
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
-        const filename = response.headers.get('content-disposition') ?? ''
-        const matches = filenameRegex.exec(filename)
-
-        if (matches?.[1] !== undefined) {
-          label = matches[1].replace(/['"]/g, '')
-        }
-
-        if (label === undefined) {
-          label = 'download'
-        }
-      }
-
-      if (!response.ok) {
-        throw new Error('File download not possible')
-      }
-
-      // Get the blob from the response
-      const blob = await response.blob()
-
-      const link = document.createElement('a')
-      link.download = label
-      link.href = window.URL.createObjectURL(blob)
-      link.click()
-    } catch (e: any) {
-      await messageApi.error({
-        content: e.message
-      })
-    }
+    saveFileLocal(downloadUrl, label)
   }
 
-  const handleDownload = async (node: Asset | TreeNodeProps, onFinish?: () => void): Promise<void> => {
+  const handleDownload = (node: Asset | TreeNodeProps, onFinish?: () => void): void => {
     const id = typeof node.id === 'string' ? node.id : node.id.toString()
-
-    await download(id)
+    download(id)
 
     onFinish?.()
   }
@@ -82,9 +47,7 @@ export const useDownload = (): UseDownloadReturn => {
       key: 'download',
       icon: <Icon value={ 'download-02' } />,
       hidden: node.type === 'folder',
-      onClick: () => {
-        void handleDownload(node, onFinish)
-      }
+      onClick: () => handleDownload(node, onFinish)
     }
   }
 
@@ -94,9 +57,7 @@ export const useDownload = (): UseDownloadReturn => {
       key: 'download',
       icon: <Icon value={ 'download-02' } />,
       hidden: node.type === 'folder',
-      onClick: () => {
-        void handleDownload(node)
-      }
+      onClick: () => handleDownload(node, onFinish)
     }
   }
 
