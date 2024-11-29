@@ -21,7 +21,8 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 export interface UseDownloadReturn {
-  downloadContextMenuItem: (node: Asset) => ItemType
+  download: (id: string, label?: string) => Promise<void>
+  downloadContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
   downloadTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
@@ -29,23 +30,35 @@ export const useDownload = (): UseDownloadReturn => {
   const { t } = useTranslation()
   const messageApi = useMessage()
 
-  const download = async (node: Asset | TreeNodeProps): Promise<void> => {
-    const label = 'label' in node ? node.label : 'filename' in node ? node.filename : ''
-    const id = typeof node.id === 'number' ? node.id : parseInt(node.id)
+  const download = async (id: string, label?: string): Promise<void> => {
     const downloadUrl = `${getPrefix()}/assets/${id}/download`
 
     try {
       const response = await fetch(downloadUrl)
 
+      if (label === undefined) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+        const filename = response.headers.get('content-disposition') ?? ''
+        const matches = filenameRegex.exec(filename)
+
+        if (matches?.[1] !== undefined) {
+          label = matches[1].replace(/['"]/g, '')
+        }
+
+        if (label === undefined) {
+          label = 'download'
+        }
+      }
+
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error('File download not possible')
       }
 
       // Get the blob from the response
       const blob = await response.blob()
 
       const link = document.createElement('a')
-      link.download = label!
+      link.download = label
       link.href = window.URL.createObjectURL(blob)
       link.click()
     } catch (e: any) {
@@ -55,14 +68,22 @@ export const useDownload = (): UseDownloadReturn => {
     }
   }
 
-  const downloadContextMenuItem = (node: Asset): ItemType => {
+  const handleDownload = async (node: Asset | TreeNodeProps, onFinish?: () => void): Promise<void> => {
+    const id = typeof node.id === 'string' ? node.id : node.id.toString()
+
+    await download(id)
+
+    onFinish?.()
+  }
+
+  const downloadContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download-02' } />,
       hidden: node.type === 'folder',
       onClick: () => {
-        void download(node)
+        void handleDownload(node, onFinish)
       }
     }
   }
@@ -74,12 +95,13 @@ export const useDownload = (): UseDownloadReturn => {
       icon: <Icon value={ 'download-02' } />,
       hidden: node.type === 'folder',
       onClick: () => {
-        void download(node)
+        void handleDownload(node)
       }
     }
   }
 
   return {
+    download,
     downloadContextMenuItem,
     downloadTreeContextMenuItem
   }
