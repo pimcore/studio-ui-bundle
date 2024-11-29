@@ -36,10 +36,10 @@ export const QuantityValueCalculatorContent = (props: QuantityValueCalculatorCon
     <>
       <Header title={ t('quantity-value.converted-units') } />
 
-      {props.convertedValues.map((item, index) => (
+      {props.convertedValues.map((item) => (
         <Flex
           gap="mini"
-          key={ index }
+          key={ _.uniqueId('item_') }
         >
           <strong>{formatNumber({ value: props.value })} {getAbbreviation(props.unitId)}</strong>
           <span>=</span>
