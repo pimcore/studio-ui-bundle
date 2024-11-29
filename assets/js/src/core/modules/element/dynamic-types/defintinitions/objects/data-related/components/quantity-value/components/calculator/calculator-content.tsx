@@ -14,7 +14,7 @@
 import React from 'react'
 import {
   type ConvertedQuantityValues2
-} from '@Pimcore/modules/data-object/quantity-value-units-api-slice.gen'
+} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { formatNumber } from '@Pimcore/utils/number'
 import { useTranslation } from 'react-i18next'
 import { Header } from '@Pimcore/components/header/header'

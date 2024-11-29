@@ -14,7 +14,7 @@
 import {
   useClassQuantityValueUnitConvertMutation,
   useClassQuantityValueUnitListQuery
-} from '@Pimcore/modules/data-object/quantity-value-units-api-slice.gen'
+} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { type DefaultOptionType } from 'rc-select/lib/Select'
 import { useTranslation } from 'react-i18next'
 import _ from 'lodash'

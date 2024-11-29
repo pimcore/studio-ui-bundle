@@ -18,7 +18,7 @@ import { QuantityValueCalculatorContent } from './calculator-content'
 import {
   type ConvertedQuantityValues,
   useClassQuantityValueUnitConvertAllMutation
-} from '@Pimcore/modules/data-object/quantity-value-units-api-slice.gen'
+} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
 interface QuantityValueCalculatorButtonProps {
   value: number
