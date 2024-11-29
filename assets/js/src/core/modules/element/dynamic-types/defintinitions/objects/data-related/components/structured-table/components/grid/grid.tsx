@@ -1,0 +1,87 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import React from 'react'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import {
+  type StructuredTableCol,
+  type StructuredTableColType,
+  type StructuredTableRow,
+  type StructuredTableValue
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/structured-table'
+
+interface StructuredTableGridProps {
+  cols: StructuredTableCol[]
+  rows: StructuredTableRow[]
+  value: StructuredTableValue | null
+  onChange?: (value: StructuredTableValue | null) => void
+}
+
+export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.Element => {
+  const columnHelper = createColumnHelper()
+  const columns: Array<ColumnDef<any>> = []
+
+  const mapColType = (type: StructuredTableColType): string => {
+    switch (type) {
+      case 'text':
+        return 'text'
+      case 'bool':
+        return 'checkbox'
+      case 'number':
+        return 'number'
+      default:
+        return 'text'
+    }
+  }
+
+  props.cols.forEach((col) => {
+    columns.push(
+      columnHelper.accessor(col.key, {
+        header: col.label,
+        size: col.width ?? 100,
+        meta: {
+          type: mapColType(col.type),
+          editable: true
+        }
+      })
+    )
+  })
+
+  const rows = props.rows.map((row) => {
+    const rowData = {}
+    props.cols.forEach((col) => {
+      rowData[col.key] = props.value?.[row.key]?.[col.key] ?? null
+    })
+    return rowData
+  })
+
+  return (
+    <Grid
+      columns={ columns }
+      data={ rows }
+      onUpdateCellData={ (data) => {
+        const newValue = {
+          ...props.value,
+          [props.rows[data.rowIndex].key]: {
+            ...props.value?.[props.rows[data.rowIndex].key],
+            [data.columnId]: data.value
+          }
+        }
+
+        props.onChange?.(newValue)
+      } }
+      resizable
+    />
+  )
+}
