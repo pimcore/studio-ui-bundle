@@ -18,6 +18,7 @@ import { RootComponent } from './components/root-component'
 import { useDataObjectGetByIdQuery, useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Content } from '@Pimcore/components/content/content'
+import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
@@ -29,10 +30,12 @@ export const EditContainer = (): React.JSX.Element => {
   }
 
   return (
-    <RootComponent
-      data={ data?.objectData }
-      layout={ layoutData }
-    />
+    <FieldCollectionProvider>
+      <RootComponent
+        data={ data?.objectData }
+        layout={ layoutData }
+      />
+    </FieldCollectionProvider>
   )
 }
 

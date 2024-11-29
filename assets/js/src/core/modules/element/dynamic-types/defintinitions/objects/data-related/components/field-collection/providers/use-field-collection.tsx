@@ -11,15 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export function replaceFileEnding (name: string, ending: string): string {
-  const extensionP = name.split('.')
-  extensionP[extensionP.length - 1] = ending
-  return extensionP.join('.')
-}
+import { useContext } from 'react'
+import { FieldCollectionContext, type IFieldCollectionContext } from './field-collection-provider'
 
-export function saveFileLocal (url: string, name?: string): void {
-  const a = document.createElement('a')
-  a.download = name ?? ''
-  a.href = url
-  a.click()
+export type UseFieldCollectionReturn = IFieldCollectionContext
+
+export const useFieldCollection = (): UseFieldCollectionReturn => {
+  const context = useContext(FieldCollectionContext)
+
+  return context
 }
