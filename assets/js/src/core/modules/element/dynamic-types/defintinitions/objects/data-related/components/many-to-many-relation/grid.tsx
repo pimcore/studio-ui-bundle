@@ -104,8 +104,8 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
               <IconButton
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
                 icon={ { value: 'download-02' } }
-                onClick={ async () => {
-                  await download(
+                onClick={ () => {
+                  download(
                     rowValue.id.toString()
                   )
                 } }

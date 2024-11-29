@@ -21,7 +21,7 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 
 export interface UseDownloadReturn {
-  download: (id: string, label?: string) => Promise<void>
+  download: (id: string, label?: string) => void
   downloadContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
   downloadTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
