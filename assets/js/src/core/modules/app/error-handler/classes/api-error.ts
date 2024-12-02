@@ -25,7 +25,7 @@ interface IApiErrorDetails {
 
 const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
-export class ApiError extends Error {
+class ApiError extends Error {
   private readonly errorData: ApiErrorData
 
   constructor (errorData: ApiErrorData) {
@@ -56,3 +56,5 @@ export class ApiError extends Error {
     return DEFAULT_ERROR_CONTENT
   }
 }
+
+export default ApiError

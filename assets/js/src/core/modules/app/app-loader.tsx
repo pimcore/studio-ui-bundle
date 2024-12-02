@@ -26,8 +26,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
-import { trackError } from '@Pimcore/modules/app/error-handler/error-handler'
-import { ApiError } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface IAppLoaderProps {
   children: React.ReactNode

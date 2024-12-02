@@ -11,18 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-class GeneralError extends Error {
-  private readonly errorData: string
-
-  constructor (message: string) {
-    super()
-
-    this.errorData = message
-  }
-
-  public getContent (): string {
-    return this.errorData
-  }
-}
-
-export default GeneralError
+export { default } from './error-handler'
+export { default as ApiError } from './classes/api-error'
+export { default as GeneralError } from './classes/general-error'

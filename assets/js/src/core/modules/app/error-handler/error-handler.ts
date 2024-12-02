@@ -17,8 +17,10 @@ interface IErrorContentProvider {
   getContent: () => string
 }
 
-export const trackError = (data: IErrorContentProvider): void => {
+const trackError = (data: IErrorContentProvider): void => {
   const errorContent = data.getContent()
 
   ErrorModalService.showError(errorContent)
 }
+
+export default trackError

@@ -22,8 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { Icon } from '../icon/icon'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
-import { trackError } from '@Pimcore/modules/app/error-handler/error-handler'
-import { ApiError } from '@Pimcore/modules/app/error-handler/classes/api-error'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface IAdditionalLogins {
   key: string

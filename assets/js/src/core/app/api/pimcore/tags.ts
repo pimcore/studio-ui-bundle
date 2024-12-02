@@ -12,8 +12,7 @@
 */
 
 import { type ElementType } from 'types/element-type.d'
-import { trackError } from '@Pimcore/modules/app/error-handler/error-handler'
-import { GeneralError } from '@Pimcore/modules/app/error-handler/classes/general-error'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export type Tag = string | {
   type: string
