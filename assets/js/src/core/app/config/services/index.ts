@@ -36,6 +36,7 @@ import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeGridCellText } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
+import { DynamicTypeGridCellNumber } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/number/dynamic-type-grid-cell-number'
 import { DynamicTypeGridCellSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/select/dynamic-type-grid-cell-select'
 import { DynamicTypeGridCellCheckbox } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
 import { DynamicTypeGridCellDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/date/dynamic-type-grid-cell-date'
@@ -107,6 +108,7 @@ import { DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
 import { DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
 import { DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
+import { DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
 import { DynamicTypeObjectDataBlock } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-block'
 import { DynamicTypeObjectDataLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
 import { DynamicTypeGridCellAsset } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
@@ -164,6 +166,7 @@ container.bind(serviceIds['DynamicTypes/BatchEdit/TextArea']).to(DynamicTypeBatc
 container.bind(serviceIds['DynamicTypes/GridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Text']).to(DynamicTypeGridCellText).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Textarea']).to(DynamicTypeGridCellTextarea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/Number']).to(DynamicTypeGridCellNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Select']).to(DynamicTypeGridCellSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Checkbox']).to(DynamicTypeGridCellCheckbox).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Date']).to(DynamicTypeGridCellDate).inSingletonScope()
@@ -248,6 +251,7 @@ container.bind(serviceIds['DynamicTypes/ObjectData/GeoBounds']).to(DynamicTypeOb
 container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolygon']).to(DynamicTypeObjectDataGeoPolygon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']).to(DynamicTypeObjectDataGeoPolyLine).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']).to(DynamicTypeObjectDataManyToManyRelation).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/StructuredTable']).to(DynamicTypeObjectDataStructuredTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Block']).to(DynamicTypeObjectDataBlock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/LocalizedFields']).to(DynamicTypeObjectDataLocalizedFields).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/FieldCollection']).to(DynamicTypeObjectDataFieldCollection).inSingletonScope()

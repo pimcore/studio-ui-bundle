@@ -48,7 +48,7 @@ export interface TreeContextMenuProps {
 export interface TreeProps {
   nodeId: number
   nodeApiHook: any
-  maxItemsPerNode: number
+  maxItemsPerNode?: number
 
   renderNode: ElementType<TreeNodeProps>
   renderNodeContent: ElementType<TreeNodeContentProps>
