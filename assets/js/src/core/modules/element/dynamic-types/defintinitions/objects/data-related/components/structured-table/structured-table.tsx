@@ -19,6 +19,8 @@ import {
 export interface StructuredTableProps {
   rows: StructuredTableRow[]
   cols: StructuredTableCol[]
+  labelWidth: number | null
+  labelFirstCell: string | null
   value?: StructuredTableValue | null
   onChange?: (value: StructuredTableValue | null) => void
 }
@@ -57,6 +59,8 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
   return (
     <StructuredTableGrid
       cols={ props.cols }
+      labelFirstCell={ props.labelFirstCell }
+      labelWidth={ props.labelWidth }
       onChange={ onChange }
       rows={ props.rows }
       value={ value }

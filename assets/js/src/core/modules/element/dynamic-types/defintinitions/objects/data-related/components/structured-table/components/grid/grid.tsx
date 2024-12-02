@@ -20,17 +20,21 @@ import {
   type StructuredTableRow,
   type StructuredTableValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/structured-table'
+import { useTranslation } from 'react-i18next'
+import _ from 'lodash'
 
 interface StructuredTableGridProps {
   cols: StructuredTableCol[]
   rows: StructuredTableRow[]
+  labelWidth: number | null
+  labelFirstCell: string | null
   value: StructuredTableValue | null
   onChange?: (value: StructuredTableValue | null) => void
 }
 
 export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
-  const columns: Array<ColumnDef<any>> = []
+  const { t } = useTranslation()
 
   const mapColType = (type: StructuredTableColType): string => {
     switch (type) {
@@ -45,10 +49,16 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     }
   }
 
+  const columns: Array<ColumnDef<any>> = [
+    columnHelper.accessor('rowLabel', {
+      header: !_.isEmpty(props.labelFirstCell) ? t(props.labelFirstCell!) : '',
+      size: props.labelWidth ?? 100
+    })
+  ]
   props.cols.forEach((col) => {
     columns.push(
       columnHelper.accessor(col.key, {
-        header: col.label,
+        header: t(col.label),
         size: col.width ?? 100,
         meta: {
           type: mapColType(col.type),
@@ -59,7 +69,9 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
   })
 
   const rows = props.rows.map((row) => {
-    const rowData = {}
+    const rowData = {
+      rowLabel: t(row.label)
+    }
     props.cols.forEach((col) => {
       rowData[col.key] = props.value?.[row.key]?.[col.key] ?? null
     })

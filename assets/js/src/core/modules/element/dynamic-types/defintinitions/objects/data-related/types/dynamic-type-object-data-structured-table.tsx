@@ -16,14 +16,10 @@ import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
-  StructuredTable, type StructuredTableCol, type StructuredTableRow
+  StructuredTable, type StructuredTableProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/structured-table'
 
-export type StructuredTableObjectDataDefinition = AbstractObjectDataDefinition & {
-  width: string
-  rows: StructuredTableRow[]
-  cols: StructuredTableCol[]
-}
+export type StructuredTableObjectDataDefinition = AbstractObjectDataDefinition & StructuredTableProps
 
 export class DynamicTypeObjectDataStructuredTable extends DynamicTypeObjectDataAbstract {
   id: string = 'structuredTable'

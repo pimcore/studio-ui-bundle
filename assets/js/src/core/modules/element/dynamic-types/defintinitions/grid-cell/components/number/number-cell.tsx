@@ -11,19 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { InputNumber } from 'antd'
 import { useStyle } from './number-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import cn from 'classnames'
 import type { InputNumberRef } from 'rc-input-number'
-import _ from 'lodash'
 
 export interface NumberCellProps extends DefaultCellProps {}
 
 export const NumberCell = (props: NumberCellProps): React.JSX.Element => {
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
+  const [value, setValue] = useState<number | null>(props.getValue() as number)
   const { styles } = useStyle()
   const element = useRef<InputNumberRef>(null)
 
@@ -34,7 +34,7 @@ export const NumberCell = (props: NumberCellProps): React.JSX.Element => {
   }, [isInEditMode])
 
   function saveValue (): void {
-    fireOnUpdateCellDataEvent(_.toNumber(element.current?.value) ?? null)
+    fireOnUpdateCellDataEvent(value)
     disableEditMode()
   }
 
@@ -56,14 +56,16 @@ export const NumberCell = (props: NumberCellProps): React.JSX.Element => {
         </>
       )
     }
-    console.log(typeof props.getValue())
+
     return (
       <InputNumber
         className="w-full"
         defaultValue={ props.getValue() }
         onBlur={ onBlur }
+        onChange={ setValue }
         onKeyDown={ onKeyDown }
         ref={ element }
+        value={ value }
       />
     )
   }
