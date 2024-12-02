@@ -46,8 +46,6 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
 
   if (focalPointContext === undefined) {
     trackError(new GeneralError('FocalPoint must be used within the FocalPointProvider'))
-
-    return null
   }
 
   const {
@@ -57,15 +55,7 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     setIsActive,
     disabled,
     containerRef
-  } = focalPointContext
-
-  if (!isValidElement(Image)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
-  }
-
-  const ImageComponent = Image.type
+  } = focalPointContext!
 
   const onLoad = (): void => {
     if (
@@ -90,7 +80,15 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     if (!isActive && !isLoading && containerRef.current !== null) {
       onToggleOff()
     }
-  }, [isActive, isLoading, containerRef])
+  }, [isActive])
+
+  if (!isValidElement(Image)) {
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
+  }
+
+  const ImageComponent = Image.type
 
   return (
     <DndContext

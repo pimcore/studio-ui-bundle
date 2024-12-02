@@ -34,8 +34,7 @@ function Draggable (props: DraggableProps): React.JSX.Element | null {
 
   if (!isValidElement(Child)) {
     trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
+    throw new Error('Invalid React child element.')
   }
 
   const Component = Child.type
@@ -51,7 +50,7 @@ function Draggable (props: DraggableProps): React.JSX.Element | null {
         { ...Child.props }
       />
     </div>
-  ), [[setNodeRef, listeners, attributes, Child.props, Component]])
+  ), [])
 }
 
 const DraggableMemo = React.memo(Draggable)
