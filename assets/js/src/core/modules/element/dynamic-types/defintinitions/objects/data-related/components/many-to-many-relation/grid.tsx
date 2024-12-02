@@ -12,6 +12,7 @@
 */
 
 import React, { forwardRef, type MutableRefObject, type ReactElement } from 'react'
+import { isUndefined } from 'lodash'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -83,8 +84,10 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             <IconButton
               icon={ { value: 'group' } }
               onClick={ async () => {
-                await openElement({
-                  type: mapToElementType(rowValue.type),
+                const typeValue = mapToElementType(rowValue.type)
+
+                !isUndefined(typeValue) && await openElement({
+                  type: typeValue,
                   id: rowValue.id
                 })
               } }
