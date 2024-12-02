@@ -80,7 +80,7 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
       messageApi.error({
         content: t('failed-to-assign-tag-to-element'),
         type: 'error',
-        duration: 3
+        duration: 5
       })
     } finally {
       setLoadingNodes((prev) => {
@@ -92,27 +92,31 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   }
 
   const removeTagFromElement = async (tagId: number): Promise<void> => {
-    const unassignTask = unassignTag({
-      elementType,
-      id: elementId,
-      tagId
-    })
+    try {
+      const response = await unassignTag({
+        elementType,
+        id: elementId,
+        tagId
+      })
 
-    unassignTask.catch(() => {
+      if (response.error !== undefined) {
+        throw new Error(response.error as string)
+      }
+    } catch (error) {
       console.log('Failed to remove tag from element')
-    })
-
-    const response = (await unassignTask) as any
-
-    if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error({
+        content: t('failed-to-un-assign-tag-to-element'),
+        type: 'error',
+        duration: 5
+      })
+    } finally {
+      setLoadingNodes((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(String(tagId))
+        return newSet
+      })
     }
-
-    setLoadingNodes((prev) => {
-      const newSet = new Set(prev)
-      newSet.delete(String(tagId))
-      return newSet
-    })
   }
 
   const handleCheck: TreeProps['onCheck'] = async (checkedKeys: { checked: Key[], halfChecked: Key[] }, info): Promise<void> => {

@@ -69,6 +69,7 @@ widget-manager.tab-title.close-confirmation: You have unsaved changes, are you s
 action-applied-successfully: Action applied successfully
 action-could-not-be-applied: Action could not be applied
 failed-to-assign-tag-to-element: Failed to assign tag to element
+failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
 workflow-modal.cancel: Cancel
 workflow-modal.log-time: Log Time
