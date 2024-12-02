@@ -12,15 +12,15 @@
 */
 
 export class GeneralError extends Error {
-  private readonly errorMessage: string
+  private readonly errorData: string
 
   constructor (message: string) {
     super()
 
-    this.errorMessage = message
+    this.errorData = message
   }
 
   public getContent (): string {
-    return this.errorMessage
+    return this.errorData
   }
 }

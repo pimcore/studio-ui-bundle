@@ -27,6 +27,7 @@ import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 import { trackError } from '@Pimcore/modules/app/error-handler/error-handler'
+import { ApiError } from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -52,7 +53,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     userFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError({ errorType: 'API_ERROR', errorData: error })
+        isError && trackError(new ApiError(error))
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
@@ -68,7 +69,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     settingsFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError({ errorType: 'API_ERROR', errorData: error })
+        isError && trackError(new ApiError(error))
 
         if (isSuccess && data !== undefined) {
           dispatch(setSettings(data))
