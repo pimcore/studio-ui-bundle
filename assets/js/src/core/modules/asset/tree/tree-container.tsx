@@ -20,6 +20,7 @@ import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export interface TreeContainerProps {
   id: number
@@ -27,6 +28,7 @@ export interface TreeContainerProps {
 
 const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
+  const { asset_tree_paging_limit: assetTreePagingLimit } = useSettings()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
     openAsset({
@@ -39,7 +41,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   return (
     <ElementTree
       contextMenu={ AssetTreeContextMenu }
-      maxItemsPerNode={ 20 }
+      maxItemsPerNode={ assetTreePagingLimit }
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }
       onSelect={ onSelect }

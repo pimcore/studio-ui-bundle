@@ -92,7 +92,6 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
-        selected: 0,
         children: [
           {
             type: 'tab',
