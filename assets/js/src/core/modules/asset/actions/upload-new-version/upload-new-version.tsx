@@ -19,6 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import {useAssetDraft} from "@Pimcore/modules/asset/hooks/use-asset-draft";
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, accept?: string) => void
@@ -66,6 +67,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
         throw new Error(response.error.data.error as string)
       }
     } catch (e: any) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({
         content: e.message
       })
