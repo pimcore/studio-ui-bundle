@@ -30,6 +30,7 @@ import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
 import { Select } from '@Pimcore/components/select/select'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -210,7 +211,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
       config: property.config,
       description: property.description,
       predefinedName: property.name,
-      rowId: crypto.randomUUID()
+      rowId: uuid()
     }
 
     addProperty(newDataProperty)
@@ -245,7 +246,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
       data: null,
       inherited: false,
       inheritable: false,
-      rowId: crypto.randomUUID()
+      rowId: uuid()
     }
 
     addProperty(newDataProperty)
