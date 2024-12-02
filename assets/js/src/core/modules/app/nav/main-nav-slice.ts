@@ -13,14 +13,17 @@
 
 import { injectSliceWithState } from '@Pimcore/app/store/index'
 import { createSlice } from '@reduxjs/toolkit'
+import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 
 export interface IMainNavItem {
+  order?: number
   id?: string
-  icon: string
+  icon?: string
   path: string
   label?: string
   children?: IMainNavItem[]
-  key?: string
+  permission?: string
+  widgetConfig?: WidgetManagerTabConfig
 }
 
 export interface IMainNavState {
@@ -39,22 +42,48 @@ export const slice = createSlice({
       const levels = action.payload.path.split('/')
       let currentLevel = state.items
 
+      if (levels.length > 4) {
+        console.warn('MainNav: Maximum depth of 4 levels is allowed, Item will be ignored', action.payload)
+        return
+      }
+
       levels.forEach((level, index) => {
         let existingItem = currentLevel.find(item => item.id === level)
+        if (existingItem !== undefined && index === levels.length - 1) {
+          if (action.payload.icon !== undefined) {
+            existingItem.icon = action.payload.icon
+          }
+
+          if (action.payload.order !== undefined) {
+            existingItem.order = action.payload.order
+          }
+        }
 
         if (existingItem === undefined) {
           existingItem = {
+            order: index === levels.length - 1 ? action.payload.order : undefined,
             id: level,
             label: level,
-            key: `${index}-${index}`,
-            icon: 'DataObjectOutlined',
             path: levels.slice(0, index + 1).join('/'),
-            children: []
+            children: [],
+            icon: index === levels.length - 1 ? action.payload.icon : undefined,
+            widgetConfig: index === levels.length - 1 ? action.payload.widgetConfig : undefined
           }
+
           currentLevel.push(existingItem)
         }
 
-        currentLevel = existingItem.children ?? []
+        // Sort children by order
+        currentLevel = existingItem.children !== undefined
+          ? existingItem.children.sort((a, b) => {
+            return (a.order ?? 20) - (b.order ?? 20)
+          })
+          : []
+      })
+
+      // Sort items by order
+      state.items = state.items.sort((a, b) => {
+        return (a.order ?? 20) - (b.order ?? 20)
       })
     }
   },

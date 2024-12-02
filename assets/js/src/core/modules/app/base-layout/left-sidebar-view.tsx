@@ -23,14 +23,68 @@ export const LeftSidebarView = (): React.JSX.Element => {
   const [mainNavOpen, setMainNavOpen] = React.useState(false)
 
   const { addNavItem } = useMainNav()
+
   addNavItem({
-    path: 'Settings/User & Roles/Users',
-    icon: 'DataObjectOutlined'
+    path: 'Settings/Document Types',
+    permission: 'documents'
   })
 
   addNavItem({
-    path: 'Settings/User & Roles/Roles',
-    icon: 'DataObjectOutlined'
+    path: 'Settings/User & Roles/Users',
+    widgetConfig: {
+      name: 'Users',
+      id: 'user-management',
+      component: 'user-management',
+      config: {
+        icon: {
+          type: 'name',
+          value: 'user-01'
+        }
+      }
+    }
+  })
+
+  addNavItem({
+    path: 'Settings/User & Roles/Open ID Connect Config/Test/Super Long Path/Configuration'
+  })
+
+  addNavItem({
+    path: 'Settings/User & Roles/Open ID Connect Config/Configuration'
+  })
+
+  addNavItem({
+    path: 'Settings',
+    icon: 'appstore-outlined'
+  })
+
+  addNavItem({
+    path: 'Tools',
+    icon: 'tools-outlined'
+  })
+
+  addNavItem({
+    path: 'Tools/Glossary'
+  })
+
+  addNavItem({
+    path: 'Marketing',
+    icon: 'bar-chart-08'
+  })
+
+  addNavItem({
+    path: 'Customers',
+    icon: 'shopping-car-outlined'
+  })
+
+  addNavItem({
+    path: 'Cache',
+    icon: 'brush-03'
+  })
+
+  addNavItem({
+    path: 'System Related',
+    icon: 'shield-02'
+    // onClick: () => { console.log('Open System Related') }
   })
 
   return (
@@ -50,13 +104,13 @@ export const LeftSidebarView = (): React.JSX.Element => {
           >
             <Icon
               options={ { width: 21, height: 21 } }
-              value={ 'AppstoreOutlined' }
+              value={ 'appstore-outlined' }
             />
           </button>
 
           { mainNavOpen
             ? (
-              <MainNav />
+              <MainNav onNavItemClick={ () => { setMainNavOpen(false) } } />
               )
             : null}
         </li>

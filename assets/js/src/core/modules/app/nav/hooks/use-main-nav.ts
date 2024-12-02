@@ -16,6 +16,7 @@ import {
   addNavItem as addNavItemAction,
   type IMainNavItem
 } from '@Pimcore/modules/app/nav/main-nav-slice'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
 interface useMainNavReturn {
   addNavItem: (item: IMainNavItem) => void
@@ -26,6 +27,15 @@ export const useMainNav = (): useMainNavReturn => {
   const dispatch = useAppDispatch()
 
   function addNavItem (item: IMainNavItem): void {
+    let userIsAllowed = true
+    if (item.permission !== undefined) {
+      userIsAllowed = isAllowed(item.permission)
+    }
+
+    if (!userIsAllowed) {
+      return
+    }
+
     dispatch(addNavItemAction(item))
   }
 

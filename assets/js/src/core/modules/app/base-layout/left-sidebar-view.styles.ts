@@ -23,7 +23,7 @@ export const useStlyes = createStyles(({
       top: 0;
       left: 0;
       bottom: 0;
-      z-index: 2;
+      z-index: 1001;
       pointer-events: none;
 
       .left-sidebar__avatar {
@@ -81,10 +81,6 @@ export const useStlyes = createStyles(({
       .left-sidebar__nav-menu {
         width: 30%;
         height: 426px;
-      }
-
-      .ant-menu {
-        box-shadow: none;
       }
     `
   }
