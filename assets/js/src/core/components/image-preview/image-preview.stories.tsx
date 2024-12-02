@@ -34,7 +34,7 @@ export const _default = {
     width: 300,
     height: 300,
     style: {
-        border: '1px dashed #d9d9d9',
+      border: '1px dashed #d9d9d9'
     }
   }
 }
