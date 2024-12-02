@@ -12,8 +12,9 @@
 */
 
 import React, { useContext, useEffect, useState } from 'react'
-import { TreeContext, type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 import { Input } from 'antd'
+import { isUndefined } from 'lodash'
+import { TreeContext, type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 
 const { Search } = Input
 
@@ -27,8 +28,8 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   const { maxItemsPerNode } = useContext(TreeContext)
 
   useEffect(() => {
-    if (total > maxItemsPerNode) {
-      setSearchActive(true)
+    if (!isUndefined(maxItemsPerNode)) {
+      total > maxItemsPerNode && setSearchActive(true)
     }
   }, [total])
 
