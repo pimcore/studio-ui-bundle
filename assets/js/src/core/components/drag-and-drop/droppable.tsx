@@ -18,6 +18,7 @@ import { useStyle } from './droppable.styles'
 import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
 import cn from 'classnames'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface DroppableContentProps {
   isDragActive: boolean
@@ -35,7 +36,7 @@ export interface DroppableProps {
   onDrop: (info: DragAndDropInfo) => void
 }
 
-export const Droppable = (props: DroppableProps): React.JSX.Element => {
+export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   const { styles } = useStyle()
   const context = useContext(DragAndDropInfoContext)
   const [isValidContext, setIsValidContext] = useState(false)
@@ -77,7 +78,9 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
   const Child = Children.only(props.children)
 
   if (!isValidElement(Child)) {
-    throw new Error('Children must be a valid react component')
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
   }
 
   const Component = Child.type

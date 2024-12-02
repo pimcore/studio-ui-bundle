@@ -107,6 +107,4 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag | undefi
   }
 
   trackError(new GeneralError(`Unknown element type: ${elementType}`))
-
-  return undefined
 }

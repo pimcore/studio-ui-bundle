@@ -17,10 +17,12 @@ interface IErrorContentProvider {
   getContent: () => string
 }
 
-const trackError = (data: IErrorContentProvider): void => {
+const trackError = (data: IErrorContentProvider): never => {
   const errorContent = data.getContent()
 
   ErrorModalService.showError(errorContent)
+
+  throw new Error(errorContent)
 }
 
 export default trackError

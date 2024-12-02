@@ -16,13 +16,14 @@ import { useDraggable } from '@dnd-kit/core'
 import { type DragAndDropInfo } from './context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
 import { GlobalStyle } from './draggable.styles'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface DraggableProps {
   children: React.ReactNode
   info: DragAndDropInfo
 }
 
-function Draggable (props: DraggableProps): React.JSX.Element {
+function Draggable (props: DraggableProps): React.JSX.Element | null {
   const [id] = useState(uuid())
   const { attributes, listeners, setNodeRef } = useDraggable({
     id,
@@ -32,7 +33,9 @@ function Draggable (props: DraggableProps): React.JSX.Element {
   const Child = Children.only(props.children)
 
   if (!isValidElement(Child)) {
-    throw new Error('Children must be a valid react component')
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
   }
 
   const Component = Child.type

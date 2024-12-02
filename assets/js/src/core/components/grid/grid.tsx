@@ -37,6 +37,7 @@ import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -170,7 +171,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
       for (const column of columns) {
         if (column.meta?.autoWidth === true) {
           if (autoWidthColumnFound) {
-            throw new Error('Only one column can have autoWidth set to true')
+            trackError(new GeneralError('Only one column can have autoWidth set to true'))
           }
           autoWidthColumnFound = true
         }
