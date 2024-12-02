@@ -11,15 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Asset, useAssetReplaceMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { useTranslation } from 'react-i18next'
-import { Icon } from '@Pimcore/components/icon/icon'
+import {type Asset, useAssetReplaceMutation} from '@Pimcore/modules/asset/asset-api-slice.gen'
+import {type TreeNodeProps} from '@Pimcore/components/element-tree/node/tree-node'
+import {type ItemType} from '@Pimcore/components/dropdown/dropdown'
+import {useTranslation} from 'react-i18next'
+import {Icon} from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useMessage } from '@Pimcore/components/message/useMessage'
-import {useAssetDraft} from "@Pimcore/modules/asset/hooks/use-asset-draft";
+import {useFormModal} from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import {useMessage} from '@Pimcore/components/message/useMessage'
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, accept?: string) => void
