@@ -66,7 +66,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
         throw new Error(response.error.data.error as string)
       }
     } catch (e: any) {
-      void messageApi.error({
+      messageApi.error({
         content: e.message
       })
     }
