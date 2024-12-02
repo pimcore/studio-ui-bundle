@@ -51,7 +51,7 @@ function Draggable (props: DraggableProps): React.JSX.Element | null {
         { ...Child.props }
       />
     </div>
-  ), [])
+  ), [[setNodeRef, listeners, attributes, Child.props, Component]])
 }
 
 const DraggableMemo = React.memo(Draggable)

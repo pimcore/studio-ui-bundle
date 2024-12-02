@@ -90,7 +90,7 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
     if (!isActive && !isLoading && containerRef.current !== null) {
       onToggleOff()
     }
-  }, [isActive])
+  }, [isActive, isLoading, containerRef])
 
   return (
     <DndContext
