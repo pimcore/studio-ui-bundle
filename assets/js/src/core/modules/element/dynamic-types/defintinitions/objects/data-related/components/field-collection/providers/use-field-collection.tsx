@@ -11,21 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { NumericRange } from './numeric-range'
+import { useContext } from 'react'
+import { FieldCollectionContext, type IFieldCollectionContext } from './field-collection-provider'
 
-const config: Meta = {
-  title: 'Components/Data Entry/NumericRange',
-  component: NumericRange,
-  argTypes: {
-    onChange: { action: 'changed' }
-  }
-}
+export type UseFieldCollectionReturn = IFieldCollectionContext
 
-export default config
+export const useFieldCollection = (): UseFieldCollectionReturn => {
+  const context = useContext(FieldCollectionContext)
 
-export const _default = {
-  args: {
-    value: [0, 100]
-  }
+  return context
 }

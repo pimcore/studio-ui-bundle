@@ -19,10 +19,8 @@ export interface GeoPoint {
 export type GeoPoints = GeoPoint[]
 
 export interface GeoBounds {
-  NElongitude: number
-  NElatitude: number
-  SWlongitude: number
-  SWlatitude: number
+  northEast: GeoPoint
+  southWest: GeoPoint
 }
 
 export type GeoType = GeoPoint | GeoPoints | GeoBounds

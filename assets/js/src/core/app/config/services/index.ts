@@ -77,6 +77,7 @@ import { DynamicTypeObjectLayoutFieldContainer } from '@Pimcore/modules/element/
 import { DynamicTypeObjectDataInput } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input'
 import { DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-textarea'
 import { DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-password'
+import { DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
 import { DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
 import { DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-multiselect'
 import { DynamicTypeObjectDataLanguage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-language'
@@ -88,6 +89,8 @@ import { DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/element/dyn
 import { DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
 import { DynamicTypeObjectDataNumericRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric-range'
 import { DynamicTypeObjectDataSlider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-slider'
+import { DynamicTypeObjectDataQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value'
+import { DynamicTypeObjectDataQuantityValueRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value-range'
 import { DynamicTypeObjectDataConsent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-consent'
 import { DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-firstname'
 import { DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-lastname'
@@ -120,6 +123,7 @@ import {
 import {
   DynamicTypeBatchEditTextArea
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
+import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -213,6 +217,7 @@ container.bind(serviceIds['DynamicTypes/ObjectLayout/FieldContainer']).to(Dynami
 container.bind(serviceIds['DynamicTypes/ObjectDataRegistry']).to(DynamicTypeObjectDataRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Input']).to(DynamicTypeObjectDataInput).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Textarea']).to(DynamicTypeObjectDataTextarea).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']).to(DynamicTypeObjectDataInputQuantityValue).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Password']).to(DynamicTypeObjectDataPassword).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Select']).to(DynamicTypeObjectDataSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/MultiSelect']).to(DynamicTypeObjectDataMultiSelect).inSingletonScope()
@@ -225,6 +230,8 @@ container.bind(serviceIds['DynamicTypes/ObjectData/BooleanSelect']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/ObjectData/Numeric']).to(DynamicTypeObjectDataNumeric).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/NumericRange']).to(DynamicTypeObjectDataNumericRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Slider']).to(DynamicTypeObjectDataSlider).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/QuantityValue']).to(DynamicTypeObjectDataQuantityValue).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/QuantityValueRange']).to(DynamicTypeObjectDataQuantityValueRange).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Consent']).to(DynamicTypeObjectDataConsent).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Firstname']).to(DynamicTypeObjectDataFirstname).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Lastname']).to(DynamicTypeObjectDataLastname).inSingletonScope()
@@ -243,6 +250,7 @@ container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']).to(DynamicTypeObjectDataManyToManyRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Block']).to(DynamicTypeObjectDataBlock).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/LocalizedFields']).to(DynamicTypeObjectDataLocalizedFields).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/FieldCollection']).to(DynamicTypeObjectDataFieldCollection).inSingletonScope()
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()

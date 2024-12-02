@@ -17,6 +17,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from './services/icon-library'
+import calculator from '@Pimcore/assets/icons/calculator.inline.svg'
 import camera from '@Pimcore/assets/icons/camera.inline.svg'
 import close from '@Pimcore/assets/icons/close.inline.svg'
 import folder from '@Pimcore/assets/icons/folder.inline.svg'
@@ -137,6 +138,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'camera',
       component: camera
+    })
+    iconLibrary.register({
+      name: 'calculator',
+      component: calculator
     })
     iconLibrary.register({
       name: 'folder',

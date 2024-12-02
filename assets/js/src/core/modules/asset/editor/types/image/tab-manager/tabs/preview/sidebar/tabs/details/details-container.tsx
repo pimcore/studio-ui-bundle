@@ -116,12 +116,12 @@ const DetailContainer = (): React.JSX.Element => {
       filename = replaceFileEnding(name, 'jpg')
     }
 
-    saveFileLocal(filename, url)
+    saveFileLocal(url, filename)
   }
 
   function downloadShortcutsHandlerForCustomSettings (name: string, url: string, format: string): void {
     const filename = replaceFileEnding(name, format.toLowerCase())
-    saveFileLocal(filename, url)
+    saveFileLocal(url, filename)
   }
 }
 

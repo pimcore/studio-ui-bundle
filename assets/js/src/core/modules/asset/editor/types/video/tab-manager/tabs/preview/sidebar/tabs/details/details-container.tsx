@@ -119,7 +119,7 @@ const DetailContainer = (): React.JSX.Element => {
       url,
       onSuccess: (blob) => {
         const objectUrl = URL.createObjectURL(blob)
-        saveFileLocal(videoData.filename!, objectUrl)
+        saveFileLocal(objectUrl, videoData.filename)
       }
     })
       .catch(console.error)
