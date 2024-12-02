@@ -18,7 +18,8 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 
 import {
-  type ManyToManyRelationValue, type ManyToManyRelationValueItem
+  type ManyToManyRelationValue,
+  type ManyToManyRelationValueItem
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
@@ -28,7 +29,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Box } from '@Pimcore/components/box/box'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import cn from 'classnames'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
@@ -41,6 +42,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { confirm } = useFormModal()
   const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
+  const { download } = useDownload()
 
   const columnHelper = createColumnHelper()
   const columns = [
@@ -103,9 +105,13 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
               title={ t('download') }
             >
               <IconButton
-                download
-                href={ `${getPrefix()}/assets/${rowValue.id}/download` }
+                aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
                 icon={ { value: 'download-02' } }
+                onClick={ () => {
+                  download(
+                    rowValue.id.toString()
+                  )
+                } }
                 type="link"
               />
             </Tooltip>

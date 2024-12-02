@@ -29,6 +29,7 @@ import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -66,7 +67,7 @@ export const Table = ({
     return data.map((item) => {
       return {
         ...item,
-        rowId: crypto.randomUUID()
+        rowId: uuid()
       }
     })
   }
