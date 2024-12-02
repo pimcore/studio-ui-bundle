@@ -82,7 +82,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     })
     return rowData
   })
-  console.log('rows', rows)
+
   return (
     <Grid
       columns={ columns }
