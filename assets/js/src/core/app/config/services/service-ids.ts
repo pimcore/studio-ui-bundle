@@ -61,6 +61,7 @@ export const serviceIds = {
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
+  'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
   'DynamicTypes/GridCell/Checkbox': 'DynamicTypes/GridCell/Checkbox',
   'DynamicTypes/GridCell/Date': 'DynamicTypes/GridCell/Date',
@@ -142,6 +143,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/GeoPolygon': 'DynamicTypes/ObjectData/GeoPolygon',
   'DynamicTypes/ObjectData/GeoPolyLine': 'DynamicTypes/ObjectData/GeoPolyLine',
   'DynamicTypes/ObjectData/ManyToManyRelation': 'DynamicTypes/ObjectData/ManyToManyRelation',
+  'DynamicTypes/ObjectData/StructuredTable': 'DynamicTypes/ObjectData/StructuredTable',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
   'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',

@@ -40,7 +40,7 @@ interface NodeApiHookReturnType {
 export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
   const [additionalQueryParams, setAdditionalQueryParams] = useState<DataObjectTreeAdditionalTreeProps>()
   const { maxItemsPerNode } = useContext(TreeContext)
-  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode, page: 1, ...additionalQueryParams })
+  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...additionalQueryParams })
 
   function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
     const nodes: TreeNodeProps[] = []
