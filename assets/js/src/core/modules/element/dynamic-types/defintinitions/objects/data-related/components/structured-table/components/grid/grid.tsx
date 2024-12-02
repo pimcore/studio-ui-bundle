@@ -16,7 +16,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import {
   type StructuredTableCol,
-  type StructuredTableColType,
+  type StructuredTableColType, type StructuredTableColumnValue,
   type StructuredTableRow,
   type StructuredTableValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/structured-table'
@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
 
 interface StructuredTableGridProps {
+  castColumnValue: (value: StructuredTableColumnValue, key: string) => StructuredTableColumnValue
   cols: StructuredTableCol[]
   rows: StructuredTableRow[]
   labelWidth: number | null
@@ -49,17 +50,21 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     }
   }
 
+  const applyColWidth = (colWidth?: number | null): number => {
+    return !_.isEmpty(colWidth) && colWidth! > 0 ? colWidth! : 100
+  }
+
   const columns: Array<ColumnDef<any>> = [
     columnHelper.accessor('rowLabel', {
       header: !_.isEmpty(props.labelFirstCell) ? t(props.labelFirstCell!) : '',
-      size: props.labelWidth ?? 100
+      size: applyColWidth(props.labelWidth)
     })
   ]
   props.cols.forEach((col) => {
     columns.push(
       columnHelper.accessor(col.key, {
         header: t(col.label),
-        size: col.width ?? 100,
+        size: applyColWidth(col.width),
         meta: {
           type: mapColType(col.type),
           editable: true
@@ -73,11 +78,11 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
       rowLabel: t(row.label)
     }
     props.cols.forEach((col) => {
-      rowData[col.key] = props.value?.[row.key]?.[col.key] ?? null
+      rowData[col.key] = props.castColumnValue(props.value?.[row.key]?.[col.key] ?? null, col.key)
     })
     return rowData
   })
-
+  console.log('rows', rows)
   return (
     <Grid
       columns={ columns }
@@ -87,7 +92,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
           ...props.value,
           [props.rows[data.rowIndex].key]: {
             ...props.value?.[props.rows[data.rowIndex].key],
-            [data.columnId]: data.value
+            [data.columnId]: props.castColumnValue(data.value as StructuredTableColumnValue, data.columnId)
           }
         }
 

@@ -15,6 +15,11 @@ import React, { useEffect, useState } from 'react'
 import {
   StructuredTableGrid
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/components/grid/grid'
+import { Box } from '@Pimcore/components/box/box'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Tooltip } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export interface StructuredTableProps {
   rows: StructuredTableRow[]
@@ -41,10 +46,14 @@ export interface StructuredTableCol {
 }
 
 export type StructuredTableColType = 'text' | 'bool' | 'number'
-export type StructuredTableValue = Record<string, Record<string, string | null | number | boolean>>
+export type StructuredTableValue = Record<string, Record<string, StructuredTableColumnValue>>
+export type StructuredTableColumnValue = string | null | number | boolean
 
 export const StructuredTable = (props: StructuredTableProps): React.JSX.Element => {
   const [value, setValue] = useState<StructuredTableValue | null>(props.value ?? null)
+  const [key, setKey] = useState<number>(0)
+  const { t } = useTranslation()
+  const { confirm } = useFormModal()
 
   const onChange = (value: StructuredTableValue | null): void => {
     setValue(value)
@@ -56,14 +65,63 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
     }
   }, [value])
 
+  const castColumnValue = (value: StructuredTableColumnValue, columnId: string): StructuredTableColumnValue => {
+    const column = props.cols.find((col) => col.key === columnId)
+
+    if (column === undefined) {
+      return value
+    }
+
+    switch (column.type) {
+      case 'number':
+        return Number(value)
+      case 'bool':
+        return Boolean(value)
+      default:
+        return value === null ? '' : String(value)
+    }
+  }
+
+  const emptyValue = (): void => {
+    if (value !== null) {
+      const newValue = value
+      for (const rowKey in value) {
+        for (const colKey in value[rowKey]) {
+          newValue[rowKey][colKey] = castColumnValue(null, colKey)
+        }
+      }
+      setValue(newValue)
+      setKey(key + 1) // force re-render
+    }
+  }
+
   return (
-    <StructuredTableGrid
-      cols={ props.cols }
-      labelFirstCell={ props.labelFirstCell }
-      labelWidth={ props.labelWidth }
-      onChange={ onChange }
-      rows={ props.rows }
-      value={ value }
-    />
+    <>
+      <StructuredTableGrid
+        castColumnValue={ castColumnValue }
+        cols={ props.cols }
+        key={ key }
+        labelFirstCell={ props.labelFirstCell }
+        labelWidth={ props.labelWidth }
+        onChange={ onChange }
+        rows={ props.rows }
+        value={ value }
+      />
+      <Box padding="extra-small">
+        <Tooltip title={ t('empty') }>
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => {
+              confirm({
+                title: t('empty'),
+                content: t('structured-table.empty.confirm'),
+                onOk: emptyValue
+              })
+            } }
+            type="default"
+          />
+        </Tooltip>
+      </Box>
+    </>
   )
 }
