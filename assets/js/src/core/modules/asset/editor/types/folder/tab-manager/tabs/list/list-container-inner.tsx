@@ -11,10 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { isUndefined } from 'lodash'
+import { api, type AssetGetGridApiResponse, type Column, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -84,6 +85,18 @@ export const ListContainerInner = (): React.JSX.Element => {
     }
   }, [columns, filterOptions, page, pageSize, sorting])
 
+  const getInitialColumns = ({ initialGridConfigData, availableGridConfigData }): GridColumnConfiguration[] => {
+    return initialGridConfigData!.columns.map((column: Column) => {
+      const availableColumn = availableGridConfigData?.columns?.find((availableColumn: GridColumnConfiguration) => availableColumn.key === column.key)
+
+      if (isUndefined(availableColumn)) {
+        trackError(new GeneralError(`Column with key ${column.key} is not available`))
+      }
+
+      return availableColumn
+    }).filter((column: GridColumnConfiguration | undefined) => !isUndefined(column))
+  }
+
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
       const availableGridConfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
@@ -93,15 +106,10 @@ export const ListContainerInner = (): React.JSX.Element => {
         setAvailableColumns(availableGridConfig.data?.columns)
         setGridConfig(initialGridConfig.data)
 
-        const initialColumns = initialGridConfig.data!.columns.map((column) => {
-          const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
-
-          if (isUndefined(availableColumn)) {
-            trackError(new GeneralError(`Column with key ${column.key} is not available`))
-          }
-
-          return availableColumn
-        }).filter((column) => !isUndefined(column))
+        const initialColumns = getInitialColumns({
+          initialGridConfigData: initialGridConfig.data,
+          availableGridConfigData: availableGridConfig.data
+        })
 
         setGridColumns(initialColumns)
         availableGridConfigPromise.unsubscribe()
