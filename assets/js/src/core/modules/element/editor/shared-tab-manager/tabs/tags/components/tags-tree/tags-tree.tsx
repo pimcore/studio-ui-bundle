@@ -30,7 +30,8 @@ import {
 import { t } from 'i18next'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
-  useTagAssignToElementMutation, useTagUnassignFromElementMutation
+  useTagAssignToElementMutation,
+  useTagUnassignFromElementMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 
 export interface TagsTreeProps {
@@ -43,7 +44,15 @@ export interface TagsTreeProps {
   setDefaultCheckedTags: (tags: React.Key[]) => void
 }
 
-export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
+export const TagsTree = ({
+  elementId,
+  elementType,
+  tags,
+  setFilter,
+  isLoading,
+  defaultCheckedTags,
+  setDefaultCheckedTags
+}: TagsTreeProps): React.JSX.Element => {
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
   const messageApi = useMessage()
   const flatTags = flattenArray(tags)
@@ -64,62 +73,45 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   }
 
   const assignTagToElement = async (tagId: number): Promise<void> => {
-    try {
-      const response = await assignTag({
-        elementType,
-        id: elementId,
-        tagId
-      })
+    const assignTask = assignTag({
+      elementType,
+      id: elementId,
+      tagId
+    })
 
-      if (response.error !== undefined) {
-        throw new Error(response.error as string)
-      }
-    } catch (error) {
+    assignTask.catch(() => {
       console.log('Failed to assign tag to element')
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error({
-        content: t('failed-to-assign-tag-to-element'),
-        type: 'error',
-        duration: 5
-      })
-    } finally {
-      setLoadingNodes((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(String(tagId))
-        return newSet
-      })
+    })
+
+    const response = (await assignTask) as any
+
+    if (response.error !== undefined) {
+      throw new Error(response.error.data.error as string)
     }
   }
 
   const removeTagFromElement = async (tagId: number): Promise<void> => {
-    try {
-      const response = await unassignTag({
-        elementType,
-        id: elementId,
-        tagId
-      })
+    const unassignTask = unassignTag({
+      elementType,
+      id: elementId,
+      tagId
+    })
 
-      if (response.error !== undefined) {
-        throw new Error(response.error as string)
-      }
-    } catch (error) {
+    unassignTask.catch(() => {
       console.log('Failed to remove tag from element')
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error({
-        content: t('failed-to-un-assign-tag-to-element'),
-        type: 'error',
-        duration: 5
-      })
-    } finally {
-      setLoadingNodes((prev) => {
-        const newSet = new Set(prev)
-        newSet.delete(String(tagId))
-        return newSet
-      })
+    })
+
+    const response = (await unassignTask) as any
+
+    if (response.error !== undefined) {
+      throw new Error(response.error.data.error as string)
     }
   }
 
-  const handleCheck: TreeProps['onCheck'] = async (checkedKeys: { checked: Key[], halfChecked: Key[] }, info): Promise<void> => {
+  const handleCheck: TreeProps['onCheck'] = async (checkedKeys: {
+    checked: Key[]
+    halfChecked: Key[]
+  }, info): Promise<void> => {
     const tagId = Number(info.node.key)
     setLoadingNodes((prev) => new Set(prev).add(String(tagId)))
 
@@ -130,7 +122,24 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
         ? await assignTagToElement(tagId)
         : await removeTagFromElement(tagId)
     } catch (e) {
-      void applyTagsToElement(checkedKeys.checked.filter((key) => key !== tagId))
+      console.log('----> here', (checkedKeys.checked))
+      const errorMessage = info.checked
+        ? t('failed-to-assign-tag-to-element')
+        : t('failed-to-un-assign-tag-to-element')
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error({
+        content: errorMessage,
+        type: 'error',
+        duration: 5
+      })
+
+      void applyTagsToElement(checkedKeys.checked.filter((key) => key !== String(tagId)))
+    } finally {
+      setLoadingNodes((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(String(tagId))
+        return newSet
+      })
     }
   }
 

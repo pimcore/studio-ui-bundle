@@ -57,7 +57,6 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateReturn => {
       )
     )
   }
-
   return {
     updateTagsForElementByTypeAndId
   }
