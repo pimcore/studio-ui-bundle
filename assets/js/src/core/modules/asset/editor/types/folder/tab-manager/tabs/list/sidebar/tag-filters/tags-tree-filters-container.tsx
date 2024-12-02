@@ -11,7 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useTagGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import React, { type Key } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -19,6 +18,9 @@ import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
+import {
+  useTagGetCollectionQuery
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, setCheckedKeys }: { addOrUpdateFieldFilter: (value: any) => void, checkedKeys: any, setCheckedKeys: any }): React.JSX.Element => {
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,

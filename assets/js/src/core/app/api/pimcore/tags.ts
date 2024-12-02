@@ -34,7 +34,8 @@ export const tagNames = {
   PROPERTIES: 'PROPERTIES',
   SCHEDULES: 'SCHEDULES',
   DEPENDENCIES: 'DEPENDENCIES',
-  NOTES_AND_EVENTS: 'NOTES_AND_EVENTS'
+  NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
+  TAGS: 'TAGS'
 }
 
 export const providingTags = {
@@ -69,7 +70,8 @@ export const providingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.WORKFLOW],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
-  NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }]
+  NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
+  TAGS_ID: (id: number) => [tagNames.TAGS, { type: tagNames.TAGS, id }]
 }
 
 export const invalidatingTags = {
@@ -93,6 +95,7 @@ export const invalidatingTags = {
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
+  TAGS_ID: (id: number) => [tagNames.TAGS, { type: tagNames.TAGS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS]
 }

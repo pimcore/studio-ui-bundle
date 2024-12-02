@@ -1,5 +1,5 @@
 import { api } from "../../../../../../app/api/pimcore/index";
-export const addTagTypes = ["Tags", "Tags for Element"] as const;
+export const addTagTypes = ["Tags"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -40,7 +40,7 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/tags/assign/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "POST",
                 }),
-                invalidatesTags: ["Tags for Element"],
+                invalidatesTags: ["Tags"],
             }),
             tagBatchOperationToElementsByTypeAndId: build.mutation<
                 TagBatchOperationToElementsByTypeAndIdApiResponse,
@@ -50,21 +50,21 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/tags/batch/${queryArg.operation}/${queryArg.elementType}/${queryArg.id}`,
                     method: "POST",
                 }),
-                invalidatesTags: ["Tags for Element"],
+                invalidatesTags: ["Tags"],
             }),
             tagGetCollectionForElementByTypeAndId: build.query<
                 TagGetCollectionForElementByTypeAndIdApiResponse,
                 TagGetCollectionForElementByTypeAndIdApiArg
             >({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/tags/${queryArg.elementType}/${queryArg.id}` }),
-                providesTags: ["Tags for Element"],
+                providesTags: ["Tags"],
             }),
             tagUnassignFromElement: build.mutation<TagUnassignFromElementApiResponse, TagUnassignFromElementApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/tags/${queryArg.elementType}/${queryArg.id}/${queryArg.tagId}`,
                     method: "DELETE",
                 }),
-                invalidatesTags: ["Tags for Element"],
+                invalidatesTags: ["Tags"],
             }),
         }),
         overrideExisting: false,

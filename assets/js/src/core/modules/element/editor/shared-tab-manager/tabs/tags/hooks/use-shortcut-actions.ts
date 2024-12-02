@@ -12,13 +12,15 @@
 */
 
 import {
-  type TagBatchOperationToElementsByTypeAndIdApiArg,
-  useTagBatchOperationToElementsByTypeAndIdMutation
+  type TagBatchOperationToElementsByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import {
+  useTagBatchOperationToElementsByTypeAndIdMutation
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 
 interface UseShortcutActionsReturn {
   removeAndApplyTagsToChildren: () => Promise<void>

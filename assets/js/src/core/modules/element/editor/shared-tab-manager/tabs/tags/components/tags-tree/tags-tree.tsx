@@ -14,9 +14,7 @@
 import React, { type Key, useState } from 'react'
 import {
   type Tag,
-  type TagAssignToElementApiArg,
-  useTagAssignToElementMutation,
-  useTagUnassignFromElementMutation
+  type TagAssignToElementApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import {
   useOptimisticUpdate
@@ -31,6 +29,9 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 import { t } from 'i18next'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import {
+  useTagAssignToElementMutation, useTagUnassignFromElementMutation
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 
 export interface TagsTreeProps {
   elementId: number

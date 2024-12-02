@@ -21,9 +21,6 @@ import {
   TagsTreeContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import {
-  useTagGetCollectionForElementByTypeAndIdQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import {
   useShortcutActions
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
@@ -31,6 +28,9 @@ import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import {
+  useTagGetCollectionForElementByTypeAndIdQuery
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
