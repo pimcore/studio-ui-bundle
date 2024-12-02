@@ -29,6 +29,8 @@ import { type TreeProps } from 'antd'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
+import { t } from 'i18next'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export interface TagsTreeProps {
   elementId: number
@@ -42,6 +44,7 @@ export interface TagsTreeProps {
 
 export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
   const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
+  const messageApi = useMessage()
   const flatTags = flattenArray(tags)
   const [assignTag] = useTagAssignToElementMutation()
   const [loadingNodes, setLoadingNodes] = useState<Set<string>>(new Set())
@@ -60,27 +63,31 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
   }
 
   const assignTagToElement = async (tagId: number): Promise<void> => {
-    const assignTask = assignTag({
-      elementType,
-      id: elementId,
-      tagId
-    })
+    try {
+      const response = await assignTag({
+        elementType,
+        id: elementId,
+        tagId
+      })
 
-    assignTask.catch(() => {
+      if (response.error !== undefined) {
+        throw new Error(response.error as string)
+      }
+    } catch (error) {
       console.log('Failed to assign tag to element')
-    })
-
-    const response = (await assignTask) as any
-
-    if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error({
+        content: t('failed-to-assign-tag-to-element'),
+        type: 'error',
+        duration: 3
+      })
+    } finally {
+      setLoadingNodes((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(String(tagId))
+        return newSet
+      })
     }
-
-    setLoadingNodes((prev) => {
-      const newSet = new Set(prev)
-      newSet.delete(String(tagId))
-      return newSet
-    })
   }
 
   const removeTagFromElement = async (tagId: number): Promise<void> => {
