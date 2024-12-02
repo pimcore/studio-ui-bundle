@@ -28,6 +28,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { isEmpty } from 'lodash'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
 import { DefaultCell } from './columns/default-cell'
@@ -149,9 +150,12 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
 
         if (typeof autoColumnRef.current?.clientWidth !== 'undefined') {
           newValue.startSize = autoColumnRef.current?.clientWidth
-          newValue.columnSizingStart.forEach(columnSizing => {
-            columnSizing[1] = columnWidth
-          })
+
+          if (!isEmpty(newValue?.columnSizingStart)) {
+            newValue.columnSizingStart.forEach(columnSizing => {
+              columnSizing[1] = columnWidth
+            })
+          }
         }
 
         setColumnSizingInfo(newValue)
