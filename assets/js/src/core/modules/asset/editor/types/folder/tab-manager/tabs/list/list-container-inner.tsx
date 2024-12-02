@@ -14,6 +14,7 @@
 import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { isUndefined } from 'lodash'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -35,6 +36,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
 import usePagination from '@Pimcore/utils/hooks/use-pagination'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface DataPatch {
   columnId: string
@@ -94,12 +96,12 @@ export const ListContainerInner = (): React.JSX.Element => {
         const initialColumns = initialGridConfig.data!.columns.map((column) => {
           const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
 
-          if (availableColumn === undefined) {
-            throw new Error(`Column with key ${column.key} is not available`)
+          if (isUndefined(availableColumn)) {
+            trackError(new GeneralError(`Column with key ${column.key} is not available`))
           }
 
           return availableColumn
-        })
+        }).filter((column) => !isUndefined(column))
 
         setGridColumns(initialColumns)
         availableGridConfigPromise.unsubscribe()
@@ -206,7 +208,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     const backendType = column.type.split('.')
 
     if (backendType[0] !== 'metadata') {
-      throw new Error('Only metadata columns are supported for now')
+      trackError(new GeneralError('Only metadata columns are supported for now'))
     }
 
     const update: AssetPatchByIdApiArg = {

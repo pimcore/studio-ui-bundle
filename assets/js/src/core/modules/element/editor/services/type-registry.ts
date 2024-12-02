@@ -12,6 +12,7 @@
 */
 
 import { injectable } from 'inversify'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface ElementEditorType {
   name: string
@@ -29,14 +30,15 @@ export class TypeRegistry implements TypeRegistryInterface {
 
   register (type: ElementEditorType): void {
     if (this.has(type.name)) {
-      throw new Error(`Type with the name "${type.name}" already exists.`)
+      trackError(new GeneralError(`Type with the name "${type.name}" already exists.`))
     }
+
     this.registry[type.name] = type
   }
 
   get (name: string): ElementEditorType {
     if (!this.has(name)) {
-      throw new Error(`No type with the name "${name}" found`)
+      trackError(new GeneralError(`No type with the name "${name}" found`))
     }
 
     return this.registry[name]

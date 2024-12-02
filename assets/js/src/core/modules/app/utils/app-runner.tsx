@@ -14,12 +14,15 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { AppView } from '../app-view'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export function runApp (): void {
   const domElement = document.getElementById('app')
 
   if (domElement === null) {
-    throw new Error('Root element not found')
+    trackError(new GeneralError('Root element not found'))
+
+    return undefined
   }
 
   const root = createRoot(domElement)

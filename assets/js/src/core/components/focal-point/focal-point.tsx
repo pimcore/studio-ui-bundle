@@ -26,13 +26,14 @@ import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { FocalPointContext } from '@Pimcore/components/focal-point/context/focal-point-context'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface FocalPointProps {
   activationConstraint?: PointerActivationConstraint
   children: React.ReactNode
 }
 
-export const FocalPoint = ({ activationConstraint, children }: FocalPointProps): React.JSX.Element => {
+export const FocalPoint = ({ activationConstraint, children }: FocalPointProps): React.JSX.Element | null => {
   const Image = Children.only(children)
   const { id } = useContext(AssetContext)
   const focalPointContext = useContext(FocalPointContext)
@@ -44,7 +45,9 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   const { addImageSettings, removeImageSetting } = useAssetDraft(id)
 
   if (focalPointContext === undefined) {
-    throw new Error('FocalPoint must be used within the FocalPointProvider')
+    trackError(new GeneralError('FocalPoint must be used within the FocalPointProvider'))
+
+    return null
   }
 
   const {
@@ -57,7 +60,9 @@ export const FocalPoint = ({ activationConstraint, children }: FocalPointProps):
   } = focalPointContext
 
   if (!isValidElement(Image)) {
-    throw new Error('Children must be a valid react component')
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
   }
 
   const ImageComponent = Image.type
