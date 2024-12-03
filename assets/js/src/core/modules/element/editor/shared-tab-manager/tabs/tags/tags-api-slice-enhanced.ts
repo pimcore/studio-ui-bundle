@@ -33,28 +33,17 @@ export const api = baseApi.enhanceEndpoints({
       }
     },
     tagAssignToElement: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS_ID(args.id)
+      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
     },
     tagUnassignFromElement: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS_ID(args.id)
+      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
     },
     tagBatchOperationToElementsByTypeAndId: {
       // when tags from folder are applied to children assets or data objects
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
     },
     tagGetCollectionForElementByTypeAndId: {
-      providesTags: (result, error, args) => {
-        const tags: Tag[] = []
-        // all tags that are applied to an element
-        const items = Array.isArray(result?.items) ? result.items : []
-        items.forEach((assignedTag) => {
-          if (assignedTag.id !== undefined) {
-            tags.push(...providingTags.ELEMENT_TAGS(args.elementType, assignedTag.id))
-          }
-        })
-
-        return tags
-      }
+      providesTags: (result, error, args) => providingTags.ELEMENT_TAGS(args.elementType, args.id)
     }
   }
 })
