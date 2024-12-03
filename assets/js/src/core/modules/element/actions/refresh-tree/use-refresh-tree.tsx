@@ -21,10 +21,12 @@ import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 
 export interface UseRefreshTreeHookReturn {
   refreshTree: (parentId: number) => void
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  refreshContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
 }
 
 export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
@@ -58,8 +60,21 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
     }
   }
 
+  const refreshContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
+    return {
+      label: t('element.tree.refresh'),
+      key: 'refresh',
+      icon: <Icon value={ 'refresh-ccw-03' } />,
+      onClick: () => {
+        refreshTree(node.parentId)
+        onFinish?.()
+      }
+    }
+  }
+
   return {
     refreshTree,
-    refreshTreeContextMenuItem
+    refreshTreeContextMenuItem,
+    refreshContextMenuItem
   }
 }

@@ -43,4 +43,11 @@ export const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './version-api-slice.gen'
-export const { useVersionAssetDownloadByIdQuery, useVersionCleanupForElementByTypeAndIdMutation, useVersionDeleteByIdMutation, useVersionGetByIdQuery, useVersionGetCollectionForElementByTypeAndIdQuery, useVersionPublishByIdMutation, useVersionUpdateByIdMutation } = api
+export const {
+  useVersionAssetDownloadByIdQuery,
+  useVersionCleanupForElementByTypeAndIdMutation,
+  useVersionDeleteByIdMutation, useVersionGetByIdQuery,
+  useVersionGetCollectionForElementByTypeAndIdQuery,
+  useVersionPublishByIdMutation,
+  useVersionUpdateByIdMutation
+} = api

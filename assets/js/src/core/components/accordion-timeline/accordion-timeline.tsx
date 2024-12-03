@@ -48,7 +48,7 @@ export const AccordionTimeline = ({ items }: AccordionTimelineProps): React.JSX.
               items={ [item] }
             />
             )
-                }
+        }
       </div>
     )
   })

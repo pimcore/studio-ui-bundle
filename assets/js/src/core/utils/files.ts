@@ -17,11 +17,9 @@ export function replaceFileEnding (name: string, ending: string): string {
   return extensionP.join('.')
 }
 
-export function saveFileLocal (name: string, url: string): void {
+export function saveFileLocal (url: string, name?: string): void {
   const a = document.createElement('a')
-  document.body.append(a)
+  a.download = name ?? ''
   a.href = url
-  a.download = name
   a.click()
-  a.remove()
 }

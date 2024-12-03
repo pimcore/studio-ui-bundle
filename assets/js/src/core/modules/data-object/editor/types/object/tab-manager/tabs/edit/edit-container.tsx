@@ -15,19 +15,28 @@ import React from 'react'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { RootComponent } from './components/root-component'
-import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { useDataObjectGetByIdQuery, useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Content } from '@Pimcore/components/content/content'
+import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
-  const { data, isLoading } = useDataObjectGetLayoutByIdQuery({ id })
+  const { data: layoutData, isLoading } = useDataObjectGetLayoutByIdQuery({ id })
+  const { data, isLoading: isDataLoading } = useDataObjectGetByIdQuery({ id })
 
-  if (data === undefined || isLoading) {
+  if (layoutData === undefined || isLoading || isDataLoading) {
     return <Content loading />
   }
 
-  return <RootComponent layout={ data } />
+  return (
+    <FieldCollectionProvider>
+      <RootComponent
+        data={ data?.objectData }
+        layout={ layoutData }
+      />
+    </FieldCollectionProvider>
+  )
 }
 
 export const TAB_EDIT: IEditorTab = {

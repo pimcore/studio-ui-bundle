@@ -22,6 +22,7 @@ import { type DynamicTypeFieldFilterDatetime } from './defintinitions/field-filt
 import { type DynamicTypeGridCellText } from './defintinitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { type DynamicTypeGridCellRegistry } from './defintinitions/grid-cell/dynamic-type-grid-cell-registry'
 import { type DynamicTypeGridCellTextarea } from './defintinitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
+import { type DynamicTypeGridCellNumber } from './defintinitions/grid-cell/types/number/dynamic-type-grid-cell-number'
 import { type DynamicTypeGridCellSelect } from './defintinitions/grid-cell/types/select/dynamic-type-grid-cell-select'
 import { type DynamicTypeGridCellCheckbox } from './defintinitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
 import { type DynamicTypeGridCellDate } from './defintinitions/grid-cell/types/date/dynamic-type-grid-cell-date'
@@ -65,6 +66,7 @@ import { type DynamicTypeObjectLayoutFieldContainer } from './defintinitions/obj
 import { type DynamicTypeObjectDataInput } from './defintinitions/objects/data-related/types/dynamic-type-object-data-input'
 import { type DynamicTypeObjectDataTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-textarea'
 import { type DynamicTypeObjectDataPassword } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-password'
+import { type DynamicTypeObjectDataInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input-quantity-value'
 import { type DynamicTypeObjectDataSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-select'
 import { type DynamicTypeObjectDataMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-multiselect'
 import { type DynamicTypeObjectDataLanguage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-language'
@@ -76,6 +78,8 @@ import { type DynamicTypeObjectDataBooleanSelect } from '@Pimcore/modules/elemen
 import { type DynamicTypeObjectDataNumeric } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric'
 import { type DynamicTypeObjectDataNumericRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-numeric-range'
 import { type DynamicTypeObjectDataSlider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-slider'
+import { type DynamicTypeObjectDataQuantityValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value'
+import { type DynamicTypeObjectDataQuantityValueRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-quantity-value-range'
 import { type DynamicTypeObjectDataConsent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-consent'
 import { type DynamicTypeObjectDataFirstname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-firstname'
 import { type DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-lastname'
@@ -91,6 +95,9 @@ import { type DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dyn
 import { type DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geobounds'
 import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
 import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
+import { type DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
+import { type DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
+
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
 import { type DynamicTypeObjectDataLocalizedFields } from './defintinitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
 import {
@@ -103,8 +110,10 @@ import {
   type DynamicTypeBatchEditTextArea
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 import { type DynamicTypeGridCellLanguageSelect } from './defintinitions/grid-cell/types/language-select/dynamic-type-grid-cell-language-select'
+import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/translate/dynamic-type-grid-cell-translate'
 import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
 import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
+import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 
 moduleSystem.registerModule({
   onInit () {
@@ -128,6 +137,7 @@ moduleSystem.registerModule({
 
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellText>(serviceIds['DynamicTypes/GridCell/Text']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTextarea>(serviceIds['DynamicTypes/GridCell/Textarea']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellNumber>(serviceIds['DynamicTypes/GridCell/Number']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSelect>(serviceIds['DynamicTypes/GridCell/Select']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellCheckbox>(serviceIds['DynamicTypes/GridCell/Checkbox']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDate>(serviceIds['DynamicTypes/GridCell/Date']))
@@ -151,6 +161,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellObject>(serviceIds['DynamicTypes/GridCell/Object']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDocument>(serviceIds['DynamicTypes/GridCell/Document']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 
@@ -178,6 +189,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInput>(serviceIds['DynamicTypes/ObjectData/Input']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTextarea>(serviceIds['DynamicTypes/ObjectData/Textarea']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataPassword>(serviceIds['DynamicTypes/ObjectData/Password']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataInputQuantityValue>(serviceIds['DynamicTypes/ObjectData/InputQuantityValue']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSelect>(serviceIds['DynamicTypes/ObjectData/Select']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataMultiSelect>(serviceIds['DynamicTypes/ObjectData/MultiSelect']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLanguage>(serviceIds['DynamicTypes/ObjectData/Language']))
@@ -189,6 +201,8 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumeric>(serviceIds['DynamicTypes/ObjectData/Numeric']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataNumericRange>(serviceIds['DynamicTypes/ObjectData/NumericRange']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataSlider>(serviceIds['DynamicTypes/ObjectData/Slider']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataQuantityValue>(serviceIds['DynamicTypes/ObjectData/QuantityValue']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataQuantityValueRange>(serviceIds['DynamicTypes/ObjectData/QuantityValueRange']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataConsent>(serviceIds['DynamicTypes/ObjectData/Consent']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFirstname>(serviceIds['DynamicTypes/ObjectData/Firstname']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLastname>(serviceIds['DynamicTypes/ObjectData/Lastname']))
@@ -204,7 +218,10 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoBounds>(serviceIds['DynamicTypes/ObjectData/GeoBounds']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolygon>(serviceIds['DynamicTypes/ObjectData/GeoPolygon']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolyLine>(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataStructuredTable>(serviceIds['DynamicTypes/ObjectData/StructuredTable']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
   }
 })

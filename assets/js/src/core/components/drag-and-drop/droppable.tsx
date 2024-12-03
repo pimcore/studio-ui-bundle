@@ -17,6 +17,7 @@ import { useDroppable } from '@dnd-kit/core'
 import { useStyle } from './droppable.styles'
 import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
+import cn from 'classnames'
 
 export interface DroppableContentProps {
   isDragActive: boolean
@@ -27,6 +28,8 @@ export interface DroppableContentProps {
 export interface DroppableProps {
   className?: string
   children: ReactNode
+  variant?: 'default' | 'outline'
+  shape?: 'round' | 'angular'
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
@@ -80,7 +83,7 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
   const Component = Child.type
 
   return (
-    <div className={ [props.className, styles.droppable].join(' ') }>
+    <div className={ cn(props.className, styles[props.variant ?? 'default'], props.shape !== 'angular' ? styles.round : undefined) }>
       <DroppableContextProvider value={ { isDragActive: isValidContext, isOver: isOver && isValidContext, isValid: isValidData && isValidContext } }>
         <Component
           { ...Child.props }

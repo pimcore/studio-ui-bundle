@@ -18,7 +18,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { t } from 'i18next'
 
-export type NumericRangeValue = [start: ValueType | null, end: ValueType | null]
+export interface NumericRangeValue { minimum: ValueType | null, maximum: ValueType | null }
 
 export type NumericRangeProps = InputNumberProps & {
   value?: NumericRangeValue | null
@@ -29,10 +29,10 @@ export const validateOneFieldEmpty = async (rule, value): Promise<any> => {
   if (value === null) {
     await Promise.resolve(); return
   }
-  if (value[0] === null) {
+  if (value.minimum === null) {
     await Promise.reject(Error(t('form.validation.numeric-range.first-value-missing')))
   }
-  if (value[1] === null) {
+  if (value.maximum === null) {
     await Promise.reject(Error(t('form.validation.numeric-range.second-value-missing')))
   }
   await Promise.resolve()
@@ -44,7 +44,7 @@ export const validateSecondValueGreater = async (rule, value): Promise<any> => {
     return
   }
 
-  if (value[0] > value[1]) {
+  if (value.minimum > value.maximum) {
     await Promise.reject(Error(t('form.validation.numeric-range.second-value-greater')))
   }
   await Promise.resolve()
@@ -59,14 +59,15 @@ export const NumericRange = (props: NumericRangeProps): React.JSX.Element => {
     }
   }, [value])
 
-  const updateValue = (index: number, newValue: ValueType | null): void => {
+  const updateValue = (key: 'minimum' | 'maximum', newValue: ValueType | null): void => {
     setValue((prevValue) => {
-      if (prevValue === null) {
-        prevValue = [null, null]
+      const updatedValue: NumericRangeValue = {
+        minimum: prevValue?.minimum ?? null,
+        maximum: prevValue?.maximum ?? null,
+        [key]: newValue
       }
-      const updatedValue: NumericRangeValue = index === 0 ? [newValue, prevValue[1]] : [prevValue[0], newValue]
 
-      return updatedValue[0] === null && updatedValue[1] === null ? null : updatedValue
+      return updatedValue.minimum === null && updatedValue.maximum === null ? null : updatedValue
     })
   }
 
@@ -78,14 +79,14 @@ export const NumericRange = (props: NumericRangeProps): React.JSX.Element => {
     >
       <InputNumber
         { ...props }
-        onChange={ (newValue) => { updateValue(0, newValue) } }
-        value={ value !== null ? value[0] : null }
+        onChange={ (newValue) => { updateValue('minimum', newValue) } }
+        value={ value !== null ? value.minimum : null }
       />
       <div>–</div>
       <InputNumber
         { ...props }
-        onChange={ (newValue) => { updateValue(1, newValue) } }
-        value={ value !== null ? value[1] : null }
+        onChange={ (newValue) => { updateValue('maximum', newValue) } }
+        value={ value !== null ? value.maximum : null }
       />
     </Flex>
   )

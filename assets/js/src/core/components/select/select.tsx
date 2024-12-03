@@ -19,7 +19,7 @@ import { isString, isEmpty } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
 
-interface SelectProps extends AntdSelectProps {
+export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
   width?: number
