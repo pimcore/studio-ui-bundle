@@ -16,6 +16,9 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     imagePreviewContainer: css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
       max-width: 100%;
       
       .ant-image {

@@ -38,10 +38,8 @@ export interface ImageProps {
 export const Image = (props: ImageProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ImageValue | null>(props.value ?? null)
   const { t } = useTranslation()
-  console.log(setValue)
-  const onChange = (value?: string): void => {
-    // const newUrl = value !== '' && value !== undefined ? value : null
-    // setValue(newUrl === null ? null : { url: newUrl })
+  const emptyValue = (): void => {
+    setValue(null)
   }
 
   useEffect(() => {
@@ -55,33 +53,34 @@ export const Image = (props: ImageProps): React.JSX.Element => {
         fitContent
         footer={ <ImageFooter
           disabled={ props.disabled }
+          emptyValue={ emptyValue }
           key="image-footer"
-          onChange={ onChange }
+          value={ value }
                  /> }
       >
-        { value !== null
-          ? (
-            <ImagePreview
-              assetId={ value.id }
-              height={ props.height ?? 150 }
-              width={ props.width ?? 300 }
-            />
-            )
-          : (
-            <Droppable
-              isValidContext={ (info: DragAndDropInfo) => true }
-              isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-              onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', id: info.data.id as number }) } }
-              variant="outline"
-            >
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+          onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', id: info.data.id as number }) } }
+          variant="outline"
+        >
+          { value !== null
+            ? (
+              <ImagePreview
+                assetId={ value.id }
+                height={ props.height ?? 150 }
+                width={ props.width ?? 300 }
+              />
+              )
+            : (
               <ImageTarget
                 dndIcon
                 height={ props.height ?? 150 }
                 title={ t('image.dnd-target') }
                 width={ props.width ?? 300 }
               />
-            </Droppable>
-            ) }
+              ) }
+        </Droppable>
       </Card>
     </>
   )

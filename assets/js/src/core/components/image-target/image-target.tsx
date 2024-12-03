@@ -28,9 +28,8 @@ interface ImageTargetProps {
   uploadIcon?: boolean
 }
 
-export const ImageTarget = forwardRef(function ImageTarget (props: ImageTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImageTarget = forwardRef(function ImageTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon }: ImageTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
-  const { title, className, width = 200, height = 200, dndIcon, uploadIcon } = props
   const { styles } = useStyle()
 
   return (

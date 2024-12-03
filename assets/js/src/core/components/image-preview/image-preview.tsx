@@ -11,13 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type CSSProperties } from 'react'
-import { Flex } from '@Pimcore/components/flex/flex'
+import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect } from 'react'
 import { useStyle } from './image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Image } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { Spin } from '@Pimcore/components/spin/spin'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface ImagePreviewProps {
   src?: string
@@ -28,16 +30,31 @@ interface ImagePreviewProps {
   style?: CSSProperties
 }
 
-export const ImagePreview = ({ src, assetId, width, height, className, style }: ImagePreviewProps): React.JSX.Element => {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, width, height, className, style }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+  const [key, setKey] = React.useState(0)
+  const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
 
   const imageSrc = assetId !== undefined ? `${getPrefix()}/assets/${assetId}/image/stream/preview` : src
 
-  return (
+  useEffect(() => {
+    setKey(key + 1)
+  }, [imageSrc])
+
+  const loadingSpinner = (
     <Flex
       align="center"
-      className={ cn(className, styles.imagePreviewContainer) }
+      className="h-full"
       justify="center"
+    >
+      <Spin size="small" />
+    </Flex>
+  )
+
+  return (
+    <div
+      className={ cn(className, styles.imagePreviewContainer, ...getStateClasses()) }
+      ref={ ref }
       style={ {
         ...style,
         height: toCssDimension(height),
@@ -47,9 +64,11 @@ export const ImagePreview = ({ src, assetId, width, height, className, style }: 
       <Image
         className="w-full"
         fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+        key={ key }
+        placeholder={ loadingSpinner }
         preview={ false }
         src={ imageSrc }
       />
-    </Flex>
+    </div>
   )
-}
+})
