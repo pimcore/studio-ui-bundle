@@ -32,7 +32,7 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
     return {
       label: t('element.open'),
       key: 'open',
-      icon: <Icon value={ 'type-square' } />,
+      icon: <Icon value={ 'union' } />,
       hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
       onClick: async () => {
         await openElement({
