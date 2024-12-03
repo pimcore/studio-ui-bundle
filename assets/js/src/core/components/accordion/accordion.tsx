@@ -13,6 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Collapse, type CollapseProps, Flex } from 'antd'
+import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
 import i18n from 'i18next'
@@ -70,7 +71,9 @@ export const Accordion = ({
   }
 
   const itemsWithCardClassName = items?.map((item) => {
-    const chevronClassName = ['accordion__chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'accordion__chevron--up' : ''].join(' ')
+    const chevronClassName = cn('accordion__chevron', {
+      'accordion__chevron--up': item.key != null && expandedIds.includes(String(item.key))
+    })
 
     const chevronButton = (): React.ReactElement => {
       return (
@@ -98,14 +101,15 @@ export const Accordion = ({
 
     const collapseDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
 
-    const itemClassNames = [item?.className, 'accordion__item'].filter(Boolean)
-    if (item.theme !== undefined) {
-      itemClassNames.push(`accordion__item--${item.theme}`)
-    }
+    const itemClassNames = cn(
+      item?.className,
+      'accordion__item',
+      { [`accordion__item--${item.theme}`]: item.theme !== undefined }
+    )
 
     return ({
       ...restItem,
-      className: itemClassNames.join(' '),
+      className: itemClassNames,
       label: <>
         <Flex
           align={ 'baseline' }
@@ -124,28 +128,19 @@ export const Accordion = ({
     })
   }) ?? []
 
-  const allClassNames = [
-    'accordion',
-    className,
-    styles.accordion
-  ]
-
-  if (spaced) {
-    allClassNames.push('accordion--spaced', styles.spaced)
-    allClassNames.push(styles.spaced)
-  }
-
-  if (bordered) {
-    allClassNames.push('accordion--bordered', styles.bordered)
-    allClassNames.push(styles.bordered)
-  }
+  const allClassNames = cn('accordion', className, styles.accordion, {
+    'accordion--spaced': spaced,
+    [styles.spaced]: spaced,
+    'accordion--bordered': bordered,
+    [styles.bordered]: bordered
+  })
 
   return (
     <Collapse
       accordion={ accordion }
       activeKey={ expandedIds }
       bordered={ !spaced }
-      className={ allClassNames.join(' ') }
+      className={ allClassNames }
       items={ itemsWithCardClassName }
       onChange={ (keys) => {
         setExpandedIds(Array.isArray(keys) ? keys : [keys])
