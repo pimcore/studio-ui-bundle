@@ -35,7 +35,7 @@ export const tagNames = {
   SCHEDULES: 'SCHEDULES',
   DEPENDENCIES: 'DEPENDENCIES',
   NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
-  TAGS: 'TAGS',
+  AVAILABLE_TAGS: 'AVAILABLE_TAGS',
   ELEMENT_TAGS: 'ELEMENT_TAGS'
 }
 
@@ -74,7 +74,7 @@ export const providingTags = {
   NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.ELEMENT_TAGS],
   ELEMENT_TAGS_ID: (id: number) => [tagNames.ELEMENT_TAGS, { type: tagNames.ELEMENT_TAGS, id }],
-  TAGS_ID: (id: number) => [tagNames.TAGS, { type: tagNames.TAGS, id }]
+  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
 export const invalidatingTags = {
@@ -102,7 +102,7 @@ export const invalidatingTags = {
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.ELEMENT_TAGS],
   ELEMENT_TAGS_ID: (id: number) => [tagNames.ELEMENT_TAGS, { type: tagNames.ELEMENT_TAGS, id }],
-  TAGS_ID: (id: number) => [tagNames.TAGS, { type: tagNames.TAGS, id }]
+  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
 const getElementDetailTag = (elementType: ElementType, id: number): Tag => {

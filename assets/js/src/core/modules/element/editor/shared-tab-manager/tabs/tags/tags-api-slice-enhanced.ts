@@ -11,26 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './tags-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.TAGS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
+  addTagTypes: [tagNames.AVAILABLE_TAGS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     tagGetCollection: {
-      providesTags: (result, error, args) => {
-        const tags: Tag[] = []
-        // all possible tags that can be applied
-        if (result?.items !== undefined && result.items !== null) {
-          result.items.forEach((assignedTag) => {
-            if (assignedTag.id !== undefined) {
-              tags.push(...providingTags.TAGS_ID(assignedTag.id))
-            }
-          })
-        }
-
-        return tags
-      }
+      providesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
     },
     tagAssignToElement: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
