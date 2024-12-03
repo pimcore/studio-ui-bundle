@@ -23,7 +23,7 @@ interface DraggableProps {
   info: DragAndDropInfo
 }
 
-function Draggable (props: DraggableProps): React.JSX.Element | null {
+function Draggable (props: DraggableProps): React.JSX.Element {
   const [id] = useState(uuid())
   const { attributes, listeners, setNodeRef } = useDraggable({
     id,
