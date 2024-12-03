@@ -18,12 +18,12 @@ import {
 } from '@Pimcore/modules/app/nav/main-nav-slice'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
-interface useMainNavReturn {
+interface IUseMainNavReturn {
   addNavItem: (item: IMainNavItem) => void
   getNavItems: IMainNavItem[]
 }
 
-export const useMainNav = (): useMainNavReturn => {
+export const useMainNav = (): IUseMainNavReturn => {
   const dispatch = useAppDispatch()
 
   function addNavItem (item: IMainNavItem): void {

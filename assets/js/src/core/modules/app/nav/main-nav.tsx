@@ -37,12 +37,10 @@ export const MainNav = (): React.JSX.Element => {
       const searchKey = key.substring(0, key.length - 1)
       const newOpenKeys = openKeys.filter(k => !k.startsWith(searchKey))
       setOpenKeys([...newOpenKeys, key])
-    } else {
-      if (openKeys.find(k => k === key) !== undefined) {
-        setOpenKeys(openKeys.filter(k => k !== key))
-      } else {
-        setOpenKeys([key])
-      }
+    }
+
+    if (!key.includes('-')) {
+      setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
     }
   }
 
@@ -57,11 +55,9 @@ export const MainNav = (): React.JSX.Element => {
           onClick={ () => {
             if (item.children !== undefined && item.children.length > 0) {
               handleOpenState(index)
-            } else {
-              if (item.widgetConfig !== undefined) {
-                openMainWidget(item.widgetConfig)
-                setIsOpen(false)
-              }
+            } else if (item.widgetConfig !== undefined) {
+              openMainWidget(item.widgetConfig)
+              setIsOpen(false)
             }
           } }
         >
