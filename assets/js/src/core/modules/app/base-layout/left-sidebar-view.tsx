@@ -20,8 +20,6 @@ import { useMainNav } from '@Pimcore/modules/app/nav/hooks/use-main-nav'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStlyes()
-  const [mainNavOpen, setMainNavOpen] = React.useState(false)
-
   const { addNavItem } = useMainNav()
 
   addNavItem({
@@ -30,7 +28,12 @@ export const LeftSidebarView = (): React.JSX.Element => {
   })
 
   addNavItem({
+    path: 'Tools/Glossary'
+  })
+
+  addNavItem({
     path: 'Settings/User & Roles/Users',
+    className: 'item-style-modifier',
     widgetConfig: {
       name: 'Users',
       id: 'user-management',
@@ -45,10 +48,6 @@ export const LeftSidebarView = (): React.JSX.Element => {
   })
 
   addNavItem({
-    path: 'Settings/User & Roles/Open ID Connect Config/Test/Super Long Path/Configuration'
-  })
-
-  addNavItem({
     path: 'Settings/User & Roles/Open ID Connect Config/Configuration'
   })
 
@@ -60,10 +59,6 @@ export const LeftSidebarView = (): React.JSX.Element => {
   addNavItem({
     path: 'Tools',
     icon: 'tools-outlined'
-  })
-
-  addNavItem({
-    path: 'Tools/Glossary'
   })
 
   addNavItem({
@@ -84,7 +79,6 @@ export const LeftSidebarView = (): React.JSX.Element => {
   addNavItem({
     path: 'System Related',
     icon: 'shield-02'
-    // onClick: () => { console.log('Open System Related') }
   })
 
   return (
@@ -97,22 +91,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
 
       <ul className='left-sidebar__nav'>
         <li>
-          <button
-            className='left-sidebar__nav-item'
-            onClick={ () => { setMainNavOpen(!mainNavOpen) } }
-            type='button'
-          >
-            <Icon
-              options={ { width: 21, height: 21 } }
-              value={ 'appstore-outlined' }
-            />
-          </button>
-
-          { mainNavOpen
-            ? (
-              <MainNav onNavItemClick={ () => { setMainNavOpen(false) } } />
-              )
-            : null}
+          <MainNav />
         </li>
       </ul>
     </div>

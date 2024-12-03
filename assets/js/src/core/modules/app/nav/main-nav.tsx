@@ -12,7 +12,8 @@
 */
 
 import { Divider } from 'antd'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useStlyes } from './main-nav.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useMainNav } from './hooks/use-main-nav'
@@ -20,15 +21,15 @@ import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import type { IMainNavItem } from '@Pimcore/modules/app/nav/main-nav-slice'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useTranslation } from 'react-i18next'
 
-interface IMainNavProps {
-  onNavItemClick: () => void
-}
-
-export const MainNav = ({ onNavItemClick, ...props }: IMainNavProps): React.JSX.Element => {
+export const MainNav = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStlyes()
   const { getNavItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
@@ -45,10 +46,10 @@ export const MainNav = ({ onNavItemClick, ...props }: IMainNavProps): React.JSX.
     }
   }
 
-  const renderNavItem = (item: IMainNavItem, index: string): React.JSX.Element => {
+  const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     return (
       <li
-        className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''}` }
+        className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
         key={ item.id }
       >
         <button
@@ -59,11 +60,8 @@ export const MainNav = ({ onNavItemClick, ...props }: IMainNavProps): React.JSX.
             } else {
               if (item.widgetConfig !== undefined) {
                 openMainWidget(item.widgetConfig)
-                onNavItemClick()
+                setIsOpen(false)
               }
-              // if (item.onClick !== undefined) {
-              //   item.onClick()
-              // }
             }
           } }
         >
@@ -82,8 +80,8 @@ export const MainNav = ({ onNavItemClick, ...props }: IMainNavProps): React.JSX.
 
         {item.children !== undefined && item.children.length > 0
           ? (
-            <ul className={ `main-nav__list main-nav__list--level-${parseInt(index) + 1}` }>
-              {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`))}
+            <ul className={ `main-nav__list main-nav__list--level-${level + 1}` }>
+              {item.children?.map((child: IMainNavItem, childIndex) => renderNavItem(child, `${index}-${childIndex}`, level))}
             </ul>
             )
           : null}
@@ -91,40 +89,104 @@ export const MainNav = ({ onNavItemClick, ...props }: IMainNavProps): React.JSX.
     )
   }
 
+  const elRef = useRef<HTMLDivElement | null>(null)
+  const handleClickOutside = (evt): void => {
+    if (elRef.current !== null && !elRef.current.contains(evt.target as Node)) {
+      setIsOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('click', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [isOpen])
+
   return (
-    <div className={ ['main-nav', styles.mainNav].join(' ') }>
-      <div className={ 'main-nav__top' }>
-        <ul className={ 'main-nav__list-inline' }>
-          <li>
-            <IconTextButton
-              icon={ { value: 'pin-02-outlined' } }
-              type={ 'link' }
-            >Document Types</IconTextButton></li>
-          <li><Button type={ 'link' }>Clear Full Page Cache</Button></li>
-          <li><Button type={ 'link' }>Custom Reports</Button></li>
-        </ul>
-        <Button type={ 'default' }>Customise</Button>
-      </div>
+    <div ref={ elRef }>
+      <IconButton
+        icon={ { value: 'appstore-outlined' } }
+        onClick={ () => { setIsOpen(!isOpen) } }
+        type={ 'text' }
+      />
 
-      <Divider className={ 'main-nav__divider' } />
+      <AnimatePresence>
+        <motion.div
+          animate={ { opacity: 1 } }
+          exit={ { opacity: 0 } }
+          initial={ { opacity: isOpen ? 0 : 1 } }
+          key={ isOpen ? 'open' : 'closed' }
+        >
 
-      <ul className={ 'main-nav__list main-nav__list--level-0' }>
-        {getNavItems.map((item, index) => (
-          renderNavItem(item, `${index}`)
-        ))}
-      </ul>
+          {isOpen
+            ? (
+              <div
+                className={ ['main-nav', styles.mainNav].join(' ') }
+              >
+                <div className={ 'main-nav__top' }>
+                  <ul className={ 'main-nav__list-inline' }>
+                    <li>
+                      <IconTextButton
+                        icon={ { value: 'pin-02-outlined' } }
+                        type={ 'link' }
+                      >{t('navigation.document-types')}</IconTextButton></li>
+                    <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
+                    <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
+                  </ul>
+                  <Button type={ 'default' }>Customise</Button>
+                </div>
 
-      <Divider className={ 'main-nav__divider' } />
+                <Divider className={ 'main-nav__divider' } />
 
-      <div className={ 'main-nav__bottom' }>
-        Perspectives
-        <ul className={ 'main-nav__list-inline' }>
-          <li><IconTextButton
-            icon={ { value: 'pin-02-outlined' } }
-            type={ 'default' }
-              >Default</IconTextButton></li>
-        </ul>
-      </div>
+                <ul className={ 'main-nav__list main-nav__list--level-0' }>
+                  {getNavItems.map((item, index) => (
+                    renderNavItem(item, `${index}`)
+                  ))}
+                </ul>
+
+                <Divider className={ 'main-nav__divider' } />
+
+                <div className={ 'main-nav__bottom' }>
+                  {t('navigation.perspectives')}
+                  <ul className={ 'main-nav__list-inline' }>
+                    <li><IconTextButton
+                      icon={ { value: 'pimcore' } }
+                        >Default</IconTextButton></li>
+                    <li><IconTextButton
+                      icon={ { value: 'users-01' } }
+                      type={ 'default' }
+                        >CDP</IconTextButton></li>
+                    <li><IconTextButton
+                      icon={ { value: 'file-outlined' } }
+                      type={ 'default' }
+                        >CMS</IconTextButton></li>
+                    <li><IconTextButton
+                      icon={ { value: 'shop-outlined' } }
+                      type={ 'default' }
+                        >Commerce</IconTextButton></li>
+                    <li><IconTextButton
+                      icon={ { value: 'mainAsset' } }
+                      type={ 'default' }
+                        >DAM</IconTextButton></li>
+                    <li><IconTextButton
+                      icon={ { value: 'mainObject' } }
+                      type={ 'default' }
+                        >PIM</IconTextButton></li>
+                    <li><IconTextButton
+                      icon={ { value: 'book' } }
+                      type={ 'default' }
+                        >Catalogue</IconTextButton></li>
+                  </ul>
+                </div>
+              </div>
+              )
+            : null}
+        </motion.div>
+      </AnimatePresence>
     </div>
   )
 }

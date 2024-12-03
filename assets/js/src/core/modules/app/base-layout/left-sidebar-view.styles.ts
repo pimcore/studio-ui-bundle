@@ -54,33 +54,8 @@ export const useStlyes = createStyles(({
           left: ${token.paddingSM}px;
           right: ${token.paddingSM}px;
           height: 1px;
-          background: #D3ADF7;
+          background: ${token.Divider.colorSplit};
         }
-      }
-      
-      .left-sidebar__nav-item {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: ${token.paddingXXS}px ${token.paddingSM}px;
-        color: #4D4169;
-        position: relative;
-      }
-      
-      .left-sidebar__nav-detail {
-        position: absolute;
-        left: 100%;
-        top: 0;
-        background: #fff;
-        padding: ${token.paddingMD}px 0;
-        box-shadow: ${token.boxShadow};
-        width: 818px;
-        text-align: left;
-      }
-      
-      .left-sidebar__nav-menu {
-        width: 30%;
-        height: 426px;
       }
     `
   }

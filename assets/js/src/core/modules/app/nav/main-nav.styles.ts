@@ -34,19 +34,23 @@ export const useStlyes = createStyles(({
         justify-content: space-between;
       }
       
+      .main-nav__list-inline {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
       .main-nav__bottom {
         display: flex;
         align-items: center;
         text-transform: uppercase;
         gap: ${token.marginSM}px;
         color: ${token.colorTextDescription};
-      }
 
-      .main-nav__list-inline {
-        display: flex;
-        list-style: none;
-        padding: 0;
-        margin: 0;
+        .main-nav__list-inline {
+          gap: ${token.marginXS}px;
+        }
       }
       
       .main-nav__list {
@@ -74,16 +78,6 @@ export const useStlyes = createStyles(({
         padding: ${token.paddingXS}px;
       }
       
-      //.ant-menu-submenu {
-      //  position: relative;
-      //}
-      //
-      //.ant-menu.ant-menu-inline .ant-menu.ant-menu-sub {
-      //  position: absolute;
-      //  left: 100%;
-      //  top: 0;
-      //  background: #fff;
-      //}
       .main-nav__list:not(.main-nav__list--level-0) {
         position: absolute;
         left: 100%;

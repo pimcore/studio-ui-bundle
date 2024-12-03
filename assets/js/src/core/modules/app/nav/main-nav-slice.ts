@@ -16,14 +16,15 @@ import { createSlice } from '@reduxjs/toolkit'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 
 export interface IMainNavItem {
+  path: string
   order?: number
   id?: string
   icon?: string
-  path: string
   label?: string
   children?: IMainNavItem[]
   permission?: string
   widgetConfig?: WidgetManagerTabConfig
+  className?: string
 }
 
 export interface IMainNavState {
@@ -39,52 +40,44 @@ export const slice = createSlice({
   initialState,
   reducers: {
     addNavItem: (state, action) => {
-      const levels = action.payload.path.split('/')
-      let currentLevel = state.items
+      const item = action.payload
 
+      const levels = item.path.split('/')
       if (levels.length > 4) {
-        console.warn('MainNav: Maximum depth of 4 levels is allowed, Item will be ignored', action.payload)
+        console.warn('MainNav: Maximum depth of 4 levels is allowed, Item will be ignored', item)
         return
       }
 
-      levels.forEach((level, index) => {
-        let existingItem = currentLevel.find(item => item.id === level)
-        if (existingItem !== undefined && index === levels.length - 1) {
-          if (action.payload.icon !== undefined) {
-            existingItem.icon = action.payload.icon
-          }
-
-          if (action.payload.order !== undefined) {
-            existingItem.order = action.payload.order
-          }
-        }
+      let currentLevel = state.items
+      levels.forEach((level: string, index) => {
+        let existingItem = currentLevel.find(i => i.id === level)
+        const isCurrentItem = index === levels.length - 1
 
         if (existingItem === undefined) {
           existingItem = {
-            order: index === levels.length - 1 ? action.payload.order : undefined,
+            order: isCurrentItem ? item.order : 100,
             id: level,
             label: level,
             path: levels.slice(0, index + 1).join('/'),
             children: [],
-            icon: index === levels.length - 1 ? action.payload.icon : undefined,
-            widgetConfig: index === levels.length - 1 ? action.payload.widgetConfig : undefined
+            icon: isCurrentItem ? item.icon : undefined,
+            widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
+            className: isCurrentItem ? item.className : undefined
           }
-
           currentLevel.push(existingItem)
+        } else if (index === levels.length - 1) {
+          Object.assign(existingItem, {
+            icon: item.icon,
+            order: item.order ?? 100,
+            className: item.className
+          })
         }
 
-        // Sort children by order
-        currentLevel = existingItem.children !== undefined
-          ? existingItem.children.sort((a, b) => {
-            return (a.order ?? 20) - (b.order ?? 20)
-          })
-          : []
+        currentLevel = existingItem.children ?? []
+        currentLevel.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
       })
 
-      // Sort items by order
-      state.items = state.items.sort((a, b) => {
-        return (a.order ?? 20) - (b.order ?? 20)
-      })
+      state.items.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
     }
   },
   selectors: {

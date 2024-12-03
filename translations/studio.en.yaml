@@ -364,3 +364,7 @@ upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
 structured-table.empty.confirm: Are you sure you want to clear all data?
+navigation.document-types: Document Types
+navigation.clear-cache: Clear Full Page Cache
+navigation.custom-reports: Custom Reports
+navigation.perspectives: Perspectives

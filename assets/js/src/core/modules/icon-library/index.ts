@@ -135,6 +135,11 @@ import BarChart08 from '@Pimcore/assets/icons/bar-chart-08.inline.svg'
 import Brush03 from '@Pimcore/assets/icons/brush-03.inline.svg'
 import ShoppingCartOutlined from '@Pimcore/assets/icons/ShoppingCartOutlined.inline.svg'
 import ToolOutlined from '@Pimcore/assets/icons/ToolOutlined.inline.svg'
+import FileOutlined from '@Pimcore/assets/icons/FileOutlined.inline.svg'
+import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg'
+import Users01 from '@Pimcore/assets/icons/users-01.inline.svg'
+import ShopOutlined from '@Pimcore/assets/icons/ShopOutlined.inline.svg'
+import Book from '@Pimcore/assets/icons/book.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -387,6 +392,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'user-01',
       component: user01
+    })
+    iconLibrary.register({
+      name: 'users-01',
+      component: Users01
     })
     iconLibrary.register({
       name: 'shield-02',
@@ -646,6 +655,26 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'tools-outlined',
       component: ToolOutlined
+    })
+
+    iconLibrary.register({
+      name: 'file-outlined',
+      component: FileOutlined
+    })
+
+    iconLibrary.register({
+      name: 'pimcore',
+      component: pimcore
+    })
+
+    iconLibrary.register({
+      name: 'shop-outlined',
+      component: ShopOutlined
+    })
+
+    iconLibrary.register({
+      name: 'book',
+      component: Book
     })
   }
 })
