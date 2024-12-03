@@ -16,7 +16,7 @@ import { Collapse, type CollapseProps, Flex } from 'antd'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
-import i18n from 'i18next'
+import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { type CollapsibleType } from 'antd/es/collapse/CollapsePanel'
 
@@ -52,6 +52,8 @@ export const Accordion = ({
   const { styles } = useStyles()
   const [expandedIds, setExpandedIds] = useState<string[]>([])
 
+  const { t } = useTranslation()
+
   useEffect(() => {
     setExpandedIds([String(activeKey)])
   }, [activeKey])
@@ -78,7 +80,7 @@ export const Accordion = ({
     const chevronButton = (): React.ReactElement => {
       return (
         <IconButton
-          aria-label={ i18n.t('aria.notes-and-events.expand') }
+          aria-label={ t('aria.notes-and-events.expand') }
           className={ 'accordion__chevron-btn' }
           icon={ {
             value: 'chevron-up',
