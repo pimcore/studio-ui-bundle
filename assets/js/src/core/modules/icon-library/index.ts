@@ -129,6 +129,7 @@ import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlin
 import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
 import edit03 from '@Pimcore/assets/icons/edit-03.inline.svg'
 import save01 from '@Pimcore/assets/icons/save-01.inline.svg'
+import union from '@Pimcore/assets/icons/union.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -611,6 +612,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'save-01',
       component: save01
+    })
+
+    iconLibrary.register({
+      name: 'union',
+      component: union
     })
   }
 })
