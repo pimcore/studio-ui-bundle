@@ -11,18 +11,31 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { isUndefined } from 'lodash'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+import { GeneralError } from '@Pimcore/modules/app/error-handler/index'
 
 interface IErrorContentProvider {
   getContent: () => string
 }
 
-const trackError = (data: IErrorContentProvider): never => {
+type ErrorHandler = (data: string) => void
+
+const isGeneralError = (error: any): boolean => error instanceof GeneralError
+
+const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never | void => {
   const errorContent = data.getContent()
 
-  ErrorModalService.showError(errorContent)
+  if (!isUndefined(handler)) {
+    handler(errorContent)
+  } else {
+    // Default handler
+    ErrorModalService.showError(errorContent)
+  }
 
-  throw new Error(errorContent)
+  if (isGeneralError(data)) {
+    throw new Error(errorContent)
+  }
 }
 
 export default trackError
