@@ -19,9 +19,6 @@ import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
 interface ITableProps {
   data: UserWorkspace[]
   isLoading: boolean
-  type: string
-  showDuplicatePropertyModal: () => void
-  showMandatoryModal: () => void
 }
 
 export const Table = ({

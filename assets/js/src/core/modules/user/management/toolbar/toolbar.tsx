@@ -32,15 +32,10 @@ interface IToolbarProps {
 
 export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
-  // const { id } = useContext(UserContext)
   const { user, isLoading, reloadUser } = useUserDraft(id)
   const { updateUserById } = useUserHelper()
 
   const hasChanges = user?.modified === true
-
-  // React.useEffect(() => {
-  //   console.log('todo refresh user')
-  // }, [user?.modified])
 
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
   const onOpenChange = (newOpen: boolean): void => {
@@ -53,7 +48,6 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
       setPopConfirmOpen(true)
     } else {
       reloadUser()
-      console.log('todo refresh user')
     }
   }
 

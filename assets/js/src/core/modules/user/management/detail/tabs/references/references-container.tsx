@@ -30,9 +30,6 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ references }
         isLoading={ false }
-        showDuplicatePropertyModal={ () => {} }
-        showMandatoryModal={ () => {} }
-        type={ 'documents' }
                 />
     }
   ]

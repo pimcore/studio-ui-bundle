@@ -24,14 +24,10 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 
-// export interface ManagementDetailWorkspacesContainerProps {
-// }
-
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useUserContext()
   const { user, isLoading } = useUserDraft(id)
-  // const [propertiesTableTab] = useState<string>('own')
 
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(user?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
@@ -69,16 +65,14 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           console.log('documentWorkspaces', documentWorkspaces)
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
-      children: <>
-        <Table
-          data={ documentWorkspaces }
-          isLoading={ isLoading }
-          showDuplicatePropertyModal={ () => {
-            showDuplicatePropertyModal()
-          } }
-          type={ 'documents' }
-        />
-      </>
+      children: <Table
+        data={ documentWorkspaces }
+        isLoading={ isLoading }
+        showDuplicatePropertyModal={ () => {
+          showDuplicatePropertyModal()
+        } }
+        type={ 'documents' }
+                />
     }
   ]
 
@@ -104,16 +98,14 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           }])
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
-      children: <>
-        <Table
-          data={ assetWorkspaces }
-          isLoading={ isLoading }
-          showDuplicatePropertyModal={ () => {
-            showDuplicatePropertyModal()
-          } }
-          type={ 'assets' }
-        />
-      </>
+      children: <Table
+        data={ assetWorkspaces }
+        isLoading={ isLoading }
+        showDuplicatePropertyModal={ () => {
+          showDuplicatePropertyModal()
+        } }
+        type={ 'assets' }
+                />
     }
   ]
 
@@ -139,16 +131,14 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           }])
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
-      children: <>
-        <Table
-          data={ objectWorkspaces }
-          isLoading={ isLoading }
-          showDuplicatePropertyModal={ () => {
-            showDuplicatePropertyModal()
-          } }
-          type={ 'objects' }
-        />
-      </>
+      children: <Table
+        data={ objectWorkspaces }
+        isLoading={ isLoading }
+        showDuplicatePropertyModal={ () => {
+          showDuplicatePropertyModal()
+        } }
+        type={ 'objects' }
+                />
     }
   ]
 

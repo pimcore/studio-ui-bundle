@@ -49,8 +49,8 @@ export const slice = createSlice({
         userAdapter.upsertOne(state, action)
       }
     },
-    removeUser: (state, action: PayloadAction<number | any>): void => {
-      userAdapter.removeOne(state, action.payload as number)
+    removeUser: (state, action: PayloadAction<number>): void => {
+      userAdapter.removeOne(state, action.payload)
     },
     changeUser: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
       const id: number = action.payload.id
@@ -77,8 +77,6 @@ export const slice = createSlice({
       userAdapter.updateOne(state, update)
     },
     userUpdated: (state, action: PayloadAction<any>): void => {
-      console.log('userUpdated', action)
-      // todo set modified to false
       userAdapter.upsertOne(state, { ...action })
     },
     userAvailablePermissionsFetched: (state, action: PayloadAction<UserGetAvailablePermissionsApiResponse>): void => {
