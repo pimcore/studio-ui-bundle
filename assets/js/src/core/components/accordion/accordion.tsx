@@ -91,6 +91,7 @@ export const Accordion = ({
           role={ 'button' }
           size="small"
           type={ 'text' }
+          variant='minimal'
         />
       )
     }
@@ -109,8 +110,7 @@ export const Accordion = ({
       className: itemClassNames.join(' '),
       label: <>
         <Flex
-          align={ 'center' }
-          vertical={ false }
+          align={ 'baseline' }
         >
           {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}

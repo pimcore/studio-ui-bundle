@@ -13,21 +13,30 @@
 
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
-  DynamicTypeObjectDataAbstractSelect, type SelectProps
+  DynamicTypeObjectDataAbstractSelect,
+  type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
-import type React from 'react'
+import React from 'react'
 import type {
   AbstractObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
+import { t } from 'i18next'
+import {
+  BooleanSelect
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/boolean-select/boolean-select'
 
 export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'booleanSelect'
 
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
-    return super.getObjectDataComponent({
-      ...props,
-      allowClear: false
-    })
+    const options = props.options === null ? undefined : props.options.map(option => ({ label: t(option.key), value: option.value }))
+    return (
+      <BooleanSelect
+        disabled={ props.noteditable === true }
+        optionFilterProp="label"
+        options={ options }
+      />
+    )
   }
 
   getObjectDataFormItemProps (props: SelectProps): FormItemProps {

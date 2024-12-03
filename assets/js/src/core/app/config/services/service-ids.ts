@@ -61,6 +61,7 @@ export const serviceIds = {
 
   'DynamicTypes/GridCell/Text': 'DynamicTypes/GridCell/Text',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
+  'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
   'DynamicTypes/GridCell/Checkbox': 'DynamicTypes/GridCell/Checkbox',
   'DynamicTypes/GridCell/Date': 'DynamicTypes/GridCell/Date',
@@ -84,6 +85,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Object': 'DynamicTypes/GridCell/Object',
   'DynamicTypes/GridCell/Document': 'DynamicTypes/GridCell/Document',
   'DynamicTypes/GridCell/LanguageSelect': 'DynamicTypes/GridCell/LanguageSelect',
+  'DynamicTypes/GridCell/Translate': 'DynamicTypes/GridCell/Translate',
 
   'DynamicTypes/Listing/Text': 'DynamicTypes/Listing/Text',
   'DynamicTypes/Listing/AssetLink': 'DynamicTypes/Listing/AssetLink',
@@ -111,6 +113,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Input': 'DynamicTypes/ObjectData/Input',
   'DynamicTypes/ObjectData/Textarea': 'DynamicTypes/ObjectData/Textarea',
   'DynamicTypes/ObjectData/Password': 'DynamicTypes/ObjectData/Password',
+  'DynamicTypes/ObjectData/InputQuantityValue': 'DynamicTypes/ObjectData/InputQuantityValue',
   'DynamicTypes/ObjectData/Select': 'DynamicTypes/ObjectData/Select',
   'DynamicTypes/ObjectData/MultiSelect': 'DynamicTypes/ObjectData/MultiSelect',
   'DynamicTypes/ObjectData/Language': 'DynamicTypes/ObjectData/Language',
@@ -122,6 +125,8 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Numeric': 'DynamicTypes/ObjectData/Numeric',
   'DynamicTypes/ObjectData/NumericRange': 'DynamicTypes/ObjectData/NumericRange',
   'DynamicTypes/ObjectData/Slider': 'DynamicTypes/ObjectData/Slider',
+  'DynamicTypes/ObjectData/QuantityValue': 'DynamicTypes/ObjectData/QuantityValue',
+  'DynamicTypes/ObjectData/QuantityValueRange': 'DynamicTypes/ObjectData/QuantityValueRange',
   'DynamicTypes/ObjectData/Consent': 'DynamicTypes/ObjectData/Consent',
   'DynamicTypes/ObjectData/Firstname': 'DynamicTypes/ObjectData/Firstname',
   'DynamicTypes/ObjectData/Lastname': 'DynamicTypes/ObjectData/Lastname',
@@ -137,8 +142,11 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/GeoBounds': 'DynamicTypes/ObjectData/GeoBounds',
   'DynamicTypes/ObjectData/GeoPolygon': 'DynamicTypes/ObjectData/GeoPolygon',
   'DynamicTypes/ObjectData/GeoPolyLine': 'DynamicTypes/ObjectData/GeoPolyLine',
+  'DynamicTypes/ObjectData/ManyToManyRelation': 'DynamicTypes/ObjectData/ManyToManyRelation',
+  'DynamicTypes/ObjectData/StructuredTable': 'DynamicTypes/ObjectData/StructuredTable',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
+  'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

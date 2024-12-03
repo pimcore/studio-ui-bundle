@@ -13,8 +13,9 @@
 
 import { type Asset, type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import type { ElementType } from '../../../../types/element-type.d'
 
-type Element = Asset | DataObject
+export type Element = Asset | DataObject
 
 export const getElementIcon = (element: Element, defaultIcon: ElementIcon): ElementIcon => {
   if (
@@ -32,4 +33,16 @@ export const getElementIcon = (element: Element, defaultIcon: ElementIcon): Elem
   }
 
   return defaultIcon
+}
+
+export const getElementKey = (element: Element, elementType: ElementType): string => {
+  if (elementType === 'asset') {
+    return (element as Asset).filename ?? ''
+  }
+
+  if (elementType === 'data-object') {
+    return (element as DataObject).key ?? ''
+  }
+
+  return ''
 }

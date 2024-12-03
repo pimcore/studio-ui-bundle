@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button, Card, Checkbox } from 'antd'
-import React, { useState } from 'react'
+import { Button, Card, Checkbox, type MenuRef } from 'antd'
+import React, { useRef, useState } from 'react'
 import { useStyle } from './preview-card.styles'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
@@ -32,12 +32,11 @@ interface PreviewCardProps {
   onClick?: (e) => void
 }
 
-export const PreviewCard = ({
-  name, dropdownItems, imgSrc, size = SizeTypes.SMALL, onClick
-}: PreviewCardProps
-): React.JSX.Element => {
+export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
+  const { size = SizeTypes.SMALL } = props
   const { styles } = useStyle()
   const [selected, setSelected] = useState(false)
+  const dropdownMenuRef = useRef<MenuRef>(null)
 
   let classCard: string = ''
   let classImg: string = 'img'
@@ -62,13 +61,20 @@ export const PreviewCard = ({
       cover={
         <div className={ classImgDiv }>
           <PimcoreImage
-            alt={ name }
+            alt={ props.name }
             className={ classImg }
-            src={ imgSrc }
+            src={ props.imgSrc }
           />
         </div>
         }
-      onClick={ onClick }
+      onClick={ (event) => {
+        if (
+          dropdownMenuRef.current === null ||
+          dropdownMenuRef.current.menu?.list.contains(event.target as Node) === false
+        ) {
+          props.onClick?.(event)
+        }
+      } }
     >
       <Checkbox
         checked={ selected }
@@ -78,8 +84,9 @@ export const PreviewCard = ({
       />
       <Dropdown
         menu={ {
-          items: dropdownItems
+          items: props.dropdownItems
         } }
+        menuRef={ dropdownMenuRef }
         placement='bottomLeft'
       >
         <Button
@@ -93,7 +100,7 @@ export const PreviewCard = ({
         />
       </Dropdown>
       <Meta
-        title={ name }
+        title={ props.name }
       />
     </Card>
   )

@@ -23,6 +23,7 @@ import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager
 import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { Box } from '@Pimcore/components/box/box'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface CustomMetadataWithActions extends CustomMetadata {
   actions: React.ReactNode
@@ -45,7 +46,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     return data.map((item) => {
       return {
         ...item,
-        rowId: crypto.randomUUID()
+        rowId: uuid()
       }
     })
   }

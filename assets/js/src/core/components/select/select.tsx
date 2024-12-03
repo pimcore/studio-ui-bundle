@@ -19,17 +19,18 @@ import { isString, isEmpty } from 'lodash'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './select.styles'
 
-interface SelectProps extends AntdSelectProps {
+export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
   width?: number
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
+  const [isSelected, setIsSelected] = useState(false)
 
   useImperativeHandle(ref, () => selectRef.current!)
 
@@ -41,7 +42,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const selectContainerClassNames = cn(styles.selectContainer, {
     [styles.selectContainerWarning]: isStatusWarning,
-    [styles.selectContainerError]: isStatusError
+    [styles.selectContainerError]: isStatusError,
+    [styles.selectContainerWithClear]: allowClear === true && isSelected
   })
   const selectClassNames = cn(className, styles.select, {
     [styles.selectWithCustomIcon]: withCustomIcon
@@ -53,6 +55,10 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   })
 
   const handleClick = (): void => { setIsActive(!isActive) }
+
+  const handleChange = (value: string): void => {
+    !isEmpty(value) ? setIsSelected(true) : setIsSelected(false)
+  }
 
   const getSuffixIcon = (): React.JSX.Element => {
     const isShowCustomIcon = !isEmpty(customArrowIcon) && isString(customArrowIcon)
@@ -83,10 +89,12 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
         />
       )}
       <AntdSelect
+        allowClear={ allowClear }
         className={ selectClassNames }
         menuItemSelectedIcon={ getItemSelectedIcon() }
         mode={ mode }
         onBlur={ () => { setIsFocus(false) } }
+        onChange={ handleChange }
         onDropdownVisibleChange={ handleClick }
         onFocus={ () => { setIsFocus(true) } }
         ref={ selectRef }

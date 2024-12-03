@@ -27,7 +27,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   const { maxItemsPerNode } = useContext(TreeContext)
 
   useEffect(() => {
-    if (total > maxItemsPerNode) {
+    if (total > maxItemsPerNode!) {
       setSearchActive(true)
     }
   }, [total])
@@ -46,6 +46,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   return (
     <Search
       aria-label={ props.label }
+      loading={ props.isLoading }
       onSearch={ onSearch }
       placeholder={ props.label }
       size='small'

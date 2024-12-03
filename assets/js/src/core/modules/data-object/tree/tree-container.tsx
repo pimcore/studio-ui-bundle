@@ -20,6 +20,7 @@ import { withDraggable } from './node/with-draggable'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
 import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export interface TreeContainerProps {
   id: number
@@ -27,6 +28,7 @@ export interface TreeContainerProps {
 
 const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
+  const { object_tree_paging_limit: dataObjectTreePagingLimit } = useSettings()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
     openDataObject({
@@ -39,7 +41,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   return (
     <ElementTree
       contextMenu={ DataObjectTreeContextMenu }
-      maxItemsPerNode={ 20 }
+      maxItemsPerNode={ dataObjectTreePagingLimit }
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }
       onSelect={ onSelect }

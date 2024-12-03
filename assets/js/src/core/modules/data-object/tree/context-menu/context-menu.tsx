@@ -33,21 +33,21 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { t } = useTranslation()
 
   const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
-  const { addFolderContextMenuItem } = useAddFolder('data-object')
-  const { renameContextMenuItem } = useRename('data-object')
-  const { deleteContextMenuItem } = useDelete('data-object')
+  const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
+  const { renameTreeContextMenuItem } = useRename('data-object')
+  const { deleteTreeContextMenuItem } = useDelete('data-object')
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
-  const { copyContextMenuItem, cutContextMenuItem, pasteContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
-  const { lockContextMenuItem, lockAndPropagateContextMenuItem, unlockContextMenuItem, unlockAndPropagateContextMenuItem } = useLock('data-object')
+  const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
+  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem } = useLock('data-object')
 
   const items: DropdownMenuProps['items'] = [
-    addFolderContextMenuItem(props.node),
-    renameContextMenuItem(props.node),
-    copyContextMenuItem(props.node),
-    pasteContextMenuItem(props.node),
-    cutContextMenuItem(props.node),
+    addFolderTreeContextMenuItem(props.node),
+    renameTreeContextMenuItem(props.node),
+    copyTreeContextMenuItem(props.node),
+    pasteTreeContextMenuItem(props.node),
+    cutTreeContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
-    deleteContextMenuItem(props.node),
+    deleteTreeContextMenuItem(props.node),
     createZipDownloadContextMeuItem(props.node),
 
     {
@@ -60,10 +60,10 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
           key: 'advanced-lock',
           icon: <Icon value={ 'lock-01' } />,
           children: [
-            lockContextMenuItem(props.node),
-            lockAndPropagateContextMenuItem(props.node),
-            unlockContextMenuItem(props.node),
-            unlockAndPropagateContextMenuItem(props.node)
+            lockTreeContextMenuItem(props.node),
+            lockAndPropagateTreeContextMenuItem(props.node),
+            unlockTreeContextMenuItem(props.node),
+            unlockAndPropagateTreeContextMenuItem(props.node)
           ]
         }
       ]

@@ -98,6 +98,10 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["User Management"],
             }),
+            userGetImage: build.query<UserGetImageApiResponse, UserGetImageApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/image/${queryArg.id}` }),
+                providesTags: ["User Management"],
+            }),
             userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/users/tree`,
@@ -198,6 +202,11 @@ export type UserUploadImageApiArg = {
         /** User image to upload */
         userImage: Blob;
     };
+};
+export type UserGetImageApiResponse = /** status 200 User profile image */ Blob;
+export type UserGetImageApiArg = {
+    /** Id of the User */
+    id: number;
 };
 export type UserGetTreeApiResponse = /** status 200 Collection of users including folders for the given parent id. */ {
     totalItems: number;
@@ -421,5 +430,6 @@ export const {
     usePimcoreStudioApiUserSearchQuery,
     useUserUpdatePasswordByIdMutation,
     useUserUploadImageMutation,
+    useUserGetImageQuery,
     useUserGetTreeQuery,
 } = injectedRtkApi;

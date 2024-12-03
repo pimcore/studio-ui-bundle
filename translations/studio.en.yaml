@@ -291,11 +291,13 @@ select-image-preview: Select Image Preview
 choose-media: Choose Media
 current-player-position: Current Player Position
 drag-and-drop-asset: Drag and Drop Asset
+ok: OK
 apply: Apply
 close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.add-assets: Add Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
@@ -331,13 +333,38 @@ error: Error
 info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
+remove: Remove
 data-object.editor.external-image.preview-placeholder: Add an external image
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
+search: Search
 geocode.address-not-found: 'The entered address was not found'
 geocode.possible-causes: 'Possible causes'
 geocode.postal-code-format-error: 'Postal code format, e.g. use "5020 Salzburg, Söllheimer Straße 16" instead of "A-5020 Salzburg, Söllheimer Straße 16"'
+delete-confirmation-advanced: Do you really want to delete {{type}} '{{value}}'?
+relations.id: ID
+relations.reference: Reference
+relations.type: Type
+relations.subtype: Subtype
+relations.remove-all.confirm: Do you really want to delete all relations?
+relation: relation
+items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
+actions: Actions
+asset: Asset
+data-object: Data Object
+document: Document
+folder: Folder
+archive: Archive
+audio: Audio
+image: Image
+text: Text
+video: Video
+processing: Processing
+upload: Upload
+upload.assets-items-failed-message: Some items could not be uploaded.
+quantity-value.converted-units: Converted Units
+structured-table.empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.add-folder: Add Folder

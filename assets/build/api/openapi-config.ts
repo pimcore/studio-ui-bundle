@@ -77,6 +77,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/(login|logout)/i)
+    },
+    '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/class\//i)
     }
   },
   exportName: 'api',
