@@ -94,6 +94,14 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       }
     `,
 
+    selectContainerWithClear: css`
+      &:hover {
+        .ant-select-arrow {
+          display: none;
+        }
+      }
+    `,
+
     select: css`
       width: ${!isEmptyValue(props.width) ? `${props.width}px` : 'initial'};
       

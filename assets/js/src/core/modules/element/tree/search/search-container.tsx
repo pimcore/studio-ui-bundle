@@ -47,6 +47,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   return (
     <Search
       aria-label={ props.label }
+      loading={ props.isLoading }
       onSearch={ onSearch }
       placeholder={ props.label }
       size='small'
