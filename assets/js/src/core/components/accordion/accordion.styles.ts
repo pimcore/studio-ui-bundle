@@ -67,7 +67,7 @@ export const useStyles = createStyles(({ token, css }) => {
             > .ant-collapse-header {
                 display: inline-flex;
                 width: 100%;
-                align-items: center;
+                align-items: baseline;
 
                 > .ant-collapse-header-text {
                     margin-inline-end: 0;
