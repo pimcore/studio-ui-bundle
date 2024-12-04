@@ -35,7 +35,7 @@ export const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
     },
     noteElementCreate: {
-      invalidatesTags: (result, error, args) => providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
     }
   }
 })
