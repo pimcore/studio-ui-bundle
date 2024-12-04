@@ -92,6 +92,7 @@ import { type DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dy
 import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-time'
 import { type DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-external-image'
 import { type DynamicTypeObjectDataImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image'
+import { type DynamicTypeObjectDataImageGallery } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image-gallery'
 import { type DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopoint'
 import { type DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geobounds'
 import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
@@ -216,6 +217,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTime>(serviceIds['DynamicTypes/ObjectData/Time']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataExternalImage>(serviceIds['DynamicTypes/ObjectData/ExternalImage']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataImage>(serviceIds['DynamicTypes/ObjectData/Image']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataImageGallery>(serviceIds['DynamicTypes/ObjectData/ImageGallery']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPoint>(serviceIds['DynamicTypes/ObjectData/GeoPoint']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoBounds>(serviceIds['DynamicTypes/ObjectData/GeoBounds']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolygon>(serviceIds['DynamicTypes/ObjectData/GeoPolygon']))
