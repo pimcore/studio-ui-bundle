@@ -30,6 +30,7 @@ import { Box } from '../box/box'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
+  isLoading?: boolean
   mergeAdditionalQueryParams?: Dispatch<unknown>
   total: number
 }
