@@ -27,10 +27,6 @@ interface ITableProps {
   onChange?: (data) => void
 }
 
-interface ActionCellProps {
-  index: number
-}
-
 export const LanguageTable = ({
   data,
   onChangeOrder, onChange
@@ -94,30 +90,24 @@ export const LanguageTable = ({
     })
   ]
 
-  const ActionCell = ({ index }: ActionCellProps): React.JSX.Element => {
-    return (
-      <div>
-        <IconButton
-          disabled={ index === 0 }
-          icon={ { value: 'chevron-up' } }
-          onClick={ () => { hanldeOrder(index, index - 1) } }
-        />
-        <IconButton
-          disabled={ index === tableColumns.length - 1 }
-          icon={ { value: 'chevron-down' } }
-          onClick={ () => { hanldeOrder(index, index + 1) } }
-        />
-      </div>
-    )
-  }
-
   if (onChangeOrder !== null && onChangeOrder !== undefined) {
     tableColumns.push(columnHelper.accessor('actions', {
       header: '',
       size: 60,
       cell: (context) => {
         return (
-          <ActionCell index={ context.row.index } />
+          <div>
+            <IconButton
+              disabled={ context.row.index === 0 }
+              icon={ { value: 'chevron-up' } }
+              onClick={ () => { hanldeOrder(context.row.index, context.row.index - 1) } }
+            />
+            <IconButton
+              disabled={ context.row.index === tableColumns.length - 1 }
+              icon={ { value: 'chevron-down' } }
+              onClick={ () => { hanldeOrder(context.row.index, context.row.index + 1) } }
+            />
+          </div>
         )
       }
     }))
