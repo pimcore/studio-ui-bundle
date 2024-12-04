@@ -87,7 +87,8 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const reloadTree = (): void => {
     getUserTree({ parentId: 0 }).then((data) => {
       updateTreeData('0', data.items)
-      setTreeKey('tree-' + Math.random())
+      const timestamp = Date.now()
+      setTreeKey('tree-' + timestamp)
     }).catch((error) => {
       console.error(error)
     })
