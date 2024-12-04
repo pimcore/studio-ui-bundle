@@ -62,7 +62,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
               <Typography className={ styles.text }>
                 Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using
                 various criteria, including filtering values in related elements, to enable precise and comprehensive
-                data retrieval. For details see&nbsp;
+                data retrieval. For details see{' '}
                 <a
                   href={ PQL_DOCUMENTATION_LINK }
                   rel="noreferrer"
