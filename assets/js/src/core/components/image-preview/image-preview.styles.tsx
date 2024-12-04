@@ -15,17 +15,22 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    imageTargetContainer: css`
-      border-radius: ${token.borderRadiusLG}px;
-      outline: 1px dashed ${token.colorBorder};
-      background: ${token.controlItemBgHover};
-      padding: ${token.paddingSM}px;
+    imagePreviewContainer: css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
       max-width: 100%;
       
-      
-      .image-target-title {
-          text-align: center;
+      .ant-image {
+        height: 100%;
+        width: 100%;
       }
+      
+        .ant-image-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
     `
   }
 })

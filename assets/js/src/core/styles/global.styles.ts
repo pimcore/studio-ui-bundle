@@ -631,6 +631,10 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
   }
 
+  .max-w-full {
+      max-width: 100%;
+  }
+  
   .min-w-100 {
       min-width: 100px;
   }
