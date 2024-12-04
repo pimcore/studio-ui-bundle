@@ -20,7 +20,7 @@ export const useStyles = createStyles(({ css, token }) => {
       cursor: pointer;
     `,
 
-    link: css`
+    text: css`
       color: ${token.colorTextLightSolid};
     }
     `
