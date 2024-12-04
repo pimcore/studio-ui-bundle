@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Accordion, type AccordionProps } from '@Pimcore/components/accordion/accordion'
+import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
 import React from 'react'
 
 export interface AccordionViewProps {
@@ -19,24 +19,18 @@ export interface AccordionViewProps {
   children?: React.ReactNode
   bordered?: boolean
   collapsed?: boolean
+  theme?: 'fieldset' | 'default'
 }
 
 export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewProps): React.JSX.Element => {
-  const item: AccordionProps['items'][0] = {
-    key: '0',
-    title: <>{props.title}</>,
-    children: props.children,
-    forceRender: true
-  }
-
   return (
-    <Accordion
+    <CollapseItem
       bordered={ bordered }
-      defaultActiveKey={ collapsed ?? false ? '0' : undefined }
-      ghost
-      items={ [item] }
+      defaultActive={ collapsed ?? false }
+      forceRender
+      label={ (<>{props.title}</>) }
     >
       {props.children}
-    </Accordion>
+    </CollapseItem>
   )
 }

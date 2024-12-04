@@ -27,6 +27,7 @@ export const CardView = (props: CardViewProps): React.JSX.Element => {
   return (
     <Card
       bordered={ props.bordered === true }
+      theme='fieldset'
       title={ isEmpty(props.title) ? undefined : props.title }
     >
       {props.children}

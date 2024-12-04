@@ -73,6 +73,21 @@ export const useStyles = createStyles(({ token, css }) => {
           border: none;
         }
       }
+
+      &.card--theme-card-with-highlight {
+        .ant-card-head {
+          border-bottom: 1px solid ${token.colorPrimaryBorder};
+        }
+      }
+
+      &.card--theme-fieldset {
+        background-color: #F4F4F4;
+        border-left: 3px solid #D5CFDA;
+
+        .ant-card-head {
+          border-bottom: none;
+        }
+      }
     `
   }
 })
