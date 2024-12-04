@@ -52,11 +52,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
   useEffect(() => {
     dispatch(
       api.util.invalidateTags(
-        invalidatingTags.ELEMENT_TAGS(elementType, id)
-      )
-    )
-    dispatch(
-      api.util.invalidateTags(
         invalidatingTags.AVAILABLE_TAGS()
       )
     )

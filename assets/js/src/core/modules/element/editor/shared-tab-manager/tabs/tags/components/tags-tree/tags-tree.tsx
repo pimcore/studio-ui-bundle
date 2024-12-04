@@ -30,8 +30,7 @@ import {
 import { t } from 'i18next'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
-  useTagAssignToElementMutation,
-  useTagUnassignFromElementMutation
+  useTagAssignToElementMutation, useTagUnassignFromElementMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 
 export interface TagsTreeProps {
@@ -122,7 +121,6 @@ export const TagsTree = ({
         ? await assignTagToElement(tagId)
         : await removeTagFromElement(tagId)
     } catch (e) {
-      console.log('----> here', (checkedKeys.checked))
       const errorMessage = info.checked
         ? t('failed-to-assign-tag-to-element')
         : t('failed-to-un-assign-tag-to-element')

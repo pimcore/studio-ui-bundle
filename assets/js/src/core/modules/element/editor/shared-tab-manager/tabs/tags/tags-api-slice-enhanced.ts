@@ -18,7 +18,7 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.AVAILABLE_TAGS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     tagGetCollection: {
-      providesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
+      providesTags: (result, error, args) => providingTags.AVAILABLE_TAGS()
     },
     tagAssignToElement: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
@@ -27,7 +27,6 @@ export const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
     },
     tagBatchOperationToElementsByTypeAndId: {
-      // when tags from folder are applied to children assets or data objects
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
     },
     tagGetCollectionForElementByTypeAndId: {
