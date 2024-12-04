@@ -16,17 +16,15 @@ import type { UserPermission } from '@Pimcore/modules/user/user-api-slice.gen'
 export const generatePassword = (len = 20): string => {
   const string = 'abcdefghijklmnopqrstuvwxyz'
   const numeric = '0123456789'
+  const charset = string + numeric
   let password = ''
-  let character = ''
 
-  while (password.length < len) {
-    const entity1 = Math.ceil(string.length * Math.random() * Math.random())
-    const entity2 = Math.ceil(numeric.length * Math.random() * Math.random())
-    let hold = string.charAt(entity1)
-    hold = (entity1 % 2 === 0) ? hold.toUpperCase() : hold
-    character += hold
-    character += numeric.charAt(entity2)
-    password = character
+  const randomValues = new Uint32Array(len)
+  window.crypto.getRandomValues(randomValues)
+
+  for (let i = 0; i < len; i++) {
+    const randomIndex = randomValues[i] % charset.length
+    password += charset[randomIndex]
   }
 
   return password
