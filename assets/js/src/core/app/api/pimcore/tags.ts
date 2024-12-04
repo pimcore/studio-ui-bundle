@@ -72,8 +72,7 @@ export const providingTags = {
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
-  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.ELEMENT_TAGS],
-  ELEMENT_TAGS_ID: (id: number) => [tagNames.ELEMENT_TAGS, { type: tagNames.ELEMENT_TAGS, id }],
+  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.ELEMENT_TAGS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
@@ -99,9 +98,8 @@ export const invalidatingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
-  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.ELEMENT_TAGS],
-  ELEMENT_TAGS_ID: (id: number) => [tagNames.ELEMENT_TAGS, { type: tagNames.ELEMENT_TAGS, id }],
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [tagNames.NOTES_AND_EVENTS],
+  ELEMENT_TAGS: (elementType: ElementType, id: number) => [{ type: tagNames.ELEMENT_TAGS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
