@@ -25,7 +25,7 @@ import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserHelper()
-  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Math.random())
+  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
     title: t('user-management.tree.all'),
