@@ -14,6 +14,7 @@
 import React, { useState } from 'react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Tooltip, Typography } from 'antd'
+import { Trans } from 'react-i18next'
 import { isObject } from 'lodash'
 import TextArea from 'antd/es/input/TextArea'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -60,16 +61,18 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
             open={ isShowTooltip }
             title={ (
               <Typography className={ styles.text }>
-                Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using
-                various criteria, including filtering values in related elements, to enable precise and comprehensive
-                data retrieval. For details see{' '}
-                <a
-                  href={ PQL_DOCUMENTATION_LINK }
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  PQL Documentation
-                </a>
+                <Trans
+                  components={ {
+                    anchorPQL: (
+                    // eslint-disable-next-line jsx-a11y/anchor-has-content
+                      <a
+                        href={ PQL_DOCUMENTATION_LINK }
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      />)
+                  } }
+                  i18nKey="component.pql.description"
+                />
               </Typography>
             ) }
             trigger="click"

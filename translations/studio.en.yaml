@@ -55,6 +55,7 @@ asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
 component.workflow-card.action-btn: Workflow Actions
+component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
 asset.asset-editor-tabs.embedded-metadata.columns.value: Value
