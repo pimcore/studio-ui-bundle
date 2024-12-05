@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key, useState } from 'react'
+import React, { useState } from 'react'
 import {
   type Tag,
   useTagUnassignFromElementMutation
@@ -19,13 +19,10 @@ import {
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
-import {
-  useOptimisticUpdate
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
-import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Flex } from 'antd'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -33,25 +30,13 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
-  const [loadingRows, setLoadingRows] = useState({})
+  const [loadingRows, setLoadingRows] = useState<string[]>([])
   const { id, elementType } = useElementContext()
+  const messageApi = useMessage()
 
   const [unassignTag] = useTagUnassignFromElementMutation()
-  const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
-  const flatTags = flattenArray(tags)
 
   async function removeTag (tag: Tag): Promise<void> {
-    const futureCheckedKeys = tags
-      .map((tag) => tag.id)
-      .filter((key: number) => tag.id !== key)
-
-    updateTagsForElementByTypeAndId({
-      elementType,
-      id,
-      flatTags,
-      checkedTags: futureCheckedKeys as Key[]
-    })
-
     try {
       await unassignTag({
         elementType,
@@ -60,6 +45,12 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
       }).unwrap()
     } catch (error) {
       console.error(error)
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error({
+        content: t('failed-to-un-assign-tag-to-element'),
+        type: 'error',
+        duration: 5
+      })
     }
   }
 
@@ -76,12 +67,15 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     columnHelper.accessor('actions', {
       header: t('tags.columns.actions'),
       cell: (info) => {
-        const isLoading = loadingRows[info.row.id]
+        const isLoading = loadingRows.includes(info.row.id)
 
         const handleClick = async (): Promise<void> => {
-          setLoadingRows({ ...loadingRows, [info.row.id]: true })
-          await removeTag(info.row.original)
-          setLoadingRows({ ...loadingRows, [info.row.id]: false })
+          setLoadingRows(prevLoadingRows =>
+            prevLoadingRows.includes(info.row.id)
+              ? prevLoadingRows
+              : [...prevLoadingRows, info.row.id]
+          ); await removeTag(info.row.original)
+          setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((row) => row !== info.row.id))
         }
 
         return (
