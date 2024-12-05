@@ -59,6 +59,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
           <Tooltip
             onOpenChange={ () => { setIsShowTooltip(!isShowTooltip) } }
             open={ isShowTooltip }
+            overlayClassName={ styles.tooltip }
             title={ (
               <Typography className={ styles.text }>
                 <Trans
@@ -66,6 +67,7 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
                     anchorPQL: (
                     // eslint-disable-next-line jsx-a11y/anchor-has-content
                       <a
+                        className={ styles.link }
                         href={ PQL_DOCUMENTATION_LINK }
                         rel="noopener noreferrer"
                         target="_blank"
