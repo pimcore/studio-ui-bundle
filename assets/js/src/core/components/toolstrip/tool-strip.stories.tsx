@@ -12,8 +12,8 @@
 */
 
 import React from 'react'
-import { StoryObj, type Meta } from '@storybook/react'
-import { ToolStrip, ToolStripProps } from './tool-strip'
+import { type StoryObj, type Meta } from '@storybook/react'
+import { ToolStrip, type ToolStripProps } from './tool-strip'
 import { IconButton } from '../icon-button/icon-button'
 import { Space } from '../space/space'
 import { Text } from '../text/text'
@@ -34,29 +34,34 @@ export default config
 export const _default: StoryObj<ToolStripProps> = {
   args: {
     children: (
-      <Split size='mini' dividerSize='small' theme='secondary'>
+      <Split
+        dividerSize='small'
+        size='mini'
+        theme='secondary'
+      >
         <Space size='mini'>
-          <IconButton icon={{ value: "draggable" }} />
+          <IconButton icon={ { value: 'draggable' } } />
           <Text>Title</Text>
-          <Dropdown menu={{
+          <Dropdown menu={ {
             items: [
-              { 
+              {
                 key: 0,
-                label: "Action 1",
+                label: 'Action 1'
               },
-              { 
+              {
                 key: 1,
-                label: "Action 2",
+                label: 'Action 2'
               }
             ]
-          }}>
-            <IconButton icon={{ value: "plus" }} />
+          } }
+          >
+            <IconButton icon={ { value: 'plus' } } />
           </Dropdown>
-          <IconButton icon={{ value: "move-down" }} />
-          <IconButton icon={{ value: "move-up" }} />
+          <IconButton icon={ { value: 'move-down' } } />
+          <IconButton icon={ { value: 'move-up' } } />
         </Space>
 
-        <IconButton icon={{ value: "trash" }} />
+        <IconButton icon={ { value: 'trash' } } />
       </Split>
     )
   }

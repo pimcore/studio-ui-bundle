@@ -12,9 +12,9 @@
 */
 
 import React from 'react'
-import { StoryObj, type Meta } from '@storybook/react'
-import { ToolStripBox, ToolStripBoxProps } from './tool-strip-box'
-import { _default as toolStripStory } from '../tool-strip.stories';
+import { type StoryObj, type Meta } from '@storybook/react'
+import { ToolStripBox, type ToolStripBoxProps } from './tool-strip-box'
+import { _default as toolStripStory } from '../tool-strip.stories'
 
 const config: Meta = {
   title: 'Components/Data Display/ToolStrip/ToolStripBox',

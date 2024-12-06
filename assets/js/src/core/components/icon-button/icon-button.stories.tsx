@@ -27,7 +27,7 @@ export default config
 
 export const _default = {
   args: {
-    icon: { value: 'trash'},
+    icon: { value: 'trash' },
     loading: false
   }
 }

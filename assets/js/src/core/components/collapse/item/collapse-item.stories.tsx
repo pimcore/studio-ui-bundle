@@ -13,7 +13,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import { CollapseItem, CollapseItemProps } from './collapse-item'
+import { CollapseItem, type CollapseItemProps } from './collapse-item'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -29,25 +29,31 @@ export default config
 
 export const _default: StoryObj<CollapseItemProps> = {
   args: {
-    label: <Flex gap={'extra-small'} align='center'>
+    label: <Flex
+      align='center'
+      gap={ 'extra-small' }
+           >
       <Icon value='camera' />
       <span>Label</span>
     </Flex>,
-    children: 'Content',
+    children: 'Content'
   }
 }
 
 export const SubLabel: StoryObj<CollapseItemProps> = {
   args: {
     ..._default.args,
-    subLabel: 'Some descriptive sub label',
+    subLabel: 'Some descriptive sub label'
   }
 }
 
 export const Extra: StoryObj<CollapseItemProps> = {
   args: {
     ...SubLabel.args,
-    extra: <IconButton icon={{ value: 'trash' }} variant='minimal' />,
+    extra: <IconButton
+      icon={ { value: 'trash' } }
+      variant='minimal'
+           />
   }
 }
 
@@ -55,35 +61,35 @@ export const ExtraPosition: StoryObj<CollapseItemProps> = {
   args: {
     ..._default.args,
     extra: <Button>New</Button>,
-    extraPosition: 'start',
+    extraPosition: 'start'
   }
 }
 
 export const Borderless: StoryObj<CollapseItemProps> = {
   args: {
     ...Extra.args,
-    bordered: false,
+    bordered: false
   }
 }
 
 export const ThemeSimple: StoryObj<CollapseItemProps> = {
   args: {
     ...Extra.args,
-    theme: 'simple',
+    theme: 'simple'
   }
 }
 
 export const ThemeSuccess: StoryObj<CollapseItemProps> = {
   args: {
     ...Extra.args,
-    theme: 'success',
+    theme: 'success'
   }
 }
 
 export const ThemePrimary: StoryObj<CollapseItemProps> = {
   args: {
     ...Extra.args,
-    theme: 'primary',
+    theme: 'primary'
   }
 }
 
@@ -91,7 +97,7 @@ export const ThemeCardWithHighlight: StoryObj<CollapseItemProps> = {
   args: {
     ..._default.args,
     theme: 'card-with-highlight',
-    bordered: false,
+    bordered: false
   }
 }
 
@@ -99,7 +105,7 @@ export const ThemeFieldset: StoryObj<CollapseItemProps> = {
   args: {
     ..._default.args,
     theme: 'fieldset',
-    hasContentSeparator: false,
+    hasContentSeparator: false
   }
 }
 
@@ -108,12 +114,12 @@ export const Nested: StoryObj<CollapseItemProps> = {
     ..._default.args,
     children: (
       <CollapseItem
+        hasContentSeparator={ false }
         label='Nested item'
         theme='fieldset'
-        hasContentSeparator={false}
       >
         Nested content
       </CollapseItem>
-    ),
+    )
   }
 }
