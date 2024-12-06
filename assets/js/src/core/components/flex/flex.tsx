@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type LegacyRef } from 'react'
 import { Flex as AntFlex, type FlexProps as AntFlexProps, theme } from 'antd'
 import cn from 'classnames'
 import { isString, isNumber, isObject } from 'lodash'
@@ -21,6 +21,7 @@ import { type GapType } from '@Pimcore/types/components/types'
 
 export interface FlexProps extends Omit<AntFlexProps, 'gap'> {
   gap?: GapType
+  ref?: LegacyRef<HTMLDivElement>
 }
 
 const { useToken } = theme

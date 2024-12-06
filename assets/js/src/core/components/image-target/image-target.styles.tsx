@@ -17,9 +17,11 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     imageTargetContainer: css`
       border-radius: ${token.borderRadiusLG}px;
-      border: 1px dashed ${token.colorBorder};
+      outline: 1px dashed ${token.colorBorder};
       background: ${token.controlItemBgHover};
       padding: ${token.paddingSM}px;
+      max-width: 100%;
+      
       
       .image-target-title {
           text-align: center;

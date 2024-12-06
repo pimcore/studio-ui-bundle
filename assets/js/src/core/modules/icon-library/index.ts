@@ -132,6 +132,7 @@ import save01 from '@Pimcore/assets/icons/save-01.inline.svg'
 import plus from '@Pimcore/assets/icons/plus.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
+import union from '@Pimcore/assets/icons/union.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -629,6 +630,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'move-down',
       component: moveDown
+    })
+
+    iconLibrary.register({
+      name: 'union',
+      component: union
     })
   }
 })

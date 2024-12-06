@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  useClassQuantityValueUnitConvertMutation,
-  useClassQuantityValueUnitListQuery
-} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { type DefaultOptionType } from 'rc-select/lib/Select'
 import { useTranslation } from 'react-i18next'
 import _ from 'lodash'
+import {
+  api,
+  useUnitQuantityValueListQuery
+} from '@Pimcore/modules/data-object/unit-slice.gen'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 interface UseQuantityValueUnitsReturn {
   getSelectOptions: (validUnits?: string[]) => DefaultOptionType[]
@@ -26,8 +27,9 @@ interface UseQuantityValueUnitsReturn {
 }
 
 export const useQuantityValueUnits = (): UseQuantityValueUnitsReturn => {
-  const { data: units } = useClassQuantityValueUnitListQuery()
-  const [convertQuantityValue] = useClassQuantityValueUnitConvertMutation()
+  const { data: units } = useUnitQuantityValueListQuery()
+  const dispatch = useAppDispatch()
+
   const { t } = useTranslation()
 
   const getSelectOptions = (validUnits?: string[]): DefaultOptionType[] => {
@@ -57,16 +59,11 @@ export const useQuantityValueUnits = (): UseQuantityValueUnitsReturn => {
       return null
     }
 
-    const { data } = await convertQuantityValue({
-      convertParameters: {
-        fromUnitId,
-        toUnitId,
-        value
-      }
-    }).catch(() => {
-      throw new Error('Error converting quantity value.')
-    })
-
+    const { data } = await dispatch(api.endpoints.unitQuantityValueConvert.initiate({
+      fromUnitId,
+      toUnitId,
+      value
+    }))
     return data?.data ?? null
   }
 

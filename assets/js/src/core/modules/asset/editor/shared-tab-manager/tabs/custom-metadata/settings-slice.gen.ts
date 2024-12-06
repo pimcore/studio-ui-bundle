@@ -1,5 +1,5 @@
 import { api } from "../../../../../../app/api/pimcore/index";
-export const addTagTypes = ["Assets"] as const;
+export const addTagTypes = ["Metadata"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -11,7 +11,7 @@ const injectedRtkApi = api
                 AssetCustomMetadataGetByIdApiArg
             >({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
-                providesTags: ["Assets"],
+                providesTags: ["Metadata"],
             }),
         }),
         overrideExisting: false,
@@ -36,7 +36,7 @@ export type CustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: string | null;
+    data: any | null;
 };
 export type Error = {
     /** Message */

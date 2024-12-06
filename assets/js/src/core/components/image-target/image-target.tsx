@@ -11,30 +11,57 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { forwardRef, type MutableRefObject } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './image-target.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 
 interface ImageTargetProps {
   title: string
   className?: string
-  width?: number
-  height?: number
+  width?: number | string
+  height?: number | string
+  dndIcon?: boolean
+  uploadIcon?: boolean
 }
 
-export const ImageTarget = ({ title, width, height, className }: ImageTargetProps): React.JSX.Element => {
+export const ImageTarget = forwardRef(function ImageTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon }: ImageTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+  const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
 
   return (
-    <Flex
-      align="center"
-      className={ cn(className, styles.imageTargetContainer) }
-      justify="center"
-      style={ { maxWidth: toCssDimension(width), height: toCssDimension(height) } }
+    <div
+      className={ cn(className, styles.imageTargetContainer, ...getStateClasses()) }
+      ref={ ref }
+      style={ {
+        height: toCssDimension(height),
+        width: toCssDimension(width)
+      } }
     >
-      <div className="image-target-title">{ title }</div>
-    </Flex>
+      <Flex
+        align="center"
+        gap="extra-small"
+        justify="center"
+        style={ { height: '100%' } }
+        vertical
+      >
+        { (dndIcon === true || uploadIcon === true) && (
+        <div className="icon-container">
+          <Icon
+            options={ { height: 30, width: 30 } }
+            value={ 'PlusOutlined' }
+          />
+          <Icon
+            options={ { height: 30, width: 30 } }
+            value={ 'copy-07' }
+          />
+        </div>
+        )}
+        <div className="image-target-title">{ title }</div>
+      </Flex>
+    </div>
   )
-}
+})

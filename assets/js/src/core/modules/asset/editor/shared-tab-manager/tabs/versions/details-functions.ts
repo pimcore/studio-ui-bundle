@@ -85,7 +85,7 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
     map.set(metaKey, {
       key: metaKey,
       field: meta.name,
-      language: meta.language,
+      language: meta.language ?? undefined,
       metadataType: meta.type,
       displayValue: metadataType !== undefined ? metadataType.getVersionPreviewComponent(meta.data) : 'Metadata type not supported',
       raw: meta

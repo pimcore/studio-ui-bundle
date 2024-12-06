@@ -57,6 +57,10 @@ export const Pagination = ({
     }
   }, [currentPage, pageSize])
 
+  useEffect(() => {
+    setCurrentPage(current)
+  }, [current])
+
   const pages = Math.ceil(total / pageSize)
 
   if (total === 0 || (hideOnSinglePage && pages === 1)) {
