@@ -22,6 +22,7 @@ export interface DragAndDropInfo {
   icon: string
   title: string
   data: any
+  sortable?: any
 }
 
 const defaultInfo: DragAndDropInfo = { type: 'unknown', data: null, title: '', icon: 'widget-default' }
@@ -42,6 +43,7 @@ export const DragAndDropInfoContext = createContext<IDragAndDropInfoContext>({
 
 export const DragAndDropContextProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
   const [info, setInfo] = React.useState<DragAndDropInfo>(defaultInfo)
+  // const [draggedElement, setDraggedElement] = React.useState<React.ReactNode>(null)
   const callbackRegistry = useRef<ICallbackRegistry>(new CallbackRegistry())
 
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -66,6 +68,8 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
   function onDragStart (event: DragStartEvent): void {
     const data = event.active.data.current as DragAndDropInfo
     setContext(data)
+
+    console.log('start', event)
   }
 
   function onDragCancel (): void {
@@ -90,12 +94,15 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
       onDragStart={ onDragStart }
       sensors={ sensors }
     >
+      { info.sortable === undefined && (
       <DragOverlay
         className='dnd-overlay'
+        dropAnimation={ null }
         style={ { width: 'max-content' } }
       >
         <StyledDragOverlay info={ info } />
       </DragOverlay>
+      )}
 
       <DragAndDropInfoContext.Provider value={ { type: info.type, data: info.data, icon: info.icon, title: info.title, setInfo: setContext, removeInfo: removeContext, getInfo: getContext, callbackRegistry } }>
         {children}
