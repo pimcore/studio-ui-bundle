@@ -129,6 +129,9 @@ import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlin
 import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
 import edit03 from '@Pimcore/assets/icons/edit-03.inline.svg'
 import save01 from '@Pimcore/assets/icons/save-01.inline.svg'
+import plus from '@Pimcore/assets/icons/plus.inline.svg'
+import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
+import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import union from '@Pimcore/assets/icons/union.inline.svg'
 
 moduleSystem.registerModule({
@@ -612,6 +615,21 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'save-01',
       component: save01
+    })
+
+    iconLibrary.register({
+      name: 'plus',
+      component: plus
+    })
+
+    iconLibrary.register({
+      name: 'move-up',
+      component: moveUp
+    })
+
+    iconLibrary.register({
+      name: 'move-down',
+      component: moveDown
     })
 
     iconLibrary.register({

@@ -15,24 +15,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    split: css`
-      align-items: center;
-
-      .ant-divider {
-        margin-inline: 0;
-      }
-
-      &.split--theme-secondary {
-        .ant-divider {
-          border-color: ${token.colorTextSecondary};
-        }
-      }
-
-      &.split--divider-size-large {
-        .ant-divider {
-          height: 24px;
-        }
-      }
+    'tool-strip': css`
+      background: #f5f5f5;
+      border-top-left-radius: ${token.borderRadius}px;
+      border-top-right-radius: ${token.borderRadius}px;
     `
   }
 })
