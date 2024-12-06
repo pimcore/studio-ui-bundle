@@ -335,6 +335,7 @@ info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
+delete: Delete
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -366,4 +367,4 @@ upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
 structured-table.empty.confirm: Are you sure you want to clear all data?
 external-image.preview-placeholder: Add an external image
-image.dnd-target: Add or drop an image directly here
+image.dnd-target: Upload or drop an image here

@@ -18,8 +18,12 @@ import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Tooltip } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 interface ImageTargetProps {
+  onRemove?: (event: React.MouseEvent<HTMLButtonElement>) => void
   title: string
   className?: string
   width?: number | string
@@ -28,9 +32,10 @@ interface ImageTargetProps {
   uploadIcon?: boolean
 }
 
-export const ImageTarget = forwardRef(function ImageTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon }: ImageTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImageTarget = forwardRef(function ImageTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove }: ImageTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
+  const { t } = useTranslation()
 
   return (
     <div
@@ -43,7 +48,7 @@ export const ImageTarget = forwardRef(function ImageTarget ({ title, className, 
     >
       <Flex
         align="center"
-        gap="extra-small"
+        gap="mini"
         justify="center"
         style={ { height: '100%' } }
         vertical
@@ -62,6 +67,19 @@ export const ImageTarget = forwardRef(function ImageTarget ({ title, className, 
         )}
         <div className="image-target-title">{ title }</div>
       </Flex>
+
+      { onRemove !== undefined && (
+        <Tooltip title={ t('remove') }>
+          <IconButton
+            className={ styles.closeButton }
+            icon={ {
+              value: 'close'
+            } }
+            onClick={ onRemove }
+            size="small"
+          />
+        </Tooltip>
+      )}
     </div>
   )
 })

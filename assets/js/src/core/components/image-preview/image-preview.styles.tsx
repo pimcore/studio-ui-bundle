@@ -20,17 +20,27 @@ export const useStyle = createStyles(({ token, css }) => {
       justify-content: center;
       align-items: center;
       max-width: 100%;
+      position: relative;
       
       .ant-image {
         height: 100%;
         width: 100%;
-      }
-      
+
         .ant-image-img {
           width: 100%;
           height: 100%;
           object-fit: contain;
         }
+      }
+      
+      &.image-preview-bordered {
+        outline: 1px solid ${token.colorBorderSecondary};
+        border-radius: ${token.borderRadius}px;
+        .ant-image-img {
+           border-radius: ${token.borderRadius}px;
+        }
+      }
+        
     `
   }
 })
