@@ -34,11 +34,11 @@ export const useStyle = createStyles(({ token, css }) => {
     outline: css`
             
       & .dnd--drag-valid {
-        outline: 1px dashed ${token.colorInfoBorderHover};
+        outline: 1px dashed ${token.colorInfoBorderHover} !important;
       }
 
       & .dnd--drag-error {
-        outline: 1px dashed ${token.colorErrorActive};
+        outline: 1px dashed ${token.colorErrorActive} !important;
       }
     `,
     round: css`

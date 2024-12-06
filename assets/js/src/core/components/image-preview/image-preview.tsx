@@ -20,6 +20,8 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/components/dropdown/dropdown'
 
 interface ImagePreviewProps {
   src?: string
@@ -28,9 +30,11 @@ interface ImagePreviewProps {
   width: number | string
   height: number | string
   style?: CSSProperties
+  bordered?: boolean
+  dropdownItems?: DropdownProps['menu']['items']
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, width, height, className, style }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const [key, setKey] = React.useState(0)
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
@@ -53,7 +57,7 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, wi
 
   return (
     <div
-      className={ cn(className, styles.imagePreviewContainer, ...getStateClasses()) }
+      className={ cn(className, styles.imagePreviewContainer, bordered ? 'image-preview-bordered' : undefined, ...getStateClasses()) }
       ref={ ref }
       style={ {
         ...style,
@@ -69,6 +73,8 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, wi
         preview={ false }
         src={ imageSrc }
       />
+
+      <ImagePreviewDropdown dropdownItems={ dropdownItems } />
     </div>
   )
 })

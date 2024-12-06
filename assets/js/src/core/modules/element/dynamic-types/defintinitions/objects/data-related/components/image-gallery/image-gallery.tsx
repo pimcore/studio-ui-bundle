@@ -15,56 +15,76 @@ import React, { useEffect, useState } from 'react'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
-import { ImageTarget } from '@Pimcore/components/image-target/image-target'
-import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Flex } from '@Pimcore/components/flex/flex'
+import {
+  ImageGalleryImageTarget
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image-gallery/components/image-target/image-target'
+import { Card } from '@Pimcore/components/card/card'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import _ from 'lodash'
+import { Tooltip } from 'antd'
+import { useTranslation } from 'react-i18next'
+import {
+  ImageGallerySortableItem
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image-gallery/components/sortable-item/sortable-item'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
   className?: string
   onChange?: (value: ImageGalleryValue | null) => void
+  disabled?: boolean
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]
 
 export interface ImageGalleryValueItem {
-  // hotspots: [],
-  // marker: [],
-  // crop: []
-  image: ImageValue
+  image: ImageValue | null
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const [value, setValue] = useState<ImageGalleryValue>(props.value ?? [])
-
-  console.log(setValue)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (props.onChange !== undefined) {
-      props.onChange(value)
+      const changedValue = value.filter(item => item.image !== null)
+      props.onChange(changedValue.length > 0 ? changedValue : null)
     }
   }, [value])
 
   return (
-    <Flex
-      gap="small"
-      wrap
-    >
-      { value.map((item, index) => (
-        <ImagePreview
-          assetId={ item.image.id }
-          height={ 100 }
-          key={ index }
-          width={ 200 }
+    <Card
+      footer={ <Tooltip
+        key="empty"
+        title={ t('empty') }
+               >
+        <IconButton
+          disabled={ _.isEmpty(props.value) || props.disabled }
+          icon={ { value: 'delete-outlined' } }
+          onClick={ () => { setValue([]) } }
         />
-      )) }
-      <ImageTarget
-        dndIcon
-        height={ 'auto' }
-        title={ 'add item' }
-        uploadIcon
-        width={ 200 }
-      />
-    </Flex>
+      </Tooltip> }
+    >
+      <Flex
+        gap="small"
+        wrap
+      >
+        { value.map((item, index) => (
+          <ImageGallerySortableItem
+            id={ String(index) }
+            index={ index }
+            item={ item }
+            key={ index }
+            setValue={ setValue }
+            value={ value }
+          />
+        )) }
+        <ImageGalleryImageTarget
+          index={ value.length }
+          setValue={ setValue }
+          value={ value }
+        />
+      </Flex>
+    </Card>
   )
 }

@@ -28,8 +28,8 @@ export interface ImageValue {
 }
 
 export interface ImageProps {
-  width: string | null
-  height: string | null
+  width: string | number | null
+  height: string | number | null
   disabled?: boolean
   value?: ImageValue | null
   onChange?: (value: ImageValue | null) => void
@@ -46,6 +46,8 @@ export const Image = (props: ImageProps): React.JSX.Element => {
     props.onChange?.(value)
   }, [value])
 
+  const width = props.width === null || props.width === '' ? 300 : props.width
+  const height = props.height === null || props.width === '' ? 150 : props.height
   return (
     <Card
       className="max-w-full"
@@ -67,16 +69,16 @@ export const Image = (props: ImageProps): React.JSX.Element => {
           ? (
             <ImagePreview
               assetId={ value.id }
-              height={ props.height ?? 150 }
-              width={ props.width ?? 300 }
+              height={ height }
+              width={ width }
             />
             )
           : (
             <ImageTarget
               dndIcon
-              height={ props.height ?? 150 }
+              height={ height }
               title={ t('image.dnd-target') }
-              width={ props.width ?? 300 }
+              width={ width }
             />
             ) }
       </Droppable>
