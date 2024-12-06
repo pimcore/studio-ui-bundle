@@ -22,7 +22,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { TagsTreeFiltersContainer } from './tags-tree-filters-container'
 import { useTagFilters } from './hooks/use-tag-filters'
-import { useListFilterOptions } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
+import { useListFilterOptions, useListPage } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 export const TagFiltersContainerInner = (): React.JSX.Element => {
   // Set state to visualize it in the Tree
@@ -30,8 +30,14 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
 
   const { filterOptions, addOrUpdateFieldFilter, resetFilters } = useTagFilters()
   const { setFilterOptions } = useListFilterOptions()
+  const { setPage } = useListPage()
 
-  const handleApplyClick = (): void => { setFilterOptions('tags', filterOptions) }
+  const handleApplyClick = (): void => {
+    setFilterOptions('tags', filterOptions)
+
+    // Set to 1 to filter through all items
+    setPage(1)
+  }
 
   const handleResetAllFiltersClick = (): void => {
     setCheckedKeys([])
