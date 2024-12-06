@@ -44,7 +44,7 @@ export interface UseZipDownloadHookProps {
 
 export interface UseZipDownloadHookReturn {
   createZipDownload: createFolderZipDownload | createAssetListZipDownload
-  createZipDownloadContextMeuItem: (node: TreeNodeProps) => ItemType
+  createZipDownloadContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHookReturn => {
@@ -79,7 +79,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     }))
   }
 
-  const createZipDownloadContextMeuItem = (node: TreeNodeProps): ItemType => {
+  const createZipDownloadContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
@@ -97,12 +97,12 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   if (props.type === 'folder') {
     return {
       createZipDownload: createZipDownload as createFolderZipDownload,
-      createZipDownloadContextMeuItem
+      createZipDownloadContextMenuItem
     }
   }
 
   return {
     createZipDownload: createZipDownload as createAssetListZipDownload,
-    createZipDownloadContextMeuItem
+    createZipDownloadContextMenuItem
   }
 }

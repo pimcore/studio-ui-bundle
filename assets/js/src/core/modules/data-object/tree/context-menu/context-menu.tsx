@@ -32,7 +32,7 @@ export interface DataObjectTreeContextMenuProps {
 export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
+  const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
   const { renameTreeContextMenuItem } = useRename('data-object')
   const { deleteTreeContextMenuItem } = useDelete('data-object')
@@ -48,7 +48,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     cutTreeContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteTreeContextMenuItem(props.node),
-    createZipDownloadContextMeuItem(props.node),
+    createZipDownloadContextMenuItem(props.node),
 
     {
       label: t('element.tree.context-menu.advanced'),
