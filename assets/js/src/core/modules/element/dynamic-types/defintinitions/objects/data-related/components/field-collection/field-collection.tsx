@@ -20,13 +20,16 @@ import { FieldCollectionContent } from './field-collection-content'
 export interface FieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
   allowedTypes: string[]
+  border?: boolean
+  collapsed?: boolean
 }
 
-export const FieldCollection = (props: FieldCollectionProps): React.JSX.Element => {
+export const FieldCollection = ({ border = false, ...props }: FieldCollectionProps): React.JSX.Element => {
   return (
     <Form.List name={ props.name }>
       {(fields, operation) => (
         <FieldCollectionContent
+          border={ border }
           { ...props }
           fields={ fields }
           operation={ operation }

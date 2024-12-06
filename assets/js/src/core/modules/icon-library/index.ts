@@ -140,6 +140,10 @@ import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg'
 import Users01 from '@Pimcore/assets/icons/users-01.inline.svg'
 import ShopOutlined from '@Pimcore/assets/icons/ShopOutlined.inline.svg'
 import Book from '@Pimcore/assets/icons/book.inline.svg'
+import plus from '@Pimcore/assets/icons/plus.inline.svg'
+import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
+import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
+import union from '@Pimcore/assets/icons/union.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -675,6 +679,26 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'book',
       component: Book
+    })
+
+    iconLibrary.register({
+      name: 'plus',
+      component: plus
+    })
+
+    iconLibrary.register({
+      name: 'move-up',
+      component: moveUp
+    })
+
+    iconLibrary.register({
+      name: 'move-down',
+      component: moveDown
+    })
+
+    iconLibrary.register({
+      name: 'union',
+      component: union
     })
   }
 })

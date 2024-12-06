@@ -79,6 +79,10 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
 
   const openDetachedWidget = (item: IDetachTab): void => {
     detachWidget(item)
+
+    if (items?.length > 0) {
+      setActiveTab(items[0].key)
+    }
   }
 
   items = items.filter((item) => {
@@ -123,7 +127,8 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
           <IconButton
             className={ 'detachable-button' }
             icon={ { value: 'share-03' } }
-            onClick={ () => {
+            onClick={ (e) => {
+              e.stopPropagation()
               openDetachedWidget({
                 tabKey: item.key
               })
@@ -143,6 +148,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
       ref={ elementRef }
     >
       <Tabs
+        activeKey={ activeTab ?? undefined }
         className={ cn(styles.editorTabs, { [styles.onlyActiveLabel]: showLabelIfActive }) }
         defaultActiveKey={ defaultActiveKey }
         items={ items }

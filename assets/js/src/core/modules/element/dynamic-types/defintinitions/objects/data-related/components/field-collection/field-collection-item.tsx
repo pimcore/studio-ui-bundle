@@ -19,13 +19,15 @@ import { type FieldCollectionProps } from './field-collection'
 import { useFieldCollection } from './providers/use-field-collection'
 import { Content } from '@Pimcore/components/content/content'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
+import { FieldCollectionToolStrip } from './field-collection-tool-strip'
 
 export interface FieldCollectionItemProps extends FieldCollectionProps {
   field: FormListFieldData
   operation: FormListOperation
 }
 
-export const FieldCollectionItem = ({ field, operation, name }: FieldCollectionItemProps): React.JSX.Element => {
+export const FieldCollectionItem = ({ field, operation, name, border, ...props }: FieldCollectionItemProps): React.JSX.Element => {
   const form = useFormInstance()
   const fieldCollection = useFieldCollection()
   const value = form.getFieldValue([name, field.name])
@@ -49,19 +51,33 @@ export const FieldCollectionItem = ({ field, operation, name }: FieldCollectionI
   }
 
   return (
-    <FormListProvider
-      field={ field }
-      fieldSuffix='data'
-      operation={ operation }
+    <ToolStripBox
+      docked={ border }
+      renderToolStripStart={ (
+        <FieldCollectionToolStrip
+          { ...props }
+          field={ field }
+          label={ fieldCollectionType }
+          name={ name }
+          operations={ operation }
+        />
+      ) }
     >
-      {layoutDefinition.children.map((child, index) => {
-        return (
-          <ObjectComponent
-            key={ index }
-            { ...child }
-          />
-        )
-      })}
-    </FormListProvider>
+      <FormListProvider
+        field={ field }
+        fieldSuffix='data'
+        operation={ operation }
+      >
+        {layoutDefinition.children.map((child, index) => {
+          return (
+            <ObjectComponent
+              key={ index }
+              { ...child }
+            />
+          )
+        })}
+      </FormListProvider>
+    </ToolStripBox>
+
   )
 }

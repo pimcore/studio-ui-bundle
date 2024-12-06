@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Collision, type CollisionDetection } from '@dnd-kit/core'
+import { type Collision, type CollisionDetection, pointerWithin } from '@dnd-kit/core'
 
 export const transformBoundingRectToCoordinates = (rect: DOMRect): { x1: number, x2: number, y1: number, y2: number } => {
   return {
@@ -23,9 +23,16 @@ export const transformBoundingRectToCoordinates = (rect: DOMRect): { x1: number,
 }
 
 export const boundingRectIntersection: CollisionDetection = (props) => {
+  const pointerCollisions = pointerWithin(props)
+
+  if (pointerCollisions.length > 0) {
+    return pointerCollisions
+  }
+
   const { droppableContainers } = props
   const activeEl = document.querySelector('.dnd-overlay')
-  const collisions: Collision[] = []
+  type CollisionWithRatio = Collision & { ratio: number }
+  const collisions: CollisionWithRatio[] = []
 
   const draggableRect = activeEl?.getBoundingClientRect()
 
@@ -56,10 +63,27 @@ export const boundingRectIntersection: CollisionDetection = (props) => {
     if (intersectX1 < intersectX2 && intersectY1 < intersectY2) {
       collisions.push({
         id: container.id,
-        data: container.data
+        data: container.data,
+        ratio: getIntersectionRatio(draggableRect, droppableRect)
       })
     }
   }
+  return collisions.sort((a, b) => b.ratio - a.ratio)
+}
 
-  return collisions
+const getIntersectionRatio = (rect1: DOMRect, rect2: DOMRect): number => {
+  const x1 = Math.max(rect1.left, rect2.left)
+  const y1 = Math.max(rect1.top, rect2.top)
+  const x2 = Math.min(rect1.right, rect2.right)
+  const y2 = Math.min(rect1.bottom, rect2.bottom)
+
+  const intersectionWidth = Math.max(0, x2 - x1)
+  const intersectionHeight = Math.max(0, y2 - y1)
+  const intersectionArea = intersectionWidth * intersectionHeight
+
+  const rect1Area = rect1.width * rect1.height
+  const rect2Area = rect2.width * rect2.height
+  const unionArea = rect1Area + rect2Area - intersectionArea
+
+  return intersectionArea / unionArea
 }
