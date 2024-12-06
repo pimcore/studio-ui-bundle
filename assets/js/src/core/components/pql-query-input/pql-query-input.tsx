@@ -13,7 +13,8 @@
 
 import React, { useState } from 'react'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { Tooltip } from 'antd'
+import { Tooltip, Typography } from 'antd'
+import { Trans } from 'react-i18next'
 import { isObject } from 'lodash'
 import TextArea from 'antd/es/input/TextArea'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -58,16 +59,24 @@ export const PQLQueryInput = ({ value, handleChange, handleBlur, errorData, isSh
           <Tooltip
             onOpenChange={ () => { setIsShowTooltip(!isShowTooltip) } }
             open={ isShowTooltip }
+            overlayClassName={ styles.tooltip }
             title={ (
-              <a
-                className={ styles.link }
-                href={ PQL_DOCUMENTATION_LINK }
-                rel="noreferrer"
-                target="_blank"
-              >
-                {PQL_DOCUMENTATION_LINK}
-              </a>
-                ) }
+              <Typography className={ styles.text }>
+                <Trans
+                  components={ {
+                    anchorPQL: (
+                    // eslint-disable-next-line jsx-a11y/anchor-has-content
+                      <a
+                        className={ styles.link }
+                        href={ PQL_DOCUMENTATION_LINK }
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      />)
+                  } }
+                  i18nKey="component.pql.description"
+                />
+              </Typography>
+            ) }
             trigger="click"
           >
             <Icon
