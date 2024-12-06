@@ -39,14 +39,11 @@ export const useStyles = createStyles(({ css, token }) => {
         .ant-collapse-content {
           border: none;
           background-color: transparent;
+          padding: 0;
         }
 
         .ant-collapse-content>.ant-collapse-content-box {
-          padding-top: 4px;
-        }
-
-        &.collapse-item--separator .ant-collapse-content>.ant-collapse-content-box {
-          padding-top: 16px;
+          padding: 0;
         }
 
         &.collapse-item--theme-card-with-highlight,
@@ -106,7 +103,7 @@ export const useStyles = createStyles(({ css, token }) => {
 
         &.collapse-item--theme-fieldset {
           // @todo check for tokens
-          background-color: #F4F4F4;
+          background-color: rgba(242, 240, 244, 0.52);
           border-left: 3px solid #D5CFDA;
         }
       }

@@ -19,7 +19,7 @@ export interface AccordionViewProps {
   children?: React.ReactNode
   bordered?: boolean
   collapsed?: boolean
-  theme?: 'fieldset' | 'default'
+  theme?: 'fieldset' | 'card-with-highlight'
 }
 
 export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewProps): React.JSX.Element => {
@@ -28,7 +28,9 @@ export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewPr
       bordered={ bordered }
       defaultActive={ collapsed ?? false }
       forceRender
+      hasContentSeparator={ props.theme !== 'fieldset' }
       label={ (<>{props.title}</>) }
+      theme={ props.theme }
     >
       {props.children}
     </CollapseItem>

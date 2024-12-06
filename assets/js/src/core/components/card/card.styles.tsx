@@ -23,6 +23,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.ant-card:not(.ant-card-bordered) {
         box-shadow: none;
+        border: 1px solid transparent;
       }
 
       .ant-card-head-title {
@@ -81,11 +82,19 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.card--theme-fieldset {
-        background-color: #F4F4F4;
         border-left: 3px solid #D5CFDA;
+        background: rgba(242, 240, 244, 0.52);
 
+        &, &.ant-card:not(.ant-card-bordered) {
+          border-left: 3px solid #D5CFDA;
+        }
+ 
         .ant-card-head {
-          border-bottom: none;
+          border-bottom: transparent;
+        }
+
+        .ant-card-body {
+          padding-top: ${token.paddingXXS}px;
         }
       }
     `

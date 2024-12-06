@@ -17,6 +17,7 @@ import { CollapseHeader } from './header/collapse-header'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './collapse-item.styles'
 import cn from 'classnames'
+import { Box, type BoxProps } from '@Pimcore/components/box/box'
 
 type AntdCollapsePropsItem = Exclude<CollapseProps['items'], undefined>[number]
 
@@ -31,6 +32,7 @@ export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | '
   subLabel?: React.ReactNode
   extraPosition?: 'start' | 'end'
   theme?: 'success' | 'primary' | 'simple' | 'default' | 'card-with-highlight' | 'fieldset'
+  contentPadding?: BoxProps['padding']
   hasContentSeparator?: boolean
 }
 
@@ -52,7 +54,7 @@ export const CollapseItem = ({
   hasContentSeparator = true,
   ...props
 }: CollapseItemProps): React.JSX.Element => {
-  const [activeState, setActiveState] = useState<boolean>(defaultActive)
+  const [activeState, setActiveState] = useState<boolean>(active ?? defaultActive)
   const { styles } = useStyles()
 
   const classNames = cn(
@@ -63,6 +65,16 @@ export const CollapseItem = ({
       'collapse-item--separator': hasContentSeparator
     }
   )
+
+  let contentPadding = props.contentPadding
+
+  if (contentPadding === undefined) {
+    contentPadding = { x: 'small', y: 'small' }
+
+    if (!hasContentSeparator) {
+      contentPadding = { x: 'small', y: 'small', top: 'none' }
+    }
+  }
 
   useEffect(() => {
     if (active !== undefined) {
@@ -80,7 +92,7 @@ export const CollapseItem = ({
     }
   }
 
-  const { label, extra, ...itemProps } = props
+  const { label, extra, children, ...itemProps } = props
   const item = {
     ...itemProps,
     showArrow: false,
@@ -93,6 +105,11 @@ export const CollapseItem = ({
         label={ props.label }
         subLabel={ subLabel }
       />
+    ),
+    children: (
+      <Box padding={ contentPadding }>
+        {children}
+      </Box>
     )
   }
 
