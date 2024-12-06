@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Asset Grid", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Metadata", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -12,13 +12,6 @@ const injectedRtkApi = api
                     method: "POST",
                 }),
                 invalidatesTags: ["Assets"],
-            }),
-            assetCustomMetadataGetById: build.query<
-                AssetCustomMetadataGetByIdApiResponse,
-                AssetCustomMetadataGetByIdApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
-                providesTags: ["Assets"],
             }),
             assetCustomSettingsGetById: build.query<
                 AssetCustomSettingsGetByIdApiResponse,
@@ -214,6 +207,16 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageClearThumbnail: build.mutation<
+                AssetImageClearThumbnailApiResponse,
+                AssetImageClearThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/thumbnail/clear`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Assets"],
+            }),
             assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets`, method: "PATCH", body: queryArg.body }),
                 invalidatesTags: ["Assets"],
@@ -307,6 +310,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetCustomMetadataGetById: build.query<
+                AssetCustomMetadataGetByIdApiResponse,
+                AssetCustomMetadataGetByIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
+                providesTags: ["Metadata"],
+            }),
             versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
@@ -325,13 +335,6 @@ export type AssetCloneApiArg = {
     id: number;
     /** ParentId of the asset */
     parentId: number;
-};
-export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
-    items?: CustomMetadata[];
-};
-export type AssetCustomMetadataGetByIdApiArg = {
-    /** Id of the asset */
-    id: number;
 };
 export type AssetCustomSettingsGetByIdApiResponse = /** status 200 Successfully retrieved custom settings as JSON */ {
     items?: CustomSettings;
@@ -617,6 +620,11 @@ export type AssetImageDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetImageClearThumbnailApiResponse = /** status 200 Success */ void;
+export type AssetImageClearThumbnailApiArg = {
+    /** Id of the asset */
+    id: number;
+};
 export type AssetPatchByIdApiResponse =
     /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
         /** ID of created jobRun */
@@ -747,6 +755,13 @@ export type AssetVideoStreamByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
+    items?: CustomMetadata[];
+};
+export type AssetCustomMetadataGetByIdApiArg = {
+    /** Id of the asset */
+    id: number;
+};
 export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
 export type VersionAssetDownloadByIdApiArg = {
     /** Id of the version */
@@ -761,20 +776,6 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
-};
-export type CustomMetadata = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Name */
-    name: string;
-    /** Language */
-    language: string;
-    /** Type */
-    type: string;
-    /** Data */
-    data: string | null;
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
@@ -1025,6 +1026,8 @@ export type GridColumnConfiguration = {
     sortable: boolean;
     /** Editable */
     editable: boolean;
+    /** Exportable */
+    exportable?: boolean;
     /** Localizable */
     localizable: boolean;
     /** Locale */
@@ -1068,9 +1071,22 @@ export type PatchCustomMetadata = {
     /** Data */
     data?: string | null;
 };
+export type CustomMetadata = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: any | null;
+};
 export const {
     useAssetCloneMutation,
-    useAssetCustomMetadataGetByIdQuery,
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
     useAssetDocumentStreamPreviewQuery,
@@ -1097,6 +1113,7 @@ export const {
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageDownloadByThumbnailQuery,
+    useAssetImageClearThumbnailMutation,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
     useAssetGetTreeQuery,
@@ -1107,5 +1124,6 @@ export const {
     useAssetVideoImageThumbnailStreamQuery,
     useAssetVideoDownloadByThumbnailQuery,
     useAssetVideoStreamByThumbnailQuery,
+    useAssetCustomMetadataGetByIdQuery,
     useVersionAssetDownloadByIdQuery,
 } = injectedRtkApi;

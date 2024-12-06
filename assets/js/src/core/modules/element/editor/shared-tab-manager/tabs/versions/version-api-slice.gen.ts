@@ -143,7 +143,7 @@ export type CustomMetadataVersion = {
     /** Name */
     name: string;
     /** Language */
-    language: string;
+    language?: string | null;
     /** Type */
     type: string;
     /** Data */
