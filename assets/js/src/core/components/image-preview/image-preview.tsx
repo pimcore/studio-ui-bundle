@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect, useRef, useState } from 'react'
 import { useStyle } from './image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -35,11 +35,35 @@ interface ImagePreviewProps {
 }
 
 export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const previewImageWrapperRef = useRef<HTMLDivElement>(null)
   const [key, setKey] = React.useState(0)
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
 
-  const imageSrc = assetId !== undefined ? `${getPrefix()}/assets/${assetId}/image/stream/preview` : src
+  const createPreviewSrc = (): string | undefined => {
+    if (assetId !== undefined && dimensions.width > 0 && dimensions.height > 0) {
+      return `${getPrefix()}/assets/${assetId}/image/stream/custom?${new URLSearchParams({
+        mimeType: 'JPEG',
+        resizeMode: 'scaleByWidth',
+        contain: 'true',
+        width: dimensions.width.toString(),
+        height: dimensions.height.toString()
+      }).toString()}`
+    }
+    return undefined
+  }
+
+  const imageSrc: string | undefined = assetId !== undefined
+    ? createPreviewSrc()
+    : src
+
+  useEffect(() => {
+    if (previewImageWrapperRef?.current !== null) {
+      const { width: previewWidth, height: previewHeight } = previewImageWrapperRef.current.getBoundingClientRect()
+      setDimensions({ width: previewWidth, height: previewHeight })
+    }
+  }, [previewImageWrapperRef.current])
 
   useEffect(() => {
     setKey(key + 1)
@@ -65,14 +89,21 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, wi
         width: toCssDimension(width)
       } }
     >
-      <Image
-        className="w-full"
-        fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-        key={ key }
-        placeholder={ loadingSpinner }
-        preview={ false }
-        src={ imageSrc }
-      />
+      <div
+        className="w-full h-full"
+        ref={ previewImageWrapperRef }
+      >
+        { imageSrc !== undefined && (
+          <Image
+            className="w-full"
+            fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+            key={ key }
+            placeholder={ loadingSpinner }
+            preview={ false }
+            src={ imageSrc }
+          />
+        )}
+      </div>
 
       <ImagePreviewDropdown dropdownItems={ dropdownItems } />
     </div>
