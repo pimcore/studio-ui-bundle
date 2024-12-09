@@ -21,10 +21,10 @@ export const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.AVAILABLE_TAGS()
     },
     tagAssignToElement: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
+      invalidatesTags: (result, error, args) => []
     },
     tagUnassignFromElement: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
+      invalidatesTags: (result, error, args) => []
     },
     tagBatchOperationToElementsByTypeAndId: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
