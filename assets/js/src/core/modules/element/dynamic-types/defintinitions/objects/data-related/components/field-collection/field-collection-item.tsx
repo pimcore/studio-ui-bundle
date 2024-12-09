@@ -14,13 +14,13 @@
 import React from 'react'
 import { FormListProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/form-list-provider/form-list-provider'
 import { type FormListFieldData, type FormListOperation } from 'antd'
-import useFormInstance from 'antd/es/form/hooks/useFormInstance'
 import { type FieldCollectionProps } from './field-collection'
 import { useFieldCollection } from './providers/use-field-collection'
 import { Content } from '@Pimcore/components/content/content'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { FieldCollectionToolStrip } from './field-collection-tool-strip'
+import { Form } from '@Pimcore/components/form/form'
 
 export interface FieldCollectionItemProps extends FieldCollectionProps {
   field: FormListFieldData
@@ -28,7 +28,7 @@ export interface FieldCollectionItemProps extends FieldCollectionProps {
 }
 
 export const FieldCollectionItem = ({ field, operation, name, border, ...props }: FieldCollectionItemProps): React.JSX.Element => {
-  const form = useFormInstance()
+  const form = Form.useFormInstance()
   const fieldCollection = useFieldCollection()
   const value = form.getFieldValue([name, field.name])
 
