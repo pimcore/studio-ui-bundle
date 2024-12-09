@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { StoryObj, type Meta } from '@storybook/react'
-import { ITabsProps, Tabs } from './tabs'
+import { type StoryObj, type Meta } from '@storybook/react'
+import { type ITabsProps, Tabs } from './tabs'
 import React from 'react'
 
 const config: Meta = {
