@@ -11,9 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { Tabs } from './tabs'
-import React, { Fragment } from 'react'
+import { StoryObj, type Meta } from '@storybook/react'
+import { ITabsProps, Tabs } from './tabs'
+import React from 'react'
 
 const config: Meta = {
   title: 'Components/Data Display/Tabs',
@@ -23,7 +23,7 @@ const config: Meta = {
 
 export default config
 
-export const _default = {
+export const _default: StoryObj<ITabsProps> = {
   args: {
     items: [
       {
@@ -50,7 +50,7 @@ export const _default = {
   }
 }
 
-export const ActiveKey = {
+export const ActiveKey: StoryObj<ITabsProps> = {
   args: {
     ..._default.args,
     activeKey: 'tab-3',
@@ -58,7 +58,7 @@ export const ActiveKey = {
   }
 }
 
-export const Closeable = {
+export const Closeable: StoryObj<ITabsProps> = {
   args: {
     ..._default.args,
     onClose: (key) => { console.log('click close button', key) }
