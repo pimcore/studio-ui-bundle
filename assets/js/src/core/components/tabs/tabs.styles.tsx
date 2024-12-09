@@ -23,6 +23,13 @@ export const useStyles = createStyles(({ token, css }) => {
           margin-left: ${token.marginXXS}px;
         }
       }
+
+      .ant-tabs-nav-list {
+        padding-left: ${token.paddingXS}px;
+        padding-right: ${token.paddingXS}px;
+        align-items: center;
+      }
+
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab {
         border-radius: 0;
         background: none;
