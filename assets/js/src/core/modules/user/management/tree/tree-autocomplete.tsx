@@ -63,7 +63,7 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
       className={ 'simple-tree--search' }
       onSearch={ onSearch }
       onSelect={ (id, option) => {
-        openUser(id)
+        openUser(Number(id))
         setSearchValue('')
       } }
       options={ searchOptions }

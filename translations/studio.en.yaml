@@ -371,6 +371,7 @@ tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.add-folder: Add Folder
 tree.actions.add-user: Add User
+user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings
 user-management.workspaces.title: Workspaces
@@ -444,10 +445,13 @@ user-management.editor-settings: Editor Settings
 user-management.shared-translation-settings: Shared Translation Settings
 user-management.document-types: Document Types
 user-management.classes: Classes
+user-management.settings.avatar: Avatar
+user-management.settings.upload-avatar: Choose an avatar
 user-management.settings.language.name: Language
 user-management.settings.language.abbreviation: Abbreviation
 user-management.settings.language.view: View
 user-management.settings.language.edit: Edit
+user-management.two-factor-authentication: Two Factor Authentication
 user-management.workspaces.documents: Documents
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects

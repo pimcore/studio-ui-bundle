@@ -123,7 +123,7 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
             </Popconfirm>
           }))
           }
-          onChange={ openUser }
+          onChange={ (id: string) => { openUser(Number(id)) } }
           onClose={ onHandleClose }
         />
         <Content className={ 'detail-tabs__content' }>

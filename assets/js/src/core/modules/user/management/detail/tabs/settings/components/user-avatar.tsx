@@ -47,7 +47,7 @@ const UserAvatar = ({ ...props }): React.JSX.Element => {
           <Upload
             customRequest={ ({ file, onError, onSuccess }) => {
               let state = 'uploading'
-              uploadUserAvatar({ id, file }).then(response => {
+              uploadUserAvatar({ id, file: file as File }).then(response => {
                 state = 'done'
               }).catch(error => {
                 console.log(error)

@@ -79,7 +79,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const handleOnLoadData = async (node: TreeDataNode): Promise<void> => {
-    await getUserTree({ parentId: node.key }).then(response => {
+    await getUserTree({ parentId: Number(node.key) }).then(response => {
       updateTreeData(node.key, response.items)
     })
   }

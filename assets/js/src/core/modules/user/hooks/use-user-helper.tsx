@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
   api,
@@ -25,7 +26,12 @@ import {
   type UserGetAvailablePermissionsApiResponse,
   type UserGetByIdApiResponse,
   type UserGetCollectionApiResponse,
-  type PimcoreStudioApiUserSearchApiResponse, type UserDefaultKeyBindingsApiResponse, type UserUploadImageApiResponse
+  type PimcoreStudioApiUserSearchApiResponse,
+  type UserDefaultKeyBindingsApiResponse,
+  type UserUploadImageApiResponse,
+  type UserGetTreeApiArg,
+  type UserDeleteByIdApiArg,
+  type UserFolderDeleteByIdApiArg, type User2, type User
 } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { userOpened, userClosed, userUpdated, changeUser } from '@Pimcore/modules/user/user-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
@@ -34,23 +40,28 @@ import type {
   UseTrackableChangesDraftReturn
 } from '@Pimcore/modules/user/hooks/use-user-trackable-changes'
 
+interface AddItemArgs {
+  parentId: number
+  name: string
+}
+
 interface UseUserReturn extends
   UseTrackableChangesDraftReturn {
-  openUser: (id) => void
-  closeUser: (id) => void
-  getUserTree: (props) => Promise<UserGetTreeApiResponse>
-  addNewUser: ({ parentId, name }) => Promise<{ data: UserCreateApiResponse, error: any }>
-  removeUser: (props) => Promise<{ data: UserDeleteByIdApiResponse, error: any }>
-  removeFolder: (props) => Promise<{ data: UserFolderDeleteByIdApiResponse, error: any }>
-  cloneUser: (props) => Promise<{ data: UserCloneByIdApiResponse, error: any }>
-  updateUserById: (props) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
-  moveUserById: (props) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
+  openUser: (id: number) => void
+  closeUser: (id: number) => void
+  getUserTree: (props: UserGetTreeApiArg) => Promise<UserGetTreeApiResponse>
+  addNewUser: (props: AddItemArgs) => Promise<{ data: UserCreateApiResponse, error: any }>
+  removeUser: (props: UserDeleteByIdApiArg) => Promise<{ data: UserDeleteByIdApiResponse, error: any }>
+  removeFolder: (props: UserFolderDeleteByIdApiArg) => Promise<{ data: UserFolderDeleteByIdApiResponse, error: any }>
+  cloneUser: (props: { id: number, name: string }) => Promise<{ data: UserCloneByIdApiResponse, error: any }>
+  updateUserById: (props: { id: number, user: User2 | User }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
+  moveUserById: (props: { id: number, parentId: number }) => Promise<{ data: UserUpdateByIdApiResponse, error: any }>
   getAvailablePermissions: (props) => Promise<{ data: UserGetAvailablePermissionsApiResponse, error: any }>
-  addNewFolder: ({ parentId, name }) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
+  addNewFolder: (props: AddItemArgs) => Promise<{ data: UserFolderCreateApiResponse, error: any }>
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
-  searchUserByText: (query) => Promise<PimcoreStudioApiUserSearchApiResponse>
-  resetUserKeyBindings: (id) => Promise<UserDefaultKeyBindingsApiResponse>
-  uploadUserAvatar: (props) => Promise<{ data: UserUploadImageApiResponse, error: any }>
+  searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
+  resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
+  uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
   availablePermissions: any[]
@@ -81,13 +92,13 @@ export const useUserHelper = (): UseUserReturn => {
 
     return data
   }
-  async function searchUserByText (query): Promise<PimcoreStudioApiUserSearchApiResponse> {
+  async function searchUserByText (query: string): Promise<PimcoreStudioApiUserSearchApiResponse> {
     const { data }: any = await dispatch(api.endpoints.pimcoreStudioApiUserSearch.initiate({ searchQuery: query }))
 
     return data
   }
 
-  async function resetUserKeyBindings (id): Promise<UserDefaultKeyBindingsApiResponse> {
+  async function resetUserKeyBindings (id: number): Promise<UserDefaultKeyBindingsApiResponse> {
     const { data }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
 
     dispatch(changeUser({ id, changes: { keyBindings: data.items } }))
@@ -95,14 +106,15 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function getUserTree (props): Promise<UserGetTreeApiResponse> {
+  async function getUserTree (props: UserGetTreeApiArg): Promise<UserGetTreeApiResponse> {
     const { parentId } = props
     const { data }: any = await dispatch(api.endpoints.userGetTree.initiate({ parentId }))
 
     return data
   }
 
-  async function addNewUser ({ parentId, name }): Promise<{ data: UserCreateApiResponse, error: Error }> {
+  async function addNewUser (props: AddItemArgs): Promise<{ data: UserCreateApiResponse, error: Error }> {
+    const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userCreate.initiate({ body: { parentId, name } }))
 
     if (error !== undefined) {
@@ -121,7 +133,8 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function addNewFolder ({ parentId, name }): Promise<{ data: UserFolderCreateApiResponse, error: Error }> {
+  async function addNewFolder (props: AddItemArgs): Promise<{ data: UserFolderCreateApiResponse, error: Error }> {
+    const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userFolderCreate.initiate({ body: { parentId, name } }))
 
     if (error !== undefined) {
@@ -140,7 +153,7 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function removeUser (props): Promise<{ data: UserDeleteByIdApiResponse, error: Error }> {
+  async function removeUser (props: UserDeleteByIdApiArg): Promise<{ data: UserDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userDeleteById.initiate({ id }))
 
@@ -160,7 +173,7 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function removeFolder (props): Promise<{ data: UserFolderDeleteByIdApiResponse, error: Error }> {
+  async function removeFolder (props: UserFolderDeleteByIdApiArg): Promise<{ data: UserFolderDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.userFolderDeleteById.initiate({ id }))
 
@@ -180,7 +193,7 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function cloneUser (props): Promise<{ data: UserCloneByIdApiResponse, error: Error }> {
+  async function cloneUser (props: { id: number, name: string }): Promise<{ data: UserCloneByIdApiResponse, error: Error }> {
     const { id, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userCloneById.initiate({ id, body: { name } }))
 
@@ -200,10 +213,10 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function updateUserById (props): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
+  async function updateUserById (props: { id: number, user: User2 | User }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
 
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId: user.parentId ?? 0 } }))
 
     if (error !== undefined) {
       notificationApi.open({
@@ -223,11 +236,11 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function moveUserById (props): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
+  async function moveUserById (props: { id: number, parentId: number }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId: parentId as number } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId } }))
 
     if (error !== undefined) {
       notificationApi.open({
@@ -250,8 +263,8 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function uploadUserAvatar (props): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
-    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file as File } }))
+  async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
+    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
 
     if (error !== undefined) {
       notificationApi.open({

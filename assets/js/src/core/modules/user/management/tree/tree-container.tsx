@@ -114,7 +114,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                   title: t('user-management.remove-user'),
                   content: t('user-management.remove-user.text'),
                   onOk: async () => {
-                    await removeUser({ id: key })
+                    await removeUser({ id: Number(key) })
 
                     onRemoveItem(key)
                   }
@@ -126,7 +126,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                   title: t('user-management.remove-folder'),
                   content: t('user-management.remove-folder.text'),
                   onOk: async () => {
-                    await removeFolder({ id: key })
+                    await removeFolder({ id: Number(key) })
 
                     onRemoveItem(key)
                   }
@@ -136,7 +136,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
             }
           } }
           onDragAndDrop={ async (params) => {
-            const data = await moveUserById({ id: params.dragNode.key, parentId: params.node.key })
+            const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
             if (data !== undefined) {
               onMoveItem(params.dragNode, params.node.key)
@@ -148,7 +148,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
           onLoadData={ onLoadTreeData }
           onSelected={ (key) => {
             if (findNodeByKey(treeData, key)?.selectable === true) {
-              openUser(key)
+              openUser(Number(key))
             }
           } }
           treeData={ treeData }

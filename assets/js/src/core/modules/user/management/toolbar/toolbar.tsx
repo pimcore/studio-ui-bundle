@@ -23,6 +23,7 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { type UserDraft } from '@Pimcore/modules/user/user-slice'
 
 interface IToolbarProps {
   id: number
@@ -61,7 +62,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
   }
 
   const onSaveClick = (): void => {
-    updateUserById({ id, user }).catch(() => {
+    updateUserById({ id, user: user as UserDraft }).catch(() => {
       console.log('error')
     })
   }
