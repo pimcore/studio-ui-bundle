@@ -26,7 +26,7 @@ import {
   type UserGetByIdApiResponse,
   type UserGetCollectionApiResponse,
   type PimcoreStudioApiUserSearchApiResponse, type UserDefaultKeyBindingsApiResponse, type UserUploadImageApiResponse
-} from '@Pimcore/modules/user/user-api-slice.gen'
+} from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { userOpened, userClosed, userUpdated, changeUser } from '@Pimcore/modules/user/user-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
@@ -251,10 +251,7 @@ export const useUserHelper = (): UseUserReturn => {
   }
 
   async function uploadUserAvatar (props): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
-    const formData = new FormData()
-    formData.append('userImage', props.file as File)
-
-    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: formData }))
+    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file as File } }))
 
     if (error !== undefined) {
       notificationApi.open({
