@@ -28,7 +28,7 @@ export interface FieldCollectionItemProps extends FieldCollectionProps {
 }
 
 export const FieldCollectionItem = ({ field, operation, name, border, ...props }: FieldCollectionItemProps): React.JSX.Element => {
-  const form = Form.useFormInstance();
+  const form = Form.useFormInstance()
   const fieldCollection = useFieldCollection()
   const value = form.getFieldValue([name, field.name])
 
