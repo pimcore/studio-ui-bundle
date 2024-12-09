@@ -95,6 +95,7 @@ import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
 import user01 from '@Pimcore/assets/icons/user-01.inline.svg'
+import userPlus01 from '@Pimcore/assets/icons/user-plus-01.inline.svg'
 import shield02 from '@Pimcore/assets/icons/shield-02.inline.svg'
 import intersectCircle from '@Pimcore/assets/icons/intersect-circle.inline.svg'
 import cornerLeftUp from '@Pimcore/assets/icons/corner-left-up.inline.svg'
@@ -161,6 +162,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'folder',
       component: folder
+    })
+    iconLibrary.register({
+      name: 'folder-plus',
+      component: folderPlus
     })
     iconLibrary.register({
       name: 'widget-default',
