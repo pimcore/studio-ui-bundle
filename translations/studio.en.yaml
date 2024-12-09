@@ -56,6 +56,7 @@ asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
 component.workflow-card.action-btn: Workflow Actions
+component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
 asset.asset-editor-tabs.embedded-metadata.columns.value: Value
@@ -335,7 +336,7 @@ info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
-data-object.editor.external-image.preview-placeholder: Add an external image
+delete: Delete
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -463,3 +464,9 @@ user-management.workspaces.columns.create: Create
 user-management.workspaces.columns.settings: Settings
 user-management.workspaces.columns.versions: Versions
 user-management.workspaces.columns.properties: Properties
+navigation.document-types: Document Types
+navigation.clear-cache: Clear Full Page Cache
+navigation.custom-reports: Custom Reports
+navigation.perspectives: Perspectives
+external-image.preview-placeholder: Add an external image
+image.dnd-target: Upload or drop an image here

@@ -18,9 +18,6 @@ export const useStyles = createStyles(({ token, css }) => {
     highlightBackgroundColor: '#F6FFED',
     highlightBorderColor: '#B7EB8F',
     highlightColor: '#52C41A',
-    signalBackgroundColor: '#E6F4FF',
-    signalBorderColor: '#91CAFF',
-    signalColor: '#1677FF',
     ...token
   }
 
@@ -43,8 +40,8 @@ export const useStyles = createStyles(({ token, css }) => {
 
         .ant-collapse-item.accordion__item--theme-success {
             border: 1px solid ${themeToken.highlightBorderColor};
-            border-radius: ${themeToken.borderRadiusLG}px !important;
             background-color: ${themeToken.highlightBackgroundColor};
+            border-radius: ${themeToken.borderRadiusLG}px !important;
 
             > .ant-collapse-content {
                 border-top: 1px solid ${themeToken.highlightBorderColor};

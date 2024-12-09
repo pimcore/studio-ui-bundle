@@ -80,6 +80,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/class\//i)
+    },
+    '../../js/src/core/modules/data-object/unit-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/unit\//i)
     }
   },
   exportName: 'api',

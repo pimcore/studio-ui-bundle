@@ -12,15 +12,13 @@
 */
 
 import React from 'react'
-import {
-  type ConvertedQuantityValues2
-} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { formatNumber } from '@Pimcore/utils/number'
 import { useTranslation } from 'react-i18next'
 import { Header } from '@Pimcore/components/header/header'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 import _ from 'lodash'
+import { type ConvertedQuantityValues2 } from '@Pimcore/modules/data-object/unit-slice.gen'
 
 interface QuantityValueCalculatorContentProps {
   value: number

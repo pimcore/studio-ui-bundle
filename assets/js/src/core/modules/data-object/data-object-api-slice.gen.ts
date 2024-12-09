@@ -39,7 +39,7 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/folderId`,
+                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/${queryArg.folderId}`,
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -223,17 +223,23 @@ export type DataObjectGetTreeApiArg = {
     /** Filter by class. */
     className?:
         | "AccessoryPart"
+        | "asdf"
         | "BodyStyle"
         | "Car"
         | "Category"
+        | "ComplexLayout"
         | "Customer"
         | "CustomerSegment"
         | "CustomerSegmentGroup"
-        | "Eierlegenedewollmilchsau"
+        | "datatypetest"
+        | "datetest"
         | "Event"
+        | "fieldtest"
         | "FilterDefinition"
+        | "foo5"
         | "LinkActivityDefinition"
         | "Manufacturer"
+        | "mappingTest"
         | "News"
         | "OfferToolCustomProduct"
         | "OfferToolOffer"
@@ -245,8 +251,11 @@ export type DataObjectGetTreeApiArg = {
         | "OnlineShopVoucherToken"
         | "PortalUser"
         | "PortalUserGroup"
+        | "simple"
+        | "StudioFieldTypeTest"
         | "TermSegmentBuilderDefinition"
-        | "test";
+        | "Test"
+        | "unittest";
 };
 export type Error = {
     /** Message */
@@ -403,6 +412,8 @@ export type GridColumnConfiguration = {
     sortable: boolean;
     /** Editable */
     editable: boolean;
+    /** Exportable */
+    exportable?: boolean;
     /** Localizable */
     localizable: boolean;
     /** Locale */
