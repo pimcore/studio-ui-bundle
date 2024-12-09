@@ -100,7 +100,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
             <div className={ 'pimcore-tags-content' }>
               <AssignedTagsTable
                 isLoading={ isLoading }
-                tags={ Object.values(data?.items ?? {}) }
+                tags={ data?.items ?? [] }
               />
             </div>
           </Content>
