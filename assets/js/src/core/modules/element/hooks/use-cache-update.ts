@@ -68,22 +68,17 @@ export const useCacheUpdate = (elementType: ElementType, tags: ReadonlyArray<Tag
   }
 
   const updateFieldValue = (id: number, field: string, value: any): void => {
-    cacheEntries.forEach((cacheEntry) => {
-      // @ts-expect-error not compatible with the current type definitions
-      dispatch(api.util.updateQueryData(
-        cacheEntry.endpointName,
-        cacheEntry.originalArgs,
-        (draft) => {
-          if ('items' in draft && typeof draft.items === 'object') {
-            const entries = draft.items as Element[]
-            const indexToUpdate = entries.findIndex((entry) => entry.id === id)
+    update({
+      updateFn: (draft: any) => {
+        if ('items' in draft && typeof draft.items === 'object') {
+          const entries = draft.items as Element[]
+          const indexToUpdate = entries.findIndex((entry) => entry.id === id)
 
-            if (indexToUpdate !== -1 && field in draft.items![indexToUpdate]) {
-              draft.items![indexToUpdate][field] = value
-            }
+          if (indexToUpdate !== -1 && field in draft.items![indexToUpdate]) {
+            draft.items![indexToUpdate][field] = value
           }
         }
-      ))
+      }
     })
   }
 
