@@ -47,7 +47,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
         return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
       } }
       onDrop={ (info: DragAndDropInfo) => {
-        console.log('drop', info)
         const newValue = [...value]
         newValue[index] = { image: { type: 'asset', id: info.data.id as number } }
         setValue(newValue)

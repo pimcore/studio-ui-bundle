@@ -43,7 +43,6 @@ export const DragAndDropInfoContext = createContext<IDragAndDropInfoContext>({
 
 export const DragAndDropContextProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
   const [info, setInfo] = React.useState<DragAndDropInfo>(defaultInfo)
-  // const [draggedElement, setDraggedElement] = React.useState<React.ReactNode>(null)
   const callbackRegistry = useRef<ICallbackRegistry>(new CallbackRegistry())
   const isSortableInfo = Object.keys(info).includes('sortable')
   const collisionDetection = isSortableInfo ? closestCorners : boundingRectIntersection
@@ -70,8 +69,6 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
   function onDragStart (event: DragStartEvent): void {
     const data = event.active.data.current as DragAndDropInfo
     setContext(data)
-
-    console.log('start', event)
   }
 
   function onDragCancel (): void {
