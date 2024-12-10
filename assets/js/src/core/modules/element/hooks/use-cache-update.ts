@@ -19,7 +19,7 @@ import { type ElementType } from '../../../../../types/element-type.d'
 import { type Element } from '../element-helper'
 
 interface UseCacheUpdateHookReturn {
-  updateCache: (props: UpdateCacheProps) => void
+  update: (props: UpdateCacheProps) => void
   updateFieldValue: (id: number, field: string, value: any) => void
 }
 
@@ -56,7 +56,7 @@ export const useCacheUpdate = (elementType: ElementType, tags: ReadonlyArray<Tag
     throw new Error('Unknown element type')
   }
 
-  const updateCache = ({ updateFn }: UpdateCacheProps): void => {
+  const update = ({ updateFn }: UpdateCacheProps): void => {
     cacheEntries.forEach((cacheEntry) => {
       // @ts-expect-error not compatible with the current type definitions
       dispatch(api.util.updateQueryData(
@@ -88,7 +88,7 @@ export const useCacheUpdate = (elementType: ElementType, tags: ReadonlyArray<Tag
   }
 
   return {
-    updateCache,
+    update,
     updateFieldValue
   }
 }
