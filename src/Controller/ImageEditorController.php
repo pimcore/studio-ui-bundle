@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
-
 use Pimcore\Bundle\StudioBackendBundle\Security\Service\SecurityServiceInterface;
 use Pimcore\Bundle\StudioBackendBundle\Util\Constant\ElementPermissions;
 use Pimcore\Model\Asset;
@@ -28,14 +27,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ImageEditorController extends AbstractController
 {
-    public function __construct (
+    public function __construct(
         private readonly SecurityServiceInterface $securityService,
-    )
-    {
+    ) {
     }
 
     #[Route('/image-editor', methods: ['GET'])]
-    public function editorAction(Request $request): Response {
+    public function editorAction(Request $request): Response
+    {
         $asset = Asset\Image::getById((int) $request->get('id'));
 
         if (!$asset) {
@@ -48,13 +47,12 @@ final class ImageEditorController extends AbstractController
             ElementPermissions::VIEW_PERMISSION
         );
 
-
         return $this->render('@PimcoreStudioUi/image-editor/editor.html.twig', [
-            'asset' => $asset
+            'asset' => $asset,
         ]);
     }
 
-    #[Route('/get-asset',  name: 'studio_temp_get_asset', methods: ['GET'])]
+    #[Route('/get-asset', name: 'studio_temp_get_asset', methods: ['GET'])]
     public function getAssetAction(Request $request): StreamedResponse
     {
         $image = Asset::getById((int)$request->get('id'));
