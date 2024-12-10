@@ -8,6 +8,7 @@
             cursor: pointer;
         }
     </style>
+    {# TODO do not rely on resources from classic bundle #}
     <base href="/bundles/pimcoreadmin/js/lib/minipaint/" />
     {{ encore_entry_script_tags('imageEditor', null, 'pimcoreAdminImageEditor') }}
 </head>
@@ -88,9 +89,11 @@
 <div id="popups"></div>
 
 {% set imageFileExtension = pimcore_file_extension(asset.getFilename()) %}
+{# TODO ask backend team to provide endpoint in backend API #}
 {% set imageUrl = path('studio_temp_get_asset', {id: asset.getId()}) %}
 
 {% if imageFileExtension not in ['png', 'jpg', 'jpeg'] %}
+    {# TODO ask backend team to provide endpoint in backend API #}
     {% set imageUrl = path('pimcore_admin_asset_getimagethumbnail', {id: asset.getId(), format: 'png' }) %}
 {% endif %}
 
@@ -137,6 +140,7 @@
             var dataUri = tempCanvas.toDataURL('image/{{ imageFileExtension == "png" ? "png" : "jpeg" }}');
 
             parent.Ext.Ajax.request({
+                {# TODO ask backend team to provide endpoint in backend API #}
                 url: "{{ path('pimcore_admin_asset_imageeditorsave', {id: asset.getId()}) }}",
                 method: 'PUT',
                 params: {
@@ -161,7 +165,8 @@
         aElement.classList.add('cursor-pointer');
         aElement.setAttribute('aria-expanded', 'false');
         spanElement.setAttribute('class', 'name trn');
-        spanElement.innerText = parent.t('save');
+        //TODO: how to solve this? spanElement.innerText = parent.t('save');
+        spanElement.innerText = 'save';
 
         aElement.appendChild(spanElement);
         liElement.appendChild(aElement);
