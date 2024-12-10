@@ -12,17 +12,14 @@
 */
 
 import React, { useState } from 'react'
-import {
-  type Tag,
-  useTagUnassignFromElementMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Flex } from 'antd'
-import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useHandleCheck } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-handle-check-tags'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -30,29 +27,37 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
+  const { id: elementId, elementType } = useElementContext()
   const [loadingRows, setLoadingRows] = useState<string[]>([])
-  const { id, elementType } = useElementContext()
-  const messageApi = useMessage()
 
-  const [unassignTag] = useTagUnassignFromElementMutation()
+  console.log('Tags:', tags)
 
-  async function removeTag (tag: Tag): Promise<void> {
-    try {
-      await unassignTag({
-        elementType,
-        id,
-        tagId: tag.id!
-      }).unwrap()
-    } catch (error) {
-      console.error(error)
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error({
-        content: t('failed-to-un-assign-tag-to-element'),
-        type: 'error',
-        duration: 5
-      })
-    }
-  }
+  const tagEntries = Object.entries(tags)
+
+  console.log('tagEntries:', tagEntries)
+
+  const validTags = tagEntries
+    .map(([key, tag]) => ({ ...tag, key }))
+    .filter((tag) => tag.id !== undefined)
+
+  console.log('validTags:', validTags)
+
+  const flatTags = validTags.map((tag) => ({ id: tag.id! }))
+
+  console.log('flatTags:', flatTags)
+
+  const [checkedTags, setCheckedTags] = useState<string[]>(
+    validTags.map((tag) => tag.id!.toString())
+  )
+
+  const { handleCheck, loadingNodes } = useHandleCheck({
+    elementId,
+    elementType,
+    flatTags,
+    setDefaultCheckedTags: (tags) => { setCheckedTags(tags.map(String)) }
+  })
+
+  console.log('----> loadingNodes', loadingNodes)
 
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
@@ -70,11 +75,20 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
         const isLoading = loadingRows.includes(info.row.id)
 
         const handleClick = async (): Promise<void> => {
-          setLoadingRows(prevLoadingRows =>
+          setLoadingRows((prevLoadingRows) =>
             prevLoadingRows.includes(info.row.id)
               ? prevLoadingRows
               : [...prevLoadingRows, info.row.id]
-          ); await removeTag(info.row.original)
+          )
+
+          await handleCheck(
+            {
+              checked: checkedTags.filter((key) => key !== info.row.original.id!.toString()),
+              halfChecked: []
+            },
+            { node: { key: info.row.original.id!.toString() }, checked: false }
+          )
+
           setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((row) => row !== info.row.id))
         }
 
