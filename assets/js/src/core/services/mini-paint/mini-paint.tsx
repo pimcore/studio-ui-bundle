@@ -12,14 +12,21 @@
 */
 
 import React from 'react'
-import { Content } from '@Pimcore/components/content/content'
-import { MiniPaint } from '@Pimcore/services/mini-paint/mini-paint'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
-export const EditTabContainer = (): React.JSX.Element => {
+export const MiniPaint = (): React.JSX.Element => {
+  const { id } = useElementContext()
+
+  const iframeSrc = `/pimcore-studio/api/image-editor?id=${id}`
+
   return (
-    <Content padded>
-      <MiniPaint />
-    </Content>
-
+    <div style={ { width: '100%', height: '100%' } }>
+      <iframe
+        height={ '100%' }
+        src={ iframeSrc }
+        title="MiniPaint editor"
+        width={ '100%' }
+      />
+    </div>
   )
 }
