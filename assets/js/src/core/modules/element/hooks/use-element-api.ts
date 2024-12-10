@@ -50,30 +50,6 @@ export const useElementApi = (elementType: ElementType): UseElementApiReturn => 
         'filename',
         args.body.data[0].key
       )
-
-      /* eslint-disable */
-      /*const entries = assetApi.util.selectInvalidatedBy(
-        store.getState() as any,
-        ['ASSET_TREE']
-      )
-
-      entries.forEach((queryKeys) => {
-        dispatch(assetApi.util.updateQueryData(
-          // @ts-ignore typescript, constants, u know? - i dont - @daniel
-          queryKeys.endpointName,
-          queryKeys.originalArgs,
-          (draft) => {
-            if('items' in draft && typeof draft.items === 'object') {
-              const entries = draft.items as Array<Asset>
-              const indexToUpdate = entries.findIndex((entry) => entry.id === args.body.data[0].id)
-
-              if(indexToUpdate !== -1) {
-                draft.items![indexToUpdate].filename = args.body.data[0].key as string
-              }
-            }
-          }
-        ))
-      })*/
     } else if (elementType === 'data-object') {
       await dataObjectPatch(args)
 
