@@ -12,7 +12,7 @@
 */
 
 import React, { type MutableRefObject, createContext, useRef, type ReactNode, useMemo } from 'react'
-import { DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
+import { closestCorners, DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors, type DragEndEvent, type DragStartEvent } from '@dnd-kit/core'
 import { type Callback, CallbackRegistry, type ICallbackRegistry } from './callback-registry'
 import { DragOverlay as StyledDragOverlay } from './drag-overlay'
 import { boundingRectIntersection } from './collision-detection/boundingRectIntersection'
@@ -45,9 +45,11 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
   const [info, setInfo] = React.useState<DragAndDropInfo>(defaultInfo)
   // const [draggedElement, setDraggedElement] = React.useState<React.ReactNode>(null)
   const callbackRegistry = useRef<ICallbackRegistry>(new CallbackRegistry())
+  const isSortableInfo = Object.keys(info).includes('sortable')
+  const collisionDetection = isSortableInfo ? closestCorners : boundingRectIntersection
 
-  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
-  const touchSensor = useSensor(TouchSensor, { activationConstraint: { distance: 10 } })
+  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 5 } })
+  const touchSensor = useSensor(TouchSensor, { activationConstraint: { distance: 5 } })
 
   const sensors = useSensors(mouseSensor, touchSensor)
 
@@ -88,7 +90,7 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
   return useMemo(() => (
     <DndContext
       autoScroll={ false }
-      collisionDetection={ boundingRectIntersection }
+      collisionDetection={ collisionDetection }
       onDragCancel={ onDragCancel }
       onDragEnd={ onDragEnd }
       onDragStart={ onDragStart }
@@ -108,5 +110,5 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
         {children}
       </DragAndDropInfoContext.Provider>
     </DndContext>
-  ), [info, children])
+  ), [info, children, collisionDetection])
 }
