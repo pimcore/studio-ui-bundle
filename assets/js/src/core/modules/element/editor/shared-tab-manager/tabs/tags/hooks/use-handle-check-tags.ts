@@ -31,17 +31,17 @@ interface UseHandleCheckProps {
   setDefaultCheckedTags: (tags: React.Key[]) => void
 }
 
-interface UseHandleCheckReturn {
-  handleCheck: (
-    checkedKeys: { checked: Key[], halfChecked: Key[] },
-    info: any
-  ) => Promise<void>
-  loadingNodes: Set<string>
-}
-
 interface NodeInfo {
   node: { key: string }
   checked: boolean
+}
+
+interface UseHandleCheckReturn {
+  handleCheck: (
+    checkedKeys: { checked: Key[], halfChecked: Key[] },
+    info: NodeInfo
+  ) => Promise<void>
+  loadingNodes: Set<string>
 }
 
 export const useHandleCheck = ({

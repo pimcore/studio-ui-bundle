@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -28,42 +28,31 @@ type TagWithActions = Tag & {
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id: elementId, elementType } = useElementContext()
-  // const [loadingRows, setLoadingRows] = useState<string[]>([])
-  const [checkedTags, setCheckedTags] = useState<string[]>([])
 
-  console.log('Tags:', tags)
-  console.log('----> isLoading', isLoading)
-
-  const validTags = useMemo(() => {
+  const checkedTags = useMemo(() => {
     const tagEntries = Object.entries(tags)
     return tagEntries
       .map(([key, tag]) => ({ ...tag, key }))
       .filter((tag) => tag.id !== undefined)
   }, [tags])
 
-  console.log('validTags:', validTags)
-  console.log('validTags dd:', validTags.map((tag) => tag.id!.toString()))
-
-  useEffect(() => {
-    if (validTags.length > 0) {
-      setCheckedTags(validTags.map((tag) => tag.id!.toString()))
-    }
-  }, [validTags])
-
-  console.log('Initial Checked Tags:', checkedTags)
-
-  const { handleCheck, loadingNodes } = useHandleCheck({
+  const { handleCheck } = useHandleCheck({
     elementId,
     elementType,
-    flatTags: validTags,
-    setDefaultCheckedTags: (tags) => {
-      console.log('Updated Tags in setDefaultCheckedTags:', tags)
-      setCheckedTags(tags.map(String))
-    }
+    flatTags: checkedTags,
+    setDefaultCheckedTags: () => {}
   })
 
-  console.log('----> loadingNodes', loadingNodes)
-  console.log('Checked Tags:', checkedTags)
+  const handleRemoveTag = async (tagId: string): Promise<void> => {
+    const updatedCheckedTags = checkedTags.filter((tag) => tag.id?.toString() !== tagId).map((tag) => tag.id!.toString())
+    await handleCheck(
+      {
+        checked: updatedCheckedTags,
+        halfChecked: []
+      },
+      { node: { key: tagId }, checked: false }
+    )
+  }
 
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
@@ -77,43 +66,20 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     }),
     columnHelper.accessor('actions', {
       header: t('tags.columns.actions'),
-      cell: (info) => {
-        // const isLoading = loadingRows.includes(info.row.id)
-
-        const handleClick = async (): Promise<void> => {
-          console.log('----> checkedTags before', checkedTags)
-
-          // setLoadingRows((prevLoadingRows) =>
-          //   prevLoadingRows.includes(info.row.id)
-          //     ? prevLoadingRows
-          //     : [...prevLoadingRows, info.row.id]
-          // )
-
-          await handleCheck(
-            {
-              checked: checkedTags.filter((key) => key !== info.row.original.id!.toString()),
-              halfChecked: []
-            },
-            { node: { key: info.row.original.id!.toString() }, checked: false }
-          )
-
-          // setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((row) => row !== info.row.id))
-        }
-
-        return (
-          <Flex
-            align='center'
-            className='w-full h-full'
-            justify='center'
-          >
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ handleClick }
-              type="link"
-            />
-          </Flex>
-        )
-      },
+      cell: (info) => (
+        <Flex
+          align="center"
+          className='w-full h-full'
+          justify="center"
+        >
+          <IconButton
+            aria-label={ t('tags.actions.delete') }
+            icon={ { value: 'trash' } }
+            onClick={ async () => { await handleRemoveTag(info.row.original.id!.toString()) } }
+            type="link"
+          />
+        </Flex>
+      ),
       size: 60
     })
   ]

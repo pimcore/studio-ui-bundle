@@ -27,7 +27,6 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
   const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
     Object.keys(props.tags).map(String)
   )
-  console.log('----> props.tags', props.tags)
 
   const { id, elementType } = useElementContext()
 
