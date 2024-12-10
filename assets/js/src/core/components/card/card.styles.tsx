@@ -23,6 +23,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.ant-card:not(.ant-card-bordered) {
         box-shadow: none;
+        border: 1px solid transparent;
       }
 
       .ant-card-head-title {
@@ -71,6 +72,29 @@ export const useStyles = createStyles(({ token, css }) => {
 
         li:not(:last-child) {
           border: none;
+        }
+      }
+
+      &.card--theme-card-with-highlight {
+        .ant-card-head {
+          border-bottom: 1px solid ${token.colorPrimaryBorder};
+        }
+      }
+
+      &.card--theme-fieldset {
+        border-left: 3px solid #D5CFDA;
+        background: rgba(242, 240, 244, 0.52);
+
+        &, &.ant-card:not(.ant-card-bordered) {
+          border-left: 3px solid #D5CFDA;
+        }
+ 
+        .ant-card-head {
+          border-bottom: transparent;
+        }
+
+        .ant-card-body {
+          padding-top: ${token.paddingXXS}px;
         }
       }
     `

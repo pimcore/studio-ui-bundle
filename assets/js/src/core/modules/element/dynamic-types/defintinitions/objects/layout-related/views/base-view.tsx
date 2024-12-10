@@ -22,9 +22,10 @@ export interface BaseViewProps {
   collapsed?: boolean
   children?: React.ReactNode
   border?: boolean
+  theme?: 'fieldset' | 'card-with-highlight'
 }
 
-export const BaseView = (props: BaseViewProps): React.JSX.Element => {
+export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
 
   if (!isPaddedLayout) {
@@ -40,6 +41,7 @@ export const BaseView = (props: BaseViewProps): React.JSX.Element => {
       <AccordionView
         bordered={ props.border }
         collapsed={ props.collapsed }
+        theme={ theme }
         title={ props.title }
       >{props.children}</AccordionView>
     )
@@ -48,6 +50,7 @@ export const BaseView = (props: BaseViewProps): React.JSX.Element => {
   return (
     <CardView
       bordered={ props.border }
+      theme={ theme }
       title={ props.title }
     >{props.children}</CardView>
   )

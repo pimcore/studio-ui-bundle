@@ -19,14 +19,14 @@ export interface CardViewProps {
   title?: string
   children?: React.ReactNode
   bordered?: boolean
+  theme?: 'fieldset' | 'card-with-highlight'
 }
 
 export const CardView = (props: CardViewProps): React.JSX.Element => {
-  console.log(props.bordered, props.bordered === true)
-
   return (
     <Card
       bordered={ props.bordered === true }
+      theme={ props.theme }
       title={ isEmpty(props.title) ? undefined : props.title }
     >
       {props.children}

@@ -23,7 +23,7 @@ export class DynamicTypeObjectLayoutFieldset extends DynamicTypeObjectLayoutAbst
     return (
       <Panel
         { ...props }
-        border
+        theme='fieldset'
       />
     )
   }

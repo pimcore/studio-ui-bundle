@@ -29,7 +29,7 @@ export const useStyle = createStyles(({ token, css }) => {
         height: 100%;
       }
 
-      &.ant-tabs .ant-tabs-tab {
+      &.ant-tabs > .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list > .ant-tabs-tab {
         margin: 0 ${token.paddingXS}px !important;
         transition: color .2s;
 
@@ -68,7 +68,7 @@ export const useStyle = createStyles(({ token, css }) => {
         margin-inline-end: 0;
       }
       
-      .ant-tabs-tab {
+      &.ant-tabs > .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list > .ant-tabs-tab {
         padding: 0;
         
         &:first-of-type {

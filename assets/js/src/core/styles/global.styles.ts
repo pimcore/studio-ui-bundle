@@ -16,23 +16,6 @@
 import { createGlobalStyle } from 'antd-style'
 
 export const GlobalStyles = createGlobalStyle`
-  @font-face {
-    font-family: Lato;
-    src: url(../fonts/Lato-Regular.ttf);
-  }
-
-  @font-face {
-    font-family: Lato;
-    src: url(../fonts/Lato-Light.ttf);
-    font-weight: 300;
-  }
-
-  @font-face {
-    font-family: Lato;
-    src: url(../fonts/Lato-Bold.ttf);
-    font-weight: 700;
-  }
-
   * {
     box-sizing: border-box;
   }
@@ -631,6 +614,10 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
   }
 
+  .max-w-full {
+      max-width: 100%;
+  }
+  
   .min-w-100 {
       min-width: 100px;
   }

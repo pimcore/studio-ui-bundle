@@ -56,6 +56,7 @@ import rightOutlined from '@Pimcore/assets/icons/right-outlined.inline.svg'
 import richEdit from '@Pimcore/assets/icons/rich-edit.inline.svg'
 import download02 from '@Pimcore/assets/icons/download-02.inline.svg'
 import pin02 from '@Pimcore/assets/icons/pin-02.inline.svg'
+import pin02Outlined from '@Pimcore/assets/icons/pin-02-outlined.inline.svg'
 import expandAltOutlined from '@Pimcore/assets/icons/expand-alt-outlined.inline.svg'
 import eyeOutlined from '@Pimcore/assets/icons/eye-outlined.inline.svg'
 import shareAltOutlined from '@Pimcore/assets/icons/share-alt-outlined.inline.svg'
@@ -129,6 +130,19 @@ import questionCircleOutlined from '@Pimcore/assets/icons/question-circle-outlin
 import searchSM from '@Pimcore/assets/icons/search-sm.inline.svg'
 import edit03 from '@Pimcore/assets/icons/edit-03.inline.svg'
 import save01 from '@Pimcore/assets/icons/save-01.inline.svg'
+import AppstoreOutlined from '@Pimcore/assets/icons/AppstoreOutlined.inline.svg'
+import BarChart08 from '@Pimcore/assets/icons/bar-chart-08.inline.svg'
+import Brush03 from '@Pimcore/assets/icons/brush-03.inline.svg'
+import ShoppingCartOutlined from '@Pimcore/assets/icons/ShoppingCartOutlined.inline.svg'
+import ToolOutlined from '@Pimcore/assets/icons/ToolOutlined.inline.svg'
+import FileOutlined from '@Pimcore/assets/icons/FileOutlined.inline.svg'
+import pimcore from '@Pimcore/assets/icons/pimcore.inline.svg'
+import Users01 from '@Pimcore/assets/icons/users-01.inline.svg'
+import ShopOutlined from '@Pimcore/assets/icons/ShopOutlined.inline.svg'
+import Book from '@Pimcore/assets/icons/book.inline.svg'
+import plus from '@Pimcore/assets/icons/plus.inline.svg'
+import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
+import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import union from '@Pimcore/assets/icons/union.inline.svg'
 
 moduleSystem.registerModule({
@@ -288,6 +302,10 @@ moduleSystem.registerModule({
       component: pin02
     })
     iconLibrary.register({
+      name: 'pin-02-outlined',
+      component: pin02Outlined
+    })
+    iconLibrary.register({
       name: 'expand-alt-outlined',
       component: expandAltOutlined
     })
@@ -378,6 +396,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'user-01',
       component: user01
+    })
+    iconLibrary.register({
+      name: 'users-01',
+      component: Users01
     })
     iconLibrary.register({
       name: 'shield-02',
@@ -612,6 +634,66 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'save-01',
       component: save01
+    })
+
+    iconLibrary.register({
+      name: 'appstore-outlined',
+      component: AppstoreOutlined
+    })
+
+    iconLibrary.register({
+      name: 'bar-chart-08',
+      component: BarChart08
+    })
+
+    iconLibrary.register({
+      name: 'brush-03',
+      component: Brush03
+    })
+
+    iconLibrary.register({
+      name: 'shopping-car-outlined',
+      component: ShoppingCartOutlined
+    })
+
+    iconLibrary.register({
+      name: 'tools-outlined',
+      component: ToolOutlined
+    })
+
+    iconLibrary.register({
+      name: 'file-outlined',
+      component: FileOutlined
+    })
+
+    iconLibrary.register({
+      name: 'pimcore',
+      component: pimcore
+    })
+
+    iconLibrary.register({
+      name: 'shop-outlined',
+      component: ShopOutlined
+    })
+
+    iconLibrary.register({
+      name: 'book',
+      component: Book
+    })
+
+    iconLibrary.register({
+      name: 'plus',
+      component: plus
+    })
+
+    iconLibrary.register({
+      name: 'move-up',
+      component: moveUp
+    })
+
+    iconLibrary.register({
+      name: 'move-down',
+      component: moveDown
     })
 
     iconLibrary.register({
