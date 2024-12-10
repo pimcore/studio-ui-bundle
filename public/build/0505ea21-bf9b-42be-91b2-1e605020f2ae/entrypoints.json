@@ -1,0 +1,14 @@
+{
+  "entrypoints": {
+    "main": {
+      "css": [
+        "http://localhost:3030/build/0505ea21-bf9b-42be-91b2-1e605020f2ae/vendors-node_modules_dnd-kit_modifiers_dist_modifiers_esm_js-node_modules_dnd-kit_sortable_di-41eabe.css",
+        "http://localhost:3030/build/0505ea21-bf9b-42be-91b2-1e605020f2ae/main.css"
+      ],
+      "js": [
+        "http://localhost:3030/build/0505ea21-bf9b-42be-91b2-1e605020f2ae/vendors-node_modules_dnd-kit_modifiers_dist_modifiers_esm_js-node_modules_dnd-kit_sortable_di-41eabe.js",
+        "http://localhost:3030/build/0505ea21-bf9b-42be-91b2-1e605020f2ae/main.js"
+      ]
+    }
+  }
+}

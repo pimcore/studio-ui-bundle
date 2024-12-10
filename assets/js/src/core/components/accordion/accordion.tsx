@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { Collapse, type CollapseProps, Flex } from 'antd'
+import { Collapse, type CollapseProps, Flex, type FlexProps } from 'antd'
 import cn from 'classnames'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
@@ -37,6 +37,7 @@ export interface AccordionProps extends Omit<CollapseProps, 'expandIconPosition'
   spaced?: boolean
   bordered?: boolean
   expandIconPosition?: CustomExpandIconPosition
+  headerAlign?: FlexProps['align']
 }
 
 export const Accordion = ({
@@ -44,6 +45,7 @@ export const Accordion = ({
   accordion = false,
   spaced = false,
   bordered = false,
+  headerAlign = 'baseline',
   className,
   activeKey,
   expandIconPosition = 'after-title',
@@ -114,7 +116,7 @@ export const Accordion = ({
       className: itemClassNames,
       label: <>
         <Flex
-          align={ 'baseline' }
+          align={ headerAlign }
         >
           {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
                         chevronButton()}
