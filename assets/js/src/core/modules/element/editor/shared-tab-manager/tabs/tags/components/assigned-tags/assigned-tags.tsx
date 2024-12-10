@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -28,36 +28,42 @@ type TagWithActions = Tag & {
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id: elementId, elementType } = useElementContext()
-  const [loadingRows, setLoadingRows] = useState<string[]>([])
+  // const [loadingRows, setLoadingRows] = useState<string[]>([])
+  const [checkedTags, setCheckedTags] = useState<string[]>([])
 
   console.log('Tags:', tags)
+  console.log('----> isLoading', isLoading)
 
-  const tagEntries = Object.entries(tags)
-
-  console.log('tagEntries:', tagEntries)
-
-  const validTags = tagEntries
-    .map(([key, tag]) => ({ ...tag, key }))
-    .filter((tag) => tag.id !== undefined)
+  const validTags = useMemo(() => {
+    const tagEntries = Object.entries(tags)
+    return tagEntries
+      .map(([key, tag]) => ({ ...tag, key }))
+      .filter((tag) => tag.id !== undefined)
+  }, [tags])
 
   console.log('validTags:', validTags)
+  console.log('validTags dd:', validTags.map((tag) => tag.id!.toString()))
 
-  const flatTags = validTags.map((tag) => ({ id: tag.id! }))
+  useEffect(() => {
+    if (validTags.length > 0) {
+      setCheckedTags(validTags.map((tag) => tag.id!.toString()))
+    }
+  }, [validTags])
 
-  console.log('flatTags:', flatTags)
-
-  const [checkedTags, setCheckedTags] = useState<string[]>(
-    validTags.map((tag) => tag.id!.toString())
-  )
+  console.log('Initial Checked Tags:', checkedTags)
 
   const { handleCheck, loadingNodes } = useHandleCheck({
     elementId,
     elementType,
-    flatTags,
-    setDefaultCheckedTags: (tags) => { setCheckedTags(tags.map(String)) }
+    flatTags: validTags,
+    setDefaultCheckedTags: (tags) => {
+      console.log('Updated Tags in setDefaultCheckedTags:', tags)
+      setCheckedTags(tags.map(String))
+    }
   })
 
   console.log('----> loadingNodes', loadingNodes)
+  console.log('Checked Tags:', checkedTags)
 
   const columnHelper = createColumnHelper<TagWithActions>()
   const columns = [
@@ -72,14 +78,16 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     columnHelper.accessor('actions', {
       header: t('tags.columns.actions'),
       cell: (info) => {
-        const isLoading = loadingRows.includes(info.row.id)
+        // const isLoading = loadingRows.includes(info.row.id)
 
         const handleClick = async (): Promise<void> => {
-          setLoadingRows((prevLoadingRows) =>
-            prevLoadingRows.includes(info.row.id)
-              ? prevLoadingRows
-              : [...prevLoadingRows, info.row.id]
-          )
+          console.log('----> checkedTags before', checkedTags)
+
+          // setLoadingRows((prevLoadingRows) =>
+          //   prevLoadingRows.includes(info.row.id)
+          //     ? prevLoadingRows
+          //     : [...prevLoadingRows, info.row.id]
+          // )
 
           await handleCheck(
             {
@@ -89,7 +97,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
             { node: { key: info.row.original.id!.toString() }, checked: false }
           )
 
-          setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((row) => row !== info.row.id))
+          // setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((row) => row !== info.row.id))
         }
 
         return (
@@ -99,9 +107,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
             justify='center'
           >
             <IconButton
-              disabled={ isLoading }
               icon={ { value: 'trash' } }
-              loading={ isLoading }
               onClick={ handleClick }
               type="link"
             />

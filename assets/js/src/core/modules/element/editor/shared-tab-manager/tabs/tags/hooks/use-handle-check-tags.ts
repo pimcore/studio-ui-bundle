@@ -16,6 +16,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { t } from 'i18next'
 import { type Key } from 'react'
 import {
+  type Tag,
   useTagAssignToElementMutation,
   useTagUnassignFromElementMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
@@ -26,7 +27,7 @@ import {
 interface UseHandleCheckProps {
   elementId: number
   elementType: 'asset' | 'document' | 'data-object'
-  flatTags: Array<{ id: number }>
+  flatTags: Tag[]
   setDefaultCheckedTags: (tags: React.Key[]) => void
 }
 
@@ -72,6 +73,10 @@ export const useHandleCheck = ({
     if (response.error?.data?.error != null && response.error.data.error !== '') {
       throw new Error(response.error.data.error)
     }
+
+    if (response.error != null) {
+      throw new Error('Failed to assign tag to element')
+    }
   }
 
   const removeTagFromElement = async (tagId: number): Promise<void> => {
@@ -80,6 +85,10 @@ export const useHandleCheck = ({
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
       throw new Error(response.error.data.error)
+    }
+
+    if (response.error != null) {
+      throw new Error('Failed to unassign tag from element')
     }
   }
 
