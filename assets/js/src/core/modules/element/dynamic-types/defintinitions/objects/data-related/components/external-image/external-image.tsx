@@ -16,10 +16,9 @@ import { Card } from '@Pimcore/components/card/card'
 import {
   ExternalImageFooter
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/footer'
-import { Image } from 'antd'
 import { ImageTarget } from '@Pimcore/components/image-target/image-target'
-import { toCssDimension } from '@Pimcore/utils/css'
 import { useTranslation } from 'react-i18next'
+import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 
 export interface ExternalImageValue {
   url: string
@@ -53,6 +52,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   return (
     <>
       <Card
+        className="max-w-full"
         fitContent={ Boolean(props.inputWidth) }
         footer={ <ExternalImageFooter
           disabled={ props.disabled }
@@ -64,19 +64,16 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
       >
         { value !== null && value.url !== ''
           ? (
-            <Image
-              fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+            <ImagePreview
               height={ previewHeight }
-              preview={ false }
               src={ value?.url }
-              style={ { maxHeight: toCssDimension(previewHeight), maxWidth: toCssDimension(previewWidth) } }
-              width={ '100%' }
+              width={ previewWidth }
             />
             )
           : (
             <ImageTarget
               height={ previewHeight }
-              title={ t('data-object.editor.external-image.preview-placeholder') }
+              title={ t('external-image.preview-placeholder') }
               width={ previewWidth }
             />
             )}

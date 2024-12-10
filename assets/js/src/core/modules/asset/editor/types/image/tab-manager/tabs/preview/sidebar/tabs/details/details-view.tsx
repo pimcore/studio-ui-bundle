@@ -19,9 +19,9 @@ import { Button } from '@Pimcore/components/button/button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
-import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useDetailsViewData } from './hooks/use-details-view-data'
 import { useStyle } from './details.styles'
+import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
 
 export interface CustomDownloadProps {
   width: number
@@ -69,112 +69,109 @@ export const AssetEditorSidebarDetailsView = ({
   const FORMATS = getFormats()
   const DOWNLOAD_FORMATS = getDownloadFormats()
 
-  const CUSTOM_DOWNLOAD_OPTIONS = [
-    {
-      key: 1,
-      title: <span>{t('image-sidebar.tab.details.custom-download')}</span>,
-      children: (
-        <Form
-          initialValues={ {
-            width,
-            height,
-            mode: customMode,
-            format: customFormat
-          } }
-          layout="vertical"
-        >
-          <div className={ 'entry-content__download-content-custom__dimensions' }>
+  const CUSTOM_DOWNLOAD_OPTIONS = {
+    label: <span>{t('image-sidebar.tab.details.custom-download')}</span>,
+    children: (
+      <Form
+        initialValues={ {
+          width,
+          height,
+          mode: customMode,
+          format: customFormat
+        } }
+        layout="vertical"
+      >
+        <div className={ 'entry-content__download-content-custom__dimensions' }>
+          <Form.Item
+            label={ t('width') }
+            name={ 'width' }
+          >
+            <Input
+              onChange={ (e) => { setCustomWidth(e.target.value as unknown as number) } }
+              type="number"
+            />
+          </Form.Item>
+
+          <Form.Item
+            label={ t('height') }
+            name={ 'height' }
+          >
+            <Input
+              onChange={ (e) => { setCustomHeight(e.target.value as unknown as number) } }
+              type="number"
+            />
+          </Form.Item>
+        </div>
+
+        <div className={ 'entry-content__download-content-custom__others' }>
+          <div>
             <Form.Item
-              label={ t('width') }
-              name={ 'width' }
+              label={ t('quality') }
+              name={ 'quality' }
             >
               <Input
-                onChange={ (e) => { setCustomWidth(e.target.value as unknown as number) } }
+                onChange={ (e) => { setCustomQuality(e.target.value as unknown as number) } }
                 type="number"
               />
             </Form.Item>
 
             <Form.Item
-              label={ t('height') }
-              name={ 'height' }
+              label={ 'DPI' }
+              name={ 'dpi' }
             >
               <Input
-                onChange={ (e) => { setCustomHeight(e.target.value as unknown as number) } }
+                onChange={ (e) => { setCustomDPI(e.target.value as unknown as number) } }
                 type="number"
               />
             </Form.Item>
           </div>
 
-          <div className={ 'entry-content__download-content-custom__others' }>
-            <div>
-              <Form.Item
-                label={ t('quality') }
-                name={ 'quality' }
-              >
-                <Input
-                  onChange={ (e) => { setCustomQuality(e.target.value as unknown as number) } }
-                  type="number"
-                />
-              </Form.Item>
-
-              <Form.Item
-                label={ 'DPI' }
-                name={ 'dpi' }
-              >
-                <Input
-                  onChange={ (e) => { setCustomDPI(e.target.value as unknown as number) } }
-                  type="number"
-                />
-              </Form.Item>
-            </div>
-
-            <div>
-              <Form.Item
-                label={ t('mode') }
-                name={ 'mode' }
-              >
-                <Select
-                  aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
-                  onChange={ (mode: string) => { setCustomMode(mode) } }
-                  options={ MODES }
-                />
-              </Form.Item>
-            </div>
-            <div>
-              <Form.Item
-                label={ t('format') }
-                name={ 'format' }
-              >
-                <Select
-                  aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format') }
-                  onChange={ (format: string) => { setCustomFormat(format) } }
-                  options={ FORMATS }
-                />
-              </Form.Item>
-            </div>
-          </div>
-
-          <div className={ 'entry-content__download-content-custom__button' }>
-            <Button
-              aria-label={ t('aria.asset.image-sidebar.tab.details.download-custom-thumbnail') }
-              onClick={ () => {
-                onClickCustomDownload({
-                  width: customWidth,
-                  height: customHeight,
-                  quality: customQuality,
-                  dpi: customDPI,
-                  mode: customMode,
-                  format: customFormat
-                })
-              } }
+          <div>
+            <Form.Item
+              label={ t('mode') }
+              name={ 'mode' }
             >
-              {t('download')}
-            </Button>
+              <Select
+                aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-mode') }
+                onChange={ (mode: string) => { setCustomMode(mode) } }
+                options={ MODES }
+              />
+            </Form.Item>
           </div>
-        </Form>
-      )
-    }
-  ]
+          <div>
+            <Form.Item
+              label={ t('format') }
+              name={ 'format' }
+            >
+              <Select
+                aria-label={ t('aria.asset.image-sidebar.tab.details.custom-thumbnail-format') }
+                onChange={ (format: string) => { setCustomFormat(format) } }
+                options={ FORMATS }
+              />
+            </Form.Item>
+          </div>
+        </div>
+
+        <div className={ 'entry-content__download-content-custom__button' }>
+          <Button
+            aria-label={ t('aria.asset.image-sidebar.tab.details.download-custom-thumbnail') }
+            onClick={ () => {
+              onClickCustomDownload({
+                width: customWidth,
+                height: customHeight,
+                quality: customQuality,
+                dpi: customDPI,
+                mode: customMode,
+                format: customFormat
+              })
+            } }
+          >
+            {t('download')}
+          </Button>
+        </div>
+      </Form>
+    )
+  }
 
   return (
     <Content
@@ -215,10 +212,10 @@ export const AssetEditorSidebarDetailsView = ({
             </div>
 
             <div className={ 'entry-content__download-content-custom' }>
-              <Accordion
-                defaultActiveKey={ ['1'] }
-                expandIconPosition={ 'start' }
-                items={ CUSTOM_DOWNLOAD_OPTIONS }
+              <CollapseItem
+                { ...CUSTOM_DOWNLOAD_OPTIONS }
+                defaultActive
+                theme='simple'
               />
             </div>
           </div>

@@ -14,9 +14,9 @@
 import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { Tabs, type TabsProps } from 'antd'
 import { Box } from '@Pimcore/components/box/box'
 import { BaseView } from '../../views/base-view'
+import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 
 export interface TabpanelProps extends AbstractObjectLayoutDefinition {
   title?: string
@@ -27,7 +27,7 @@ export interface TabpanelProps extends AbstractObjectLayoutDefinition {
 }
 
 export const Tabpanel = ({ children, border, collapsed, collapsible, title }: TabpanelProps): React.JSX.Element => {
-  const items: TabsProps['items'] = children.map((child, index) => {
+  const items: ITabsProps['items'] = children.map((child, index) => {
     const tabPanelChild = {
       ...child,
       title: undefined
@@ -54,7 +54,9 @@ export const Tabpanel = ({ children, border, collapsed, collapsible, title }: Ta
       collapsible={ collapsible }
       title={ title }
     >
-      <Tabs items={ items } />
+      <Tabs
+        items={ items }
+      />
     </BaseView>
   )
 }

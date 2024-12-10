@@ -18,7 +18,7 @@ import React from 'react'
 import { Button } from '@Pimcore/components/button/button'
 
 const config: Meta = {
-  title: 'Components/Layout/Accordion',
+  title: 'Components/Layout/[Deprecated] Accordion',
   component: Accordion,
   parameters: {
     layout: 'fullscreen'

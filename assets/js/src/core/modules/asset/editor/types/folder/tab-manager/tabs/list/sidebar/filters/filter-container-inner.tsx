@@ -26,7 +26,7 @@ import { useFilters } from './hooks/use-filters'
 import { usePQLQueryFilter } from './hooks/use-pql-query-filter'
 import { useSearchFilter } from './hooks/use-search-filter'
 import { useIncludeDescendantsFilter } from './hooks/use-include-descendants-filter'
-import { useListFilterOptions } from '../../hooks/use-list'
+import { useListFilterOptions, useListPage } from '../../hooks/use-list'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
@@ -42,6 +42,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   const { resetFilters, filterOptions, filterError } = useFilters()
   const { setFilterOptions } = useListFilterOptions()
+  const { setPage } = useListPage()
   const { isShowOnlyDirectChildren, setIsShowOnlyDirectChildren, handleChangeIsIncludeDescendants } = useIncludeDescendantsFilter()
   const {
     pqlQueryValue,
@@ -59,7 +60,12 @@ export const FilterContainerInner = (): React.JSX.Element => {
     }
   }, [filterError])
 
-  const handleApplyClick = (): void => { setFilterOptions('filters', filterOptions) }
+  const handleApplyClick = (): void => {
+    setFilterOptions('filters', filterOptions)
+
+    // Set to 1 to filter through all items
+    setPage(1)
+  }
 
   const handleResetAllFiltersClick = (): void => {
     setIsShowOnlyDirectChildren(!DEFAULT_IS_INCLUDE_DESCENDANTS_VALUE)

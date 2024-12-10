@@ -23,7 +23,7 @@ export const useStyle = createStyles(({ token, css }) => {
       
       & .dnd--drag-valid {
         background: ${token.colorBgTextActive};
-        border: 1px dashed ${token.colorInfoBorder};
+        border: 1px dashed ${token.colorInfoBorderHover};
       }
 
       & .dnd--drag-error {
@@ -32,13 +32,13 @@ export const useStyle = createStyles(({ token, css }) => {
       }
     `,
     outline: css`
-      
+            
       & .dnd--drag-valid {
-        outline: 1px dashed ${token.colorInfoBorder};
+        outline: 1px dashed ${token.colorInfoBorderHover} !important;
       }
 
       & .dnd--drag-error {
-        outline: 1px dashed ${token.colorErrorActive};
+        outline: 1px dashed ${token.colorErrorActive} !important;
       }
     `,
     round: css`
