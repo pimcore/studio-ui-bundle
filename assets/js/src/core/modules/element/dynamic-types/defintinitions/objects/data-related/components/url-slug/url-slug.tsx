@@ -84,62 +84,60 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   }))
 
   return (
-    <>
-      <List
-        bordered
-        dataSource={ value }
-        loadMore={ remainingSites.length > 0 && (
+    <List
+      bordered
+      dataSource={ value }
+      loadMore={ remainingSites.length > 0 && (
+      <List.Item>
+        <Dropdown
+          disabled={ props.disabled }
+          menu={ { items: remainingSitesMenuItems } }
+          trigger={ ['click'] }
+        >
+          <DropdownButton type="default">
+            {t('url-slug.add-site')}
+          </DropdownButton>
+        </Dropdown>
+      </List.Item>
+      ) }
+      renderItem={ (item: UrlSlugEntry, index: number) => (
         <List.Item>
-          <Dropdown
-            disabled={ props.disabled }
-            menu={ { items: remainingSitesMenuItems } }
-            trigger={ ['click'] }
+          <Flex
+            align="center"
+            className="w-full"
+            gap="small"
+            justify="center"
           >
-            <DropdownButton type="default">
-              {t('url-slug.add-site')}
-            </DropdownButton>
-          </Dropdown>
+            <div style={ { width: toCssDimension(props.domainLabelWidth, 250) } }>
+              { item.siteId === 0 ? t('fallback') : getSiteById(item.siteId)?.domain }
+            </div>
+            <div className="w-full">
+              <Input
+                onChange={ e => { handleInputChange(index, e.target.value) } }
+                status={ errors[index] ? 'error' : undefined }
+                value={ item.slug }
+              />
+              { errors[index] && (
+              <Text type="danger">
+                {t('url-slug.invalid')}
+              </Text>
+              )}
+            </div>
+            <Tooltip title={ t('remove') }>
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  const newValue = [...value]
+                  newValue.splice(index, 1)
+                  setValue(newValue)
+                } }
+              />
+            </Tooltip>
+          </Flex>
         </List.Item>
-        ) }
-        renderItem={ (item: UrlSlugEntry, index: number) => (
-          <List.Item>
-            <Flex
-              align="center"
-              className="w-full"
-              gap="small"
-              justify="center"
-            >
-              <div style={ { width: toCssDimension(props.domainLabelWidth, 250) } }>
-                { item.siteId === 0 ? t('fallback') : getSiteById(item.siteId)?.domain }
-              </div>
-              <div className="w-full">
-                <Input
-                  onChange={ e => { handleInputChange(index, e.target.value) } }
-                  status={ errors[index] ? 'error' : undefined }
-                  value={ item.slug }
-                />
-                { errors[index] && (
-                <Text type="danger">
-                  {t('url-slug.invalid')}
-                </Text>
-                )}
-              </div>
-              <Tooltip title={ t('remove') }>
-                <IconButton
-                  icon={ { value: 'trash' } }
-                  onClick={ () => {
-                    const newValue = [...value]
-                    newValue.splice(index, 1)
-                    setValue(newValue)
-                  } }
-                />
-              </Tooltip>
-            </Flex>
-          </List.Item>
-        ) }
-        size="small"
-        style={ { maxWidth: toCssDimension(props.width) } }
-      />
-    </>
+      ) }
+      size="small"
+      style={ { maxWidth: toCssDimension(props.width) } }
+    />
   )
 }
