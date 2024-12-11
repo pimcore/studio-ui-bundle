@@ -66,6 +66,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     }),
     columnHelper.accessor('actions', {
       header: t('tags.columns.actions'),
+      enableSorting: false,
       cell: (info) => (
         <Flex
           align="center"
@@ -88,8 +89,9 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     <Grid
       columns={ columns }
       data={ Object.values(tags) }
-      initialState={ { sorting: [{ id: 'path', desc: false }] } }
+      enableSorting
       isLoading={ isLoading }
+      sorting={ [{ id: 'path', desc: false }] }
     />
   )
 }
