@@ -12,7 +12,7 @@
 */
 
 import type { Meta, StoryObj } from '@storybook/react'
-import { Collapse, CollapseProps } from './collapse'
+import { Collapse, type CollapseProps } from './collapse'
 import { Extra as CollapseItemDefault } from './item/collapse-item.stories'
 
 const config: Meta = {
@@ -28,26 +28,26 @@ export const _default: StoryObj<CollapseProps> = {
     items: [
       {
         key: '1',
-        ...CollapseItemDefault.args,
+        ...CollapseItemDefault.args
       },
 
       {
         key: '2',
-        ...CollapseItemDefault.args,
+        ...CollapseItemDefault.args
       },
 
       {
         key: '3',
-        ...CollapseItemDefault.args,
-      },
-    ],
+        ...CollapseItemDefault.args
+      }
+    ]
   }
 }
 
 export const Accordion: StoryObj<CollapseProps> = {
   args: {
     ..._default.args,
-    accordion: true,
+    accordion: true
   }
 }
 
@@ -57,7 +57,7 @@ export const HandleUniqueItems: StoryObj<CollapseProps> = {
     items: [
       {
         key: '1',
-        ...CollapseItemDefault.args,
+        ...CollapseItemDefault.args
       },
 
       {
@@ -65,15 +65,15 @@ export const HandleUniqueItems: StoryObj<CollapseProps> = {
         ...CollapseItemDefault.args,
         bordered: false,
         theme: 'primary',
-        hasContentSeparator: false,
+        hasContentSeparator: false
       },
 
       {
         key: '3',
-        ...CollapseItemDefault.args,
-      },
+        ...CollapseItemDefault.args
+      }
     ],
     bordered: true,
-    theme: 'success',
+    theme: 'success'
   }
 }
