@@ -30,7 +30,10 @@ export const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_TAGS(args.elementType, args.id)
     },
     tagGetCollectionForElementByTypeAndId: {
-      providesTags: (result, error, args) => providingTags.ELEMENT_TAGS(args.elementType, args.id)
+      providesTags: (result, error, args) =>
+        providingTags
+          .ELEMENT_TAGS(args.elementType, args.id)
+          .filter((tag) => tag !== undefined)
     }
   }
 })
