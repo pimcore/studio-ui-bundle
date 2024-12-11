@@ -86,6 +86,7 @@ import { type DynamicTypeObjectDataLastname } from '@Pimcore/modules/element/dyn
 import { type DynamicTypeObjectDataEmail } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-email'
 import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-gender'
 import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
+import { type DynamicTypeObjectDataCheckbox } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-checkbox'
 import { type DynamicTypeObjectDataDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date'
 import { type DynamicTypeObjectDataDatetime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-datetime'
 import { type DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date-range'
@@ -211,6 +212,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataEmail>(serviceIds['DynamicTypes/ObjectData/Email']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGender>(serviceIds['DynamicTypes/ObjectData/Gender']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataRgbaColor>(serviceIds['DynamicTypes/ObjectData/RgbaColor']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCheckbox>(serviceIds['DynamicTypes/ObjectData/Checkbox']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDate>(serviceIds['DynamicTypes/ObjectData/Date']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDatetime>(serviceIds['DynamicTypes/ObjectData/Datetime']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDateRange>(serviceIds['DynamicTypes/ObjectData/DateRange']))

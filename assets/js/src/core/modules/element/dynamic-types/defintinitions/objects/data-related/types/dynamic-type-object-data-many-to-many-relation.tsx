@@ -20,9 +20,6 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
-  type RgbaColorObjectDataDefinition
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
-import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/components/label/label'
 
@@ -39,7 +36,7 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
     )
   }
 
-  getObjectDataFormItemProps (props: RgbaColorObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: ManyToManyRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       label: <ManyToManyRelationLabel label={ props.title } />
