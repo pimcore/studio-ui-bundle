@@ -16,8 +16,8 @@ import { Job } from '../job/job'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStyles } from './job-list.styles'
 import { useTranslation } from 'react-i18next'
-import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { Collapse } from '@Pimcore/components/collapse/collapse'
 
 export const JobList = (): React.JSX.Element => {
   const { jobs } = useJobs()
@@ -28,7 +28,7 @@ export const JobList = (): React.JSX.Element => {
 
   const item = {
     key: '1',
-    title: <span>{t('jobs.notification.jobs', { count: jobs.length })}</span>,
+    label: <span>{t('jobs.notification.jobs', { count: jobs.length })}</span>,
     children:
   <AnimatePresence>
     {jobs.map((job) => (
@@ -49,13 +49,12 @@ export const JobList = (): React.JSX.Element => {
   }
 
   return (
-    <>
-      <Accordion
-        activeKey={ item.key }
-        className={ styles.jobList }
-        ghost
-        items={ [item] }
-      />
-    </>
+    <Collapse
+      bordered={ false }
+      className={ styles.jobList }
+      defaultActiveKeys={ [item.key] }
+      hasContentSeparator={ false }
+      items={ [item] }
+    />
   )
 }
