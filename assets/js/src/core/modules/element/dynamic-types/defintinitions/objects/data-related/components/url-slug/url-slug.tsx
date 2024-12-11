@@ -138,7 +138,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
           </List.Item>
         ) }
         size="small"
-        style={ { maxWidth: toCssDimension(props.width, undefined) } }
+        style={ { maxWidth: toCssDimension(props.width) } }
       />
     </>
   )
