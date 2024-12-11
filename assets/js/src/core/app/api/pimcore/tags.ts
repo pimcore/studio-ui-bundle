@@ -12,6 +12,7 @@
 */
 
 import { type ElementType } from 'types/element-type.d'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export type Tag = string | {
   type: string
@@ -103,7 +104,7 @@ export const invalidatingTags = {
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
-const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
+const getElementDetailTag = (elementType: ElementType, id: number): Tag | undefined => {
   switch (elementType) {
     case 'asset':
       return { type: tagNames.ASSET_DETAIL, id }
@@ -111,5 +112,5 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
   }
 
-  throw new Error(`Unknown element type: ${elementType}`)
+  trackError(new GeneralError(`Unknown element type: ${elementType}`))
 }

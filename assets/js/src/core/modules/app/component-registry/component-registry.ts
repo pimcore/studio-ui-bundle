@@ -13,6 +13,7 @@
 
 import { injectable } from 'inversify'
 import type React from 'react'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface ComponentRegistryEntry<T> {
   name: string
@@ -33,7 +34,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
 
   register (component: ComponentRegistryEntry<any>): void {
     if (this.has(component.name)) {
-      throw new Error(`Component with the name "${component.name}" already exists. Use the override method to override it`)
+      trackError(new GeneralError(`Component with the name "${component.name}" already exists. Use the override method to override it`))
     }
 
     this.registry[component.name] = component
@@ -45,7 +46,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
 
   get<T>(name: string): ComponentRegistryEntry<T>['component'] {
     if (!this.has(name)) {
-      throw new Error(`No component with the name "${name}" found`)
+      trackError(new GeneralError(`No component with the name "${name}" found`))
     }
 
     return this.registry[name].component
@@ -57,7 +58,7 @@ export class ComponentRegistry implements ComponentRegistryInterface {
 
   override <T>(name: string, component: ComponentRegistryEntry<T>): void {
     if (!this.has(name)) {
-      throw new Error(`No component named "${name}" found to override`)
+      trackError(new GeneralError(`No component named "${name}" found to override`))
     }
 
     this.registry[name] = component

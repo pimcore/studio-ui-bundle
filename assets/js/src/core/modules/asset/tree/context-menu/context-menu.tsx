@@ -38,7 +38,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 
   const uploadContext = React.useContext(UploadContext)!
-  const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
+  const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('asset')
   const { renameTreeContextMenuItem } = useRename('asset')
   const { deleteTreeContextMenuItem } = useDelete('asset')
@@ -90,7 +90,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     cutTreeContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteTreeContextMenuItem(props.node),
-    createZipDownloadContextMeuItem(props.node),
+    createZipDownloadContextMenuItem(props.node),
     downloadTreeContextMenuItem(props.node),
     {
       label: t('element.tree.context-menu.advanced'),

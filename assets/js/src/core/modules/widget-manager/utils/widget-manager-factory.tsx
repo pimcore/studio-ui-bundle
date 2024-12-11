@@ -18,6 +18,7 @@ import { WidgetManagerInnerContainer } from '../widget-manager-inner-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type WidgetRegistry } from '../services/widget-registry'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
   if (node.getComponent() === 'inner-widget-manager') {
@@ -34,7 +35,9 @@ export const widgetManagerFactory = (node: TabNode): ReactNode | undefined => {
   const widget = widgetRegistryService.getWidget(widgetName)
 
   if (widget === undefined) {
-    throw new Error(`Widget ${widgetName} not found`)
+    trackError(new GeneralError(`Widget ${widgetName} not found`))
+
+    return undefined
   }
 
   const { component } = widget

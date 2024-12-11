@@ -14,6 +14,7 @@
 import React, { type RefObject } from 'react'
 import { Tabs as AntdTabs, type TabsProps } from 'antd'
 import { useStyles } from '@Pimcore/components/tabs/tabs.styles'
+import cn from 'classnames'
 
 export interface ITabsProps extends TabsProps {
   onClose?: (any) => void
@@ -21,7 +22,11 @@ export interface ITabsProps extends TabsProps {
 
 const Component = ({ items, className, activeKey, onClose, onChange, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
-  const classNames = ['ant-tabs-line', styles.tabs, className]
+  const classNames = cn(
+    'ant-tabs-line',
+    styles.tabs,
+    className
+  )
 
   const onEdit = (key: string | React.MouseEvent<HTMLElement>, action: 'add' | 'remove'): void => {
     if (action === 'remove' && onClose !== undefined) {
@@ -32,14 +37,14 @@ const Component = ({ items, className, activeKey, onClose, onChange, ...props }:
   return (
     <AntdTabs
       activeKey={ activeKey }
-      className={ classNames.join(' ') }
+      className={ classNames }
       hideAdd
       items={ items }
       onChange={ onChange }
       onEdit={ onEdit }
       type={ onClose !== undefined ? 'editable-card' : 'line' }
-    >
-    </AntdTabs>
+      { ...props }
+    />
   )
 }
 

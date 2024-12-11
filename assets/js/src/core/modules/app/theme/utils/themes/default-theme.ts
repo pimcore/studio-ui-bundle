@@ -55,6 +55,7 @@ const defaultTheme = {
     colorTextTreeElement: '#404655',
     colorIconTree: '#404655',
     colorIconTreeUnpublished: 'rgba(64, 70, 85, 0.4)',
+    colorInfoBorderHover: '#b37feb',
     paddingTabs: 8,
     colorTextSidebarTitle: '#531dab',
     colorBgToolbar: '#f5f3fa',

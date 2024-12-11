@@ -15,6 +15,7 @@ import { type ElementType } from 'types/element-type.d'
 import { useContext } from 'react'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseElementContextReturn {
   id: number
@@ -31,5 +32,8 @@ export const useElementContext = (): UseElementContextReturn => {
     return { id: dataObjectId, elementType: 'data-object' }
   }
 
-  throw new Error('No element context found')
+  const errorMessage = 'No element context found'
+
+  trackError(new GeneralError(errorMessage))
+  throw new Error(errorMessage)
 }

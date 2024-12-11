@@ -13,11 +13,12 @@
 
 import React, { Children, type ReactNode, isValidElement, useContext, useEffect, useState } from 'react'
 import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider'
-import { useDroppable } from '@dnd-kit/core'
+import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
 import { useStyle } from './droppable.styles'
 import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
 import cn from 'classnames'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface DroppableContentProps {
   isDragActive: boolean
@@ -33,9 +34,10 @@ export interface DroppableProps {
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
+  onSort?: (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => void
 }
 
-export const Droppable = (props: DroppableProps): React.JSX.Element => {
+export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   const { styles } = useStyle()
   const context = useContext(DragAndDropInfoContext)
   const [isValidContext, setIsValidContext] = useState(false)
@@ -63,7 +65,15 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
       setIsValidContext(props.isValidContext as boolean)
     }
 
-    context.callbackRegistry!.current.register(id, () => {
+    context.callbackRegistry!.current.register(id, (event) => {
+      if (isValidContext && isValidData && context.getInfo().sortable !== undefined) {
+        if (event.over === null) {
+          return
+        }
+
+        props.onSort?.(context.getInfo(), event.active.id, event.over.id)
+        return
+      }
       if (!isValidData || !isValidContext || !isOver) return
 
       props.onDrop(context.getInfo())
@@ -77,10 +87,16 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
   const Child = Children.only(props.children)
 
   if (!isValidElement(Child)) {
-    throw new Error('Children must be a valid react component')
+    trackError(new GeneralError('Children must be a valid react component'))
+
+    return null
   }
 
   const Component = Child.type
+
+  if (context.getInfo().sortable !== undefined) {
+    return Child
+  }
 
   return (
     <div className={ cn(props.className, styles[props.variant ?? 'default'], props.shape !== 'angular' ? styles.round : undefined) }>

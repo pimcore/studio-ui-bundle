@@ -1,0 +1,11 @@
+<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="bar-chart-08">
+<g id="Icon">
+<path d="M3.5 7.25V8.75V7.25Z" fill="currentColor"/>
+<path d="M5.75 5.75V8.75V5.75Z" fill="currentColor"/>
+<path d="M8 4.25V8.75V4.25Z" fill="currentColor"/>
+<path d="M10.25 2.75V8.75V2.75Z" fill="currentColor"/>
+<path d="M10.5 10.5H3.1C2.53995 10.5 2.25992 10.5 2.04601 10.391C1.85785 10.2951 1.70487 10.1422 1.60899 9.95399C1.5 9.74008 1.5 9.46005 1.5 8.9V1.5M3.5 7.25V8.75M5.75 5.75V8.75M8 4.25V8.75M10.25 2.75V8.75" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</svg>

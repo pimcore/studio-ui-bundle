@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+
 interface FetchBlobWithPollingParams {
   url: string
   onSuccess: (blob: Blob) => void
@@ -30,7 +32,7 @@ export async function fetchBlobWithPolling ({
     } else if (response.status === 202) {
       setTimeout(fetchUrl, interval)
     } else {
-      throw new Error(`Unexpected response status: ${response.status}`)
+      trackError(new GeneralError(`Unexpected response status: ${response.status}`))
     }
   }
 

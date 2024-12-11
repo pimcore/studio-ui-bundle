@@ -15,6 +15,7 @@ import {
   type DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import React, { useEffect, useState } from 'react'
+import { isUndefined } from 'lodash'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -152,8 +153,10 @@ export const Table = ({
                 <IconButton
                   icon={ { value: 'group' } }
                   onClick={ async () => {
-                    await openElement({
-                      type: mapToElementType(info.row.original.type),
+                    const typeValue = mapToElementType(info.row.original.type)
+
+                    !isUndefined(typeValue) && await openElement({
+                      type: typeValue,
                       id: info.row.original.data.id
                     })
                   } }
