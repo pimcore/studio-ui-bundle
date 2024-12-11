@@ -32,7 +32,7 @@ interface UseHandleCheckProps {
 }
 
 interface NodeInfo {
-  node: { key: string }
+  node: { key: Key }
   checked: boolean
 }
 
@@ -56,6 +56,24 @@ export const useHandleCheck = ({
   const [unassignTag] = useTagUnassignFromElementMutation()
   const [loadingNodes, setLoadingNodes] = useState<Set<string>>(new Set())
 
+  const mutateTag = async (tagId: number, checked: boolean): Promise<void> => {
+    const mutation = checked ? assignTag : unassignTag
+
+    const response = (await mutation({ elementType, id: elementId, tagId })) as {
+      error?: { data?: { error?: string | null } }
+    }
+
+    if (response.error?.data?.error != null && response.error.data.error !== '') {
+      throw new Error(response.error.data.error)
+    }
+
+    if (response.error != null) {
+      throw new Error(
+        checked ? 'Failed to assign tag to element' : 'Failed to unassign tag from element'
+      )
+    }
+  }
+
   const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
     updateTagsForElementByTypeAndId({
       elementType,
@@ -64,32 +82,6 @@ export const useHandleCheck = ({
       checkedTags: checkedTags.map(Number)
     })
     setDefaultCheckedTags(checkedTags)
-  }
-
-  const assignTagToElement = async (tagId: number): Promise<void> => {
-    const assignTask = assignTag({ elementType, id: elementId, tagId })
-    const response = (await assignTask) as { error?: { data?: { error?: string | null } } }
-
-    if (response.error?.data?.error != null && response.error.data.error !== '') {
-      throw new Error(response.error.data.error)
-    }
-
-    if (response.error != null) {
-      throw new Error('Failed to assign tag to element')
-    }
-  }
-
-  const removeTagFromElement = async (tagId: number): Promise<void> => {
-    const unassignTask = unassignTag({ elementType, id: elementId, tagId })
-    const response = (await unassignTask) as { error?: { data?: { error?: string | null } } }
-
-    if (response.error?.data?.error != null && response.error.data.error !== '') {
-      throw new Error(response.error.data.error)
-    }
-
-    if (response.error != null) {
-      throw new Error('Failed to unassign tag from element')
-    }
   }
 
   const handleCheck = async (
@@ -101,11 +93,7 @@ export const useHandleCheck = ({
 
     void applyTagsToElement(checkedKeys.checked)
 
-    try {
-      info.checked
-        ? await assignTagToElement(tagId)
-        : await removeTagFromElement(tagId)
-    } catch {
+    try { await mutateTag(tagId, info.checked) } catch {
       const errorMessage = info.checked
         ? t('failed-to-assign-tag-to-element')
         : t('failed-to-un-assign-tag-to-element')
