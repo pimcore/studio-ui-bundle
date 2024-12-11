@@ -12,6 +12,7 @@
 */
 
 import React, { useContext, useEffect, useState } from 'react'
+import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import {
@@ -40,6 +41,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -84,9 +86,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         try {
           const response = await patchAsset(assetPatchForUpdate())
           const data = response.data
-          if (data?.jobRunId !== undefined) {
+          if (!isUndefined(data?.jobRunId)) {
             return data.jobRunId
           } else {
+            trackError(new GeneralError('JobRunId is undefined'))
             throw new Error('JobRunId is undefined')
           }
         } catch (error) {

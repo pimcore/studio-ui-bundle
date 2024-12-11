@@ -29,6 +29,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { type TreeProps } from 'antd'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface TagsTreeProps {
   elementId: number
@@ -70,10 +71,10 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
       console.log('Failed to assign tag to element')
     })
 
-    const response = (await assignTask) as any
+    const response = await assignTask
 
     if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
+      trackError(new ApiError(response.error))
     }
   }
 
@@ -88,10 +89,10 @@ export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, d
       console.log('Failed to remove tag from element')
     })
 
-    const response = (await unassignTask) as any
+    const response = await unassignTask
 
     if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
+      trackError(new ApiError(response.error))
     }
   }
 

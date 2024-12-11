@@ -21,6 +21,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { type UploadChangeParam } from '@Pimcore/components/upload/upload'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseFileUploaderProps {
   parentId?: string
@@ -40,17 +41,17 @@ export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUplo
 
   const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (parentId === undefined) {
-      throw new Error('Parent ID is required')
+      trackError(new GeneralError('Parent ID is required'))
     }
 
     const fileStates = fileList.map((file) => file.status)
     const allFullFilled = fileStates.every(item => item === 'done')
 
     uploadContext.setUploadFileList(fileList)
-    uploadContext.setUploadingNode(parentId)
+    uploadContext.setUploadingNode(parentId!)
 
     if (allFullFilled) {
-      dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(parentId))))
+      dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(parentId!))))
       uploadContext.setUploadFileList([])
       uploadContext.setUploadingNode(null)
     }

@@ -12,6 +12,7 @@
 */
 
 import i18n from 'i18next'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface IFormatDateTimeProps {
   timestamp: number | null
@@ -44,7 +45,9 @@ export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options 
       }
     )
   } catch (error) {
-    throw new Error(`Failed to format date time: ${error}`)
+    trackError(new GeneralError(`Failed to format date time: ${error}`))
+
+    return ''
   }
 }
 

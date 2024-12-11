@@ -18,7 +18,11 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL, tagNames.DEPENDENCIES],
   endpoints: {
     dependencyGetCollectionByElementType: {
-      providesTags: (result, error, args) => providingTags.ELEMENT_DEPENDENCIES(args.elementType, args.id)
+      providesTags: (result, error, args) => {
+        const tags = providingTags.ELEMENT_DEPENDENCIES(args.elementType, args.id)
+
+        return tags.filter((tag) => tag !== undefined)
+      }
     }
   }
 })

@@ -14,6 +14,7 @@
 import { type ElementType } from 'types/element-type.d'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface OpenElementWidgetProps {
   id: number
@@ -22,7 +23,7 @@ interface OpenElementWidgetProps {
 
 interface UseElementReturn {
   openElement: (props: OpenElementWidgetProps) => Promise<void>
-  mapToElementType: (elementType: string) => ElementType
+  mapToElementType: (elementType: string) => ElementType | undefined
 }
 
 export const useElementHelper = (): UseElementReturn => {
@@ -46,7 +47,7 @@ export const useElementHelper = (): UseElementReturn => {
     }
   }
 
-  function mapToElementType (elementType: string): ElementType {
+  function mapToElementType (elementType: string): ElementType | undefined {
     switch (elementType) {
       case 'asset':
         return 'asset'
@@ -60,7 +61,9 @@ export const useElementHelper = (): UseElementReturn => {
         return 'data-object'
 
       default:
-        throw new Error('Unknown element type: ' + elementType)
+        trackError(new GeneralError('Unknown element type: ' + elementType))
+
+        return undefined
     }
   }
 
