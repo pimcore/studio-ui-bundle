@@ -195,7 +195,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                 ref={ tableElement }
                 style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
               >
-                { hideColumnHeaders !== true && (
+                { !hideColumnHeaders && (
                   <thead className='ant-table-thead'>
                     {table.getHeaderGroups().map(headerGroup => (
                       <tr key={ headerGroup.id }>
