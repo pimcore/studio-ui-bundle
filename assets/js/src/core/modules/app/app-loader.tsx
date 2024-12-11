@@ -52,7 +52,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
     userFetcher
       .then(({ data, isSuccess, isError, error }) => {
-        isError && trackError(new ApiError(error))
+        // @todo check handling of 401
+        const _error = error as unknown as any
+        if (_error?.status !== 401) {
+          isError && trackError(new ApiError(error))
+        }
 
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
