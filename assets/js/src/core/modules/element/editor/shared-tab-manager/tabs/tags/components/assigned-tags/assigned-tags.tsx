@@ -11,21 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key, useState } from 'react'
-import {
-  type Tag,
-  useTagUnassignFromElementMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import React, { useMemo } from 'react'
+import { type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
-import {
-  useOptimisticUpdate
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
-import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Flex } from 'antd'
+import { useHandleCheck } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-handle-check-tags'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -33,34 +27,31 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
-  const [loadingRows, setLoadingRows] = useState({})
-  const { id, elementType } = useElementContext()
+  const { id: elementId, elementType } = useElementContext()
 
-  const [unassignTag] = useTagUnassignFromElementMutation()
-  const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
-  const flatTags = flattenArray(tags)
+  const checkedTags = useMemo(() => {
+    const tagEntries = Object.entries(tags)
+    return tagEntries
+      .map(([key, tag]) => ({ ...tag, key }))
+      .filter((tag) => tag.id !== undefined)
+  }, [tags])
 
-  async function removeTag (tag: Tag): Promise<void> {
-    const futureCheckedKeys = tags
-      .map((tag) => tag.id)
-      .filter((key: number) => tag.id !== key)
+  const { handleCheck } = useHandleCheck({
+    elementId,
+    elementType,
+    flatTags: checkedTags,
+    setDefaultCheckedTags: () => {}
+  })
 
-    updateTagsForElementByTypeAndId({
-      elementType,
-      id,
-      flatTags,
-      checkedTags: futureCheckedKeys as Key[]
-    })
-
-    try {
-      await unassignTag({
-        elementType,
-        id,
-        tagId: tag.id!
-      }).unwrap()
-    } catch (error) {
-      console.error(error)
-    }
+  const handleRemoveTag = async (tagId: string): Promise<void> => {
+    const updatedCheckedTags = checkedTags.filter((tag) => tag.id?.toString() !== tagId).map((tag) => tag.id!.toString())
+    await handleCheck(
+      {
+        checked: updatedCheckedTags,
+        halfChecked: []
+      },
+      { node: { key: tagId }, checked: false }
+    )
   }
 
   const columnHelper = createColumnHelper<TagWithActions>()
@@ -75,31 +66,21 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     }),
     columnHelper.accessor('actions', {
       header: t('tags.columns.actions'),
-      cell: (info) => {
-        const isLoading = loadingRows[info.row.id]
-
-        const handleClick = async (): Promise<void> => {
-          setLoadingRows({ ...loadingRows, [info.row.id]: true })
-          await removeTag(info.row.original)
-          setLoadingRows({ ...loadingRows, [info.row.id]: false })
-        }
-
-        return (
-          <Flex
-            align='center'
-            className='w-full h-full'
-            justify='center'
-          >
-            <IconButton
-              disabled={ isLoading }
-              icon={ { value: 'trash' } }
-              loading={ isLoading }
-              onClick={ handleClick }
-              type="link"
-            />
-          </Flex>
-        )
-      },
+      enableSorting: false,
+      cell: (info) => (
+        <Flex
+          align="center"
+          className='w-full h-full'
+          justify="center"
+        >
+          <IconButton
+            aria-label={ t('tags.actions.delete') }
+            icon={ { value: 'trash' } }
+            onClick={ async () => { await handleRemoveTag(info.row.original.id!.toString()) } }
+            type="link"
+          />
+        </Flex>
+      ),
       size: 60
     })
   ]
@@ -108,8 +89,9 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
     <Grid
       columns={ columns }
       data={ Object.values(tags) }
-      initialState={ { sorting: [{ id: 'path', desc: false }] } }
+      enableSorting
       isLoading={ isLoading }
+      sorting={ [{ id: 'path', desc: false }] }
     />
   )
 }
