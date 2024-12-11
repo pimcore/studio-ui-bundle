@@ -59,7 +59,7 @@ export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, hideColumnHeaders = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
@@ -195,57 +195,59 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                 ref={ tableElement }
                 style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
               >
-                <thead className='ant-table-thead'>
-                  {table.getHeaderGroups().map(headerGroup => (
-                    <tr key={ headerGroup.id }>
-                      {headerGroup.headers.map((header, index) => (
-                        <th
-                          className='ant-table-cell'
-                          key={ header.id }
-                          ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
-                          style={
-                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                                ? {
-                                    width: 'auto',
-                                    minWidth: header.column.getSize()
-                                  }
-                                : {
-                                    width: header.column.getSize(),
-                                    maxWidth: header.column.getSize()
-                                  }
-                            }
-                        >
-                          <div className='grid__cell-content'>
-                            <span>
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
+                { hideColumnHeaders !== true && (
+                  <thead className='ant-table-thead'>
+                    {table.getHeaderGroups().map(headerGroup => (
+                      <tr key={ headerGroup.id }>
+                        {headerGroup.headers.map((header, index) => (
+                          <th
+                            className='ant-table-cell'
+                            key={ header.id }
+                            ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
+                            style={
+                                header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                                  ? {
+                                      width: 'auto',
+                                      minWidth: header.column.getSize()
+                                    }
+                                  : {
+                                      width: header.column.getSize(),
+                                      maxWidth: header.column.getSize()
+                                    }
+                              }
+                          >
+                            <div className='grid__cell-content'>
+                              <span>
+                                {flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                              </span>
+
+                              {header.column.getCanSort() && (
+                                <div className='grid__sorter'>
+                                  <SortButton
+                                    allowUnsorted={ sorting === undefined }
+                                    onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
+                                    value={ getSortDirection(header.column) }
+                                  />
+                                </div>
                               )}
-                            </span>
+                            </div>
 
-                            {header.column.getCanSort() && (
-                              <div className='grid__sorter'>
-                                <SortButton
-                                  allowUnsorted={ sorting === undefined }
-                                  onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-                                  value={ getSortDirection(header.column) }
-                                />
-                              </div>
+                            {props.resizable === true && header.column.getCanResize() && (
+                            <Resizer
+                              header={ header }
+                              isResizing={ header.column.getIsResizing() }
+                              table={ table }
+                            />
                             )}
-                          </div>
-
-                          {props.resizable === true && header.column.getCanResize() && (
-                          <Resizer
-                            header={ header }
-                            isResizing={ header.column.getIsResizing() }
-                            table={ table }
-                          />
-                          )}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                )}
                 <tbody className="ant-table-tbody">
                   {table.getRowModel().rows.length === 0 && (
                   <tr className={ 'ant-table-row' }>

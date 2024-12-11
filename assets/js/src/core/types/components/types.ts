@@ -43,4 +43,5 @@ export interface GridProps {
   onSortingChange?: (sorting: SortingState) => void
   setRowId?: (originalRow: any, index: number, parent: any) => string
   autoWidth?: boolean
+  hideColumnHeaders?: boolean
 }
