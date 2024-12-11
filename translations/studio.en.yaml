@@ -372,3 +372,6 @@ navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 external-image.preview-placeholder: Add an external image
 image.dnd-target: Upload or drop an image here
+fallback: Fallback
+url-slug.add-site: Add Site
+url-slug.invalid: Please enter a valid URL slug (starting with a '/')

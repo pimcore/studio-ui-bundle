@@ -134,6 +134,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Gender': 'DynamicTypes/ObjectData/Gender',
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/Checkbox': 'DynamicTypes/ObjectData/Checkbox',
+  'DynamicTypes/ObjectData/UrlSlug': 'DynamicTypes/ObjectData/UrlSlug',
   'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
   'DynamicTypes/ObjectData/DateRange': 'DynamicTypes/ObjectData/DateRange',
