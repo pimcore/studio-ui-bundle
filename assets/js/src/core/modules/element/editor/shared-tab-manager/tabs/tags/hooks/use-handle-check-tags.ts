@@ -104,9 +104,11 @@ export const useHandleCheck = ({
         duration: 5
       })
 
-      void applyTagsToElement(
-        checkedKeys.checked.filter((key) => key !== String(tagId))
-      )
+      const updatedCheckedKeys = info.checked
+        ? checkedKeys.checked.filter((key) => key !== String(tagId))
+        : [...checkedKeys.checked, String(tagId)]
+
+      void applyTagsToElement(updatedCheckedKeys)
     } finally {
       setLoadingNodes((prev) => {
         const newSet = new Set(prev)
