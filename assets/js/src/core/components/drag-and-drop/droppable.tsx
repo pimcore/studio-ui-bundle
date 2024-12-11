@@ -13,7 +13,7 @@
 
 import React, { Children, type ReactNode, isValidElement, useContext, useEffect, useState } from 'react'
 import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider'
-import { useDroppable } from '@dnd-kit/core'
+import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
 import { useStyle } from './droppable.styles'
 import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
@@ -33,6 +33,7 @@ export interface DroppableProps {
   isValidContext: boolean | ((info: DragAndDropInfo) => boolean)
   isValidData?: ((info: DragAndDropInfo) => boolean)
   onDrop: (info: DragAndDropInfo) => void
+  onSort?: (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => void
 }
 
 export const Droppable = (props: DroppableProps): React.JSX.Element => {
@@ -63,7 +64,15 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
       setIsValidContext(props.isValidContext as boolean)
     }
 
-    context.callbackRegistry!.current.register(id, () => {
+    context.callbackRegistry!.current.register(id, (event) => {
+      if (isValidContext && isValidData && context.getInfo().sortable !== undefined) {
+        if (event.over === null) {
+          return
+        }
+
+        props.onSort?.(context.getInfo(), event.active.id, event.over.id)
+        return
+      }
       if (!isValidData || !isValidContext || !isOver) return
 
       props.onDrop(context.getInfo())
@@ -81,6 +90,10 @@ export const Droppable = (props: DroppableProps): React.JSX.Element => {
   }
 
   const Component = Child.type
+
+  if (context.getInfo().sortable !== undefined) {
+    return Child
+  }
 
   return (
     <div className={ cn(props.className, styles[props.variant ?? 'default'], props.shape !== 'angular' ? styles.round : undefined) }>

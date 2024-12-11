@@ -15,9 +15,71 @@ import { Avatar } from 'antd'
 import React from 'react'
 import { useStlyes } from './left-sidebar-view.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
+import { useMainNav } from '@Pimcore/modules/app/nav/hooks/use-main-nav'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStlyes()
+  const { addNavItem } = useMainNav()
+
+  addNavItem({
+    path: 'Settings/Document Types',
+    permission: 'documents'
+  })
+
+  addNavItem({
+    path: 'Tools/Glossary'
+  })
+
+  addNavItem({
+    path: 'Settings/User & Roles/Users',
+    className: 'item-style-modifier',
+    widgetConfig: {
+      name: 'Users',
+      id: 'user-management',
+      component: 'user-management',
+      config: {
+        icon: {
+          type: 'name',
+          value: 'user-01'
+        }
+      }
+    }
+  })
+
+  addNavItem({
+    path: 'Settings/User & Roles/Open ID Connect Config/Configuration'
+  })
+
+  addNavItem({
+    path: 'Settings',
+    icon: 'appstore-outlined'
+  })
+
+  addNavItem({
+    path: 'Tools',
+    icon: 'tools-outlined'
+  })
+
+  addNavItem({
+    path: 'Marketing',
+    icon: 'bar-chart-08'
+  })
+
+  addNavItem({
+    path: 'Customers',
+    icon: 'shopping-car-outlined'
+  })
+
+  addNavItem({
+    path: 'Cache',
+    icon: 'brush-03'
+  })
+
+  addNavItem({
+    path: 'System Related',
+    icon: 'shield-02'
+  })
 
   return (
     <div className={ styles.leftSidebar }>
@@ -26,6 +88,12 @@ export const LeftSidebarView = (): React.JSX.Element => {
         icon={ <Icon value='user-01' /> }
         size={ 26 }
       />
+
+      <ul className='left-sidebar__nav'>
+        <li>
+          <MainNav />
+        </li>
+      </ul>
     </div>
   )
 }

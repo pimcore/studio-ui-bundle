@@ -25,6 +25,7 @@ import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
+import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 
 interface FlexContainerProps {
   assets: AssetGetTreeApiResponse
@@ -38,6 +39,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
   const { uploadNewVersionContextMenuItem } = useUploadNewVersion()
+  const { openContextMenuItem } = useOpen('asset')
 
   const cards: ReactNode[] = []
   assets.items.forEach((asset) => {
@@ -50,6 +52,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
     }
 
     const dropdownItems: DropdownProps['menu']['items'] = [
+      openContextMenuItem(asset),
       {
         key: 'locate-in-tree',
         icon: <Icon value="target" />,

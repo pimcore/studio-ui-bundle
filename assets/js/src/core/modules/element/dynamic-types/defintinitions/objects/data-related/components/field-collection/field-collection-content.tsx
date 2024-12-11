@@ -13,12 +13,12 @@
 
 import { type FormListFieldData, type FormListOperation } from 'antd'
 import { type FieldCollectionProps } from './field-collection'
-import React from 'react'
-import { Accordion, type AccordionProps } from '@Pimcore/components/accordion/accordion'
-import { Button } from '@Pimcore/components/button/button'
-import { Box } from '@Pimcore/components/box/box'
+import React, { useState } from 'react'
 import { FieldCollectionItem } from './field-collection-item'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { CollapseItem, type CollapseItemProps } from '@Pimcore/components/collapse/item/collapse-item'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Space } from '@Pimcore/components/space/space'
 
 interface FieldCollectionContentProps extends FieldCollectionProps {
   fields: FormListFieldData[]
@@ -26,50 +26,60 @@ interface FieldCollectionContentProps extends FieldCollectionProps {
 }
 
 export const FieldCollectionContent = (props: FieldCollectionContentProps): React.JSX.Element => {
-  const { title, fields, operation, allowedTypes } = props
+  const { title, fields, operation, allowedTypes, border, collapsed } = props
+  const [collapseActive, setCollapseActive] = useState(collapsed ?? false)
+
   const fieldCollectionDropdownItems: DropdownMenuProps['items'] = allowedTypes.map((type) => {
     return {
       key: type,
       label: type,
-      onClick: () => { operation.add({ type }) }
+      onClick: (e) => {
+        e.domEvent.stopPropagation()
+        operation.add({ type })
+        setCollapseActive(true)
+      }
     }
   })
 
-  const items: AccordionProps['items'] = fields.map((field) => {
-    return {
-      title: <>{title} {field.name}</>,
-      forceRender: true,
-      children: (
-        <FieldCollectionItem
-          { ...props }
-          field={ field }
-          operation={ operation }
-        />
-      )
-    }
-  })
+  const onChange: CollapseItemProps['onChange'] = (keys): void => {
+    setCollapseActive(keys.length > 0)
+  }
 
   return (
-    <Accordion
-      bordered
-      ghost
-      items={ [
-        {
-          title: <>{title}</>,
-          forceRender: true,
-          children: (
-            <>
-              <Box padding={ { bottom: 'small' } }>
-                <Dropdown menu={ { items: fieldCollectionDropdownItems } }>
-                  <Button>New</Button>
-                </Dropdown>
-              </Box>
-
-              { fields.length > 0 && <Accordion items={ items } /> }
-            </>
-          )
-        }
-      ] }
-    />
+    <CollapseItem
+      active={ collapseActive }
+      bordered={ border }
+      contentPadding={ border === true ? { x: 'none', y: 'small' } : undefined }
+      extra={ (
+        <>
+          {fields.length === 0 && (
+            <Dropdown menu={ { items: fieldCollectionDropdownItems } }>
+              <IconTextButton
+                icon={ { value: 'plus' } }
+                onClick={ (e) => { e.stopPropagation() } }
+              >Add</IconTextButton>
+            </Dropdown>
+          )}
+        </>
+      ) }
+      extraPosition='start'
+      label={ title }
+      onChange={ onChange }
+    >
+      <Space
+        className='w-full'
+        direction='vertical'
+        size='small'
+      >
+        {fields.length !== 0 && fields.map((field, index) => (
+          <FieldCollectionItem
+            key={ field.key }
+            { ...props }
+            field={ field }
+            operation={ operation }
+          />
+        ))}
+      </Space>
+    </CollapseItem>
   )
 }

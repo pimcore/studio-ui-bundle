@@ -25,6 +25,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { useTranslation } from 'react-i18next'
+import { Box } from '@Pimcore/components/box/box'
 
 interface VersionIdentifiers {
   id: number
@@ -82,12 +83,18 @@ export const createVersionAccordionItem = ({
     return (
       <div>
         {selectable && (
-          <Checkbox
-            checked={ selected }
-            onChange={ () => {
-              selectVersion(vId)
-            } }
-          />
+          <Box
+            inline
+            padding={ { right: 'extra-small' } }
+          >
+            <Checkbox
+              checked={ selected }
+              onChange={ () => {
+                selectVersion(vId)
+              } }
+            />
+          </Box>
+
         )}
         <span className={ 'title' }>
           {`${t('version.version')} ${version.versionCount} | ${formatDateTime({
@@ -115,15 +122,17 @@ export const createVersionAccordionItem = ({
 
   const Extra = (): React.JSX.Element => {
     const { t } = useTranslation()
-    const color = published ? 'success' : 'blue'
-    const icon = published ? 'world' : 'user'
+
+    if (!published) {
+      return <></>
+    }
 
     return (
       <Tag
-        color={ color }
-        iconName={ icon }
+        color={ 'success' }
+        iconName={ 'world' }
       >
-        { published ? t('version.published') : t('version.own-draft') }
+        {t('version.published')}
       </Tag>
     )
   }
@@ -151,7 +160,7 @@ export const createVersionAccordionItem = ({
         vertical
       >
         <Flex
-          align='center'
+          align='top'
           justify='space-between'
         >
           <Tag className={ 'id-tag' }>ID: {version.id}</Tag>

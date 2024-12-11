@@ -11,14 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Popover } from 'antd'
 import { QuantityValueCalculatorContent } from './calculator-content'
 import {
-  type ConvertedQuantityValues,
-  useClassQuantityValueUnitConvertAllMutation
-} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+  useUnitQuantityValueConvertAllQuery
+} from '@Pimcore/modules/data-object/unit-slice.gen'
 
 interface QuantityValueCalculatorButtonProps {
   value: number
@@ -26,23 +25,9 @@ interface QuantityValueCalculatorButtonProps {
 }
 
 export const QuantityValueCalculatorButton = (props: QuantityValueCalculatorButtonProps): React.JSX.Element => {
-  const [apiResponse, setApiResponse] = useState<ConvertedQuantityValues | undefined>(undefined)
-  const [convertQuantityValue] = useClassQuantityValueUnitConvertAllMutation()
+  const { data } = useUnitQuantityValueConvertAllQuery({ value: props.value, fromUnitId: props.unitId })
 
-  useMemo((): void => {
-    convertQuantityValue({
-      convertAllParameters: {
-        value: props.value,
-        fromUnitId: props.unitId
-      }
-    }).then((res) => {
-      setApiResponse(res.data)
-    }).catch(() => {
-      throw new Error('Error converting quantity value.')
-    })
-  }, [props.value, props.unitId])
-
-  if (apiResponse === undefined || apiResponse.convertedValues.length === 0) {
+  if (data === undefined || data.convertedValues.length === 0) {
     return <></>
   }
 
@@ -50,7 +35,7 @@ export const QuantityValueCalculatorButton = (props: QuantityValueCalculatorButt
     <Popover
       content={
         <QuantityValueCalculatorContent
-          convertedValues={ apiResponse.convertedValues }
+          convertedValues={ data.convertedValues }
           unitId={ props.unitId }
           value={ props.value }
         />

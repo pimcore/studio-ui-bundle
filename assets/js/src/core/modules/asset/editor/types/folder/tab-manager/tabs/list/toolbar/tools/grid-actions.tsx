@@ -14,7 +14,7 @@
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useListSelectedRows } from '../../hooks/use-list'
+import { useListFilterOptions, useListPage, useListPageSize, useListSelectedRows } from '../../hooks/use-list'
 import {
   useAssetGetByIdQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -29,18 +29,26 @@ import {
   BatchEditModal
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { isEmpty } from 'lodash'
 
 export const GridActions = (): React.JSX.Element => {
   const { selectedRows } = useListSelectedRows()
-  const numberedSelectedRows = Object.keys(selectedRows).map(Number)
-  const hasSelectedItems = Object.keys(selectedRows).length > 0
+  const { filterOptions } = useListFilterOptions()
+  const { pageSize } = useListPageSize()
+  const { page } = useListPage()
+  const { id } = useAsset()
+
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
-  const { id } = useAsset()
   const { data } = useAssetGetByIdQuery({ id })
+
+  const numberedSelectedRows = Object.keys(selectedRows).map(Number)
+  const hasSelectedItems = Object.keys(selectedRows).length > 0
+
   const [jobTitle, setJobTitle] = useState<string>('Asset')
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
+
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -111,7 +119,21 @@ export const GridActions = (): React.JSX.Element => {
     if (hasSelectedItems) {
       createZipAssetListDownload({ jobTitle, requestData: { body: { assets: numberedSelectedRows } } })
     } else {
-      createZipFolderDownload({ jobTitle, requestData: { body: { folders: [id] } } })
+      createZipFolderDownload({
+        jobTitle,
+        requestData: {
+          body: {
+            folders: [id],
+            ...(!isEmpty(filterOptions) && {
+              filters: {
+                page,
+                pageSize,
+                ...filterOptions
+              }
+            })
+          }
+        }
+      })
     }
   }
 }
