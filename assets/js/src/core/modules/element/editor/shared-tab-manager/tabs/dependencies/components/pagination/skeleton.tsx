@@ -14,13 +14,14 @@
 import React from 'react'
 import { Skeleton } from 'antd'
 import { useStyle } from './skeleton.styles'
+import { SkeletonInput } from '@Pimcore/components/skeleton'
 
 export const PaginationSkeleton = (): React.JSX.Element => {
   const { styles } = useStyle()
 
   return (
     <div className={ styles.skeleton }>
-      <Skeleton.Input
+      <SkeletonInput
         active
         size={ 'small' }
       />
