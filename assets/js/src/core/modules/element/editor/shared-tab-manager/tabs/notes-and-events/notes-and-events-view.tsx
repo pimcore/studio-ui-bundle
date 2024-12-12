@@ -13,6 +13,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { kebabCase } from 'lodash'
 import {
   type Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
@@ -61,9 +62,12 @@ export const NotesAndEventsTabView = ({
     key: string
   }> = notes.map((note) => {
     let showDetails = false
+
     const formatedData: any[] = []
+
     if (Array.isArray(note.data) && note.data.length > 0) {
       showDetails = true
+
       note.data.forEach((noteData) => {
         const tempData = structuredClone(noteData)
         if (typeof tempData.data === 'object') {
@@ -77,7 +81,7 @@ export const NotesAndEventsTabView = ({
     }
 
     const extra = (): React.JSX.Element => {
-      const type = note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined
+      const type = note.type !== '' ? t(`notes-and-events.${kebabCase(note.type)}`) : undefined
 
       return (
         <Space
