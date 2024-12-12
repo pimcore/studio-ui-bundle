@@ -204,7 +204,6 @@ export const NotesAndEventsTabView = ({
         >
           <Collapse
             accordion={ false }
-            headerAlign={ 'center' }
             items={ NotesAndEvents }
           />
         </Content>
