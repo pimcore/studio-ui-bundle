@@ -12,11 +12,10 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { Collapse, type CollapseProps, Flex, type FlexProps } from 'antd'
-import cn from 'classnames'
+import { Collapse, type CollapseProps, Flex } from 'antd'
 import { useStyles } from '@Pimcore/components/accordion/accordion.styles'
 import { type ItemType } from 'rc-collapse/es/interface'
-import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { type CollapsibleType } from 'antd/es/collapse/CollapsePanel'
 
@@ -37,7 +36,6 @@ export interface AccordionProps extends Omit<CollapseProps, 'expandIconPosition'
   spaced?: boolean
   bordered?: boolean
   expandIconPosition?: CustomExpandIconPosition
-  headerAlign?: FlexProps['align']
 }
 
 export const Accordion = ({
@@ -45,7 +43,6 @@ export const Accordion = ({
   accordion = false,
   spaced = false,
   bordered = false,
-  headerAlign = 'baseline',
   className,
   activeKey,
   expandIconPosition = 'after-title',
@@ -53,8 +50,6 @@ export const Accordion = ({
 }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
   const [expandedIds, setExpandedIds] = useState<string[]>([])
-
-  const { t } = useTranslation()
 
   useEffect(() => {
     setExpandedIds([String(activeKey)])
@@ -75,14 +70,12 @@ export const Accordion = ({
   }
 
   const itemsWithCardClassName = items?.map((item) => {
-    const chevronClassName = cn('accordion__chevron', {
-      'accordion__chevron--up': item.key != null && expandedIds.includes(String(item.key))
-    })
+    const chevronClassName = ['accordion__chevron', item.key != null && expandedIds.includes(String(item.key)) ? 'accordion__chevron--up' : ''].join(' ')
 
     const chevronButton = (): React.ReactElement => {
       return (
         <IconButton
-          aria-label={ t('aria.notes-and-events.expand') }
+          aria-label={ i18n.t('aria.notes-and-events.expand') }
           className={ 'accordion__chevron-btn' }
           icon={ {
             value: 'chevron-up',
@@ -105,24 +98,23 @@ export const Accordion = ({
 
     const collapseDisabled: { collapsible: CollapsibleType } = { collapsible: 'icon' }
 
-    const itemClassNames = cn(
-      item?.className,
-      'accordion__item',
-      { [`accordion__item--${item.theme}`]: item.theme !== undefined }
-    )
+    const itemClassNames = [item?.className, 'accordion__item'].filter(Boolean)
+    if (item.theme !== undefined) {
+      itemClassNames.push(`accordion__item--${item.theme}`)
+    }
 
     return ({
       ...restItem,
-      className: itemClassNames,
+      className: itemClassNames.join(' '),
       label: <>
         <Flex
-          align={ headerAlign }
+          align={ 'baseline' }
         >
           {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
-                        chevronButton()}
+              chevronButton()}
           {item.title}
           {expandIconPosition === 'after-title' && (item.children !== null) && !(item.disabled === true) &&
-                        chevronButton()}
+              chevronButton()}
 
           <span className="accordion-item__header-info">{item.info !== null && item.info}</span>
         </Flex>
@@ -132,19 +124,28 @@ export const Accordion = ({
     })
   }) ?? []
 
-  const allClassNames = cn('accordion', className, styles.accordion, {
-    'accordion--spaced': spaced,
-    [styles.spaced]: spaced,
-    'accordion--bordered': bordered,
-    [styles.bordered]: bordered
-  })
+  const allClassNames = [
+    'accordion',
+    className,
+    styles.accordion
+  ]
+
+  if (spaced) {
+    allClassNames.push('accordion--spaced', styles.spaced)
+    allClassNames.push(styles.spaced)
+  }
+
+  if (bordered) {
+    allClassNames.push('accordion--bordered', styles.bordered)
+    allClassNames.push(styles.bordered)
+  }
 
   return (
     <Collapse
       accordion={ accordion }
       activeKey={ expandedIds }
       bordered={ !spaced }
-      className={ allClassNames }
+      className={ allClassNames.join(' ') }
       items={ itemsWithCardClassName }
       onChange={ (keys) => {
         setExpandedIds(Array.isArray(keys) ? keys : [keys])
