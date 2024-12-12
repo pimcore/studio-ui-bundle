@@ -111,10 +111,10 @@ export const Accordion = ({
           align={ 'baseline' }
         >
           {expandIconPosition === 'start' && (item.children !== null) && !(item.disabled === true) &&
-              chevronButton()}
+                        chevronButton()}
           {item.title}
           {expandIconPosition === 'after-title' && (item.children !== null) && !(item.disabled === true) &&
-              chevronButton()}
+                        chevronButton()}
 
           <span className="accordion-item__header-info">{item.info !== null && item.info}</span>
         </Flex>
