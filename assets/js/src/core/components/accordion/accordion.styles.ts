@@ -23,57 +23,57 @@ export const useStyles = createStyles(({ token, css }) => {
 
   return {
     accordion: css`
-      border: none;
+        border: none;
 
-      &.ant-collapse-borderless.accordion--spaced {
-        > .ant-collapse-item:last-child {
-          > .ant-collapse-header[aria-expanded='false'] {
-            border-radius: ${themeToken.borderRadiusLG}px;
-          }
+        &.ant-collapse-borderless.accordion--spaced {
+            > .ant-collapse-item:last-child {
+                > .ant-collapse-header[aria-expanded='false'] {
+                    border-radius: ${themeToken.borderRadiusLG}px;
+                }
 
-          > .ant-collapse-header[aria-expanded='true'] {
-            border-top-left-radius: ${themeToken.borderRadiusLG}px;
-            border-top-right-radius: ${themeToken.borderRadiusLG}px;
-          }
+                > .ant-collapse-header[aria-expanded='true'] {
+                    border-top-left-radius: ${themeToken.borderRadiusLG}px;
+                    border-top-right-radius: ${themeToken.borderRadiusLG}px;
+                }
+            }
         }
-      }
 
         .ant-collapse-item.accordion__item--theme-success {
             border: 1px solid ${themeToken.highlightBorderColor};
             background-color: ${themeToken.highlightBackgroundColor};
             border-radius: ${themeToken.borderRadiusLG}px !important;
 
-          > .ant-collapse-content {
-            border-top: 1px solid ${themeToken.highlightBorderColor};
-            background-color: transparent;
-          }
+            > .ant-collapse-content {
+                border-top: 1px solid ${themeToken.highlightBorderColor};
+                background-color: transparent;
+            }
         }
 
         .ant-collapse-item.accordion__item--theme-primary {
-          border: 1px solid ${themeToken.colorBorder};
-          border-radius: ${themeToken.borderRadiusLG}px !important;
-          background-color: ${themeToken.colorFillAlter};
+            border: 1px solid ${themeToken.colorBorder};
+            border-radius: ${themeToken.borderRadiusLG}px !important;
+            background-color: ${themeToken.colorFillAlter};
 
-          > .ant-collapse-content {
-            border-top: 1px solid ${themeToken.colorBorder};
-            background-color: transparent;
-          }
+            > .ant-collapse-content {
+                border-top: 1px solid ${themeToken.colorBorder};
+                background-color: transparent;
+            }
         }
 
         .accordion__item {
-          > .ant-collapse-header {
-            display: inline-flex;
-            width: 100%;
-            align-items: baseline;
+            > .ant-collapse-header {
+                display: inline-flex;
+                width: 100%;
+                align-items: baseline;
 
-            > .ant-collapse-header-text {
-              margin-inline-end: 0;
-            }
+                > .ant-collapse-header-text {
+                    margin-inline-end: 0;
+                }
 
-            > .ant-collapse-expand-icon {
-              display: none;
+                > .ant-collapse-expand-icon {
+                    display: none;
+                }
             }
-          }
 
             .accordion__chevron-btn {
               display: flex;
@@ -83,19 +83,19 @@ export const useStyles = createStyles(({ token, css }) => {
             }
 
             .accordion__chevron {
-              rotate: 180deg;
-              transition-duration: 0.6s;
-              transition-property: transform;
+                rotate: 180deg;
+                transition-duration: 0.6s;
+                transition-property: transform;
             }
 
             .accordion__chevron--up {
-              transform: rotate(-180deg);
+                transform: rotate(-180deg);
             }
         }
 
         .ant-collapse-extra {
-          order: 1;
-          margin-left: 5px;
+            order: 1;
+            margin-left: 5px;
         }
     `,
     bordered: css`
@@ -130,7 +130,6 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
     `,
-
     spaced: css`
       background: ${token.colorBgContainer};
 
@@ -139,14 +138,17 @@ export const useStyles = createStyles(({ token, css }) => {
         border-bottom: none;
       }
 
-      .ant-collapse-header {
+      .ant-collapse-header[aria-expanded='false'] {
         background-color: ${token.colorBgSelectedTab};
         border: 1px solid ${token.colorBorder};
         border-radius: 5px;
       }
 
       .ant-collapse-header[aria-expanded='true'] {
-        border-radius: 5px 5px 0 0;
+        background-color: ${token.colorBgSelectedTab};
+        border: 1px solid ${token.colorBorder};
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
       }
 
       .ant-collapse-content-box {
