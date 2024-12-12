@@ -19,6 +19,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 interface UseShortcutActionsReturn {
   removeAndApplyTagsToChildren: () => Promise<void>
@@ -41,13 +42,13 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
       console.log('Failed to apply tags to children')
     })
 
-    const response = (await assignTask) as any
+    const response = await assignTask
 
     if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
+      trackError(new ApiError(response.error))
     }
 
-    const data = response.data
+    const data = response.data!
     return data.jobRunId
   }
 

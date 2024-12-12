@@ -21,19 +21,22 @@ import { Box, type BoxProps } from '@Pimcore/components/box/box'
 
 type AntdCollapsePropsItem = Exclude<CollapseProps['items'], undefined>[number]
 
-export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | 'onChange' | 'showArrow'> {
+export interface CollapseStyleProps {
   size?: CollapseProps['size']
   bordered?: CollapseProps['bordered']
-  active?: boolean
-  defaultActive?: boolean
   expandIcon?: CollapseProps['expandIcon']
   expandIconPosition?: CollapseProps['expandIconPosition']
-  onChange?: CollapseProps['onChange']
-  subLabel?: React.ReactNode
   extraPosition?: 'start' | 'end'
   theme?: 'success' | 'primary' | 'simple' | 'default' | 'card-with-highlight' | 'fieldset'
   contentPadding?: BoxProps['padding']
   hasContentSeparator?: boolean
+}
+
+export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | 'onChange' | 'showArrow'>, CollapseStyleProps {
+  active?: boolean
+  defaultActive?: boolean
+  onChange?: CollapseProps['onChange']
+  subLabel?: React.ReactNode
 }
 
 export const ExpandIcon = ({ isActive }: { isActive: boolean }): React.ReactElement => {

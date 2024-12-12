@@ -24,6 +24,9 @@ import {
 } from '../asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/mercure-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -31,17 +34,30 @@ export interface IAppLoaderProps {
 
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const [translations] = useTranslationGetCollectionMutation()
   const { i18n } = useTranslation()
+
   const [isLoading, setIsLoading] = useState(true)
+
+  const [translations] = useTranslationGetCollectionMutation()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
+
+  const modal = useAlertModal()
+
+  // Register the modal instance to allow centralized error message display throughout the project
+  ErrorModalService.setModalInstance(modal)
 
   async function initLoadUser (): Promise<any> {
     const userFetcher = dispatch(api.endpoints.userGetCurrentInformation.initiate())
     await fetchMercureCookie()
 
     userFetcher
-      .then(({ data, isSuccess }) => {
+      .then(({ data, isSuccess, isError, error }) => {
+        // @todo check handling of 401
+        const _error = error as unknown as any
+        if (_error?.status !== 401) {
+          isError && trackError(new ApiError(error))
+        }
+
         if (isSuccess && data !== undefined) {
           dispatch(setUser(data))
         }
@@ -55,7 +71,9 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     const settingsFetcher = dispatch(settingsApi.endpoints.systemSettingsGet.initiate())
 
     settingsFetcher
-      .then(({ data, isSuccess }) => {
+      .then(({ data, isSuccess, isError, error }) => {
+        isError && trackError(new ApiError(error))
+
         if (isSuccess && data !== undefined) {
           dispatch(setSettings(data))
         }

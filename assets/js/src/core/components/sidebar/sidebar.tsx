@@ -14,6 +14,7 @@
 import { useStyle } from './sidebar.styles'
 import React, { isValidElement, useState } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface SidebarProps {
   entries: ISidebarEntry[]
@@ -89,11 +90,11 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
               const { component, key, ...props } = button
 
               if (!isValidElement(component)) {
-                throw new Error('SidebarButton must be a valid react component')
+                trackError(new GeneralError('SidebarButton must be a valid react component'))
               }
 
               const SidebarButton = component.type
-              const sidebarButtonProps = component.props as any
+              const sidebarButtonProps = component.props
 
               return (
                 <SidebarButton

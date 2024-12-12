@@ -30,12 +30,12 @@ import { Space } from '@Pimcore/components/space/space'
 import i18n from 'i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
+import { Collapse } from '@Pimcore/components/collapse/collapse'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -58,7 +58,7 @@ export const NotesAndEventsTabView = ({
   const NotesAndEvents: Array<{
     children: React.JSX.Element
     extra: React.JSX.Element
-    title: React.JSX.Element
+    label: React.JSX.Element
     key: string
   }> = notes.map((note) => {
     let showDetails = false
@@ -138,7 +138,7 @@ export const NotesAndEventsTabView = ({
 
     return ({
       key: note.id.toString(),
-      title: <Split
+      label: <Split
         dividerSize='small'
         size='extra-small'
         theme='secondary'
@@ -202,11 +202,10 @@ export const NotesAndEventsTabView = ({
             text: t('notes-and-events.no-notes-and-events-to-show')
           } }
         >
-          <Accordion
+          <Collapse
             accordion={ false }
             headerAlign={ 'center' }
             items={ NotesAndEvents }
-            spaced
           />
         </Content>
       </Content>

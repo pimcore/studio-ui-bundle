@@ -23,6 +23,7 @@ import { useKeyboardNavigation } from '../keyboard-navigation/use-keyboard-navig
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { type ExtendedCellContext } from '../grid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface DefaultCellProps extends ExtendedCellContext {}
 
@@ -102,7 +103,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
     }
 
     if (isEditable && table.options.meta?.onUpdateCellData === undefined) {
-      throw new Error('onUpdateCellData is required when using editable cells')
+      trackError(new GeneralError('onUpdateCellData is required when using editable cells'))
     }
 
     setIsInEditMode(true)
