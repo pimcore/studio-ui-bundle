@@ -14,7 +14,7 @@
 import React from 'react'
 import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
 
-interface ISkeletonProps extends SkeletonProps {}
+export interface ISkeletonProps extends SkeletonProps {}
 
 const Skeleton = (props: ISkeletonProps): JSX.Element => {
   return (

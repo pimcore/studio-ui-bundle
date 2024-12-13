@@ -15,7 +15,7 @@ import React from 'react'
 import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
 import type { SkeletonInputProps } from 'antd/es/skeleton/Input'
 
-interface ISkeletonInputProps extends SkeletonProps, SkeletonInputProps {}
+export interface ISkeletonInputProps extends SkeletonProps, SkeletonInputProps {}
 
 const SkeletonInput = (props: ISkeletonInputProps): JSX.Element => {
   return (

@@ -21,27 +21,31 @@ import SkeletonInput from './components/skeleton-input'
 const config: Meta = {
   title: 'Components/General/Skeleton',
   component: Skeleton,
-  tags: ['autodocs']
+  args: {
+    active: true
+  },
+  tags: ['autodocs'],
+  parameters: {
+    docs: {
+      source: {
+        type: 'code'
+      }
+    }
+  }
 }
 
-export const Basic = (): JSX.Element => <Skeleton active />
+export const _default = {}
 
 export const WithAvatar = (): JSX.Element => (
-  <SkeletonAvatar active />
+  <SkeletonAvatar />
 )
 
 export const WithButton = (): JSX.Element => (
-  <SkeletonButton
-    active
-    size="default"
-  />
+  <SkeletonButton />
 )
 
 export const WithInput = (): JSX.Element => (
-  <SkeletonInput
-    active
-    size="large"
-  />
+  <SkeletonInput />
 )
 
 export default config
