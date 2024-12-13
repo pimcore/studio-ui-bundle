@@ -34,6 +34,12 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementGetSubtype: build.query<ElementGetSubtypeApiResponse, ElementGetSubtypeApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/subtype/${queryArg.id}`,
+                }),
+                providesTags: ["Elements"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -74,6 +80,13 @@ export type ElementGetIdByPathApiArg = {
     /** Filter elements by matching element path. */
     elementPath: string;
 };
+export type ElementGetSubtypeApiResponse = /** status 200 Subtype of the element */ Subtype;
+export type ElementGetSubtypeApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
 export type Error = {
     /** Message */
     message: string;
@@ -98,9 +111,22 @@ export type FolderData = {
     /** Folder Name */
     folderName: string;
 };
+export type Subtype = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Element Id */
+    elementId: number;
+    /** Element Type */
+    elementType: string;
+    /** Element Subtype */
+    elementSubtype: string;
+};
 export const {
     useElementDeleteMutation,
     useElementGetDeleteInfoQuery,
     useElementFolderCreateMutation,
     useElementGetIdByPathQuery,
+    useElementGetSubtypeQuery,
 } = injectedRtkApi;
