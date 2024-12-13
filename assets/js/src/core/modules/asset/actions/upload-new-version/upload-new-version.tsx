@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Asset, useAssetReplaceMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type Asset, type AssetReplaceApiResponse, useAssetReplaceMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, accept?: string) => void
@@ -30,6 +31,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
   const messageApi = useMessage()
+  const { updateFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const [replaceAsset] = useAssetReplaceMutation()
 
   const uploadNewVersion = (id: number, accept?: string, onFinish?: () => void): void => {
@@ -65,6 +67,13 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       if (response.error !== undefined) {
         throw new Error(response.error.data.error as string)
       }
+
+      const data = response.data as AssetReplaceApiResponse
+      updateFieldValue(
+        id,
+        'filename',
+        data.data
+      )
     } catch (e: any) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.error({
