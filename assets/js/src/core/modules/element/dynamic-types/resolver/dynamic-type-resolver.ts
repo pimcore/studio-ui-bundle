@@ -13,6 +13,7 @@
 
 import { type ReactElement } from 'react'
 import { type DynamicTypeAbstract } from '../registry/dynamic-type-registry-abstract'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export const DynamicTypesResolverTargets = {
   GRID_CELL: 'GRID_CELL',
@@ -31,7 +32,7 @@ export type ITargetCallbackNameMap = typeof targetCallbackNameMap
 export class DynamicTypeResolver {
   resolve<T>({ target, dynamicType }: { target: keyof ITargetCallbackNameMap, dynamicType: DynamicTypeAbstract }): (props: T) => ReactElement<T> {
     if (!this.hasCallable(target, dynamicType)) {
-      throw new Error(`DynamicTypeResolver: ${dynamicType.id} does not have a callable ${targetCallbackNameMap[target]}`)
+      trackError(new GeneralError(`DynamicTypeResolver: ${dynamicType.id} does not have a callable ${targetCallbackNameMap[target]}`))
     }
 
     return (props: T) => dynamicType[targetCallbackNameMap[target]].bind(dynamicType)(props)

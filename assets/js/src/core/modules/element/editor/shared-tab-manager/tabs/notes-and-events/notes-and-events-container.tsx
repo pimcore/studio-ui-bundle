@@ -48,11 +48,10 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   async function onClickTrash (id: number): Promise<void> {
     await deleteNote({ id })
 
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.ELEMENT_NOTES_AND_EVENTS(elementType, id)
-      )
-    )
+    const invalidateTagsList = invalidatingTags.ELEMENT_NOTES_AND_EVENTS(elementType, id)
+    const filteredInvalidateTags = invalidateTagsList.filter((tag) => tag !== undefined)
+
+    dispatch(api.util.invalidateTags(filteredInvalidateTags))
   }
 
   if (isLoading) {

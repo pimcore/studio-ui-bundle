@@ -18,20 +18,22 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from '@Pimcore/app/router/router'
 import { AppLoader } from '@Pimcore/modules/app/app-loader'
 import { DateTimeConfig } from '@Pimcore/app/config/date-time'
+import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 
 export const AppView = (): React.JSX.Element => {
   return (
     <>
-
-      <GlobalProvider>
-        <AntApp>
-          <DateTimeConfig>
-            <AppLoader>
-              <RouterProvider router={ router } />
-            </AppLoader>
-          </DateTimeConfig>
-        </AntApp>
-      </GlobalProvider>
+      <ErrorBoundary>
+        <GlobalProvider>
+          <AntApp>
+            <DateTimeConfig>
+              <AppLoader>
+                <RouterProvider router={ router } />
+              </AppLoader>
+            </DateTimeConfig>
+          </AntApp>
+        </GlobalProvider>
+      </ErrorBoundary>
     </>
   )
 }

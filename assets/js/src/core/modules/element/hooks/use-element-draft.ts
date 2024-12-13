@@ -23,6 +23,7 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import { type UseTabsDraftReturn } from '../draft/hooks/use-tabs'
 import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
@@ -48,13 +49,16 @@ interface UseElementDraftReturn extends
 export const useElementDraft = (id: number, elementType: ElementType): UseElementDraftReturn => {
   if (elementType === 'asset') {
     const draft = useAssetDraft(id)
+
     return { ...draft, element: draft.asset }
   }
 
   if (elementType === 'data-object') {
     const draft = useDataObjectDraft(id)
+
     return { ...draft, element: draft.dataObject }
   }
 
+  trackError(new GeneralError('Element type not supported: ' + elementType))
   throw new Error('Element type not supported: ' + elementType)
 }

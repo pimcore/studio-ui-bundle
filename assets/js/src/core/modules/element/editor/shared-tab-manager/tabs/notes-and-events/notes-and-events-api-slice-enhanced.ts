@@ -32,10 +32,18 @@ export const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_ID(args.id)
     },
     noteElementGetCollection: {
-      providesTags: (result, error, args) => providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+      providesTags: (result, error, args) => {
+        const tags = providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+
+        return tags.filter((tag) => tag !== undefined)
+      }
     },
     noteElementCreate: {
-      invalidatesTags: (result, error, args) => providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+      invalidatesTags: (result, error, args) => {
+        const tags = providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+
+        return tags.filter((tag) => tag !== undefined)
+      }
     }
   }
 })

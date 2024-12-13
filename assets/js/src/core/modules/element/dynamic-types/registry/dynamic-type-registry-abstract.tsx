@@ -12,6 +12,7 @@
 */
 
 import { injectable } from 'inversify'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 @injectable()
 export abstract class DynamicTypeAbstract {
@@ -24,7 +25,7 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
 
   registerDynamicType (type: GenericDynamicTypeAbstract): void {
     if (this.dynamicTypes.has(type.id)) {
-      throw new Error(`Dynamic type with id "${type.id}" already exists`)
+      trackError(new GeneralError(`Dynamic type with id "${type.id}" already exists`))
     }
 
     this.dynamicTypes.set(type.id, type)
@@ -34,10 +35,10 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
     const dynamicType = this.dynamicTypes.get(id)
 
     if (dynamicType === undefined) {
-      throw new Error(`Dynamic type with id "${id}" not found`)
+      trackError(new GeneralError(`Dynamic type with id "${id}" not found`))
     }
 
-    return dynamicType
+    return dynamicType!
   }
 
   getDynamicTypes (): GenericDynamicTypeAbstract[] {
@@ -46,7 +47,7 @@ export abstract class DynamicTypeRegistryAbstract<GenericDynamicTypeAbstract ext
 
   overrideDynamicType (type: GenericDynamicTypeAbstract): void {
     if (!this.dynamicTypes.has(type.id)) {
-      throw new Error(`Dynamic type with id "${type.id}" not found`)
+      trackError(new GeneralError(`Dynamic type with id "${type.id}" not found`))
     }
 
     this.dynamicTypes.set(type.id, type)
