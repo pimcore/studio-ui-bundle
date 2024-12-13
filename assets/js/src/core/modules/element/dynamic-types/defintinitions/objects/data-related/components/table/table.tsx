@@ -11,13 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useTableValue, type TableValue } from './hooks/use-table-value'
+import { getCopyData, getPasteData } from './utils/copy-paste'
 
 export interface TableProps {
   rows: number | null
@@ -26,41 +28,112 @@ export interface TableProps {
   onChange?: (value: TableValue | null) => void
 }
 
-export type TableValue = string[][]
-
 export const Table = (props: TableProps): React.JSX.Element => {
-  const [value, setValue] = useState<TableValue | null>(props.value ?? null)
-  const [key, setKey] = useState<number>(0)
   const { t } = useTranslation()
-  const { confirm } = useFormModal()
+  const modal = useFormModal()
+  const { confirm } = modal
 
-  const onChange = (value: TableValue | null): void => {
-    setValue(value)
-  }
-
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value)
-    }
-  }, [value])
-
-  const emptyValue = (): void => {
-    if (value !== null) {
-      setValue([])
-      setKey(key + 1) // force re-render
-    }
-  }
+  const {
+    value,
+    setValue,
+    activeCell,
+    setActiveCell,
+    key,
+    emptyValue,
+    addRow,
+    addColumn,
+    deleteRow,
+    deleteColumn,
+    duplicateRow,
+    rows,
+    cols
+  } = useTableValue({ initialValue: props.value ?? null, onChange: props.onChange, cols: props.cols, rows: props.rows })
 
   return (
     <>
       <TableGrid
-        cols={ props.cols }
+        cols={ cols }
         key={ key }
-        onChange={ onChange }
-        rows={ props.rows }
+        onActiveCellChange={ setActiveCell }
+        onChange={ setValue }
+        rows={ rows }
         value={ value }
       />
       <Box padding="extra-small">
+
+        <Tooltip title={ t('table.add-column') }>
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ addColumn }
+            type="default"
+          />
+        </Tooltip>
+        <Tooltip title={ t('table.delete-column') }>
+          <IconButton
+            disabled={ activeCell === undefined }
+            icon={ { value: 'trash' } }
+            onClick={ deleteColumn }
+            type="default"
+          />
+        </Tooltip>
+        <Tooltip title={ t('table.add-row') }>
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ addRow }
+            type="default"
+          />
+        </Tooltip>
+        <Tooltip title={ t('table.delete-row') }>
+          <IconButton
+            disabled={ activeCell === undefined }
+            icon={ { value: 'trash' } }
+            onClick={ deleteRow }
+            type="default"
+          />
+        </Tooltip>
+        <Tooltip title={ t('table.duplicate-row') }>
+          <IconButton
+            disabled={ activeCell === undefined }
+            icon={ { value: 'trash' } }
+            onClick={ duplicateRow }
+            type="default"
+          />
+        </Tooltip>
+
+        <Tooltip title={ t('table.copy') }>
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => modal.textarea({
+              title: t('table.copy'),
+              initialValue: getCopyData(value),
+              okText: t('copy'),
+              onOk: (value: string) => {
+                void navigator.clipboard.writeText(value)
+              }
+            })
+              }
+            type="default"
+          />
+        </Tooltip>
+
+        <Tooltip title={ t('table.paste') }>
+          <IconButton
+            icon={ { value: 'trash' } }
+            onClick={ () => modal.textarea({
+              title: t('table.paste'),
+              placeholder: t('paste-placeholder'),
+              okText: t('save'),
+              onOk: (value: string) => {
+                if (value !== '') {
+                  setValue(getPasteData(value))
+                }
+              }
+            })
+              }
+            type="default"
+          />
+        </Tooltip>
+
         <Tooltip title={ t('empty') }>
           <IconButton
             icon={ { value: 'trash' } }

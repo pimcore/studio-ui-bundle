@@ -16,6 +16,7 @@ import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps } from '@Pimcore/types/components/types'
+import { type GridCellReference } from '@Pimcore/components/grid/grid'
 
 export interface GridRowProps {
   row: Row<any>
@@ -23,6 +24,8 @@ export interface GridRowProps {
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
   columns: GridProps['columns']
+  activeColumId?: string
+  onFocusCell?: (cell: GridCellReference) => void
 }
 
 const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
@@ -51,15 +54,17 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
           >
             <GridCell
               cell={ cell }
+              isActive={ props.activeColumId === cell.column.id }
               isModified={ isModifiedCell(cell.column.id) }
               key={ cell.id }
+              onFocusCell={ props.onFocusCell }
               tableElement={ props.tableElement }
             />
           </td>
         ))}
       </tr>
     )
-  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
+  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, props.activeColumId])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined

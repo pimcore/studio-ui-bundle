@@ -69,6 +69,11 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         // @todo move to new dynamic type system
         // onCopy={ onCopy }
         onDoubleClick={ onDoubleClick }
+        onFocus={ () => props.onFocus?.({
+          rowIndex: row.index,
+          columnIndex: column.getIndex(),
+          columnId: column.id
+        }) }
         onKeyDown={ onKeyDown }
         // @todo move to new dynamic type system
         // onPaste={ onPaste }
@@ -81,10 +86,14 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         </EditableCellContextProvider>
       </div>
     )
-  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable])
+  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable, props.active])
 
   function getCssClasses (): string[] {
     const classes: string[] = []
+
+    if (props.active === true) {
+      classes.push('default-cell--active')
+    }
 
     if (props.modified === true) {
       classes.push('default-cell--modified')

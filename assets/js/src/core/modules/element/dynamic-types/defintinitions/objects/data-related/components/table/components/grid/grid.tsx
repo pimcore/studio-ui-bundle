@@ -12,27 +12,23 @@
 */
 
 import React from 'react'
-import { Grid } from '@Pimcore/components/grid/grid'
+import { Grid, type GridCellReference } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import {
-  type TableValue
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/table/table'
+import { type TableValue } from '../../hooks/use-table-value'
 
 interface TableGridProps {
-  cols: number | null
-  rows: number | null
+  cols: number
+  rows: number
   value: TableValue | null
+  onActiveCellChange?: (activeCell?: GridCellReference) => void
   onChange?: (value: TableValue | null) => void
 }
 
 export const TableGrid = (props: TableGridProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
 
-  const cols = props.cols ?? 5
-  const rows = props.rows ?? 7
-
   const columns: Array<ColumnDef<any>> = []
-  for (let i = 0; i < cols; i++) {
+  for (let i = 0; i < props.cols; i++) {
     columns.push(
       columnHelper.accessor('col-' + i, {
         meta: {
@@ -44,9 +40,9 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
   }
 
   const dataRows: Array<Record<string, string>> = []
-  for (let i = 0; i < rows; i++) {
+  for (let i = 0; i < props.rows; i++) {
     const rowValues = {}
-    for (let j = 0; j < cols; j++) {
+    for (let j = 0; j < props.cols; j++) {
       rowValues['col-' + j] = props.value?.[i]?.[j] ?? ''
     }
     dataRows.push(rowValues)
@@ -54,10 +50,11 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
 
   return (
     <Grid
-
       columns={ columns }
       data={ dataRows }
       hideColumnHeaders
+      highlightActiveCell
+      onActiveCellChange={ props.onActiveCellChange }
       onUpdateCellData={ (data) => {
         const newDataRows = {
           ...dataRows,
@@ -68,7 +65,6 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
         }
 
         const newValue = Object.values(newDataRows).map(row => Object.values(row))
-        console.log('new value', newValue, newDataRows)
         props.onChange?.(newValue)
       } }
       resizable
