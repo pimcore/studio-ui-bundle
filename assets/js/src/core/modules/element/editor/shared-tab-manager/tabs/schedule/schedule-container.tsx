@@ -51,8 +51,6 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    console.log('----> in useeffect')
-
     dispatch(
       api.util.invalidateTags(
         invalidatingTags.ELEMENT_SCHEDULES(elementType, id)
