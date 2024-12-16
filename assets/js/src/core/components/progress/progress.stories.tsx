@@ -19,8 +19,7 @@ const config: Meta = {
   component: Progress,
   args: {
     percent: 30
-  },
-  tags: ['autodocs']
+  }
 }
 
 export default config

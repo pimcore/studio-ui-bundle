@@ -25,8 +25,7 @@ const config: Meta = {
       <Button>Click on me!</Button>
     ),
     title: 'This is a Popconfirm'
-  },
-  tags: ['autodocs']
+  }
 }
 
 export default config

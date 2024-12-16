@@ -16,8 +16,7 @@ import { Checkbox } from './checkbox'
 
 const config: Meta = {
   title: 'Components/Controls/Checkbox',
-  component: Checkbox,
-  tags: ['autodocs']
+  component: Checkbox
 }
 
 export default config

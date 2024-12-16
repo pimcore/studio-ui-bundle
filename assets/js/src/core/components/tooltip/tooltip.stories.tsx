@@ -20,8 +20,7 @@ const config: Meta = {
   args: {
     children: 'Hover me!',
     title: 'This is a tooltip'
-  },
-  tags: ['autodocs']
+  }
 }
 
 export default config

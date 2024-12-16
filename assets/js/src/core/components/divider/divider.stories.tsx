@@ -16,8 +16,7 @@ import { Divider } from './divider'
 
 const config: Meta = {
   title: 'Components/Layout/Spacing/Divider',
-  component: Divider,
-  tags: ['autodocs']
+  component: Divider
 }
 
 export default config

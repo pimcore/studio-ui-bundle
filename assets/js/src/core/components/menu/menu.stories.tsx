@@ -96,8 +96,7 @@ const config: Meta = {
   },
   args: {
     ...MOCK_DEFAULT_DATA
-  },
-  tags: ['autodocs']
+  }
 }
 
 export default config
