@@ -38,7 +38,7 @@ export const Disabled = {
 
 export const WithFormattedValue = {
   args: {
-    formatter: (value: any) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    formatter: (value: any) => `$ ${value}`,
     value: 1000
   }
 }
