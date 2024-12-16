@@ -11,37 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
 import { type Meta } from '@storybook/react'
-import { Empty } from './empty'
-import { Icon } from '../icon/icon'
-import { Text } from '../text/text'
+import { Image } from './image'
 
 const config: Meta = {
-  title: 'Components/Data Display/Empty',
-  component: Empty
+  title: 'Components/Data Display/Image',
+  component: Image,
+  args: {
+    width: 300,
+    height: 300,
+    src: ''
+  }
 }
 
 export default config
 
 export const _default = {}
 
-export const WithCustomImage = {
+export const WithPreview = {
   args: {
-    image: (
-      <Icon
-        options={ {
-          width: 110,
-          height: 110
-        } }
-        value={ 'no-content' }
-      />
-    )
-  }
-}
-
-export const WithCustomDescription = {
-  args: {
-    description: <Text>Customize Description</Text>
+    preview: {
+      src: ''
+    }
   }
 }
