@@ -17,20 +17,43 @@ export const useStyle = createStyles(({ token, css }) => {
     return {
         hotspotImage: css`
             position: relative;
+            width: 100%;
+            height: auto;
             
             .hotspot-image__image {
                 width: 100%;
                 height: auto;
+                display: block;
             }
-      }
-      
-      // &.image-preview-bordered {
-      //   outline: 1px solid ${token.colorBorderSecondary};
-      //   border-radius: ${token.borderRadius}px;
-      //   .ant-image-img {
-      //      border-radius: ${token.borderRadius}px;
-      //   }
-      // }
-    `
+            
+            .hotspot-image__item {
+                border-radius: ${token.borderRadius}px;
+                color: ${token.colorPrimary};
+                background: rgba(215, 199, 236, 0.40);
+                border: 3px dashed ${token.colorPrimary};
+                border-radius: ${token.borderRadius}px;
+                user-select: none;
+                cursor: nwse-resize;
+                
+                &:before {
+                    content: '';
+                    position: absolute;
+                    right: 6px;
+                    bottom: 6px;
+                    left: 6px;
+                    top: 6px;
+                    cursor: move;
+                }
+            }
+            
+            .hotspot-image__item--marker {
+                cursor: move;
+                border-width: 1px;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        `
     }
 })

@@ -24,6 +24,27 @@ export default config
 
 export const _default = {
   args: {
-    src: 'https://144170849.fs1.hubspotusercontent-eu1.net/hub/144170849/hubfs/01-English/01-Website/06-Resources/01-Blog/2024/24-10-Platform-Version-Release-24-3/24-10-Platform-Version-Release-2403-Blog-Header-1.png?width=1440&height=810&name=24-10-Platform-Version-Release-2403-Blog-Header-1.png'
+    src: 'https://144170849.fs1.hubspotusercontent-eu1.net/hub/144170849/hubfs/01-English/01-Website/06-Resources/01-Blog/2024/24-10-Platform-Version-Release-24-3/24-10-Platform-Version-Release-2403-Blog-Header-1.png?width=1440&height=810&name=24-10-Platform-Version-Release-2403-Blog-Header-1.png',
+    items: [
+      {
+        id: 1,
+        x: 50,
+        y: 100,
+        width: 24,
+        height: 24,
+        type: 'marker'
+      },
+      {
+        id: 2,
+        x: 60,
+        y: 60,
+        width: 50,
+        height: 50,
+        type: 'hotspot'
+      }
+    ],
+    onEdit: (id: number) => console.log('Edit', id),
+    onRemove: (id: number) => console.log('Remove', id),
+    onClone: (id: number) => console.log('Clone', id)
   }
 }

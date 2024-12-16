@@ -144,6 +144,7 @@ import plus from '@Pimcore/assets/icons/plus.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import union from '@Pimcore/assets/icons/union.inline.svg'
+import markerPin02 from '@Pimcore/assets/icons/marker-pin-02.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -699,6 +700,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'union',
       component: union
+    })
+
+    iconLibrary.register({
+      name: 'markerPin02',
+      component: markerPin02
     })
   }
 })
