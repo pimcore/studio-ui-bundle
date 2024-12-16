@@ -11,23 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { Skeleton } from './skeleton'
+import React from 'react'
+import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
+import type { SkeletonButtonProps } from 'antd/es/skeleton/Button'
 
-const config: Meta = {
-  title: 'Components/General/Skeleton',
-  component: Skeleton,
-  args: {
-    active: true
-  }
+export interface ISkeletonButtonProps extends SkeletonProps, SkeletonButtonProps {}
+
+export const SkeletonButton = (props: ISkeletonButtonProps): JSX.Element => {
+  return (
+    <AntSkeleton.Button { ...props } />
+  )
 }
-
-export const _default = {}
-
-export const Rounded = {
-  args: {
-    round: true
-  }
-}
-
-export default config

@@ -11,16 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
-import type { AvatarProps } from 'antd/es/skeleton/Avatar'
+import { type Meta } from '@storybook/react'
+import { SkeletonButton } from './skeleton-button'
 
-export interface ISkeletonAvatarProps extends SkeletonProps, AvatarProps {}
-
-const SkeletonAvatar = (props: ISkeletonAvatarProps): JSX.Element => {
-  return (
-    <AntSkeleton.Avatar { ...props } />
-  )
+const config: Meta = {
+  title: 'Components/General/Skeleton/SkeletonButton',
+  component: SkeletonButton,
+  args: {
+    active: true
+  }
 }
 
-export default SkeletonAvatar
+export const _default = {}
+
+export const Round = {
+  args: {
+    shape: 'round'
+  }
+}
+
+export const Small = {
+  args: {
+    size: 'small'
+  }
+}
+
+export default config

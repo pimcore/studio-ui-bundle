@@ -12,11 +12,11 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { Skeleton } from './skeleton'
+import { SkeletonInput } from './skeleton-input'
 
 const config: Meta = {
-  title: 'Components/General/Skeleton',
-  component: Skeleton,
+  title: 'Components/General/Skeleton/SkeletonInput',
+  component: SkeletonInput,
   args: {
     active: true
   }
@@ -24,9 +24,15 @@ const config: Meta = {
 
 export const _default = {}
 
-export const Rounded = {
+export const Large = {
   args: {
-    round: true
+    size: 'large'
+  }
+}
+
+export const Small = {
+  args: {
+    size: 'small'
   }
 }
 

@@ -13,14 +13,12 @@
 
 import React from 'react'
 import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
-import type { SkeletonButtonProps } from 'antd/es/skeleton/Button'
+import type { SkeletonInputProps } from 'antd/es/skeleton/Input'
 
-export interface ISkeletonButtonProps extends SkeletonProps, SkeletonButtonProps {}
+export interface ISkeletonInputProps extends SkeletonProps, SkeletonInputProps {}
 
-const SkeletonButton = (props: ISkeletonButtonProps): JSX.Element => {
+export const SkeletonInput = (props: ISkeletonInputProps): JSX.Element => {
   return (
-    <AntSkeleton.Button { ...props } />
+    <AntSkeleton.Input { ...props } />
   )
 }
-
-export default SkeletonButton
