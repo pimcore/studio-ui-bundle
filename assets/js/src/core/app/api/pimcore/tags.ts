@@ -12,6 +12,7 @@
 */
 
 import { type ElementType } from 'types/element-type.d'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export type Tag = string | {
   type: string
@@ -34,7 +35,9 @@ export const tagNames = {
   PROPERTIES: 'PROPERTIES',
   SCHEDULES: 'SCHEDULES',
   DEPENDENCIES: 'DEPENDENCIES',
-  NOTES_AND_EVENTS: 'NOTES_AND_EVENTS'
+  NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
+  AVAILABLE_TAGS: 'AVAILABLE_TAGS',
+  ELEMENT_TAGS: 'ELEMENT_TAGS'
 }
 
 export const providingTags = {
@@ -69,7 +72,9 @@ export const providingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.WORKFLOW],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
-  NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }]
+  NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
+  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.ELEMENT_TAGS, id }],
+  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
 export const invalidatingTags = {
@@ -94,10 +99,12 @@ export const invalidatingTags = {
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS]
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [tagNames.NOTES_AND_EVENTS],
+  ELEMENT_TAGS: (elementType: ElementType, id: number) => [{ type: tagNames.ELEMENT_TAGS, id }],
+  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
 }
 
-const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
+const getElementDetailTag = (elementType: ElementType, id: number): Tag | undefined => {
   switch (elementType) {
     case 'asset':
       return { type: tagNames.ASSET_DETAIL, id }
@@ -105,5 +112,5 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
   }
 
-  throw new Error(`Unknown element type: ${elementType}`)
+  trackError(new GeneralError(`Unknown element type: ${elementType}`))
 }

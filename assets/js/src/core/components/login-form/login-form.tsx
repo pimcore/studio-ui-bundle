@@ -21,7 +21,8 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { setUser } from '@Pimcore/modules/auth/user/user-slice'
 import { Icon } from '../icon/icon'
-import { type Credentials, useLoginMutation, type UserInformation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
+import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface IAdditionalLogins {
   key: string
@@ -49,19 +50,19 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
   const handleAuthentication = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     const loginTask = login({ credentials: formState })
 
-    loginTask.catch((error) => {
-      throw new Error(error.message as string)
+    loginTask.catch((error: Error) => {
+      trackError(new ApiError(error))
     })
 
     try {
       event.preventDefault()
-      const response = (await loginTask) as any
+      const response = (await loginTask)
 
       if (response.error !== undefined) {
-        throw new Error(response.error.data.error as string)
+        trackError(new ApiError(response.error))
       }
 
-      const userInformation = response.data as UserInformation
+      const userInformation = response.data!
       dispatch(setUser(userInformation))
     } catch (e: any) {
       void messageApi.error({
