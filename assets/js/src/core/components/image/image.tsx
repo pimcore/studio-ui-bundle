@@ -14,9 +14,7 @@
 import React from 'react'
 import { Image as AntImage, type ImageProps } from 'antd'
 
-export interface IImageProps extends ImageProps {}
-
-export const Image = (props: IImageProps): JSX.Element => {
+export const Image = (props: ImageProps): JSX.Element => {
   return (
     <AntImage { ...props } />
   )
