@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Dropdown } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
@@ -21,9 +21,6 @@ import {
   TagsTreeContainer
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/tags-tree-container'
 import {
-  useTagGetCollectionForElementByTypeAndIdQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import {
   useShortcutActions
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-shortcut-actions'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
@@ -31,17 +28,34 @@ import { Content } from '@Pimcore/components/content/content'
 import { Header } from '@Pimcore/components/header/header'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import {
+  useTagGetCollectionForElementByTypeAndIdQuery
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
+import {
+  api
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { element } = useElementDraft(id, elementType)
   const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
+  const dispatch = useAppDispatch()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
+
+  useEffect(() => {
+    dispatch(
+      api.util.invalidateTags(
+        invalidatingTags.AVAILABLE_TAGS()
+      )
+    )
+  }, [])
 
   return (
     <SplitLayout
@@ -86,7 +100,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
             <div className={ 'pimcore-tags-content' }>
               <AssignedTagsTable
                 isLoading={ isLoading }
-                tags={ Object.values(data?.items ?? {}) }
+                tags={ data?.items ?? [] }
               />
             </div>
           </Content>

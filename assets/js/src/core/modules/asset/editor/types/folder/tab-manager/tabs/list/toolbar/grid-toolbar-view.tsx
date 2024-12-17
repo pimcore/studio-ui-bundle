@@ -13,10 +13,13 @@
 
 import React, { type ReactNode } from 'react'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Split } from '@Pimcore/components/split/split'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export interface GridToolbarViewProps {
   renderPagination?: ReactNode
   renderTools?: ReactNode
+  onRefresh?: () => void
 }
 
 const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
@@ -30,9 +33,16 @@ const GridToolbarView = (props: GridToolbarViewProps): React.JSX.Element => {
         <div />
       )}
 
-      {props.renderPagination !== undefined && (
-        <>{props.renderPagination}</>
-      )}
+      <Split dividerSize='small'>
+        <IconButton
+          icon={ { value: 'refresh' } }
+          onClick={ props.onRefresh }
+        />
+
+        {props.renderPagination !== undefined && (
+          <>{props.renderPagination}</>
+        )}
+      </Split>
     </Toolbar>
   )
 }

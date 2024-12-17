@@ -73,6 +73,17 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectGetSelectOptions: build.mutation<
+                DataObjectGetSelectOptionsApiResponse,
+                DataObjectGetSelectOptionsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/select-options`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
             dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/tree`,
@@ -198,6 +209,18 @@ export type DataObjectReplaceContentApiArg = {
     /** TargetId of the data-object */
     targetId: number;
 };
+export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
+    totalItems: number;
+    items: SelectOption[];
+};
+export type DataObjectGetSelectOptionsApiArg = {
+    body: {
+        objectId: number;
+        fieldName: string;
+        changedData?: object;
+        context: object;
+    };
+};
 export type DataObjectGetTreeApiResponse =
     /** status 200 Paginated data objects with total count as header param as JSON */ {
         totalItems: number;
@@ -221,41 +244,7 @@ export type DataObjectGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
     /** Filter by class. */
-    className?:
-        | "AccessoryPart"
-        | "asdf"
-        | "BodyStyle"
-        | "Car"
-        | "Category"
-        | "ComplexLayout"
-        | "Customer"
-        | "CustomerSegment"
-        | "CustomerSegmentGroup"
-        | "datatypetest"
-        | "datetest"
-        | "Event"
-        | "fieldtest"
-        | "FilterDefinition"
-        | "foo5"
-        | "LinkActivityDefinition"
-        | "Manufacturer"
-        | "mappingTest"
-        | "News"
-        | "OfferToolCustomProduct"
-        | "OfferToolOffer"
-        | "OfferToolOfferItem"
-        | "OnlineShopOrder"
-        | "OnlineShopOrderItem"
-        | "OnlineShopTaxClass"
-        | "OnlineShopVoucherSeries"
-        | "OnlineShopVoucherToken"
-        | "PortalUser"
-        | "PortalUserGroup"
-        | "simple"
-        | "StudioFieldTypeTest"
-        | "TermSegmentBuilderDefinition"
-        | "Test"
-        | "unittest";
+    className?: string;
 };
 export type Error = {
     /** Message */
@@ -503,6 +492,16 @@ export type Layout = {
     /** Border */
     border: boolean;
 };
+export type SelectOption = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key: string;
+    /** Value */
+    value: string;
+};
 export const {
     useDataObjectAddMutation,
     useDataObjectCloneMutation,
@@ -513,5 +512,6 @@ export const {
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectReplaceContentMutation,
+    useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;

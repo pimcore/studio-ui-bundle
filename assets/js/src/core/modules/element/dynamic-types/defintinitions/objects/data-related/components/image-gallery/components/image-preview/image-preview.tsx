@@ -17,8 +17,9 @@ import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import type { ImageGalleryValueItem } from '../../image-gallery'
+import type { UniqueIdentifier } from '@dnd-kit/core'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -33,12 +34,32 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
 
   return (
     <Droppable
-      isValidContext={ (info: DragAndDropInfo) => true }
-      isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
+      isValidContext={ (info: DragAndDropInfo) => {
+        if (info.sortable! !== undefined) {
+          return true
+        }
+        return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
+      } }
+      isValidData={ (info: DragAndDropInfo) => {
+        if (info.sortable! !== undefined || info.type === 'unknown') {
+          return true
+        }
+        return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
+      } }
       onDrop={ (info: DragAndDropInfo) => {
         const newValue = [...value]
         newValue[index] = { image: { type: 'asset', id: info.data.id as number } }
         setValue(newValue)
+      } }
+      onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
+        const newValue = [...value]
+        const dragValue = value[Number(dragId)]
+        const dropValue = value[Number(dropId)]
+        if (dragValue !== undefined && dropValue !== undefined) {
+          newValue.splice(Number(dragId), 1)
+          newValue.splice(Number(dropId), 0, dragValue)
+          setValue(newValue)
+        }
       } }
       variant="outline"
     >
@@ -80,6 +101,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
           }
         ] }
         height={ 100 }
+        style={ { backgroundColor: '#fff' } }
         width={ 200 }
       />
     </Droppable>

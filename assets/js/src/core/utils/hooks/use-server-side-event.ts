@@ -15,6 +15,7 @@ import { useEffect } from 'react'
 import { type topics } from '../../modules/execution-engine/topics'
 import { type NonEmptyArray } from 'types/non-empty-array'
 import { appConfig } from '@Pimcore/app/config/app-config'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 const ServerSideEventDomain = appConfig.mercureUrl
 
@@ -33,7 +34,7 @@ export const useServerSideEvent = ({ topics, messageHandler, openHandler }: UseS
   let event: EventSource | undefined
 
   if (topics.length === 0) {
-    throw new Error('No topics provided')
+    trackError(new GeneralError('No topics provided'))
   }
 
   function open (): void {
