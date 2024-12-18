@@ -19,7 +19,6 @@ import { ButtonGroup } from '../button-group/button-group'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { IconButton } from '../icon-button/icon-button'
 
-/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Components/Data Display/Listings/StackList',
   component: StackList,
@@ -41,11 +40,15 @@ export const _default = {
         children: <Tag>Item 1</Tag>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
+            key="languageSelection"
             languages={ ['EN', 'FR'] }
             onSelectLanguage={ () => {} }
             selectedLanguage={ 'EN' }
           />,
-          <IconButton icon={ { value: 'trash' } } />
+          <IconButton
+            icon={ { value: 'trash' } }
+            key="iconTrash"
+          />
         ] }
                             />
       },
@@ -56,11 +59,15 @@ export const _default = {
         children: <Tag>Item 2</Tag>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
+            key="languageSelection"
             languages={ ['EN', 'FR'] }
             onSelectLanguage={ () => {} }
             selectedLanguage={ 'EN' }
           />,
-          <IconButton icon={ { value: 'trash' } } />
+          <IconButton
+            icon={ { value: 'trash' } }
+            key="iconTrash"
+          />
         ] }
                             />
       },
@@ -71,11 +78,15 @@ export const _default = {
         children: <Tag>Item 3</Tag>,
         renderRightToolbar: <ButtonGroup items={ [
           <LanguageSelection
+            key="languageSelection"
             languages={ ['EN', 'FR'] }
             onSelectLanguage={ () => {} }
             selectedLanguage={ 'EN' }
           />,
-          <IconButton icon={ { value: 'trash' } } />
+          <IconButton
+            icon={ { value: 'trash' } }
+            key="iconTrash"
+          />
         ] }
                             />
       }
