@@ -1,36 +1,34 @@
-
 import * as fs from 'fs';
 import * as path from 'path';
 
 const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
 const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/icon-index.ts');
 
+if (!fs.existsSync(SVG_FOLDER)) {
+    console.error(`Error: Directory ${SVG_FOLDER} does not exist.`);
+    process.exit(1);
+}
+
+const files = fs.readdirSync(SVG_FOLDER).filter(file => file.endsWith('.inline.svg'));
+
+if (files.length === 0) {
+    console.log(`No SVG files found in ${SVG_FOLDER}`);
+    process.exit(0);
+}
+
 const generateIconEntry = (fileName: string): string => {
-    const baseName = fileName.replace('.inline.svg', '');
-    const variableName = baseName
+    const iconName = fileName.replace('.inline.svg', '');
+    const variableName = iconName
         .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
         .replace(/^./, str => str.toLowerCase());
     return `
-import ${variableName} from '@Pimcore/assets/icons/${fileName}';
-
-iconLibrary.register({
-  name: '${baseName}',
-  component: ${variableName}
-});
-`;
+    iconLibrary.register({
+      name: '${iconName}',
+      component: ${variableName}
+    });`;
 };
 
-const generateIndexFile = async () => {
-    try {
-        const files = fs.readdirSync(SVG_FOLDER);
-        const svgFiles = files.filter(file => file.endsWith('.inline.svg'));
-
-        if (svgFiles.length === 0) {
-            console.log('No SVG files found in the specified folder.');
-            return;
-        }
-
-        let content = `
+let content = `
 /**
  * Pimcore
  *
@@ -50,31 +48,35 @@ import { container } from '@Pimcore/app/depency-injection';
 import { moduleSystem } from '@Pimcore/app/module-system/module-system';
 import { serviceIds } from '@Pimcore/app/config/services/service-ids';
 import { type IconLibrary } from './services/icon-library';
+`;
+
+files.forEach(file => {
+    const variableName = file
+        .replace('.inline.svg', '')
+        .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
+        .replace(/^./, str => str.toLowerCase());
+    content += `
+import ${variableName} from '../assets/icons/${file}';`;
+});
+
+content += `
 
 moduleSystem.registerModule({
-  onInit: () => {`;
+  onInit: () => {
+    const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary);`;
 
-        for (const svgFile of svgFiles) {
-            content += generateIconEntry(svgFile);
-        }
+files.forEach(file => {
+    content += generateIconEntry(file);
+});
 
-        content += `
+content += `
   }
 });
 `;
 
-        fs.writeFileSync(OUTPUT_FILE, content.trim());
-        console.log(`Index file generated successfully at: ${OUTPUT_FILE}`);
-    } catch (error) {
-        console.error('Error generating the index file:', error);
-    }
-};
-
-(async () => {
-    try {
-        await generateIndexFile();
-        console.log('Icon index file generation completed successfully.');
-    } catch (error) {
-        console.error('Error occurred during icon index generation:', error);
-    }
-})();
+try {
+    fs.writeFileSync(OUTPUT_FILE, content.trim());
+    console.log(`Index file generated successfully at: ${OUTPUT_FILE}`);
+} catch (error) {
+    console.error('Error generating the index file:', error);
+}
