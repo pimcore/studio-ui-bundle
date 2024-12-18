@@ -16,11 +16,11 @@ import { FilterContext } from '../filter-provider'
 import { type FilterOptions, type IFilterContext } from '../../../types/filterTypes'
 import { defaultFilterOptions } from '../../../constants/filters'
 import { type GridColumnConfiguration } from 'src/sdk/main'
-import { useGridConfig, type useGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
+import { useGridConfig, type IUseGridConfigHookReturn } from '../../grid-config/hooks/use-grid-config'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type FILTER_TYPE } from '../../../constants/systemTypes'
 
-interface UseFiltersHookReturn extends IFilterContext, useGridConfigHookReturn {
+interface UseFiltersHookReturn extends IFilterContext, IUseGridConfigHookReturn {
   addOrUpdateFieldFilter: (column: GridColumnConfiguration, value: string | number | object | null) => void
   removeFieldFilter: (column: GridColumnConfiguration) => void
   getFieldFilter: (column: GridColumnConfiguration) => FieldFilter | undefined
