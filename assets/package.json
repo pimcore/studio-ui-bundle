@@ -1,6 +1,7 @@
 {
   "name": "pimcore-studio-ui",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "dev-server": "NODE_OPTIONS=--max_old_space_size=4096 encore dev-server --port 3030",
     "dev": "npm run dev-vendor && npm run dev-core-dll && encore dev && npm run dev-sdk",
@@ -17,7 +18,8 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./js",
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./js --fix",
     "test": "jest ./js/src --passWithNoTests",
-    "storybook": "storybook dev -p 6006 --no-open"
+    "storybook": "storybook dev -p 6006 --no-open",
+    "generate-icons": "node --loader ts-node/esm js/src/core/modules/icon-library/generate-icon-index.ts"
   },
   "types": "./dist/build/types/src/sdk/main.d.ts",
   "main": "./dist/sdk/main.js",

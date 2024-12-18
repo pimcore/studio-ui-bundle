@@ -9,15 +9,23 @@ if (!fs.existsSync(SVG_FOLDER)) {
     process.exit(1);
 }
 
-const files = fs.readdirSync(SVG_FOLDER).filter(file => file.endsWith('.inline.svg'));
+const files = fs.readdirSync(SVG_FOLDER).filter(file => file.endsWith('.svg'));
 
 if (files.length === 0) {
     console.log(`No SVG files found in ${SVG_FOLDER}`);
     process.exit(0);
 }
 
+const generateVariableName = (fileName: string): string => {
+    return fileName
+        .replace('.svg', '')
+        .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
+        .replace(/^./, str => str.toLowerCase());
+};
+
 const generateIconEntry = (fileName: string): string => {
-    const iconName = fileName.replace('.inline.svg', '');
+    const iconName = fileName.replace('.svg', '');
+
     const variableName = iconName
         .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
         .replace(/^./, str => str.toLowerCase());
@@ -31,12 +39,21 @@ const generateIconEntry = (fileName: string): string => {
 const modifySvgStroke = (filePath: string): void => {
     let svgContent = fs.readFileSync(filePath, 'utf-8');
 
-    // Replace all `stroke` attributes with `stroke="currentColor"`
     svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
-
-    // Save the modified SVG back to the file
     fs.writeFileSync(filePath, svgContent, 'utf-8');
 };
+
+const variableNameSet = new Set<string>();
+files.forEach(file => {
+    const variableName = generateVariableName(file);
+
+    if (variableNameSet.has(variableName)) {
+        console.error(`Error: Duplicate SVG file detected with variable name '${variableName}'. File: '${file}'`);
+        process.exit(1);
+    }
+
+    variableNameSet.add(variableName);
+});
 
 let content = `
 /**
@@ -65,7 +82,7 @@ files.forEach(file => {
     modifySvgStroke(filePath);
 
     const variableName = file
-        .replace('.inline.svg', '')
+        .replace('.svg', '')
         .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
         .replace(/^./, str => str.toLowerCase());
     content += `
