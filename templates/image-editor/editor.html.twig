@@ -165,7 +165,11 @@
         aElement.setAttribute('aria-expanded', 'false');
         spanElement.setAttribute('class', 'name trn');
         //TODO: how to solve this? spanElement.innerText = parent.t('save');
-        spanElement.innerText = 'save';
+        // Possible ways:
+        // 1. Backend localisation support
+        // 2. Use PostMessage API
+        // 3. Check Symphony supports trans
+        spanElement.innerText = "{{ 'asset.sidebar.details'|trans }}";
 
         aElement.appendChild(spanElement);
         liElement.appendChild(aElement);
