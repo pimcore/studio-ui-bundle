@@ -16,7 +16,6 @@ import React, { type ReactNode } from 'react'
 
 interface FlexContainerProps {
   renderElements: ReactNode[]
-  className?: string
 }
 
 const FlexContainerView = (props: FlexContainerProps): React.JSX.Element => {
