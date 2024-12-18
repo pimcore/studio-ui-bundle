@@ -28,6 +28,16 @@ const generateIconEntry = (fileName: string): string => {
     });`;
 };
 
+const modifySvgStroke = (filePath: string): void => {
+    let svgContent = fs.readFileSync(filePath, 'utf-8');
+
+    // Replace all `stroke` attributes with `stroke="currentColor"`
+    svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
+
+    // Save the modified SVG back to the file
+    fs.writeFileSync(filePath, svgContent, 'utf-8');
+};
+
 let content = `
 /**
  * Pimcore
@@ -51,6 +61,9 @@ import { type IconLibrary } from './services/icon-library';
 `;
 
 files.forEach(file => {
+    const filePath = path.join(SVG_FOLDER, file);
+    modifySvgStroke(filePath);
+
     const variableName = file
         .replace('.inline.svg', '')
         .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
