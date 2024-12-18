@@ -96,7 +96,7 @@ export const Image = {
     >
       <div>Lorem ipsum dolor</div>
       <IconButton
-        icon={ { value: 'eye-outlined' } }
+        icon={ { value: 'eye' } }
         onClick={ () => { console.log('click button') } }
       />
     </Flex>
