@@ -15,7 +15,7 @@ import dayjs, { type Dayjs } from 'dayjs'
 
 export type DatePickerValueType = string | number | Dayjs | null
 export type OutputType = 'dateString' | 'timestamp' | 'dayjs'
-export const toDayJs = (value?: DatePickerValueType, format?: string): Dayjs | null => {
+export const toDayJs = (value?: DatePickerValueType | unknown, format?: string): Dayjs | null => {
   if (dayjs.isDayjs(value)) {
     return value
   }
