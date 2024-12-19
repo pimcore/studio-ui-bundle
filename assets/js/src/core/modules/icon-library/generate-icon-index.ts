@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
-const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/icon-index.ts');
+const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/index.ts');
+const protectedNames = new Set(['new', 'package', 'import', 'export']);
 
 if (!fs.existsSync(SVG_FOLDER)) {
     console.error(`Error: Directory ${SVG_FOLDER} does not exist.`);
@@ -17,18 +18,22 @@ if (files.length === 0) {
 }
 
 const generateVariableName = (fileName: string): string => {
-    return fileName
-        .replace('.svg', '')
-        .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
+    const baseName = fileName.replace('.svg', '');
+    let variableName = baseName
+        .replace(/[-_\s]+(.)?/g, (_, letter) => letter ? letter.toUpperCase() : '')
         .replace(/^./, str => str.toLowerCase());
+
+    if (protectedNames.has(variableName)) {
+        variableName += 'Icon';
+    }
+
+    return variableName;
 };
 
 const generateIconEntry = (fileName: string): string => {
     const iconName = fileName.replace('.svg', '');
 
-    const variableName = iconName
-        .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
-        .replace(/^./, str => str.toLowerCase());
+    const variableName = generateVariableName(fileName)
     return `
     iconLibrary.register({
       name: '${iconName}',
@@ -81,12 +86,9 @@ files.forEach(file => {
     const filePath = path.join(SVG_FOLDER, file);
     modifySvgStroke(filePath);
 
-    const variableName = file
-        .replace('.svg', '')
-        .replace(/[-_\s](.)/g, (_, letter) => letter.toUpperCase())
-        .replace(/^./, str => str.toLowerCase());
+    const variableName = generateVariableName(file);
     content += `
-import ${variableName} from '../assets/icons/${file}';`;
+import ${variableName} from '../../assets/icons/${file}';`;
 });
 
 content += `
