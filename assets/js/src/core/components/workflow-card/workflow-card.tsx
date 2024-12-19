@@ -11,78 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode, useEffect } from 'react'
+import React from 'react'
 import { Badge, Card, Tag } from 'antd'
-import {
-  type WorkflowDetails
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useStyles } from '@Pimcore/components/workflow-card/workflow-card.styles'
-import { useTranslation } from 'react-i18next'
-import { Dropdown, type DropdownMenuProps } from '../dropdown/dropdown'
-import { useSubmitWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-submit-workflow'
-import { useWorkflow } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/hooks/use-workflow'
-import { Button } from '@Pimcore/components/button/button'
-
-interface IWorkflowCardProps {
-  workflow: WorkflowDetails
-}
+import { DropdownButton } from './components/dropdown-button/dropdown-button'
+import { type IWorkflowCardProps } from './types'
 
 export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const { t } = useTranslation()
-  const { openModal } = useWorkflow()
-  const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow(workflow.workflowName)
-
-  const DropdownButton = (): ReactNode => {
-    const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
-
-    useEffect(() => {
-      const items: DropdownMenuProps['items'] = []
-
-      workflow.allowedTransitions?.forEach((status) => {
-        items.push({
-          key: Number(items.length + 1).toString(),
-          label: t(`${status.label}`),
-          onClick: () => {
-            submitWorkflowAction(status.name, 'transition', workflow.workflowName, {})
-          }
-        })
-      })
-
-      workflow.globalActions?.forEach((status) => {
-        items.push({
-          key: Number(items.length + 1).toString(),
-          label: t(`${status.label}`),
-          onClick: () => {
-            openModal({ transition: 'global', action: status.name, workflowName: workflow.workflowName })
-          }
-        })
-      })
-
-      setItems(items)
-    }, [])
-
-    return (
-      <Dropdown
-        menu={ { items } }
-        placement="bottom"
-      >
-        {submissionLoading
-          ? (
-            <Button
-              loading
-              type={ 'link' }
-            />
-            )
-          : <Button>{t('component.workflow-card.action-btn')}</Button>}
-      </Dropdown>
-    )
-  }
 
   return (
     <Card
       className={ styles.workflowCard }
-      extra={ <DropdownButton /> }
+      extra={ <DropdownButton workflow={ workflow } /> }
       title={ (
         <>
           <p>{workflow.workflowName}</p>
