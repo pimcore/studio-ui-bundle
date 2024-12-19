@@ -154,25 +154,25 @@ export const useFilters = (): UseFiltersHookReturn => {
     })
   }
 
+  const filterColumnFiltersList = (prevColumnFilters: object, type: string): ColumnFiltersList => {
+    return (prevColumnFilters as ColumnFiltersList).filter(
+      (item: any) => item.type !== type
+    )
+  }
+
   const addOrUpdateFilterValue = ({ type, value }: { type: FILTER_TYPE, value: string }): void => {
     setFilterOptions((filterOptions) => {
       const prevColumnFilters = filterOptions.columnFilters
 
-      const filterColumnFiltersList = (): ColumnFiltersList => {
-        return (prevColumnFilters as ColumnFiltersList).filter(
-          (item: any) => item.type !== type
-        )
-      }
-
       const newColumnFilters = !isEmptyValue(value)
         ? [
-            ...(filterColumnFiltersList()),
+            ...(filterColumnFiltersList(prevColumnFilters!, type)),
             {
               type,
               filterValue: value
             }
           ]
-        : filterColumnFiltersList()
+        : filterColumnFiltersList(prevColumnFilters!, type)
 
       return {
         ...filterOptions,
