@@ -20,7 +20,7 @@ import {
   type ColumnDef,
   type ColumnResizeMode, type ColumnSizingInfoState,
   flexRender, functionalUpdate,
-  getCoreRowModel, getSortedRowModel, HeaderGroup,
+  getCoreRowModel, getSortedRowModel,
   type RowData,
   type RowSelectionState,
   type SortingState,
