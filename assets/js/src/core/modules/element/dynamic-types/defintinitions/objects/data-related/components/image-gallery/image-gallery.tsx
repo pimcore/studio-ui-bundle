@@ -35,7 +35,6 @@ import { uuid } from '@Pimcore/utils/uuid'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
-  className?: string
   onChange?: (value: ImageGalleryValue | null) => void
   disabled?: boolean
 }
