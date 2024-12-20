@@ -16,6 +16,8 @@ import { GridToolbarView } from './grid-toolbar-view'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { GridTools } from './tools/grid-tools'
+import { eventBus } from '@Pimcore/lib/event-bus'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 interface GridToolbarContainerProps {
   pager: {
@@ -29,9 +31,18 @@ interface GridToolbarContainerProps {
 const GridToolbarContainer = (props: GridToolbarContainerProps): React.JSX.Element => {
   const { pager } = props
   const { t } = useTranslation()
+  const { id } = useElementContext()
+
+  const onRefresh = (): void => {
+    eventBus.publish({ identifier: { type: 'asset:listing:refresh', id } })
+  }
 
   return (
     <GridToolbarView
+      onRefresh={ () => {
+        onRefresh()
+      } }
+
       renderPagination={ pager !== undefined && pager.total > 0
         ? (
           <Pagination

@@ -12,6 +12,10 @@ asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
+asset.tree.context-menu.upload-new-version: Upload new version
+asset.upload: Upload
+asset.upload.label: Select file
+asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 workflow.label: Workflow
@@ -211,6 +215,7 @@ notes-and-events.content: content
 notes-and-events.seo: seo
 notes-and-events.warning: warning
 notes-and-events.notice: notice
+notes-and-events.status-update: status update
 notes-and-events.erp_import: erp_import
 notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
 tags.label: Tags

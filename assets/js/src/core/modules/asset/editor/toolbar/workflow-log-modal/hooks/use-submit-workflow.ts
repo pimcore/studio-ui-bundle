@@ -53,8 +53,8 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
       actionType,
       elementId: id,
       elementType,
-      workflowName: _.snakeCase(workFlowName),
-      transition,
+      workflowId: _.snakeCase(workFlowName),
+      transitionId: _.snakeCase(transition),
       workflowOptions: workFlowOptions
     }
   })
