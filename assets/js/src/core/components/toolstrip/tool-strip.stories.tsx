@@ -40,7 +40,7 @@ export const _default: StoryObj<ToolStripProps> = {
         theme='secondary'
       >
         <Space size='mini'>
-          <IconButton icon={ { value: 'draggable' } } />
+          <IconButton icon={ { value: 'drag-option' } } />
           <Text>Title</Text>
           <Dropdown menu={ {
             items: [
@@ -55,7 +55,7 @@ export const _default: StoryObj<ToolStripProps> = {
             ]
           } }
           >
-            <IconButton icon={ { value: 'plus' } } />
+            <IconButton icon={ { value: 'new' } } />
           </Dropdown>
           <IconButton icon={ { value: 'move-down' } } />
           <IconButton icon={ { value: 'move-up' } } />

@@ -1,7 +1,7 @@
 {
   "name": "pimcore-studio-ui",
   "version": "0.0.1",
-  "type": "module",
+//  "type": "module",
   "scripts": {
     "dev-server": "NODE_OPTIONS=--max_old_space_size=4096 encore dev-server --port 3030",
     "dev": "npm run dev-vendor && npm run dev-core-dll && encore dev && npm run dev-sdk",

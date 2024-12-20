@@ -70,7 +70,8 @@ export const HorizontalScroll = ({ children, scrollWidth }: HorizontalScrollProp
 
   const startScrolling = (direction: 'left' | 'right'): void => {
     if (scrollInterval === null) {
-      const interval = setInterval(() => {
+      // @ts-expect-error temporary
+      const interval: number = setInterval(() => {
         if (scrollContainerRef.current !== null) {
           const scrollOffset = direction === 'left' ? -scrollAmount : scrollAmount
           scrollContainerRef.current.scrollBy({ left: scrollOffset, behavior: 'smooth' })

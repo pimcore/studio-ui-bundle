@@ -51,7 +51,7 @@ export const BlockContent = ({ title, fields, operation, children, collapsed }: 
         <>
           {fields.length === 0 && (
             <IconTextButton
-              icon={ { value: 'plus' } }
+              icon={ { value: 'new' } }
               onClick={ onAddClick }
             >Add</IconTextButton>
           )}

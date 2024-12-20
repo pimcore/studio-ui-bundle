@@ -65,7 +65,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
                >
         <IconButton
           disabled={ _.isEmpty(props.value) || props.disabled }
-          icon={ { value: 'delete-outlined' } }
+          icon={ { value: 'trash' } }
           onClick={ () => { setValue([]) } }
         />
       </Tooltip> }

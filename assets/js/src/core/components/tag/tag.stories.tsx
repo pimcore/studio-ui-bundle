@@ -41,7 +41,7 @@ export const ColorSuccessIconTag = {
 
 export const ColorBlueIconTag = {
   args: {
-    iconName: 'user-01',
+    iconName: 'user',
     color: 'blue',
     children: 'Own draft'
   }

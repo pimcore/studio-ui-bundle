@@ -10,7 +10,7 @@ if (!fs.existsSync(SVG_FOLDER)) {
     process.exit(1);
 }
 
-const files = fs.readdirSync(SVG_FOLDER).filter(file => file.endsWith('.svg'));
+const files = fs.readdirSync(SVG_FOLDER).filter(file => file.endsWith('.inline.svg'));
 
 if (files.length === 0) {
     console.log(`No SVG files found in ${SVG_FOLDER}`);
@@ -18,7 +18,7 @@ if (files.length === 0) {
 }
 
 const generateVariableName = (fileName: string): string => {
-    const baseName = fileName.replace('.svg', '');
+    const baseName = fileName.replace('inline.svg', '');
     let variableName = baseName
         .replace(/[-_\s]+(.)?/g, (_, letter) => letter ? letter.toUpperCase() : '')
         .replace(/^./, str => str.toLowerCase());
@@ -88,7 +88,7 @@ files.forEach(file => {
 
     const variableName = generateVariableName(file);
     content += `
-import ${variableName} from '../../assets/icons/${file}';`;
+import ${variableName} from '@Pimcore/assets/icons/${file}';`;
 });
 
 content += `

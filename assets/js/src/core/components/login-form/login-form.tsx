@@ -77,7 +77,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
         <Input
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
           placeholder="Username"
-          prefix={ <Icon value="user-01" /> }
+          prefix={ <Icon value="user" /> }
         />
         <Input.Password
           // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }

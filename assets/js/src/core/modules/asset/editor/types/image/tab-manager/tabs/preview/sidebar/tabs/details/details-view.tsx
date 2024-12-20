@@ -206,7 +206,7 @@ export const AssetEditorSidebarDetailsView = ({
 
               <IconButton
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ { value: 'download-02' } }
+                icon={ { value: 'download' } }
                 onClick={ () => { onClickDownloadByFormat(downloadFormat) } }
               />
             </div>

@@ -25,7 +25,7 @@ export const ManyToManyRelationLabel = (props: ManyToManyRelationLabelProps): Re
       align="center"
       gap="extra-small"
     >
-      <Icon value={ 'copy-07' } />
+      <Icon value={ 'copy' } />
       <span>{props.label}</span>
     </Flex>
   )

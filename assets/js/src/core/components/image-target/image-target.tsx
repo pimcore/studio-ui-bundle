@@ -57,11 +57,11 @@ export const ImageTarget = forwardRef(function ImageTarget ({ title, className, 
         <div className="icon-container">
           <Icon
             options={ { height: 30, width: 30 } }
-            value={ 'PlusOutlined' }
+            value={ 'new' }
           />
           <Icon
             options={ { height: 30, width: 30 } }
-            value={ 'copy-07' }
+            value={ 'copy' }
           />
         </div>
         )}

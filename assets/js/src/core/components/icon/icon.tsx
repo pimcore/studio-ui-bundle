@@ -40,6 +40,9 @@ export const Icon = ({ value, type = 'name', options, className, ...props }: Ico
     }
 
     const SvgIcon = iconLibrary.get(value)
+    console.log('----> value', value)
+    console.log('----> SvgIcon', SvgIcon)
+
     if (SvgIcon === undefined) {
       return <div style={ { width, height } } />
     }

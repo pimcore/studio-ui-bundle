@@ -83,7 +83,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
-      icon: <Icon value={ 'file-download-zip-01' } />,
+      icon: <Icon value={ 'download-zip' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({

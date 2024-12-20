@@ -31,7 +31,7 @@ export const BlockToolStrip = ({ field, operations }: BlockToolStripProps): Reac
     >
       <Space size="mini">
         <IconButton
-          icon={ { value: 'plus' } }
+          icon={ { value: 'new' } }
           onClick={ () => { operations.add(undefined, field.name + 1) } }
           style={ { padding: 4 } }
           variant='minimal'

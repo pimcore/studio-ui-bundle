@@ -46,7 +46,7 @@ export const FieldCollectionToolStrip = ({ label, field, operations, allowedType
 
         <Dropdown menu={ { items: dropDownItems } }>
           <IconButton
-            icon={ { value: 'plus' } }
+            icon={ { value: 'new' } }
             style={ { padding: 4 } }
             variant='minimal'
           />

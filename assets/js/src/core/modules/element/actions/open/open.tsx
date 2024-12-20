@@ -32,7 +32,7 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
     return {
       label: t('element.open'),
       key: 'open',
-      icon: <Icon value={ 'union' } />,
+      icon: <Icon value={ 'open-folder' } />,
       hidden: !checkElementPermission(node.permissions!, 'view'),
       onClick: async () => {
         await openElement({

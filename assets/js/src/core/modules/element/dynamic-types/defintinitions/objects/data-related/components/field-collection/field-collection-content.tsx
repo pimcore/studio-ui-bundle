@@ -55,7 +55,7 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
           {fields.length === 0 && (
             <Dropdown menu={ { items: fieldCollectionDropdownItems } }>
               <IconTextButton
-                icon={ { value: 'plus' } }
+                icon={ { value: 'new' } }
                 onClick={ (e) => { e.stopPropagation() } }
               >Add</IconTextButton>
             </Dropdown>
