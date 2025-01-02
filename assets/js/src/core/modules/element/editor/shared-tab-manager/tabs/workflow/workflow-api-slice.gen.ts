@@ -106,14 +106,14 @@ export type DevError = {
 export type SubmitAction = {
     /** type of the action */
     actionType: string;
-    /** id of the element */
+    /** Id of the element */
     elementId: number;
-    /** type of the element */
+    /** Type of the element */
     elementType: string;
-    /** name of the workflow */
-    workflowName: string;
-    /** transition */
-    transition: string;
+    /** Id of the workflow */
+    workflowId?: string;
+    /** Id of the transition */
+    transitionId?: string;
     /** workflowOptions */
     workflowOptions: object;
 };

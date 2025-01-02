@@ -57,9 +57,17 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     return new Array(rows).fill(null).map(() => createEmptyRow())
   }
 
-  const cols = value !== null && value.length > 0
-    ? (props.columnConfigActivated ? Object.keys(value[0]).length : (value[0] as string[]).length)
-    : (props.cols ?? 0)
+  const cols = (() => {
+    if (value !== null && value.length > 0) {
+      if (props.columnConfigActivated) {
+        return Object.keys(value[0]).length
+      } else {
+        return (value[0] as string[]).length
+      }
+    } else {
+      return props.cols ?? 0
+    }
+  })()
   const rows = value !== null && value.length > 0 ? value.length : (props.rows ?? 0)
 
   const emptyValue = (): void => {
