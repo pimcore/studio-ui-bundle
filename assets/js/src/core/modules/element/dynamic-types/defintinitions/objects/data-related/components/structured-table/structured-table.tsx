@@ -114,7 +114,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
             onClick={ () => {
               confirm({
                 title: t('empty'),
-                content: t('structured-table.empty.confirm'),
+                content: t('table.empty.confirm'),
                 onOk: emptyValue
               })
             } }
