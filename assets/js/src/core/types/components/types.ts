@@ -12,7 +12,7 @@
 */
 
 import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
-import {GridCellReference} from "@Pimcore/components/grid/grid";
+import { type GridCellReference } from '@Pimcore/components/grid/grid'
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
 export interface GapRowColGroupType { x: GapStringType | number, y: GapStringType | number }
