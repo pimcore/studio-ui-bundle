@@ -23,7 +23,7 @@ export const DropdownButton = ({ icon, ...props }: dropdownButtonProps): React.J
   return (
     <IconTextButton
       icon={ {
-        value: 'accessory',
+        value: 'chevron-down',
         ...icon
       } }
       iconPlacement="right"

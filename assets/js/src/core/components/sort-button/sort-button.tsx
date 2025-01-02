@@ -46,7 +46,7 @@ export const SortButton = ({ onSortingChange, ...props }: SortButtonProps): Reac
     >
       <Icon
         className="sort-button__arrow sort-button__asc"
-        value='chevron-selector-horizontal'
+        value='chevron-up'
       />
       <Icon
         className="sort-button__arrow sort-button__desc"

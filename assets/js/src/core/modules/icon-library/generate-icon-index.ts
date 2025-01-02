@@ -1,5 +1,25 @@
-import * as fs from 'fs';
-import * as path from 'path';
+/**
+ * Pimcore
+ *
+ * This source file is available under two different licenses:
+ * - Pimcore Open Core License (POCL)
+ * - Pimcore Commercial License (PCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+ *
+ * HOW TO USE:
+ * 1. Place all the SVG files in the folder `./js/src/core/assets/icons`
+ * 2. Please remove any duplicates and add SVG files that use a protected word to the `protectedNames` array, the script will append 'Icon' to the variable name.
+ * 3. Run the script using `npm run generate-icons`
+ * 4. The script will generate the index file at `./js/src/core/modules/icon-library/index.ts`
+ * 5. The script will also update the SVG files to use `currentColor` for the stroke and fill color.
+ */
+
+const fs = require('fs');
+const path = require('path');
 
 const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
 const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/index.ts');
@@ -18,7 +38,7 @@ if (files.length === 0) {
 }
 
 const generateVariableName = (fileName: string): string => {
-    const baseName = fileName.replace('inline.svg', '');
+    const baseName = fileName.replace('.inline.svg', '');
     let variableName = baseName
         .replace(/[-_\s]+(.)?/g, (_, letter) => letter ? letter.toUpperCase() : '')
         .replace(/^./, str => str.toLowerCase());
@@ -31,7 +51,7 @@ const generateVariableName = (fileName: string): string => {
 };
 
 const generateIconEntry = (fileName: string): string => {
-    const iconName = fileName.replace('.svg', '');
+    const iconName = fileName.replace('.inline.svg', '');
 
     const variableName = generateVariableName(fileName)
     return `

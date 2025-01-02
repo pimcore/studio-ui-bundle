@@ -67,7 +67,7 @@ export const ThemeTransparent = {
 export const DefaultIconTag = {
   args: {
     color: 'default',
-    iconName: 'shield-02',
+    iconName: 'shield',
     children: 'Jane Doe'
   }
 }

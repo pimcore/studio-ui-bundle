@@ -32,6 +32,7 @@ import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg'
+import brush from '@Pimcore/assets/icons/brush.inline.svg'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg'
 import calendar from '@Pimcore/assets/icons/calendar.inline.svg'
 import car from '@Pimcore/assets/icons/car.inline.svg'
@@ -62,9 +63,11 @@ import customer from '@Pimcore/assets/icons/customer.inline.svg'
 import customers from '@Pimcore/assets/icons/customers.inline.svg'
 import cut from '@Pimcore/assets/icons/cut.inline.svg'
 import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg'
+import dataManagement from '@Pimcore/assets/icons/data-management.inline.svg'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
+import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
 import details from '@Pimcore/assets/icons/details.inline.svg'
 import document from '@Pimcore/assets/icons/document.inline.svg'
@@ -121,9 +124,11 @@ import market from '@Pimcore/assets/icons/market.inline.svg'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg'
 import menu from '@Pimcore/assets/icons/menu.inline.svg'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg'
+import minus from '@Pimcore/assets/icons/minus.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
+import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg'
 import newColumn from '@Pimcore/assets/icons/new-column.inline.svg'
 import newHotspot from '@Pimcore/assets/icons/new-hotspot.inline.svg'
 import newMarker from '@Pimcore/assets/icons/new-marker.inline.svg'
@@ -131,6 +136,7 @@ import newRow from '@Pimcore/assets/icons/new-row.inline.svg'
 import newSomething from '@Pimcore/assets/icons/new-something.inline.svg'
 import newIcon from '@Pimcore/assets/icons/new.inline.svg'
 import news from '@Pimcore/assets/icons/news.inline.svg'
+import noContent from '@Pimcore/assets/icons/no-content.inline.svg'
 import notesEvents from '@Pimcore/assets/icons/notes-events.inline.svg'
 import notification from '@Pimcore/assets/icons/notification.inline.svg'
 import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg'
@@ -162,6 +168,7 @@ import settings from '@Pimcore/assets/icons/settings.inline.svg'
 import share from '@Pimcore/assets/icons/share.inline.svg'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg'
 import shield from '@Pimcore/assets/icons/shield.inline.svg'
+import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg'
 import style from '@Pimcore/assets/icons/style.inline.svg'
 import tag from '@Pimcore/assets/icons/tag.inline.svg'
@@ -186,12 +193,6 @@ import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
-import newCircle from '@Pimcore/assets/icons/new-circle.inline.svg'
-import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
-import dataManagement from '@Pimcore/assets/icons/data-management.inline.svg'
-import minus from '@Pimcore/assets/icons/minus.inline.svg'
-import noContent from '@Pimcore/assets/icons/no-content.inline.svg'
-import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -253,6 +254,10 @@ moduleSystem.registerModule({
       component: bookmark
     })
     iconLibrary.register({
+      name: 'brush',
+      component: brush
+    })
+    iconLibrary.register({
       name: 'calculator',
       component: calculator
     })
@@ -289,7 +294,7 @@ moduleSystem.registerModule({
       component: checkbox
     })
     iconLibrary.register({
-      name: 'chevron-down-Icon',
+      name: 'chevron-down',
       component: chevronDown
     })
     iconLibrary.register({
@@ -373,6 +378,10 @@ moduleSystem.registerModule({
       component: dashboard
     })
     iconLibrary.register({
+      name: 'data-management',
+      component: dataManagement
+    })
+    iconLibrary.register({
       name: 'data-object-variant',
       component: dataObjectVariant
     })
@@ -383,6 +392,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
+    })
+    iconLibrary.register({
+      name: 'data-sheet',
+      component: dataSheet
     })
     iconLibrary.register({
       name: 'dependencies',
@@ -609,6 +622,10 @@ moduleSystem.registerModule({
       component: minusSquare
     })
     iconLibrary.register({
+      name: 'minus',
+      component: minus
+    })
+    iconLibrary.register({
       name: 'more',
       component: more
     })
@@ -619,6 +636,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'move-up',
       component: moveUp
+    })
+    iconLibrary.register({
+      name: 'new-circle',
+      component: newCircle
     })
     iconLibrary.register({
       name: 'new-column',
@@ -647,6 +668,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'news',
       component: news
+    })
+    iconLibrary.register({
+      name: 'no-content',
+      component: noContent
     })
     iconLibrary.register({
       name: 'notes-events',
@@ -773,6 +798,10 @@ moduleSystem.registerModule({
       component: shield
     })
     iconLibrary.register({
+      name: 'spinner',
+      component: spinner
+    })
+    iconLibrary.register({
       name: 'split-view',
       component: splitView
     })
@@ -867,30 +896,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
-    })
-    iconLibrary.register({
-      name: 'new-circle',
-      component: newCircle
-    })
-    iconLibrary.register({
-      name: 'data-sheet',
-      component: dataSheet
-    })
-    iconLibrary.register({
-      name: 'data-management',
-      component: dataManagement
-    })
-    iconLibrary.register({
-      name: 'minus',
-      component: minus
-    })
-    iconLibrary.register({
-      name: 'no-content',
-      component: noContent
-    })
-    iconLibrary.register({
-      name: 'spinner',
-      component: spinner
     })
   }
 })
