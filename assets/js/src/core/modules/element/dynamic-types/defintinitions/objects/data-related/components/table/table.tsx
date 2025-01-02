@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useTableValue, type TableValue } from './hooks/use-table-value'
 import { getCopyData, getPasteData } from './utils/copy-paste'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 
 export interface TableProps {
   rows: number | null
@@ -64,6 +65,127 @@ export const Table = (props: TableProps): React.JSX.Element => {
     columnConfigActivated
   })
 
+  const items: ReactElement[] = []
+
+  if (!columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0))) {
+    items.push(
+      <Tooltip title={ t('table.add-column') }>
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ addColumn }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (!columnConfigActivated && (props.colsFixed !== true || cols > (props.cols ?? 0))) {
+    items.push(
+      <Tooltip title={ t('table.delete-column') }>
+        <IconButton
+          disabled={ activeCell === undefined }
+          icon={ { value: 'trash' } }
+          onClick={ deleteColumn }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
+    items.push(
+      <Tooltip title={ t('table.add-row') }>
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ addRow }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (props.rowsFixed !== true || rows > (props.rows ?? 0)) {
+    items.push(
+      <Tooltip title={ t('table.delete-row') }>
+        <IconButton
+          disabled={ activeCell === undefined }
+          icon={ { value: 'trash' } }
+          onClick={ deleteRow }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
+    items.push(
+      <Tooltip title={ t('table.duplicate-row') }>
+        <IconButton
+          disabled={ activeCell === undefined }
+          icon={ { value: 'trash' } }
+          onClick={ duplicateRow }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  items.push(
+    <Tooltip title={ t('table.copy') }>
+      <IconButton
+        icon={ { value: 'clipboard' } }
+        onClick={ () => modal.textarea({
+          title: t('table.copy'),
+          initialValue: getCopyData(value),
+          okText: t('copy'),
+          onOk: (value: string) => {
+            void navigator.clipboard.writeText(value)
+          }
+        })
+            }
+        type="default"
+      />
+    </Tooltip>
+  )
+
+  if (props.disabled !== true) {
+    items.push(
+      <Tooltip title={ t('table.paste') }>
+        <IconButton
+          icon={ { value: 'clipboard-check' } }
+          onClick={ () => modal.textarea({
+            title: t('table.paste'),
+            placeholder: t('paste-placeholder'),
+            okText: t('save'),
+            onOk: (value: string) => {
+              if (value !== '') {
+                console.log('paste data', getPasteData(value), fixColumnConfig(getPasteData(value)))
+                setValue(fixColumnConfig(getPasteData(value)))
+              }
+            }
+          })
+                }
+          type="default"
+        />
+      </Tooltip>
+    )
+    items.push(
+      <Tooltip title={ t('empty') }>
+        <IconButton
+          icon={ { value: 'trash' } }
+          onClick={ () => {
+            confirm({
+              title: t('empty'),
+              content: t('table.empty.confirm'),
+              onOk: emptyValue
+            })
+          } }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
   return (
     <>
       <TableGrid
@@ -78,110 +200,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
         value={ value }
       />
       <Box padding="extra-small">
-        { props.disabled !== true && (
-        <>
-            { !columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0)) && (
-            <Tooltip title={ t('table.add-column') }>
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ addColumn }
-                type="default"
-              />
-            </Tooltip>
-            ) }
-            { !columnConfigActivated && (props.colsFixed !== true || cols > (props.cols ?? 0)) && (
-            <Tooltip title={ t('table.delete-column') }>
-              <IconButton
-                disabled={ activeCell === undefined }
-                icon={ { value: 'trash' } }
-                onClick={ deleteColumn }
-                type="default"
-              />
-            </Tooltip>
-            ) }
-            { (props.rowsFixed !== true || rows < (props.rows ?? 0)) && (
-            <Tooltip title={ t('table.add-row') }>
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ addRow }
-                type="default"
-              />
-            </Tooltip>
-            ) }
-            { (props.rowsFixed !== true || rows > (props.rows ?? 0)) && (
-            <Tooltip title={ t('table.delete-row') }>
-              <IconButton
-                disabled={ activeCell === undefined }
-                icon={ { value: 'trash' } }
-                onClick={ deleteRow }
-                type="default"
-              />
-            </Tooltip>
-            ) }
-            { (props.rowsFixed !== true || rows < (props.rows ?? 0)) && (
-            <Tooltip title={ t('table.duplicate-row') }>
-              <IconButton
-                disabled={ activeCell === undefined }
-                icon={ { value: 'trash' } }
-                onClick={ duplicateRow }
-                type="default"
-              />
-            </Tooltip>
-            ) }
-        </>
-        ) }
-        <Tooltip title={ t('table.copy') }>
-          <IconButton
-            icon={ { value: 'trash' } }
-            onClick={ () => modal.textarea({
-              title: t('table.copy'),
-              initialValue: getCopyData(value),
-              okText: t('copy'),
-              onOk: (value: string) => {
-                void navigator.clipboard.writeText(value)
-              }
-            })
-              }
-            type="default"
-          />
-        </Tooltip>
-
-        { props.disabled !== true && (
-        <>
-          <Tooltip title={ t('table.paste') }>
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ () => modal.textarea({
-                title: t('table.paste'),
-                placeholder: t('paste-placeholder'),
-                okText: t('save'),
-                onOk: (value: string) => {
-                  if (value !== '') {
-                    console.log('paste data', getPasteData(value), fixColumnConfig(getPasteData(value)))
-                    setValue(fixColumnConfig(getPasteData(value)))
-                  }
-                }
-              })
-                }
-              type="default"
-            />
-          </Tooltip>
-
-          <Tooltip title={ t('empty') }>
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                confirm({
-                  title: t('empty'),
-                  content: t('table.empty.confirm'),
-                  onOk: emptyValue
-                })
-              } }
-              type="default"
-            />
-          </Tooltip>
-        </>
-        ) }
+        <ButtonGroup items={ items } />
       </Box>
     </>
   )
