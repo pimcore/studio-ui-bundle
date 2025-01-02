@@ -34,7 +34,6 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
-  const columnWrapperRef = useRef<HTMLDivElement>(null)
   const [columnWrapperWidth, setColumnWrapperWidth] = useState<number | undefined>(undefined)
   // @todo move to new dynamic type system
   // const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
@@ -63,6 +62,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   }
 
   return useMemo(() => {
+    const isInAutoWidthColumnEditMode = isInEditMode && column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true
     return (
       <div
         className={ [styles['default-cell'], ...getCssClasses()].join(' ') }
@@ -70,6 +70,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         data-grid-row={ row.index }
         // @todo move to new dynamic type system
         // onCopy={ onCopy }
+        key={ isInAutoWidthColumnEditMode ? 'auto-width-column-editmode' : 'default' }
         onDoubleClick={ onDoubleClick }
         onFocus={ () => props.onFocus?.({
           rowIndex: row.index,
@@ -81,23 +82,11 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         // onPaste={ onPaste }
         ref={ element }
         role='button'
+        style={ { width: isInAutoWidthColumnEditMode ? columnWrapperWidth : undefined } }
         tabIndex={ 0 }
       >
         <EditableCellContextProvider value={ editableCellContextValue }>
-          { column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true
-            ? (
-              <div
-                className="w-full"
-                key={ isInEditMode ? 'edit-mode' : 'view-mode' }
-                ref={ columnWrapperRef }
-                style={ { width: isInEditMode ? columnWrapperWidth : undefined } }
-              >
-                {ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>}
-              </div>
-              )
-            : (
-                ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>
-              )}
+          { ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</> }
 
         </EditableCellContextProvider>
       </div>
@@ -128,8 +117,8 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
     }
 
     if (!isInEditMode) {
-      if (columnWrapperRef.current !== null) {
-        setColumnWrapperWidth(columnWrapperRef.current.offsetWidth)
+      if (element.current !== null) {
+        setColumnWrapperWidth(element.current.offsetWidth)
       }
     }
 
