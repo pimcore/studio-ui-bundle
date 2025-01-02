@@ -87,7 +87,6 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
       >
         <EditableCellContextProvider value={ editableCellContextValue }>
           { ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</> }
-
         </EditableCellContextProvider>
       </div>
     )

@@ -37,6 +37,7 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
         columnHelper.accessor(col.key, {
           header: col.label ?? col.key,
           id: col.key,
+          size: 150,
           meta: {
             autoWidth: true,
             type: 'text',
@@ -49,6 +50,8 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
     for (let i = 0; i < props.cols; i++) {
       columns.push(
         columnHelper.accessor('col-' + i, {
+          id: 'col-' + i,
+          size: 150,
           meta: {
             autoWidth: true,
             type: 'text',
@@ -73,7 +76,7 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
     }
     dataRows.push(rowValues)
   }
-
+  console.log('columns', columns)
   return (
     <Grid
       columns={ columns }
