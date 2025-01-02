@@ -14,13 +14,15 @@
 import { useState, useEffect } from 'react'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
 
-export type TableValue = string[][]
+export type TableValue = Array<Record<string, string> | string[]>
 
 interface UseTableValueProps {
   cols: number | null
   rows: number | null
   initialValue: TableValue | null
   onChange?: (value: TableValue | null) => void
+  columnConfigActivated: boolean
+  columnConfig?: Array<{ key: string, label: string }>
 }
 
 interface UseTableValueReturn {
@@ -35,6 +37,7 @@ interface UseTableValueReturn {
   deleteRow: () => void
   deleteColumn: () => void
   duplicateRow: () => void
+  fixColumnConfig: (value: TableValue) => TableValue
   rows: number
   cols: number
 }
@@ -48,8 +51,16 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     props.onChange?.(value)
   }, [value])
 
-  const cols = value !== null && (value.length > 0) ? value[0].length : (props.cols ?? 0)
-  const rows = value !== null && (value.length > 0) ? value.length : (props.rows ?? 0)
+  const initializeValue = (): TableValue => {
+    const rows = props.rows ?? 0
+
+    return new Array(rows).fill(null).map(() => createEmptyRow())
+  }
+
+  const cols = value !== null && value.length > 0
+    ? (props.columnConfigActivated ? Object.keys(value[0]).length : (value[0] as string[]).length)
+    : (props.cols ?? 0)
+  const rows = value !== null && value.length > 0 ? value.length : (props.rows ?? 0)
 
   const emptyValue = (): void => {
     if (value !== null) {
@@ -58,9 +69,20 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     }
   }
 
+  const createEmptyRow = (): Record<string, string> | string[] => {
+    if (props.columnConfigActivated && props.columnConfig !== undefined) {
+      return props.columnConfig.reduce<Record<string, string>>((acc, col) => {
+        acc[col.key] = ''
+        return acc
+      }, {})
+    } else {
+      return new Array<string>(cols).fill('')
+    }
+  }
+
   const addRow = (): void => {
-    const newValue = [...value ?? []]
-    const newRow = new Array<string>(cols).fill('')
+    const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
+    const newRow = createEmptyRow()
 
     if (activeCell?.rowIndex !== undefined) {
       newValue.splice(activeCell.rowIndex, 0, newRow)
@@ -68,44 +90,58 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
       newValue.push(newRow)
     }
 
-    setValue(newValue)
+    setValue(newValue as TableValue)
   }
 
   const addColumn = (): void => {
-    if (activeCell === undefined) return
+    if (props.columnConfigActivated) return
+    const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
+    newValue.forEach(row => (row as string[]).splice(activeCell?.columnIndex ?? (row as string[]).length, 0, ''))
 
-    const newValue = [...value ?? []]
-    newValue.forEach(row => row.splice(activeCell.columnIndex, 0, ''))
-
-    setValue(newValue)
+    setValue(newValue as TableValue)
   }
 
   const deleteRow = (): void => {
     if (activeCell === undefined) return
 
-    const newValue = [...value ?? []]
+    const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     newValue.splice(activeCell.rowIndex, 1)
 
-    setValue(newValue)
+    setValue(newValue as TableValue)
   }
 
   const deleteColumn = (): void => {
-    if (activeCell === undefined) return
+    if (props.columnConfigActivated || activeCell === undefined) return
 
-    const newValue = [...value ?? []]
-    newValue.forEach(row => row.splice(activeCell.columnIndex, 1))
+    const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
+    newValue.forEach(row => (row as string[]).splice(activeCell.columnIndex, 1))
 
-    setValue(newValue)
+    setValue(newValue as TableValue)
   }
 
   const duplicateRow = (): void => {
     if (activeCell === undefined) return
 
-    const newValue = [...value ?? []]
+    const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     const rowToDuplicate = newValue[activeCell.rowIndex]
-    newValue.splice(activeCell.rowIndex, 0, [...rowToDuplicate])
+    newValue.splice(activeCell.rowIndex, 0, { ...rowToDuplicate })
 
-    setValue(newValue)
+    setValue(newValue as TableValue)
+  }
+
+  const fixColumnConfig = (value: TableValue): TableValue => {
+    if (!props.columnConfigActivated || props.columnConfig === undefined) {
+      return value
+    }
+
+    const columnConfig = props.columnConfig ?? []
+    return value.map(row => {
+      const newRow: Record<string, string> = {}
+      columnConfig.forEach((col, index) => {
+        newRow[col.key] = row[index] ?? ''
+      })
+      return newRow
+    })
   }
 
   return {
@@ -120,6 +156,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     deleteRow,
     deleteColumn,
     duplicateRow,
+    fixColumnConfig,
     rows,
     cols
   }

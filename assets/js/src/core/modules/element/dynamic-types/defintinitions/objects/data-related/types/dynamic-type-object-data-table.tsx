@@ -26,7 +26,10 @@ export class DynamicTypeObjectDataTable extends DynamicTypeObjectDataAbstract {
 
   getObjectDataComponent (props: TableObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <Table { ...props } />
+      <Table
+        { ...props }
+        disabled={ props.noteditable === true }
+      />
     )
   }
 }

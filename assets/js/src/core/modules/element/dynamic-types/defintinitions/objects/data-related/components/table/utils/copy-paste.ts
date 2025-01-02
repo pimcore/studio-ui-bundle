@@ -20,7 +20,7 @@ export const getCopyData = (value: TableValue | null): string => {
     return ''
   }
 
-  return value.map(row => row.join('\t')).join('\n')
+  return value.map(row => Array.isArray(row) ? row.join('\t') : Object.values(row).join('\t')).join('\n')
 }
 
 export const getPasteData = (data: string): TableValue => {

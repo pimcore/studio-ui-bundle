@@ -280,7 +280,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                 )}
                 {table.getRowModel().rows.map(row => (
                   <GridRow
-                    activeColumId={ highlightActiveCell === true && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+                    activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
                     columns={ columns }
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
@@ -296,7 +296,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
         </div>
       </div>
     </div>
-  ), [table, modifiedCells, data, columns, rowSelection, internalSorting, (highlightActiveCell === true ? activeCell : undefined)])
+  ), [table, modifiedCells, data, columns, rowSelection, internalSorting, (highlightActiveCell ? activeCell : undefined)])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

@@ -22,28 +22,53 @@ interface TableGridProps {
   value: TableValue | null
   onActiveCellChange?: (activeCell?: GridCellReference) => void
   onChange?: (value: TableValue | null) => void
+  disabled?: boolean
+  columnConfigActivated: boolean
+  columnConfig?: Array<{ key: string, label: string }>
 }
 
 export const TableGrid = (props: TableGridProps): React.JSX.Element => {
   const columnHelper = createColumnHelper()
 
   const columns: Array<ColumnDef<any>> = []
-  for (let i = 0; i < props.cols; i++) {
-    columns.push(
-      columnHelper.accessor('col-' + i, {
-        meta: {
-          type: 'text',
-          editable: true
-        }
-      })
-    )
+  if (props.columnConfigActivated && props.columnConfig !== undefined) {
+    props.columnConfig.forEach((col, index) => {
+      columns.push(
+        columnHelper.accessor(col.key, {
+          header: col.label,
+          meta: {
+            autoWidth: true,
+            type: 'text',
+            editable: props.disabled !== true
+          }
+        })
+      )
+    })
+  } else {
+    for (let i = 0; i < props.cols; i++) {
+      columns.push(
+        columnHelper.accessor('col-' + i, {
+          meta: {
+            autoWidth: true,
+            type: 'text',
+            editable: props.disabled !== true
+          }
+        })
+      )
+    }
   }
 
   const dataRows: Array<Record<string, string>> = []
   for (let i = 0; i < props.rows; i++) {
-    const rowValues = {}
-    for (let j = 0; j < props.cols; j++) {
-      rowValues['col-' + j] = props.value?.[i]?.[j] ?? ''
+    const rowValues: Record<string, string> = {}
+    if (props.columnConfigActivated && props.columnConfig !== undefined) {
+      props.columnConfig.forEach((col, index) => {
+        rowValues[col.key] = props.value?.[i]?.[col.key] ?? ''
+      })
+    } else {
+      for (let j = 0; j < props.cols; j++) {
+        rowValues['col-' + j] = props.value?.[i]?.[j] ?? ''
+      }
     }
     dataRows.push(rowValues)
   }
@@ -52,19 +77,20 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
     <Grid
       columns={ columns }
       data={ dataRows }
-      hideColumnHeaders
-      highlightActiveCell
+      hideColumnHeaders={ !props.columnConfigActivated || props.columnConfig === undefined }
+      highlightActiveCell={ props.disabled !== true }
       onActiveCellChange={ props.onActiveCellChange }
       onUpdateCellData={ (data) => {
-        const newDataRows = {
-          ...dataRows,
-          [data.rowIndex]: {
-            ...dataRows?.[data.rowIndex],
-            [data.columnId]: data.value
-          }
+        const newDataRows = [...dataRows]
+        newDataRows[data.rowIndex] = {
+          ...newDataRows[data.rowIndex],
+          [data.columnId]: data.value
         }
 
-        const newValue = Object.values(newDataRows).map(row => Object.values(row))
+        const newValue = props.columnConfigActivated && props.columnConfig !== undefined
+          ? newDataRows
+          : newDataRows.map(row => Object.values(row))
+
         props.onChange?.(newValue)
       } }
       resizable
