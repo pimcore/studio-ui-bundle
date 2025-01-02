@@ -34,6 +34,8 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   const cellType = useMemo(() => column.columnDef.meta?.type ?? 'text', [column.columnDef.meta?.type])
   const [isInEditMode, setIsInEditMode] = useState(false)
   const element = useRef<HTMLInputElement>(null)
+  const columnWrapperRef = useRef<HTMLDivElement>(null)
+  const [columnWrapperWidth, setColumnWrapperWidth] = useState<number | undefined>(undefined)
   // @todo move to new dynamic type system
   // const typeRegistry = useInjection<TypeRegistry>(serviceIds['Grid/TypeRegistry'])
   const { handleArrowNavigation } = useKeyboardNavigation(props)
@@ -82,7 +84,21 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         tabIndex={ 0 }
       >
         <EditableCellContextProvider value={ editableCellContextValue }>
-          {ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>}
+          { column.columnDef.meta?.editable === true && column.columnDef.meta?.autoWidth === true
+            ? (
+              <div
+                className="w-full"
+                key={ isInEditMode ? 'edit-mode' : 'view-mode' }
+                ref={ columnWrapperRef }
+                style={ { width: isInEditMode ? columnWrapperWidth : undefined } }
+              >
+                {ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>}
+              </div>
+              )
+            : (
+                ComponentRenderer !== null ? ComponentRenderer(props) : <>Cell type not supported</>
+              )}
+
         </EditableCellContextProvider>
       </div>
     )
@@ -109,6 +125,12 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
   function enableEditMode (): void {
     if (!isEditable) {
       return
+    }
+
+    if (!isInEditMode) {
+      if (columnWrapperRef.current !== null) {
+        setColumnWrapperWidth(columnWrapperRef.current.offsetWidth)
+      }
     }
 
     if (isEditable && table.options.meta?.onUpdateCellData === undefined) {

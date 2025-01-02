@@ -187,7 +187,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
       for (const column of columns) {
         if (column.meta?.autoWidth === true) {
           if (autoWidthColumnFound) {
-            trackError(new GeneralError('Only one column can have autoWidth set to true'))
+            trackError(new GeneralError('Only one column can have autoWidth set to true when table autoWidth is enabled.'))
           }
           autoWidthColumnFound = true
         }
@@ -201,6 +201,11 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
     setActiveCell(cell)
   }, [])
 
+  const calculateTableWidth = (): number | string => {
+    const hasAutoWidthColumn = columns.some(column => column.meta?.autoWidth === true)
+    return hasAutoWidthColumn ? 'auto' : table.getCenterTotalSize()
+  }
+
   return useMemo(() => (
     <div
       className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }
@@ -210,7 +215,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
           <div className='ant-table-content'>
             <table
               ref={ tableElement }
-              style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
+              style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
             >
               { !hideColumnHeaders && (
                 <thead className='ant-table-thead'>
