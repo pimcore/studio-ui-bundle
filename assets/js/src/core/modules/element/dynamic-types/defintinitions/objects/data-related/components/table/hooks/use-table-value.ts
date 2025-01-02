@@ -52,12 +52,12 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
   }, [value])
 
   const initializeValue = (): TableValue => {
-    const rows = props.rows ?? 0
+    const rows = props.rows ?? 1
 
     return new Array(rows).fill(null).map(() => createEmptyRow())
   }
 
-  const cols = (() => {
+  let cols = (() => {
     if (value !== null && value.length > 0) {
       if (props.columnConfigActivated) {
         return Object.keys(value[0]).length
@@ -68,7 +68,9 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
       return props.cols ?? 0
     }
   })()
-  const rows = value !== null && value.length > 0 ? value.length : (props.rows ?? 0)
+  let rows = value !== null && value.length > 0 ? value.length : (props.rows ?? 0)
+  cols = Math.max(cols, 1)
+  rows = Math.max(rows, 1)
 
   const emptyValue = (): void => {
     if (value !== null) {
