@@ -22,9 +22,10 @@ interface ImageGalleryImageTargetProps {
   index: number
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
+  disabled?: boolean
 }
 
-export const ImageGalleryImageTarget = ({ index, value, setValue }: ImageGalleryImageTargetProps): React.JSX.Element => {
+export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: ImageGalleryImageTargetProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -39,7 +40,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue }: ImageGallery
       variant="outline"
     >
       <ImageTarget
-        dndIcon
+        dndIcon={ disabled !== true }
         height={ 100 }
         onRemove={ value[index] === undefined
           ? undefined
@@ -49,8 +50,8 @@ export const ImageGalleryImageTarget = ({ index, value, setValue }: ImageGallery
               newValue.splice(index, 1)
               setValue(newValue)
             } }
-        title={ t('image.dnd-target') }
-        uploadIcon
+        title={ t(disabled !== true ? 'image.dnd-target' : 'empty') }
+        uploadIcon={ disabled !== true }
         width={ 200 }
       />
     </Droppable>

@@ -31,9 +31,10 @@ export interface ImageGallerySortableItemProps {
   item: ImageGalleryValueItem
   value: ImageGalleryValue
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValue>>
+  disabled?: boolean
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -59,6 +60,7 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue }: I
       { item.image !== null
         ? (
           <ImageGalleryImagePreview
+            disabled={ disabled }
             index={ index }
             item={ item }
             setValue={ setValue }
@@ -67,6 +69,7 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue }: I
           )
         : (
           <ImageGalleryImageTarget
+            disabled={ disabled }
             index={ index }
             setValue={ setValue }
             value={ value }
