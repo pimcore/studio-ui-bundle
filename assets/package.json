@@ -18,7 +18,7 @@
     "lint-fix": "eslint --ext .js,.jsx,.ts,.tsx ./js --fix",
     "test": "jest ./js/src --passWithNoTests",
     "storybook": "storybook dev -p 6006 --no-open",
-    "generate-icons": "ts-node -r tsconfig-paths/register js/src/core/modules/icon-library/generate-icon-index.ts"
+    "generate-icons": "npx ts-node -O '{\"module\": \"CommonJS\", \"esModuleInterop\": true}' -r tsconfig-paths/register build/generate-icon-index.ts"
   },
   "types": "./dist/build/types/src/sdk/main.d.ts",
   "main": "./dist/sdk/main.js",

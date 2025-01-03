@@ -16,11 +16,11 @@
  * the script will append 'Icon' to the variable name.
  * 3. Run the script using `npm run generate-icons`
  * 4. The script will generate/replace the index file at `./js/src/core/modules/icon-library/index.ts`
- * 5. The script will also update the SVG files to use `currentColor` as the stroke color.
+ * 5. The script will also update the SVG files to use `currentColor` as the stroke color or fill color (if stroke does not exist in the file).
  */
 
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const SVG_FOLDER = path.resolve('./js/src/core/assets/icons');
 const OUTPUT_FILE = path.resolve('./js/src/core/modules/icon-library/index.ts');
