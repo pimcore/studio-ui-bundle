@@ -48,7 +48,7 @@ export const HeadWithButtons = {
     </Fragment>,
     extra: [
       {
-        icon: 'eye-outlined',
+        icon: 'eye',
         title: 'View',
         type: 'default',
         onClick: () => { console.log('click view button') }
@@ -67,7 +67,7 @@ export const CloseButton = {
 export const HeadWithIcon = {
   args: {
     ..._default.args,
-    icon: 'eye-outlined'
+    icon: 'eye'
   }
 }
 

@@ -33,7 +33,7 @@ export const _default = {
 
 export const ColorSuccessIconTag = {
   args: {
-    iconName: 'world',
+    iconName: 'published',
     color: 'success',
     children: 'Published'
   }
