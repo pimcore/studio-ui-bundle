@@ -54,6 +54,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
         defaultCheckedTags={ defaultCheckedTags }
         elementId={ id }
         elementType={ elementType }
+        filter={ filter }
         isLoading={ tagsLoading }
         setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }
