@@ -36,7 +36,11 @@ export interface UrlSlugProps {
 }
 
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
-  const [value, setValue] = useState<UrlSlugEntry[]>(props.value ?? [])
+  const initialValue = props.value ?? [{ slug: '', siteId: 0 }]
+  if (!initialValue.some(entry => entry.siteId === 0)) {
+    initialValue.unshift({ slug: '', siteId: 0 })
+  }
+  const [value, setValue] = useState<UrlSlugEntry[]>(initialValue)
   const [errors, setErrors] = useState<boolean[]>([])
   const { t } = useTranslation()
   const { getSiteById, getRemainingSites } = useSites()
@@ -123,6 +127,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
               </Text>
               )}
             </div>
+            { item.siteId !== 0 && (
             <Tooltip title={ t('remove') }>
               <IconButton
                 icon={ { value: 'trash' } }
@@ -133,6 +138,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
                 } }
               />
             </Tooltip>
+            )}
           </Flex>
         </List.Item>
       ) }
