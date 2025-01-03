@@ -60,7 +60,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
                /> }
     >
       <Droppable
-        isValidContext={ (info: DragAndDropInfo) => true }
+        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
         isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
         onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', id: info.data.id as number }) } }
         variant="outline"
@@ -75,9 +75,10 @@ export const Image = (props: ImageProps): React.JSX.Element => {
             )
           : (
             <ImageTarget
-              dndIcon
+              dndIcon={ props.disabled !== true }
               height={ height }
-              title={ t('image.dnd-target') }
+              title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
+              uploadIcon={ props.disabled !== true }
               width={ width }
             />
             ) }
