@@ -27,6 +27,7 @@ export interface InputQuantityValueProps {
   onChange?: (value: InputQuantityValueValue | null) => void
   validUnits?: string[] | null
   width?: string | null
+  disabled?: boolean
 }
 
 export interface InputQuantityValueValue {
@@ -70,6 +71,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
     >
       <Input
         className={ styles.input }
+        disabled={ props.disabled }
         onChange={ onChangeInput }
         style={ { maxWidth: toCssDimension(props.width, 150) } }
         value={ value?.value ?? undefined }
@@ -77,6 +79,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
       <Select
         allowClear
         className={ styles.select }
+        disabled={ props.disabled }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }

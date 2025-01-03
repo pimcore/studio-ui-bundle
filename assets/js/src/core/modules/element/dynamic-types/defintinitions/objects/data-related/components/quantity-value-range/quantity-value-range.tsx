@@ -31,6 +31,7 @@ export interface QuantityValueRangeProps {
   unitWidth?: string | null
   width?: string | null
   decimalPrecision?: number | null
+  disabled?: boolean
 }
 
 export interface QuantityValueRangeValue {
@@ -85,12 +86,14 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
       >
         <InputNumber
           className={ cn(styles.input, 'w-full') }
+          disabled={ props.disabled }
           onChange={ onChangeMinimum }
           precision={ props.decimalPrecision ?? undefined }
           value={ value?.minimum ?? undefined }
         />
         <InputNumber
           className={ cn(styles.input, 'w-full') }
+          disabled={ props.disabled }
           onChange={ onChangeMaximum }
           precision={ props.decimalPrecision ?? undefined }
           value={ value?.maximum ?? undefined }
@@ -98,6 +101,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
       </Flex>
       <Select
         allowClear
+        disabled={ props.disabled }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }

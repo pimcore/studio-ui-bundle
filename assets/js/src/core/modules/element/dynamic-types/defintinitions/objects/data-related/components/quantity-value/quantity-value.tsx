@@ -33,6 +33,7 @@ export interface QuantityValueProps {
   width?: string | null
   decimalPrecision?: number | null
   autoConvert: boolean
+  disabled?: boolean
 }
 
 export interface QuantityValueValue {
@@ -88,6 +89,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
     >
       <InputNumber
         className={ cn(styles.input, 'w-full') }
+        disabled={ props.disabled }
         onChange={ onChangeNumber }
         precision={ props.decimalPrecision ?? undefined }
         style={ { maxWidth: toCssDimension(props.width, 150) } }
@@ -95,6 +97,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
       />
       <Select
         allowClear
+        disabled={ props.disabled }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }
