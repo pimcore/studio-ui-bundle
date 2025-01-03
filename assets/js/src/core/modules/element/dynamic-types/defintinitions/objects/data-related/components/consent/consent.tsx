@@ -20,6 +20,7 @@ export interface ConsentProps {
   value?: ConsentValue | null
   className?: string
   onChange?: (value: ConsentValue | null) => void
+  disabled?: boolean
 }
 
 export interface ConsentValue {
@@ -53,6 +54,7 @@ export const Consent = (props: ConsentProps): React.JSX.Element => {
     >
       <Checkbox
         checked={ value?.consent }
+        disabled={ props.disabled }
         onChange={ onChange }
       />
       { noteContent.length > 0 && (
