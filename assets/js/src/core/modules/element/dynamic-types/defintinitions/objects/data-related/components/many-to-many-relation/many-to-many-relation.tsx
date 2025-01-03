@@ -44,6 +44,7 @@ export interface ManyToManyRelationClassDefinitionProps {
   width: number | string | null
   height: number | string | null
   assetInlineDownloadAllowed?: boolean | null
+  disabled?: boolean
 }
 
 export interface ManyToManyRelationProps extends ManyToManyRelationClassDefinitionProps {
@@ -63,7 +64,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   return (
     <>
       <Droppable
-        isValidContext={ (info: DragAndDropInfo) => { return isValidElementType(info.type) } }
+        isValidContext={ (info: DragAndDropInfo) => { return props.disabled !== true && isValidElementType(info.type) } }
         isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
         onDrop={ onDrop }
         variant="outline"
@@ -71,15 +72,16 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
         <ManyToManyRelationGrid
           assetInlineDownloadAllowed={ props.assetInlineDownloadAllowed ?? false }
           deleteItem={ deleteItem }
+          disabled={ props.disabled }
           value={ displayedValue }
         />
       </Droppable>
       <ManyToManyRelationToolbar
         addAssets={ addAssets }
-        allowClear={ props.allowToClearRelation }
+        allowClear={ props.allowToClearRelation && props.disabled !== true }
         assetUploadPath={ props.assetUploadPath }
         empty={ () => { setValue(null) } }
-        enableUpload={ props.assetsAllowed }
+        enableUpload={ props.assetsAllowed && props.disabled !== true }
         onSearch={ onSearch }
         uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
         uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
