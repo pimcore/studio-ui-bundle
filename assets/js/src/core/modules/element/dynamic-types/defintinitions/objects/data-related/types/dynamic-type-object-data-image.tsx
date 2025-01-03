@@ -26,7 +26,10 @@ export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <Image { ...props } />
+      <Image
+        { ...props }
+        disabled={ props.noteditable === true }
+      />
     )
   }
 }

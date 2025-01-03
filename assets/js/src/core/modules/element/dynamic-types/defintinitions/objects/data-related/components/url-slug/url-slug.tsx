@@ -117,6 +117,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
             </div>
             <div className="w-full">
               <Input
+                disabled={ props.disabled }
                 onChange={ e => { handleInputChange(index, e.target.value) } }
                 status={ errors[index] ? 'error' : undefined }
                 value={ item.slug }
@@ -127,15 +128,17 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
               </Text>
               )}
             </div>
-            { item.siteId !== 0 && (
+            { props.disabled !== true && (
             <Tooltip title={ t('remove') }>
               <IconButton
+                disabled={ item.siteId === 0 }
                 icon={ { value: 'trash' } }
                 onClick={ () => {
                   const newValue = [...value]
                   newValue.splice(index, 1)
                   setValue(newValue)
                 } }
+                style={ { visibility: item.siteId === 0 ? 'hidden' : undefined } }
               />
             </Tooltip>
             )}
