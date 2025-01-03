@@ -159,7 +159,6 @@ export const Table = (props: TableProps): React.JSX.Element => {
             okText: t('save'),
             onOk: (value: string) => {
               if (value !== '') {
-                console.log('paste data', getPasteData(value), fixColumnConfig(getPasteData(value)))
                 setValue(fixColumnConfig(getPasteData(value)))
               }
             }
