@@ -51,33 +51,4 @@ final class ImageEditorController extends AbstractController
             'asset' => $asset,
         ]);
     }
-
-    #[Route('/get-asset', name: 'studio_temp_get_asset', methods: ['GET'])]
-    public function getAssetAction(Request $request): StreamedResponse
-    {
-        $image = Asset::getById((int)$request->get('id'));
-
-        if (!$image) {
-            throw $this->createNotFoundException('Asset not found');
-        }
-
-        $this->securityService->hasElementPermission(
-            $image,
-            $this->securityService->getCurrentUser(),
-            ElementPermissions::VIEW_PERMISSION
-        );
-
-        $stream = $image->getStream();
-
-        if (!is_resource($stream)) {
-            throw $this->createNotFoundException('Unable to get resource for asset ' . $image->getId());
-        }
-
-        return new StreamedResponse(function () use ($stream) {
-            fpassthru($stream);
-        }, 200, [
-            'Content-Type' => $image->getMimeType(),
-            'Access-Control-Allow-Origin' => '*',
-        ]);
-    }
 }

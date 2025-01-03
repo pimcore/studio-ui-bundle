@@ -88,8 +88,7 @@
 <div id="popups"></div>
 
 {% set imageFileExtension = pimcore_file_extension(asset.getFilename()) %}
-{# TODO ask backend team to provide endpoint in backend API #}
-{% set imageUrl = path('studio_temp_get_asset', {id: asset.getId()}) %}
+{% set imageUrl = path('pimcore_studio_api_stream_image', {id: asset.getId()}) %}
 
 {% if imageFileExtension not in ['png', 'jpg', 'jpeg'] %}
     {# TODO ask backend team to provide endpoint in backend API #}
