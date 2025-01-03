@@ -25,8 +25,6 @@ export class IconLibrary implements AbstractIconLibrary {
   private readonly icons = new Map<string, ComponentType>()
 
   register ({ name, component }: { name: string, component: ComponentType }): void {
-    console.log('----> registered', name)
-
     this.icons.set(name, component)
   }
 

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "rootDir": ".",
-    "module": "CommonJS",
-    "target": "ES6",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "target": "ES2023",
+    "moduleResolution": "Node",
     "types": ["reflect-metadata", "@types/webpack-env", "jest", "react", "react-dom", "node"],
     "baseUrl": "./js/",
     "paths": {

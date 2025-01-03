@@ -62,10 +62,16 @@ const generateIconEntry = (fileName: string): string => {
     });`;
 };
 
-const modifySvgStroke = (filePath: string): void => {
+const modifySvgAttributes = (filePath: string): void => {
     let svgContent: string = fs.readFileSync(filePath, 'utf-8');
+    const hasStroke = /stroke="[^"]*"/.test(svgContent);
+
+    if (!hasStroke) {
+        svgContent = svgContent.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+    }
 
     svgContent = svgContent.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
+
     fs.writeFileSync(filePath, svgContent, 'utf-8');
 };
 
@@ -105,7 +111,7 @@ import { type IconLibrary } from './services/icon-library';
 
 files.forEach((file: string) => {
     const filePath: string = path.join(SVG_FOLDER as string, file);
-    modifySvgStroke(filePath);
+    modifySvgAttributes(filePath);
 
     const variableName: string = generateVariableName(file);
     content += `
