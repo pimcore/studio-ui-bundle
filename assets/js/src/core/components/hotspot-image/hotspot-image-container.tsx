@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { HotspotImage, IHotspot, IStyleOptions, defaultStyleOptions } from "@Pimcore/components/hotspot-image/hotspot-image";
 
 interface IHotspotImageContainer {

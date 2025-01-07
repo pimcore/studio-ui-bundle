@@ -69,6 +69,71 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, x: 0, y: 0 });
     const [popoverOpen, setPopoverOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // Update the item with the new position
+    const dragItem = (evt, containerBounds, hotspotIndex, hotspot) => {
+        const newX = Math.min(containerBounds.width - hotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x));
+        const newY = Math.min(containerBounds.height - hotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y));
+
+        setItems(items.map((h, i) => i === hotspotIndex ? { ...h, x: newX, y: newY } : h));
+    };
+
+    const resizeItem = (evt, containerBounds, hotspotIndex, hotspot, dx, dy) => {
+        let { newWidth, newHeight, newX, newY } = calculateNewDimensions(hotspot, dx, dy);
+
+        if (resizeDirection.includes('w')) {
+            ({ newWidth, newX } = handleWestResize(hotspot, dx, evt, containerBounds));
+        }
+        if (resizeDirection.includes('e')) {
+            newWidth = Math.max(styleOptions[hotspot.type].minSize, resizeStart.width + dx);
+        }
+        if (resizeDirection.includes('n')) {
+            ({ newHeight, newY } = handleNorthResize(hotspot, dy, evt, containerBounds));
+        }
+        if (resizeDirection.includes('s')) {
+            newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height + dy);
+        }
+
+        setItems(items.map((h, i) => i === hotspotIndex ? {
+            ...h,
+            x: newX,
+            y: newY,
+            width: newWidth,
+            height: newHeight
+        } : h));
+    };
+
+    const calculateNewDimensions = (hotspot, dx, dy) => {
+        return {
+            newWidth: resizeStart.width,
+            newHeight: resizeStart.height,
+            newX: hotspot.x,
+            newY: hotspot.y
+        };
+    };
+
+    const handleWestResize = (hotspot, dx, evt, containerBounds) => {
+        let newWidth = Math.max(styleOptions[hotspot.type].minSize, resizeStart.width - dx);
+        let newX = Math.min(hotspot.x + resizeStart.width - styleOptions[hotspot.type].minSize, evt.clientX - containerBounds.left);
+
+        if (newWidth === styleOptions[hotspot.type].minSize) {
+            newX = hotspot.x + hotspot.width - styleOptions[hotspot.type].minSize;
+        }
+
+        return { newWidth, newX };
+    };
+    const handleNorthResize = (hotspot, dy, evt, containerBounds) => {
+        let newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height - dy);
+        let newY = Math.min(hotspot.y + resizeStart.height - styleOptions[hotspot.type].minSize, evt.clientY - containerBounds.top);
+
+        if (newHeight === styleOptions[hotspot.type].minSize) {
+            newY = hotspot.y + hotspot.height - styleOptions[hotspot.type].minSize;
+        }
+
+        return { newHeight, newY };
+    };
+
+    // Handle mouse events
     const handleMouseDown = (evt, hotspot) => {
         const rect = evt.target.getBoundingClientRect();
         const mouseX = evt.clientX - rect.left;
@@ -106,51 +171,11 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         const dy = evt.clientY - resizeStart.y;
 
         if (dragging) {
-            const newX = Math.min(containerBounds.width - hotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x));
-            const newY = Math.min(containerBounds.height - hotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y));
-
-            // Update the item with the new position
-            setItems(items.map((h, i) => i === hotspotIndex ? { ...h, x: newX, y: newY } : h));
+            dragItem(evt, containerBounds, hotspotIndex, hotspot);
         } else if (resizeDirection) {
-            let newWidth = resizeStart.width,
-                newHeight = resizeStart.height,
-                newX = hotspot.x,
-                newY = hotspot.y;
-
-            if (resizeDirection.includes('w')) {
-                newWidth = Math.max(styleOptions[hotspot.type].minSize, resizeStart.width - dx);
-                newX = Math.min(hotspot.x + resizeStart.width - styleOptions[hotspot.type].minSize, evt.clientX - containerBounds.left);
-
-                if (newWidth === styleOptions[hotspot.type].minSize) {
-                    newX = hotspot.x + hotspot.width - styleOptions[hotspot.type].minSize;
-                }
-            }
-            if (resizeDirection.includes('e')) {
-                newWidth = Math.max(styleOptions[hotspot.type].minSize, resizeStart.width + dx);
-            }
-            if (resizeDirection.includes('n')) {
-                newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height - dy);
-                newY = Math.min(hotspot.y + resizeStart.height - styleOptions[hotspot.type].minSize, evt.clientY - containerBounds.top);
-
-                if (newHeight === styleOptions[hotspot.type].minSize) {
-                    newY = hotspot.y + hotspot.height - styleOptions[hotspot.type].minSize;
-                }
-            }
-            if (resizeDirection?.includes('s')) {
-                newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height + dy);
-            }
-
-            // Update the item with the new position and size
-            setItems(items.map((h, i) => i === hotspotIndex ? {
-                ...h,
-                x: newX,
-                y: newY,
-                width: newWidth,
-                height: newHeight
-            } : h));
+            resizeItem(evt, containerBounds, hotspotIndex, hotspot, dx, dy);
         }
     };
-
     const handleMouseUp = () => {
         setDragging(false);
         setResizeDirection(null);
@@ -160,6 +185,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     return (
         <div
             ref={containerRef}
+            role={'presentation'}
             className={['hotspot-image', styles.hotspotImage].join(' ')}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -188,7 +214,8 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                         </div>
                     }
                 >
-                    <div
+                    <button
+                        type={'button'}
                         key={hotspot.id}
                         className={`hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''}`}
                         style={{
@@ -203,7 +230,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                         {styleOptions[hotspot.type]?.icon ? (
                             <Icon value={styleOptions[hotspot.type].icon}/>
                         ) : null}
-                    </div>
+                    </button>
                 </Popover>
             ))}
         </div>
