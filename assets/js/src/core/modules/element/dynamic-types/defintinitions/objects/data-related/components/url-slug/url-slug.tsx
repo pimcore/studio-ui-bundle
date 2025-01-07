@@ -36,7 +36,11 @@ export interface UrlSlugProps {
 }
 
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
-  const [value, setValue] = useState<UrlSlugEntry[]>(props.value ?? [])
+  const initialValue = props.value ?? [{ slug: '', siteId: 0 }]
+  if (!initialValue.some(entry => entry.siteId === 0)) {
+    initialValue.unshift({ slug: '', siteId: 0 })
+  }
+  const [value, setValue] = useState<UrlSlugEntry[]>(initialValue)
   const [errors, setErrors] = useState<boolean[]>([])
   const { t } = useTranslation()
   const { getSiteById, getRemainingSites } = useSites()
@@ -113,6 +117,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
             </div>
             <div className="w-full">
               <Input
+                disabled={ props.disabled }
                 onChange={ e => { handleInputChange(index, e.target.value) } }
                 status={ errors[index] ? 'error' : undefined }
                 value={ item.slug }
@@ -123,16 +128,20 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
               </Text>
               )}
             </div>
+            { props.disabled !== true && (
             <Tooltip title={ t('remove') }>
               <IconButton
+                disabled={ item.siteId === 0 }
                 icon={ { value: 'trash' } }
                 onClick={ () => {
                   const newValue = [...value]
                   newValue.splice(index, 1)
                   setValue(newValue)
                 } }
+                style={ { visibility: item.siteId === 0 ? 'hidden' : undefined } }
               />
             </Tooltip>
+            )}
           </Flex>
         </List.Item>
       ) }

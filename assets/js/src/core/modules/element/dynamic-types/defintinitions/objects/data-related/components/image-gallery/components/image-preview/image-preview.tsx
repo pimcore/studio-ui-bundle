@@ -26,15 +26,19 @@ interface ImageGalleryImagePreviewProps {
   index: number
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
+  disabled?: boolean
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
 
   return (
     <Droppable
       isValidContext={ (info: DragAndDropInfo) => {
+        if (disabled === true) {
+          return false
+        }
         if (info.sortable! !== undefined) {
           return true
         }
@@ -68,6 +72,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
         bordered
         dropdownItems={ [
           {
+            disabled,
             key: 'add',
             label: t('add'),
             icon: <Icon value={ 'PlusOutlined' } />,
@@ -78,6 +83,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
             }
           },
           {
+            disabled,
             key: 'delete',
             label: t('delete'),
             icon: <Icon value={ 'delete-outlined' } />,

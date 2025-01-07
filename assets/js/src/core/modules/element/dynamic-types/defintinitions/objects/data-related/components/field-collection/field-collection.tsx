@@ -14,27 +14,30 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { Form } from '@Pimcore/components/form/form'
-import { FieldCollectionContent } from './field-collection-content'
+import { Collection } from '../collection/collection'
+import { FieldCollectionItem } from './field-collection-item'
+import { FieldCollectionAddButton } from './field-collection-add-button'
 
 export interface FieldCollectionProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
   allowedTypes: string[]
   border?: boolean
   collapsed?: boolean
+  disallowReorder?: boolean
+  disallowAddRemove?: boolean
+  maxItems?: number
 }
 
-export const FieldCollection = ({ border = false, ...props }: FieldCollectionProps): React.JSX.Element => {
+export const FieldCollection = ({ border = false, disallowAddRemove, ...props }: FieldCollectionProps): React.JSX.Element => {
   return (
-    <Form.List name={ props.name }>
-      {(fields, operation) => (
-        <FieldCollectionContent
-          border={ border }
-          { ...props }
-          fields={ fields }
-          operation={ operation }
-        />
-      )}
-    </Form.List>
+    <Collection
+      addButtonComponent={ [FieldCollectionAddButton, { allowedTypes: props.allowedTypes }] }
+      border={ border }
+      disallowAdd={ disallowAddRemove }
+      disallowDelete={ disallowAddRemove }
+      itemComponent={ [FieldCollectionItem, { allowedTypes: props.allowedTypes }] }
+      name={ props.name }
+      title={ props.title }
+    />
   )
 }

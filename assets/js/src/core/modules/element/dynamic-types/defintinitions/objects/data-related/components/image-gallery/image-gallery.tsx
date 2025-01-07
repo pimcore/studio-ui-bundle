@@ -80,6 +80,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
         >
           { value.map((item, index) => (
             <ImageGallerySortableItem
+              disabled={ props.disabled }
               id={ String(index) }
               index={ index }
               item={ item }
@@ -89,11 +90,14 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             />
           )) }
         </SortableContext>
-        <ImageGalleryImageTarget
-          index={ value.length }
-          setValue={ setValue }
-          value={ value }
-        />
+        { (props.disabled !== true || _.isEmpty(value)) && (
+          <ImageGalleryImageTarget
+            disabled={ props.disabled }
+            index={ value.length }
+            setValue={ setValue }
+            value={ value }
+          />
+        ) }
       </Flex>
     </Card>
   )

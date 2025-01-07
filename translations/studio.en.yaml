@@ -382,3 +382,4 @@ image.dnd-target: Upload or drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
+collection.empty: No available fields yet. Start by adding a field.
