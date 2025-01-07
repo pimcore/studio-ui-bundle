@@ -54,14 +54,14 @@ const Component = ({ loading, children, footer, fitContent, className, theme = '
                   ? (
                     <IconButton
                       icon={ { value: extra.icon as string } }
-                      key={ index }
+                      key={ `${extra.icon}-${index}` }
                       onClick={ extra.onClick }
                       role={ 'button' }
                       title={ extra.title }
                       type={ extra.type !== undefined ? extra.type : 'text' }
                     />
                     )
-                  : (<Fragment key={ index }>{extra}</Fragment>)
+                  : (<Fragment key={ `${extra.icon}-${index}` }>{extra}</Fragment>)
               ))}
             </div>
             )

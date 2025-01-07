@@ -54,29 +54,29 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
 
   let items: NonNullable<AntBreadcrumbProps['items']> = []
 
+  // Handle click event for intermediate parts of breadcrumb
+  const handleMenuItemClick = (path: string): void => {
+    const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
+      elementType,
+      elementPath: path
+    }))
+
+    elementIdFetcher
+      .then(({ data }) => {
+        if (data !== undefined) {
+          openElement({
+            id: data.id,
+            type: elementType
+          }).catch(() => {})
+        }
+      })
+      .catch(() => {})
+  }
+
   function getBreadcrumbItems (path: string): AntBreadcrumbProps['items'] {
     // Split to check if it has more that just a single key
     const partList = path.split('/')
     const partListAmount = partList.length
-
-    // Handle click event for intermediate parts
-    const onMenuItemClick = (path: string): void => {
-      const elementIdFetcher = dispatch(elementApi.endpoints.elementGetIdByPath.initiate({
-        elementType,
-        elementPath: path
-      }))
-
-      elementIdFetcher
-        .then(({ data }) => {
-          if (data !== undefined) {
-            openElement({
-              id: data.id,
-              type: elementType
-            }).catch(() => {})
-          }
-        })
-        .catch(() => {})
-    }
 
     // Generate the breadcrumb text with ellipsis
     const generateBreadcrumbText = ({ content, style, className, hasFilename = false }: { content: string, style?: CSSProperties, className?: string, hasFilename?: boolean }): ReactElement => {
@@ -116,7 +116,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
         title: generateBreadcrumbText({ content: partList[partListAmount - 2], style: { maxWidth: '100px' } }),
         className: styles.pathItem,
         onClick: () => {
-          onMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
+          handleMenuItemClick(partList.slice(0, partListAmount - 1).join('/'))
         }
       })
 
@@ -128,7 +128,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
               partList[i]
             ),
             onClick: () => {
-              onMenuItemClick(partList.slice(0, i + 1).join('/'))
+              handleMenuItemClick(partList.slice(0, i + 1).join('/'))
             }
           })
         }
@@ -146,7 +146,7 @@ export const Breadcrumb = ({ path, elementType, editorTabsWidth, pageSize }: Bre
             partList[i]
           ),
           onClick: () => {
-            onMenuItemClick(partList.slice(0, i + 1).join('/'))
+            handleMenuItemClick(partList.slice(0, i + 1).join('/'))
           }
         })
       }

@@ -69,7 +69,7 @@ const DefaultContent = (): React.JSX.Element => {
   )
 }
 
-export const Error = {
+export const WithError = {
   args: {
     type: 'error',
     title: 'Error occurred when creating ZIP',
@@ -106,7 +106,7 @@ export const Success = {
   }
 }
 
-export const Info = {
+export const WithInfo = {
   args: {
     type: 'info',
     title: 'Info',
@@ -121,7 +121,7 @@ export const Info = {
   }
 }
 
-export const Warn = {
+export const WithWarn = {
   args: {
     type: 'warn',
     title: 'Warning',

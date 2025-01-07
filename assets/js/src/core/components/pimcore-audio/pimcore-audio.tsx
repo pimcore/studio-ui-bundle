@@ -47,7 +47,7 @@ export const PimcoreAudio = ({
     >
       {sources.map((source, index) => (
         <source
-          key={ index }
+          key={ `${index}-${source.type}` }
           src={ source.src }
           type={ source.type }
         />
@@ -55,7 +55,7 @@ export const PimcoreAudio = ({
 
       {tracks?.map((track, index) => (
         <track
-          key={ index }
+          key={ `${index}-${track.label}` }
           kind={ track.kind }
           label={ track.label }
           src={ track.src }

@@ -14,7 +14,7 @@
 import React from 'react'
 import { Badge as AntBadge, type BadgeProps } from 'antd'
 
-export const Badge = ({ color, children, ...props }: BadgeProps): React.JSX.Element => {
+export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
   return (
     <AntBadge
       color={ color }
