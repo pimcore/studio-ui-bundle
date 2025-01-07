@@ -62,7 +62,7 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
           {children.map((child, index) => (
             <ObjectComponent
               { ...child }
-              key={ child.name }
+              key={ index }
             />
           ))}
         </Space>

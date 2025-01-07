@@ -27,11 +27,11 @@ export const FieldContainer = ({ children, collapsible, collapsed }: FieldContai
       className='w-full'
       gap={ { x: 'extra-small', y: 0 } }
     >
-      {children.map((child) => {
+      {children.map((child, index) => {
         return (
           <Flex
             flex={ 1 }
-            key={ child.name }
+            key={ index }
           >
             <ObjectComponent
               { ...child }

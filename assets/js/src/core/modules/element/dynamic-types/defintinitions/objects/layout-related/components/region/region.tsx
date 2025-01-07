@@ -13,10 +13,15 @@
 
 import { Region as BaseRegion, type RegionProps as BaseRegionProps } from '@Pimcore/components/region/region'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { BaseView } from '../../views/base-view'
 
-export interface RegionProps extends AbstractObjectLayoutDefinition {}
+export interface RegionProps extends AbstractObjectLayoutDefinition {
+  collapsible?: boolean
+  collapsed?: boolean
+  title?: ReactNode
+}
 
 export const availableRegions = {
   north: 'north',
@@ -26,7 +31,7 @@ export const availableRegions = {
   center: 'center'
 }
 
-export const Region = ({ children }: RegionProps): React.JSX.Element => {
+export const Region = ({ children, ...props }: RegionProps): React.JSX.Element => {
   const items: BaseRegionProps['items'] = []
   const layoutDefinition: BaseRegionProps['layoutDefinition'] = []
   const regionMap: Record<string, number> = {}
@@ -96,9 +101,15 @@ export const Region = ({ children }: RegionProps): React.JSX.Element => {
   }
 
   return (
-    <BaseRegion
-      items={ items }
-      layoutDefinition={ layoutDefinition }
-    />
+    <BaseView
+      collapsed={ props.collapsed }
+      collapsible={ props.collapsible }
+      title={ props.title }
+    >
+      <BaseRegion
+        items={ items }
+        layoutDefinition={ layoutDefinition }
+      />
+    </BaseView>
   )
 }
