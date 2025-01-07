@@ -14,7 +14,7 @@
 import React, { useState, type Key, useEffect } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
-import { flatMap, get, map } from 'lodash'
+import { map } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TreeElementItem } from './tree-element-item'
@@ -63,22 +63,9 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     map(treeData[0].children, 'key').map(String)
   )
 
-  const getFilteredCheckedKeys = (nodes: any): string[] => {
-    return flatMap(nodes, node => {
-      if (get(node, 'children.length') === 0) {
-        return node.key
-      } else {
-        return getFilteredCheckedKeys(node.children)
-      }
-    })
-  }
-
   useEffect(() => {
     if (!isEmptyValue(filter)) {
       const _expandedKeys = getFilteredExpandedKeys()
-      const _checkedKeys = getFilteredCheckedKeys(treeData)
-
-      console.log('------->>>> _checkedKeys: ', _checkedKeys)
 
       setExpandedKeys(['root', ..._expandedKeys])
     }
