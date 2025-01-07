@@ -15,7 +15,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    imageTargetContainer: css`
+    assetTargetContainer: css`
       border-radius: ${token.borderRadiusLG}px;
       outline: 1px dashed ${token.colorBorder};
       background: ${token.controlItemBgHover};

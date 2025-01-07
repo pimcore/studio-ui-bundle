@@ -26,6 +26,7 @@ import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/componen
 interface ImagePreviewProps {
   src?: string
   assetId?: number
+  assetType?: 'image' | 'video'
   className?: string
   width: number | string
   height: number | string
@@ -34,12 +35,19 @@ interface ImagePreviewProps {
   dropdownItems?: DropdownProps['menu']['items']
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const [key, setKey] = React.useState(0)
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
 
-  const imageSrc = assetId !== undefined ? `${getPrefix()}/assets/${assetId}/image/stream/preview` : src
+  const getAssetPreviewUrl = (): string => {
+    if (assetType === 'video') {
+      return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=300&height=300&frame=true&aspectRatio=true`
+    }
+
+    return `${getPrefix()}/assets/${assetId}/image/stream/preview`
+  }
+  const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
 
   useEffect(() => {
     setKey(key + 1)

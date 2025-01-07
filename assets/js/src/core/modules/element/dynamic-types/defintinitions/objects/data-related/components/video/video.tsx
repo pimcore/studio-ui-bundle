@@ -14,29 +14,51 @@
 import React, { useEffect } from 'react'
 import { Card } from '@Pimcore/components/card/card'
 import {
-  ImageFooter
+  VideoFooter
 } from './footer'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
-import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import {
+  VideoPreview
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/preview'
 
-export interface ImageValue {
+export type VideoValue = AssetVideoValue | YoutubeVideoValue | VimeoVideoValue | DailymotionVideoValue
+
+interface AssetVideoValue {
   type: 'asset'
-  id: number
+  data: {
+    type: 'asset'
+    id: number
+  }
 }
 
-export interface ImageProps {
+interface YoutubeVideoValue {
+  type: 'youtube'
+  data: string
+}
+
+interface VimeoVideoValue {
+  type: 'vimeo'
+  data: string
+}
+
+interface DailymotionVideoValue {
+  type: 'dailymotion'
+  data: string
+}
+
+export interface VideoProps {
   width: string | number | null
   height: string | number | null
   disabled?: boolean
-  value?: ImageValue | null
-  onChange?: (value: ImageValue | null) => void
+  value?: VideoValue | null
+  onChange?: (value: VideoValue | null) => void
 }
 
-export const Image = (props: ImageProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ImageValue | null>(props.value ?? null)
+export const Video = (props: VideoProps): React.JSX.Element => {
+  const [value, setValue] = React.useState<VideoValue | null>(props.value ?? null)
   const { t } = useTranslation()
   const emptyValue = (): void => {
     setValue(null)
@@ -47,29 +69,29 @@ export const Image = (props: ImageProps): React.JSX.Element => {
   }, [value])
 
   const width = props.width === null || props.width === '' ? 300 : props.width
-  const height = props.height === null || props.width === '' ? 150 : props.height
+  const height = props.height === null || props.width === '' ? 245 : props.height
   return (
     <Card
       className="max-w-full"
       fitContent
-      footer={ <ImageFooter
+      footer={ <VideoFooter
         disabled={ props.disabled }
         emptyValue={ emptyValue }
-        key="image-footer"
+        key="video-footer"
         value={ value }
                /> }
     >
       <Droppable
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
-        isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
-        onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', id: info.data.id as number }) } }
+        isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'video' }
+        onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', data: { type: 'asset', id: info.data.id as number } }) } }
         variant="outline"
       >
         { value !== null
           ? (
-            <ImagePreview
-              assetId={ value.id }
+            <VideoPreview
               height={ height }
+              value={ value }
               width={ width }
             />
             )
@@ -77,7 +99,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
             <AssetTarget
               dndIcon={ props.disabled !== true }
               height={ height }
-              title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
+              title={ t(props.disabled !== true ? 'video.dnd-target' : 'empty') }
               uploadIcon={ props.disabled !== true }
               width={ width }
             />
