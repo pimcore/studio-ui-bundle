@@ -20,13 +20,20 @@ export const useCssComponentHash = (componentName: string): string => {
   const context = useContext(ConfigContext)
   const prefix = context.getPrefixCls(componentName, '')
 
+  const tableHashId = useTableStyle(prefix)[1]
+  const paginationHashId = usePaginationStyle(prefix)[1]
+
   let hashId
   switch (componentName) {
     case 'table':
-      hashId = useTableStyle(prefix)[1]
+      hashId = tableHashId
       break
     case 'pagination':
-      hashId = usePaginationStyle(prefix)[1]
+      hashId = paginationHashId
+      break
+
+    default:
+      hashId = ''
   }
 
   return hashId

@@ -17,7 +17,7 @@ import ReactCodeMirror from '@uiw/react-codemirror'
 import { getLanguageExtensions, type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
 
 interface TextEditorProps {
-  defaultText?: string | undefined
+  defaultText?: string
   lineNumbers?: boolean
   className?: string
   language?: SupportedLanguage

@@ -76,7 +76,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         gap="extra-small"
         justify="space-between"
       >
-        <ButtonGroup items={ buttons } />
+        { buttons.length > 0 ? <ButtonGroup items={ buttons } /> : <div></div> }
 
         <div>
           <Search

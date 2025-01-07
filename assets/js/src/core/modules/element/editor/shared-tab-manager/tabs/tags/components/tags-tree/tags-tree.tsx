@@ -11,24 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Key } from 'react'
+import React from 'react'
 import {
   type Tag,
-  type TagAssignToElementApiArg,
-  useTagAssignToElementMutation,
-  useTagUnassignFromElementMutation
+  type TagAssignToElementApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
-import {
-  useCreateTreeStructure
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/hooks/use-create-tree-structure'
-import {
-  useOptimisticUpdate
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
 import { flattenArray } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/utils/flattn-tags-array'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
-import { type TreeProps } from 'antd'
+import {
+  createTreeStructure
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
+import { useHandleCheck } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-handle-check-tags'
 
 export interface TagsTreeProps {
   elementId: number
@@ -40,85 +35,35 @@ export interface TagsTreeProps {
   setDefaultCheckedTags: (tags: React.Key[]) => void
 }
 
-export const TagsTree = ({ elementId, elementType, tags, setFilter, isLoading, defaultCheckedTags, setDefaultCheckedTags }: TagsTreeProps): React.JSX.Element => {
-  const { createTreeStructure } = useCreateTreeStructure()
-  const treeData = createTreeStructure({ tags })
-  const { updateTagsForElementByTypeAndId } = useOptimisticUpdate()
-  const flatTags = flattenArray(tags)
-  const [assignTag] = useTagAssignToElementMutation()
-  const [unassignTag] = useTagUnassignFromElementMutation()
+export const TagsTree = ({
+  elementId,
+  elementType,
+  tags,
+  setFilter,
+  isLoading,
+  defaultCheckedTags,
+  setDefaultCheckedTags
+}: TagsTreeProps): React.JSX.Element => {
+  const flatTags = flattenArray(tags).filter((tag): tag is { id: number } => tag.id !== undefined)
 
-  const applyTagsToElement = async (checkedTags: Key[]): Promise<void> => {
-    updateTagsForElementByTypeAndId({
-      elementType,
-      id: elementId,
-      flatTags,
-      checkedTags: checkedTags.map(Number)
-    })
+  const { handleCheck, loadingNodes } = useHandleCheck({
+    elementId,
+    elementType,
+    flatTags,
+    setDefaultCheckedTags
+  })
 
-    setDefaultCheckedTags(checkedTags)
-  }
-
-  const assignTagToElement = async (tagId: number): Promise<void> => {
-    const assignTask = assignTag({
-      elementType,
-      id: elementId,
-      tagId
-    })
-
-    assignTask.catch(() => {
-      console.log('Failed to assign tag to element')
-    })
-
-    const response = (await assignTask) as any
-
-    if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
-    }
-  }
-
-  const removeTagFromElement = async (tagId: number): Promise<void> => {
-    const unassignTask = unassignTag({
-      elementType,
-      id: elementId,
-      tagId
-    })
-
-    unassignTask.catch(() => {
-      console.log('Failed to remove tag from element')
-    })
-
-    const response = (await unassignTask) as any
-
-    if (response.error !== undefined) {
-      throw new Error(response.error.data.error as string)
-    }
-  }
-
-  const handleCheck: TreeProps['onCheck'] = async (checkedKeys: { checked: Key[], halfChecked: Key[] }, info): Promise<void> => {
-    const tagId = Number(info.node.key)
-
-    void applyTagsToElement(checkedKeys.checked)
-
-    try {
-      info.checked
-        ? await assignTagToElement(tagId)
-        : await removeTagFromElement(tagId)
-    } catch (e) {
-      void applyTagsToElement(checkedKeys.checked.filter((key) => key !== tagId))
-    }
-  }
+  const treeData = createTreeStructure({ tags, loadingNodes })
 
   return (
     <Flex
-      gap={ 'small' }
+      gap="small"
       vertical
     >
       <SearchInput
         loading={ isLoading }
         onChange={ (e) => {
           const { value } = e.target
-
           setFilter(value)
         } }
         placeholder="Search"

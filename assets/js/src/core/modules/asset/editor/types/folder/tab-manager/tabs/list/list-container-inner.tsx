@@ -11,9 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { api, type AssetGetGridApiResponse, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { isUndefined } from 'lodash'
+import { api, type AssetGetGridApiResponse, type Column, type AssetPatchByIdApiArg, useAssetGetGridMutation, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { encodeColumnIdentifier, GridContainer } from './grid-container'
 import { GridToolbarContainer } from './toolbar/grid-toolbar-container'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -35,6 +37,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
 import usePagination from '@Pimcore/utils/hooks/use-pagination'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface DataPatch {
   columnId: string
@@ -82,6 +85,18 @@ export const ListContainerInner = (): React.JSX.Element => {
     }
   }, [columns, filterOptions, page, pageSize, sorting])
 
+  const getInitialColumns = ({ initialGridConfigData, availableGridConfigData }): GridColumnConfiguration[] => {
+    return initialGridConfigData!.columns.map((column: Column) => {
+      const availableColumn = availableGridConfigData?.columns?.find((availableColumn: GridColumnConfiguration) => availableColumn.key === column.key)
+
+      if (isUndefined(availableColumn)) {
+        trackError(new GeneralError(`Column with key ${column.key} is not available`))
+      }
+
+      return availableColumn
+    }).filter((column: GridColumnConfiguration | undefined) => !isUndefined(column))
+  }
+
   useEffect(() => {
     async function fetchGridConfiguration (): Promise<void> {
       const availableGridConfigPromise = dispatch(api.endpoints.assetGetAvailableGridColumns.initiate())
@@ -91,14 +106,9 @@ export const ListContainerInner = (): React.JSX.Element => {
         setAvailableColumns(availableGridConfig.data?.columns)
         setGridConfig(initialGridConfig.data)
 
-        const initialColumns = initialGridConfig.data!.columns.map((column) => {
-          const availableColumn = availableGridConfig.data?.columns?.find((availableColumn) => availableColumn.key === column.key)
-
-          if (availableColumn === undefined) {
-            throw new Error(`Column with key ${column.key} is not available`)
-          }
-
-          return availableColumn
+        const initialColumns = getInitialColumns({
+          initialGridConfigData: initialGridConfig.data,
+          availableGridConfigData: availableGridConfig.data
         })
 
         setGridColumns(initialColumns)
@@ -175,38 +185,59 @@ export const ListContainerInner = (): React.JSX.Element => {
     })
   }
 
-  const onUpdateCellData = ({ value, columnId, rowData }: OnUpdateCellDataEvent): void => {
-    const columnIdentifier = encodeColumnIdentifier(columnId)
-    const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
-
-    if (column === undefined) return
-
+  const updateDataPatches = (columnIdentifier: any, rowIndex: any, value: any): void => {
     setDataPatches((oldPatches) => {
       return [
         ...oldPatches,
         {
           columnId: columnIdentifier.key,
           locale: columnIdentifier.locale,
-          rowIndex: rowData.id,
+          rowIndex,
           value
         }
       ]
     })
+  }
 
-    setModifiedCells((oldModified) => [
-      ...oldModified ?? [],
-      {
-        columnId,
-        rowIndex: rowData.id
-      }
-    ])
+  const updateModifiedCells = (columnId: string, rowIndex: any): void => {
+    setModifiedCells((oldModified) => {
+      return [
+        ...(oldModified ?? []),
+        {
+          columnId,
+          rowIndex
+        }
+      ]
+    })
+  }
+
+  const replaceModifiedCells = (columnId: string, rowIndex: any): void => {
+    setModifiedCells((oldModified) => {
+      return oldModified?.filter((item) => !(item.columnId === columnId && item.rowIndex === rowIndex))
+    })
+  }
+
+  const replaceDataPatches = (columnIdentifier: any, rowIndex: any, locale: string): void => {
+    setDataPatches((oldPatches) => {
+      return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && locale === columnIdentifier.locale && patch.rowIndex === rowIndex))
+    })
+  }
+
+  const onUpdateCellData = ({ value, columnId, rowData }: OnUpdateCellDataEvent): void => {
+    const columnIdentifier = encodeColumnIdentifier(columnId)
+    const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
+
+    if (column === undefined) return
+
+    updateDataPatches(columnIdentifier, rowData.id, value)
+    updateModifiedCells(columnId, rowData.id)
 
     updateData()
 
     const backendType = column.type.split('.')
 
     if (backendType[0] !== 'metadata') {
-      throw new Error('Only metadata columns are supported for now')
+      trackError(new GeneralError('Only metadata columns are supported for now'))
     }
 
     const update: AssetPatchByIdApiArg = {
@@ -230,13 +261,8 @@ export const ListContainerInner = (): React.JSX.Element => {
       console.error(error)
     }).then(() => {
       prepareAndFetchListing()?.finally(() => {
-        setModifiedCells((oldModified) => {
-          return oldModified?.filter((item) => !(item.columnId === columnId && item.rowIndex === rowData.id))
-        })
-
-        setDataPatches((oldPatches) => {
-          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && column.locale === columnIdentifier.locale && patch.rowIndex === rowData.id))
-        })
+        replaceModifiedCells(columnId, rowData.id)
+        replaceDataPatches(columnIdentifier, rowData.id, column.locale!)
       }).catch((error) => {
         console.error(error)
       })

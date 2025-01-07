@@ -14,23 +14,28 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dynamic-type-object-layout-abstract'
-import { Form } from '@Pimcore/components/form/form'
-import { BlockContent } from './block-content'
+import { Collection } from '../collection/collection'
+import { BlockItem } from './block-item'
+import { BlockAddButton } from './block-add-button'
 
 export interface BlockProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectLayoutDefinition | AbstractObjectDataDefinition
+  collapsed?: boolean
+  collapsible?: boolean
+  disallowReorder?: boolean
+  disallowAddRemove?: boolean
+  maxItems?: number
 }
 
 export const Block = (props: BlockProps): React.JSX.Element => {
   return (
-    <Form.List name={ props.name }>
-      {(fields, operation) => (
-        <BlockContent
-          { ...props }
-          fields={ fields }
-          operation={ operation }
-        />
-      )}
-    </Form.List>
+    <Collection
+      addButtonComponent={ [BlockAddButton, {}] }
+      border
+      disallowAdd={ props.disallowAddRemove }
+      disallowDelete={ props.disallowAddRemove }
+      itemComponent={ [BlockItem, { children: props.children }] }
+      { ...props }
+    />
   )
 }

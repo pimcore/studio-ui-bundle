@@ -39,7 +39,7 @@ const injectedRtkApi = api
                 DataObjectGetAvailableGridColumnsApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/folderId`,
+                    url: `/pimcore-studio/api/data-object/grid/available-columns/${queryArg.classId}/${queryArg.folderId}`,
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -70,6 +70,17 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/${queryArg.sourceId}/replace/${queryArg.targetId}`,
                     method: "POST",
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectGetSelectOptions: build.mutation<
+                DataObjectGetSelectOptionsApiResponse,
+                DataObjectGetSelectOptionsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/select-options`,
+                    method: "POST",
+                    body: queryArg.body,
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
@@ -198,6 +209,18 @@ export type DataObjectReplaceContentApiArg = {
     /** TargetId of the data-object */
     targetId: number;
 };
+export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
+    totalItems: number;
+    items: SelectOption[];
+};
+export type DataObjectGetSelectOptionsApiArg = {
+    body: {
+        objectId: number;
+        fieldName: string;
+        changedData?: object;
+        context: object;
+    };
+};
 export type DataObjectGetTreeApiResponse =
     /** status 200 Paginated data objects with total count as header param as JSON */ {
         totalItems: number;
@@ -221,32 +244,7 @@ export type DataObjectGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
     /** Filter by class. */
-    className?:
-        | "AccessoryPart"
-        | "BodyStyle"
-        | "Car"
-        | "Category"
-        | "Customer"
-        | "CustomerSegment"
-        | "CustomerSegmentGroup"
-        | "Eierlegenedewollmilchsau"
-        | "Event"
-        | "FilterDefinition"
-        | "LinkActivityDefinition"
-        | "Manufacturer"
-        | "News"
-        | "OfferToolCustomProduct"
-        | "OfferToolOffer"
-        | "OfferToolOfferItem"
-        | "OnlineShopOrder"
-        | "OnlineShopOrderItem"
-        | "OnlineShopTaxClass"
-        | "OnlineShopVoucherSeries"
-        | "OnlineShopVoucherToken"
-        | "PortalUser"
-        | "PortalUserGroup"
-        | "TermSegmentBuilderDefinition"
-        | "test";
+    className?: string;
 };
 export type Error = {
     /** Message */
@@ -403,6 +401,8 @@ export type GridColumnConfiguration = {
     sortable: boolean;
     /** Editable */
     editable: boolean;
+    /** Exportable */
+    exportable?: boolean;
     /** Localizable */
     localizable: boolean;
     /** Locale */
@@ -492,6 +492,16 @@ export type Layout = {
     /** Border */
     border: boolean;
 };
+export type SelectOption = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Key */
+    key: string;
+    /** Value */
+    value: string;
+};
 export const {
     useDataObjectAddMutation,
     useDataObjectCloneMutation,
@@ -502,5 +512,6 @@ export const {
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectReplaceContentMutation,
+    useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;

@@ -28,6 +28,8 @@ import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-co
 import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -37,13 +39,15 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 
   const uploadContext = React.useContext(UploadContext)!
-  const { createZipDownloadContextMeuItem } = useZipDownload({ type: 'folder' })
+  const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('asset')
   const { renameTreeContextMenuItem } = useRename('asset')
   const { deleteTreeContextMenuItem } = useDelete('asset')
   const { refreshTreeContextMenuItem } = useRefreshTree('asset')
+  const { downloadTreeContextMenuItem } = useDownload()
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
   const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem } = useLock('asset')
+  const { uploadNewVersionTreeContextMenuItem } = useUploadNewVersion()
   const node = props.node
 
   useEffect(() => {
@@ -88,7 +92,9 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     cutTreeContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteTreeContextMenuItem(props.node),
-    createZipDownloadContextMeuItem(props.node),
+    createZipDownloadContextMenuItem(props.node),
+    uploadNewVersionTreeContextMenuItem(props.node),
+    downloadTreeContextMenuItem(props.node),
     {
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',

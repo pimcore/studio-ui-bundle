@@ -21,7 +21,7 @@ export interface ManyToManyRelationValueItem {
   type: string
   subtype: string | null
   fullPath: string
-  published: boolean
+  isPublished: boolean | null
 }
 
 export type ManyToManyRelationValue = ManyToManyRelationValueItem[]
@@ -82,7 +82,7 @@ export const useValue = (
         id: info.data.id,
         type: info.type,
         subtype: info.data.className ?? info.data.type,
-        published: info.data.published,
+        isPublished: info.data.published,
         fullPath: info.data.fullPath
       }
     } else if (info.type === 'asset') {
@@ -90,7 +90,7 @@ export const useValue = (
         id: info.data.id,
         type: info.type,
         subtype: info.data.type,
-        published: info.data.published,
+        isPublished: null,
         fullPath: info.data.fullPath
       }
     }
@@ -133,7 +133,7 @@ export const useValue = (
       id: asset.id,
       type: 'asset',
       subtype: asset.type ?? null,
-      published: true,
+      isPublished: null,
       fullPath: asset.fullPath ?? ''
     }))
 

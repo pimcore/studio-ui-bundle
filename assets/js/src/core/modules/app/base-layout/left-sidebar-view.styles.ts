@@ -23,7 +23,7 @@ export const useStlyes = createStyles(({
       top: 0;
       left: 0;
       bottom: 0;
-      z-index: 2;
+      z-index: 1001;
       pointer-events: none;
 
       .left-sidebar__avatar {
@@ -36,6 +36,25 @@ export const useStlyes = createStyles(({
 
         .anticon {
           vertical-align: 0;
+        }
+      }
+      
+      .left-sidebar__nav {
+        list-style: none;
+        padding: ${token.paddingXXS}px 0;
+        margin: ${token.marginSM}px 0;
+        position: relative;
+        pointer-events: auto;
+        text-align: center;
+        
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: ${token.paddingSM}px;
+          right: ${token.paddingSM}px;
+          height: 1px;
+          background: ${token.Divider.colorSplit};
         }
       }
     `

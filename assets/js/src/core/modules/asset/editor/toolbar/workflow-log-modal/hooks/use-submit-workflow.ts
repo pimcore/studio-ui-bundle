@@ -24,7 +24,7 @@ import {
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 interface UseSubmitWorkflowReturn {
-  submitWorkflowAction: (transition: string, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions) => void
+  submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
   submissionLoading: boolean
   submissionSuccess: boolean
   submissionError: boolean
@@ -53,8 +53,8 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
       actionType,
       elementId: id,
       elementType,
-      workflowName: _.snakeCase(workFlowName),
-      transition,
+      workflowId: _.snakeCase(workFlowName),
+      transitionId: _.snakeCase(transition),
       workflowOptions: workFlowOptions
     }
   })

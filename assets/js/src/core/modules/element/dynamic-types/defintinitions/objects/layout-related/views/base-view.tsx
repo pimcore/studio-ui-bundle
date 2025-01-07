@@ -13,18 +13,14 @@
 
 import React from 'react'
 import { isEmpty } from 'lodash'
-import { AccordionView } from './accordion-view'
-import { CardView } from './card-view'
+import { AccordionView, type AccordionViewProps } from './accordion-view'
+import { CardView, type CardViewProps } from './card-view'
 
-export interface BaseViewProps {
-  title?: string
-  collapsible?: boolean
-  collapsed?: boolean
-  children?: React.ReactNode
+export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
 }
 
-export const BaseView = (props: BaseViewProps): React.JSX.Element => {
+export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
 
   if (!isPaddedLayout) {
@@ -40,6 +36,9 @@ export const BaseView = (props: BaseViewProps): React.JSX.Element => {
       <AccordionView
         bordered={ props.border }
         collapsed={ props.collapsed }
+        collapsible
+        contentPadding={ props.contentPadding }
+        theme={ theme }
         title={ props.title }
       >{props.children}</AccordionView>
     )
@@ -48,6 +47,8 @@ export const BaseView = (props: BaseViewProps): React.JSX.Element => {
   return (
     <CardView
       bordered={ props.border }
+      contentPadding={ props.contentPadding }
+      theme={ theme }
       title={ props.title }
     >{props.children}</CardView>
   )

@@ -12,9 +12,10 @@
 */
 
 import React from 'react'
-
+import { Input } from 'antd'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import TextArea from 'antd/es/input/TextArea'
+
+const { TextArea } = Input
 
 export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
   showCharCount: boolean

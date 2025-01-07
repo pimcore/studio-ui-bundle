@@ -33,9 +33,14 @@ export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
   initialValue?: string
 }
 
+interface UploadFormProps extends Omit<InputFormModalProps, 'initialValues'> {
+  accept?: string
+}
+
 export interface UseFormModalHookResponse {
   input: (props: InputFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
   confirm: (props: ModalFuncProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  upload: (props: UploadFormProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
 export function useFormModal (): UseFormModalHookResponse {
@@ -52,7 +57,8 @@ export function useFormModal (): UseFormModalHookResponse {
         modalResult.then(() => {}, () => {})
         return modalResult
       },
-      confirm: (props) => modal.confirm(withConfirm(props))
+      confirm: (props) => modal.confirm(withConfirm(props)),
+      upload: (props) => modal.confirm(withUpload(props))
     }),
     []
   )
@@ -137,5 +143,71 @@ export function withConfirm (props: ModalFuncProps): ModalFuncProps {
     type: props.type ?? 'confirm',
     okText: props.okText ?? i18n.t('yes'),
     cancelText: props.cancelText ?? i18n.t('no')
+  }
+}
+
+export function withUpload (props: UploadFormProps): ModalFuncProps {
+  const inputRef = React.createRef<InputRef>()
+  const uuid = pimcoreUUid()
+  const fieldName = `upload-${uuid}`
+  const {
+    label,
+    rule,
+    accept,
+    ...modalProps
+  } = props
+
+  let formattedRule: Rule[] = []
+  if (rule !== undefined) {
+    formattedRule = [rule]
+  }
+
+  const UploadForm = forwardRef(function InputForm (props: InputFormProps, ref: RefObject<InputRef>): React.JSX.Element {
+    return (
+      <Form
+        form={ props.form }
+        initialValues={ props.initialValues }
+        layout={ 'vertical' }
+      >
+        <Form.Item
+          label={ label }
+          name={ props.fieldName }
+          rules={ formattedRule }
+        >
+          <Input
+            accept={ accept }
+            ref={ ref }
+            type="file"
+          />
+        </Form.Item>
+      </Form>
+    )
+  })
+
+  return {
+    ...modalProps,
+    type: props.type ?? 'confirm',
+    icon: props.icon ?? null,
+    onOk: async () => {
+      return await new Promise((resolve, reject) => {
+        form!.validateFields()
+          .then(() => {
+            const files = inputRef.current!.input!.files
+
+            props.onOk?.(files)
+            resolve(files)
+          })
+          .catch(() => {
+            reject(new Error('Invalid form'))
+          })
+      })
+    },
+    content: <UploadForm
+      fieldName={ fieldName }
+      form={ form! }
+      initialValues={ {} }
+      key={ 'upload-form' }
+      ref={ inputRef }
+             />
   }
 }

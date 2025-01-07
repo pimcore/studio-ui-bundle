@@ -18,6 +18,7 @@ import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 import { Button } from '@Pimcore/components/button/button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type AbstractGridCellDefinition } from '../../dynamic-type-grid-cell-abstract'
+import { isUndefined } from 'lodash'
 
 export const OpenElementCell = (props: AbstractGridCellDefinition): React.JSX.Element => {
   const { styles } = useStyle()
@@ -25,7 +26,9 @@ export const OpenElementCell = (props: AbstractGridCellDefinition): React.JSX.El
   const elementType = mapToElementType(props.row.original.type as string)
   const elementId = props.row.original.id
 
-  function renderCell (): React.JSX.Element {
+  function renderCell (): React.JSX.Element | null {
+    if (isUndefined(elementType)) return null
+
     const onClick = async (): Promise<void> => {
       await openElement({
         id: elementId,

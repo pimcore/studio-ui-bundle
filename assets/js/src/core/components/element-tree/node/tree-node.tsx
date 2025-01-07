@@ -14,7 +14,7 @@
 import { Flex, theme, Upload, type UploadProps } from 'antd'
 import React, { type KeyboardEvent, type MouseEvent, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { type nodeRef, TreeContext } from '../element-tree'
+import { type INodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
@@ -178,7 +178,7 @@ const TreeNode = ({
   }
 
   function registerNode (el: HTMLElement): void {
-    const nodeRef: nodeRef = { el, node: treeNodeProps }
+    const nodeRef: INodeRef = { el, node: treeNodeProps }
     nodesRefs!.current[internalKey] = nodeRef
   }
 

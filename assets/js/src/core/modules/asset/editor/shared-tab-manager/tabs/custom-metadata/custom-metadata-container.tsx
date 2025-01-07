@@ -36,6 +36,7 @@ import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-cust
 import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -100,7 +101,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
       type: typeSelectValue.current,
       language: languageSelectValue.current,
       data: null,
-      rowId: crypto.randomUUID()
+      rowId: uuid()
     }
 
     addCustomMetadata(newCustomMetadata)

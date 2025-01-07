@@ -11,32 +11,32 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Accordion, type AccordionProps } from '@Pimcore/components/accordion/accordion'
-import React from 'react'
+import { type BoxProps } from '@Pimcore/components/box/box'
+import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
+import React, { type ReactNode } from 'react'
 
 export interface AccordionViewProps {
-  title?: string
+  title?: ReactNode
   children?: React.ReactNode
   bordered?: boolean
   collapsed?: boolean
+  collapsible: true
+  theme?: 'fieldset' | 'card-with-highlight' | 'default'
+  contentPadding?: BoxProps['padding']
 }
 
 export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewProps): React.JSX.Element => {
-  const item: AccordionProps['items'][0] = {
-    key: '0',
-    title: <>{props.title}</>,
-    children: props.children,
-    forceRender: true
-  }
-
   return (
-    <Accordion
+    <CollapseItem
       bordered={ bordered }
-      defaultActiveKey={ collapsed ?? false ? '0' : undefined }
-      ghost
-      items={ [item] }
+      contentPadding={ props.contentPadding }
+      defaultActive={ !(collapsed ?? true) }
+      forceRender
+      hasContentSeparator={ props.theme !== 'fieldset' }
+      label={ (<>{props.title}</>) }
+      theme={ props.theme }
     >
       {props.children}
-    </Accordion>
+    </CollapseItem>
   )
 }

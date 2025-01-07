@@ -1,5 +1,5 @@
 import { api } from "../../app/api/pimcore/index";
-export const addTagTypes = ["Assets", "Asset Grid", "Versions"] as const;
+export const addTagTypes = ["Assets", "Asset Grid", "Metadata", "Versions"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -12,13 +12,6 @@ const injectedRtkApi = api
                     method: "POST",
                 }),
                 invalidatesTags: ["Assets"],
-            }),
-            assetCustomMetadataGetById: build.query<
-                AssetCustomMetadataGetByIdApiResponse,
-                AssetCustomMetadataGetByIdApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
-                providesTags: ["Assets"],
             }),
             assetCustomSettingsGetById: build.query<
                 AssetCustomSettingsGetByIdApiResponse,
@@ -192,6 +185,24 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetImageStreamCustom: build.query<AssetImageStreamCustomApiResponse, AssetImageStreamCustomApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/custom`,
+                    params: {
+                        mimeType: queryArg.mimeType,
+                        resizeMode: queryArg.resizeMode,
+                        width: queryArg.width,
+                        height: queryArg.height,
+                        quality: queryArg.quality,
+                        dpi: queryArg.dpi,
+                        contain: queryArg.contain,
+                        frame: queryArg.frame,
+                        cover: queryArg.cover,
+                        forceResize: queryArg.forceResize,
+                    },
+                }),
+                providesTags: ["Assets"],
+            }),
             assetImageDownloadByFormat: build.query<
                 AssetImageDownloadByFormatApiResponse,
                 AssetImageDownloadByFormatApiArg
@@ -213,6 +224,16 @@ const injectedRtkApi = api
                     url: `/pimcore-studio/api/assets/${queryArg.id}/image/download/thumbnail/${queryArg.thumbnailName}`,
                 }),
                 providesTags: ["Assets"],
+            }),
+            assetImageClearThumbnail: build.mutation<
+                AssetImageClearThumbnailApiResponse,
+                AssetImageClearThumbnailApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/image/thumbnail/clear`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Assets"],
             }),
             assetPatchById: build.mutation<AssetPatchByIdApiResponse, AssetPatchByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets`, method: "PATCH", body: queryArg.body }),
@@ -307,6 +328,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetCustomMetadataGetById: build.query<
+                AssetCustomMetadataGetByIdApiResponse,
+                AssetCustomMetadataGetByIdApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/custom-metadata` }),
+                providesTags: ["Metadata"],
+            }),
             versionAssetDownloadById: build.query<VersionAssetDownloadByIdApiResponse, VersionAssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/versions/${queryArg.id}/asset/download` }),
                 providesTags: ["Versions"],
@@ -325,13 +353,6 @@ export type AssetCloneApiArg = {
     id: number;
     /** ParentId of the asset */
     parentId: number;
-};
-export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
-    items?: CustomMetadata[];
-};
-export type AssetCustomMetadataGetByIdApiArg = {
-    /** Id of the asset */
-    id: number;
 };
 export type AssetCustomSettingsGetByIdApiResponse = /** status 200 Successfully retrieved custom settings as JSON */ {
     items?: CustomSettings;
@@ -597,6 +618,32 @@ export type AssetImageDownloadCustomApiArg = {
     /** Dpi of downloaded image */
     dpi?: number;
 };
+export type AssetImageStreamCustomApiResponse =
+    /** status 200 Image asset stream based on custom thumbnail configuration */ Blob;
+export type AssetImageStreamCustomApiArg = {
+    /** Id of the image */
+    id: number;
+    /** Mime type of downloaded image. */
+    mimeType: "JPEG" | "PNG";
+    /** Resize mode of downloaded image. */
+    resizeMode: "resize" | "scaleByWidth" | "scaleByHeight";
+    /** Width of downloaded image */
+    width?: number;
+    /** Height of downloaded image */
+    height?: number;
+    /** Quality of downloaded image */
+    quality?: number;
+    /** Dpi of downloaded image */
+    dpi?: number;
+    /** Contain */
+    contain?: boolean;
+    /** Frame */
+    frame?: boolean;
+    /** Cover */
+    cover?: boolean;
+    /** ForceResize */
+    forceResize?: boolean;
+};
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
     /** Id of the image */
@@ -616,6 +663,11 @@ export type AssetImageDownloadByThumbnailApiArg = {
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
+};
+export type AssetImageClearThumbnailApiResponse = /** status 200 Success */ void;
+export type AssetImageClearThumbnailApiArg = {
+    /** Id of the asset */
+    id: number;
 };
 export type AssetPatchByIdApiResponse =
     /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
@@ -697,7 +749,10 @@ export type AssetUploadInfoApiArg = {
     /** Name of the file to upload */
     fileName: string;
 };
-export type AssetReplaceApiResponse = /** status 200 Successfully replaced asset binary */ void;
+export type AssetReplaceApiResponse = /** status 200 File name of the successfully replaced asset */ {
+    /** new file name of the asset */
+    data: string;
+};
 export type AssetReplaceApiArg = {
     /** Id of the asset */
     id: number;
@@ -747,6 +802,13 @@ export type AssetVideoStreamByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
+    items?: CustomMetadata[];
+};
+export type AssetCustomMetadataGetByIdApiArg = {
+    /** Id of the asset */
+    id: number;
+};
 export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
 export type VersionAssetDownloadByIdApiArg = {
     /** Id of the version */
@@ -761,20 +823,6 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
-};
-export type CustomMetadata = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
-    };
-    /** Name */
-    name: string;
-    /** Language */
-    language: string;
-    /** Type */
-    type: string;
-    /** Data */
-    data: string | null;
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
@@ -1025,6 +1073,8 @@ export type GridColumnConfiguration = {
     sortable: boolean;
     /** Editable */
     editable: boolean;
+    /** Exportable */
+    exportable?: boolean;
     /** Localizable */
     localizable: boolean;
     /** Locale */
@@ -1068,9 +1118,22 @@ export type PatchCustomMetadata = {
     /** Data */
     data?: string | null;
 };
+export type CustomMetadata = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object | any[];
+    };
+    /** Name */
+    name: string;
+    /** Language */
+    language: string;
+    /** Type */
+    type: string;
+    /** Data */
+    data: any | null;
+};
 export const {
     useAssetCloneMutation,
-    useAssetCustomMetadataGetByIdQuery,
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
     useAssetDocumentStreamPreviewQuery,
@@ -1094,9 +1157,11 @@ export const {
     useAssetUpdateGridConfigurationMutation,
     useAssetGetGridMutation,
     useAssetImageDownloadCustomQuery,
+    useAssetImageStreamCustomQuery,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
     useAssetImageDownloadByThumbnailQuery,
+    useAssetImageClearThumbnailMutation,
     useAssetPatchByIdMutation,
     useAssetPatchFolderByIdMutation,
     useAssetGetTreeQuery,
@@ -1107,5 +1172,6 @@ export const {
     useAssetVideoImageThumbnailStreamQuery,
     useAssetVideoDownloadByThumbnailQuery,
     useAssetVideoStreamByThumbnailQuery,
+    useAssetCustomMetadataGetByIdQuery,
     useVersionAssetDownloadByIdQuery,
 } = injectedRtkApi;

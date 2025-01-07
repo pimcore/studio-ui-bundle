@@ -16,26 +16,30 @@ import { Card } from '@Pimcore/components/card/card'
 import {
   ExternalImageFooter
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/footer'
-import { Image } from 'antd'
 import { ImageTarget } from '@Pimcore/components/image-target/image-target'
-import { toCssDimension } from '@Pimcore/utils/css'
 import { useTranslation } from 'react-i18next'
+import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
+
+export interface ExternalImageValue {
+  url: string
+}
 
 export interface ExternalImageProps {
   previewWidth: number | null
   previewHeight: number | null
   inputWidth: number | null
   disabled?: boolean
-  value?: string | null
-  onChange?: (value: string | null) => void
+  value?: ExternalImageValue | null
+  onChange?: (value: ExternalImageValue | null) => void
 }
 
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<string | null>(props.value ?? null)
+  const [value, setValue] = React.useState<ExternalImageValue | null>(props.value ?? null)
   const { t } = useTranslation()
 
   const onChange = (value?: string): void => {
-    setValue(value !== '' && value !== undefined ? value : null)
+    const newUrl = value !== '' && value !== undefined ? value : null
+    setValue(newUrl === null ? null : { url: newUrl })
   }
 
   useEffect(() => {
@@ -48,30 +52,28 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   return (
     <>
       <Card
+        className="max-w-full"
         fitContent={ Boolean(props.inputWidth) }
         footer={ <ExternalImageFooter
           disabled={ props.disabled }
           inputWidth={ props.inputWidth ?? undefined }
           key="external-image-footer"
           onChange={ onChange }
-          value={ value ?? undefined }
+          value={ value?.url ?? undefined }
                  /> }
       >
-        { value !== null && value !== ''
+        { value !== null && value.url !== ''
           ? (
-            <Image
-              fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+            <ImagePreview
               height={ previewHeight }
-              preview={ false }
-              src={ value }
-              style={ { maxHeight: toCssDimension(previewHeight), maxWidth: toCssDimension(previewWidth) } }
-              width={ '100%' }
+              src={ value?.url }
+              width={ previewWidth }
             />
             )
           : (
             <ImageTarget
               height={ previewHeight }
-              title={ t('data-object.editor.external-image.preview-placeholder') }
+              title={ t('external-image.preview-placeholder') }
               width={ previewWidth }
             />
             )}

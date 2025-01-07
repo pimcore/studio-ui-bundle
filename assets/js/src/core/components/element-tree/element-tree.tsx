@@ -30,6 +30,7 @@ import { Box } from '../box/box'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
+  isLoading?: boolean
   mergeAdditionalQueryParams?: Dispatch<unknown>
   total: number
 }
@@ -48,7 +49,7 @@ export interface TreeContextMenuProps {
 export interface TreeProps {
   nodeId: number
   nodeApiHook: any
-  maxItemsPerNode: number
+  maxItemsPerNode?: number
 
   renderNode: ElementType<TreeNodeProps>
   renderNodeContent: ElementType<TreeNodeContentProps>
@@ -61,14 +62,14 @@ export interface TreeProps {
   onRightClick?: (event: React.MouseEvent, node: TreeNodeProps) => void
 }
 
-export interface nodeRef {
+export interface INodeRef {
   el: HTMLElement
   node: TreeNodeProps
 }
 
 export interface ITreeContext extends TreeProps {
   selectedIdsState?: [string[], (ids: string[]) => void]
-  nodesRefs?: MutableRefObject<Record<string, nodeRef>>
+  nodesRefs?: MutableRefObject<Record<string, INodeRef>>
   nodeOrder?: () => string[]
 }
 
@@ -102,7 +103,7 @@ const ElementTree = (
     level: -1
   })
   const { isLoading, isError, data } = apiHookResult
-  const nodesRefs = useRef<Record<string, nodeRef>>({})
+  const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
     return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
       const nodeA = nodesRefs.current[a].node

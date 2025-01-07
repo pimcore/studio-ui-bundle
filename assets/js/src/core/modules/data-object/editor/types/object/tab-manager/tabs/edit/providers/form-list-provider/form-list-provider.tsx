@@ -17,6 +17,7 @@ import React, { useMemo } from 'react'
 export interface IFormListContext {
   field: FormListFieldData
   operation: FormListOperation
+  fieldSuffix?: string
 }
 
 export const FormListContext = React.createContext<IFormListContext | undefined>(undefined)
@@ -25,10 +26,10 @@ export interface FormListProviderProps extends IFormListContext {
   children: React.ReactNode
 }
 
-export const FormListProvider = ({ field, operation, children }: FormListProviderProps): React.JSX.Element => {
+export const FormListProvider = ({ field, fieldSuffix, operation, children }: FormListProviderProps): React.JSX.Element => {
   return useMemo(() => {
     return (
-      <FormListContext.Provider value={ { field, operation } }>
+      <FormListContext.Provider value={ { field, fieldSuffix, operation } }>
         { children }
       </FormListContext.Provider>
     )

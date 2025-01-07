@@ -21,6 +21,7 @@ export const addGeoPolygonToolbar = (leafletMap: L.Map, featureGroup: L.FeatureG
   const polygon = geoPolygon !== undefined ? L.polygon(convertPolyLineToLatLngs(geoPolygon), { stroke: true, color: '#3388ff', opacity: 0.5, fillOpacity: 0.2, weight: 4 }) : undefined
   if (polygon !== undefined) {
     featureGroup.addLayer(polygon)
+    leafletMap.fitBounds(polygon.getBounds())
   }
 
   if (disabled === true) {
@@ -65,8 +66,6 @@ export const addGeoPolygonToolbar = (leafletMap: L.Map, featureGroup: L.FeatureG
   })
 
   leafletMap.on(L.Draw.Event.EDITSTOP, function (e) {
-    this.dirty = true
-    this.data = []
     for (const layerId in e.target._layers) {
       if (Object.prototype.hasOwnProperty.call(e.target._layers, layerId) === true) {
         const layer = e.target._layers[layerId]

@@ -12,6 +12,10 @@ asset.asset-editor-tabs.list.columns.type: Type
 asset.asset-editor-tabs.list.columns.fullPath: Full Path
 asset.asset-editor-tabs.list.columns.creationDate: Creation Date
 asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
+asset.tree.context-menu.upload-new-version: Upload new version
+asset.upload: Upload
+asset.upload.label: Select file
+asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
 workflow.label: Workflow
@@ -55,6 +59,7 @@ asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
 component.workflow-card.action-btn: Workflow Actions
+component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
 asset.asset-editor-tabs.embedded-metadata.columns.value: Value
@@ -68,6 +73,8 @@ unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 action-applied-successfully: Action applied successfully
 action-could-not-be-applied: Action could not be applied
+failed-to-assign-tag-to-element: Failed to assign tag to element
+failed-to-un-assign-tag-to-element: Failed to un-assign tag to element
 workflow-modal.perform-action: Perform Action
 workflow-modal.cancel: Cancel
 workflow-modal.log-time: Log Time
@@ -208,6 +215,7 @@ notes-and-events.content: content
 notes-and-events.seo: seo
 notes-and-events.warning: warning
 notes-and-events.notice: notice
+notes-and-events.status-update: status update
 notes-and-events.erp_import: erp_import
 notes-and-events.no-notes-and-events-to-show: There are no notes or events to show.
 tags.label: Tags
@@ -296,6 +304,7 @@ close-tab: Close Tab
 close-others: Close Others
 close-unmodified: Close Unmodified
 close-all: Close All
+asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
 element.tree.context-menu.add-assets: Add Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
@@ -322,6 +331,7 @@ element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
+element.open: Open
 male: Male
 female: Female
 other: Other
@@ -332,7 +342,7 @@ info: Info
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
-data-object.editor.external-image.preview-placeholder: Add an external image
+delete: Delete
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -361,3 +371,15 @@ video: Video
 processing: Processing
 upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
+quantity-value.converted-units: Converted Units
+structured-table.empty.confirm: Are you sure you want to clear all data?
+navigation.document-types: Document Types
+navigation.clear-cache: Clear Full Page Cache
+navigation.custom-reports: Custom Reports
+navigation.perspectives: Perspectives
+external-image.preview-placeholder: Add an external image
+image.dnd-target: Upload or drop an image here
+fallback: Fallback
+url-slug.add-site: Add Site
+url-slug.invalid: Please enter a valid URL slug (starting with a '/')
+collection.empty: No available fields yet. Start by adding a field.

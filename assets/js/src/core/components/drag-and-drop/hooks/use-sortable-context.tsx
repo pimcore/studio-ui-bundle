@@ -15,13 +15,13 @@ import { closestCenter, DndContext, type DragEndEvent, KeyboardSensor, PointerSe
 import { SortableContext, sortableKeyboardCoordinates, type SortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import React, { type ComponentType, type ReactNode } from 'react'
 
-export interface useSortableContextProps {
+export interface IUseSortableContextProps {
   onDragEnd: (event: DragEndEvent) => void
   items: any[]
   sortingStrategy?: SortingStrategy
 }
 
-export interface useSortableContextHookReturn {
+export interface IUseSortableContextHookReturn {
   ContextHolder: ComponentType<ContextHolderProps>
 }
 
@@ -29,7 +29,7 @@ export interface ContextHolderProps {
   children: ReactNode
 }
 
-export const useSortableContext = ({ onDragEnd, items, sortingStrategy = verticalListSortingStrategy }: useSortableContextProps): useSortableContextHookReturn => {
+export const useSortableContext = ({ onDragEnd, items, sortingStrategy = verticalListSortingStrategy }: IUseSortableContextProps): IUseSortableContextHookReturn => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {

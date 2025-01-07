@@ -20,18 +20,19 @@ export interface ConsentProps {
   value?: ConsentValue | null
   className?: string
   onChange?: (value: ConsentValue | null) => void
+  disabled?: boolean
 }
 
 export interface ConsentValue {
   consent: boolean
-  'note-text'?: string
+  noteContent?: string
   noteId?: number
 }
 
 export const Consent = (props: ConsentProps): React.JSX.Element => {
   const [value, setValue] = useState<ConsentValue | null>(props.value ?? null)
 
-  const noteText = value !== null ? (value['note-text'] ?? '') : ''
+  const noteContent = value !== null ? (value.noteContent ?? '') : ''
 
   const onChange = (e: CheckboxChangeEvent): void => {
     setValue({
@@ -51,9 +52,13 @@ export const Consent = (props: ConsentProps): React.JSX.Element => {
       className={ props.className }
       gap="small"
     >
-      <Checkbox onChange={ onChange } />
-      { noteText.length > 0 && (
-        <span>({ noteText })</span>
+      <Checkbox
+        checked={ value?.consent }
+        disabled={ props.disabled }
+        onChange={ onChange }
+      />
+      { noteContent.length > 0 && (
+        <span>({ noteContent })</span>
       ) }
     </Flex>
   )

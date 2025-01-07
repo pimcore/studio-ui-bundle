@@ -77,7 +77,11 @@ export const Dropdown = ({ selectedKeys, onSelect, menu, ...props }: DropdownPro
     // @ts-expect-error - the prop exists trust me bro ;)
     if (item?.children !== undefined) {
       // @ts-expect-error - the prop exists trust me bro ;)
-      return (item.children = item.children.filter(filterItems)).length
+      const filteredChildren = item.children.filter(filterItems)
+      // @ts-expect-error - the prop exists trust me bro ;)
+      item.children = filteredChildren
+
+      return filteredChildren.length
     }
 
     return true

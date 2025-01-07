@@ -18,6 +18,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { PimcoreImage as Image } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { useTranslation } from 'react-i18next'
+import { Box, type BoxProps } from '../box/box'
 
 export interface CardProps extends AntdCardProps {
   loading?: boolean
@@ -27,16 +28,19 @@ export interface CardProps extends AntdCardProps {
   image?: { src: string, alt?: string } | null
   extra?: any[]
   footer?: React.ReactNode
+  theme?: 'default' | 'fieldset' | 'card-with-highlight'
+  contentPadding?: BoxProps['padding']
 }
 
-const Component = ({ loading, children, footer, fitContent, className, ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ loading, children, footer, fitContent, className, theme = 'default', contentPadding = 'small', ...props }: CardProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const classNames = [
     styles.card,
     className,
     footer !== undefined ? 'card-with-footer' : '',
-    fitContent === true ? 'card-fit-content' : ''
+    fitContent === true ? 'card-fit-content' : '',
+    `card--theme-${theme}`
   ].filter(Boolean)
 
   const renderExtraContent = (): React.ReactElement | null => {
@@ -50,14 +54,14 @@ const Component = ({ loading, children, footer, fitContent, className, ...props 
                   ? (
                     <IconButton
                       icon={ { value: extra.icon as string } }
-                      key={ index }
+                      key={ `${extra.icon}-${index}` }
                       onClick={ extra.onClick }
                       role={ 'button' }
                       title={ extra.title }
                       type={ extra.type !== undefined ? extra.type : 'text' }
                     />
                     )
-                  : (<Fragment key={ index }>{extra}</Fragment>)
+                  : (<Fragment key={ `${extra.icon}-${index}` }>{extra}</Fragment>)
               ))}
             </div>
             )
@@ -104,13 +108,9 @@ const Component = ({ loading, children, footer, fitContent, className, ...props 
       extra={ props.extra !== undefined && props.extra !== null ? renderExtraContent() : null }
       title={ props.title !== undefined && props.title !== null ? renderTitle() : null }
     >
-      {footer !== undefined && children !== undefined
-        ? (
-          <div className="card-body-inner">
-            {children}
-          </div>
-          )
-        : children}
+      <Box padding={ contentPadding }>
+        {children}
+      </Box>
 
       {footer !== undefined && (
       <div className="card-footer">

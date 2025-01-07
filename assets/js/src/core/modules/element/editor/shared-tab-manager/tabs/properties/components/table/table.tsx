@@ -15,6 +15,7 @@ import {
   type DataProperty as DataPropertyApi
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import React, { useEffect, useState } from 'react'
+import { isUndefined } from 'lodash'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +29,7 @@ import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
+import { uuid } from '@Pimcore/utils/uuid'
 
 interface ITableProps {
   propertiesTableTab: string
@@ -49,7 +51,7 @@ export const Table = ({
   const { styles } = useStyles()
   const { id, elementType } = useElementContext()
   const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
-  const arePropertiesAvailable = properties !== undefined && properties.length >= 0
+  const arePropertiesAvailable = properties !== undefined && properties.length > 0
 
   const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
     elementType,
@@ -65,7 +67,7 @@ export const Table = ({
     return data.map((item) => {
       return {
         ...item,
-        rowId: crypto.randomUUID()
+        rowId: uuid()
       }
     })
   }
@@ -151,8 +153,10 @@ export const Table = ({
                 <IconButton
                   icon={ { value: 'group' } }
                   onClick={ async () => {
-                    await openElement({
-                      type: mapToElementType(info.row.original.type),
+                    const typeValue = mapToElementType(info.row.original.type)
+
+                    !isUndefined(typeValue) && await openElement({
+                      type: typeValue,
                       id: info.row.original.data.id
                     })
                   } }
