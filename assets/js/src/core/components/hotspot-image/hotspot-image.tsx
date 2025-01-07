@@ -185,12 +185,11 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     return (
         <div
             ref={containerRef}
-            role={'presentation'}
             className={['hotspot-image', styles.hotspotImage].join(' ')}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
         >
-            <img src={src} alt="Decorative" className={'hotspot-image__image'}/>
+            <img src={src} className={'hotspot-image__image'}/>
             {items.map(hotspot => (
                 <Popover
                     trigger={['contextMenu']}
