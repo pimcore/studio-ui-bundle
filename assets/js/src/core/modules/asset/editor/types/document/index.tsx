@@ -36,7 +36,7 @@ moduleSystem.registerModule({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',
       children: <PreviewContainer />,
-      icon: <Icon value={ 'image-05' } />
+      icon: <Icon value={ 'image' } />
     })
 
     documentTabManager.register(TAB_CUSTOM_METADATA)

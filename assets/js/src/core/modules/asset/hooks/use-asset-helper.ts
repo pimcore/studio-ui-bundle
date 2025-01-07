@@ -53,7 +53,7 @@ export const useAssetHelper = (): UseAssetReturn => {
       component: 'asset-editor',
       config: {
         ...config,
-        icon: getElementIcon(data, { value: 'widget-default', type: 'name' })
+        icon: getElementIcon(data, { value: 'widget', type: 'name' })
       }
     })
   }

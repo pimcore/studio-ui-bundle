@@ -67,7 +67,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
           width: 12,
           height: 12
         } }
-        value="chevron-down-small"
+        value="chevron-down"
       />
     )
   }

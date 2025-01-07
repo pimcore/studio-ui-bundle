@@ -53,7 +53,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
     return {
       label: t('element.tree.refresh'),
       key: 'refresh',
-      icon: <Icon value={ 'refresh-ccw-03' } />,
+      icon: <Icon value={ 'refresh' } />,
       onClick: () => {
         refreshTree(parseInt(node.id))
       }
@@ -64,7 +64,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
     return {
       label: t('element.tree.refresh'),
       key: 'refresh',
-      icon: <Icon value={ 'refresh-ccw-03' } />,
+      icon: <Icon value={ 'refresh' } />,
       onClick: () => {
         refreshTree(node.parentId)
         onFinish?.()

@@ -45,7 +45,7 @@ export const useDownload = (): UseDownloadReturn => {
     return {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
-      icon: <Icon value={ 'download-02' } />,
+      icon: <Icon value={ 'download' } />,
       hidden: node.type === 'folder',
       onClick: () => { handleDownload(node, onFinish) }
     }
@@ -55,7 +55,7 @@ export const useDownload = (): UseDownloadReturn => {
     return {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
-      icon: <Icon value={ 'download-02' } />,
+      icon: <Icon value={ 'download' } />,
       hidden: node.type === 'folder',
       onClick: () => { handleDownload(node) }
     }

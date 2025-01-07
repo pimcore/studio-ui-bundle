@@ -61,7 +61,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       },
       {
         key: 'info',
-        icon: <Icon value="info-circle-outlined" />,
+        icon: <Icon value="info-circle" />,
         label: t('info'),
         hidden: true
       },

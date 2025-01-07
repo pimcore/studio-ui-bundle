@@ -60,7 +60,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     {
       label: t('element.tree.context-menu.add-assets'),
       key: '1',
-      icon: <Icon value={ 'mainAsset' } />,
+      icon: <Icon value={ 'asset' } />,
       hidden: !checkElementPermission(props.node.permissions, 'create') || props.node?.type !== 'folder',
       children: [
         {
@@ -103,7 +103,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
         {
           label: t('element.lock'),
           key: 'advanced-lock',
-          icon: <Icon value={ 'lock-01' } />,
+          icon: <Icon value={ 'lock' } />,
           hidden: !checkElementPermission(props.node.permissions, 'publish') || props.node.isLocked,
           children: [
             lockTreeContextMenuItem(props.node),
