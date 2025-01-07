@@ -7,12 +7,12 @@ interface IHotspotImageContainer {
     items?: IHotspot[];
 }
 
-export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleOptions }: IHotspotImageContainer) => {
-    const [hotspots, setHotspots] = useState(items || []);
+export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleOptions }: IHotspotImageContainer): JSX.Element => {
+    const [hotspots, setHotspots] = useState<IHotspot[]>(items ?? []);
 
-    const addHotspot = (type:string) => {
+    const addHotspot = (type: string): void => {
         const style = styleOptions[type];
-        const newHotspot = {
+        const newHotspot: IHotspot = {
             id: hotspots.length + 1,
             x: 50,
             y: 50,
@@ -24,15 +24,15 @@ export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleO
         setHotspots([...hotspots, newHotspot]);
     };
 
-    const onRemove = (id: number) => {
+    const onRemove = (id: number): void => {
         setHotspots(hotspots.filter(h => h.id !== id));
     }
 
-    const onEdit = (id: number) => {
+    const onEdit = (id: number): void => {
         console.log('Todo show edit view', id);
     }
 
-    const onUpdate = (item: IHotspot) => {
+    const onUpdate = (item: IHotspot): void => {
         setHotspots(hotspots.map(h => h.id === item.id ? item : h));
     }
 
