@@ -43,8 +43,8 @@ export const _default = {
         type: 'hotspot'
       }
     ],
-    onEdit: (id: number) => console.log('Edit', id),
-    onRemove: (id: number) => console.log('Remove', id),
-    onClone: (id: number) => console.log('Clone', id)
+    onEdit: (id: number) => { console.log('Edit', id) },
+    onRemove: (id: number) => { console.log('Remove', id) },
+    onClone: (id: number) => { console.log('Clone', id) }
   }
 }
