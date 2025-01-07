@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { useStyle } from './hotspot-image.styles';
 import {Icon} from "@Pimcore/components/icon/icon";
 import { Popover} from "antd";
 import { IconTextButton } from "@Pimcore/components/icon-text-button/icon-text-button";
 import { IconButton } from "@Pimcore/components/icon-button/icon-button";
 
-interface IStyleOptions {
+export interface IStyleOptions {
     hotspot: {
         width: number;
         height: number;
@@ -20,7 +20,7 @@ interface IStyleOptions {
     };
 }
 
-const defaultStyleOptions = {
+export const defaultStyleOptions = {
     hotspot: {
         width: 100,
         height: 80,
@@ -35,7 +35,7 @@ const defaultStyleOptions = {
     }
 }
 
-interface IHotspot {
+export interface IHotspot {
     id: number;
     x: number;
     y: number;
@@ -47,28 +47,32 @@ interface IHotspot {
 interface IHotspotImage {
     src: string;
     styleOptions?: IStyleOptions;
-    items?: IHotspot[];
+    data?: IHotspot[];
     onRemove?: (id: number) => void;
     onClone?: (id: number) => void;
     onEdit?: (id: number) => void;
+    onUpdate: (item: IHotspot) => void;
 }
 
-export const HotspotImage = ({ src, items, styleOptions = defaultStyleOptions, onClone, onRemove, onEdit }: IHotspotImage) => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onClone, onRemove, onEdit, onUpdate }: IHotspotImage) => {
     const {styles} = useStyle();
 
-    const [hotspots, setHotspots] = useState(items || []);
+    const [items, setItems] = useState(data || []);
+    useEffect(() => {
+        setItems(data || []);
+    }, [data?.length]);
+
     const [selectedId, setSelectedId] = useState(null);
     const [dragging, setDragging] = useState(false);
-    const [resizeDirection, setResizeDirection] = useState(false);
+    const [resizeDirection, setResizeDirection] = useState<string | null>(null);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, x: 0, y: 0 });
     const [popoverOpen, setPopoverOpen] = useState(false);
-    const containerRef = useRef(null);
-
-    const handleMouseDown = (e, hotspot) => {
-        const rect = e.target.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+    const containerRef = useRef<HTMLDivElement>(null);
+    const handleMouseDown = (evt, hotspot) => {
+        const rect = evt.target.getBoundingClientRect();
+        const mouseX = evt.clientX - rect.left;
+        const mouseY = evt.clientY - rect.top;
 
         const nearLeftEdge = mouseX < styleOptions[hotspot.type].resizeBorderSize;
         const nearRightEdge = mouseX > rect.width - styleOptions[hotspot.type].resizeBorderSize;
@@ -83,7 +87,7 @@ export const HotspotImage = ({ src, items, styleOptions = defaultStyleOptions, o
             if (nearRightEdge) direction += 'e';
 
             setResizeDirection(direction);
-            setResizeStart({ x: e.clientX, y: e.clientY, width: hotspot.width, height: hotspot.height });
+            setResizeStart({ x: evt.clientX, y: evt.clientY, width: hotspot.width, height: hotspot.height });
         } else {
             setDragging(true);
             setDragStart({ x: mouseX, y: mouseY });
@@ -91,30 +95,31 @@ export const HotspotImage = ({ src, items, styleOptions = defaultStyleOptions, o
 
         setPopoverOpen(false)
         setSelectedId(hotspot.id);
-        e.stopPropagation();
+        evt.stopPropagation();
     };
-    const handleMouseMove = (e) => {
-        if (selectedId === null) return;
+    const handleMouseMove = (evt) => {
+        if (selectedId === null || containerRef.current === null) return;
         const containerBounds = containerRef.current.getBoundingClientRect();
-        const hotspotIndex = hotspots.findIndex(h => h.id === selectedId);
-        const hotspot = hotspots[hotspotIndex];
-        const dx = e.clientX - resizeStart.x;
-        const dy = e.clientY - resizeStart.y;
+        const hotspotIndex = items.findIndex(h => h.id === selectedId);
+        const hotspot = items[hotspotIndex];
+        const dx = evt.clientX - resizeStart.x;
+        const dy = evt.clientY - resizeStart.y;
 
         if (dragging) {
-            const newX = Math.min(containerBounds.width - hotspot.width, Math.max(0, e.clientX - containerBounds.left - dragStart.x));
-            const newY = Math.min(containerBounds.height - hotspot.height, Math.max(0, e.clientY - containerBounds.top - dragStart.y));
+            const newX = Math.min(containerBounds.width - hotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x));
+            const newY = Math.min(containerBounds.height - hotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y));
 
-            setHotspots(hotspots.map((h, i) => i === hotspotIndex ? { ...h, x: newX, y: newY } : h));
+            // Update the item with the new position
+            setItems(items.map((h, i) => i === hotspotIndex ? { ...h, x: newX, y: newY } : h));
         } else if (resizeDirection) {
-            let newWidth = resizeStart.width;
-            let newHeight = resizeStart.height;
-            let newX = hotspot.x;
-            let newY = hotspot.y;
+            let newWidth = resizeStart.width,
+                newHeight = resizeStart.height,
+                newX = hotspot.x,
+                newY = hotspot.y;
 
             if (resizeDirection.includes('w')) {
                 newWidth = Math.max(styleOptions[hotspot.type].minSize, resizeStart.width - dx);
-                newX = Math.min(hotspot.x + resizeStart.width - styleOptions[hotspot.type].minSize, e.clientX - containerBounds.left);
+                newX = Math.min(hotspot.x + resizeStart.width - styleOptions[hotspot.type].minSize, evt.clientX - containerBounds.left);
 
                 if (newWidth === styleOptions[hotspot.type].minSize) {
                     newX = hotspot.x + hotspot.width - styleOptions[hotspot.type].minSize;
@@ -125,18 +130,18 @@ export const HotspotImage = ({ src, items, styleOptions = defaultStyleOptions, o
             }
             if (resizeDirection.includes('n')) {
                 newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height - dy);
-                newY = Math.min(hotspot.y + resizeStart.height - styleOptions[hotspot.type].minSize, e.clientY - containerBounds.top);
+                newY = Math.min(hotspot.y + resizeStart.height - styleOptions[hotspot.type].minSize, evt.clientY - containerBounds.top);
 
                 if (newHeight === styleOptions[hotspot.type].minSize) {
                     newY = hotspot.y + hotspot.height - styleOptions[hotspot.type].minSize;
                 }
             }
-            if (resizeDirection.includes('s')) {
+            if (resizeDirection?.includes('s')) {
                 newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height + dy);
             }
 
-            // Update the hotspot with the new position and size
-            setHotspots(hotspots.map((h, i) => i === hotspotIndex ? {
+            // Update the item with the new position and size
+            setItems(items.map((h, i) => i === hotspotIndex ? {
                 ...h,
                 x: newX,
                 y: newY,
@@ -149,76 +154,58 @@ export const HotspotImage = ({ src, items, styleOptions = defaultStyleOptions, o
     const handleMouseUp = () => {
         setDragging(false);
         setResizeDirection(null);
-    };
-
-    const addHotspot = (type:string) => {
-        const style = styleOptions[type];
-        const newHotspot = {
-            id: hotspots.length,
-            x: 50,
-            y: 50,
-            width: style.width,
-            height: style.height,
-            type
-        };
-        setHotspots([...hotspots, newHotspot]);
+        onUpdate(items.find(h => h.id === selectedId));
     };
 
     return (
-        <>
-            <div
-                ref={containerRef}
-                className={['hotspot-image', styles.hotspotImage].join(' ')}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-            >
-                <img src={src} alt="Decorative" className={'hotspot-image__image'} />
-                {hotspots.map(hotspot => (
-                    <Popover
-                        trigger={['contextMenu']}
-                        key={hotspot.id}
-                        arrow={false}
-                        size={'small'}
-                        open={popoverOpen && selectedId === hotspot.id}
-                        onOpenChange={(open) => setPopoverOpen(open)}
-                        content={
-                            <div>
-                                {onEdit !== undefined ? (
-                                    <IconTextButton icon={ { value: 'PlusOutlined' } } type="default" onClick={() => onEdit(hotspot.id)}>Add & Edit Data</IconTextButton>
-                                ) : null}
+        <div
+            ref={containerRef}
+            className={['hotspot-image', styles.hotspotImage].join(' ')}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+        >
+            <img src={src} alt="Decorative" className={'hotspot-image__image'}/>
+            {items.map(hotspot => (
+                <Popover
+                    trigger={['contextMenu']}
+                    key={hotspot.id}
+                    arrow={false}
+                    open={popoverOpen && selectedId === hotspot.id}
+                    onOpenChange={(open) => setPopoverOpen(open)}
+                    content={
+                        <div>
+                            {onEdit !== undefined ? (
+                                <IconTextButton icon={{value: 'PlusOutlined'}} type="default" onClick={() => onEdit(hotspot.id)}>Add & Edit Data</IconTextButton>
+                            ) : null}
 
-                                {onClone !== undefined ? (
-                                    <IconButton icon={ { value: 'copy-03' } } type={"link"} onClick={() => onClone(hotspot.id)} />
-                                ): null}
+                            {onClone !== undefined ? (
+                                <IconButton icon={{value: 'copy-03'}} type={"link"} onClick={() => onClone(hotspot.id)}/>
+                            ) : null}
 
-                                {onRemove !== undefined ? (
-                                    <IconButton icon={ { value: 'trash' } } type={"link"} onClick={() => onRemove(hotspot.id)} />
-                                ): null}
-                            </div>
-                        }
-                    >
-                        <div
-                            key={hotspot.id}
-                            className={`hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''}`}
-                            style={{
-                                position: 'absolute',
-                                left: `${hotspot.x}px`,
-                                top: `${hotspot.y}px`,
-                                width: `${hotspot.width}px`,
-                                height: `${hotspot.height}px`
-                            }}
-                            onMouseDown={evt => handleMouseDown(evt, hotspot)}>
-
-                            {styleOptions[hotspot.type]?.icon ? (
-                                <Icon value={styleOptions[hotspot.type].icon}/>
+                            {onRemove !== undefined ? (
+                                <IconButton icon={{value: 'trash'}} type={"link"} onClick={() => onRemove(hotspot.id)}/>
                             ) : null}
                         </div>
-                    </Popover>
-                ))}
-            </div>
-
-            <button onClick={() => addHotspot('hotspot')}>Add Hotspot</button>
-            <button onClick={() => addHotspot('marker')}>Add Marker</button>
-        </>
+                    }
+                >
+                    <div
+                        key={hotspot.id}
+                        className={`hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''}`}
+                        style={{
+                            position: 'absolute',
+                            left: `${hotspot.x}px`,
+                            top: `${hotspot.y}px`,
+                            width: `${hotspot.width}px`,
+                            height: `${hotspot.height}px`
+                        }}
+                        onMouseDown={evt => handleMouseDown(evt, hotspot)}
+                    >
+                        {styleOptions[hotspot.type]?.icon ? (
+                            <Icon value={styleOptions[hotspot.type].icon}/>
+                        ) : null}
+                    </div>
+                </Popover>
+            ))}
+        </div>
     );
 };

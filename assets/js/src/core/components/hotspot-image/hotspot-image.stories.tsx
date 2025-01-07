@@ -12,11 +12,11 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { HotspotImage } from './hotspot-image'
+import { HotspotImageContainer } from './hotspot-image-container'
 
 const config: Meta = {
   title: 'Components/Data Display/Hotspot Image',
-  component: HotspotImage,
+  component: HotspotImageContainer,
   tags: ['autodocs']
 }
 
@@ -28,18 +28,18 @@ export const _default = {
     items: [
       {
         id: 1,
-        x: 50,
-        y: 100,
+        x: 190,
+        y: 350,
         width: 24,
         height: 24,
         type: 'marker'
       },
       {
         id: 2,
-        x: 60,
-        y: 60,
-        width: 50,
-        height: 50,
+        x: 647,
+        y: 106,
+        width: 150,
+        height: 150,
         type: 'hotspot'
       }
     ],
