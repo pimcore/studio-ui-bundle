@@ -82,7 +82,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
             <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? 'No saved templates available' : '' }>
               <IconTextButton
                 disabled={ savedGridConfigurations?.length === 0 && !isLoading }
-                icon={ { value: 'magic-wand-01' } }
+                icon={ { value: 'style' } }
                 loading={ isLoading }
               >
                 { isSavedConfiguration
@@ -110,7 +110,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
           {!isEmpty(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
               <IconTextButton
-                icon={ { value: 'PlusCircleOutlined' } }
+                icon={ { value: 'new-circle' } }
                 type='link'
               >
                 { t('listing.add-column') }
@@ -151,7 +151,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                     items: [
                       {
                         key: 0,
-                        icon: <Icon value='edit-03' />,
+                        icon: <Icon value='edit' />,
                         label: 'Edit template details',
                         onClick: () => {
                           onEditConfigurationClick()
@@ -160,7 +160,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
 
                       {
                         key: 1,
-                        icon: <Icon value='save-01' />,
+                        icon: <Icon value='save' />,
                         label: 'Save as new template',
                         onClick: () => {
                           onSaveConfigurationClick()
@@ -171,7 +171,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                 }
                 >
                   <IconButton
-                    icon={ { value: 'dots-horizontal' } }
+                    icon={ { value: 'more' } }
                     type='default'
                   />
                 </Dropdown>

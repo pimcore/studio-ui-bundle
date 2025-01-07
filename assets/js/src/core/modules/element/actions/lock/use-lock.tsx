@@ -72,7 +72,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.lock'),
       key: 'lock',
-      icon: <Icon value={ 'lock-01' } />,
+      icon: <Icon value={ 'lock' } />,
       hidden: node.isLocked,
       onClick: async () => {
         await lock(parseInt(node.id))
@@ -84,7 +84,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.lock'),
       key: 'lock',
-      icon: <Icon value={ 'lock-01' } />,
+      icon: <Icon value={ 'lock' } />,
       hidden: node.isLocked,
       onClick: async () => {
         await lock(node.id)
@@ -97,7 +97,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.lock-and-propagate-to-children'),
       key: 'lock-and-propagate-to-children',
-      icon: <Icon value={ 'file-lock-02' } />,
+      icon: <Icon value={ 'file-locked' } />,
       hidden: node.isLocked,
       onClick: async () => {
         await lockAndPropagate(parseInt(node.id))
@@ -109,7 +109,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.lock-and-propagate-to-children'),
       key: 'lock-and-propagate-to-children',
-      icon: <Icon value={ 'file-lock-02' } />,
+      icon: <Icon value={ 'file-locked' } />,
       hidden: node.isLocked,
       onClick: async () => {
         await lockAndPropagate(node.id)
@@ -122,7 +122,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.unlock'),
       key: 'unlock',
-      icon: <Icon value={ 'lock-unlock-01' } />,
+      icon: <Icon value={ 'unlocked' } />,
       hidden: !node.isLocked,
       onClick: async () => {
         await unlock(parseInt(node.id))
@@ -134,7 +134,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.unlock'),
       key: 'unlock',
-      icon: <Icon value={ 'lock-unlock-01' } />,
+      icon: <Icon value={ 'unlocked' } />,
       hidden: !node.isLocked,
       onClick: async () => {
         await unlock(node.id)
@@ -147,7 +147,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.unlock-and-propagate-to-children'),
       key: 'unlock-and-propagate-to-children',
-      icon: <Icon value={ 'lock-unlock-01' } />,
+      icon: <Icon value={ 'unlocked' } />,
       hidden: !node.isLocked,
       onClick: async () => {
         await unlockAndPropagate(parseInt(node.id))
@@ -159,7 +159,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
     return {
       label: t('element.unlock-and-propagate-to-children'),
       key: 'unlock-and-propagate-to-children',
-      icon: <Icon value={ 'lock-unlock-01' } />,
+      icon: <Icon value={ 'unlocked' } />,
       hidden: !node.isLocked,
       onClick: async () => {
         await unlockAndPropagate(node.id)

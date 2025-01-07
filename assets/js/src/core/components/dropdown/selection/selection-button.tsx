@@ -33,7 +33,7 @@ export const SelectionButton = ({ id }: SelectionButtonProps): React.JSX.Element
   return (
     <IconButton
       className={ classes.join(' ') }
-      icon={ { value: 'pin-02' } }
+      icon={ { value: 'pin' } }
       onClick={ onClick }
       variant="minimal"
     />

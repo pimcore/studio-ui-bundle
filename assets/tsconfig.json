@@ -4,7 +4,7 @@
     "module": "ESNext",
     "target": "ES2023",
     "moduleResolution": "Node",
-    "types": ["reflect-metadata", "@types/webpack-env", "jest", "react", "react-dom"],
+    "types": ["reflect-metadata", "@types/webpack-env", "jest", "react", "react-dom", "node"],
     "baseUrl": "./js/",
     "paths": {
       "@Pimcore/*": ["./src/core/*"],

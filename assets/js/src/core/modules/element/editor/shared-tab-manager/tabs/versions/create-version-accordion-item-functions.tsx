@@ -112,7 +112,7 @@ export const createVersionAccordionItem = ({
     return (
       <div>
         <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
-        {isSet(version.autosave) && version.autosave && <Icon value="lightning-01" />}
+        {isSet(version.autosave) && version.autosave && <Icon value="auto-save" />}
       </div>
     )
   }
@@ -169,7 +169,7 @@ export const createVersionAccordionItem = ({
               <IconTextButton
                 className={ 'btn-publish' }
                 disabled={ publishingVersion || deletingVersion }
-                icon={ { value: 'world' } }
+                icon={ { value: 'published' } }
                 loading={ publishingVersion }
                 onClick={ publishVersion }
               >
@@ -191,7 +191,7 @@ export const createVersionAccordionItem = ({
             <div className={ 'row-margin' }>
               <div>{t('version.schedule-for')}</div>
               <div className={ 'date-container' }>
-                <Icon value="calender" />
+                <Icon value="calendar" />
                 <span className={ 'scheduled-date' }>{scheduledDate}</span>
               </div>
             </div>

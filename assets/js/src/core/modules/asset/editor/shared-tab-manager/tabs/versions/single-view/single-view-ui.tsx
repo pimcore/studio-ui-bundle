@@ -61,7 +61,7 @@ export const SingleViewUi = ({
       >
         <IconButton
           disabled={ firstVersion }
-          icon={ { value: 'left-outlined' } }
+          icon={ { value: 'chevron-left' } }
           onClick={ onClickPrevious }
           type={ 'text' }
         />
@@ -77,7 +77,7 @@ export const SingleViewUi = ({
 
         <IconButton
           disabled={ lastVersion }
-          icon={ { value: 'right-outlined' } }
+          icon={ { value: 'chevron-right' } }
           onClick={ onClickNext }
           type={ 'text' }
         />

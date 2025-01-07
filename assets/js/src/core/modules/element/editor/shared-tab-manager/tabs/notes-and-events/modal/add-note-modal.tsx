@@ -72,7 +72,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
       onOk={ () => { form.submit() } }
       open={ props.open }
       title={ (
-        <ModalTitle iconName='PlusCircleOutlined'>{ t('notes-and-events.new-note') }</ModalTitle>
+        <ModalTitle iconName='new-circle'>{ t('notes-and-events.new-note') }</ModalTitle>
           ) }
     >
 

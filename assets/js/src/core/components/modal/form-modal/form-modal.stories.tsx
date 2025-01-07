@@ -104,7 +104,7 @@ export const InputWithInitialValue = {
 export const Confirmation = {
   args: {
     type: 'confirmation',
-    icon: 'exclamation-circle-filled',
+    icon: 'warning-circle',
     title: 'Confirmation',
     content: 'Are you sure that you are sure?'
   }

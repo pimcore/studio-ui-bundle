@@ -193,7 +193,7 @@ function PreviousButton (prop): React.JSX.Element {
         disabled={ currentPage === 1 }
         icon={ <Icon
           options={ iconOptions }
-          value='left-outlined'
+          value='chevron-left'
                /> }
         onClick={ onClickPrev }
         size={ 'small' }
@@ -213,7 +213,7 @@ function NextButton (prop): React.JSX.Element {
         disabled={ currentPage === pages }
         icon={ <Icon
           options={ iconOptions }
-          value='right-outlined'
+          value='chevron-right'
                /> }
         onClick={ onClickNext }
         size={ 'small' }

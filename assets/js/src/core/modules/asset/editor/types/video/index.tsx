@@ -40,7 +40,7 @@ moduleSystem.registerModule({
       key: 'view',
       label: 'asset.asset-editor-tabs.view',
       children: <PreviewContainer />,
-      icon: <Icon value={ 'image-05' } />
+      icon: <Icon value={ 'image' } />
     })
 
     videoTabManager.register(TAB_EMBEDDED_METADATA)

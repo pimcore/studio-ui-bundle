@@ -28,7 +28,7 @@ export default config
 
 export const _default = {
   args: {
-    icon: 'trash',
+    icon: { value: 'trash' },
     children: 'Delete'
   }
 }

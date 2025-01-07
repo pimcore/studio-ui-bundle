@@ -48,7 +48,7 @@ export const createTreeStructure = ({ tags, loadingNodes }: { tags: NonNullable<
         key: tag.id!.toString(),
         title: getTitle(tag.text, isLoading),
         icon: Icon({
-          value: 'tag-02'
+          value: 'tag'
         }),
         disableCheckbox: isLoading,
         children: tag.hasChildren === true ? treeWalker(tag.children!) : []

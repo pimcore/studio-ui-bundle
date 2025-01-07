@@ -105,7 +105,7 @@ export const MainNav = (): React.JSX.Element => {
   return (
     <div ref={ elRef }>
       <IconButton
-        icon={ { value: 'appstore-outlined' } }
+        icon={ { value: 'menu' } }
         onClick={ () => { setIsOpen(!isOpen) } }
         type={ 'text' }
       />
@@ -127,7 +127,7 @@ export const MainNav = (): React.JSX.Element => {
                   <ul className={ 'main-nav__list-inline' }>
                     <li>
                       <IconTextButton
-                        icon={ { value: 'pin-02-outlined' } }
+                        icon={ { value: 'pin' } }
                         type={ 'link' }
                       >{t('navigation.document-types')}</IconTextButton></li>
                     <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
@@ -147,33 +147,33 @@ export const MainNav = (): React.JSX.Element => {
                 <Divider className={ 'main-nav__divider' } />
 
                 <div className={ 'main-nav__bottom' }>
-                  {t('navigation.perspectives')}
+                  <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
                   <ul className={ 'main-nav__list-inline' }>
                     <li><IconTextButton
                       icon={ { value: 'pimcore' } }
                         >Default</IconTextButton></li>
                     <li><IconTextButton
-                      icon={ { value: 'users-01' } }
+                      icon={ { value: 'cdp' } }
                       type={ 'default' }
                         >CDP</IconTextButton></li>
                     <li><IconTextButton
-                      icon={ { value: 'file-outlined' } }
+                      icon={ { value: 'document' } }
                       type={ 'default' }
                         >CMS</IconTextButton></li>
                     <li><IconTextButton
-                      icon={ { value: 'shop-outlined' } }
+                      icon={ { value: 'asset' } }
                       type={ 'default' }
                         >Commerce</IconTextButton></li>
                     <li><IconTextButton
-                      icon={ { value: 'mainAsset' } }
+                      icon={ { value: 'asset' } }
                       type={ 'default' }
                         >DAM</IconTextButton></li>
                     <li><IconTextButton
-                      icon={ { value: 'mainObject' } }
+                      icon={ { value: 'data-object' } }
                       type={ 'default' }
                         >PIM</IconTextButton></li>
                     <li><IconTextButton
-                      icon={ { value: 'book' } }
+                      icon={ { value: 'catalog' } }
                       type={ 'default' }
                         >Catalogue</IconTextButton></li>
                   </ul>
