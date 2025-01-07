@@ -185,7 +185,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             className={['hotspot-image', styles.hotspotImage].join(' ')}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            role="button"
+            role="none"
         >
             <img src={src} className={'hotspot-image__image'} alt="" />
             {items.map(hotspot => (
