@@ -14,17 +14,19 @@
 import React from 'react'
 import { FormListProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/form-list-provider/form-list-provider'
 import { type FormListFieldData, type FormListOperation } from 'antd'
-import { type FieldCollectionProps } from './field-collection'
 import { useFieldCollection } from './providers/use-field-collection'
 import { Content } from '@Pimcore/components/content/content'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import { FieldCollectionToolStrip } from './field-collection-tool-strip'
 import { Form } from '@Pimcore/components/form/form'
+import { type CollectionItemProps } from '../collection/collection'
+import { type FieldCollectionProps } from './field-collection'
 
-export interface FieldCollectionItemProps extends FieldCollectionProps {
+export interface FieldCollectionItemProps extends CollectionItemProps {
   field: FormListFieldData
   operation: FormListOperation
+  allowedTypes: FieldCollectionProps['allowedTypes']
 }
 
 export const FieldCollectionItem = ({ field, operation, name, border, ...props }: FieldCollectionItemProps): React.JSX.Element => {
@@ -59,7 +61,7 @@ export const FieldCollectionItem = ({ field, operation, name, border, ...props }
           field={ field }
           label={ fieldCollectionType }
           name={ name }
-          operations={ operation }
+          operation={ operation }
         />
       ) }
     >

@@ -25,13 +25,14 @@ export interface SplitLayoutProps {
   rightItem: ISplitLayoutItem
   withDivider?: boolean
   resizeAble?: boolean
+  withToolbar?: boolean
 }
 
 interface ISplitLayoutItemSizing extends Omit<ISplitLayoutItem, 'children'> {}
 
 const RESIZE_INCREMENT = 5 // define the amount to resize with each key press
 
-export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAble = false }: SplitLayoutProps): React.JSX.Element => {
+export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAble = false, withToolbar = false }: SplitLayoutProps): React.JSX.Element => {
   const leftItemRef = useRef<HTMLDivElement>(null)
   const rightItemRef = useRef<HTMLDivElement>(null)
   const elementRef = useRef<HTMLDivElement>(null)
@@ -105,6 +106,7 @@ export const SplitLayout = ({ leftItem, rightItem, withDivider = false, resizeAb
       <Divider
         onKeyboardResize={ resizeAble ? onKeyboardResize : undefined }
         onMouseResize={ resizeAble ? onMouseResize : undefined }
+        withToolbar={ withToolbar }
       />
       )}
 

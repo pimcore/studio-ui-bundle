@@ -14,7 +14,7 @@
 import React, { useState } from 'react'
 import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 
-interface useModalReturnType {
+interface IUseModalReturnType {
   renderModal: (props: IModalProps) => React.JSX.Element
   showModal: () => void
   handleOk: () => void
@@ -22,7 +22,7 @@ interface useModalReturnType {
   closeModal: () => void
 }
 
-export const useModal = (config = { type: 'default' }): useModalReturnType => {
+export const useModal = (config = { type: 'default' }): IUseModalReturnType => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const showModal = (): void => {

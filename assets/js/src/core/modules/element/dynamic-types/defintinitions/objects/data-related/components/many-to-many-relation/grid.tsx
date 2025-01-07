@@ -35,6 +35,7 @@ interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
   deleteItem: (id: number, type: string) => void
   assetInlineDownloadAllowed: boolean
+  disabled?: boolean
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -118,33 +119,35 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           )
         }
 
-        buttons.push(
-          <Tooltip
-            key="remove"
-            title={ t('remove') }
-          >
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                confirm({
-                  title: t('remove'),
-                  content: <Trans
-                    i18nKey={ 'delete-confirmation-advanced' }
-                    shouldUnescape
-                    values={ {
-                      type: t('relation'),
-                      value: rowValue.fullPath
-                    } }
-                           />,
-                  onOk: () => {
-                    props.deleteItem(rowValue.id, rowValue.type)
-                  }
-                })
-              } }
-              type="link"
-            />
-          </Tooltip>
-        )
+        if (props.disabled !== true) {
+          buttons.push(
+            <Tooltip
+              key="remove"
+              title={ t('remove') }
+            >
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  confirm({
+                    title: t('remove'),
+                    content: <Trans
+                      i18nKey={ 'delete-confirmation-advanced' }
+                      shouldUnescape
+                      values={ {
+                        type: t('relation'),
+                        value: rowValue.fullPath
+                      } }
+                             />,
+                    onOk: () => {
+                      props.deleteItem(rowValue.id, rowValue.type)
+                    }
+                  })
+                } }
+                type="link"
+              />
+            </Tooltip>
+          )
+        }
 
         return (
           <Box padding="mini">

@@ -35,7 +35,10 @@ export class DynamicTypeObjectDataQuantityValue extends DynamicTypeObjectDataAbs
 
   getObjectDataComponent (props: QuantityValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <QuantityValue { ...props } />
+      <QuantityValue
+        { ...props }
+        disabled={ props.noteditable === true }
+      />
     )
   }
 

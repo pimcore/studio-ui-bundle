@@ -32,7 +32,7 @@ export type DateRangePickerProps = OriginalRangePickerProps & {
   outputFormat?: string
 }
 
-const valueToDayJs = (value?: DateRangeTargetValue | any): DateRange | null => {
+const valueToDayJs = (value?: DateRangeTargetValue | unknown): DateRange | null => {
   if (Array.isArray(value)) {
     return [
       toDayJs(value[0]),

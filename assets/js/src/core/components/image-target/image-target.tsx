@@ -55,14 +55,18 @@ export const ImageTarget = forwardRef(function ImageTarget ({ title, className, 
       >
         { (dndIcon === true || uploadIcon === true) && (
         <div className="icon-container">
-          <Icon
-            options={ { height: 30, width: 30 } }
-            value={ 'new' }
-          />
-          <Icon
-            options={ { height: 30, width: 30 } }
-            value={ 'copy' }
-          />
+          { dndIcon === true && (
+            <Icon
+              options={ { height: 30, width: 30 } }
+              value={ 'PlusOutlined' }
+            />
+          )}
+          { uploadIcon === true && (
+            <Icon
+              options={ { height: 30, width: 30 } }
+              value={ 'copy-07' }
+            />
+          )}
         </div>
         )}
         <div className="image-target-title">{ title }</div>

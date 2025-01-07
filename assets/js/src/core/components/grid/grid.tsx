@@ -185,6 +185,18 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
 
   const table = useReactTable(tableProps)
 
+  const renderSortButton = ({ headerColumn }: { headerColumn: Column<any> }): JSX.Element => (
+    <div className='grid__sorter'>
+      <SortButton
+        allowUnsorted={ sorting === undefined }
+        onSortingChange={ (value) => {
+          updateSortDirection(headerColumn, value)
+        } }
+        value={ getSortDirection(headerColumn) }
+      />
+    </div>
+  )
+
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
       <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
@@ -223,23 +235,15 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                               )}
                             </span>
 
-                            {header.column.getCanSort() && (
-                              <div className='grid__sorter'>
-                                <SortButton
-                                  allowUnsorted={ sorting === undefined }
-                                  onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-                                  value={ getSortDirection(header.column) }
-                                />
-                              </div>
-                            )}
+                            {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
                           </div>
 
                           {props.resizable === true && header.column.getCanResize() && (
-                          <Resizer
-                            header={ header }
-                            isResizing={ header.column.getIsResizing() }
-                            table={ table }
-                          />
+                            <Resizer
+                              header={ header }
+                              isResizing={ header.column.getIsResizing() }
+                              table={ table }
+                            />
                           )}
                         </th>
                       ))}

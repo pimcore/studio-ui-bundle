@@ -147,7 +147,7 @@ export const MainNav = (): React.JSX.Element => {
                 <Divider className={ 'main-nav__divider' } />
 
                 <div className={ 'main-nav__bottom' }>
-                  {t('navigation.perspectives')}
+                  <div className={ 'main-nav__bottom-title' }>{t('navigation.perspectives')}</div>
                   <ul className={ 'main-nav__list-inline' }>
                     <li><IconTextButton
                       icon={ { value: 'pimcore' } }
