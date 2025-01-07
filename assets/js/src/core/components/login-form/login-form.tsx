@@ -65,7 +65,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
       const userInformation = response.data!
       dispatch(setUser(userInformation))
     } catch (e: any) {
-      void messageApi.error({
+      await messageApi.error({
         content: e.message
       })
     }
