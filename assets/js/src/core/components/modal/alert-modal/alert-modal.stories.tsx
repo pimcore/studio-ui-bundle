@@ -71,14 +71,14 @@ export const Info = {
   }
 }
 
-export const Error = {
+export const WithError = {
   args: {
     type: 'error',
     content: 'This is an info message'
   }
 }
 
-export const Warn = {
+export const WithWarn = {
   args: {
     type: 'warn',
     content: 'This is an info message'

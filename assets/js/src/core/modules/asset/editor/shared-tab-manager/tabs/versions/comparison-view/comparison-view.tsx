@@ -35,6 +35,17 @@ export const ComparisonView = ({
   const [gridData, setGridData] = useState([] as object[])
   const [versions, setVersions] = useState<AssetVersionData[]>([])
 
+  const handleImageVersions = (currentVersions: AssetVersionData[], imageUrls: Array<string | null>): void => {
+    const imageVersions = currentVersions
+
+    imageVersions.forEach((version, versionIndex) => {
+      version.previewImageUrl = imageUrls[versionIndex]
+    })
+
+    setVersions(imageVersions)
+    setGridData(versionsDataToTableData(imageVersions))
+  }
+
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
 
@@ -48,22 +59,20 @@ export const ComparisonView = ({
 
     Promise.all(versionPromises)
       .then((responses): void => {
-        const versions: AssetVersionData[] = []
+        const currentVersions: AssetVersionData[] = []
+
         const imagePromises: Array<Promise<string | null>> = []
+
         responses.forEach((response, versionIndex) => {
           const dataRaw = response.data as AssetVersion
-          versions.push(hydrateVersionData(dataRaw, versionIds[versionIndex].id, versionIds[versionIndex].count))
+
+          currentVersions.push(hydrateVersionData(dataRaw, versionIds[versionIndex].id, versionIds[versionIndex].count))
           imagePromises.push(loadPreviewImage(dataRaw, versionIds[versionIndex].id))
         })
 
         Promise.all(imagePromises)
           .then((imageUrls): void => {
-            versions.forEach((version, versionIndex) => {
-              version.previewImageUrl = imageUrls[versionIndex]
-            })
-
-            setVersions(versions)
-            setGridData(versionsDataToTableData(versions))
+            handleImageVersions(currentVersions, imageUrls)
           })
           .catch(err => { console.log(err) })
       })

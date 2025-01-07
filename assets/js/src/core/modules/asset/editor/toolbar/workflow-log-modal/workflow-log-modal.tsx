@@ -35,7 +35,7 @@ export const WorkflowLogModal = (): React.JSX.Element => {
   }
 
   const onFinish = (values: FormValues): void => {
-    contextWorkflowDetails !== null && submitWorkflowAction(contextWorkflowDetails.transition, contextWorkflowDetails.action, contextWorkflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
+    contextWorkflowDetails !== null && submitWorkflowAction(contextWorkflowDetails.action, contextWorkflowDetails.transition, contextWorkflowDetails.workflowName, { notes: values.notes, additional: { timeWorked: values.timeSpent } })
     closeModal()
   }
 

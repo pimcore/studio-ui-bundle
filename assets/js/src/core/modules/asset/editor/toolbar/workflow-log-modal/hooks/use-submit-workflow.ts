@@ -24,7 +24,7 @@ import {
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 interface UseSubmitWorkflowReturn {
-  submitWorkflowAction: (transition: string, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions) => void
+  submitWorkflowAction: (actionType: string, transition: TransitionType, workFlowName: string, workFlowOptions: WorkflowOptions) => void
   submissionLoading: boolean
   submissionSuccess: boolean
   submissionError: boolean

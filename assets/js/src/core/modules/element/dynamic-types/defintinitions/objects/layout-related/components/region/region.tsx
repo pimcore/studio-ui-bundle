@@ -23,12 +23,12 @@ export interface RegionProps extends AbstractObjectLayoutDefinition {
   title?: ReactNode
 }
 
-export const availableRegions = {
-  north: 'north',
-  south: 'south',
-  east: 'east',
-  west: 'west',
-  center: 'center'
+export enum AvailableRegions {
+  North = 'north',
+  South = 'south',
+  East = 'east',
+  West = 'west',
+  Center = 'center',
 }
 
 export const Region = ({ children, ...props }: RegionProps): React.JSX.Element => {
@@ -40,7 +40,7 @@ export const Region = ({ children, ...props }: RegionProps): React.JSX.Element =
     let { region } = child
 
     if (region === '' || region === null) {
-      region = availableRegions.center
+      region = AvailableRegions.Center
     }
 
     const regionIndex = (regionMap[region] ?? 0) + 1
@@ -57,47 +57,49 @@ export const Region = ({ children, ...props }: RegionProps): React.JSX.Element =
     regionMap[region] = regionIndex
   })
 
-  let mainAreaColumnAmount = (regionMap[availableRegions.center] ?? 0) + (regionMap[availableRegions.east] ?? 0) + (regionMap[availableRegions.west] ?? 0)
+  const handleLayoutDefinitionByRegion = (region: AvailableRegions): void => {
+    for (let i = 0; i < regionMap[region]; i++) {
+      layoutDefinition.push(`${region}${i + 1} `.repeat(mainAreaColumnAmount).trim())
+    }
+  }
+
+  let mainAreaColumnAmount = (regionMap[AvailableRegions.Center] ?? 0) + (regionMap[AvailableRegions.East] ?? 0) + (regionMap[AvailableRegions.West] ?? 0)
   const hasMainAreaColumn = mainAreaColumnAmount > 0
 
   if (!hasMainAreaColumn) {
     mainAreaColumnAmount = 1
   }
 
-  if (regionMap[availableRegions.north] > 0) {
-    for (let i = 0; i < regionMap[availableRegions.north]; i++) {
-      layoutDefinition.push(`${availableRegions.north}${i + 1} `.repeat(mainAreaColumnAmount).trim())
-    }
+  if (regionMap[AvailableRegions.North] > 0) {
+    handleLayoutDefinitionByRegion(AvailableRegions.North)
+  }
+
+  if (regionMap[AvailableRegions.South] > 0) {
+    handleLayoutDefinitionByRegion(AvailableRegions.South)
   }
 
   if (hasMainAreaColumn) {
     let mainLayoutDefinition = ''
 
-    if (regionMap[availableRegions.west] > 0) {
-      for (let i = 0; i < regionMap[availableRegions.west]; i++) {
-        mainLayoutDefinition += `${availableRegions.west}${i + 1} `
+    const handleMainLayoutDefinitionByRegion = (region: AvailableRegions): void => {
+      for (let i = 0; i < regionMap[region]; i++) {
+        mainLayoutDefinition += `${region}${i + 1} `
       }
     }
 
-    if (regionMap[availableRegions.center] > 0) {
-      for (let i = 0; i < regionMap[availableRegions.center]; i++) {
-        mainLayoutDefinition += `${availableRegions.center}${i + 1} `
-      }
+    if (regionMap[AvailableRegions.West] > 0) {
+      handleMainLayoutDefinitionByRegion(AvailableRegions.West)
     }
 
-    if (regionMap[availableRegions.east] > 0) {
-      for (let i = 0; i < regionMap[availableRegions.east]; i++) {
-        mainLayoutDefinition += `${availableRegions.east}${i + 1} `
-      }
+    if (regionMap[AvailableRegions.Center] > 0) {
+      handleMainLayoutDefinitionByRegion(AvailableRegions.Center)
+    }
+
+    if (regionMap[AvailableRegions.East] > 0) {
+      handleMainLayoutDefinitionByRegion(AvailableRegions.East)
     }
 
     layoutDefinition.push(mainLayoutDefinition.trim())
-  }
-
-  if (regionMap[availableRegions.south] > 0) {
-    for (let i = 0; i < regionMap[availableRegions.south]; i++) {
-      layoutDefinition.push(`${availableRegions.south}${i + 1} `.repeat(mainAreaColumnAmount).trim())
-    }
   }
 
   return (

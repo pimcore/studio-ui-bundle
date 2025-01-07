@@ -13,7 +13,7 @@
 
 const Encore = require('@symfony/webpack-encore');
 const path = require('path');
-var { DllPlugin } = require('webpack');
+const { DllPlugin } = require('webpack');
 const uuid = require('uuid');
 const buildId = uuid.v4();
 const fs = require('fs');

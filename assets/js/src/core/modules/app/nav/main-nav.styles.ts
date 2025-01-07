@@ -27,6 +27,8 @@ export const useStlyes = createStyles(({
       box-shadow: ${token.boxShadowSecondary};
       border-radius: ${token.borderRadius}px;
       width: 818px;
+      max-width: 90vw;
+      min-width: 530px;
       text-align: left;
       
       .main-nav__top {
@@ -43,13 +45,18 @@ export const useStlyes = createStyles(({
 
       .main-nav__bottom {
         display: flex;
-        align-items: center;
         text-transform: uppercase;
         gap: ${token.marginSM}px;
         color: ${token.colorTextDescription};
+        
+        .main-nav__bottom-title {
+          margin-top: ${token.marginXS}px;
+          line-height: 1.5;
+        }
 
         .main-nav__list-inline {
           gap: ${token.marginXS}px;
+          flex-wrap: wrap;
         }
       }
       
