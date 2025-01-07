@@ -78,18 +78,21 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     };
 
     const resizeItem = (evt, containerBounds, hotspotIndex, hotspot, dx, dy) => {
-        let { newWidth, newHeight, newX, newY } = calculateNewDimensions(hotspot, dx, dy);
+        let newWidth = resizeStart.width,
+            newHeight = resizeStart.height,
+            newX = hotspot.x,
+            newY = hotspot.y;
 
-        if (resizeDirection.includes('w')) {
+        if (resizeDirection?.includes('w')) {
             ({ newWidth, newX } = handleWestResize(hotspot, dx, evt, containerBounds));
         }
-        if (resizeDirection.includes('e')) {
-            newWidth = Math.max(styleOptions[hotspot.type].minSize, resizeStart.width + dx);
+        if (resizeDirection?.includes('e')) {
+            newWidth = Math.min(containerBounds.width - hotspot.x, Math.max(styleOptions[hotspot.type].minSize, resizeStart.width + dx));
         }
-        if (resizeDirection.includes('n')) {
+        if (resizeDirection?.includes('n')) {
             ({ newHeight, newY } = handleNorthResize(hotspot, dy, evt, containerBounds));
         }
-        if (resizeDirection.includes('s')) {
+        if (resizeDirection?.includes('s')) {
             newHeight = Math.max(styleOptions[hotspot.type].minSize, resizeStart.height + dy);
         }
 
@@ -100,15 +103,6 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             width: newWidth,
             height: newHeight
         } : h));
-    };
-
-    const calculateNewDimensions = (hotspot, dx, dy) => {
-        return {
-            newWidth: resizeStart.width,
-            newHeight: resizeStart.height,
-            newX: hotspot.x,
-            newY: hotspot.y
-        };
     };
 
     const handleWestResize = (hotspot, dx, evt, containerBounds) => {
@@ -165,20 +159,23 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         if (selectedId === null || containerRef.current === null) return;
         const containerBounds = containerRef.current.getBoundingClientRect();
         const hotspotIndex = items.findIndex(h => h.id === selectedId);
-        const hotspot = items[hotspotIndex];
         const dx = evt.clientX - resizeStart.x;
         const dy = evt.clientY - resizeStart.y;
 
         if (dragging) {
-            dragItem(evt, containerBounds, hotspotIndex, hotspot);
+            dragItem(evt, containerBounds, hotspotIndex, items[hotspotIndex]);
         } else if (resizeDirection) {
-            resizeItem(evt, containerBounds, hotspotIndex, hotspot, dx, dy);
+            resizeItem(evt, containerBounds, hotspotIndex, items[hotspotIndex], dx, dy);
         }
     };
     const handleMouseUp = () => {
         setDragging(false);
         setResizeDirection(null);
-        onUpdate(items.find(h => h.id === selectedId));
+
+        const updatedItem = items.find(h => h.id === selectedId);
+        if (updatedItem) {
+            onUpdate(updatedItem);
+        }
     };
 
     return (
