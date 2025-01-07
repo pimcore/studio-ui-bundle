@@ -11,15 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { type Meta } from '@storybook/react'
+import { Spin } from './spin'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
-  return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
-  )
+const config: Meta = {
+  title: 'Components/Feedback/Spin',
+  component: Spin,
+  args: {
+    asContainer: true
+  }
 }
+
+export default config
+
+export const _default = {}

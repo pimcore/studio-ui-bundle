@@ -12,14 +12,12 @@
 */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { Empty as AntEmpty, type EmptyProps } from 'antd'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+export interface IEmptyProps extends EmptyProps {}
+
+export const Empty = (props: IEmptyProps): JSX.Element => {
   return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
+    <AntEmpty { ...props } />
   )
 }

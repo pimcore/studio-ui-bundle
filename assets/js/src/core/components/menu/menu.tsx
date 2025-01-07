@@ -12,14 +12,12 @@
 */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { Menu as AntMenu, type MenuProps } from 'antd'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+export interface IMenuProps extends MenuProps {}
+
+export const Menu = (props: IMenuProps): JSX.Element => {
   return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
+    <AntMenu { ...props } />
   )
 }

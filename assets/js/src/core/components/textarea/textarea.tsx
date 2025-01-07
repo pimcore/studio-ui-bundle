@@ -12,14 +12,12 @@
 */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import AntTextArea, { type TextAreaProps } from 'antd/es/input/TextArea'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+export interface ITextAreaProps extends TextAreaProps {}
+
+export const TextArea = (props: ITextAreaProps): JSX.Element => {
   return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
+    <AntTextArea { ...props } />
   )
 }

@@ -12,14 +12,12 @@
 */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { Popconfirm as AntPopconfirm, type PopconfirmProps } from 'antd'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+export interface IPopconfirmProps extends PopconfirmProps {}
+
+export const Popconfirm = (props: IPopconfirmProps): JSX.Element => {
   return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
+    <AntPopconfirm { ...props } />
   )
 }

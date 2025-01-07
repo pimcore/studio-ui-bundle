@@ -12,14 +12,12 @@
 */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+export interface ISkeletonProps extends SkeletonProps {}
+
+export const Skeleton = (props: ISkeletonProps): JSX.Element => {
   return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
+    <AntSkeleton { ...props } />
   )
 }

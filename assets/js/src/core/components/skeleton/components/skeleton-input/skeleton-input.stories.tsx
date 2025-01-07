@@ -11,15 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { type Meta } from '@storybook/react'
+import { SkeletonInput } from './skeleton-input'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
-  return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
-  )
+const config: Meta = {
+  title: 'Components/General/Skeleton/SkeletonInput',
+  component: SkeletonInput,
+  args: {
+    active: true
+  }
 }
+
+export const _default = {}
+
+export const Large = {
+  args: {
+    size: 'large'
+  }
+}
+
+export const Small = {
+  args: {
+    size: 'small'
+  }
+}
+
+export default config

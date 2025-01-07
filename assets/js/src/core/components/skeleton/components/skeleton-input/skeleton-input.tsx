@@ -12,14 +12,13 @@
 */
 
 import React from 'react'
-import { Badge as AntBadge, type BadgeProps } from 'antd'
+import { Skeleton as AntSkeleton, type SkeletonProps } from 'antd'
+import type { SkeletonInputProps } from 'antd/es/skeleton/Input'
 
-export const Badge = ({ color, ...props }: BadgeProps): React.JSX.Element => {
+export interface ISkeletonInputProps extends SkeletonProps, SkeletonInputProps {}
+
+export const SkeletonInput = (props: ISkeletonInputProps): JSX.Element => {
   return (
-    <AntBadge
-      color={ color }
-      styles={ { indicator: { outline: `1px solid ${color}` }, root: { marginRight: '5px' } } }
-      { ...props }
-    />
+    <AntSkeleton.Input { ...props } />
   )
 }
