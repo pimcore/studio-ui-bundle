@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, MouseEvent} from 'react';
+import React, { useState, useRef, useEffect, MouseEvent } from 'react';
 import { useStyle } from './hotspot-image.styles';
 import { Icon } from "@Pimcore/components/icon/icon";
 import { Popover } from "antd";
@@ -164,7 +164,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
 
         if (dragging) {
             dragItem(evt, containerBounds, hotspotIndex, items[hotspotIndex]);
-        } else if (resizeDirection) {
+        } else if (resizeDirection !== null) {
             resizeItem(evt, containerBounds, hotspotIndex, items[hotspotIndex], dx, dy);
         }
     };
@@ -174,7 +174,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         setResizeDirection(null);
 
         const updatedItem = items.find(h => h.id === selectedId);
-        if (updatedItem) {
+        if (updatedItem !== undefined) {
             onUpdate(updatedItem);
         }
     };
@@ -211,9 +211,9 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                     }
                 >
                     <button
-                        type={'button'}
-                        key={hotspot.id}
                         className={`hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''}`}
+                        key={hotspot.id}
+                        onMouseDown={evt => handleMouseDown(evt, hotspot)}
                         style={{
                             position: 'absolute',
                             left: `${hotspot.x}px`,
@@ -221,7 +221,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                             width: `${hotspot.width}px`,
                             height: `${hotspot.height}px`
                         }}
-                        onMouseDown={evt => handleMouseDown(evt, hotspot)}
+                        type={'button'}
                     >
                         {styleOptions[hotspot.type]?.icon ? (
                             <Icon value={styleOptions[hotspot.type].icon} />
