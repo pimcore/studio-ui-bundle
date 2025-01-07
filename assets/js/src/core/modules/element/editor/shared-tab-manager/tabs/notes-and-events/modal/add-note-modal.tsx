@@ -41,7 +41,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
   const [createNote] = useNoteElementCreateMutation()
   const [saveInProgress, setSaveInProgress] = React.useState(false)
 
-  async function addNote (type: string = '', title: string, description: string = ''): Promise<void> {
+  async function addNote (title: string, type: string = '', description: string = ''): Promise<void> {
     await createNote({
       elementType: props.elementType,
       id: props.elementId,
@@ -55,7 +55,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
 
   async function onFinish (values: AddNoteFormValues): Promise<void> {
     setSaveInProgress(true)
-    await addNote(values.type, values.title, values.description)
+    await addNote(values.title, values.type, values.description)
     props.setOpen(false)
     form.resetFields()
     setSaveInProgress(false)

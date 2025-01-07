@@ -62,7 +62,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
 
   const getSuffixIcon = (): React.JSX.Element => {
     const isShowCustomIcon = !isEmpty(customArrowIcon) && isString(customArrowIcon)
-    const iconToShow = isShowCustomIcon ? customArrowIcon : (isActive ? 'chevron-up' : 'chevron-down')
+    const defaultIcon = isActive ? 'chevron-up' : 'chevron-down'
+
+    const iconToShow = isShowCustomIcon ? customArrowIcon : defaultIcon
 
     return (
       <Icon

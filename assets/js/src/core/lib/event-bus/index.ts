@@ -16,7 +16,7 @@ interface EventIdentifier {
   id?: any
 }
 
-interface subscriber {
+interface ISubscriber {
   identifier: EventIdentifier
   callback: (event: AbstractEvent) => void
 }
@@ -27,15 +27,15 @@ interface AbstractEvent {
 }
 
 interface AbstractEventBus {
-  subscribe: (identifier: EventIdentifier, callback: (event: AbstractEvent) => void) => subscriber
-  unsubscribe: (subscriber: subscriber) => void
+  subscribe: (identifier: EventIdentifier, callback: (event: AbstractEvent) => void) => ISubscriber
+  unsubscribe: (subscriber: ISubscriber) => void
   publish: (event: AbstractEvent) => void
 }
 
 class EventBus implements AbstractEventBus {
-  private subscribers: subscriber[] = []
+  private subscribers: ISubscriber[] = []
 
-  subscribe (identifier: EventIdentifier, callback: (event: AbstractEvent) => void): subscriber {
+  subscribe (identifier: EventIdentifier, callback: (event: AbstractEvent) => void): ISubscriber {
     const newSubscriber = {
       identifier,
       callback
@@ -46,7 +46,7 @@ class EventBus implements AbstractEventBus {
     return newSubscriber
   }
 
-  unsubscribe (subscriber: subscriber): void {
+  unsubscribe (subscriber: ISubscriber): void {
     this.subscribers = this.subscribers.filter(sub => sub !== subscriber)
   }
 

@@ -99,15 +99,12 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return [columns, columnIdentifiers]
   }, [GridColumns])
 
-  const data: TransformedGridData = useMemo(() => {
-    if (assets === undefined) {
-      return undefined
-    }
-
+  const getTransformedData = (assets: GridContainerProps['assets']): AssetRow[] => {
     const transformedData: AssetRow[] = []
 
-    assets.items.forEach((item) => {
+    assets!.items.forEach((item) => {
       const row: AssetRow = {}
+
       columnIdentifiers.forEach((columnIdentifier) => {
         const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
 
@@ -121,10 +118,19 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
           }
         })
       })
+
       transformedData.push(row)
     })
 
     return transformedData
+  }
+
+  const data: TransformedGridData = useMemo(() => {
+    if (assets === undefined) {
+      return undefined
+    }
+
+    return getTransformedData(assets)
   }, [assets, columnIdentifiers])
 
   return useMemo(() => {

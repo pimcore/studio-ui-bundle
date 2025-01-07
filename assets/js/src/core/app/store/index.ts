@@ -29,7 +29,11 @@ const slices: AnySliceLike[] = [
   pimcoreApi
 ]
 
-export let rootReducer = combineSlices({}, ...slices).withLazyLoadedSlices<LazyloadedSlices>()
+const createRootReducer = (): CombinedSliceReducer<Record<string, any>, Record<string, any>> => {
+  return combineSlices({}, ...slices).withLazyLoadedSlices<LazyloadedSlices>()
+}
+
+export const rootReducer = createRootReducer()
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -47,10 +51,10 @@ export const store = configureStore({
 export const injectSliceWithState = (newSlice: AnySliceLike): CombinedSliceReducer<Record<string, any>, Record<string, any>> => {
   slices.push(newSlice)
 
-  rootReducer = combineSlices({}, ...slices).withLazyLoadedSlices<LazyloadedSlices>()
-  store.replaceReducer(rootReducer)
+  const updatedRootReducer = createRootReducer()
+  store.replaceReducer(updatedRootReducer)
 
-  return rootReducer
+  return updatedRootReducer
 }
 
 export type AppStore = typeof store
