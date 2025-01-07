@@ -24,13 +24,6 @@ export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleO
         setHotspots([...hotspots, newHotspot]);
     };
 
-    const onClone = (id: number) => {
-        const hotspot = hotspots.find(h => h.id === id);
-        const newHotspot = {...hotspot, id: hotspots.length + 1};
-
-        setHotspots([...hotspots, newHotspot]);
-    }
-
     const onRemove = (id: number) => {
         setHotspots(hotspots.filter(h => h.id !== id));
     }
@@ -51,7 +44,6 @@ export const HotspotImageContainer = ({ src, items, styleOptions = defaultStyleO
                 styleOptions={styleOptions}
                 onEdit={onEdit}
                 onRemove={onRemove}
-                onClone={onClone}
                 onUpdate={onUpdate} />
 
             <div>

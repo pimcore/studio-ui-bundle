@@ -54,6 +54,14 @@ export const useStyle = createStyles(({ token, css }) => {
                 justify-content: center;
                 align-items: center;
             }
+            
+            .hotspot-image__popover {
+            }
+        `,
+        Popover: css`
+            .ant-popover-inner {
+                padding: ${token.paddingXS}px;
+            }
         `
     }
 })

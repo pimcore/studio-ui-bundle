@@ -91,6 +91,7 @@ import ChevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-ho
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import Trash from '@Pimcore/assets/icons/trash.inline.svg'
+import Trash04 from '@Pimcore/assets/icons/trash-04.inline.svg'
 import lightning01 from '@Pimcore/assets/icons/lightning-01.inline.svg'
 import calender from '@Pimcore/assets/icons/calender.inline.svg'
 import world from '@Pimcore/assets/icons/world.inline.svg'
@@ -119,6 +120,7 @@ import deleteOutlined from '@Pimcore/assets/icons/delete-outlined.inline.svg'
 import fileDownloadZip01 from '@Pimcore/assets/icons/file-download-zip-01.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import folderSearch from '@Pimcore/assets/icons/folder-search.inline.svg'
+import openFolder from '@Pimcore/assets/icons/open-folder.inline.svg'
 import lock01 from '@Pimcore/assets/icons/lock-01.inline.svg'
 import fileLock02 from '@Pimcore/assets/icons/file-lock-02.inline.svg'
 import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg'
@@ -459,6 +461,10 @@ moduleSystem.registerModule({
       component: Trash
     })
     iconLibrary.register({
+      name: 'trash-04',
+      component: Trash04
+    })
+    iconLibrary.register({
       name: 'icon',
       component: Icon
     })
@@ -580,6 +586,11 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'folder-search',
       component: folderSearch
+    })
+
+    iconLibrary.register({
+      name: 'open-folder',
+      component: openFolder
     })
 
     iconLibrary.register({

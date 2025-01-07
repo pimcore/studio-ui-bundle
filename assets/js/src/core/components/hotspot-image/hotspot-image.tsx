@@ -48,13 +48,12 @@ interface IHotspotImage {
     src: string;
     styleOptions?: IStyleOptions;
     data?: IHotspot[];
-    onRemove?: (id: number) => void;
-    onClone?: (id: number) => void;
+    onRemove: (id: number) => void;
     onEdit?: (id: number) => void;
     onUpdate: (item: IHotspot) => void;
 }
 
-export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onClone, onRemove, onEdit, onUpdate }: IHotspotImage) => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onUpdate }: IHotspotImage) => {
     const {styles} = useStyle();
 
     const [items, setItems] = useState(data || []);
@@ -192,25 +191,24 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             <img src={src} className={'hotspot-image__image'}/>
             {items.map(hotspot => (
                 <Popover
+                    overlayClassName={[styles.Popover].join(' ')}
                     trigger={['contextMenu']}
                     key={hotspot.id}
                     arrow={false}
                     open={popoverOpen && selectedId === hotspot.id}
                     onOpenChange={(open) => setPopoverOpen(open)}
                     content={
-                        <div>
+                        <>
                             {onEdit !== undefined ? (
                                 <IconTextButton icon={{value: 'PlusOutlined'}} type="default" onClick={() => onEdit(hotspot.id)}>Add & Edit Data</IconTextButton>
                             ) : null}
 
-                            {onClone !== undefined ? (
-                                <IconButton icon={{value: 'copy-03'}} type={"link"} onClick={() => onClone(hotspot.id)}/>
-                            ) : null}
+                            <IconButton icon={{value: 'open-folder'}} type={"link"} onClick={() => console.log('TODO')}/>
 
-                            {onRemove !== undefined ? (
-                                <IconButton icon={{value: 'trash'}} type={"link"} onClick={() => onRemove(hotspot.id)}/>
-                            ) : null}
-                        </div>
+                            <IconButton icon={{value: 'trash-04'}} type={"link"} onClick={() => onRemove(hotspot.id)}/>
+
+                            <IconButton icon={{value: 'dots-horizontal'}} type={"link"}/>
+                        </>
                     }
                 >
                     <button
