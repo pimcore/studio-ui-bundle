@@ -15,12 +15,18 @@ import { Popconfirm } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import ButtonGroup from 'antd/es/button/button-group'
 import React, { useContext, useState } from 'react'
-import { api } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { api, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslation } from 'react-i18next'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -28,23 +34,42 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { id } = useContext(AssetContext)
   const { asset, removeAssetFromState } = useAssetDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
+  const { renameContextMenuItem } = useRename('asset')
+  const { deleteContextMenuItem } = useDelete('asset')
+  const { downloadContextMenuItem } = useDownload()
+  const { createZipDownloadContextMenuItem } = useZipDownload({ elementType: 'asset', type: 'folder' })
+
+  const items: DropdownMenuProps['items'] = [
+    renameContextMenuItem(asset as Asset),
+    deleteContextMenuItem(asset as Asset),
+    downloadContextMenuItem(asset as Asset),
+    createZipDownloadContextMenuItem(asset as Asset)
+  ]
 
   return (
-    <ButtonGroup>
-      <Popconfirm
-        onCancel={ onCancel }
-        onConfirm={ onConfirm }
-        onOpenChange={ onOpenChange }
-        open={ popConfirmOpen }
-        title={ t('toolbar.reload.confirmation') }
-      >
-        <IconButton
-          icon={ { value: 'refresh' } }
+    <>
+      <ButtonGroup>
+        <Popconfirm
+          onCancel={ onCancel }
+          onConfirm={ onConfirm }
+          onOpenChange={ onOpenChange }
+          open={ popConfirmOpen }
+          title={ t('toolbar.reload.confirmation') }
         >
-          {t('toolbar.reload')}
-        </IconButton>
-      </Popconfirm>
-    </ButtonGroup>
+          <IconButton
+            icon={ { value: 'refresh' } }
+          >
+            {t('toolbar.reload')}
+          </IconButton>
+        </Popconfirm>
+
+        <Dropdown menu={ { items } }>
+          <DropdownButton key={ 'dropdown-button' }>
+            More
+          </DropdownButton>
+        </Dropdown>
+      </ButtonGroup>
+    </>
   )
 
   function onOpenChange (newOpen: boolean): void {
