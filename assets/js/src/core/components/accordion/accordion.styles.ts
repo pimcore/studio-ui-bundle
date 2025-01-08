@@ -61,6 +61,10 @@ export const useStyles = createStyles(({ token, css }) => {
         }
 
         .accordion__item {
+          + .accordion__item {
+            margin-top: ${token.marginXS}px;
+          }
+          
             > .ant-collapse-header {
                 display: inline-flex;
                 width: 100%;
@@ -98,7 +102,60 @@ export const useStyles = createStyles(({ token, css }) => {
             margin-left: 5px;
         }
     `,
+    table: css`
+      width: min-content;
+      min-width: 100%;
+
+      .ant-collapse-item .ant-collapse-content .ant-collapse-content-box {
+        padding: 0;
+      }
+
+      .ant-table {
+        table {
+          border: 0;
+          border-radius: 0;
+
+          th {
+            padding: ${token.paddingXXS}px ${token.paddingXS}px !important;
+          }
+        }
+
+        .ant-table-thead {
+          th:first-child {
+            border-left: 0;
+          }
+          tr:first-child th:first-child {
+            border-top-left-radius: 0;
+          }
+          tr:first-child th:last-child {
+            border-top-right-radius: 0;
+          }
+        }
+
+        .ant-table-tbody {
+          td:first-child {
+            border-left: 0;
+          }
+
+          .ant-table-row:last-of-type {
+            .ant-table-cell:first-of-type {
+              border-bottom-left-radius: 0;
+            }
+
+            .ant-table-cell:last-of-type {
+              border-bottom-right-radius: 0;
+            }
+
+            .ant-table-cell {
+              border-bottom: 0;
+            }
+          }
+        }
+      }
+    `,
     bordered: css`
+      background: ${token.colorBgContainer};
+      
       &.accordion--bordered {
         .ant-collapse-item {
           background: ${token.colorBgContainer};

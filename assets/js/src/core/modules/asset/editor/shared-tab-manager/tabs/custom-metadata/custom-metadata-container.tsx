@@ -166,7 +166,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ { value: 'PlusCircleOutlined' } }
+                  icon={ { value: 'new-circle' } }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
@@ -211,7 +211,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
               {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
             </Button>,
               <IconTextButton
-                icon={ { value: 'PlusCircleOutlined' } }
+                icon={ { value: 'new-circle' } }
                 key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
                 onClick={ () => {
                   setEditMode(true)

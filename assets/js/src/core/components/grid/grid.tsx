@@ -38,6 +38,7 @@ import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -174,7 +175,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
       for (const column of columns) {
         if (column.meta?.autoWidth === true) {
           if (autoWidthColumnFound) {
-            throw new Error('Only one column can have autoWidth set to true')
+            trackError(new GeneralError('Only one column can have autoWidth set to true'))
           }
           autoWidthColumnFound = true
         }
@@ -183,6 +184,18 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
   }, [columns, tableAutoWidth])
 
   const table = useReactTable(tableProps)
+
+  const renderSortButton = ({ headerColumn }: { headerColumn: Column<any> }): JSX.Element => (
+    <div className='grid__sorter'>
+      <SortButton
+        allowUnsorted={ sorting === undefined }
+        onSortingChange={ (value) => {
+          updateSortDirection(headerColumn, value)
+        } }
+        value={ getSortDirection(headerColumn) }
+      />
+    </div>
+  )
 
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
@@ -222,23 +235,15 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                               )}
                             </span>
 
-                            {header.column.getCanSort() && (
-                              <div className='grid__sorter'>
-                                <SortButton
-                                  allowUnsorted={ sorting === undefined }
-                                  onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-                                  value={ getSortDirection(header.column) }
-                                />
-                              </div>
-                            )}
+                            {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
                           </div>
 
                           {props.resizable === true && header.column.getCanResize() && (
-                          <Resizer
-                            header={ header }
-                            isResizing={ header.column.getIsResizing() }
-                            table={ table }
-                          />
+                            <Resizer
+                              header={ header }
+                              isResizing={ header.column.getIsResizing() }
+                              table={ table }
+                            />
                           )}
                         </th>
                       ))}

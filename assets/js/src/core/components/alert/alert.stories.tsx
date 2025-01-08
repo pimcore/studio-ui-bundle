@@ -34,14 +34,14 @@ export const Success = {
   }
 }
 
-export const Error = {
+export const WithError = {
   args: {
     ..._default.args,
     type: 'error'
   }
 }
 
-export const Warning = {
+export const WithWarning = {
   args: {
     ..._default.args,
     type: 'warning'

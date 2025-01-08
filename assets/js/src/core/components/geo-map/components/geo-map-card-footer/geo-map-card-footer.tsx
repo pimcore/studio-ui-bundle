@@ -56,7 +56,7 @@ export const GeoMapCardFooter = (props: GeoMapCardFooterProps): React.JSX.Elemen
           >
             <IconButton
               disabled={ props.removeButtonDisabled }
-              icon={ { value: 'delete-outlined' } }
+              icon={ { value: 'trash' } }
               onClick={ props.emptyValue }
             />
           </Tooltip>

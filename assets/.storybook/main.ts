@@ -22,7 +22,7 @@ const config: StorybookConfig = {
 
     reactDocgenTypescriptOptions: {
       propFilter: (prop: any) => {
-        const res = /antd/.test(prop.parent?.fileName) || !/node_modules/.test(prop.parent?.fileName);
+        const res = /antd|rc-image/.test(prop.parent?.fileName) || !/node_modules/.test(prop.parent?.fileName);
         return prop.parent ? res : true;
       },
       shouldExtractLiteralValuesFromEnum: true,

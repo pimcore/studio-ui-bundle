@@ -46,11 +46,11 @@ export const SortButton = ({ onSortingChange, ...props }: SortButtonProps): Reac
     >
       <Icon
         className="sort-button__arrow sort-button__asc"
-        value='caret-up-outlined'
+        value='chevron-up'
       />
       <Icon
         className="sort-button__arrow sort-button__desc"
-        value='caret-down-outlined'
+        value='chevron-down'
       />
     </div>
   )

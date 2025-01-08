@@ -46,7 +46,7 @@ export const StackListItem = ({ id, children, body, sortable = false, renderLeft
       <div className="stack-list-item__title">
         {sortable && (
           <IconButton
-            icon={ { value: 'draggable' } }
+            icon={ { value: 'drag-option' } }
             ref={ setActivatorNodeRef }
             theme='secondary'
             { ...listeners }

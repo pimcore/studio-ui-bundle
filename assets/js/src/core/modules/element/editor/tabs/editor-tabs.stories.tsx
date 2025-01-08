@@ -101,7 +101,7 @@ export const _default = {
         key: '3',
         label: 'Tab 3',
         children: 'Tab 3',
-        icon: <Icon value={ 'view-details' } />
+        icon: <Icon value={ 'details' } />
       },
       {
         key: '4',

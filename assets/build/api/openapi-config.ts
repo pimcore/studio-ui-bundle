@@ -42,6 +42,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/auth/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/user/i)
     },
+    '../../js/src/core/modules/user/user-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/user/i)
+    },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/version/i)
     },
@@ -80,6 +83,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/data-object/unit-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/unit\//i)
+    },
+    '../../js/src/core/modules/document/sites-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/documents\/sites\//i)
     }
   },
   exportName: 'api',

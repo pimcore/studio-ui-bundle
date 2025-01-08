@@ -13,6 +13,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { kebabCase } from 'lodash'
 import {
   type Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
@@ -29,12 +30,12 @@ import { Space } from '@Pimcore/components/space/space'
 import i18n from 'i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
+import { Collapse } from '@Pimcore/components/collapse/collapse'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -57,13 +58,16 @@ export const NotesAndEventsTabView = ({
   const NotesAndEvents: Array<{
     children: React.JSX.Element
     extra: React.JSX.Element
-    title: React.JSX.Element
+    label: React.JSX.Element
     key: string
   }> = notes.map((note) => {
     let showDetails = false
+
     const formatedData: any[] = []
+
     if (Array.isArray(note.data) && note.data.length > 0) {
       showDetails = true
+
       note.data.forEach((noteData) => {
         const tempData = structuredClone(noteData)
         if (typeof tempData.data === 'object') {
@@ -77,7 +81,7 @@ export const NotesAndEventsTabView = ({
     }
 
     const extra = (): React.JSX.Element => {
-      const type = note.type !== '' ? t(`notes-and-events.${note.type}`) : undefined
+      const type = note.type !== '' ? t(`notes-and-events.${kebabCase(note.type)}`) : undefined
 
       return (
         <Space
@@ -134,7 +138,7 @@ export const NotesAndEventsTabView = ({
 
     return ({
       key: note.id.toString(),
-      title: <Split
+      label: <Split
         dividerSize='small'
         size='extra-small'
         theme='secondary'
@@ -176,7 +180,7 @@ export const NotesAndEventsTabView = ({
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton
-            icon={ { value: 'PlusCircleOutlined' } }
+            icon={ { value: 'new-circle' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }
@@ -198,10 +202,9 @@ export const NotesAndEventsTabView = ({
             text: t('notes-and-events.no-notes-and-events-to-show')
           } }
         >
-          <Accordion
+          <Collapse
             accordion={ false }
             items={ NotesAndEvents }
-            spaced
           />
         </Content>
       </Content>

@@ -12,6 +12,7 @@
 */
 
 import React, { forwardRef, type MutableRefObject, type ReactElement } from 'react'
+import { isUndefined } from 'lodash'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -34,6 +35,7 @@ interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
   deleteItem: (id: number, type: string) => void
   assetInlineDownloadAllowed: boolean
+  disabled?: boolean
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -85,8 +87,10 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             <IconButton
               icon={ { value: 'group' } }
               onClick={ async () => {
-                await openElement({
-                  type: mapToElementType(rowValue.type),
+                const typeValue = mapToElementType(rowValue.type)
+
+                !isUndefined(typeValue) && await openElement({
+                  type: typeValue,
                   id: rowValue.id
                 })
               } }
@@ -103,7 +107,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             >
               <IconButton
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ { value: 'download-02' } }
+                icon={ { value: 'download' } }
                 onClick={ () => {
                   download(
                     rowValue.id.toString()
@@ -115,33 +119,35 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           )
         }
 
-        buttons.push(
-          <Tooltip
-            key="remove"
-            title={ t('remove') }
-          >
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                confirm({
-                  title: t('remove'),
-                  content: <Trans
-                    i18nKey={ 'delete-confirmation-advanced' }
-                    shouldUnescape
-                    values={ {
-                      type: t('relation'),
-                      value: rowValue.fullPath
-                    } }
-                           />,
-                  onOk: () => {
-                    props.deleteItem(rowValue.id, rowValue.type)
-                  }
-                })
-              } }
-              type="link"
-            />
-          </Tooltip>
-        )
+        if (props.disabled !== true) {
+          buttons.push(
+            <Tooltip
+              key="remove"
+              title={ t('remove') }
+            >
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  confirm({
+                    title: t('remove'),
+                    content: <Trans
+                      i18nKey={ 'delete-confirmation-advanced' }
+                      shouldUnescape
+                      values={ {
+                        type: t('relation'),
+                        value: rowValue.fullPath
+                      } }
+                             />,
+                    onOk: () => {
+                      props.deleteItem(rowValue.id, rowValue.type)
+                    }
+                  })
+                } }
+                type="link"
+              />
+            </Tooltip>
+          )
+        }
 
         return (
           <Box padding="mini">

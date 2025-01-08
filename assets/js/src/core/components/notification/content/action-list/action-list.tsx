@@ -61,13 +61,13 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
                     ? (
                       <Icon
                         options={ { width: 22, height: 22 } }
-                        value={ 'chevron-down-wide' }
+                        value={ 'chevron-down' }
                       />
                       )
                     : (
                       <Icon
                         options={ { width: 22, height: 22 } }
-                        value={ 'chevron-up-wide' }
+                        value={ 'chevron-up' }
                       />
                       )
                 }
@@ -128,7 +128,7 @@ export const ActionList = ({ actions }: IActionListProps): React.JSX.Element => 
             <div className={ 'notification-content__content__completed-actions__headline' }>
               <Icon
                 options={ { width: 14, height: 14 } }
-                value={ 'check-circle-filled' }
+                value={ 'check-circle' }
               />
               <p>{t('notification.action-list.completed-actions')}</p>
             </div>

@@ -70,7 +70,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
 
       <Icon
         className={ styles.dropTargetIcon }
-        value={ 'copy-07' }
+        value={ 'drop-target' }
       />
     </div>
   )

@@ -40,7 +40,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
       >
         <IconButton
           disabled={ _.isEmpty(props.value) || props.disabled }
-          icon={ { value: 'delete-outlined' } }
+          icon={ { value: 'trash' } }
           onClick={ props.emptyValue }
         />
       </Tooltip>,

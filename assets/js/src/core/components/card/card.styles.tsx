@@ -41,17 +41,10 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-card-body {
-        padding: ${token.paddingSM}px;
+        padding: 0;
       }
 
       &.card-with-footer {
-          .ant-card-body {
-              padding: 0;
-          }
-
-          .card-body-inner {
-              padding: ${token.paddingSM}px
-          }
          .card-footer {
              padding: ${token.paddingXXS}px ${token.paddingXS}px;
              border-top: 1px solid ${token.colorBorderSecondary};

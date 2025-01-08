@@ -27,6 +27,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
   const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
     Object.keys(props.tags).map(String)
   )
+
   const { id, elementType } = useElementContext()
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
         defaultCheckedTags={ defaultCheckedTags }
         elementId={ id }
         elementType={ elementType }
+        filter={ filter }
         isLoading={ tagsLoading }
         setDefaultCheckedTags={ setDefaultCheckedTags }
         setFilter={ setFilter }

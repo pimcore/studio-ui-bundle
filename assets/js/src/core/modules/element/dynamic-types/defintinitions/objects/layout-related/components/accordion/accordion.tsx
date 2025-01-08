@@ -13,9 +13,9 @@
 
 import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
-import { Accordion as BaseAccordion, type AccordionProps as BaseAccordionProps } from '@Pimcore/components/accordion/accordion'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { BaseView } from '../../views/base-view'
+import { Collapse, type CollapseProps } from '@Pimcore/components/collapse/collapse'
 
 export interface AccordionProps extends AbstractObjectLayoutDefinition {
   title?: string
@@ -25,14 +25,13 @@ export interface AccordionProps extends AbstractObjectLayoutDefinition {
 }
 
 export const Accordion = ({ children, title, border, collapsed, collapsible }: AccordionProps): React.JSX.Element => {
-  const items: BaseAccordionProps['items'] = children.map((child, index) => ({
-    key: child.name,
-    title: child.title,
+  const items: CollapseProps['items'] = children.map((child, index) => ({
+    key: index,
+    label: child.title,
     forceRender: true,
     children: (
       <ObjectComponent
         { ...{ ...child, title: '' } }
-        key={ child.name }
       />
     )
   }))
@@ -44,9 +43,9 @@ export const Accordion = ({ children, title, border, collapsed, collapsible }: A
       collapsible={ collapsible }
       title={ title }
     >
-      <BaseAccordion
+      <Collapse
+        accordion
         bordered
-        ghost
         items={ items }
       />
     </BaseView>

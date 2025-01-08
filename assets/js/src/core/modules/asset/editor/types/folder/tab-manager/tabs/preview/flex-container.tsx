@@ -24,6 +24,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 
 interface FlexContainerProps {
@@ -37,6 +38,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const { renameContextMenuItem } = useRename('asset')
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
+  const { uploadNewVersionContextMenuItem } = useUploadNewVersion()
   const { openContextMenuItem } = useOpen('asset')
 
   const cards: ReactNode[] = []
@@ -59,11 +61,12 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       },
       {
         key: 'info',
-        icon: <Icon value="info-circle-outlined" />,
+        icon: <Icon value="info-circle" />,
         label: t('info'),
         hidden: true
       },
       renameContextMenuItem(asset),
+      uploadNewVersionContextMenuItem(asset),
       downloadContextMenuItem(asset),
       deleteContextMenuItem(asset)
     ]

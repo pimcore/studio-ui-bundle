@@ -20,10 +20,18 @@ const api = baseApi.enhanceEndpoints({
 
   endpoints: {
     workflowGetDetails: {
-      providesTags: (result, error, args) => providingTags.ELEMENT_WORKFLOW(args.elementType, args.elementId)
+      providesTags: (result, error, args) => {
+        const tags = providingTags.ELEMENT_WORKFLOW(args.elementType, args.elementId)
+
+        return tags.filter((tag) => tag !== undefined)
+      }
     },
     workflowActionSubmit: {
-      invalidatesTags: (result, error, args) => providingTags.ELEMENT_WORKFLOW(args.submitAction.elementType as ElementType, args.submitAction.elementId)
+      invalidatesTags: (result, error, args) => {
+        const tags = providingTags.ELEMENT_WORKFLOW(args.submitAction.elementType as ElementType, args.submitAction.elementId)
+
+        return tags.filter((tag) => tag !== undefined)
+      }
     }
   }
 })

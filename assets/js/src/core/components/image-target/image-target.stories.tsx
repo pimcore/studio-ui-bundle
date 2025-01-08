@@ -26,6 +26,8 @@ export const _default = {
   args: {
     width: 300,
     height: 300,
-    title: 'Place an image here'
+    title: 'Place an image here',
+    dndIcon: true,
+    uploadIcon: true
   }
 }

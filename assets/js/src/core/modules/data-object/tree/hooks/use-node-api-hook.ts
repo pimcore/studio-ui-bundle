@@ -49,7 +49,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
     dataObjectData.forEach((dataObjectNode) => {
       nodes.push({
         id: dataObjectNode.id.toString(),
-        icon: getElementIcon(dataObjectNode, { type: 'name', value: 'mainObject' }),
+        icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
         label: dataObjectNode.key!,
         type: dataObjectNode.type,
         parentId: dataObjectNode.parentId.toString(),

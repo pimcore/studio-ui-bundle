@@ -23,7 +23,7 @@ const config: Meta = {
 
   argTypes: {
     name: {
-      options: ['camera', 'folder'],
+      options: ['asset', 'folder'],
       control: { type: 'radio' }
     }
   },
@@ -35,7 +35,7 @@ export default config
 
 export const _default = {
   args: {
-    name: 'camera',
+    name: 'asset',
     options: { width: 16, height: 16 }
   }
 }

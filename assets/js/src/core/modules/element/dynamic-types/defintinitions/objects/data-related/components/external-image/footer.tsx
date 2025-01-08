@@ -78,7 +78,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
           >
             <IconButton
               disabled={ props.disabled }
-              icon={ { value: 'delete-outlined' } }
+              icon={ { value: 'trash' } }
               onClick={ emptyValue }
             />
           </Tooltip>

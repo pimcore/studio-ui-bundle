@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { CSS } from '@dnd-kit/utilities'
+import { useSortable } from '@dnd-kit/sortable'
 import React from 'react'
 import {
   ImageGalleryImageTarget
@@ -29,25 +31,51 @@ export interface ImageGallerySortableItemProps {
   item: ImageGalleryValueItem
   value: ImageGalleryValue
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValue>>
+  disabled?: boolean
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue }: ImageGallerySortableItemProps): React.JSX.Element => {
-  if (item.image !== null) {
-    return (
-      <ImageGalleryImagePreview
-        index={ index }
-        item={ item }
-        setValue={ setValue }
-        value={ value }
-      />
-    )
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled }: ImageGallerySortableItemProps): React.JSX.Element => {
+  const sortable = useSortable({
+    id,
+    transition: {
+      duration: 300,
+      easing: 'linear'
+    }
+  })
+  const { attributes, listeners, setNodeRef, transform, transition, active } = sortable
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
   }
 
   return (
-    <ImageGalleryImageTarget
-      index={ index }
-      setValue={ setValue }
-      value={ value }
-    />
+    <div
+      ref={ setNodeRef }
+      { ...attributes }
+      { ...listeners }
+      key={ index }
+      style={ active?.data.current?.sortable !== undefined ? style : undefined }
+    >
+      { item.image !== null
+        ? (
+          <ImageGalleryImagePreview
+            disabled={ disabled }
+            index={ index }
+            item={ item }
+            setValue={ setValue }
+            value={ value }
+          />
+          )
+        : (
+          <ImageGalleryImageTarget
+            disabled={ disabled }
+            index={ index }
+            setValue={ setValue }
+            value={ value }
+          />
+          )
+        }
+    </div>
   )
 }

@@ -35,6 +35,11 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Space } from '@Pimcore/components/space/space'
 import { Box } from '@Pimcore/components/box/box'
+import {
+  api
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -43,11 +48,21 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const [activeOnly, setActiveOnly] = useState<boolean>(false)
   const { element, schedules, setSchedules, addSchedule, removeSchedule } = useElementDraft(id, elementType)
   const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules(elementType, id)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(
+      api.util.invalidateTags(
+        invalidatingTags.ELEMENT_SCHEDULES(elementType, id)
+      )
+    )
+  }, [])
 
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
+
   useEffect(() => {
     if (data !== undefined && element?.changes.schedules === undefined && Array.isArray(data.items)) {
       const currentDate = Math.floor(Date.now() / 1000)
@@ -103,7 +118,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-            icon={ { value: 'PlusCircleOutlined' } }
+            icon={ { value: 'new-circle' } }
             key={ 'add' }
             onClick={ (): void => {
               addSchedule({

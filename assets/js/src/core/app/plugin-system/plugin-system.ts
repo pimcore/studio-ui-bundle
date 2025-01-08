@@ -15,17 +15,17 @@ import { container } from '@Pimcore/app/depency-injection'
 import { type Container } from 'inversify'
 import { moduleSystem } from '../module-system/module-system'
 
-export interface lifeCycleEvents {
+export interface ILifeCycleEvents {
   onInit?: (config: { container: Container }) => void
   onStartup?: (config: { moduleSystem: typeof moduleSystem }) => void
 }
 
-export interface abstractPlugin extends lifeCycleEvents {
+export interface IAbstractPlugin extends ILifeCycleEvents {
   name: string
 }
 
 export class PluginSystem {
-  private registry: Record<string, abstractPlugin> = {}
+  private registry: Record<string, IAbstractPlugin> = {}
 
   async loadPlugins (): Promise<void> {
     const promises: any[] = []
@@ -48,7 +48,7 @@ export class PluginSystem {
     await Promise.allSettled(promises)
   }
 
-  registerPlugin (plugin: abstractPlugin): void {
+  registerPlugin (plugin: IAbstractPlugin): void {
     this.registry[plugin.name] = plugin
   }
 

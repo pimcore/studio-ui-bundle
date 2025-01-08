@@ -26,7 +26,10 @@ export class DynamicTypeObjectDataImageGallery extends DynamicTypeObjectDataAbst
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <ImageGallery { ...props } />
+      <ImageGallery
+        { ...props }
+        disabled={ props.noteditable === true }
+      />
     )
   }
 }
