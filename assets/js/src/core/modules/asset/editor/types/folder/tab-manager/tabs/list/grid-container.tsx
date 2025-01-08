@@ -16,7 +16,11 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type GridProps } from '@Pimcore/types/components/types'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type GridColumnConfiguration, type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type GridColumnConfiguration,
+  type AssetGetGridApiResponse,
+  type GridColumnData
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
@@ -99,6 +103,23 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return [columns, columnIdentifiers]
   }, [GridColumns])
 
+  const handleProcessColumns = ({ assetItem, assetRow, columnIdentifier, columnIdentifierString }: {
+    assetItem: { columns?: GridColumnData[] }
+    assetRow: AssetRow
+    columnIdentifier: ColumnIdentifier
+    columnIdentifierString: string
+  }): void => {
+    assetItem.columns?.forEach((column) => {
+      if (column.key === 'id') {
+        assetRow.id = column.value
+      }
+
+      if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
+        assetRow[columnIdentifierString] = column.value
+      }
+    })
+  }
+
   const getTransformedData = (assets: GridContainerProps['assets']): AssetRow[] => {
     const transformedData: AssetRow[] = []
 
@@ -108,15 +129,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       columnIdentifiers.forEach((columnIdentifier) => {
         const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
 
-        item.columns?.forEach((column) => {
-          if (column.key === 'id') {
-            row.id = column.value
-          }
-
-          if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
-            row[columnIdentifierString] = column.value
-          }
-        })
+        handleProcessColumns({ assetItem: item, assetRow: row, columnIdentifier, columnIdentifierString })
       })
 
       transformedData.push(row)
