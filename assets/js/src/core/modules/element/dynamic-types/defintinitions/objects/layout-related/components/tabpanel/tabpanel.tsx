@@ -25,9 +25,10 @@ export interface TabpanelProps extends AbstractObjectLayoutDefinition {
   collapsed?: boolean
   children: AbstractObjectLayoutDefinition[]
   tabPosition?: ITabsProps['tabPosition']
+  hasStickyHeader?: boolean
 }
 
-export const Tabpanel = ({ children, border, collapsed, collapsible, title, ...props }: TabpanelProps): React.JSX.Element => {
+export const Tabpanel = ({ children, border, collapsed, collapsible, title, hasStickyHeader = false, ...props }: TabpanelProps): React.JSX.Element => {
   const items: ITabsProps['items'] = children.map((child, index) => {
     const tabPanelChild = {
       ...child,
@@ -57,7 +58,9 @@ export const Tabpanel = ({ children, border, collapsed, collapsible, title, ...p
       title={ title }
     >
       <Tabs
+        hasStickyHeader={ hasStickyHeader }
         items={ items }
+        size='small'
         tabPosition={ props.tabPosition }
       />
     </BaseView>

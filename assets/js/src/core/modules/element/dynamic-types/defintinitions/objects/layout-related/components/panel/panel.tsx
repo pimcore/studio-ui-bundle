@@ -61,12 +61,24 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
         >
           {children.map((child, index) => (
             <ObjectComponent
-              { ...child }
+              { ...getChildProperties(child) }
               key={ index }
             />
           ))}
         </Space>
       </BaseView>
     )
+  }
+
+  function getChildProperties (child: AbstractObjectLayoutDefinition): AbstractObjectLayoutDefinition {
+    const isTabpanelChild = child.fieldType === 'tabpanel' || child.fieldtype === 'tabpanel'
+
+    const newChildProps = { ...child }
+
+    if (isTabpanelChild && isMainPanel) {
+      newChildProps.hasStickyHeader = true
+    }
+
+    return newChildProps
   }
 }
