@@ -95,6 +95,7 @@
     {% set imageUrl = path('pimcore_admin_asset_getimagethumbnail', {id: asset.getId(), format: 'png' }) %}
 {% endif %}
 
+{# TODO do we need this logic?  #}
 <img style="visibility: hidden" id='image' src="{{ imageUrl }}" />
 <script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
 
@@ -128,22 +129,23 @@
         });
 
         document.getElementById('save_button').addEventListener('click', function () {
+            let tempCanvas = document.createElement("canvas");
 
-            var tempCanvas = document.createElement("canvas");
-            var tempCtx = tempCanvas.getContext("2d");
-            var dim = window.Layers.get_dimensions();
+            const tempCtx = tempCanvas.getContext("2d");
+            const dim = window.Layers.get_dimensions();
             tempCanvas.width = dim.width;
             tempCanvas.height = dim.height;
             Layers.convert_layers_to_canvas(tempCtx);
-            var dataUri = tempCanvas.toDataURL('image/{{ imageFileExtension == "png" ? "png" : "jpeg" }}');
 
-            parent.Ext.Ajax.request({
-                {# TODO ask backend team to provide endpoint in backend API #}
-                url: "{{ path('pimcore_admin_asset_imageeditorsave', {id: asset.getId()}) }}",
+            const dataUri = tempCanvas.toDataURL('image/{{ imageFileExtension == "png" ? "png" : "jpeg" }}');
+            const url = '{{ path('pimcore_studio_api_update_asset', {id: asset.getId()}) }}';
+
+            fetch(url, {
                 method: 'PUT',
-                params: {
-                    dataUri: dataUri
-                }
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: { dataUri } })
             });
 
             return false;
@@ -168,7 +170,7 @@
         // 1. Backend localisation support
         // 2. Use PostMessage API
         // 3. Check Symphony supports trans
-        spanElement.innerText = "{{ 'asset.sidebar.details'|trans }}";
+        spanElement.innerText = 'Save';
 
         aElement.appendChild(spanElement);
         liElement.appendChild(aElement);

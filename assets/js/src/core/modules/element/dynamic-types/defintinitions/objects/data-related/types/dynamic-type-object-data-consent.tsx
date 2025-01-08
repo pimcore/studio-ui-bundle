@@ -26,9 +26,7 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
 
   getObjectDataComponent (props: ConsentObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <Consent
-        disabled={ props.noteditable === true }
-      />
+      <Consent disabled={ props.noteditable === true } />
     )
   }
 }
