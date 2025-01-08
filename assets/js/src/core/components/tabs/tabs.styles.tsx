@@ -17,10 +17,27 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     tabs: css`
       .ant-tabs-nav .ant-tabs-tab {
-        padding: ${token.paddingSM}px ${token.paddingXXS}px;
+        padding-left: ${token.paddingXXS}px;
+        padding-right: ${token.paddingXXS}px;
 
         + .ant-tabs-tab {
           margin-left: ${token.marginXXS}px;
+        }
+      }
+
+      &.ant-tabs-top > .ant-tabs-nav {
+        margin-bottom: 0;
+
+        & + .ant-tabs-content-holder {
+          padding-top: ${token.marginXS}px;
+        }
+      }
+
+      &.ant-tabs-bottom > .ant-tabs-nav {
+        margin-top: 0;
+
+        & + .ant-tabs-content-holder {
+          padding-bottom: ${token.marginXS}px;
         }
       }
 
