@@ -1,0 +1,9 @@
+{
+  "entrypoints": {
+    "main": {
+      "js": [
+        "http://localhost:3030/build/5e588925-cbcc-4dbf-bea4-d0fbdcc66025/main.js"
+      ]
+    }
+  }
+}
