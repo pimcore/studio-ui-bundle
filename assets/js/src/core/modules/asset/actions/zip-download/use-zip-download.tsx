@@ -21,6 +21,8 @@ import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { type ElementType } from 'types/element-type.d'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -39,12 +41,14 @@ export type CreateFolderZipDownload = (props: ICreateZipFolderDownloadProps) => 
 export type CreateAssetListZipDownload = (props: ICreateZipFolderAssetListProps) => void
 
 export interface UseZipDownloadHookProps {
+  elementType: ElementType
   type: 'folder' | 'asset-list'
 }
 
 export interface UseZipDownloadHookReturn {
   createZipDownload: CreateFolderZipDownload | CreateAssetListZipDownload
-  createZipDownloadContextMenuItem: (node: TreeNodeProps) => ItemType
+  createZipDownloadContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  createZipDownloadTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
 export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHookReturn => {
@@ -79,7 +83,22 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     }))
   }
 
-  const createZipDownloadContextMenuItem = (node: TreeNodeProps): ItemType => {
+  const createZipDownloadContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
+    return {
+      label: t('asset.tree.context-menu.download-as-zip'),
+      key: 'download-as-zip',
+      icon: <Icon value={ 'download-zip' } />,
+      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions!, 'view'),
+      onClick: () => {
+        createZipDownload({
+          jobTitle: getElementKey(node, props.elementType),
+          requestData: { body: { folders: [node.id] } }
+        })
+      }
+    }
+  }
+
+  const createZipDownloadTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
@@ -97,12 +116,14 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   if (props.type === 'folder') {
     return {
       createZipDownload: createZipDownload as CreateFolderZipDownload,
+      createZipDownloadTreeContextMenuItem,
       createZipDownloadContextMenuItem
     }
   }
 
   return {
     createZipDownload: createZipDownload as CreateAssetListZipDownload,
+    createZipDownloadTreeContextMenuItem,
     createZipDownloadContextMenuItem
   }
 }
