@@ -13,29 +13,38 @@
 
 import React, { useState } from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { Spin } from '@Pimcore/components/spin/spin'
+import { useStyle } from './mini-paint.styles'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export const MiniPaint = (): React.JSX.Element => {
   const { id } = useElementContext()
 
   const [isLoaded, setIsLoaded] = useState(false)
+  const { styles } = useStyle({ isLoaded })
 
   const iframeSrc = `/pimcore-studio/api/image-editor?id=${id}`
 
-  const handleIframeLoad = (): void => {
-    setIsLoaded(true)
-  }
+  const handleIframeLoad = (): void => { setIsLoaded(true) }
 
   return (
-    <div style={ { width: '100%', height: '100%' } }>
-      {!isLoaded && <div>Loading...</div>}
+    <Flex
+      align="center"
+      className={ styles.imageIframeContainer }
+      justify="center"
+    >
+      {!isLoaded && (
+        <Spin
+          asContainer
+          tip='Loading'
+        />
+      )}
       <iframe
-        height={ '100%' }
+        className={ styles.imageIframe }
         onLoad={ handleIframeLoad }
         src={ iframeSrc }
-        style={ { display: isLoaded ? 'block' : 'none' } }
-        title="MiniPaint editor"
-        width={ '100%' }
+        title="Image Editor"
       />
-    </div>
+    </Flex>
   )
 }
