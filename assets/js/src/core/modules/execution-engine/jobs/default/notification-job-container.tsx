@@ -37,12 +37,60 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
     }
   }, [])
 
+  function openHandler (): void {
+    action().then(actionJobId => {
+      jobId.current = actionJobId
+    }).catch(console.error)
+  }
+
+  const handleFailureButtonHandler = (): void => {
+    updateJob(id, {
+      status: JobStatus.QUEUED
+    })
+
+    openSEEvent()
+  }
+
+  const handleJobStatusUpdate = (data: any): void => {
+    if (data.status === 'finished') {
+      updateJob(id, {
+        status: JobStatus.SUCCESS
+      })
+
+      closeSEEvent()
+    }
+
+    if (data.status === 'failed') {
+      updateJob(id, {
+        status: JobStatus.FAILED
+      })
+
+      closeSEEvent()
+    }
+  }
+
+  function messageHandler (event: MessageEvent): void {
+    const data: any = JSON.parse(event.data as string)
+
+    if (data.jobRunId !== jobId.current) {
+      return
+    }
+
+    if (data.progress !== undefined) {
+      setProgress(data.progress as number)
+    }
+
+    if (data.status !== undefined) {
+      handleJobStatusUpdate(data)
+    }
+  }
+
   return (
     <JobView
       failureButtonActions={ [
         {
           label: t('jobs.job.button-retry'),
-          handler: failureButtonHandler
+          handler: handleFailureButtonHandler
         },
 
         {
@@ -62,48 +110,4 @@ export const NotificationJobContainer = (props: JobProps): React.JSX.Element => 
       progress={ progress }
     />
   )
-
-  function failureButtonHandler (): void {
-    updateJob(id, {
-      status: JobStatus.QUEUED
-    })
-
-    openSEEvent()
-  }
-
-  function openHandler (): void {
-    action().then(actionJobId => {
-      jobId.current = actionJobId
-    }).catch(console.error)
-  }
-
-  function messageHandler (event: MessageEvent): void {
-    const data: any = JSON.parse(event.data as string)
-
-    if (data.jobRunId !== jobId.current) {
-      return
-    }
-
-    if (data.progress !== undefined) {
-      setProgress(data.progress as number)
-    }
-
-    if (data.status !== undefined) {
-      if (data.status === 'finished') {
-        updateJob(id, {
-          status: JobStatus.SUCCESS
-        })
-
-        closeSEEvent()
-      }
-
-      if (data.status === 'failed') {
-        updateJob(id, {
-          status: JobStatus.FAILED
-        })
-
-        closeSEEvent()
-      }
-    }
-  }
 }

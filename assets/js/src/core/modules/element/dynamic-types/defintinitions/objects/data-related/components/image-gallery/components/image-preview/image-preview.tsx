@@ -26,15 +26,19 @@ interface ImageGalleryImagePreviewProps {
   index: number
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
+  disabled?: boolean
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
 
   return (
     <Droppable
       isValidContext={ (info: DragAndDropInfo) => {
+        if (disabled === true) {
+          return false
+        }
         if (info.sortable! !== undefined) {
           return true
         }
@@ -68,9 +72,10 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
         bordered
         dropdownItems={ [
           {
+            disabled,
             key: 'add',
             label: t('add'),
-            icon: <Icon value={ 'PlusOutlined' } />,
+            icon: <Icon value={ 'new' } />,
             onClick: () => {
               const newValue = [...value]
               newValue.splice(index + 1, 0, { image: null })
@@ -78,9 +83,10 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
             }
           },
           {
+            disabled,
             key: 'delete',
             label: t('delete'),
-            icon: <Icon value={ 'delete-outlined' } />,
+            icon: <Icon value={ 'trash' } />,
             onClick: () => {
               const newValue = [...value]
               newValue.splice(index, 1)
@@ -90,7 +96,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue }: Image
           {
             label: t('element.open'),
             key: 'open',
-            icon: <Icon value={ 'union' } />,
+            icon: <Icon value={ 'open-folder' } />,
             onClick: async () => {
               openAsset({
                 config: {

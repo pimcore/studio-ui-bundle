@@ -123,7 +123,7 @@ export const GeoPointPickerFooter = (props: GeoPointPickerFooterProps): React.JS
           <Button
             icon={ <Icon
               className='dropdown-menu__icon'
-              value="dots-horizontal"
+              value="more"
                    /> }
             onClick={ (e) => { e.stopPropagation() } }
           />

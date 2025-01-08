@@ -29,6 +29,7 @@ export interface TagsTreeProps {
   elementId: number
   elementType: TagAssignToElementApiArg['elementType']
   tags: Tag[]
+  filter: string
   setFilter: (filter: string) => void
   isLoading?: boolean
   defaultCheckedTags: React.Key[]
@@ -39,6 +40,7 @@ export const TagsTree = ({
   elementId,
   elementType,
   tags,
+  filter,
   setFilter,
   isLoading,
   defaultCheckedTags,
@@ -73,6 +75,7 @@ export const TagsTree = ({
         checkStrictly
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         defaultExpandedKeys={ ['root'] }
+        filter={ filter }
         onCheck={ handleCheck }
         treeData={ treeData }
         withCustomSwitcherIcon

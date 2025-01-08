@@ -31,7 +31,7 @@ export function respectLineBreak (text: string, useParagraph: boolean = true): R
   if (useParagraph) {
     return (
       <div>{textSplit.map((line, index) =>
-        <p key={ index }>{line}</p>)}
+        <p key={ `${index}-${line}` }>{line}</p>)}
       </div>
     )
   } else {

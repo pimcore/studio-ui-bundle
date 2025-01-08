@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type Ref } from 'react'
+import React, { type ReactNode, type Ref } from 'react'
 import { Dropdown as AntdDropdown, Menu, type MenuRef } from 'antd'
 import { renderDropdownItem } from './item/utils/dropdown-item'
 import { type DropdownProps, type ItemType } from './dropdown'
@@ -23,18 +23,16 @@ export type DropdownInnerProps = DropdownProps & {
 export const DropdownInner = ({ selectedKeys, onSelect, menu, menuRef, ...props }: DropdownInnerProps): React.JSX.Element => {
   const { items } = menu
 
+  const renderMenuComponent = (): ReactNode => (
+    <Menu ref={ menuRef }>
+      {items?.map((item: ItemType) => renderDropdownItem({ item }))}
+    </Menu>
+  )
+
   return (
     <AntdDropdown
       { ...props }
-      dropdownRender={ () => {
-        return (
-          <>
-            <Menu ref={ menuRef }>
-              {items?.map((item: ItemType) => renderDropdownItem({ item }))}
-            </Menu>
-          </>
-        )
-      } }
+      dropdownRender={ renderMenuComponent }
     >
       {props.children}
     </AntdDropdown>

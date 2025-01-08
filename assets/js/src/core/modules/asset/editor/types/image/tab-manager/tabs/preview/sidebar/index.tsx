@@ -29,7 +29,7 @@ sidebarManager.registerEntry({
   key: 'details',
   icon: <Icon
     options={ { width: '16px', height: '16px' } }
-    value={ 'view-details' }
+    value={ 'details' }
         />,
   component: <DetailContainer />
 })

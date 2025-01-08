@@ -11,15 +11,18 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, type Key } from 'react'
+import React, { useState, type Key, useEffect } from 'react'
 import { Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
+import { map } from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TreeElementItem } from './tree-element-item'
 import { useStyles } from './tree-element.styles'
 
 export interface TreeDataItem extends TreeDataNode {
   actions?: Array<{ key: string, icon: string }>
+  allowDrop?: boolean
 }
 
 interface ITreeElementProps extends TreeProps {
@@ -29,8 +32,10 @@ interface ITreeElementProps extends TreeProps {
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
   onLoadData?: (node: any) => Promise<any>
+  onExpand?: (keys: Key[]) => void
   withCustomSwitcherIcon?: boolean
   isHideRootChecker?: boolean
+  filter?: string
 }
 
 const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
@@ -46,14 +51,32 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     onDragAndDrop,
     onSelected,
     onLoadData,
+    onExpand,
     withCustomSwitcherIcon,
-    isHideRootChecker = true
+    isHideRootChecker = true,
+    filter
   } = props
 
   const { styles } = useStyles({ isHideRootChecker })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [])
+
+  const getFilteredExpandedKeys = (): string[] => (
+    map(treeData[0].children, 'key').map(String)
+  )
+
+  useEffect(() => {
+    if (!isEmptyValue(filter)) {
+      const _expandedKeys = getFilteredExpandedKeys()
+
+      setExpandedKeys(['root', ..._expandedKeys])
+    }
+
+    if (isEmptyValue(filter)) {
+      setExpandedKeys(['root'])
+    }
+  }, [filter])
 
   const handleCustomSwitcherIcon = (): React.JSX.Element | undefined => {
     if (withCustomSwitcherIcon === false) return undefined
@@ -64,13 +87,22 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
           width: 12,
           height: 12
         } }
-        value="chevron-down-small"
+        value="chevron-down"
       />
     )
   }
 
+  useEffect(() => {
+    if (defaultExpandedKeys !== undefined) {
+      setExpandedKeys(defaultExpandedKeys)
+    }
+  }, [defaultExpandedKeys])
+
   return (
     <Tree
+      allowDrop={ ({ dropNode, dropPosition }): boolean => {
+        return dropNode.allowDrop !== false && dropPosition === 0
+      } }
       blockNode
       checkStrictly={ checkStrictly }
       checkable={ onCheck !== undefined }
@@ -88,7 +120,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
           dropPosition: evt.dropPosition
         })
       } }
-      onExpand={ (keys): void => { setExpandedKeys(keys) } }
+      onExpand={ (keys): void => { onExpand !== null && onExpand !== undefined ? onExpand(keys) : setExpandedKeys(keys) } }
       selectedKeys={ selectedKeys }
       showIcon
       switcherIcon={ handleCustomSwitcherIcon }

@@ -22,28 +22,28 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
-export interface createZipDownloadProps {
+export interface ICreateZipDownloadProps {
   jobTitle: string
   requestData: unknown
 }
 
-export interface createZipFolderDownloadProps extends createZipDownloadProps {
+export interface ICreateZipFolderDownloadProps extends ICreateZipDownloadProps {
   requestData: AssetExportZipFolderApiArg
 }
 
-export interface createZipFolderAssetListProps extends createZipDownloadProps {
+export interface ICreateZipFolderAssetListProps extends ICreateZipDownloadProps {
   requestData: AssetExportZipAssetApiArg
 }
 
-export type createFolderZipDownload = (props: createZipFolderDownloadProps) => void
-export type createAssetListZipDownload = (props: createZipFolderAssetListProps) => void
+export type CreateFolderZipDownload = (props: ICreateZipFolderDownloadProps) => void
+export type CreateAssetListZipDownload = (props: ICreateZipFolderAssetListProps) => void
 
 export interface UseZipDownloadHookProps {
   type: 'folder' | 'asset-list'
 }
 
 export interface UseZipDownloadHookReturn {
-  createZipDownload: createFolderZipDownload | createAssetListZipDownload
+  createZipDownload: CreateFolderZipDownload | CreateAssetListZipDownload
   createZipDownloadContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
@@ -53,7 +53,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   const { addJob } = useJobs()
   const { t } = useTranslation()
 
-  const createZipDownload = ({ jobTitle, requestData }: createZipFolderDownloadProps | createZipFolderAssetListProps): void => {
+  const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
     addJob(createJob({
       // @todo add api domain
       title: t('jobs.zip-job.title', { title: jobTitle }),
@@ -83,7 +83,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     return {
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
-      icon: <Icon value={ 'file-download-zip-01' } />,
+      icon: <Icon value={ 'download-zip' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({
@@ -96,13 +96,13 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
 
   if (props.type === 'folder') {
     return {
-      createZipDownload: createZipDownload as createFolderZipDownload,
+      createZipDownload: createZipDownload as CreateFolderZipDownload,
       createZipDownloadContextMenuItem
     }
   }
 
   return {
-    createZipDownload: createZipDownload as createAssetListZipDownload,
+    createZipDownload: createZipDownload as CreateAssetListZipDownload,
     createZipDownloadContextMenuItem
   }
 }

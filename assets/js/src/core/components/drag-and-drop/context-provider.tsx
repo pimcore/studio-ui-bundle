@@ -25,7 +25,7 @@ export interface DragAndDropInfo {
   sortable?: any
 }
 
-const defaultInfo: DragAndDropInfo = { type: 'unknown', data: null, title: '', icon: 'widget-default' }
+const defaultInfo: DragAndDropInfo = { type: 'unknown', data: null, title: '', icon: 'widget' }
 
 interface IDragAndDropInfoContext extends DragAndDropInfo {
   setInfo: (info: DragAndDropInfo) => void

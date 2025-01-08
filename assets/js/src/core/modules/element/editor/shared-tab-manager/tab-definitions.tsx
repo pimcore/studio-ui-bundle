@@ -32,7 +32,7 @@ export const TAB_PROPERTIES: IEditorTab = {
   label: 'properties.label',
   workspacePermission: 'properties',
   children: <PropertiesContainer />,
-  icon: <Icon value={ 'settings2' } />,
+  icon: <Icon value={ 'settings' } />,
   isDetachable: true
 }
 export const TAB_SCHEDULE: IEditorTab = {
@@ -40,7 +40,7 @@ export const TAB_SCHEDULE: IEditorTab = {
   label: 'schedule.label',
   workspacePermission: 'settings',
   children: <ScheduleTabContainer />,
-  icon: <Icon value={ 'schedule-outlined' } />,
+  icon: <Icon value={ 'schedule' } />,
   isDetachable: true
 }
 export const TAB_DEPENDENCIES: IEditorTab = {
@@ -48,7 +48,7 @@ export const TAB_DEPENDENCIES: IEditorTab = {
   label: 'dependencies.label',
 
   children: <DependenciesTabContainer />,
-  icon: <Icon value={ 'hierarchy' } />,
+  icon: <Icon value={ 'dependencies' } />,
   isDetachable: true
 }
 export const TAB_WORKFLOW: IEditorTab = {
@@ -64,7 +64,7 @@ export const TAB_NOTES_AND_EVENTS: IEditorTab = {
   label: 'notes-and-events.label',
   userPermission: 'notes_events',
   children: <NotesAndEventsTabContainer />,
-  icon: <Icon value={ 'view-details' } />,
+  icon: <Icon value={ 'details' } />,
   isDetachable: true
 }
 export const TAB_TAGS: IEditorTab = {
@@ -72,6 +72,6 @@ export const TAB_TAGS: IEditorTab = {
   label: 'tags.label',
   userPermission: 'tags_assignment',
   children: <TagsTabContainer />,
-  icon: <Icon value={ 'tag-two-tone' } />,
+  icon: <Icon value={ 'tag' } />,
   isDetachable: true
 }

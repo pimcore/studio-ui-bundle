@@ -18,13 +18,17 @@ import cn from 'classnames'
 
 export interface ITabsProps extends TabsProps {
   onClose?: (any) => void
+  hasStickyHeader?: boolean
 }
 
-const Component = ({ items, className, activeKey, onClose, onChange, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
   const classNames = cn(
     'ant-tabs-line',
     styles.tabs,
+    {
+      'tabs--has-sticky-header': hasStickyHeader
+    },
     className
   )
 

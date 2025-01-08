@@ -49,7 +49,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
     assetData.forEach((assetNode) => {
       nodes.push({
         id: assetNode.id.toString(),
-        icon: getElementIcon(assetNode, { type: 'name', value: 'file-question-02' }),
+        icon: getElementIcon(assetNode, { type: 'name', value: 'unknown' }),
         label: assetNode.filename!,
         type: assetNode.type,
         parentId: assetNode.parentId.toString(),

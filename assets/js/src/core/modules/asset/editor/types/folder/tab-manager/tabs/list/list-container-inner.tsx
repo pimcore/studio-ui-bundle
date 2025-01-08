@@ -185,31 +185,52 @@ export const ListContainerInner = (): React.JSX.Element => {
     })
   }
 
-  const onUpdateCellData = ({ value, columnId, rowData }: OnUpdateCellDataEvent): void => {
-    const columnIdentifier = encodeColumnIdentifier(columnId)
-    const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
-
-    if (column === undefined) return
-
+  const updateDataPatches = (columnIdentifier: any, rowIndex: any, value: any): void => {
     setDataPatches((oldPatches) => {
       return [
         ...oldPatches,
         {
           columnId: columnIdentifier.key,
           locale: columnIdentifier.locale,
-          rowIndex: rowData.id,
+          rowIndex,
           value
         }
       ]
     })
+  }
 
-    setModifiedCells((oldModified) => [
-      ...oldModified ?? [],
-      {
-        columnId,
-        rowIndex: rowData.id
-      }
-    ])
+  const updateModifiedCells = (columnId: string, rowIndex: any): void => {
+    setModifiedCells((oldModified) => {
+      return [
+        ...(oldModified ?? []),
+        {
+          columnId,
+          rowIndex
+        }
+      ]
+    })
+  }
+
+  const replaceModifiedCells = (columnId: string, rowIndex: any): void => {
+    setModifiedCells((oldModified) => {
+      return oldModified?.filter((item) => !(item.columnId === columnId && item.rowIndex === rowIndex))
+    })
+  }
+
+  const replaceDataPatches = (columnIdentifier: any, rowIndex: any, locale: string): void => {
+    setDataPatches((oldPatches) => {
+      return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && locale === columnIdentifier.locale && patch.rowIndex === rowIndex))
+    })
+  }
+
+  const onUpdateCellData = ({ value, columnId, rowData }: OnUpdateCellDataEvent): void => {
+    const columnIdentifier = encodeColumnIdentifier(columnId)
+    const column = columns.find((column) => column.key === columnIdentifier.key && column.locale === columnIdentifier.locale)
+
+    if (column === undefined) return
+
+    updateDataPatches(columnIdentifier, rowData.id, value)
+    updateModifiedCells(columnId, rowData.id)
 
     updateData()
 
@@ -240,13 +261,8 @@ export const ListContainerInner = (): React.JSX.Element => {
       console.error(error)
     }).then(() => {
       prepareAndFetchListing()?.finally(() => {
-        setModifiedCells((oldModified) => {
-          return oldModified?.filter((item) => !(item.columnId === columnId && item.rowIndex === rowData.id))
-        })
-
-        setDataPatches((oldPatches) => {
-          return oldPatches.filter((patch) => !(patch.columnId === columnIdentifier.key && column.locale === columnIdentifier.locale && patch.rowIndex === rowData.id))
-        })
+        replaceModifiedCells(columnId, rowData.id)
+        replaceDataPatches(columnIdentifier, rowData.id, column.locale!)
       }).catch((error) => {
         console.error(error)
       })
