@@ -27,7 +27,7 @@ interface UseFileUploaderProps {
   parentId?: string
 }
 
-export interface UseFileUploaderReturn {
+interface UseFileUploaderReturn {
   uploadFile: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
   uploadZip: (props: UploadChangeParam<UploadFile<any>>) => Promise<void>
 }
