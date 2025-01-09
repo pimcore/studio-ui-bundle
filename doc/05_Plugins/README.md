@@ -6,9 +6,24 @@ Plugins can add new features, modify existing functionality, or integrate with e
 
 ## Getting started
 
+Since there’s no npm package available yet, follow the local development guide to install the Pimcore Studio UI as one of your frontend dependencies. To do this, change to the Pimcore Studio path (vendor/pimcore/studio-ui-bundle) and run these commands:
+
+```
+npm install
+npm run build
+npm pack --pack-destination ~
+```
+
+This will create a installable tar file in our home directory. 
+
+Switch back to your bundle directory. We can now install the package directly in our Bundle via:
+
+```
+npm install ~/package-name.tgz
+```
+
 To begin, ensure you have a basic [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/). For this guide, let’s call our plugin `PimcoreStudioUiDemoPluginBundle`.
 
-Since there’s no npm package available yet, follow the local development guide to install the Pimcore Studio UI as one of your frontend dependencies.
 
 With our dependency in place we should now setup our bundling process. we recommend using [Symfony Encore](https://symfony.com/doc/current/frontend/encore/installation.html). Later on, you’ll need a generated manifest from it.
 
@@ -88,10 +103,12 @@ Encore
 
   // Important! Reference this vendor-manifest in your build.
   // It will take care of injecting Ant-Design, React, etc. without the need to bundle it in your plugin.
-  .addPlugin(new webpack.DllReferencePlugin({
+  // Note: This is currently not even possible, since the build dir changes with every build (uidv4) and even if you
+  // use the right folder, it fails... is it really needed?
+  /*.addPlugin(new webpack.DllReferencePlugin({
     context: __dirname,
     manifest: path.join(__dirname, 'node_modules', 'pimcore-studio-ui', 'dist', 'vendor',  'vendor-manifest.json')
-  }))
+  }))*/
 ;
 
 if (!Encore.isDevServer()) {
@@ -175,12 +192,6 @@ use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
 class PimcoreStudioUiDemoPluginBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface
 {
-
-    public function getPath(): string
-    {
-        return \dirname(__DIR__);
-    }
-
     public function getWebpackEntryPointsJsonLocations(): array
     {
         return [$this->getPath() . '/public/build/entrypoints.json'];
@@ -200,18 +211,4 @@ Now just ensure that our bundle is installed. And finally we should see our `con
 - [How to add a custom icon](./02_Adding_custom_icons.md)
 - [How to add your first widget](03_Add_your_first_widget.md)
 
-## Local development
 
-For local development we have to create a local package of the Pimcore Studio UI first. For that we simply have to navigate to our package.json and run the following commands:
-
-```
-npm install
-npm run build
-npm pack --pack-destination ~
-```
-
-This will create a installable tar file in our home directory. We can now install the package directly in our Bundle via:
-
-```
-npm install ~/package-name.tgz
-```
