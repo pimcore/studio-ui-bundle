@@ -20,6 +20,8 @@ import { type GridColumnConfiguration, type AssetGetGridApiResponse } from '@Pim
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { useOpen } from '@Pimcore/modules/element/actions/open/open'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -58,6 +60,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
   const { hasType } = useDynamicTypeResolver()
+  const open = useOpen('asset')
+  const rename = useRename('asset')
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -133,6 +137,9 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return getTransformedData(assets)
   }, [assets, columnIdentifiers])
 
+  // add "contextMenuItems"
+  console.log('loaded grid-container')
+
   return useMemo(() => {
     if (data === undefined) {
       return <></>
@@ -140,6 +147,10 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return (
       <Grid
         columns={ columns }
+        contextMenuItems={ [
+          open.openGridContextMenuItem,
+          rename.renameGridContextMenuItem
+        ] }
         data={ data }
         enableMultipleRowSelection
         enableSorting

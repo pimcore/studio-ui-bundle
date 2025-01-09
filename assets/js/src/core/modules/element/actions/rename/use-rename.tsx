@@ -22,15 +22,24 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import {
+  type AssetGetByIdApiResponse,
+  type AssetGetGridApiResponse,
+  type Image
+} from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
   renameTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   renameContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  renameGridContextMenuItem: (props: AssetGetGridApiResponse['items']) => ItemType
   renameMutation: (parentId: number, value: string) => Promise<void>
 }
 
 export const useRename = (elementType: ElementType): UseRenameHookReturn => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
@@ -73,6 +82,34 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     }
   }
 
+  const renameGridContextMenuItem = (props: AssetGetGridApiResponse['items']): ItemType => {
+    return {
+      label: t('element.rename'),
+      key: 'rename',
+      icon: <Icon value={ 'rename' } />,
+      hidden: !checkElementPermission(props.permissions, 'rename') || props.isLocked,
+      onClick: async () => { await stagedLoading(props.columns!.id.value) }
+    }
+  }
+
+  const loadAssetById = async (id: number): Promise<AssetGetByIdApiResponse> => {
+    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+
+    if (data !== undefined) {
+      return data
+    }
+
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {} as Image
+  }
+
+  const stagedLoading = async (id: number): Promise<void> => {
+    const node = await loadAssetById(id)
+
+    const parentId = node.parentId !== undefined ? node.parentId : undefined
+    rename(id, getElementKey(node, elementType), parentId)
+  }
+
   const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
       label: t('element.rename'),
@@ -112,6 +149,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     rename,
     renameTreeContextMenuItem,
     renameContextMenuItem,
+    renameGridContextMenuItem,
     renameMutation
   }
 }

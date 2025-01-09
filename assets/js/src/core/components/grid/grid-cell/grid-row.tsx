@@ -17,12 +17,6 @@ import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps } from '@Pimcore/types/components/types'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
-import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 
 export interface GridRowProps {
   row: Row<any>
@@ -30,32 +24,17 @@ export interface GridRowProps {
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
   columns: GridProps['columns']
+  contextMenuItems?: DropdownMenuProps['items']
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, contextMenuItems = [], ...props }: GridRowProps): React.JSX.Element => {
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
-  const { asset } = useAssetDraft(parseInt(row.id))
-  const { openContextMenuItem } = useOpen('asset')
-  const { renameContextMenuItem } = useRename('asset')
-  const { deleteContextMenuItem } = useDelete('asset')
-  const { downloadContextMenuItem } = useDownload()
-
-  let items: DropdownMenuProps['items'] = []
-
-  if (asset !== undefined) {
-    items = [
-      openContextMenuItem(asset as Asset),
-      renameContextMenuItem(asset as Asset),
-      deleteContextMenuItem(asset as Asset),
-      downloadContextMenuItem(asset as Asset)
-    ]
-  }
 
   return useMemo(() => {
     return (
       <Dropdown
         key={ row.id }
-        menu={ { items } }
+        menu={ { items: contextMenuItems } }
         trigger={ ['contextMenu'] }
       >
         <tr

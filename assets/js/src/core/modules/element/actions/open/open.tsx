@@ -19,9 +19,11 @@ import { useTranslation } from 'react-i18next'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementType } from 'types/element-type.d'
+import { type AssetPermissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export interface UseOpenHookReturn {
   openContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  openGridContextMenuItem: (id: string, permissions: AssetPermissions) => ItemType
 }
 
 export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
@@ -43,7 +45,23 @@ export const useOpen = (elementType: ElementType): UseOpenHookReturn => {
     }
   }
 
+  const openGridContextMenuItem = (id: string, permissions: AssetPermissions): ItemType => {
+    return {
+      label: t('element.open'),
+      key: 'open',
+      icon: <Icon value={ 'open-folder' } />,
+      hidden: !checkElementPermission(permissions, 'view'),
+      onClick: async () => {
+        await openElement({
+          id: parseInt(id),
+          type: elementType
+        })
+      }
+    }
+  }
+
   return {
-    openContextMenuItem
+    openContextMenuItem,
+    openGridContextMenuItem
   }
 }
