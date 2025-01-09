@@ -92,7 +92,7 @@
 {% set imageUrl = path('pimcore_studio_api_stream_image', {id: asset.getId()}) %}
 
 {% if imageFileExtension not in ['png', 'jpg', 'jpeg'] %}
-    {% set imageUrl = path('pimcore_admin_asset_getimagethumbnail', {id: asset.getId(), format: 'png' }) %}
+    {% set imageUrl = path('pimcore_studio_api_stream_image_custom', {id: asset.getId(), mimeType: 'png', resizeMode: 'none' }) %}
 {% endif %}
 
 <img style="visibility: hidden" id='image' src="{{ imageUrl }}" />
