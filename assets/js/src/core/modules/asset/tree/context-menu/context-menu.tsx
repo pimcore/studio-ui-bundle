@@ -15,7 +15,7 @@ import { Button } from 'antd'
 import React, { useEffect } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
-import { UseFileUploader, type UseFileUploaderReturn } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
@@ -117,20 +117,12 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     refreshTreeContextMenuItem(props.node)
   ]
 
-  const handleUploadFileProcessor: UseFileUploaderReturn['uploadFile'] = async (props) => {
-    await uploadFileProcessor(props)
-  }
-
-  const handleUploadZipProcessor: UseFileUploaderReturn['uploadZip'] = async (props) => {
-    await uploadZipProcessor(props)
-  }
-
   const uploadFile: UploadProps = {
     action: `/pimcore-studio/api/assets/add/${props.node?.id}`,
     name: 'file',
     multiple: true,
     showUploadList: false,
-    onChange: handleUploadFileProcessor
+    onChange: uploadFileProcessor
   }
 
   const uploadZip: UploadProps = {
@@ -139,7 +131,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     name: 'zipFile',
     multiple: true,
     showUploadList: false,
-    onChange: handleUploadZipProcessor
+    onChange: uploadZipProcessor
   }
 
   return (
