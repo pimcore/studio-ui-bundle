@@ -19,15 +19,15 @@ import { PathTarget } from './path-target'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import {
-  type IRelationAllowedTypesDataComponent, isAllowedSubType
+  dndIsValidData,
+  type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
-import _ from 'lodash'
 
 export interface ManyToOneRelationValue {
   type: ElementType
@@ -75,15 +75,8 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     >
       <div style={ { flex: 1 } }>
         <Droppable
-          isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && allElementTypes.includes(info.type) }
-          isValidData={ (info: DragAndDropInfo) => {
-            if (info.data === null) {
-              return false
-            }
-            const subType: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
-            return isAllowedSubType(info.type as ElementType, subType, props)
-          }
-          }
+          isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
+          isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
           onDrop={ (info: DragAndDropInfo) => {
             setValue({
               type: info.type as ElementType,
