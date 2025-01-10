@@ -33,32 +33,34 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
 
   return (
-    <ButtonGroup items={ [
-      <Tooltip
-        key="empty"
-        title={ t('empty') }
-      >
-        <IconButton
-          disabled={ _.isEmpty(props.value) || props.disabled }
-          icon={ { value: 'trash' } }
-          onClick={ props.emptyValue }
-        />
-      </Tooltip>,
-      <Tooltip
-        key="open"
-        title={ t('open') }
-      >
-        <IconButton
-          disabled={ _.isEmpty(props.value) }
-          icon={ { value: 'group' } }
-          onClick={ () => {
-            if (typeof props.value?.id === 'number') {
-              openAsset({ config: { id: props.value.id } })
-            }
-          } }
-        />
-      </Tooltip>
-    ] }
+    <ButtonGroup
+      items={ [
+        <Tooltip
+          key="empty"
+          title={ t('empty') }
+        >
+          <IconButton
+            disabled={ _.isEmpty(props.value) || props.disabled }
+            icon={ { value: 'trash' } }
+            onClick={ props.emptyValue }
+          />
+        </Tooltip>,
+        <Tooltip
+          key="open"
+          title={ t('open') }
+        >
+          <IconButton
+            disabled={ _.isEmpty(props.value) }
+            icon={ { value: 'open-folder' } }
+            onClick={ () => {
+              if (typeof props.value?.id === 'number') {
+                openAsset({ config: { id: props.value.id } })
+              }
+            } }
+          />
+        </Tooltip>
+      ] }
+      noSpacing
     />
   )
 }

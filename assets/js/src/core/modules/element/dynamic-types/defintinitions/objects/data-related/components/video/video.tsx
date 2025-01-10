@@ -31,22 +31,28 @@ interface AssetVideoValue {
   data: {
     type: 'asset'
     id: number
-  }
+  } | null
+  title?: string
+  description?: string
+  poster?: {
+    type: 'asset'
+    id: number
+  } | null
 }
 
 interface YoutubeVideoValue {
   type: 'youtube'
-  data: string
+  data: string | null
 }
 
 interface VimeoVideoValue {
   type: 'vimeo'
-  data: string
+  data: string | null
 }
 
 interface DailymotionVideoValue {
   type: 'dailymotion'
-  data: string
+  data: string | null
 }
 
 export interface VideoProps {
@@ -78,6 +84,7 @@ export const Video = (props: VideoProps): React.JSX.Element => {
         disabled={ props.disabled }
         emptyValue={ emptyValue }
         key="video-footer"
+        onSave={ setValue }
         value={ value }
                /> }
     >
@@ -87,23 +94,25 @@ export const Video = (props: VideoProps): React.JSX.Element => {
         onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', data: { type: 'asset', id: info.data.id as number } }) } }
         variant="outline"
       >
-        { value !== null
-          ? (
-            <VideoPreview
-              height={ height }
-              value={ value }
-              width={ width }
-            />
-            )
-          : (
-            <AssetTarget
-              dndIcon={ props.disabled !== true }
-              height={ height }
-              title={ t(props.disabled !== true ? 'video.dnd-target' : 'empty') }
-              uploadIcon={ props.disabled !== true }
-              width={ width }
-            />
-            ) }
+
+        { /* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */
+          value !== null && value?.data !== null
+            ? (
+              <VideoPreview
+                height={ height }
+                value={ value }
+                width={ width }
+              />
+              )
+            : (
+              <AssetTarget
+                dndIcon={ props.disabled !== true }
+                height={ height }
+                title={ t(props.disabled !== true ? 'video.dnd-target' : 'empty') }
+                uploadIcon={ props.disabled !== true }
+                width={ width }
+              />
+              ) }
       </Droppable>
     </Card>
   )

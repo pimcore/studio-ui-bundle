@@ -22,6 +22,10 @@ interface VideoPreviewProps {
 }
 
 export const VideoPreview = (props: VideoPreviewProps): React.JSX.Element => {
+  if (props.value.data === null) {
+    return <></>
+  }
+
   if (props.value.type === 'asset') {
     return (
       <ImagePreview

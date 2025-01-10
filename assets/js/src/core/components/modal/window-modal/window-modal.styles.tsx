@@ -11,8 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export const isValidElementType = (type: string): boolean => {
-  return allElementTypes.includes(type)
-}
+import { createStyles } from 'antd-style'
 
-export const allElementTypes = ['asset', 'document', 'data-object']
+export const useStyle = createStyles(({ token, css }) => {
+  return {
+    modal: css`
+      .ant-modal-content {
+          outline: 1px solid ${token.colorBorderContainer};
+          box-shadow: ${token.boxShadowSecondary} !important;
+      }
+    `
+  }
+}, { hashPriority: 'low' })
