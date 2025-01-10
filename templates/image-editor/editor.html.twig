@@ -112,6 +112,7 @@
                     manipulateMenuBar(translationKeys);
 
                     loadImageToEditor(e);
+
                     resolve(true);
                 }
             }, 300);
@@ -135,7 +136,8 @@
     }
 
     function loadImageToEditor(e) {
-        var image = document.getElementById('image');
+        const image = document.getElementById('image');
+
         window.Layers.insert({
             name: "{{ asset.getFilename() }}",
             type: 'image',

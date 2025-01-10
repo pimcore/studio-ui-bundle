@@ -14,8 +14,8 @@
 import React, { useState } from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { useStyle } from './mini-paint.styles'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useStyle } from './mini-paint.styles'
 
 export const MiniPaint = (): React.JSX.Element => {
   const { id } = useElementContext()
