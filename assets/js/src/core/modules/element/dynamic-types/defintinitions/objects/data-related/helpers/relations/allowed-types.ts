@@ -12,6 +12,8 @@
 */
 
 import { type ElementType } from 'types/element-type.d'
+import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import _ from 'lodash'
 
 export interface IRelationAllowedTypesClassDefinition {
   assetsAllowed: boolean
@@ -76,4 +78,12 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
   }
 
   return false
+}
+
+export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTypesDataComponent): boolean => {
+  if (info.data === null) {
+    return false
+  }
+  const subType: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
+  return isAllowedSubType(info.type as ElementType, subType, props)
 }
