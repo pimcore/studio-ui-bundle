@@ -44,7 +44,8 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type DropdownMenuProps, ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,6 +64,10 @@ declare module '@tanstack/react-table' {
 
 export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
+}
+
+export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['items'][number], 'isLocked' | 'permissions'> {
+  id: number
 }
 
 // add "contextMenuItems"
@@ -224,8 +229,14 @@ export const Grid = ({
     </div>
   )
 
-  const getContextMenuItems = (row): DropdownMenuProps['items'] => {
-    return contextMenuItems.map((item) => item(row))
+  const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
+    return contextMenuItems.map((item) => {
+      return item({
+        id: row.id,
+        isLocked: row.original.isLocked,
+        permissions: row.original.permissions
+      })
+    })
   }
 
   return useMemo(() => (

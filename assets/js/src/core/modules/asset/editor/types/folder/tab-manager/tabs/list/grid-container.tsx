@@ -120,6 +120,9 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
           if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
             row[columnIdentifierString] = column.value
           }
+
+          row.isLocked = item.isLocked
+          row.permissions = item.permissions
         })
       })
 
