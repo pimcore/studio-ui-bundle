@@ -39,7 +39,7 @@ export const VideoPreview = (props: VideoPreviewProps): React.JSX.Element => {
 
   if (props.value.type === 'youtube') {
     let src = `https://www.youtube-nocookie.com/embed/${props.value.data}`
-    if (props.value.data.indexOf('PL') === 0) {
+    if (props.value.data.startsWith('PL')) {
       src = `https://www.youtube-nocookie.com/embed/videoseries?list=${props.value.data}`
     }
 
