@@ -27,7 +27,7 @@ import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Input } from '@Pimcore/components/input/input'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Select } from '@Pimcore/components/select/select'
-import { Href } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/href/href'
+import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { parseVideoIdFromUrl } from '@Pimcore/utils/video-url-parser'
 
@@ -174,9 +174,9 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
             >
               { value.type === 'asset'
                 ? (
-                  <Href
-                    allowedElementSubTypes={ ['video'] }
-                    allowedElementTypes={ ['asset'] }
+                  <ManyToOneRelation
+                    allowedAssetTypes={ ['video'] }
+                    assetsAllowed
                     disabled={ props.disabled }
                     onOpenElement={ () => { setIsModalVisible(false) } }
                   />
@@ -191,9 +191,9 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                 label={ t('video.poster') }
                 name="poster"
               >
-                <Href
-                  allowedElementSubTypes={ ['image'] }
-                  allowedElementTypes={ ['asset'] }
+                <ManyToOneRelation
+                  allowedAssetTypes={ ['image'] }
+                  assetsAllowed
                   disabled={ props.disabled }
                   onOpenElement={ () => { setIsModalVisible(false) } }
                 />

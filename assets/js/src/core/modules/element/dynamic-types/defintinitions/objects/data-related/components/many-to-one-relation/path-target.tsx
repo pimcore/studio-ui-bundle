@@ -15,13 +15,13 @@ import React, { forwardRef, type MutableRefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
 import {
-  type HrefValue
-} from './href'
+  type ManyToOneRelationValue
+} from './many-to-one-relation'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 
 export interface PathTargetProps {
-  value: HrefValue | null
+  value: ManyToOneRelationValue | null
   disabled?: boolean
 }
 
@@ -45,7 +45,7 @@ export const PathTarget = forwardRef(function PathTarget (
       <Input
         className={ cn(...getStateClasses()) }
         disabled={ props.disabled }
-        placeholder={ t('href.drop-placeholder') }
+        placeholder={ t('many-to-one-relation.drop-placeholder') }
         readOnly
         value={ displayText }
       />
