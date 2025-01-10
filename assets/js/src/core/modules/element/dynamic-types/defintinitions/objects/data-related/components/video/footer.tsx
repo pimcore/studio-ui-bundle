@@ -26,6 +26,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Select } from '@Pimcore/components/select/select'
 import { Href } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/href/href'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
+import { parseVideoIdFromUrl } from '@Pimcore/utils/video-url-parser'
 
 interface VideoFooterProps {
   emptyValue?: () => void
@@ -78,27 +79,8 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     }
 
     if (typeof data === 'string' && data !== '') {
-      if (type === 'youtube') {
-        const ytRegex = /^(?:https?:\/\/|\/\/)?(?:www\.|m\.|.+\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|feeds\/api\/videos\/|watch\?v=|watch\?.+&v=))(?<videoId>[\w-]{11})(?![\w-])/g
-        const match = data.matchAll(ytRegex)
-        const matches = [...match]
-        const videoIds = Array.from(matches, m => m[1])
-        if (videoIds?.length > 0) {
-          data = videoIds[0]
-        }
-      } else if (type === 'vimeo') {
-        const regExp = /vimeo.com\/(\d+)($|\/)/
-        const match = data.match(regExp)
-        if (match?.[1] !== null && match?.[1] !== undefined) {
-          data = match[1]
-        }
-      } else if (type === 'dailymotion') {
-        const regExp = /dailymotion.*\/video\/([^_]+)/
-        const match = data.match(regExp)
-        if (match?.[1] !== null && match?.[1] !== undefined) {
-          data = match[1]
-        }
-      }
+      const videoId = parseVideoIdFromUrl(data, type)
+      data = videoId ?? data
     }
 
     return {
