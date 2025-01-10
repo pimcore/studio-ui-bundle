@@ -21,21 +21,25 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import type { AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as assetApi, type Image, type AssetDeleteZipApiArg, type AssetGetByIdApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { getElementKey } from '@Pimcore/modules/element/element-helper'
+import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
   deleteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  deleteGridContextMenuItem: (props: GridContextMenuProps) => ItemType
   deleteMutation: (id: number, parentId?: number) => Promise<void>
 }
 
 export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const modal = useFormModal()
   const { addJob } = useJobs()
@@ -83,6 +87,37 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     }
   }
 
+  const deleteGridContextMenuItem = (props: GridContextMenuProps): ItemType => {
+    return {
+      label: t('element.delete'),
+      key: 'delete',
+      icon: <Icon value={ 'trash' } />,
+      hidden: !checkElementPermission(props.permissions!, 'delete') || props.isLocked,
+      onClick: async () => {
+        await stagedLoading(props.id)
+      }
+    }
+  }
+
+  // TODO: centalize
+  const loadAssetById = async (id: number): Promise<AssetGetByIdApiResponse> => {
+    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+
+    if (data !== undefined) {
+      return data
+    }
+
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    return {} as Image
+  }
+
+  const stagedLoading = async (id: GridContextMenuProps['id']): Promise<void> => {
+    const node = await loadAssetById(id)
+
+    const parentId = node.parentId ?? undefined
+    deleteElement(node.id, getElementKey(node, elementType), parentId)
+  }
+
   const deleteMutation = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
     const promise = elementDelete({
       id,
@@ -121,6 +156,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     deleteElement,
     deleteTreeContextMenuItem,
     deleteContextMenuItem,
+    deleteGridContextMenuItem,
     deleteMutation
   }
 }

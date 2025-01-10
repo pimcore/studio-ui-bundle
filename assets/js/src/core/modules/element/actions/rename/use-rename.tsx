@@ -90,6 +90,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     }
   }
 
+  // TODO: centalize
   const loadAssetById = async (id: number): Promise<AssetGetByIdApiResponse> => {
     const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
 

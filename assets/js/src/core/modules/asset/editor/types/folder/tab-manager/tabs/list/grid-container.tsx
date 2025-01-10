@@ -22,6 +22,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -62,6 +63,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { hasType } = useDynamicTypeResolver()
   const open = useOpen('asset')
   const rename = useRename('asset')
+  const remove = useDelete('asset')
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -113,9 +115,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
 
         item.columns?.forEach((column) => {
-          if (column.key === 'id') {
-            row.id = column.value
-          }
+          row.id = item.id
 
           if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
             row[columnIdentifierString] = column.value
@@ -152,7 +152,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         columns={ columns }
         contextMenuItems={ [
           open.openGridContextMenuItem,
-          rename.renameGridContextMenuItem
+          rename.renameGridContextMenuItem,
+          remove.deleteGridContextMenuItem
         ] }
         data={ data }
         enableMultipleRowSelection
