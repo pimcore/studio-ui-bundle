@@ -22,6 +22,7 @@ import {
   type LinkValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 import { Select } from '@Pimcore/components/select/select'
+import { Card } from '@Pimcore/components/card/card'
 
 export interface LinkModalProps {
   open: boolean
@@ -66,7 +67,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
       onOk={ handleOk }
       open={ props.open }
       size="M"
-      title={ t('link.settings') }
+      title={ t('link.edit-title') }
     >
       <Form
         form={ form }
@@ -85,42 +86,53 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             <Input />
           </FormItem>
 
-          <FormItem
-            label={ t('link.target') }
-            name="target"
+          <Card
+            theme="card-with-highlight"
+            title={ t('link.properties') }
           >
-            <Select
-              allowClear
-              options={ [
-                { label: '_blank', value: '_blank' },
-                { label: '_self', value: '_self' },
-                { label: '_top', value: '_top' },
-                { label: '_parent', value: '_parent' }
-              ] }
-            />
+            <Space
+              className='w-full'
+              direction='vertical'
+              size='small'
+            >
+              <FormItem
+                label={ t('link.target') }
+                name="target"
+              >
+                <Select
+                  allowClear
+                  options={ [
+                    { label: '_blank', value: '_blank' },
+                    { label: '_self', value: '_self' },
+                    { label: '_top', value: '_top' },
+                    { label: '_parent', value: '_parent' }
+                  ] }
+                />
 
-          </FormItem>
+              </FormItem>
 
-          <FormItem
-            label={ t('link.parameters') }
-            name="parameters"
-          >
-            <Input />
-          </FormItem>
+              <FormItem
+                label={ t('link.parameters') }
+                name="parameters"
+              >
+                <Input />
+              </FormItem>
 
-          <FormItem
-            label={ t('link.anchor') }
-            name="anchor"
-          >
-            <Input />
-          </FormItem>
+              <FormItem
+                label={ t('link.anchor') }
+                name="anchor"
+              >
+                <Input />
+              </FormItem>
 
-          <FormItem
-            label={ t('link.title') }
-            name="title"
-          >
-            <Input />
-          </FormItem>
+              <FormItem
+                label={ t('link.title') }
+                name="title"
+              >
+                <Input />
+              </FormItem>
+            </Space>
+          </Card>
         </Space>
       </Form>
     </WindowModal>
