@@ -480,8 +480,19 @@ navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 external-image.preview-placeholder: Add an external image
-image.dnd-target: Upload or drop an image here
+image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
 collection.empty: No available fields yet. Start by adding a field.
+video.type: Video Type
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video ID
+video.url: Video URL
+video.settings: Video Settings
+video.poster: Poster-Image
+video.path: Path
+video.dnd-target: Drop a video here

@@ -12,11 +12,11 @@
 */
 
 import { type Meta } from '@storybook/react'
-import { ImageTarget } from './image-target'
+import { AssetTarget } from './asset-target'
 
 const config: Meta = {
-  title: 'Components/Data Display/ImageTarget',
-  component: ImageTarget,
+  title: 'Components/Data Display/AssetTarget',
+  component: AssetTarget,
   tags: ['autodocs']
 }
 
