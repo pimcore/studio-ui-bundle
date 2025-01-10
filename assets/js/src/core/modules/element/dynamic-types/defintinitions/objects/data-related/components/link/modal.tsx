@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import {
   type LinkValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
+import { Select } from '@Pimcore/components/select/select'
 
 export interface LinkModalProps {
   open: boolean
@@ -33,13 +34,11 @@ export interface LinkModalProps {
 export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const emptyLinkValue: LinkValue = { text: '' }
+  const emptyLinkValue: LinkValue = { text: '', target: '', parameters: '', anchor: '', title: '' }
   const [value, setValue] = useState<LinkValue>(props.value ?? { ...emptyLinkValue })
 
   useEffect(() => {
-    form.setFieldsValue({
-      text: value.text
-    })
+    form.setFieldsValue(value)
   }, [value])
 
   const handleValuesChange = (changedValues: any, allValues: LinkValue): void => {
@@ -82,6 +81,43 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
           <FormItem
             label={ t('link.text') }
             name="text"
+          >
+            <Input />
+          </FormItem>
+
+          <FormItem
+            label={ t('link.target') }
+            name="target"
+          >
+            <Select
+              allowClear
+              options={ [
+                { label: '_blank', value: '_blank' },
+                { label: '_self', value: '_self' },
+                { label: '_top', value: '_top' },
+                { label: '_parent', value: '_parent' }
+              ] }
+            />
+
+          </FormItem>
+
+          <FormItem
+            label={ t('link.parameters') }
+            name="parameters"
+          >
+            <Input />
+          </FormItem>
+
+          <FormItem
+            label={ t('link.anchor') }
+            name="anchor"
+          >
+            <Input />
+          </FormItem>
+
+          <FormItem
+            label={ t('link.title') }
+            name="title"
           >
             <Input />
           </FormItem>

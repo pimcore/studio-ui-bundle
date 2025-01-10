@@ -22,6 +22,11 @@ import {
 
 export interface LinkValue {
   text: string
+  target: string
+  parameters: string
+  anchor: string
+  title: string
+
 }
 
 export interface LinkProps {
