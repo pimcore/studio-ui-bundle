@@ -16,10 +16,12 @@ import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
-  Video, type VideoProps
+  Video, type VideoProps, type VideoType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/video'
 
-export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProps
+export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProps & {
+  allowedTypes?: VideoType[] | null
+}
 
 export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
   id: string = 'video'
@@ -28,6 +30,7 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
     return (
       <Video
         { ...props }
+        allowedVideoTypes={ props.allowedTypes ?? undefined }
         disabled={ props.noteditable === true }
       />
     )

@@ -55,12 +55,15 @@ interface DailymotionVideoValue {
   data: string | null
 }
 
+export type VideoType = 'asset' | 'youtube' | 'vimeo' | 'dailymotion'
+
 export interface VideoProps {
   width: string | number | null
   height: string | number | null
   disabled?: boolean
   value?: VideoValue | null
   onChange?: (value: VideoValue | null) => void
+  allowedVideoTypes?: VideoType[]
 }
 
 export const Video = (props: VideoProps): React.JSX.Element => {
@@ -81,6 +84,7 @@ export const Video = (props: VideoProps): React.JSX.Element => {
       className="max-w-full"
       fitContent
       footer={ <VideoFooter
+        allowedVideoTypes={ props.allowedVideoTypes }
         disabled={ props.disabled }
         emptyValue={ emptyValue }
         key="video-footer"

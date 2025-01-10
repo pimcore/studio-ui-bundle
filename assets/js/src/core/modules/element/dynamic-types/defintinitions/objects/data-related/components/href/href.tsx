@@ -72,7 +72,10 @@ export const Href = (props: HrefProps): React.JSX.Element => {
             })
           } }
         >
-          <PathTarget value={ value } />
+          <PathTarget
+            disabled={ props.disabled }
+            value={ value }
+          />
         </Droppable>
       </div>
 

@@ -13,7 +13,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { type VideoValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/video'
+import {
+  type VideoType,
+  type VideoValue
+} from './video'
 import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
@@ -33,13 +36,15 @@ interface VideoFooterProps {
   disabled?: boolean
   value?: VideoValue | null
   onSave?: (value: VideoValue) => void
+  allowedVideoTypes?: VideoType[]
 }
 
 export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [value, setValue] = useState<VideoValue>(props.value ?? { type: 'asset', data: null })
+  const firstType = props.allowedVideoTypes?.[0] ?? 'asset'
+  const [value, setValue] = useState<VideoValue>(props.value ?? { type: firstType, data: null })
   const [form] = Form.useForm()
 
   useEffect(() => {
@@ -57,7 +62,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
   }, [value])
 
   useEffect(() => {
-    setValue(props.value ?? { type: 'asset', data: null })
+    setValue(props.value ?? { type: firstType, data: null })
   }, [props.value])
 
   const showModal = (): void => {
@@ -97,6 +102,16 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     setValue(allValues)
   }
 
+  const getVideoTypeOptions = (): Array<{ value: VideoType, label: string }> => {
+    const allowedVideoTypes = props.allowedVideoTypes ?? ['asset', 'youtube', 'vimeo', 'dailymotion']
+    return allowedVideoTypes.map(type => {
+      return {
+        value: type,
+        label: t(`video.type.${type}`)
+      }
+    })
+  }
+
   return (
     <>
       <ButtonGroup
@@ -116,7 +131,6 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
             title={ t('edit') }
           >
             <IconButton
-              disabled={ props.disabled }
               icon={ { value: 'edit' } }
               onClick={ showModal }
             />
@@ -125,6 +139,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
         noSpacing
       />
       <WindowModal
+        footer={ props.disabled === true ? <span></span> : undefined }
         okText={ t('save') }
         onCancel={ handleCancel }
         onOk={ handleOk }
@@ -147,13 +162,9 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
               name="type"
             >
               <Select
+                disabled={ props.disabled }
                 onChange={ newType => { setValue({ type: newType, data: null }) } }
-                options={ [
-                  { value: 'asset', label: t('video.type.asset') },
-                  { value: 'youtube', label: t('video.type.youtube') },
-                  { value: 'vimeo', label: t('video.type.vimeo') },
-                  { value: 'dailymotion', label: t('video.type.dailymotion') }
-                ] }
+                options={ getVideoTypeOptions() }
               />
             </FormItem>
 
@@ -166,6 +177,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                   <Href
                     allowedElementSubTypes={ ['video'] }
                     allowedElementTypes={ ['asset'] }
+                    disabled={ props.disabled }
                     onOpenElement={ () => { setIsModalVisible(false) } }
                   />
                   )
@@ -182,6 +194,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                 <Href
                   allowedElementSubTypes={ ['image'] }
                   allowedElementTypes={ ['asset'] }
+                  disabled={ props.disabled }
                   onOpenElement={ () => { setIsModalVisible(false) } }
                 />
               </FormItem>
@@ -189,7 +202,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                 label={ t('title') }
                 name="title"
               >
-                <Input />
+                <Input disabled={ props.disabled } />
               </FormItem>
               <FormItem
                 label={ t('description') }
@@ -197,6 +210,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
               >
                 <TextArea
                   autoSize={ { minRows: 3 } }
+                  disabled={ props.disabled }
                 />
               </FormItem>
             </>

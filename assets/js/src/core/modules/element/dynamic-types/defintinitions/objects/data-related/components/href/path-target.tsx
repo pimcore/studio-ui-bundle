@@ -22,6 +22,7 @@ import cn from 'classnames'
 
 export interface PathTargetProps {
   value: HrefValue | null
+  disabled?: boolean
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -43,6 +44,7 @@ export const PathTarget = forwardRef(function PathTarget (
     >
       <Input
         className={ cn(...getStateClasses()) }
+        disabled={ props.disabled }
         placeholder={ t('href.drop-placeholder') }
         readOnly
         value={ displayText }
