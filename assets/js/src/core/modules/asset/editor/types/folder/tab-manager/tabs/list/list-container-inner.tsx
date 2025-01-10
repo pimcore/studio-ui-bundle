@@ -36,15 +36,10 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Content } from '@Pimcore/components/content/content'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { generateQueryArgsForGrid } from './helpers/gridHelpers'
+import { getDataModelList } from './helpers/columnHelpers'
 import usePagination from '@Pimcore/utils/hooks/use-pagination'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-
-interface DataPatch {
-  columnId: string
-  locale: string | null | undefined
-  rowIndex: number
-  value: any
-}
+import type { IDataPatch } from './types/dataTypes'
 
 export const ListContainerInner = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
@@ -61,7 +56,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   const [fetchListing, fetchListingResult] = useAssetGetGridMutation()
   const [patchAsset] = useAssetPatchByIdMutation()
   const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
-  const [, setDataPatches] = useState<DataPatch[]>([])
+  const [, setDataPatches] = useState<IDataPatch[]>([])
   const { sorting } = useListSorting()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -70,9 +65,7 @@ export const ListContainerInner = (): React.JSX.Element => {
   }, [sorting, page, pageSize, filterOptions])
 
   useEffect(() => {
-    prepareAndFetchListing()?.catch((error) => {
-      console.log(error)
-    })
+    prepareAndFetchListing()?.catch((error) => { console.log(error) })
 
     const subscriber = eventBus.subscribe({ type: 'asset:listing:refresh', id: assetId }, () => {
       prepareAndFetchListing()?.catch((error) => {
@@ -130,35 +123,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     setDataPatches((currentDataPatches) => {
       setData((currentData) => {
         const currentDataModel = dataUpdate ?? currentData
-
-        const items = currentDataModel?.items.map((item) => {
-          const itemId = item.columns!.find((column) => column.key === 'id')?.value
-          const hasPatch = currentDataPatches.some((patch) => patch.rowIndex === itemId)
-
-          if (!hasPatch) {
-            return item
-          }
-
-          const patchedColumns = item.columns!.map((column) => {
-            const patch = currentDataPatches.find((_patch) => {
-              return _patch.rowIndex === itemId && _patch.columnId === column.key && _patch.locale === column.locale
-            })
-
-            if (patch === undefined) {
-              return column
-            }
-
-            return {
-              ...column,
-              value: patch.value
-            }
-          })
-
-          return {
-            ...item,
-            columns: patchedColumns
-          }
-        })
+        const items = getDataModelList({ currentDataModel, currentDataPatches })
 
         return {
           items: items ?? [],
@@ -231,7 +196,6 @@ export const ListContainerInner = (): React.JSX.Element => {
 
     updateDataPatches(columnIdentifier, rowData.id, value)
     updateModifiedCells(columnId, rowData.id)
-
     updateData()
 
     const backendType = column.type.split('.')

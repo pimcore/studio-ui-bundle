@@ -57,32 +57,34 @@ export const ValidatedSwitch: StoryObj = {
   )
 }
 
-export const ValidatedCheckbox: StoryObj = {
-  render: () => {
-    const [form] = Form.useForm()
+const ValidatedCheckboxComponent = (): React.JSX.Element => {
+  const [form] = Form.useForm()
 
-    return (
-      <Form
-        form={ form }
-        onFinish={ (values) => {
-          console.log('Form values:', values)
-        } }
+  return (
+    <Form
+      form={ form }
+      onFinish={ (values) => {
+        console.log('Form values:', values)
+      } }
+    >
+      <FormItemWrapper
+        name="acceptTerms"
+        rules={ [{
+          required: true,
+          transform: value => (value ?? undefined),
+          type: 'boolean',
+          message: 'You must accept the terms and conditions!'
+        }] }
+        valuePropName="checked"
       >
-        <FormItemWrapper
-          name="acceptTerms"
-          rules={ [{
-            required: true,
-            transform: value => (value ?? undefined),
-            type: 'boolean',
-            message: 'You must accept the terms and conditions!'
-          }] }
-          valuePropName="checked"
-        >
-          <Checkbox>
-            I accept the terms and conditions
-          </Checkbox>
-        </FormItemWrapper>
-      </Form>
-    )
-  }
+        <Checkbox>
+          I accept the terms and conditions
+        </Checkbox>
+      </FormItemWrapper>
+    </Form>
+  )
+}
+
+export const ValidatedCheckbox: StoryObj = {
+  render: () => <ValidatedCheckboxComponent />
 }

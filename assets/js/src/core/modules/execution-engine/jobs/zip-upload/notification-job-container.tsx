@@ -29,13 +29,80 @@ export interface ZipUploadJobProps extends JobProps {
 
 export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.Element => {
   const { id, topics, status, action } = props
-  const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
+
   const [progress, setProgress] = useState<number>(0)
   const { updateJob, removeJob } = useJobs()
   const jobId = useRef<number>()
   const { t } = useTranslation()
   const [title, setTitle] = useState(props.title)
   const dispatch = useAppDispatch()
+
+  const openHandler = (): void => {
+    action().then(actionJobId => {
+      jobId.current = actionJobId
+    }).catch(console.error)
+  }
+
+  const handleMessageProgress = (data: any): void => {
+    if (data.progress !== undefined) {
+      setProgress(data.progress as number)
+    }
+  }
+
+  const handleJobSuccess = (): void => {
+    updateJob(id, {
+      status: JobStatus.SUCCESS
+    })
+  }
+
+  const handleJobFailed = (): void => {
+    updateJob(id, {
+      status: JobStatus.FAILED
+    })
+  }
+
+  const handleMessageStatus = (data: any): void => {
+    if (data.status !== undefined) {
+      if (data.status === 'finished' && data.messages !== undefined) {
+        const messages: { jobRunChildId?: number } = data.messages
+
+        if (messages.jobRunChildId !== undefined) {
+          jobId.current = messages.jobRunChildId
+
+          setTitle('Creating assets')
+          setProgress(0)
+        }
+
+        if (messages.jobRunChildId === undefined) {
+          handleJobSuccess()
+          closeSEEvent()
+        }
+      }
+
+      if (data.status === 'finished_with_errors') {
+        handleJobSuccess()
+        closeSEEvent()
+      }
+
+      if (data.status === 'failed') {
+        handleJobFailed()
+        closeSEEvent()
+      }
+    }
+  }
+
+  const messageHandler = (event: MessageEvent): void => {
+    const data: any = JSON.parse(event.data as string)
+
+    if (data.jobRunId !== jobId.current) {
+      return
+    }
+
+    handleMessageProgress(data)
+    handleMessageStatus(data)
+  }
+
+  const { open: openSEEvent, close: closeSEEvent } = useServerSideEvent({ topics, messageHandler, openHandler })
 
   useEffect(() => {
     if (JobStatus.QUEUED === status) {
@@ -76,64 +143,4 @@ export const NotificationJobContainer = (props: ZipUploadJobProps): React.JSX.El
       title={ title }
     />
   )
-
-  function openHandler (): void {
-    action().then(actionJobId => {
-      jobId.current = actionJobId
-    }).catch(console.error)
-  }
-
-  function messageHandler (event: MessageEvent): void {
-    const data: any = JSON.parse(event.data as string)
-    if (data.jobRunId !== jobId.current) {
-      return
-    }
-
-    if (data.progress !== undefined) {
-      setProgress(data.progress as number)
-    }
-
-    if (data.status !== undefined) {
-      if (data.status === 'finished') {
-        if (data.messages !== undefined) {
-          const messages: { jobRunChildId?: number } = data.messages
-
-          if (messages.jobRunChildId !== undefined) {
-            const childId = messages.jobRunChildId
-
-            // do something awesome
-            jobId.current = childId
-            setTitle('Creating assets')
-            setProgress(0)
-          }
-
-          if (messages.jobRunChildId === undefined) {
-            updateJob(id, {
-              status: JobStatus.SUCCESS
-            })
-
-            closeSEEvent()
-
-            // und dann wär gut ...
-          }
-        }
-      }
-
-      if (data.status === 'finished_with_errors') {
-        updateJob(id, {
-          status: JobStatus.SUCCESS
-        })
-
-        closeSEEvent()
-      }
-
-      if (data.status === 'failed') {
-        updateJob(id, {
-          status: JobStatus.FAILED
-        })
-
-        closeSEEvent()
-      }
-    }
-  }
 }

@@ -31,7 +31,7 @@ export const useAssetHelper = (): UseAssetReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
 
-  async function openAsset (props: OpenAssetWidgetProps): Promise<void> {
+  const openAsset = async (props: OpenAssetWidgetProps): Promise<void> => {
     const { config } = props
     const widgetId = `asset-${config.id}`
 
