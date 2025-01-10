@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { Content } from '@Pimcore/components/content/content'
-import { MiniPaint } from '@Pimcore/services/mini-paint/mini-paint'
+import { MiniPaint } from '@Pimcore/lib/mini-paint/mini-paint'
 
 export const EditTabContainer = (): React.JSX.Element => {
   return (
