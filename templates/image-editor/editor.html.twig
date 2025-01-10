@@ -95,7 +95,7 @@
     {% set imageUrl = path('pimcore_studio_api_stream_image_custom', {id: asset.getId(), mimeType: 'png', resizeMode: 'none' }) %}
 {% endif %}
 
-<img style="visibility: hidden" id='image' src="{{ imageUrl }}" alt="Image editor picture" />
+<img style="visibility: hidden" id='image' src="{{ imageUrl }}" alt="editor preview" />
 <script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
 
     /**
