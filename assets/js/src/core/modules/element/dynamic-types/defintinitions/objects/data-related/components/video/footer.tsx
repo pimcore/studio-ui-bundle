@@ -84,7 +84,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     }
 
     return {
-      type: type as 'youtube' | 'vimeo' | 'dailymotion',
+      type,
       data: data as string
     }
   }

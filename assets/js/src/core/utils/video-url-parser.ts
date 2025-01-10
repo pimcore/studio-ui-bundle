@@ -22,13 +22,13 @@ export const parseVideoIdFromUrl = (url: string, type: 'youtube' | 'vimeo' | 'da
     }
   } else if (type === 'vimeo') {
     const regExp = /vimeo.com\/(\d+)($|\/)/
-    const match = url.match(regExp)
+    const match = regExp.exec(url)
     if (match?.[1] !== null && match?.[1] !== undefined) {
       return match[1]
     }
   } else if (type === 'dailymotion') {
     const regExp = /dailymotion.*\/video\/([^_]+)/
-    const match = url.match(regExp)
+    const match = regExp.exec(url)
     if (match?.[1] !== null && match?.[1] !== undefined) {
       return match[1]
     }

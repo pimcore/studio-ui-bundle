@@ -21,6 +21,19 @@ interface VideoPreviewProps {
   height: string | number
 }
 
+const getVideoSrc = (type: string, data: string): string => {
+  if (type === 'youtube') {
+    return data.startsWith('PL')
+      ? `https://www.youtube-nocookie.com/embed/videoseries?list=${data}`
+      : `https://www.youtube-nocookie.com/embed/${data}`
+  } else if (type === 'vimeo') {
+    return `https://player.vimeo.com/video/${data}?title=0&amp;byline=0&amp;portrait=0`
+  } else if (type === 'dailymotion') {
+    return `https://www.dailymotion.com/embed/video/${data}`
+  }
+  return ''
+}
+
 export const VideoPreview = (props: VideoPreviewProps): React.JSX.Element => {
   if (props.value.data === null) {
     return <></>
@@ -37,53 +50,14 @@ export const VideoPreview = (props: VideoPreviewProps): React.JSX.Element => {
     )
   }
 
-  if (props.value.type === 'youtube') {
-    let src = `https://www.youtube-nocookie.com/embed/${props.value.data}`
-    if (props.value.data.startsWith('PL')) {
-      src = `https://www.youtube-nocookie.com/embed/videoseries?list=${props.value.data}`
-    }
-
-    return (
-      // eslint-disable-next-line jsx-a11y/iframe-has-title
-      <iframe
-        allowFullScreen
-        frameBorder="0"
-        height={ props.height }
-        src={ src }
-        width={ props.width }
-      ></iframe>
-    )
-  }
-
-  if (props.value.type === 'vimeo') {
-    const src = `https://player.vimeo.com/video/${props.value.data}?title=0&amp;byline=0&amp;portrait=0`
-
-    return (
-    // eslint-disable-next-line jsx-a11y/iframe-has-title
-      <iframe
-        allowFullScreen
-        frameBorder="0"
-        height={ props.height }
-        src={ src }
-        width={ props.width }
-      ></iframe>
-    )
-  }
-
-  if (props.value.type === 'dailymotion') {
-    const src = `https://www.dailymotion.com/embed/video/${props.value.data}`
-
-    return (
-    // eslint-disable-next-line jsx-a11y/iframe-has-title
-      <iframe
-        allowFullScreen
-        frameBorder="0"
-        height={ props.height }
-        src={ src }
-        width={ props.width }
-      ></iframe>
-    )
-  }
-
-  return <></>
+  return (
+    <iframe
+      allowFullScreen
+      height={ props.height }
+      src={ getVideoSrc(props.value.type, props.value.data) }
+      style={ { border: 'none' } }
+      title="Video Preview"
+      width={ props.width }
+    ></iframe>
+  )
 }
