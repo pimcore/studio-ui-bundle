@@ -56,6 +56,10 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     }
   }, [value])
 
+  useEffect(() => {
+    setValue(props.value ?? { type: 'asset', data: null })
+  }, [props.value])
+
   const showModal = (): void => {
     setIsModalVisible(true)
   }
