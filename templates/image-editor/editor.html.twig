@@ -104,15 +104,34 @@
      */
     async function loadEditor(e) {
         return new Promise(resolve => {
-            var checkInterval = setInterval(() => {
+            var checkInterval = setInterval(async () => {
                 if (window.Layers) {
                     clearInterval(checkInterval);
-                    manipulateMenuBar();
+
+                    const translationKeys = await getTranslation()
+                    manipulateMenuBar(translationKeys);
+
                     loadImageToEditor(e);
                     resolve(true);
                 }
             }, 300);
         });
+    }
+
+    async function getTranslation() {
+        const url = '{{ path('pimcore_studio_api_translations') }}';
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ locale: 'en', keys: [] })
+        });
+
+        const data = await response.json();
+
+        return data.keys;
     }
 
     function loadImageToEditor(e) {
@@ -151,7 +170,7 @@
         });
     }
 
-    function manipulateMenuBar() {
+    function manipulateMenuBar(translationKeys) {
         const menuBar = document.getElementsByClassName('menu_bar')[0];
         const liElement = document.createElement('li');
         const aElement = document.createElement('a');
@@ -164,7 +183,7 @@
         aElement.classList.add('cursor-pointer');
         aElement.setAttribute('aria-expanded', 'false');
         spanElement.setAttribute('class', 'name trn');
-        spanElement.innerText = 'Save';
+        spanElement.innerText = translationKeys['save']
 
         aElement.appendChild(spanElement);
         liElement.appendChild(aElement);
