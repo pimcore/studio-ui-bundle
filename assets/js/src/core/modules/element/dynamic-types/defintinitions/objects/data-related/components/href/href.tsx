@@ -40,8 +40,6 @@ export const Href = (props: HrefProps): React.JSX.Element => {
   const [value, setValue] = React.useState<HrefValue | null>(props.value ?? null)
   const { openElement } = useElementHelper()
 
-  console.log('href val', value)
-
   useEffect(() => {
     props.onChange?.(value)
   }, [value])
