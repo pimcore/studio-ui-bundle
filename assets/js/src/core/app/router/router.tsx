@@ -18,11 +18,9 @@ import { LoginPage } from '@Pimcore/modules/auth/login-page'
 import { DeepLink } from '@Pimcore/components/deep-link/deep-link'
 import { appConfig } from '../config/app-config'
 
-export let baseUrl = appConfig.baseUrl
-
-if (baseUrl.endsWith('/')) {
-  baseUrl = baseUrl.slice(0, -1) + '/'
-}
+export const baseUrl = appConfig.baseUrl.endsWith('/')
+  ? appConfig.baseUrl.slice(0, -1) + '/'
+  : appConfig.baseUrl
 
 export const routes = {
   root: baseUrl,
