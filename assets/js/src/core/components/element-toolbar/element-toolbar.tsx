@@ -27,6 +27,8 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
 
   const { element } = useElementDraft(id, elementType)
 
+  const deeplinkUrl = `/pimcore-studio/${elementType}/${id}`
+
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
 
   useLayoutEffect(() => {
@@ -62,10 +64,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
       key: '3',
       label: 'Copy deep link to clipboard',
       onClick: () => {
-        // @todo implement other types
-        void navigator.clipboard.writeText(`
-          http://localhost/admin/login/deeplink?asset_${element.id}_${element.type}
-        `)
+        void navigator.clipboard.writeText(deeplinkUrl)
       }
     }
   ]

@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, useParams } from 'react-router-dom'
 import { DefaultPage } from '@Pimcore/modules/app/default-page'
 import { LoginPage } from '@Pimcore/modules/auth/login-page'
 import { appConfig } from '../config/app-config'
@@ -25,7 +25,15 @@ if (baseUrl.endsWith('/')) {
 
 export const routes = {
   root: baseUrl,
-  login: `${baseUrl}login/`
+  login: `${baseUrl}login/`,
+  deeplinkAsset: `${baseUrl}/asset/68`
+}
+
+const DynamicPage = (): React.JSX.Element => {
+  const { type, id } = useParams()
+  console.log('------>>>>> DynamicPage: ', type, id)
+
+  return <div>Asset</div>
 }
 
 export const router = createBrowserRouter([
@@ -36,5 +44,9 @@ export const router = createBrowserRouter([
   {
     path: routes.login,
     element: <LoginPage />
+  },
+  {
+    path: routes.deeplinkAsset,
+    element: <DynamicPage />
   }
 ])
