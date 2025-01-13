@@ -11,23 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type Meta } from '@storybook/react'
-import { ImageTarget } from './image-target'
+import { useContext } from 'react'
+import { ObjectBrickContext, type IObjectBrickContext } from './object-brick-provider'
 
-const config: Meta = {
-  title: 'Components/Data Display/ImageTarget',
-  component: ImageTarget,
-  tags: ['autodocs']
-}
+export type UseObjectBrickReturn = IObjectBrickContext
 
-export default config
+export const useObjectBrick = (): UseObjectBrickReturn => {
+  const context = useContext(ObjectBrickContext)
 
-export const _default = {
-  args: {
-    width: 300,
-    height: 300,
-    title: 'Place an image here',
-    dndIcon: true,
-    uploadIcon: true
-  }
+  return context
 }

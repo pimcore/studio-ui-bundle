@@ -13,7 +13,7 @@
 
 import React, { forwardRef, type MutableRefObject } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useStyle } from './image-target.styles'
+import { useStyle } from './asset-target.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -22,7 +22,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-interface ImageTargetProps {
+interface AssetTargetProps {
   onRemove?: (event: React.MouseEvent<HTMLButtonElement>) => void
   title: string
   className?: string
@@ -32,14 +32,14 @@ interface ImageTargetProps {
   uploadIcon?: boolean
 }
 
-export const ImageTarget = forwardRef(function ImageTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove }: ImageTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const AssetTarget = forwardRef(function AssetTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove }: AssetTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
   const { t } = useTranslation()
 
   return (
     <div
-      className={ cn(className, styles.imageTargetContainer, ...getStateClasses()) }
+      className={ cn(className, styles.assetTargetContainer, ...getStateClasses()) }
       ref={ ref }
       style={ {
         height: toCssDimension(height),

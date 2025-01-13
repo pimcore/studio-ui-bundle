@@ -23,6 +23,8 @@ export interface AccordionViewProps {
   collapsible: true
   theme?: 'fieldset' | 'card-with-highlight' | 'default'
   contentPadding?: BoxProps['padding']
+  extra?: ReactNode
+  extraPosition?: 'start' | 'end'
 }
 
 export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewProps): React.JSX.Element => {
@@ -31,9 +33,12 @@ export const AccordionView = ({ collapsed, bordered, ...props }: AccordionViewPr
       bordered={ bordered }
       contentPadding={ props.contentPadding }
       defaultActive={ !(collapsed ?? true) }
+      extra={ props.extra }
+      extraPosition={ props.extraPosition }
       forceRender
       hasContentSeparator={ props.theme !== 'fieldset' }
       label={ (<>{props.title}</>) }
+      size='small'
       theme={ props.theme }
     >
       {props.children}
