@@ -56,6 +56,24 @@ export const HeadWithButtons = {
     ]
   }
 }
+
+export const HeadWithActionButton = {
+  args: {
+    ..._default.args,
+    title: 'Action Buttons',
+    extraPosition: 'flex-start',
+    extra: (
+      <IconTextButton
+        icon={ { value: 'edit' } }
+        onClick={ () => { console.log('click action button 1') } }
+        type='action'
+      >
+        Edit
+      </IconTextButton>
+    )
+  }
+}
+
 export const CloseButton = {
   args: {
     ..._default.args,

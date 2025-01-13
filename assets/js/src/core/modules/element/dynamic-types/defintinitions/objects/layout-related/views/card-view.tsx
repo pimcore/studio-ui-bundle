@@ -23,6 +23,8 @@ export interface CardViewProps {
   bordered?: boolean
   theme?: 'fieldset' | 'card-with-highlight' | 'default'
   contentPadding?: BoxProps['padding']
+  extra?: ReactNode
+  extraPosition?: 'start' | 'end'
 }
 
 export const CardView = (props: CardViewProps): React.JSX.Element => {
@@ -30,6 +32,8 @@ export const CardView = (props: CardViewProps): React.JSX.Element => {
     <Card
       bordered={ props.bordered === true }
       contentPadding={ props.contentPadding }
+      extra={ props.extra }
+      extraPosition={ props.extraPosition }
       theme={ props.theme }
       title={ isEmpty(props.title) ? undefined : props.title }
     >

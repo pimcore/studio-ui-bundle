@@ -20,6 +20,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { Content } from '@Pimcore/components/content/content'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useStyles } from './edit-container.styles'
+import { ObjectBrickProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/object-brick/providers/object-brick-provider'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
@@ -33,11 +34,13 @@ export const EditContainer = (): React.JSX.Element => {
 
   return (
     <FieldCollectionProvider>
-      <RootComponent
-        className={ styles.editContainer }
-        data={ data?.objectData }
-        layout={ layoutData }
-      />
+      <ObjectBrickProvider>
+        <RootComponent
+          className={ styles.editContainer }
+          data={ data?.objectData }
+          layout={ layoutData }
+        />
+      </ObjectBrickProvider>
     </FieldCollectionProvider>
   )
 }

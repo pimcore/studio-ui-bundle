@@ -18,6 +18,7 @@ import { CardView, type CardViewProps } from './card-view'
 
 export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
+  extra?: CardViewProps['extra'] | AccordionViewProps['extra']
 }
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
@@ -38,6 +39,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         collapsed={ props.collapsed }
         collapsible
         contentPadding={ props.contentPadding }
+        extra={ props.extra }
         theme={ theme }
         title={ props.title }
       >{props.children}</AccordionView>
@@ -48,6 +50,8 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
     <CardView
       bordered={ props.border }
       contentPadding={ props.contentPadding }
+      extra={ props.extra }
+      extraPosition={ props.extraPosition }
       theme={ theme }
       title={ props.title }
     >{props.children}</CardView>

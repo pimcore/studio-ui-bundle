@@ -12,16 +12,14 @@
 */
 
 import React from 'react'
-import { type CollectionContentProps } from './collection-content'
+import { type CollectionContentBaseProps } from './collection-content'
 import { Space } from '@Pimcore/components/space/space'
 import { Text } from '@Pimcore/components/text/text'
 import { Box } from '@Pimcore/components/box/box'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useTranslation } from 'react-i18next'
 
-interface CollectionEmptyProps extends CollectionContentProps {
-  operation: CollectionContentProps['operation']
-}
+interface CollectionEmptyProps extends CollectionContentBaseProps {}
 
 export const CollectionContentEmpty = (props: CollectionEmptyProps): React.JSX.Element => {
   const { addButtonComponent, title, ...baseButtonProps } = props

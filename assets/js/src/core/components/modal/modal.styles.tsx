@@ -16,9 +16,6 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     modal: css`
-        &.ant-modal .ant-modal-footer > .ant-btn + .ant-btn {
-            margin-inline-start: 0;
-        }
 
         .ant-modal-content {
             width: 100%;

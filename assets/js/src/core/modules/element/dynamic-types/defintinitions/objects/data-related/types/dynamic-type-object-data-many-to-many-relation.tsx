@@ -22,8 +22,11 @@ import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/components/label/label'
+import {
+  convertAllowedTypes, type IRelationAllowedTypesClassDefinition
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
 
-export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & ManyToManyRelationClassDefinitionProps
+export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
 
 export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'manyToManyRelation'
@@ -32,6 +35,7 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
     return (
       <ManyToManyRelation
         { ...props }
+        { ... convertAllowedTypes(props) }
         disabled={ props.noteditable === true }
       />
     )

@@ -15,6 +15,19 @@ import { type Meta } from '@storybook/react'
 import { Switch } from '@Pimcore/components/switch/switch'
 import React from 'react'
 
+const SwitchComponent = (args: any): React.JSX.Element => {
+  const [checked, setChecked] = React.useState(false)
+
+  return (
+    <Switch
+      { ...args }
+      checked={ checked }
+      labelRight={ checked ? 'toggle checked' : 'toggle unchecked' }
+      onChange={ setChecked }
+    />
+  )
+}
+
 const config: Meta = {
   title: 'Components/Controls/Switch',
   component: Switch,
@@ -41,16 +54,5 @@ export const TagBoth = {
   args: {
     labelLeft: 'Switch'
   },
-  render: (args) => {
-    const [checked, setChecked] = React.useState(false)
-
-    return (
-      <Switch
-        { ...args }
-        checked={ checked }
-        labelRight={ checked ? 'toggle checked' : 'toggle unchecked' }
-        onChange={ setChecked }
-      />
-    )
-  }
+  render: SwitchComponent
 }
