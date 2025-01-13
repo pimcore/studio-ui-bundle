@@ -18,6 +18,7 @@ import {
   type LinkValue
 } from '../link'
 import { type ElementType } from 'types/element-type.d'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface InternalLinkValue {
   text: string
@@ -87,15 +88,10 @@ const getInternalPath = (value: LinkValue): ManyToOneRelationValue | PathTextInp
 }
 
 const convertType = (type?: string | null): ElementType | null => {
-  if (type === 'object') {
-    return 'data-object'
+  if (typeof type === 'string') {
+    return mapToElementType(type)
   }
-  if (type === 'asset') {
-    return 'asset'
-  }
-  if (type === 'document') {
-    return 'document'
-  }
+
   return null
 }
 
