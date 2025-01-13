@@ -13,7 +13,7 @@
 
 import React from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { ImageTarget } from '@Pimcore/components/image-target/image-target'
+import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import type { ImageGalleryValueItem } from '../../image-gallery'
 import { useTranslation } from 'react-i18next'
@@ -39,7 +39,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
       } }
       variant="outline"
     >
-      <ImageTarget
+      <AssetTarget
         dndIcon={ disabled !== true }
         height={ 100 }
         onRemove={ value[index] === undefined

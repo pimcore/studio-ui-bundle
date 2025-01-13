@@ -40,7 +40,7 @@ export const TAB_CUSTOM_METADATA: IEditorTab = {
   key: 'custom-metadata',
   label: 'asset.asset-editor-tabs.custom-metadata',
   children: <CustomMetadataTabContainer />,
-  icon: <Icon value={ 'data-management-2' } />,
+  icon: <Icon value={ 'data-management' } />,
   isDetachable: true
 }
 
@@ -52,6 +52,6 @@ export const TAB_VERSIONS: IEditorTab = {
     ComparisonViewComponent={ ComparisonView }
     SingleViewComponent={ SingleView }
             />,
-  icon: <Icon value={ 'history-outlined' } />,
+  icon: <Icon value={ 'history' } />,
   isDetachable: true
 }

@@ -25,6 +25,34 @@ interface IEditorTabsStory extends IEditorTabsProps {
   loading: boolean
 }
 
+const EditorTabComponent = ({ elementId, elementType, loading, defaultActiveKey, showLabelIfActive, items }: IEditorTabsStory): React.JSX.Element => {
+  const { setContext } = useGlobalAssetContext()
+
+  if (loading) {
+    return (
+      <div style={ { minWidth: 1024 } }>
+        <EditorTabsSkeleton />
+      </div>
+    )
+  }
+
+  if (elementId === undefined || elementType === undefined) {
+    return (<p>Please fill elementId and elementType argument</p>)
+  }
+
+  setContext({ id: elementId })
+
+  return (
+    <div style={ { minWidth: 1024 } }>
+      <EditorTabs
+        defaultActiveKey={ defaultActiveKey }
+        items={ items }
+        showLabelIfActive={ showLabelIfActive }
+      />
+    </div>
+  )
+}
+
 // TODO: Component needs refactoring because it contains business logic
 const config: Meta = {
   title: 'Components/__Refactor__/EditorTabs',
@@ -46,33 +74,7 @@ const config: Meta = {
     items: { table: { disable: true } }
   },
   tags: ['autodocs'],
-  render: ({ elementId, elementType, loading, defaultActiveKey, showLabelIfActive, items }: IEditorTabsStory) => {
-    const { setContext } = useGlobalAssetContext()
-
-    if (loading) {
-      return (
-        <div style={ { minWidth: 1024 } }>
-          <EditorTabsSkeleton />
-        </div>
-      )
-    }
-
-    if (elementId === undefined || elementType === undefined) {
-      return (<p>Please fill elementId and elementType argument</p>)
-    }
-
-    setContext({ id: elementId })
-
-    return (
-      <div style={ { minWidth: 1024 } }>
-        <EditorTabs
-          defaultActiveKey={ defaultActiveKey }
-          items={ items }
-          showLabelIfActive={ showLabelIfActive }
-        />
-      </div>
-    )
-  }
+  render: EditorTabComponent
 }
 
 export default config
@@ -101,7 +103,7 @@ export const _default = {
         key: '3',
         label: 'Tab 3',
         children: 'Tab 3',
-        icon: <Icon value={ 'view-details' } />
+        icon: <Icon value={ 'details' } />
       },
       {
         key: '4',

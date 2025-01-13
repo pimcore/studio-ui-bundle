@@ -33,7 +33,7 @@ export const _default: StoryObj<CollapseItemProps> = {
       align='center'
       gap={ 'extra-small' }
            >
-      <Icon value='camera' />
+      <Icon value='asset' />
       <span>Label</span>
     </Flex>,
     children: 'Content'

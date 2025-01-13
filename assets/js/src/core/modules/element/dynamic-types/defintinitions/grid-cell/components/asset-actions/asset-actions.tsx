@@ -28,7 +28,7 @@ export const AssetActionsCell = ({ row }: DefaultCellProps): React.JSX.Element =
         justify='center'
       >
         <IconButton
-          icon={ { value: 'group' } }
+          icon={ { value: 'open-folder' } }
           onClick={ () => { openAsset({ config: { id: data.id } }) } }
           type='link'
         />

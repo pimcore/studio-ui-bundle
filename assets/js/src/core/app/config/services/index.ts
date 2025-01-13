@@ -107,11 +107,13 @@ import { DynamicTypeObjectDataDateRange } from '@Pimcore/modules/element/dynamic
 import { DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-time'
 import { DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-external-image'
 import { DynamicTypeObjectDataImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image'
+import { DynamicTypeObjectDataVideo } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-video'
 import { DynamicTypeObjectDataImageGallery } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image-gallery'
 import { DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopoint'
 import { DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geobounds'
 import { DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolygon'
 import { DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
+import { DynamicTypeObjectDataManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-one-relation'
 import { DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
 import { DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
 import { DynamicTypeObjectDataBlock } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-block'
@@ -255,11 +257,13 @@ container.bind(serviceIds['DynamicTypes/ObjectData/DateRange']).to(DynamicTypeOb
 container.bind(serviceIds['DynamicTypes/ObjectData/Time']).to(DynamicTypeObjectDataTime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ExternalImage']).to(DynamicTypeObjectDataExternalImage).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Image']).to(DynamicTypeObjectDataImage).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/Video']).to(DynamicTypeObjectDataVideo).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ImageGallery']).to(DynamicTypeObjectDataImageGallery).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/GeoPoint']).to(DynamicTypeObjectDataGeoPoint).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/GeoBounds']).to(DynamicTypeObjectDataGeoBounds).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolygon']).to(DynamicTypeObjectDataGeoPolygon).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']).to(DynamicTypeObjectDataGeoPolyLine).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/ManyToOneRelation']).to(DynamicTypeObjectDataManyToOneRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']).to(DynamicTypeObjectDataManyToManyRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/StructuredTable']).to(DynamicTypeObjectDataStructuredTable).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Block']).to(DynamicTypeObjectDataBlock).inSingletonScope()

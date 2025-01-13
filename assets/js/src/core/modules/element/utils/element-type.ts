@@ -12,5 +12,7 @@
 */
 
 export const isValidElementType = (type: string): boolean => {
-  return type === 'asset' || type === 'document' || type === 'data-object'
+  return allElementTypes.includes(type)
 }
+
+export const allElementTypes = ['asset', 'document', 'data-object']

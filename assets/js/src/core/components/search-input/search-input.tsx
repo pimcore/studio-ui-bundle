@@ -50,7 +50,7 @@ export const SearchInput = ({ className, withoutAddon = true, withPrefix = true,
         <Icon
           className={ styles.searchIcon }
           options={ { width: 12, height: 12 } }
-          value='search-sm'
+          value='search'
         />
       ) }
       { ...props }

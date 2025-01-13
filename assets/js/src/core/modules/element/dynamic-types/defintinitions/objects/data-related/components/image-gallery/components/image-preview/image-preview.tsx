@@ -75,7 +75,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
             disabled,
             key: 'add',
             label: t('add'),
-            icon: <Icon value={ 'PlusOutlined' } />,
+            icon: <Icon value={ 'new' } />,
             onClick: () => {
               const newValue = [...value]
               newValue.splice(index + 1, 0, { image: null })
@@ -86,7 +86,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
             disabled,
             key: 'delete',
             label: t('delete'),
-            icon: <Icon value={ 'delete-outlined' } />,
+            icon: <Icon value={ 'trash' } />,
             onClick: () => {
               const newValue = [...value]
               newValue.splice(index, 1)
@@ -96,7 +96,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           {
             label: t('element.open'),
             key: 'open',
-            icon: <Icon value={ 'union' } />,
+            icon: <Icon value={ 'open-folder' } />,
             onClick: async () => {
               openAsset({
                 config: {

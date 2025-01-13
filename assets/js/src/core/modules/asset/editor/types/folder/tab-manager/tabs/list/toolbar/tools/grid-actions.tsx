@@ -62,7 +62,7 @@ export const GridActions = (): React.JSX.Element => {
       {
         key: '1',
         label: t('listing.actions.batch-edit'),
-        icon: <Icon value={ 'grid' } />,
+        icon: <Icon value={ 'batch-selection' } />,
         onClick: () => {
           setBatchEditModalOpen(true)
         }
@@ -85,7 +85,7 @@ export const GridActions = (): React.JSX.Element => {
       {
         key: '3',
         label: t('listing.actions.zip-download'),
-        icon: <Icon value={ 'download-02' } />,
+        icon: <Icon value={ 'download' } />,
         onClick: () => {
           createZip()
         }

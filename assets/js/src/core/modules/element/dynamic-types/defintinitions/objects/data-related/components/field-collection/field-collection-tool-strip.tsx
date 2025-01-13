@@ -52,7 +52,7 @@ export const FieldCollectionToolStrip = ({ label, field, fields, operation, allo
           menu={ { items: dropDownItems } }
         >
           <IconButton
-            icon={ { value: 'plus' } }
+            icon={ { value: 'new' } }
             style={ { padding: 4 } }
             variant='minimal'
           />

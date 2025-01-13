@@ -11,30 +11,32 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React from 'react'
 import { type Meta } from '@storybook/react'
 import { Button } from '@Pimcore/components/button/button'
-import React from 'react'
 import { FileList } from '@Pimcore/components/modal/file-list/file-list'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { useModal } from '@Pimcore/components/modal/useModal'
 
+const AlertModalComponent = (args: any): React.JSX.Element => {
+  const { renderModal: RenderModal, showModal } = useModal({ type: args.type })
+
+  return (
+    <>
+      <Button onClick={ showModal }>Open modal</Button>
+      <RenderModal
+        footer={ args.footer }
+        title={ args.title }
+      >
+        {args.content}
+      </RenderModal>
+    </>
+  )
+}
+
 const config: Meta = {
   title: 'Components/Feedback/InfoModal',
-  component: (args) => {
-    const { renderModal: RenderModal, showModal } = useModal({ type: args.type })
-
-    return (
-      <>
-        <Button onClick={ showModal }>Open modal</Button>
-        <RenderModal
-          footer={ args.footer }
-          title={ args.title }
-        >
-          {args.content}
-        </RenderModal>
-      </>
-    )
-  },
+  component: AlertModalComponent,
   argTypes: {
     type: {
       options: ['error', 'success', 'info', 'warn'],

@@ -45,7 +45,7 @@ export const LanguageSelection = ({ languages, selectedLanguage, onSelectLanguag
       </Button>
 
       <div className='language-select__current-value'>
-        <Icon value='flag-outlined' /> <span>{language}</span>
+        <Icon value='flag' /> <span>{language}</span>
       </div>
 
       <Button

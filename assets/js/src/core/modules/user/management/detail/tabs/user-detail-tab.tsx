@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect } from 'react'
-import { Tabs, type TabsProps } from 'antd'
+import { Tabs, type ITabsProps } from '@Pimcore/components/tabs/tabs'
 import { SettingsContainer } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-container'
 import { WorkspacesContainer } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspaces-container'
 import { KeyBindingsContainer } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings-container'
@@ -65,7 +65,7 @@ const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element
     return <></>
   }
 
-  const items: TabsProps['items'] = [
+  const items: ITabsProps['items'] = [
     {
       key: 'settings',
       label: t('user-management.settings.title'),

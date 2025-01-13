@@ -41,7 +41,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
       config: {
         icon: {
           type: 'name',
-          value: 'user-01'
+          value: 'user'
         }
       }
     }
@@ -53,39 +53,39 @@ export const LeftSidebarView = (): React.JSX.Element => {
 
   addNavItem({
     path: 'Settings',
-    icon: 'appstore-outlined'
+    icon: 'menu'
   })
 
   addNavItem({
     path: 'Tools',
-    icon: 'tools-outlined'
+    icon: 'accessory'
   })
 
   addNavItem({
     path: 'Marketing',
-    icon: 'bar-chart-08'
+    icon: 'marketing'
   })
 
   addNavItem({
     path: 'Customers',
-    icon: 'shopping-car-outlined'
+    icon: 'customers'
   })
 
   addNavItem({
     path: 'Cache',
-    icon: 'brush-03'
+    icon: 'brush'
   })
 
   addNavItem({
     path: 'System Related',
-    icon: 'shield-02'
+    icon: 'shield'
   })
 
   return (
     <div className={ styles.leftSidebar }>
       <Avatar
         className='left-sidebar__avatar'
-        icon={ <Icon value='user-01' /> }
+        icon={ <Icon value='user' /> }
         size={ 26 }
       />
 

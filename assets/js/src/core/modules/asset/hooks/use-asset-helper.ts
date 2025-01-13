@@ -31,7 +31,7 @@ export const useAssetHelper = (): UseAssetReturn => {
   const { openMainWidget, isMainWidgetOpen } = useWidgetManager()
   const dispatch = useAppDispatch()
 
-  async function openAsset (props: OpenAssetWidgetProps): Promise<void> {
+  const openAsset = async (props: OpenAssetWidgetProps): Promise<void> => {
     const { config } = props
     const widgetId = `asset-${config.id}`
 
@@ -53,7 +53,7 @@ export const useAssetHelper = (): UseAssetReturn => {
       component: 'asset-editor',
       config: {
         ...config,
-        icon: getElementIcon(data, { value: 'widget-default', type: 'name' })
+        icon: getElementIcon(data, { value: 'widget', type: 'name' })
       }
     })
   }

@@ -93,7 +93,7 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
           className={ classDotsButton }
           icon={ <Icon
             className='dropdown-menu__icon'
-            value="dots-horizontal"
+            value="more"
                  /> }
           onClick={ (e) => { e.stopPropagation() } }
           size="small"
