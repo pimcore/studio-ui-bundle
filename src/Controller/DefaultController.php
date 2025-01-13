@@ -25,6 +25,7 @@ final class DefaultController extends FrontendController
 {
     #[Route('')]
     #[Route('/login')]
+    #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
         StaticResourcesResolverInterface $staticResourcesResolver,
         string $studioUrlUrlPath,
