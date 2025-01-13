@@ -475,6 +475,9 @@ user-management.workspaces.columns.create: Create
 user-management.workspaces.columns.settings: Settings
 user-management.workspaces.columns.versions: Versions
 user-management.workspaces.columns.properties: Properties
+user-management.workspaces.columns.path: Path
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Subtype
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
