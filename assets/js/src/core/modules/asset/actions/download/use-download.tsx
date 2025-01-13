@@ -19,11 +19,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
+import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => void
   downloadContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
   downloadTreeContextMenuItem: (node: TreeNodeProps) => ItemType
+  downloadGridContextMenuItem: (props: GridContextMenuProps) => ItemType
 }
 
 export const useDownload = (): UseDownloadReturn => {
@@ -34,7 +36,7 @@ export const useDownload = (): UseDownloadReturn => {
     saveFileLocal(downloadUrl, label)
   }
 
-  const handleDownload = (node: Asset | TreeNodeProps, onFinish?: () => void): void => {
+  const handleDownload = (node: Asset | TreeNodeProps | GridContextMenuProps, onFinish?: () => void): void => {
     const id = typeof node.id === 'string' ? node.id : node.id.toString()
     download(id)
 
@@ -61,9 +63,19 @@ export const useDownload = (): UseDownloadReturn => {
     }
   }
 
+  const downloadGridContextMenuItem = (props: GridContextMenuProps): ItemType => {
+    return {
+      label: t('asset.tree.context-menu.download'),
+      key: 'download',
+      icon: <Icon value={ 'download' } />,
+      onClick: () => { handleDownload(props) }
+    }
+  }
+
   return {
     download,
     downloadContextMenuItem,
-    downloadTreeContextMenuItem
+    downloadTreeContextMenuItem,
+    downloadGridContextMenuItem
   }
 }
