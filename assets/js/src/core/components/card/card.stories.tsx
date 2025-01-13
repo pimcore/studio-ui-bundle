@@ -20,8 +20,6 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Flex } from 'antd'
 import Input from 'antd/es/input/Input'
 import { Button } from '@Pimcore/components/button/button'
-import { ExtraPosition } from '../collapse/item/collapse-item.stories'
-import { extractComponentProps } from 'storybook/internal/docs-tools'
 
 const config: Meta = {
   title: 'Components/Data Display/Card',
