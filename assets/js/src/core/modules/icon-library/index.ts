@@ -179,6 +179,7 @@ import textField from '@Pimcore/assets/icons/text-field.inline.svg'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg'
 import translate from '@Pimcore/assets/icons/translate.inline.svg'
 import trash from '@Pimcore/assets/icons/trash.inline.svg'
+import Trash04 from '@Pimcore/assets/icons/trash-04.inline.svg'
 import tree from '@Pimcore/assets/icons/tree.inline.svg'
 import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg'
@@ -195,6 +196,8 @@ import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
+import markerPin02 from '@Pimcore/assets/icons/marker-pin-02.inline.svg'
+import dotsHorizontal from '@Pimcore/assets/icons/dots-horizontal.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -844,6 +847,10 @@ moduleSystem.registerModule({
       component: trash
     })
     iconLibrary.register({
+      name: 'trash-04',
+      component: Trash04
+    })
+    iconLibrary.register({
       name: 'tree',
       component: tree
     })
@@ -906,6 +913,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
+    })
+    iconLibrary.register({
+      name: 'markerPin02',
+      component: markerPin02
+    })
+    iconLibrary.register({
+      name: 'dots-horizontal',
+      component: dotsHorizontal
     })
   }
 })

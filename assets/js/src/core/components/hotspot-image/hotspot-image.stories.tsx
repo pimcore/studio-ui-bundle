@@ -42,9 +42,6 @@ export const _default = {
         height: 150,
         type: 'hotspot'
       }
-    ],
-    onEdit: (id: number) => { console.log('Edit', id) },
-    onRemove: (id: number) => { console.log('Remove', id) },
-    onClone: (id: number) => { console.log('Clone', id) }
+    ]
   }
 }

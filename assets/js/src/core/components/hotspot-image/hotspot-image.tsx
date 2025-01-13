@@ -215,7 +215,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
               {onEdit !== undefined
                 ? (
                   <IconTextButton
-                    icon={ { value: 'PlusOutlined' } }
+                    icon={ { value: 'plus-square' } }
                     onClick={ () => { onEdit(hotspot.id) } }
                     type="default"
                   >Add & Edit Data</IconTextButton>
