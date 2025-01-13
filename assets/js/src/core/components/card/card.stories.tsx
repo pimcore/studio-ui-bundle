@@ -63,7 +63,11 @@ export const HeadWithActionButton = {
     title: 'Action Buttons',
     extraPosition: 'flex-start',
     extra: (
-      <IconTextButton icon={{ value: 'edit' }} type='action' onClick={ () => { console.log('click action button 1') } }>
+      <IconTextButton
+        icon={ { value: 'edit' } }
+        onClick={ () => { console.log('click action button 1') } }
+        type='action'
+      >
         Edit
       </IconTextButton>
     )

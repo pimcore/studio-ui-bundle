@@ -70,7 +70,11 @@ export const ActionButtons: StoryObj<CollapseItemProps> = {
   args: {
     ..._default.args,
     extra: <Flex>
-      <IconTextButton icon={{ value: 'edit' }} type='action' onClick={ (e) => { e.stopPropagation(); console.log('click action button 1') } }>
+      <IconTextButton
+        icon={ { value: 'edit' } }
+        onClick={ (e) => { e.stopPropagation(); console.log('click action button 1') } }
+        type='action'
+      >
         Edit
       </IconTextButton>
     </Flex>,
