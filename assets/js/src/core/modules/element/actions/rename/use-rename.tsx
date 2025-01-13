@@ -22,8 +22,6 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
-import { api as assetApi, type AssetGetByIdApiResponse, type Image } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
@@ -36,12 +34,12 @@ export interface UseRenameHookReturn {
 }
 
 export const useRename = (elementType: ElementType): UseRenameHookReturn => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { elementPatch } = useElementApi(elementType)
+  const { getElementById } = useElementApi(elementType)
 
   const rename = (
     id: number,
@@ -92,23 +90,11 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     }
   }
 
-  // TODO: centalize
-  const loadAssetById = async (id: number): Promise<AssetGetByIdApiResponse> => {
-    const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
-
-    if (data !== undefined) {
-      return data
-    }
-
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return {} as Image
-  }
-
   const stagedLoading = async (id: GridContextMenuProps['id']): Promise<void> => {
-    const node = await loadAssetById(id)
+    const node = await getElementById(id)
 
-    const parentId = node.parentId ?? undefined
-    rename(id, getElementKey(node, elementType), parentId)
+    const parentId = node!.parentId ?? undefined
+    rename(id, getElementKey(node!, elementType), parentId)
   }
 
   const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
