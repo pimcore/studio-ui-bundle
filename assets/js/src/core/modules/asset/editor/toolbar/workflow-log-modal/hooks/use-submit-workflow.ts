@@ -48,16 +48,21 @@ export const useSubmitWorkflow = (workflowName: string): UseSubmitWorkflowReturn
   }] = useWorkflowActionSubmitMutation(
     { fixedCacheKey: `shared-submit-workflow-action-${workflowName}` }
   )
-  const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => ({
-    submitAction: {
-      actionType,
-      elementId: id,
-      elementType,
-      workflowId: _.snakeCase(workFlowName),
-      transitionId: _.snakeCase(transition),
-      workflowOptions: workFlowOptions
-    }
-  })
+  const workFlowTransition = (transition: TransitionType, actionType: string, workFlowName: string, workFlowOptions: WorkflowOptions): WorkflowActionSubmitApiArg => {
+    const workflowId = _.snakeCase(workFlowName)
+    const transitionId = _.snakeCase(transition)
+
+    return ({
+      submitAction: {
+        actionType,
+        elementId: id,
+        elementType,
+        workflowId,
+        transitionId,
+        workflowOptions: workFlowOptions
+      }
+    })
+  }
 
   const submitWorkflowAction = (transition: TransitionType, actionType: string, workflowName: string, workFlowOptions: WorkflowOptions): void => {
     setContextWorkflowDetails({ transition, action: actionType, workflowName })
