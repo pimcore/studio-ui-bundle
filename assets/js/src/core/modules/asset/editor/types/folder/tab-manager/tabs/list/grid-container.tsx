@@ -23,6 +23,7 @@ import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/r
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -64,6 +65,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const open = useOpen('asset')
   const rename = useRename('asset')
   const remove = useDelete('asset')
+  const download = useDownload()
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -140,9 +142,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return getTransformedData(assets)
   }, [assets, columnIdentifiers])
 
-  // add "contextMenuItems"
-  console.log('loaded grid-container')
-
   return useMemo(() => {
     if (data === undefined) {
       return <></>
@@ -153,7 +152,8 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         contextMenuItems={ [
           open.openGridContextMenuItem,
           rename.renameGridContextMenuItem,
-          remove.deleteGridContextMenuItem
+          remove.deleteGridContextMenuItem,
+          download.downloadGridContextMenuItem
         ] }
         data={ data }
         enableMultipleRowSelection

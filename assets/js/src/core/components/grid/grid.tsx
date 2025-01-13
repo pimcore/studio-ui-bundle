@@ -94,15 +94,6 @@ export const Grid = ({
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
 
-  /**
-   * 1. add new contextMenu "function" to the actions (open, rename, delete, ...)
-   * 1.1 this function should only return an entry with a "onClick" trigger
-   *
-   * 2. onClick should trigger the function (all needed data should be passed)
-   */
-
-  console.log('grid loaded!')
-
   useEffect(() => {
     if (sorting !== undefined) {
       setInternalSorting(sorting)
@@ -232,7 +223,7 @@ export const Grid = ({
   const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
     return contextMenuItems.map((item) => {
       return item({
-        id: row.id,
+        id: row.original.id,
         isLocked: row.original.isLocked,
         permissions: row.original.permissions
       })
