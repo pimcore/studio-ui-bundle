@@ -40,7 +40,6 @@ export const PathTarget = forwardRef(function PathTarget (
   }, [props.value])
 
   const getDisplayText: () => string | undefined = () => {
-    console.log('getDisplayText', value)
     if (value === null) {
       return undefined
     }
