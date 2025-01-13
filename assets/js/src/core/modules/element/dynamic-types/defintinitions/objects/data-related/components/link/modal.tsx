@@ -27,6 +27,10 @@ import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import {
   ManyToOneRelation
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
+import {
+  convertFromInternalLinkValue,
+  convertToInternalLinkValue, type InternalLinkValue
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/utils/link-value-converter'
 
 export interface LinkModalProps {
   open: boolean
@@ -39,15 +43,15 @@ export interface LinkModalProps {
 export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const emptyLinkValue: LinkValue = { text: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
+  const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
   const [value, setValue] = useState<LinkValue>(props.value ?? { ...emptyLinkValue })
 
   useEffect(() => {
-    form.setFieldsValue(value)
+    form.setFieldsValue(convertToInternalLinkValue(value))
   }, [value])
 
-  const handleValuesChange = (changedValues: any, allValues: LinkValue): void => {
-    setValue(allValues)
+  const handleValuesChange = (changedValues: any, allValues: InternalLinkValue): void => {
+    setValue(convertFromInternalLinkValue(allValues))
   }
 
   useEffect(() => {
@@ -87,6 +91,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             name="path"
           >
             <ManyToOneRelation
+              allowPathTextInput
               assetsAllowed
               dataObjectsAllowed
               disabled={ props.disabled }

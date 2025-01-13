@@ -34,23 +34,30 @@ export interface ManyToOneRelationValue {
   id: number
   fullPath?: string
   subType?: string
+  textInput?: false
+}
+
+export interface PathTextInputValue {
+  textInput: true
+  fullPath: string
 }
 
 export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
   allowToClearRelation?: boolean
+  allowPathTextInput?: boolean
   width?: number | string | null
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
   disabled?: boolean
-  value?: ManyToOneRelationValue | null
-  onChange?: (value: ManyToOneRelationValue | null) => void
+  value?: ManyToOneRelationValue | PathTextInputValue | null
+  onChange?: (value: ManyToOneRelationValue | PathTextInputValue | null) => void
   onOpenElement?: () => void
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ManyToOneRelationValue | null>(props.value ?? null)
+  const [value, setValue] = React.useState<ManyToOneRelationValue | PathTextInputValue | null>(props.value ?? null)
   const { openElement } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
@@ -60,7 +67,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }, [value])
 
   const clickOpenElement = (): void => {
-    if (value !== null) {
+    if (value !== null && value.textInput !== true) {
       openElement(value).catch(() => {})
       props.onOpenElement?.()
     }
@@ -87,37 +94,40 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           } }
         >
           <PathTarget
+            allowPathTextInput={ props.allowPathTextInput }
             disabled={ props.disabled }
+            onChange={ setValue }
             value={ value }
           />
         </Droppable>
       </div>
+      { props.allowPathTextInput !== true && (
+        <Tooltip
+          key="open"
+          title={ t('open') }
+        >
+          <IconButton
+            disabled={ value === null }
+            icon={ { value: 'open-folder' } }
+            onClick={ clickOpenElement }
+            style={ { flex: '0 0 auto' } }
+            type="default"
+          />
+        </Tooltip>
+      ) }
 
-      <Tooltip
-        key="open"
-        title={ t('open') }
-      >
-        <IconButton
-          disabled={ value === null }
-          icon={ { value: 'open-folder' } }
-          onClick={ clickOpenElement }
-          style={ { flex: '0 0 auto' } }
-          type="default"
-        />
-      </Tooltip>
-
-      { props.assetInlineDownloadAllowed === true && (
+      { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
 
         <Tooltip
           key="download"
           title={ t('download') }
         >
           <IconButton
-            disabled={ props.value?.type !== 'asset' || props.value?.subType === 'folder' }
+            disabled={ value?.type !== 'asset' || value?.subType === 'folder' }
             icon={ { value: 'download' } }
             onClick={ () => {
               download(
-                String(props.value?.id)
+                String(value?.id)
               )
             } }
             type="default"

@@ -11,18 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { forwardRef, type MutableRefObject } from 'react'
+import React, { forwardRef, type MutableRefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
 import {
-  type ManyToOneRelationValue
+  type ManyToOneRelationValue, type PathTextInputValue
 } from './many-to-one-relation'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 
 export interface PathTargetProps {
-  value: ManyToOneRelationValue | null
+  value: ManyToOneRelationValue | PathTextInputValue | null
   disabled?: boolean
+  allowPathTextInput?: boolean
+  onChange?: (value: ManyToOneRelationValue | PathTextInputValue | null) => void
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -30,11 +32,27 @@ export const PathTarget = forwardRef(function PathTarget (
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
   const { t } = useTranslation()
+  const [value, setValue] = React.useState<ManyToOneRelationValue | PathTextInputValue | null>(props.value ?? null)
   const { getStateClasses } = useDroppable()
 
-  const displayText = props.value === null
-    ? undefined
-    : props.value.fullPath ?? props.value.id
+  useEffect(() => {
+    setValue(props.value ?? null)
+  }, [props.value])
+
+  const getDisplayText: () => string | undefined = () => {
+    console.log('getDisplayText', value)
+    if (value === null) {
+      return undefined
+    }
+
+    if (value.textInput === true) {
+      return value.fullPath ?? ''
+    }
+
+    return value.fullPath ?? String(value.id)
+  }
+
+  const displayText = getDisplayText()
 
   return (
     <div
@@ -45,8 +63,17 @@ export const PathTarget = forwardRef(function PathTarget (
       <Input
         className={ cn(...getStateClasses()) }
         disabled={ props.disabled }
-        placeholder={ t('many-to-one-relation.drop-placeholder') }
-        readOnly
+        onChange={ (e) => {
+          const newValue: { textInput: true, fullPath: string } = {
+            textInput: true,
+            fullPath: e.currentTarget.value
+          }
+
+          setValue(newValue)
+          props.onChange?.(newValue)
+        } }
+        placeholder={ t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
+        readOnly={ props.allowPathTextInput !== true }
         value={ displayText }
       />
     </div>

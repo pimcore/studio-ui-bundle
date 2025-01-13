@@ -23,7 +23,11 @@ import { Tag } from '@Pimcore/components/tag/tag'
 
 export interface LinkValue {
   text: string
-  path: string
+  linktype: 'direct' | 'internal'
+  direct?: string | null
+  internal?: number | null
+  internalType?: string | null
+  path?: string
   target: string
   parameters: string
   anchor: string
