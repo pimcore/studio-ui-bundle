@@ -84,7 +84,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
-  async function addNewFolder (props: AddItemArgs): Promise<{ data: RoleFolderCreateApiResponse, error: Error }> {
+  async function addNewFolder (props: IAddItemArgs): Promise<{ data: RoleFolderCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleFolderCreate.initiate({ body: { parentId, name } }))
 
