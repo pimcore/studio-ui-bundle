@@ -29,6 +29,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { getElementKey } from '@Pimcore/modules/element/element-helper'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -44,6 +45,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const modal = useFormModal()
   const { addJob } = useJobs()
   const { refreshTree } = useRefreshTree(elementType)
+  const { refreshGrid } = useRefreshGrid(elementType)
   const [elementDelete] = useElementDeleteMutation()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
@@ -147,6 +149,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
+      refreshGrid(parentId)
     }
 
     onFinish?.()

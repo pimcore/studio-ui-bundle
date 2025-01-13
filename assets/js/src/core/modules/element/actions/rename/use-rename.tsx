@@ -25,6 +25,7 @@ import { type Element, getElementKey } from '@Pimcore/modules/element/element-he
 import { api as assetApi, type AssetGetByIdApiResponse, type Image } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -39,6 +40,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
+  const { refreshGrid } = useRefreshGrid(elementType)
   const { elementPatch } = useElementApi(elementType)
 
   const rename = (
@@ -138,6 +140,7 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
 
       if (parentId !== undefined) {
         refreshTree(parentId)
+        refreshGrid(parentId)
       }
     } catch (error) {
       console.error('Error renaming ' + elementType, error)
