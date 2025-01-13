@@ -65,6 +65,7 @@ interface UseUserReturn extends
   activeId: number
   getAllIds: number[]
   availablePermissions: any[]
+  getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
 }
 
 export const useUserHelper = (): UseUserReturn => {
@@ -98,8 +99,14 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function resetUserKeyBindings (id: number): Promise<UserDefaultKeyBindingsApiResponse> {
+  async function getDefaultKeyBindings (): Promise<UserDefaultKeyBindingsApiResponse> {
     const { data }: any = await dispatch(api.endpoints.userDefaultKeyBindings.initiate())
+
+    return data
+  }
+
+  async function resetUserKeyBindings (id: number): Promise<UserDefaultKeyBindingsApiResponse> {
+    const data = await getDefaultKeyBindings()
 
     dispatch(changeUser({ id, changes: { keyBindings: data.items } }))
 
@@ -302,6 +309,7 @@ export const useUserHelper = (): UseUserReturn => {
     fetchUserList,
     searchUserByText,
     resetUserKeyBindings,
+    getDefaultKeyBindings,
     uploadUserAvatar,
     activeId,
     getAllIds,
