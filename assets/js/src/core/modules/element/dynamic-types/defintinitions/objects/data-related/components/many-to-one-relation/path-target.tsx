@@ -15,16 +15,16 @@ import React, { forwardRef, type MutableRefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Input } from '@Pimcore/components/input/input'
 import {
-  type ManyToOneRelationValue, type PathTextInputValue
+  type ManyToOneRelationValueType
 } from './many-to-one-relation'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import cn from 'classnames'
 
 export interface PathTargetProps {
-  value: ManyToOneRelationValue | PathTextInputValue | null
+  value: ManyToOneRelationValueType
   disabled?: boolean
   allowPathTextInput?: boolean
-  onChange?: (value: ManyToOneRelationValue | PathTextInputValue | null) => void
+  onChange?: (value: ManyToOneRelationValueType) => void
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -32,7 +32,7 @@ export const PathTarget = forwardRef(function PathTarget (
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
   const { t } = useTranslation()
-  const [value, setValue] = React.useState<ManyToOneRelationValue | PathTextInputValue | null>(props.value ?? null)
+  const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { getStateClasses } = useDroppable()
 
   useEffect(() => {
