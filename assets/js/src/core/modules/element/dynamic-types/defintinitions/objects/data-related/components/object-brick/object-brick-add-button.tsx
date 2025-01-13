@@ -42,7 +42,7 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
       menu={ { items: dropdownItems } }
     >
       <IconTextButton
-        icon={ { value: 'plus' } }
+        icon={ { value: 'new' } }
         onClick={ (e) => { e.stopPropagation() } }
       >{t('add')}</IconTextButton>
     </Dropdown>

@@ -43,7 +43,7 @@ export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): 
       menu={ { items: fieldCollectionDropdownItems } }
     >
       <IconTextButton
-        icon={ { value: 'plus' } }
+        icon={ { value: 'new' } }
         onClick={ (e) => { e.stopPropagation() } }
       >{t('add')}</IconTextButton>
     </Dropdown>

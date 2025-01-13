@@ -35,7 +35,7 @@ export const BlockToolStrip = ({ field, operations, disallowAdd, disallowDelete,
       <Space size="mini">
         <IconButton
           disabled={ disallowAdd === true || hasMaxItems }
-          icon={ { value: 'plus' } }
+          icon={ { value: 'new' } }
           onClick={ () => { operations.add(undefined, field.name + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
