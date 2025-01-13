@@ -47,7 +47,7 @@ export const useElementApi = (elementType: ElementType): UseElementApiReturn => 
   const [assetPatch] = useAssetPatchByIdMutation()
   const [dataObjectPatch] = useDataObjectPatchByIdMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
-  const { updateFieldValue: updateDataObjectFieldValule } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
+  const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
 
   const elementPatch = async (args: ElementPatchArgs): Promise<void> => {
     if (elementType === 'asset') {
@@ -61,7 +61,7 @@ export const useElementApi = (elementType: ElementType): UseElementApiReturn => 
     } else if (elementType === 'data-object') {
       await dataObjectPatch(args)
 
-      updateDataObjectFieldValule(
+      updateDataObjectFieldValue(
         args.body.data[0].id,
         'key',
         args.body.data[0].key
