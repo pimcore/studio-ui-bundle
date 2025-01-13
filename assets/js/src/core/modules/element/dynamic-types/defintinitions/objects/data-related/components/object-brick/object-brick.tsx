@@ -33,14 +33,14 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   const currentValue = Form.useWatch(props.name, form)
 
   const dropdownItems: DropdownMenuProps['items'] = props.allowedTypes.map((type) => {
-    const hasType = currentValue.some((fieldValue) => fieldValue.type === type)
+    const hasType = currentValue?.some((fieldValue) => fieldValue.type === type) ?? false
 
     return {
       key: type,
       label: type,
       itemIcon: hasType === true ? <Icon value='close' /> : <Icon value='new' />,
       onClick: () => {
-        const fieldValues: ObjectBrickLayoutDefinition[] = currentValue
+        const fieldValues: ObjectBrickLayoutDefinition[] = form.getFieldValue(props.name)
         const hasType = fieldValues.some((fieldValue) => fieldValue.type === type)
 
         if (hasType) {
