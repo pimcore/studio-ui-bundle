@@ -29,6 +29,8 @@ import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
+export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
+
 export interface ManyToOneRelationValue {
   type: ElementType
   id: number
@@ -51,13 +53,13 @@ export interface ManyToOneRelationClassDefinitionProps {
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
   disabled?: boolean
-  value?: ManyToOneRelationValue | PathTextInputValue | null
-  onChange?: (value: ManyToOneRelationValue | PathTextInputValue | null) => void
+  value?: ManyToOneRelationValueType
+  onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ManyToOneRelationValue | PathTextInputValue | null>(props.value ?? null)
+  const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { openElement } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
