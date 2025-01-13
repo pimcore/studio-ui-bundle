@@ -46,6 +46,11 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: ${token.paddingXS}px;
         align-items: center;
       }
+      
+      &.tabs--no-padding .ant-tabs-nav-list {
+        padding-left: 0;
+        padding-right: 0;
+      }
 
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab {
         border-radius: 0;

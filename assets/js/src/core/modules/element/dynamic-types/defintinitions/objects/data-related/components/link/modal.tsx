@@ -23,6 +23,10 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 import { Select } from '@Pimcore/components/select/select'
 import { Card } from '@Pimcore/components/card/card'
+import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
+import {
+  ManyToOneRelation
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 
 export interface LinkModalProps {
   open: boolean
@@ -35,7 +39,7 @@ export interface LinkModalProps {
 export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const emptyLinkValue: LinkValue = { text: '', target: '', parameters: '', anchor: '', title: '' }
+  const emptyLinkValue: LinkValue = { text: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
   const [value, setValue] = useState<LinkValue>(props.value ?? { ...emptyLinkValue })
 
   useEffect(() => {
@@ -57,23 +61,16 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
 
   const handleCancel = (): void => {
     props.onClose()
+    const newValue = props.value ?? { ...emptyLinkValue }
+    setValue(newValue)
   }
 
-  return (
-    <WindowModal
-      footer={ props.disabled === true ? <span></span> : undefined }
-      okText={ t('save') }
-      onCancel={ handleCancel }
-      onOk={ handleOk }
-      open={ props.open }
-      size="M"
-      title={ t('link.edit-title') }
-    >
-      <Form
-        form={ form }
-        layout="vertical"
-        onValuesChange={ handleValuesChange }
-      >
+  const tabItems: ITabsProps['items'] = [
+    {
+      key: 'basic',
+      label: t('link.tab.basic'),
+      forceRender: true,
+      children: (
         <Space
           className='w-full'
           direction='vertical'
@@ -84,6 +81,16 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             name="text"
           >
             <Input />
+          </FormItem>
+          <FormItem
+            label={ t('link.path') }
+            name="path"
+          >
+            <ManyToOneRelation
+              assetsAllowed
+              dataObjectsAllowed
+              documentsAllowed
+            />
           </FormItem>
 
           <Card
@@ -134,6 +141,67 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             </Space>
           </Card>
         </Space>
+      )
+    },
+    {
+      key: 'advanced',
+      label: t('link.tab.advanced'),
+      forceRender: true,
+      children: (
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='small'
+        >
+          <FormItem
+            label={ t('link.accesskey') }
+            name="accesskey"
+          >
+            <Input />
+          </FormItem>
+          <FormItem
+            label={ t('link.rel') }
+            name="rel"
+          >
+            <Input />
+          </FormItem>
+          <FormItem
+            label={ t('link.tabindex') }
+            name="tabindex"
+          >
+            <Input />
+          </FormItem>
+          <FormItem
+            label={ t('link.class') }
+            name="class"
+          >
+            <Input />
+          </FormItem>
+        </Space>
+      )
+    }
+  ]
+
+  return (
+    <WindowModal
+      footer={ props.disabled === true ? <span></span> : undefined }
+      okText={ t('save') }
+      onCancel={ handleCancel }
+      onOk={ handleOk }
+      open={ props.open }
+      size="M"
+      title={ t('link.edit-title') }
+    >
+      <Form
+        form={ form }
+        layout="vertical"
+        onValuesChange={ handleValuesChange }
+      >
+        <Tabs
+          items={ tabItems }
+          noPadding
+          size='small'
+        />
       </Form>
     </WindowModal>
   )

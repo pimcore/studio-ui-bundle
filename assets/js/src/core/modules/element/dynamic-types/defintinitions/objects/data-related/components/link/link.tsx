@@ -22,10 +22,15 @@ import {
 
 export interface LinkValue {
   text: string
+  path: string
   target: string
   parameters: string
   anchor: string
   title: string
+  accesskey: string
+  rel: string
+  tabindex: string
+  class: string
 
 }
 

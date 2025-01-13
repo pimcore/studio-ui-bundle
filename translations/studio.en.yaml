@@ -499,9 +499,15 @@ video.dnd-target: Drop a video here
 many-to-one-relation.drop-placeholder: Drop an item here
 link.not-set: not set
 link.edit-title: Edit Link
+link.tab.basic: Basic
+link.tab.advanced: Advanced
 link.text: Text
 link.properties: Properties
 link.target: Target
 link.parameters: Parameters
 link.anchor: Anchor
 link.title: Title
+link.accesskey: Accesskey
+link.rel: Relation
+link.tabindex: Tabindex
+link.class: Class
