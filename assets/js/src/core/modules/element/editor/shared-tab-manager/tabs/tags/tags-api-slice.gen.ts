@@ -152,17 +152,17 @@ export type Tag = {
         [key: string]: string | number | boolean | object | any[];
     };
     /** tag ID */
-    id?: number;
+    id: number;
     /** parent tag ID */
-    parentId?: number;
+    parentId: number;
     /** tag text */
-    text?: string;
+    text: string;
     /** path */
-    path?: string;
+    path: string;
     /** has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** IconName */
-    iconName?: string;
+    iconName: string;
     /** children */
     children?: Tag[];
 };
