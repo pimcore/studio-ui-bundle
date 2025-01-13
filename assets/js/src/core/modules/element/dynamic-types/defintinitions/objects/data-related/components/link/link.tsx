@@ -20,6 +20,7 @@ import {
   LinkModal
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/modal'
 import { Tag } from '@Pimcore/components/tag/tag'
+import _ from 'lodash'
 
 export interface LinkValue {
   text: string
@@ -69,7 +70,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       align="center"
       gap="extra-small"
     >
-      <Tag>{value?.text ?? '[' + t('link.not-set') + ']'}</Tag>
+      <Tag>{!_.isEmpty(value?.text) ? value?.text : '[' + t('link.not-set') + ']'}</Tag>
 
       <Tooltip
         key="edit"

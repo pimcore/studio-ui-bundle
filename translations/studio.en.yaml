@@ -373,7 +373,7 @@ processing: Processing
 upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
-structured-table.empty.confirm: Are you sure you want to clear all data?
+empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.add-folder: Add Folder

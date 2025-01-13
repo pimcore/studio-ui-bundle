@@ -68,6 +68,10 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     props.onChange?.(value)
   }, [value])
 
+  useEffect(() => {
+    setValue(props.value ?? null)
+  }, [props.value])
+
   const clickOpenElement = (): void => {
     if (value !== null && value.textInput !== true) {
       openElement(value).catch(() => {})

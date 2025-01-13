@@ -31,6 +31,10 @@ import {
   convertFromInternalLinkValue,
   convertToInternalLinkValue, type InternalLinkValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/utils/link-value-converter'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export interface LinkModalProps {
   open: boolean
@@ -43,8 +47,9 @@ export interface LinkModalProps {
 export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
+  const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', direct: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
   const [value, setValue] = useState<LinkValue>(props.value ?? { ...emptyLinkValue })
+  const { confirm } = useFormModal()
 
   useEffect(() => {
     form.setFieldsValue(convertToInternalLinkValue(value))
@@ -67,6 +72,13 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
     props.onClose()
     const newValue = props.value ?? { ...emptyLinkValue }
     setValue(newValue)
+  }
+
+  const emptyValue = (): void => {
+    const newValue = { ...emptyLinkValue }
+    setValue(newValue)
+    props.onSave(newValue)
+    props.onClose()
   }
 
   const tabItems: ITabsProps['items'] = [
@@ -191,7 +203,31 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
 
   return (
     <WindowModal
-      footer={ props.disabled === true ? <span></span> : undefined }
+      footer={ props.disabled === true
+        ? <span></span>
+        : (_, { OkBtn, CancelBtn }) => (
+          <Flex
+            className="w-100"
+            justify="flex-end"
+          >
+            <ButtonGroup items={ [
+              <IconTextButton
+                icon={ { value: 'trash' } }
+                key="empty"
+                onClick={ () => confirm({
+                  title: t('empty'),
+                  content: t('empty.confirm'),
+                  onOk: emptyValue
+                }) }
+              >
+                {t('empty')}
+              </IconTextButton>,
+              <CancelBtn key="cancel" />,
+              <OkBtn key="ok" />
+            ] }
+            />
+          </Flex>
+          ) }
       okText={ t('save') }
       onCancel={ handleCancel }
       onOk={ handleOk }
