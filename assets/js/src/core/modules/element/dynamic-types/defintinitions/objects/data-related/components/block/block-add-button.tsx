@@ -34,7 +34,7 @@ export const BlockAddButton = (props: BlockAddButtonProps): React.JSX.Element =>
   return (
     <IconTextButton
       disabled={ props.disallowAdd === true }
-      icon={ { value: 'plus' } }
+      icon={ { value: 'new' } }
       onClick={ onAddClick }
     >{t('add')}</IconTextButton>
   )

@@ -12,21 +12,21 @@
 */
 
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import React from 'react'
 import { type CollectionAddButtonProps } from '../collection/collection'
-import { type FieldCollectionProps } from './field-collection'
+import React from 'react'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
 
-export interface FieldCollectionAddButtonProps extends CollectionAddButtonProps {
-  allowedTypes: FieldCollectionProps['allowedTypes']
+export interface ObjectBrickAddButtonProps extends CollectionAddButtonProps {
+  allowedTypes: string[]
 }
 
-export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): React.JSX.Element => {
-  const { operation, allowedTypes, disallowAdd } = props
+export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JSX.Element => {
+  const { operation, allowedTypes } = props
   const { t } = useTranslation()
 
-  const fieldCollectionDropdownItems: DropdownMenuProps['items'] = allowedTypes.map((type) => {
+  // @todo filter allowedTypes based on the current assigned bricks
+  const dropdownItems: DropdownMenuProps['items'] = allowedTypes.map((type) => {
     return {
       key: type,
       label: type,
@@ -39,8 +39,7 @@ export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): 
 
   return (
     <Dropdown
-      disabled={ disallowAdd === true }
-      menu={ { items: fieldCollectionDropdownItems } }
+      menu={ { items: dropdownItems } }
     >
       <IconTextButton
         icon={ { value: 'new' } }

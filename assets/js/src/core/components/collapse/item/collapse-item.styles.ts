@@ -28,6 +28,16 @@ export const useStyles = createStyles(({ css, token }) => {
         background: transparent;
         border: none;
 
+        &.ant-collapse-small >.ant-collapse-item >.ant-collapse-header {
+          padding: ${token.paddingXXS}px ${token.paddingSM}px;
+        }
+
+        &>.ant-collapse-item >.ant-collapse-header {
+          .button--type-action {
+            margin-bottom: -4px;
+          }
+        }
+
         .collapse-header__title-container {
           flex-grow: 0;
         }
