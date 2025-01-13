@@ -29,7 +29,10 @@ export const useStyles = createStyles(({ css, token }) => {
         border: none;
 
         &.ant-collapse-small >.ant-collapse-item >.ant-collapse-header {
+          display: flex;
+          min-height: 38px;
           padding: ${token.paddingXXS}px ${token.paddingSM}px;
+          align-items: center;
         }
 
         &>.ant-collapse-item >.ant-collapse-header {
