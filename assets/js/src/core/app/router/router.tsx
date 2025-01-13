@@ -22,10 +22,13 @@ export const baseUrl = appConfig.baseUrl.endsWith('/')
   ? appConfig.baseUrl.slice(0, -1) + '/'
   : appConfig.baseUrl
 
+export const LOGIN_URL = `${baseUrl}login/`
+export const DEEP_LINK_URL = `${baseUrl}:elementType/:id`
+
 export const routes = {
   root: baseUrl,
-  login: `${baseUrl}login/`,
-  deeplinkAsset: `${baseUrl}:elementType/:id`
+  login: LOGIN_URL,
+  deeplinkAsset: DEEP_LINK_URL
 }
 
 export const router = createBrowserRouter([
