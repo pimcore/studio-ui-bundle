@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import FormItem from 'antd/es/form/FormItem'
@@ -48,35 +48,28 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', direct: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
-  const [value, setValue] = useState<LinkValue>(props.value ?? { ...emptyLinkValue })
   const { confirm } = useFormModal()
 
   useEffect(() => {
-    form.setFieldsValue(convertToInternalLinkValue(value))
-  }, [value])
-
-  const handleValuesChange = (changedValues: any, allValues: InternalLinkValue): void => {
-    setValue(convertFromInternalLinkValue(allValues))
-  }
-
-  useEffect(() => {
-    setValue(props.value ?? { ...emptyLinkValue })
+    form.setFieldsValue(convertToInternalLinkValue(props.value ?? emptyLinkValue))
   }, [props.value])
 
   const handleOk = (): void => {
-    props.onSave(value)
+    const values: InternalLinkValue = form.getFieldsValue()
+    const newValue = convertFromInternalLinkValue(values)
+    props.onSave(newValue)
     props.onClose()
   }
 
   const handleCancel = (): void => {
     props.onClose()
     const newValue = props.value ?? { ...emptyLinkValue }
-    setValue(newValue)
+    form.setFieldsValue(convertToInternalLinkValue(newValue))
   }
 
   const emptyValue = (): void => {
     const newValue = { ...emptyLinkValue }
-    setValue(newValue)
+    form.setFieldsValue(convertToInternalLinkValue(newValue))
     props.onSave(newValue)
     props.onClose()
   }
@@ -238,7 +231,6 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
       <Form
         form={ form }
         layout="vertical"
-        onValuesChange={ handleValuesChange }
       >
         <Tabs
           items={ tabItems }
