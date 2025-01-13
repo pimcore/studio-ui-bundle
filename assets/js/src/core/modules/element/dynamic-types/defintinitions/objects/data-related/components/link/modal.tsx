@@ -80,7 +80,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             label={ t('link.text') }
             name="text"
           >
-            <Input />
+            <Input disabled={ props.disabled } />
           </FormItem>
           <FormItem
             label={ t('link.path') }
@@ -89,6 +89,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             <ManyToOneRelation
               assetsAllowed
               dataObjectsAllowed
+              disabled={ props.disabled }
               documentsAllowed
             />
           </FormItem>
@@ -108,6 +109,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
               >
                 <Select
                   allowClear
+                  disabled={ props.disabled }
                   options={ [
                     { label: '_blank', value: '_blank' },
                     { label: '_self', value: '_self' },
@@ -122,21 +124,21 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
                 label={ t('link.parameters') }
                 name="parameters"
               >
-                <Input />
+                <Input disabled={ props.disabled } />
               </FormItem>
 
               <FormItem
                 label={ t('link.anchor') }
                 name="anchor"
               >
-                <Input />
+                <Input disabled={ props.disabled } />
               </FormItem>
 
               <FormItem
                 label={ t('link.title') }
                 name="title"
               >
-                <Input />
+                <Input disabled={ props.disabled } />
               </FormItem>
             </Space>
           </Card>
@@ -157,25 +159,25 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             label={ t('link.accesskey') }
             name="accesskey"
           >
-            <Input />
+            <Input disabled={ props.disabled } />
           </FormItem>
           <FormItem
             label={ t('link.rel') }
             name="rel"
           >
-            <Input />
+            <Input disabled={ props.disabled } />
           </FormItem>
           <FormItem
             label={ t('link.tabindex') }
             name="tabindex"
           >
-            <Input />
+            <Input disabled={ props.disabled } />
           </FormItem>
           <FormItem
             label={ t('link.class') }
             name="class"
           >
-            <Input />
+            <Input disabled={ props.disabled } />
           </FormItem>
         </Space>
       )

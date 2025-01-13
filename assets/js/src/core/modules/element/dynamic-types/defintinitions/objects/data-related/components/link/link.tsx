@@ -19,6 +19,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import {
   LinkModal
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/modal'
+import { Tag } from '@Pimcore/components/tag/tag'
 
 export interface LinkValue {
   text: string
@@ -35,10 +36,7 @@ export interface LinkValue {
 }
 
 export interface LinkProps {
-  availableSites?: number[] | null
   disabled?: boolean
-  domainLabelWidth?: number | null
-  width?: number | string | null
   value?: LinkValue | null
   onChange?: (value?: LinkValue | null) => void
 }
@@ -67,7 +65,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       align="center"
       gap="extra-small"
     >
-      <div>{value?.text ?? '[' + t('link.not-set') + ']'}</div>
+      <Tag>{value?.text ?? '[' + t('link.not-set') + ']'}</Tag>
 
       <Tooltip
         key="edit"
@@ -81,6 +79,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       </Tooltip>
 
       <LinkModal
+        disabled={ props.disabled }
         onClose={ hideModal }
         onSave={ setValue }
         open={ isModalVisible }
