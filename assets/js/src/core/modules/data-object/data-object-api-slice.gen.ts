@@ -166,7 +166,10 @@ export type DataObjectGetAvailableGridColumnsApiArg = {
 export type DataObjectGetGridApiResponse = /** status 200 Data object grid data */ {
     totalItems: number;
     items: {
+        id?: number;
         columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
     }[];
 };
 export type DataObjectGetGridApiArg = {
@@ -199,6 +202,7 @@ export type DataObjectPatchByIdApiArg = {
             childrenSortBy?: string | null;
             childrenSortOrder?: string | null;
             published?: boolean | null;
+            editableData?: object | null;
         }[];
     };
 };
