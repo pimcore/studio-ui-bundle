@@ -12,12 +12,13 @@
 */
 
 import React from 'react'
-import { createBrowserRouter, useParams } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import { DefaultPage } from '@Pimcore/modules/app/default-page'
 import { LoginPage } from '@Pimcore/modules/auth/login-page'
+import { DeepLink } from '@Pimcore/components/deep-link/deep-link'
 import { appConfig } from '../config/app-config'
 
-let baseUrl = appConfig.baseUrl
+export let baseUrl = appConfig.baseUrl
 
 if (baseUrl.endsWith('/')) {
   baseUrl = baseUrl.slice(0, -1) + '/'
@@ -26,14 +27,7 @@ if (baseUrl.endsWith('/')) {
 export const routes = {
   root: baseUrl,
   login: `${baseUrl}login/`,
-  deeplinkAsset: `${baseUrl}/asset/68`
-}
-
-const DynamicPage = (): React.JSX.Element => {
-  const { type, id } = useParams()
-  console.log('------>>>>> DynamicPage: ', type, id)
-
-  return <div>Asset</div>
+  deeplinkAsset: `${baseUrl}:elementType/:id`
 }
 
 export const router = createBrowserRouter([
@@ -47,6 +41,6 @@ export const router = createBrowserRouter([
   },
   {
     path: routes.deeplinkAsset,
-    element: <DynamicPage />
+    element: <DeepLink />
   }
 ])

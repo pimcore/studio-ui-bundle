@@ -18,6 +18,7 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { baseUrl } from '@Pimcore/app/router/router'
 import { type ElementType } from 'types/element-type.d'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
@@ -27,7 +28,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
 
   const { element } = useElementDraft(id, elementType)
 
-  const deeplinkUrl = `/pimcore-studio/${elementType}/${id}`
+  const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
 
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
 
