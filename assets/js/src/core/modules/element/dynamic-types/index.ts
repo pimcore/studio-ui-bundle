@@ -119,6 +119,7 @@ import { type DynamicTypeGridCellTranslate } from '@Pimcore/modules/element/dyna
 import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/dynamic-type-listing-registry'
 import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
 import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
+import { type DynamicTypeObjectDataObjectBrick } from './defintinitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 
 moduleSystem.registerModule({
   onInit () {
@@ -233,5 +234,6 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataFieldCollection>(serviceIds['DynamicTypes/ObjectData/FieldCollection']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataObjectBrick>(serviceIds['DynamicTypes/ObjectData/ObjectBrick']))
   }
 })

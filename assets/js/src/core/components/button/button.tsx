@@ -18,11 +18,12 @@ import cn from 'classnames'
 import { Spin } from '../spin/spin'
 import { useStyles } from './button.styles'
 
-export interface ButtonProps extends AntdButtonProps {
+export interface ButtonProps extends Omit<AntdButtonProps, 'type'> {
+  type?: AntdButtonProps['type'] | 'action'
   loading?: boolean
 }
 
-const Component = ({ loading, children, className, ...props }: ButtonProps, ref: RefObject<HTMLButtonElement | null>): React.JSX.Element => {
+const Component = ({ loading, children, className, type, ...props }: ButtonProps, ref: RefObject<HTMLButtonElement | null>): React.JSX.Element => {
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const { styles } = useStyles()
@@ -31,6 +32,7 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
 
   const buttonClassNames = cn(
     'button',
+    `button--type-${type}`,
     styles.button,
     {
       'ant-btn-loading': loading
@@ -56,6 +58,7 @@ const Component = ({ loading, children, className, ...props }: ButtonProps, ref:
     <AntdButton
       className={ buttonClassNames }
       ref={ buttonRef }
+      type={ type === 'action' ? undefined : type }
       { ...props }
     >
       <AnimatePresence>
