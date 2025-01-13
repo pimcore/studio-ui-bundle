@@ -70,8 +70,6 @@ export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['item
   id: number
 }
 
-// add "contextMenuItems"
-
 export const Grid = ({
   enableMultipleRowSelection = false,
   modifiedCells = [],
