@@ -29,28 +29,37 @@ import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
+export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
+
 export interface ManyToOneRelationValue {
   type: ElementType
   id: number
   fullPath?: string
   subType?: string
+  textInput?: false
+}
+
+export interface PathTextInputValue {
+  textInput: true
+  fullPath: string
 }
 
 export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
   allowToClearRelation?: boolean
+  allowPathTextInput?: boolean
   width?: number | string | null
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
   disabled?: boolean
-  value?: ManyToOneRelationValue | null
-  onChange?: (value: ManyToOneRelationValue | null) => void
+  value?: ManyToOneRelationValueType
+  onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<ManyToOneRelationValue | null>(props.value ?? null)
+  const [value, setValue] = React.useState<ManyToOneRelationValueType>(props.value ?? null)
   const { openElement } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
@@ -59,8 +68,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     props.onChange?.(value)
   }, [value])
 
+  useEffect(() => {
+    setValue(props.value ?? null)
+  }, [props.value])
+
   const clickOpenElement = (): void => {
-    if (value !== null) {
+    if (value !== null && value.textInput !== true) {
       openElement(value).catch(() => {})
       props.onOpenElement?.()
     }
@@ -87,37 +100,40 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           } }
         >
           <PathTarget
+            allowPathTextInput={ props.allowPathTextInput }
             disabled={ props.disabled }
+            onChange={ setValue }
             value={ value }
           />
         </Droppable>
       </div>
+      { props.allowPathTextInput !== true && (
+        <Tooltip
+          key="open"
+          title={ t('open') }
+        >
+          <IconButton
+            disabled={ value === null }
+            icon={ { value: 'open-folder' } }
+            onClick={ clickOpenElement }
+            style={ { flex: '0 0 auto' } }
+            type="default"
+          />
+        </Tooltip>
+      ) }
 
-      <Tooltip
-        key="open"
-        title={ t('open') }
-      >
-        <IconButton
-          disabled={ value === null }
-          icon={ { value: 'open-folder' } }
-          onClick={ clickOpenElement }
-          style={ { flex: '0 0 auto' } }
-          type="default"
-        />
-      </Tooltip>
-
-      { props.assetInlineDownloadAllowed === true && (
+      { props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
 
         <Tooltip
           key="download"
           title={ t('download') }
         >
           <IconButton
-            disabled={ props.value?.type !== 'asset' || props.value?.subType === 'folder' }
+            disabled={ value?.type !== 'asset' || value?.subType === 'folder' }
             icon={ { value: 'download' } }
             onClick={ () => {
               download(
-                String(props.value?.id)
+                String(value?.id)
               )
             } }
             type="default"

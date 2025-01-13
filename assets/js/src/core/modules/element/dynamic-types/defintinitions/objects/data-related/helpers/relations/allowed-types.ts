@@ -66,15 +66,15 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
   }
 
   if (type === 'asset') {
-    return props.allowedAssetTypes?.includes(subType) ?? false
+    return props.allowedAssetTypes?.includes(subType) ?? true
   }
 
   if (type === 'data-object') {
-    return props.allowedClasses?.includes(subType) ?? false
+    return props.allowedClasses?.includes(subType) ?? true
   }
 
   if (type === 'document') {
-    return props.allowedDocumentTypes?.includes(subType) ?? false
+    return props.allowedDocumentTypes?.includes(subType) ?? true
   }
 
   return false
