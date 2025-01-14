@@ -27,6 +27,7 @@ import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -38,12 +39,14 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ elementType: 'asset', type: 'folder' })
+  const { clearThumbnailContextMenuItem } = useClearThumbnails()
 
   const items: DropdownMenuProps['items'] = [
     renameContextMenuItem(asset as Asset),
     deleteContextMenuItem(asset as Asset),
     downloadContextMenuItem(asset as Asset),
-    createZipDownloadContextMenuItem(asset as Asset)
+    createZipDownloadContextMenuItem(asset as Asset),
+    clearThumbnailContextMenuItem(asset as Asset)
   ]
 
   return (
@@ -65,7 +68,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
         <Dropdown menu={ { items } }>
           <DropdownButton key={ 'dropdown-button' }>
-            More
+            {t('toolbar.more')}
           </DropdownButton>
         </Dropdown>
       </ButtonGroup>
