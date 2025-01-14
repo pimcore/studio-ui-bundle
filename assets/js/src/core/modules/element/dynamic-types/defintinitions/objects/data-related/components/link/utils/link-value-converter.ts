@@ -21,23 +21,23 @@ import { type ElementType } from 'types/element-type.d'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface InternalLinkValue {
-  text: string
+  text?: string
   path?: ManyToOneRelationValue | PathTextInputValue | null
-  target: string
-  parameters: string
-  anchor: string
-  title: string
-  accesskey: string
-  rel: string
-  tabindex: string
-  class: string
+  target?: string
+  parameters?: string
+  anchor?: string
+  title?: string
+  accesskey?: string
+  rel?: string
+  tabindex?: string
+  class?: string
 }
 
 export const convertToInternalLinkValue = (value: LinkValue): InternalLinkValue => {
   return {
     text: value.text,
     path: getInternalPath(value),
-    target: value.target,
+    target: value.target ?? undefined,
     parameters: value.parameters,
     anchor: value.anchor,
     title: value.title,
@@ -50,20 +50,20 @@ export const convertToInternalLinkValue = (value: LinkValue): InternalLinkValue 
 
 export const convertFromInternalLinkValue = (value: InternalLinkValue): LinkValue => {
   return {
-    text: value.text,
+    text: value.text ?? '',
     linktype: value.path?.textInput === true ? 'direct' : 'internal',
     direct: value.path?.textInput === true ? value.path.fullPath : null,
     internal: value.path?.textInput === true ? null : value.path?.id,
     internalType: value.path?.textInput === true ? null : reverseConvertType(value.path?.type),
     fullPath: value.path?.fullPath,
-    target: value.target,
-    parameters: value.parameters,
-    anchor: value.anchor,
-    title: value.title,
-    accesskey: value.accesskey,
-    rel: value.rel,
-    tabindex: value.tabindex,
-    class: value.class
+    target: value.target ?? null,
+    parameters: value.parameters ?? '',
+    anchor: value.anchor ?? '',
+    title: value.title ?? '',
+    accesskey: value.accesskey ?? '',
+    rel: value.rel ?? '',
+    tabindex: value.tabindex ?? '',
+    class: value.class ?? ''
   }
 }
 

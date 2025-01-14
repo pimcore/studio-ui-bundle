@@ -33,7 +33,7 @@ export interface LinkValue {
   internal?: number | null
   internalType?: string | null
   fullPath?: string
-  target: string
+  target: string | null
   parameters: string
   anchor: string
   title: string
@@ -94,12 +94,28 @@ export const Link = (props: LinkProps): React.JSX.Element => {
     }
   }
 
+  const getLinkText = (): string => {
+    if (value === null) {
+      return t('link.not-set')
+    }
+
+    if (!_.isEmpty(value?.text)) {
+      return value?.text ?? ''
+    }
+
+    if (!_.isEmpty(value?.fullPath)) {
+      return value?.fullPath ?? ''
+    }
+
+    return t('link.not-set')
+  }
+
   return (
     <Flex
       align="center"
       gap="extra-small"
     >
-      <Tag>{!_.isEmpty(value?.text) ? value?.text : '[' + t('link.not-set') + ']'}</Tag>
+      <Tag>{ getLinkText() }</Tag>
 
       <Tooltip
         key="open"

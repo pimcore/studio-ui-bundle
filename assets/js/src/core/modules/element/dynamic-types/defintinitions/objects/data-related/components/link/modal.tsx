@@ -84,36 +84,38 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
     return props.allowedTypes.includes(type)
   }
 
-  const tabItems: ITabsProps['items'] = [
-    {
-      key: 'basic',
-      label: t('link.tab.basic'),
-      forceRender: true,
-      children: (
-        <Space
-          className='w-full'
-          direction='vertical'
-          size='small'
-        >
+  const basicTab = {
+    key: 'basic',
+    label: t('link.tab.basic'),
+    forceRender: true,
+    children: (
+      <Space
+        className='w-full'
+        direction='vertical'
+        size='small'
+      >
+        { !props.disabledFields.includes('text') && (
           <FormItem
             label={ t('link.text') }
             name="text"
           >
             <Input disabled={ props.disabled } />
           </FormItem>
-          <FormItem
-            label={ t('link.path') }
-            name="path"
-          >
-            <ManyToOneRelation
-              allowPathTextInput
-              assetsAllowed={ isTypeAllowed('asset') }
-              dataObjectsAllowed={ isTypeAllowed('object') }
-              disabled={ props.disabled }
-              documentsAllowed={ isTypeAllowed('document') }
-            />
-          </FormItem>
+        ) }
 
+        <FormItem
+          label={ t('link.path') }
+          name="path"
+        >
+          <ManyToOneRelation
+            allowPathTextInput
+            assetsAllowed={ isTypeAllowed('asset') }
+            dataObjectsAllowed={ isTypeAllowed('object') }
+            disabled={ props.disabled }
+            documentsAllowed={ isTypeAllowed('document') }
+          />
+        </FormItem>
+        { !['target', 'parameters', 'anchor', 'title'].every(field => props.disabledFields.includes(field)) && (
           <Card
             theme="card-with-highlight"
             title={ t('link.properties') }
@@ -123,86 +125,113 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
               direction='vertical'
               size='small'
             >
-              <FormItem
-                label={ t('link.target') }
-                name="target"
-              >
-                <Select
-                  allowClear
-                  disabled={ props.disabled }
-                  options={ [
-                    { label: '_blank', value: '_blank' },
-                    { label: '_self', value: '_self' },
-                    { label: '_top', value: '_top' },
-                    { label: '_parent', value: '_parent' }
-                  ] }
-                />
+              { !props.disabledFields.includes('target') && (
+                <FormItem
+                  label={ t('link.target') }
+                  name="target"
+                >
+                  <Select
+                    allowClear
+                    disabled={ props.disabled }
+                    options={ [
+                      { label: '_blank', value: '_blank' },
+                      { label: '_self', value: '_self' },
+                      { label: '_top', value: '_top' },
+                      { label: '_parent', value: '_parent' }
+                    ] }
+                  />
+                </FormItem>
+              ) }
 
-              </FormItem>
+              { !props.disabledFields.includes('parameters') && (
+                <FormItem
+                  label={ t('link.parameters') }
+                  name="parameters"
+                >
+                  <Input disabled={ props.disabled } />
+                </FormItem>
+              ) }
 
-              <FormItem
-                label={ t('link.parameters') }
-                name="parameters"
-              >
-                <Input disabled={ props.disabled } />
-              </FormItem>
+              { !props.disabledFields.includes('anchor') && (
+                <FormItem
+                  label={ t('link.anchor') }
+                  name="anchor"
+                >
+                  <Input disabled={ props.disabled } />
+                </FormItem>
+              ) }
 
-              <FormItem
-                label={ t('link.anchor') }
-                name="anchor"
-              >
-                <Input disabled={ props.disabled } />
-              </FormItem>
-
-              <FormItem
-                label={ t('link.title') }
-                name="title"
-              >
-                <Input disabled={ props.disabled } />
-              </FormItem>
+              { !props.disabledFields.includes('title') && (
+                <FormItem
+                  label={ t('link.title') }
+                  name="title"
+                >
+                  <Input disabled={ props.disabled } />
+                </FormItem>
+              ) }
             </Space>
           </Card>
-        </Space>
-      )
-    },
-    {
-      key: 'advanced',
-      label: t('link.tab.advanced'),
-      forceRender: true,
-      children: (
-        <Space
-          className='w-full'
-          direction='vertical'
-          size='small'
-        >
+        ) }
+      </Space>
+    )
+  }
+
+  const advancedTab = {
+    key: 'advanced',
+    label: t('link.tab.advanced'),
+    forceRender: true,
+    children: (
+      <Space
+        className='w-full'
+        direction='vertical'
+        size='small'
+      >
+        { !props.disabledFields.includes('accesskey') && (
           <FormItem
             label={ t('link.accesskey') }
             name="accesskey"
           >
             <Input disabled={ props.disabled } />
           </FormItem>
+        ) }
+
+        { !props.disabledFields.includes('rel') && (
           <FormItem
             label={ t('link.rel') }
             name="rel"
           >
             <Input disabled={ props.disabled } />
           </FormItem>
+        ) }
+
+        { !props.disabledFields.includes('tabindex') && (
           <FormItem
             label={ t('link.tabindex') }
             name="tabindex"
           >
             <Input disabled={ props.disabled } />
           </FormItem>
+        ) }
+
+        { !props.disabledFields.includes('class') && (
           <FormItem
             label={ t('link.class') }
             name="class"
           >
             <Input disabled={ props.disabled } />
           </FormItem>
-        </Space>
-      )
-    }
+        ) }
+      </Space>
+    )
+  }
+
+  const tabItems: ITabsProps['items'] = [
+    basicTab
   ]
+
+  if (!['accesskey', 'rel', 'tabindex', 'class'].every(field => props.disabledFields.includes(field))) {
+    tabItems.push(advancedTab)
+  }
 
   return (
     <WindowModal
