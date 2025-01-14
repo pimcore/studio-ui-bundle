@@ -35,7 +35,7 @@ export interface ManyToOneRelationValue {
   type: ElementType
   id: number
   fullPath?: string
-  subType?: string
+  subtype?: string
   textInput?: false
 }
 
@@ -95,7 +95,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
               type: info.type as ElementType,
               id: info.data.id as number,
               fullPath: `${info.data.path}${info.data.filename ?? info.data.key}`,
-              subType: info.data.type
+              subtype: info.data.type
             })
           } }
         >
@@ -129,7 +129,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           title={ t('download') }
         >
           <IconButton
-            disabled={ value?.type !== 'asset' || value?.subType === 'folder' }
+            disabled={ value?.type !== 'asset' || value?.subtype === 'folder' }
             icon={ { value: 'download' } }
             onClick={ () => {
               download(
