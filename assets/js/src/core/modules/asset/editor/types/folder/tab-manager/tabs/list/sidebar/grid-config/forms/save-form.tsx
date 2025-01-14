@@ -73,12 +73,13 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           <Checkbox>Set as default template</Checkbox>
         </Form.Item>
 
-        <Form.Item
-          name="saveFilters"
-          valuePropName='checked'
-        >
-          <Checkbox>Save filters</Checkbox>
-        </Form.Item>
+        {/* @TODO: the logic will be implemented later */}
+        {/* <Form.Item */}
+        {/*  name="saveFilters" */}
+        {/*  valuePropName='checked' */}
+        {/* > */}
+        {/*  <Checkbox>Save filters</Checkbox> */}
+        {/* </Form.Item> */}
       </Space>
 
       <Flex
