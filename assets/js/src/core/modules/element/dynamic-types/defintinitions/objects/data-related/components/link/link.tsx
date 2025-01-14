@@ -21,6 +21,10 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/modal'
 import { Tag } from '@Pimcore/components/tag/tag'
 import _ from 'lodash'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import {
+  convertType
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/utils/link-value-converter'
 
 export interface LinkValue {
   text: string
@@ -28,7 +32,7 @@ export interface LinkValue {
   direct?: string | null
   internal?: number | null
   internalType?: string | null
-  path?: string
+  fullPath?: string
   target: string
   parameters: string
   anchor: string
@@ -50,6 +54,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
   const [value, setValue] = useState<LinkValue | null>(props.value ?? null)
   const { t } = useTranslation()
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const { openElement } = useElementHelper()
 
   useEffect(() => {
     if (props.onChange !== undefined) {
@@ -65,12 +70,45 @@ export const Link = (props: LinkProps): React.JSX.Element => {
     setIsModalVisible(false)
   }
 
+  const openLink = (): void => {
+    if (value === null) {
+      return
+    }
+    if (value.linktype === 'direct' && value.direct !== null && !_.isEmpty(value.direct)) {
+      window.open(value.direct, '_blank')
+    }
+
+    const internalType = convertType(value.internalType ?? null)
+    const internal = value.internal ?? null
+
+    if (value.linktype === 'internal' && internalType !== null && internal !== null) {
+      openElement({
+        type: internalType,
+        id: internal
+      }).catch((error) => {
+        console.error('Error while opening element:', error)
+      })
+    }
+  }
+
   return (
     <Flex
       align="center"
       gap="extra-small"
     >
       <Tag>{!_.isEmpty(value?.text) ? value?.text : '[' + t('link.not-set') + ']'}</Tag>
+
+      <Tooltip
+        key="open"
+        title={ t('open') }
+      >
+        <IconButton
+          disabled={ value === null || _.isEmpty(value.fullPath) }
+          icon={ { value: 'open-folder' } }
+          onClick={ openLink }
+          type="default"
+        />
+      </Tooltip>
 
       <Tooltip
         key="edit"

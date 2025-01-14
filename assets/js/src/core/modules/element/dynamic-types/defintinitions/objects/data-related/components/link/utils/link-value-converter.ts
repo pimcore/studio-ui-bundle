@@ -55,7 +55,7 @@ export const convertFromInternalLinkValue = (value: InternalLinkValue): LinkValu
     direct: value.path?.textInput === true ? value.path.fullPath : null,
     internal: value.path?.textInput === true ? null : value.path?.id,
     internalType: value.path?.textInput === true ? null : reverseConvertType(value.path?.type),
-    path: value.path?.fullPath,
+    fullPath: value.path?.fullPath,
     target: value.target,
     parameters: value.parameters,
     anchor: value.anchor,
@@ -76,7 +76,7 @@ const getInternalPath = (value: LinkValue): ManyToOneRelationValue | PathTextInp
     return {
       type,
       id: value.internal ?? 0,
-      fullPath: value.path,
+      fullPath: value.fullPath,
       subType: value.internalType ?? undefined
     }
   } else {
@@ -87,7 +87,7 @@ const getInternalPath = (value: LinkValue): ManyToOneRelationValue | PathTextInp
   }
 }
 
-const convertType = (type?: string | null): ElementType | null => {
+export const convertType = (type?: string | null): ElementType | null => {
   if (typeof type === 'string') {
     return mapToElementType(type)
   }
