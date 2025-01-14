@@ -11,14 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { Content } from '@Pimcore/components/content/content'
-import { MiniPaint } from '@Pimcore/lib/mini-paint/mini-paint'
+import { createStyles } from 'antd-style'
 
-export const EditTabContainer = (): React.JSX.Element => {
-  return (
-    <Content>
-      <MiniPaint />
-    </Content>
-  )
+interface StylesProps {
+  isLoaded: boolean
 }
+
+export const useStyle = createStyles(({ css }, props: StylesProps) => {
+  return {
+    imageIframeContainer: css`
+      width: 100%;
+      height: 100%;
+    `,
+
+    imageIframe: css`
+      width: 100%;
+      height: 100%;
+      display: ${props.isLoaded ? 'block' : 'none'};
+    `
+  }
+})
