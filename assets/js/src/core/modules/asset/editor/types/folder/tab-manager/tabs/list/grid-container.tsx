@@ -147,7 +147,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
           row.isLocked = item.isLocked
           row.permissions = item.permissions
         })
-                
+
         handleProcessColumns({ assetItem: item, assetRow: row, columnIdentifier, columnIdentifierString })
       })
 
