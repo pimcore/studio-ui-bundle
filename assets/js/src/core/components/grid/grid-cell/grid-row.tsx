@@ -30,44 +30,52 @@ export interface GridRowProps {
 const GridRow = ({ row, isSelected, modifiedCells, contextMenuItems = [], ...props }: GridRowProps): React.JSX.Element => {
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
-  return useMemo(() => {
-    return (
-      <Dropdown
-        key={ row.id }
-        menu={ { items: contextMenuItems } }
-        trigger={ ['contextMenu'] }
-      >
-        <tr
-          className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
+  const renderWithContextMenu = (children: React.ReactNode): React.JSX.Element => {
+    if (contextMenuItems.length > 0) {
+      return (
+        <Dropdown
           key={ row.id }
+          menu={ { items: contextMenuItems } }
+          trigger={ ['contextMenu'] }
         >
-          {row.getVisibleCells().map(cell => (
-            <td
-              className='ant-table-cell'
-              key={ cell.id }
-              style={ cell.column.columnDef.meta?.autoWidth === true
-                ? {
-                    width: 'auto',
-                    minWidth: cell.column.getSize()
-                  }
-                : {
-                    width: cell.column.getSize(),
-                    maxWidth: cell.column.getSize()
-                  }
+          {children}
+        </Dropdown>
+      )
+    }
+
+    return <>{children}</>
+  }
+
+  return useMemo(() => renderWithContextMenu(
+    <tr
+      className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
+      key={ row.id }
+    >
+      {row.getVisibleCells().map(cell => (
+        <td
+          className='ant-table-cell'
+          key={ cell.id }
+          style={ cell.column.columnDef.meta?.autoWidth === true
+            ? {
+                width: 'auto',
+                minWidth: cell.column.getSize()
               }
-            >
-              <GridCell
-                cell={ cell }
-                isModified={ isModifiedCell(cell.column.id) }
-                key={ cell.id }
-                tableElement={ props.tableElement }
-              />
-            </td>
-          ))}
-        </tr>
-      </Dropdown>
-    )
-  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
+            : {
+                width: cell.column.getSize(),
+                maxWidth: cell.column.getSize()
+              }
+          }
+        >
+          <GridCell
+            cell={ cell }
+            isModified={ isModifiedCell(cell.column.id) }
+            key={ cell.id }
+            tableElement={ props.tableElement }
+          />
+        </td>
+      ))}
+    </tr>
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
