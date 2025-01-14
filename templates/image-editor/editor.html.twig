@@ -127,7 +127,7 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ locale: 'en', keys: [] })
+            body: JSON.stringify({ locale: 'en', keys: ["save"] })
         });
 
         const data = await response.json();
