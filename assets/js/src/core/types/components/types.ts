@@ -44,5 +44,5 @@ export interface GridProps {
   onSortingChange?: (sorting: SortingState) => void
   setRowId?: (originalRow: any, index: number, parent: any) => string
   autoWidth?: boolean
-  contextMenuItems?: Array<(...args: any[]) => ItemType> // DropdownMenuProps['items']
+  contextMenuItems?: Array<(...args: any[]) => ItemType | undefined>
 }

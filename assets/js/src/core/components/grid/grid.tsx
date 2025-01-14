@@ -219,13 +219,11 @@ export const Grid = ({
   )
 
   const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
-    return contextMenuItems.map((item) => {
-      return item({
-        id: row.original.id,
-        isLocked: row.original.isLocked,
-        permissions: row.original.permissions
-      })
+    const possibleContextMenuItems = contextMenuItems.map((item) => {
+      return item(row)
     })
+
+    return possibleContextMenuItems.filter((item) => item !== undefined)
   }
 
   return useMemo(() => (

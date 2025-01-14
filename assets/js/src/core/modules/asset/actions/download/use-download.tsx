@@ -25,7 +25,7 @@ export interface UseDownloadReturn {
   download: (id: string, label?: string) => void
   downloadContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
   downloadTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  downloadGridContextMenuItem: (props: GridContextMenuProps) => ItemType
+  downloadGridContextMenuItem: (row: any) => ItemType | undefined
 }
 
 export const useDownload = (): UseDownloadReturn => {
@@ -63,12 +63,17 @@ export const useDownload = (): UseDownloadReturn => {
     }
   }
 
-  const downloadGridContextMenuItem = (props: GridContextMenuProps): ItemType => {
+  const downloadGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
+      return
+    }
+
     return {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download' } />,
-      onClick: () => { handleDownload(props) }
+      onClick: () => { handleDownload(data) }
     }
   }
 

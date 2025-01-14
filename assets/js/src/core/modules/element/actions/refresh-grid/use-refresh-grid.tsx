@@ -13,15 +13,20 @@
 
 import type { ElementType } from '../../../../../../types/element-type.d'
 import { eventBus } from '@Pimcore/lib/event-bus'
+import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export interface UseRefreshGridHookReturn {
-  refreshGrid: (parentId: number) => void
+  refreshGrid: (parentId?: number) => void
 }
 
 export const useRefreshGrid = (elementType: ElementType): UseRefreshGridHookReturn => {
-  const refreshGrid = (parentId: number): void => {
-    if (elementType === 'asset') {
-      eventBus.publish({ identifier: { type: 'asset:listing:refresh', id: parentId } })
+  const elementContext = useOptionalElementContext()
+
+  const refreshGrid = (parentId?: number): void => {
+    const id = parentId ?? elementContext?.id
+
+    if (elementType === 'asset' && id !== undefined) {
+      eventBus.publish({ identifier: { type: 'asset:listing:refresh', id } })
     }
   }
 

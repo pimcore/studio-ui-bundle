@@ -24,20 +24,18 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
   renameTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   renameContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
-  renameGridContextMenuItem: (props: GridContextMenuProps) => ItemType
+  renameGridContextMenuItem: (row: any) => ItemType | undefined
   renameMutation: (parentId: number, value: string) => Promise<void>
 }
 
 export const useRename = (elementType: ElementType): UseRenameHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const { id: parentElementId } = useElementContext()
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { elementPatch } = useElementApi(elementType)
@@ -80,14 +78,19 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     }
   }
 
-  const renameGridContextMenuItem = (props: GridContextMenuProps): ItemType => {
+  const renameGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
+      return
+    }
+
     return {
       label: t('element.rename'),
       key: 'rename',
       icon: <Icon value={ 'rename' } />,
-      hidden: !checkElementPermission(props.permissions!, 'rename') || props.isLocked!,
+      hidden: !checkElementPermission(data.permissions, 'rename') || data.isLocked,
       onClick: async () => {
-        await stagedLoading(props.id)
+        await stagedLoading(data.id)
       }
     }
   }
@@ -96,7 +99,12 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
     const node = await getElementById(id)
 
     const parentId = node!.parentId ?? undefined
-    rename(id, getElementKey(node!, elementType), parentId)
+    rename(
+      id,
+      getElementKey(node!, elementType),
+      parentId,
+      () => { refreshGrid() }
+    )
   }
 
   const renameTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
@@ -128,7 +136,6 @@ export const useRename = (elementType: ElementType): UseRenameHookReturn => {
 
       if (parentId !== undefined) {
         refreshTree(parentId)
-        refreshGrid(parentElementId)
       }
     } catch (error) {
       console.error('Error renaming ' + elementType, error)

@@ -27,14 +27,14 @@ import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-s
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
-import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
   deleteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
-  deleteGridContextMenuItem: (props: GridContextMenuProps) => ItemType
+  deleteGridContextMenuItem: (row: any) => ItemType | undefined
   deleteMutation: (id: number, parentId?: number) => Promise<void>
 }
 
@@ -88,14 +88,19 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     }
   }
 
-  const deleteGridContextMenuItem = (props: GridContextMenuProps): ItemType => {
+  const deleteGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
+      return
+    }
+
     return {
       label: t('element.delete'),
       key: 'delete',
       icon: <Icon value={ 'trash' } />,
-      hidden: !checkElementPermission(props.permissions!, 'delete') || props.isLocked,
+      hidden: !checkElementPermission(data.permissions, 'delete') || data.isLocked,
       onClick: async () => {
-        await stagedLoading(props.id)
+        await stagedLoading(data.id)
       }
     }
   }
@@ -104,7 +109,12 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     const node = await getElementById(id)
 
     const parentId = node!.parentId ?? undefined
-    deleteElement(node!.id, getElementKey(node!, elementType), parentId)
+    deleteElement(
+      node!.id,
+      getElementKey(node!, elementType),
+      parentId,
+      () => { refreshGrid() }
+    )
   }
 
   const deleteMutation = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
@@ -136,7 +146,6 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
-      refreshGrid(parentId)
     }
 
     onFinish?.()

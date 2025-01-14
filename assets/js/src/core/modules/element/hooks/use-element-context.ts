@@ -37,3 +37,16 @@ export const useElementContext = (): UseElementContextReturn => {
   trackError(new GeneralError(errorMessage))
   throw new Error(errorMessage)
 }
+
+export const useOptionalElementContext = (): UseElementContextReturn | null => {
+  const { id: assetId } = useContext(AssetContext)
+  const { id: dataObjectId } = useContext(DataObjectContext)
+
+  if (assetId !== 0) {
+    return { id: assetId, elementType: 'asset' }
+  } else if (dataObjectId !== 0) {
+    return { id: dataObjectId, elementType: 'data-object' }
+  } else {
+    return null
+  }
+}
