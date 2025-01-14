@@ -28,7 +28,7 @@ export interface LinkValue {
   direct?: string | null
   internal?: number | null
   internalType?: string | null
-  path?: string
+  fullPath?: string
   target: string
   parameters: string
   anchor: string

@@ -47,7 +47,7 @@ export interface LinkModalProps {
 export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', direct: '', path: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
+  const emptyLinkValue: LinkValue = { linktype: 'direct', text: '', direct: '', fullPath: '', target: '', parameters: '', anchor: '', title: '', accesskey: '', rel: '', tabindex: '', class: '' }
   const { confirm } = useFormModal()
 
   useEffect(() => {
