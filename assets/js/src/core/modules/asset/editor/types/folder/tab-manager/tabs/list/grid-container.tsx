@@ -141,8 +141,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
         row.isLocked = item.isLocked
         row.permissions = item.permissions
 
-        console.log(row)
-
         item.columns?.forEach((column) => {
           if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
             row[columnIdentifierString] = column.value
