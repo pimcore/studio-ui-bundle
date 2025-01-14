@@ -24,7 +24,6 @@ export interface IModalProps extends AntModalProps {
   iconName?: string
   size?: ModalSize
   className?: string
-  footer?: React.JSX.Element
   useModal?: typeof useModal
   children: React.ReactNode
 }

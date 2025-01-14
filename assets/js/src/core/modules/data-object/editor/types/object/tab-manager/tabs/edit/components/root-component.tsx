@@ -35,7 +35,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     >
       <Form
         className={ className }
-
+        initialValues={ data }
         layout='vertical'
         onFinish={ onFinish }
         preserve
