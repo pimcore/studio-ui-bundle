@@ -48,6 +48,9 @@ export interface LinkProps {
   disabled?: boolean
   value?: LinkValue | null
   onChange?: (value?: LinkValue | null) => void
+  allowedTypes: string[]
+  allowedTargets: string[]
+  disabledFields: string[]
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {
@@ -122,7 +125,10 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       </Tooltip>
 
       <LinkModal
+        allowedTargets={ props.allowedTargets }
+        allowedTypes={ props.allowedTypes }
         disabled={ props.disabled }
+        disabledFields={ props.disabledFields }
         onClose={ hideModal }
         onSave={ setValue }
         open={ isModalVisible }

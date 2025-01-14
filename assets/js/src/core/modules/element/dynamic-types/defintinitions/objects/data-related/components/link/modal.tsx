@@ -42,6 +42,9 @@ export interface LinkModalProps {
   value?: LinkValue | null
   onClose: () => void
   onSave: (value: LinkValue) => void
+  allowedTypes: string[]
+  allowedTargets: string[]
+  disabledFields: string[]
 }
 
 export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
@@ -74,6 +77,13 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
     props.onClose()
   }
 
+  const isTypeAllowed = (type: string): boolean => {
+    if (props.allowedTypes.length === 0) {
+      return true
+    }
+    return props.allowedTypes.includes(type)
+  }
+
   const tabItems: ITabsProps['items'] = [
     {
       key: 'basic',
@@ -97,10 +107,10 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
           >
             <ManyToOneRelation
               allowPathTextInput
-              assetsAllowed
-              dataObjectsAllowed
+              assetsAllowed={ isTypeAllowed('asset') }
+              dataObjectsAllowed={ isTypeAllowed('object') }
               disabled={ props.disabled }
-              documentsAllowed
+              documentsAllowed={ isTypeAllowed('document') }
             />
           </FormItem>
 
