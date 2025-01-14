@@ -109,6 +109,7 @@ export const GridConfigInner = (): React.JSX.Element => {
           } }
           isDeleting={ isDeleting }
           isLoading={ isSaveLoading }
+          modificationDate={ gridConfig?.modificationDate }
           onCancelClick={ () => { setView('edit') } }
           onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
           saveAsNewConfiguration={ view === 'save' }

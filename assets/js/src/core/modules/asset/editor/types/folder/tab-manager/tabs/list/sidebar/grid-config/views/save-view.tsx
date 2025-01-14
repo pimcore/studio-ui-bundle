@@ -22,6 +22,8 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Header } from '@Pimcore/components/header/header'
 import { Col, Flex, Popconfirm, Row } from 'antd'
 import { Text } from '@Pimcore/components/text/text'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface SaveViewProps {
   formProps: SaveFormProps
@@ -30,9 +32,10 @@ export interface SaveViewProps {
   isLoading?: boolean
   isDeleting?: boolean
   saveAsNewConfiguration?: boolean
+  modificationDate?: number | null
 }
 
-export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration }: SaveViewProps): React.JSX.Element => {
+export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate }: SaveViewProps): React.JSX.Element => {
   const { form } = formProps
 
   return (
@@ -93,9 +96,14 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
               <Col span={ 6 }>
                 <Text>Owner:</Text> <Text type='secondary'>Admin</Text>
               </Col>
-              <Col span={ 12 }>
-                <Text>Modification date:</Text> <Text type='secondary'>22.10.2024 10:11</Text>
-              </Col>
+              {!isEmptyValue(modificationDate) && (
+                <Col span={ 12 }>
+                  <Text>Modification date: </Text>
+                  <Text type='secondary'>
+                    {formatDateTime({ timestamp: modificationDate!, dateStyle: 'short', timeStyle: 'short' })}
+                  </Text>
+                </Col>
+              )}
             </Row>
           )}
 
