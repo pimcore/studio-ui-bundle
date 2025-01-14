@@ -137,15 +137,16 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       columnIdentifiers.forEach((columnIdentifier) => {
         const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
 
-        item.columns?.forEach((column) => {
-          row.id = item.id
+        row.id = item.id
+        row.isLocked = item.isLocked
+        row.permissions = item.permissions
 
+        console.log(row)
+
+        item.columns?.forEach((column) => {
           if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
             row[columnIdentifierString] = column.value
           }
-
-          row.isLocked = item.isLocked
-          row.permissions = item.permissions
         })
 
         handleProcessColumns({ assetItem: item, assetRow: row, columnIdentifier, columnIdentifierString })
