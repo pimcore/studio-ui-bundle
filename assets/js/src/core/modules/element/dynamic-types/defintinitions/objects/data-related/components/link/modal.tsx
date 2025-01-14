@@ -84,6 +84,16 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
     return props.allowedTypes.includes(type)
   }
 
+  const getTargetOptions = (): Array<{ value: string, label: string }> => {
+    const allowedTargets = props.allowedTargets.length > 0 ? props.allowedTargets : ['_blank', '_self', '_top', '_parent']
+    return allowedTargets.map(target => (
+      {
+        value: target,
+        label: target
+      }
+    ))
+  }
+
   const basicTab = {
     key: 'basic',
     label: t('link.tab.basic'),
@@ -133,12 +143,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
                   <Select
                     allowClear
                     disabled={ props.disabled }
-                    options={ [
-                      { label: '_blank', value: '_blank' },
-                      { label: '_self', value: '_self' },
-                      { label: '_top', value: '_top' },
-                      { label: '_parent', value: '_parent' }
-                    ] }
+                    options={ getTargetOptions() }
                   />
                 </FormItem>
               ) }
