@@ -87,7 +87,7 @@ const getInternalPath = (value: LinkValue): ManyToOneRelationValue | PathTextInp
   }
 }
 
-const convertType = (type?: string | null): ElementType | null => {
+export const convertType = (type?: string | null): ElementType | null => {
   if (typeof type === 'string') {
     return mapToElementType(type)
   }
