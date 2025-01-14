@@ -29,7 +29,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
   const { id } = useRoleContext()
   const { item, isLoading, changeItemInState } = useRoleDraft(id)
-  // todo no api in roles for available permissions
   const permissions = getGroupedPermissions([
     {
       key: 'workflow_details',
