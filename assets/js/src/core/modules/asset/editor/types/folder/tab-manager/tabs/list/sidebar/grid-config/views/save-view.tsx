@@ -33,9 +33,10 @@ export interface SaveViewProps {
   isDeleting?: boolean
   saveAsNewConfiguration?: boolean
   modificationDate?: number | null
+  userName?: string
 }
 
-export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate }: SaveViewProps): React.JSX.Element => {
+export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate, userName }: SaveViewProps): React.JSX.Element => {
   const { form } = formProps
 
   return (
@@ -94,7 +95,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
           { saveAsNewConfiguration !== true && (
             <Row>
               <Col span={ 6 }>
-                <Text>Owner:</Text> <Text type='secondary'>Admin</Text>
+                <Text>Owner:</Text> <Text type='secondary'>{userName}</Text>
               </Col>
               {!isEmptyValue(modificationDate) && (
                 <Col span={ 12 }>

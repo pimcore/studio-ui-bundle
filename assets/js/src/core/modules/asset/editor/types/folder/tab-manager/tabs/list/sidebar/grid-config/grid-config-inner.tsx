@@ -14,6 +14,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { getFormattedDropDownMenu, useListColumns, useListGridAvailableColumns, useListGridConfig, useListSelectedConfigId } from '../../hooks/use-list'
 import { useGridConfig } from './hooks/use-grid-config'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import {
   type GridColumnConfiguration,
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
@@ -35,15 +36,19 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { columns: gridColumns, setGridColumns } = useListColumns()
   const { columns, setColumns, addColumn } = useGridConfig()
   const { id } = useAsset()
-  const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
-  const [view, setView] = useState<'edit' | 'save' | 'update'>('edit')
-  const [form] = useForm()
+  const userData = useUser()
   const { selectedGridConfigId, setSelectedGridConfigId } = useListSelectedConfigId()
   const { gridConfig } = useListGridConfig()
+
+  const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useAssetUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
   const { isFetching: gridConfigIsLoading } = useAssetGetGridConfigurationByFolderIdQuery({ folderId: id, configurationId: selectedGridConfigId })
+
+  const [view, setView] = useState<'edit' | 'save' | 'update'>('edit')
+  const [form] = useForm()
+
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
 
   const savedGridConfigurations: DropdownMenuProps['items'] = useMemo(() => {
@@ -113,6 +118,7 @@ export const GridConfigInner = (): React.JSX.Element => {
           onCancelClick={ () => { setView('edit') } }
           onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
           saveAsNewConfiguration={ view === 'save' }
+          userName={ userData?.username }
         />
       ) }
     </>
