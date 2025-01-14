@@ -77,7 +77,7 @@ const getInternalPath = (value: LinkValue): ManyToOneRelationValue | PathTextInp
       type,
       id: value.internal ?? 0,
       fullPath: value.fullPath,
-      subType: value.internalType ?? undefined
+      subtype: value.internalType ?? undefined
     }
   } else {
     return {
