@@ -32,6 +32,9 @@ import {
   SortableContext
 } from '@dnd-kit/sortable'
 import { uuid } from '@Pimcore/utils/uuid'
+import {
+  type Hotspot, type Marker
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -43,6 +46,8 @@ export type ImageGalleryValue = ImageGalleryValueItem[]
 
 export interface ImageGalleryValueItem {
   image: ImageValue | null
+  hotspots?: Hotspot[] | null
+  marker?: Marker[] | null
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
