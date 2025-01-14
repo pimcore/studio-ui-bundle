@@ -18,7 +18,7 @@ import { Table } from '@Pimcore/modules/user/roles/detail/tabs/workspaces/compon
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import type { UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
 import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -26,7 +26,7 @@ import { Button } from '@Pimcore/components/button/button'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useUserContext()
+  const { id } = useRoleContext()
   const { user, isLoading } = useUserDraft(id)
 
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(user?.assetWorkspaces ?? [])

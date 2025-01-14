@@ -13,51 +13,50 @@
 
 import React, { useState, useEffect } from 'react'
 import { DetailTab } from '@Pimcore/modules/user/roles/detail/tabs/detail-tab'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { Content } from '@Pimcore/components/content/content'
-import { selectUserById } from '@Pimcore/modules/user/user-slice'
+import { selectRoleById } from '@Pimcore/modules/user/roles/roles-slice'
 import { store } from '@Pimcore/app/store'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
-import { Toolbar } from '@Pimcore/modules/user/management/toolbar/toolbar'
+import { Toolbar } from '@Pimcore/modules/user/roles/toolbar/toolbar'
 import { useStyle } from '@Pimcore/modules/user/roles/detail/detail.styles'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { Popconfirm } from 'antd'
+import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 
 interface IDetailProps {
   onRemoveItem: (id: any) => void
-  onCloneUser: (data: any) => void
+  onCloneItem: (data: any) => void
 }
 
-const Detail = ({ onCloneUser, onRemoveItem, ...props }: IDetailProps): React.JSX.Element => {
+const Detail = ({ onCloneItem, onRemoveItem, ...props }: IDetailProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const classNames = ['detail-tabs', styles.detailTabs]
   const modal = useFormModal()
 
-  const { openUser, closeUser, removeUser, cloneUser, getAllIds, activeId } = useUserHelper()
-  const { user } = useUserDraft(activeId)
+  const { openItem, closeItem, removeItem, cloneItem, getAllIds, activeId } = useRoleHelper()
+  const { item } = useRoleDraft(activeId)
   const [popConfirmOpen, setPopConfirmOpen] = useState<number | null>(null)
 
   const triggerConfirm = (): void => {
-    closeUser(activeId)
-    openUser(getAllIds[getAllIds.length - 2])
+    closeItem(activeId)
+    openItem(getAllIds[getAllIds.length - 2])
   }
 
   const onHandleClose = (key: string): void => {
-    if (selectUserById(store.getState(), parseInt(key))?.modified && popConfirmOpen === null) {
+    const role = selectRoleById(store.getState(), parseInt(key))
+    if (role?.modified && popConfirmOpen === null) {
       setPopConfirmOpen(parseInt(key))
-
       return
     }
 
-    if (!selectUserById(store.getState(), parseInt(key))?.modified) {
+    if (!role?.modified) {
       triggerConfirm()
-
       return
     }
 
@@ -66,24 +65,24 @@ const Detail = ({ onCloneUser, onRemoveItem, ...props }: IDetailProps): React.JS
     }
   }
 
-  const handleCloneUser = (): void => {
+  const handleCloneItem = (): void => {
     modal.input({
-      title: t('user-management.clone-user'),
-      label: t('user-management.clone-user.label'),
+      title: t('roles.clone-item'),
+      label: t('roles.clone-item.label'),
       onOk: async (value: string) => {
-        const data = await cloneUser({ id: activeId, name: value })
-        onCloneUser(data)
+        const data = await cloneItem({ id: activeId, name: value })
+        onCloneItem(data)
       }
     })
   }
 
-  const handleRemoveUser = (): void => {
+  const handleRemoveItem = (): void => {
     modal.confirm({
-      title: t('user-management.remove-user'),
-      content: t('user-management.remove-user.text'),
+      title: t('roles.remove-item'),
+      content: t('roles.remove-item.text'),
       onOk: async () => {
-        closeUser(activeId)
-        await removeUser({ id: activeId })
+        closeItem(activeId)
+        await removeItem({ id: activeId })
 
         onRemoveItem(activeId)
       }
@@ -92,7 +91,7 @@ const Detail = ({ onCloneUser, onRemoveItem, ...props }: IDetailProps): React.JS
 
   useEffect(() => {
     setPopConfirmOpen(null)
-  }, [user])
+  }, [item])
 
   if (activeId === undefined) {
     return <Content none></Content>
@@ -103,8 +102,8 @@ const Detail = ({ onCloneUser, onRemoveItem, ...props }: IDetailProps): React.JS
       renderToolbar={
         <Toolbar
           id={ activeId }
-          onCloneUser={ handleCloneUser }
-          onRemoveUser={ handleRemoveUser }
+          onCloneItem={ handleCloneItem }
+          onRemoveItem={ handleRemoveItem }
         />
       }
     >
@@ -119,11 +118,11 @@ const Detail = ({ onCloneUser, onRemoveItem, ...props }: IDetailProps): React.JS
               open={ popConfirmOpen === id }
               title={ t('widget-manager.tab-title.close-confirmation') }
                    >
-              {selectUserById(store.getState(), id)?.name} {selectUserById(store.getState(), id)?.modified ? '*' : ''}
+              {selectRoleById(store.getState(), id)?.name} {selectRoleById(store.getState(), id)?.modified ? '*' : ''}
             </Popconfirm>
           }))
           }
-          onChange={ (id: string) => { openUser(Number(id)) } }
+          onChange={ (id: string) => { openItem(Number(id)) } }
           onClose={ onHandleClose }
         />
         <Content className={ 'detail-tabs__content' }>

@@ -11,20 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
+import { useContext } from 'react'
+import { RoleContext } from '@Pimcore/modules/user/roles/role-provider'
 
-export const useStyle = createStyles(({ token, css }) => {
+export interface UseDataObjectReturn {
+  id: number
+}
+
+export const useRoleContext = (): UseDataObjectReturn => {
+  const { id } = useContext(RoleContext)
+
   return {
-    treeContainer: css`
-      margin-top: ${token.paddingSM}px;
-
-      .simple-tree--search {
-        margin: ${token.paddingSM}px ${token.paddingSM}px ${token.paddingXS}px;
-      }
-      
-      :has(.simple-tree--search) {
-        margin-top: 0;
-      }
-    `
+    id
   }
-}, { hashPriority: 'low' })
+}

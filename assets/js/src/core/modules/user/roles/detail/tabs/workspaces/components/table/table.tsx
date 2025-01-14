@@ -15,7 +15,7 @@ import React, { useEffect } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { useUserContext } from '@Pimcore/modules/user/hooks/use-user-context'
+import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
 import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
 import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -35,7 +35,7 @@ export const Table = ({
   isLoading
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { id } = useUserContext()
+  const { id } = useRoleContext()
   const { updateUserWorkspaces } = useUserDraft(id)
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
 

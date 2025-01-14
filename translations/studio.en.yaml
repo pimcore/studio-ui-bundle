@@ -378,6 +378,9 @@ tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.add-folder: Add Folder
 tree.actions.add-user: Add User
+tree.actions.add-role: Add Role
+tree.actions.clone-role: Clone Role
+tree.actions.remove-role: Remove Role
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings
@@ -475,6 +478,7 @@ user-management.workspaces.columns.create: Create
 user-management.workspaces.columns.settings: Settings
 user-management.workspaces.columns.versions: Versions
 user-management.workspaces.columns.properties: Properties
+roles.tree.all: All Roles
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports

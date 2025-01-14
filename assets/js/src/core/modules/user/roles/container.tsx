@@ -24,17 +24,17 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { getRoleTree } = useRoleHelper()
+  const { getItemTree } = useRoleHelper()
   const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
-    title: t('user-management.tree.all'),
+    title: t('roles.tree.all'),
     key: '0',
     icon: <Icon value={ 'folder' } />,
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-user', icon: 'user-plus-01' }
+      { key: 'add-role', icon: 'user-plus-01' }
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
@@ -43,17 +43,17 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     return items.map((item: any) => ({
       title: item.name,
       key: item.id,
-      selectable: item.type === 'user',
-      allowDrop: item.type !== 'user',
-      icon: item.type === 'user' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
-      actions: item.type === 'user'
+      selectable: item.type === 'role',
+      allowDrop: item.type !== 'role',
+      icon: item.type === 'role' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
+      actions: item.type === 'role'
         ? [
-            { key: 'clone-user', icon: 'copy-03' },
-            { key: 'remove-user', icon: 'delete-outlined' }
+            { key: 'clone-role', icon: 'copy-03' },
+            { key: 'remove-role', icon: 'delete-outlined' }
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-user', icon: 'user-plus-01' },
+            { key: 'add-role', icon: 'user-plus-01' },
             { key: 'remove-folder', icon: 'delete-outlined' }
           ],
       children: [],
@@ -79,13 +79,13 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const handleOnLoadData = async (node: TreeDataNode): Promise<void> => {
-    await getRoleTree({ parentId: Number(node.key) }).then(response => {
+    await getItemTree({ parentId: Number(node.key) }).then(response => {
       updateTreeData(node.key, response.items)
     })
   }
 
   const reloadTree = (): void => {
-    getRoleTree({ parentId: 0 }).then((data) => {
+    getItemTree({ parentId: 0 }).then((data) => {
       updateTreeData('0', data.items)
       const timestamp = Date.now()
       setTreeKey('tree-' + timestamp)
@@ -131,13 +131,13 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const main = {
-    id: 'user-detail',
+    id: 'role-detail',
     size: 80,
     minSize: 600,
     children: [
       <Detail
-        key="user-detail"
-        onCloneUser={ (data) => {
+        key="role-detail"
+        onCloneItem={ (data) => {
           reloadTree()
         } }
         onRemoveItem={ (id) => {

@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { userOpened, userClosed } from '@Pimcore/modules/user/user-slice'
+import { itemOpened, itemClosed } from '@Pimcore/modules/user/roles/roles-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import { api } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
@@ -22,9 +22,12 @@ import type {
   RoleCreateApiResponse, RoleDeleteByIdApiArg,
   RoleDeleteByIdApiResponse, RoleFolderCreateApiResponse, RoleFolderDeleteByIdApiArg,
   RoleGetTreeApiArg,
-  RoleGetTreeApiResponse
+  RoleGetTreeApiResponse,
+  RoleUpdateByIdApiResponse,
+  DetailedUserRole,
+  RoleFolderDeleteByIdApiResponse,
+  RoleGetByIdApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
-import { type RoleFolderDeleteByIdApiResponse } from '@Pimcore/modules/roles/role-api-slice.gen'
 
 interface IAddItemArgs {
   parentId: number
@@ -32,14 +35,16 @@ interface IAddItemArgs {
 }
 
 interface IUseRoleReturn {
-  openRole: (id: number) => void
-  closeRole: (id: number) => void
-  getRoleTree: (props: RoleGetTreeApiArg) => Promise<RoleGetTreeApiResponse>
-  addNewRole: (props: IAddItemArgs) => Promise<{ data: RoleCreateApiResponse, error: any }>
-  removeRole: (props: RoleDeleteByIdApiArg) => Promise<{ data: RoleDeleteByIdApiResponse, error: any }>
+  openItem: (id: number) => void
+  closeItem: (id: number) => void
+  getItemTree: (props: RoleGetTreeApiArg) => Promise<RoleGetTreeApiResponse>
+  addNewItem: (props: IAddItemArgs) => Promise<{ data: RoleCreateApiResponse, error: any }>
+  removeItem: (props: RoleDeleteByIdApiArg) => Promise<{ data: RoleDeleteByIdApiResponse, error: any }>
   removeFolder: (props: RoleFolderDeleteByIdApiArg) => Promise<{ data: RoleFolderDeleteByIdApiResponse, error: any }>
-  cloneRole: (props: { id: number, name: string }) => Promise<{ data: RoleCloneByIdApiResponse, error: any }>
+  cloneItem: (props: { id: number, name: string }) => Promise<{ data: RoleCloneByIdApiResponse, error: any }>
   addNewFolder: (props: IAddItemArgs) => Promise<{ data: RoleFolderCreateApiResponse, error: any }>
+  updateItemById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
+  moveItemById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
 }
@@ -49,22 +54,29 @@ export const useRoleHelper = (): IUseRoleReturn => {
   const [notificationApi] = useNotification()
   const dispatch = useAppDispatch()
 
-  function openRole (id: number): void {
-    dispatch(userOpened(id))
+  function openItem (id: number): void {
+    dispatch(itemOpened(id))
   }
 
-  function closeRole (id: number): void {
-    dispatch(userClosed(id))
+  function closeItem (id: number): void {
+    dispatch(itemClosed(id))
   }
 
-  async function getRoleTree (props: RoleGetTreeApiArg): Promise<RoleGetTreeApiResponse> {
+  async function fetchItemById (props): Promise<RoleGetByIdApiResponse> {
+    const { id } = props
+    const { data }: any = await dispatch(api.endpoints.roleGetById.initiate({ id }))
+
+    return data
+  }
+
+  async function getItemTree (props: RoleGetTreeApiArg): Promise<RoleGetTreeApiResponse> {
     const { parentId } = props
     const { data }: any = await dispatch(api.endpoints.roleGetTree.initiate({ parentId }))
 
     return data
   }
 
-  async function addNewRole (props: IAddItemArgs): Promise<{ data: RoleCreateApiResponse, error: Error }> {
+  async function addNewItem (props: IAddItemArgs): Promise<{ data: RoleCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCreate.initiate({ body: { parentId, name } }))
 
@@ -77,7 +89,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     } else {
       notificationApi.open({
         type: 'success',
-        message: t('user-management.add-user.success')
+        message: t('roles.add-item.success')
       })
     }
 
@@ -97,14 +109,14 @@ export const useRoleHelper = (): IUseRoleReturn => {
     } else {
       notificationApi.open({
         type: 'success',
-        message: t('user-management.add-folder.success')
+        message: t('roles.add-folder.success')
       })
     }
 
     return data
   }
 
-  async function removeRole (props: RoleDeleteByIdApiArg): Promise<{ data: RoleDeleteByIdApiResponse, error: Error }> {
+  async function removeItem (props: RoleDeleteByIdApiArg): Promise<{ data: RoleDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.roleDeleteById.initiate({ id }))
 
@@ -117,7 +129,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     } else {
       notificationApi.open({
         type: 'success',
-        message: t('user-management.remove-user.success')
+        message: t('roles.remove-item.success')
       })
     }
 
@@ -137,14 +149,14 @@ export const useRoleHelper = (): IUseRoleReturn => {
     } else {
       notificationApi.open({
         type: 'success',
-        message: t('user-management.remove-folder.success')
+        message: t('roles.remove-folder.success')
       })
     }
 
     return data
   }
 
-  async function cloneRole (props: { id: number, name: string }): Promise<{ data: RoleCloneByIdApiResponse, error: Error }> {
+  async function cloneItem (props: { id: number, name: string }): Promise<{ data: RoleCloneByIdApiResponse, error: Error }> {
     const { id, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCloneById.initiate({ id, body: { name } }))
 
@@ -157,25 +169,72 @@ export const useRoleHelper = (): IUseRoleReturn => {
     } else {
       notificationApi.open({
         type: 'success',
-        message: t('user-management.clone-user.success')
+        message: t('roles.clone-item.success')
       })
     }
 
     return data
   }
 
-  const activeId = useAppSelector(state => state.user.activeId)
-  const getAllIds = useAppSelector(state => state.user.ids)
+  async function updateItemById (props: { id: number, item: DetailedUserRole }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
+    const { id, item } = props
+
+    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId: item.parentId ?? 0 } }))
+
+    if (error !== undefined) {
+      notificationApi.open({
+        type: 'error',
+        message: 'Error',
+        description: error.data.message
+      })
+    } else {
+      notificationApi.open({
+        type: 'success',
+        message: t('roles.save-item.success')
+      })
+
+      // dispatch(userUpdated(data))
+    }
+
+    return data
+  }
+
+  async function moveItemById (props: { id: number, parentId: number }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
+    const { id, parentId } = props
+
+    const item = await fetchItemById({ id })
+    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId } }))
+
+    if (error !== undefined) {
+      notificationApi.open({
+        type: 'error',
+        message: 'Error',
+        description: error.data.message
+      })
+    } else {
+      notificationApi.open({
+        type: 'success',
+        message: t('user-management.save-user.success')
+      })
+    }
+
+    return data
+  }
+
+  const activeId = useAppSelector(state => state.role.activeId)
+  const getAllIds = useAppSelector(state => state.role.ids)
 
   return {
-    openRole,
-    closeRole,
-    getRoleTree,
-    addNewRole,
+    openItem,
+    closeItem,
+    getItemTree,
+    addNewItem,
     addNewFolder,
-    removeRole,
-    cloneRole,
+    removeItem,
+    cloneItem,
     removeFolder,
+    updateItemById,
+    moveItemById,
     activeId,
     getAllIds
   }

@@ -16,26 +16,26 @@ import { Tabs, type ITabsProps } from '@Pimcore/components/tabs/tabs'
 import { SettingsContainer } from '@Pimcore/modules/user/roles/detail/tabs/settings/settings-container'
 import { WorkspacesContainer } from '@Pimcore/modules/user/roles/detail/tabs/workspaces/workspaces-container'
 import { useTranslation } from 'react-i18next'
-import { UserProvider } from '@Pimcore/modules/user/user-provider'
+import { RoleProvider } from '@Pimcore/modules/user/roles/role-provider'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-context'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Content } from '@Pimcore/components/content/content'
 
 interface IDetailTabProps {
   id: number
 }
 
-const DetailTab = ({ id, ...props }: IDetailTabProps): React.JSX.Element => {
+const DetailTab = ({ id }: IDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalUserContext()
-  const { user, isLoading, isError, removeUserFromState } = useUserDraft(id)
+  const { item, isLoading, isError, removeItemFromState } = useRoleDraft(id)
 
   useEffect(() => {
     return () => {
       removeContext()
-      removeUserFromState()
+      removeItemFromState()
     }
   }, [])
 
@@ -59,33 +59,32 @@ const DetailTab = ({ id, ...props }: IDetailTabProps): React.JSX.Element => {
     return <Content loading />
   }
 
-  if (user === undefined) {
+  if (item === undefined) {
     return <></>
   }
 
   const items: ITabsProps['items'] = [
     {
       key: 'settings',
-      label: t('user-management.settings.title'),
-      children: <SettingsContainer />,
-      className: 'user-settings'
+      label: t('roles.settings.title'),
+      children: <SettingsContainer />
     },
     {
       key: 'workspaces',
-      label: t('user-management.workspaces.title'),
+      label: t('roles.workspaces.title'),
       children: <WorkspacesContainer />
     }
   ]
 
   return (
-    <UserProvider id={ id }>
+    <RoleProvider id={ id }>
       <Tabs
         defaultActiveKey="1"
         destroyInactiveTabPane
         items={ items }
       >
       </Tabs>
-    </UserProvider>
+    </RoleProvider>
   )
 }
 
