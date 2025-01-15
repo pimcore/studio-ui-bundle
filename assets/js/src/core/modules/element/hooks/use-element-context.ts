@@ -23,6 +23,19 @@ interface UseElementContextReturn {
 }
 
 export const useElementContext = (): UseElementContextReturn => {
+  const elementContext = useOptionalElementContext()
+
+  if (elementContext !== null) {
+    return elementContext
+  }
+
+  const errorMessage = 'No element context found'
+
+  trackError(new GeneralError(errorMessage))
+  throw new Error(errorMessage)
+}
+
+export const useOptionalElementContext = (): UseElementContextReturn | null => {
   const { id: assetId } = useContext(AssetContext)
   const { id: dataObjectId } = useContext(DataObjectContext)
 
@@ -30,10 +43,7 @@ export const useElementContext = (): UseElementContextReturn => {
     return { id: assetId, elementType: 'asset' }
   } else if (dataObjectId !== 0) {
     return { id: dataObjectId, elementType: 'data-object' }
+  } else {
+    return null
   }
-
-  const errorMessage = 'No element context found'
-
-  trackError(new GeneralError(errorMessage))
-  throw new Error(errorMessage)
 }

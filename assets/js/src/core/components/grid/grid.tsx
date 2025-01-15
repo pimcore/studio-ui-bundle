@@ -18,9 +18,12 @@ import {
   type CellContext,
   type Column,
   type ColumnDef,
-  type ColumnResizeMode, type ColumnSizingInfoState,
-  flexRender, functionalUpdate,
-  getCoreRowModel, getSortedRowModel,
+  type ColumnResizeMode,
+  type ColumnSizingInfoState,
+  flexRender,
+  functionalUpdate,
+  getCoreRowModel,
+  getSortedRowModel,
   type RowData,
   type RowSelectionState,
   type SortingState,
@@ -36,9 +39,13 @@ import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
-import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import {
+  DynamicTypeRegistryProvider
+} from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,7 +66,21 @@ export interface ExtendedCellContext extends CellContext<any, any> {
   modified?: boolean
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['items'][number], 'isLocked' | 'permissions'> {
+  id: number
+}
+
+export const Grid = ({
+  enableMultipleRowSelection = false,
+  modifiedCells = [],
+  sorting,
+  manualSorting = false,
+  enableSorting = false,
+  enableRowSelection = false,
+  selectedRows = {},
+  contextMenuItems = [],
+  ...props
+}: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
@@ -197,6 +218,14 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
     </div>
   )
 
+  const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
+    const possibleContextMenuItems = contextMenuItems.map((item) => {
+      return item(row)
+    })
+
+    return possibleContextMenuItems.filter((item) => item !== undefined)
+  }
+
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
       <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
@@ -264,6 +293,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                   {table.getRowModel().rows.map(row => (
                     <GridRow
                       columns={ columns }
+                      contextMenuItems={ getContextMenuItems(row) }
                       isSelected={ row.getIsSelected() }
                       key={ row.id }
                       modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
