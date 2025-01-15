@@ -17,8 +17,10 @@ import { Form, type FormProps } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { useStyles } from './save-form.styles'
 
 export interface SaveFormProps extends FormProps {
   roleList?: RoleGetCollectionApiResponse
@@ -36,6 +38,8 @@ export const defaultValues = {
 export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
 
+  const { styles } = useStyles()
+
   useEffect(() => {
     props.form?.resetFields()
   }, [])
@@ -46,6 +50,27 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     if (changedValues.shareGlobally !== undefined) {
       setIsSharedGlobally(changedValues.shareGlobally)
     }
+  }
+
+  const renderIcon = (iconName: string): React.JSX.Element => (
+    <Icon
+      options={ { width: 12, height: 12 } }
+      value={ iconName }
+    />
+  )
+
+  const renderRightLabelComponent = (): JSX.Element | string | undefined => {
+    const renderGlobalView = (): React.JSX.Element => (
+      <Text className={ styles.label }>Globally</Text>
+    )
+
+    const renderUserView = (): React.JSX.Element => (
+      <Text className={ styles.label }>
+        {renderIcon('user')} User | {renderIcon('shield')} Role
+      </Text>
+    )
+
+    return isSharedGlobally === true ? renderGlobalView() : renderUserView()
   }
 
   return (
@@ -96,8 +121,8 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           valuePropName='checked'
         >
           <Switch
-            labelLeft='Shared'
-            labelRight={ isSharedGlobally === true ? 'Globally' : 'User | Role' }
+            labelLeft={ <Text>Shared</Text> }
+            labelRight={ renderRightLabelComponent() }
           />
         </Form.Item>
       </Flex>
