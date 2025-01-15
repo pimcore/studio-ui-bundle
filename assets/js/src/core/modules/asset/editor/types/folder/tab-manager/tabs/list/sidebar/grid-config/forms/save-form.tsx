@@ -18,6 +18,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './save-form.styles'
@@ -37,6 +38,7 @@ export const defaultValues = {
 
 export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
 
   const { styles } = useStyles()
 
@@ -65,19 +67,28 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     )
 
     const renderUserView = (): React.JSX.Element => (
-      <Flex gap={ 10 }>
-        <Text className={ styles.label }>
-          {renderIcon('user')} User | {renderIcon('shield')} Role
-        </Text>
-        <Flex
-          align="center"
-          className={ styles.updateButton }
-          gap={ 8 }
-        >
-          {renderIcon('edit', 16)}
-          <Text className={ styles.updateButtonText }>Add & Edit</Text>
+      <>
+        <Flex gap={ 10 }>
+          <Text className={ styles.label }>
+            {renderIcon('user')} User | {renderIcon('shield')} Role
+          </Text>
+          <Flex
+            align="center"
+            className={ styles.updateButton }
+            gap={ 8 }
+            onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
+          >
+            {renderIcon('edit', 16)}
+            <Text className={ styles.updateButtonText }>Add & Edit</Text>
+          </Flex>
         </Flex>
-      </Flex>
+        {isOpenDropdown && (
+          <UsersRolesDropdown
+            roleList={ props?.roleList }
+            userList={ props?.userList }
+          />
+        )}
+      </>
     )
 
     return isSharedGlobally === true ? renderGlobalView() : renderUserView()
