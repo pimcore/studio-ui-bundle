@@ -84,6 +84,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
         </Flex>
         {isOpenDropdown && (
           <UsersRolesDropdown
+            handleClose={ () => { setIsOpenDropdown(false) } }
             roleList={ props?.roleList }
             userList={ props?.userList }
           />

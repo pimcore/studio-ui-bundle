@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
@@ -21,34 +21,47 @@ import { Button } from '@Pimcore/components/button/button'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
+import { isEmpty } from 'lodash'
 
 interface IUsersRolesDropdownProps {
   roleList?: RoleGetCollectionApiResponse
   userList?: UserGetCollectionApiResponse
+  handleClose: () => void
 }
 
-export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownProps): React.JSX.Element => {
+export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRolesDropdownProps): React.JSX.Element => {
   const { gridConfig, setGridConfig } = useListGridConfig()
+
+  const [sharedUsersList, setSharedUsersList] = useState<number[] | null>(null)
+  const [sharedRolesList, setSharedRolesList] = useState<number[] | null>(null)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  console.log('------>>>>> gridConfig: ', gridConfig)
-  console.log('------>>>>> userList: ', userList)
-
-  const handleUpdateSharedUsers = (id: any): void => {
-    console.log('------>>>>>> ID: ', id, typeof id)
-    console.log('------>>>>>> gridConfig: ', gridConfig)
-    const initial = gridConfig?.sharedUsers
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    setGridConfig({ ...gridConfig, sharedUsers: [id, ...initial] })
+  const handleChangeSharedUsers = (usersIdList: number[]): void => {
+    setSharedUsersList(usersIdList)
   }
-  console.log('------>>>> handleUpdateSharedUsers: ', handleUpdateSharedUsers)
 
-  const renderSelect = ({ options, placeholder }: { options?: Array<{ value: number, label?: string }>, placeholder: string }): React.JSX.Element => (
+  const handleChangeSharedRoles = (rolesIdList: number[]): void => {
+    setSharedRolesList(rolesIdList)
+  }
+
+  const handleApplyChanges = (): void => {
+    if (!isEmpty(gridConfig)) {
+      setGridConfig({
+        ...gridConfig,
+        sharedUsers: sharedUsersList as object,
+        sharedRoles: sharedRolesList as object
+      })
+
+      handleClose()
+    }
+  }
+
+  const renderSelect = ({ options, placeholder, handleOnChange }: { options?: Array<{ value: number, label?: string }>, placeholder: string, handleOnChange: any }): React.JSX.Element => (
     <Select
       mode="multiple"
+      onChange={ handleOnChange }
       options={ options }
       placeholder={ t(placeholder) }
       showSearch
@@ -61,7 +74,11 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
       label: item.username
     }))
 
-    return renderSelect({ options, placeholder: 'user-management.user.search' })
+    return renderSelect({
+      options,
+      placeholder: 'user-management.user.search',
+      handleOnChange: handleChangeSharedUsers
+    })
   }
 
   const renderRoles = (): React.JSX.Element => {
@@ -70,7 +87,11 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
       label: item.name
     }))
 
-    return renderSelect({ options, placeholder: 'user-management.role.search' })
+    return renderSelect({
+      options,
+      placeholder: 'user-management.role.search',
+      handleOnChange: handleChangeSharedRoles
+    })
   }
 
   const tabItems: ITabsProps['items'] = [
@@ -96,9 +117,15 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
       <div className={ styles.btnGroupWrapper }>
         <ButtonGroup
           items={ [
-            <Button key="cancel">{t('button.cancel-edits')}</Button>,
+            <Button
+              key="cancel"
+              onClick={ handleClose }
+            >
+              {t('button.cancel-edits')}
+            </Button>,
             <Button
               key="apply"
+              onClick={ handleApplyChanges }
               type="primary"
             >
               {t('button.apply')}
