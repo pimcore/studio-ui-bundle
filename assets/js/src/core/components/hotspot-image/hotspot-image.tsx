@@ -41,8 +41,8 @@ export interface IStyleOptions {
 
 export const defaultStyleOptions = {
   hotspot: {
-    width: 100,
-    height: 80,
+    width: 10,
+    height: 10,
     resizeBorderSize: 10,
     minSize: 24,
     icon: null
