@@ -28,19 +28,21 @@ export interface HotspotMarkersModalContainerRef {
 export const HotspotMarkersModalContainer = forwardRef<HotspotMarkersModalContainerRef, HotspotMarkersModalContainerProps>((props: HotspotMarkersModalContainerProps, ref) => {
   const [modals, setModals] = useState<Array<{ id: number, props: HotspotMarkersModalProps }>>([])
 
+  const setModal = (id: number, modalProps: HotspotMarkersModalProps): void => {
+    setModals((prevModals) => {
+      const existingModalIndex = prevModals.findIndex(modal => modal.id === id)
+      if (existingModalIndex !== -1) {
+        const newModals = [...prevModals]
+        newModals[existingModalIndex] = { id, props: modalProps }
+        return newModals
+      } else {
+        return [...prevModals, { id, props: modalProps }]
+      }
+    })
+  }
+
   useImperativeHandle(ref, () => ({
-    setModal: (id: number, modalProps: HotspotMarkersModalProps) => {
-      setModals((prevModals) => {
-        const existingModalIndex = prevModals.findIndex(modal => modal.id === id)
-        if (existingModalIndex !== -1) {
-          const newModals = [...prevModals]
-          newModals[existingModalIndex] = { id, props: modalProps }
-          return newModals
-        } else {
-          return [...prevModals, { id, props: modalProps }]
-        }
-      })
-    }
+    setModal
   }))
 
   return (
