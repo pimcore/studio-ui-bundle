@@ -14,6 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
+import { Select } from '@Pimcore/components/select/select'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
@@ -30,6 +31,9 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
   const { t } = useTranslation()
   const { styles } = useStyles()
 
+  console.log('------>>>>> gridConfig: ', gridConfig)
+  console.log('------>>>>> userList: ', userList)
+
   const handleUpdateSharedUsers = (id: any): void => {
     console.log('------>>>>>> ID: ', id, typeof id)
     console.log('------>>>>>> gridConfig: ', gridConfig)
@@ -38,31 +42,39 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
     // @ts-expect-error
     setGridConfig({ ...gridConfig, sharedUsers: [id, ...initial] })
   }
+  console.log('------>>>> handleUpdateSharedUsers: ', handleUpdateSharedUsers)
 
-  const renderUsers = (): React.JSX.Element => (
-    <div>
-      {userList?.items?.map((item: any) => (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-        <div
-          key={ item?.id }
-          onClick={ () => { handleUpdateSharedUsers(item?.id) } }
-        >{item?.username}
-        </div>
-      ))}
-    </div>
-  )
+  const renderUsers = (): React.JSX.Element => {
+    const options = userList?.items?.map(item => ({
+      value: item.id,
+      label: item.username
+    }))
 
-  const renderRoles = (): React.JSX.Element => (
-    <div>
-      {roleList?.items?.map((item: any) => (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-        <div
-          key={ item?.id }
-        >{item?.name}
-        </div>
-      ))}
-    </div>
-  )
+    return (
+      <Select
+        mode="multiple"
+        options={ options }
+        placeholder={ t('user-management.user.search') }
+        showSearch
+      />
+    )
+  }
+
+  const renderRoles = (): React.JSX.Element => {
+    const options = roleList?.items?.map(item => ({
+      value: item.id,
+      label: item.name
+    }))
+
+    return (
+      <Select
+        mode="multiple"
+        options={ options }
+        placeholder={ t('user-management.role.search') }
+        showSearch
+      />
+    )
+  }
 
   const tabItems: ITabsProps['items'] = [
     {

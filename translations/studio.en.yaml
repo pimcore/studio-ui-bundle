@@ -432,6 +432,8 @@ user-management.general: General
 user-management.active: Active
 user-management.name: Name
 user-management.password: Password
+user-management.user.search: Search for a user
+user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
 user-management.firstname: Firstname
 user-management.lastname: Lastname

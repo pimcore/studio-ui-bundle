@@ -31,7 +31,11 @@ export const useStyles = createStyles(({ token, css }) => {
       
       .ant-tabs-ink-bar {
         width: 50% !important;
-      } 
+      }
+      
+      .ant-tabs-content-holder {
+        padding: ${token.paddingXS}px;
+      }
     `
   }
 })
