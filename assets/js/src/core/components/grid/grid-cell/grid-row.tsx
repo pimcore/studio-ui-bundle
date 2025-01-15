@@ -16,6 +16,7 @@ import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps } from '@Pimcore/types/components/types'
+import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export interface GridRowProps {
   row: Row<any>
@@ -23,43 +24,58 @@ export interface GridRowProps {
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
   columns: GridProps['columns']
+  contextMenuItems?: DropdownMenuProps['items']
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, contextMenuItems = [], ...props }: GridRowProps): React.JSX.Element => {
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
-  return useMemo(() => {
-    return (
-      <tr
-        className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
-        key={ row.id }
-      >
-        {row.getVisibleCells().map(cell => (
-          <td
-            className='ant-table-cell'
+  const renderWithContextMenu = (children: React.ReactNode): React.JSX.Element => {
+    if (contextMenuItems.length > 0) {
+      return (
+        <Dropdown
+          key={ row.id }
+          menu={ { items: contextMenuItems } }
+          trigger={ ['contextMenu'] }
+        >
+          {children}
+        </Dropdown>
+      )
+    }
+
+    return <>{children}</>
+  }
+
+  return useMemo(() => renderWithContextMenu(
+    <tr
+      className={ ['ant-table-row', row.getIsSelected() ? 'ant-table-row-selected' : ''].join(' ') }
+      key={ row.id }
+    >
+      {row.getVisibleCells().map(cell => (
+        <td
+          className='ant-table-cell'
+          key={ cell.id }
+          style={ cell.column.columnDef.meta?.autoWidth === true
+            ? {
+                width: 'auto',
+                minWidth: cell.column.getSize()
+              }
+            : {
+                width: cell.column.getSize(),
+                maxWidth: cell.column.getSize()
+              }
+          }
+        >
+          <GridCell
+            cell={ cell }
+            isModified={ isModifiedCell(cell.column.id) }
             key={ cell.id }
-            style={ cell.column.columnDef.meta?.autoWidth === true
-              ? {
-                  width: 'auto',
-                  minWidth: cell.column.getSize()
-                }
-              : {
-                  width: cell.column.getSize(),
-                  maxWidth: cell.column.getSize()
-                }
-            }
-          >
-            <GridCell
-              cell={ cell }
-              isModified={ isModifiedCell(cell.column.id) }
-              key={ cell.id }
-              tableElement={ props.tableElement }
-            />
-          </td>
-        ))}
-      </tr>
-    )
-  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
+            tableElement={ props.tableElement }
+          />
+        </td>
+      ))}
+    </tr>
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
