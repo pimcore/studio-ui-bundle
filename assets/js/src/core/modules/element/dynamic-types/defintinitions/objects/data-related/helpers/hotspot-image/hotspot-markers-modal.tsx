@@ -31,8 +31,15 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const width = 952
   const height = 800
 
-  console.log('myhots', hotspots)
-  console.log(setHotspots)
+  const onRemove = (id: number): void => {
+    setHotspots(hotspots.filter(h => h.id !== id))
+  }
+
+  const onUpdate = (item: IHotspot): void => {
+    setHotspots(hotspots.map(h => h.id === item.id ? item : h))
+  }
+
+  const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&contain=true`
 
   return (
     <WindowModal
@@ -44,9 +51,9 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     >
       <HotspotImage
         data={ hotspots }
-        onRemove={ () => {} }
-        onUpdate={ () => {} }
-        src={ `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&contain=true` }
+        onRemove={ onRemove }
+        onUpdate={ onUpdate }
+        src={ thumbnailSrc }
       />
     </WindowModal>
   )
