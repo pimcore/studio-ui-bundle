@@ -21,7 +21,7 @@ import {
   convertHotspotsToPixel, convertHotspotToPercent, convertHotspotToPixel
 } from '@Pimcore/components/hotspot-image/utils/calculate-dimensions'
 import { dragItem } from '@Pimcore/components/hotspot-image/utils/drag'
-import { type Coordinates, type ImageDimensions } from '@Pimcore/components/hotspot-image/types/dimensions'
+import { type Coordinates } from '@Pimcore/components/hotspot-image/types/types'
 
 export interface IStyleOptions {
   hotspot: {
@@ -73,7 +73,7 @@ interface IHotspotImage {
 
 export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onUpdate }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
-  const [loadedImageDimensions, setLoadedImageDimensions] = useState<ImageDimensions | null>(null)
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
@@ -90,7 +90,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const containerRef = useRef<HTMLDivElement>(null)
 
   const resizeItem = (evt: MouseEvent, containerBounds: DOMRect, hotspotIndex: number, hotspot: IHotspot, dx: number, dy: number): void => {
-    const pixelHotspot = convertHotspotToPixel(hotspot, loadedImageDimensions!)
+    const pixelHotspot = convertHotspotToPixel(hotspot, containerBounds)
     let newWidth = resizeStart.width
     let newHeight = resizeStart.height
     let newX = pixelHotspot.x
@@ -116,7 +116,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         y: newY,
         width: newWidth,
         height: newHeight
-      }, loadedImageDimensions!)
+      }, containerBounds)
       : h))
   }
 
@@ -179,7 +179,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     const dy = evt.clientY - resizeStart.y
 
     if (dragging) {
-      setItems(dragItem(evt, dragStart, loadedImageDimensions!, containerBounds, items, hotspotIndex))
+      setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex))
     } else if (resizeDirection !== null) {
       resizeItem(evt, containerBounds, hotspotIndex, items[hotspotIndex], dx, dy)
     }
@@ -208,17 +208,14 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         className={ 'hotspot-image__image' }
         onLoad={ () => {
           if (imageRef.current !== null) {
-            setLoadedImageDimensions({
-              width: imageRef.current.offsetWidth,
-              height: imageRef.current.offsetHeight
-            })
+            setImageLoaded(true)
           }
         } }
         ref={ imageRef }
         src={ src }
       />
-      { loadedImageDimensions !== null && (
-        convertHotspotsToPixel(items, loadedImageDimensions).map(hotspot => (
+      { imageLoaded && containerRef.current !== null && (
+        convertHotspotsToPixel(items, containerRef.current.getBoundingClientRect()).map(hotspot => (
           <Popover
             arrow={ false }
             content={

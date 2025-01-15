@@ -13,27 +13,27 @@
 
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
-export const convertHotspotToPixel = (hotspot: IHotspot, imageDimensions: { width: number, height: number }): IHotspot => {
+export const convertHotspotToPixel = (hotspot: IHotspot, containerBounds: DOMRect): IHotspot => {
   return {
     ...hotspot,
-    x: percentToPixel(hotspot.x, imageDimensions.width),
-    y: percentToPixel(hotspot.y, imageDimensions.height),
-    width: hotspot.type === 'marker' ? hotspot.width : percentToPixel(hotspot.width, imageDimensions.width),
-    height: hotspot.type === 'marker' ? hotspot.height : percentToPixel(hotspot.height, imageDimensions.height)
+    x: percentToPixel(hotspot.x, containerBounds.width),
+    y: percentToPixel(hotspot.y, containerBounds.height),
+    width: hotspot.type === 'marker' ? hotspot.width : percentToPixel(hotspot.width, containerBounds.width),
+    height: hotspot.type === 'marker' ? hotspot.height : percentToPixel(hotspot.height, containerBounds.height)
   }
 }
 
-export const convertHotspotsToPixel = (hotspots: IHotspot[], imageDimensions: { width: number, height: number }): IHotspot[] => {
-  return hotspots.map(hotspot => convertHotspotToPixel(hotspot, imageDimensions))
+export const convertHotspotsToPixel = (hotspots: IHotspot[], containerBounds: DOMRect): IHotspot[] => {
+  return hotspots.map(hotspot => convertHotspotToPixel(hotspot, containerBounds))
 }
 
-export const convertHotspotToPercent = (hotspot: IHotspot, imageDimensions: { width: number, height: number }): IHotspot => {
+export const convertHotspotToPercent = (hotspot: IHotspot, containerBounds: DOMRect): IHotspot => {
   return {
     ...hotspot,
-    x: pixelToPercent(hotspot.x, imageDimensions.width),
-    y: pixelToPercent(hotspot.y, imageDimensions.height),
-    width: hotspot.type === 'marker' ? hotspot.width : pixelToPercent(hotspot.width, imageDimensions.width),
-    height: hotspot.type === 'marker' ? hotspot.height : pixelToPercent(hotspot.height, imageDimensions.height)
+    x: pixelToPercent(hotspot.x, containerBounds.width),
+    y: pixelToPercent(hotspot.y, containerBounds.height),
+    width: hotspot.type === 'marker' ? hotspot.width : pixelToPercent(hotspot.width, containerBounds.width),
+    height: hotspot.type === 'marker' ? hotspot.height : pixelToPercent(hotspot.height, containerBounds.height)
   }
 }
 
