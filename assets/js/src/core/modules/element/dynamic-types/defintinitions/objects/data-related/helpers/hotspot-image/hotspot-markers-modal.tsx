@@ -127,7 +127,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       onOk={ handleOk }
       open={ props.open }
       size="XL"
-      title={ t('hotspots.markers-modal.title') }
+      title={ t('hotspots.edit') }
     >
       <HotspotImage
         data={ modalOpened ? hotspots : [] }

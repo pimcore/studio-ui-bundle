@@ -515,6 +515,7 @@ link.accesskey: Accesskey
 link.rel: Relation
 link.tabindex: Tabindex
 link.class: Class
-hotspots.markers-modal.title: Edit markers and hotspots
+hotspots.edit: Edit marker and hotspots
 hotspots.new-marker: New Marker
 hotspots.new-hotspot: New Hotspot
+
