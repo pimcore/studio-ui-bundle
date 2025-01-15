@@ -161,6 +161,14 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
                 }
               })
             }
+          },
+          {
+            label: t('empty'),
+            key: 'open',
+            icon: <Icon value={ 'trash' } />,
+            onClick: async () => {
+              setValue(value.map((v, i) => i === index ? { image: null, hotspots: null, marker: null } : v))
+            }
           }
         ] }
         height={ 100 }
