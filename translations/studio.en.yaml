@@ -202,6 +202,7 @@ properties.add-property-mandatory-fields-missing.error: Key and type are mandato
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.cancel-edits: Cancel edits
 actions.open: Open
 open: Open
 component.no-content.no-content-available: No content available

@@ -36,6 +36,12 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-tabs-content-holder {
         padding: ${token.paddingXS}px;
       }
+    `,
+
+    btnGroupWrapper: css`
+      display: flex;
+      justify-content: flex-end;
+      padding: 7px ${token.paddingXS}px;
     `
   }
 })

@@ -13,12 +13,14 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Select } from '@Pimcore/components/select/select'
+import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { Button } from '@Pimcore/components/button/button'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
-import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 
 interface IUsersRolesDropdownProps {
   roleList?: RoleGetCollectionApiResponse
@@ -44,20 +46,22 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
   }
   console.log('------>>>> handleUpdateSharedUsers: ', handleUpdateSharedUsers)
 
+  const renderSelect = ({ options, placeholder }: { options?: Array<{ value: number, label?: string }>, placeholder: string }): React.JSX.Element => (
+    <Select
+      mode="multiple"
+      options={ options }
+      placeholder={ t(placeholder) }
+      showSearch
+    />
+  )
+
   const renderUsers = (): React.JSX.Element => {
     const options = userList?.items?.map(item => ({
       value: item.id,
       label: item.username
     }))
 
-    return (
-      <Select
-        mode="multiple"
-        options={ options }
-        placeholder={ t('user-management.user.search') }
-        showSearch
-      />
-    )
+    return renderSelect({ options, placeholder: 'user-management.user.search' })
   }
 
   const renderRoles = (): React.JSX.Element => {
@@ -66,14 +70,7 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
       label: item.name
     }))
 
-    return (
-      <Select
-        mode="multiple"
-        options={ options }
-        placeholder={ t('user-management.role.search') }
-        showSearch
-      />
-    )
+    return renderSelect({ options, placeholder: 'user-management.role.search' })
   }
 
   const tabItems: ITabsProps['items'] = [
@@ -96,6 +93,19 @@ export const UsersRolesDropdown = ({ userList, roleList }: IUsersRolesDropdownPr
         className={ styles.tabs }
         items={ tabItems }
       />
+      <div className={ styles.btnGroupWrapper }>
+        <ButtonGroup
+          items={ [
+            <Button key="cancel">{t('button.cancel-edits')}</Button>,
+            <Button
+              key="apply"
+              type="primary"
+            >
+              {t('button.apply')}
+            </Button>
+          ] }
+        />
+      </div>
     </div>
   )
 }
