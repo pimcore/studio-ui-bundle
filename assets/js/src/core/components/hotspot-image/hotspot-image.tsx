@@ -20,6 +20,8 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import {
   convertHotspotsToPixel, convertHotspotToPercent, convertHotspotToPixel
 } from '@Pimcore/components/hotspot-image/utils/calculate-dimensions'
+import { dragItem } from '@Pimcore/components/hotspot-image/utils/drag'
+import { type Coordinates, type ImageDimensions } from '@Pimcore/components/hotspot-image/types/dimensions'
 
 export interface IStyleOptions {
   hotspot: {
@@ -71,7 +73,7 @@ interface IHotspotImage {
 
 export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onUpdate }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
-  const [loadedImageDimensions, setLoadedImageDimensions] = useState<{ width: number, height: number } | null>(null)
+  const [loadedImageDimensions, setLoadedImageDimensions] = useState<ImageDimensions | null>(null)
   const imageRef = useRef<HTMLImageElement | null>(null)
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
@@ -82,18 +84,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [dragging, setDragging] = useState<boolean>(false)
   const [resizeDirection, setResizeDirection] = useState<string | null>(null)
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const [dragStart, setDragStart] = useState<Coordinates>({ x: 0, y: 0 })
   const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, x: 0, y: 0 })
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const dragItem = (evt: MouseEvent, containerBounds: DOMRect, hotspotIndex: number, hotspot: IHotspot): void => {
-    const pixelHotspot = convertHotspotToPixel(hotspot, loadedImageDimensions!)
-    const newX = Math.min(containerBounds.width - pixelHotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x))
-    const newY = Math.min(containerBounds.height - pixelHotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y))
-
-    setItems(items.map((h, i) => i === hotspotIndex ? convertHotspotToPercent({ ...h, x: newX, y: newY, width: pixelHotspot.width, height: pixelHotspot.height }, loadedImageDimensions!) : h))
-  }
 
   const resizeItem = (evt: MouseEvent, containerBounds: DOMRect, hotspotIndex: number, hotspot: IHotspot, dx: number, dy: number): void => {
     const pixelHotspot = convertHotspotToPixel(hotspot, loadedImageDimensions!)
@@ -185,7 +179,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     const dy = evt.clientY - resizeStart.y
 
     if (dragging) {
-      dragItem(evt, containerBounds, hotspotIndex, items[hotspotIndex])
+      setItems(dragItem(evt, dragStart, loadedImageDimensions!, containerBounds, items, hotspotIndex))
     } else if (resizeDirection !== null) {
       resizeItem(evt, containerBounds, hotspotIndex, items[hotspotIndex], dx, dy)
     }
