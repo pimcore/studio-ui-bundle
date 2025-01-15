@@ -52,7 +52,7 @@ export const defaultStyleOptions = {
   marker: {
     width: 24,
     height: 24,
-    icon: 'marker-pin-02'
+    icon: 'location-marker'
   }
 }
 
@@ -184,7 +184,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
 
                 <Tooltip title={ t('remove') }>
                   <IconButton
-                    icon={ { value: 'trash-04' } }
+                    icon={ { value: 'trash' } }
                     onClick={ () => { onRemove(hotspot.id) } }
                     type={ 'link' }
                   />
