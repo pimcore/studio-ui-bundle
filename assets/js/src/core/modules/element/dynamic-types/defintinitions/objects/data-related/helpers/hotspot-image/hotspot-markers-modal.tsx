@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { defaultStyleOptions, HotspotImage, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
@@ -36,6 +36,10 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
 
   const width = 952
   const height = 800
+
+  useEffect(() => {
+    setHotspots(props.hotspots ?? [])
+  }, [props.hotspots])
 
   const onClone = (id: number): void => {
     const originalHotspot = hotspots.find(h => h.id === id)
@@ -62,7 +66,6 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   }
 
   const handleCancel = (): void => {
-    setHotspots(props.hotspots ?? [])
     props.onClose?.()
   }
 

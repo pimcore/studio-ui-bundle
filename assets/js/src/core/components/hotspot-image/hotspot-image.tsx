@@ -86,6 +86,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     setItems(data ?? [])
   }, [data?.length])
 
+  useEffect(() => {
+    setImageLoaded(false)
+  }, [src])
+
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [dragging, setDragging] = useState<boolean>(false)
   const [resizeDirection, setResizeDirection] = useState<string | null>(null)
@@ -158,6 +162,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
       <img
         alt=""
         className={ 'hotspot-image__image' }
+        key={ src }
         onLoad={ () => {
           if (imageRef.current !== null) {
             setImageLoaded(true)
