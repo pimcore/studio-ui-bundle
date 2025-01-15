@@ -216,6 +216,10 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream/preview` }),
                 providesTags: ["Assets"],
             }),
+            assetImageStream: build.query<AssetImageStreamApiResponse, AssetImageStreamApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/image/stream` }),
+                providesTags: ["Assets"],
+            }),
             assetImageDownloadByThumbnail: build.query<
                 AssetImageDownloadByThumbnailApiResponse,
                 AssetImageDownloadByThumbnailApiArg
@@ -508,6 +512,7 @@ export type AssetUpdateByIdApiArg = {
             key?: string | null;
             locked?: string | null;
             data?: string | null;
+            dataUri?: string | null;
             metadata?: UpdateCustomMetadata[] | null;
             customSettings?: UpdateCustomSettings[] | null;
             properties?: UpdateDataProperty[] | null;
@@ -591,7 +596,10 @@ export type AssetUpdateGridConfigurationApiArg = {
 export type AssetGetGridApiResponse = /** status 200 Asset grid data */ {
     totalItems: number;
     items: {
+        id?: number;
         columns?: GridColumnData[];
+        isLocked?: boolean;
+        permissions?: Permissions;
     }[];
 };
 export type AssetGetGridApiArg = {
@@ -626,7 +634,7 @@ export type AssetImageStreamCustomApiArg = {
     /** Mime type of downloaded image. */
     mimeType: "JPEG" | "PNG";
     /** Resize mode of downloaded image. */
-    resizeMode: "resize" | "scaleByWidth" | "scaleByHeight";
+    resizeMode: "scaleByHeight" | "scaleByWidth" | "resize" | "none";
     /** Width of downloaded image */
     width?: number;
     /** Height of downloaded image */
@@ -653,6 +661,11 @@ export type AssetImageDownloadByFormatApiArg = {
 };
 export type AssetImageStreamPreviewApiResponse = /** status 200 Image preview stream */ Blob;
 export type AssetImageStreamPreviewApiArg = {
+    /** Id of the image */
+    id: number;
+};
+export type AssetImageStreamApiResponse = /** status 200 Stream of an original image asset */ Blob;
+export type AssetImageStreamApiArg = {
     /** Id of the image */
     id: number;
 };
@@ -1160,6 +1173,7 @@ export const {
     useAssetImageStreamCustomQuery,
     useAssetImageDownloadByFormatQuery,
     useAssetImageStreamPreviewQuery,
+    useAssetImageStreamQuery,
     useAssetImageDownloadByThumbnailQuery,
     useAssetImageClearThumbnailMutation,
     useAssetPatchByIdMutation,

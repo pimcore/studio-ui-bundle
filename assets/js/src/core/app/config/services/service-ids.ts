@@ -135,6 +135,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/RgbaColor': 'DynamicTypes/ObjectData/RgbaColor',
   'DynamicTypes/ObjectData/EncryptedField': 'DynamicTypes/ObjectData/EncryptedField',
   'DynamicTypes/ObjectData/Checkbox': 'DynamicTypes/ObjectData/Checkbox',
+  'DynamicTypes/ObjectData/Link': 'DynamicTypes/ObjectData/Link',
   'DynamicTypes/ObjectData/UrlSlug': 'DynamicTypes/ObjectData/UrlSlug',
   'DynamicTypes/ObjectData/Date': 'DynamicTypes/ObjectData/Date',
   'DynamicTypes/ObjectData/Datetime': 'DynamicTypes/ObjectData/Datetime',
@@ -154,6 +155,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
   'DynamicTypes/ObjectData/FieldCollection': 'DynamicTypes/ObjectData/FieldCollection',
+  'DynamicTypes/ObjectData/ObjectBrick': 'DynamicTypes/ObjectData/ObjectBrick',
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',

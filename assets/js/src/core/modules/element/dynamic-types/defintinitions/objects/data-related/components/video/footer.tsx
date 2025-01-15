@@ -44,13 +44,17 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const firstType = props.allowedVideoTypes?.[0] ?? 'asset'
-  const [value, setValue] = useState<VideoValue>(props.value ?? { type: firstType, data: null })
+  const [type, setType] = useState<VideoType>(props.value?.type ?? firstType)
   const [form] = Form.useForm()
 
   useEffect(() => {
+    fillFormWithPropValue()
+  }, [props.value])
+
+  const fillForm = (value: VideoValue): void => {
     form.setFieldsValue({
       type: value.type,
-      data: value.data
+      data: checkData(value.type, value.data) ? value.data : null
     })
     if (value.type === 'asset') {
       form.setFieldsValue({
@@ -59,25 +63,38 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
         poster: value.poster
       })
     }
-  }, [value])
+  }
 
-  useEffect(() => {
-    setValue(props.value ?? { type: firstType, data: null })
-  }, [props.value])
+  const checkData = (type: VideoType, data: any): boolean => {
+    if (type === 'asset') {
+      return data !== null
+    }
+    return typeof data === 'string'
+  }
+
+  const fillFormWithPropValue = (): void => {
+    setType(props.value?.type ?? firstType)
+    fillForm(props.value ?? { type: firstType, data: null })
+  }
 
   const showModal = (): void => {
     setIsModalVisible(true)
   }
 
   const handleOk = (): void => {
-    const sanitizedValue = sanitizeVideoIds(value)
-    setValue(sanitizedValue)
+    const sanitizedValue = sanitizeVideoIds(form.getFieldsValue() as VideoValue)
     props.onSave?.(sanitizedValue)
     setIsModalVisible(false)
   }
 
   const handleCancel = (): void => {
     setIsModalVisible(false)
+  }
+
+  const handleAfterOpenChange = (open: boolean): void => {
+    if (!open) {
+      fillFormWithPropValue()
+    }
   }
 
   const sanitizeVideoIds = (videoValue: VideoValue): VideoValue => {
@@ -96,10 +113,6 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
       type,
       data: data as string
     }
-  }
-
-  const handleValuesChange = (changedValues: any, allValues: VideoValue): void => {
-    setValue(allValues)
   }
 
   const getVideoTypeOptions = (): Array<{ value: VideoType, label: string }> => {
@@ -139,6 +152,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
         noSpacing
       />
       <WindowModal
+        afterOpenChange={ handleAfterOpenChange }
         footer={ props.disabled === true ? <span></span> : undefined }
         okText={ t('save') }
         onCancel={ handleCancel }
@@ -150,7 +164,6 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
         <Form
           form={ form }
           layout="vertical"
-          onValuesChange={ handleValuesChange }
         >
           <Space
             className='w-full'
@@ -163,16 +176,19 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
             >
               <Select
                 disabled={ props.disabled }
-                onChange={ newType => { setValue({ type: newType, data: null }) } }
+                onChange={ newType => {
+                  setType(newType as VideoType)
+                  fillForm({ type: newType, data: null })
+                } }
                 options={ getVideoTypeOptions() }
               />
             </FormItem>
 
             <FormItem
-              label={ t(value.type === 'asset' ? 'video.path' : 'video.id') }
+              label={ t(type === 'asset' ? 'video.path' : 'video.id') }
               name="data"
             >
-              { value.type === 'asset'
+              { type === 'asset'
                 ? (
                   <ManyToOneRelation
                     allowedAssetTypes={ ['video'] }
@@ -185,7 +201,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
                   <Input placeholder={ t('video.url') } />
                   )}
             </FormItem>
-            { value.type === 'asset' && (
+            { type === 'asset' && (
             <>
               <FormItem
                 label={ t('video.poster') }

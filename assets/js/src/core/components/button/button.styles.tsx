@@ -28,6 +28,17 @@ export const useStyles = createStyles(({ token, css }) => {
         margin: auto;
         color: inherit;
       }
+
+      &.button--type-action {
+        background-color: ${token.colorBgToolbar};
+        border: none;
+        box-shadow: none;
+        border-radius: ${token.borderRadius}px ${token.borderRadius}px 0 0;
+
+        &.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
+          background-color: ${token.colorFillActive};
+        }
+      }
     `
   }
 })
