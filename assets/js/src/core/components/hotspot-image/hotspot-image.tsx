@@ -18,10 +18,11 @@ import { Popover } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import {
-  convertHotspotsToPixel, convertHotspotToPercent, convertHotspotToPixel
+  convertHotspotsToPixel
 } from '@Pimcore/components/hotspot-image/utils/calculate-dimensions'
 import { dragItem } from '@Pimcore/components/hotspot-image/utils/drag'
-import { type Coordinates } from '@Pimcore/components/hotspot-image/types/types'
+import { type Coordinates, type Rectangle } from '@Pimcore/components/hotspot-image/types/types'
+import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
 
 export interface IStyleOptions {
   hotspot: {
@@ -85,62 +86,9 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const [dragging, setDragging] = useState<boolean>(false)
   const [resizeDirection, setResizeDirection] = useState<string | null>(null)
   const [dragStart, setDragStart] = useState<Coordinates>({ x: 0, y: 0 })
-  const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, x: 0, y: 0 })
+  const [resizeStart, setResizeStart] = useState<Rectangle>({ width: 0, height: 0, x: 0, y: 0 })
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const resizeItem = (evt: MouseEvent, containerBounds: DOMRect, hotspotIndex: number, hotspot: IHotspot, dx: number, dy: number): void => {
-    const pixelHotspot = convertHotspotToPixel(hotspot, containerBounds)
-    let newWidth = resizeStart.width
-    let newHeight = resizeStart.height
-    let newX = pixelHotspot.x
-    let newY = pixelHotspot.y
-
-    if (resizeDirection !== null && resizeDirection?.includes('w')) {
-      ({ newWidth, newX } = handleWestResize(pixelHotspot, dx, evt, containerBounds))
-    }
-    if (resizeDirection !== null && resizeDirection?.includes('e')) {
-      newWidth = Math.min(containerBounds.width - pixelHotspot.x, Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.width + dx))
-    }
-    if (resizeDirection !== null && resizeDirection?.includes('n')) {
-      ({ newHeight, newY } = handleNorthResize(pixelHotspot, dy, evt, containerBounds))
-    }
-    if (resizeDirection !== null && resizeDirection?.includes('s')) {
-      newHeight = Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.height + dy)
-    }
-
-    setItems(items.map((h, i) => i === hotspotIndex
-      ? convertHotspotToPercent({
-        ...h,
-        x: newX,
-        y: newY,
-        width: newWidth,
-        height: newHeight
-      }, containerBounds)
-      : h))
-  }
-
-  const handleWestResize = (hotspot: IHotspot, dx: number, evt: MouseEvent, containerBounds: DOMRect): { newWidth: number, newX: number } => {
-    const newWidth = Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.width - dx)
-    let newX = Math.min(hotspot.x + resizeStart.width - styleOptions[hotspot.type].minSize, evt.clientX - containerBounds.left)
-
-    if (newWidth === styleOptions[hotspot.type].minSize) {
-      newX = hotspot.x + hotspot.width - styleOptions[hotspot.type].minSize
-    }
-
-    return { newWidth, newX }
-  }
-
-  const handleNorthResize = (hotspot: IHotspot, dy: number, evt: MouseEvent, containerBounds: DOMRect): { newHeight: number, newY: number } => {
-    const newHeight = Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.height - dy)
-    let newY = Math.min(hotspot.y + resizeStart.height - styleOptions[hotspot.type].minSize, evt.clientY - containerBounds.top)
-
-    if (newHeight === styleOptions[hotspot.type].minSize) {
-      newY = hotspot.y + hotspot.height - styleOptions[hotspot.type].minSize
-    }
-
-    return { newHeight, newY }
-  }
 
   const handleMouseDown = (evt: MouseEvent, hotspot: IHotspot): void => {
     const rect = evt.currentTarget.getBoundingClientRect()
@@ -181,7 +129,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     if (dragging) {
       setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex))
     } else if (resizeDirection !== null) {
-      resizeItem(evt, containerBounds, hotspotIndex, items[hotspotIndex], dx, dy)
+      setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, Number(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
     }
   }
 
