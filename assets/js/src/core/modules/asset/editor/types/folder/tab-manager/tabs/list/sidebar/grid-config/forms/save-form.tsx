@@ -11,14 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Space } from '@Pimcore/components/space/space'
+import React, { useEffect, useState } from 'react'
 import { Checkbox, Flex, Input } from 'antd'
 import { Form, type FormProps } from '@Pimcore/components/form/form'
+import { Space } from '@Pimcore/components/space/space'
 import { Switch } from '@Pimcore/components/switch/switch'
-import React, { useEffect, useState } from 'react'
 import { Text } from '@Pimcore/components/text/text'
+import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
+import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
-export interface SaveFormProps extends FormProps {}
+export interface SaveFormProps extends FormProps {
+  roleList?: RoleGetCollectionApiResponse
+  userList?: UserGetCollectionApiResponse
+}
 
 export const defaultValues = {
   name: '',

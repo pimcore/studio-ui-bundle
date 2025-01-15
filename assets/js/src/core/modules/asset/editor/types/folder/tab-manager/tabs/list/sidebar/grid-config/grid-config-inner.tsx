@@ -30,6 +30,8 @@ import { useForm } from 'antd/es/form/Form'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Content } from '@Pimcore/components/content/content'
+import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/role/role-api-slice-enhanced'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridAvailableColumns()
@@ -41,10 +43,16 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { gridConfig } = useListGridConfig()
 
   const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
+  const { data: roleList } = useRoleGetCollectionQuery()
+  const { data: userList } = useUserGetCollectionQuery()
+  const { isFetching: gridConfigIsLoading } = useAssetGetGridConfigurationByFolderIdQuery({
+    folderId: id,
+    configurationId: selectedGridConfigId
+  })
+
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useAssetSaveGridConfigurationMutation()
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useAssetUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
-  const { isFetching: gridConfigIsLoading } = useAssetGetGridConfigurationByFolderIdQuery({ folderId: id, configurationId: selectedGridConfigId })
 
   const [view, setView] = useState<'edit' | 'save' | 'update'>('edit')
   const [form] = useForm()
@@ -70,59 +78,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   useEffect(() => {
     setColumns(gridColumns)
   }, [gridColumns])
-
-  if (gridConfigIsLoading || isDeleting) {
-    return <Content loading />
-  }
-
-  return (
-    <>
-      { view === 'edit' && (
-        <EditView
-          addColumnMenu={ getFormattedDropDownMenu(dropDownMenu, onColumnClick) }
-          columns={ columns }
-          gridConfig={ gridConfig }
-          isLoading={ isLoading || isFetching }
-          isUpdating={ isUpdating }
-          onApplyClick={ onApplyClick }
-          onCancelClick={ onCancelClick }
-          onEditConfigurationClick={ () => {
-            setView('update')
-          } }
-          onSaveConfigurationClick={ () => { setView('save') } }
-          onUpdateConfigurationClick={ onUpdatedConfigurationClick }
-          savedGridConfigurations={ savedGridConfigurations }
-        />
-      ) }
-
-      { (view === 'save' || view === 'update') && (
-        <SaveView
-          formProps={ {
-            form,
-            onFinish: onFormFinish,
-            initialValues:
-              view === 'update' && isSavedConfiguration
-                ? {
-                    name: gridConfig?.name,
-                    description: gridConfig?.description,
-                    setAsDefault: gridConfig?.setAsFavorite,
-                    shareGlobally: gridConfig?.shareGlobal
-                  }
-                : {
-                    ...defaultValues
-                  }
-          } }
-          isDeleting={ isDeleting }
-          isLoading={ isSaveLoading }
-          modificationDate={ gridConfig?.modificationDate }
-          onCancelClick={ () => { setView('edit') } }
-          onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
-          saveAsNewConfiguration={ view === 'save' }
-          userName={ userData?.username }
-        />
-      ) }
-    </>
-  )
 
   function onDeleteClick (): void {
     if (isSavedConfiguration) {
@@ -219,15 +174,66 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  function onCancelClick (): void {
-    setColumns(gridColumns)
-  }
+  const onCancelClick = (): void => { setColumns(gridColumns) }
 
-  function onApplyClick (): void {
-    setGridColumns(columns)
-  }
+  const onApplyClick = (): void => { setGridColumns(columns) }
 
-  function onColumnClick (column: GridColumnConfiguration): void {
+  const onColumnClick = (column: GridColumnConfiguration): void => {
     addColumn(column)
   }
+
+  if (gridConfigIsLoading || isDeleting) {
+    return <Content loading />
+  }
+
+  return (
+    <>
+      { view === 'edit' && (
+        <EditView
+          addColumnMenu={ getFormattedDropDownMenu(dropDownMenu, onColumnClick) }
+          columns={ columns }
+          gridConfig={ gridConfig }
+          isLoading={ isLoading || isFetching }
+          isUpdating={ isUpdating }
+          onApplyClick={ onApplyClick }
+          onCancelClick={ onCancelClick }
+          onEditConfigurationClick={ () => {
+            setView('update')
+          } }
+          onSaveConfigurationClick={ () => { setView('save') } }
+          onUpdateConfigurationClick={ onUpdatedConfigurationClick }
+          savedGridConfigurations={ savedGridConfigurations }
+        />
+      ) }
+
+      { (view === 'save' || view === 'update') && (
+        <SaveView
+          formProps={ {
+            form,
+            onFinish: onFormFinish,
+            initialValues:
+              view === 'update' && isSavedConfiguration
+                ? {
+                    name: gridConfig?.name,
+                    description: gridConfig?.description,
+                    setAsDefault: gridConfig?.setAsFavorite,
+                    shareGlobally: gridConfig?.shareGlobal
+                  }
+                : {
+                    ...defaultValues
+                  }
+          } }
+          isDeleting={ isDeleting }
+          isLoading={ isSaveLoading }
+          modificationDate={ gridConfig?.modificationDate }
+          onCancelClick={ () => { setView('edit') } }
+          onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
+          roleList={ roleList }
+          saveAsNewConfiguration={ view === 'save' }
+          userList={ userList }
+          userName={ userData?.username }
+        />
+      ) }
+    </>
+  )
 }

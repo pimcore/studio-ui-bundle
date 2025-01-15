@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { Col, Flex, Popconfirm, Row } from 'antd'
 import { SaveForm, type SaveFormProps } from '../forms/save-form'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -20,10 +21,11 @@ import { Space } from '@Pimcore/components/space/space'
 import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
-import { Col, Flex, Popconfirm, Row } from 'antd'
 import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
+import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 export interface SaveViewProps {
   formProps: SaveFormProps
@@ -34,9 +36,11 @@ export interface SaveViewProps {
   saveAsNewConfiguration?: boolean
   modificationDate?: number | null
   userName?: string
+  roleList?: RoleGetCollectionApiResponse
+  userList?: UserGetCollectionApiResponse
 }
 
-export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate, userName }: SaveViewProps): React.JSX.Element => {
+export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate, userName, ...props }: SaveViewProps): React.JSX.Element => {
   const { form } = formProps
 
   return (
@@ -108,7 +112,10 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
             </Row>
           )}
 
-          <SaveForm { ...formProps } />
+          <SaveForm
+            { ...formProps }
+            { ...props }
+          />
         </Flex>
       </Content>
     </ContentLayout>
