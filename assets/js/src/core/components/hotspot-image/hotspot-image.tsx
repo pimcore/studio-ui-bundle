@@ -17,7 +17,9 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Popover } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { percentToPixel, pixelToPercent } from '@Pimcore/components/hotspot-image/utils/calculate-dimensions'
+import {
+  convertHotspotsToPixel, convertHotspotToPercent, convertHotspotToPixel
+} from '@Pimcore/components/hotspot-image/utils/calculate-dimensions'
 
 export interface IStyleOptions {
   hotspot: {
@@ -85,43 +87,42 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const imageWidth = loadedImageDimensions?.width ?? 0
-  const imageHeight = loadedImageDimensions?.height ?? 0
-
   const dragItem = (evt: MouseEvent, containerBounds: DOMRect, hotspotIndex: number, hotspot: IHotspot): void => {
-    const newX = Math.min(containerBounds.width - hotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x))
-    const newY = Math.min(containerBounds.height - hotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y))
+    const pixelHotspot = convertHotspotToPixel(hotspot, loadedImageDimensions!)
+    const newX = Math.min(containerBounds.width - pixelHotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x))
+    const newY = Math.min(containerBounds.height - pixelHotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y))
 
-    setItems(items.map((h, i) => i === hotspotIndex ? { ...h, x: pixelToPercent(newX, imageWidth), y: pixelToPercent(newY, imageHeight) } : h))
+    setItems(items.map((h, i) => i === hotspotIndex ? convertHotspotToPercent({ ...h, x: newX, y: newY, width: pixelHotspot.width, height: pixelHotspot.height }, loadedImageDimensions!) : h))
   }
 
   const resizeItem = (evt: MouseEvent, containerBounds: DOMRect, hotspotIndex: number, hotspot: IHotspot, dx: number, dy: number): void => {
+    const pixelHotspot = convertHotspotToPixel(hotspot, loadedImageDimensions!)
     let newWidth = resizeStart.width
     let newHeight = resizeStart.height
-    let newX = percentToPixel(hotspot.x, imageWidth)
-    let newY = percentToPixel(hotspot.y, imageHeight)
+    let newX = pixelHotspot.x
+    let newY = pixelHotspot.y
 
     if (resizeDirection !== null && resizeDirection?.includes('w')) {
-      ({ newWidth, newX } = handleWestResize(hotspot, dx, evt, containerBounds))
+      ({ newWidth, newX } = handleWestResize(pixelHotspot, dx, evt, containerBounds))
     }
     if (resizeDirection !== null && resizeDirection?.includes('e')) {
-      newWidth = Math.min(containerBounds.width - hotspot.x, Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.width + dx))
+      newWidth = Math.min(containerBounds.width - pixelHotspot.x, Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.width + dx))
     }
     if (resizeDirection !== null && resizeDirection?.includes('n')) {
-      ({ newHeight, newY } = handleNorthResize(hotspot, dy, evt, containerBounds))
+      ({ newHeight, newY } = handleNorthResize(pixelHotspot, dy, evt, containerBounds))
     }
     if (resizeDirection !== null && resizeDirection?.includes('s')) {
       newHeight = Math.max(Number(styleOptions[hotspot.type].minSize), resizeStart.height + dy)
     }
 
     setItems(items.map((h, i) => i === hotspotIndex
-      ? {
-          ...h,
-          x: pixelToPercent(newX, imageWidth),
-          y: pixelToPercent(newY, imageHeight),
-          width: pixelToPercent(newWidth, imageWidth),
-          height: pixelToPercent(newHeight, imageHeight)
-        }
+      ? convertHotspotToPercent({
+        ...h,
+        x: newX,
+        y: newY,
+        width: newWidth,
+        height: newHeight
+      }, loadedImageDimensions!)
       : h))
   }
 
@@ -223,7 +224,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
         src={ src }
       />
       { loadedImageDimensions !== null && (
-        items.map(hotspot => (
+        convertHotspotsToPixel(items, loadedImageDimensions).map(hotspot => (
           <Popover
             arrow={ false }
             content={
@@ -265,10 +266,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
               onMouseDown={ evt => { handleMouseDown(evt, hotspot) } }
               style={ {
                 position: 'absolute',
-                left: `${percentToPixel(hotspot.x, loadedImageDimensions.width)}px`,
-                top: `${percentToPixel(hotspot.y, loadedImageDimensions.height)}px`,
-                width: `${hotspot.type === 'marker' ? hotspot.width : percentToPixel(hotspot.width, loadedImageDimensions.width)}px`,
-                height: `${hotspot.type === 'marker' ? hotspot.height : percentToPixel(hotspot.height, loadedImageDimensions.height)}px`
+                left: `${hotspot.x}px`,
+                top: `${hotspot.y}px`,
+                width: `${hotspot.width}px`,
+                height: `${hotspot.height}px`
               } }
               type={ 'button' }
             >
