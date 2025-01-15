@@ -36,16 +36,16 @@ export const resizeItem = (
   let newX = hotspot.x
   let newY = hotspot.y
 
-  if (resizeDirection !== null && resizeDirection?.includes('w')) {
+  if (resizeDirection?.includes('w') === true) {
     ({ newWidth, newX } = handleWestResize(resizeStart, hotspot, dx, evt, containerBounds, minSize))
   }
-  if (resizeDirection !== null && resizeDirection?.includes('e')) {
+  if (resizeDirection?.includes('e') === true) {
     newWidth = Math.min(containerBounds.width - hotspot.x, Math.max(minSize, resizeStart.width + dx))
   }
-  if (resizeDirection !== null && resizeDirection?.includes('n')) {
+  if (resizeDirection?.includes('n') === true) {
     ({ newHeight, newY } = handleNorthResize(resizeStart, hotspot, dy, evt, containerBounds, minSize))
   }
-  if (resizeDirection !== null && resizeDirection?.includes('s')) {
+  if (resizeDirection?.includes('s') === true) {
     newHeight = Math.max(minSize, resizeStart.height + dy)
   }
 

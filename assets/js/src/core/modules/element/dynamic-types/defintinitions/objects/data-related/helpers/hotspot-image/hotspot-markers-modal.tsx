@@ -32,7 +32,7 @@ export interface HotspotMarkersModalProps {
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
-  const [modalOpenend, setModalOpened] = useState(false)
+  const [modalOpened, setModalOpened] = useState(false)
 
   const width = 952
   const height = 800
@@ -119,7 +119,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
       title={ t('hotspots.markers-modal.title') }
     >
       <HotspotImage
-        data={ modalOpenend ? hotspots : [] }
+        data={ modalOpened ? hotspots : [] }
         onRemove={ onRemove }
         onUpdate={ onUpdate }
         src={ thumbnailSrc }
