@@ -52,9 +52,9 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     }
   }
 
-  const renderIcon = (iconName: string): React.JSX.Element => (
+  const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
     <Icon
-      options={ { width: 12, height: 12 } }
+      options={ { width: size ?? 12, height: size ?? 12 } }
       value={ iconName }
     />
   )
@@ -65,9 +65,19 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     )
 
     const renderUserView = (): React.JSX.Element => (
-      <Text className={ styles.label }>
-        {renderIcon('user')} User | {renderIcon('shield')} Role
-      </Text>
+      <Flex gap={ 10 }>
+        <Text className={ styles.label }>
+          {renderIcon('user')} User | {renderIcon('shield')} Role
+        </Text>
+        <Flex
+          align="center"
+          className={ styles.updateButton }
+          gap={ 8 }
+        >
+          {renderIcon('edit', 16)}
+          <Text className={ styles.updateButtonText }>Add & Edit</Text>
+        </Flex>
+      </Flex>
     )
 
     return isSharedGlobally === true ? renderGlobalView() : renderUserView()

@@ -17,6 +17,18 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     label: css`
       color: ${token.colorTextLabel};
+    `,
+
+    updateButton: css`
+      color: ${token.Button.defaultColor};
+      
+      &:hover {
+        cursor: pointer;
+      }
+    `,
+
+    updateButtonText: css`
+      color: ${token.Button.defaultColor};
     `
   }
 })
