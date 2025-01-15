@@ -21,14 +21,63 @@ import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data
 import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
 import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useTranslation } from 'react-i18next'
+import { type ElementIcon, useDataObjectGetTreeQuery } from '../data-object-api-slice.gen'
+import { transformApiDataToNodes } from './utils/transform-api-data-to-node'
+import { Box } from '@Pimcore/components/box/box'
+import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 
 export interface TreeContainerProps {
   id: number
 }
 
+export interface IDefaultRootNodeProps {
+  icon: ElementIcon
+  level: number
+  isRoot: true
+}
+
+const defaultRootNodeProps: IDefaultRootNodeProps = {
+  icon: { type: 'name', value: 'home-root-folder' },
+  level: -1,
+  isRoot: true
+}
+
 const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
   const { object_tree_paging_limit: dataObjectTreePagingLimit } = useSettings()
+  const pagingLimit: number | undefined = dataObjectTreePagingLimit
+  const { isLoading, data: rootNodeData } = useDataObjectGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true })
+  const { t } = useTranslation()
+
+  if (isLoading || rootNodeData === undefined) {
+    return (
+      <Box padding={ 'small' }>
+        <Skeleton />
+      </Box>
+    )
+  }
+
+  const transformedNodes = transformApiDataToNodes(
+    {
+      children: [],
+      icon: { type: 'name', value: 'home-root-folder' },
+      id: '0',
+      internalKey: '0',
+      label: '',
+      level: -1,
+      isLocked: false,
+      permissions: {}
+    },
+    rootNodeData,
+    pagingLimit
+  )
+
+  const rootNode: TreeNodeProps = {
+    ...transformedNodes.nodes[0],
+    ...defaultRootNodeProps,
+    label: t('home')
+  }
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
     openDataObject({
@@ -49,6 +98,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
       renderNode={ withDraggable(TreeNode) }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
+      rootNode={ rootNode }
     />
   )
 }
