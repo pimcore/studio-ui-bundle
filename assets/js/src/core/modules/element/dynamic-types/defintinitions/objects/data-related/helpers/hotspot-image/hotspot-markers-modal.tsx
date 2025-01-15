@@ -37,6 +37,17 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const width = 952
   const height = 800
 
+  const onClone = (id: number): void => {
+    const originalHotspot = hotspots.find(h => h.id === id)
+    if (originalHotspot !== undefined) {
+      const newHotspot = {
+        ...originalHotspot,
+        id: hotspots.length + 1
+      }
+      setHotspots([...hotspots, newHotspot])
+    }
+  }
+
   const onRemove = (id: number): void => {
     setHotspots(hotspots.filter(h => h.id !== id))
   }
@@ -120,6 +131,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     >
       <HotspotImage
         data={ modalOpened ? hotspots : [] }
+        onClone={ onClone }
         onRemove={ onRemove }
         onUpdate={ onUpdate }
         src={ thumbnailSrc }

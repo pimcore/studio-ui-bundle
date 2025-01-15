@@ -121,7 +121,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
             {
               label: t('hotspots.edit'),
               key: 'open',
-              icon: <Icon value={ 'edit' } />,
+              icon: <Icon value={ 'new-marker' } />,
               onClick: async () => {
                 setMarkerModalOpen(true)
               }

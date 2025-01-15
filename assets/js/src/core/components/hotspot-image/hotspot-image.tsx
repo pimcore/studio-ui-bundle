@@ -23,6 +23,8 @@ import {
 import { dragItem } from '@Pimcore/components/hotspot-image/utils/drag'
 import { type Coordinates, type Rectangle } from '@Pimcore/components/hotspot-image/types/types'
 import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { useTranslation } from 'react-i18next'
 
 export interface IStyleOptions {
   hotspot: {
@@ -50,7 +52,7 @@ export const defaultStyleOptions = {
   marker: {
     width: 24,
     height: 24,
-    icon: 'markerPin02'
+    icon: 'marker-pin-02'
   }
 }
 
@@ -69,13 +71,15 @@ interface IHotspotImage {
   data?: IHotspot[]
   onRemove: (id: number) => void
   onEdit?: (id: number) => void
+  onClone?: (id: number) => void
   onUpdate: (item: IHotspot) => void
 }
 
-export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onUpdate }: IHotspotImage): JSX.Element => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
+  const { t } = useTranslation()
 
   const [items, setItems] = useState<IHotspot[]>(data ?? [])
   useEffect((): void => {
@@ -177,20 +181,27 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                     >Todo edit</IconTextButton>
                     )
                   : null}
-                <IconButton
-                  icon={ { value: 'open-folder' } }
-                  onClick={ () => { console.log('TODO') } }
-                  type={ 'link' }
-                />
-                <IconButton
-                  icon={ { value: 'trash-04' } }
-                  onClick={ () => { onRemove(hotspot.id) } }
-                  type={ 'link' }
-                />
-                <IconButton
-                  icon={ { value: 'dots-horizontal' } }
-                  type={ 'link' }
-                />
+
+                <Tooltip title={ t('remove') }>
+                  <IconButton
+                    icon={ { value: 'trash-04' } }
+                    onClick={ () => { onRemove(hotspot.id) } }
+                    type={ 'link' }
+                  />
+                </Tooltip>
+
+                {onClone !== undefined
+                  ? (
+                    <Tooltip title={ t('clone') }>
+                      <IconButton
+                        icon={ { value: 'content-duplicate' } }
+                        onClick={ () => { onClone(hotspot.id) } }
+                        type={ 'link' }
+                      />
+                    </Tooltip>
+                    )
+                  : null}
+
               </>
                       }
             key={ hotspot.id }

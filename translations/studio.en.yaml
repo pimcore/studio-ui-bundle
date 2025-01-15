@@ -345,6 +345,7 @@ no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
+clone: Clone
 latitude: Latitude
 longitude: Longitude
 search-address: Search address

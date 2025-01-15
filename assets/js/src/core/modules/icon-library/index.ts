@@ -52,8 +52,10 @@ import close from '@Pimcore/assets/icons/close.inline.svg'
 import cms from '@Pimcore/assets/icons/cms.inline.svg'
 import collection from '@Pimcore/assets/icons/collection.inline.svg'
 import columns from '@Pimcore/assets/icons/columns.inline.svg'
+import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg'
 import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
+import copy03 from '@Pimcore/assets/icons/copy-03.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
 import crop from '@Pimcore/assets/icons/crop.inline.svg'
 import customMetadata from '@Pimcore/assets/icons/custom--metadata.inline.svg'
@@ -71,6 +73,7 @@ import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
 import details from '@Pimcore/assets/icons/details.inline.svg'
 import document from '@Pimcore/assets/icons/document.inline.svg'
+import dotsHorizontal from '@Pimcore/assets/icons/dots-horizontal.inline.svg'
 import doubleArrowDown from '@Pimcore/assets/icons/double-arrow-down.inline.svg'
 import doubleArrowLeft from '@Pimcore/assets/icons/double-arrow-left.inline.svg'
 import doubleArrowRight from '@Pimcore/assets/icons/double-arrow-right.inline.svg'
@@ -121,6 +124,7 @@ import locked from '@Pimcore/assets/icons/locked.inline.svg'
 import logOut from '@Pimcore/assets/icons/log-out.inline.svg'
 import longText from '@Pimcore/assets/icons/long-text.inline.svg'
 import mailAnswer from '@Pimcore/assets/icons/mail-answer.inline.svg'
+import markerPin02 from '@Pimcore/assets/icons/marker-pin-02.inline.svg'
 import market from '@Pimcore/assets/icons/market.inline.svg'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg'
 import menu from '@Pimcore/assets/icons/menu.inline.svg'
@@ -178,8 +182,8 @@ import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg'
 import textField from '@Pimcore/assets/icons/text-field.inline.svg'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg'
 import translate from '@Pimcore/assets/icons/translate.inline.svg'
+import trash04 from '@Pimcore/assets/icons/trash-04.inline.svg'
 import trash from '@Pimcore/assets/icons/trash.inline.svg'
-import Trash04 from '@Pimcore/assets/icons/trash-04.inline.svg'
 import tree from '@Pimcore/assets/icons/tree.inline.svg'
 import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg'
@@ -196,8 +200,6 @@ import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
-import markerPin02 from '@Pimcore/assets/icons/marker-pin-02.inline.svg'
-import dotsHorizontal from '@Pimcore/assets/icons/dots-horizontal.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -339,12 +341,20 @@ moduleSystem.registerModule({
       component: columns
     })
     iconLibrary.register({
+      name: 'content-duplicate',
+      component: contentDuplicate
+    })
+    iconLibrary.register({
       name: 'content',
       component: content
     })
     iconLibrary.register({
       name: 'copilot',
       component: copilot
+    })
+    iconLibrary.register({
+      name: 'copy-03',
+      component: copy03
     })
     iconLibrary.register({
       name: 'copy',
@@ -413,6 +423,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'document',
       component: document
+    })
+    iconLibrary.register({
+      name: 'dots-horizontal',
+      component: dotsHorizontal
     })
     iconLibrary.register({
       name: 'double-arrow-down',
@@ -613,6 +627,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'mail-answer',
       component: mailAnswer
+    })
+    iconLibrary.register({
+      name: 'marker-pin-02',
+      component: markerPin02
     })
     iconLibrary.register({
       name: 'market',
@@ -843,12 +861,12 @@ moduleSystem.registerModule({
       component: translate
     })
     iconLibrary.register({
-      name: 'trash',
-      component: trash
+      name: 'trash-04',
+      component: trash04
     })
     iconLibrary.register({
-      name: 'trash-04',
-      component: Trash04
+      name: 'trash',
+      component: trash
     })
     iconLibrary.register({
       name: 'tree',
@@ -913,14 +931,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
-    })
-    iconLibrary.register({
-      name: 'markerPin02',
-      component: markerPin02
-    })
-    iconLibrary.register({
-      name: 'dots-horizontal',
-      component: dotsHorizontal
     })
   }
 })
