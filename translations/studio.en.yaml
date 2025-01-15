@@ -518,4 +518,6 @@ link.class: Class
 hotspots.edit: Edit marker and hotspots
 hotspots.new-marker: New Marker
 hotspots.new-hotspot: New Hotspot
+hotspots.clear-data: Clear Marker, Hotspot and Cropping Data
+hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 home: Home

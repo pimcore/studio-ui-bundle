@@ -31,6 +31,7 @@ import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
   type HotspotMarkersModalContainerRef
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -46,6 +47,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
+  const messageApi = useMessage()
 
   const hotspots = toIHotspots(item.hotspots ?? [], item.marker ?? [])
 
@@ -67,6 +69,11 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
       onChange: onModalHotspotsChange
     }
     hotspotMarkersModalContainer.current?.setModal(index, hotspotMarkersModalProps)
+  }
+
+  const clearValueData = async (): Promise<void> => {
+    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [] } : v))
+    await messageApi.success(t('hotspots.data-cleared'))
   }
 
   return (
@@ -136,6 +143,12 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
             onClick: async () => {
               setMarkerModalOpen(true)
             }
+          },
+          {
+            label: t('hotspots.clear-data'),
+            key: 'hotspots-edit',
+            icon: <Icon value={ 'trash' } />,
+            onClick: clearValueData
           },
           {
             label: t('element.open'),
