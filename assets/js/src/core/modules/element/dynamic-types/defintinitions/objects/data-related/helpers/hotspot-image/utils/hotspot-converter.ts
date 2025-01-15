@@ -16,7 +16,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { defaultStyleOptions, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
-export const convertHotspots = (hotspots: Hotspot[], markers: Marker[]): IHotspot[] => {
+export const toIHotspots = (hotspots: Hotspot[], markers: Marker[]): IHotspot[] => {
   const resultArray: IHotspot[] = []
 
   hotspots.forEach((hotspot) => {
@@ -42,4 +42,31 @@ export const convertHotspots = (hotspots: Hotspot[], markers: Marker[]): IHotspo
     })
   })
   return resultArray
+}
+
+export const fromIHotspots = (iHotspots: IHotspot[]): { hotspots: Hotspot[], marker: Marker[] } => {
+  const hotspots: Hotspot[] = []
+  const marker: Marker[] = []
+
+  iHotspots.forEach((iHotspot) => {
+    if (iHotspot.type === 'hotspot') {
+      hotspots.push({
+        left: iHotspot.x,
+        top: iHotspot.y,
+        width: iHotspot.width,
+        height: iHotspot.height,
+        data: null,
+        name: null
+      })
+    } else if (iHotspot.type === 'marker') {
+      marker.push({
+        left: iHotspot.x,
+        top: iHotspot.y,
+        data: null,
+        name: null
+      })
+    }
+  })
+
+  return { hotspots, marker }
 }

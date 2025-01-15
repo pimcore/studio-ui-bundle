@@ -28,6 +28,7 @@ export interface HotspotMarkersModalProps {
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [hotspots, setHotspots] = useState<IHotspot[]>(props.hotspots ?? [])
+  const [modalOpenend, setModalOpened] = useState(false)
 
   const width = 952
   const height = 800
@@ -40,22 +41,36 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
   }
 
-  useEffect(() => {
+  const handleOk = (): void => {
     props.onChange?.(hotspots)
-  }, [hotspots])
+    props.onClose?.()
+  }
+
+  const handleCancel = (): void => {
+    props.onClose?.()
+  }
+
+  const afterOpenChange = (open: boolean): void => {
+    setModalOpened(open)
+  }
+
+  useEffect(() => {
+    setHotspots(props.hotspots ?? [])
+  }, [props.hotspots])
 
   const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&contain=true`
 
   return (
     <WindowModal
-      onCancel={ props.onClose }
-      onOk={ props.onClose }
+      afterOpenChange={ afterOpenChange }
+      onCancel={ handleCancel }
+      onOk={ handleOk }
       open={ props.open }
       size="XL"
-      title={ t('hotspot-markers-modal.title') }
+      title={ t('hotspots.markers-modal.title') }
     >
       <HotspotImage
-        data={ hotspots }
+        data={ modalOpenend ? hotspots : [] }
         onRemove={ onRemove }
         onUpdate={ onUpdate }
         src={ thumbnailSrc }

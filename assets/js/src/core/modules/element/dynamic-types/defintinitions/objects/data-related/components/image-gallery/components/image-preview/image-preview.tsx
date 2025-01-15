@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -24,8 +24,13 @@ import {
   HotspotMarkersModal
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal'
 import {
-  convertHotspots
+  fromIHotspots,
+  toIHotspots
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
+import {
+  type Hotspot, type Marker
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -33,15 +38,24 @@ interface ImageGalleryImagePreviewProps {
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
   disabled?: boolean
+  onHotspotsChange?: (hotspots: Hotspot[], marker: Marker[]) => void
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, onHotspotsChange }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
+  const [markerModalOpen, setMarkerModalOpen] = useState(false)
 
-  const hotspots = convertHotspots(item.hotspots ?? [], item.marker ?? [])
+  const hotspots = toIHotspots(item.hotspots ?? [], item.marker ?? [])
 
-  console.log(hotspots)
+  const hideMarkerModal = (): void => {
+    setMarkerModalOpen(false)
+  }
+
+  const onModalHotspotsChange = (iHotspots: IHotspot[]): void => {
+    const { hotspots, marker } = fromIHotspots(iHotspots)
+    onHotspotsChange?.(hotspots, marker)
+  }
 
   return (
     <>
@@ -105,6 +119,14 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
+              label: t('hotspots.edit'),
+              key: 'open',
+              icon: <Icon value={ 'edit' } />,
+              onClick: async () => {
+                setMarkerModalOpen(true)
+              }
+            },
+            {
               label: t('element.open'),
               key: 'open',
               icon: <Icon value={ 'open-folder' } />,
@@ -126,7 +148,9 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
       <HotspotMarkersModal
         hotspots={ hotspots }
         imageId={ item.image!.id }
-        open
+        onChange={ onModalHotspotsChange }
+        onClose={ hideMarkerModal }
+        open={ markerModalOpen }
       />
     </>
   )
