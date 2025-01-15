@@ -16,7 +16,7 @@ import { Card } from '@Pimcore/components/card/card'
 import {
   ExternalImageFooter
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/footer'
-import { ImageTarget } from '@Pimcore/components/image-target/image-target'
+import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 
@@ -71,7 +71,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
             />
             )
           : (
-            <ImageTarget
+            <AssetTarget
               height={ previewHeight }
               title={ t('external-image.preview-placeholder') }
               width={ previewWidth }

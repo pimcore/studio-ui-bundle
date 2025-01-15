@@ -204,6 +204,7 @@ button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
 open: Open
+edit: Edit
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
@@ -374,7 +375,7 @@ processing: Processing
 upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
-structured-table.empty.confirm: Are you sure you want to clear all data?
+empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.add-folder: Add Folder
@@ -481,8 +482,36 @@ navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 external-image.preview-placeholder: Add an external image
-image.dnd-target: Upload or drop an image here
+image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
 collection.empty: No available fields yet. Start by adding a field.
+video.type: Video Type
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video ID
+video.url: Video URL
+video.settings: Video Settings
+video.poster: Poster-Image
+video.path: Path
+video.dnd-target: Drop a video here
+many-to-one-relation.drop-placeholder: Drop an item here
+many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
+link.not-set: not set
+link.edit-title: Edit Link
+link.tab.basic: Basic
+link.tab.advanced: Advanced
+link.text: Text
+link.path: Path
+link.properties: Properties
+link.target: Target
+link.parameters: Parameters
+link.anchor: Anchor
+link.title: Title
+link.accesskey: Accesskey
+link.rel: Relation
+link.tabindex: Tabindex
+link.class: Class

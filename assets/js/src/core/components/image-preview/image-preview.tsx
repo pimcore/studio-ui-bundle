@@ -26,6 +26,7 @@ import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/componen
 interface ImagePreviewProps {
   src?: string
   assetId?: number
+  assetType?: 'image' | 'video'
   className?: string
   width: number | string
   height: number | string
@@ -34,12 +35,37 @@ interface ImagePreviewProps {
   dropdownItems?: DropdownProps['menu']['items']
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const [key, setKey] = React.useState(0)
+  const [thumbnailDimensions, setThumbnailDimensions] = React.useState({ width: 0, height: 0 })
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
+  const wrapperRef = React.useRef<HTMLDivElement>(null)
 
-  const imageSrc = assetId !== undefined ? `${getPrefix()}/assets/${assetId}/image/stream/preview` : src
+  const getAssetPreviewUrl = (): string | undefined => {
+    const { width, height } = thumbnailDimensions
+
+    if (width === 0 || height === 0) {
+      return undefined
+    }
+
+    if (assetType === 'video') {
+      return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&height=${height}&frame=true&aspectRatio=true`
+    }
+
+    return `${getPrefix()}/assets/${assetId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&frame=true`
+  }
+
+  const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
+
+  useEffect(() => {
+    if (wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
+      setThumbnailDimensions({
+        width: wrapperRef.current.offsetWidth,
+        height: wrapperRef.current.offsetHeight
+      })
+    }
+  }, [wrapperRef, width, height])
 
   useEffect(() => {
     setKey(key + 1)
@@ -56,25 +82,29 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, wi
   )
 
   return (
-    <div
-      className={ cn(className, styles.imagePreviewContainer, bordered ? 'image-preview-bordered' : undefined, ...getStateClasses()) }
-      ref={ ref }
-      style={ {
-        ...style,
-        height: toCssDimension(height),
-        width: toCssDimension(width)
-      } }
-    >
-      <Image
-        className="w-full"
-        fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
-        key={ key }
-        placeholder={ loadingSpinner }
-        preview={ false }
-        src={ imageSrc }
-      />
+    <div ref={ ref }>
+      <div
+        className={ cn(className, styles.imagePreviewContainer, bordered ? 'image-preview-bordered' : undefined, ...getStateClasses()) }
+        ref={ wrapperRef }
+        style={ {
+          ...style,
+          height: toCssDimension(height),
+          width: toCssDimension(width)
+        } }
+      >
+        { imageSrc !== undefined && (
+          <Image
+            className="w-full"
+            fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
+            key={ key }
+            placeholder={ loadingSpinner }
+            preview={ false }
+            src={ imageSrc }
+          />
+        ) }
 
-      <ImagePreviewDropdown dropdownItems={ dropdownItems } />
+        <ImagePreviewDropdown dropdownItems={ dropdownItems } />
+      </div>
     </div>
   )
 })

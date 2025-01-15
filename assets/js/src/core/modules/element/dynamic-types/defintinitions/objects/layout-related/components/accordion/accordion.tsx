@@ -47,6 +47,7 @@ export const Accordion = ({ children, title, border, collapsed, collapsible }: A
         accordion
         bordered
         items={ items }
+        size='small'
       />
     </BaseView>
   )

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { StrictMode } from 'react'
 import { GlobalProvider } from './global-provider'
 import { App as AntApp } from 'antd'
 import { RouterProvider } from 'react-router-dom'
@@ -23,17 +23,19 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 export const AppView = (): React.JSX.Element => {
   return (
     <>
-      <ErrorBoundary>
-        <GlobalProvider>
-          <AntApp>
-            <DateTimeConfig>
-              <AppLoader>
-                <RouterProvider router={ router } />
-              </AppLoader>
-            </DateTimeConfig>
-          </AntApp>
-        </GlobalProvider>
-      </ErrorBoundary>
+      <StrictMode>
+        <ErrorBoundary>
+          <GlobalProvider>
+            <AntApp>
+              <DateTimeConfig>
+                <AppLoader>
+                  <RouterProvider router={ router } />
+                </AppLoader>
+              </DateTimeConfig>
+            </AntApp>
+          </GlobalProvider>
+        </ErrorBoundary>
+      </StrictMode>
     </>
   )
 }

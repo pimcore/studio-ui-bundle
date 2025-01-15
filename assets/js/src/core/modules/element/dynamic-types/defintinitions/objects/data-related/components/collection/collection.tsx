@@ -15,6 +15,13 @@ import { Form } from '@Pimcore/components/form/form'
 import React, { type ComponentType, type ReactNode } from 'react'
 import { CollectionContent } from './content/collection-content'
 import { type FormListFieldData, type FormListOperation } from 'antd'
+import { type BaseViewProps } from '../../../layout-related/views/base-view'
+
+export interface CollectionOnTabCloseEvent {
+  tabName: string
+  fields: FormListFieldData[]
+  operation: FormListOperation
+}
 
 export interface CollectionProps {
   name: string | number | Array<string | number>
@@ -28,6 +35,10 @@ export interface CollectionProps {
   disallowAdd?: boolean
   disallowDelete?: boolean
   disallowReorder?: boolean
+  type?: 'list' | 'tabs'
+  onTabClose?: (event: CollectionOnTabCloseEvent) => void
+  extra?: BaseViewProps['extra']
+  extraPosition?: BaseViewProps['extraPosition']
 }
 
 export interface CollectionItemProps extends Omit<CollectionProps, 'itemComponent'> {
@@ -47,6 +58,7 @@ export const Collection = ({
   disallowAdd = false,
   disallowDelete = false,
   disallowReorder = false,
+  type = 'list',
   ...props
 }: CollectionProps): React.JSX.Element => {
   return (
@@ -59,6 +71,7 @@ export const Collection = ({
           disallowAdd={ disallowAdd }
           disallowDelete={ disallowDelete }
           disallowReorder={ disallowReorder }
+          type={ type }
           { ...props }
           fields={ fields }
           operation={ operation }

@@ -97,7 +97,7 @@ export const DragAndDropContextProvider = ({ children }: { children: ReactNode }
       <DragOverlay
         className='dnd-overlay'
         dropAnimation={ null }
-        style={ { width: 'max-content' } }
+        style={ { width: 'max-content', zIndex: 1001 } }
       >
         <StyledDragOverlay info={ info } />
       </DragOverlay>

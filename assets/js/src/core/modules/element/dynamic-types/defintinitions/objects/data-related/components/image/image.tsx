@@ -16,7 +16,7 @@ import { Card } from '@Pimcore/components/card/card'
 import {
   ImageFooter
 } from './footer'
-import { ImageTarget } from '@Pimcore/components/image-target/image-target'
+import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -74,7 +74,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
             />
             )
           : (
-            <ImageTarget
+            <AssetTarget
               dndIcon={ props.disabled !== true }
               height={ height }
               title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }

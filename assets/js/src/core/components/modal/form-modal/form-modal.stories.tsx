@@ -11,60 +11,62 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React, { useState } from 'react'
 import type { Meta } from '@storybook/react'
 import { Button } from '@Pimcore/components/button/button'
-import React, { useState } from 'react'
 import { useFormModal } from './hooks/use-form-modal'
+
+const FormModalComponent = (args: any): React.JSX.Element => {
+  const modal = useFormModal()
+  const [value, setValue] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
+
+  const callbackManager = (): void => {
+    switch (args.type) {
+      case 'input':
+        modal.input({
+          title: args.title,
+          label: args.label,
+          rule: args.rule,
+          initialValue: args.initialValue,
+          onOk: (value: string) => {
+            setValue(value ?? 'n/a')
+          }
+        })
+        break
+      case 'confirmation':
+        modal.confirm({
+          title: args.title,
+          content: args.content,
+          onOk: () => {
+            setConfirmed(true)
+          },
+          onCancel: () => {
+            setConfirmed(false)
+          }
+        })
+        break
+    }
+  }
+
+  return (
+    <>
+      <Button onClick={ callbackManager }>Open modal</Button>
+
+      {args.type === 'input' && (
+        <p>Form Value: {value}</p>
+      )}
+
+      {args.type === 'confirmation' && (
+        <p>Confirmed: {confirmed ? 'yes' : 'no'}</p>
+      )}
+    </>
+  )
+}
 
 const config: Meta = {
   title: 'Components/Data Entry/Input Modal',
-  component: (args) => {
-    const modal = useFormModal()
-    const [value, setValue] = useState('')
-    const [confirmed, setConfirmed] = useState(false)
-
-    const callbackManager = (): void => {
-      switch (args.type) {
-        case 'input':
-          modal.input({
-            title: args.title,
-            label: args.label,
-            rule: args.rule,
-            initialValue: args.initialValue,
-            onOk: (value: string) => {
-              setValue(value ?? 'n/a')
-            }
-          })
-          break
-        case 'confirmation':
-          modal.confirm({
-            title: args.title,
-            content: args.content,
-            onOk: () => {
-              setConfirmed(true)
-            },
-            onCancel: () => {
-              setConfirmed(false)
-            }
-          })
-          break
-      }
-    }
-
-    return (
-      <>
-        <Button onClick={ callbackManager }>Open modal</Button>
-
-        {args.type === 'input' && (
-          <p>Form Value: {value}</p>
-        )}
-
-        {args.type === 'confirmation' && (
-          <p>Confirmed: {confirmed ? 'yes' : 'no'}</p>
-        )}
-      </>
-    )
-  },
+  component: FormModalComponent,
   argTypes: {
     type: {
       table: {

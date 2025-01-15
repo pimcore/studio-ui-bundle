@@ -46,7 +46,7 @@ export const TagsTree = ({
   defaultCheckedTags,
   setDefaultCheckedTags
 }: TagsTreeProps): React.JSX.Element => {
-  const flatTags = flattenArray(tags).filter((tag): tag is { id: number } => tag.id !== undefined)
+  const flatTags = flattenArray(tags).filter((tag) => tag.id !== undefined)
 
   const { handleCheck, loadingNodes } = useHandleCheck({
     elementId,
