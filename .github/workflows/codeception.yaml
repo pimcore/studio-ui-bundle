@@ -28,8 +28,6 @@ jobs:
             matrix:
                 include:
                     - { php-version: 8.3, dependencies: highest, pimcore_version: "", experimental: false }
-                    - { php-version: 8.3, dependencies: lowest, pimcore_version: "", experimental: false }
-                    - { php-version: 8.4, dependencies: highest, pimcore_version: "", experimental: false }
                     - { php-version: 8.4, dependencies: highest, pimcore_version: "", experimental: false }
 
         steps:
