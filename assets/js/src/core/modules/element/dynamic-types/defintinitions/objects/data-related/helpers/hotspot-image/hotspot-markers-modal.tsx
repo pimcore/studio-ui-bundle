@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { HotspotImage, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
@@ -22,6 +22,7 @@ export interface HotspotMarkersModalProps {
   imageId: number
   open: boolean
   onClose?: () => void
+  onChange?: (hotspots: IHotspot[]) => void
 }
 
 export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.Element => {
@@ -38,6 +39,10 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
   const onUpdate = (item: IHotspot): void => {
     setHotspots(hotspots.map(h => h.id === item.id ? item : h))
   }
+
+  useEffect(() => {
+    props.onChange?.(hotspots)
+  }, [hotspots])
 
   const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&contain=true`
 
