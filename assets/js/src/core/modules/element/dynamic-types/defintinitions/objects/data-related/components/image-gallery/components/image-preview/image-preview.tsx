@@ -58,14 +58,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
     onHotspotsChange?.(hotspots, marker)
   }
 
-  /* <HotspotMarkersModal
-      hotspots={ hotspots }
-      imageId={ item.image!.id }
-      onChange={ onModalHotspotsChange }
-      onClose={ hideMarkerModal }
-      open={ markerModalOpen }
-  /> */
-
   if (hotspotMarkersModalContainer.current !== null) {
     const hotspotMarkersModalProps = {
       hotspots,
@@ -78,93 +70,90 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   }
 
   return (
-    <>
-      <Droppable
-        isValidContext={ (info: DragAndDropInfo) => {
-          if (disabled === true) {
-            return false
-          }
-          if (info.sortable! !== undefined) {
-            return true
-          }
-          return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
-        } }
-        isValidData={ (info: DragAndDropInfo) => {
-          if (info.sortable! !== undefined || info.type === 'unknown') {
-            return true
-          }
-          return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
-        } }
-        onDrop={ (info: DragAndDropInfo) => {
-          const newValue = [...value]
-          newValue[index] = { image: { type: 'asset', id: info.data.id as number } }
+    <Droppable
+      isValidContext={ (info: DragAndDropInfo) => {
+        if (disabled === true) {
+          return false
+        }
+        if (info.sortable! !== undefined) {
+          return true
+        }
+        return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
+      } }
+      isValidData={ (info: DragAndDropInfo) => {
+        if (info.sortable! !== undefined || info.type === 'unknown') {
+          return true
+        }
+        return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
+      } }
+      onDrop={ (info: DragAndDropInfo) => {
+        const newValue = [...value]
+        newValue[index] = { image: { type: 'asset', id: info.data.id as number } }
+        setValue(newValue)
+      } }
+      onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
+        const newValue = [...value]
+        const dragValue = value[Number(dragId)]
+        const dropValue = value[Number(dropId)]
+        if (dragValue !== undefined && dropValue !== undefined) {
+          newValue.splice(Number(dragId), 1)
+          newValue.splice(Number(dropId), 0, dragValue)
           setValue(newValue)
-        } }
-        onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
-          const newValue = [...value]
-          const dragValue = value[Number(dragId)]
-          const dropValue = value[Number(dropId)]
-          if (dragValue !== undefined && dropValue !== undefined) {
-            newValue.splice(Number(dragId), 1)
-            newValue.splice(Number(dropId), 0, dragValue)
-            setValue(newValue)
-          }
-        } }
-        variant="outline"
-      >
-        <ImagePreview
-          assetId={ item.image!.id }
-          bordered
-          dropdownItems={ [
-            {
-              disabled,
-              key: 'add',
-              label: t('add'),
-              icon: <Icon value={ 'new' } />,
-              onClick: () => {
-                const newValue = [...value]
-                newValue.splice(index + 1, 0, { image: null })
-                setValue(newValue)
-              }
-            },
-            {
-              disabled,
-              key: 'delete',
-              label: t('delete'),
-              icon: <Icon value={ 'trash' } />,
-              onClick: () => {
-                const newValue = [...value]
-                newValue.splice(index, 1)
-                setValue(newValue)
-              }
-            },
-            {
-              label: t('hotspots.edit'),
-              key: 'hotspots-edit',
-              icon: <Icon value={ 'new-marker' } />,
-              onClick: async () => {
-                setMarkerModalOpen(true)
-              }
-            },
-            {
-              label: t('element.open'),
-              key: 'open',
-              icon: <Icon value={ 'open-folder' } />,
-              onClick: async () => {
-                openAsset({
-                  config: {
-                    id: item.image!.id
-                  }
-                })
-              }
+        }
+      } }
+      variant="outline"
+    >
+      <ImagePreview
+        assetId={ item.image!.id }
+        bordered
+        dropdownItems={ [
+          {
+            disabled,
+            key: 'add',
+            label: t('add'),
+            icon: <Icon value={ 'new' } />,
+            onClick: () => {
+              const newValue = [...value]
+              newValue.splice(index + 1, 0, { image: null })
+              setValue(newValue)
             }
-          ] }
-          height={ 100 }
-          style={ { backgroundColor: '#fff' } }
-          width={ 200 }
-        />
-      </Droppable>
-
-    </>
+          },
+          {
+            disabled,
+            key: 'delete',
+            label: t('delete'),
+            icon: <Icon value={ 'trash' } />,
+            onClick: () => {
+              const newValue = [...value]
+              newValue.splice(index, 1)
+              setValue(newValue)
+            }
+          },
+          {
+            label: t('hotspots.edit'),
+            key: 'hotspots-edit',
+            icon: <Icon value={ 'new-marker' } />,
+            onClick: async () => {
+              setMarkerModalOpen(true)
+            }
+          },
+          {
+            label: t('element.open'),
+            key: 'open',
+            icon: <Icon value={ 'open-folder' } />,
+            onClick: async () => {
+              openAsset({
+                config: {
+                  id: item.image!.id
+                }
+              })
+            }
+          }
+        ] }
+        height={ 100 }
+        style={ { backgroundColor: '#fff' } }
+        width={ 200 }
+      />
+    </Droppable>
   )
 }
