@@ -33,6 +33,12 @@ import { Content } from '@Pimcore/components/content/content'
 import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/role/role-api-slice-enhanced'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 
+enum ViewState {
+  Edit = 'edit',
+  Save = 'save',
+  Update = 'update'
+}
+
 export const GridConfigInner = (): React.JSX.Element => {
   const { dropDownMenu } = useListGridAvailableColumns()
   const { columns: gridColumns, setGridColumns } = useListColumns()
@@ -54,7 +60,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useAssetUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useAssetDeleteGridConfigurationByConfigurationIdMutation()
 
-  const [view, setView] = useState<'edit' | 'save' | 'update'>('edit')
+  const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = useForm()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
@@ -82,7 +88,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   function onDeleteClick (): void {
     if (isSavedConfiguration) {
       fetchDeleteGridConfig({ configurationId: gridConfig.id!, folderId: id }).then(() => {
-        setView('edit')
+        setView(ViewState.Edit)
         setSelectedGridConfigId(undefined)
       }).catch((error) => {
         console.error('Failed to switch to edit view', error)
@@ -125,7 +131,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   function onFormFinish (values: any): void {
     const columnsToSave = prepareColumns(columns)
 
-    if (view === 'update' && isSavedConfiguration) {
+    if (view === ViewState.Update && isSavedConfiguration) {
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
@@ -143,13 +149,13 @@ export const GridConfigInner = (): React.JSX.Element => {
       }).catch((error) => {
         console.error('Failed to update grid configuration', error)
       }).then(() => {
-        setView('edit')
+        setView(ViewState.Edit)
       }).catch((error) => {
         console.error('Failed to switch to edit view', error)
       })
     }
 
-    if (view === 'save') {
+    if (view === ViewState.Save) {
       fetchSaveGridConfig({
         body: {
           columns: columnsToSave,
@@ -166,7 +172,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       }).then((response) => {
         if (response?.data !== undefined) {
           setSelectedGridConfigId(response.data.id)
-          setView('edit')
+          setView(ViewState.Edit)
         }
       }).catch((error) => {
         console.error('Failed to switch to edit view', error)
@@ -188,7 +194,7 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   return (
     <>
-      { view === 'edit' && (
+      { view === ViewState.Edit && (
         <EditView
           addColumnMenu={ getFormattedDropDownMenu(dropDownMenu, onColumnClick) }
           columns={ columns }
@@ -198,21 +204,21 @@ export const GridConfigInner = (): React.JSX.Element => {
           onApplyClick={ onApplyClick }
           onCancelClick={ onCancelClick }
           onEditConfigurationClick={ () => {
-            setView('update')
+            setView(ViewState.Update)
           } }
-          onSaveConfigurationClick={ () => { setView('save') } }
+          onSaveConfigurationClick={ () => { setView(ViewState.Save) } }
           onUpdateConfigurationClick={ onUpdatedConfigurationClick }
           savedGridConfigurations={ savedGridConfigurations }
         />
       ) }
 
-      { (view === 'save' || view === 'update') && (
+      { (view === ViewState.Save || view === ViewState.Update) && (
         <SaveView
           formProps={ {
             form,
             onFinish: onFormFinish,
             initialValues:
-              view === 'update' && isSavedConfiguration
+              view === ViewState.Update && isSavedConfiguration
                 ? {
                     name: gridConfig?.name,
                     description: gridConfig?.description,
@@ -226,10 +232,10 @@ export const GridConfigInner = (): React.JSX.Element => {
           isDeleting={ isDeleting }
           isLoading={ isSaveLoading }
           modificationDate={ gridConfig?.modificationDate }
-          onCancelClick={ () => { setView('edit') } }
+          onCancelClick={ () => { setView(ViewState.Edit) } }
           onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
           roleList={ roleList }
-          saveAsNewConfiguration={ view === 'save' }
+          saveAsNewConfiguration={ view === ViewState.Save }
           userList={ userList }
           userName={ userData?.username }
         />
