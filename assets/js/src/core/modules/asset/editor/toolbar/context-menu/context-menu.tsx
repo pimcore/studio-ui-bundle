@@ -50,6 +50,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     createZipDownloadContextMenuItem(asset as Asset),
     clearThumbnailContextMenuItem(asset as Asset)
   ]
+  const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
   return (
     <>
@@ -68,11 +69,13 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
           </IconButton>
         </Popconfirm>
 
-        <Dropdown menu={ { items } }>
-          <DropdownButton key={ 'dropdown-button' }>
-            {t('toolbar.more')}
-          </DropdownButton>
-        </Dropdown>
+        {visibleItems.length > 0 && (
+          <Dropdown menu={ { items } }>
+            <DropdownButton key={ 'dropdown-button' }>
+              {t('toolbar.more')}
+            </DropdownButton>
+          </Dropdown>
+        )}
       </ButtonGroup>
     </>
   )
