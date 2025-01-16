@@ -519,5 +519,6 @@ hotspots.edit: Edit marker and hotspots
 hotspots.new-marker: New Marker
 hotspots.new-hotspot: New Hotspot
 hotspots.clear-data: Clear Marker, Hotspot and Cropping Data
+hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
 hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 home: Home

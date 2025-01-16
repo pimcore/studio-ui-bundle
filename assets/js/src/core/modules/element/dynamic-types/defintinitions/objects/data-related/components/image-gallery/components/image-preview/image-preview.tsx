@@ -32,6 +32,11 @@ import {
   type HotspotMarkersModalContainerRef
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import {
+  type ImageValue
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
+import _ from 'lodash'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -48,6 +53,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   const { openAsset } = useAssetHelper()
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const messageApi = useMessage()
+  const { confirm } = useFormModal()
 
   const hotspots = toIHotspots(item.hotspots ?? [], item.marker ?? [])
 
@@ -76,6 +82,22 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
     await messageApi.success(t('hotspots.data-cleared'))
   }
 
+  const hasValueData = (index: number): boolean => {
+    return !_.isEmpty(value[index].hotspots) || !_.isEmpty(value[index].marker)
+  }
+
+  const setImage = (index: number, image: ImageValue, replaceValueData: boolean): void => {
+    const newValue = [...value]
+
+    if (replaceValueData) {
+      newValue[index] = { image }
+    } else {
+      newValue[index] = { ...newValue[index], image }
+    }
+
+    setValue(newValue)
+  }
+
   return (
     <Droppable
       isValidContext={ (info: DragAndDropInfo) => {
@@ -94,9 +116,23 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
         return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
       } }
       onDrop={ (info: DragAndDropInfo) => {
-        const newValue = [...value]
-        newValue[index] = { image: { type: 'asset', id: info.data.id as number } }
-        setValue(newValue)
+        const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
+        if (hasValueData(index)) {
+          confirm({
+            title: t('hotspots.clear-data'),
+            content: t('hotspots.clear-data.dnd-message'),
+            okText: t('yes'),
+            cancelText: t('no'),
+            onOk: () => {
+              setImage(index, newImage, true)
+            },
+            onCancel: () => {
+              setImage(index, newImage, false)
+            }
+          })
+        } else {
+          setImage(index, newImage, true)
+        }
       } }
       onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
         const newValue = [...value]
@@ -145,6 +181,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
             }
           },
           {
+            disabled: !hasValueData(index),
             label: t('hotspots.clear-data'),
             key: 'hotspots-edit',
             icon: <Icon value={ 'remove-marker' } />,
