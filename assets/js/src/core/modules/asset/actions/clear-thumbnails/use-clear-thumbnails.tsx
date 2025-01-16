@@ -40,7 +40,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
     return {
       label: t('asset.tree.context-menu.clear-thumbnails'),
       key: 'clear-thumbnails',
-      icon: <Icon value={ 'download' } />,
+      icon: <Icon value={ 'remove-image-thumbnails' } />,
       hidden: node.type !== 'image',
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
     }
