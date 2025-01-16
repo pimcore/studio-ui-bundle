@@ -22,6 +22,7 @@ import {
 
 export interface UserDraft extends User, TrackableChangesDraft {
   password?: string
+  image?: string
 }
 
 export const userAdapter: EntityAdapter<UserDraft, number> = createEntityAdapter<UserDraft>({})
@@ -62,6 +63,13 @@ export const slice = createSlice({
       const update: Update<any, any> = {
         id: action.payload.id,
         changes: { ...action.payload.changes, modified: true }
+      }
+      userAdapter.updateOne(state, update)
+    },
+    userImageLoaded: (state, action: PayloadAction<{ id: any, image: any }>): void => {
+      const update: Update<any, any> = {
+        id: action.payload.id,
+        changes: { image: action.payload.image }
       }
       userAdapter.updateOne(state, update)
     },
@@ -124,6 +132,7 @@ export const {
   userReloaded,
   userAvailablePermissionsFetched,
   changeUser,
+  userImageLoaded,
   userUpdated,
   userUpdateWorkspaces
 } = slice.actions
