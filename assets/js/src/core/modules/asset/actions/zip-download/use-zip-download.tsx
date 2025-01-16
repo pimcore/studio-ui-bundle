@@ -22,7 +22,6 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
-import { type ElementType } from 'types/element-type.d'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -41,7 +40,6 @@ export type CreateFolderZipDownload = (props: ICreateZipFolderDownloadProps) => 
 export type CreateAssetListZipDownload = (props: ICreateZipFolderAssetListProps) => void
 
 export interface UseZipDownloadHookProps {
-  elementType: ElementType
   type: 'folder' | 'asset-list'
 }
 
@@ -91,7 +89,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions!, 'view'),
       onClick: () => {
         createZipDownload({
-          jobTitle: getElementKey(node, props.elementType),
+          jobTitle: getElementKey(node, 'asset'),
           requestData: { body: { folders: [node.id] } }
         })
       }

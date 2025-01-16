@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
@@ -32,7 +31,6 @@ export interface DataObjectTreeContextMenuProps {
 export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const { createZipDownloadTreeContextMenuItem } = useZipDownload({ elementType: 'data-object', type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('data-object')
   const { renameTreeContextMenuItem } = useRename('data-object')
   const { deleteTreeContextMenuItem } = useDelete('data-object')
@@ -48,7 +46,6 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
     cutTreeContextMenuItem(props.node),
     pasteCutContextMenuItem(parseInt(props.node.id)),
     deleteTreeContextMenuItem(props.node),
-    createZipDownloadTreeContextMenuItem(props.node),
 
     {
       label: t('element.tree.context-menu.advanced'),

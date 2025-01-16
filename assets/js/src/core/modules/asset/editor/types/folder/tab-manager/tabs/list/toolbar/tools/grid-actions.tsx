@@ -38,8 +38,8 @@ export const GridActions = (): React.JSX.Element => {
   const { page } = useListPage()
   const { id } = useAsset()
 
-  const { createZipDownload: createZipFolderDownload } = useZipDownload({ elementType: 'asset', type: 'folder' })
-  const { createZipDownload: createZipAssetListDownload } = useZipDownload({ elementType: 'asset', type: 'asset-list' })
+  const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
+  const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
   const { data } = useAssetGetByIdQuery({ id })
 
   const numberedSelectedRows = Object.keys(selectedRows).map(Number)

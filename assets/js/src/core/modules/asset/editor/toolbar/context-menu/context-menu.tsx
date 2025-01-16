@@ -36,7 +36,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { renameContextMenuItem } = useRename('asset')
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
-  const { createZipDownloadContextMenuItem } = useZipDownload({ elementType: 'asset', type: 'folder' })
+  const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
   const { refreshElement } = useElementRefresh(asset!.id, 'asset')
   const {
     clearImageThumbnailContextMenuItem,
