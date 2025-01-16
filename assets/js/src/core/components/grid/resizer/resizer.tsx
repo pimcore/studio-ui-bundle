@@ -122,6 +122,9 @@ const Resizer = (props: ResizerProps): React.JSX.Element => {
     }
   }
 
+  const columnResizeMultiplier = (props.table.options.columnResizeDirection === 'rtl' ? -1 : 1)
+  const offsetValue = (props.table.getState().columnSizingInfo.deltaOffset ?? 0)
+
   return (
     <div
       className={ classes.join(' ') }
@@ -129,14 +132,7 @@ const Resizer = (props: ResizerProps): React.JSX.Element => {
       style={ {
         transform:
           props.isResizing
-            ? `translateX(${
-                (props.table.options.columnResizeDirection ===
-                'rtl'
-                  ? -1
-                  : 1) *
-                (props.table.getState().columnSizingInfo
-                  .deltaOffset ?? 0)
-              }px)`
+            ? `translateX(${columnResizeMultiplier * offsetValue}px)`
             : ''
       } }
     />

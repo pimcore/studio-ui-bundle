@@ -21,17 +21,20 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import type { AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element } from '@Pimcore/modules/element/element-helper'
-import { getElementKey } from '@Pimcore/modules/element/element-helper'
+import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
   deleteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
+  deleteGridContextMenuItem: (row: any) => ItemType | undefined
   deleteMutation: (id: number, parentId?: number) => Promise<void>
 }
 
@@ -40,6 +43,8 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const modal = useFormModal()
   const { addJob } = useJobs()
   const { refreshTree } = useRefreshTree(elementType)
+  const { refreshGrid } = useRefreshGrid(elementType)
+  const { getElementById } = useElementApi(elementType)
   const [elementDelete] = useElementDeleteMutation()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
@@ -59,7 +64,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     return {
       label: t('element.delete'),
       key: 'delete',
-      icon: <Icon value={ 'delete-outlined' } />,
+      icon: <Icon value={ 'trash' } />,
       hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
@@ -73,7 +78,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     return {
       label: t('element.delete'),
       key: 'delete',
-      icon: <Icon value={ 'delete-outlined' } />,
+      icon: <Icon value={ 'trash' } />,
       hidden: !checkElementPermission(node.permissions!, 'delete') || node.isLocked,
       onClick: () => {
         const id = node.id
@@ -81,6 +86,35 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
         deleteElement(id, getElementKey(node, elementType), parentId, onFinish)
       }
     }
+  }
+
+  const deleteGridContextMenuItem = (row: any): ItemType | undefined => {
+    const data: GridContextMenuProps = row.original ?? {}
+    if (data.id === undefined || data.isLocked === undefined || data.permissions === undefined) {
+      return
+    }
+
+    return {
+      label: t('element.delete'),
+      key: 'delete',
+      icon: <Icon value={ 'trash' } />,
+      hidden: !checkElementPermission(data.permissions, 'delete') || data.isLocked,
+      onClick: async () => {
+        await stagedLoading(data.id)
+      }
+    }
+  }
+
+  const stagedLoading = async (id: GridContextMenuProps['id']): Promise<void> => {
+    const node = await getElementById(id)
+
+    const parentId = node!.parentId ?? undefined
+    deleteElement(
+      node!.id,
+      getElementKey(node!, elementType),
+      parentId,
+      () => { refreshGrid() }
+    )
   }
 
   const deleteMutation = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
@@ -121,6 +155,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
     deleteElement,
     deleteTreeContextMenuItem,
     deleteContextMenuItem,
+    deleteGridContextMenuItem,
     deleteMutation
   }
 }

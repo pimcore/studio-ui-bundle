@@ -16,7 +16,7 @@ import { Card } from '@Pimcore/components/card/card'
 import {
   ImageFooter
 } from './footer'
-import { ImageTarget } from '@Pimcore/components/image-target/image-target'
+import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -60,7 +60,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
                /> }
     >
       <Droppable
-        isValidContext={ (info: DragAndDropInfo) => true }
+        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
         isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
         onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', id: info.data.id as number }) } }
         variant="outline"
@@ -74,10 +74,11 @@ export const Image = (props: ImageProps): React.JSX.Element => {
             />
             )
           : (
-            <ImageTarget
-              dndIcon
+            <AssetTarget
+              dndIcon={ props.disabled !== true }
               height={ height }
-              title={ t('image.dnd-target') }
+              title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
+              uploadIcon={ props.disabled !== true }
               width={ width }
             />
             ) }

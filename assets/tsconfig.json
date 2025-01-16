@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "./js/",
     "module": "ESNext",
     "target": "ES2023",
     "moduleResolution": "Node",
-    "types": ["reflect-metadata", "@types/webpack-env", "jest", "react", "react-dom"],
+    "types": ["reflect-metadata", "@types/webpack-env", "jest", "react", "react-dom", "node"],
     "baseUrl": "./js/",
     "paths": {
       "@Pimcore/*": ["./src/core/*"],
@@ -18,12 +18,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "outDir": "./dist/build/types",
     "composite": true
   },
-  
   "include": [
     "./js/**/*"
-  ],
+  ]
 }

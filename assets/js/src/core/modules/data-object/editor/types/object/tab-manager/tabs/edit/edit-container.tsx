@@ -19,11 +19,14 @@ import { useDataObjectGetByIdQuery, useDataObjectGetLayoutByIdQuery } from '@Pim
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { Content } from '@Pimcore/components/content/content'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
+import { useStyles } from './edit-container.styles'
+import { ObjectBrickProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/object-brick/providers/object-brick-provider'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
   const { data: layoutData, isLoading } = useDataObjectGetLayoutByIdQuery({ id })
   const { data, isLoading: isDataLoading } = useDataObjectGetByIdQuery({ id })
+  const { styles } = useStyles()
 
   if (layoutData === undefined || isLoading || isDataLoading) {
     return <Content loading />
@@ -31,10 +34,13 @@ export const EditContainer = (): React.JSX.Element => {
 
   return (
     <FieldCollectionProvider>
-      <RootComponent
-        data={ data?.objectData }
-        layout={ layoutData }
-      />
+      <ObjectBrickProvider>
+        <RootComponent
+          className={ styles.editContainer }
+          data={ data?.objectData }
+          layout={ layoutData }
+        />
+      </ObjectBrickProvider>
     </FieldCollectionProvider>
   )
 }

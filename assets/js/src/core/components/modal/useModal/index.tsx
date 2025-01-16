@@ -14,7 +14,7 @@
 import React, { useState } from 'react'
 import { Modal, type IModalProps } from '@Pimcore/components/modal/modal'
 
-interface useModalReturnType {
+interface IUseModalReturnType {
   renderModal: (props: IModalProps) => React.JSX.Element
   showModal: () => void
   handleOk: () => void
@@ -22,7 +22,7 @@ interface useModalReturnType {
   closeModal: () => void
 }
 
-export const useModal = (config = { type: 'default' }): useModalReturnType => {
+export const useModal = (config = { type: 'default' }): IUseModalReturnType => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const showModal = (): void => {
@@ -87,7 +87,7 @@ export const withError = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'close-circle-filled' }
+        iconName={ 'x-circle' }
         title={ 'Error' }
         { ...inlineProps }
       >
@@ -105,7 +105,7 @@ export const withSuccess = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'check-circle-filled' }
+        iconName={ 'check-circle' }
         title={ 'Success' }
         { ...inlineProps }
       >
@@ -123,7 +123,7 @@ export const withInfo = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'info-circle-filled' }
+        iconName={ 'info-circle' }
         title={ 'Info' }
         { ...inlineProps }
       >
@@ -141,7 +141,7 @@ export const withWarn = (Component: typeof Modal): typeof Modal => {
 
     return (
       <Component
-        iconName={ 'exclamation-circle-filled' }
+        iconName={ 'warning-circle' }
         title="Warn"
         { ...inlineProps }
       >

@@ -26,27 +26,24 @@ import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import {
   ManyToManyRelationToolbar
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/components/toolbar/toolbar'
+
 import {
-  dndIsValidData
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/utils/dnd-is-valid'
+  dndIsValidData,
+  type IRelationAllowedTypesDataComponent
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
 
 export interface ManyToManyRelationClassDefinitionProps {
-  assetsAllowed: boolean
   assetUploadPath?: string | null
-  assetTypes?: Array<{ assetTypes: string }>
-  objectsAllowed: boolean
-  classes?: Array<{ classes: string }>
-  documentsAllowed: boolean
-  documentTypes?: Array<{ documentTypes: string }>
   allowToClearRelation: boolean
   maxItems: number | null
   pathFormatterClass: string | null
   width: number | string | null
   height: number | string | null
   assetInlineDownloadAllowed?: boolean | null
+  disabled?: boolean
 }
 
-export interface ManyToManyRelationProps extends ManyToManyRelationClassDefinitionProps {
+export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
   value?: ManyToManyRelationValue | null
   onChange?: (value?: ManyToManyRelationValue | null) => void
 }
@@ -63,7 +60,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   return (
     <>
       <Droppable
-        isValidContext={ (info: DragAndDropInfo) => { return isValidElementType(info.type) } }
+        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
         isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
         onDrop={ onDrop }
         variant="outline"
@@ -71,15 +68,16 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
         <ManyToManyRelationGrid
           assetInlineDownloadAllowed={ props.assetInlineDownloadAllowed ?? false }
           deleteItem={ deleteItem }
+          disabled={ props.disabled }
           value={ displayedValue }
         />
       </Droppable>
       <ManyToManyRelationToolbar
         addAssets={ addAssets }
-        allowClear={ props.allowToClearRelation }
+        allowClear={ props.allowToClearRelation && props.disabled !== true }
         assetUploadPath={ props.assetUploadPath }
         empty={ () => { setValue(null) } }
-        enableUpload={ props.assetsAllowed }
+        enableUpload={ props.assetsAllowed === true && props.disabled !== true }
         onSearch={ onSearch }
         uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
         uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }

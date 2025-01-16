@@ -42,13 +42,13 @@ export const HeadWithButtons = {
     title: <Fragment>
       Card Title
       <IconTextButton
-        icon={ { value: 'PlusCircleOutlined' } }
+        icon={ { value: 'new-circle' } }
         type="default"
       >Add</IconTextButton>
     </Fragment>,
     extra: [
       {
-        icon: 'eye-outlined',
+        icon: 'eye',
         title: 'View',
         type: 'default',
         onClick: () => { console.log('click view button') }
@@ -56,6 +56,24 @@ export const HeadWithButtons = {
     ]
   }
 }
+
+export const HeadWithActionButton = {
+  args: {
+    ..._default.args,
+    title: 'Action Buttons',
+    extraPosition: 'flex-start',
+    extra: (
+      <IconTextButton
+        icon={ { value: 'edit' } }
+        onClick={ () => { console.log('click action button 1') } }
+        type='action'
+      >
+        Edit
+      </IconTextButton>
+    )
+  }
+}
+
 export const CloseButton = {
   args: {
     ..._default.args,
@@ -67,7 +85,7 @@ export const CloseButton = {
 export const HeadWithIcon = {
   args: {
     ..._default.args,
-    icon: 'eye-outlined'
+    icon: 'eye'
   }
 }
 
@@ -96,7 +114,7 @@ export const Image = {
     >
       <div>Lorem ipsum dolor</div>
       <IconButton
-        icon={ { value: 'eye-outlined' } }
+        icon={ { value: 'eye' } }
         onClick={ () => { console.log('click button') } }
       />
     </Flex>

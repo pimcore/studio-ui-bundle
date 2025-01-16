@@ -26,7 +26,10 @@ export class DynamicTypeObjectDataStructuredTable extends DynamicTypeObjectDataA
 
   getObjectDataComponent (props: StructuredTableObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <StructuredTable { ...props } />
+      <StructuredTable
+        { ...props }
+        disabled={ props.noteditable === true }
+      />
     )
   }
 }

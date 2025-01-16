@@ -165,7 +165,7 @@ export const VideoEditorSidebarDetailsTab = ({
 
               <Button
                 aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-                icon={ <Icon value={ 'download-02' } /> }
+                icon={ <Icon value={ 'download' } /> }
                 loading={ isDownloading }
                 onClick={ onClickDownload }
               />

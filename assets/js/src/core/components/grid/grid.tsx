@@ -18,9 +18,12 @@ import {
   type CellContext,
   type Column,
   type ColumnDef,
-  type ColumnResizeMode, type ColumnSizingInfoState,
-  flexRender, functionalUpdate,
-  getCoreRowModel, getSortedRowModel,
+  type ColumnResizeMode,
+  type ColumnSizingInfoState,
+  flexRender,
+  functionalUpdate,
+  getCoreRowModel,
+  getSortedRowModel,
   type RowData,
   type RowSelectionState,
   type SortingState,
@@ -36,8 +39,13 @@ import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
+import {
+  DynamicTypeRegistryProvider
+} from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,6 +75,22 @@ export interface ExtendedCellContext extends CellContext<any, any> {
 }
 
 export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, hideColumnHeaders = false, highlightActiveCell = false, onActiveCellChange, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+
+export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['items'][number], 'isLocked' | 'permissions'> {
+  id: number
+}
+
+export const Grid = ({
+  enableMultipleRowSelection = false,
+  modifiedCells = [],
+  sorting,
+  manualSorting = false,
+  enableSorting = false,
+  enableRowSelection = false,
+  selectedRows = {},
+  contextMenuItems = [],
+  ...props
+}: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
@@ -205,6 +229,25 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
     const hasAutoWidthColumn = columns.some(column => column.meta?.autoWidth === true)
     return hasAutoWidthColumn ? 'auto' : table.getCenterTotalSize()
   }
+  const renderSortButton = ({ headerColumn }: { headerColumn: Column<any> }): JSX.Element => (
+    <div className='grid__sorter'>
+      <SortButton
+        allowUnsorted={ sorting === undefined }
+        onSortingChange={ (value) => {
+          updateSortDirection(headerColumn, value)
+        } }
+        value={ getSortDirection(headerColumn) }
+      />
+    </div>
+  )
+
+  const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
+    const possibleContextMenuItems = contextMenuItems.map((item) => {
+      return item(row)
+    })
+
+    return possibleContextMenuItems.filter((item) => item !== undefined)
+  }
 
   return useMemo(() => (
     <div
@@ -255,14 +298,15 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                               />
                             </div>
                             )}
+                            {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
                           </div>
 
                           {props.resizable === true && header.column.getCanResize() && (
-                          <Resizer
-                            header={ header }
-                            isResizing={ header.column.getIsResizing() }
-                            table={ table }
-                          />
+                            <Resizer
+                              header={ header }
+                              isResizing={ header.column.getIsResizing() }
+                              table={ table }
+                            />
                           )}
                         </th>
                       ))}
@@ -297,6 +341,31 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                 ))}
               </tbody>
             </table>
+                <tbody className="ant-table-tbody">
+                  {table.getRowModel().rows.length === 0 && (
+                  <tr className={ 'ant-table-row' }>
+                    <td
+                      className='ant-table-cell ant-table-cell__no-data'
+                      colSpan={ table.getAllColumns().length }
+                    >
+                      {t('no-data-available-yet')}
+                    </td>
+                  </tr>
+                  )}
+                  {table.getRowModel().rows.map(row => (
+                    <GridRow
+                      columns={ columns }
+                      contextMenuItems={ getContextMenuItems(row) }
+                      isSelected={ row.getIsSelected() }
+                      key={ row.id }
+                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                      row={ row }
+                      tableElement={ tableElement }
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

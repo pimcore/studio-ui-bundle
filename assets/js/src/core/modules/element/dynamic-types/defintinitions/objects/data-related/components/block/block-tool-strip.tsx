@@ -16,13 +16,16 @@ import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
 import { type FormListFieldData, type FormListOperation } from 'antd'
 import React from 'react'
+import { type CollectionItemProps } from '../collection/collection'
 
-export interface BlockToolStripProps {
+export interface BlockToolStripProps extends CollectionItemProps {
   field: FormListFieldData
   operations: FormListOperation
 }
 
-export const BlockToolStrip = ({ field, operations }: BlockToolStripProps): React.JSX.Element => {
+export const BlockToolStrip = ({ field, operations, disallowAdd, disallowDelete, disallowReorder, fields, maxItems }: BlockToolStripProps): React.JSX.Element => {
+  const hasMaxItems = maxItems !== undefined && maxItems !== null && fields.length >= maxItems
+
   return (
     <Split
       dividerSize='small'
@@ -31,18 +34,21 @@ export const BlockToolStrip = ({ field, operations }: BlockToolStripProps): Reac
     >
       <Space size="mini">
         <IconButton
-          icon={ { value: 'plus' } }
+          disabled={ disallowAdd === true || hasMaxItems }
+          icon={ { value: 'new' } }
           onClick={ () => { operations.add(undefined, field.name + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
         <IconButton
+          disabled={ disallowReorder === true }
           icon={ { value: 'move-down' } }
           onClick={ () => { operations.move(field.name, field.name + 1) } }
           style={ { padding: 4 } }
           variant='minimal'
         />
         <IconButton
+          disabled={ disallowReorder === true }
           icon={ { value: 'move-up' } }
           onClick={ () => { operations.move(field.name, field.name - 1) } }
           style={ { padding: 4 } }
@@ -51,6 +57,7 @@ export const BlockToolStrip = ({ field, operations }: BlockToolStripProps): Reac
       </Space>
 
       <IconButton
+        disabled={ disallowDelete === true }
         icon={ { value: 'trash' } }
         onClick={ () => { operations.remove(field.name) } }
         style={ { padding: 4 } }

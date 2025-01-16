@@ -18,6 +18,7 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { baseUrl } from '@Pimcore/app/router/router'
 import { type ElementType } from 'types/element-type.d'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
@@ -26,6 +27,8 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const { styles } = useStyle()
 
   const { element } = useElementDraft(id, elementType)
+
+  const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
 
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
 
@@ -62,10 +65,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
       key: '3',
       label: 'Copy deep link to clipboard',
       onClick: () => {
-        // @todo implement other types
-        void navigator.clipboard.writeText(`
-          http://localhost/admin/login/deeplink?asset_${element.id}_${element.type}
-        `)
+        void navigator.clipboard.writeText(deeplinkUrl)
       }
     }
   ]
@@ -89,7 +89,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
             icon={
               <Icon
                 options={ { width: 14, height: 7 } }
-                value={ 'icon' }
+                value={ 'chevron-down' }
               />
             }
             iconPosition="end"

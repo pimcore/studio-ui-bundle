@@ -14,7 +14,7 @@
 import { Checkbox, Input } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
-// import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
+// import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons-old'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
 import { useDispatch } from 'react-redux'
 import { useMessage } from '@Pimcore/components/message/useMessage'
@@ -65,7 +65,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
       const userInformation = response.data!
       dispatch(setUser(userInformation))
     } catch (e: any) {
-      void messageApi.error({
+      await messageApi.error({
         content: e.message
       })
     }
@@ -77,7 +77,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
         <Input
           onChange={ (e) => { setFormState({ ...formState, username: e.target.value }) } }
           placeholder="Username"
-          prefix={ <Icon value="user-01" /> }
+          prefix={ <Icon value="user" /> }
         />
         <Input.Password
           // iconRender={ (visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />) }

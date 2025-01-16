@@ -26,13 +26,12 @@ export interface AccordionProps extends AbstractObjectLayoutDefinition {
 
 export const Accordion = ({ children, title, border, collapsed, collapsible }: AccordionProps): React.JSX.Element => {
   const items: CollapseProps['items'] = children.map((child, index) => ({
-    key: child.name,
+    key: index,
     label: child.title,
     forceRender: true,
     children: (
       <ObjectComponent
         { ...{ ...child, title: '' } }
-        key={ child.name }
       />
     )
   }))
@@ -48,6 +47,7 @@ export const Accordion = ({ children, title, border, collapsed, collapsible }: A
         accordion
         bordered
         items={ items }
+        size='small'
       />
     </BaseView>
   )

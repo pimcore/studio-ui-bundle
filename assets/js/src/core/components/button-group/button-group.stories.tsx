@@ -19,7 +19,6 @@ import { Button } from '../button/button'
 import { IconButton } from '../icon-button/icon-button'
 import { IconTextButton } from '../icon-text-button/icon-text-button'
 
-/* eslint-disable react/jsx-key */
 const config: Meta = {
   title: 'Components/Controls/Buttons/ButtonGroup',
   component: ButtonGroup,
@@ -34,8 +33,13 @@ export default config
 export const _default = {
   args: {
     items: [
-      <Button >clear</Button>,
-      <Button type='primary'>save</Button>
+      <Button key="clear">clear</Button>,
+      <Button
+        key="save"
+        type='primary'
+      >
+        save
+      </Button>
     ]
   }
 }
@@ -45,14 +49,16 @@ export const CombinedButtons = {
     items: [
       <IconTextButton
         icon={ { value: 'trash' } }
+        key="delete"
         type="default"
       >Delete</IconTextButton>,
       <IconButton
         icon={ { value: 'edit' } }
+        key="edit"
         type="default"
       />,
-      <Button>save</Button>,
-      <Button>cancel</Button>
+      <Button key="save">save</Button>,
+      <Button key="cancel">cancel</Button>
     ],
     noSpacing: true
   }
@@ -63,14 +69,19 @@ export const CombinedButtons02 = {
     items: [
       <IconButton
         icon={ { value: 'trash' } }
+        key="clear"
         type="primary"
       >clear</IconButton>,
       <IconButton
         icon={ { value: 'edit' } }
+        key="clear2"
         type="dashed"
       >clear</IconButton>,
-      <Button type='primary'>save</Button>,
-      <Button>cancel</Button>
+      <Button
+        key="save"
+        type='primary'
+      >save</Button>,
+      <Button key="cancel">cancel</Button>
     ],
     noSpacing: true
   }
@@ -79,10 +90,22 @@ export const CombinedButtons02 = {
 export const ButtonsWithSeparator = {
   args: {
     items: [
-      <IconButton icon={ { value: 'trash' } }>clear</IconButton>,
-      <IconButton icon={ { value: 'edit' } }>clear</IconButton>,
-      <Button type='link'>save</Button>,
-      <Button type='link'>cancel</Button>
+      <IconButton
+        icon={ { value: 'trash' } }
+        key="clear1"
+      >clear</IconButton>,
+      <IconButton
+        icon={ { value: 'edit' } }
+        key="clear2"
+      >clear</IconButton>,
+      <Button
+        key="save"
+        type='link'
+      >save</Button>,
+      <Button
+        key="cancel"
+        type='link'
+      >cancel</Button>
     ],
     withSeparator: true
   }
@@ -93,16 +116,24 @@ export const ButtonGroupNesting = {
     items: [
       <ButtonGroup
         items={ [
-          <Button>clear</Button>,
-          <Button>save</Button>
+          <Button key="clear">clear</Button>,
+          <Button key="save">save</Button>
         ] }
+        key="btnGroup1"
         noSpacing
       />,
       <ButtonGroup
         items={ [
-          <Button type='link'>cancel</Button>,
-          <Button type='link'>close</Button>
+          <Button
+            key="cancel"
+            type='link'
+          >cancel</Button>,
+          <Button
+            key="close"
+            type='link'
+          >close</Button>
         ] }
+        key="btnGroup2"
         withSeparator
       />
     ]
@@ -112,8 +143,11 @@ export const ButtonGroupNesting = {
 export const IconAndButtonGroup = {
   args: {
     items: [
-      <IconButton icon={ { value: 'trash' } } />,
-      <Button>delete</Button>
+      <IconButton
+        icon={ { value: 'trash' } }
+        key="delete1"
+      />,
+      <Button key="delete2">delete</Button>
     ]
   }
 }
@@ -121,8 +155,14 @@ export const IconAndButtonGroup = {
 export const IconButtonExample = {
   args: {
     items: [
-      <IconButton icon={ { value: 'trash' } } />,
-      <IconButton icon={ { value: 'edit' } } />
+      <IconButton
+        icon={ { value: 'trash' } }
+        key="delete1"
+      />,
+      <IconButton
+        icon={ { value: 'edit' } }
+        key="delete2"
+      />
     ]
   }
 }
@@ -131,11 +171,15 @@ export const LanguageSelectionExample = {
   args: {
     items: [
       <LanguageSelection
+        key="languageSelection"
         languages={ ['EN', 'FR'] }
         onSelectLanguage={ () => {} }
         selectedLanguage={ 'EN' }
       />,
-      <IconButton icon={ { value: 'trash' } } />
+      <IconButton
+        icon={ { value: 'trash' } }
+        key="trashIcon"
+      />
     ]
   }
 }

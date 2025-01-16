@@ -19,6 +19,10 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-card-head {
         min-height: 38px;
         padding: ${token.paddingXXS}px ${token.paddingSM}px;
+
+        .button--type-action {
+          margin-bottom: -4px;
+        }
       }
 
       &.ant-card:not(.ant-card-bordered) {
@@ -40,18 +44,23 @@ export const useStyles = createStyles(({ token, css }) => {
         color: ${token.colorTextSecondary};
       }
 
+      .ant-card-head-wrapper {
+        gap: ${token.paddingXS}px;
+
+        .ant-card-head-title {
+          min-width: fit-content;  
+        }
+
+        .ant-card-extra {
+          width: 100%;
+        }
+      }
+
       .ant-card-body {
-        padding: ${token.paddingSM}px;
+        padding: 0;
       }
 
       &.card-with-footer {
-          .ant-card-body {
-              padding: 0;
-          }
-
-          .card-body-inner {
-              padding: ${token.paddingSM}px
-          }
          .card-footer {
              padding: ${token.paddingXXS}px ${token.paddingXS}px;
              border-top: 1px solid ${token.colorBorderSecondary};

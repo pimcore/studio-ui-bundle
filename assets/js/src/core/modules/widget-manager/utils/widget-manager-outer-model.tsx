@@ -70,7 +70,7 @@ export const getInitialModelJson = (): IJsonModel => {
             enableClose: false,
             config: {
               icon: {
-                value: 'camera'
+                value: 'asset'
               }
             }
           },
@@ -81,7 +81,7 @@ export const getInitialModelJson = (): IJsonModel => {
             enableClose: false,
             config: {
               icon: {
-                value: 'mainObject'
+                value: 'data-object'
               }
             }
           }

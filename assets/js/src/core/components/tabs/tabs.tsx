@@ -18,14 +18,22 @@ import cn from 'classnames'
 
 export interface ITabsProps extends TabsProps {
   onClose?: (any) => void
+  hasStickyHeader?: boolean
+  noPadding?: boolean
 }
 
-const Component = ({ items, className, activeKey, onClose, onChange, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+const Component = ({ items, className, activeKey, onClose, onChange, hasStickyHeader = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
   const { styles } = useStyles()
   const classNames = cn(
     'ant-tabs-line',
     styles.tabs,
-    className
+    {
+      'tabs--has-sticky-header': hasStickyHeader
+    },
+    className,
+    {
+      'tabs--no-padding': props.noPadding
+    }
   )
 
   const onEdit = (key: string | React.MouseEvent<HTMLElement>, action: 'add' | 'remove'): void => {

@@ -15,13 +15,13 @@ import { useContext } from 'react'
 import { GridConfigContext, type IGridConfigContext } from '../grid-config-provider'
 import { type GridColumnConfiguration } from 'src/sdk/main'
 
-export interface useGridConfigHookReturn extends IGridConfigContext {
+export interface IUseGridConfigHookReturn extends IGridConfigContext {
   removeColumn: (column: GridColumnConfiguration) => void
   addColumn: (column: GridColumnConfiguration) => void
   resetColumns: () => void
 }
 
-export const useGridConfig = (): useGridConfigHookReturn => {
+export const useGridConfig = (): IUseGridConfigHookReturn => {
   const { columns, setColumns } = useContext(GridConfigContext)
 
   function removeColumn (column: GridColumnConfiguration): void {

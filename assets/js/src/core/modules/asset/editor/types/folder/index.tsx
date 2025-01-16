@@ -33,14 +33,14 @@ moduleSystem.registerModule({
 
     folderEditorTabManager.register({
       children: <PreviewContainer />,
-      icon: <Icon value={ 'image-05' } />,
+      icon: <Icon value={ 'image' } />,
       key: 'preview',
       label: 'folder.folder-editor-tabs.preview'
     })
 
     folderEditorTabManager.register({
       children: <ListContainer />,
-      icon: <Icon value={ 'unordered-list-outlined' } />,
+      icon: <Icon value={ 'list' } />,
       key: 'list',
       label: 'folder.folder-editor-tabs.view'
     })

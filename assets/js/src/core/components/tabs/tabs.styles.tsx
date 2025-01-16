@@ -17,10 +17,27 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     tabs: css`
       .ant-tabs-nav .ant-tabs-tab {
-        padding: ${token.paddingSM}px ${token.paddingXXS}px;
+        padding-left: ${token.paddingXXS}px;
+        padding-right: ${token.paddingXXS}px;
 
         + .ant-tabs-tab {
           margin-left: ${token.marginXXS}px;
+        }
+      }
+
+      &.ant-tabs-top > .ant-tabs-nav {
+        margin-bottom: 0;
+
+        & + .ant-tabs-content-holder {
+          padding-top: ${token.marginXS}px;
+        }
+      }
+
+      &.ant-tabs-bottom > .ant-tabs-nav {
+        margin-top: 0;
+
+        & + .ant-tabs-content-holder {
+          padding-bottom: ${token.marginXS}px;
         }
       }
 
@@ -28,6 +45,11 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-left: ${token.paddingXS}px;
         padding-right: ${token.paddingXS}px;
         align-items: center;
+      }
+      
+      &.tabs--no-padding .ant-tabs-nav-list {
+        padding-left: 0;
+        padding-right: 0;
       }
 
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab {

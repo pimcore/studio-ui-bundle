@@ -26,6 +26,7 @@ import _ from 'lodash'
 interface StructuredTableGridProps {
   castColumnValue: (value: StructuredTableColumnValue, key: string) => StructuredTableColumnValue
   cols: StructuredTableCol[]
+  disabled?: boolean
   rows: StructuredTableRow[]
   labelWidth: number | null
   labelFirstCell: string | null
@@ -67,7 +68,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
         size: applyColWidth(col.width),
         meta: {
           type: mapColType(col.type),
-          editable: true
+          editable: props.disabled !== true
         }
       })
     )

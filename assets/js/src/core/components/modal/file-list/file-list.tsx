@@ -24,7 +24,7 @@ export const FileList = (props: IFileListProps): React.JSX.Element => {
   return (
     <ul className={ styles.filesList }>
       {props.files.map((file, index) => (
-        <li key={ index }>{file}</li>
+        <li key={ `${file}-${index}` }>{file}</li>
       ))}
     </ul>
   )

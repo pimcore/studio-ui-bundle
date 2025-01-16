@@ -40,7 +40,7 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
         className={ styles.dotsButton }
         icon={ <Icon
           className='dropdown-menu__icon'
-          value="dots-horizontal"
+          value="more"
                /> }
         onClick={ (e) => { e.stopPropagation() } }
         size="small"

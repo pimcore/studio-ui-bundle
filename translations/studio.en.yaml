@@ -28,6 +28,7 @@ toolbar.reload: Reload
 toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
+toolbar.new: New
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -203,6 +204,7 @@ button.apply: Apply
 button.cancel: Cancel
 actions.open: Open
 open: Open
+edit: Edit
 component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
@@ -343,6 +345,7 @@ no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
+clone: Clone
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -382,12 +385,151 @@ table.copy: Copy
 table.paste: Paste
 table.empty: Empty
 table.paste-placeholder: Paste your data here
+empty.confirm: Are you sure you want to clear all data?
+tree.actions.clone-user: Clone User
+tree.actions.remove-user: Remove User
+tree.actions.add-folder: Add Folder
+tree.actions.add-user: Add User
+user-management.admin: Admin
+user-management.tree.all: All Users
+user-management.settings.title: Settings
+user-management.workspaces.title: Workspaces
+user-management.key-bindings.title: Key Bindings
+user-management.key-bindings.info: Please don’t forget to reload Pimcore after your modification!
+user-management.key-bindings.reset: Reset to default
+user-management.key-bindings.general: General
+user-management.key-bindings.save: Save
+user-management.key-bindings.publish: Publish
+user-management.key-bindings.unpublish: Unpublish
+user-management.key-bindings.rename: Rename
+user-management.key-bindings.refresh: Refresh
+user-management.key-bindings.navigation: Navigation
+user-management.key-bindings.openDocument: Open Document
+user-management.key-bindings.openAsset: Open Asset
+user-management.key-bindings.openObject: Open Object
+user-management.key-bindings.openClassEditor: Open Class Editor
+user-management.key-bindings.openInTree: Open in Tree
+user-management.key-bindings.closeAllTabs: Close All Tabs
+user-management.key-bindings.searchDocument: Search Document
+user-management.key-bindings.searchAsset: Search Asset
+user-management.key-bindings.searchObject: Search Object
+user-management.key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
+user-management.key-bindings.quickSearch: Quick Search
+user-management.key-bindings.system: System
+user-management.key-bindings.showMetaInfo: Show Meta Info
+user-management.key-bindings.showElementHistory: Show Element History
+user-management.key-bindings.sharedTranslations: Shared Translations
+user-management.key-bindings.recycleBin: Recycle Bin
+user-management.key-bindings.notesEvents: Notes & Events
+user-management.key-bindings.tagManager: Tag Manager
+user-management.key-bindings.tagConfiguration: Tag Configuration
+user-management.key-bindings.users: Users
+user-management.key-bindings.roles: Roles
+user-management.key-bindings.clearAllCaches: Clear All Caches
+user-management.key-bindings.clearDataCache: Clear Data Cache
+user-management.key-bindings.customReports: Custom Reports
+user-management.key-bindings.reports: Reports
+user-management.key-bindings.applicationLogger: Application Logger
+user-management.key-bindings.glossary: Glossary
+user-management.key-bindings.seoDocumentEditor: SEO Document Editor
+user-management.key-bindings.robots: Robots
+user-management.key-bindings.httpErrorLog: HTTP Error Log
+user-management.key-bindings.redirects: redirects
+user-management.references.title: References
+user-management.references.documents: Documents
+user-management.references.columns.id: ID
+user-management.references.columns.cpath: Path
+user-management.references.columns.subtype: Subtype
+user-management.general: General
+user-management.active: Active
+user-management.name: Name
+user-management.password: Password
+user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
+user-management.firstname: Firstname
+user-management.lastname: Lastname
+user-management.email: Email
+user-management.language: Language
+user-management.dateTime: Date Time Locale
+user-management.welcomeScreen: Show welcome screen on startup
+user-management.memorizeTabs: Memorize open tabs
+user-management.allowDirtyClose: Disable unsaved content warning
+user-management.closeWarning: Show close warning
+user-management.admin.info: Admin users do not only automatically gain all permissions listed below, they are also allowed to perform all actions on documents, assets and objects without any restrictions.
+user-management.admin.login: Login as this user in a different browser
+user-management.customisation: Customisation
+user-management.permissions.default: Permissions
+user-management.permissions.bundles: Permissions Bundles
+user-management.types-and-classes: Allowed types to create (Defaults to all)
+user-management.editor-settings: Editor Settings
+user-management.shared-translation-settings: Shared Translation Settings
+user-management.document-types: Document Types
+user-management.classes: Classes
+user-management.settings.avatar: Avatar
+user-management.settings.upload-avatar: Choose an avatar
+user-management.settings.language.name: Language
+user-management.settings.language.abbreviation: Abbreviation
+user-management.settings.language.view: View
+user-management.settings.language.edit: Edit
+user-management.two-factor-authentication: Two Factor Authentication
+user-management.workspaces.documents: Documents
+user-management.workspaces.assets: Assets
+user-management.workspaces.objects: Data Objects
+user-management.workspaces.add: Add
+user-management.workspaces.columns.cpath: Path
+user-management.workspaces.columns.list: List
+user-management.workspaces.columns.view: View
+user-management.workspaces.columns.save: Save
+user-management.workspaces.columns.publish: Publish
+user-management.workspaces.columns.unpublish: Unpublish
+user-management.workspaces.columns.delete: Delete
+user-management.workspaces.columns.rename: Rename
+user-management.workspaces.columns.create: Create
+user-management.workspaces.columns.settings: Settings
+user-management.workspaces.columns.versions: Versions
+user-management.workspaces.columns.properties: Properties
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 external-image.preview-placeholder: Add an external image
-image.dnd-target: Upload or drop an image here
+image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
+collection.empty: No available fields yet. Start by adding a field.
+video.type: Video Type
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video ID
+video.url: Video URL
+video.settings: Video Settings
+video.poster: Poster-Image
+video.path: Path
+video.dnd-target: Drop a video here
+many-to-one-relation.drop-placeholder: Drop an item here
+many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
+link.not-set: not set
+link.edit-title: Edit Link
+link.tab.basic: Basic
+link.tab.advanced: Advanced
+link.text: Text
+link.path: Path
+link.properties: Properties
+link.target: Target
+link.parameters: Parameters
+link.anchor: Anchor
+link.title: Title
+link.accesskey: Accesskey
+link.rel: Relation
+link.tabindex: Tabindex
+link.class: Class
+hotspots.edit: Edit marker and hotspots
+hotspots.new-marker: New Marker
+hotspots.new-hotspot: New Hotspot
+hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
+hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
+hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
+hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
+home: Home

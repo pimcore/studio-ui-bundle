@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export interface StructuredTableProps {
+  disabled?: boolean
   rows: StructuredTableRow[]
   cols: StructuredTableCol[]
   labelWidth: number | null
@@ -100,6 +101,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
       <StructuredTableGrid
         castColumnValue={ castColumnValue }
         cols={ props.cols }
+        disabled={ props.disabled }
         key={ key }
         labelFirstCell={ props.labelFirstCell }
         labelWidth={ props.labelWidth }
@@ -107,6 +109,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
         rows={ props.rows }
         value={ value }
       />
+      { props.disabled !== true && (
       <Box padding="extra-small">
         <Tooltip title={ t('empty') }>
           <IconButton
@@ -114,7 +117,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
             onClick={ () => {
               confirm({
                 title: t('empty'),
-                content: t('table.empty.confirm'),
+                content: t('empty.confirm'),
                 onOk: emptyValue
               })
             } }
@@ -122,6 +125,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
           />
         </Tooltip>
       </Box>
+      )}
     </>
   )
 }

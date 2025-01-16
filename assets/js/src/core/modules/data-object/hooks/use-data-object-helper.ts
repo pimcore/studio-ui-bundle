@@ -53,7 +53,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       component: 'data-object-editor',
       config: {
         ...config,
-        icon: getElementIcon(data, { value: 'widget-default', type: 'name' })
+        icon: getElementIcon(data, { value: 'widget', type: 'name' })
       }
     })
   }

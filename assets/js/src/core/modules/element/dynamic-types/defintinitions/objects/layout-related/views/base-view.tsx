@@ -13,16 +13,12 @@
 
 import React from 'react'
 import { isEmpty } from 'lodash'
-import { AccordionView } from './accordion-view'
-import { CardView } from './card-view'
+import { AccordionView, type AccordionViewProps } from './accordion-view'
+import { CardView, type CardViewProps } from './card-view'
 
-export interface BaseViewProps {
-  title?: string
-  collapsible?: boolean
-  collapsed?: boolean
-  children?: React.ReactNode
+export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
-  theme?: 'fieldset' | 'card-with-highlight'
+  extra?: CardViewProps['extra'] | AccordionViewProps['extra']
 }
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
@@ -41,6 +37,9 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
       <AccordionView
         bordered={ props.border }
         collapsed={ props.collapsed }
+        collapsible
+        contentPadding={ props.contentPadding }
+        extra={ props.extra }
         theme={ theme }
         title={ props.title }
       >{props.children}</AccordionView>
@@ -50,6 +49,9 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
   return (
     <CardView
       bordered={ props.border }
+      contentPadding={ props.contentPadding }
+      extra={ props.extra }
+      extraPosition={ props.extraPosition }
       theme={ theme }
       title={ props.title }
     >{props.children}</CardView>

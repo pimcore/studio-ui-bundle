@@ -16,10 +16,18 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { type GridProps } from '@Pimcore/types/components/types'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { type GridColumnConfiguration, type AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type GridColumnConfiguration,
+  type AssetGetGridApiResponse,
+  type GridColumnData
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { useOpen } from '@Pimcore/modules/element/actions/open/open'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -58,6 +66,10 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
   const { hasType } = useDynamicTypeResolver()
+  const open = useOpen('asset')
+  const rename = useRename('asset')
+  const remove = useDelete('asset')
+  const download = useDownload()
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -99,32 +111,57 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return [columns, columnIdentifiers]
   }, [GridColumns])
 
+  const handleProcessColumns = ({ assetItem, assetRow, columnIdentifier, columnIdentifierString }: {
+    assetItem: { columns?: GridColumnData[] }
+    assetRow: AssetRow
+    columnIdentifier: ColumnIdentifier
+    columnIdentifierString: string
+  }): void => {
+    assetItem.columns?.forEach((column) => {
+      if (column.key === 'id') {
+        assetRow.id = column.value
+      }
+
+      if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
+        assetRow[columnIdentifierString] = column.value
+      }
+    })
+  }
+
+  const getTransformedData = (assets: GridContainerProps['assets']): AssetRow[] => {
+    const transformedData: AssetRow[] = []
+
+    assets!.items.forEach((item) => {
+      const row: AssetRow = {}
+
+      columnIdentifiers.forEach((columnIdentifier) => {
+        const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
+
+        row.id = item.id
+        row.isLocked = item.isLocked
+        row.permissions = item.permissions
+
+        item.columns?.forEach((column) => {
+          if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
+            row[columnIdentifierString] = column.value
+          }
+        })
+
+        handleProcessColumns({ assetItem: item, assetRow: row, columnIdentifier, columnIdentifierString })
+      })
+
+      transformedData.push(row)
+    })
+
+    return transformedData
+  }
+
   const data: TransformedGridData = useMemo(() => {
     if (assets === undefined) {
       return undefined
     }
 
-    const transformedData: AssetRow[] = []
-
-    assets.items.forEach((item) => {
-      const row: AssetRow = {}
-      columnIdentifiers.forEach((columnIdentifier) => {
-        const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
-
-        item.columns?.forEach((column) => {
-          if (column.key === 'id') {
-            row.id = column.value
-          }
-
-          if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
-            row[columnIdentifierString] = column.value
-          }
-        })
-      })
-      transformedData.push(row)
-    })
-
-    return transformedData
+    return getTransformedData(assets)
   }, [assets, columnIdentifiers])
 
   return useMemo(() => {
@@ -134,6 +171,12 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return (
       <Grid
         columns={ columns }
+        contextMenuItems={ [
+          open.openGridContextMenuItem,
+          rename.renameGridContextMenuItem,
+          remove.deleteGridContextMenuItem,
+          download.downloadGridContextMenuItem
+        ] }
         data={ data }
         enableMultipleRowSelection
         enableSorting

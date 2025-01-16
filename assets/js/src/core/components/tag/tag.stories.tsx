@@ -33,7 +33,7 @@ export const _default = {
 
 export const ColorSuccessIconTag = {
   args: {
-    iconName: 'world',
+    iconName: 'published',
     color: 'success',
     children: 'Published'
   }
@@ -41,7 +41,7 @@ export const ColorSuccessIconTag = {
 
 export const ColorBlueIconTag = {
   args: {
-    iconName: 'user-01',
+    iconName: 'user',
     color: 'blue',
     children: 'Own draft'
   }
@@ -67,7 +67,7 @@ export const ThemeTransparent = {
 export const DefaultIconTag = {
   args: {
     color: 'default',
-    iconName: 'shield-02',
+    iconName: 'shield',
     children: 'Jane Doe'
   }
 }
