@@ -376,6 +376,16 @@ processing: Processing
 upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
+table.empty.confirm: Are you sure you want to clear all data?
+table.new-column: New column
+table.delete-column: Delete column
+table.new-row: New row
+table.delete-row: Delete row
+table.duplicate-row: Duplicate row
+table.copy: Copy
+table.paste: Paste
+table.empty: Empty
+table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User

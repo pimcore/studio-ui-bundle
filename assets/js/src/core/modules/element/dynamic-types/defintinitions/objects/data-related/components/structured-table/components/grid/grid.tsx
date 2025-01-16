@@ -63,8 +63,8 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
   ]
   props.cols.forEach((col) => {
     columns.push(
-      columnHelper.accessor(col.key, {
-        header: t(col.label),
+      columnHelper.accessor(col.key !== '' ? col.key : col.position.toString(), {
+        header: col.label !== '' ? t(col.label) : col.position.toString(),
         size: applyColWidth(col.width),
         meta: {
           type: mapColType(col.type),

@@ -69,6 +69,8 @@ import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
 import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
+import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg'
+import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
 import details from '@Pimcore/assets/icons/details.inline.svg'
 import document from '@Pimcore/assets/icons/document.inline.svg'
@@ -407,6 +409,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-sheet',
       component: dataSheet
+    })
+    iconLibrary.register({
+      name: 'delete-column',
+      component: deleteColumn
+    })
+    iconLibrary.register({
+      name: 'delete-row',
+      component: deleteRow
     })
     iconLibrary.register({
       name: 'dependencies',
