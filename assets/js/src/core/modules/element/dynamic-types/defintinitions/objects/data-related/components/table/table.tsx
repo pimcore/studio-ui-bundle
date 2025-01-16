@@ -67,7 +67,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
   })
 
   useEffect(() => {
-    if (activeCell !== undefined && (value?.[activeCell.rowIndex] === undefined || value[activeCell.rowIndex][activeCell.columnIndex] === undefined)) {
+    if (activeCell !== undefined && (value?.[activeCell.rowIndex] === undefined || (value[activeCell.rowIndex][activeCell.columnIndex] === undefined && value[activeCell.rowIndex][activeCell.columnId] === undefined))) {
       setActiveCell(undefined)
     }
   }, [value])

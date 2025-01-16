@@ -134,7 +134,11 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
 
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     const rowToDuplicate = newValue[activeCell.rowIndex]
-    newValue.splice(activeCell.rowIndex, 0, { ...rowToDuplicate })
+    if (Array.isArray(rowToDuplicate)) {
+      newValue.splice(activeCell.rowIndex, 0, [...rowToDuplicate])
+    } else {
+      newValue.splice(activeCell.rowIndex, 0, { ...rowToDuplicate })
+    }
 
     setValue(newValue as TableValue)
   }
