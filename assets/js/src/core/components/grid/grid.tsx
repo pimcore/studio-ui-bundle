@@ -39,9 +39,6 @@ import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
-import {
-  DynamicTypeRegistryProvider
-} from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
@@ -74,8 +71,6 @@ export interface ExtendedCellContext extends CellContext<any, any> {
   onFocus?: (cell: GridCellReference) => void
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, hideColumnHeaders = false, highlightActiveCell = false, onActiveCellChange, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
-
 export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['items'][number], 'isLocked' | 'permissions'> {
   id: number
 }
@@ -86,6 +81,9 @@ export const Grid = ({
   sorting,
   manualSorting = false,
   enableSorting = false,
+  hideColumnHeaders = false,
+  highlightActiveCell = false,
+  onActiveCellChange,
   enableRowSelection = false,
   selectedRows = {},
   contextMenuItems = [],
@@ -229,6 +227,7 @@ export const Grid = ({
     const hasAutoWidthColumn = columns.some(column => column.meta?.autoWidth === true)
     return hasAutoWidthColumn ? 'auto' : table.getCenterTotalSize()
   }
+
   const renderSortButton = ({ headerColumn }: { headerColumn: Column<any> }): JSX.Element => (
     <div className='grid__sorter'>
       <SortButton
@@ -250,9 +249,7 @@ export const Grid = ({
   }
 
   return useMemo(() => (
-    <div
-      className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }
-    >
+    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
       <div className="ant-table ant-table-small">
         <div className='ant-table-container'>
           <div className='ant-table-content'>
@@ -270,16 +267,16 @@ export const Grid = ({
                           key={ header.id }
                           ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
                           style={
-                                  header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                                    ? {
-                                        width: 'auto',
-                                        minWidth: header.column.getSize()
-                                      }
-                                    : {
-                                        width: header.column.getSize(),
-                                        maxWidth: header.column.getSize()
-                                      }
-                                }
+                              header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
+                                ? {
+                                    width: 'auto',
+                                    minWidth: header.column.getSize()
+                                  }
+                                : {
+                                    width: header.column.getSize(),
+                                    maxWidth: header.column.getSize()
+                                  }
+                            }
                         >
                           <div className='grid__cell-content'>
                             <span>
@@ -289,15 +286,6 @@ export const Grid = ({
                               )}
                             </span>
 
-                            {header.column.getCanSort() && (
-                            <div className='grid__sorter'>
-                              <SortButton
-                                allowUnsorted={ sorting === undefined }
-                                onSortingChange={ (value) => { updateSortDirection(header.column, value) } }
-                                value={ getSortDirection(header.column) }
-                              />
-                            </div>
-                            )}
                             {header.column.getCanSort() && renderSortButton({ headerColumn: header.column })}
                           </div>
 
@@ -314,23 +302,22 @@ export const Grid = ({
                   ))}
                 </thead>
               )}
-              <tbody
-                className="ant-table-tbody"
-              >
+              <tbody className="ant-table-tbody">
                 {table.getRowModel().rows.length === 0 && (
-                <tr className={ 'ant-table-row' }>
-                  <td
-                    className='ant-table-cell ant-table-cell__no-data'
-                    colSpan={ table.getAllColumns().length }
-                  >
-                    {t('no-data-available-yet')}
-                  </td>
-                </tr>
+                  <tr className={ 'ant-table-row' }>
+                    <td
+                      className='ant-table-cell ant-table-cell__no-data'
+                      colSpan={ table.getAllColumns().length }
+                    >
+                      {t('no-data-available-yet')}
+                    </td>
+                  </tr>
                 )}
                 {table.getRowModel().rows.map(row => (
                   <GridRow
                     activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
                     columns={ columns }
+                    contextMenuItems={ getContextMenuItems(row) }
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
                     modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
@@ -341,36 +328,11 @@ export const Grid = ({
                 ))}
               </tbody>
             </table>
-                <tbody className="ant-table-tbody">
-                  {table.getRowModel().rows.length === 0 && (
-                  <tr className={ 'ant-table-row' }>
-                    <td
-                      className='ant-table-cell ant-table-cell__no-data'
-                      colSpan={ table.getAllColumns().length }
-                    >
-                      {t('no-data-available-yet')}
-                    </td>
-                  </tr>
-                  )}
-                  {table.getRowModel().rows.map(row => (
-                    <GridRow
-                      columns={ columns }
-                      contextMenuItems={ getContextMenuItems(row) }
-                      isSelected={ row.getIsSelected() }
-                      key={ row.id }
-                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                      row={ row }
-                      tableElement={ tableElement }
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       </div>
     </div>
-  ), [table, modifiedCells, data, columns, rowSelection, internalSorting, (highlightActiveCell ? activeCell : undefined)])
+  ), [table, modifiedCells, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

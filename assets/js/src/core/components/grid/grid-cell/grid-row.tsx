@@ -71,33 +71,16 @@ const GridRow = ({ row, isSelected, modifiedCells, contextMenuItems = [], ...pro
         >
           <GridCell
             cell={ cell }
+            isActive={ props.activeColumId === cell.column.id }
             isModified={ isModifiedCell(cell.column.id) }
             key={ cell.id }
-            style={ cell.column.columnDef.meta?.autoWidth === true
-              ? {
-                  width: 'auto',
-                  minWidth: cell.column.getSize()
-                }
-              : {
-                  width: cell.column.getSize(),
-                  maxWidth: cell.column.getSize()
-                }
-            }
-          >
-            <GridCell
-              cell={ cell }
-              isActive={ props.activeColumId === cell.column.id }
-              isModified={ isModifiedCell(cell.column.id) }
-              key={ cell.id }
-              onFocusCell={ props.onFocusCell }
-              tableElement={ props.tableElement }
-            />
-          </td>
-        ))}
-      </tr>
-    )
-  }, [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, props.activeColumId])
-
+            onFocusCell={ props.onFocusCell }
+            tableElement={ props.tableElement }
+          />
+        </td>
+      ))}
+    </tr>
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
