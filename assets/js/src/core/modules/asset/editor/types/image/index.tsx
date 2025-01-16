@@ -48,7 +48,7 @@ moduleSystem.registerModule({
       key: 'edit',
       label: 'asset.asset-editor-tabs.edit',
       children: <EditTabContainer />,
-      icon: <Icon value={ 'edit' } />
+      icon: <Icon value={ 'edit-pen' } />
     })
 
     imageEditorTabManager.register(TAB_EMBEDDED_METADATA)
