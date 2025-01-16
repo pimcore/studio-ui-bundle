@@ -16,7 +16,30 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     modal: css`
-
+        &.error {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: red; 
+            }
+        }
+        
+        &.success {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: green; 
+            }
+        }
+        
+        &.info {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: orange; 
+            }
+        }
+        
+        &.alert {
+            .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
+                color: orange; 
+            }
+        }
+        
         .ant-modal-content {
             width: 100%;
             display: inline-flex;
@@ -33,7 +56,6 @@ export const useStyle = createStyles(({ token, css }) => {
                     line-height: 24px;
                     display: flex;
                     gap: 4px;
-                }
             }
 
             .ant-modal-footer {

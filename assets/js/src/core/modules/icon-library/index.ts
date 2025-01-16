@@ -127,6 +127,7 @@ import market from '@Pimcore/assets/icons/market.inline.svg'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg'
 import menu from '@Pimcore/assets/icons/menu.inline.svg'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg'
+import minus from '@Pimcore/assets/icons/minus.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
@@ -636,6 +637,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'minus-square',
       component: minusSquare
+    })
+    iconLibrary.register({
+      name: 'minus',
+      component: minus
     })
     iconLibrary.register({
       name: 'more',
