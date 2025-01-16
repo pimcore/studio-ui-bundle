@@ -42,9 +42,9 @@ export const HeadWithButtons = {
     title: <Fragment>
       Card Title
       <IconTextButton
-        icon={ { value: 'new-circle' } }
+        icon={ { value: 'new' } }
         type="default"
-      >Add</IconTextButton>
+      >New</IconTextButton>
     </Fragment>,
     extra: [
       {

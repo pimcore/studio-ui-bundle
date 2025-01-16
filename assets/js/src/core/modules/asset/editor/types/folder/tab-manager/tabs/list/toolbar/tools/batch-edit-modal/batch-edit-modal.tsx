@@ -117,7 +117,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         } }
         >
           <IconTextButton
-            icon={ { value: 'new-circle' } }
+            icon={ { value: 'new' } }
             type='default'
           >
             {t('listing.add-column')}
