@@ -25,7 +25,6 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 
 export interface UseRefreshTreeHookReturn {
   refreshTree: (parentId: number) => void
-  refreshElementTab: (id: number) => void
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   refreshContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
 }
@@ -45,22 +44,6 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
       dispatch(
         dataObjectApi.util.invalidateTags(
           invalidatingTags.DATA_OBJECT_TREE_ID(parentId)
-        )
-      )
-    }
-  }
-
-  const refreshElementTab = (id: number): void => {
-    if (elementType === 'asset') {
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_DETAIL_ID(id)
-        )
-      )
-    } else if (elementType === 'data-object') {
-      dispatch(
-        dataObjectApi.util.invalidateTags(
-          invalidatingTags.DATA_OBJECT_DETAIL_ID(id)
         )
       )
     }
@@ -91,7 +74,6 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
 
   return {
     refreshTree,
-    refreshElementTab,
     refreshTreeContextMenuItem,
     refreshContextMenuItem
   }
