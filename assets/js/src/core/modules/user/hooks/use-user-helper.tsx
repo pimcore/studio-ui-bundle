@@ -119,7 +119,7 @@ export const useUserHelper = (): UseUserReturn => {
     const data = await getDefaultKeyBindings()
 
     dispatch(changeUser({ id, changes: { keyBindings: data.items } }))
-          
+
     return data
   }
 
