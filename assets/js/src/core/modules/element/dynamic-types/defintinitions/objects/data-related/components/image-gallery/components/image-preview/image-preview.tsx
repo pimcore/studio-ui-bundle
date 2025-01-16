@@ -147,7 +147,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           {
             label: t('hotspots.clear-data'),
             key: 'hotspots-edit',
-            icon: <Icon value={ 'trash' } />,
+            icon: <Icon value={ 'remove-marker' } />,
             onClick: clearValueData
           },
           {

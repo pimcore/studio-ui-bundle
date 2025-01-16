@@ -156,6 +156,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg'
 import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
+import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg'
 import requires from '@Pimcore/assets/icons/requires.inline.svg'
@@ -751,6 +752,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'refresh',
       component: refresh
+    })
+    iconLibrary.register({
+      name: 'remove-marker',
+      component: removeMarker
     })
     iconLibrary.register({
       name: 'rename',
