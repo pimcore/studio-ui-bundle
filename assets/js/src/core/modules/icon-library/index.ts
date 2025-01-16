@@ -25,6 +25,7 @@ import addImage from '@Pimcore/assets/icons/add-image.inline.svg'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg'
+import alert from '@Pimcore/assets/icons/alert.inline.svg'
 import asset from '@Pimcore/assets/icons/asset.inline.svg'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg'
 import audio from '@Pimcore/assets/icons/audio.inline.svg'
@@ -42,12 +43,14 @@ import cdp from '@Pimcore/assets/icons/cdp.inline.svg'
 import channels from '@Pimcore/assets/icons/channels.inline.svg'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg'
+import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg'
 import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
 import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg'
+import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg'
 import close from '@Pimcore/assets/icons/close.inline.svg'
 import cms from '@Pimcore/assets/icons/cms.inline.svg'
 import collection from '@Pimcore/assets/icons/collection.inline.svg'
@@ -107,6 +110,7 @@ import history from '@Pimcore/assets/icons/history.inline.svg'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg'
 import image from '@Pimcore/assets/icons/image.inline.svg'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg'
+import info from '@Pimcore/assets/icons/info.inline.svg'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg'
 import inheritance from '@Pimcore/assets/icons/inheritance.inline.svg'
 import json from '@Pimcore/assets/icons/json.inline.svg'
@@ -151,6 +155,7 @@ import presentation from '@Pimcore/assets/icons/presentation.inline.svg'
 import preview from '@Pimcore/assets/icons/preview.inline.svg'
 import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
+import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg'
@@ -225,6 +230,10 @@ moduleSystem.registerModule({
       component: addUser
     })
     iconLibrary.register({
+      name: 'alert',
+      component: alert
+    })
+    iconLibrary.register({
       name: 'asset',
       component: asset
     })
@@ -293,6 +302,10 @@ moduleSystem.registerModule({
       component: checkbox
     })
     iconLibrary.register({
+      name: 'checkmark',
+      component: checkmark
+    })
+    iconLibrary.register({
       name: 'chevron-down',
       component: chevronDown
     })
@@ -315,6 +328,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'children-grid',
       component: childrenGrid
+    })
+    iconLibrary.register({
+      name: 'close-filled',
+      component: closeFilled
     })
     iconLibrary.register({
       name: 'close',
@@ -553,6 +570,10 @@ moduleSystem.registerModule({
       component: infoCircle
     })
     iconLibrary.register({
+      name: 'info',
+      component: info
+    })
+    iconLibrary.register({
       name: 'inheritance-broken',
       component: inheritanceBroken
     })
@@ -727,6 +748,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'published',
       component: published
+    })
+    iconLibrary.register({
+      name: 'questionmark',
+      component: questionmark
     })
     iconLibrary.register({
       name: 'refresh',
