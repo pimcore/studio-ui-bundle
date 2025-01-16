@@ -82,8 +82,12 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
     await messageApi.success(t('hotspots.data-cleared'))
   }
 
-  const hasValueData = (index: number): boolean => {
+  const hasHotspotData = (index: number): boolean => {
     return !_.isEmpty(value[index].hotspots) || !_.isEmpty(value[index].marker)
+  }
+
+  const hasValueData = (index: number): boolean => {
+    return hasHotspotData(index)
   }
 
   const setImage = (index: number, image: ImageValue, replaceValueData: boolean): void => {
@@ -209,6 +213,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           }
         ] }
         height={ 100 }
+        onHotspotsDataButtonClick={ hasHotspotData(index) ? () => { setMarkerModalOpen(true) } : undefined }
         style={ { backgroundColor: '#fff' } }
         width={ 200 }
       />
