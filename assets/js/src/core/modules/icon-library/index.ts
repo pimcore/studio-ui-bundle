@@ -56,7 +56,7 @@ import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
 import crop from '@Pimcore/assets/icons/crop.inline.svg'
-import customMetadata from '@Pimcore/assets/icons/custom--metadata.inline.svg'
+import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg'
 import customerSegment from '@Pimcore/assets/icons/customer-segment.inline.svg'
 import customer from '@Pimcore/assets/icons/customer.inline.svg'
@@ -83,7 +83,7 @@ import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg'
 import editPen from '@Pimcore/assets/icons/edit-pen.inline.svg'
 import edit from '@Pimcore/assets/icons/edit.inline.svg'
-import embededMetadata from '@Pimcore/assets/icons/embeded-metadata.inline.svg'
+import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg'
 import event from '@Pimcore/assets/icons/event.inline.svg'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg'
 import expand from '@Pimcore/assets/icons/expand.inline.svg'
@@ -352,7 +352,7 @@ moduleSystem.registerModule({
       component: crop
     })
     iconLibrary.register({
-      name: 'custom--metadata',
+      name: 'custom-metadata',
       component: customMetadata
     })
     iconLibrary.register({
@@ -460,8 +460,8 @@ moduleSystem.registerModule({
       component: edit
     })
     iconLibrary.register({
-      name: 'embeded-metadata',
-      component: embededMetadata
+      name: 'embedded-metadata',
+      component: embeddedMetadata
     })
     iconLibrary.register({
       name: 'event',
