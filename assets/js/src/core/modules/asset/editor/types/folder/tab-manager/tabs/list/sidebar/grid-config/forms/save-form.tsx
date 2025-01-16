@@ -105,35 +105,27 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     const usersList: TagProps[] = []
     const rolesList: TagProps[] = []
 
+    const getTagItem = ({ label, iconName }: { label?: string, iconName: string }): TagProps => ({
+      children: (
+        <Text
+          ellipsis
+          style={ { maxWidth: '148px' } }
+          type="secondary"
+        >{label}</Text>
+      ),
+      icon: renderIcon(iconName),
+      bordered: false
+    })
+
     props.userList?.items.forEach((item) => {
       if ((gridConfig?.sharedUsers as number[]).includes(item.id)) {
-        usersList.push({
-          children: (
-            <Text
-              ellipsis
-              style={ { maxWidth: '148px' } }
-              type="secondary"
-            >{item.username}</Text>
-          ),
-          icon: renderIcon('user'),
-          bordered: false
-        })
+        usersList.push(getTagItem({ label: item?.username, iconName: 'user' }))
       }
     })
 
     props.roleList?.items.forEach((item) => {
       if ((gridConfig?.sharedRoles as number[]).includes(item.id)) {
-        rolesList.push({
-          children: (
-            <Text
-              ellipsis
-              style={ { maxWidth: '148px' } }
-              type="secondary"
-            >{item.name}</Text>
-          ),
-          icon: renderIcon('shield'),
-          bordered: false
-        })
+        rolesList.push(getTagItem({ label: item?.name, iconName: 'shield' }))
       }
     })
 
