@@ -32,7 +32,7 @@ import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg'
-import brush from '@Pimcore/assets/icons/brush.inline.svg'
+import cache from '@Pimcore/assets/icons/cache.inline.svg'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg'
 import calendar from '@Pimcore/assets/icons/calendar.inline.svg'
 import car from '@Pimcore/assets/icons/car.inline.svg'
@@ -63,11 +63,9 @@ import customer from '@Pimcore/assets/icons/customer.inline.svg'
 import customers from '@Pimcore/assets/icons/customers.inline.svg'
 import cut from '@Pimcore/assets/icons/cut.inline.svg'
 import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg'
-import dataManagement from '@Pimcore/assets/icons/data-management.inline.svg'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
-import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
 import details from '@Pimcore/assets/icons/details.inline.svg'
 import document from '@Pimcore/assets/icons/document.inline.svg'
@@ -125,7 +123,6 @@ import market from '@Pimcore/assets/icons/market.inline.svg'
 import marketing from '@Pimcore/assets/icons/marketing.inline.svg'
 import menu from '@Pimcore/assets/icons/menu.inline.svg'
 import minusSquare from '@Pimcore/assets/icons/minus-square.inline.svg'
-import minus from '@Pimcore/assets/icons/minus.inline.svg'
 import more from '@Pimcore/assets/icons/more.inline.svg'
 import moveDown from '@Pimcore/assets/icons/move-down.inline.svg'
 import moveUp from '@Pimcore/assets/icons/move-up.inline.svg'
@@ -256,8 +253,8 @@ moduleSystem.registerModule({
       component: bookmark
     })
     iconLibrary.register({
-      name: 'brush',
-      component: brush
+      name: 'cache',
+      component: cache
     })
     iconLibrary.register({
       name: 'calculator',
@@ -380,10 +377,6 @@ moduleSystem.registerModule({
       component: dashboard
     })
     iconLibrary.register({
-      name: 'data-management',
-      component: dataManagement
-    })
-    iconLibrary.register({
       name: 'data-object-variant',
       component: dataObjectVariant
     })
@@ -394,10 +387,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
-    })
-    iconLibrary.register({
-      name: 'data-sheet',
-      component: dataSheet
     })
     iconLibrary.register({
       name: 'dependencies',
@@ -626,10 +615,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'minus-square',
       component: minusSquare
-    })
-    iconLibrary.register({
-      name: 'minus',
-      component: minus
     })
     iconLibrary.register({
       name: 'more',
