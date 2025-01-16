@@ -17,10 +17,11 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     dropdown: css`
       position: absolute;
-      top: 30px;
+      top: 35px;
       width: 360px;
       background-color: ${token.colorBgContainer};
       box-shadow: ${token.boxShadowSecondary};
+      z-index: 1;
     `,
 
     tabs: css`

@@ -28,6 +28,7 @@ const staticTokens = {
     }
   }
 }
+// Colors/Neutral/Fill/colorFillTertiary
 
 const defaultTheme = {
   token: {
@@ -159,7 +160,8 @@ const defaultTheme = {
     Colors: {
       Neutral: {
         Fill: {
-          colorFill: 'rgba(215, 199, 236, 0.60)'
+          colorFill: 'rgba(215, 199, 236, 0.60)',
+          colorFillTertiary: '#f5f5f5'
         }
       }
     },

@@ -19,6 +19,9 @@ import { Switch } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
+import { TagList, type TagListProps } from '@Pimcore/components/tag-list/tag-list'
+import { type TagProps } from '@Pimcore/components/tag/tag'
+import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './save-form.styles'
@@ -40,6 +43,8 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
 
+  const { gridConfig } = useListGridConfig()
+
   const { styles } = useStyles()
 
   useEffect(() => {
@@ -56,6 +61,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
     <Icon
+      className={ styles.icon }
       options={ { width: size ?? 12, height: size ?? 12 } }
       value={ iconName }
     />
@@ -93,6 +99,45 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     )
 
     return isSharedGlobally === true ? renderGlobalView() : renderUserView()
+  }
+
+  const getSharedUsersRolesList = (): TagListProps['list'] => {
+    const usersList: TagProps[] = []
+    const rolesList: TagProps[] = []
+
+    props.userList?.items.forEach((item) => {
+      if ((gridConfig?.sharedUsers as number[]).includes(item.id)) {
+        usersList.push({
+          children: (
+            <Text
+              ellipsis
+              style={ { maxWidth: '148px' } }
+              type="secondary"
+            >{item.username}</Text>
+          ),
+          icon: renderIcon('user'),
+          bordered: false
+        })
+      }
+    })
+
+    props.roleList?.items.forEach((item) => {
+      if ((gridConfig?.sharedRoles as number[]).includes(item.id)) {
+        rolesList.push({
+          children: (
+            <Text
+              ellipsis
+              style={ { maxWidth: '148px' } }
+              type="secondary"
+            >{item.name}</Text>
+          ),
+          icon: renderIcon('shield'),
+          bordered: false
+        })
+      }
+    })
+
+    return [usersList, rolesList]
   }
 
   return (
@@ -150,7 +195,11 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
       </Flex>
 
       { isSharedGlobally === false && (
-        <Text>@Todo: Add user and role sharing</Text>
+        <TagList
+          itemGap="mini"
+          list={ getSharedUsersRolesList() }
+          tagListItemClassNames={ styles.tag }
+        />
       )}
     </Form>
   )

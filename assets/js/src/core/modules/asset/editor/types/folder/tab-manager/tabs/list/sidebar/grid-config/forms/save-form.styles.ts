@@ -19,8 +19,16 @@ export const useStyles = createStyles(({ css, token }) => {
       color: ${token.colorTextLabel};
     `,
 
+    icon: css`
+      color: ${token.colorTextLabel};
+    `,
+
     updateButton: css`
       color: ${token.Button.defaultColor};
+      
+      .pimcore-icon {
+        color: ${token.Button.defaultColor};
+      }
       
       &:hover {
         cursor: pointer;
@@ -29,6 +37,12 @@ export const useStyles = createStyles(({ css, token }) => {
 
     updateButtonText: css`
       color: ${token.Button.defaultColor};
+    `,
+
+    tag: css`
+      .ant-tag {
+        background-color: ${token.Colors.Neutral.Fill.colorFillTertiary};
+      }
     `
   }
 })
