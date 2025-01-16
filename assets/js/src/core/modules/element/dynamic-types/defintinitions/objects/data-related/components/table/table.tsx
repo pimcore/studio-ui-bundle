@@ -22,6 +22,8 @@ import { useTableValue, type TableValue } from './hooks/use-table-value'
 import { getCopyData, getPasteData } from './utils/copy-paste'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Content } from '@Pimcore/components/content/content'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface TableProps {
   rows: number | null
@@ -33,6 +35,8 @@ export interface TableProps {
   rowsFixed?: boolean
   columnConfigActivated?: boolean
   columnConfig?: Array<{ key: string, label: string }>
+  width?: number | string | null
+  height?: number | string | null
 }
 
 export const Table = (props: TableProps): React.JSX.Element => {
@@ -194,17 +198,24 @@ export const Table = (props: TableProps): React.JSX.Element => {
 
   return (
     <>
-      <TableGrid
-        cols={ cols }
-        columnConfig={ props.columnConfig }
-        columnConfigActivated={ columnConfigActivated }
-        disabled={ props.disabled }
-        key={ key }
-        onActiveCellChange={ setActiveCell }
-        onChange={ setValue }
-        rows={ rows }
-        value={ value }
-      />
+      <Content
+        style={ {
+          width: toCssDimension(props.width === 320 ? undefined : props.width), // the default table width does not make sense in studio, 100% width is better
+          height: toCssDimension(props.height)
+        } }
+      >
+        <TableGrid
+          cols={ cols }
+          columnConfig={ props.columnConfig }
+          columnConfigActivated={ columnConfigActivated }
+          disabled={ props.disabled }
+          key={ key }
+          onActiveCellChange={ setActiveCell }
+          onChange={ setValue }
+          rows={ rows }
+          value={ value }
+        />
+      </Content>
       <Box padding="extra-small">
         <ButtonGroup items={ items } />
       </Box>
