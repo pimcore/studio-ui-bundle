@@ -20,11 +20,11 @@ import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-a
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
-interface UseRefreshElementHookReturn {
+interface UseElementRefreshHookReturn {
   refreshElement: () => void
 }
 
-export const useRefreshElement = (id: number, elementType: ElementType): UseRefreshElementHookReturn => {
+export const useElementRefresh = (id: number, elementType: ElementType): UseElementRefreshHookReturn => {
   const dispatch = useAppDispatch()
   const draft = useElementDraft(id, elementType)
 

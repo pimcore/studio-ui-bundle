@@ -15,9 +15,7 @@ import { Popconfirm } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import ButtonGroup from 'antd/es/button/button-group'
 import React, { useContext, useState } from 'react'
-import { api, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
@@ -28,20 +26,19 @@ import { useDownload } from '@Pimcore/modules/asset/actions/download/use-downloa
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
-import { useRefreshElement } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const { id } = useContext(AssetContext)
-  const { asset, removeAssetFromState } = useAssetDraft(id)
+  const { asset } = useAssetDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
   const { renameContextMenuItem } = useRename('asset')
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ elementType: 'asset', type: 'folder' })
   const { clearThumbnailContextMenuItem } = useClearThumbnails()
-  const { refreshElement } = useRefreshElement(asset!.id, 'asset')
+  const { refreshElement } = useElementRefresh(asset!.id, 'asset')
 
   const items: DropdownMenuProps['items'] = [
     renameContextMenuItem(asset as Asset, () => { refreshElement() }),
@@ -89,21 +86,16 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     if (Object.keys(asset?.changes ?? {}).length > 0) {
       setPopConfirmOpen(true)
     } else {
-      refreshAsset()
+      refreshElement()
     }
   }
 
   function onConfirm (): void {
     setPopConfirmOpen(false)
-    refreshAsset()
+    refreshElement()
   }
 
   function onCancel (): void {
     setPopConfirmOpen(false)
-  }
-
-  function refreshAsset (): void {
-    removeAssetFromState()
-    dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(id)))
   }
 }
