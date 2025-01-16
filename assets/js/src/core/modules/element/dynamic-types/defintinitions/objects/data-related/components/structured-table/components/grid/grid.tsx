@@ -52,7 +52,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
   }
 
   const applyColWidth = (colWidth?: number | null): number => {
-    return !_.isEmpty(colWidth) && colWidth! > 0 ? colWidth! : 100
+    return Number(colWidth) > 0 ? Number(colWidth) : 100
   }
 
   const columns: Array<ColumnDef<any>> = [
@@ -68,11 +68,14 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
         size: applyColWidth(col.width),
         meta: {
           type: mapColType(col.type),
-          editable: props.disabled !== true
+          editable: props.disabled !== true,
+          autoWidth: true
         }
       })
     )
   })
+
+  console.log('columns', columns, props.cols)
 
   const rows = props.rows.map((row) => {
     const rowData = {
