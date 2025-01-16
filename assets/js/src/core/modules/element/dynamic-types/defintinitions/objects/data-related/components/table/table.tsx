@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactElement } from 'react'
+import React, { type ReactElement, useEffect } from 'react'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -65,6 +65,12 @@ export const Table = (props: TableProps): React.JSX.Element => {
     columnConfig: props.columnConfig,
     columnConfigActivated
   })
+
+  useEffect(() => {
+    if (activeCell !== undefined && (value?.[activeCell.rowIndex] === undefined || value[activeCell.rowIndex][activeCell.columnIndex] === undefined)) {
+      setActiveCell(undefined)
+    }
+  }, [value])
 
   const items: ReactElement[] = []
 
