@@ -203,7 +203,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
             {!editmode && (
             <ButtonGroup items={ [<IconTextButton
-              icon={ { value: 'new-something' } }
+              icon={ { value: 'add-something' } }
               key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
               onClick={ () => {
                 console.log('clicked')
