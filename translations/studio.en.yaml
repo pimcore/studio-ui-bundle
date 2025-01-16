@@ -376,9 +376,9 @@ upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
-table.add-column: Add column
+table.new-column: New column
 table.delete-column: Delete column
-table.add-row: Add row
+table.new-row: New row
 table.delete-row: Delete row
 table.duplicate-row: Duplicate row
 table.copy: Copy

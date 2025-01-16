@@ -21,6 +21,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { useTableValue, type TableValue } from './hooks/use-table-value'
 import { getCopyData, getPasteData } from './utils/copy-paste'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 export interface TableProps {
   rows: number | null
@@ -48,8 +49,8 @@ export const Table = (props: TableProps): React.JSX.Element => {
     setActiveCell,
     key,
     emptyValue,
-    addRow,
-    addColumn,
+    newRow,
+    newColumn,
     deleteRow,
     deleteColumn,
     duplicateRow,
@@ -67,73 +68,73 @@ export const Table = (props: TableProps): React.JSX.Element => {
 
   const items: ReactElement[] = []
 
-  if (!columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0))) {
-    items.push(
-      <Tooltip title={ t('table.add-column') }>
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ addColumn }
-          type="default"
-        />
-      </Tooltip>
-    )
-  }
-
-  if (!columnConfigActivated && (props.colsFixed !== true || cols > (props.cols ?? 0))) {
-    items.push(
-      <Tooltip title={ t('table.delete-column') }>
-        <IconButton
-          disabled={ activeCell === undefined }
-          icon={ { value: 'trash' } }
-          onClick={ deleteColumn }
-          type="default"
-        />
-      </Tooltip>
-    )
-  }
-
   if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
     items.push(
-      <Tooltip title={ t('table.add-row') }>
-        <IconButton
-          icon={ { value: 'trash' } }
-          onClick={ addRow }
-          type="default"
-        />
-      </Tooltip>
+      <IconTextButton
+        icon={ { value: 'new-row' } }
+        onClick={ newRow }
+        type="default"
+      >
+        {t('table.new-row')}
+      </IconTextButton>
+    )
+  }
+
+  if (!columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0))) {
+    items.push(
+      <IconTextButton
+        icon={ { value: 'new-column' } }
+        onClick={ newColumn }
+        type="default"
+      >
+        { t('table.new-column') }
+      </IconTextButton>
     )
   }
 
   if (props.rowsFixed !== true || rows > (props.rows ?? 0)) {
     items.push(
-      <Tooltip title={ t('table.delete-row') }>
-        <IconButton
-          disabled={ activeCell === undefined }
-          icon={ { value: 'trash' } }
-          onClick={ deleteRow }
-          type="default"
-        />
-      </Tooltip>
+      <IconTextButton
+        disabled={ activeCell === undefined }
+        icon={ { value: 'delete-row' } }
+        onClick={ deleteRow }
+        type="default"
+      >
+        { t('table.delete-row') }
+      </IconTextButton>
+    )
+  }
+
+  if (!columnConfigActivated && (props.colsFixed !== true || cols > (props.cols ?? 0))) {
+    items.push(
+      <IconTextButton
+        disabled={ activeCell === undefined }
+        icon={ { value: 'delete-column' } }
+        onClick={ deleteColumn }
+        type="default"
+      >
+        { t('table.delete-column') }
+      </IconTextButton>
     )
   }
 
   if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
     items.push(
-      <Tooltip title={ t('table.duplicate-row') }>
-        <IconButton
-          disabled={ activeCell === undefined }
-          icon={ { value: 'trash' } }
-          onClick={ duplicateRow }
-          type="default"
-        />
-      </Tooltip>
+      <IconTextButton
+        disabled={ activeCell === undefined }
+        icon={ { value: 'content-duplicate' } }
+        onClick={ duplicateRow }
+        type="default"
+      >
+        { t('table.duplicate-row') }
+      </IconTextButton>
     )
   }
 
   items.push(
     <Tooltip title={ t('table.copy') }>
       <IconButton
-        icon={ { value: 'clipboard' } }
+        icon={ { value: 'copy' } }
         onClick={ () => modal.textarea({
           title: t('table.copy'),
           initialValue: getCopyData(value),
@@ -152,7 +153,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
     items.push(
       <Tooltip title={ t('table.paste') }>
         <IconButton
-          icon={ { value: 'clipboard-check' } }
+          icon={ { value: 'paste' } }
           onClick={ () => modal.textarea({
             title: t('table.paste'),
             placeholder: t('paste-placeholder'),

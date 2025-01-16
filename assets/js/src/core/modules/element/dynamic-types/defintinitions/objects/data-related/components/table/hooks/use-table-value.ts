@@ -32,8 +32,8 @@ interface UseTableValueReturn {
   setActiveCell: (cell: GridCellReference | undefined) => void
   key: number
   emptyValue: () => void
-  addRow: () => void
-  addColumn: () => void
+  newRow: () => void
+  newColumn: () => void
   deleteRow: () => void
   deleteColumn: () => void
   duplicateRow: () => void
@@ -90,7 +90,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     }
   }
 
-  const addRow = (): void => {
+  const newRow = (): void => {
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     const newRow = createEmptyRow()
 
@@ -103,7 +103,7 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     setValue(newValue as TableValue)
   }
 
-  const addColumn = (): void => {
+  const newColumn = (): void => {
     if (props.columnConfigActivated) return
     const newValue = [...(value !== null && value.length > 0 ? value : initializeValue())]
     newValue.forEach(row => (row as string[]).splice(activeCell?.columnIndex ?? (row as string[]).length, 0, ''))
@@ -161,8 +161,8 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
     setActiveCell,
     key,
     emptyValue,
-    addRow,
-    addColumn,
+    newRow,
+    newColumn,
     deleteRow,
     deleteColumn,
     duplicateRow,
