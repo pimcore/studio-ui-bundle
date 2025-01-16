@@ -12,6 +12,8 @@
 */
 
 import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
+import { type GridCellReference } from '@Pimcore/components/grid/grid'
+import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
 export interface GapRowColGroupType { x: GapStringType | number, y: GapStringType | number }
@@ -43,4 +45,8 @@ export interface GridProps {
   onSortingChange?: (sorting: SortingState) => void
   setRowId?: (originalRow: any, index: number, parent: any) => string
   autoWidth?: boolean
+  hideColumnHeaders?: boolean
+  highlightActiveCell?: boolean
+  onActiveCellChange?: (activeCell?: GridCellReference) => void
+  contextMenuItems?: Array<(...args: any[]) => ItemType | undefined>
 }

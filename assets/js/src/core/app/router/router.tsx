@@ -15,17 +15,20 @@ import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import { DefaultPage } from '@Pimcore/modules/app/default-page'
 import { LoginPage } from '@Pimcore/modules/auth/login-page'
+import { DeepLink } from '@Pimcore/components/deep-link/deep-link'
 import { appConfig } from '../config/app-config'
 
-let baseUrl = appConfig.baseUrl
+export const baseUrl = appConfig.baseUrl.endsWith('/')
+  ? appConfig.baseUrl.slice(0, -1) + '/'
+  : appConfig.baseUrl
 
-if (baseUrl.endsWith('/')) {
-  baseUrl = baseUrl.slice(0, -1) + '/'
-}
+export const LOGIN_URL = `${baseUrl}login/`
+export const DEEP_LINK_URL = `${baseUrl}:elementType/:id`
 
 export const routes = {
   root: baseUrl,
-  login: `${baseUrl}login/`
+  login: LOGIN_URL,
+  deeplinkAsset: DEEP_LINK_URL
 }
 
 export const router = createBrowserRouter([
@@ -36,5 +39,9 @@ export const router = createBrowserRouter([
   {
     path: routes.login,
     element: <LoginPage />
+  },
+  {
+    path: routes.deeplinkAsset,
+    element: <DeepLink />
   }
 ])

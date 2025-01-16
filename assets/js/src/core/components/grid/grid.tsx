@@ -18,16 +18,19 @@ import {
   type CellContext,
   type Column,
   type ColumnDef,
-  type ColumnResizeMode, type ColumnSizingInfoState,
-  flexRender, functionalUpdate,
-  getCoreRowModel, getSortedRowModel,
+  type ColumnResizeMode,
+  type ColumnSizingInfoState,
+  flexRender,
+  functionalUpdate,
+  getCoreRowModel,
+  getSortedRowModel,
   type RowData,
   type RowSelectionState,
   type SortingState,
   type TableOptions,
   useReactTable
 } from '@tanstack/react-table'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
@@ -36,9 +39,10 @@ import { useTranslation } from 'react-i18next'
 import { Checkbox, Skeleton } from 'antd'
 import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
-import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -55,21 +59,51 @@ declare module '@tanstack/react-table' {
   }
 }
 
-export interface ExtendedCellContext extends CellContext<any, any> {
-  modified?: boolean
+export interface GridCellReference {
+  rowIndex: number
+  columnIndex: number
+  columnId: string
 }
 
-export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], sorting, manualSorting = false, enableSorting = false, enableRowSelection = false, selectedRows = {}, ...props }: GridProps): React.JSX.Element => {
+export interface ExtendedCellContext extends CellContext<any, any> {
+  modified?: boolean
+  active?: boolean
+  onFocus?: (cell: GridCellReference) => void
+}
+
+export interface GridContextMenuProps extends Pick<AssetGetGridApiResponse['items'][number], 'isLocked' | 'permissions'> {
+  id: number
+}
+
+export const Grid = ({
+  enableMultipleRowSelection = false,
+  modifiedCells = [],
+  sorting,
+  manualSorting = false,
+  enableSorting = false,
+  hideColumnHeaders = false,
+  highlightActiveCell = false,
+  onActiveCellChange,
+  enableRowSelection = false,
+  selectedRows = {},
+  contextMenuItems = [],
+  ...props
+}: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const hashId = useCssComponentHash('table')
   const { styles } = useStyles()
   const [columnResizeMode] = useState<ColumnResizeMode>('onEnd')
+  const [activeCell, setActiveCell] = useState<GridCellReference | undefined>()
   const [tableAutoWidth, setTableAutoWidth] = useState<boolean>(props.autoWidth ?? false)
   const tableElement = useRef<HTMLTableElement>(null)
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
+
+  useEffect(() => {
+    onActiveCellChange?.(activeCell)
+  }, [activeCell])
 
   useEffect(() => {
     if (sorting !== undefined) {
@@ -175,7 +209,7 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
       for (const column of columns) {
         if (column.meta?.autoWidth === true) {
           if (autoWidthColumnFound) {
-            trackError(new GeneralError('Only one column can have autoWidth set to true'))
+            trackError(new GeneralError('Only one column can have autoWidth set to true when table autoWidth is enabled.'))
           }
           autoWidthColumnFound = true
         }
@@ -184,6 +218,15 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
   }, [columns, tableAutoWidth])
 
   const table = useReactTable(tableProps)
+
+  const onFocusCell = useCallback((cell: GridCellReference) => {
+    setActiveCell(cell)
+  }, [])
+
+  const calculateTableWidth = (): number | string => {
+    const hasAutoWidthColumn = columns.some(column => column.meta?.autoWidth === true)
+    return hasAutoWidthColumn ? 'auto' : table.getCenterTotalSize()
+  }
 
   const renderSortButton = ({ headerColumn }: { headerColumn: Column<any> }): JSX.Element => (
     <div className='grid__sorter'>
@@ -197,16 +240,24 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
     </div>
   )
 
+  const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
+    const possibleContextMenuItems = contextMenuItems.map((item) => {
+      return item(row)
+    })
+
+    return possibleContextMenuItems.filter((item) => item !== undefined)
+  }
+
   return useMemo(() => (
-    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/GridCellRegistry'] }>
-      <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
-        <div className="ant-table ant-table-small">
-          <div className='ant-table-container'>
-            <div className='ant-table-content'>
-              <table
-                ref={ tableElement }
-                style={ { width: tableAutoWidth ? '100%' : table.getCenterTotalSize(), minWidth: table.getCenterTotalSize() } }
-              >
+    <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
+      <div className="ant-table ant-table-small">
+        <div className='ant-table-container'>
+          <div className='ant-table-content'>
+            <table
+              ref={ tableElement }
+              style={ { width: tableAutoWidth ? '100%' : calculateTableWidth(), minWidth: table.getCenterTotalSize() } }
+            >
+              { !hideColumnHeaders && (
                 <thead className='ant-table-thead'>
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={ headerGroup.id }>
@@ -250,8 +301,9 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                     </tr>
                   ))}
                 </thead>
-                <tbody className="ant-table-tbody">
-                  {table.getRowModel().rows.length === 0 && (
+              )}
+              <tbody className="ant-table-tbody">
+                {table.getRowModel().rows.length === 0 && (
                   <tr className={ 'ant-table-row' }>
                     <td
                       className='ant-table-cell ant-table-cell__no-data'
@@ -260,25 +312,27 @@ export const Grid = ({ enableMultipleRowSelection = false, modifiedCells = [], s
                       {t('no-data-available-yet')}
                     </td>
                   </tr>
-                  )}
-                  {table.getRowModel().rows.map(row => (
-                    <GridRow
-                      columns={ columns }
-                      isSelected={ row.getIsSelected() }
-                      key={ row.id }
-                      modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
-                      row={ row }
-                      tableElement={ tableElement }
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                )}
+                {table.getRowModel().rows.map(row => (
+                  <GridRow
+                    activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
+                    columns={ columns }
+                    contextMenuItems={ getContextMenuItems(row) }
+                    isSelected={ row.getIsSelected() }
+                    key={ row.id }
+                    modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }
+                    onFocusCell={ onFocusCell }
+                    row={ row }
+                    tableElement={ tableElement }
+                  />
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </DynamicTypeRegistryProvider>
-  ), [table, modifiedCells, data, columns, rowSelection, internalSorting])
+    </div>
+  ), [table, modifiedCells, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

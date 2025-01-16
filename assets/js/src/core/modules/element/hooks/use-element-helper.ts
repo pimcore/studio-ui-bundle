@@ -15,6 +15,7 @@ import { type ElementType } from 'types/element-type.d'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { mapToElementType as mapType } from '@Pimcore/modules/element/utils/element-type'
 
 interface OpenElementWidgetProps {
   id: number
@@ -48,23 +49,14 @@ export const useElementHelper = (): UseElementReturn => {
   }
 
   function mapToElementType (elementType: string): ElementType | undefined {
-    switch (elementType) {
-      case 'asset':
-        return 'asset'
+    const targetType = mapType(elementType)
 
-      case 'document':
-        return 'document'
-
-      case 'data-object':
-      case 'object':
-      case 'dataObject':
-        return 'data-object'
-
-      default:
-        trackError(new GeneralError('Unknown element type: ' + elementType))
-
-        return undefined
+    if (targetType === null) {
+      trackError(new GeneralError(`Unknown element type: ${elementType}`))
+      return undefined
     }
+
+    return targetType
   }
 
   return { openElement, mapToElementType }

@@ -14,10 +14,23 @@
 import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
+import { useTranslation } from 'react-i18next'
+import { useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props
   const { asset } = useAssetDraft(node.getConfig().id as number)
+  const { data } = useAssetGetByIdQuery({ id: node.getConfig().id })
+  const { t } = useTranslation()
+
+  const nodeName = node.getName()
+  node.getName = () => {
+    if (asset?.parentId === 0) {
+      return t('home')
+    }
+
+    return data?.filename ?? nodeName
+  }
 
   return (
     <TabTitleContainer

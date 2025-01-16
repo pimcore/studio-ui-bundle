@@ -88,6 +88,7 @@ import { type DynamicTypeObjectDataGender } from '@Pimcore/modules/element/dynam
 import { type DynamicTypeObjectDataRgbaColor } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-rgba-color'
 import { type DynamicTypeObjectDataEncryptedField } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-encrypted-field'
 import { type DynamicTypeObjectDataCheckbox } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-checkbox'
+import { type DynamicTypeObjectDataLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-link'
 import { type DynamicTypeObjectDataUrlSlug } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-url-slug'
 import { type DynamicTypeObjectDataDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-date'
 import { type DynamicTypeObjectDataDatetime } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-datetime'
@@ -103,6 +104,7 @@ import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/d
 import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
 import { type DynamicTypeObjectDataManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-one-relation'
 import { type DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
+import { type DynamicTypeObjectDataTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-table'
 import { type DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
 
 import { type DynamicTypeObjectDataBlock } from './defintinitions/objects/data-related/types/dynamic-type-object-data-block'
@@ -219,6 +221,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataRgbaColor>(serviceIds['DynamicTypes/ObjectData/RgbaColor']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataEncryptedField>(serviceIds['DynamicTypes/ObjectData/EncryptedField']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataCheckbox>(serviceIds['DynamicTypes/ObjectData/Checkbox']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLink>(serviceIds['DynamicTypes/ObjectData/Link']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataUrlSlug>(serviceIds['DynamicTypes/ObjectData/UrlSlug']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDate>(serviceIds['DynamicTypes/ObjectData/Date']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataDatetime>(serviceIds['DynamicTypes/ObjectData/Datetime']))
@@ -234,6 +237,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolyLine>(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToOneRelation>(serviceIds['DynamicTypes/ObjectData/ManyToOneRelation']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTable>(serviceIds['DynamicTypes/ObjectData/Table']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataStructuredTable>(serviceIds['DynamicTypes/ObjectData/StructuredTable']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataLocalizedFields>(serviceIds['DynamicTypes/ObjectData/LocalizedFields']))

@@ -34,6 +34,7 @@ export interface TreeNodeProps {
   metaData?: any
   type?: string
   parentId?: string
+  isRoot?: boolean
 }
 
 const defaultProps: TreeNodeProps = {
@@ -57,7 +58,8 @@ const defaultProps: TreeNodeProps = {
     properties: false
   },
   level: 0,
-  isLocked: false
+  isLocked: false,
+  isRoot: false
 }
 
 const { useToken } = theme
@@ -68,6 +70,7 @@ const TreeNode = ({
   icon = defaultProps.icon,
   label = defaultProps.label,
   level = defaultProps.level,
+  isRoot = defaultProps.isRoot,
   ...props
 }: TreeNodeProps): React.JSX.Element => {
   const { token } = useToken()
@@ -100,6 +103,10 @@ const TreeNode = ({
 
     if (selectedIds.includes(id)) {
       classes.push('tree-node--selected')
+    }
+
+    if (isRoot === true) {
+      classes.push('tree-node--is-root')
     }
 
     return classes.join(' ')
@@ -220,10 +227,12 @@ const TreeNode = ({
         }
         tabIndex={ -1 }
       >
-        <TreeExpander
-          node={ treeNodeProps }
-          state={ [isExpanded, setIsExpanded] }
-        />
+        {isRoot !== true && (
+          <TreeExpander
+            node={ treeNodeProps }
+            state={ [isExpanded, setIsExpanded] }
+          />
+        )}
 
         <Upload { ...uploadProps }>
           <div className="tree-node__content-wrapper">

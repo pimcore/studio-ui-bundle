@@ -15,19 +15,17 @@ import { Popconfirm } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import ButtonGroup from 'antd/es/button/button-group'
 import React, { useContext, useState } from 'react'
-import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeDataObjectFromState } = useDataObjectDraft(id)
+  const { dataObject } = useDataObjectDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
+  const { refreshElement } = useElementRefresh(id, 'data-object')
 
   return (
     <ButtonGroup>
@@ -56,21 +54,16 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     if (Object.keys(dataObject?.changes ?? {}).length > 0) {
       setPopConfirmOpen(true)
     } else {
-      refreshDataObject()
+      refreshElement()
     }
   }
 
   function onConfirm (): void {
     setPopConfirmOpen(false)
-    refreshDataObject()
+    refreshElement()
   }
 
   function onCancel (): void {
     setPopConfirmOpen(false)
-  }
-
-  function refreshDataObject (): void {
-    removeDataObjectFromState()
-    dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
   }
 }

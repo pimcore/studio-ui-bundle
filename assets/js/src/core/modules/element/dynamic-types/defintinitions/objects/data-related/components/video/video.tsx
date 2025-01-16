@@ -31,12 +31,16 @@ interface AssetVideoValue {
   data: {
     type: 'asset'
     id: number
+    fullPath: string
+    subtype: string
   } | null
   title?: string
   description?: string
   poster?: {
     type: 'asset'
     id: number
+    fullPath: string
+    subtype: string
   } | null
 }
 
@@ -95,7 +99,17 @@ export const Video = (props: VideoProps): React.JSX.Element => {
       <Droppable
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
         isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'video' }
-        onDrop={ (info: DragAndDropInfo) => { setValue({ type: 'asset', data: { type: 'asset', id: info.data.id as number } }) } }
+        onDrop={ (info: DragAndDropInfo) => {
+          setValue({
+            type: 'asset',
+            data: {
+              type: 'asset',
+              id: info.data.id as number,
+              fullPath: `${info.data.path}${info.data.filename ?? info.data.key}`,
+              subtype: info.data.type
+            }
+          })
+        } }
         variant="outline"
       >
 

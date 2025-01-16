@@ -15,12 +15,11 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
 import {
   type DataObjectGetTreeApiResponse,
-  type DataObjectPermissions,
   useDataObjectGetTreeQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
 
 interface DataObjectTreeAdditionalTreeProps {
   pager?: number
@@ -43,37 +42,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
   const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...additionalQueryParams })
 
   function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
-    const nodes: TreeNodeProps[] = []
-
-    const dataObjectData = data.items
-    dataObjectData.forEach((dataObjectNode) => {
-      nodes.push({
-        id: dataObjectNode.id.toString(),
-        icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
-        label: dataObjectNode.key!,
-        type: dataObjectNode.type,
-        parentId: dataObjectNode.parentId.toString(),
-        children: [],
-        hasChildren: dataObjectNode.hasChildren,
-        isLocked: dataObjectNode.isLocked,
-        metaData: {
-          dataObject: dataObjectNode
-        },
-        permissions: dataObjectNode.permissions ?? [] as DataObjectPermissions,
-        level: node.level + 1,
-        ...(() => {
-          if (node.level === -1) {
-            return { internalKey: `${dataObjectNode.id}` }
-          }
-
-          return { internalKey: `${node.internalKey}-${dataObjectNode.id}` }
-        })()
-      })
-    })
-
-    const total = data.totalItems ?? maxItemsPerNode
-
-    return { nodes, total }
+    return transformApiDataToNodes(node, data, maxItemsPerNode)
   }
 
   function mergeAdditionalQueryParams (newParams: DataObjectTreeAdditionalTreeProps): void {

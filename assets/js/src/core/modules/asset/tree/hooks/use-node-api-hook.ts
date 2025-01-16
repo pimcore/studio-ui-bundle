@@ -15,12 +15,11 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
 import {
   type AssetGetTreeApiResponse,
-  type AssetPermissions,
   useAssetGetTreeQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
 
 interface AssetTreeAdditionalTreeProps {
   pager?: number
@@ -43,37 +42,7 @@ export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
   const apiHookResult = useAssetGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...additionalQueryParams })
 
   function dataTransformer (data: AssetGetTreeApiResponse): DataTransformerReturnType {
-    const nodes: TreeNodeProps[] = []
-
-    const assetData = data.items
-    assetData.forEach((assetNode) => {
-      nodes.push({
-        id: assetNode.id.toString(),
-        icon: getElementIcon(assetNode, { type: 'name', value: 'unknown' }),
-        label: assetNode.filename!,
-        type: assetNode.type,
-        parentId: assetNode.parentId.toString(),
-        children: [],
-        hasChildren: assetNode.hasChildren,
-        isLocked: assetNode.isLocked,
-        metaData: {
-          asset: assetNode
-        },
-        permissions: assetNode.permissions ?? [] as AssetPermissions,
-        level: node.level + 1,
-        ...(() => {
-          if (node.level === -1) {
-            return { internalKey: `${assetNode.id}` }
-          }
-
-          return { internalKey: `${node.internalKey}-${assetNode.id}` }
-        })()
-      })
-    })
-
-    const total = data.totalItems ?? maxItemsPerNode
-
-    return { nodes, total }
+    return transformApiDataToNodes(node, data, maxItemsPerNode)
   }
 
   function mergeAdditionalQueryParams (newParams: AssetTreeAdditionalTreeProps): void {

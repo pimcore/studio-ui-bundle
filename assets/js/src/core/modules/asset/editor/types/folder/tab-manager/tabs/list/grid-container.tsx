@@ -24,6 +24,10 @@ import {
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { useOpen } from '@Pimcore/modules/element/actions/open/open'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -62,6 +66,10 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
   const { hasType } = useDynamicTypeResolver()
+  const open = useOpen('asset')
+  const rename = useRename('asset')
+  const remove = useDelete('asset')
+  const download = useDownload()
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -129,6 +137,16 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
       columnIdentifiers.forEach((columnIdentifier) => {
         const columnIdentifierString = decodeColumnIdentifier(columnIdentifier)
 
+        row.id = item.id
+        row.isLocked = item.isLocked
+        row.permissions = item.permissions
+
+        item.columns?.forEach((column) => {
+          if (column.key === columnIdentifier.key && column.locale === columnIdentifier.locale) {
+            row[columnIdentifierString] = column.value
+          }
+        })
+
         handleProcessColumns({ assetItem: item, assetRow: row, columnIdentifier, columnIdentifierString })
       })
 
@@ -153,6 +171,12 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return (
       <Grid
         columns={ columns }
+        contextMenuItems={ [
+          open.openGridContextMenuItem,
+          rename.renameGridContextMenuItem,
+          remove.deleteGridContextMenuItem,
+          download.downloadGridContextMenuItem
+        ] }
         data={ data }
         enableMultipleRowSelection
         enableSorting
