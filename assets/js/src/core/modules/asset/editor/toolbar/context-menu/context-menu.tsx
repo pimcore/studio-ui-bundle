@@ -28,6 +28,7 @@ import { useDownload } from '@Pimcore/modules/asset/actions/download/use-downloa
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -40,9 +41,10 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ elementType: 'asset', type: 'folder' })
   const { clearThumbnailContextMenuItem } = useClearThumbnails()
+  const { refreshElementTab } = useRefreshTree('asset')
 
   const items: DropdownMenuProps['items'] = [
-    renameContextMenuItem(asset as Asset),
+    renameContextMenuItem(asset as Asset, () => { refreshElementTab(asset!.id) }),
     deleteContextMenuItem(asset as Asset),
     downloadContextMenuItem(asset as Asset),
     createZipDownloadContextMenuItem(asset as Asset),
