@@ -16,9 +16,12 @@ import { type Asset, useAssetImageClearThumbnailMutation } from '@Pimcore/module
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface UseClearThumbnailsHookReturn {
-  clearThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
+  clearImageThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
+  clearVideoThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
+  clearPdfThumbnailContextMenuItem: (node: Asset, onFinish?: () => void) => ItemType
 }
 
 export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
@@ -36,17 +39,39 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
     }
   }
 
-  const clearThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
+  const clearImageThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
     return {
       label: t('asset.tree.context-menu.clear-thumbnails'),
-      key: 'clear-thumbnails',
+      key: 'clear-image-thumbnails',
       icon: <Icon value={ 'remove-image-thumbnails' } />,
-      hidden: node.type !== 'image',
+      hidden: node.type !== 'image' || !checkElementPermission(node.permissions!, 'publish'),
+      onClick: async () => { await handleClearThumbnails(node, onFinish) }
+    }
+  }
+
+  const clearVideoThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
+    return {
+      label: t('asset.tree.context-menu.clear-thumbnails'),
+      key: 'clear-video-thumbnails',
+      icon: <Icon value={ 'remove-video-thumbnails' } />,
+      hidden: node.type !== 'video' || !checkElementPermission(node.permissions!, 'publish'),
+      onClick: async () => { await handleClearThumbnails(node, onFinish) }
+    }
+  }
+
+  const clearPdfThumbnailContextMenuItem = (node: Asset, onFinish?: () => void): ItemType => {
+    return {
+      label: t('asset.tree.context-menu.clear-thumbnails'),
+      key: 'clear-pdf-thumbnails',
+      icon: <Icon value={ 'remove-pdf-thumbnails' } />,
+      hidden: node.mimeType !== 'application/pdf' || !checkElementPermission(node.permissions!, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
     }
   }
 
   return {
-    clearThumbnailContextMenuItem
+    clearImageThumbnailContextMenuItem,
+    clearVideoThumbnailContextMenuItem,
+    clearPdfThumbnailContextMenuItem
   }
 }

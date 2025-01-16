@@ -37,15 +37,21 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ elementType: 'asset', type: 'folder' })
-  const { clearThumbnailContextMenuItem } = useClearThumbnails()
   const { refreshElement } = useElementRefresh(asset!.id, 'asset')
+  const {
+    clearImageThumbnailContextMenuItem,
+    clearVideoThumbnailContextMenuItem,
+    clearPdfThumbnailContextMenuItem
+  } = useClearThumbnails()
 
   const items: DropdownMenuProps['items'] = [
     renameContextMenuItem(asset as Asset, () => { refreshElement() }),
     deleteContextMenuItem(asset as Asset),
     downloadContextMenuItem(asset as Asset),
     createZipDownloadContextMenuItem(asset as Asset),
-    clearThumbnailContextMenuItem(asset as Asset)
+    clearImageThumbnailContextMenuItem(asset as Asset),
+    clearVideoThumbnailContextMenuItem(asset as Asset),
+    clearPdfThumbnailContextMenuItem(asset as Asset)
   ]
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
