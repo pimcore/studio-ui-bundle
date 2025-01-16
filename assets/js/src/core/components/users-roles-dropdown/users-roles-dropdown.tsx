@@ -32,8 +32,11 @@ interface IUsersRolesDropdownProps {
 export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRolesDropdownProps): React.JSX.Element => {
   const { gridConfig, setGridConfig } = useListGridConfig()
 
-  const [sharedUsersList, setSharedUsersList] = useState<number[] | null>(null)
-  const [sharedRolesList, setSharedRolesList] = useState<number[] | null>(null)
+  const initialSharedUsers = gridConfig?.sharedUsers as number[]
+  const initialSharedRoles = gridConfig?.sharedRoles as number[]
+
+  const [sharedUsersList, setSharedUsersList] = useState<number[]>(initialSharedUsers ?? [])
+  const [sharedRolesList, setSharedRolesList] = useState<number[]>(initialSharedRoles ?? [])
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -58,13 +61,14 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
     }
   }
 
-  const renderSelect = ({ options, placeholder, handleOnChange }: { options?: Array<{ value: number, label?: string }>, placeholder: string, handleOnChange: any }): React.JSX.Element => (
+  const renderSelect = ({ options, selectedOptions, placeholder, handleOnChange }: { options?: Array<{ value: number, label?: string }>, placeholder: string, handleOnChange: any, selectedOptions: number[] }): React.JSX.Element => (
     <Select
       mode="multiple"
       onChange={ handleOnChange }
       options={ options }
       placeholder={ t(placeholder) }
       showSearch
+      value={ selectedOptions }
     />
   )
 
@@ -76,6 +80,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
 
     return renderSelect({
       options,
+      selectedOptions: sharedUsersList,
       placeholder: 'user-management.user.search',
       handleOnChange: handleChangeSharedUsers
     })
@@ -89,6 +94,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
 
     return renderSelect({
       options,
+      selectedOptions: sharedRolesList,
       placeholder: 'user-management.role.search',
       handleOnChange: handleChangeSharedRoles
     })
