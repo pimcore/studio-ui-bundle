@@ -20,6 +20,8 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface StructuredTableProps {
   disabled?: boolean
@@ -29,6 +31,8 @@ export interface StructuredTableProps {
   labelFirstCell: string | null
   value?: StructuredTableValue | null
   onChange?: (value: StructuredTableValue | null) => void
+  width?: number | string | null
+  height?: number | string | null
 }
 
 export interface StructuredTableRow {
@@ -98,17 +102,24 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
 
   return (
     <>
-      <StructuredTableGrid
-        castColumnValue={ castColumnValue }
-        cols={ props.cols }
-        disabled={ props.disabled }
-        key={ key }
-        labelFirstCell={ props.labelFirstCell }
-        labelWidth={ props.labelWidth }
-        onChange={ onChange }
-        rows={ props.rows }
-        value={ value }
-      />
+      <Content
+        style={ {
+          width: toCssDimension(props.width),
+          height: toCssDimension(props.height)
+        } }
+      >
+        <StructuredTableGrid
+          castColumnValue={ castColumnValue }
+          cols={ props.cols }
+          disabled={ props.disabled }
+          key={ key }
+          labelFirstCell={ props.labelFirstCell }
+          labelWidth={ props.labelWidth }
+          onChange={ onChange }
+          rows={ props.rows }
+          value={ value }
+        />
+      </Content>
       { props.disabled !== true && (
       <Box padding="extra-small">
         <Tooltip title={ t('empty') }>
