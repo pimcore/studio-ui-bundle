@@ -56,31 +56,29 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const visibleItems = items.filter(item => (item !== null && 'hidden' in item) ? item?.hidden === false : false)
 
   return (
-    <>
-      <ButtonGroup>
-        <Popconfirm
-          onCancel={ onCancel }
-          onConfirm={ onConfirm }
-          onOpenChange={ onOpenChange }
-          open={ popConfirmOpen }
-          title={ t('toolbar.reload.confirmation') }
+    <ButtonGroup>
+      <Popconfirm
+        onCancel={ onCancel }
+        onConfirm={ onConfirm }
+        onOpenChange={ onOpenChange }
+        open={ popConfirmOpen }
+        title={ t('toolbar.reload.confirmation') }
+      >
+        <IconButton
+          icon={ { value: 'refresh' } }
         >
-          <IconButton
-            icon={ { value: 'refresh' } }
-          >
-            {t('toolbar.reload')}
-          </IconButton>
-        </Popconfirm>
+          {t('toolbar.reload')}
+        </IconButton>
+      </Popconfirm>
 
-        {visibleItems.length > 0 && (
-          <Dropdown menu={ { items } }>
-            <DropdownButton key={ 'dropdown-button' }>
-              {t('toolbar.more')}
-            </DropdownButton>
-          </Dropdown>
-        )}
-      </ButtonGroup>
-    </>
+      {visibleItems.length > 0 && (
+        <Dropdown menu={ { items } }>
+          <DropdownButton key={ 'dropdown-button' }>
+            {t('toolbar.more')}
+          </DropdownButton>
+        </Dropdown>
+      )}
+    </ButtonGroup>
   )
 
   function onOpenChange (newOpen: boolean): void {
