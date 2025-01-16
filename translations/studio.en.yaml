@@ -314,6 +314,7 @@ element.tree.context-menu.add-assets.upload-zip: Upload Zip
 element.tree.context-menu.advanced: Advanced
 element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
+asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
 element.tree.paste: Paste
 element.tree.cut: Cut

@@ -197,6 +197,9 @@ import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
+import removeImageThumbnails from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg'
+import removeVideoThumbnails from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg'
+import removePdfThumbnails from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -916,6 +919,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
+    })
+    iconLibrary.register({
+      name: 'remove-image-thumbnails',
+      component: removeImageThumbnails
+    })
+    iconLibrary.register({
+      name: 'remove-video-thumbnails',
+      component: removeVideoThumbnails
+    })
+    iconLibrary.register({
+      name: 'remove-pdf-thumbnails',
+      component: removePdfThumbnails
     })
   }
 })

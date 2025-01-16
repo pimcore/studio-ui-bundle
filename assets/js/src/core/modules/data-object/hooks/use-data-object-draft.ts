@@ -42,7 +42,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 
-interface UseDataObjectDraftReturn extends
+export interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTabsDraftReturn,
