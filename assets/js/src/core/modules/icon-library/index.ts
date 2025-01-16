@@ -52,6 +52,7 @@ import close from '@Pimcore/assets/icons/close.inline.svg'
 import cms from '@Pimcore/assets/icons/cms.inline.svg'
 import collection from '@Pimcore/assets/icons/collection.inline.svg'
 import columns from '@Pimcore/assets/icons/columns.inline.svg'
+import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg'
 import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
@@ -155,6 +156,7 @@ import preview from '@Pimcore/assets/icons/preview.inline.svg'
 import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
+import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg'
 import requires from '@Pimcore/assets/icons/requires.inline.svg'
@@ -334,6 +336,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'columns',
       component: columns
+    })
+    iconLibrary.register({
+      name: 'content-duplicate',
+      component: contentDuplicate
     })
     iconLibrary.register({
       name: 'content',
@@ -746,6 +752,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'refresh',
       component: refresh
+    })
+    iconLibrary.register({
+      name: 'remove-marker',
+      component: removeMarker
     })
     iconLibrary.register({
       name: 'rename',

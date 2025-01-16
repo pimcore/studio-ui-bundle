@@ -24,6 +24,13 @@ import {
   type ImageGalleryValue,
   type ImageGalleryValueItem
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image-gallery/image-gallery'
+import type {
+  Hotspot,
+  Marker
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import {
+  type HotspotMarkersModalContainerRef
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
 
 export interface ImageGallerySortableItemProps {
   id: string
@@ -32,9 +39,10 @@ export interface ImageGallerySortableItemProps {
   value: ImageGalleryValue
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValue>>
   disabled?: boolean
+  hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, disabled, hotspotMarkersModalContainer }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -49,6 +57,12 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
     transition
   }
 
+  const onHotspotsChange = (hotspots: Hotspot[], marker: Marker[]): void => {
+    const newValue = value.map((v, i) => i === index ? { ...v, hotspots, marker } : v)
+
+    setValue(newValue)
+  }
+
   return (
     <div
       ref={ setNodeRef }
@@ -61,8 +75,10 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
         ? (
           <ImageGalleryImagePreview
             disabled={ disabled }
+            hotspotMarkersModalContainer={ hotspotMarkersModalContainer }
             index={ index }
             item={ item }
+            onHotspotsChange={ onHotspotsChange }
             setValue={ setValue }
             value={ value }
           />

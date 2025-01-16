@@ -345,6 +345,7 @@ no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
+clone: Clone
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -514,4 +515,11 @@ link.accesskey: Accesskey
 link.rel: Relation
 link.tabindex: Tabindex
 link.class: Class
+hotspots.edit: Edit marker and hotspots
+hotspots.new-marker: New Marker
+hotspots.new-hotspot: New Hotspot
+hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
+hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
+hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
+hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
 home: Home
