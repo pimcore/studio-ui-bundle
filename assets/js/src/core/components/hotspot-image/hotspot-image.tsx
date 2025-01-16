@@ -52,6 +52,8 @@ export const defaultStyleOptions = {
   marker: {
     width: 24,
     height: 24,
+    marginLeft: -12,
+    marginTop: -19,
     icon: 'location-marker'
   }
 }
@@ -135,7 +137,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     const dy = evt.clientY - resizeStart.y
 
     if (dragging) {
-      setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex))
+      setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex, Number(styleOptions[items[hotspotIndex].type].marginLeft), Number(styleOptions[items[hotspotIndex].type].marginTop)))
     } else if (resizeDirection !== null) {
       setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, Number(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
     }
@@ -224,7 +226,9 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                 left: `${hotspot.x}px`,
                 top: `${hotspot.y}px`,
                 width: `${hotspot.width}px`,
-                height: `${hotspot.height}px`
+                height: `${hotspot.height}px`,
+                marginTop: styleOptions[hotspot.type].marginTop === undefined ? undefined : `${styleOptions[hotspot.type].marginTop}px`,
+                marginLeft: styleOptions[hotspot.type].marginLeft === undefined ? undefined : `${styleOptions[hotspot.type].marginLeft}px`
               } }
               type={ 'button' }
             >
