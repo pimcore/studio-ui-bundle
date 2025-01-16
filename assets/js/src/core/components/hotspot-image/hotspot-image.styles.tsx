@@ -17,11 +17,13 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     hotspotImage: css`
             position: relative;
-            width: 100%;
+            width: fit-content;
             height: auto;
+            margin: 0 auto;
             
             .hotspot-image__image {
-                width: 100%;
+                width: auto;
+                max-width: 100%;
                 height: auto;
                 display: block;
             }
