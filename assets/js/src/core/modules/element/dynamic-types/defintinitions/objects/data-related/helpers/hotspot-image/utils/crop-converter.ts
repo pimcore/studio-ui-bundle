@@ -45,6 +45,8 @@ export const hotspotToCrop = (hotspot: IHotspot): CropSettings => {
   }
 }
 
+export const defaultCrop = (): CropSettings => hotspotToCrop(defaultHotspot)
+
 const defaultHotspot: IHotspot = {
   id: 1,
   x: 10,

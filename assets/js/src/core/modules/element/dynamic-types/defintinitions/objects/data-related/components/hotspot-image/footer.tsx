@@ -21,6 +21,10 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  hasValueData
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/hotspot-image/utils/value-data'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface HotspotImageFooterProps {
   emptyValue?: () => void
@@ -34,17 +38,17 @@ interface HotspotImageFooterProps {
 export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
+  const messageApi = useMessage()
 
-  const clearValueData = (): void => {
+  const clearValueData = async (): Promise<void> => {
     props.setValue({
       ...props.value!,
       hotspots: [],
       marker: [],
       crop: null
     })
-  }
-  const hasValueData = (): boolean => {
-    return !_.isEmpty(props.value?.hotspots) || !_.isEmpty(props.value?.marker) || !_.isEmpty(props.value?.crop)
+
+    await messageApi.success(t('hotspots.data-cleared'))
   }
 
   return (
@@ -79,6 +83,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
           menu={ {
             items: [
               {
+                disabled: !_.isNumber(props.value?.image?.id),
                 label: t('crop'),
                 key: 'crop',
                 icon: <Icon value={ 'crop' } />,
@@ -87,6 +92,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
                 }
               },
               {
+                disabled: !_.isNumber(props.value?.image?.id),
                 label: t('hotspots.edit'),
                 key: 'hotspots-edit',
                 icon: <Icon value={ 'new-marker' } />,
@@ -95,9 +101,9 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
                 }
               },
               {
-                disabled: !hasValueData(),
+                disabled: !hasValueData(props.value) || props.disabled === true,
                 label: t('hotspots.clear-data'),
-                key: 'hotspots-edit',
+                key: 'clear-data',
                 icon: <Icon value={ 'remove-marker' } />,
                 onClick: clearValueData
               }

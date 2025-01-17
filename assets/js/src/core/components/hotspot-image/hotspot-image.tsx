@@ -76,9 +76,10 @@ interface IHotspotImage {
   onClone?: (id: number) => void
   onUpdate?: (item: IHotspot) => void
   disableContextMenu?: boolean
+  disabled?: boolean
 }
 
-export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu }: IHotspotImage): JSX.Element => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu, disabled }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
@@ -136,7 +137,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
   }
 
   const handleMouseMove = (evt: MouseEvent): void => {
-    if (selectedId === null || containerRef.current === null) return
+    if (selectedId === null || containerRef.current === null || disabled === true) return
     const containerBounds = containerRef.current.getBoundingClientRect()
     const hotspotIndex = items.findIndex(h => h.id === selectedId)
     const dx = evt.clientX - resizeStart.x
@@ -221,10 +222,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             onOpenChange={ (open) => { setPopoverOpen(open) } }
             open={ popoverOpen && selectedId === hotspot.id }
             overlayClassName={ [styles.Popover].join(' ') }
-            trigger={ disableContextMenu === true ? [] : ['contextMenu'] }
+            trigger={ disableContextMenu === true || disabled === true ? [] : ['contextMenu'] }
           >
             <button
-              className={ `hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''}` }
+              className={ `hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''} ${disabled === true ? 'hotspot-image__item--disabled' : ''}` }
               key={ hotspot.id }
               onMouseDown={ evt => { handleMouseDown(evt, hotspot) } }
               style={ {
