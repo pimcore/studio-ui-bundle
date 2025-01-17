@@ -18,9 +18,9 @@ import {
 import { Link } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 
 export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
-  allowedTypes: string[]
-  allowedTargets: string[]
-  disabledFields: string[]
+  allowedTypes?: string[] | null
+  allowedTargets?: string[] | null
+  disabledFields?: string[] | null
 }
 
 export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
@@ -30,7 +30,10 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
     return (
       <Link
         { ...props }
+        allowedTargets={ props.allowedTargets ?? [] }
+        allowedTypes={ props.allowedTypes ?? [] }
         disabled={ props.noteditable === true }
+        disabledFields={ props.disabledFields ?? [] }
       />
     )
   }
