@@ -25,6 +25,7 @@ import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/ta
 import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './save-form.styles'
+import { isEmpty } from 'lodash'
 
 export interface SaveFormProps extends FormProps {
   roleList?: RoleGetCollectionApiResponse
@@ -43,7 +44,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
 
-  const { gridConfig } = useListGridConfig()
+  const { gridConfig, setGridConfig } = useListGridConfig()
 
   const { styles } = useStyles()
 
@@ -51,11 +52,22 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     props.form?.resetFields()
   }, [])
 
-  const onValuesChange = (changedValues: any, values: any): void => {
+  const handleFormValuesChange = (changedValues: any, values: any): void => {
     props.onValuesChange?.(changedValues, values)
 
-    if (changedValues.shareGlobally !== undefined) {
+    const isSharedGlobally = changedValues.shareGlobally
+
+    if (isSharedGlobally !== undefined) {
       setIsSharedGlobally(changedValues.shareGlobally)
+
+      if (!isEmpty(gridConfig) && isSharedGlobally === true) {
+        setGridConfig({
+          ...gridConfig,
+          shareGlobal: true,
+          sharedUsers: [] as object,
+          sharedRoles: [] as object
+        })
+      }
     }
   }
 
@@ -135,7 +147,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   return (
     <Form
       layout="vertical"
-      onValuesChange={ onValuesChange }
+      onValuesChange={ handleFormValuesChange }
       { ...props }
     >
       <Form.Item

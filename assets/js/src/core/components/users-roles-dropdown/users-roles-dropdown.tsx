@@ -63,6 +63,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
     if (!isEmpty(gridConfig)) {
       setGridConfig({
         ...gridConfig,
+        shareGlobal: false,
         sharedUsers: sharedUsersList as object,
         sharedRoles: sharedRolesList as object
       })
