@@ -44,7 +44,7 @@ interface UseElementApiReturn {
 
 export const useElementApi = (elementType: ElementType): UseElementApiReturn => {
   const dispatch = useAppDispatch()
-  const [assetPatch] = useAssetPatchByIdMutation()
+  const [assetPatch] = useAssetPatchByIdMutation({ fixedCacheKey: 'ASSET_ACTION_RENAME' })
   const [dataObjectPatch] = useDataObjectPatchByIdMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
