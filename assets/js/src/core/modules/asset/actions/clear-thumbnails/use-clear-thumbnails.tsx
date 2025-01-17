@@ -12,7 +12,9 @@
 */
 
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { type Asset, useAssetImageClearThumbnailMutation } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import {
+  type Asset, useAssetClearThumbnailMutation
+} from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +28,7 @@ export interface UseClearThumbnailsHookReturn {
 
 export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
   const { t } = useTranslation()
-  const [clearThumbnail] = useAssetImageClearThumbnailMutation()
+  const [clearThumbnail] = useAssetClearThumbnailMutation()
 
   const handleClearThumbnails = async (node: Asset, onFinish?: () => void): Promise<void> => {
     const clearThumbnailTask = clearThumbnail({ id: node.id })
