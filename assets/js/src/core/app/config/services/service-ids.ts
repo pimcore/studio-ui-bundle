@@ -144,6 +144,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/ExternalImage': 'DynamicTypes/ObjectData/ExternalImage',
   'DynamicTypes/ObjectData/Image': 'DynamicTypes/ObjectData/Image',
   'DynamicTypes/ObjectData/Video': 'DynamicTypes/ObjectData/Video',
+  'DynamicTypes/ObjectData/HotspotImage': 'DynamicTypes/ObjectData/HotspotImage',
   'DynamicTypes/ObjectData/ImageGallery': 'DynamicTypes/ObjectData/ImageGallery',
   'DynamicTypes/ObjectData/GeoPoint': 'DynamicTypes/ObjectData/GeoPoint',
   'DynamicTypes/ObjectData/GeoBounds': 'DynamicTypes/ObjectData/GeoBounds',

@@ -62,7 +62,6 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
   }
 
   const onUpdate = (item: IHotspot): void => {
-    console.log('onupdate', item, hotspotToCrop(item))
     setCrop(hotspotToCrop(item))
   }
 
@@ -72,8 +71,8 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
     props.onClose?.()
   }
 
-  const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&contain=true`
-  console.log('currentcrop', cropToHotspot(crop))
+  const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=PNG&resizeMode=none&contain=true`
+
   return (
     <Modal
       afterOpenChange={ afterOpenChange }
