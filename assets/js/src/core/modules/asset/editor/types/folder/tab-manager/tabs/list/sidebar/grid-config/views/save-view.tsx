@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Col, Flex, Popconfirm, Row } from 'antd'
 import { SaveForm, type SaveFormProps } from '../forms/save-form'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -43,6 +44,8 @@ export interface SaveViewProps {
 export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate, userName, ...props }: SaveViewProps): React.JSX.Element => {
   const { form } = formProps
 
+  const { t } = useTranslation()
+
   return (
     <ContentLayout
       renderToolbar={
@@ -52,18 +55,18 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
           { onDeleteClick !== undefined && saveAsNewConfiguration !== true
             ? (
               <Popconfirm
-                cancelText={ 'cancel' }
-                description="Are you sure that you want to delete this template?"
-                okText="Delete"
+                cancelText={ t('button.cancel') }
+                description={ t('grid.configuration.delete-template-confirmation') }
+                okText={ t('delete') }
                 onConfirm={ onDeleteClick }
-                title="Delete this template"
+                title={ t('grid.configuration.delete-this-template') }
               >
                 <IconTextButton
                   disabled={ isLoading }
                   icon={ { value: 'trash' } }
                   loading={ isDeleting }
                 >
-                  Delete Template
+                  {t('grid.configuration.delete-template')}
                 </IconTextButton>
               </Popconfirm>
 
@@ -75,7 +78,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
               icon={ { value: 'close' } }
               onClick={ onCancelClick }
               type='default'
-            >Cancel</IconTextButton>
+            >{ t('button.cancel') }</IconTextButton>
 
             <Button
               disabled={ isDeleting }
@@ -83,7 +86,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
               onClick={ () => form?.submit() }
               type='primary'
             >
-              Save & Apply
+              { t('button.save-apply') }
             </Button>
           </Space>
         </Toolbar>
@@ -94,16 +97,16 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
           gap='small'
           vertical
         >
-          <Header title='Save configuration as template' />
+          <Header title={ t('grid.configuration.save-template-configuration') } />
 
           { saveAsNewConfiguration !== true && (
             <Row>
               <Col span={ 6 }>
-                <Text>Owner:</Text> <Text type='secondary'>{userName}</Text>
+                <Text>{t('common.owner')}:</Text> <Text type='secondary'>{userName}</Text>
               </Col>
               {!isEmptyValue(modificationDate) && (
                 <Col span={ 12 }>
-                  <Text>Modification date: </Text>
+                  <Text>{t('common.modification-date')}: </Text>
                   <Text type='secondary'>
                     {formatDateTime({ timestamp: modificationDate!, dateStyle: 'short', timeStyle: 'short' })}
                   </Text>

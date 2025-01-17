@@ -1,3 +1,5 @@
+common.owner: Owner
+common.modification-date: Modification date
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
@@ -65,6 +67,10 @@ grid.configuration.save-template: Save as template
 grid.configuration.save-new-template: Save as new template
 grid.configuration.update-template: Update the template
 grid.configuration.edit-template-details: Edit template details
+grid.configuration.delete-template: Delete Template
+grid.configuration.delete-this-template: Delete this template
+grid.configuration.delete-template-confirmation: Are you sure that you want to delete this template?
+grid.configuration.save-template-configuration: Save configuration as template
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -208,6 +214,7 @@ properties.add-property-mandatory-fields-missing.error: Key and type are mandato
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.save-apply: Save & Apply
 button.cancel-edits: Cancel edits
 actions.open: Open
 open: Open
