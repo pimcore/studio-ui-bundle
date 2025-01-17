@@ -87,7 +87,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     setHotspots(currentHotspots => [...currentHotspots, newHotspot])
   }
 
-  const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&contain=true`
+  const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=PNG&resizeMode=none&contain=true`
 
   return (
     <WindowModal

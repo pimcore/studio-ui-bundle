@@ -28,7 +28,6 @@ export const dragItem = (
   marginLeft: number,
   marginTop: number
 ): IHotspot[] => {
-  console.log('margins', marginLeft, marginTop)
   const hotspot = convertHotspotToPixel(hotspots[hotspotIndex], containerBounds)
   const newX = Math.min(containerBounds.width - hotspot.width, Math.max(0, evt.clientX - containerBounds.left - dragStart.x)) - marginLeft
   const newY = Math.min(containerBounds.height - hotspot.height, Math.max(0, evt.clientY - containerBounds.top - dragStart.y)) - marginTop
