@@ -25,11 +25,13 @@ import { Flex, Space } from 'antd'
 interface ComparisonViewUiProps {
   versions: AssetVersionData[]
   gridData: any[]
+  isImageVersion: boolean
 }
 
 export const ComparisonViewUi = ({
   versions,
-  gridData
+  gridData,
+  isImageVersion
 }: ComparisonViewUiProps): React.JSX.Element => {
   const { styles } = useStyles()
 
@@ -75,7 +77,7 @@ export const ComparisonViewUi = ({
           {versions.map((version, index) => {
             return (
               <div key={ index }>
-                { version.previewImageUrl !== null
+                { version.previewImageUrl !== null && isImageVersion
                   ? (
                     <PimcoreImage
                       src={ version.previewImageUrl }

@@ -95,12 +95,12 @@ const formatMetadata = (metadata: CustomMetadataVersion[] | undefined): Map<stri
   return map
 }
 
-const isImageVersion = (version: AssetVersion): boolean => {
-  return version.type === 'image'
-}
+export const checkIsImageVersion = (version: AssetVersion): boolean => (
+  version.type === 'image'
+)
 
 export const loadPreviewImage = async (version: AssetVersion, versionId: number): Promise<string | null> => {
-  if (!isImageVersion(version)) {
+  if (!checkIsImageVersion(version)) {
     return null
   }
   let result: string | null = null
@@ -129,7 +129,7 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
     const dataColumn = `${t('version.version')} ${versionData.versionCount}`
 
     Object.keys(versionData.baseDataFormatted).forEach((key) => {
-      if (key === 'dimensions' && isImageVersion(versionData.dataRaw)) {
+      if (key === 'dimensions' && checkIsImageVersion(versionData.dataRaw)) {
         return
       }
       const row = tableBaseData.find((row: any) => row[fieldColumn].key === key)

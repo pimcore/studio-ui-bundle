@@ -28,6 +28,7 @@ interface SingleVersionViewUiProps {
   lastVersion: boolean
   onClickPrevious: () => void
   onClickNext: () => void
+  isImageVersion: boolean
 }
 
 export const SingleViewUi = ({
@@ -37,7 +38,8 @@ export const SingleViewUi = ({
   firstVersion,
   lastVersion,
   onClickPrevious,
-  onClickNext
+  onClickNext,
+  isImageVersion
 }: SingleVersionViewUiProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<any>()
 
@@ -65,7 +67,7 @@ export const SingleViewUi = ({
           onClick={ onClickPrevious }
           type={ 'text' }
         />
-        {imgSrc !== null
+        {imgSrc !== null && isImageVersion
           ? (
             <PimcoreImage
               className={ 'image-slider__image' }

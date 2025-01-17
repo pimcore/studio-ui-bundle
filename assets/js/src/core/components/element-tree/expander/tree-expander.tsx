@@ -43,8 +43,6 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
     }
   }
 
-  console.log({ isLoading })
-
   return (
     <div
       className='tree-expander'
