@@ -11,22 +11,32 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
 import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Select } from '@Pimcore/components/select/select'
+import { Text } from '@Pimcore/components/text/text'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Button } from '@Pimcore/components/button/button'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
-import { isEmpty } from 'lodash'
 
 interface IUsersRolesDropdownProps {
   roleList?: RoleGetCollectionApiResponse
   userList?: UserGetCollectionApiResponse
   handleClose: () => void
+}
+
+interface IRenderSelectProps {
+  options?: Array<{ value: number, label: ReactNode }>
+  placeholder: string
+  handleOnChange: any
+  selectedOptions: number[]
 }
 
 export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRolesDropdownProps): React.JSX.Element => {
@@ -61,7 +71,17 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
     }
   }
 
-  const renderSelect = ({ options, selectedOptions, placeholder, handleOnChange }: { options?: Array<{ value: number, label?: string }>, placeholder: string, handleOnChange: any, selectedOptions: number[] }): React.JSX.Element => (
+  const renderLabel = ({ labelName, iconName }: { labelName?: string, iconName: string }): React.JSX.Element => (
+    <Flex
+      align="center"
+      gap="mini"
+    >
+      <Icon value={ iconName } />
+      <Text>{labelName}</Text>
+    </Flex>
+  )
+
+  const renderSelect = ({ options, selectedOptions, placeholder, handleOnChange }: IRenderSelectProps): React.JSX.Element => (
     <Select
       mode="multiple"
       onChange={ handleOnChange }
@@ -75,7 +95,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   const renderUsers = (): React.JSX.Element => {
     const options = userList?.items?.map(item => ({
       value: item.id,
-      label: item.username
+      label: renderLabel({ labelName: item?.username, iconName: 'user' })
     }))
 
     return renderSelect({
@@ -89,7 +109,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   const renderRoles = (): React.JSX.Element => {
     const options = roleList?.items?.map(item => ({
       value: item.id,
-      label: item.name
+      label: renderLabel({ labelName: item?.name, iconName: 'shield' })
     }))
 
     return renderSelect({
