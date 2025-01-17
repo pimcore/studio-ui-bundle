@@ -59,6 +59,12 @@ aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels s
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
+grid.configuration.no-saved-templates: No saved templates available
+grid.configuration.template: Template
+grid.configuration.save-template: Save as template
+grid.configuration.save-new-template: Save as new template
+grid.configuration.update-template: Update the template
+grid.configuration.edit-template-details: Edit template details
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info

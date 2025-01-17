@@ -79,7 +79,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
             disabled={ savedGridConfigurations?.length === 0 && !isLoading }
             menu={ { items: savedGridConfigurations } }
           >
-            <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? 'No saved templates available' : '' }>
+            <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
               <IconTextButton
                 disabled={ savedGridConfigurations?.length === 0 && !isLoading }
                 icon={ { value: 'style' } }
@@ -93,7 +93,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                     )
                   : (
                     <>
-                      Template
+                      {t('grid.configuration.template')}
                     </>
                     ) }
               </IconTextButton>
@@ -130,7 +130,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
             onClick={ onSaveConfigurationClick }
             type='default'
           >
-            Save as template
+            {t('grid.configuration.save-template')}
           </Button>
         ) }
 
@@ -143,7 +143,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                   onClick={ onUpdateConfigurationClick }
                   type='default'
                 >
-                  Update the template
+                  {t('grid.configuration.update-template')}
                 </Button>
 
                 <Dropdown menu={
@@ -152,7 +152,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                       {
                         key: 0,
                         icon: <Icon value='edit' />,
-                        label: 'Edit template details',
+                        label: t('grid.configuration.edit-template-details'),
                         onClick: () => {
                           onEditConfigurationClick()
                         }
@@ -161,7 +161,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                       {
                         key: 1,
                         icon: <Icon value='save' />,
-                        label: 'Save as new template',
+                        label: t('grid.configuration.save-new-template'),
                         onClick: () => {
                           onSaveConfigurationClick()
                         }
@@ -183,7 +183,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                 onClick={ onSaveConfigurationClick }
                 type='default'
               >
-                Save as template
+                {t('grid.configuration.save-template')}
               </Button>
             )}
           </>
