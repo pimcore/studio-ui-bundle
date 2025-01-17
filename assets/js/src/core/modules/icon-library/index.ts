@@ -55,6 +55,7 @@ import close from '@Pimcore/assets/icons/close.inline.svg'
 import cms from '@Pimcore/assets/icons/cms.inline.svg'
 import collection from '@Pimcore/assets/icons/collection.inline.svg'
 import columns from '@Pimcore/assets/icons/columns.inline.svg'
+import contentDuplicate from '@Pimcore/assets/icons/content-duplicate.inline.svg'
 import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
@@ -69,6 +70,8 @@ import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
+import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg'
+import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
 import details from '@Pimcore/assets/icons/details.inline.svg'
 import document from '@Pimcore/assets/icons/document.inline.svg'
@@ -158,6 +161,7 @@ import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
+import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg'
 import requires from '@Pimcore/assets/icons/requires.inline.svg'
@@ -198,6 +202,9 @@ import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
+import removeImageThumbnails from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg'
+import removeVideoThumbnails from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg'
+import removePdfThumbnails from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -351,6 +358,10 @@ moduleSystem.registerModule({
       component: columns
     })
     iconLibrary.register({
+      name: 'content-duplicate',
+      component: contentDuplicate
+    })
+    iconLibrary.register({
       name: 'content',
       component: content
     })
@@ -405,6 +416,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
+    })
+    iconLibrary.register({
+      name: 'delete-column',
+      component: deleteColumn
+    })
+    iconLibrary.register({
+      name: 'delete-row',
+      component: deleteRow
     })
     iconLibrary.register({
       name: 'dependencies',
@@ -763,6 +782,10 @@ moduleSystem.registerModule({
       component: refresh
     })
     iconLibrary.register({
+      name: 'remove-marker',
+      component: removeMarker
+    })
+    iconLibrary.register({
       name: 'rename',
       component: rename
     })
@@ -921,6 +944,18 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
+    })
+    iconLibrary.register({
+      name: 'remove-image-thumbnails',
+      component: removeImageThumbnails
+    })
+    iconLibrary.register({
+      name: 'remove-video-thumbnails',
+      component: removeVideoThumbnails
+    })
+    iconLibrary.register({
+      name: 'remove-pdf-thumbnails',
+      component: removePdfThumbnails
     })
   }
 })

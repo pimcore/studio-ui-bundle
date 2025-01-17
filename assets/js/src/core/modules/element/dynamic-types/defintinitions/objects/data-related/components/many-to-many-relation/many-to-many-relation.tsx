@@ -31,6 +31,8 @@ import {
   dndIsValidData,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -69,19 +71,27 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           assetInlineDownloadAllowed={ props.assetInlineDownloadAllowed ?? false }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          height={ props.height }
           value={ displayedValue }
+          width={ props.width }
         />
       </Droppable>
-      <ManyToManyRelationToolbar
-        addAssets={ addAssets }
-        allowClear={ props.allowToClearRelation && props.disabled !== true }
-        assetUploadPath={ props.assetUploadPath }
-        empty={ () => { setValue(null) } }
-        enableUpload={ props.assetsAllowed === true && props.disabled !== true }
-        onSearch={ onSearch }
-        uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
-        uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
-      />
+      <Content
+        style={ {
+          width: toCssDimension(props.width)
+        } }
+      >
+        <ManyToManyRelationToolbar
+          addAssets={ addAssets }
+          allowClear={ props.allowToClearRelation && props.disabled !== true }
+          assetUploadPath={ props.assetUploadPath }
+          empty={ () => { setValue(null) } }
+          enableUpload={ props.assetsAllowed === true && props.disabled !== true }
+          onSearch={ onSearch }
+          uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
+          uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
+        />
+      </Content>
     </>
   )
 }

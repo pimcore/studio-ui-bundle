@@ -315,6 +315,7 @@ element.tree.context-menu.add-assets.upload-zip: Upload Zip
 element.tree.context-menu.advanced: Advanced
 element.tree.context-menu.search-and-move: Search & Move
 element.tree.context-menu.expand-children: Expand Children
+asset.tree.context-menu.clear-thumbnails: Clear Thumbnails
 element.tree.copy: Copy
 element.tree.paste: Paste
 element.tree.cut: Cut
@@ -346,6 +347,7 @@ no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
 delete: Delete
+clone: Clone
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
@@ -375,6 +377,16 @@ processing: Processing
 upload: Upload
 upload.assets-items-failed-message: Some items could not be uploaded.
 quantity-value.converted-units: Converted Units
+table.empty.confirm: Are you sure you want to clear all data?
+table.new-column: New column
+table.delete-column: Delete column
+table.new-row: New row
+table.delete-row: Delete row
+table.duplicate-row: Duplicate row
+table.copy: Copy
+table.paste: Paste
+table.empty: Empty
+table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
@@ -477,6 +489,9 @@ user-management.workspaces.columns.create: Create
 user-management.workspaces.columns.settings: Settings
 user-management.workspaces.columns.versions: Versions
 user-management.workspaces.columns.properties: Properties
+user-management.workspaces.columns.path: Path
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Subtype
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
@@ -515,4 +530,11 @@ link.accesskey: Accesskey
 link.rel: Relation
 link.tabindex: Tabindex
 link.class: Class
+hotspots.edit: Edit marker and hotspots
+hotspots.new-marker: New Marker
+hotspots.new-hotspot: New Hotspot
+hotspots.clear-data: Clear all edits (marker, hotspot, cropping)
+hotspots.clear-data.dnd-message: This image contains additional data like markers or hotspots. Do you want to clear them as well?
+hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
+hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
 home: Home

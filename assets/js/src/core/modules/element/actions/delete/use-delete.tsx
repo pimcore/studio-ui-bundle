@@ -45,7 +45,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
-  const [elementDelete] = useElementDeleteMutation()
+  const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: `${elementType.toUpperCase()}_ACTION_DELETE_ID_XY` })
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({

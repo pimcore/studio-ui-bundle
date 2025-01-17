@@ -30,12 +30,16 @@ import { Box } from '@Pimcore/components/box/box'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import cn from 'classnames'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { Content } from '@Pimcore/components/content/content'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
   deleteItem: (id: number, type: string) => void
   assetInlineDownloadAllowed: boolean
   disabled?: boolean
+  width: number | string | null
+  height: number | string | null
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -170,12 +174,25 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       className={ cn(...getStateClasses()) }
       ref={ ref }
     >
-      <Grid
-        autoWidth
-        columns={ columns }
-        data={ getDataArray() }
-        resizable
-      />
+      <Content
+        style={ {
+          width: toCssDimension(props.width),
+          height: toCssDimension(props.height)
+        } }
+      >
+        <div
+          style={ {
+            maxWidth: 'calc(100% - 2px)'
+          } }
+        >
+          <Grid
+            autoWidth
+            columns={ columns }
+            data={ getDataArray() }
+            resizable
+          />
+        </div>
+      </Content>
     </div>
   )
 })

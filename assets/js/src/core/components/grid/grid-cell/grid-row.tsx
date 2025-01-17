@@ -16,6 +16,7 @@ import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps } from '@Pimcore/types/components/types'
+import { type GridCellReference } from '@Pimcore/components/grid/grid'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export interface GridRowProps {
@@ -24,6 +25,8 @@ export interface GridRowProps {
   isSelected?: boolean
   tableElement: GridContextProviderProps['table']
   columns: GridProps['columns']
+  activeColumId?: string
+  onFocusCell?: (cell: GridCellReference) => void
   contextMenuItems?: DropdownMenuProps['items']
 }
 
@@ -68,8 +71,10 @@ const GridRow = ({ row, isSelected, modifiedCells, contextMenuItems = [], ...pro
         >
           <GridCell
             cell={ cell }
+            isActive={ props.activeColumId === cell.column.id }
             isModified={ isModifiedCell(cell.column.id) }
             key={ cell.id }
+            onFocusCell={ props.onFocusCell }
             tableElement={ props.tableElement }
           />
         </td>

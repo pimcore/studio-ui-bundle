@@ -117,6 +117,21 @@ export const Toolbar = (): React.JSX.Element => {
     if (asset.changes.customMetadata) {
       update.metadata = customMetadata?.map((metadata: CustomMetadata): CustomMetadataApi => {
         const { rowId, ...metadataApi } = metadata
+
+        if (metadataApi.type.startsWith('metadata.')) {
+          metadataApi.type = metadataApi.type.replace('metadata.', '')
+        }
+
+        if (metadataApi.data === null) {
+          if (metadataApi.type === 'input' || metadataApi.type === 'textarea') {
+            metadataApi.data = ''
+          }
+
+          if (metadataApi.type === 'checkbox') {
+            metadataApi.data = false
+          }
+        }
+
         return metadataApi
       })
     }
