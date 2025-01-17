@@ -147,7 +147,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
           />
         </Col>
         <Col span={ 8 }>
-          <UserAvatar />
+          <UserAvatar id={ id } />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion />

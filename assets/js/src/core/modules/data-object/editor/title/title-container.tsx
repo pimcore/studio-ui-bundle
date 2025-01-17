@@ -14,10 +14,16 @@
 import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { useTranslation } from 'react-i18next'
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props
   const { dataObject } = useDataObjectDraft(node.getConfig().id as number)
+  const { t } = useTranslation()
+
+  if (dataObject?.parentId === 0) {
+    node.getName = () => t('home')
+  }
 
   return (
     <TabTitleContainer//

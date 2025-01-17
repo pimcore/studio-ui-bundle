@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
@@ -32,6 +32,13 @@ import {
   SortableContext
 } from '@dnd-kit/sortable'
 import { uuid } from '@Pimcore/utils/uuid'
+import {
+  type Hotspot, type Marker
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
+import {
+  HotspotMarkersModalContainer,
+  type HotspotMarkersModalContainerRef
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -43,11 +50,14 @@ export type ImageGalleryValue = ImageGalleryValueItem[]
 
 export interface ImageGalleryValueItem {
   image: ImageValue | null
+  hotspots?: Hotspot[] | null
+  marker?: Marker[] | null
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const [value, setValue] = useState<ImageGalleryValue>(props.value ?? [])
   const { t } = useTranslation()
+  const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
   useEffect(() => {
     if (props.onChange !== undefined) {
@@ -80,6 +90,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
           { value.map((item, index) => (
             <ImageGallerySortableItem
               disabled={ props.disabled }
+              hotspotMarkersModalContainer={ hotspotMarkersModalContainerRef }
               id={ String(index) }
               index={ index }
               item={ item }
@@ -98,6 +109,9 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
           />
         ) }
       </Flex>
+      <HotspotMarkersModalContainer
+        ref={ hotspotMarkersModalContainerRef }
+      />
     </Card>
   )
 }

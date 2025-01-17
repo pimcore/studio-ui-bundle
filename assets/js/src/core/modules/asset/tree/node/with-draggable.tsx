@@ -18,7 +18,7 @@ import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 
 export const withDraggable = (Component: ElementType<TreeNodeProps>): ElementType<TreeNodeProps> => {
   const DraggableNodeContent = (props: TreeNodeProps): ReactElement => {
-    const metaData: Asset | undefined = props.metaData.asset
+    const metaData: Asset | undefined = props.metaData?.asset
 
     if (props.metaData?.asset === undefined) {
       return (

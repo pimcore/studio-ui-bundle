@@ -21,14 +21,63 @@ import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { type ElementIcon, useAssetGetTreeQuery } from '../asset-api-slice-enhanced'
+import { transformApiDataToNodes } from './utils/transform-api-data-to-node'
+import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
+import { useTranslation } from 'react-i18next'
+import { Box } from '@Pimcore/components/box/box'
 
 export interface TreeContainerProps {
   id: number
 }
 
-const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
+export interface IDefaultRootNodeProps {
+  icon: ElementIcon
+  level: number
+  isRoot: true
+}
+
+const defaultRootNodeProps: IDefaultRootNodeProps = {
+  icon: { type: 'name', value: 'home-root-folder' },
+  level: -1,
+  isRoot: true
+}
+
+const TreeContainer = ({ id = 1 }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
+  const { isLoading, data: rootNodeData } = useAssetGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true })
   const { asset_tree_paging_limit: assetTreePagingLimit } = useSettings()
+  const pagingLimit: number | undefined = assetTreePagingLimit
+  const { t } = useTranslation()
+
+  if (isLoading || rootNodeData === undefined) {
+    return (
+      <Box padding={ 'small' }>
+        <Skeleton />
+      </Box>
+    )
+  }
+
+  const transformedNodes = transformApiDataToNodes(
+    {
+      children: [],
+      icon: { type: 'name', value: 'home-root-folder' },
+      id: '0',
+      internalKey: '0',
+      label: '',
+      level: -1,
+      isLocked: false,
+      permissions: {}
+    },
+    rootNodeData,
+    pagingLimit
+  )
+
+  const rootNode: TreeNodeProps = {
+    ...transformedNodes.nodes[0],
+    ...defaultRootNodeProps,
+    label: t('home')
+  }
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
     openAsset({
@@ -41,7 +90,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   return (
     <ElementTree
       contextMenu={ AssetTreeContextMenu }
-      maxItemsPerNode={ assetTreePagingLimit }
+      maxItemsPerNode={ pagingLimit }
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }
       onSelect={ onSelect }
@@ -49,6 +98,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
       renderNode={ withDraggable(TreeNode) }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
+      rootNode={ rootNode }
     />
   )
 }

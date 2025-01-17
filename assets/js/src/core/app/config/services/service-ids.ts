@@ -151,6 +151,7 @@ export const serviceIds = {
   'DynamicTypes/ObjectData/GeoPolyLine': 'DynamicTypes/ObjectData/GeoPolyLine',
   'DynamicTypes/ObjectData/ManyToOneRelation': 'DynamicTypes/ObjectData/ManyToOneRelation',
   'DynamicTypes/ObjectData/ManyToManyRelation': 'DynamicTypes/ObjectData/ManyToManyRelation',
+  'DynamicTypes/ObjectData/Table': 'DynamicTypes/ObjectData/Table',
   'DynamicTypes/ObjectData/StructuredTable': 'DynamicTypes/ObjectData/StructuredTable',
   'DynamicTypes/ObjectData/Block': 'DynamicTypes/ObjectData/Block',
   'DynamicTypes/ObjectData/LocalizedFields': 'DynamicTypes/ObjectData/LocalizedFields',
