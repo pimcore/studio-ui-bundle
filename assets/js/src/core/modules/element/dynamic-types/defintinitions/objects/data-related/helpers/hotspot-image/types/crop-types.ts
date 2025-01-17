@@ -11,18 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export interface Hotspot {
-  top: number
-  left: number
-  width: number
-  height: number
-  data?: any
-  name?: string | null
-}
-
-export interface Marker {
-  top: number
-  left: number
-  data: any
-  name?: string | null
+export interface CropSettings {
+  cropWidth: number
+  cropHeight: number
+  cropTop: number
+  cropLeft: number
+  cropPercent: boolean
 }

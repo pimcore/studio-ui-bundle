@@ -24,10 +24,6 @@ import {
   type ImageGalleryValue,
   type ImageGalleryValueItem
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image-gallery/image-gallery'
-import type {
-  Hotspot,
-  Marker
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import {
   type HotspotMarkersModalContainerRef
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
@@ -57,12 +53,6 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
     transition
   }
 
-  const onHotspotsChange = (hotspots: Hotspot[], marker: Marker[]): void => {
-    const newValue = value.map((v, i) => i === index ? { ...v, hotspots, marker } : v)
-
-    setValue(newValue)
-  }
-
   return (
     <div
       ref={ setNodeRef }
@@ -78,7 +68,6 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
             hotspotMarkersModalContainer={ hotspotMarkersModalContainer }
             index={ index }
             item={ item }
-            onHotspotsChange={ onHotspotsChange }
             setValue={ setValue }
             value={ value }
           />

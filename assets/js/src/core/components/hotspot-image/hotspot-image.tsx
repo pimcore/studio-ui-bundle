@@ -71,13 +71,14 @@ interface IHotspotImage {
   src: string
   styleOptions?: IStyleOptions
   data?: IHotspot[]
-  onRemove: (id: number) => void
+  onRemove?: (id: number) => void
   onEdit?: (id: number) => void
   onClone?: (id: number) => void
-  onUpdate: (item: IHotspot) => void
+  onUpdate?: (item: IHotspot) => void
+  disableContextMenu?: boolean
 }
 
-export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate }: IHotspotImage): JSX.Element => {
+export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, onRemove, onEdit, onClone, onUpdate, disableContextMenu }: IHotspotImage): JSX.Element => {
   const { styles } = useStyle()
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
   const imageRef = useRef<HTMLImageElement | null>(null)
@@ -129,6 +130,11 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     evt.stopPropagation()
   }
 
+  const toNumber = (value: any): number => {
+    const number = Number(value)
+    return isNaN(number) ? 0 : number
+  }
+
   const handleMouseMove = (evt: MouseEvent): void => {
     if (selectedId === null || containerRef.current === null) return
     const containerBounds = containerRef.current.getBoundingClientRect()
@@ -137,9 +143,9 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
     const dy = evt.clientY - resizeStart.y
 
     if (dragging) {
-      setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex, Number(styleOptions[items[hotspotIndex].type].marginLeft), Number(styleOptions[items[hotspotIndex].type].marginTop)))
+      setItems(dragItem(evt, dragStart, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].marginLeft), toNumber(styleOptions[items[hotspotIndex].type].marginTop)))
     } else if (resizeDirection !== null) {
-      setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, Number(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
+      setItems(resizeItem(evt, resizeStart, resizeDirection, containerBounds, items, hotspotIndex, toNumber(styleOptions[items[hotspotIndex].type].minSize), dx, dy))
     }
   }
 
@@ -149,7 +155,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
 
     const updatedItem = items.find(h => h.id === selectedId)
     if (updatedItem !== undefined) {
-      onUpdate(updatedItem)
+      onUpdate?.(updatedItem)
     }
   }
 
@@ -192,7 +198,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                 <Tooltip title={ t('remove') }>
                   <IconButton
                     icon={ { value: 'trash' } }
-                    onClick={ () => { onRemove(hotspot.id) } }
+                    onClick={ () => { onRemove?.(hotspot.id) } }
                     type={ 'link' }
                   />
                 </Tooltip>
@@ -215,7 +221,7 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
             onOpenChange={ (open) => { setPopoverOpen(open) } }
             open={ popoverOpen && selectedId === hotspot.id }
             overlayClassName={ [styles.Popover].join(' ') }
-            trigger={ ['contextMenu'] }
+            trigger={ disableContextMenu === true ? [] : ['contextMenu'] }
           >
             <button
               className={ `hotspot-image__item ${hotspot.type === 'marker' ? 'hotspot-image__item--marker' : ''}` }
