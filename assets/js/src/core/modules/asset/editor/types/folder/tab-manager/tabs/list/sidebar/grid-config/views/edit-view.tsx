@@ -84,6 +84,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                 disabled={ savedGridConfigurations?.length === 0 && !isLoading }
                 icon={ { value: 'style' } }
                 loading={ isLoading }
+                style={ { minHeight: '32px', minWidth: '100px' } }
               >
                 { isSavedConfiguration
                   ? (
