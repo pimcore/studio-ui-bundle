@@ -17,11 +17,21 @@ import { Spin } from './spin'
 const config: Meta = {
   title: 'Components/Feedback/Spin',
   component: Spin,
-  args: {
-    asContainer: true
-  }
 }
 
 export default config
 
-export const _default = {}
+export const _default = {
+}
+
+export const Classic = {
+  args: {
+    type: 'classic',
+  }
+}
+
+export const AsContainer = {
+  args: {
+    asContainer: true,
+  }
+}
