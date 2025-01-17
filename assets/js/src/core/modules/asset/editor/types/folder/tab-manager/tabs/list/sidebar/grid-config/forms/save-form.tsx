@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Checkbox, Flex, Input } from 'antd'
 import { Form, type FormProps } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
@@ -46,6 +47,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
 
   const { gridConfig, setGridConfig } = useListGridConfig()
 
+  const { t } = useTranslation()
   const { styles } = useStyles()
 
   useEffect(() => {
@@ -82,14 +84,14 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
 
   const renderRightLabelComponent = (): JSX.Element | string | undefined => {
     const renderGlobalView = (): React.JSX.Element => (
-      <Text className={ styles.label }>Globally</Text>
+      <Text className={ styles.label }>{t('common.globally')}</Text>
     )
 
     const renderUserView = (): React.JSX.Element => (
       <>
         <Flex gap={ 10 }>
           <Text className={ styles.label }>
-            {renderIcon('user')} User | {renderIcon('shield')} Role
+            {renderIcon('user')} {t('user-management.key-bindings.user')} | {renderIcon('shield')} {t('user-management.key-bindings.role')}
           </Text>
           <Flex
             align="center"
@@ -98,7 +100,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
             onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
           >
             {renderIcon('edit', 16)}
-            <Text className={ styles.updateButtonText }>Add & Edit</Text>
+            <Text className={ styles.updateButtonText }>{t('button.add-edit')}</Text>
           </Flex>
         </Flex>
         {isOpenDropdown && (
@@ -152,17 +154,17 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
       { ...props }
     >
       <Form.Item
-        label="Name"
+        label={ t('user-management.name') }
         name="name"
-        rules={ [{ required: true, message: 'Please provide a name' }] }
+        rules={ [{ required: true, message: t('form.validation.provide-name') }] }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="Description"
+        label={ t('description') }
         name="description"
-        rules={ [{ required: true, message: 'Please provide a description' }] }
+        rules={ [{ required: true, message: t('form.validation.provide-description') }] }
       >
         <Input.TextArea />
       </Form.Item>
@@ -172,7 +174,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           name="setAsDefault"
           valuePropName='checked'
         >
-          <Checkbox>Set as default template</Checkbox>
+          <Checkbox>{t('grid.configuration.set-default-template')}</Checkbox>
         </Form.Item>
 
         {/* @TODO: the logic will be implemented later */}
@@ -193,7 +195,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           valuePropName='checked'
         >
           <Switch
-            labelLeft={ <Text>Shared</Text> }
+            labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
             labelRight={ renderRightLabelComponent() }
           />
         </Form.Item>
