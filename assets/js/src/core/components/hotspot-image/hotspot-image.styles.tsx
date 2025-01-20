@@ -56,6 +56,13 @@ export const useStyle = createStyles(({ token, css }) => {
                 justify-content: center;
                 align-items: center;
             }
+
+            .hotspot-image__item--disabled {
+                cursor: default;
+                &:before {
+                    cursor: default;
+                }
+            }
             
             .hotspot-image__popover {
             }

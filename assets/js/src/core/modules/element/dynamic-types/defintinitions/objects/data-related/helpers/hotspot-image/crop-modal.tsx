@@ -23,7 +23,7 @@ import {
   type CropSettings
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 import {
-  cropToHotspot, hotspotToCrop
+  cropToHotspot, defaultCrop, hotspotToCrop
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/utils/crop-converter'
 
 export interface CropModalProps {
@@ -48,7 +48,7 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
   }, [props.crop])
 
   const handleOk = (): void => {
-    props.onChange?.(crop)
+    props.onChange?.(crop ?? defaultCrop())
     props.onClose?.()
   }
 
@@ -115,6 +115,7 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
       <HotspotImage
         data={ modalOpened ? [cropToHotspot(crop)] : [] }
         disableContextMenu
+        disabled={ props.disabled }
         onUpdate={ onUpdate }
         src={ thumbnailSrc }
       />

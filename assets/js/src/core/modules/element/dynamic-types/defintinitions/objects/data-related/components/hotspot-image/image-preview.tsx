@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState, forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { forwardRef, type MutableRefObject } from 'react'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { HotspotMarkersModal } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal'
 import { fromIHotspots, toIHotspots } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
@@ -35,22 +35,16 @@ interface HotspotImagePreviewProps {
   markerModalOpen: boolean
   setCropModalOpen: (open: boolean) => void
   setMarkerModalOpen: (open: boolean) => void
+  disabled?: boolean
 }
 
 export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
-  { assetId, height, width, value: initialValue, onChange, cropModalOpen, setCropModalOpen, markerModalOpen, setMarkerModalOpen }: HotspotImagePreviewProps,
+  { assetId, height, width, value, onChange, cropModalOpen, setCropModalOpen, markerModalOpen, setMarkerModalOpen, disabled }: HotspotImagePreviewProps,
   ref: MutableRefObject<HTMLDivElement>
 ): React.JSX.Element {
-  const [value, setValue] = useState<HotspotImageValue>(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
   const handleHotspotsChange = (iHotspots: IHotspot[]): void => {
     const { hotspots, marker } = fromIHotspots(iHotspots)
     const newValue: HotspotImageValue = { ...value, hotspots, marker }
-    setValue(newValue)
     onChange?.(newValue)
   }
 
@@ -68,7 +62,6 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
 
   const onCropChange = (crop: CropSettings | null): void => {
     const newValue = { ...value, crop }
-    setValue(newValue)
     onChange?.(newValue)
   }
 
@@ -82,17 +75,19 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
       />
 
       { cropModalOpen && (
-      <CropModal
-        crop={ value.crop }
-        imageId={ value.image!.id }
-        onChange={ onCropChange }
-        onClose={ hideCropModal }
-        open={ cropModalOpen }
-      />
+        <CropModal
+          crop={ value.crop }
+          disabled={ disabled }
+          imageId={ value.image!.id }
+          onChange={ onCropChange }
+          onClose={ hideCropModal }
+          open={ cropModalOpen }
+        />
       ) }
 
       { markerModalOpen && (
         <HotspotMarkersModal
+          disabled={ disabled }
           hotspots={ toIHotspots(value.hotspots ?? [], value.marker ?? []) }
           imageId={ assetId }
           onChange={ handleHotspotsChange }

@@ -135,6 +135,7 @@ export const HotspotMarkersModal = (props: HotspotMarkersModalProps): React.JSX.
     >
       <HotspotImage
         data={ modalOpened ? hotspots : [] }
+        disabled={ props.disabled }
         onClone={ onClone }
         onRemove={ onRemove }
         onUpdate={ onUpdate }

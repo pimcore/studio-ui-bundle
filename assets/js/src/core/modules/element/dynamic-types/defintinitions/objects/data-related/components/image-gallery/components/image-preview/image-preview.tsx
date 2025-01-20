@@ -72,6 +72,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
 
   if (hotspotMarkersModalContainer.current !== null) {
     const hotspotMarkersModalProps = {
+      disabled,
       hotspots,
       imageId: item.image!.id,
       open: markerModalOpen,
@@ -207,9 +208,9 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
-              disabled: !hasValueData(index),
+              disabled: !hasValueData(index) || disabled === true,
               label: t('hotspots.clear-data'),
-              key: 'hotspots-edit',
+              key: 'clear-data',
               icon: <Icon value={ 'remove-marker' } />,
               onClick: clearValueData
             },
@@ -226,8 +227,9 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
+              disabled,
               label: t('empty'),
-              key: 'open',
+              key: 'empty',
               icon: <Icon value={ 'trash' } />,
               onClick: async () => {
                 setValue(value.map((v, i) => i === index ? { image: null, hotspots: null, marker: null, crop: null } : v))
@@ -243,6 +245,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
       { cropModalOpen && (
         <CropModal
           crop={ item.crop }
+          disabled={ disabled }
           imageId={ item.image!.id }
           onChange={ onCropChange }
           onClose={ hideCropModal }
