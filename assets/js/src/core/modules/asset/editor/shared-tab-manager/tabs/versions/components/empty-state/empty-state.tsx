@@ -19,7 +19,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 
-export const EmptyState = ({ id, fileName }: { id: number, fileName?: string }): React.JSX.Element => {
+export const EmptyState = ({ id, fileName }: { id?: number, fileName?: string }): React.JSX.Element => {
   const [isLoading, setIsLoading] = useState(false)
 
   const { t } = useTranslation()

@@ -88,6 +88,7 @@ export const ComparisonView = ({
     <ComparisonViewUi
       gridData={ gridData }
       isImageVersion={ isImageVersion }
+      versionIds={ versionIds }
       versions={ versions }
     />
   )
