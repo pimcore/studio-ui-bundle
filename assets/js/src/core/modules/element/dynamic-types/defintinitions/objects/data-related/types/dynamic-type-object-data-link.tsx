@@ -16,6 +16,7 @@ import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { Link } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
+import _ from 'lodash'
 
 export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
   allowedTypes?: string[] | null
@@ -30,10 +31,10 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
     return (
       <Link
         { ...props }
-        allowedTargets={ props.allowedTargets ?? [] }
-        allowedTypes={ props.allowedTypes ?? [] }
+        allowedTargets={ _.compact(props.allowedTargets ?? []) }
+        allowedTypes={ _.compact(props.allowedTypes ?? []) }
         disabled={ props.noteditable === true }
-        disabledFields={ props.disabledFields ?? [] }
+        disabledFields={ _.compact(props.disabledFields ?? []) }
       />
     )
   }
