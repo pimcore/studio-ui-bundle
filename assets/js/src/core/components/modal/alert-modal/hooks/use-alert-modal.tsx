@@ -12,7 +12,6 @@
 */
 
 import { App, type ModalFuncProps } from 'antd'
-import { Icon } from '@Pimcore/components/icon/icon'
 import type React from 'react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
