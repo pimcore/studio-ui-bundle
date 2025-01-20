@@ -93,7 +93,7 @@ export const Toolbar = ({ id, onCloneItem, onRemoveItem }: IToolbar): React.JSX.
           title={ t('toolbar.reload.confirmation') }
         >
           <IconButton
-            icon={ { value: 'refresh-ccw-03' } }
+            icon={ { value: 'refresh' } }
           >
             {t('toolbar.reload')}
           </IconButton>

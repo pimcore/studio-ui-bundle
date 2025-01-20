@@ -83,11 +83,9 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     >
       <Row gutter={ [10, 10] }>
         <Col span={ 16 }>
-          TODO
           <GeneralAccordion />
         </Col>
         <Col span={ 16 }>
-          TODO
           <PermissionsAccordion permissions={ permissions } />
         </Col>
         <Col span={ 16 }>
