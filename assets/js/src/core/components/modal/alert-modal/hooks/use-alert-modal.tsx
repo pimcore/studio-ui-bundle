@@ -48,7 +48,6 @@ export const useAlertModal = (): UseAlertModalResponse => {
       ),
       warn: ({ content }) => (
         modal.warning({
-          icon: <Icon value={ 'alert' } />,
           title: t('warning'),
           content
         })
