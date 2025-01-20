@@ -27,6 +27,7 @@ export const SingleView = ({
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState([] as object[])
   const [versionPreviewImageUrl, setVersionPreviewImageUrl] = useState<string | null>(null)
+  const [versionFileName, setVersionFileName] = useState<string | undefined>(undefined)
   const [isImageVersion, setIsImageVersion] = useState(false)
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export const SingleView = ({
           setIsImageVersion(true)
         }
 
+        setVersionFileName(dataRaw?.fileName)
         setVersionData(versionsDataToTableData([tempVersionData]))
         setVersionPreviewImageUrl(tempVersionData.previewImageUrl)
       })
@@ -82,6 +84,7 @@ export const SingleView = ({
   return (
     <SingleViewUi
       data={ versionData }
+      fileName={ versionFileName }
       firstVersion={ versions[0].id === vId.id }
       imgSrc={ versionPreviewImageUrl }
       isImageVersion={ isImageVersion }
