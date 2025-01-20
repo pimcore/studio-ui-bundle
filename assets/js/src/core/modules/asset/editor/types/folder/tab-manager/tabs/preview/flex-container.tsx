@@ -18,7 +18,7 @@ import {
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container-view'
 import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
-import { api as assetApi, type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
@@ -26,8 +26,6 @@ import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 interface FlexContainerProps {
   assets: AssetGetTreeApiResponse
@@ -42,7 +40,6 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
   const { downloadContextMenuItem } = useDownload()
   const { uploadNewVersionContextMenuItem } = useUploadNewVersion()
   const { openContextMenuItem } = useOpen('asset')
-  const dispatch = useAppDispatch()
 
   const cards: ReactNode[] = []
   assets.items.forEach((asset) => {
