@@ -95,6 +95,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
     <ManyToManyRelation
       { ...props }
       columnDefinition={ columnDefinition }
+      dataObjectsAllowed={ !_.isEmpty(props.allowedClasses) }
       enrichRowData={ (row: ManyToManyRelationValueItem) => enrichRowData(visibleFieldDefinitions, row) }
       // isLoading // todo: set this prop while loading the column definition data
     />
