@@ -22,6 +22,10 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/components/dropdown/dropdown'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Button } from '@Pimcore/components/button/button'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { useTranslation } from 'react-i18next'
 
 interface ImagePreviewProps {
   src?: string
@@ -33,14 +37,16 @@ interface ImagePreviewProps {
   style?: CSSProperties
   bordered?: boolean
   dropdownItems?: DropdownProps['menu']['items']
+  onHotspotsDataButtonClick?: () => void
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false, onHotspotsDataButtonClick }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const [key, setKey] = React.useState(0)
   const [thumbnailDimensions, setThumbnailDimensions] = React.useState({ width: 0, height: 0 })
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
   const wrapperRef = React.useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   const getAssetPreviewUrl = (): string | undefined => {
     const { width, height } = thumbnailDimensions
@@ -104,6 +110,22 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
         ) }
 
         <ImagePreviewDropdown dropdownItems={ dropdownItems } />
+
+        { onHotspotsDataButtonClick !== undefined && (
+          <Tooltip
+            className={ styles.hotspotButton }
+            title={ t('hotspots.has-hotspots-or-marker') }
+          >
+            <Button
+              className={ styles.hotspotButton }
+              icon={ <Icon
+                value="location-marker"
+                     /> }
+              onClick={ onHotspotsDataButtonClick }
+              size="small"
+            />
+          </Tooltip>
+        ) }
       </div>
     </div>
   )

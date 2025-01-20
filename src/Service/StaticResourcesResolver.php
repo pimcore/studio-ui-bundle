@@ -68,7 +68,7 @@ final class StaticResourcesResolver implements StaticResourcesResolverInterface
     /**
      * @throws InvalidEntrypointsJsonException
      */
-    private function getFilesFromEntryPointsJson(string $type, array $bundles = null): array
+    private function getFilesFromEntryPointsJson(string $type, ?array $bundles = null): array
     {
         $bundles = is_array($bundles) ? $bundles : $this->getStudioUiBundles();
 

@@ -17,7 +17,11 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { Link } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 
-export type LinkObjectDataDefinition = AbstractObjectDataDefinition
+export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
+  allowedTypes: string[]
+  allowedTargets: string[]
+  disabledFields: string[]
+}
 
 export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
   id: string = 'link'
@@ -25,6 +29,7 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
   getObjectDataComponent (props: LinkObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Link
+        { ...props }
         disabled={ props.noteditable === true }
       />
     )

@@ -32,7 +32,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
   const checkedTags = useMemo(() => {
     const tagEntries = Object.entries(tags)
     return tagEntries
-      .map(([key, tag]) => ({ ...tag, key }))
+      .map(([key, tag]) => ({ ...tag }))
       .filter((tag) => tag.id !== undefined)
   }, [tags])
 

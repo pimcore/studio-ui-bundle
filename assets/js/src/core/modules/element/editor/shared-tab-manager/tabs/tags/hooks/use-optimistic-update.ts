@@ -47,11 +47,10 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateReturn => {
         (draft): TagGetCollectionForElementByTypeAndIdApiResponse => {
           const items = props.flatTags
             .filter((tag) => props.checkedTags.includes(tag.id))
-            .reduce((res, tag) => Object.assign(res, { [tag.id]: tag }), {})
 
           return {
             totalItems: props.checkedTags.length,
-            items: items as Tag[]
+            items
           }
         }
       )

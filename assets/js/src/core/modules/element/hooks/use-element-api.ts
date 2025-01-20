@@ -11,10 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { useDataObjectPatchByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type AssetGetByIdApiResponse, useAssetPatchByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type DataObjectGetByIdApiResponse,
+  useDataObjectPatchByIdMutation
+} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
 import { type ElementType } from 'types/element-type.d'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 /**
  * Abstracts the logic for some basic API calls across element types (assets, data objects, documents)
@@ -33,13 +39,15 @@ interface ElementPatchArgs {
 
 interface UseElementApiReturn {
   elementPatch: (args: ElementPatchArgs) => Promise<void>
+  getElementById: (id: number) => Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined>
 }
 
 export const useElementApi = (elementType: ElementType): UseElementApiReturn => {
-  const [assetPatch] = useAssetPatchByIdMutation()
+  const dispatch = useAppDispatch()
+  const [assetPatch] = useAssetPatchByIdMutation({ fixedCacheKey: 'ASSET_ACTION_RENAME' })
   const [dataObjectPatch] = useDataObjectPatchByIdMutation()
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
-  const { updateFieldValue: updateDataObjectFieldValule } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
+  const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
 
   const elementPatch = async (args: ElementPatchArgs): Promise<void> => {
     if (elementType === 'asset') {
@@ -53,7 +61,7 @@ export const useElementApi = (elementType: ElementType): UseElementApiReturn => 
     } else if (elementType === 'data-object') {
       await dataObjectPatch(args)
 
-      updateDataObjectFieldValule(
+      updateDataObjectFieldValue(
         args.body.data[0].id,
         'key',
         args.body.data[0].key
@@ -61,5 +69,32 @@ export const useElementApi = (elementType: ElementType): UseElementApiReturn => 
     }
   }
 
-  return { elementPatch }
+  const getElementById = async (id: number): Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined> => {
+    if (elementType === 'asset') {
+      const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+
+      if (data !== undefined) {
+        return data
+      }
+
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      return {} as AssetGetByIdApiResponse
+    }
+
+    if (elementType === 'data-object') {
+      const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
+
+      if (data !== undefined) {
+        return data
+      }
+
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      return {} as DataObjectGetByIdApiResponse
+    }
+  }
+
+  return {
+    elementPatch,
+    getElementById
+  }
 }
