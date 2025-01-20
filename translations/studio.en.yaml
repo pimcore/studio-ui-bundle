@@ -496,6 +496,12 @@ user-management.workspaces.columns.path: Path
 user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
 roles.tree.all: All Roles
+roles.save-item.success: Role saved successfully
+roles.clone-item.success: Role cloned successfully
+roles.remove-folder.success: Folder removed successfully
+roles.remove-item.success: Role removed successfully
+roles.add-item.success: Role added successfully
+roles.add-folder.success: Folder added successfully
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports

@@ -54,6 +54,19 @@ export const useRoleHelper = (): IUseRoleReturn => {
   const [notificationApi] = useNotification()
   const dispatch = useAppDispatch()
 
+  const handleNotification = (successMessage, error): void => {
+    if (error !== undefined) {
+      notificationApi.open({
+        type: 'error',
+        message: error.data.message
+      })
+    } else {
+      notificationApi.open({
+        type: 'success',
+        message: successMessage
+      })
+    }
+  }
   function openItem (id: number): void {
     dispatch(itemOpened(id))
   }
@@ -80,19 +93,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCreate.initiate({ body: { parentId, name } }))
 
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('roles.add-item.success')
-      })
-    }
-
+    handleNotification(t('roles.add-item.success'), error)
     return data
   }
 
@@ -100,18 +101,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleFolderCreate.initiate({ body: { parentId, name } }))
 
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('roles.add-folder.success')
-      })
-    }
+    handleNotification(t('roles.add-folder.success'), error)
 
     return data
   }
@@ -120,18 +110,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.roleDeleteById.initiate({ id }))
 
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('roles.remove-item.success')
-      })
-    }
+    handleNotification(t('roles.remove-item.success'), error)
 
     return data
   }
@@ -140,18 +119,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.roleFolderDeleteById.initiate({ id }))
 
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('roles.remove-folder.success')
-      })
-    }
+    handleNotification(t('roles.remove-folder.success'), error)
 
     return data
   }
@@ -160,42 +128,17 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCloneById.initiate({ id, body: { name } }))
 
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('roles.clone-item.success')
-      })
-    }
+    handleNotification(t('roles.clone-item.success'), error)
 
     return data
   }
 
   async function updateItemById (props: { id: number, item: DetailedUserRole }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
+    console.log('call updateItemById')
     const { id, item } = props
 
     const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId: item.parentId ?? 0 } }))
-
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('roles.save-item.success')
-      })
-
-      // dispatch(userUpdated(data))
-    }
-
+    handleNotification(t('roles.save-item.success'), error)
     return data
   }
 
@@ -205,19 +148,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const item = await fetchItemById({ id })
     const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId } }))
 
-    if (error !== undefined) {
-      notificationApi.open({
-        type: 'error',
-        message: 'Error',
-        description: error.data.message
-      })
-    } else {
-      notificationApi.open({
-        type: 'success',
-        message: t('user-management.save-user.success')
-      })
-    }
-
+    handleNotification(t('roles.save-item.success'), error)
     return data
   }
 
