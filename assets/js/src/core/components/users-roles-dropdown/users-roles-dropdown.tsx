@@ -22,6 +22,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Button } from '@Pimcore/components/button/button'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
@@ -41,6 +42,7 @@ interface IRenderSelectProps {
 
 export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRolesDropdownProps): React.JSX.Element => {
   const { gridConfig, setGridConfig } = useListGridConfig()
+  const userData = useUser()
 
   const initialSharedUsers = gridConfig?.sharedUsers as number[]
   const initialSharedRoles = gridConfig?.sharedRoles as number[]
@@ -94,10 +96,12 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   )
 
   const renderUsers = (): React.JSX.Element => {
-    const options = userList?.items?.map(item => ({
-      value: item.id,
-      label: renderLabel({ labelName: item?.username, iconName: 'user' })
-    }))
+    const options = userList?.items
+      ?.filter(item => userData?.id !== item.id)
+      ?.map(item => ({
+        value: item.id,
+        label: renderLabel({ labelName: item?.username, iconName: 'user' })
+      }))
 
     return renderSelect({
       options,
