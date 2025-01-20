@@ -40,7 +40,6 @@ interface ManyToManyRelationGridProps {
   disabled?: boolean
   width: number | string | null
   height: number | string | null
-  enrichColumnDefinition?: (columns: Array<ColumnDef<any>>) => void
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
   columnDefinition?: Array<ColumnDef<any>>
 }
