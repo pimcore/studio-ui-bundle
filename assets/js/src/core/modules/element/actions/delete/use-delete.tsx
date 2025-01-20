@@ -29,6 +29,9 @@ import { type Element, getElementKey } from '@Pimcore/modules/element/element-he
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -41,6 +44,7 @@ export interface UseDeleteHookReturn {
 export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
+  const dispatch = useAppDispatch()
   const { addJob } = useJobs()
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
@@ -146,6 +150,12 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
+
+      dispatch(
+        assetApi.util.invalidateTags(
+          invalidatingTags.ASSET_DETAIL_ID(id)
+        )
+      )
     }
 
     onFinish?.()

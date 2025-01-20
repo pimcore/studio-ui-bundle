@@ -54,14 +54,6 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       })
     }
 
-    const clearCache = (): void => {
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_DETAIL_ID(asset.id)
-        )
-      )
-    }
-
     const dropdownItems: DropdownProps['menu']['items'] = [
       openContextMenuItem(asset),
       {
@@ -79,7 +71,7 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
       renameContextMenuItem(asset),
       uploadNewVersionContextMenuItem(asset),
       downloadContextMenuItem(asset),
-      deleteContextMenuItem(asset, clearCache)
+      deleteContextMenuItem(asset)
     ]
 
     if ('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined && asset.imageThumbnailPath !== null) {
