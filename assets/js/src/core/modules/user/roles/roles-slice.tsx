@@ -46,7 +46,7 @@ export const slice = createSlice({
     removeItem: (state, action: PayloadAction<number>): void => {
       roleAdapter.removeOne(state, action.payload)
     },
-    changeItem: (state, action: PayloadAction<{ id: any, changes: any, type?: string }>): void => {
+    changeItem: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
       const id: number = action.payload.id
 
       if (!state.changedIds.includes(id)) {
@@ -56,11 +56,6 @@ export const slice = createSlice({
       const update: Update<any, any> = {
         id: action.payload.id,
         changes: { ...action.payload.changes, modified: true }
-      }
-
-      if (action.payload.type !== undefined) {
-        const type = action.payload.type
-        update.changes[type] = action.payload.changes
       }
 
       roleAdapter.updateOne(state, update)

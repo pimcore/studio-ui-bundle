@@ -30,7 +30,7 @@ interface IUserRoleDraft {
   item: undefined | ReturnType<typeof selectRoleById>
 
   removeItemFromState: () => void
-  changeItemInState: (changedValues: any, type?: string) => void
+  changeItemInState: (changedValues: any) => void
   reloadItem: () => void
 }
 
@@ -81,10 +81,10 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
     dispatch(removeItem(item.id))
   }
 
-  function changeItemInState (changes: any, type?: string): void {
+  function changeItemInState (changes: any): void {
     console.log('changeItemInState', changes)
     if (item === undefined) return
-    dispatch(changeItem({ id: item.id, changes, type }))
+    dispatch(changeItem({ id: item.id, changes }))
   }
 
   return {

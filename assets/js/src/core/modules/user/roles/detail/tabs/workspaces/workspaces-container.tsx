@@ -14,11 +14,11 @@
 import React from 'react'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
-import { Table } from '@Pimcore/modules/user/roles/detail/tabs/workspaces/components/table/table'
+import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import type { UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import type { UserWorkspace } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
+import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -27,11 +27,15 @@ import { Button } from '@Pimcore/components/button/button'
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
-  const { user, isLoading } = useUserDraft(id)
+  const { item, isLoading, changeItemInState } = useRoleDraft(id)
 
-  const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(user?.assetWorkspaces ?? [])
-  const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(user?.documentWorkspaces ?? [])
-  const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(user?.dataObjectWorkspaces ?? [])
+  if (item === undefined) {
+    return <></>
+  }
+
+  const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(item?.assetWorkspaces ?? [])
+  const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(item?.documentWorkspaces ?? [])
+  const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(item?.dataObjectWorkspaces ?? [])
 
   const {
     showModal: showDuplicatePropertyModal,
@@ -48,7 +52,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
         onClick={ () => {
-          setDocumentWorkspaces([...documentWorkspaces, {
+          setDocumentWorkspaces([...item.documentWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
             list: false,
@@ -66,10 +70,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ documentWorkspaces }
         isLoading={ isLoading }
+        onUpdateData={ (data) => { changeItemInState({ documentWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'documentWorkspaces' }
                 />
     }
   ]
@@ -81,7 +85,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
         onClick={ () => {
-          setAssetWorkspaces([...assetWorkspaces, {
+          setAssetWorkspaces([...item.assetWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
             list: false,
@@ -99,10 +103,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ assetWorkspaces }
         isLoading={ isLoading }
+        onUpdateData={ (data) => { changeItemInState({ assetWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'assetWorkspaces' }
                 />
     }
   ]
@@ -114,7 +118,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
         onClick={ () => {
-          setObjectWorkspaces([...objectWorkspaces, {
+          setObjectWorkspaces([...item.dataObjectWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
             cpath: '',
             list: false,
@@ -132,10 +136,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ objectWorkspaces }
         isLoading={ isLoading }
+        onUpdateData={ (data) => { changeItemInState({ dataObjectWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'dataObjectWorkspaces' }
                 />
     }
   ]
