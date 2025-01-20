@@ -89,7 +89,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             title={ t('open') }
           >
             <IconButton
-              icon={ { value: 'group' } }
+              icon={ { value: 'open-folder' } }
               onClick={ async () => {
                 const typeValue = mapToElementType(rowValue.type)
 
