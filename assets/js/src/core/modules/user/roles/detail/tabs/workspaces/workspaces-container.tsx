@@ -29,10 +29,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { id } = useRoleContext()
   const { item, isLoading, changeItemInState } = useRoleDraft(id)
 
-  if (item === undefined) {
-    return <></>
-  }
-
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(item?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(item?.documentWorkspaces ?? [])
   const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(item?.dataObjectWorkspaces ?? [])
@@ -44,6 +40,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   } = useModal({
     type: 'error'
   })
+
+  if (item === undefined) {
+    return <></>
+  }
 
   const documentsAccordion = [
     {
