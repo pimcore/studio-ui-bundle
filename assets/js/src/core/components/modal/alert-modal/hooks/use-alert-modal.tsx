@@ -13,7 +13,8 @@
 
 import { App, type ModalFuncProps } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React, { useMemo } from 'react'
+import type React from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
