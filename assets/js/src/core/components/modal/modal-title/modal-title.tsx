@@ -22,7 +22,10 @@ export interface ModalTitleProps {
 
 export const ModalTitle = ({ iconName, ...props }: ModalTitleProps): React.JSX.Element => {
   return (
-    <Flex gap={ 'small' }>
+    <Flex
+      align={ 'center' }
+      gap={ 'small' }
+    >
       {iconName !== undefined && (
         <Icon
           options={ { width: 20, height: 20 } }

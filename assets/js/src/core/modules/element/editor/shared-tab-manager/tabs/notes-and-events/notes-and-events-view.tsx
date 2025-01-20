@@ -180,12 +180,12 @@ export const NotesAndEventsTabView = ({
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton
-            icon={ { value: 'new-circle' } }
+            icon={ { value: 'new' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }
           >
-            {t('add')}
+            {t('new')}
           </IconTextButton>
 
           <AddNoteModal

@@ -110,7 +110,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
           {!isEmpty(addColumnMenu) && (
             <Dropdown menu={ { items: addColumnMenu } }>
               <IconTextButton
-                icon={ { value: 'new-circle' } }
+                icon={ { value: 'new' } }
                 type='link'
               >
                 { t('listing.add-column') }
