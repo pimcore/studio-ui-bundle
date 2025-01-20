@@ -166,7 +166,11 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   ]
 
   const getDataArray = (): ManyToManyRelationValue => {
-    return props.value ?? []
+    const result = props.value ?? []
+    return result.map((item: ManyToManyRelationValueItem) => {
+      const elementType = mapToElementType(item.type)
+      return { ...item, type: elementType ?? '' }
+    })
   }
 
   return (
