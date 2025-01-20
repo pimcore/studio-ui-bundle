@@ -18,6 +18,7 @@ import {
 import {
   Video, type VideoProps, type VideoType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/video'
+import _ from 'lodash'
 
 export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProps & {
   allowedTypes?: VideoType[] | null
@@ -30,7 +31,7 @@ export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
     return (
       <Video
         { ...props }
-        allowedVideoTypes={ props.allowedTypes ?? undefined }
+        allowedVideoTypes={ _.compact(props.allowedTypes) ?? undefined }
         disabled={ props.noteditable === true }
       />
     )

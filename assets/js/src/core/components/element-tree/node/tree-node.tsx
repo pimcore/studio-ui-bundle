@@ -35,6 +35,8 @@ export interface TreeNodeProps {
   type?: string
   parentId?: string
   isRoot?: boolean
+  isLoading?: boolean
+  danger?: boolean
 }
 
 const defaultProps: TreeNodeProps = {
@@ -71,6 +73,8 @@ const TreeNode = ({
   label = defaultProps.label,
   level = defaultProps.level,
   isRoot = defaultProps.isRoot,
+  isLoading = false,
+  danger = false,
   ...props
 }: TreeNodeProps): React.JSX.Element => {
   const { token } = useToken()
@@ -86,7 +90,7 @@ const TreeNode = ({
   } = useContext(TreeContext)
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
-  const treeNodeProps = { id, icon, label, internalKey, level, ...props }
+  const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 
   useEffect(() => {
@@ -103,6 +107,10 @@ const TreeNode = ({
 
     if (selectedIds.includes(id)) {
       classes.push('tree-node--selected')
+    }
+
+    if (danger) {
+      classes.push('tree-node--danger')
     }
 
     if (isRoot === true) {

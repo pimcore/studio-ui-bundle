@@ -24,9 +24,6 @@ import {
   fromIHotspots,
   toIHotspots
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
-import {
-  type Hotspot, type Marker
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import {
   type HotspotMarkersModalContainerRef
@@ -37,6 +34,12 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
 import _ from 'lodash'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import {
+  CropModal
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/crop-modal'
+import {
+  type CropSettings
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -44,14 +47,14 @@ interface ImageGalleryImagePreviewProps {
   value: ImageGalleryValueItem[]
   setValue: React.Dispatch<React.SetStateAction<ImageGalleryValueItem[]>>
   disabled?: boolean
-  onHotspotsChange?: (hotspots: Hotspot[], marker: Marker[]) => void
   hotspotMarkersModalContainer: React.RefObject<HotspotMarkersModalContainerRef>
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, onHotspotsChange, hotspotMarkersModalContainer }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setValue, disabled, hotspotMarkersModalContainer }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
+  const [cropModalOpen, setCropModalOpen] = useState(false)
   const messageApi = useMessage()
   const { confirm } = useFormModal()
 
@@ -61,24 +64,35 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
     setMarkerModalOpen(false)
   }
 
-  const onModalHotspotsChange = (iHotspots: IHotspot[]): void => {
+  const onHotspotsChange = (iHotspots: IHotspot[]): void => {
     const { hotspots, marker } = fromIHotspots(iHotspots)
-    onHotspotsChange?.(hotspots, marker)
+    const newValue = value.map((v, i) => i === index ? { ...v, hotspots, marker } : v)
+    setValue(newValue)
   }
 
   if (hotspotMarkersModalContainer.current !== null) {
     const hotspotMarkersModalProps = {
+      disabled,
       hotspots,
       imageId: item.image!.id,
       open: markerModalOpen,
       onClose: hideMarkerModal,
-      onChange: onModalHotspotsChange
+      onChange: onHotspotsChange
     }
     hotspotMarkersModalContainer.current?.setModal(index, hotspotMarkersModalProps)
   }
 
+  const onCropChange = (crop: CropSettings | null): void => {
+    const newValue = value.map((v, i) => i === index ? { ...v, crop } : v)
+    setValue(newValue)
+  }
+
+  const hideCropModal = (): void => {
+    setCropModalOpen(false)
+  }
+
   const clearValueData = async (): Promise<void> => {
-    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [] } : v))
+    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [], crop: null } : v))
     await messageApi.success(t('hotspots.data-cleared'))
   }
 
@@ -87,7 +101,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   }
 
   const hasValueData = (index: number): boolean => {
-    return hasHotspotData(index)
+    return hasHotspotData(index) || !_.isEmpty(value[index].crop)
   }
 
   const setImage = (index: number, image: ImageValue, replaceValueData: boolean): void => {
@@ -103,120 +117,141 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   }
 
   return (
-    <Droppable
-      isValidContext={ (info: DragAndDropInfo) => {
-        if (disabled === true) {
-          return false
-        }
-        if (info.sortable! !== undefined) {
-          return true
-        }
-        return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
-      } }
-      isValidData={ (info: DragAndDropInfo) => {
-        if (info.sortable! !== undefined || info.type === 'unknown') {
-          return true
-        }
-        return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
-      } }
-      onDrop={ (info: DragAndDropInfo) => {
-        const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
-        if (hasValueData(index)) {
-          confirm({
-            title: t('hotspots.clear-data'),
-            content: t('hotspots.clear-data.dnd-message'),
-            okText: t('yes'),
-            cancelText: t('no'),
-            onOk: () => {
-              setImage(index, newImage, true)
-            },
-            onCancel: () => {
-              setImage(index, newImage, false)
-            }
-          })
-        } else {
-          setImage(index, newImage, true)
-        }
-      } }
-      onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
-        const newValue = [...value]
-        const dragValue = value[Number(dragId)]
-        const dropValue = value[Number(dropId)]
-        if (dragValue !== undefined && dropValue !== undefined) {
-          newValue.splice(Number(dragId), 1)
-          newValue.splice(Number(dropId), 0, dragValue)
-          setValue(newValue)
-        }
-      } }
-      variant="outline"
-    >
-      <ImagePreview
-        assetId={ item.image!.id }
-        bordered
-        dropdownItems={ [
-          {
-            disabled,
-            key: 'add',
-            label: t('add'),
-            icon: <Icon value={ 'new' } />,
-            onClick: () => {
-              const newValue = [...value]
-              newValue.splice(index + 1, 0, { image: null })
-              setValue(newValue)
-            }
-          },
-          {
-            disabled,
-            key: 'delete',
-            label: t('delete'),
-            icon: <Icon value={ 'trash' } />,
-            onClick: () => {
-              const newValue = [...value]
-              newValue.splice(index, 1)
-              setValue(newValue)
-            }
-          },
-          {
-            label: t('hotspots.edit'),
-            key: 'hotspots-edit',
-            icon: <Icon value={ 'new-marker' } />,
-            onClick: async () => {
-              setMarkerModalOpen(true)
-            }
-          },
-          {
-            disabled: !hasValueData(index),
-            label: t('hotspots.clear-data'),
-            key: 'hotspots-edit',
-            icon: <Icon value={ 'remove-marker' } />,
-            onClick: clearValueData
-          },
-          {
-            label: t('element.open'),
-            key: 'open',
-            icon: <Icon value={ 'open-folder' } />,
-            onClick: async () => {
-              openAsset({
-                config: {
-                  id: item.image!.id
-                }
-              })
-            }
-          },
-          {
-            label: t('empty'),
-            key: 'open',
-            icon: <Icon value={ 'trash' } />,
-            onClick: async () => {
-              setValue(value.map((v, i) => i === index ? { image: null, hotspots: null, marker: null } : v))
-            }
+    <>
+      <Droppable
+        isValidContext={ (info: DragAndDropInfo) => {
+          if (disabled === true) {
+            return false
           }
-        ] }
-        height={ 100 }
-        onHotspotsDataButtonClick={ hasHotspotData(index) ? () => { setMarkerModalOpen(true) } : undefined }
-        style={ { backgroundColor: '#fff' } }
-        width={ 200 }
-      />
-    </Droppable>
+          if (info.sortable! !== undefined) {
+            return true
+          }
+          return info.type === 'asset' || info.type === 'document' || info.type === 'data-object' || info.type === 'unknown'
+        } }
+        isValidData={ (info: DragAndDropInfo) => {
+          if (info.sortable! !== undefined || info.type === 'unknown') {
+            return true
+          }
+          return ((info.type === 'asset' && info.data.type === 'image')) || info.type === 'unknown'
+        } }
+        onDrop={ (info: DragAndDropInfo) => {
+          const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
+          if (hasValueData(index)) {
+            confirm({
+              title: t('hotspots.clear-data'),
+              content: t('hotspots.clear-data.dnd-message'),
+              okText: t('yes'),
+              cancelText: t('no'),
+              onOk: () => {
+                setImage(index, newImage, true)
+              },
+              onCancel: () => {
+                setImage(index, newImage, false)
+              }
+            })
+          } else {
+            setImage(index, newImage, true)
+          }
+        } }
+        onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
+          const newValue = [...value]
+          const dragValue = value[Number(dragId)]
+          const dropValue = value[Number(dropId)]
+          if (dragValue !== undefined && dropValue !== undefined) {
+            newValue.splice(Number(dragId), 1)
+            newValue.splice(Number(dropId), 0, dragValue)
+            setValue(newValue)
+          }
+        } }
+        variant="outline"
+      >
+        <ImagePreview
+          assetId={ item.image!.id }
+          bordered
+          dropdownItems={ [
+            {
+              disabled,
+              key: 'add',
+              label: t('add'),
+              icon: <Icon value={ 'new' } />,
+              onClick: () => {
+                const newValue = [...value]
+                newValue.splice(index + 1, 0, { image: null })
+                setValue(newValue)
+              }
+            },
+            {
+              disabled,
+              key: 'delete',
+              label: t('delete'),
+              icon: <Icon value={ 'trash' } />,
+              onClick: () => {
+                const newValue = [...value]
+                newValue.splice(index, 1)
+                setValue(newValue)
+              }
+            },
+            {
+              label: t('crop'),
+              key: 'crop',
+              icon: <Icon value={ 'crop' } />,
+              onClick: async () => {
+                setCropModalOpen(true)
+              }
+            },
+            {
+              label: t('hotspots.edit'),
+              key: 'hotspots-edit',
+              icon: <Icon value={ 'new-marker' } />,
+              onClick: async () => {
+                setMarkerModalOpen(true)
+              }
+            },
+            {
+              disabled: !hasValueData(index) || disabled === true,
+              label: t('hotspots.clear-data'),
+              key: 'clear-data',
+              icon: <Icon value={ 'remove-marker' } />,
+              onClick: clearValueData
+            },
+            {
+              label: t('element.open'),
+              key: 'open',
+              icon: <Icon value={ 'open-folder' } />,
+              onClick: async () => {
+                openAsset({
+                  config: {
+                    id: item.image!.id
+                  }
+                })
+              }
+            },
+            {
+              disabled,
+              label: t('empty'),
+              key: 'empty',
+              icon: <Icon value={ 'trash' } />,
+              onClick: async () => {
+                setValue(value.map((v, i) => i === index ? { image: null, hotspots: null, marker: null, crop: null } : v))
+              }
+            }
+          ] }
+          height={ 100 }
+          onHotspotsDataButtonClick={ hasHotspotData(index) ? () => { setMarkerModalOpen(true) } : undefined }
+          style={ { backgroundColor: '#fff' } }
+          width={ 200 }
+        />
+      </Droppable>
+      { cropModalOpen && (
+        <CropModal
+          crop={ item.crop }
+          disabled={ disabled }
+          imageId={ item.image!.id }
+          onChange={ onCropChange }
+          onClose={ hideCropModal }
+          open={ cropModalOpen }
+        />
+      ) }
+    </>
   )
 }

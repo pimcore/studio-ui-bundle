@@ -39,6 +39,9 @@ import {
   HotspotMarkersModalContainer,
   type HotspotMarkersModalContainerRef
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/hotspot-markers-modal-container'
+import {
+  type CropSettings
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -52,6 +55,7 @@ export interface ImageGalleryValueItem {
   image: ImageValue | null
   hotspots?: Hotspot[] | null
   marker?: Marker[] | null
+  crop?: CropSettings | null
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {

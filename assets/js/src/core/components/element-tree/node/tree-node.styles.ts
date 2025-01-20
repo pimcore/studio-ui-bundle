@@ -19,8 +19,15 @@ export const useStyles = createStyles(({ token, css }) => {
       user-select: none;
 
       &.tree-node--is-root {
-        .tree-node__content {
+        & > .tree-node__content {
           padding-left: ${token.paddingSM}px;
+        }
+      }
+
+      &.tree-node--danger {
+        & > .tree-node__content .tree-node__content-wrapper {
+          color: ${token.colorError};
+          text-decoration: line-through;
         }
       }
 

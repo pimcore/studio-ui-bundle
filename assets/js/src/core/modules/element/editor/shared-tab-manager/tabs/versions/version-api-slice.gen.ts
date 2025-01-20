@@ -143,22 +143,22 @@ export type CustomMetadataVersion = {
     /** Name */
     name: string;
     /** Language */
-    language?: string | null;
+    language?: any;
     /** Type */
     type: string;
     /** Data */
-    data: string | null;
+    data: any;
 };
 export type VersionDimensions = {
     /** width */
-    width?: number | null;
+    width?: any;
     /** height */
-    height?: number | null;
+    height?: any;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** asset type */
     type: string;
@@ -167,19 +167,20 @@ export type AssetVersion = {
     /** creation date */
     creationDate: number;
     /** modification date */
-    modificationDate?: number | null;
+    modificationDate?: any;
     /** file size */
     fileSize: number;
     /** mime type */
     mimeType: string;
     /** Metadata */
     metadata: CustomMetadataVersion[];
+    /** dimensions */
     dimensions: VersionDimensions;
 };
 export type DataObjectVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** modification date */
     modificationDate: number;
@@ -191,7 +192,7 @@ export type DataObjectVersion = {
 export type DocumentVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** modification date */
     modificationDate: number;
@@ -202,20 +203,20 @@ export type DocumentVersion = {
 };
 export type UpdateVersion = {
     /** Public */
-    public?: boolean | null;
+    public?: any;
     /** Note */
-    note?: string | null;
+    note?: any;
 };
 export type VersionUser = {
     /** ID */
-    id?: number | null;
+    id?: any;
     /** name */
-    name?: string | null;
+    name?: any;
 };
 export type Version = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** version ID */
     id: number;
@@ -235,9 +236,10 @@ export type Version = {
     versionCount: number;
     /** autosave */
     autosave: boolean;
+    /** user */
     user: VersionUser;
     /** scheduled */
-    scheduled?: number | null;
+    scheduled?: any;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

@@ -515,6 +515,13 @@ user-management.workspaces.columns.properties: Properties
 user-management.workspaces.columns.path: Path
 user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
+user-management.add-folder.success: Folder added successfully
+user-management.remove-folder.success: Folder removed successfully
+user-management.clone-user.success: User cloned successfully
+user-management.save-user.success: User saved successfully
+user-management.add-user.success: User added successfully
+user-management.remove-user.success: User removed successfully
+user-management.upload-image.success: Image uploaded successfully
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
@@ -553,6 +560,8 @@ link.accesskey: Accesskey
 link.rel: Relation
 link.tabindex: Tabindex
 link.class: Class
+crop: Crop
+crop.remove: Remove Crop
 hotspots.edit: Edit marker and hotspots
 hotspots.new-marker: New Marker
 hotspots.new-hotspot: New Hotspot
