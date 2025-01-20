@@ -75,8 +75,7 @@ export const useUserHelper = (): UseUserReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: 'Error',
-        description: error.data.message
+        message: error.data.message
       })
     } else {
       notificationApi.open({
