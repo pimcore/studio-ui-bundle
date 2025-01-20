@@ -359,6 +359,7 @@ relations.id: ID
 relations.reference: Reference
 relations.type: Type
 relations.subtype: Subtype
+relations.classname: Class
 relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.

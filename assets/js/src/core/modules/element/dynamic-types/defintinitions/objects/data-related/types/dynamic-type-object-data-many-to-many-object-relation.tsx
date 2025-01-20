@@ -16,7 +16,7 @@ import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
-  ManyToManyRelation, type ManyToManyRelationClassDefinitionProps
+  type ManyToManyRelationClassDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
@@ -25,15 +25,18 @@ import {
 import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/components/label/label'
+import {
+  ManyToManyObjectRelation
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 
-export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
+export type ManyToManyObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
 
-export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDataAbstract {
-  id: string = 'manyToManyRelation'
+export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeObjectDataAbstract {
+  id: string = 'manyToManyObjectRelation'
 
-  getObjectDataComponent (props: ManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+  getObjectDataComponent (props: ManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <ManyToManyRelation
+      <ManyToManyObjectRelation
         { ...props }
         { ... convertAllowedTypes(props) }
         disabled={ props.noteditable === true }
@@ -41,7 +44,7 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
     )
   }
 
-  getObjectDataFormItemProps (props: ManyToManyRelationObjectDataDefinition): FormItemProps {
+  getObjectDataFormItemProps (props: ManyToManyObjectRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
       label: <ManyToManyRelationLabel label={ props.title } />
