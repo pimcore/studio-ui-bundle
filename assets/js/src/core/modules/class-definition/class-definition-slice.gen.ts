@@ -47,22 +47,22 @@ export type ClassObjectBrickObjectLayoutApiArg = {
 export type FieldCollectionLayoutDefinition = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Key of Field Collection */
     key: string;
     /** Data Type */
     datatype: string;
     /** Group */
-    group?: string | null;
+    group?: any;
     /** Name */
-    name?: string | null;
+    name?: any;
     /** Type */
-    type?: string | null;
+    type?: any;
     /** Region */
-    region?: string | null;
+    region?: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */
@@ -87,20 +87,20 @@ export type DevError = {
 export type ObjectBrickLayoutDefinition = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Key of Object Brick */
     key: string;
     /** Data Type */
     datatype: string;
     /** Name */
-    name?: string | null;
+    name?: any;
     /** Type */
-    type?: string | null;
+    type?: any;
     /** Region */
-    region?: string | null;
+    region?: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */
