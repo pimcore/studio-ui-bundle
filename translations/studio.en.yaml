@@ -394,6 +394,7 @@ tree.actions.add-user: Add User
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
 tree.actions.remove-role: Remove Role
+tree.actions.remove-folder: Remove Folder
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings

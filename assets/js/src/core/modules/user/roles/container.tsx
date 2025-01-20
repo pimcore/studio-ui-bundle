@@ -48,13 +48,13 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       icon: item.type === 'role' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'role'
         ? [
-            { key: 'clone-role', icon: 'copy-03' },
-            { key: 'remove-role', icon: 'delete-outlined' }
+            { key: 'clone-role', icon: 'copy' },
+            { key: 'remove-role', icon: 'trash' }
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
             { key: 'add-role', icon: 'user-plus-01' },
-            { key: 'remove-folder', icon: 'delete-outlined' }
+            { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
       isLeaf: item.children === false

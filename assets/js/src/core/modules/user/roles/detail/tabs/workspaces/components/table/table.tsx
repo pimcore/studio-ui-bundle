@@ -16,7 +16,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { type UserWorkspace } from '@Pimcore/modules/user/user-api-slice.gen'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
@@ -36,10 +36,8 @@ export const Table = ({
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
-  const { updateUserWorkspaces } = useUserDraft(id)
+  const { changeItemInState } = useRoleDraft(id)
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
-
-  // const modifiedCells = user?.modifiedCells !== undefined ? user?.modifiedCells[type] : []
 
   useEffect(() => {
     setGridData(data)
@@ -204,6 +202,7 @@ export const Table = ({
   ]
 
   const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
+    console.log('onUpdateCellData', rowIndex, columnId, value, rowData)
     setGridData(gridData.map((item, index) => {
       if (index === rowIndex) {
         return { ...item, [columnId]: value }
@@ -223,7 +222,7 @@ export const Table = ({
       showDuplicatePropertyModal()
     } else {
       setGridData(updatedProperties)
-      updateUserWorkspaces({ type, changes: updatedProperties })
+      changeItemInState({ changes: updatedProperties }, type)
     }
   }
 
@@ -232,7 +231,7 @@ export const Table = ({
     const propertyIndex = updatedProperties.findIndex((property) => property.cid === id)
     updatedProperties.splice(propertyIndex, 1)
     setGridData(updatedProperties)
-    updateUserWorkspaces({ type, changes: updatedProperties })
+    changeItemInState({ changes: updatedProperties }, type)
   }
 
   return (

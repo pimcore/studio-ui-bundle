@@ -46,7 +46,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.documents') }</>,
       info: <> <IconTextButton
-        icon={ { value: 'folder-search' } }
+        icon={ { value: 'add-find' } }
         onClick={ () => {
           setDocumentWorkspaces([...documentWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
@@ -61,8 +61,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
             versions: false,
             properties: false
           }])
-
-          console.log('documentWorkspaces', documentWorkspaces)
         } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
       children: <Table
@@ -71,7 +69,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'documents' }
+        type={ 'documentWorkspaces' }
                 />
     }
   ]
@@ -81,7 +79,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: <> <IconTextButton
-        icon={ { value: 'folder-search' } }
+        icon={ { value: 'add-find' } }
         onClick={ () => {
           setAssetWorkspaces([...assetWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
@@ -104,7 +102,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'assets' }
+        type={ 'assetWorkspaces' }
                 />
     }
   ]
@@ -114,7 +112,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       key: '1',
       title: <>{ t('user-management.workspaces.objects') }</>,
       info: <> <IconTextButton
-        icon={ { value: 'folder-search' } }
+        icon={ { value: 'add-find' } }
         onClick={ () => {
           setObjectWorkspaces([...objectWorkspaces, {
             cid: new Date().getTime(), // after path update is set to document id
@@ -137,7 +135,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'objects' }
+        type={ 'dataObjectWorkspaces' }
                 />
     }
   ]
