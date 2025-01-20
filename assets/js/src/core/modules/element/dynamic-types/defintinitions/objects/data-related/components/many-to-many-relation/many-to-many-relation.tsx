@@ -18,7 +18,7 @@ import {
   ManyToManyRelationGrid
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/grid'
 import {
-  type ManyToManyRelationValue,
+  type ManyToManyRelationValue, type ManyToManyRelationValueItem,
   useValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
@@ -33,6 +33,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
+import type { ColumnDef } from '@tanstack/react-table'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -42,12 +43,15 @@ export interface ManyToManyRelationClassDefinitionProps {
   width: number | string | null
   height: number | string | null
   assetInlineDownloadAllowed?: boolean | null
-  disabled?: boolean
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
+  disabled?: boolean
   value?: ManyToManyRelationValue | null
   onChange?: (value?: ManyToManyRelationValue | null) => void
+  isLoading?: boolean
+  columnDefinition?: Array<ColumnDef<any>>
+  enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
 }
 
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
@@ -59,6 +63,18 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
     props.onChange?.(value)
   }, [value])
 
+  if (props.isLoading === true) {
+    return (
+      <Content
+        loading
+        style={ {
+          width: toCssDimension(props.width),
+          height: toCssDimension(props.height)
+        } }
+      />
+    )
+  }
+
   return (
     <>
       <Droppable
@@ -69,8 +85,10 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
       >
         <ManyToManyRelationGrid
           assetInlineDownloadAllowed={ props.assetInlineDownloadAllowed ?? false }
+          columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enrichRowData={ props.enrichRowData }
           height={ props.height }
           value={ displayedValue }
           width={ props.width }
