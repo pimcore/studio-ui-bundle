@@ -15,6 +15,7 @@ import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -103,7 +104,7 @@ export const useValue = (
   }
 
   const deleteItem = (id: number, type: string): void => {
-    const filterFunction = (item: ManyToManyRelationValueItem): boolean => item.id !== id || item.type !== type
+    const filterFunction = (item: ManyToManyRelationValueItem): boolean => item.id !== id || mapToElementType(item.type) !== mapToElementType(type)
     setValue(value === null ? null : value.filter(filterFunction))
     setDisplayedValue(displayedValue === null ? null : displayedValue.filter(filterFunction))
   }
