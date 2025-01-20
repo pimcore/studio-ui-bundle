@@ -80,7 +80,7 @@ export const useValue = (
     if (info.type === 'data-object') {
       newValue = {
         id: info.data.id,
-        type: info.type,
+        type: 'object',
         subtype: info.data.className ?? info.data.type,
         isPublished: info.data.published,
         fullPath: info.data.fullPath
