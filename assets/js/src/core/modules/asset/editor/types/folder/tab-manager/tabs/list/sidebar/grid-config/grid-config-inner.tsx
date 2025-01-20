@@ -198,6 +198,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         <EditView
           addColumnMenu={ getFormattedDropDownMenu(dropDownMenu, onColumnClick) }
           columns={ columns }
+          currentUserId={ userData?.id }
           gridConfig={ gridConfig }
           isLoading={ isLoading || isFetching }
           isUpdating={ isUpdating }

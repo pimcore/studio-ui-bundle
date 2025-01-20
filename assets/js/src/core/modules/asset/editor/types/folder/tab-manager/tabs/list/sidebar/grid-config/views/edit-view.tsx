@@ -41,13 +41,29 @@ export interface EditViewProps {
   isUpdating: boolean
   columns: any[]
   gridConfig: IListGridConfigContext['gridConfig']
+  currentUserId?: number
 }
 
-export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfigurationClick, onUpdateConfigurationClick, isUpdating, onSaveConfigurationClick, savedGridConfigurations, addColumnMenu, isLoading, columns }: EditViewProps): React.JSX.Element => {
+export const EditView = (props: EditViewProps): React.JSX.Element => {
+  const {
+    onCancelClick,
+    onApplyClick,
+    onEditConfigurationClick,
+    onUpdateConfigurationClick,
+    onSaveConfigurationClick,
+    addColumnMenu,
+    gridConfig,
+    savedGridConfigurations,
+    isUpdating,
+    isLoading,
+    columns,
+    currentUserId
+  } = props
+
   const { t } = useTranslation()
+
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
-  // @todo bound it to the grid config id when the ownerId is available via api.
-  const isOwner = true
+  const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
 
   return (
     <ContentLayout
@@ -137,7 +153,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
 
         { isSavedConfiguration && (
           <>
-            { isOwner && (
+            { isGridTemplateOwner && (
               <Compact>
                 <Button
                   loading={ isUpdating }
@@ -179,7 +195,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
               </Compact>
             )}
 
-            { !isOwner && (
+            { !isGridTemplateOwner && (
               <Button
                 onClick={ onSaveConfigurationClick }
                 type='default'
