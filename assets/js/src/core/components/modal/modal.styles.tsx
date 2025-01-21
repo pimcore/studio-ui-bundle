@@ -18,25 +18,25 @@ export const useStyle = createStyles(({ token, css }) => {
     modal: css`
         &.error {
             .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
-                color: red; 
+                color:  ${token.colorError}; 
             }
         }
         
         &.success {
             .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
-                color: green; 
+                color: ${token.colorSuccess}; 
             }
         }
         
         &.info {
             .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
-                color: orange; 
+                color: ${token.colorPrimary}; 
             }
         }
         
         &.alert {
             .ant-modal-content .ant-modal-header .ant-modal-title .pimcore-icon {
-                color: orange; 
+                color: ${token.colorWarning}; 
             }
         }
         
