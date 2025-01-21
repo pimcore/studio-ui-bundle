@@ -56,6 +56,7 @@ export const useStyle = createStyles(({ token, css }) => {
                     line-height: 24px;
                     display: flex;
                     gap: 4px;
+                }
             }
 
             .ant-modal-footer {

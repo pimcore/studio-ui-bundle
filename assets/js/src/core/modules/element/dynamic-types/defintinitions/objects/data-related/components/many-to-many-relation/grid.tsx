@@ -42,6 +42,7 @@ interface ManyToManyRelationGridProps {
   height: number | string | null
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
   columnDefinition?: Array<ColumnDef<any>>
+  hint?: React.ReactNode | null
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -209,6 +210,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             data={ getDataArray() }
             resizable
           />
+          { props.hint }
         </div>
       </Content>
     </div>

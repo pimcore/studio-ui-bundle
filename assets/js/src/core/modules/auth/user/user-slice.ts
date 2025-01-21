@@ -17,6 +17,7 @@ import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
 import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 const initialState: UserInformation = {
+  id: 0,
   username: '',
   permissions: [],
   isAdmin: false
