@@ -89,7 +89,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
   const dispatch = useDispatch()
   const handleLogout = async (): Promise<void> => {
     await logout()
-    dispatch(setUser({ username: '', isAdmin: false, permissions: [] }))
+    dispatch(setUser({ id: 1, username: '', isAdmin: false, permissions: [] }))
   }
 
   return (
