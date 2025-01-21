@@ -70,7 +70,7 @@ export const createVersionAccordionItem = ({
   }
 
   const handleClick = (): void => {
-    comparingActive ? handleComparisonAction() : handleDetailAction()
+    selectable ? handleComparisonAction() : handleDetailAction()
   }
 
   const scheduledDate = isSet(version.scheduled)
