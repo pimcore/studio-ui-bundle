@@ -380,6 +380,10 @@ export type DataObject = Element & {
     permissions?: DataObjectPermissions;
     /** Custom index */
     index?: number;
+    /** Sort mode of children */
+    childrenSortBy?: string;
+    /** Sort order of children */
+    childrenSortOrder?: string;
     /** Detail object data */
     objectData?: object;
     /** Inheritance object data */

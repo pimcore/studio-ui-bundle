@@ -38,11 +38,11 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
 
   const addFolder = (parentId: number, onFinish?: () => void): void => {
     modal.input({
-      title: t('element.add-folder'),
-      label: t('element.add-folder.label'),
+      title: t('element.new-folder'),
+      label: t('element.new-folder.label'),
       rule: {
         required: true,
-        message: t('element.add-folder.validation')
+        message: t('element.new-folder.validation')
       },
       onOk: async (value: string) => { await addFolderMutation(parentId, value, onFinish) }
     })
@@ -50,9 +50,9 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
 
   const addFolderTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
     return {
-      label: t('element.add-folder'),
+      label: t('element.new-folder'),
       key: 'add-folder',
-      icon: <Icon value={ 'folder' } />,
+      icon: <Icon value={ 'add-folder' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
@@ -63,9 +63,9 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
 
   const addFolderContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
-      label: t('element.add-folder'),
+      label: t('element.new-folder'),
       key: 'add-folder',
-      icon: <Icon value={ 'folder' } />,
+      icon: <Icon value={ 'add-folder' } />,
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions!, 'create'),
       onClick: () => {
         addFolder(node.id)

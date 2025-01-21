@@ -78,7 +78,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
 
   addNavItem({
     path: 'Cache',
-    icon: 'brush'
+    icon: 'cache'
   })
 
   addNavItem({

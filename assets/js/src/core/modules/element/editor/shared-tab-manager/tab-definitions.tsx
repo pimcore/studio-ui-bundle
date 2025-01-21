@@ -64,7 +64,7 @@ export const TAB_NOTES_AND_EVENTS: IEditorTab = {
   label: 'notes-and-events.label',
   userPermission: 'notes_events',
   children: <NotesAndEventsTabContainer />,
-  icon: <Icon value={ 'details' } />,
+  icon: <Icon value={ 'notes-events' } />,
   isDetachable: true
 }
 export const TAB_TAGS: IEditorTab = {

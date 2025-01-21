@@ -29,6 +29,8 @@ export type UserInformation = {
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
+    /** User ID */
+    id: number;
     /** Username */
     username: string;
     /** Permissions */
