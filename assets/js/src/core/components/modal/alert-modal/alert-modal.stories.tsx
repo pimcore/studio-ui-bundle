@@ -35,6 +35,7 @@ const AlertModalComponent = (args: { type: string, content: string }): React.JSX
         modal.warn({
           content: args.content
         })
+        break
       case 'success':
         modal.success({
           content: args.content
