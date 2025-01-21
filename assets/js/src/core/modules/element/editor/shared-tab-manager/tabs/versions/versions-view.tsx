@@ -32,6 +32,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import {
   type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+import { type VersionIdentifiers } from './types/types'
 
 interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
@@ -39,11 +40,6 @@ interface VersionsViewProps extends VersionDetailViewsProps {
   onClickPublish: (id: number) => Promise<void>
   onClickDelete: (id: number) => void
   onBlurNote: (id: number, note: string) => void
-}
-
-export interface VersionIdentifiers {
-  id: number
-  count: number
 }
 
 export const VersionsView = ({

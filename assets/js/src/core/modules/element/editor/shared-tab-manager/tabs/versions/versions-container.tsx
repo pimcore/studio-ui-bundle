@@ -25,7 +25,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import {
   type SingleVersionViewProps,
   type VersionComparisonViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 export interface VersionTabContainerProps extends VersionDetailViewsProps {
 }

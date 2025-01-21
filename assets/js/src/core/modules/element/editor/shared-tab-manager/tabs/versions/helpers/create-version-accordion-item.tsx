@@ -26,11 +26,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { useTranslation } from 'react-i18next'
 import { Box } from '@Pimcore/components/box/box'
-
-interface VersionIdentifiers {
-  id: number
-  count: number
-}
+import { type VersionIdentifiers } from '../types/types'
 
 interface CreateAccordionItemProps {
   version: Version
