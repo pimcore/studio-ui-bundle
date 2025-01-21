@@ -48,5 +48,5 @@ export const getElementKey = (element: Element, elementType: ElementType): strin
 }
 
 export const getContextMenuCacheKey = (elementType: ElementType, action: string, id: number): string => {
-  return `${elementType.toUpperCase()}_ACTION_${action}_ID_${id}`
+  return `${elementType}_ACTION_${action}_ID_${id}`.toUpperCase()
 }
