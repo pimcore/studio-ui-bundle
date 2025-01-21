@@ -116,7 +116,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
   }
 
   const getVideoTypeOptions = (): Array<{ value: VideoType, label: string }> => {
-    const allowedVideoTypes = props.allowedVideoTypes ?? ['asset', 'youtube', 'vimeo', 'dailymotion']
+    const allowedVideoTypes: VideoType[] = props.allowedVideoTypes === undefined || props.allowedVideoTypes.length === 0 ? ['asset', 'youtube', 'vimeo', 'dailymotion'] : props.allowedVideoTypes
     return allowedVideoTypes.map(type => {
       return {
         value: type,
