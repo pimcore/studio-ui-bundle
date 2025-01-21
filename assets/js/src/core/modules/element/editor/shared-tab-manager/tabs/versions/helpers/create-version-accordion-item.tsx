@@ -58,15 +58,19 @@ export const createVersionAccordionItem = ({
   const themeBySelection = selected ? 'theme-primary' : 'theme-default'
   const themeByState: PanelTheme = published ? 'theme-success' : themeBySelection
 
-  const onClick = (): void => {
-    if (comparingActive) {
-      selectVersion(vId)
-    } else {
-      setDetailedVersions([{
-        id: version.id,
-        count: version.versionCount
-      }])
-    }
+  const handleComparisonAction = (): void => {
+    selectVersion(vId)
+  }
+
+  const handleDetailAction = (): void => {
+    setDetailedVersions([{
+      id: version.id,
+      count: version.versionCount
+    }])
+  }
+
+  const handleClick = (): void => {
+    comparingActive ? handleComparisonAction() : handleDetailAction()
   }
 
   const scheduledDate = isSet(version.scheduled)
@@ -215,7 +219,7 @@ export const createVersionAccordionItem = ({
     subtitle: <Subtitle />,
     extra: <Extra />,
     children: <Component />,
-    onClick,
+    onClick: handleClick,
     theme: themeByState
   }
 }
