@@ -45,16 +45,16 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'user',
       allowDrop: item.type !== 'user',
-      icon: item.type === 'user' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
+      icon: item.type === 'user' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'user'
         ? [
-            { key: 'clone-user', icon: 'copy-03' },
-            { key: 'remove-user', icon: 'delete-outlined' }
+            { key: 'clone-user', icon: 'copy' },
+            { key: 'remove-user', icon: 'trash' }
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
             { key: 'add-user', icon: 'add-user' },
-            { key: 'remove-folder', icon: 'delete-outlined' }
+            { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
       isLeaf: item.children === false

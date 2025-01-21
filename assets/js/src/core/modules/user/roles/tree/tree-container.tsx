@@ -60,7 +60,6 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
       onOk: async (value: string) => {
         const data = await addNewFolder({ parentId: parseInt(key), name: value })
         if (data !== undefined) {
-          console.log('call onUpdateTreeData')
           onUpdateTreeData(key, [data], true)
         }
       }
