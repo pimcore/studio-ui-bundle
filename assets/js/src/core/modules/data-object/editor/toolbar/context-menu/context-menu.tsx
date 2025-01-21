@@ -25,7 +25,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
-  const { refreshElement } = useElementRefresh(id, 'data-object')
+  const { refreshElement } = useElementRefresh('data-object')
 
   return (
     <ButtonGroup>
@@ -54,13 +54,13 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     if (Object.keys(dataObject?.changes ?? {}).length > 0) {
       setPopConfirmOpen(true)
     } else {
-      refreshElement()
+      refreshElement(id)
     }
   }
 
   function onConfirm (): void {
     setPopConfirmOpen(false)
-    refreshElement()
+    refreshElement(id)
   }
 
   function onCancel (): void {

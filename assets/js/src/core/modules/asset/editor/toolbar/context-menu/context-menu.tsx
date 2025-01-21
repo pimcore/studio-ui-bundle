@@ -37,7 +37,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { deleteContextMenuItem } = useDelete('asset')
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
-  const { refreshElement } = useElementRefresh(asset!.id, 'asset')
+  const { refreshElement } = useElementRefresh('asset')
   const {
     clearImageThumbnailContextMenuItem,
     clearVideoThumbnailContextMenuItem,
@@ -45,7 +45,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   } = useClearThumbnails()
 
   const items: DropdownMenuProps['items'] = [
-    renameContextMenuItem(asset as Asset, () => { refreshElement() }),
+    renameContextMenuItem(asset as Asset, () => { refreshElement(asset!.id) }),
     deleteContextMenuItem(asset as Asset),
     downloadContextMenuItem(asset as Asset),
     createZipDownloadContextMenuItem(asset as Asset),
@@ -90,13 +90,13 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     if (Object.keys(asset?.changes ?? {}).length > 0) {
       setPopConfirmOpen(true)
     } else {
-      refreshElement()
+      refreshElement(asset!.id)
     }
   }
 
   function onConfirm (): void {
     setPopConfirmOpen(false)
-    refreshElement()
+    refreshElement(asset!.id)
   }
 
   function onCancel (): void {

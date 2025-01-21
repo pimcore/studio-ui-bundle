@@ -13,31 +13,29 @@
 
 import { type ElementType } from '../../../../../../types/element-type.d'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { type UseAssetDraftReturn } from '@Pimcore/modules/asset/hooks/use-asset-draft'
-import { type UseDataObjectDraftReturn } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { removeAsset } from '@Pimcore/modules/asset/asset-draft-slice'
+import { removeDataObject } from '@Pimcore/modules/data-object/data-object-draft-slice'
 
 interface UseElementRefreshHookReturn {
-  refreshElement: () => void
+  refreshElement: (id: number) => void
 }
 
-export const useElementRefresh = (id: number, elementType: ElementType): UseElementRefreshHookReturn => {
+export const useElementRefresh = (elementType: ElementType): UseElementRefreshHookReturn => {
   const dispatch = useAppDispatch()
-  const draft = useElementDraft(id, elementType)
 
-  const refreshElement = (): void => {
+  const refreshElement = (id: number): void => {
     if (elementType === 'asset') {
-      (draft as any as UseAssetDraftReturn).removeAssetFromState()
+      removeAsset(id)
       dispatch(
         assetApi.util.invalidateTags(
           invalidatingTags.ASSET_DETAIL_ID(id)
         )
       )
     } else if (elementType === 'data-object') {
-      (draft as any as UseDataObjectDraftReturn).removeDataObjectFromState()
+      removeDataObject(id)
       dispatch(
         dataObjectApi.util.invalidateTags(
           invalidatingTags.DATA_OBJECT_DETAIL_ID(id)
