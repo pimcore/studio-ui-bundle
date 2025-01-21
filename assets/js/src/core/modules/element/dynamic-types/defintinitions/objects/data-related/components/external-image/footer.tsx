@@ -68,7 +68,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
           >
             <IconButton
               disabled={ openUrlDisabled }
-              icon={ { value: 'group' } }
+              icon={ { value: 'open-folder' } }
               onClick={ openUrl }
             />
           </Tooltip>,

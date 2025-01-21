@@ -58,7 +58,7 @@ interface UseUserReturn extends
   fetchUserList: () => Promise<UserGetCollectionApiResponse>
   searchUserByText: (query: string) => Promise<PimcoreStudioApiUserSearchApiResponse>
   resetUserKeyBindings: (id: number) => Promise<UserDefaultKeyBindingsApiResponse>
-  uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse }>
+  uploadUserAvatar: (props: { id: number, file: File }) => Promise<{ data: UserUploadImageApiResponse, error: any }>
   fetchUserImageById: (props: { id: number }) => Promise<{ data: UserGetImageApiResponse | undefined, error?: any }>
   activeId: number
   getAllIds: number[]
@@ -75,8 +75,7 @@ export const useUserHelper = (): UseUserReturn => {
     if (error !== undefined) {
       notificationApi.open({
         type: 'error',
-        message: 'Error',
-        description: error.data.message
+        message: error.data.message
       })
     } else {
       notificationApi.open({
@@ -196,10 +195,10 @@ export const useUserHelper = (): UseUserReturn => {
     return data
   }
 
-  async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse }> {
-    const data: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
+  async function uploadUserAvatar (props: { id: number, file: File }): Promise<{ data: UserUploadImageApiResponse, error: Error }> {
+    const { data, error }: any = await dispatch(api.endpoints.userUploadImage.initiate({ id: props.id, body: { userImage: props.file } }))
 
-    // handleNotification(t('user-management.upload-avatar.success'), error)
+    handleNotification(t('user-management.upload-image.success'), error)
     return data
   }
 

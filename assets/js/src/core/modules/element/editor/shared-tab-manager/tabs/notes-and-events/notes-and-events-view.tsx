@@ -63,19 +63,26 @@ export const NotesAndEventsTabView = ({
   }> = notes.map((note) => {
     let showDetails = false
 
-    const formatedData: any[] = []
+    interface NoteDataEntry { name: string | null, type: string | null, value?: string | React.JSX.Element | null }
+    const formatedData: NoteDataEntry[] = []
 
     if (Array.isArray(note.data) && note.data.length > 0) {
       showDetails = true
 
       note.data.forEach((noteData) => {
-        const tempData = structuredClone(noteData)
-        if (typeof tempData.data === 'object') {
-          tempData[t('notes-and-events.value')] = tempData.data.path
-        } else {
-          tempData[t('notes-and-events.value')] = respectLineBreak(tempData.data as string)
+        if (typeof noteData !== 'object') {
+          return
         }
-        delete tempData.data
+        const tempData: NoteDataEntry = { name: (noteData as NoteDataEntry).name, type: (noteData as NoteDataEntry).type, value: '' }
+        if (typeof noteData !== 'object' || !('data' in noteData)) {
+          return
+        }
+
+        if (typeof noteData.data === 'object') {
+          tempData.value = noteData.data !== null && ('path' in noteData.data) ? String(noteData.data.path) : ''
+        } else {
+          tempData.value = respectLineBreak(noteData.data as string)
+        }
         formatedData.push(tempData)
       })
     }
@@ -107,9 +114,9 @@ export const NotesAndEventsTabView = ({
     const columnHelper = createColumnHelper<any>()
 
     const columns = [
-      columnHelper.accessor(i18n.t('notes-and-events.name'), {}),
-      columnHelper.accessor(i18n.t('notes-and-events.type'), { size: 120 }),
-      columnHelper.accessor(i18n.t('notes-and-events.value'), { size: 310, meta: { autoWidth: true } })
+      columnHelper.accessor('name', { header: i18n.t('notes-and-events.name') }),
+      columnHelper.accessor('type', { header: i18n.t('notes-and-events.type'), size: 120 }),
+      columnHelper.accessor('value', { header: i18n.t('notes-and-events.value'), size: 310, meta: { autoWidth: true } })
     ]
 
     const children = (): React.JSX.Element => {
@@ -125,7 +132,7 @@ export const NotesAndEventsTabView = ({
             <Grid
               autoWidth
               columns={ columns }
-              data={ note.data }
+              data={ formatedData }
               resizable
             />
           </div>
@@ -180,12 +187,12 @@ export const NotesAndEventsTabView = ({
           title={ t('notes-and-events.notes-and-events') }
         >
           <IconTextButton
-            icon={ { value: 'new-circle' } }
+            icon={ { value: 'new' } }
             onClick={ () => {
               setAddNoteModalOpen(true)
             } }
           >
-            {t('add')}
+            {t('new')}
           </IconTextButton>
 
           <AddNoteModal

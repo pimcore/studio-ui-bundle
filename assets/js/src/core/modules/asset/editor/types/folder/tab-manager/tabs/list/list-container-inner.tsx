@@ -226,7 +226,7 @@ export const ListContainerInner = (): React.JSX.Element => {
     }).then(() => {
       prepareAndFetchListing()?.finally(() => {
         replaceModifiedCells(columnId, rowData.id)
-        replaceDataPatches(columnIdentifier, rowData.id, column.locale)
+        replaceDataPatches(columnIdentifier, rowData.id, String(column.locale))
       }).catch((error) => {
         console.error(error)
       })

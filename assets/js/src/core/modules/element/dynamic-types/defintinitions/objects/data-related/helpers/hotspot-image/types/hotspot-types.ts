@@ -16,13 +16,13 @@ export interface Hotspot {
   left: number
   width: number
   height: number
-  data: any
-  name: string | null
+  data?: any
+  name?: string | null
 }
 
 export interface Marker {
   top: number
   left: number
   data: any
-  name: string | null
+  name?: string | null
 }

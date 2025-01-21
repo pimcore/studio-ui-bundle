@@ -20,11 +20,11 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
-  ManyToManyRelationLabel
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/components/label/label'
-import {
   convertAllowedTypes, type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import {
+  ManyToManyRelationLabel
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/components/label/label'
 
 export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ManyToManyRelationClassDefinitionProps
 

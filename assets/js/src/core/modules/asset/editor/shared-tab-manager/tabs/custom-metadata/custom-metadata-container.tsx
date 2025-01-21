@@ -37,6 +37,10 @@ import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
 import { uuid } from '@Pimcore/utils/uuid'
+import {
+  useMetadataGetCollectionMutation
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -44,6 +48,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
+  const [predefinedMetadata, { isLoading }] = useMetadataGetCollectionMutation()
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -107,6 +112,37 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     addCustomMetadata(newCustomMetadata)
   }
 
+  const addPredefinedMetadata = async (): Promise<void> => {
+    const predefinedMetadataTask = predefinedMetadata({
+      body: {}
+    })
+
+    predefinedMetadataTask.catch(() => {
+      console.error('Failed to load predefined metadata')
+    })
+
+    const response = await predefinedMetadataTask
+
+    if (response.error !== undefined) {
+      trackError(new ApiError(response.error))
+    }
+
+    const data = response.data!
+
+    data.items!.forEach((predefinedDefinition) => {
+      if (customMetadata?.find((cm) => cm.name === predefinedDefinition.name && cm.language === (predefinedDefinition.language ?? '')) !== undefined) {
+        return
+      }
+
+      addCustomMetadata({
+        ...predefinedDefinition,
+        rowId: predefinedDefinition.id,
+        language: predefinedDefinition.language ?? '',
+        data: predefinedDefinition.data ?? null
+      })
+    })
+  }
+
   useEffect(() => {
     if (editmode) {
       nameInputRef.current?.focus()
@@ -166,12 +202,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ { value: 'new-circle' } }
+                  icon={ { value: 'new-something' } }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
                 >
-                  {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
+                  {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create')}
                 </IconTextButton>
               </Space>
 
@@ -202,22 +238,23 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
             )}
 
             {!editmode && (
-            <ButtonGroup items={ [<Button
+            <ButtonGroup items={ [<IconTextButton
+              disabled={ isLoading }
+              icon={ { value: 'add-something' } }
               key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
-              onClick={ () => {
-                console.log('clicked')
-              } }
+              loading={ isLoading }
+              onClick={ addPredefinedMetadata }
                                   >
               {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
-            </Button>,
+            </IconTextButton>,
               <IconTextButton
-                icon={ { value: 'new-circle' } }
-                key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
+                icon={ { value: 'new-something' } }
+                key={ t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata') }
                 onClick={ () => {
                   setEditMode(true)
                 } }
               >
-                {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
+                {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata')}
               </IconTextButton>] }
             />
             )}

@@ -74,7 +74,7 @@ export type NoteGetCollectionApiArg = {
     filter?: string;
     /** Filter for specific fields, will be json decoded to an array. e.g.
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
-    fieldFilters?: any;
+    fieldFilters?: string;
 };
 export type NoteDeleteByIdApiResponse = /** status 200 note_delete_by_id_success_description */ void;
 export type NoteDeleteByIdApiArg = {
@@ -102,7 +102,7 @@ export type NoteElementGetCollectionApiArg = {
     filter?: string;
     /** Filter for specific fields, will be json decoded to an array. e.g.
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
-    fieldFilters?: any;
+    fieldFilters?: string;
 };
 export type NoteElementCreateApiResponse = /** status 200 Created note for element */ Note;
 export type NoteElementCreateApiArg = {
@@ -122,7 +122,7 @@ export type NoteElementGetTypeCollectionApiArg = {
 export type Note = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** id */
     id: number;
@@ -143,11 +143,11 @@ export type Note = {
     /** Locked */
     locked: boolean;
     /** Data of note */
-    data: any[];
+    data: (string | number | boolean | object)[];
     /** User ID */
-    userId?: number | null;
+    userId?: any;
     /** Username */
-    userName?: string | null;
+    userName?: any;
 };
 export type Error = {
     /** Message */
@@ -170,7 +170,7 @@ export type CreateNote = {
 export type NoteType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** id */
     id: string;

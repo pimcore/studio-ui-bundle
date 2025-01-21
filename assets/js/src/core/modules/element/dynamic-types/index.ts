@@ -97,6 +97,7 @@ import { type DynamicTypeObjectDataTime } from '@Pimcore/modules/element/dynamic
 import { type DynamicTypeObjectDataExternalImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-external-image'
 import { type DynamicTypeObjectDataImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image'
 import { type DynamicTypeObjectDataVideo } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-video'
+import { type DynamicTypeObjectDataHotspotImage } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-hotspotimage'
 import { type DynamicTypeObjectDataImageGallery } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-image-gallery'
 import { type DynamicTypeObjectDataGeoPoint } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopoint'
 import { type DynamicTypeObjectDataGeoBounds } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geobounds'
@@ -104,6 +105,8 @@ import { type DynamicTypeObjectDataGeoPolygon } from '@Pimcore/modules/element/d
 import { type DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-geopolyline'
 import { type DynamicTypeObjectDataManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-one-relation'
 import { type DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
+import { type DynamicTypeObjectDataManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-object-relation'
+import { type DynamicTypeObjectDataReverseObjectRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-reverse-object-relation'
 import { type DynamicTypeObjectDataTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-table'
 import { type DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
 
@@ -230,6 +233,7 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataExternalImage>(serviceIds['DynamicTypes/ObjectData/ExternalImage']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataImage>(serviceIds['DynamicTypes/ObjectData/Image']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataVideo>(serviceIds['DynamicTypes/ObjectData/Video']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataHotspotImage>(serviceIds['DynamicTypes/ObjectData/HotspotImage']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataImageGallery>(serviceIds['DynamicTypes/ObjectData/ImageGallery']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPoint>(serviceIds['DynamicTypes/ObjectData/GeoPoint']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoBounds>(serviceIds['DynamicTypes/ObjectData/GeoBounds']))
@@ -237,6 +241,8 @@ moduleSystem.registerModule({
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataGeoPolyLine>(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToOneRelation>(serviceIds['DynamicTypes/ObjectData/ManyToOneRelation']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataManyToManyObjectRelation>(serviceIds['DynamicTypes/ObjectData/ManyToManyObjectRelation']))
+    objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataReverseObjectRelation>(serviceIds['DynamicTypes/ObjectData/ReverseObjectRelation']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataTable>(serviceIds['DynamicTypes/ObjectData/Table']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataStructuredTable>(serviceIds['DynamicTypes/ObjectData/StructuredTable']))
     objectDataRegistry.registerDynamicType(container.get<DynamicTypeObjectDataBlock>(serviceIds['DynamicTypes/ObjectData/Block']))
