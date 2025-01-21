@@ -26,7 +26,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { createVersionAccordionItem } from './create-version-accordion-item-functions'
+import { createVersionAccordionItem } from './helpers/create-version-accordion-item'
 import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { Flex } from '@Pimcore/components/flex/flex'
 import {
@@ -160,32 +160,32 @@ export const VersionsView = ({
             <Content padded>
               <Header title={ t('version.versions') }>
                 {!isEmptyVersionsList &&
-                          (
-                          <>
-                            <Flex
-                              className='w-full'
-                              gap='small'
-                              justify='space-between'
-                            >
-                              <Button
-                                className={ comparingActive ? 'compare-button' : '' }
-                                key={ t('version.compare-versions') }
-                                onClick={ handleClickCompareVersion }
-                              >{t('version.compare-versions')}</Button>
+                  (
+                  <>
+                    <Flex
+                      className='w-full'
+                      gap='small'
+                      justify='space-between'
+                    >
+                      <Button
+                        className={ comparingActive ? 'compare-button' : '' }
+                        key={ t('version.compare-versions') }
+                        onClick={ handleClickCompareVersion }
+                      >{t('version.compare-versions')}</Button>
 
-                              <IconTextButton
-                                icon={ { value: 'trash' } }
-                                key={ t('version.clear-unpublished') }
-                                loading={ clearingAll }
-                                onClick={ showModal }
-                              >
-                                {t('version.clear-unpublished')}
-                              </IconTextButton>
-                            </Flex>
+                      <IconTextButton
+                        icon={ { value: 'trash' } }
+                        key={ t('version.clear-unpublished') }
+                        loading={ clearingAll }
+                        onClick={ showModal }
+                      >
+                        {t('version.clear-unpublished')}
+                      </IconTextButton>
+                    </Flex>
 
-                            {renderModal()}
-                          </>
-                          )}
+                    {renderModal()}
+                  </>
+                  )}
               </Header>
 
               {!isEmptyVersionsList && (
