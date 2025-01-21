@@ -166,12 +166,12 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ { value: 'new-circle' } }
+                  icon={ { value: 'new-something' } }
                   onClick={ () => {
                     onAddPropertyClick()
                   } }
                 >
-                  {t('asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add')}
+                  {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create')}
                 </IconTextButton>
               </Space>
 
@@ -202,22 +202,23 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
             )}
 
             {!editmode && (
-            <ButtonGroup items={ [<Button
+            <ButtonGroup items={ [<IconTextButton
+              icon={ { value: 'add-something' } }
               key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
               onClick={ () => {
                 console.log('clicked')
               } }
                                   >
               {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
-            </Button>,
+            </IconTextButton>,
               <IconTextButton
-                icon={ { value: 'new-circle' } }
-                key={ t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add') }
+                icon={ { value: 'new-something' } }
+                key={ t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata') }
                 onClick={ () => {
                   setEditMode(true)
                 } }
               >
-                {t('asset.asset-editor-tabs.custom-metadata.add-custom-definition.add')}
+                {t('asset.asset-editor-tabs.custom-metadata.new-custom-metadata')}
               </IconTextButton>] }
             />
             )}

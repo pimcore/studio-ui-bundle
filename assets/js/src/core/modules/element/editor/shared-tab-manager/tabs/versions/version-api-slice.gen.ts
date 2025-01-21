@@ -177,17 +177,65 @@ export type AssetVersion = {
     /** dimensions */
     dimensions: VersionDimensions;
 };
-export type DataObjectVersion = {
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type Element = {
+    /** ID */
+    id: number;
+    /** ID of parent */
+    parentId: number;
+    /** path */
+    path: string;
+    /** icon */
+    icon?: ElementIcon;
+    /** ID of owner */
+    userOwner: number;
+    /** User that modified the element */
+    userModification: number;
+    /** Locked */
+    locked: any;
+    /** Is locked */
+    isLocked: boolean;
+    /** Creation date */
+    creationDate: any;
+    /** Modification date */
+    modificationDate: any;
+};
+export type DataObjectVersion = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** modification date */
-    modificationDate: number;
-    /** path */
-    path: string;
-    /** published */
-    published: boolean;
+    /** Inheritance allowed */
+    allowInheritance?: boolean;
+    /** Variants allowed */
+    allowVariants?: boolean;
+    /** Show variants */
+    showVariants?: boolean;
+    /** Has preview */
+    hasPreview?: boolean;
+    /** Has workflow available */
+    hasWorkflowAvailable?: boolean;
+    /** Key */
+    key?: string;
+    /** Type */
+    type?: string;
+    /** Has children */
+    hasChildren?: boolean;
+    /** Full path */
+    fullPath?: string;
+    /** Custom index */
+    index?: number;
+    /** Class name */
+    className?: any;
+    /** Published */
+    published?: any;
+    /** Detail object data */
+    objectData?: object;
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */

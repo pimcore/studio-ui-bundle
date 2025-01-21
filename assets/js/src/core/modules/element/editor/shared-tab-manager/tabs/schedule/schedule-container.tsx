@@ -118,7 +118,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
         <ButtonGroup items={ [
           <IconTextButton
             className={ 'pimcore-schedule-toolbar__headline__buttons__add' }
-            icon={ { value: 'new-circle' } }
+            icon={ { value: 'new' } }
             key={ 'add' }
             onClick={ (): void => {
               addSchedule({
@@ -132,7 +132,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
               })
             } }
           >
-            {t('schedule.toolbar.add')}
+            {t('schedule.toolbar.new')}
           </IconTextButton>,
 
           <Button

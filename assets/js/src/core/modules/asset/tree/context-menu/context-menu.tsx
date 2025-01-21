@@ -58,7 +58,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
 
   const items: DropdownMenuProps['items'] = [
     {
-      label: t('element.tree.context-menu.add-assets'),
+      label: t('element.tree.context-menu.new-assets'),
       key: '1',
       icon: <Icon value={ 'asset' } />,
       hidden: !checkElementPermission(props.node.permissions, 'create') || props.node?.type !== 'folder',

@@ -30,13 +30,13 @@ export const _default = {
       {
         title: 'All users',
         key: '0-0',
-        actions: [{ key: 'add-folder', icon: 'new-circle' }, { key: 'add-user', icon: 'new-circle' }],
+        actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
         icon: <Icon value={ 'folder' } />,
         children: [
           {
             title: 'Admins',
             key: '0-0-0',
-            actions: [{ key: 'add-folder', icon: 'new-circle' }, { key: 'add-user', icon: 'new-circle' }],
+            actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
             icon: <Icon value={ 'folder' } />,
             children: [
               {
@@ -51,13 +51,13 @@ export const _default = {
           {
             title: 'Portal Engine',
             key: '0-0-1',
-            actions: [{ key: 'add-folder', icon: 'new-circle' }, { key: 'add-user', icon: 'new-circle' }],
+            actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
             icon: <Icon value={ 'folder' } />,
             children: [
               {
                 title: 'All rights',
                 key: '0-0-1-0',
-                actions: [{ key: 'add-folder', icon: 'new-circle' }, { key: 'add-user', icon: 'new-circle' }],
+                actions: [{ key: 'add-folder', icon: 'add-folder' }, { key: 'add-user', icon: 'add-user' }],
                 icon: <Icon value={ 'folder' } />,
                 children: [
                   {

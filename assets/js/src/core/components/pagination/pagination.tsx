@@ -185,14 +185,12 @@ export const Pagination = ({
 
 function PreviousButton (prop): React.JSX.Element {
   const { currentPage, onClickPrev } = prop
-  const iconOptions = { width: 10, height: 10 }
   return (
     <li className={ `ant-pagination-prev ${currentPage === 1 ? 'ant-pagination-disabled' : ''}` }>
       <Button
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === 1 }
         icon={ <Icon
-          options={ iconOptions }
           value='chevron-left'
                /> }
         onClick={ onClickPrev }
@@ -205,14 +203,12 @@ function PreviousButton (prop): React.JSX.Element {
 
 function NextButton (prop): React.JSX.Element {
   const { currentPage, pages, onClickNext } = prop
-  const iconOptions = { width: 10, height: 10 }
   return (
     <li className={ `ant-pagination-next ${currentPage === pages ? 'ant-pagination-disabled' : ''}` }>
       <Button
         className={ 'ant-pagination-item-link' }
         disabled={ currentPage === pages }
         icon={ <Icon
-          options={ iconOptions }
           value='chevron-right'
                /> }
         onClick={ onClickNext }
