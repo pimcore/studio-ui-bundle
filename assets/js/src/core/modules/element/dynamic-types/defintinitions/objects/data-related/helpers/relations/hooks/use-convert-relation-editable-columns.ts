@@ -13,7 +13,7 @@
 
 import { useMemo } from 'react'
 import { type RelationColumnDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, type ColumnMeta, createColumnHelper } from '@tanstack/react-table'
 import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
@@ -25,6 +25,47 @@ export interface UseConvertRelationEditableColumnsResult {
 }
 
 export const EDITABLE_COLUMN_PREFIX = 'edit::'
+
+const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
+  if (type === 'bool') {
+    return {
+      type: 'checkbox',
+      editable: true
+    }
+  }
+
+  if (type === 'number') {
+    return {
+      type: 'number',
+      editable: true
+    }
+  }
+
+  if (type === 'select') {
+    return {
+      type: 'select',
+      editable: true,
+      config: {
+        options: value?.split(';') ?? []
+      }
+    }
+  }
+
+  if (type === 'multiselect') {
+    return {
+      type: 'multiselect',
+      editable: true,
+      config: {
+        options: value?.split(';') ?? []
+      }
+    }
+  }
+
+  return {
+    type: 'input',
+    editable: true
+  }
+}
 
 export const useConvertRelationEditableColumns = (
   columns: RelationColumnDefinition[],
@@ -41,10 +82,7 @@ export const useConvertRelationEditableColumns = (
         columnHelper.accessor(EDITABLE_COLUMN_PREFIX + column.key, {
           header: !_.isEmpty(column.label) ? t(String(column.label)) : undefined,
           size: column.width ?? 150,
-          meta: {
-            type: column.type,
-            editable: true
-          }
+          meta: mapColumnType(column.type ?? 'text', column.value)
         })
       )
     }
