@@ -23,17 +23,10 @@ import { VersionsView } from '@Pimcore/modules/element/editor/shared-tab-manager
 import { Content } from '@Pimcore/components/content/content'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import {
-  type SingleVersionViewProps,
-  type VersionComparisonViewProps
+  type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
-export interface VersionTabContainerProps extends VersionDetailViewsProps {
-}
-
-export interface VersionDetailViewsProps {
-  SingleViewComponent: React.ComponentType<SingleVersionViewProps>
-  ComparisonViewComponent: React.ComponentType<VersionComparisonViewProps>
-}
+interface VersionTabContainerProps extends VersionDetailViewsProps {}
 
 export const VersionsTabContainer = ({
   SingleViewComponent,

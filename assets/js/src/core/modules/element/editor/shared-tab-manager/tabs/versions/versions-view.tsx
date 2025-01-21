@@ -31,7 +31,7 @@ import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accord
 import { Flex } from '@Pimcore/components/flex/flex'
 import {
   type VersionDetailViewsProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { type VersionIdentifiers } from './types/types'
 
 interface VersionsViewProps extends VersionDetailViewsProps {
