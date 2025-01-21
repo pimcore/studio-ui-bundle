@@ -34,6 +34,7 @@ import {
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import type { ColumnDef } from '@tanstack/react-table'
+import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -43,6 +44,7 @@ export interface ManyToManyRelationClassDefinitionProps {
   width: number | string | null
   height: number | string | null
   assetInlineDownloadAllowed?: boolean | null
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
@@ -61,8 +63,17 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
   const { onDrop, deleteItem, onSearch, addAssets, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems)
 
   useEffect(() => {
-    props.onChange?.(value)
+    if (value !== props.value) {
+      props.onChange?.(value)
+    }
   }, [value])
+
+  useEffect(() => {
+    if (value !== props.value) {
+      setValue(props.value ?? null)
+      setDisplayedValue(props.value ?? null)
+    }
+  }, [props.value])
 
   if (props.isLoading === true) {
     return (
@@ -92,6 +103,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           enrichRowData={ props.enrichRowData }
           height={ props.height }
           hint={ props.hint }
+          onUpdateCellData={ props.onUpdateCellData }
           value={ displayedValue }
           width={ props.width }
         />
