@@ -35,6 +35,10 @@ const AlertModalComponent = (args: { type: string, content: string }): React.JSX
         modal.warn({
           content: args.content
         })
+      case 'success':
+        modal.success({
+          content: args.content
+        })
         break
     }
   }
@@ -52,7 +56,7 @@ const config: Meta = {
   },
   argTypes: {
     type: {
-      options: ['info', 'error', 'warn'],
+      options: ['info', 'error', 'warn', 'success'],
       control: {
         type: 'select',
         labels: {
@@ -84,5 +88,12 @@ export const WithWarn = {
   args: {
     type: 'warn',
     content: 'This is an info message'
+  }
+}
+
+export const WithSuccess = {
+  args: {
+    type: 'success',
+    content: 'This is an success message'
   }
 }
