@@ -30,10 +30,9 @@ export interface UseAlertModalResponse {
 }
 
 export const useAlertModal = (): UseAlertModalResponse => {
+  const { modal } = App.useApp()
 
-    const { modal } = App.useApp()
-
-    const { t } = useTranslation()
+  const { t } = useTranslation()
 
   return useMemo<UseAlertModalResponse>(
     () => ({
@@ -55,12 +54,12 @@ export const useAlertModal = (): UseAlertModalResponse => {
           content
         })
       ),
-        success: ({ content }) => (
-            modal.success({
-                title: t('success'),
-                content
-            })
-        ),
+      success: ({ content }) => (
+        modal.success({
+          title: t('success'),
+          content
+        })
+      )
     }),
     []
   )
