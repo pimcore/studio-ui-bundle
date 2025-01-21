@@ -17,9 +17,6 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
-  convertAllowedTypes, type IRelationAllowedTypesClassDefinition
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
-import {
   ManyToManyRelationLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/components/label/label'
 import {
@@ -27,7 +24,7 @@ import {
   type ReverseObjectRelationClassDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/reverse-object-relation/reverse-object-relation'
 
-export type ReverseObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & IRelationAllowedTypesClassDefinition & ReverseObjectRelationClassDefinitionProps
+export type ReverseObjectRelationObjectDataDefinition = AbstractObjectDataDefinition & ReverseObjectRelationClassDefinitionProps
 
 export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'reverseObjectRelation'
@@ -36,7 +33,6 @@ export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjec
     return (
       <ReverseObjectRelation
         { ...props }
-        { ... convertAllowedTypes(props) }
         disabled={ props.noteditable === true }
       />
     )

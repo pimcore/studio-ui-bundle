@@ -24,6 +24,7 @@ import type {
   ManyToManyRelationValueItem
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { ColumnDef } from '@tanstack/react-table'
+import _ from 'lodash'
 
 export interface ReverseObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -32,6 +33,7 @@ export interface ReverseObjectRelationClassDefinitionProps {
   width: number | string | null
   height: number | string | null
   visibleFieldDefinitions?: Record<string, VisibleFieldDefinition> | null
+  ownerClassName: string | null
 }
 
 export interface ReverseObjectRelationProps extends IRelationAllowedTypesDataComponent, ReverseObjectRelationClassDefinitionProps {
@@ -43,5 +45,15 @@ export interface ReverseObjectRelationProps extends IRelationAllowedTypesDataCom
 }
 
 export const ReverseObjectRelation = (props: ReverseObjectRelationProps): React.JSX.Element => {
-  return <ManyToManyObjectRelation { ...props } />
+  if (_.isEmpty(props.ownerClassName)) {
+    return <div>Owner class name is missing</div>
+  }
+
+  return (
+    <ManyToManyObjectRelation
+      { ...props }
+      allowedClasses={ [String(props.ownerClassName)] }
+      dataObjectsAllowed
+    />
+  )
 }
