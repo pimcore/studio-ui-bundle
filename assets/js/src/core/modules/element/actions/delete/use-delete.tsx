@@ -11,28 +11,25 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useTranslation } from 'react-i18next'
-import { type ElementType } from 'types/element-type.d'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { Icon } from '@Pimcore/components/icon/icon'
+import {useTranslation} from 'react-i18next'
+import {type ElementType} from 'types/element-type.d'
+import {useFormModal} from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import {type ItemType} from '@Pimcore/components/dropdown/dropdown'
+import {Icon} from '@Pimcore/components/icon/icon'
 import React from 'react'
-import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
-import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
-import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
-import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
-import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
-import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
-import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
-import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
-import {useElementRefresh} from "@Pimcore/modules/element/actions/refresh-element/use-element-refresh";
+import type {TreeNodeProps} from '@Pimcore/components/element-tree/node/tree-node'
+import {useRefreshTree} from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import {createJob as createDeleteJob} from '@Pimcore/modules/execution-engine/jobs/delete/factory'
+import {defaultTopics, topics} from '@Pimcore/modules/execution-engine/topics'
+import {type AssetDeleteZipApiArg} from '@Pimcore/modules/asset/asset-api-slice.gen'
+import {useJobs} from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import {useElementDeleteMutation} from '@Pimcore/modules/element/element-api-slice.gen'
+import {checkElementPermission} from '@Pimcore/modules/element/permissions/permission-helper'
+import {type Element, getElementKey} from '@Pimcore/modules/element/element-helper'
+import type {GridContextMenuProps} from '@Pimcore/components/grid/grid'
+import {useElementApi} from '@Pimcore/modules/element/hooks/use-element-api'
+import {useRefreshGrid} from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import {useElementRefresh} from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -45,12 +42,11 @@ export interface UseDeleteHookReturn {
 export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const dispatch = useAppDispatch()
   const { addJob } = useJobs()
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
-  const {refreshElement} = useElementRefresh(elementType)
+  const { refreshElement } = useElementRefresh(elementType)
   const [elementDelete] = useElementDeleteMutation()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
@@ -152,6 +148,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
+
       refreshElement(parentId)
     }
 
