@@ -37,6 +37,10 @@ import { Space } from '@Pimcore/components/space/space'
 import { Select } from '@Pimcore/components/select/select'
 import { type DynamicTypeMetaDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/meta-data/dynamic-type-metadata-registry'
 import { uuid } from '@Pimcore/utils/uuid'
+import {
+  useMetadataGetCollectionMutation
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -44,6 +48,7 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
   const settings = useSettings()
   const { id } = useContext(AssetContext)
   const { addCustomMetadata, customMetadata } = useAssetDraft(id)
+  const [predefinedMetadata, { isLoading }] = useMetadataGetCollectionMutation()
   const {
     showModal: showDuplicateEntryModal,
     closeModal: closeDuplicateEntryModal,
@@ -105,6 +110,37 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
     }
 
     addCustomMetadata(newCustomMetadata)
+  }
+
+  const addPredefinedMetadata = async (): Promise<void> => {
+    const predefinedMetadataTask = predefinedMetadata({
+      body: {}
+    })
+
+    predefinedMetadataTask.catch(() => {
+      console.error('Failed to load predefined metadata')
+    })
+
+    const response = await predefinedMetadataTask
+
+    if (response.error !== undefined) {
+      trackError(new ApiError(response.error))
+    }
+
+    const data = response.data!
+
+    data.items!.forEach((predefinedDefinition) => {
+      if (customMetadata?.find((cm) => cm.name === predefinedDefinition.name && cm.language === (predefinedDefinition.language ?? '')) !== undefined) {
+        return
+      }
+
+      addCustomMetadata({
+        ...predefinedDefinition,
+        rowId: predefinedDefinition.id,
+        language: predefinedDefinition.language ?? '',
+        data: predefinedDefinition.data ?? null
+      })
+    })
   }
 
   useEffect(() => {
@@ -203,11 +239,11 @@ export const CustomMetadataTabContainer = (): React.JSX.Element => {
 
             {!editmode && (
             <ButtonGroup items={ [<IconTextButton
+              disabled={ isLoading }
               icon={ { value: 'add-something' } }
               key={ t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition') }
-              onClick={ () => {
-                console.log('clicked')
-              } }
+              loading={ isLoading }
+              onClick={ addPredefinedMetadata }
                                   >
               {t('asset.asset-editor-tabs.custom-metadata.add-predefined-definition')}
             </IconTextButton>,
