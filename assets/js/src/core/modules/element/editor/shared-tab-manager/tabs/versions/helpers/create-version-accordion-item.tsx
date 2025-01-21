@@ -54,6 +54,10 @@ export const createVersionAccordionItem = ({
 
   const selectable = comparingActive
   const published = version.published ?? false
+
+  const themeBySelection = selected ? 'theme-primary' : 'theme-default'
+  const themeByState: PanelTheme = published ? 'theme-success' : themeBySelection
+
   const onClick = (): void => {
     if (comparingActive) {
       selectVersion(vId)
@@ -112,9 +116,6 @@ export const createVersionAccordionItem = ({
       </div>
     )
   }
-
-  let themeByState: PanelTheme = selected ? 'theme-primary' : 'theme-default'
-  themeByState = published ? 'theme-success' : themeByState
 
   const Extra = (): React.JSX.Element => {
     const { t } = useTranslation()
