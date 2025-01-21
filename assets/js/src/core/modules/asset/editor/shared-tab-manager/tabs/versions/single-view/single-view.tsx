@@ -37,8 +37,10 @@ export const SingleView = ({
   const [versionPreviewImageUrl, setVersionPreviewImageUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    setVersionData([])
-    setVId(versionId)
+    if (versionId.id !== vId.id) {
+      setVersionData([])
+      setVId(versionId)
+    }
   }, [versionId])
 
   useEffect(() => {
