@@ -34,7 +34,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-user', icon: 'user-plus-01' }
+      { key: 'add-user', icon: 'add-user' }
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
@@ -53,7 +53,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-user', icon: 'user-plus-01' },
+            { key: 'add-user', icon: 'add-user' },
             { key: 'remove-folder', icon: 'delete-outlined' }
           ],
       children: [],

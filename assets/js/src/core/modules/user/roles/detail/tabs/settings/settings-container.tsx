@@ -29,27 +29,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
   const { id } = useRoleContext()
   const { item, isLoading, changeItemInState } = useRoleDraft(id)
-  const permissions = getGroupedPermissions([
-    {
-      key: 'workflow_details',
-      category: '',
-      additionalAttributes: []
-    },
-    {
-      key: 'recyclebin',
-      category: '',
-      additionalAttributes: []
-    },
-    {
-      key: 'quantityValueUnits',
-      category: '',
-      additionalAttributes: []
-    }, {
-      key: 'plugin_datahub_config',
-      category: 'Datahub',
-      additionalAttributes: []
-    }
-  ])
+  const permissions = getGroupedPermissions(item?.permissions as [] ?? [])
 
   useEffect(() => {
     if (!isLoading) {

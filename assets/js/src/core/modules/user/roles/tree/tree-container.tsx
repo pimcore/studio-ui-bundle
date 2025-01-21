@@ -41,10 +41,10 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>(['0'])
   const modal = useFormModal()
 
-  const hanldeAddItem = (key: string): void => {
+  const handleAddItem = (key: string): void => {
     modal.input({
-      title: t('roles.add-item'),
-      label: t('roles.add-item.label'),
+      title: t('roles.add-role'),
+      label: t('roles.add-role.label'),
       onOk: async (value: string) => {
         const data = await addNewItem({ parentId: parseInt(key), name: value })
         if (data !== undefined) {
@@ -60,6 +60,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
       onOk: async (value: string) => {
         const data = await addNewFolder({ parentId: parseInt(key), name: value })
         if (data !== undefined) {
+          console.log('call onUpdateTreeData')
           onUpdateTreeData(key, [data], true)
         }
       }
@@ -72,10 +73,10 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
         <ToolbarTree
           actions={ [
             {
-              key: 'add-item',
+              key: 'add-role',
               label: t('tree.actions.add-role'),
-              icon: <Icon value='user-plus-01'></Icon>,
-              onClick: () => { hanldeAddItem('0') }
+              icon: <Icon value='add-user'></Icon>,
+              onClick: () => { handleAddItem('0') }
             },
             {
               key: 'add-folder',
@@ -100,8 +101,8 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                 handleAddFolder(key)
 
                 break
-              case 'add-item':
-                hanldeAddItem(key)
+              case 'add-role':
+                handleAddItem(key)
 
                 break
               case 'clone-role':

@@ -189,7 +189,6 @@ import unknown from '@Pimcore/assets/icons/unknown.inline.svg'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg'
-import userPlus01 from '@Pimcore/assets/icons/user-plus-01.inline.svg'
 import user from '@Pimcore/assets/icons/user.inline.svg'
 import video from '@Pimcore/assets/icons/video.inline.svg'
 import view from '@Pimcore/assets/icons/view.inline.svg'
@@ -889,10 +888,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'upload-zip',
       component: uploadZip
-    })
-    iconLibrary.register({
-      name: 'user-plus-01',
-      component: userPlus01
     })
     iconLibrary.register({
       name: 'user',

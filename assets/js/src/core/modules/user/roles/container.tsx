@@ -34,7 +34,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-role', icon: 'user-plus-01' }
+      { key: 'add-role', icon: 'add-user' }
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
@@ -45,7 +45,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       key: item.id,
       selectable: item.type === 'role',
       allowDrop: item.type !== 'role',
-      icon: item.type === 'role' ? <Icon value={ 'user-01' } /> : <Icon value={ 'folder' } />,
+      icon: item.type === 'role' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'role'
         ? [
             { key: 'clone-role', icon: 'copy' },
@@ -53,7 +53,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-role', icon: 'user-plus-01' },
+            { key: 'add-role', icon: 'add-user' },
             { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
@@ -68,6 +68,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
         parentNode.children = parentNode.children ?? []
 
         if (add === true) {
+          parentNode.isLeaf = false
           parentNode.children.push(...createNodeByResponse(items))
           parentNode.children.sort((a, b) => (typeof a.title === 'string' ? a.title : '').localeCompare(typeof b.title === 'string' ? b.title : ''))
         } else {
@@ -122,6 +123,10 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
               parent.children = updatedTreeData
               return [...data]
             })
+
+            if (parent?.children.length === 0) {
+              parent.isLeaf = true
+            }
           }
         } }
         onUpdateTreeData={ updateTreeData }

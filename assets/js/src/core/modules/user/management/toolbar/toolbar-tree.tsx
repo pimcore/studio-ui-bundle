@@ -34,7 +34,7 @@ export const ToolbarTree = ({ actions, onReload, onAddItem, onAddFolder }: ITool
     {
       key: '1',
       label: t('tree.actions.add-user'),
-      icon: <Icon value='user-plus-01'></Icon>,
+      icon: <Icon value='add-user'></Icon>,
       onClick: onAddItem ?? (() => {})
     },
     {
