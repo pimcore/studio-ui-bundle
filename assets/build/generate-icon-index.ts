@@ -114,10 +114,10 @@ let content = `
 
 /* eslint-disable max-lines */
 
-import { container } from '@Pimcore/app/depency-injection';
-import { moduleSystem } from '@Pimcore/app/module-system/module-system';
-import { serviceIds } from '@Pimcore/app/config/services/service-ids';
-import { type IconLibrary } from './services/icon-library';
+import { container } from '@Pimcore/app/depency-injection'
+import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type IconLibrary } from './services/icon-library'
 `;
 files.forEach((file: string) => {
     const filePath: string = path.join(SVG_FOLDER as string, file);
@@ -145,7 +145,7 @@ files.forEach(file => {
 
 content += `
   }
-});
+})
 `;
 
 try {
