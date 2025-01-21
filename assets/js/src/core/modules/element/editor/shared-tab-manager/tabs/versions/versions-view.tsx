@@ -57,6 +57,7 @@ export const VersionsView = ({
 }: VersionsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+
   const [comparingActive, setComparingActive] = useState(false)
   const [clearingAll, setClearingAll] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
@@ -66,22 +67,6 @@ export const VersionsView = ({
   useEffect(() => {
     setClearingAll(false)
   }, [versions])
-
-  if (versions.length === 0) {
-    return (
-      <Content
-        padded
-      >
-        <Header title={ t('version.versions') } />
-        <Content
-          none
-          noneOptions={ {
-            text: t('version.no-versions-to-show')
-          } }
-        />
-      </Content>
-    )
-  }
 
   const clearVersions = async (): Promise<void> => {
     handleOk()
@@ -93,7 +78,29 @@ export const VersionsView = ({
     )
   }
 
-  const modal = (
+  const handleClickCompareVersion = (): void => {
+    setDetailedVersions([])
+    setComparingActive(!comparingActive)
+  }
+
+  const selectVersion = (vId: VersionIdentifiers): void => {
+    let tempComparedVersions = [...detailedVersions]
+    const isSelected = tempComparedVersions.some(v => v.id === vId.id)
+
+    if (tempComparedVersions.length === 2 && !isSelected) {
+      tempComparedVersions = []
+    }
+
+    if (!isSelected) {
+      tempComparedVersions.push(vId)
+    } else {
+      tempComparedVersions.splice(tempComparedVersions.indexOf(vId), 1)
+    }
+
+    setDetailedVersions(tempComparedVersions)
+  }
+
+  const renderModal = (): React.JSX.Element => (
     <RenderModal
       footer={
         <ModalFooter>
@@ -126,10 +133,25 @@ export const VersionsView = ({
     })
   )
 
+  const isEmptyVersionsList = versions.length === 0
+  const isEmptyDetailedVersionsList = detailedVersions.length === 0
+
+  if (isEmptyVersionsList) {
+    return (
+      <Content padded>
+        <Header title={ t('version.versions') } />
+        <Content
+          none
+          noneOptions={ {
+            text: t('version.no-versions-to-show')
+          } }
+        />
+      </Content>
+    )
+  }
+
   return (
-    <Content
-      className={ styles.versions }
-    >
+    <Content className={ styles.versions }>
       <SplitLayout
         leftItem={ {
           size: 25,
@@ -137,36 +159,36 @@ export const VersionsView = ({
           children: (
             <Content padded>
               <Header title={ t('version.versions') }>
-                {versions.length > 0 &&
-                  (
-                    <>
-                      <Flex
-                        className='w-full'
-                        gap='small'
-                        justify='space-between'
-                      >
-                        <Button
-                          className={ comparingActive ? 'compare-button' : '' }
-                          key={ t('version.compare-versions') }
-                          onClick={ onClickCompareVersion }
-                        >{t('version.compare-versions')}</Button>
+                {!isEmptyVersionsList &&
+                          (
+                          <>
+                            <Flex
+                              className='w-full'
+                              gap='small'
+                              justify='space-between'
+                            >
+                              <Button
+                                className={ comparingActive ? 'compare-button' : '' }
+                                key={ t('version.compare-versions') }
+                                onClick={ handleClickCompareVersion }
+                              >{t('version.compare-versions')}</Button>
 
-                        <IconTextButton
-                          icon={ { value: 'trash' } }
-                          key={ t('version.clear-unpublished') }
-                          loading={ clearingAll }
-                          onClick={ showModal }
-                        >
-                          {t('version.clear-unpublished')}
-                        </IconTextButton>
-                      </Flex>
+                              <IconTextButton
+                                icon={ { value: 'trash' } }
+                                key={ t('version.clear-unpublished') }
+                                loading={ clearingAll }
+                                onClick={ showModal }
+                              >
+                                {t('version.clear-unpublished')}
+                              </IconTextButton>
+                            </Flex>
 
-                      {modal}
-                    </>
-                  )}
+                            {renderModal()}
+                          </>
+                          )}
               </Header>
 
-              {versions.length > 0 && (
+              {!isEmptyVersionsList && (
                 <AccordionTimeline items={ accordionItems } />
               )}
             </Content>
@@ -178,11 +200,11 @@ export const VersionsView = ({
           children: (
             <Content padded>
               <Flex justify='center' >
-                {detailedVersions.length > 0 && comparingActive && (
+                {!isEmptyDetailedVersionsList && comparingActive && (
                   <ComparisonViewComponent versionIds={ detailedVersions } />
                 )}
 
-                {detailedVersions.length > 0 && !comparingActive && (
+                {!isEmptyDetailedVersionsList && !comparingActive && (
                   <SingleViewComponent
                     setDetailedVersions={ setDetailedVersions }
                     versionId={ detailedVersions[0] }
@@ -196,24 +218,4 @@ export const VersionsView = ({
       />
     </Content>
   )
-
-  function onClickCompareVersion (): void {
-    setDetailedVersions([])
-    setComparingActive(!comparingActive)
-  }
-
-  function selectVersion (vId: VersionIdentifiers): void {
-    let tempComparedVersions = [...detailedVersions]
-    const isSelected = tempComparedVersions.some(v => v.id === vId.id)
-    if (tempComparedVersions.length === 2 && !isSelected) {
-      tempComparedVersions = []
-    }
-
-    if (!isSelected) {
-      tempComparedVersions.push(vId)
-    } else {
-      tempComparedVersions.splice(tempComparedVersions.indexOf(vId), 1)
-    }
-    setDetailedVersions(tempComparedVersions)
-  }
 }
