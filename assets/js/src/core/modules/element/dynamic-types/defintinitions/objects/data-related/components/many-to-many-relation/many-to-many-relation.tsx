@@ -52,6 +52,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   isLoading?: boolean
   columnDefinition?: Array<ColumnDef<any>>
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  hint?: React.ReactNode | null
 }
 
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
@@ -90,6 +91,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           disabled={ props.disabled }
           enrichRowData={ props.enrichRowData }
           height={ props.height }
+          hint={ props.hint }
           value={ displayedValue }
           width={ props.width }
         />
