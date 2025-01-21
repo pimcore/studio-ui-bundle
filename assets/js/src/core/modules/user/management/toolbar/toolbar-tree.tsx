@@ -33,13 +33,13 @@ export const ToolbarTree = ({ actions, onReload, onAddItem, onAddFolder }: ITool
   const items = actions ?? [
     {
       key: '1',
-      label: t('tree.actions.add-user'),
+      label: t('tree.actions.user'),
       icon: <Icon value='add-user'></Icon>,
       onClick: onAddItem ?? (() => {})
     },
     {
       key: '2',
-      label: t('tree.actions.add-folder'),
+      label: t('tree.actions.folder'),
       icon: <Icon value='folder-plus'></Icon>,
       onClick: onAddFolder ?? (() => {})
     }
@@ -64,7 +64,7 @@ export const ToolbarTree = ({ actions, onReload, onAddItem, onAddFolder }: ITool
           >
             <Icon
               options={ { width: 18, height: 18 } }
-              value={ 'PlusOutlined' }
+              value={ 'new' }
             ></Icon> {t('toolbar.new')}
           </Flex>
         </DropdownButton>

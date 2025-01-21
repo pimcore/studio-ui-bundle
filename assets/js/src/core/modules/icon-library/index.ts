@@ -25,6 +25,7 @@ import addImage from '@Pimcore/assets/icons/add-image.inline.svg'
 import addPackage from '@Pimcore/assets/icons/add-package.inline.svg'
 import addSomething from '@Pimcore/assets/icons/add-something.inline.svg'
 import addUser from '@Pimcore/assets/icons/add-user.inline.svg'
+import alert from '@Pimcore/assets/icons/alert.inline.svg'
 import asset from '@Pimcore/assets/icons/asset.inline.svg'
 import attachment from '@Pimcore/assets/icons/attachment.inline.svg'
 import audio from '@Pimcore/assets/icons/audio.inline.svg'
@@ -32,7 +33,7 @@ import autoSave from '@Pimcore/assets/icons/auto-save.inline.svg'
 import batchSelection from '@Pimcore/assets/icons/batch-selection.inline.svg'
 import bodyStyle from '@Pimcore/assets/icons/body-style.inline.svg'
 import bookmark from '@Pimcore/assets/icons/bookmark.inline.svg'
-import brush from '@Pimcore/assets/icons/brush.inline.svg'
+import cache from '@Pimcore/assets/icons/cache.inline.svg'
 import calculator from '@Pimcore/assets/icons/calculator.inline.svg'
 import calendar from '@Pimcore/assets/icons/calendar.inline.svg'
 import car from '@Pimcore/assets/icons/car.inline.svg'
@@ -42,12 +43,14 @@ import cdp from '@Pimcore/assets/icons/cdp.inline.svg'
 import channels from '@Pimcore/assets/icons/channels.inline.svg'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg'
+import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg'
 import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg'
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg'
 import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg'
+import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg'
 import close from '@Pimcore/assets/icons/close.inline.svg'
 import cms from '@Pimcore/assets/icons/cms.inline.svg'
 import collection from '@Pimcore/assets/icons/collection.inline.svg'
@@ -57,18 +60,16 @@ import content from '@Pimcore/assets/icons/content.inline.svg'
 import copilot from '@Pimcore/assets/icons/copilot.inline.svg'
 import copy from '@Pimcore/assets/icons/copy.inline.svg'
 import crop from '@Pimcore/assets/icons/crop.inline.svg'
-import customMetadata from '@Pimcore/assets/icons/custom--metadata.inline.svg'
+import customMetadata from '@Pimcore/assets/icons/custom-metadata.inline.svg'
 import customerSegmentGroup from '@Pimcore/assets/icons/customer-segment-group.inline.svg'
 import customerSegment from '@Pimcore/assets/icons/customer-segment.inline.svg'
 import customer from '@Pimcore/assets/icons/customer.inline.svg'
 import customers from '@Pimcore/assets/icons/customers.inline.svg'
 import cut from '@Pimcore/assets/icons/cut.inline.svg'
 import dashboard from '@Pimcore/assets/icons/dashboard.inline.svg'
-import dataManagement from '@Pimcore/assets/icons/data-management.inline.svg'
 import dataObjectVariant from '@Pimcore/assets/icons/data-object-variant.inline.svg'
 import dataObject from '@Pimcore/assets/icons/data-object.inline.svg'
 import dataQuality from '@Pimcore/assets/icons/data-quality.inline.svg'
-import dataSheet from '@Pimcore/assets/icons/data-sheet.inline.svg'
 import deleteColumn from '@Pimcore/assets/icons/delete-column.inline.svg'
 import deleteRow from '@Pimcore/assets/icons/delete-row.inline.svg'
 import dependencies from '@Pimcore/assets/icons/dependencies.inline.svg'
@@ -86,7 +87,7 @@ import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg'
 import editPen from '@Pimcore/assets/icons/edit-pen.inline.svg'
 import edit from '@Pimcore/assets/icons/edit.inline.svg'
-import embededMetadata from '@Pimcore/assets/icons/embeded-metadata.inline.svg'
+import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg'
 import event from '@Pimcore/assets/icons/event.inline.svg'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg'
 import expand from '@Pimcore/assets/icons/expand.inline.svg'
@@ -112,6 +113,7 @@ import history from '@Pimcore/assets/icons/history.inline.svg'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg'
 import image from '@Pimcore/assets/icons/image.inline.svg'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg'
+import info from '@Pimcore/assets/icons/info.inline.svg'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg'
 import inheritance from '@Pimcore/assets/icons/inheritance.inline.svg'
 import json from '@Pimcore/assets/icons/json.inline.svg'
@@ -157,6 +159,7 @@ import presentation from '@Pimcore/assets/icons/presentation.inline.svg'
 import preview from '@Pimcore/assets/icons/preview.inline.svg'
 import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
+import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
 import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
@@ -234,6 +237,10 @@ moduleSystem.registerModule({
       component: addUser
     })
     iconLibrary.register({
+      name: 'alert',
+      component: alert
+    })
+    iconLibrary.register({
       name: 'asset',
       component: asset
     })
@@ -262,8 +269,8 @@ moduleSystem.registerModule({
       component: bookmark
     })
     iconLibrary.register({
-      name: 'brush',
-      component: brush
+      name: 'cache',
+      component: cache
     })
     iconLibrary.register({
       name: 'calculator',
@@ -302,6 +309,10 @@ moduleSystem.registerModule({
       component: checkbox
     })
     iconLibrary.register({
+      name: 'checkmark',
+      component: checkmark
+    })
+    iconLibrary.register({
       name: 'chevron-down',
       component: chevronDown
     })
@@ -324,6 +335,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'children-grid',
       component: childrenGrid
+    })
+    iconLibrary.register({
+      name: 'close-filled',
+      component: closeFilled
     })
     iconLibrary.register({
       name: 'close',
@@ -362,7 +377,7 @@ moduleSystem.registerModule({
       component: crop
     })
     iconLibrary.register({
-      name: 'custom--metadata',
+      name: 'custom-metadata',
       component: customMetadata
     })
     iconLibrary.register({
@@ -390,10 +405,6 @@ moduleSystem.registerModule({
       component: dashboard
     })
     iconLibrary.register({
-      name: 'data-management',
-      component: dataManagement
-    })
-    iconLibrary.register({
       name: 'data-object-variant',
       component: dataObjectVariant
     })
@@ -404,10 +415,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'data-quality',
       component: dataQuality
-    })
-    iconLibrary.register({
-      name: 'data-sheet',
-      component: dataSheet
     })
     iconLibrary.register({
       name: 'delete-column',
@@ -478,8 +485,8 @@ moduleSystem.registerModule({
       component: edit
     })
     iconLibrary.register({
-      name: 'embeded-metadata',
-      component: embededMetadata
+      name: 'embedded-metadata',
+      component: embeddedMetadata
     })
     iconLibrary.register({
       name: 'event',
@@ -580,6 +587,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'info-circle',
       component: infoCircle
+    })
+    iconLibrary.register({
+      name: 'info',
+      component: info
     })
     iconLibrary.register({
       name: 'inheritance-broken',
@@ -760,6 +771,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'published',
       component: published
+    })
+    iconLibrary.register({
+      name: 'questionmark',
+      component: questionmark
     })
     iconLibrary.register({
       name: 'refresh',

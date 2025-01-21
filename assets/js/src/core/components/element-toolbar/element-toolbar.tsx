@@ -88,7 +88,6 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
           <Button
             icon={
               <Icon
-                options={ { width: 14, height: 7 } }
                 value={ 'chevron-down' }
               />
             }
