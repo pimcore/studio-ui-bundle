@@ -32,6 +32,7 @@ import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/us
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
+import {useElementRefresh} from "@Pimcore/modules/element/actions/refresh-element/use-element-refresh";
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -49,6 +50,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
+  const {refreshElement} = useElementRefresh(elementType)
   const [elementDelete] = useElementDeleteMutation()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
@@ -150,12 +152,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
-
-      dispatch(
-        assetApi.util.invalidateTags(
-          invalidatingTags.ASSET_DETAIL_ID(id)
-        )
-      )
+      refreshElement(parentId)
     }
 
     onFinish?.()
