@@ -11,16 +11,17 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { createStyles } from 'antd-style'
-
-export const useStyles = createStyles(({ css }) => {
-  return {
-    'select-cell': css`
-      padding: 4px;
-
-      .ant-select, .studio-select {
-        width: 100%;
-      }
-    `
+export interface AdvancedManyToManyRelationValueItem {
+  element: {
+    id: number
+    type: string
+    subtype: string | null
+    fullPath: string
+    isPublished: boolean | null
   }
-})
+  fieldName: string
+  columns: string[] | null
+  data: Record<string, any> | null
+}
+
+export type AdvancedManyToManyRelationValue = AdvancedManyToManyRelationValueItem[]
