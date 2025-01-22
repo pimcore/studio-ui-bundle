@@ -36,7 +36,7 @@ import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
-  deleteItem: (id: number, type: string) => void
+  deleteItem: (rowIndex: number) => void
   assetInlineDownloadAllowed: boolean
   disabled?: boolean
   width: number | string | null
@@ -91,6 +91,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       header: t('actions'),
       size: 110,
       cell: (info) => {
+        const rowIndex = info.row.index
         const rowValue = info.row.original as ManyToManyRelationValueItem
 
         const buttons: ReactElement[] = []
@@ -154,7 +155,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
                       } }
                              />,
                     onOk: () => {
-                      props.deleteItem(rowValue.id, rowValue.type)
+                      props.deleteItem(rowIndex)
                     }
                   })
                 } }
