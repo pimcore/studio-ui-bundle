@@ -27,7 +27,7 @@ import { store } from '@Pimcore/app/store'
 import { Content } from '@Pimcore/components/content/content'
 import {
   type VersionComparisonViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 export const ComparisonView = ({
   versionIds
