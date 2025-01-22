@@ -38,8 +38,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
-  const { elementPatch } = useElementApi(elementType, cacheKey)
-  const { getElementById } = useElementApi(elementType)
+  const { elementPatch, getElementById } = useElementApi(elementType, cacheKey)
 
   const rename = (
     id: number,

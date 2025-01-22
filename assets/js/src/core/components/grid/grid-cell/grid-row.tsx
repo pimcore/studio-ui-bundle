@@ -15,9 +15,8 @@ import { type Row } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
-import { type GridProps } from '@Pimcore/types/components/types'
+import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
 import { type GridCellReference } from '@Pimcore/components/grid/grid'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 
 export interface GridRowProps {
   row: Row<any>
@@ -27,22 +26,22 @@ export interface GridRowProps {
   columns: GridProps['columns']
   activeColumId?: string
   onFocusCell?: (cell: GridCellReference) => void
-  contextMenuItems?: DropdownMenuProps['items']
+  contextMenu?: ListGridContextMenuComponents
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, contextMenuItems = [], ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): React.JSX.Element => {
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
   const renderWithContextMenu = (children: React.ReactNode): React.JSX.Element => {
-    if (contextMenuItems.length > 0) {
+    if (props.contextMenu !== undefined) {
+      const { contextMenu: ContextMenu } = props
+
+      console.log(row)
+
       return (
-        <Dropdown
-          key={ row.id }
-          menu={ { items: contextMenuItems } }
-          trigger={ ['contextMenu'] }
-        >
+        <ContextMenu row={ row as any as ListGridContextMenuProps['row'] }>
           {children}
-        </Dropdown>
+        </ContextMenu>
       )
     }
 
