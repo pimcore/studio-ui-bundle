@@ -36,8 +36,6 @@ const GridRow = ({ row, isSelected, modifiedCells, ...props }: GridRowProps): Re
     if (props.contextMenu !== undefined) {
       const { contextMenu: ContextMenu } = props
 
-      console.log(row)
-
       return (
         <ContextMenu row={ row as any as ListGridContextMenuProps['row'] }>
           {children}
