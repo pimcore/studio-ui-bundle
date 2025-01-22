@@ -28,14 +28,14 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
 
   const refreshElement = (id: number): void => {
     if (elementType === 'asset') {
-      removeAsset(id)
+      dispatch(removeAsset(id))
       dispatch(
         assetApi.util.invalidateTags(
           invalidatingTags.ASSET_DETAIL_ID(id)
         )
       )
     } else if (elementType === 'data-object') {
-      removeDataObject(id)
+      dispatch(removeDataObject(id))
       dispatch(
         dataObjectApi.util.invalidateTags(
           invalidatingTags.DATA_OBJECT_DETAIL_ID(id)
