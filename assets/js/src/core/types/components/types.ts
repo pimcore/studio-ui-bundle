@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type {ColumnDef, RowSelectionState, SortingState, TableOptions} from '@tanstack/react-table'
-import {type GridCellReference, GridContextMenuProps} from '@Pimcore/components/grid/grid'
-import React, {ElementType} from "react";
+import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
+import { type GridCellReference, type GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { type ElementType } from 'react'
+import type React from 'react'
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
 export interface GapRowColGroupType { x: GapStringType | number, y: GapStringType | number }
@@ -27,10 +28,9 @@ export interface OnUpdateCellDataEvent {
   rowData: any
 }
 
-
 export interface ListGridContextMenuProps {
   row: {
-    id: GridContextMenuProps['id'],
+    id: GridContextMenuProps['id']
     [x: string]: any
   }
   children: React.ReactNode
