@@ -14,7 +14,7 @@
 import React from 'react'
 import {
   type SingleVersionViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 export const SingleView = ({
   versions,

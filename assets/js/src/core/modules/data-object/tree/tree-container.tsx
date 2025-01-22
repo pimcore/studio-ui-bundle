@@ -26,6 +26,9 @@ import { type ElementIcon, useDataObjectGetTreeQuery } from '../data-object-api-
 import { transformApiDataToNodes } from './utils/transform-api-data-to-node'
 import { Box } from '@Pimcore/components/box/box'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
+import { withDroppable } from './node/with-droppable/with-droppable'
+import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
+import { withActionStates } from './node/with-action-states'
 
 export interface TreeContainerProps {
   id: number
@@ -95,7 +98,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
-      renderNode={ withDraggable(TreeNode) }
+      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNode)))) }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }

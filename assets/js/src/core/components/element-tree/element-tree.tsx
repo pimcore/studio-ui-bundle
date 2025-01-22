@@ -52,7 +52,7 @@ export interface TreeProps {
   maxItemsPerNode?: number
   rootNode?: TreeNodeProps
 
-  renderNode: ElementType<TreeNodeProps>
+  renderNode: typeof TreeNode
   renderNodeContent: ElementType<TreeNodeContentProps>
   contextMenu?: ElementType<TreeContextMenuProps>
   renderFilter?: ElementType<TreeSearchProps>

@@ -22,7 +22,7 @@ import {
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import {
   VersionsTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-container/versions-container'
 import {
   ComparisonView
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/comparison-view/comparison-view'

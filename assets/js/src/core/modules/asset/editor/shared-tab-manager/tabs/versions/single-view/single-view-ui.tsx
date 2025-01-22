@@ -17,7 +17,7 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'
-import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
+import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 interface SingleVersionViewUiProps {

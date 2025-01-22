@@ -26,11 +26,7 @@ import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { useTranslation } from 'react-i18next'
 import { Box } from '@Pimcore/components/box/box'
-
-interface VersionIdentifiers {
-  id: number
-  count: number
-}
+import { type VersionIdentifiers } from '../types/types'
 
 interface CreateAccordionItemProps {
   version: Version
@@ -58,15 +54,23 @@ export const createVersionAccordionItem = ({
 
   const selectable = comparingActive
   const published = version.published ?? false
-  const onClick = (): void => {
-    if (comparingActive) {
-      selectVersion(vId)
-    } else {
-      setDetailedVersions([{
-        id: version.id,
-        count: version.versionCount
-      }])
-    }
+
+  const themeBySelection = selected ? 'theme-primary' : 'theme-default'
+  const themeByState: PanelTheme = published ? 'theme-success' : themeBySelection
+
+  const handleComparisonAction = (): void => {
+    selectVersion(vId)
+  }
+
+  const handleDetailAction = (): void => {
+    setDetailedVersions([{
+      id: version.id,
+      count: version.versionCount
+    }])
+  }
+
+  const handleClick = (): void => {
+    selectable ? handleComparisonAction() : handleDetailAction()
   }
 
   const scheduledDate = isSet(version.scheduled)
@@ -116,9 +120,6 @@ export const createVersionAccordionItem = ({
       </div>
     )
   }
-
-  let themeByState: PanelTheme = selected ? 'theme-primary' : 'theme-default'
-  themeByState = published ? 'theme-success' : themeByState
 
   const Extra = (): React.JSX.Element => {
     const { t } = useTranslation()
@@ -218,7 +219,7 @@ export const createVersionAccordionItem = ({
     subtitle: <Subtitle />,
     extra: <Extra />,
     children: <Component />,
-    onClick,
+    onClick: handleClick,
     theme: themeByState
   }
 }
