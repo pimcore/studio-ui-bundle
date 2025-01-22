@@ -23,7 +23,7 @@ import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-v
 import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import type { DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { getContextMenuCacheKey } from '@Pimcore/modules/element/element-helper'
+import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 
 interface PreviewCardContainerProps {
   asset: AssetGetTreeApiResponse['items'][number]
@@ -32,8 +32,8 @@ interface PreviewCardContainerProps {
 export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
-  const { renameContextMenuItem } = useRename('asset', getContextMenuCacheKey('asset', 'rename', asset.id))
-  const { deleteContextMenuItem } = useDelete('asset', getContextMenuCacheKey('asset', 'delete', asset.id))
+  const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', asset.id))
+  const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', asset.id))
   const { downloadContextMenuItem } = useDownload()
   const { uploadNewVersionContextMenuItem } = useUploadNewVersion()
   const { openContextMenuItem } = useOpen('asset')

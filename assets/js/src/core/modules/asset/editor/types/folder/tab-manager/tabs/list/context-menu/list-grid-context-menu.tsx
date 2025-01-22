@@ -18,13 +18,13 @@ import { useOpen } from '@Pimcore/modules/element/actions/open/open'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
-import { getContextMenuCacheKey } from '@Pimcore/modules/element/element-helper'
+import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
   const { openGridContextMenuItem } = useOpen('asset')
-  const { renameGridContextMenuItem } = useRename('asset', getContextMenuCacheKey('asset', 'rename', row.id))
-  const { deleteGridContextMenuItem } = useDelete('asset', getContextMenuCacheKey('asset', 'delete', row.id))
+  const { renameGridContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', row.id))
+  const { deleteGridContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', row.id))
   const { downloadGridContextMenuItem } = useDownload()
 
   const items = [
