@@ -38,6 +38,7 @@ export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   visibleFieldDefinitions?: Record<string, VisibleFieldDefinition> | null
   allowedClassId: string | null
   columns?: RelationColumnDefinition[] | null
+  name: string[]
 }
 
 export interface RelationColumnDefinition {
@@ -57,7 +58,8 @@ export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToMan
 }
 
 export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObjectRelationProps): React.JSX.Element => {
-  const { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue } = useConvertRelationEditableColumns(props.columns ?? [], props.value, props.onChange)
+  const fieldName = props.name[props.name.length - 1]
+  const { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue, convertToAdvancedManyToManyRelationValue } = useConvertRelationEditableColumns(props.columns ?? [], fieldName, props.value, props.onChange)
 
   useEffect(() => {
   }, [props.value])
@@ -72,7 +74,7 @@ export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObject
   }
 
   const onChange = (value?: ManyToManyRelationValue | null): void => {
-    console.log('onChange', value)
+    props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
   }
 
   return (

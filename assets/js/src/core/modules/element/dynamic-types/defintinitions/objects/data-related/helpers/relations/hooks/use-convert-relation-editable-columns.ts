@@ -24,6 +24,7 @@ export interface UseConvertRelationEditableColumnsResult {
   columnDefinition: Array<ColumnDef<any>>
   onUpdateCellData: (event: OnUpdateCellDataEvent) => void
   convertToManyToManyRelationValue: (value?: AdvancedManyToManyRelationValue | null) => ManyToManyRelationValue | null
+  convertToAdvancedManyToManyRelationValue: (value?: ManyToManyRelationValue | null) => AdvancedManyToManyRelationValue | null
 }
 
 const EDITABLE_COLUMN_PREFIX = 'edit::'
@@ -71,6 +72,7 @@ const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
 
 export const useConvertRelationEditableColumns = (
   columns: RelationColumnDefinition[],
+  fieldName: string,
   value?: AdvancedManyToManyRelationValue | null,
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
 ): UseConvertRelationEditableColumnsResult => {
@@ -107,7 +109,6 @@ export const useConvertRelationEditableColumns = (
       return row
     })
 
-    console.log('newValue', newValue)
     onChange?.(newValue)
   }
 
@@ -137,5 +138,40 @@ export const useConvertRelationEditableColumns = (
     }
   }
 
-  return { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue }
+  const convertToAdvancedManyToManyRelationValue = (value?: ManyToManyRelationValue | null): AdvancedManyToManyRelationValue | null => {
+    if (value === undefined || value === null) {
+      return null
+    }
+    const columnKeys = columns.map((column) => column.key)
+    return value.map((item) => {
+      return convertToAdvancedManyToManyRelationValueItem(item, columnKeys)
+    })
+  }
+
+  const convertToAdvancedManyToManyRelationValueItem = (value: ManyToManyRelationValueItem & Record<string, any>, columnKeys: string[]): AdvancedManyToManyRelationValueItem => {
+    const data: Record<string, any> = {}
+    for (const columnKey of columnKeys) {
+      const valueKey = EDITABLE_COLUMN_PREFIX + columnKey
+      if (value[valueKey] !== undefined) {
+        data[columnKey] = value[valueKey]
+      } else {
+        data[columnKey] = null
+      }
+    }
+
+    return {
+      element: {
+        id: value.id,
+        type: value.type,
+        subtype: value.subtype,
+        isPublished: value.isPublished,
+        fullPath: value.fullPath
+      },
+      data,
+      fieldName,
+      columns: columnKeys
+    }
+  }
+
+  return { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue, convertToAdvancedManyToManyRelationValue }
 }

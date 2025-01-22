@@ -73,7 +73,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
       setValue(props.value ?? null)
       setDisplayedValue(props.value ?? null)
     }
-  }, [props.value])
+  }, [JSON.stringify(props.value)])
 
   if (props.isLoading === true) {
     return (
