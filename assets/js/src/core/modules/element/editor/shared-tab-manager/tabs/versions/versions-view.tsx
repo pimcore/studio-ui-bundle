@@ -121,9 +121,6 @@ export const VersionsView = ({
       version,
       detailedVersions,
       comparingActive,
-      onClickDelete,
-      onClickPublish,
-      handleUpdateNote,
       selectVersion,
       setDetailedVersions
     })
