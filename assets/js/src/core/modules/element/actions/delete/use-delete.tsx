@@ -39,7 +39,7 @@ export interface UseDeleteHookReturn {
   deleteMutation: (id: number, parentId?: number) => Promise<void>
 }
 
-export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
+export const useDelete = (elementType: ElementType, cacheKey?: string): UseDeleteHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
   const { addJob } = useJobs()
@@ -47,7 +47,7 @@ export const useDelete = (elementType: ElementType): UseDeleteHookReturn => {
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
   const { refreshElement } = useElementRefresh(elementType)
-  const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: `${elementType.toUpperCase()}_ACTION_DELETE_ID_XY` })
+  const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({

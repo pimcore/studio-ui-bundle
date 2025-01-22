@@ -42,10 +42,10 @@ interface UseElementApiReturn {
   getElementById: (id: number) => Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined>
 }
 
-export const useElementApi = (elementType: ElementType): UseElementApiReturn => {
+export const useElementApi = (elementType: ElementType, cacheKey?: string): UseElementApiReturn => {
   const dispatch = useAppDispatch()
-  const [assetPatch] = useAssetPatchByIdMutation({ fixedCacheKey: 'ASSET_ACTION_RENAME' })
-  const [dataObjectPatch] = useDataObjectPatchByIdMutation()
+  const [assetPatch] = useAssetPatchByIdMutation({ fixedCacheKey: cacheKey })
+  const [dataObjectPatch] = useDataObjectPatchByIdMutation({ fixedCacheKey: cacheKey })
   const { updateFieldValue: updateAssetFieldValue } = useCacheUpdate('asset', ['ASSET_TREE'])
   const { updateFieldValue: updateDataObjectFieldValue } = useCacheUpdate('data-object', ['DATA_OBJECT_TREE'])
 
