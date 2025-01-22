@@ -63,6 +63,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
+  'DynamicTypes/GridCell/MultiSelect': 'DynamicTypes/GridCell/MultiSelect',
   'DynamicTypes/GridCell/Checkbox': 'DynamicTypes/GridCell/Checkbox',
   'DynamicTypes/GridCell/Date': 'DynamicTypes/GridCell/Date',
   'DynamicTypes/GridCell/Time': 'DynamicTypes/GridCell/Time',

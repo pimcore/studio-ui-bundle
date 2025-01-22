@@ -56,7 +56,7 @@ const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
 
   if (type === 'multiselect') {
     return {
-      type: 'multiselect',
+      type: 'multi-select',
       editable: true,
       config: {
         options: value?.split(';') ?? []
@@ -77,6 +77,8 @@ export const useConvertRelationEditableColumns = (
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
 ): UseConvertRelationEditableColumnsResult => {
   const { t } = useTranslation()
+  const columnKeys = columns.map((column) => column.key)
+
   const columnDefinition = useMemo(() => {
     const columnHelper = createColumnHelper()
     const columnDefinition: Array<ColumnDef<any>> = []
@@ -102,7 +104,7 @@ export const useConvertRelationEditableColumns = (
           ...row,
           data: {
             ...row.data,
-            [event.columnId.replace(EDITABLE_COLUMN_PREFIX, '')]: event.value
+            [event.columnId.replace(EDITABLE_COLUMN_PREFIX, '')]: transformColumnData(event.value)
           }
         }
       }
@@ -125,7 +127,12 @@ export const useConvertRelationEditableColumns = (
     const editableData: Record<string, any> = {}
     if (value.data !== undefined) {
       for (const key in value.data) {
-        editableData[EDITABLE_COLUMN_PREFIX + key] = value.data[key]
+        const column = columns.find(col => col.key === key)
+        if (column?.type === 'multiselect') {
+          editableData[EDITABLE_COLUMN_PREFIX + key] = _.compact(String(value.data[key]).split(','))
+        } else {
+          editableData[EDITABLE_COLUMN_PREFIX + key] = value.data[key]
+        }
       }
     }
     return {
@@ -142,18 +149,17 @@ export const useConvertRelationEditableColumns = (
     if (value === undefined || value === null) {
       return null
     }
-    const columnKeys = columns.map((column) => column.key)
     return value.map((item) => {
-      return convertToAdvancedManyToManyRelationValueItem(item, columnKeys)
+      return convertToAdvancedManyToManyRelationValueItem(item)
     })
   }
 
-  const convertToAdvancedManyToManyRelationValueItem = (value: ManyToManyRelationValueItem & Record<string, any>, columnKeys: string[]): AdvancedManyToManyRelationValueItem => {
+  const convertToAdvancedManyToManyRelationValueItem = (value: ManyToManyRelationValueItem & Record<string, any>): AdvancedManyToManyRelationValueItem => {
     const data: Record<string, any> = {}
     for (const columnKey of columnKeys) {
       const valueKey = EDITABLE_COLUMN_PREFIX + columnKey
       if (value[valueKey] !== undefined) {
-        data[columnKey] = value[valueKey]
+        data[columnKey] = transformColumnData(value[valueKey])
       } else {
         data[columnKey] = null
       }
@@ -171,6 +177,16 @@ export const useConvertRelationEditableColumns = (
       fieldName,
       columns: columnKeys
     }
+  }
+
+  const transformColumnData = (value: any): any => {
+    if (value === undefined) {
+      return null
+    }
+    if (Array.isArray(value)) {
+      return _.compact(value).join(',')
+    }
+    return value
   }
 
   return { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue, convertToAdvancedManyToManyRelationValue }

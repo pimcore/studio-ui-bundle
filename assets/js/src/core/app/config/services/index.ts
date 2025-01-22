@@ -38,6 +38,7 @@ import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-ty
 import { DynamicTypeGridCellTextarea } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/textarea/dynamic-type-grid-cell-text'
 import { DynamicTypeGridCellNumber } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/number/dynamic-type-grid-cell-number'
 import { DynamicTypeGridCellSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/select/dynamic-type-grid-cell-select'
+import { DynamicTypeGridCellMultiSelect } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/multi-select/dynamic-type-grid-cell-multi-select'
 import { DynamicTypeGridCellCheckbox } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
 import { DynamicTypeGridCellDate } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/date/dynamic-type-grid-cell-date'
 import { DynamicTypeGridCellTime } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/time/dynamic-type-grid-cell-time'
@@ -182,6 +183,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Text']).to(DynamicTypeGridCellT
 container.bind(serviceIds['DynamicTypes/GridCell/Textarea']).to(DynamicTypeGridCellTextarea).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Number']).to(DynamicTypeGridCellNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Select']).to(DynamicTypeGridCellSelect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/MultiSelect']).to(DynamicTypeGridCellMultiSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Checkbox']).to(DynamicTypeGridCellCheckbox).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Date']).to(DynamicTypeGridCellDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Time']).to(DynamicTypeGridCellTime).inSingletonScope()
