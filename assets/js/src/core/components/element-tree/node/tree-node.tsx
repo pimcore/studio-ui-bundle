@@ -12,7 +12,7 @@
 */
 
 import { Flex, theme, Upload, type UploadProps } from 'antd'
-import React, { type KeyboardEvent, type MouseEvent, useContext, useEffect } from 'react'
+import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type INodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
@@ -37,6 +37,7 @@ export interface TreeNodeProps {
   isRoot?: boolean
   isLoading?: boolean
   danger?: boolean
+  ref?: MutableRefObject<HTMLDivElement>
 }
 
 const defaultProps: TreeNodeProps = {
@@ -46,7 +47,7 @@ const defaultProps: TreeNodeProps = {
     type: 'name',
     value: 'folder'
   },
-  label: 'Node',
+  label: '',
   children: [],
   permissions: {
     list: false,
@@ -66,7 +67,7 @@ const defaultProps: TreeNodeProps = {
 
 const { useToken } = theme
 
-const TreeNode = ({
+const TreeNode = forwardRef(function ForwardedTreeNode ({
   id = defaultProps.id,
   internalKey = defaultProps.internalKey,
   icon = defaultProps.icon,
@@ -76,7 +77,7 @@ const TreeNode = ({
   isLoading = false,
   danger = false,
   ...props
-}: TreeNodeProps): React.JSX.Element => {
+}: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { token } = useToken()
   const { children, metaData } = props
   const { styles } = useStyles()
@@ -218,6 +219,7 @@ const TreeNode = ({
     <div
       className={ getClasses() }
       onDragOver={ onDragOver }
+      ref={ forwardRef }
     >
       <Flex
         className='tree-node__content'
@@ -254,6 +256,6 @@ const TreeNode = ({
       )}
     </div>
   )
-}
+})
 
 export { TreeNode }

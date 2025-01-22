@@ -13,14 +13,14 @@
 
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type Ref, type ReactElement } from 'react'
-import { useAssetPatchByIdMutation } from '../../asset-api-slice-enhanced'
 import { useElementDeleteMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useDataObjectPatchByIdMutation } from '../../data-object-api-slice.gen'
 
 export const withActionStates = (Component: typeof TreeNode): typeof TreeNode => {
   const ActionStates = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const originalLoadingState = props.isLoading ?? false
-    const [, { isLoading }] = useAssetPatchByIdMutation({ fixedCacheKey: `ASSET_ACTION_RENAME_ID_${props.id}` })
-    const [, { isLoading: isDeleteLoading }] = useElementDeleteMutation({ fixedCacheKey: `ASSET_ACTION_DELETE_ID_${props.id}` })
+    const [, { isLoading }] = useDataObjectPatchByIdMutation({ fixedCacheKey: `OBJECT_ACTION_RENAME_ID_${props.id}` })
+    const [, { isLoading: isDeleteLoading }] = useElementDeleteMutation({ fixedCacheKey: `OBJECT_ACTION_DELETE_ID_${props.id}` })
 
     return (
       <Component
