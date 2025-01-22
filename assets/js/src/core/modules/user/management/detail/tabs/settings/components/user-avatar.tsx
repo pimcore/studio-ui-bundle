@@ -35,17 +35,21 @@ const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
   const [userImage, setUserImage] = React.useState<any>(user?.image ?? null)
   const [userImageLoading, setUserImageLoading] = React.useState<boolean>(user?.hasImage === true && userImage === null)
 
+  const getUserImage = (): void => {
+    setUserImageLoading(true)
+
+    fetchUserImageById({ id }).then(response => {
+      setUserImage(response.data)
+      setUserImageLoading(false)
+    }).catch(error => {
+      setUserImageLoading(false)
+      console.log(error)
+    })
+  }
+
   useEffect(() => {
     if (user?.hasImage === true && userImage === null) {
-      setUserImageLoading(true)
-
-      fetchUserImageById({ id }).then(response => {
-        setUserImageLoading(false)
-        setUserImage(response.data)
-      }).catch(error => {
-        setUserImageLoading(false)
-        console.log(error)
-      })
+      getUserImage()
     }
   }, [id])
 
@@ -55,7 +59,6 @@ const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
         gap={ 'middle' }
         vertical
       >
-
         {userImageLoading
           ? (
             <Skeleton.Avatar
@@ -74,16 +77,9 @@ const UserAvatar = ({ id, ...props }: IUserAvatar): React.JSX.Element => {
 
         <div>
           <Upload
-            accept={ 'image/jpeg, image/png' }
-            customRequest={ ({ file }) => {
-              setUserImageLoading(true)
-              uploadUserAvatar({ id, file: file as File }).then(response => {
-                setUserImage(URL.createObjectURL(file as Blob))
-              }).catch(error => {
-                console.log(error)
-              }).finally(() => {
-                setUserImageLoading(false)
-              })
+            customRequest={ async ({ file }) => {
+              await uploadUserAvatar({ id, file: file as File })
+              getUserImage()
             } }
             headers={ {
               'Content-Type': 'multipart/form-data'

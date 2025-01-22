@@ -130,7 +130,7 @@ schedule.columns.actions: Delete
 schedule.upcoming: Upcoming
 schedule.all: All scheduled (upcoming & archive)
 schedule.toolbar.filters.active-switch: Active only
-schedule.toolbar.add: Add
+schedule.toolbar.new: New
 schedule.toolbar.save-scheduled-tasks: Save scheduled tasks
 schedule.version.delete: Delete version
 schedule.version.publish: Publish version
@@ -183,7 +183,7 @@ properties.label: Properties
 properties.editable-properties: Editable Properties
 properties.all-properties: All Properties
 properties.predefined-properties: Predefined Properties
-properties.add-custom-property: Add a custom property
+properties.new-custom-property: New custom property
 properties.columns.type: Type
 properties.columns.key: Key
 properties.columns.name: Name
@@ -194,7 +194,7 @@ properties.columns.actions: Actions
 properties.inherited.properties: Inherited Properties
 properties.add-custom-property.cancel: Cancel
 properties.add-custom-property.key: Key
-properties.add-custom-property.add: Add
+properties.add-custom-property.create: Create
 properties.add-custom-property.type: Type
 properties.property-already-exist.title: Property already exists
 properties.property-already-exist.error: Name is already in use, please choose a different one
@@ -228,13 +228,14 @@ tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
 add: Add
+new: New
 save: Save
 type: Type
 title: Title
 description: Description
 select: Select
 asset.asset-editor-tabs.custom-metadata.text: Custom Metadata
-asset.asset-editor-tabs.custom-metadata.add-custom-definition.add: Add custom definition
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata: New custom metadata
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
 asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Language
@@ -245,7 +246,7 @@ asset.asset-editor-tabs.custom-metadata.columns.name: Name
 asset.asset-editor-tabs.custom-metadata.columns.language: Language
 asset.asset-editor-tabs.custom-metadata.columns.value: Value
 asset.asset-editor-tabs.custom-metadata.columns.actions: Actions
-asset.asset-editor-tabs.custom-metadata.add-custom-metadata.add: Add
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create: Create
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Custom Metadata already exists
 asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name is already in use, please choose a different one
 asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Mandatory fields missing
@@ -309,7 +310,7 @@ close-unmodified: Close Unmodified
 close-all: Close All
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Download as ZIP
-element.tree.context-menu.add-assets: Add Asset(s)
+element.tree.context-menu.new-assets: New Asset(s)
 element.tree.context-menu.add-assets.upload-files: Upload Files
 element.tree.context-menu.add-assets.upload-zip: Upload Zip
 element.tree.context-menu.advanced: Advanced
@@ -325,9 +326,9 @@ element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
 element.tree.refresh: Refresh
-element.add-folder: Add Folder
-element.add-folder.label: 'Enter the name of the new item'
-element.add-folder.validation: 'Please enter a valid name'
+element.new-folder: New Folder
+element.new-folder.label: 'Enter the name of the new item'
+element.new-folder.validation: 'Please enter a valid name'
 element.rename: Rename
 element.rename.label: 'Please enter the new name'
 element.rename.validation: 'Please enter a valid name'
@@ -360,6 +361,7 @@ relations.id: ID
 relations.reference: Reference
 relations.type: Type
 relations.subtype: Subtype
+relations.classname: Class
 relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
@@ -390,8 +392,8 @@ table.paste-placeholder: Paste your data here
 empty.confirm: Are you sure you want to clear all data?
 tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
-tree.actions.add-folder: Add Folder
-tree.actions.add-user: Add User
+tree.actions.folder: Folder
+tree.actions.user: User
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings
@@ -492,6 +494,13 @@ user-management.workspaces.columns.properties: Properties
 user-management.workspaces.columns.path: Path
 user-management.workspaces.columns.id: ID
 user-management.workspaces.columns.subtype: Subtype
+user-management.add-folder.success: Folder added successfully
+user-management.remove-folder.success: Folder removed successfully
+user-management.clone-user.success: User cloned successfully
+user-management.save-user.success: User saved successfully
+user-management.add-user.success: User added successfully
+user-management.remove-user.success: User removed successfully
+user-management.upload-image.success: Image uploaded successfully
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
@@ -515,6 +524,9 @@ video.path: Path
 video.dnd-target: Drop a video here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
+reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
+reverse-object-relation.owner-class: Owner class
+reverse-object-relation.owner-field: Owner field
 link.not-set: not set
 link.edit-title: Edit Link
 link.tab.basic: Basic

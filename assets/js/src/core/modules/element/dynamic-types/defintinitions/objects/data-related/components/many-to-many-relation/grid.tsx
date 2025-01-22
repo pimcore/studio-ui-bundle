@@ -15,7 +15,7 @@ import React, { forwardRef, type MutableRefObject, type ReactElement } from 'rea
 import { isUndefined } from 'lodash'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 
 import {
   type ManyToManyRelationValue,
@@ -40,6 +40,9 @@ interface ManyToManyRelationGridProps {
   disabled?: boolean
   width: number | string | null
   height: number | string | null
+  enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  columnDefinition?: Array<ColumnDef<any>>
+  hint?: React.ReactNode | null
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -50,32 +53,38 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { download } = useDownload()
 
   const columnHelper = createColumnHelper()
-  const columns = [
-    columnHelper.accessor('id', {
-      header: t('relations.id'),
-      size: 80
-    }),
-    columnHelper.accessor('fullPath', {
-      header: t('relations.reference'),
-      meta: {
-        autoWidth: true
-      },
-      size: 200
-    }),
-    columnHelper.accessor('type', {
-      header: t('relations.type'),
-      meta: {
-        type: 'translate'
-      },
-      size: 150
-    }),
-    columnHelper.accessor('subtype', {
-      header: t('relations.subtype'),
-      meta: {
-        type: 'translate'
-      },
-      size: 150
-    }),
+  const columns = props.columnDefinition !== undefined
+    ? [...props.columnDefinition]
+    : [
+        columnHelper.accessor('id', {
+          header: t('relations.id'),
+          size: 80
+        }),
+        columnHelper.accessor('fullPath', {
+          header: t('relations.reference'),
+          meta: {
+            autoWidth: true
+          },
+          size: 200
+        }),
+        columnHelper.accessor('type', {
+          header: t('relations.type'),
+          meta: {
+            type: 'translate'
+          },
+          size: 150
+        }),
+        columnHelper.accessor('subtype', {
+          header: t('relations.subtype'),
+          meta: {
+            type: 'translate'
+          },
+          size: 150
+        })
+      ]
+
+  columns.push(
+
     columnHelper.accessor('actions', {
       header: t('actions'),
       size: 110,
@@ -89,7 +98,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             title={ t('open') }
           >
             <IconButton
-              icon={ { value: 'group' } }
+              icon={ { value: 'open-folder' } }
               onClick={ async () => {
                 const typeValue = mapToElementType(rowValue.type)
 
@@ -163,10 +172,20 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
         )
       }
     })
-  ]
+  )
 
   const getDataArray = (): ManyToManyRelationValue => {
-    return props.value ?? []
+    const result = props.value ?? []
+    return result.map((item: ManyToManyRelationValueItem) => {
+      const elementType = mapToElementType(item.type)
+      const resultRow = { ...item, type: elementType ?? '' }
+
+      if (props.enrichRowData !== undefined) {
+        return props.enrichRowData(resultRow)
+      }
+
+      return resultRow
+    })
   }
 
   return (
@@ -191,6 +210,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             data={ getDataArray() }
             resizable
           />
+          { props.hint }
         </div>
       </Content>
     </div>

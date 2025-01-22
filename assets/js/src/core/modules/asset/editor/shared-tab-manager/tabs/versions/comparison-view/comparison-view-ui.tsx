@@ -24,7 +24,7 @@ import { Flex, Space } from 'antd'
 import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
 import {
   type VersionComparisonViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 interface ComparisonViewUiProps {
   versions: AssetVersionData[]

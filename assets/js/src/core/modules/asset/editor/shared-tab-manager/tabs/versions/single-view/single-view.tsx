@@ -17,7 +17,9 @@ import { store } from '@Pimcore/app/store'
 import { hydrateVersionData, checkIsImageVersion, versionsDataToTableData } from '../details-functions'
 import { SingleViewUi } from './single-view-ui'
 import { Content } from '@Pimcore/components/content/content'
-import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-details-props'
+import {
+  type SingleVersionViewProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 export const SingleView = ({
   versions,
@@ -31,8 +33,10 @@ export const SingleView = ({
   const [isImageVersion, setIsImageVersion] = useState(false)
 
   useEffect(() => {
-    setVersionData([])
-    setVId(versionId)
+    if (versionId.id !== vId.id) {
+      setVersionData([])
+      setVId(versionId)
+    }
   }, [versionId])
 
   useEffect(() => {

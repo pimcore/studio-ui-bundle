@@ -134,12 +134,12 @@ export const PropertiesContainer = (): React.JSX.Element => {
               />
 
               <IconTextButton
-                icon={ { value: 'new-circle' } }
+                icon={ { value: 'new-something' } }
                 onClick={ () => {
                   onAddPropertyClick()
                 } }
               >
-                {t('properties.add-custom-property.add')}
+                {t('properties.add-custom-property.create')}
               </IconTextButton>
             </Space>
             )}
@@ -163,13 +163,13 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 />
 
                 <IconTextButton
-                  icon={ { value: 'new-circle' } }
-                  key={ t('properties.add-custom-property') }
+                  icon={ { value: 'new-something' } }
+                  key={ t('properties.new-custom-property') }
                   onClick={ () => {
                     setCreateManualPropertyMode(true)
                   } }
                 >
-                  {t('properties.add-custom-property')}
+                  {t('properties.new-custom-property')}
                 </IconTextButton>
               </Split>
             )}
