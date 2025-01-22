@@ -39,7 +39,8 @@ export const useValue = (
   setValue: (value: ManyToManyRelationValue | null) => void,
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
-  maxItems: number | null
+  maxItems: number | null,
+  allowMultipleAssignments?: boolean
 ): UseValueReturn => {
   const modal = useAlertModal()
   const { t } = useTranslation()
@@ -48,14 +49,18 @@ export const useValue = (
   }
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {
+    const newItems = allowMultipleAssignments !== true
+      ? items.filter(item => !itemIsInValue(item.id, item.type))
+      : items
+
     setValue([
       ...value ?? [],
-      ...items
+      ...newItems
     ])
 
     setDisplayedValue([
       ...displayedValue ?? [],
-      ...items
+      ...newItems
     ])
   }
 
@@ -103,7 +108,6 @@ export const useValue = (
   }
 
   const deleteItem = (rowIndex: number): void => {
-    console.log('deleteItem', rowIndex, value)
     const filterFunction = (item: ManyToManyRelationValueItem, _index: number): boolean => _index !== rowIndex
     setValue(value === null ? null : value.filter(filterFunction))
     setDisplayedValue(displayedValue === null ? null : displayedValue.filter(filterFunction))

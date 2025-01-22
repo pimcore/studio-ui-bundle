@@ -31,6 +31,7 @@ import {
 
 export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
+  allowMultipleAssignments: boolean
   maxItems: number | null
   pathFormatterClass: string | null
   width: number | string | null
