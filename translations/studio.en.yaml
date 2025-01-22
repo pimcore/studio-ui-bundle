@@ -96,6 +96,7 @@ version.publish: Publish
 version.published: Published
 version.schedule-for: Scheduled for
 version.note: Note
+version.note.add: Add a note
 version.own-draft: Own Draft
 version.compare-versions: Compare Versions
 version.fileName: Name

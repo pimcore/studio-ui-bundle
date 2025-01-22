@@ -14,7 +14,7 @@
 import React, { useState } from 'react'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isSet } from '@Pimcore/utils/helpers'
-import { Checkbox, Input } from 'antd'
+import { Checkbox } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
 import { type TimeLineAccordionItemType } from '@Pimcore/components/accordion-timeline/accordion-timeline'
@@ -24,6 +24,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
+import { Input } from '@Pimcore/components/input/input'
 import { useTranslation } from 'react-i18next'
 import { Box } from '@Pimcore/components/box/box'
 import { type VersionIdentifiers } from '../types/types'
@@ -34,7 +35,7 @@ interface CreateAccordionItemProps {
   comparingActive: boolean
   onClickDelete: (id: number) => void
   onClickPublish: (id: number) => Promise<void>
-  onBlurNote: (id: number, note: string) => void
+  handleUpdateNote: (id: number, note: string) => void
   selectVersion: (vId: VersionIdentifiers) => void
   setDetailedVersions: React.Dispatch<React.SetStateAction<VersionIdentifiers[]>>
 }
@@ -45,7 +46,7 @@ export const createVersionAccordionItem = ({
   comparingActive,
   onClickDelete,
   onClickPublish,
-  onBlurNote,
+  handleUpdateNote,
   selectVersion,
   setDetailedVersions
 }: CreateAccordionItemProps): TimeLineAccordionItemType => {
@@ -140,6 +141,9 @@ export const createVersionAccordionItem = ({
 
   const Component = (): React.JSX.Element => {
     const { t } = useTranslation()
+
+    const [inputValue, setInputValue] = useState(version?.note)
+
     const [deletingVersion, setDeletingVersion] = useState(false)
     const [publishingVersion, setPublishingVersion] = useState(false)
 
@@ -153,6 +157,14 @@ export const createVersionAccordionItem = ({
       setDeletingVersion(true)
       setDetailedVersions([])
       onClickDelete(version.id)
+    }
+
+    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+      setInputValue(e.target.value)
+    }
+
+    const handleBlurInput = (): void => {
+      handleUpdateNote(version.id, inputValue)
     }
 
     return (
@@ -201,11 +213,11 @@ export const createVersionAccordionItem = ({
         <div className={ 'row-margin' }>
           <span>{t('version.note')}</span>
           <Input
-            defaultValue={ version.note }
-            onBlur={ (e): void => {
-              onBlurNote(version.id, e.target.value.toString())
-            } }
-            placeholder={ 'Add a note' }
+            onBlur={ handleBlurInput }
+            onChange={ handleChangeInput }
+            onClick={ (e) => { e.stopPropagation() } }
+            placeholder={ t('version.note.add') }
+            value={ inputValue }
           />
         </div>
       </Flex>

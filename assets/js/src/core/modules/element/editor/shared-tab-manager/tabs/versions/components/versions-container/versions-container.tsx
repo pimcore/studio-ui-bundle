@@ -54,7 +54,7 @@ export const VersionsTabContainer = ({
     <VersionsView
       ComparisonViewComponent={ ComparisonViewComponent }
       SingleViewComponent={ SingleViewComponent }
-      onBlurNote={
+      handleUpdateNote={
         async (id, note): Promise<void> => {
           await updateVersion({
             id,

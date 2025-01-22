@@ -39,7 +39,7 @@ interface VersionsViewProps extends VersionDetailViewsProps {
   onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
   onClickPublish: (id: number) => Promise<void>
   onClickDelete: (id: number) => void
-  onBlurNote: (id: number, note: string) => void
+  handleUpdateNote: (id: number, note: string) => void
 }
 
 export const VersionsView = ({
@@ -47,7 +47,7 @@ export const VersionsView = ({
   onClickDelete,
   onClickPublish,
   onClickClearAll,
-  onBlurNote,
+  handleUpdateNote,
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
@@ -123,7 +123,7 @@ export const VersionsView = ({
       comparingActive,
       onClickDelete,
       onClickPublish,
-      onBlurNote,
+      handleUpdateNote,
       selectVersion,
       setDetailedVersions
     })
