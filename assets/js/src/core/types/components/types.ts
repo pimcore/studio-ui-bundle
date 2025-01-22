@@ -11,9 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
+import type {ColumnDef, RowSelectionState, SortingState, TableOptions} from '@tanstack/react-table'
 import {type GridCellReference, GridContextMenuProps} from '@Pimcore/components/grid/grid'
-import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import React, {ElementType} from "react";
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
