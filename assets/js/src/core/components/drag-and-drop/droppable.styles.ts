@@ -32,7 +32,6 @@ export const useStyle = createStyles(({ token, css }) => {
       }
     `,
     outline: css`
-            
       & .dnd--drag-valid {
         outline: 1px dashed ${token.colorInfoBorderHover} !important;
       }
@@ -42,9 +41,9 @@ export const useStyle = createStyles(({ token, css }) => {
       }
     `,
     round: css`
-        & .dnd--drag-active, & .dnd--drag-valid, & .dnd--drag-error {
-          border-radius: ${token.borderRadius}px;
-        }
+      & .dnd--drag-active, & .dnd--drag-valid, & .dnd--drag-error {
+        border-radius: ${token.borderRadius}px;
+      }
     `
   }
 })
