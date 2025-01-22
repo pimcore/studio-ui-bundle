@@ -12,8 +12,9 @@
 */
 
 import type { ColumnDef, RowSelectionState, SortingState, TableOptions } from '@tanstack/react-table'
-import { type GridCellReference } from '@Pimcore/components/grid/grid'
-import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { type GridCellReference, type GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { type ElementType } from 'react'
+import type React from 'react'
 
 type GapStringType = 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
 export interface GapRowColGroupType { x: GapStringType | number, y: GapStringType | number }
@@ -26,6 +27,16 @@ export interface OnUpdateCellDataEvent {
   value: any
   rowData: any
 }
+
+export interface ListGridContextMenuProps {
+  row: {
+    id: GridContextMenuProps['id']
+    [x: string]: any
+  }
+  children: React.ReactNode
+}
+
+export type ListGridContextMenuComponents = ElementType<ListGridContextMenuProps>
 
 export interface GridProps {
   data: any[]
@@ -48,5 +59,5 @@ export interface GridProps {
   hideColumnHeaders?: boolean
   highlightActiveCell?: boolean
   onActiveCellChange?: (activeCell?: GridCellReference) => void
-  contextMenuItems?: Array<(...args: any[]) => ItemType | undefined>
+  contextMenu?: ListGridContextMenuComponents
 }
