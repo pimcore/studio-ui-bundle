@@ -26,9 +26,6 @@ import {
   type AdvancedManyToManyRelationValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/types/advanced-many-to-many-relation'
 import {
-  convertToManyToManyRelationValue
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/utils/advanced-many-to-many-relation-converter'
-import {
   useConvertRelationEditableColumns
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/hooks/use-convert-relation-editable-columns'
 
@@ -60,7 +57,7 @@ export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToMan
 }
 
 export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObjectRelationProps): React.JSX.Element => {
-  const { columnDefinition, onUpdateCellData } = useConvertRelationEditableColumns(props.columns ?? [], props.value, props.onChange)
+  const { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue } = useConvertRelationEditableColumns(props.columns ?? [], props.value, props.onChange)
 
   useEffect(() => {
   }, [props.value])

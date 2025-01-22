@@ -17,14 +17,16 @@ import { type ColumnDef, type ColumnMeta, createColumnHelper } from '@tanstack/r
 import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
-import { type AdvancedManyToManyRelationValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/types/advanced-many-to-many-relation'
+import { type AdvancedManyToManyRelationValue, type AdvancedManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/types/advanced-many-to-many-relation'
+import { type ManyToManyRelationValue, type ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 
 export interface UseConvertRelationEditableColumnsResult {
   columnDefinition: Array<ColumnDef<any>>
   onUpdateCellData: (event: OnUpdateCellDataEvent) => void
+  convertToManyToManyRelationValue: (value?: AdvancedManyToManyRelationValue | null) => ManyToManyRelationValue | null
 }
 
-export const EDITABLE_COLUMN_PREFIX = 'edit::'
+const EDITABLE_COLUMN_PREFIX = 'edit::'
 
 const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
   if (type === 'bool') {
@@ -109,5 +111,31 @@ export const useConvertRelationEditableColumns = (
     onChange?.(newValue)
   }
 
-  return { columnDefinition, onUpdateCellData }
+  const convertToManyToManyRelationValue = (value?: AdvancedManyToManyRelationValue | null): ManyToManyRelationValue | null => {
+    if (value === undefined || value === null) {
+      return null
+    }
+    return value.map((item) => {
+      return convertToManyToManyRelationValueItem(item)
+    })
+  }
+
+  const convertToManyToManyRelationValueItem = (value: AdvancedManyToManyRelationValueItem): ManyToManyRelationValueItem & Record<string, any> => {
+    const editableData: Record<string, any> = {}
+    if (value.data !== undefined) {
+      for (const key in value.data) {
+        editableData[EDITABLE_COLUMN_PREFIX + key] = value.data[key]
+      }
+    }
+    return {
+      id: value.element.id,
+      type: value.element.type,
+      subtype: value.element.subtype,
+      isPublished: value.element.isPublished,
+      fullPath: value.element.fullPath,
+      ...editableData
+    }
+  }
+
+  return { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue }
 }
