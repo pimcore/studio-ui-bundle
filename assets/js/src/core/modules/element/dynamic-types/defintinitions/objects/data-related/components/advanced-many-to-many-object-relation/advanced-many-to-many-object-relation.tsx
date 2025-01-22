@@ -65,7 +65,7 @@ export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObject
   useEffect(() => {
   }, [props.value])
 
-  if (_.isEmpty(props.allowedClassId) || _.isEmpty(props.allowedClassId)) {
+  if (_.isEmpty(props.allowedClassId)) {
     return (
       <Alert
         message="Allowed class definition is missing in field configuration."
