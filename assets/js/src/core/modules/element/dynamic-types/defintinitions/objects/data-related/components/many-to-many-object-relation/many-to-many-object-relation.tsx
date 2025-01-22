@@ -50,6 +50,7 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   onChange?: (value?: ManyToManyRelationValue | null) => void
   columnDefinition?: Array<ColumnDef<any>>
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  hint?: React.ReactNode | null
 }
 
 export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {

@@ -29,6 +29,7 @@ import { type Element, getElementKey } from '@Pimcore/modules/element/element-he
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -45,6 +46,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
+  const { refreshElement } = useElementRefresh(elementType)
   const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
@@ -146,6 +148,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       }))
     } else if (parentId !== undefined) {
       refreshTree(parentId)
+      refreshElement(parentId)
     }
 
     onFinish?.()

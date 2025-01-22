@@ -26,10 +26,12 @@ export interface UseAlertModalResponse {
   info: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
   error: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
   warn: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
+  success: (props: ContentAware) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
 export const useAlertModal = (): UseAlertModalResponse => {
   const { modal } = App.useApp()
+
   const { t } = useTranslation()
 
   return useMemo<UseAlertModalResponse>(
@@ -49,6 +51,12 @@ export const useAlertModal = (): UseAlertModalResponse => {
       warn: ({ content }) => (
         modal.warning({
           title: t('warning'),
+          content
+        })
+      ),
+      success: ({ content }) => (
+        modal.success({
+          title: t('success'),
           content
         })
       )
