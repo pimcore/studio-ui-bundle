@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
 import {
@@ -161,7 +162,7 @@ export const VersionsView = ({
                       justify='space-between'
                     >
                       <Button
-                        className={ isComparingActive ? 'compare-button' : '' }
+                        className={ cn({ [styles.compareButton]: isComparingActive }) }
                         key={ t('version.compare-versions') }
                         onClick={ handleClickCompareVersion }
                       >
