@@ -51,7 +51,6 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
               setValue(newValue)
             } }
         title={ t(disabled !== true ? 'image.dnd-target' : 'empty') }
-        uploadIcon={ disabled !== true }
         width={ 200 }
       />
     </Droppable>
