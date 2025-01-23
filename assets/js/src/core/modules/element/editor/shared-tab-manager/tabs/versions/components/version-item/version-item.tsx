@@ -28,6 +28,7 @@ import {
   useVersionDeleteByIdMutation,
   useVersionPublishByIdMutation, useVersionUpdateByIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyles } from './version-item.style'
 
 export const VersionItem = ({ version, setDetailedVersions }: { version: Version, setDetailedVersions: any }): React.JSX.Element => {
@@ -36,9 +37,9 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const [deletingVersion, setDeletingVersion] = useState(false)
   const [publishingVersion, setPublishingVersion] = useState(false)
 
-  const [updateVersion] = useVersionUpdateByIdMutation()
-  const [publishVersion] = useVersionPublishByIdMutation()
-  const [deleteVersion] = useVersionDeleteByIdMutation()
+  const [updateVersion, { isError: isUpdateVersionError, error: updateVersionError }] = useVersionUpdateByIdMutation()
+  const [publishVersion, { isError: isPublishVersionError, error: publishVersionError }] = useVersionPublishByIdMutation()
+  const [deleteVersion, { isError: isDeleteVersionError, error: deleteVersionError }] = useVersionDeleteByIdMutation()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -57,15 +58,24 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
 
     await publishVersion({ id: version.id })
 
+    if (isPublishVersionError) {
+      trackError(new ApiError(publishVersionError))
+    }
+
     setPublishingVersion(false)
   }
 
   const handleDeleteVersion = async (): Promise<void> => {
     setDeletingVersion(true)
+
     setDetailedVersions([])
     await deleteVersion({
       id: version.id
     })
+
+    if (isDeleteVersionError) {
+      trackError(new ApiError(deleteVersionError))
+    }
   }
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -79,6 +89,10 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
         note: inputValue
       }
     })
+
+    if (isUpdateVersionError) {
+      trackError(new ApiError(updateVersionError))
+    }
   }
 
   return (
