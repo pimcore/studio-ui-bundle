@@ -160,6 +160,9 @@ const defaultTheme = {
       Neutral: {
         Fill: {
           colorFill: 'rgba(215, 199, 236, 0.60)'
+        },
+        Icon: {
+          colorIcon: 'rgba(0, 0, 0, 0.6)'
         }
       }
     },

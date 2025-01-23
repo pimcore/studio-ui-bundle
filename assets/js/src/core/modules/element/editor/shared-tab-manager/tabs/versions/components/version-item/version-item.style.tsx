@@ -25,6 +25,21 @@ export const useStyles = createStyles(({ token, css }) => {
       font-weight: 400;
       font-size: 12px;
       line-height: 20px;
+    `,
+
+    dateContainer: css`
+      display: flex;
+      align-items: center;
+      margin-top: 2px;
+      gap: 4px;
+    `,
+
+    dateIcon: css`
+      color: ${token.Colors.Neutral.Icon.colorIcon};
+    `,
+
+    dateLabel: css`
+      color: ${token.colorTextDescription};
     `
   }
 })

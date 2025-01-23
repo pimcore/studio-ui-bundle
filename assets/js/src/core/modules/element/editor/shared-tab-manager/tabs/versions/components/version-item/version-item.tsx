@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Tag } from '@Pimcore/components/tag/tag'
+import { Text } from '@Pimcore/components/text/text'
 import { Space } from '@Pimcore/components/space/space'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -93,7 +94,6 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
         <Space size='mini'>
           {!published && (
             <IconTextButton
-              className={ 'btn-publish' }
               disabled={ publishingVersion || deletingVersion }
               icon={ { value: 'published' } }
               loading={ publishingVersion }
@@ -114,16 +114,21 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
       </Flex>
       {
         !isNil(scheduledDate) && (
-        <div className={ 'row-margin' }>
+        <div>
           <div>{t('version.schedule-for')}</div>
-          <div className={ 'date-container' }>
-            <Icon value="calendar" />
-            <span className={ 'scheduled-date' }>{scheduledDate}</span>
+          <div className={ styles.dateContainer }>
+            <Icon
+              className={ styles.dateIcon }
+              value="calendar"
+            />
+            <Text className={ styles.dateLabel }>
+              {scheduledDate}
+            </Text>
           </div>
         </div>
         )
       }
-      <div className={ 'row-margin' }>
+      <div>
         <span>{t('version.note')}</span>
         <Input
           onBlur={ handleUpdateNote }
