@@ -26,7 +26,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
-import { createImageThumbnailUrl } from './utils/custom-image-thumbnail'
+import { createImageThumbnailUrl, type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
 
 interface ImagePreviewProps {
   src?: string
@@ -39,9 +39,10 @@ interface ImagePreviewProps {
   bordered?: boolean
   dropdownItems?: DropdownProps['menu']['items']
   onHotspotsDataButtonClick?: () => void
+  thumbnailSettings?: ImageThumbnailSettings
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false, onHotspotsDataButtonClick }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false, onHotspotsDataButtonClick, thumbnailSettings }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const [key, setKey] = React.useState(0)
   const [thumbnailDimensions, setThumbnailDimensions] = React.useState({ width: 0, height: 0 })
   const { getStateClasses } = useDroppable()
@@ -60,11 +61,16 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
       return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&height=${height}&frame=true&aspectRatio=true`
     }
 
-    return createImageThumbnailUrl(assetId!, {
+    const defaultSettings: ImageThumbnailSettings = {
       width,
       height,
       mimeType: 'JPEG',
       frame: true
+    }
+
+    return createImageThumbnailUrl(assetId!, {
+      ...defaultSettings,
+      ...thumbnailSettings
     })
   }
 

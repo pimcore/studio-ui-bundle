@@ -84,16 +84,16 @@ export const createImageThumbnailUrl = (assetId: number, settings: ImageThumbnai
     params.append('cropPercent', cropPercent.toString())
   }
   if (cropWidth !== undefined) {
-    params.append('cropWidth', cropWidth.toString())
+    params.append('cropWidth', Math.round(cropWidth).toString())
   }
   if (cropHeight !== undefined) {
-    params.append('cropHeight', cropHeight.toString())
+    params.append('cropHeight', Math.round(cropHeight).toString())
   }
   if (cropTop !== undefined) {
-    params.append('cropTop', cropTop.toString())
+    params.append('cropTop', Math.round(cropTop).toString())
   }
   if (cropLeft !== undefined) {
-    params.append('cropLeft', cropLeft.toString())
+    params.append('cropLeft', Math.round(cropLeft).toString())
   }
 
   return `${getPrefix()}/assets/${assetId}/image/stream/custom?${params.toString()}`
