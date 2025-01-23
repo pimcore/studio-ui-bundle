@@ -142,7 +142,6 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                 dndIcon={ props.disabled !== true }
                 height={ height }
                 title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
-                uploadIcon={ props.disabled !== true }
                 width={ width }
               />
               ) }
