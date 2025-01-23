@@ -37,17 +37,11 @@ import { type VersionIdentifiers } from './types/types'
 interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
   onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
-  onClickPublish: (id: number) => Promise<void>
-  onClickDelete: (id: number) => void
-  handleUpdateNote: (id: number, note: string) => void
 }
 
 export const VersionsView = ({
   versions,
-  onClickDelete,
-  onClickPublish,
   onClickClearAll,
-  handleUpdateNote,
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {

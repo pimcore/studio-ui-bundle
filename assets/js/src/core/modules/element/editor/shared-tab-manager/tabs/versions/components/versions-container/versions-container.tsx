@@ -14,10 +14,7 @@
 import React from 'react'
 import {
   useVersionCleanupForElementByTypeAndIdMutation,
-  useVersionDeleteByIdMutation,
-  useVersionGetCollectionForElementByTypeAndIdQuery,
-  useVersionPublishByIdMutation,
-  useVersionUpdateByIdMutation
+  useVersionGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { VersionsView } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
 import { Content } from '@Pimcore/components/content/content'
@@ -28,16 +25,10 @@ import {
 
 interface VersionTabContainerProps extends VersionDetailViewsProps {}
 
-export const VersionsTabContainer = ({
-  SingleViewComponent,
-  ComparisonViewComponent
-}: VersionTabContainerProps): React.JSX.Element => {
+export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewComponent }: VersionTabContainerProps): React.JSX.Element => {
   const { id, elementType } = useElementContext()
 
-  const [deleteVersion] = useVersionDeleteByIdMutation()
-  const [publishVersion] = useVersionPublishByIdMutation()
   const [cleanupVersion] = useVersionCleanupForElementByTypeAndIdMutation()
-  const [updateVersion] = useVersionUpdateByIdMutation()
 
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
     id,
@@ -54,16 +45,6 @@ export const VersionsTabContainer = ({
     <VersionsView
       ComparisonViewComponent={ ComparisonViewComponent }
       SingleViewComponent={ SingleViewComponent }
-      handleUpdateNote={
-        async (id, note): Promise<void> => {
-          await updateVersion({
-            id,
-            updateVersion: {
-              note
-            }
-          })
-        }
-      }
       onClickClearAll={ async (
         elementType,
         id
@@ -73,20 +54,6 @@ export const VersionsTabContainer = ({
           id
         })
       } }
-      onClickDelete={
-        async (id: number): Promise<void> => {
-          await deleteVersion({
-            id
-          })
-        }
-      }
-      onClickPublish={
-        async (id: number): Promise<void> => {
-          await publishVersion({
-            id
-          })
-        }
-      }
       versions={ data!.items }
     />
   )
