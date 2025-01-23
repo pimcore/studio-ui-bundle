@@ -33,13 +33,12 @@ export interface UseRenameHookReturn {
   renameMutation: (parentId: number, value: string) => Promise<void>
 }
 
-export const useRename = (elementType: ElementType): UseRenameHookReturn => {
+export const useRename = (elementType: ElementType, cacheKey?: string): UseRenameHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
-  const { elementPatch } = useElementApi(elementType)
-  const { getElementById } = useElementApi(elementType)
+  const { elementPatch, getElementById } = useElementApi(elementType, cacheKey)
 
   const rename = (
     id: number,

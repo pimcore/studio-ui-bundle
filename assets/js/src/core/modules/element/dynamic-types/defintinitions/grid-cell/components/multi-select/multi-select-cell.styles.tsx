@@ -15,7 +15,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css }) => {
   return {
-    'select-cell': css`
+    'multi-select-cell': css`
       padding: 4px;
 
       .ant-select, .studio-select {

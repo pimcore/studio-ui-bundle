@@ -33,6 +33,7 @@ import {
   type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { type VersionIdentifiers } from './types/types'
+import { Text } from '@Pimcore/components/text/text'
 
 interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
@@ -185,8 +186,11 @@ export const VersionsView = ({
         rightItem={ {
           size: 75,
           children: (
-            <Content padded>
-              <Flex justify='center' >
+            <Content
+              centered={ isEmptyDetailedVersionsList }
+              padded
+            >
+              <Flex align="center">
                 {!isEmptyDetailedVersionsList && comparingActive && (
                   <ComparisonViewComponent versionIds={ detailedVersions } />
                 )}
@@ -197,6 +201,12 @@ export const VersionsView = ({
                     versionId={ detailedVersions[0] }
                     versions={ versions }
                   />
+                )}
+
+                {isEmptyDetailedVersionsList && (
+                  <Text className={ styles.notificationMessage }>
+                      {t('version.preview-notification')}
+                  </Text>
                 )}
               </Flex>
             </Content>
