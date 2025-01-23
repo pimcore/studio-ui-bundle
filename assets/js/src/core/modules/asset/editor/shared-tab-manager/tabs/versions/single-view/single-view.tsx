@@ -82,7 +82,12 @@ export const SingleView = ({
   }
 
   if (versionData.length === 0) {
-    return <Content loading />
+    return (
+      <Content
+        fullPage
+        loading
+      />
+    )
   }
 
   return (
