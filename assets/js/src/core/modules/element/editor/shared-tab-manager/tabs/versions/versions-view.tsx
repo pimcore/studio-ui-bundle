@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
 import { Button } from '@Pimcore/components/button/button'
 import {
+  useVersionCleanupForElementByTypeAndIdMutation,
   type Version,
   type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
@@ -37,36 +38,36 @@ import { Text } from '@Pimcore/components/text/text'
 
 interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
-  onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
 }
 
 export const VersionsView = ({
   versions,
-  onClickClearAll,
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const { styles } = useStyles()
-
   const [comparingActive, setComparingActive] = useState(false)
   const [clearingAll, setClearingAll] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 
+  const [cleanupVersion] = useVersionCleanupForElementByTypeAndIdMutation()
+
   const { renderModal: RenderModal, showModal, handleOk } = useModal({ type: 'warn' })
+
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
   useEffect(() => {
     setClearingAll(false)
   }, [versions])
 
-  const clearVersions = async (): Promise<void> => {
+  const handleClearVersions = async (): Promise<void> => {
     handleOk()
     setClearingAll(true)
 
-    await onClickClearAll(
-      versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
-      versions[0].cid
-    )
+    await cleanupVersion({
+      elementType: versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
+      id: versions[0].cid
+    })
   }
 
   const handleClickCompareVersion = (): void => {
@@ -96,13 +97,17 @@ export const VersionsView = ({
       footer={
         <ModalFooter>
           <Button
-            onClick={ clearVersions }
+            onClick={ handleClearVersions }
             type={ 'primary' }
-          >{t('yes')}</Button>
+          >
+            {t('yes')}
+          </Button>
           <Button
             onClick={ handleOk }
             type={ 'default' }
-          >{t('no')}</Button>
+          >
+            {t('no')}
+          </Button>
         </ModalFooter>
           }
       title={ t('version.clear-unpublished-versions') }

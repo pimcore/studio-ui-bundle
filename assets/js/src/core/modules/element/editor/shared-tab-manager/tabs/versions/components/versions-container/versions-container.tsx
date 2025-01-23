@@ -13,7 +13,6 @@
 
 import React from 'react'
 import {
-  useVersionCleanupForElementByTypeAndIdMutation,
   useVersionGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { VersionsView } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view'
@@ -27,8 +26,6 @@ interface VersionTabContainerProps extends VersionDetailViewsProps {}
 
 export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewComponent }: VersionTabContainerProps): React.JSX.Element => {
   const { id, elementType } = useElementContext()
-
-  const [cleanupVersion] = useVersionCleanupForElementByTypeAndIdMutation()
 
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
     id,
@@ -45,15 +42,6 @@ export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewCompon
     <VersionsView
       ComparisonViewComponent={ ComparisonViewComponent }
       SingleViewComponent={ SingleViewComponent }
-      onClickClearAll={ async (
-        elementType,
-        id
-      ): Promise<void> => {
-        await cleanupVersion({
-          elementType,
-          id
-        })
-      } }
       versions={ data!.items }
     />
   )
