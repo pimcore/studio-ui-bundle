@@ -41,13 +41,12 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const [deleteVersion] = useVersionDeleteByIdMutation()
 
   const published = version.published ?? false
-  const scheduledDate = isNil(version.scheduled)
-    ? formatDateTime({
+  const scheduledDate = !isNil(version.scheduled) &&
+    formatDateTime({
       timestamp: version.scheduled!,
       dateStyle: 'short',
       timeStyle: 'short'
     })
-    : undefined
 
   const handlePublishVersion = async (): Promise<void> => {
     setPublishingVersion(true)
@@ -111,7 +110,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
         </Space>
       </Flex>
       {
-        isNil(scheduledDate) && (
+        !isNil(scheduledDate) && (
         <div className={ 'row-margin' }>
           <div>{t('version.schedule-for')}</div>
           <div className={ 'date-container' }>
