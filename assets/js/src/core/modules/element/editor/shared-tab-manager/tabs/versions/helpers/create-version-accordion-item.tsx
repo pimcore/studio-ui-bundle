@@ -28,7 +28,7 @@ import { type VersionIdentifiers } from '../types/types'
 interface CreateAccordionItemProps {
   version: Version
   detailedVersions: VersionIdentifiers[]
-  comparingActive: boolean
+  isComparingActive: boolean
   selectVersion: (vId: VersionIdentifiers) => void
   setDetailedVersions: React.Dispatch<React.SetStateAction<VersionIdentifiers[]>>
 }
@@ -36,14 +36,13 @@ interface CreateAccordionItemProps {
 export const createVersionAccordionItem = ({
   version,
   detailedVersions,
-  comparingActive,
+  isComparingActive,
   selectVersion,
   setDetailedVersions
 }: CreateAccordionItemProps): TimeLineAccordionItemType => {
   const vId = { id: version.id, count: version.versionCount }
-  const selected = detailedVersions.some((v => v.id === version.id))
 
-  const selectable = comparingActive
+  const selected = detailedVersions.some((v => v.id === version.id))
   const published = version.published ?? false
 
   const themeBySelection = selected ? 'theme-primary' : 'theme-default'
@@ -61,7 +60,7 @@ export const createVersionAccordionItem = ({
   }
 
   const handleClick = (): void => {
-    selectable ? handleComparisonAction() : handleDetailAction()
+    isComparingActive ? handleComparisonAction() : handleDetailAction()
   }
 
   const Title = (): React.JSX.Element => {
@@ -69,7 +68,7 @@ export const createVersionAccordionItem = ({
 
     return (
       <div>
-        {selectable && (
+        {isComparingActive && (
           <Box
             inline
             padding={ { right: 'extra-small' } }

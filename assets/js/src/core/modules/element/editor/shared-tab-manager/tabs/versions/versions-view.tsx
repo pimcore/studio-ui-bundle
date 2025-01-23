@@ -45,7 +45,7 @@ export const VersionsView = ({
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
-  const [comparingActive, setComparingActive] = useState(false)
+  const [isComparingActive, setIsComparingActive] = useState(false)
   const [clearingAll, setClearingAll] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 
@@ -72,7 +72,7 @@ export const VersionsView = ({
 
   const handleClickCompareVersion = (): void => {
     setDetailedVersions([])
-    setComparingActive(!comparingActive)
+    setIsComparingActive(!isComparingActive)
   }
 
   const selectVersion = (vId: VersionIdentifiers): void => {
@@ -120,7 +120,7 @@ export const VersionsView = ({
     createVersionAccordionItem({
       version,
       detailedVersions,
-      comparingActive,
+      isComparingActive,
       selectVersion,
       setDetailedVersions
     })
@@ -161,10 +161,12 @@ export const VersionsView = ({
                       justify='space-between'
                     >
                       <Button
-                        className={ comparingActive ? 'compare-button' : '' }
+                        className={ isComparingActive ? 'compare-button' : '' }
                         key={ t('version.compare-versions') }
                         onClick={ handleClickCompareVersion }
-                      >{t('version.compare-versions')}</Button>
+                      >
+                        {t('version.compare-versions')}
+                      </Button>
 
                       <IconTextButton
                         icon={ { value: 'trash' } }
@@ -196,11 +198,11 @@ export const VersionsView = ({
               padded
             >
               <Flex align="center">
-                {!isEmptyDetailedVersionsList && comparingActive && (
+                {!isEmptyDetailedVersionsList && isComparingActive && (
                   <ComparisonViewComponent versionIds={ detailedVersions } />
                 )}
 
-                {!isEmptyDetailedVersionsList && !comparingActive && (
+                {!isEmptyDetailedVersionsList && !isComparingActive && (
                   <SingleViewComponent
                     setDetailedVersions={ setDetailedVersions }
                     versionId={ detailedVersions[0] }
