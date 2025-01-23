@@ -38,7 +38,6 @@ export interface AdvancedManyToManyRelationClassDefinitionProps {
   pathFormatterClass: string | null
   width: number | string | null
   height: number | string | null
-  allowedClassId: string | null
   columns?: RelationColumnDefinition[] | null
   name: string[]
 }
@@ -106,7 +105,6 @@ export const AdvancedManyToManyRelation = (props: AdvancedManyToManyRelationProp
   return (
     <ManyToManyRelation
       { ...props }
-      allowedClasses={ [String(props.allowedClassId)] }
       columnDefinition={ addNotEditableColumns(columnDefinition) }
       dataObjectsAllowed
       onChange={ onChange }
