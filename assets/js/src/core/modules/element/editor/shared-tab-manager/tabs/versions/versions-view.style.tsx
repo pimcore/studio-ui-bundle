@@ -57,18 +57,6 @@ export const useStyles = createStyles(({ token, css }) => {
         right: 3px;
         bottom: 1px;
       }
-
-      .id-tag {
-        width: 56px;
-        height: 22px;
-
-        display: inline-grid;
-        justify-content: center;
-
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-      }
     `,
 
     notificationMessage: css`

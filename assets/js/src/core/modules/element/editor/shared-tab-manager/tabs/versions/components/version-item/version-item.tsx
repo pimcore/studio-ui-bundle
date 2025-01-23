@@ -27,10 +27,9 @@ import {
   useVersionDeleteByIdMutation,
   useVersionPublishByIdMutation, useVersionUpdateByIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import { useStyles } from './version-item.style'
 
 export const VersionItem = ({ version, setDetailedVersions }: { version: Version, setDetailedVersions: any }): React.JSX.Element => {
-  const { t } = useTranslation()
-
   const [inputValue, setInputValue] = useState(version?.note)
 
   const [deletingVersion, setDeletingVersion] = useState(false)
@@ -40,13 +39,17 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const [publishVersion] = useVersionPublishByIdMutation()
   const [deleteVersion] = useVersionDeleteByIdMutation()
 
+  const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const published = version.published ?? false
-  const scheduledDate = !isNil(version.scheduled) &&
-    formatDateTime({
+  const scheduledDate = !isNil(version.scheduled)
+    ? formatDateTime({
       timestamp: version.scheduled!,
       dateStyle: 'short',
       timeStyle: 'short'
     })
+    : undefined
 
   const handlePublishVersion = async (): Promise<void> => {
     setPublishingVersion(true)
@@ -86,7 +89,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
         align='top'
         justify='space-between'
       >
-        <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
+        <Tag className={ styles.versionTag }>ID: {version.id}</Tag>
         <Space size='mini'>
           {!published && (
             <IconTextButton
@@ -101,7 +104,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
           )}
           <IconButton
             aria-label={ t('aria.version.delete') }
-            disabled={ publishingVersion }
+            disabled={ publishingVersion || deletingVersion }
             icon={ { value: 'trash' } }
             loading={ deletingVersion }
             onClick={ handleDeleteVersion }
