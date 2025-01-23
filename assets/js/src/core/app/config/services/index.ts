@@ -119,6 +119,7 @@ import { DynamicTypeObjectDataGeoPolyLine } from '@Pimcore/modules/element/dynam
 import { DynamicTypeObjectDataManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-one-relation'
 import { DynamicTypeObjectDataManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-relation'
 import { DynamicTypeObjectDataManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-many-to-many-object-relation'
+import { DynamicTypeObjectDataAdvancedManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-relation'
 import { DynamicTypeObjectDataAdvancedManyToManyObjectRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-advanced-many-to-many-object-relation'
 import { DynamicTypeObjectDataReverseObjectRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-reverse-object-relation'
 import { DynamicTypeObjectDataStructuredTable } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-structured-table'
@@ -277,6 +278,7 @@ container.bind(serviceIds['DynamicTypes/ObjectData/GeoPolyLine']).to(DynamicType
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToOneRelation']).to(DynamicTypeObjectDataManyToOneRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToManyRelation']).to(DynamicTypeObjectDataManyToManyRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ManyToManyObjectRelation']).to(DynamicTypeObjectDataManyToManyObjectRelation).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/ObjectData/AdvancedManyToManyRelation']).to(DynamicTypeObjectDataAdvancedManyToManyRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/AdvancedManyToManyObjectRelation']).to(DynamicTypeObjectDataAdvancedManyToManyObjectRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/ReverseObjectRelation']).to(DynamicTypeObjectDataReverseObjectRelation).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/ObjectData/Table']).to(DynamicTypeObjectDataTable).inSingletonScope()
