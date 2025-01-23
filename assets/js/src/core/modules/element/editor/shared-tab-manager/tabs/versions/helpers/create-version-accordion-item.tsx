@@ -13,8 +13,8 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { isSet } from '@Pimcore/utils/helpers'
 import { Checkbox } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
@@ -98,7 +98,7 @@ export const createVersionAccordionItem = ({
     return (
       <div>
         <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
-        {isSet(version.autosave) && version.autosave && <Icon value="auto-save" />}
+        {isNil(version.autosave) && version.autosave && <Icon value="auto-save" />}
       </div>
     )
   }

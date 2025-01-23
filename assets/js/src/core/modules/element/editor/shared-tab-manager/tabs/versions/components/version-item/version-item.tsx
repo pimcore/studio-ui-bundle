@@ -13,12 +13,12 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Space } from '@Pimcore/components/space/space'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { isSet } from '@Pimcore/utils/helpers'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Input } from '@Pimcore/components/input/input'
 import { type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
@@ -41,7 +41,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const [deleteVersion] = useVersionDeleteByIdMutation()
 
   const published = version.published ?? false
-  const scheduledDate = isSet(version.scheduled)
+  const scheduledDate = isNil(version.scheduled)
     ? formatDateTime({
       timestamp: version.scheduled!,
       dateStyle: 'short',
@@ -111,7 +111,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
         </Space>
       </Flex>
       {
-        isSet(scheduledDate) && (
+        isNil(scheduledDate) && (
         <div className={ 'row-margin' }>
           <div>{t('version.schedule-for')}</div>
           <div className={ 'date-container' }>
