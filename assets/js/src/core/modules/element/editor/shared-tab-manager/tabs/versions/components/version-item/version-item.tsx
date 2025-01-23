@@ -36,13 +36,11 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const [deletingVersion, setDeletingVersion] = useState(false)
   const [publishingVersion, setPublishingVersion] = useState(false)
 
-  // duplicate logic
-  const published = version.published ?? false
-
   const [updateVersion] = useVersionUpdateByIdMutation()
   const [publishVersion] = useVersionPublishByIdMutation()
   const [deleteVersion] = useVersionDeleteByIdMutation()
 
+  const published = version.published ?? false
   const scheduledDate = isSet(version.scheduled)
     ? formatDateTime({
       timestamp: version.scheduled!,
