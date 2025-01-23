@@ -71,6 +71,7 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
         assetId={ assetId }
         height={ height }
         onHotspotsDataButtonClick={ hasHotspotData() ? () => { setMarkerModalOpen(true) } : undefined }
+        thumbnailSettings={ value.crop ?? undefined }
         width={ width }
       />
 
