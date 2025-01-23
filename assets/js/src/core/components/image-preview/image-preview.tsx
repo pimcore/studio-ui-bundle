@@ -26,6 +26,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
+import { createImageThumbnailUrl } from './utils/custom-image-thumbnail'
 
 interface ImagePreviewProps {
   src?: string
@@ -59,7 +60,12 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
       return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&height=${height}&frame=true&aspectRatio=true`
     }
 
-    return `${getPrefix()}/assets/${assetId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&frame=true`
+    return createImageThumbnailUrl(assetId!, {
+      width,
+      height,
+      mimeType: 'JPEG',
+      frame: true
+    })
   }
 
   const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
