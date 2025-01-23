@@ -68,15 +68,13 @@ export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): Reac
 
   return (
     <>
-      {('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined && asset.imageThumbnailPath !== null) && (
-        <PreviewCard
-          dropdownItems={ dropdownItems }
-          imgSrc={ asset.imageThumbnailPath }
-          key={ asset.id }
-          name={ asset.filename! }
-          onClick={ onClickCard }
-        />
-      )}
+      <PreviewCard
+        dropdownItems={ dropdownItems }
+        imgSrc={ 'imageThumbnailPath' in asset ? asset.imageThumbnailPath : asset.icon }
+        key={ asset.id }
+        name={ asset.filename! }
+        onClick={ onClickCard }
+      />
     </>
   )
 }

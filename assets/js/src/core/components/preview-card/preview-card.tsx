@@ -18,6 +18,7 @@ import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
 import { Dropdown, type DropdownProps } from '../dropdown/dropdown'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
+import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export enum SizeTypes {
   SMALL = 'small',
@@ -27,7 +28,7 @@ export enum SizeTypes {
 interface PreviewCardProps {
   name: string
   dropdownItems: DropdownProps['menu']['items']
-  imgSrc?: string
+  imgSrc?: string | ElementIcon
   size?: SizeTypes
   onClick?: (e) => void
 }
@@ -55,16 +56,33 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
     setSelected(!selected)
   }
 
+  const renderPreview = (props: PreviewCardProps): React.JSX.Element => {
+    if (typeof props.imgSrc === 'string') {
+      return (
+        <PimcoreImage
+          alt={ props.name }
+          className={ classImg }
+          src={ props.imgSrc }
+        />
+      )
+    } else if (typeof props.imgSrc === 'object') {
+      return (
+        <Icon
+          { ...props.imgSrc }
+          options={ { width: 50, height: 50 } }
+        />
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <Card
       className={ [styles.card, classCard].join(' ') }
       cover={
         <div className={ classImgDiv }>
-          <PimcoreImage
-            alt={ props.name }
-            className={ classImg }
-            src={ props.imgSrc }
-          />
+          { renderPreview(props) }
         </div>
         }
       onClick={ (event) => {
