@@ -28,7 +28,8 @@ import {
   setPropertiesForDataObject,
   setSchedulesForDataObject,
   updatePropertyForDataObject,
-  updateScheduleForDataObject
+  updateScheduleForDataObject,
+  trackModifiedObjectData
 } from '../data-object-draft-slice'
 import { useEffect, useState } from 'react'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -41,11 +42,16 @@ import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import {
+  useModifiedObjectDataDraft,
+  type UseModifiedObjectDataDraftReturn
+} from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
 
 export interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTabsDraftReturn,
+  UseModifiedObjectDataDraftReturn,
   UseTrackableChangesDraftReturn {
   isLoading: boolean
   isError: boolean
@@ -97,6 +103,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
         schedules: [],
         changes: {},
         modifiedCells: {},
+        modifiedObjectData: {},
         ...initialTabsStateValue
       }
 
@@ -150,6 +157,12 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     setActiveTabForDataObject
   )
 
+  const modifiedObjectDataActions = useModifiedObjectDataDraft(
+    id,
+    dataObject,
+    trackModifiedObjectData
+  )
+
   const editorType = dataObject?.type === undefined
     ? undefined
     : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
@@ -164,6 +177,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     ...trackableChangesActions,
     ...propertyActions,
     ...schedulesActions,
-    ...tabsActions
+    ...tabsActions,
+    ...modifiedObjectDataActions
   }
 }
