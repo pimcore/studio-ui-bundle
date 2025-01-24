@@ -17,15 +17,10 @@ import { useStlyes } from './left-sidebar-view.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
 import { useMainNav } from '@Pimcore/modules/app/nav/hooks/use-main-nav'
-import { useDispatch } from 'react-redux'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
-import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 
 export const LeftSidebarView = (): React.JSX.Element => {
   const { styles } = useStlyes()
   const { addNavItem } = useMainNav()
-
-  const [logout] = useLogoutMutation()
 
   addNavItem({
     path: 'Settings/Document Types',
@@ -86,12 +81,6 @@ export const LeftSidebarView = (): React.JSX.Element => {
     icon: 'shield'
   })
 
-  const dispatch = useDispatch()
-  const handleLogout = async (): Promise<void> => {
-    await logout()
-    dispatch(setUser({ id: 1, username: '', isAdmin: false, permissions: [] }))
-  }
-
   return (
     <div className={ styles.leftSidebar }>
       <Avatar
@@ -102,8 +91,6 @@ export const LeftSidebarView = (): React.JSX.Element => {
 
       <ul className='left-sidebar__nav'>
         <li>
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-          <div onClick={ handleLogout }>Logout</div>
           <MainNav />
         </li>
       </ul>
