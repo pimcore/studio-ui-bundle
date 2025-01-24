@@ -140,7 +140,6 @@ export const GridConfigInner = (): React.JSX.Element => {
           description: values.description,
           setAsFavorite: values.setAsDefault,
           shareGlobal: values.shareGlobally,
-          // @todo currently conflicting with global sharing => fix in the backend needed first
           sharedRoles: gridConfig.sharedRoles,
           sharedUsers: gridConfig.sharedUsers,
           saveFilter: false,
@@ -231,7 +230,7 @@ export const GridConfigInner = (): React.JSX.Element => {
                   }
           } }
           isDeleting={ isDeleting }
-          isLoading={ isSaveLoading }
+          isLoading={ isSaveLoading || isUpdating }
           modificationDate={ gridConfig?.modificationDate }
           onCancelClick={ () => { setView(ViewState.Edit) } }
           onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
