@@ -34,7 +34,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
       isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
       onDrop={ (info: DragAndDropInfo) => {
         const newValue = [...value]
-        newValue[index] = { image: { type: 'asset', id: info.data.id as number } }
+        newValue[index] = { image: { type: 'asset', id: info.data.id as number }, hotspots: [], marker: [], crop: {} }
         setValue(newValue)
       } }
       variant="outline"

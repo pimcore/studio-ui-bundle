@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Input, Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -21,31 +21,26 @@ import { toCssDimension } from '@Pimcore/utils/css'
 
 interface ExternalImageFooterProps {
   value?: string
-  onChange?: (value?: string) => void
+  onChange: (value?: string) => void
   inputWidth?: number
   disabled?: boolean
 }
 
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<string | undefined>(props.value)
-  const [openUrlDisabled, setOpenUrlDisabled] = React.useState<boolean>(props.value === '' || props.value === undefined)
   const { t } = useTranslation()
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setValue(e.target.value)
+    props.onChange(e.target.value)
   }
 
   const emptyValue = (): void => {
-    setValue(undefined)
+    props.onChange(undefined)
   }
+
+  const openUrlDisabled = props.value === '' || props.value === undefined
 
   const openUrl = (): void => {
-    window.open(value, '_blank')
+    window.open(props.value, '_blank')
   }
-
-  useEffect(() => {
-    props.onChange?.(value)
-    setOpenUrlDisabled(value === undefined || value === '')
-  }, [value])
 
   const inputWidth = toCssDimension(props.inputWidth)
 
@@ -58,7 +53,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
         disabled={ props.disabled }
         onChange={ onChange }
         style={ { maxWidth: inputWidth, width: inputWidth } }
-        value={ value }
+        value={ props.value }
       />
       <ButtonGroup
         items={ [
