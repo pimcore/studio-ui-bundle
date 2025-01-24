@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { type RangePickerProps as OriginalRangePickerProps } from 'antd/lib/date-picker/generatePicker/interface'
 import { DatePicker as OriginalDatePicker } from 'antd'
 import { type Dayjs } from 'dayjs'
@@ -57,17 +57,12 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
 export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
   const [value, setValue] = React.useState<DateRange | null>(valueToDayJs(props.value))
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(valueFromDayJs(value, props.outputType, props.outputFormat))
-    }
-  }, [value, props.outputType, props.outputFormat])
-
   return (
     <OriginalDatePicker.RangePicker
       { ...props }
       onChange={ (dates: DateRange | null) => {
         setValue(dates)
+        props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
       } }
       value={ value }
     />
