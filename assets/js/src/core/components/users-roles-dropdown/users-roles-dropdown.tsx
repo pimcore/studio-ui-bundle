@@ -66,8 +66,8 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
       setGridConfig({
         ...gridConfig,
         shareGlobal: false,
-        sharedUsers: sharedUsersList as object,
-        sharedRoles: sharedRolesList as object
+        sharedUsers: sharedUsersList,
+        sharedRoles: sharedRolesList
       })
 
       handleClose()
