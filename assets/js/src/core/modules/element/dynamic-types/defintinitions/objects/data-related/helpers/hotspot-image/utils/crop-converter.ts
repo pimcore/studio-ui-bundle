@@ -37,10 +37,10 @@ export const cropToHotspot = (crop?: CropSettings | null): IHotspot => {
 
 export const hotspotToCrop = (hotspot: IHotspot): CropSettings => {
   return {
-    cropWidth: hotspot.width,
-    cropHeight: hotspot.height,
-    cropLeft: hotspot.x,
-    cropTop: hotspot.y,
+    cropWidth: Math.round(hotspot.width),
+    cropHeight: Math.round(hotspot.height),
+    cropLeft: Math.round(hotspot.x),
+    cropTop: Math.round(hotspot.y),
     cropPercent: true
   }
 }

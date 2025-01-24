@@ -21,15 +21,23 @@ import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynami
 import { type AssetVersionData } from '../details-functions'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'
+import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
+import {
+  type VersionComparisonViewProps
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 
 interface ComparisonViewUiProps {
   versions: AssetVersionData[]
   gridData: any[]
+  isImageVersion: boolean
+  versionIds: VersionComparisonViewProps['versionIds']
 }
 
 export const ComparisonViewUi = ({
   versions,
-  gridData
+  gridData,
+  isImageVersion,
+  versionIds
 }: ComparisonViewUiProps): React.JSX.Element => {
   const { styles } = useStyles()
 
@@ -73,17 +81,24 @@ export const ComparisonViewUi = ({
           style={ { minHeight: 100 } }
         >
           {versions.map((version, index) => {
+            const currentVersion = versionIds.find(item => item.count === version?.versionCount)
+
             return (
               <div key={ index }>
-                { version.previewImageUrl !== null
+                { version.previewImageUrl !== null && isImageVersion
                   ? (
                     <PimcoreImage
                       src={ version.previewImageUrl }
                       style={ { maxHeight: 500, maxWidth: 500 } }
                     />
                     )
-                  : 'No preview available' }
-
+                  : (
+                    <EmptyState
+                      fileName={ version?.dataRaw?.fileName }
+                      id={ currentVersion?.id }
+                    />
+                    )
+                }
               </div>
             )
           })}

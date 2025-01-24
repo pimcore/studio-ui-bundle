@@ -23,8 +23,8 @@ import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helpe
 export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.Element => {
   const { row } = props
   const { openGridContextMenuItem } = useOpen('asset')
-  const { renameGridContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', row.id))
-  const { deleteGridContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', row.id))
+  const { renameGridContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', Number(row.id)))
+  const { deleteGridContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', Number(row.id)))
   const { downloadGridContextMenuItem } = useDownload()
 
   const items = [

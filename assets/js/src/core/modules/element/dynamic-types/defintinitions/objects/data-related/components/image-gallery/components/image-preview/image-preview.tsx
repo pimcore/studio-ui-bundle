@@ -239,6 +239,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           height={ 100 }
           onHotspotsDataButtonClick={ hasHotspotData(index) ? () => { setMarkerModalOpen(true) } : undefined }
           style={ { backgroundColor: '#fff' } }
+          thumbnailSettings={ item.crop ?? undefined }
           width={ 200 }
         />
       </Droppable>

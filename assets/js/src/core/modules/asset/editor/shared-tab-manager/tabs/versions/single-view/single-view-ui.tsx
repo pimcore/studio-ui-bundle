@@ -19,6 +19,9 @@ import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'
 import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import {
+  EmptyState
+} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
 
 interface SingleVersionViewUiProps {
   versionId: VersionIdentifiers
@@ -28,6 +31,8 @@ interface SingleVersionViewUiProps {
   lastVersion: boolean
   onClickPrevious: () => void
   onClickNext: () => void
+  isImageVersion: boolean
+  fileName?: string
 }
 
 export const SingleViewUi = ({
@@ -37,7 +42,9 @@ export const SingleViewUi = ({
   firstVersion,
   lastVersion,
   onClickPrevious,
-  onClickNext
+  onClickNext,
+  isImageVersion,
+  fileName
 }: SingleVersionViewUiProps): React.JSX.Element => {
   const columnHelper = createColumnHelper<any>()
 
@@ -65,7 +72,7 @@ export const SingleViewUi = ({
           onClick={ onClickPrevious }
           type={ 'text' }
         />
-        {imgSrc !== null
+        {imgSrc !== null && isImageVersion
           ? (
             <PimcoreImage
               className={ 'image-slider__image' }
@@ -73,7 +80,12 @@ export const SingleViewUi = ({
               style={ { maxHeight: 500, maxWidth: 500 } }
             />
             )
-          : null}
+          : (
+            <EmptyState
+              fileName={ fileName }
+              id={ versionId.id }
+            />
+            )}
 
         <IconButton
           disabled={ lastVersion }
