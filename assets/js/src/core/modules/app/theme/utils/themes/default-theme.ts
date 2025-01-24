@@ -28,7 +28,6 @@ const staticTokens = {
     }
   }
 }
-// Colors/Neutral/Fill/colorFillTertiary
 
 const defaultTheme = {
   token: {
