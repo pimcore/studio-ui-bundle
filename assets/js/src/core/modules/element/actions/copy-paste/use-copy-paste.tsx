@@ -31,6 +31,7 @@ export interface UseCopyPasteHookReturn {
   cut: (node: TreeNodeProps) => void
   paste: (parentId: number) => Promise<void>
   pasteCut: (parentId: number) => Promise<void>
+  move: (props: MoveProps) => Promise<void>
   copyTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   copyContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   cutTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -38,6 +39,13 @@ export interface UseCopyPasteHookReturn {
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   pasteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   pasteCutContextMenuItem: (parentId: number) => ItemType
+}
+
+type elementPartial = Pick<Element, 'id' | 'parentId'>
+
+export interface MoveProps {
+  currentElement: elementPartial
+  targetElement: elementPartial
 }
 
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
@@ -57,6 +65,28 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const cut = (node: TreeNodeProps | Element): void => {
     setStoredNode(node)
     setNodeTask('cut')
+  }
+
+  const move = async (props: MoveProps): Promise<void> => {
+    const { currentElement, targetElement } = props
+
+    try {
+      await elementPatch({
+        body: {
+          data: [{
+            id: currentElement.id,
+            parentId: targetElement.id
+          }]
+        }
+      })
+
+      refreshTree(targetElement.parentId)
+      refreshTree(currentElement.parentId)
+      refreshTree(targetElement.id)
+      refreshTree(currentElement.id)
+    } catch (error) {
+      console.error('Error moving element', error)
+    }
   }
 
   const paste = async (parentId: number): Promise<void> => {
@@ -228,6 +258,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     cut,
     paste,
     pasteCut,
+    move,
     copyTreeContextMenuItem,
     copyContextMenuItem,
     cutTreeContextMenuItem,

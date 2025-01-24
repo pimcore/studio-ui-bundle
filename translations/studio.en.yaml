@@ -122,9 +122,11 @@ version.mimeType: Mime Type
 version.additionalAttributes: Additional Attributes
 version.image: Image
 version.no-versions-to-show: There are no versions to show.
+version.no-preview-available: No preview available for this file.
 version.clear-unpublished: Clear Unpublished
 version.clear-unpublished-versions: Clear unpublished versions
 version.confirm-clear-unpublished: Are you sure you want to clear all unpublished versions?
+version.preview-notification: Preview details will be displayed once a version is selected.
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
@@ -356,6 +358,10 @@ element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
 element.open: Open
+element.toolbar.copy-id: ID {{id}} - Copy
+element.toolbar.copy-full-path-to-clipboard: Copy full path to clipboard
+element.toolbar.copy-deep-link-to-clipboard: Copy deep link to clipboard
+element.toolbar.copy-className: Class {{className}} - Copy
 male: Male
 female: Female
 other: Other
@@ -381,6 +387,7 @@ relations.reference: Reference
 relations.type: Type
 relations.subtype: Subtype
 relations.classname: Class
+relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
@@ -547,6 +554,9 @@ video.path: Path
 video.dnd-target: Drop a video here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
+reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
+reverse-object-relation.owner-class: Owner class
+reverse-object-relation.owner-field: Owner field
 link.not-set: not set
 link.edit-title: Edit Link
 link.tab.basic: Basic

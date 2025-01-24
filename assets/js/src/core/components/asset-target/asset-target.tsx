@@ -55,18 +55,24 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
       >
         { (dndIcon === true || uploadIcon === true) && (
         <div className="icon-container">
-          { dndIcon === true && (
-            <Icon
-              options={ { height: 30, width: 30 } }
-              value={ 'PlusOutlined' }
-            />
-          )}
-          { uploadIcon === true && (
-            <Icon
-              options={ { height: 30, width: 30 } }
-              value={ 'copy-07' }
-            />
-          )}
+          <Flex
+            align="center"
+            gap="mini"
+            justify="center"
+          >
+            { dndIcon === true && (
+              <Icon
+                options={ { height: 30, width: 30 } }
+                value={ 'drop-target' }
+              />
+            )}
+            { uploadIcon === true && (
+              <Icon
+                options={ { height: 30, width: 30 } }
+                value={ 'upload-cloud' }
+              />
+            )}
+          </Flex>
         </div>
         )}
         <div className="image-target-title">{ title }</div>

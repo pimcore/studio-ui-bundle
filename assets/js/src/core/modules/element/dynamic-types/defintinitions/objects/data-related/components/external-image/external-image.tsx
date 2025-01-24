@@ -19,6 +19,7 @@ import {
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
+import _ from 'lodash'
 
 export interface ExternalImageValue {
   url: string
@@ -62,7 +63,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
           value={ value?.url ?? undefined }
                  /> }
       >
-        { value !== null && value.url !== ''
+        { value !== null && !_.isEmpty(value.url)
           ? (
             <ImagePreview
               height={ previewHeight }

@@ -27,6 +27,7 @@ import {
   enrichRowData,
   visibleFieldsToColumnDefinitions
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
+import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -50,6 +51,8 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   onChange?: (value?: ManyToManyRelationValue | null) => void
   columnDefinition?: Array<ColumnDef<any>>
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  hint?: React.ReactNode | null
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
 }
 
 export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
@@ -94,7 +97,7 @@ export const ManyToManyObjectRelation = (props: ManyToManyObjectRelationProps): 
   return (
     <ManyToManyRelation
       { ...props }
-      columnDefinition={ columnDefinition }
+      columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
       dataObjectsAllowed={ !_.isEmpty(props.allowedClasses) }
       enrichRowData={ (row: ManyToManyRelationValueItem) => enrichRowData(visibleFieldDefinitions, row) }
       // isLoading // todo: set this prop while loading the column definition data

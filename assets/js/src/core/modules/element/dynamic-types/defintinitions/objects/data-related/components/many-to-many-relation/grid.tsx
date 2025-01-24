@@ -32,16 +32,19 @@ import cn from 'classnames'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
+import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 
 interface ManyToManyRelationGridProps {
   value?: ManyToManyRelationValue | null
-  deleteItem: (id: number, type: string) => void
+  deleteItem: (rowIndex: number) => void
   assetInlineDownloadAllowed: boolean
   disabled?: boolean
   width: number | string | null
   height: number | string | null
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
   columnDefinition?: Array<ColumnDef<any>>
+  hint?: React.ReactNode | null
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -88,6 +91,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       header: t('actions'),
       size: 110,
       cell: (info) => {
+        const rowIndex = info.row.index
         const rowValue = info.row.original as ManyToManyRelationValueItem
 
         const buttons: ReactElement[] = []
@@ -151,7 +155,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
                       } }
                              />,
                     onOk: () => {
-                      props.deleteItem(rowValue.id, rowValue.type)
+                      props.deleteItem(rowIndex)
                     }
                   })
                 } }
@@ -207,8 +211,10 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             autoWidth
             columns={ columns }
             data={ getDataArray() }
+            onUpdateCellData={ props.onUpdateCellData }
             resizable
           />
+          { props.hint }
         </div>
       </Content>
     </div>

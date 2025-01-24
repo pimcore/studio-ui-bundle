@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
@@ -53,22 +53,23 @@ export type ImageGalleryValue = ImageGalleryValueItem[]
 
 export interface ImageGalleryValueItem {
   image: ImageValue | null
-  hotspots?: Hotspot[] | null
-  marker?: Marker[] | null
-  crop?: CropSettings | null
+  hotspots: Hotspot[]
+  marker: Marker[]
+  crop: CropSettings
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
-  const [value, setValue] = useState<ImageGalleryValue>(props.value ?? [])
+  const [value, setValueState] = useState<ImageGalleryValue>(props.value ?? [])
   const { t } = useTranslation()
   const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      const changedValue = value.filter(item => item.image !== null)
-      props.onChange(changedValue.length > 0 ? changedValue : null)
+  const setValue = (newValue: ImageGalleryValue): void => {
+    if (!_.isEqual(newValue, value)) {
+      setValueState(newValue)
+      const changedValue = newValue.filter(item => item.image !== null)
+      props.onChange?.(changedValue.length > 0 ? changedValue : null)
     }
-  }, [value])
+  }
 
   return (
     <Card

@@ -41,7 +41,6 @@ import { GridRow } from './grid-cell/grid-row'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 import { type GridProps } from '@Pimcore/types/components/types'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import type { AssetGetGridApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 declare module '@tanstack/react-table' {
@@ -86,7 +85,6 @@ export const Grid = ({
   onActiveCellChange,
   enableRowSelection = false,
   selectedRows = {},
-  contextMenuItems = [],
   ...props
 }: GridProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -240,14 +238,6 @@ export const Grid = ({
     </div>
   )
 
-  const getContextMenuItems = (row: any): DropdownMenuProps['items'] => {
-    const possibleContextMenuItems = contextMenuItems.map((item) => {
-      return item(row)
-    })
-
-    return possibleContextMenuItems.filter((item) => item !== undefined)
-  }
-
   return useMemo(() => (
     <div className={ ['ant-table-wrapper', hashId, styles.grid].join(' ') }>
       <div className="ant-table ant-table-small">
@@ -317,7 +307,7 @@ export const Grid = ({
                   <GridRow
                     activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell.columnId : undefined }
                     columns={ columns }
-                    contextMenuItems={ getContextMenuItems(row) }
+                    contextMenu={ props.contextMenu }
                     isSelected={ row.getIsSelected() }
                     key={ row.id }
                     modifiedCells={ JSON.stringify(getModifiedRow(row.id)) }

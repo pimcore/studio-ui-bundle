@@ -34,6 +34,7 @@ import {
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import type { ColumnDef } from '@tanstack/react-table'
+import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -43,6 +44,7 @@ export interface ManyToManyRelationClassDefinitionProps {
   width: number | string | null
   height: number | string | null
   assetInlineDownloadAllowed?: boolean | null
+  onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
@@ -52,16 +54,27 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   isLoading?: boolean
   columnDefinition?: Array<ColumnDef<any>>
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
+  hint?: React.ReactNode | null
+  allowMultipleAssignments?: boolean
 }
 
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
-  const { onDrop, deleteItem, onSearch, addAssets, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems)
+  const { onDrop, deleteItem, onSearch, addAssets, maxRemainingItems } = useValue(value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments)
 
   useEffect(() => {
-    props.onChange?.(value)
+    if (value !== props.value) {
+      props.onChange?.(value)
+    }
   }, [value])
+
+  useEffect(() => {
+    if (value !== props.value) {
+      setValue(props.value ?? null)
+      setDisplayedValue(props.value ?? null)
+    }
+  }, [JSON.stringify(props.value)])
 
   if (props.isLoading === true) {
     return (
@@ -90,6 +103,8 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           disabled={ props.disabled }
           enrichRowData={ props.enrichRowData }
           height={ props.height }
+          hint={ props.hint }
+          onUpdateCellData={ props.onUpdateCellData }
           value={ displayedValue }
           width={ props.width }
         />
