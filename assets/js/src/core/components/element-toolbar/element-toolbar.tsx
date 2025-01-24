@@ -30,8 +30,6 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
 
-  console.log('element', element)
-
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
 
