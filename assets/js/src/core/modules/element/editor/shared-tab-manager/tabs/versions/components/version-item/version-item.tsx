@@ -73,10 +73,9 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   }
 
   const handleDeleteVersion = async (): Promise<void> => {
-    setDetailedVersions([])
-
     await deleteVersion({ id: version.id })
 
+    setDetailedVersions([])
     invalidateCache()
 
     if (isDeleteVersionError) {
