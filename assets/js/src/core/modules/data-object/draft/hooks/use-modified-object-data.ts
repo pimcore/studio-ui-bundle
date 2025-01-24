@@ -50,8 +50,6 @@ export const useModifiedObjectDataReducers = (entityAdapter: EntityAdapter<Modif
     }
 
     state.entities[id] = modification({ ...draft })
-
-    console.log('my modified draft', draft?.modifiedObjectData)
   }
 
   const markedAsModified = (draft: ModifiedObjectDataDraft): void => {

@@ -43,8 +43,9 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     debouncedTrackModifiedDataObjectAttribute({ ...modifiedDataObjectAttributesRef.current })
   }
 
-  const handleSubmit = (): void => {
+  const handleSubmit = (values: any): void => {
     commitToDraft(modifiedDataObjectAttributesRef.current)
+    console.log(values)
   }
 
   const commitToDraft = (changedValues: Record<string, any>): void => {
