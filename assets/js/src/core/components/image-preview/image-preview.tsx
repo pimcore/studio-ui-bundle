@@ -27,6 +27,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { createImageThumbnailUrl, type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 interface ImagePreviewProps {
   src?: string
@@ -76,14 +77,16 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
 
   const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
 
+  const isVisible = useElementVisible(wrapperRef)
+
   useEffect(() => {
-    if (wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
+    if (isVisible && wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
       setThumbnailDimensions({
         width: wrapperRef.current.offsetWidth,
         height: wrapperRef.current.offsetHeight
       })
     }
-  }, [wrapperRef, width, height])
+  }, [isVisible, width, height])
 
   useEffect(() => {
     setKey(key + 1)
