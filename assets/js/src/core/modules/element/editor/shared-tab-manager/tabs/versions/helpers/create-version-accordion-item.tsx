@@ -44,6 +44,7 @@ export const createVersionAccordionItem = ({
 
   const selected = detailedVersions.some((v => v.id === version.id))
   const published = version.published ?? false
+  const selectable = isComparingActive
 
   const themeBySelection = selected ? 'theme-primary' : 'theme-default'
   const themeByState: PanelTheme = published ? 'theme-success' : themeBySelection
@@ -60,7 +61,7 @@ export const createVersionAccordionItem = ({
   }
 
   const handleClick = (): void => {
-    isComparingActive ? handleComparisonAction() : handleDetailAction()
+    selectable ? handleComparisonAction() : handleDetailAction()
   }
 
   const Title = (): React.JSX.Element => {
@@ -68,7 +69,7 @@ export const createVersionAccordionItem = ({
 
     return (
       <div>
-        {isComparingActive && (
+        {selectable && (
           <Box
             inline
             padding={ { right: 'extra-small' } }
