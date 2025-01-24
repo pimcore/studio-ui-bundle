@@ -34,12 +34,9 @@ import { useStyles } from './version-item.style'
 export const VersionItem = ({ version, setDetailedVersions }: { version: Version, setDetailedVersions: any }): React.JSX.Element => {
   const [inputValue, setInputValue] = useState(version?.note)
 
-  const [deletingVersion, setDeletingVersion] = useState(false)
-  const [publishingVersion, setPublishingVersion] = useState(false)
-
   const [updateVersion, { isError: isUpdateVersionError, error: updateVersionError }] = useVersionUpdateByIdMutation()
-  const [publishVersion, { isError: isPublishVersionError, error: publishVersionError }] = useVersionPublishByIdMutation()
-  const [deleteVersion, { isError: isDeleteVersionError, error: deleteVersionError }] = useVersionDeleteByIdMutation()
+  const [publishVersion, { isLoading: isLoadingPublishVersion, isError: isPublishVersionError, error: publishVersionError }] = useVersionPublishByIdMutation()
+  const [deleteVersion, { isLoading: isLoadingDeleteVersion, isError: isDeleteVersionError, error: deleteVersionError }] = useVersionDeleteByIdMutation()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -54,21 +51,16 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
     : undefined
 
   const handlePublishVersion = async (): Promise<void> => {
-    setPublishingVersion(true)
-
     await publishVersion({ id: version.id })
 
     if (isPublishVersionError) {
       trackError(new ApiError(publishVersionError))
     }
-
-    setPublishingVersion(false)
   }
 
   const handleDeleteVersion = async (): Promise<void> => {
-    setDeletingVersion(true)
-
     setDetailedVersions([])
+
     await deleteVersion({
       id: version.id
     })
@@ -108,9 +100,9 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
         <Space size='mini'>
           {!published && (
             <IconTextButton
-              disabled={ publishingVersion || deletingVersion }
+              disabled={ isLoadingPublishVersion || isLoadingDeleteVersion }
               icon={ { value: 'published' } }
-              loading={ publishingVersion }
+              loading={ isLoadingPublishVersion }
               onClick={ handlePublishVersion }
             >
               {t('version.publish')}
@@ -118,9 +110,9 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
           )}
           <IconButton
             aria-label={ t('aria.version.delete') }
-            disabled={ publishingVersion || deletingVersion }
+            disabled={ isLoadingPublishVersion || isLoadingDeleteVersion }
             icon={ { value: 'trash' } }
-            loading={ deletingVersion }
+            loading={ isLoadingDeleteVersion }
             onClick={ handleDeleteVersion }
             type={ 'default' }
           />

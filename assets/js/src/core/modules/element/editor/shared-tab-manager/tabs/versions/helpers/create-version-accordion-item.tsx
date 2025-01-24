@@ -113,7 +113,7 @@ export const createVersionAccordionItem = ({
     return (
       <Tag
         color={ 'success' }
-        iconName={ 'world' }
+        iconName={ 'published' }
       >
         {t('version.published')}
       </Tag>
