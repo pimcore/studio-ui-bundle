@@ -1,0 +1,73 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
+import { type ColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
+import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
+import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useTranslation } from 'react-i18next'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+
+export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting'>
+
+export interface UseGridOptionsReturn {
+  encodeColumnIdentifier: (column: SelectedColumn) => string
+  decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn
+  transformGridColum: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>
+  transformGridColumnDefinition: (columns: Array<ColumnDef<unknown, never>>) => Array<ColumnDef<unknown, never>>
+  getGridProps: () => GridProps
+}
+
+export const useGridOptions = (): UseGridOptionsReturn => {
+  const { selectedColumns } = UseSelectedColumns()
+  const { t } = useTranslation()
+  const { hasType } = useDynamicTypeResolver()
+
+  const encodeColumnIdentifier = (column: SelectedColumn): string => {
+    return JSON.stringify({
+      key: column.key,
+      locale: column.locale
+    })
+  }
+
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn => {
+    const { key, locale } = JSON.parse(columnIdentifier)
+
+    return selectedColumns.find(column => column.key === key && column.locale === locale)!
+  }
+
+  const transformGridColum = (column: SelectedColumn): IdentifiedColumnDef<unknown, never> => {
+    return {
+      header: t('listing.column.' + column.key) + (column.locale !== undefined && column.locale !== null ? ` (${column.locale})` : ''),
+      meta: {
+        type: hasType({ target: 'GRID_CELL', dynamicTypeIds: [column.type] }) ? column.type : column.frontendType
+      }
+    }
+  }
+
+  const transformGridColumnDefinition = (columns: Array<ColumnDef<unknown, never>>): Array<ColumnDef<unknown, never>> => {
+    return columns
+  }
+
+  const getGridProps = (): GridProps => {
+    return {}
+  }
+
+  return {
+    encodeColumnIdentifier,
+    decodeColumnIdentifier,
+    transformGridColum,
+    transformGridColumnDefinition,
+    getGridProps
+  }
+}

@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { ListContainerInner } from './list-container-inner'
+import { ListContainerInner } from '../listing/list-container-inner'
 import { ListProvider } from './list-provider'
 import {
   DynamicTypeRegistryProvider

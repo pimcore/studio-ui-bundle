@@ -62,10 +62,6 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
     },
 
-    assetGetGrid: {
-      invalidatesTags: []
-    },
-
     assetGetGridConfigurationByFolderId: {
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
     },
@@ -103,7 +99,7 @@ export const {
   useAssetCustomMetadataGetByIdQuery,
   useAssetCustomSettingsGetByIdQuery,
   useAssetGetTextDataByIdQuery,
-  useAssetGetGridMutation,
+  useAssetGetGridQuery,
   useAssetPatchByIdMutation,
   useAssetExportZipAssetMutation,
   useAssetExportZipFolderMutation,
@@ -114,7 +110,8 @@ export const {
   useAssetSetGridConfigurationAsFavoriteMutation,
   useAssetUpdateGridConfigurationMutation,
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
-  useAssetGetGridConfigurationByFolderIdQuery
+  useAssetGetGridConfigurationByFolderIdQuery,
+  useAssetGetAvailableGridColumnsQuery
 } = api
 
 export { api }
