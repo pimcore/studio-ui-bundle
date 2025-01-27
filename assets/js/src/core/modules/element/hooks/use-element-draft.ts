@@ -25,7 +25,7 @@ import { type ElementEditorType } from '@Pimcore/modules/element/editor/services
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
-interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
+export interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChangesDraft {
   id: number
   parentId: number
   fullPath?: string
@@ -33,6 +33,7 @@ interface IElementDraft extends PropertiesDraft, SchedulesDraft, TrackableChange
   hasChildren?: boolean
   permissions?: ElementPermissions
   hasWorkflowAvailable?: boolean
+  hasPreview?: boolean
 }
 
 interface UseElementDraftReturn extends
