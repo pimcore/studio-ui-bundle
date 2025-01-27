@@ -12,12 +12,7 @@
 */
 
 import React from 'react'
-import i18n from '@Pimcore/app/i18n'
 import { useStyles } from './comparison-view-ui.style'
-import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
-import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
-import { type PreviewFieldLabelCellValue } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/components/_versions/preview-field-label-cell/preview-field-label-cell'
 import { type AssetVersionData } from '../details-functions'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { Flex, Space } from 'antd'
@@ -25,6 +20,7 @@ import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab
 import {
   type VersionComparisonViewProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
+import { VersionsFieldsList } from '@Pimcore/components/versions-fields-list/versions-fields-list'
 
 interface ComparisonViewUiProps {
   versions: AssetVersionData[]
@@ -40,31 +36,6 @@ export const ComparisonViewUi = ({
   versionIds
 }: ComparisonViewUiProps): React.JSX.Element => {
   const { styles } = useStyles()
-
-  const columnHelper = createColumnHelper<any>()
-  const versionColumns: any[] = []
-  versions.forEach((version) => {
-    versionColumns.push(columnHelper.accessor(i18n.t('version.version') + ' ' + version.versionCount, {
-      cell: info => {
-        const cellsInRow = info.row.getAllCells()
-        if (cellsInRow.length === 3 && info.cell.id === cellsInRow[2].id) {
-          const cellValue = info.cell.getValue()
-          const labelCellValue = cellsInRow[0].getValue()
-
-          if (!(typeof labelCellValue === 'object' && (labelCellValue as PreviewFieldLabelCellValue).key === 'version-preview') &&
-            JSON.stringify(cellValue) !== JSON.stringify(cellsInRow[1].getValue())) {
-            return <span className={ 'highlight-cell' }><DefaultCell { ...info } /></span>
-          }
-        }
-        return <DefaultCell { ...info } />
-      }
-    }))
-  })
-
-  const columns = [
-    columnHelper.accessor(i18n.t('field'), { meta: { type: 'asset-version-preview-field-label' } }),
-    ...versionColumns
-  ]
 
   return (
     <div className={ styles['right-side'] }>
@@ -104,16 +75,10 @@ export const ComparisonViewUi = ({
           })}
         </Flex>
 
-        <Flex
-          align="center"
-          className='w-full'
-        >
-          <Grid
-            autoWidth
-            columns={ columns }
-            data={ gridData }
-          />
-        </Flex>
+        <VersionsFieldsList
+          data={ gridData }
+          isComparisonView
+        />
       </Space>
     </div>
   )

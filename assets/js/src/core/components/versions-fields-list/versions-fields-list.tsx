@@ -20,7 +20,6 @@ import { useStyles } from './versions-fields-list.styles'
 
 interface IVersionsFieldsListProps {
   data: any[]
-  versionsList: number[]
   isComparisonView: boolean
 }
 
@@ -29,14 +28,17 @@ const CATEGORIES_LIST = [
   { key: 'baseData', fieldKeys: ['fileName'] }
 ]
 
-export const VersionsFieldsList = ({ data, versionsList, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
+export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const filteredList = data.filter((item) => item['Version 40'] !== item['Version 41'])
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const versionKeys = Object.keys(data[0]).filter(key => key.startsWith('Version'))
+  const filteredList = data.filter((item) => item[versionKeys[0]] !== item[versionKeys[1]])
 
-  const isExpandUnmodifiedFields = true
-  const resultList = isExpandUnmodifiedFields && !isComparisonView ? data : filteredList
+  const isExpandUnmodifiedFields = false
+  const comparisonViewData = isExpandUnmodifiedFields ? data : filteredList
+  const resultList = !isComparisonView ? data : comparisonViewData
   const resultListKeys = map(resultList, 'Field.key')
 
   const categories = filter(
@@ -53,7 +55,7 @@ export const VersionsFieldsList = ({ data, versionsList, isComparisonView }: IVe
         className={ styles.headerContainer }
         wrap="wrap"
       >
-        {versionsList.map((item, index) => (
+        {versionKeys.map((item, index) => (
           <Flex
             className={ styles.headerItem }
             key={ `${index}-${item}` }
@@ -70,7 +72,9 @@ export const VersionsFieldsList = ({ data, versionsList, isComparisonView }: IVe
               category.fieldKeys.includes(fieldItem.Field.key) && (
                 <div key={ fieldIndex }>
                   <span><b>{fieldItem.Field.field}</b>: </span>
-                  <span>{fieldItem['Version 40']}</span>
+                    {versionKeys.map((key, index) => (
+                      <span key={ index }>{fieldItem[key]}</span>
+                    ))}
                 </div>
               )
             )}

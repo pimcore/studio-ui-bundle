@@ -42,8 +42,6 @@ export const SingleViewUi = ({
   isImageVersion,
   fileName
 }: SingleVersionViewUiProps): React.JSX.Element => {
-  const versionsList = [versionId.count]
-
   return (
     <Flex
       gap="small"
@@ -87,7 +85,6 @@ export const SingleViewUi = ({
       <VersionsFieldsList
         data={ data }
         isComparisonView={ false }
-        versionsList={ versionsList }
       />
     </Flex>
   )
