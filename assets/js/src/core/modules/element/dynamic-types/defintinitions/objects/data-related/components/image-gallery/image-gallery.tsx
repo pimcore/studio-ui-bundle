@@ -98,7 +98,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
               id={ String(index) }
               index={ index }
               item={ item }
-              key={ index + (item.image === null ? '_drop-target' : '_image') }
+              key={ index + (item.image === null ? '_drop-target' : JSON.stringify(item)) }
               setValue={ setValue }
               value={ value }
             />
