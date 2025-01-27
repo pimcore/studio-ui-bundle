@@ -86,6 +86,7 @@ export const SingleViewUi = ({
 
       <VersionsFieldsList
         data={ data }
+        isComparisonView={ false }
         versionsList={ versionsList }
       />
     </Flex>
