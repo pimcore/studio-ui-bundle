@@ -1,0 +1,47 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import { createStyles } from 'antd-style'
+
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    headerContainer: css`
+      width: 100%;
+    `,
+
+    headerItem: css`
+      flex: 1 1 50%;
+      padding: ${token.paddingXS}px;
+      background-color: ${token.Table.headerBg};
+      border: 0.5px solid ${token.Table.colorBorderSecondary};
+      border-top-width: 0;
+      border-top-left-radius: ${token.borderRadius}px;
+      border-top-right-radius: ${token.borderRadius}px;
+      box-shadow: 0 2px 4px 0 rgba(35, 11, 100, .2);
+      
+      &:first-child {
+        border-right: 0;
+      }
+
+      &:last-child {
+        border-left: 0;
+      }
+
+      &:only-child {
+        flex: 1 1 100%;
+        border-right: 0.5px;
+        border-left: 0.5px;
+      }
+    `
+  }
+})
