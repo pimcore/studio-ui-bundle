@@ -19,6 +19,9 @@ import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-o
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { debounce } from 'lodash'
+import {
+  useEditFormContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -30,6 +33,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
   const { id } = useElementContext()
   const { trackModifiedObjectData } = useDataObjectDraft(id)
   const modifiedDataObjectAttributesRef = useRef({})
+  const { form } = useEditFormContext()
 
   const debouncedTrackModifiedDataObjectAttribute = useCallback(
     debounce((currentAttributes: Record<string, any>) => {
@@ -57,6 +61,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
       <Form
         className={ className }
+        form={ form }
         initialValues={ data }
         layout='vertical'
         onFinish={ handleSubmit }

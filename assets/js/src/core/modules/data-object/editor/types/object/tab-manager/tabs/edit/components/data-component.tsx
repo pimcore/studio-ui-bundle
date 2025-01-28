@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode } from 'react'
+import React, { type ReactNode, useEffect } from 'react'
 import { type ObjectComponentProps } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -41,6 +41,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   let formFieldName: Array<number | string> = [name]
   let title = props.title as ReactNode
   const { currentLanguage } = useLanguageSelection()
+  const form = Form.useFormInstance()
 
   if (hasFormList) {
     formFieldName = [...formList.getComputedFieldName(), name]
@@ -82,6 +83,10 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   }
 
   if (!objectDataType.isCollectionType) {
+    useEffect(() => {
+      objectDataType.handleDefaultValue(_props, form, formFieldName)
+    }, [form])
+
     return (
       <ErrorBoundary>
         <Form.Item

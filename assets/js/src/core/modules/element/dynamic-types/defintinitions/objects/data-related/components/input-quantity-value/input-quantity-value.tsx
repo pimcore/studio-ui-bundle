@@ -63,6 +63,13 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
     }
   }, [value])
 
+  useEffect(() => {
+    const localValue = value.value === null && value.unitId === null ? null : value
+    if (!_.isEqual(props.value, localValue)) {
+      setValue(props.value ?? { value: null, unitId: null })
+    }
+  }, [props.value])
+
   return (
     <Flex
       align="center"

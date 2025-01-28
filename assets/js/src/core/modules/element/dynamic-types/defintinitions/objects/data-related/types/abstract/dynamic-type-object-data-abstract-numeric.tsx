@@ -14,9 +14,10 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
-import { type FormItemProps } from 'antd/es/form/FormItem'
-import { InputNumber } from 'antd'
+import { type FormInstance, InputNumber } from 'antd'
 import { type InputNumberProps } from 'antd/es/input-number'
+import type { NamePath } from 'rc-field-form/es/interface'
+import _ from 'lodash'
 
 export type AbstractNumericObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | null
@@ -62,10 +63,12 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
     }
   }
 
-  getObjectDataFormItemProps (props: AbstractNumericObjectDataDefinition): FormItemProps {
-    return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: props.defaultValue
+  handleDefaultValue (props: AbstractNumericObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    if (!_.isNumber(props.defaultValue)) {
+      return
+    }
+    if (!_.isNumber(form.getFieldValue(fieldName))) {
+      form.setFieldValue(fieldName, props.defaultValue)
     }
   }
 }
