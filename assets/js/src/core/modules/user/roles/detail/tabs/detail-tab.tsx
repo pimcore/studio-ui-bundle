@@ -13,31 +13,29 @@
 
 import React, { useEffect } from 'react'
 import { Tabs, type ITabsProps } from '@Pimcore/components/tabs/tabs'
-import { SettingsContainer } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-container'
-import { WorkspacesContainer } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspaces-container'
-import { KeyBindingsContainer } from '@Pimcore/modules/user/management/detail/tabs/key-bindings/key-bindings-container'
-import { ReferenceContainer } from '@Pimcore/modules/user/management/detail/tabs/references/references-container'
+import { SettingsContainer } from '@Pimcore/modules/user/roles/detail/tabs/settings/settings-container'
+import { WorkspacesContainer } from '@Pimcore/modules/user/roles/detail/tabs/workspaces/workspaces-container'
 import { useTranslation } from 'react-i18next'
-import { UserProvider } from '@Pimcore/modules/user/user-provider'
+import { RoleProvider } from '@Pimcore/modules/user/roles/role-provider'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
 import { useGlobalUserContext } from '@Pimcore/modules/user/hooks/use-global-user-context'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
+import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Content } from '@Pimcore/components/content/content'
 
-interface IUserDetailTabProps {
+interface IDetailTabProps {
   id: number
 }
 
-const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element => {
+const DetailTab = ({ id }: IDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalUserContext()
-  const { user, isLoading, isError, removeUserFromState } = useUserDraft(id)
+  const { role, isLoading, isError, removeRoleFromState } = useRoleDraft(id)
 
   useEffect(() => {
     return () => {
       removeContext()
-      removeUserFromState()
+      removeRoleFromState()
     }
   }, [])
 
@@ -61,43 +59,33 @@ const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element
     return <Content loading />
   }
 
-  if (user === undefined) {
+  if (role === undefined) {
     return <></>
   }
 
   const items: ITabsProps['items'] = [
     {
       key: 'settings',
-      label: t('user-management.settings.title'),
+      label: t('roles.settings.title'),
       children: <SettingsContainer />
     },
     {
       key: 'workspaces',
-      label: t('user-management.workspaces.title'),
+      label: t('roles.workspaces.title'),
       children: <WorkspacesContainer />
-    },
-    {
-      key: 'key-bindings',
-      label: t('user-management.key-bindings.title'),
-      children: <KeyBindingsContainer />
-    },
-    {
-      key: 'user-references',
-      label: t('user-management.references.title'),
-      children: <ReferenceContainer />
     }
   ]
 
   return (
-    <UserProvider id={ id }>
+    <RoleProvider id={ id }>
       <Tabs
         defaultActiveKey="1"
         destroyInactiveTabPane
         items={ items }
       >
       </Tabs>
-    </UserProvider>
+    </RoleProvider>
   )
 }
 
-export { UserDetailTab }
+export { DetailTab }

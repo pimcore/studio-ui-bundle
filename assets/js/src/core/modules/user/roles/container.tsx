@@ -13,28 +13,28 @@
 
 import React, { useCallback } from 'react'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { TreeContainer } from '@Pimcore/modules/user/management/tree/tree-container'
-import { ManagementDetail } from '@Pimcore/modules/user/management/detail/management-detail'
+import { TreeContainer } from '@Pimcore/modules/user/roles/tree/tree-container'
+import { Detail } from '@Pimcore/modules/user/roles/detail/detail'
 import type { TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import type { TreeDataNode } from 'antd'
 import { findNodeByKey, findParentByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 
-const ManagementContainer = ({ ...props }): React.JSX.Element => {
+const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { getUserTree } = useUserHelper()
+  const { getRoleTree } = useRoleHelper()
   const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
-    title: t('user-management.tree.all'),
+    title: t('roles.tree.all'),
     key: '0',
     icon: <Icon value={ 'folder' } />,
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-user', icon: 'add-user' }
+      { key: 'add-role', icon: 'add-user' }
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
@@ -43,17 +43,17 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     return items.map((item: any) => ({
       title: item.name,
       key: item.id,
-      selectable: item.type === 'user',
-      allowDrop: item.type !== 'user',
-      icon: item.type === 'user' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
-      actions: item.type === 'user'
+      selectable: item.type === 'role',
+      allowDrop: item.type !== 'role',
+      icon: item.type === 'role' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
+      actions: item.type === 'role'
         ? [
-            { key: 'clone-user', icon: 'copy' },
-            { key: 'remove-user', icon: 'trash' }
+            { key: 'clone-role', icon: 'copy' },
+            { key: 'remove-role', icon: 'trash' }
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-user', icon: 'add-user' },
+            { key: 'add-role', icon: 'add-user' },
             { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
@@ -68,6 +68,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
         parentNode.children = parentNode.children ?? []
 
         if (add === true) {
+          parentNode.isLeaf = false
           parentNode.children.push(...createNodeByResponse(items))
           parentNode.children.sort((a, b) => (typeof a.title === 'string' ? a.title : '').localeCompare(typeof b.title === 'string' ? b.title : ''))
         } else {
@@ -79,13 +80,13 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const handleOnLoadData = async (node: TreeDataNode): Promise<void> => {
-    await getUserTree({ parentId: Number(node.key) }).then(response => {
+    await getRoleTree({ parentId: Number(node.key) }).then(response => {
       updateTreeData(node.key, response.items)
     })
   }
 
   const reloadTree = (): void => {
-    getUserTree({ parentId: 0 }).then((data) => {
+    getRoleTree({ parentId: 0 }).then((data) => {
       updateTreeData('0', data.items)
       const timestamp = Date.now()
       setTreeKey('tree-' + timestamp)
@@ -95,7 +96,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const sidebar = {
-    id: 'user-tree',
+    id: 'role-tree',
     size: 20,
     minSize: 170,
     children: [
@@ -122,6 +123,10 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
               parent.children = updatedTreeData
               return [...data]
             })
+
+            if (parent?.children.length === 0) {
+              parent.isLeaf = true
+            }
           }
         } }
         onUpdateTreeData={ updateTreeData }
@@ -131,16 +136,16 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const main = {
-    id: 'user-detail',
+    id: 'role-detail',
     size: 80,
     minSize: 600,
     children: [
-      <ManagementDetail
-        key="user-detail"
-        onCloneUser={ (data) => {
+      <Detail
+        key="role-detail"
+        onCloneRole={ (data) => {
           reloadTree()
         } }
-        onRemoveItem={ (id) => {
+        onRemoveRole={ (id) => {
           const parent = findParentByKey(treeData, id)
           if (parent?.children !== undefined) {
             const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== id)
@@ -164,4 +169,4 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   )
 }
 
-export { ManagementContainer }
+export { RoleContainer }

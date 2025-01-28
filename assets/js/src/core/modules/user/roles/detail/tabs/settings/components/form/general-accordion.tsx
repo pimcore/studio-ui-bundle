@@ -12,30 +12,31 @@
 */
 
 import React from 'react'
+import { Form } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
-import { LanguageTable } from '@Pimcore/modules/user/management/detail/tabs/settings/components/table/language-table'
+import { Select } from '@Pimcore/components/select/select'
+import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
 
-interface ISharedTranslationSettingsAccordionProps {
-  data: any
-  viewData: any
-  editData: any
-  onChange: (data: any) => void
-}
-const SharedTranslationSettingsAccordion = ({ data, viewData, editData, onChange, ...props }: ISharedTranslationSettingsAccordionProps): React.JSX.Element => {
+const GeneralAccordion = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
+  const { id } = useRoleContext()
 
   const content = [
     {
       key: '1',
-      title: <>{ t('user-management.shared-translation-settings') }</>,
+      title: <>{ t('roles.general') }</>,
+      info: 'ID: ' + id,
       children: (
-        <LanguageTable
-          data={ data }
-          editData={ editData }
-          onChange={ (languages) => { onChange(languages) } }
-          viewData={ viewData }
-        />
+        <Form.Item
+          name="perspectives"
+        >
+          <Select
+            mode="multiple"
+            options={ [] }
+            placeholder={ t('roles.perspectives') }
+          ></Select>
+        </Form.Item>
       )
     }
   ]
@@ -45,8 +46,7 @@ const SharedTranslationSettingsAccordion = ({ data, viewData, editData, onChange
       bordered
       items={ content }
       size={ 'small' }
-      table
     />
   )
 }
-export { SharedTranslationSettingsAccordion }
+export { GeneralAccordion }

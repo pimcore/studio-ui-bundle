@@ -45,7 +45,7 @@ const config: ConfigFile = {
     '../../js/src/core/modules/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/user/i)
     },
-    '../../js/src/core/modules/user/role/role-api-slice.gen.ts': {
+    '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/role/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {

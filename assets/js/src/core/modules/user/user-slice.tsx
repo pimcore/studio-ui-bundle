@@ -90,34 +90,6 @@ export const slice = createSlice({
     userAvailablePermissionsFetched: (state, action: PayloadAction<UserGetAvailablePermissionsApiResponse>): void => {
       state.availablePermissions = action.payload.items
     },
-    userUpdateWorkspaces: (state, action: PayloadAction<any>): void => {
-      const type = action.payload.type
-      const id: number = action.payload.id
-
-      if (!state.changedIds.includes(id)) {
-        state.changedIds.push(id)
-      }
-
-      if (type === 'assets') {
-        const update: Update<any, any> = {
-          id,
-          changes: { assetWorkspaces: action.payload.changes, modified: true }
-        }
-        userAdapter.updateOne(state, update)
-      } else if (type === 'documents') {
-        const update: Update<any, any> = {
-          id,
-          changes: { documentWorkspaces: action.payload.changes, modified: true }
-        }
-        userAdapter.updateOne(state, update)
-      } else if (type === 'objects') {
-        const update: Update<any, any> = {
-          id,
-          changes: { dataObjectWorkspaces: action.payload.changes, modified: true }
-        }
-        userAdapter.updateOne(state, update)
-      }
-    },
     ...useTrackableChangesReducers(userAdapter)
   }
 })
@@ -133,8 +105,7 @@ export const {
   userAvailablePermissionsFetched,
   changeUser,
   userImageLoaded,
-  userUpdated,
-  userUpdateWorkspaces
+  userUpdated
 } = slice.actions
 
 export const { selectById: selectUserById } = userAdapter.getSelectors((state: RootState) => state.user)

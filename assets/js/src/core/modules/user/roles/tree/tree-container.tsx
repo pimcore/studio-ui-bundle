@@ -13,7 +13,6 @@
 
 import React from 'react'
 import { TreeElement as Tree, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { type TreeDataNode } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -21,8 +20,9 @@ import { ToolbarTree } from '@Pimcore/modules/user/management/toolbar/toolbar-tr
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { useStyle } from '@Pimcore/modules/user/management/tree/tree-container.styles'
-import { TreeAutocomplete } from '@Pimcore/modules/user/management/tree/tree-autocomplete'
 import { findParentByKey, findNodeByKey } from '@Pimcore/modules/user/management/tree/tree-helper'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
@@ -34,19 +34,19 @@ interface ITreeContainerProps {
 }
 const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserHelper()
+  const { openRole, addNewRole, addNewFolder, removeRole, cloneRole, removeFolder, moveRoleById } = useRoleHelper()
   const { styles } = useStyle()
   const classNames = [styles.treeContainer]
 
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>(['0'])
   const modal = useFormModal()
 
-  const handleAddUser = (key: string): void => {
+  const handleAddRole = (key: string): void => {
     modal.input({
-      title: t('user-management.add-user'),
-      label: t('user-management.add-user.label'),
+      title: t('roles.add-role'),
+      label: t('roles.add-role.label'),
       onOk: async (value: string) => {
-        const data = await addNewUser({ parentId: parseInt(key), name: value })
+        const data = await addNewRole({ parentId: parseInt(key), name: value })
         if (data !== undefined) {
           onUpdateTreeData(key, [data], true)
         }
@@ -55,8 +55,8 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
   }
   const handleAddFolder = (key: string): void => {
     modal.input({
-      title: t('user-management.add-folder'),
-      label: t('user-management.add-folder.label'),
+      title: t('roles.add-folder'),
+      label: t('roles.add-folder.label'),
       onOk: async (value: string) => {
         const data = await addNewFolder({ parentId: parseInt(key), name: value })
         if (data !== undefined) {
@@ -70,8 +70,20 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
     <ContentLayout
       renderToolbar={
         <ToolbarTree
-          onAddFolder={ () => { handleAddFolder('0') } }
-          onAddItem={ () => { handleAddUser('0') } }
+          actions={ [
+            {
+              key: 'add-role',
+              label: t('tree.actions.add-role'),
+              icon: <Icon value='add-user'></Icon>,
+              onClick: () => { handleAddRole('0') }
+            },
+            {
+              key: 'add-folder',
+              label: t('tree.actions.add-folder'),
+              icon: <Icon value='folder-plus'></Icon>,
+              onClick: () => { handleAddFolder('0') }
+            }
+          ] }
           onReload={ onReloadTree }
         />
       }
@@ -79,8 +91,6 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
       <Content
         className={ classNames.join(', ') }
       >
-        <TreeAutocomplete />
-
         <Tree
           defaultExpandedKeys={ expandedKeys }
           draggable
@@ -90,17 +100,17 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                 handleAddFolder(key)
 
                 break
-              case 'add-user':
-                handleAddUser(key)
+              case 'add-role':
+                handleAddRole(key)
 
                 break
-              case 'clone-user':
+              case 'clone-role':
                 modal.input({
-                  title: t('user-management.clone-user'),
-                  label: t('user-management.clone-user.label'),
+                  title: t('roles.clone-role'),
+                  label: t('roles.clone-role.label'),
                   onOk: async (value: string) => {
                     const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-                    const data = await cloneUser({ id: parseInt(key), name: value })
+                    const data = await cloneRole({ id: parseInt(key), name: value })
 
                     if (data !== undefined) {
                       onUpdateTreeData(parentId, [data], true)
@@ -109,12 +119,12 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                 })
 
                 break
-              case 'remove-user':
+              case 'remove-role':
                 modal.confirm({
-                  title: t('user-management.remove-user'),
-                  content: t('user-management.remove-user.text'),
+                  title: t('roles.remove-role'),
+                  content: t('roles.remove-role.text'),
                   onOk: async () => {
-                    await removeUser({ id: Number(key) })
+                    await removeRole({ id: Number(key) })
 
                     onRemoveItem(key)
                   }
@@ -123,8 +133,8 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                 break
               case 'remove-folder':
                 modal.confirm({
-                  title: t('user-management.remove-folder'),
-                  content: t('user-management.remove-folder.text'),
+                  title: t('roles.remove-folder'),
+                  content: t('roles.remove-folder.text'),
                   onOk: async () => {
                     await removeFolder({ id: Number(key) })
 
@@ -136,7 +146,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
             }
           } }
           onDragAndDrop={ async (params) => {
-            const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
+            const data = await moveRoleById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
             if (data !== undefined) {
               onMoveItem(params.dragNode, params.node.key)
@@ -148,7 +158,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
           onLoadData={ onLoadTreeData }
           onSelected={ (key) => {
             if (findNodeByKey(treeData, key)?.selectable === true) {
-              openUser(Number(key))
+              openRole(Number(key))
             }
           } }
           treeData={ treeData }

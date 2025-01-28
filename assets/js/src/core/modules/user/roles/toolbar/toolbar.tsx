@@ -15,28 +15,28 @@ import React, { useState } from 'react'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
-import { useUserDraft } from '@Pimcore/modules/user/hooks/use-user-draft'
-import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
+import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
+import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Popconfirm } from 'antd'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type UserDraft } from '@Pimcore/modules/user/user-slice'
+import { type IRole } from '@Pimcore/modules/user/roles/roles-slice'
 
-interface IToolbarProps {
+interface IToolbar {
   id: number
-  onCloneUser: () => void
-  onRemoveUser: () => void
+  onCloneRole: () => void
+  onRemoveRole: () => void
 }
 
-export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.Element => {
   const { t } = useTranslation()
-  const { user, isLoading, reloadUser } = useUserDraft(id)
-  const { updateUserById } = useUserHelper()
+  const { role, isLoading, reloadRole } = useRoleDraft(id)
+  const { updateRoleById } = useRoleHelper()
 
-  const hasChanges = user?.modified === true
+  const hasChanges = role?.modified === true
 
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
   const onOpenChange = (newOpen: boolean): void => {
@@ -48,7 +48,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
     if (hasChanges) {
       setPopConfirmOpen(true)
     } else {
-      reloadUser()
+      reloadRole()
     }
   }
 
@@ -58,27 +58,27 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
 
   const onConfirm = (): void => {
     setPopConfirmOpen(false)
-    reloadUser()
+    reloadRole()
   }
 
   const onSaveClick = (): void => {
-    updateUserById({ id, user: user as UserDraft }).catch(() => {
-      console.log('error')
+    updateRoleById({ id, item: role as IRole }).catch((error) => {
+      console.log(error)
     })
   }
 
   const items = [
     {
       key: '1',
-      label: t('tree.actions.clone-user'),
+      label: t('tree.actions.clone-item'),
       icon: <Icon value='copy-03'></Icon>,
-      onClick: onCloneUser
+      onClick: onCloneRole
     },
     {
       key: '2',
-      label: t('tree.actions.remove-user'),
+      label: t('tree.actions.remove-item'),
       icon: <Icon value='delete-outlined'></Icon>,
-      onClick: onRemoveUser
+      onClick: onRemoveRole
     }
   ]
 
