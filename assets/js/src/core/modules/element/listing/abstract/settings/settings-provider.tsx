@@ -18,7 +18,6 @@ import { type useGridOptions } from '../view-layer/components/grid/hooks/use-gri
 export interface UseQueryHelperReturn {
   hasRequiredArgs: () => boolean
   getArgs: () => Record<string, any>
-  apiDataTransformer: (data: any) => any
 }
 
 export interface SettingsContextProps {

@@ -17,8 +17,8 @@ import { type SettingsContextProps } from '../../../settings/settings-provider'
 export interface DataContextProps {
   dataQueryResult: ReturnType<SettingsContextProps['useDataQuery']> | undefined
   setDataQueryResult: (data: any) => void
-  transformedData: ReturnType<ReturnType<SettingsContextProps['useDataQueryHelper']>['apiDataTransformer']> | undefined
-  setTransformedData: (data: any) => void
+  data: any
+  setData: (data: any) => void
 }
 
 export const DataContext = createContext<DataContextProps | null>(null)
@@ -29,11 +29,11 @@ export interface DataProviderProps {
 
 export const DataProvider = ({ children }: DataProviderProps): React.JSX.Element => {
   const [dataQueryResult, setDataQueryResult] = useState<DataContextProps['dataQueryResult']>()
-  const [transformedData, setTransformedData] = useState<DataContextProps['transformedData']>()
+  const [data, setData] = useState<DataContextProps['data']>()
 
   return useMemo(() => (
-    <DataContext.Provider value={ { dataQueryResult, setDataQueryResult, transformedData, setTransformedData } }>
+    <DataContext.Provider value={ { dataQueryResult, setDataQueryResult, data, setData } }>
       {children}
     </DataContext.Provider>
-  ), [dataQueryResult, transformedData])
+  ), [dataQueryResult, data])
 }

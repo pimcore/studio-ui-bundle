@@ -17,6 +17,8 @@ import React from 'react'
 import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { AssetAvailableColumnsDecorator } from './decorator/asset-available-columns/decorator'
 import { RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
+import { InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
+import { useInlineEditApiUpdate } from './inline-editing/hooks/use-inline-edit-api-update'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery
@@ -24,7 +26,12 @@ export interface IAssetListingDefaultParams extends ListingContainerProps {
 }
 
 const defaultProps = {
-  ...RowSelectionDecorator(listingDefaultProps, { rowSelectionMode: 'single' }),
+  ...InlineEditDecorator(
+    RowSelectionDecorator(
+      listingDefaultProps,
+      { rowSelectionMode: 'single' }
+    )
+    , { useInlineEditApiUpdate }),
   useDataQuery: useAssetGetGridQuery,
   useDataQueryHelper
 }

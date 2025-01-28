@@ -19,10 +19,11 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { useSettings } from '../../../settings/use-settings'
 
 export const GridContainer = (): React.JSX.Element => {
-  const { dataQueryResult } = useData()
+  const { data, dataQueryResult } = useData()
+  const { isLoading } = dataQueryResult!
   const { selectedColumns } = UseSelectedColumns()
   const { useGridOptions } = useSettings()
-  const { getGridProps, transformGridColum, transformGridColumnDefinition } = useGridOptions()
+  const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
   const columnHelper = createColumnHelper()
 
   const gridColumnDefinition = useMemo(() => {
@@ -30,7 +31,7 @@ export const GridContainer = (): React.JSX.Element => {
 
     selectedColumns.forEach((column) => {
       columns.push(
-        columnHelper.accessor(column.key, transformGridColum(column))
+        columnHelper.accessor(column.key, transformGridColumn(column))
       )
     })
 
@@ -38,13 +39,15 @@ export const GridContainer = (): React.JSX.Element => {
   }, [selectedColumns])
 
   const gridData = useMemo(() => {
-    if (dataQueryResult === undefined) {
+    if (data === undefined) {
       return []
     }
 
-    return dataQueryResult.data.items.map((row) => {
+    const memoizedData: any[] = []
+
+    for (const row of data.items) {
       if (row.length === 0) {
-        return undefined
+        return []
       }
 
       const newRow: Record<string, any> = {}
@@ -54,22 +57,20 @@ export const GridContainer = (): React.JSX.Element => {
         newRow[column.key] = rowColumn.value
       })
 
-      return newRow
-    })
-  }, [dataQueryResult, selectedColumns])
+      memoizedData.push(newRow)
+    }
+
+    return memoizedData
+  }, [data, selectedColumns])
 
   return (
-    <>
-      {(gridData.length === 0 || (gridData.length > 0 && gridData[0] === undefined)) && <div>Loading...</div>}
-      {gridData.length > 0 && gridData[0] !== undefined && (
-        <Grid
-          columns={ gridColumnDefinition }
-          data={ gridData }
-          resizable
-          setRowId={ (row) => row.id }
-          { ...getGridProps() }
-        />
-      )}
-    </>
+    <Grid
+      columns={ gridColumnDefinition }
+      data={ gridData }
+      isLoading={ isLoading }
+      resizable
+      setRowId={ (row) => row.id }
+      { ...getGridProps() }
+    />
   )
 }

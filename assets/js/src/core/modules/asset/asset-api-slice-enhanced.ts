@@ -62,6 +62,35 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
     },
 
+    assetPatchById: {
+      invalidatesTags: (result, error, args) => {
+        const invalidatingTagsForPatch: Tag[] = []
+
+        for (const asset of args.body.data) {
+          invalidatingTagsForPatch.push(...invalidatingTags.ASSET_DETAIL_ID(asset.id))
+        }
+
+        return invalidatingTagsForPatch
+      }
+    },
+
+    assetGetGrid: {
+      providesTags: (result, error, args) => {
+        const providingTagsForGrid: Tag[] = []
+
+        if (result === undefined) {
+          return []
+        }
+
+        for (const item of result.items) {
+          providingTagsForGrid.push(...providingTags.ASSET_DETAIL_ID(item.id!))
+        }
+
+        console.log({ providingTagsForGrid })
+        return providingTagsForGrid
+      }
+    },
+
     assetGetGridConfigurationByFolderId: {
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_DETAIL(args.folderId, args.configurationId)
     },

@@ -40,7 +40,6 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   return {
     getArgs,
-    hasRequiredArgs,
-    apiDataTransformer: (data: any) => data
+    hasRequiredArgs
   }
 }

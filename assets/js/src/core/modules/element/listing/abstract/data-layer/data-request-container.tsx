@@ -17,16 +17,16 @@ import { useData } from './provider/data/use-data'
 
 export const DataRequestContainer = (): React.JSX.Element => {
   const { ViewComponent, useDataQueryHelper, useDataQuery } = useSettings()
-  const { getArgs, apiDataTransformer } = useDataQueryHelper()
+  const { getArgs } = useDataQueryHelper()
   const dataQueryResult = useDataQuery(getArgs())
-  const { setDataQueryResult, setTransformedData } = useData()
+  const { setDataQueryResult, setData } = useData()
 
   useEffect(() => {
     setDataQueryResult(dataQueryResult)
   }, [dataQueryResult])
 
   useEffect(() => {
-    setTransformedData(apiDataTransformer(dataQueryResult.data))
+    setData(dataQueryResult.data)
   }, [dataQueryResult.data])
   return <ViewComponent />
 }
