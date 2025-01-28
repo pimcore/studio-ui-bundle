@@ -1,3 +1,6 @@
+common.owner: Owner
+common.modification-date: Modification date
+common.globally: Globally
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}
@@ -59,6 +62,18 @@ aria.asset.image.editor.zoom.preconfigured-zoom-levels: Predefined zoom levels s
 asset.preview.no-video-support: Your browser does not support video.
 asset.preview.no-audio-support: Your browser does not support audio.
 grid.copy-notice: Copied to clipboard
+grid.configuration.no-saved-templates: No saved templates available
+grid.configuration.template: Template
+grid.configuration.save-template: Save as template
+grid.configuration.save-new-template: Save as new template
+grid.configuration.update-template: Update the template
+grid.configuration.edit-template-details: Edit template details
+grid.configuration.delete-template: Delete Template
+grid.configuration.delete-this-template: Delete this template
+grid.configuration.delete-template-confirmation: Are you sure that you want to delete this template?
+grid.configuration.save-template-configuration: Save configuration as template
+grid.configuration.set-default-template: Set as default template
+grid.configuration.shared: Shared
 component.workflow-card.action-btn: Workflow Actions
 component.pql.description: Pimcore Query Language (PQL) is a simple yet powerful query language that lets you search data using various criteria, including filtering values in related elements, to enable precise and comprehensive data retrieval. For details see <anchorPQL>PQL Documentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta Info
@@ -96,6 +111,7 @@ version.publish: Publish
 version.published: Published
 version.schedule-for: Scheduled for
 version.note: Note
+version.note.add: Add a note
 version.own-draft: Own Draft
 version.compare-versions: Compare Versions
 version.fileName: Name
@@ -204,6 +220,9 @@ properties.add-property-mandatory-fields-missing.error: Key and type are mandato
 button.ok: Ok
 button.apply: Apply
 button.cancel: Cancel
+button.save-apply: Save & Apply
+button.add-edit: Add & Edit
+button.cancel-edits: Cancel edits
 actions.open: Open
 open: Open
 edit: Edit
@@ -298,6 +317,8 @@ form.validation.required: This field is required
 form.validation.numeric-range.first-value-missing: First value is missing
 form.validation.numeric-range.second-value-missing: Second value is missing
 form.validation.numeric-range.second-value-greater: Second value cannot be smaller than the first value
+form.validation.provide-name: Please provide a name
+form.validation.provide-description: Please provide a description
 thumbnail: Thumbnail
 select-image-preview: Select Image Preview
 choose-media: Choose Media
@@ -400,6 +421,12 @@ tree.actions.clone-user: Clone User
 tree.actions.remove-user: Remove User
 tree.actions.folder: Folder
 tree.actions.user: User
+tree.actions.add-folder: Add Folder
+tree.actions.add-user: Add User
+tree.actions.add-role: Add Role
+tree.actions.clone-role: Clone Role
+tree.actions.remove-role: Remove Role
+tree.actions.remove-folder: Remove Folder
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings
@@ -433,7 +460,9 @@ user-management.key-bindings.recycleBin: Recycle Bin
 user-management.key-bindings.notesEvents: Notes & Events
 user-management.key-bindings.tagManager: Tag Manager
 user-management.key-bindings.tagConfiguration: Tag Configuration
+user-management.key-bindings.user: User
 user-management.key-bindings.users: Users
+user-management.key-bindings.role: Role
 user-management.key-bindings.roles: Roles
 user-management.key-bindings.clearAllCaches: Clear All Caches
 user-management.key-bindings.clearDataCache: Clear Data Cache
@@ -454,6 +483,8 @@ user-management.general: General
 user-management.active: Active
 user-management.name: Name
 user-management.password: Password
+user-management.user.search: Search for a user
+user-management.role.search: Search for a role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
 user-management.firstname: Firstname
 user-management.lastname: Lastname
@@ -507,6 +538,13 @@ user-management.save-user.success: User saved successfully
 user-management.add-user.success: User added successfully
 user-management.remove-user.success: User removed successfully
 user-management.upload-image.success: Image uploaded successfully
+roles.tree.all: All Roles
+roles.save-item.success: Role saved successfully
+roles.clone-item.success: Role cloned successfully
+roles.remove-folder.success: Folder removed successfully
+roles.remove-item.success: Role removed successfully
+roles.add-item.success: Role added successfully
+roles.add-folder.success: Folder added successfully
 navigation.document-types: Document Types
 navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports

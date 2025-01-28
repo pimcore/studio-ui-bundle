@@ -31,7 +31,6 @@ import {
   rectSortingStrategy,
   SortableContext
 } from '@dnd-kit/sortable'
-import { uuid } from '@Pimcore/utils/uuid'
 import {
   type Hotspot, type Marker
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
@@ -99,7 +98,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
               id={ String(index) }
               index={ index }
               item={ item }
-              key={ uuid() }
+              key={ index + (item.image === null ? '_drop-target' : JSON.stringify(item)) }
               setValue={ setValue }
               value={ value }
             />

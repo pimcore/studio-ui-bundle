@@ -11,14 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Space } from '@Pimcore/components/space/space'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Checkbox, Flex, Input } from 'antd'
 import { Form, type FormProps } from '@Pimcore/components/form/form'
+import { Space } from '@Pimcore/components/space/space'
 import { Switch } from '@Pimcore/components/switch/switch'
-import React, { useEffect, useState } from 'react'
 import { Text } from '@Pimcore/components/text/text'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
+import { TagList, type TagListProps } from '@Pimcore/components/tag-list/tag-list'
+import { type TagProps } from '@Pimcore/components/tag/tag'
+import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
+import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
+import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { useStyles } from './save-form.styles'
+import { isEmpty } from 'lodash'
 
-export interface SaveFormProps extends FormProps {}
+export interface SaveFormProps extends FormProps {
+  roleList?: RoleGetCollectionApiResponse
+  userList?: UserGetCollectionApiResponse
+}
 
 export const defaultValues = {
   name: '',
@@ -30,37 +43,127 @@ export const defaultValues = {
 
 export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+
+  const { gridConfig, setGridConfig } = useListGridConfig()
+
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
   useEffect(() => {
     props.form?.resetFields()
   }, [])
 
-  const onValuesChange = (changedValues: any, values: any): void => {
+  const handleFormValuesChange = (changedValues: any, values: any): void => {
     props.onValuesChange?.(changedValues, values)
 
-    if (changedValues.shareGlobally !== undefined) {
+    const isSharedGlobally = changedValues.shareGlobally
+
+    if (isSharedGlobally !== undefined) {
       setIsSharedGlobally(changedValues.shareGlobally)
+
+      if (!isEmpty(gridConfig) && isSharedGlobally === true) {
+        setGridConfig({
+          ...gridConfig,
+          shareGlobal: true,
+          sharedUsers: [],
+          sharedRoles: []
+        })
+      }
     }
+  }
+
+  const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
+    <Icon
+      className={ styles.icon }
+      options={ { width: size ?? 12, height: size ?? 12 } }
+      value={ iconName }
+    />
+  )
+
+  const renderRightLabelComponent = (): JSX.Element | string | undefined => {
+    const renderGlobalView = (): React.JSX.Element => (
+      <Text className={ styles.label }>{t('common.globally')}</Text>
+    )
+
+    const renderUserView = (): React.JSX.Element => (
+      <>
+        <Flex gap={ 10 }>
+          <Text className={ styles.label }>
+            {renderIcon('user')} {t('user-management.key-bindings.user')} | {renderIcon('shield')} {t('user-management.key-bindings.role')}
+          </Text>
+          <Flex
+            align="center"
+            className={ styles.updateButton }
+            gap={ 8 }
+            onClick={ () => { setIsOpenDropdown(!isOpenDropdown) } }
+          >
+            {renderIcon('edit', 16)}
+            <Text className={ styles.updateButtonText }>{t('button.add-edit')}</Text>
+          </Flex>
+        </Flex>
+        {isOpenDropdown && (
+          <UsersRolesDropdown
+            handleClose={ () => { setIsOpenDropdown(false) } }
+            roleList={ props?.roleList }
+            userList={ props?.userList }
+          />
+        )}
+      </>
+    )
+
+    return isSharedGlobally === true ? renderGlobalView() : renderUserView()
+  }
+
+  const getSharedUsersRolesList = (): TagListProps['list'] => {
+    const usersList: TagProps[] = []
+    const rolesList: TagProps[] = []
+
+    const getTagItem = ({ label, iconName }: { label?: string, iconName: string }): TagProps => ({
+      children: (
+        <Text
+          ellipsis
+          style={ { maxWidth: '148px' } }
+          type="secondary"
+        >{label}</Text>
+      ),
+      icon: renderIcon(iconName),
+      bordered: false
+    })
+
+    props.userList?.items.forEach((item) => {
+      if ((gridConfig?.sharedUsers as number[]).includes(item.id)) {
+        usersList.push(getTagItem({ label: item?.username, iconName: 'user' }))
+      }
+    })
+
+    props.roleList?.items.forEach((item) => {
+      if ((gridConfig?.sharedRoles as number[]).includes(item.id)) {
+        rolesList.push(getTagItem({ label: item?.name, iconName: 'shield' }))
+      }
+    })
+
+    return [usersList, rolesList]
   }
 
   return (
     <Form
       layout="vertical"
-      onValuesChange={ onValuesChange }
+      onValuesChange={ handleFormValuesChange }
       { ...props }
     >
       <Form.Item
-        label="Name"
+        label={ t('user-management.name') }
         name="name"
-        rules={ [{ required: true, message: 'Please provide a name' }] }
+        rules={ [{ required: true, message: t('form.validation.provide-name') }] }
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        label="Description"
+        label={ t('description') }
         name="description"
-        rules={ [{ required: true, message: 'Please provide a description' }] }
+        rules={ [{ required: true, message: t('form.validation.provide-description') }] }
       >
         <Input.TextArea />
       </Form.Item>
@@ -70,15 +173,16 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           name="setAsDefault"
           valuePropName='checked'
         >
-          <Checkbox>Set as default template</Checkbox>
+          <Checkbox>{t('grid.configuration.set-default-template')}</Checkbox>
         </Form.Item>
 
-        <Form.Item
-          name="saveFilters"
-          valuePropName='checked'
-        >
-          <Checkbox>Save filters</Checkbox>
-        </Form.Item>
+        {/* @TODO: the logic will be implemented later */}
+        {/* <Form.Item */}
+        {/*  name="saveFilters" */}
+        {/*  valuePropName='checked' */}
+        {/* > */}
+        {/*  <Checkbox>Save filters</Checkbox> */}
+        {/* </Form.Item> */}
       </Space>
 
       <Flex
@@ -90,14 +194,18 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
           valuePropName='checked'
         >
           <Switch
-            labelLeft='Shared'
-            labelRight={ isSharedGlobally === true ? 'Globally' : 'User | Role' }
+            labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
+            labelRight={ renderRightLabelComponent() }
           />
         </Form.Item>
       </Flex>
 
       { isSharedGlobally === false && (
-        <Text>@Todo: Add user and role sharing</Text>
+        <TagList
+          itemGap="mini"
+          list={ getSharedUsersRolesList() }
+          tagListItemClassNames={ styles.tag }
+        />
       )}
     </Form>
   )

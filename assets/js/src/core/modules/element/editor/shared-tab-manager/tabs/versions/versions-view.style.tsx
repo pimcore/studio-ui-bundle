@@ -38,18 +38,10 @@ export const useStyles = createStyles(({ token, css }) => {
         background-color: ${themeToken.highlightBackgroundColor};
       }
 
-      .ant-card-extra {
-        height: 44px;
-      }
-
       .sub-title {
         font-weight: normal;
         margin-right: 4px;
         color: ${themeToken.colorTextDescription};
-      }
-
-      .title-tag {
-        font-size: 12px;
       }
 
       .tag-icon {
@@ -57,18 +49,10 @@ export const useStyles = createStyles(({ token, css }) => {
         right: 3px;
         bottom: 1px;
       }
+    `,
 
-      .id-tag {
-        width: 56px;
-        height: 22px;
-
-        display: inline-grid;
-        justify-content: center;
-
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 20px;
-      }
+    compareButton: css`
+      background-color: ${token.Colors.Neutral.Fill.colorFill} !important;
     `,
 
     notificationMessage: css`

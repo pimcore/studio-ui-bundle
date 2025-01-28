@@ -14,6 +14,7 @@
 import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 // import '@Pimcore/modules/asset/editor'
 import { ManagementContainer } from '@Pimcore/modules/user/management/management-container'
+import { RoleContainer } from '@Pimcore/modules/user/roles/container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
@@ -26,6 +27,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'user-management',
       component: ManagementContainer
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'role-management',
+      component: RoleContainer
     })
   }
 })

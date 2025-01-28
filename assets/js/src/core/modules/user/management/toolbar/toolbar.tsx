@@ -93,7 +93,7 @@ export const Toolbar = ({ id, onCloneUser, onRemoveUser, ...props }: IToolbarPro
           title={ t('toolbar.reload.confirmation') }
         >
           <IconButton
-            icon={ { value: 'refresh-ccw-03' } }
+            icon={ { value: 'refresh' } }
           >
             {t('toolbar.reload')}
           </IconButton>
