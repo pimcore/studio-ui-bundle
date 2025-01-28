@@ -17,24 +17,20 @@ import { map, filter, intersection, isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { getCategoriesList } from './helpers/categoriesHelper'
-import { getModifiedItems, getVersionKeysList } from './helpers/dataHelper'
+import { useAssetVersionData } from './hooks/use-asset-version-data'
 import { type IVersionsFieldsListProps } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
 export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
+  const { versionKeysList, comparisonModifiedData, categoriesList } = useAssetVersionData(data)
+
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const versionKeysList = getVersionKeysList(data)
-
-  const comparisonModifiedData = getModifiedItems(data, versionKeysList[0], versionKeysList[1])
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
-
-  const categoriesList = useMemo(() => getCategoriesList(data), [data])
 
   const categoriesListWithFields = useMemo(() => {
     const versionFieldKeys = map(versionViewData, 'Field.key')

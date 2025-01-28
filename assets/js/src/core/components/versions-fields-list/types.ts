@@ -18,3 +18,5 @@ export interface IVersionsFieldsListProps {
   }>
   isComparisonView: boolean
 }
+
+export type CategoriesList = Array<{ key: string, fieldKeys: string[] }>
