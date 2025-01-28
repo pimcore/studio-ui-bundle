@@ -42,6 +42,14 @@ export const useStyles = createStyles(({ token, css }) => {
         border-right: 0.5px;
         border-left: 0.5px;
       }
+    `,
+
+    gridItem: css`
+      flex: 1 1 50%;
+
+      &:only-child {
+        flex: 1 1 100%;
+      }
     `
   }
 })

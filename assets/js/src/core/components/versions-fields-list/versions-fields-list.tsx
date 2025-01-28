@@ -11,11 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { map, filter, intersection, isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { Switch } from '@Pimcore/components/switch/switch'
 import { useStyles } from './versions-fields-list.styles'
 
 interface IVersionsFieldsListProps {
@@ -29,6 +30,8 @@ const CATEGORIES_LIST = [
 ]
 
 export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
+  const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
+
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -36,18 +39,19 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
   const versionKeys = Object.keys(data[0]).filter(key => key.startsWith('Version'))
   const filteredList = data.filter((item) => item[versionKeys[0]] !== item[versionKeys[1]])
 
-  const isExpandUnmodifiedFields = false
-  const comparisonViewData = isExpandUnmodifiedFields ? data : filteredList
+  const comparisonViewData = isExpandedUnmodifiedFields ? data : filteredList
   const resultList = !isComparisonView ? data : comparisonViewData
   const resultListKeys = map(resultList, 'Field.key')
 
-  const categories = filter(
-    map(CATEGORIES_LIST, category => ({
-      ...category,
-      fieldKeys: intersection(category.fieldKeys, resultListKeys)
-    })),
-    category => !isEmpty(category.fieldKeys)
-  )
+  const categories = useMemo(() => {
+    return filter(
+      map(CATEGORIES_LIST, category => ({
+        ...category,
+        fieldKeys: intersection(category.fieldKeys, resultListKeys)
+      })),
+      category => !isEmpty(category.fieldKeys)
+    )
+  }, [isExpandedUnmodifiedFields])
 
   return (
     <Flex vertical>
@@ -65,6 +69,13 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
         ))}
       </Flex>
       <Flex vertical>
+        {isComparisonView && (
+          <Switch
+            labelLeft="Expand unmodified fields"
+            onChange={ () => { setIsExpandedUnmodifiedFields(!isExpandedUnmodifiedFields) } }
+            value={ isExpandedUnmodifiedFields }
+          />
+        )}
         {categories.map((category, index) => (
           <div key={ index }>
             <div><b style={ { fontSize: '15px', color: 'blue' } }>{category.key}</b></div>
@@ -72,9 +83,14 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
               category.fieldKeys.includes(fieldItem.Field.key) && (
                 <div key={ fieldIndex }>
                   <span><b>{fieldItem.Field.field}</b>: </span>
+                  <Flex>
                     {versionKeys.map((key, index) => (
-                      <span key={ index }>{fieldItem[key]}</span>
+                      <div
+                        className={ styles.gridItem }
+                        key={ index }
+                      >{fieldItem[key]}</div>
                     ))}
+                  </Flex>
                 </div>
               )
             )}
