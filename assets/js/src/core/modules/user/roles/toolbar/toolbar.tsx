@@ -27,16 +27,16 @@ import { type IRole } from '@Pimcore/modules/user/roles/roles-slice'
 
 interface IToolbar {
   id: number
-  onCloneItem: () => void
-  onRemoveItem: () => void
+  onCloneRole: () => void
+  onRemoveRole: () => void
 }
 
-export const Toolbar = ({ id, onCloneItem, onRemoveItem }: IToolbar): React.JSX.Element => {
+export const Toolbar = ({ id, onCloneRole, onRemoveRole }: IToolbar): React.JSX.Element => {
   const { t } = useTranslation()
-  const { item, isLoading, reloadItem } = useRoleDraft(id)
-  const { updateItemById } = useRoleHelper()
+  const { role, isLoading, reloadRole } = useRoleDraft(id)
+  const { updateRoleById } = useRoleHelper()
 
-  const hasChanges = item?.modified === true
+  const hasChanges = role?.modified === true
 
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
   const onOpenChange = (newOpen: boolean): void => {
@@ -48,7 +48,7 @@ export const Toolbar = ({ id, onCloneItem, onRemoveItem }: IToolbar): React.JSX.
     if (hasChanges) {
       setPopConfirmOpen(true)
     } else {
-      reloadItem()
+      reloadRole()
     }
   }
 
@@ -58,12 +58,12 @@ export const Toolbar = ({ id, onCloneItem, onRemoveItem }: IToolbar): React.JSX.
 
   const onConfirm = (): void => {
     setPopConfirmOpen(false)
-    reloadItem()
+    reloadRole()
   }
 
   const onSaveClick = (): void => {
-    updateItemById({ id, item: item as IRole }).catch(() => {
-      console.log('error')
+    updateRoleById({ id, item: role as IRole }).catch((error) => {
+      console.log(error)
     })
   }
 
@@ -72,13 +72,13 @@ export const Toolbar = ({ id, onCloneItem, onRemoveItem }: IToolbar): React.JSX.
       key: '1',
       label: t('tree.actions.clone-item'),
       icon: <Icon value='copy-03'></Icon>,
-      onClick: onCloneItem
+      onClick: onCloneRole
     },
     {
       key: '2',
       label: t('tree.actions.remove-item'),
       icon: <Icon value='delete-outlined'></Icon>,
-      onClick: onRemoveItem
+      onClick: onRemoveRole
     }
   ]
 

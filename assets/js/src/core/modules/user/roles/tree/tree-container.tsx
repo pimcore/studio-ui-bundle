@@ -34,19 +34,19 @@ interface ITreeContainerProps {
 }
 const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { openItem, addNewItem, addNewFolder, removeItem, cloneItem, removeFolder, moveItemById } = useRoleHelper()
+  const { openRole, addNewRole, addNewFolder, removeRole, cloneRole, removeFolder, moveRoleById } = useRoleHelper()
   const { styles } = useStyle()
   const classNames = [styles.treeContainer]
 
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>(['0'])
   const modal = useFormModal()
 
-  const handleAddItem = (key: string): void => {
+  const handleAddRole = (key: string): void => {
     modal.input({
       title: t('roles.add-role'),
       label: t('roles.add-role.label'),
       onOk: async (value: string) => {
-        const data = await addNewItem({ parentId: parseInt(key), name: value })
+        const data = await addNewRole({ parentId: parseInt(key), name: value })
         if (data !== undefined) {
           onUpdateTreeData(key, [data], true)
         }
@@ -75,7 +75,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
               key: 'add-role',
               label: t('tree.actions.add-role'),
               icon: <Icon value='add-user'></Icon>,
-              onClick: () => { handleAddItem('0') }
+              onClick: () => { handleAddRole('0') }
             },
             {
               key: 'add-folder',
@@ -101,7 +101,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
 
                 break
               case 'add-role':
-                handleAddItem(key)
+                handleAddRole(key)
 
                 break
               case 'clone-role':
@@ -110,7 +110,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                   label: t('roles.clone-role.label'),
                   onOk: async (value: string) => {
                     const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-                    const data = await cloneItem({ id: parseInt(key), name: value })
+                    const data = await cloneRole({ id: parseInt(key), name: value })
 
                     if (data !== undefined) {
                       onUpdateTreeData(parentId, [data], true)
@@ -124,7 +124,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
                   title: t('roles.remove-role'),
                   content: t('roles.remove-role.text'),
                   onOk: async () => {
-                    await removeItem({ id: Number(key) })
+                    await removeRole({ id: Number(key) })
 
                     onRemoveItem(key)
                   }
@@ -146,7 +146,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
             }
           } }
           onDragAndDrop={ async (params) => {
-            const data = await moveItemById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
+            const data = await moveRoleById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
             if (data !== undefined) {
               onMoveItem(params.dragNode, params.node.key)
@@ -158,7 +158,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
           onLoadData={ onLoadTreeData }
           onSelected={ (key) => {
             if (findNodeByKey(treeData, key)?.selectable === true) {
-              openItem(Number(key))
+              openRole(Number(key))
             }
           } }
           treeData={ treeData }

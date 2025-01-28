@@ -27,11 +27,11 @@ import { Button } from '@Pimcore/components/button/button'
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
-  const { item, isLoading, changeItemInState } = useRoleDraft(id)
+  const { role, isLoading, changeRoleInState } = useRoleDraft(id)
 
-  const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(item?.assetWorkspaces ?? [])
-  const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(item?.documentWorkspaces ?? [])
-  const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(item?.dataObjectWorkspaces ?? [])
+  const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(role?.assetWorkspaces ?? [])
+  const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(role?.documentWorkspaces ?? [])
+  const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(role?.dataObjectWorkspaces ?? [])
 
   const {
     showModal: showDuplicatePropertyModal,
@@ -41,36 +41,50 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     type: 'error'
   })
 
-  if (item === undefined) {
+  if (role === undefined) {
     return <></>
+  }
+
+  const handleAddNewWorkspaces = (workspaces: UserWorkspace[], type): void => {
+    const newWorkspace = {
+      cid: new Date().getTime(), // after path update is set to document id
+      cpath: '',
+      list: false,
+      view: false,
+      publish: false,
+      delete: false,
+      rename: false,
+      create: false,
+      settings: false,
+      versions: false,
+      properties: false
+    }
+
+    switch (type) {
+      case 'document':
+        setDocumentWorkspaces([...workspaces, newWorkspace])
+        break
+      case 'asset':
+        setAssetWorkspaces([...workspaces, newWorkspace])
+        break
+      case 'object':
+        setObjectWorkspaces([...workspaces, newWorkspace])
+        break
+    }
   }
 
   const documentsAccordion = [
     {
       key: '1',
       title: <>{ t('user-management.workspaces.documents') }</>,
-      info: <> <IconTextButton
+      info: <><IconTextButton
         icon={ { value: 'add-find' } }
-        onClick={ () => {
-          setDocumentWorkspaces([...item.documentWorkspaces, {
-            cid: new Date().getTime(), // after path update is set to document id
-            cpath: '',
-            list: false,
-            view: false,
-            publish: false,
-            delete: false,
-            rename: false,
-            create: false,
-            settings: false,
-            versions: false,
-            properties: false
-          }])
-        } }
-               >{ t('user-management.workspaces.add') }</IconTextButton></>,
+        onClick={ () => { handleAddNewWorkspaces(role.documentWorkspaces, 'document') } }
+              >{ t('user-management.workspaces.add') }</IconTextButton></>,
       children: <Table
         data={ documentWorkspaces }
         isLoading={ isLoading }
-        onUpdateData={ (data) => { changeItemInState({ documentWorkspaces: data }) } }
+        onUpdateData={ (data) => { changeRoleInState({ documentWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
@@ -84,26 +98,12 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       title: <>{ t('user-management.workspaces.assets') }</>,
       info: <> <IconTextButton
         icon={ { value: 'add-find' } }
-        onClick={ () => {
-          setAssetWorkspaces([...item.assetWorkspaces, {
-            cid: new Date().getTime(), // after path update is set to document id
-            cpath: '',
-            list: false,
-            view: false,
-            publish: false,
-            delete: false,
-            rename: false,
-            create: false,
-            settings: false,
-            versions: false,
-            properties: false
-          }])
-        } }
+        onClick={ () => { handleAddNewWorkspaces(role.assetWorkspaces, 'asset') } }
                >{ t('user-management.workspaces.add') }</IconTextButton></>,
       children: <Table
         data={ assetWorkspaces }
         isLoading={ isLoading }
-        onUpdateData={ (data) => { changeItemInState({ assetWorkspaces: data }) } }
+        onUpdateData={ (data) => { changeRoleInState({ assetWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
@@ -115,28 +115,14 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     {
       key: '1',
       title: <>{ t('user-management.workspaces.objects') }</>,
-      info: <> <IconTextButton
+      info: <><IconTextButton
         icon={ { value: 'add-find' } }
-        onClick={ () => {
-          setObjectWorkspaces([...item.dataObjectWorkspaces, {
-            cid: new Date().getTime(), // after path update is set to document id
-            cpath: '',
-            list: false,
-            view: false,
-            publish: false,
-            delete: false,
-            rename: false,
-            create: false,
-            settings: false,
-            versions: false,
-            properties: false
-          }])
-        } }
-               >{ t('user-management.workspaces.add') }</IconTextButton></>,
+        onClick={ () => { handleAddNewWorkspaces(role.dataObjectWorkspaces, 'object') } }
+              >{ t('user-management.workspaces.add') }</IconTextButton></>,
       children: <Table
         data={ objectWorkspaces }
         isLoading={ isLoading }
-        onUpdateData={ (data) => { changeItemInState({ dataObjectWorkspaces: data }) } }
+        onUpdateData={ (data) => { changeRoleInState({ dataObjectWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }

@@ -12,7 +12,7 @@
 */
 
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import { itemOpened, itemClosed } from '@Pimcore/modules/user/roles/roles-slice'
+import { roleOpened, roleClosed, roleUpdated } from '@Pimcore/modules/user/roles/roles-slice'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
 import { useTranslation } from 'react-i18next'
 import { api } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
@@ -29,22 +29,22 @@ import type {
   RoleGetByIdApiResponse
 } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 
-interface IAddItemArgs {
+interface IAddRoleArgs {
   parentId: number
   name: string
 }
 
 interface IUseRoleReturn {
-  openItem: (id: number) => void
-  closeItem: (id: number) => void
-  getItemTree: (props: RoleGetTreeApiArg) => Promise<RoleGetTreeApiResponse>
-  addNewItem: (props: IAddItemArgs) => Promise<{ data: RoleCreateApiResponse, error: any }>
-  removeItem: (props: RoleDeleteByIdApiArg) => Promise<{ data: RoleDeleteByIdApiResponse, error: any }>
+  openRole: (id: number) => void
+  closeRole: (id: number) => void
+  getRoleTree: (props: RoleGetTreeApiArg) => Promise<RoleGetTreeApiResponse>
+  addNewRole: (props: IAddRoleArgs) => Promise<{ data: RoleCreateApiResponse, error: any }>
+  removeRole: (props: RoleDeleteByIdApiArg) => Promise<{ data: RoleDeleteByIdApiResponse, error: any }>
   removeFolder: (props: RoleFolderDeleteByIdApiArg) => Promise<{ data: RoleFolderDeleteByIdApiResponse, error: any }>
-  cloneItem: (props: { id: number, name: string }) => Promise<{ data: RoleCloneByIdApiResponse, error: any }>
-  addNewFolder: (props: IAddItemArgs) => Promise<{ data: RoleFolderCreateApiResponse, error: any }>
-  updateItemById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
-  moveItemById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
+  cloneRole: (props: { id: number, name: string }) => Promise<{ data: RoleCloneByIdApiResponse, error: any }>
+  addNewFolder: (props: IAddRoleArgs) => Promise<{ data: RoleFolderCreateApiResponse, error: any }>
+  updateRoleById: (props: { id: number, item: DetailedUserRole }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
+  moveRoleById: (props: { id: number, parentId: number }) => Promise<{ data: RoleUpdateByIdApiResponse, error: any }>
   activeId: number
   getAllIds: number[]
 }
@@ -67,29 +67,29 @@ export const useRoleHelper = (): IUseRoleReturn => {
       })
     }
   }
-  function openItem (id: number): void {
-    dispatch(itemOpened(id))
+  function openRole (id: number): void {
+    dispatch(roleOpened(id))
   }
 
-  function closeItem (id: number): void {
-    dispatch(itemClosed(id))
+  function closeRole (id: number): void {
+    dispatch(roleClosed(id))
   }
 
-  async function fetchItemById (props): Promise<RoleGetByIdApiResponse> {
+  async function fetchRoleById (props): Promise<RoleGetByIdApiResponse> {
     const { id } = props
     const { data }: any = await dispatch(api.endpoints.roleGetById.initiate({ id }))
 
     return data
   }
 
-  async function getItemTree (props: RoleGetTreeApiArg): Promise<RoleGetTreeApiResponse> {
+  async function getRoleTree (props: RoleGetTreeApiArg): Promise<RoleGetTreeApiResponse> {
     const { parentId } = props
     const { data }: any = await dispatch(api.endpoints.roleGetTree.initiate({ parentId }))
 
     return data
   }
 
-  async function addNewItem (props: IAddItemArgs): Promise<{ data: RoleCreateApiResponse, error: Error }> {
+  async function addNewRole (props: IAddRoleArgs): Promise<{ data: RoleCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCreate.initiate({ body: { parentId, name } }))
 
@@ -97,7 +97,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
-  async function addNewFolder (props: IAddItemArgs): Promise<{ data: RoleFolderCreateApiResponse, error: Error }> {
+  async function addNewFolder (props: IAddRoleArgs): Promise<{ data: RoleFolderCreateApiResponse, error: Error }> {
     const { parentId, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleFolderCreate.initiate({ body: { parentId, name } }))
 
@@ -106,7 +106,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
-  async function removeItem (props: RoleDeleteByIdApiArg): Promise<{ data: RoleDeleteByIdApiResponse, error: Error }> {
+  async function removeRole (props: RoleDeleteByIdApiArg): Promise<{ data: RoleDeleteByIdApiResponse, error: Error }> {
     const { id } = props
     const { data, error }: any = await dispatch(api.endpoints.roleDeleteById.initiate({ id }))
 
@@ -124,7 +124,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
-  async function cloneItem (props: { id: number, name: string }): Promise<{ data: RoleCloneByIdApiResponse, error: Error }> {
+  async function cloneRole (props: { id: number, name: string }): Promise<{ data: RoleCloneByIdApiResponse, error: Error }> {
     const { id, name } = props
     const { data, error }: any = await dispatch(api.endpoints.roleCloneById.initiate({ id, body: { name } }))
 
@@ -133,20 +133,22 @@ export const useRoleHelper = (): IUseRoleReturn => {
     return data
   }
 
-  async function updateItemById (props: { id: number, item: DetailedUserRole }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
-    console.log('call updateItemById')
+  async function updateRoleById (props: { id: number, item: DetailedUserRole }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
     const { id, item } = props
 
     const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId: item.parentId ?? 0 } }))
     handleNotification(t('roles.save-item.success'), error)
+
+    dispatch(roleUpdated(id))
+
     return data
   }
 
-  async function moveItemById (props: { id: number, parentId: number }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
+  async function moveRoleById (props: { id: number, parentId: number }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
     const { id, parentId } = props
 
-    const item = await fetchItemById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId } }))
+    const role = await fetchRoleById({ id })
+    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...role, parentId } }))
 
     handleNotification(t('roles.save-item.success'), error)
     return data
@@ -156,16 +158,16 @@ export const useRoleHelper = (): IUseRoleReturn => {
   const getAllIds = useAppSelector(state => state.role.ids)
 
   return {
-    openItem,
-    closeItem,
-    getItemTree,
-    addNewItem,
+    openRole,
+    closeRole,
+    getRoleTree,
+    addNewRole,
     addNewFolder,
-    removeItem,
-    cloneItem,
+    removeRole,
+    cloneRole,
     removeFolder,
-    updateItemById,
-    moveItemById,
+    updateRoleById,
+    moveRoleById,
     activeId,
     getAllIds
   }

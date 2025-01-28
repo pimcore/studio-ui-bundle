@@ -14,10 +14,10 @@
 import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
   selectRoleById,
-  itemFetched,
-  removeItem,
-  changeItem,
-  itemReloaded
+  roleFetched,
+  removeRole,
+  changeRole,
+  roleReloaded
 } from '@Pimcore/modules/user/roles/roles-slice'
 import {
   api, type RoleGetByIdApiResponse
@@ -27,20 +27,20 @@ import { useEffect, useState } from 'react'
 interface IUserRoleDraft {
   isLoading: boolean
   isError: boolean
-  item: undefined | ReturnType<typeof selectRoleById>
+  role: undefined | ReturnType<typeof selectRoleById>
 
-  removeItemFromState: () => void
-  changeItemInState: (changedValues: any) => void
-  reloadItem: () => void
+  removeRoleFromState: () => void
+  changeRoleInState: (changedValues: any) => void
+  reloadRole: () => void
 }
 
 export const useRoleDraft = (id: number): IUserRoleDraft => {
   const dispatch = useAppDispatch()
-  const item = useAppSelector(state => selectRoleById(state, id))
+  const role = useAppSelector(state => selectRoleById(state, id))
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
 
-  async function fetchItem (): Promise<RoleGetByIdApiResponse> {
+  async function fetchRole (): Promise<RoleGetByIdApiResponse> {
     const { data } = await dispatch(api.endpoints.roleGetById.initiate({ id }))
 
     if (data !== undefined) {
@@ -51,23 +51,23 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
     return {} as RoleGetByIdApiResponse
   }
 
-  function reloadItem (): void {
-    dispatch(itemReloaded(item.id))
-    getItem()
+  function reloadRole (): void {
+    dispatch(roleReloaded(role.id))
+    getRole()
   }
 
   useEffect(() => {
-    if (item === undefined && id !== undefined) {
-      getItem()
+    if (role === undefined && id !== undefined) {
+      getRole()
     } else {
       setIsLoading(false)
     }
-  }, [item])
+  }, [role])
 
-  function getItem (): void {
+  function getRole (): void {
     setIsLoading(true)
-    fetchItem().then((data) => {
-      dispatch(itemFetched(data))
+    fetchRole().then((data) => {
+      dispatch(roleFetched(data))
     }).catch(() => {
       setIsError(true)
     }).finally(() => {
@@ -75,24 +75,23 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
     })
   }
 
-  function removeItemFromState (): void {
-    if (item === undefined) return
+  function removeRoleFromState (): void {
+    if (role === undefined) return
 
-    dispatch(removeItem(item.id))
+    dispatch(removeRole(role.id))
   }
 
-  function changeItemInState (changes: any): void {
-    console.log('changeItemInState', changes)
-    if (item === undefined) return
-    dispatch(changeItem({ id: item.id, changes }))
+  function changeRoleInState (changes: any): void {
+    if (role === undefined) return
+    dispatch(changeRole({ id: role.id, changes }))
   }
 
   return {
     isLoading,
     isError,
-    item,
-    removeItemFromState,
-    changeItemInState,
-    reloadItem
+    role,
+    removeRoleFromState,
+    changeRoleInState,
+    reloadRole
   }
 }

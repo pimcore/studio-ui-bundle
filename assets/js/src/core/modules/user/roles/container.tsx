@@ -24,7 +24,7 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
-  const { getItemTree } = useRoleHelper()
+  const { getRoleTree } = useRoleHelper()
   const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
@@ -80,13 +80,13 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const handleOnLoadData = async (node: TreeDataNode): Promise<void> => {
-    await getItemTree({ parentId: Number(node.key) }).then(response => {
+    await getRoleTree({ parentId: Number(node.key) }).then(response => {
       updateTreeData(node.key, response.items)
     })
   }
 
   const reloadTree = (): void => {
-    getItemTree({ parentId: 0 }).then((data) => {
+    getRoleTree({ parentId: 0 }).then((data) => {
       updateTreeData('0', data.items)
       const timestamp = Date.now()
       setTreeKey('tree-' + timestamp)
@@ -142,10 +142,10 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <Detail
         key="role-detail"
-        onCloneItem={ (data) => {
+        onCloneRole={ (data) => {
           reloadTree()
         } }
-        onRemoveItem={ (id) => {
+        onRemoveRole={ (id) => {
           const parent = findParentByKey(treeData, id)
           if (parent?.children !== undefined) {
             const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== id)

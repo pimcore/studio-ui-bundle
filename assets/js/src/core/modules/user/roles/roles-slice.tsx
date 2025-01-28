@@ -30,23 +30,22 @@ export const slice = createSlice({
     changedIds: [] as number[]
   }),
   reducers: {
-    itemOpened: (state, action: PayloadAction<number>): void => {
+    roleOpened: (state, action: PayloadAction<number>): void => {
       state.activeId = action.payload
     },
-    itemClosed: (state, action: PayloadAction<number>): void => {
+    roleClosed: (state, action: PayloadAction<number>): void => {
       state.activeId = undefined
       roleAdapter.removeOne(state, action.payload)
     },
-    itemFetched: (state, action: PayloadAction<any>): void => {
-      console.log('itemFetched', action.payload)
+    roleFetched: (state, action: PayloadAction<any>): void => {
       if (action.payload.id !== undefined) {
         roleAdapter.upsertOne(state, action)
       }
     },
-    removeItem: (state, action: PayloadAction<number>): void => {
+    removeRole: (state, action: PayloadAction<number>): void => {
       roleAdapter.removeOne(state, action.payload)
     },
-    changeItem: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
+    changeRole: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
       const id: number = action.payload.id
 
       if (!state.changedIds.includes(id)) {
@@ -60,19 +59,25 @@ export const slice = createSlice({
 
       roleAdapter.updateOne(state, update)
     },
-    itemReloaded: (state, action: PayloadAction<number>): void => {
+    roleReloaded: (state, action: PayloadAction<number>): void => {
       const id: number = action.payload
 
       const update: Update<any, any> = {
         id,
         changes: { modified: false }
       }
-      state.changedIds = state.changedIds.filter((item) => item !== id)
+      state.changedIds = state.changedIds.filter((role) => role !== id)
 
       roleAdapter.updateOne(state, update)
     },
-    itemUpdated: (state, action: PayloadAction<any>): void => {
-      roleAdapter.upsertOne(state, { ...action })
+    roleUpdated: (state, action: PayloadAction<number>): void => {
+      state.changedIds = state.changedIds.filter((role) => role !== action.payload)
+      const update: Update<any, any> = {
+        id: action.payload,
+        changes: { modified: false }
+      }
+
+      roleAdapter.updateOne(state, update)
     }
   }
 })
@@ -80,13 +85,13 @@ export const slice = createSlice({
 injectSliceWithState(slice)
 
 export const {
-  removeItem,
-  itemOpened,
-  itemClosed,
-  itemFetched,
-  itemReloaded,
-  changeItem,
-  itemUpdated
+  removeRole,
+  roleOpened,
+  roleClosed,
+  roleFetched,
+  roleReloaded,
+  roleUpdated,
+  changeRole
 } = slice.actions
 
 export const { selectById: selectRoleById } = roleAdapter.getSelectors((state: RootState) => state.role)

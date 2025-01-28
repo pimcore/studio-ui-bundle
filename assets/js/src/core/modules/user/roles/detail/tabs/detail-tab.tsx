@@ -30,12 +30,12 @@ const DetailTab = ({ id }: IDetailTabProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isWidgetActive = useIsAcitveMainWidget()
   const { setContext, removeContext } = useGlobalUserContext()
-  const { item, isLoading, isError, removeItemFromState } = useRoleDraft(id)
+  const { role, isLoading, isError, removeRoleFromState } = useRoleDraft(id)
 
   useEffect(() => {
     return () => {
       removeContext()
-      removeItemFromState()
+      removeRoleFromState()
     }
   }, [])
 
@@ -59,7 +59,7 @@ const DetailTab = ({ id }: IDetailTabProps): React.JSX.Element => {
     return <Content loading />
   }
 
-  if (item === undefined) {
+  if (role === undefined) {
     return <></>
   }
 

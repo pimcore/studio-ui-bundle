@@ -28,28 +28,29 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
   const [form] = Form.useForm()
   const { id } = useRoleContext()
-  const { item, isLoading, changeItemInState } = useRoleDraft(id)
-  const permissions = getGroupedPermissions(item?.permissions as [] ?? [])
+  const { role, isLoading, changeRoleInState } = useRoleDraft(id)
+  const permissions = getGroupedPermissions(role?.permissions as [] ?? [])
 
   useEffect(() => {
     if (!isLoading) {
       form.setFieldsValue({
-        name: item?.name
+        name: role?.name
       })
     }
-  }, [item, isLoading])
+  }, [role, isLoading])
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
+      const updatedValues = { ...allValues }
       if (changedValues.permissionsDefault !== undefined || changedValues.permissionsBundles !== undefined) {
-        allValues.permissions = [
+        updatedValues.permissions = [
           ...changedValues.permissionsDefault ?? allValues.permissionsDefault ?? [],
           ...changedValues.permissionsBundles ?? allValues.permissionsBundles ?? []
         ]
       }
-      changeItemInState(allValues)
+      changeRoleInState(updatedValues)
     }, 300),
-    [changeItemInState]
+    [changeRoleInState]
   )
   if (isLoading) {
     return <Content loading></Content>
@@ -74,14 +75,14 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         <Col span={ 16 }>
           <SharedTranslationSettingsAccordion
             data={ validLanguages }
-            editData={ item?.websiteTranslationLanguagesEdit }
+            editData={ role?.websiteTranslationLanguagesEdit }
             onChange={ (languages) => {
-              changeItemInState({
+              changeRoleInState({
                 websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
                 websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
               })
             } }
-            viewData={ item?.websiteTranslationLanguagesView }
+            viewData={ role?.websiteTranslationLanguagesView }
           />
         </Col>
       </Row>
