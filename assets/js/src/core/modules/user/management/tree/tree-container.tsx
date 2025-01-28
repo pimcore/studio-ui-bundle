@@ -72,7 +72,7 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
       renderToolbar={
         <ToolbarTree
           onAddFolder={ () => { handleAddFolder('0') } }
-          onAddUser={ () => { handleAddUser('0') } }
+          onAddItem={ () => { handleAddUser('0') } }
           onReload={ onReloadTree }
         />
       }

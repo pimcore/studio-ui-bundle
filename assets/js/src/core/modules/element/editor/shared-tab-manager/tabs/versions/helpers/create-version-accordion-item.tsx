@@ -11,30 +11,24 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { isSet } from '@Pimcore/utils/helpers'
-import { Checkbox, Input } from 'antd'
+import { Checkbox } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
 import { type TimeLineAccordionItemType } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Space } from '@Pimcore/components/space/space'
 import { Tag } from '@Pimcore/components/tag/tag'
-import { useTranslation } from 'react-i18next'
 import { Box } from '@Pimcore/components/box/box'
+import { VersionItem } from '../components/version-item/version-item'
 import { type VersionIdentifiers } from '../types/types'
 
 interface CreateAccordionItemProps {
   version: Version
   detailedVersions: VersionIdentifiers[]
-  comparingActive: boolean
-  onClickDelete: (id: number) => void
-  onClickPublish: (id: number) => Promise<void>
-  onBlurNote: (id: number, note: string) => void
+  isComparingActive: boolean
   selectVersion: (vId: VersionIdentifiers) => void
   setDetailedVersions: React.Dispatch<React.SetStateAction<VersionIdentifiers[]>>
 }
@@ -42,18 +36,15 @@ interface CreateAccordionItemProps {
 export const createVersionAccordionItem = ({
   version,
   detailedVersions,
-  comparingActive,
-  onClickDelete,
-  onClickPublish,
-  onBlurNote,
+  isComparingActive,
   selectVersion,
   setDetailedVersions
 }: CreateAccordionItemProps): TimeLineAccordionItemType => {
   const vId = { id: version.id, count: version.versionCount }
-  const selected = detailedVersions.some((v => v.id === version.id))
 
-  const selectable = comparingActive
+  const selected = detailedVersions.some((v => v.id === version.id))
   const published = version.published ?? false
+  const selectable = isComparingActive
 
   const themeBySelection = selected ? 'theme-primary' : 'theme-default'
   const themeByState: PanelTheme = published ? 'theme-success' : themeBySelection
@@ -72,14 +63,6 @@ export const createVersionAccordionItem = ({
   const handleClick = (): void => {
     selectable ? handleComparisonAction() : handleDetailAction()
   }
-
-  const scheduledDate = isSet(version.scheduled)
-    ? formatDateTime({
-      timestamp: version.scheduled!,
-      dateStyle: 'short',
-      timeStyle: 'short'
-    })
-    : undefined
 
   const Title = (): React.JSX.Element => {
     const { t } = useTranslation()
@@ -116,7 +99,7 @@ export const createVersionAccordionItem = ({
     return (
       <div>
         <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
-        {isSet(version.autosave) && version.autosave && <Icon value="auto-save" />}
+        {isNil(version.autosave) && version.autosave && <Icon value="auto-save" />}
       </div>
     )
   }
@@ -131,84 +114,10 @@ export const createVersionAccordionItem = ({
     return (
       <Tag
         color={ 'success' }
-        iconName={ 'world' }
+        iconName={ 'published' }
       >
         {t('version.published')}
       </Tag>
-    )
-  }
-
-  const Component = (): React.JSX.Element => {
-    const { t } = useTranslation()
-    const [deletingVersion, setDeletingVersion] = useState(false)
-    const [publishingVersion, setPublishingVersion] = useState(false)
-
-    const publishVersion = async (): Promise<void> => {
-      setPublishingVersion(true)
-      await onClickPublish(version.id)
-      setPublishingVersion(false)
-    }
-
-    const deleteVersion = (): void => {
-      setDeletingVersion(true)
-      setDetailedVersions([])
-      onClickDelete(version.id)
-    }
-
-    return (
-      <Flex
-        gap={ 'extra-small' }
-        vertical
-      >
-        <Flex
-          align='top'
-          justify='space-between'
-        >
-          <Tag className={ 'id-tag' }>ID: {version.id}</Tag>
-          <Space size='mini'>
-            {!published && (
-              <IconTextButton
-                className={ 'btn-publish' }
-                disabled={ publishingVersion || deletingVersion }
-                icon={ { value: 'published' } }
-                loading={ publishingVersion }
-                onClick={ publishVersion }
-              >
-                {t('version.publish')}
-              </IconTextButton>
-            )}
-            <IconButton
-              aria-label={ t('aria.version.delete') }
-              disabled={ publishingVersion }
-              icon={ { value: 'trash' } }
-              loading={ deletingVersion }
-              onClick={ deleteVersion }
-              type={ 'default' }
-            />
-          </Space>
-        </Flex>
-        {
-          isSet(scheduledDate) && (
-            <div className={ 'row-margin' }>
-              <div>{t('version.schedule-for')}</div>
-              <div className={ 'date-container' }>
-                <Icon value="calendar" />
-                <span className={ 'scheduled-date' }>{scheduledDate}</span>
-              </div>
-            </div>
-          )
-        }
-        <div className={ 'row-margin' }>
-          <span>{t('version.note')}</span>
-          <Input
-            defaultValue={ version.note }
-            onBlur={ (e): void => {
-              onBlurNote(version.id, e.target.value.toString())
-            } }
-            placeholder={ 'Add a note' }
-          />
-        </div>
-      </Flex>
     )
   }
 
@@ -218,7 +127,12 @@ export const createVersionAccordionItem = ({
     title: <Title />,
     subtitle: <Subtitle />,
     extra: <Extra />,
-    children: <Component />,
+    children: (
+      <VersionItem
+        setDetailedVersions={ setDetailedVersions }
+        version={ version }
+      />
+    ),
     onClick: handleClick,
     theme: themeByState
   }

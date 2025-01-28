@@ -164,18 +164,22 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         <Col span={ 16 }>
           <EditorSettingsAccordion
             data={ user?.contentLanguages }
+            editData={ user?.websiteTranslationLanguagesEdit }
             onChange={ (languages) => { changeUserInState({ contentLanguages: languages }) } }
+            viewData={ user?.websiteTranslationLanguagesView }
           />
         </Col>
         <Col span={ 16 }>
           <SharedTranslationSettingsAccordion
             data={ validLanguages }
+            editData={ user?.websiteTranslationLanguagesEdit }
             onChange={ (languages) => {
               changeUserInState({
                 websiteTranslationLanguagesEdit: languages.filter((language) => language.edit).map((language) => language.abbreviation),
                 websiteTranslationLanguagesView: languages.filter((language) => language.view).map((language) => language.abbreviation)
               })
             } }
+            viewData={ user?.websiteTranslationLanguagesView }
           />
         </Col>
       </Row>

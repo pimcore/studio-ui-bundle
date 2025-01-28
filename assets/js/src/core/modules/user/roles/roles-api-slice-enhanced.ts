@@ -12,7 +12,7 @@
 */
 
 import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from './role-api-slice.gen'
+import { api as baseApi } from './roles-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ROLE],
@@ -23,7 +23,7 @@ const api = baseApi.enhanceEndpoints({
   }
 })
 
-export type * from './role-api-slice.gen'
+export type * from './roles-api-slice.gen'
 
 export const {
   useRoleGetCollectionQuery

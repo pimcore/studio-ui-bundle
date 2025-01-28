@@ -30,7 +30,7 @@ import { useForm } from 'antd/es/form/Form'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Content } from '@Pimcore/components/content/content'
-import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/role/role-api-slice-enhanced'
+import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 
 enum ViewState {

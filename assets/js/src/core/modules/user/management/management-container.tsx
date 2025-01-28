@@ -33,7 +33,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [],
     actions: [
       { key: 'add-folder', icon: 'folder-plus' },
-      { key: 'add-user', icon: 'user-plus-01' }
+      { key: 'add-user', icon: 'add-user' }
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
@@ -48,13 +48,13 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
       icon: item.type === 'user' ? <Icon value={ 'user' } /> : <Icon value={ 'folder' } />,
       actions: item.type === 'user'
         ? [
-            { key: 'clone-user', icon: 'copy-03' },
-            { key: 'remove-user', icon: 'delete-outlined' }
+            { key: 'clone-user', icon: 'copy' },
+            { key: 'remove-user', icon: 'trash' }
           ]
         : [
             { key: 'add-folder', icon: 'folder-plus' },
-            { key: 'add-user', icon: 'user-plus-01' },
-            { key: 'remove-folder', icon: 'delete-outlined' }
+            { key: 'add-user', icon: 'add-user' },
+            { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
       isLeaf: item.children === false

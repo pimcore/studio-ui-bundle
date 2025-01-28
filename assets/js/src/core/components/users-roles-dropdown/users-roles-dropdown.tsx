@@ -23,7 +23,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Button } from '@Pimcore/components/button/button'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
+import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
 
@@ -34,7 +34,7 @@ interface IUsersRolesDropdownProps {
 }
 
 interface IRenderSelectProps {
-  options?: Array<{ value: string, label: ReactNode }>
+  options?: Array<{ value: number, label: ReactNode, searchValue?: string }>
   placeholder: string
   handleOnChange: any
   selectedOptions: number[]
@@ -88,7 +88,7 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
     <Select
       mode="multiple"
       onChange={ handleOnChange }
-      optionFilterProp="value"
+      optionFilterProp="searchValue"
       options={ options }
       placeholder={ t(placeholder) }
       showSearch
@@ -99,9 +99,10 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   const renderUsers = (): React.JSX.Element => {
     const options = userList?.items
       ?.filter(item => userData?.id !== item.id)
-      ?.map((item, index) => ({
-        value: `${index}-${item?.username}`,
-        label: renderLabel({ labelName: item?.username, iconName: 'user' })
+      ?.map((item) => ({
+        value: item.id,
+        label: renderLabel({ labelName: item?.username, iconName: 'user' }),
+        searchValue: item?.username
       }))
 
     return renderSelect({
@@ -113,9 +114,10 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   }
 
   const renderRoles = (): React.JSX.Element => {
-    const options = roleList?.items?.map((item, index) => ({
-      value: `${index}-${item?.name}`,
-      label: renderLabel({ labelName: item?.name, iconName: 'shield' })
+    const options = roleList?.items?.map((item) => ({
+      value: item.id,
+      label: renderLabel({ labelName: item?.name, iconName: 'shield' }),
+      searchValue: item?.name
     }))
 
     return renderSelect({
