@@ -23,7 +23,7 @@ import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/use
 import { TagList, type TagListProps } from '@Pimcore/components/tag-list/tag-list'
 import { type TagProps } from '@Pimcore/components/tag/tag'
 import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
-import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
+import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './save-form.styles'
 import { isEmpty } from 'lodash'
