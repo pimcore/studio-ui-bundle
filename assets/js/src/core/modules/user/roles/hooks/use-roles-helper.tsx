@@ -129,7 +129,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { data, error }: any = await dispatch(api.endpoints.roleCloneById.initiate({ id, body: { name } }))
 
     handleNotification(t('roles.clone-item.success'), error)
-
+    dispatch(roleOpened(data.id as number))
     return data
   }
 

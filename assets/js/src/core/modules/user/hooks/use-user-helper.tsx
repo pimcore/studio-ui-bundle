@@ -166,6 +166,7 @@ export const useUserHelper = (): UseUserReturn => {
     const { id, name } = props
     const { data, error }: any = await dispatch(api.endpoints.userCloneById.initiate({ id, body: { name } }))
 
+    dispatch(userOpened(data.id as number))
     handleNotification(t('user-management.clone-user.success'), error)
     return data
   }

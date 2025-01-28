@@ -83,82 +83,78 @@ const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, 
       >
         <TreeAutocomplete />
 
-        {!isLoading
-          ? (
-            <Tree
-              defaultExpandedKeys={ expandedKeys }
-              draggable
-              onActionsClick={ (key: string, action: string) => {
-                switch (action) {
-                  case 'add-folder':
-                    handleAddFolder(key)
+        <Tree
+          defaultExpandedKeys={ expandedKeys }
+          draggable
+          onActionsClick={ (key: string, action: string) => {
+            switch (action) {
+              case 'add-folder':
+                handleAddFolder(key)
 
-                    break
-                  case 'add-user':
-                    handleAddUser(key)
+                break
+              case 'add-user':
+                handleAddUser(key)
 
-                    break
-                  case 'clone-user':
-                    modal.input({
-                      title: t('user-management.clone-user'),
-                      label: t('user-management.clone-user.label'),
-                      onOk: async (value: string) => {
-                        const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-                        const data = await cloneUser({ id: parseInt(key), name: value })
+                break
+              case 'clone-user':
+                modal.input({
+                  title: t('user-management.clone-user'),
+                  label: t('user-management.clone-user.label'),
+                  onOk: async (value: string) => {
+                    const parentId = (findParentByKey(treeData, key)?.key)?.toString()
+                    const data = await cloneUser({ id: parseInt(key), name: value })
 
-                        if (data !== undefined) {
-                          onUpdateTreeData(parentId, [data], true)
-                        }
-                      }
-                    })
+                    if (data !== undefined) {
+                      onUpdateTreeData(parentId, [data], true)
+                    }
+                  }
+                })
 
-                    break
-                  case 'remove-user':
-                    modal.confirm({
-                      title: t('user-management.remove-user'),
-                      content: t('user-management.remove-user.text'),
-                      onOk: async () => {
-                        await removeUser({ id: Number(key) })
+                break
+              case 'remove-user':
+                modal.confirm({
+                  title: t('user-management.remove-user'),
+                  content: t('user-management.remove-user.text'),
+                  onOk: async () => {
+                    await removeUser({ id: Number(key) })
 
-                        onRemoveItem(key)
-                      }
-                    })
+                    onRemoveItem(key)
+                  }
+                })
 
-                    break
-                  case 'remove-folder':
-                    modal.confirm({
-                      title: t('user-management.remove-folder'),
-                      content: t('user-management.remove-folder.text'),
-                      onOk: async () => {
-                        await removeFolder({ id: Number(key) })
+                break
+              case 'remove-folder':
+                modal.confirm({
+                  title: t('user-management.remove-folder'),
+                  content: t('user-management.remove-folder.text'),
+                  onOk: async () => {
+                    await removeFolder({ id: Number(key) })
 
-                        onRemoveItem(key)
-                      }
-                    })
+                    onRemoveItem(key)
+                  }
+                })
 
-                    break
-                }
-              } }
-              onDragAndDrop={ async (params) => {
-                const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
+                break
+            }
+          } }
+          onDragAndDrop={ async (params) => {
+            const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
-                if (data !== undefined) {
-                  onMoveItem(params.dragNode, params.node.key)
-                }
-              } }
-              onExpand={ (keys) => {
-                setExpandedKeys(keys)
-              } }
-              onLoadData={ onLoadTreeData }
-              onSelected={ (key) => {
-                if (findNodeByKey(treeData, key)?.selectable === true) {
-                  openUser(Number(key))
-                }
-              } }
-              treeData={ treeData }
-            />
-            )
-          : null}
+            if (data !== undefined) {
+              onMoveItem(params.dragNode, params.node.key)
+            }
+          } }
+          onExpand={ (keys) => {
+            setExpandedKeys(keys)
+          } }
+          onLoadData={ onLoadTreeData }
+          onSelected={ (key) => {
+            if (findNodeByKey(treeData, key)?.selectable === true) {
+              openUser(Number(key))
+            }
+          } }
+          treeData={ treeData }
+        />
       </Content>
     </ContentLayout>
   )
