@@ -13,11 +13,12 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty, isEqual } from 'lodash'
+import { map, filter, intersection, isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { getCategoriesList } from './helpers/categoriesHelper'
+import { getModifiedItems } from './helpers/dataHelper'
 import { type IVersionsFieldsListProps } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
@@ -29,23 +30,25 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const versionKeys = Object.keys(data[0]).filter(key => key.startsWith('Version'))
-  const filteredList = data.filter((item) => !isEqual(item[versionKeys[0]], item[versionKeys[1]]))
 
-  const comparisonViewData = isExpandedUnmodifiedFields ? data : filteredList
+  const comparisonModifiedData = getModifiedItems(data, versionKeys[0], versionKeys[1])
+  const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
+
   const resultList = !isComparisonView ? data : comparisonViewData
+
   const resultListKeys = map(resultList, 'Field.key')
 
-  const CATEGORIES_LIST = getCategoriesList(data)
+  const categoriesList = useMemo(() => getCategoriesList(data), [data])
 
-  const categories = useMemo(() => {
+  const categoriesWithFields = useMemo(() => {
     return filter(
-      map(CATEGORIES_LIST, category => ({
+      map(categoriesList, category => ({
         ...category,
         fieldKeys: intersection(category.fieldKeys, resultListKeys)
       })),
       category => !isEmpty(category.fieldKeys)
     )
-  }, [isExpandedUnmodifiedFields, CATEGORIES_LIST])
+  }, [isExpandedUnmodifiedFields, categoriesList])
 
   return (
     <Flex vertical>
@@ -70,7 +73,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
             value={ isExpandedUnmodifiedFields }
           />
         )}
-        {categories.map((category, index) => (
+        {categoriesWithFields.map((category, index) => (
           <div key={ index }>
             <div><b style={ { fontSize: '15px', color: 'blue' } }>{category.key}</b></div>
             {resultList.map((fieldItem, fieldIndex) =>
