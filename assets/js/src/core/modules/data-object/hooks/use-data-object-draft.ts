@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { store, useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as dataObjectApi, type DataObject, type DataObjectGetByIdApiResponse } from '../data-object-api-slice-enhanced'
 import {
   addPropertyToDataObject,
@@ -61,6 +61,8 @@ export interface UseDataObjectDraftReturn extends
   removeDataObjectFromState: () => void
 
   fetchDataObject: () => Promise<DataObject>
+
+  getCurrentDraftState: () => ReturnType<typeof selectDataObjectById> | undefined
 }
 
 export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
@@ -167,6 +169,11 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     ? undefined
     : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
 
+  const getCurrentDraftState = (): ReturnType<typeof selectDataObjectById> | undefined => {
+    const state = store.getState()
+    return selectDataObjectById(state, dataObject.id)
+  }
+
   return {
     isLoading,
     isError,
@@ -174,6 +181,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     editorType,
     removeDataObjectFromState,
     fetchDataObject,
+    getCurrentDraftState,
     ...trackableChangesActions,
     ...propertyActions,
     ...schedulesActions,
