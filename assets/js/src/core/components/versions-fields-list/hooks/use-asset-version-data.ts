@@ -11,21 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { getModifiedItems, getVersionKeysList } from '../helpers/dataHelper'
-import { type CategoriesList, type IVersionsFieldsListProps } from '../types'
 import { useMemo } from 'react'
+import { isEqual } from 'lodash'
 import { getCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
+import { type CategoriesList, type IVersionsFieldsList } from '../types'
 
 interface IUseAssetVersionDataReturn {
   versionKeysList: string[]
-  comparisonModifiedData: IVersionsFieldsListProps['data']
+  comparisonModifiedData: IVersionsFieldsList['data']
   categoriesList: CategoriesList
 }
 
-export const useAssetVersionData = (data: IVersionsFieldsListProps['data']): IUseAssetVersionDataReturn => {
-  const versionKeysList = getVersionKeysList(data)
+export const useAssetVersionData = (data: IVersionsFieldsList['data']): IUseAssetVersionDataReturn => {
+  const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
-  const comparisonModifiedData = getModifiedItems(data, versionKeysList[0], versionKeysList[1])
+  const comparisonModifiedData = data.filter((item) => {
+    return !isEqual(item[versionKeysList[0]], item[versionKeysList[1]])
+  })
 
   const categoriesList = useMemo(() => getCategoriesList(data), [data])
 

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export interface IVersionsFieldsListProps {
+export interface IVersionsFieldsList {
   data: Array<{
     Field: { field: string, key: string }
     [key: string]: any

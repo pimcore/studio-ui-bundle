@@ -12,9 +12,9 @@
 */
 
 import { isUndefined } from 'lodash'
-import { type IVersionsFieldsListProps } from '../types'
+import { type IVersionsFieldsList } from '../types'
 
-export const getCategoriesList = (data: IVersionsFieldsListProps['data']): Array<{ key: string, fieldKeys: string[] }> => {
+export const getCategoriesList = (data: IVersionsFieldsList['data']): Array<{ key: string, fieldKeys: string[] }> => {
   const categoryMap: Record<string, Set<string>> = {}
 
   const getCategoryName = (value: string): string | undefined => {

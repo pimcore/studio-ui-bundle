@@ -18,8 +18,10 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { useAssetVersionData } from './hooks/use-asset-version-data'
-import { type IVersionsFieldsListProps } from './types'
+import { type IVersionsFieldsList } from './types'
 import { useStyles } from './versions-fields-list.styles'
+
+interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 
 export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
@@ -33,14 +35,16 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
   const categoriesListWithFields = useMemo(() => {
+    // get all version field keys
     const versionFieldKeys = map(versionViewData, 'Field.key')
 
     return filter(
+      // map over list to update field with matching keys
       map(categoriesList, category => ({
-        ...category,
-        fieldKeys: intersection(category.fieldKeys, versionFieldKeys)
+        ...category, // keep initial category properties
+        fieldKeys: intersection(category.fieldKeys, versionFieldKeys) // keep only matching keys
       })),
-      category => !isEmpty(category.fieldKeys)
+      category => !isEmpty(category.fieldKeys) // include only categories with non-empty fieldKeys
     )
   }, [isExpandedUnmodifiedFields, categoriesList])
 
