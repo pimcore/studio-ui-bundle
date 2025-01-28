@@ -48,6 +48,19 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
     )
   }, [isExpandedUnmodifiedFields, categoriesList])
 
+  const renderHeaderItem = (item: string, index: number): React.JSX.Element => {
+    const versionNumber = item.match(/\d+/)?.[0] ?? '0'
+
+    return (
+      <Flex
+        className={ styles.headerItem }
+        key={ `${index}-${item}` }
+      >
+        <Text>{t('version.version')} {Number(versionNumber)}</Text>
+      </Flex>
+    )
+  }
+
   return (
     <Flex vertical>
       <Flex
@@ -55,12 +68,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
         wrap="wrap"
       >
         {versionKeysList.map((item, index) => (
-          <Flex
-            className={ styles.headerItem }
-            key={ `${index}-${item}` }
-          >
-            <Text>{t('version.version')} {item}</Text>
-          </Flex>
+          renderHeaderItem(item, index)
         ))}
       </Flex>
       <Flex vertical>
