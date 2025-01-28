@@ -15,30 +15,34 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    content: css`
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      gap: 12px;
+    dropdown: css`
+      position: absolute;
+      top: 35px;
+      width: 360px;
+      background-color: ${token.colorBgContainer};
+      box-shadow: ${token.boxShadowSecondary};
+      z-index: 1;
+    `,
 
-      &.content--padded {
-        padding: ${token.paddingSM}px;
+    tabs: css`
+      .ant-tabs-nav-list {
+        justify-content: space-around;
+        width: 100%;
       }
-
-      &.content--centered {
-        justify-content: center;
-        align-items: center;
+      
+      .ant-tabs-ink-bar {
+        width: 50% !important;
+      }
+      
+      .ant-tabs-content-holder {
+        padding: ${token.paddingXS}px;
       }
     `,
 
-    contentFullPage: css`
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
+    btnGroupWrapper: css`
+      display: flex;
+      justify-content: flex-end;
+      padding: 7px ${token.paddingXS}px;
     `
   }
 })

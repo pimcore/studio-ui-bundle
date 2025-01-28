@@ -15,30 +15,31 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    content: css`
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      gap: 12px;
+    versionTag: css`
+      width: 56px;
+      height: 22px;
 
-      &.content--padded {
-        padding: ${token.paddingSM}px;
-      }
+      display: inline-grid;
+      justify-content: center;
 
-      &.content--centered {
-        justify-content: center;
-        align-items: center;
-      }
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 20px;
     `,
 
-    contentFullPage: css`
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
+    dateContainer: css`
+      display: flex;
+      align-items: center;
+      margin-top: 2px;
+      gap: 4px;
+    `,
+
+    dateIcon: css`
+      color: ${token.Colors.Neutral.Icon.colorIcon};
+    `,
+
+    dateLabel: css`
+      color: ${token.colorTextDescription};
     `
   }
 })

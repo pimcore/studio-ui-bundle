@@ -37,7 +37,8 @@ export const tagNames = {
   DEPENDENCIES: 'DEPENDENCIES',
   NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
-  ELEMENT_TAGS: 'ELEMENT_TAGS'
+  ELEMENT_TAGS: 'ELEMENT_TAGS',
+  ROLE: 'ROLE'
 }
 
 export const providingTags = {
@@ -74,7 +75,8 @@ export const providingTags = {
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.ELEMENT_TAGS, id }],
-  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
+  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
+  ROLE: () => [tagNames.ROLE]
 }
 
 export const invalidatingTags = {
@@ -101,7 +103,8 @@ export const invalidatingTags = {
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [tagNames.NOTES_AND_EVENTS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [{ type: tagNames.ELEMENT_TAGS, id }],
-  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS]
+  AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
+  ROLE: () => [tagNames.ROLE]
 }
 
 const getElementDetailTag = (elementType: ElementType, id: number): Tag | undefined => {
