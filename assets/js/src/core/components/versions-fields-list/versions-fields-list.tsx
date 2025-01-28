@@ -13,7 +13,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
+import { map, filter, intersection, isEmpty, isUndefined, isEqual } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
@@ -64,7 +64,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const versionKeys = Object.keys(data[0]).filter(key => key.startsWith('Version'))
-  const filteredList = data.filter((item) => item[versionKeys[0]] !== item[versionKeys[1]])
+  const filteredList = data.filter((item) => !isEqual(item[versionKeys[0]], item[versionKeys[1]]))
 
   const comparisonViewData = isExpandedUnmodifiedFields ? data : filteredList
   const resultList = !isComparisonView ? data : comparisonViewData
