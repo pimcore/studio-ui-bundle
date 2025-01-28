@@ -26,7 +26,10 @@ export interface CreateTreeStructureProps {
   actions?: TreeAction[]
 }
 
-export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeStructureProps): TreeDataNode[] => {
+interface CustomTreeDataNode extends TreeDataNode {
+  actions?: TreeAction[]
+}
+export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeStructureProps): CustomTreeDataNode[] => {
   const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
     if (tagText === undefined || tagText === null || tagText.trim() === '') {
       return isLoading
@@ -70,6 +73,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeS
     icon: Icon({
       value: 'folder'
     }),
-    children: tags.length > 0 ? treeWalker(tags) : []
+    children: tags.length > 0 ? treeWalker(tags) : [],
+    actions
   }]
 }

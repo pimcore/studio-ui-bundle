@@ -12,13 +12,13 @@
 */
 
 import React from 'react'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { Title } from '@Pimcore/components/title/title'
+import { Box } from '@Pimcore/components/box/box'
 
 export interface TagConfigurationContainerProps {
   isLoading: boolean
@@ -35,6 +35,7 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
         [{ key: 'add-tag', icon: 'new' },
           { key: 'rename-tag', icon: 'edit' },
           { key: 'delete-tag', icon: 'trash' }
+
         ]
 
   const onActionsClick = (key: string, type: string): void => {
@@ -53,9 +54,8 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
   const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
 
   return (
-    <Flex
-      gap="small"
-      vertical
+    <Box
+      margin={ 'small' }
     >
       <Title>Tag Configuration</Title>
       <TreeElement
@@ -65,7 +65,7 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
         treeData={ treeData }
         withCustomSwitcherIcon
       />
-    </Flex>
+    </Box>
   )
 }
 
