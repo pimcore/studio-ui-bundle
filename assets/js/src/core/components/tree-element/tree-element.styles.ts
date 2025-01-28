@@ -30,11 +30,12 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
         }
 
         .ant-tree-treenode {
-          padding: 0;
+          padding: 0 ${token.paddingXS}px;
+          position: relative;
           
           @media (hover: hover) {
             &:hover {
-              background-color: ${token.controlItemBgHover};
+              background-color: ${token.controlItemBgActiveHover};
             }
           }
 
@@ -53,7 +54,8 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
           }
         }
 
-        .ant-tree-treenode-selected {
+        .ant-tree-treenode-selected,
+        .ant-tree-treenode-selected:hover {
           background-color: ${token.controlItemBgActive};
         }
       }
@@ -90,6 +92,24 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
 
       .ant-tree-draggable-icon {
         display: none;
+      }
+      
+      .ant-tree-title__btn {
+        background: transparent;
+        border: none;
+        color: ${token.colorTextTreeElement};
+        cursor: pointer;
+        padding: 0;
+        font-size: ${token.fontSize}px; 
+                
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
       }
     `
   }

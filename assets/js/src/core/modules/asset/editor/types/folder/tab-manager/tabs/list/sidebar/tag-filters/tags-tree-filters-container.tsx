@@ -56,7 +56,6 @@ export const TagsTreeFiltersContainer = ({ addOrUpdateFieldFilter, checkedKeys, 
         <TreeElement
           checkStrictly
           checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
-          defaultExpandedKeys={ ['root'] }
           onCheck={ handleCheck }
           treeData={ treeData }
           withCustomSwitcherIcon
