@@ -75,8 +75,6 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     )
   })
 
-  console.log('columns', columns, props.cols)
-
   const rows = props.rows.map((row) => {
     const rowData = {
       rowLabel: t(row.label)

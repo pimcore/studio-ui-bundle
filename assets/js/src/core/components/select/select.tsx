@@ -40,7 +40,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
   const isStatusWarning = status === 'warning'
   const isStatusError = status === 'error'
 
-  const selectContainerClassNames = cn(styles.selectContainer, {
+  const selectContainerClassNames = cn('studio-select', styles.selectContainer, {
     [styles.selectContainerWarning]: isStatusWarning,
     [styles.selectContainerError]: isStatusError,
     [styles.selectContainerWithClear]: allowClear === true && isSelected

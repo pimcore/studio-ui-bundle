@@ -46,3 +46,13 @@ export const getElementKey = (element: Element, elementType: ElementType): strin
 
   return ''
 }
+
+export const getElementActionCacheKey = (elementType: ElementType, action: string, id?: number): string => {
+  let cacheKey = `${elementType}_ACTION_${action}`
+
+  if (id !== undefined) {
+    cacheKey += `_ID_${id}`
+  }
+
+  return cacheKey.toUpperCase()
+}

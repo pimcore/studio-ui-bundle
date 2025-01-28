@@ -69,6 +69,9 @@ const config: ConfigFile = {
     '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/settings-slice.gen.ts': {
       filterEndpoints: pathMatcher(/custom-metadata/i)
     },
+    '../../js/src/core/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/metadata/i)
+    },
     '../../js/src/core/modules/app/settings/settings-slice.gen.ts': {
       filterEndpoints: /settings/i
     },

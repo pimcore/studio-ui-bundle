@@ -161,7 +161,10 @@ import properties from '@Pimcore/assets/icons/properties.inline.svg'
 import published from '@Pimcore/assets/icons/published.inline.svg'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg'
+import removeImageThumbnail from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg'
 import removeMarker from '@Pimcore/assets/icons/remove-marker.inline.svg'
+import removePdfThumbnail from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg'
+import removeVideoThumbnail from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg'
 import rename from '@Pimcore/assets/icons/rename.inline.svg'
 import requiredBy from '@Pimcore/assets/icons/required-by.inline.svg'
 import requires from '@Pimcore/assets/icons/requires.inline.svg'
@@ -201,9 +204,6 @@ import widget from '@Pimcore/assets/icons/widget.inline.svg'
 import workflow from '@Pimcore/assets/icons/workflow.inline.svg'
 import xCircle from '@Pimcore/assets/icons/x-circle.inline.svg'
 import xlsxCsv from '@Pimcore/assets/icons/xlsx-csv.inline.svg'
-import removeImageThumbnails from '@Pimcore/assets/icons/remove-image-thumbnail.inline.svg'
-import removeVideoThumbnails from '@Pimcore/assets/icons/remove-video-thumbnail.inline.svg'
-import removePdfThumbnails from '@Pimcore/assets/icons/remove-pdf-thumbnail.inline.svg'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -781,8 +781,20 @@ moduleSystem.registerModule({
       component: refresh
     })
     iconLibrary.register({
+      name: 'remove-image-thumbnail',
+      component: removeImageThumbnail
+    })
+    iconLibrary.register({
       name: 'remove-marker',
       component: removeMarker
+    })
+    iconLibrary.register({
+      name: 'remove-pdf-thumbnail',
+      component: removePdfThumbnail
+    })
+    iconLibrary.register({
+      name: 'remove-video-thumbnail',
+      component: removeVideoThumbnail
     })
     iconLibrary.register({
       name: 'rename',
@@ -939,18 +951,6 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'xlsx-csv',
       component: xlsxCsv
-    })
-    iconLibrary.register({
-      name: 'remove-image-thumbnails',
-      component: removeImageThumbnails
-    })
-    iconLibrary.register({
-      name: 'remove-video-thumbnails',
-      component: removeVideoThumbnails
-    })
-    iconLibrary.register({
-      name: 'remove-pdf-thumbnails',
-      component: removePdfThumbnails
     })
   }
 })

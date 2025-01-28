@@ -18,7 +18,7 @@ export const useStyles = createStyles(({ css }) => {
     'select-cell': css`
       padding: 4px;
 
-      .ant-select {
+      .ant-select, .studio-select {
         width: 100%;
       }
     `

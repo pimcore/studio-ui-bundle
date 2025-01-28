@@ -15,7 +15,6 @@ import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useTranslation } from 'react-i18next'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -29,7 +28,7 @@ export type ManyToManyRelationValue = ManyToManyRelationValueItem[]
 
 interface UseValueReturn {
   onDrop: (info: DragAndDropInfo) => void
-  deleteItem: (id: number, type: string) => void
+  deleteItem: (rowIndex: number) => void
   onSearch: (searchTerm: string) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
@@ -40,7 +39,8 @@ export const useValue = (
   setValue: (value: ManyToManyRelationValue | null) => void,
   displayedValue: ManyToManyRelationValue | null,
   setDisplayedValue: (value: ManyToManyRelationValue | null) => void,
-  maxItems: number | null
+  maxItems: number | null,
+  allowMultipleAssignments?: boolean
 ): UseValueReturn => {
   const modal = useAlertModal()
   const { t } = useTranslation()
@@ -49,14 +49,18 @@ export const useValue = (
   }
 
   const addItems = (items: ManyToManyRelationValueItem[]): void => {
+    const newItems = allowMultipleAssignments !== true
+      ? items.filter(item => !itemIsInValue(item.id, item.type))
+      : items
+
     setValue([
       ...value ?? [],
-      ...items
+      ...newItems
     ])
 
     setDisplayedValue([
       ...displayedValue ?? [],
-      ...items
+      ...newItems
     ])
   }
 
@@ -103,8 +107,8 @@ export const useValue = (
     addItem(newValue)
   }
 
-  const deleteItem = (id: number, type: string): void => {
-    const filterFunction = (item: ManyToManyRelationValueItem): boolean => item.id !== id || mapToElementType(item.type) !== mapToElementType(type)
+  const deleteItem = (rowIndex: number): void => {
+    const filterFunction = (item: ManyToManyRelationValueItem, _index: number): boolean => _index !== rowIndex
     setValue(value === null ? null : value.filter(filterFunction))
     setDisplayedValue(displayedValue === null ? null : displayedValue.filter(filterFunction))
   }

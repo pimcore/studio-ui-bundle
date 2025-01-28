@@ -26,7 +26,9 @@ import { transformApiDataToNodes } from './utils/transform-api-data-to-node'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { useTranslation } from 'react-i18next'
 import { Box } from '@Pimcore/components/box/box'
+import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
+import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 
 export interface TreeContainerProps {
   id: number
@@ -96,7 +98,7 @@ const TreeContainer = ({ id = 1 }: TreeContainerProps): React.JSX.Element => {
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
-      renderNode={ withActionStates(withDraggable(TreeNode)) }
+      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNode)))) }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }

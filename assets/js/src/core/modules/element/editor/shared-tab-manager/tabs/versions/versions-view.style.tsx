@@ -69,6 +69,11 @@ export const useStyles = createStyles(({ token, css }) => {
         font-size: 12px;
         line-height: 20px;
       }
+    `,
+
+    notificationMessage: css`
+      text-align: center;
+      max-width: 200px;
     `
   }
 }, { hashPriority: 'low' })

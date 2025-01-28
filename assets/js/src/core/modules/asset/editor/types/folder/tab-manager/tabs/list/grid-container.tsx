@@ -17,17 +17,16 @@ import { type GridProps } from '@Pimcore/types/components/types'
 import { type ColumnDef, createColumnHelper, type RowSelectionState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import {
-  type GridColumnConfiguration,
   type AssetGetGridApiResponse,
+  type GridColumnConfiguration,
   type GridColumnData
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useListColumns, useListSelectedRows, useListSorting } from './hooks/use-list'
 import { uuid } from '@Pimcore/utils/uuid'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { useOpen } from '@Pimcore/modules/element/actions/open/open'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import {
+  ListGridContextMenu
+} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/context-menu/list-grid-context-menu'
 
 interface GridContainerProps {
   assets: AssetGetGridApiResponse | undefined
@@ -66,10 +65,6 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
   const { selectedRows, setSelectedRows } = useListSelectedRows()
   const { sorting, setSorting } = useListSorting()
   const { hasType } = useDynamicTypeResolver()
-  const open = useOpen('asset')
-  const rename = useRename('asset')
-  const remove = useDelete('asset')
-  const download = useDownload()
 
   const onSelectedRowsChange = useCallback((rows: RowSelectionState): void => {
     setSelectedRows(rows)
@@ -171,12 +166,7 @@ const GridContainer = (props: GridContainerProps): React.JSX.Element => {
     return (
       <Grid
         columns={ columns }
-        contextMenuItems={ [
-          open.openGridContextMenuItem,
-          rename.renameGridContextMenuItem,
-          remove.deleteGridContextMenuItem,
-          download.downloadGridContextMenuItem
-        ] }
+        contextMenu={ ListGridContextMenu }
         data={ data }
         enableMultipleRowSelection
         enableSorting

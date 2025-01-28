@@ -14,7 +14,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HotspotImage, type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -25,6 +24,7 @@ import {
 import {
   cropToHotspot, defaultCrop, hotspotToCrop
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/utils/crop-converter'
+import { createImageThumbnailUrl } from '@Pimcore/components/image-preview/utils/custom-image-thumbnail'
 
 export interface CropModalProps {
   crop?: CropSettings | null
@@ -71,7 +71,12 @@ export const CropModal = (props: CropModalProps): React.JSX.Element => {
     props.onClose?.()
   }
 
-  const thumbnailSrc = `${getPrefix()}/assets/${props.imageId}/image/stream/custom?width=${width}&height=${height}&mimeType=PNG&resizeMode=none&contain=true`
+  const thumbnailSrc = createImageThumbnailUrl(props.imageId, {
+    width,
+    height,
+    mimeType: 'PNG',
+    contain: true
+  })
 
   return (
     <Modal

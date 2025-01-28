@@ -14,7 +14,7 @@
 import type { IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
 import {
   VersionsTabContainer
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-container'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-container/versions-container'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import {

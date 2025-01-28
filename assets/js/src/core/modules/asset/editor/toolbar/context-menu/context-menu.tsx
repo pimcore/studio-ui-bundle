@@ -27,17 +27,18 @@ import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-but
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
+import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset } = useAssetDraft(id)
   const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
-  const { renameContextMenuItem } = useRename('asset')
-  const { deleteContextMenuItem } = useDelete('asset')
+  const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
+  const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
   const { downloadContextMenuItem } = useDownload()
   const { createZipDownloadContextMenuItem } = useZipDownload({ type: 'folder' })
-  const { refreshElement } = useElementRefresh(asset!.id, 'asset')
+  const { refreshElement } = useElementRefresh('asset')
   const {
     clearImageThumbnailContextMenuItem,
     clearVideoThumbnailContextMenuItem,
@@ -45,7 +46,7 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
   } = useClearThumbnails()
 
   const items: DropdownMenuProps['items'] = [
-    renameContextMenuItem(asset as Asset, () => { refreshElement() }),
+    renameContextMenuItem(asset as Asset, () => { refreshElement(asset!.id) }),
     deleteContextMenuItem(asset as Asset),
     downloadContextMenuItem(asset as Asset),
     createZipDownloadContextMenuItem(asset as Asset),
@@ -90,13 +91,13 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     if (Object.keys(asset?.changes ?? {}).length > 0) {
       setPopConfirmOpen(true)
     } else {
-      refreshElement()
+      refreshElement(asset!.id)
     }
   }
 
   function onConfirm (): void {
     setPopConfirmOpen(false)
-    refreshElement()
+    refreshElement(asset!.id)
   }
 
   function onCancel (): void {
