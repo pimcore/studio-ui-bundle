@@ -12,6 +12,8 @@
 */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Col, Flex, Popconfirm, Row } from 'antd'
 import { SaveForm, type SaveFormProps } from '../forms/save-form'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -20,8 +22,11 @@ import { Space } from '@Pimcore/components/space/space'
 import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
-import { Col, Flex, Popconfirm, Row } from 'antd'
 import { Text } from '@Pimcore/components/text/text'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
+import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 export interface SaveViewProps {
   formProps: SaveFormProps
@@ -30,10 +35,16 @@ export interface SaveViewProps {
   isLoading?: boolean
   isDeleting?: boolean
   saveAsNewConfiguration?: boolean
+  modificationDate?: number | null
+  userName?: string
+  roleList?: RoleGetCollectionApiResponse
+  userList?: UserGetCollectionApiResponse
 }
 
-export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration }: SaveViewProps): React.JSX.Element => {
+export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, isDeleting, saveAsNewConfiguration, modificationDate, userName, ...props }: SaveViewProps): React.JSX.Element => {
   const { form } = formProps
+
+  const { t } = useTranslation()
 
   return (
     <ContentLayout
@@ -44,18 +55,18 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
           { onDeleteClick !== undefined && saveAsNewConfiguration !== true
             ? (
               <Popconfirm
-                cancelText={ 'cancel' }
-                description="Are you sure that you want to delete this template?"
-                okText="Delete"
+                cancelText={ t('button.cancel') }
+                description={ t('grid.configuration.delete-template-confirmation') }
+                okText={ t('delete') }
                 onConfirm={ onDeleteClick }
-                title="Delete this template"
+                title={ t('grid.configuration.delete-this-template') }
               >
                 <IconTextButton
                   disabled={ isLoading }
                   icon={ { value: 'trash' } }
                   loading={ isDeleting }
                 >
-                  Delete Template
+                  {t('grid.configuration.delete-template')}
                 </IconTextButton>
               </Popconfirm>
 
@@ -67,7 +78,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
               icon={ { value: 'close' } }
               onClick={ onCancelClick }
               type='default'
-            >Cancel</IconTextButton>
+            >{ t('button.cancel') }</IconTextButton>
 
             <Button
               disabled={ isDeleting }
@@ -75,7 +86,7 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
               onClick={ () => form?.submit() }
               type='primary'
             >
-              Save & Apply
+              { t('button.save-apply') }
             </Button>
           </Space>
         </Toolbar>
@@ -86,20 +97,28 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
           gap='small'
           vertical
         >
-          <Header title='Save configuration as template' />
+          <Header title={ t('grid.configuration.save-template-configuration') } />
 
           { saveAsNewConfiguration !== true && (
             <Row>
               <Col span={ 6 }>
-                <Text>Owner:</Text> <Text type='secondary'>Admin</Text>
+                <Text>{t('common.owner')}:</Text> <Text type='secondary'>{userName}</Text>
               </Col>
-              <Col span={ 12 }>
-                <Text>Modification date:</Text> <Text type='secondary'>22.10.2024 10:11</Text>
-              </Col>
+              {!isEmptyValue(modificationDate) && (
+                <Col span={ 12 }>
+                  <Text>{t('common.modification-date')}: </Text>
+                  <Text type='secondary'>
+                    {formatDateTime({ timestamp: modificationDate!, dateStyle: 'short', timeStyle: 'short' })}
+                  </Text>
+                </Col>
+              )}
             </Row>
           )}
 
-          <SaveForm { ...formProps } />
+          <SaveForm
+            { ...formProps }
+            { ...props }
+          />
         </Flex>
       </Content>
     </ContentLayout>

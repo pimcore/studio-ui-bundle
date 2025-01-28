@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect, useMemo } from 'react'
 import { useStyle } from './image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -26,6 +26,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
+import { createImageThumbnailUrl, type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 interface ImagePreviewProps {
   src?: string
@@ -38,9 +40,10 @@ interface ImagePreviewProps {
   bordered?: boolean
   dropdownItems?: DropdownProps['menu']['items']
   onHotspotsDataButtonClick?: () => void
+  thumbnailSettings?: ImageThumbnailSettings
 }
 
-export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false, onHotspotsDataButtonClick }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, assetType, width, height, className, style, dropdownItems, bordered = false, onHotspotsDataButtonClick, thumbnailSettings }: ImagePreviewProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const [key, setKey] = React.useState(0)
   const [thumbnailDimensions, setThumbnailDimensions] = React.useState({ width: 0, height: 0 })
   const { getStateClasses } = useDroppable()
@@ -59,19 +62,33 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
       return `${getPrefix()}/assets/${assetId}/video/stream/image-thumbnail?width=${width}&height=${height}&frame=true&aspectRatio=true`
     }
 
-    return `${getPrefix()}/assets/${assetId}/image/stream/custom?width=${width}&height=${height}&mimeType=JPEG&resizeMode=none&frame=true`
+    const defaultSettings: ImageThumbnailSettings = {
+      width,
+      height,
+      mimeType: 'JPEG',
+      frame: true
+    }
+
+    return createImageThumbnailUrl(assetId!, {
+      ...defaultSettings,
+      ...thumbnailSettings
+    })
   }
 
-  const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
+  const imageSrc = useMemo(() => {
+    return assetId !== undefined ? getAssetPreviewUrl() : src
+  }, [assetId, src, thumbnailDimensions, assetType, thumbnailSettings])
+
+  const isVisible = useElementVisible(wrapperRef)
 
   useEffect(() => {
-    if (wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
+    if (isVisible && wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
       setThumbnailDimensions({
         width: wrapperRef.current.offsetWidth,
         height: wrapperRef.current.offsetHeight
       })
     }
-  }, [wrapperRef, width, height])
+  }, [isVisible, width, height])
 
   useEffect(() => {
     setKey(key + 1)

@@ -26,6 +26,10 @@ export const useStyle = createStyles(({ token, css }) => {
       .image-target-title {
           text-align: center;
       }
+      
+      .icon-container {
+        color: ${token.colorIcon};
+      }
     `,
     closeButton: css`
       position: absolute;

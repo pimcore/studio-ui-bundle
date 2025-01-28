@@ -114,6 +114,10 @@ export const Toolbar = (): React.JSX.Element => {
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
+    if (dataObject.changes.objectData) {
+      update.editableData = dataObject.modifiedObjectData
+    }
+
     const saveDataObjectPromise = saveDataObject({
       id,
       body: {
