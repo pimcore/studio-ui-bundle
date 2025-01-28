@@ -41,13 +41,29 @@ export interface EditViewProps {
   isUpdating: boolean
   columns: any[]
   gridConfig: IListGridConfigContext['gridConfig']
+  currentUserId?: number
 }
 
-export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfigurationClick, onUpdateConfigurationClick, isUpdating, onSaveConfigurationClick, savedGridConfigurations, addColumnMenu, isLoading, columns }: EditViewProps): React.JSX.Element => {
+export const EditView = (props: EditViewProps): React.JSX.Element => {
+  const {
+    onCancelClick,
+    onApplyClick,
+    onEditConfigurationClick,
+    onUpdateConfigurationClick,
+    onSaveConfigurationClick,
+    addColumnMenu,
+    gridConfig,
+    savedGridConfigurations,
+    isUpdating,
+    isLoading,
+    columns,
+    currentUserId
+  } = props
+
   const { t } = useTranslation()
+
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
-  // @todo bound it to the grid config id when the ownerId is available via api.
-  const isOwner = true
+  const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
 
   return (
     <ContentLayout
@@ -79,11 +95,12 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
             disabled={ savedGridConfigurations?.length === 0 && !isLoading }
             menu={ { items: savedGridConfigurations } }
           >
-            <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? 'No saved templates available' : '' }>
+            <Tooltip title={ savedGridConfigurations?.length === 0 && !isLoading ? t('grid.configuration.no-saved-templates') : '' }>
               <IconTextButton
                 disabled={ savedGridConfigurations?.length === 0 && !isLoading }
                 icon={ { value: 'style' } }
                 loading={ isLoading }
+                style={ { minHeight: '32px', minWidth: '100px' } }
               >
                 { isSavedConfiguration
                   ? (
@@ -93,7 +110,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                     )
                   : (
                     <>
-                      Template
+                      {t('grid.configuration.template')}
                     </>
                     ) }
               </IconTextButton>
@@ -130,20 +147,20 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
             onClick={ onSaveConfigurationClick }
             type='default'
           >
-            Save as template
+            {t('grid.configuration.save-template')}
           </Button>
         ) }
 
         { isSavedConfiguration && (
           <>
-            { isOwner && (
+            { isGridTemplateOwner && (
               <Compact>
                 <Button
                   loading={ isUpdating }
                   onClick={ onUpdateConfigurationClick }
                   type='default'
                 >
-                  Update the template
+                  {t('grid.configuration.update-template')}
                 </Button>
 
                 <Dropdown menu={
@@ -152,7 +169,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                       {
                         key: 0,
                         icon: <Icon value='edit' />,
-                        label: 'Edit template details',
+                        label: t('grid.configuration.edit-template-details'),
                         onClick: () => {
                           onEditConfigurationClick()
                         }
@@ -161,7 +178,7 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
                       {
                         key: 1,
                         icon: <Icon value='save' />,
-                        label: 'Save as new template',
+                        label: t('grid.configuration.save-new-template'),
                         onClick: () => {
                           onSaveConfigurationClick()
                         }
@@ -178,12 +195,12 @@ export const EditView = ({ onCancelClick, gridConfig, onApplyClick, onEditConfig
               </Compact>
             )}
 
-            { !isOwner && (
+            { !isGridTemplateOwner && (
               <Button
                 onClick={ onSaveConfigurationClick }
                 type='default'
               >
-                Save as template
+                {t('grid.configuration.save-template')}
               </Button>
             )}
           </>

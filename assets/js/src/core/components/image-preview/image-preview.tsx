@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect, useMemo } from 'react'
 import { useStyle } from './image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -27,6 +27,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { createImageThumbnailUrl, type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 interface ImagePreviewProps {
   src?: string
@@ -74,16 +75,20 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
     })
   }
 
-  const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
+  const imageSrc = useMemo(() => {
+    return assetId !== undefined ? getAssetPreviewUrl() : src
+  }, [assetId, src, thumbnailDimensions, assetType, thumbnailSettings])
+
+  const isVisible = useElementVisible(wrapperRef)
 
   useEffect(() => {
-    if (wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
+    if (isVisible && wrapperRef?.current !== null && wrapperRef?.current !== undefined) {
       setThumbnailDimensions({
         width: wrapperRef.current.offsetWidth,
         height: wrapperRef.current.offsetHeight
       })
     }
-  }, [wrapperRef, width, height])
+  }, [isVisible, width, height])
 
   useEffect(() => {
     setKey(key + 1)

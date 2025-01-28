@@ -48,6 +48,21 @@ export const LeftSidebarView = (): React.JSX.Element => {
   })
 
   addNavItem({
+    path: 'Settings/User & Roles/Roles',
+    widgetConfig: {
+      name: 'Roles',
+      id: 'role-management',
+      component: 'role-management',
+      config: {
+        icon: {
+          type: 'name',
+          value: 'user'
+        }
+      }
+    }
+  })
+
+  addNavItem({
     path: 'Settings/User & Roles/Open ID Connect Config/Configuration'
   })
 

@@ -31,6 +31,14 @@ export const useStyles = createStyles(({ token, css }) => {
         justify-content: center;
         align-items: center;
       }
+    `,
+
+    contentFullPage: css`
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
     `
   }
 })

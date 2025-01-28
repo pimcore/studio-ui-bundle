@@ -18,17 +18,17 @@ import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 
 export const cropToHotspot = (crop?: CropSettings | null): IHotspot => {
   if (crop !== null && crop !== undefined) {
-    if (!crop.cropPercent) {
+    if (crop.cropPercent === undefined || !crop.cropPercent) {
       console.error('Crop is only supported with cropPercent')
       return defaultHotspot
     }
 
     return {
       id: 1,
-      x: crop.cropLeft,
-      y: crop.cropTop,
-      width: crop.cropWidth,
-      height: crop.cropHeight,
+      x: crop.cropLeft ?? 0,
+      y: crop.cropTop ?? 0,
+      width: crop.cropWidth ?? 0,
+      height: crop.cropHeight ?? 0,
       type: 'hotspot'
     }
   }

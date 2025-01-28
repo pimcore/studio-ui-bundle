@@ -83,7 +83,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   }
 
   const onCropChange = (crop: CropSettings | null): void => {
-    const newValue = value.map((v, i) => i === index ? { ...v, crop } : v)
+    const newValue = value.map((v, i) => i === index ? { ...v, crop: crop ?? {} } : v)
     setValue(newValue)
   }
 
@@ -92,7 +92,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   }
 
   const clearValueData = async (): Promise<void> => {
-    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [], crop: null } : v))
+    setValue(value.map((v, i) => i === index ? { ...v, hotspots: [], marker: [], crop: {} } : v))
     await messageApi.success(t('hotspots.data-cleared'))
   }
 
@@ -108,7 +108,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
     const newValue = [...value]
 
     if (replaceValueData) {
-      newValue[index] = { image }
+      newValue[index] = { image, hotspots: [], marker: [], crop: {} }
     } else {
       newValue[index] = { ...newValue[index], image }
     }
@@ -176,7 +176,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               icon: <Icon value={ 'new' } />,
               onClick: () => {
                 const newValue = [...value]
-                newValue.splice(index + 1, 0, { image: null })
+                newValue.splice(index + 1, 0, { image: null, hotspots: [], marker: [], crop: {} })
                 setValue(newValue)
               }
             },
@@ -232,20 +232,20 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               key: 'empty',
               icon: <Icon value={ 'trash' } />,
               onClick: async () => {
-                setValue(value.map((v, i) => i === index ? { image: null, hotspots: null, marker: null, crop: null } : v))
+                setValue(value.map((v, i) => i === index ? { image: null, hotspots: [], marker: [], crop: {} } : v))
               }
             }
           ] }
           height={ 100 }
           onHotspotsDataButtonClick={ hasHotspotData(index) ? () => { setMarkerModalOpen(true) } : undefined }
           style={ { backgroundColor: '#fff' } }
-          thumbnailSettings={ item.crop ?? undefined }
+          thumbnailSettings={ item.crop }
           width={ 200 }
         />
       </Droppable>
       { cropModalOpen && (
         <CropModal
-          crop={ item.crop }
+          crop={ _.isEmpty(item.crop) ? null : item.crop }
           disabled={ disabled }
           imageId={ item.image!.id }
           onChange={ onCropChange }

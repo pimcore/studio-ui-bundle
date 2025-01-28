@@ -16,8 +16,14 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     treeContainer: css`
+      margin-top: ${token.paddingSM}px;
+
       .simple-tree--search {
         margin: ${token.paddingSM}px ${token.paddingSM}px ${token.paddingXS}px;
+      }
+      
+      :has(.simple-tree--search) {
+        margin-top: 0;
       }
     `
   }
