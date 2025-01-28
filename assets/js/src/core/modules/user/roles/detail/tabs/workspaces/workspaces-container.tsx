@@ -77,10 +77,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     {
       key: '1',
       title: <>{ t('user-management.workspaces.documents') }</>,
-      info: <><IconTextButton
+      info: <IconTextButton
         icon={ { value: 'add-find' } }
         onClick={ () => { handleAddNewWorkspaces(role.documentWorkspaces, 'document') } }
-              >{ t('user-management.workspaces.add') }</IconTextButton></>,
+            >{ t('user-management.workspaces.add') }</IconTextButton>,
       children: <Table
         data={ documentWorkspaces }
         isLoading={ isLoading }
@@ -96,10 +96,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     {
       key: '1',
       title: <>{ t('user-management.workspaces.assets') }</>,
-      info: <> <IconTextButton
+      info: <IconTextButton
         icon={ { value: 'add-find' } }
         onClick={ () => { handleAddNewWorkspaces(role.assetWorkspaces, 'asset') } }
-               >{ t('user-management.workspaces.add') }</IconTextButton></>,
+            >{ t('user-management.workspaces.add') }</IconTextButton>,
       children: <Table
         data={ assetWorkspaces }
         isLoading={ isLoading }
@@ -115,10 +115,10 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     {
       key: '1',
       title: <>{ t('user-management.workspaces.objects') }</>,
-      info: <><IconTextButton
+      info: <IconTextButton
         icon={ { value: 'add-find' } }
         onClick={ () => { handleAddNewWorkspaces(role.dataObjectWorkspaces, 'object') } }
-              >{ t('user-management.workspaces.add') }</IconTextButton></>,
+            >{ t('user-management.workspaces.add') }</IconTextButton>,
       children: <Table
         data={ objectWorkspaces }
         isLoading={ isLoading }
