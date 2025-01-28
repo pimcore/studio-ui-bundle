@@ -25,7 +25,6 @@ import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserHelper()
-  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
     title: t('user-management.tree.all'),
@@ -38,6 +37,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
+  const [treeIsLoading, setTreeIsLoading] = React.useState<boolean>(false)
 
   const createNodeByResponse = useCallback((items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
@@ -85,10 +85,13 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const reloadTree = (): void => {
+    setTreeIsLoading(true)
     getUserTree({ parentId: 0 }).then((data) => {
       updateTreeData('0', data.items)
-      const timestamp = Date.now()
-      setTreeKey('tree-' + timestamp)
+
+      setTimeout(() => {
+        setTreeIsLoading(false)
+      }, 100)
     }).catch((error) => {
       console.error(error)
     })
@@ -100,7 +103,8 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        key={ treeKey }
+        isLoading={ treeIsLoading }
+        key="user-tree"
         onLoadTreeData={ handleOnLoadData }
         onMoveItem={ (dragNode, dropKey) => {
           const parent = findParentByKey(treeData, dragNode.key)

@@ -26,13 +26,14 @@ import { findParentByKey, findNodeByKey } from '@Pimcore/modules/user/management
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
+  isLoading: boolean
   onLoadTreeData: (node: TreeDataNode) => Promise<void>
   onUpdateTreeData: (key: any, items: any, add?: boolean) => void
   onReloadTree: () => void
   onRemoveItem: (key: any) => void
   onMoveItem: (dragNode: any, dropKey: any) => void
 }
-const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openUser, moveUserById, addNewUser, addNewFolder, removeUser, cloneUser, removeFolder } = useUserHelper()
   const { styles } = useStyle()
@@ -78,81 +79,86 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
     >
       <Content
         className={ classNames.join(', ') }
+        loading={ isLoading }
       >
         <TreeAutocomplete />
 
-        <Tree
-          defaultExpandedKeys={ expandedKeys }
-          draggable
-          onActionsClick={ (key: string, action: string) => {
-            switch (action) {
-              case 'add-folder':
-                handleAddFolder(key)
+        {!isLoading
+          ? (
+            <Tree
+              defaultExpandedKeys={ expandedKeys }
+              draggable
+              onActionsClick={ (key: string, action: string) => {
+                switch (action) {
+                  case 'add-folder':
+                    handleAddFolder(key)
 
-                break
-              case 'add-user':
-                handleAddUser(key)
+                    break
+                  case 'add-user':
+                    handleAddUser(key)
 
-                break
-              case 'clone-user':
-                modal.input({
-                  title: t('user-management.clone-user'),
-                  label: t('user-management.clone-user.label'),
-                  onOk: async (value: string) => {
-                    const parentId = (findParentByKey(treeData, key)?.key)?.toString()
-                    const data = await cloneUser({ id: parseInt(key), name: value })
+                    break
+                  case 'clone-user':
+                    modal.input({
+                      title: t('user-management.clone-user'),
+                      label: t('user-management.clone-user.label'),
+                      onOk: async (value: string) => {
+                        const parentId = (findParentByKey(treeData, key)?.key)?.toString()
+                        const data = await cloneUser({ id: parseInt(key), name: value })
 
-                    if (data !== undefined) {
-                      onUpdateTreeData(parentId, [data], true)
-                    }
-                  }
-                })
+                        if (data !== undefined) {
+                          onUpdateTreeData(parentId, [data], true)
+                        }
+                      }
+                    })
 
-                break
-              case 'remove-user':
-                modal.confirm({
-                  title: t('user-management.remove-user'),
-                  content: t('user-management.remove-user.text'),
-                  onOk: async () => {
-                    await removeUser({ id: Number(key) })
+                    break
+                  case 'remove-user':
+                    modal.confirm({
+                      title: t('user-management.remove-user'),
+                      content: t('user-management.remove-user.text'),
+                      onOk: async () => {
+                        await removeUser({ id: Number(key) })
 
-                    onRemoveItem(key)
-                  }
-                })
+                        onRemoveItem(key)
+                      }
+                    })
 
-                break
-              case 'remove-folder':
-                modal.confirm({
-                  title: t('user-management.remove-folder'),
-                  content: t('user-management.remove-folder.text'),
-                  onOk: async () => {
-                    await removeFolder({ id: Number(key) })
+                    break
+                  case 'remove-folder':
+                    modal.confirm({
+                      title: t('user-management.remove-folder'),
+                      content: t('user-management.remove-folder.text'),
+                      onOk: async () => {
+                        await removeFolder({ id: Number(key) })
 
-                    onRemoveItem(key)
-                  }
-                })
+                        onRemoveItem(key)
+                      }
+                    })
 
-                break
-            }
-          } }
-          onDragAndDrop={ async (params) => {
-            const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
+                    break
+                }
+              } }
+              onDragAndDrop={ async (params) => {
+                const data = await moveUserById({ id: Number(params.dragNode.key), parentId: Number(params.node.key) })
 
-            if (data !== undefined) {
-              onMoveItem(params.dragNode, params.node.key)
-            }
-          } }
-          onExpand={ (keys) => {
-            setExpandedKeys(keys)
-          } }
-          onLoadData={ onLoadTreeData }
-          onSelected={ (key) => {
-            if (findNodeByKey(treeData, key)?.selectable === true) {
-              openUser(Number(key))
-            }
-          } }
-          treeData={ treeData }
-        />
+                if (data !== undefined) {
+                  onMoveItem(params.dragNode, params.node.key)
+                }
+              } }
+              onExpand={ (keys) => {
+                setExpandedKeys(keys)
+              } }
+              onLoadData={ onLoadTreeData }
+              onSelected={ (key) => {
+                if (findNodeByKey(treeData, key)?.selectable === true) {
+                  openUser(Number(key))
+                }
+              } }
+              treeData={ treeData }
+            />
+            )
+          : null}
       </Content>
     </ContentLayout>
   )
