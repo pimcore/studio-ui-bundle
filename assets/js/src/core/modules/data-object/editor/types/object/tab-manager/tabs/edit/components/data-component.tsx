@@ -82,11 +82,13 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     name: formFieldName
   }
 
-  if (!objectDataType.isCollectionType) {
-    useEffect(() => {
+  useEffect(() => {
+    if (!objectDataType.isCollectionType) {
       objectDataType.handleDefaultValue(_props, form, formFieldName)
-    }, [form])
+    }
+  }, [form])
 
+  if (!objectDataType.isCollectionType) {
     return (
       <ErrorBoundary>
         <Form.Item

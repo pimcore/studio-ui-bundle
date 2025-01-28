@@ -45,5 +45,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     }
   }
 
-  handleDefaultValue (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {}
+  handleDefaultValue (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    // This method is intentionally left empty - can be implemented in subclasses
+  }
 }
