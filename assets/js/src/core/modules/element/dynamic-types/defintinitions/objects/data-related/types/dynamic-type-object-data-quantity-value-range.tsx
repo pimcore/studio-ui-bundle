@@ -15,10 +15,12 @@ import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 
-import type { FormItemProps } from 'antd/es/form/FormItem'
 import {
   QuantityValueRange
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/quantity-value-range/quantity-value-range'
+import type { FormInstance } from 'antd'
+import type { NamePath } from 'rc-field-form/es/interface'
+import _ from 'lodash'
 
 export type QuantityValueRangeObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
@@ -40,14 +42,16 @@ export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDa
     )
   }
 
-  getObjectDataFormItemProps (props: QuantityValueRangeObjectDataDefinition): FormItemProps {
-    return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: {
+  handleDefaultValue (props: QuantityValueRangeObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    if (_.isEmpty(props.defaultUnit)) {
+      return
+    }
+    if (_.isEmpty(form.getFieldValue(fieldName))) {
+      form.setFieldValue(fieldName, {
         minimum: null,
         maximum: null,
         unitId: props.defaultUnit
-      }
+      })
     }
   }
 }

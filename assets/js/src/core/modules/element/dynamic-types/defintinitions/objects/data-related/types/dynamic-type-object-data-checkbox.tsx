@@ -18,8 +18,12 @@ import {
 import {
   Checkbox
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/checkbox/checkbox'
+import type { FormInstance } from 'antd'
+import type { NamePath } from 'rc-field-form/es/interface'
 
-export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition
+export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
+  defaultValue: boolean | number | null
+}
 
 export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract {
   id: string = 'checkbox'
@@ -30,5 +34,15 @@ export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract
         disabled={ props.noteditable === true }
       />
     )
+  }
+
+  handleDefaultValue (props: CheckboxObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    if (typeof props.defaultValue !== 'boolean' && typeof props.defaultValue !== 'number') {
+      return
+    }
+
+    if (typeof form.getFieldValue(fieldName) !== 'boolean') {
+      form.setFieldValue(fieldName, Boolean(props.defaultValue))
+    }
   }
 }

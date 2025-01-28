@@ -17,6 +17,8 @@ import { type ReactNode, type ReactElement } from 'react'
 import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
+import { type FormInstance } from 'antd'
+import { type NamePath } from 'rc-field-form/es/interface'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -41,5 +43,9 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
       hidden: props.invisible === true,
       tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? respectLineBreak(props.tooltip, false) : undefined
     }
+  }
+
+  handleDefaultValue (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    // This method is intentionally left empty - can be implemented in subclasses
   }
 }

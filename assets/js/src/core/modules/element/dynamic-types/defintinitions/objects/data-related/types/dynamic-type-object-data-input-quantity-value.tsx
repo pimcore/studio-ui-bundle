@@ -17,7 +17,9 @@ import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from
 import {
   InputQuantityValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/input-quantity-value/input-quantity-value'
-import type { FormItemProps } from 'antd/es/form/FormItem'
+import type { FormInstance } from 'antd'
+import type { NamePath } from 'rc-field-form/es/interface'
+import _ from 'lodash'
 
 export type InputQuantityValueObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultUnit: string | null
@@ -38,13 +40,15 @@ export class DynamicTypeObjectDataInputQuantityValue extends DynamicTypeObjectDa
     )
   }
 
-  getObjectDataFormItemProps (props: InputQuantityValueObjectDataDefinition): FormItemProps {
-    return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: {
+  handleDefaultValue (props: InputQuantityValueObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    if (_.isEmpty(props.defaultValue) && _.isEmpty(props.defaultUnit)) {
+      return
+    }
+    if (_.isEmpty(form.getFieldValue(fieldName))) {
+      form.setFieldValue(fieldName, {
         value: props.defaultValue,
         unitId: props.defaultUnit
-      }
+      })
     }
   }
 }

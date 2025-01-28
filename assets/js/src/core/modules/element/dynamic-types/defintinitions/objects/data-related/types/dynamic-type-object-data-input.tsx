@@ -17,6 +17,9 @@ import { type FormItemProps } from 'antd/es/form/FormItem'
 import {
   DynamicTypeObjectDataAbstractInput, type InputProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-input'
+import { type FormInstance } from 'antd'
+import { type NamePath } from 'rc-field-form/es/interface'
+import _ from 'lodash'
 
 export type InputObjectDataDefinition = AbstractObjectDataDefinition & InputProps & {
   defaultValue: string | null
@@ -30,12 +33,20 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
   getObjectDataFormItemProps (props: InputObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
-      initialValue: props.defaultValue,
       rules: [
         {
           pattern: typeof props.regex === 'string' && props.regex.length > 0 ? new RegExp(props.regex, props.regexFlags?.join('')) : undefined
         }
       ]
+    }
+  }
+
+  handleDefaultValue (props: InputObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    if (_.isEmpty(props.defaultValue)) {
+      return
+    }
+    if (_.isEmpty(form.getFieldValue(fieldName))) {
+      form.setFieldValue(fieldName, props.defaultValue)
     }
   }
 }

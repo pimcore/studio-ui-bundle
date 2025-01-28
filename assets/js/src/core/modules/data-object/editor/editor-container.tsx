@@ -21,6 +21,9 @@ import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manage
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
 import { LanguageSelectionProvider } from './toolbar/language-selection/provider/language-selection-provider'
+import {
+  EditFormProvider
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 
 export interface EditorContainerProps {
   id: number
@@ -65,19 +68,21 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
 
   return (
     <DataObjectProvider id={ id }>
-      <LanguageSelectionProvider>
-        <TabsToolbarView
-          renderTabbar={
-            <TabsContainer
-              elementEditorType={ editorType }
-            />
-            }
+      <EditFormProvider>
+        <LanguageSelectionProvider>
+          <TabsToolbarView
+            renderTabbar={
+              <TabsContainer
+                elementEditorType={ editorType }
+              />
+              }
 
-          renderToolbar={
-            <Toolbar />
-            }
-        />
-      </LanguageSelectionProvider>
+            renderToolbar={
+              <Toolbar />
+              }
+          />
+        </LanguageSelectionProvider>
+      </EditFormProvider>
     </DataObjectProvider>
   )
 }
