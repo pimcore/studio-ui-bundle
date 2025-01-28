@@ -71,10 +71,15 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
           renderHeaderItem(item, index)
         ))}
       </Flex>
-      <Flex vertical>
+      <Flex
+        className={ styles.gridContainer }
+        vertical
+      >
         {isComparisonView && (
           <Switch
-            labelLeft="Expand unmodified fields"
+            labelLeft={
+              <Text>{t('version.expand-unmodified-fields')}</Text>
+            }
             onChange={ () => { setIsExpandedUnmodifiedFields(!isExpandedUnmodifiedFields) } }
             value={ isExpandedUnmodifiedFields }
           />
