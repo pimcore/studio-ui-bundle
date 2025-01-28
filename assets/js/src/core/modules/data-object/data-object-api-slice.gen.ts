@@ -63,6 +63,21 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectFormatPath: build.mutation<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/format-path`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
+                    params: { site: queryArg.site },
+                }),
+                providesTags: ["Data Objects"],
+            }),
             dataObjectReplaceContent: build.mutation<
                 DataObjectReplaceContentApiResponse,
                 DataObjectReplaceContentApiArg
@@ -206,6 +221,24 @@ export type DataObjectPatchByIdApiArg = {
         }[];
     };
 };
+export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
+    totalItems: number;
+    items: SelectOption[];
+};
+export type DataObjectFormatPathApiArg = {
+    body: {
+        objectId: number;
+        targets: object;
+        context: object;
+    };
+};
+export type DataObjectPreviewByIdApiResponse = unknown;
+export type DataObjectPreviewByIdApiArg = {
+    /** Id of the data object */
+    id: number;
+    /** Site ID */
+    site?: any;
+};
 export type DataObjectReplaceContentApiResponse = /** status 200 Successfully replaced content of data object */ void;
 export type DataObjectReplaceContentApiArg = {
     /** SourceId of the data-object */
@@ -215,7 +248,7 @@ export type DataObjectReplaceContentApiArg = {
 };
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
-    items: SelectOption[];
+    items: SelectOption2[];
 };
 export type DataObjectGetSelectOptionsApiArg = {
     body: {
@@ -343,8 +376,6 @@ export type DataObjectPermissions = Permissions & {
     localizedEdit?: any;
     /** Localized View */
     localizedView?: any;
-    /** Layouts */
-    layouts?: any;
 };
 export type DataObject = Element & {
     /** AdditionalAttributes */
@@ -509,6 +540,16 @@ export type SelectOption = {
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
+    /** Object Reference */
+    objectReference: string;
+    /** Formated Path */
+    formatedPath: string;
+};
+export type SelectOption2 = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** Key */
     key: string;
     /** Value */
@@ -523,6 +564,8 @@ export const {
     useDataObjectGetGridMutation,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
+    useDataObjectFormatPathMutation,
+    useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
