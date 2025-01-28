@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
@@ -19,6 +19,8 @@ import {
 import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { Title } from '@Pimcore/components/title/title'
 import { Box } from '@Pimcore/components/box/box'
+import { Space } from 'antd'
+import { TagConfigurationModal } from '@Pimcore/modules/tags/tag-configuration-modal'
 
 export interface TagConfigurationContainerProps {
   isLoading: boolean
@@ -31,20 +33,22 @@ export interface TreeAction {
 }
 
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
+  const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
           { key: 'rename-tag', icon: 'edit' },
           { key: 'delete-tag', icon: 'trash' }
-
         ]
 
   const onActionsClick = (key: string, type: string): void => {
     switch (type) {
       case 'add-tag':
         console.log('add-tag clicked:', key)
+
         break
       case 'rename-tag':
         console.log('rename-tag clicked:', key)
+        setTagConfigModalOpen(true)
         break
       case 'delete-tag':
         console.log('delete-tag clicked:', key)
@@ -58,12 +62,17 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
       margin={ 'small' }
     >
       <Title>Tag Configuration</Title>
+      <Space size='small' />
       <TreeElement
         checkStrictly
         defaultExpandedKeys={ ['root'] }
         onActionsClick={ onActionsClick }
         treeData={ treeData }
         withCustomSwitcherIcon
+      />
+      <TagConfigurationModal
+        setTagConfigModalOpen={ setTagConfigModalOpen }
+        tagConfigModalOpen={ tagConfigModalOpen }
       />
     </Box>
   )
