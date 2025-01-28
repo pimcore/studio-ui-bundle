@@ -11,15 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  type TagGetCollectionApiResponse
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import type { TreeDataNode } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { LoadingOutlined } from '@ant-design/icons'
 import React from 'react'
+import { type TreeAction } from '@Pimcore/modules/tags/tag-configuration-container'
+import {
+  type TagGetCollectionApiResponse
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 
-export const createTreeStructure = ({ tags, loadingNodes }: { tags: NonNullable<TagGetCollectionApiResponse['items']>, loadingNodes: Set<string> }): TreeDataNode[] => {
+export interface CreateTreeStructureProps {
+  tags: NonNullable<TagGetCollectionApiResponse['items']>
+  loadingNodes: Set<string>
+  actions?: TreeAction[]
+}
+
+export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeStructureProps): TreeDataNode[] => {
   const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
     if (tagText === undefined || tagText === null || tagText.trim() === '') {
       return isLoading
@@ -51,7 +58,8 @@ export const createTreeStructure = ({ tags, loadingNodes }: { tags: NonNullable<
           value: 'tag'
         }),
         disableCheckbox: isLoading,
-        children: tag.hasChildren ? treeWalker(tag.children!) : []
+        children: tag.hasChildren ? treeWalker(tag.children!) : [],
+        actions
       }
     })
   }

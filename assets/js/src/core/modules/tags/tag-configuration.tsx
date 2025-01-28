@@ -17,8 +17,6 @@ import { TagConfigurationContainer } from '@Pimcore/modules/tags/tag-configurati
 
 const TagConfiguration = ({ ...props }): React.JSX.Element => {
   const { tags, tagsLoading } = useTagConfig()
-  console.log('----> tagsLoading', tagsLoading)
-  console.log('----> tags', tags)
 
   return (
     <TagConfigurationContainer

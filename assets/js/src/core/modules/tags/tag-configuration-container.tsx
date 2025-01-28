@@ -11,37 +11,46 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
-import type {
-  Tag
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { Title } from '@Pimcore/components/title/title'
 
 export interface TagConfigurationContainerProps {
   isLoading: boolean
   tags: Tag[]
 }
+
+export interface TreeAction {
+  key: string
+  icon: string
+}
+
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
-  const [defaultCheckedTags, setDefaultCheckedTags] = useState<React.Key[]>(
-    tags?.map(tag => tag.id.toString())
-  )
+  const tagActions: TreeAction[] =
+        [{ key: 'add-tag', icon: 'new' },
+          { key: 'rename-tag', icon: 'edit' },
+          { key: 'delete-tag', icon: 'trash' }
+        ]
 
-  console.log('----> isLoading', isLoading)
-
-  useEffect(() => {
-    setDefaultCheckedTags(tags.map(tag => tag.id.toString()))
-  }, [tags])
-
-  if (tags === undefined) {
-    return <div>Failed to load tags</div>
+  const onActionsClick = (key: string, type: string): void => {
+    switch (type) {
+      case 'add-tag':
+        console.log('add-tag clicked:', key)
+        break
+      case 'rename-tag':
+        console.log('rename-tag clicked:', key)
+        break
+      case 'delete-tag':
+        console.log('delete-tag clicked:', key)
+    }
   }
 
-  const treeData = createTreeStructure({ tags, loadingNodes: new Set() })
+  const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
 
   return (
     <Flex
@@ -51,9 +60,8 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
       <Title>Tag Configuration</Title>
       <TreeElement
         checkStrictly
-        checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
         defaultExpandedKeys={ ['root'] }
-        onCheck={ () => { console.log('checked') } }
+        onActionsClick={ onActionsClick }
         treeData={ treeData }
         withCustomSwitcherIcon
       />
