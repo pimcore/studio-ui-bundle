@@ -23,7 +23,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Button } from '@Pimcore/components/button/button'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/role/role-api-slice.gen'
+import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
 
