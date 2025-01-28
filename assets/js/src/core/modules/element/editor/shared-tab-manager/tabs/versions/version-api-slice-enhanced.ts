@@ -37,7 +37,7 @@ export const api = baseApi.enhanceEndpoints({
     },
 
     versionDeleteById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.VERSIONS_DETAIL(args.id)
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_VERSIONS(args.id)
     }
   }
 })
@@ -46,7 +46,8 @@ export type * from './version-api-slice.gen'
 export const {
   useVersionAssetDownloadByIdQuery,
   useVersionCleanupForElementByTypeAndIdMutation,
-  useVersionDeleteByIdMutation, useVersionGetByIdQuery,
+  useVersionDeleteByIdMutation,
+  useVersionGetByIdQuery,
   useVersionGetCollectionForElementByTypeAndIdQuery,
   useVersionPublishByIdMutation,
   useVersionUpdateByIdMutation
