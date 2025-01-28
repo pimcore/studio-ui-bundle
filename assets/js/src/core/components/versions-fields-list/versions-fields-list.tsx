@@ -13,54 +13,19 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty, isUndefined, isEqual } from 'lodash'
+import { map, filter, intersection, isEmpty, isEqual } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { getCategoriesList } from './helpers/categoriesHelper'
+import { type IVersionsFieldsListProps } from './types'
 import { useStyles } from './versions-fields-list.styles'
-
-interface IVersionsFieldsListProps {
-  data: any[]
-  isComparisonView: boolean
-}
 
 export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
-
-  const getCategoriesList = (): Array<{ key: string, fieldKeys: string[] }> => {
-    const categoryMap: Record<string, Set<string>> = {}
-
-    const getCategoryName = (value: string): string | boolean => {
-      if (value.includes('.')) {
-        return value.split('.')[0]
-      }
-
-      return false
-    }
-
-    data.forEach(item => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const result = getCategoryName(item.Field.key)
-      const categoryName: string = typeof result === 'string' ? result : 'baseData'
-
-      if (isUndefined(categoryMap[categoryName])) {
-        categoryMap[categoryName] = new Set()
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      categoryMap[categoryName].add(item.Field.key)
-    })
-
-    const categoryList: Array<{ key: string, fieldKeys: string[] }> = Object.entries(categoryMap).map(([key, fieldKeysSet]) => ({
-      key,
-      fieldKeys: Array.from(fieldKeysSet)
-    }))
-
-    return categoryList
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const versionKeys = Object.keys(data[0]).filter(key => key.startsWith('Version'))
@@ -70,7 +35,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
   const resultList = !isComparisonView ? data : comparisonViewData
   const resultListKeys = map(resultList, 'Field.key')
 
-  const CATEGORIES_LIST = getCategoriesList()
+  const CATEGORIES_LIST = getCategoriesList(data)
 
   const categories = useMemo(() => {
     return filter(
