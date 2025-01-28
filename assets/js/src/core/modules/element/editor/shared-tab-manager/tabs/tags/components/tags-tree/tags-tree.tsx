@@ -74,7 +74,7 @@ export const TagsTree = ({
       <TreeElement
         checkStrictly
         checkedKeys={ { checked: defaultCheckedTags, halfChecked: [] } }
-        defaultExpandedKeys={ ['root'] }
+        // defaultExpandedKeys={ ['root'] }
         filter={ filter }
         onCheck={ handleCheck }
         treeData={ treeData }

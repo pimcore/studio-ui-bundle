@@ -109,7 +109,6 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       checkedKeys={ checkedKeys }
       className={ cn(styles.treeContainer, className) }
       draggable={ draggable }
-      expandAction='click'
       expandedKeys={ expandedKeys }
       loadData={ onLoadData !== null ? onLoadData : undefined }
       onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
@@ -121,6 +120,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
         })
       } }
       onExpand={ (keys): void => { onExpand !== null && onExpand !== undefined ? onExpand(keys) : setExpandedKeys(keys) } }
+      selectable={ onSelected !== undefined }
       selectedKeys={ selectedKeys }
       showIcon
       switcherIcon={ handleCustomSwitcherIcon }
