@@ -17,3 +17,7 @@ import { type IVersionsFieldsListProps } from '@Pimcore/components/versions-fiel
 export const getModifiedItems = (dataList: IVersionsFieldsListProps['data'], primaryKey: string, comparisonKey: string): IVersionsFieldsListProps['data'] => {
   return dataList.filter((item) => !isEqual(item[primaryKey], item[comparisonKey]))
 }
+
+export const getVersionKeysList = (dataList: IVersionsFieldsListProps['data']): string[] => {
+  return Object.keys(dataList[0]).filter(key => key.startsWith('Version'))
+}

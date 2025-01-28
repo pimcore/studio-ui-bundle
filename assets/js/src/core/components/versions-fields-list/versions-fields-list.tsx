@@ -18,7 +18,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { getCategoriesList } from './helpers/categoriesHelper'
-import { getModifiedItems } from './helpers/dataHelper'
+import { getModifiedItems, getVersionKeysList } from './helpers/dataHelper'
 import { type IVersionsFieldsListProps } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
@@ -28,23 +28,21 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const versionKeys = Object.keys(data[0]).filter(key => key.startsWith('Version'))
+  const versionKeysList = getVersionKeysList(data)
 
-  const comparisonModifiedData = getModifiedItems(data, versionKeys[0], versionKeys[1])
+  const comparisonModifiedData = getModifiedItems(data, versionKeysList[0], versionKeysList[1])
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
-
-  const resultList = !isComparisonView ? data : comparisonViewData
-
-  const resultListKeys = map(resultList, 'Field.key')
+  const versionViewData = !isComparisonView ? data : comparisonViewData
 
   const categoriesList = useMemo(() => getCategoriesList(data), [data])
 
-  const categoriesWithFields = useMemo(() => {
+  const categoriesListWithFields = useMemo(() => {
+    const versionFieldKeys = map(versionViewData, 'Field.key')
+
     return filter(
       map(categoriesList, category => ({
         ...category,
-        fieldKeys: intersection(category.fieldKeys, resultListKeys)
+        fieldKeys: intersection(category.fieldKeys, versionFieldKeys)
       })),
       category => !isEmpty(category.fieldKeys)
     )
@@ -56,7 +54,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
         className={ styles.headerContainer }
         wrap="wrap"
       >
-        {versionKeys.map((item, index) => (
+        {versionKeysList.map((item, index) => (
           <Flex
             className={ styles.headerItem }
             key={ `${index}-${item}` }
@@ -73,15 +71,15 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
             value={ isExpandedUnmodifiedFields }
           />
         )}
-        {categoriesWithFields.map((category, index) => (
+        {categoriesListWithFields.map((category, index) => (
           <div key={ index }>
             <div><b style={ { fontSize: '15px', color: 'blue' } }>{category.key}</b></div>
-            {resultList.map((fieldItem, fieldIndex) =>
+            {versionViewData.map((fieldItem, fieldIndex) =>
               category.fieldKeys.includes(fieldItem.Field.key) && (
                 <div key={ fieldIndex }>
                   <span><b>{fieldItem.Field.field}</b>: </span>
                   <Flex>
-                    {versionKeys.map((key, index) => (
+                    {versionKeysList.map((key, index) => (
                       <div
                         className={ styles.gridItem }
                         key={ index }
