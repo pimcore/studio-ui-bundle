@@ -174,7 +174,33 @@ export const useUserHelper = (): UseUserReturn => {
   async function updateUserById (props: { id: number, user: User2 | User }): Promise<{ data: UserUpdateByIdApiResponse, error: Error }> {
     const { id, user } = props
 
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId: user.parentId ?? 0 } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
+      id,
+      updateUser: {
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        active: user.active,
+        admin: user.admin,
+        classes: user.classes,
+        twoFactorAuthenticationEnabled: user.twoFactorAuthenticationEnabled,
+        language: user.language,
+        welcomeScreen: user.welcomeScreen,
+        memorizeTabs: user.memorizeTabs,
+        allowDirtyClose: user.allowDirtyClose,
+        closeWarning: user.closeWarning,
+        permissions: user.permissions,
+        parentId: user.parentId ?? 0,
+        roles: user.roles,
+        contentLanguages: user.contentLanguages,
+        websiteTranslationLanguagesEdit: user.websiteTranslationLanguagesEdit,
+        websiteTranslationLanguagesView: user.websiteTranslationLanguagesView,
+        keyBindings: user.keyBindings,
+        assetWorkspaces: user.assetWorkspaces,
+        dataObjectWorkspaces: user.dataObjectWorkspaces,
+        documentWorkspaces: user.documentWorkspaces
+      }
+    }))
 
     handleNotification(t('user-management.save-user.success'), error)
     dispatch(userUpdated(data))
