@@ -34,7 +34,7 @@ interface IUsersRolesDropdownProps {
 }
 
 interface IRenderSelectProps {
-  options?: Array<{ value: string, label: ReactNode }>
+  options?: Array<{ value: number, label: ReactNode }>
   placeholder: string
   handleOnChange: any
   selectedOptions: number[]
@@ -99,8 +99,8 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   const renderUsers = (): React.JSX.Element => {
     const options = userList?.items
       ?.filter(item => userData?.id !== item.id)
-      ?.map((item, index) => ({
-        value: `${index}-${item?.username}`,
+      ?.map((item) => ({
+        value: item.id,
         label: renderLabel({ labelName: item?.username, iconName: 'user' })
       }))
 
@@ -113,8 +113,8 @@ export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRo
   }
 
   const renderRoles = (): React.JSX.Element => {
-    const options = roleList?.items?.map((item, index) => ({
-      value: `${index}-${item?.name}`,
+    const options = roleList?.items?.map((item) => ({
+      value: item.id,
       label: renderLabel({ labelName: item?.name, iconName: 'shield' })
     }))
 
