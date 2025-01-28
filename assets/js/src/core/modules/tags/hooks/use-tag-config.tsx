@@ -12,22 +12,42 @@
 */
 
 import {
+  type Tag,
   type TagGetCollectionApiResponse,
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
+import { useEffect, useState } from 'react'
 
 interface UseTagConfigReturn {
+  tagsWithChildren: Tag[]
   tags: TagGetCollectionApiResponse | undefined
   tagsLoading: boolean
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
+  const [tagsWithChildren, setTagsWithChildren] = useState<Tag[]>([])
+
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
     pageSize: 9999
   })
 
+  const getTagsWithChildren = (tags: Tag[]): Tag[] =>
+    tags.reduce<Tag[]>((acc, tag) => {
+      if (tag.hasChildren) {
+        acc.push(tag)
+      }
+      if (Array.isArray(tag.children) && tag.children.length > 0) {
+        acc.push(...getTagsWithChildren(tag.children))
+      }
+      return acc
+    }, [])
+
+  useEffect(() => {
+    setTagsWithChildren(getTagsWithChildren(tags?.items ?? []))
+  }, [tags])
+
   return {
-    tags, tagsLoading
+    tagsWithChildren, tags, tagsLoading
   }
 }

@@ -34,6 +34,8 @@ export interface TreeAction {
 
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
+  const [creationMode, setCreationMode] = useState<boolean>(false)
+
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
           { key: 'rename-tag', icon: 'edit' },
@@ -44,10 +46,10 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
     switch (type) {
       case 'add-tag':
         console.log('add-tag clicked:', key)
-
+        setCreationMode(true)
+        setTagConfigModalOpen(true)
         break
       case 'rename-tag':
-        console.log('rename-tag clicked:', key)
         setTagConfigModalOpen(true)
         break
       case 'delete-tag':
@@ -71,6 +73,8 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
         withCustomSwitcherIcon
       />
       <TagConfigurationModal
+        creationMode={ creationMode }
+        setCreationMode={ setCreationMode }
         setTagConfigModalOpen={ setTagConfigModalOpen }
         tagConfigModalOpen={ tagConfigModalOpen }
       />
