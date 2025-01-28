@@ -113,7 +113,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
       }
       return keyBinding
     })
-
     dispatch(changeUser({ id: user.id, changes: { keyBindings: updatedKeyBindings } }))
   }
 

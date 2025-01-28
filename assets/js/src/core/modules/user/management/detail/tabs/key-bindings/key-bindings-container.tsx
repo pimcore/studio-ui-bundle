@@ -25,7 +25,7 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { id } = useUserContext()
-  const { user, isLoading, updateUserKeyBinding } = useUserDraft(id)
+  const { user, isLoading, updateUserKeyBinding, changeUserInState } = useUserDraft(id)
   const { resetUserKeyBindings, getDefaultKeyBindings } = useUserHelper()
 
   const getKeyName = (key: number): string => {
@@ -37,7 +37,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
     } else {
       name = String.fromCharCode(key)
     }
-
     return name
   }
 
@@ -57,13 +56,13 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
     if (user?.keyBindings?.length === 0) {
       getDefaultKeyBindings().then((data) => {
         setDataToForm(data.items)
+        changeUserInState({ keyBindings: data.items })
       }).catch((error) => {
         console.error('error setting default key bindings', error)
       })
     }
     setDataToForm(user?.keyBindings)
   }
-
   if (isLoading) {
     return <Content loading></Content>
   }
@@ -85,11 +84,11 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
     if (key === 46 || key === 27) {
       // code.action = 'action?'
     } else {
-      // code.action = 'action'
       code.ctrl = evt.ctrlKey
       code.alt = evt.altKey
       code.shift = evt.shiftKey
     }
+
     form.setFieldsValue({
       [name]: renderKeyCombination(code)
     })
@@ -213,9 +212,6 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
               name={ field as any }
             >
               <Input
-                onBlur={ (evt) => {
-                  console.log(evt)
-                } }
                 onKeyDown={ (evt) => handleInputChange(evt, field) }
               />
             </Form.Item>
