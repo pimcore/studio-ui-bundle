@@ -14,9 +14,14 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
-import type { FormItemProps } from 'antd/es/form/FormItem'
 import { Select } from '@Pimcore/components/select/select'
 import { t } from 'i18next'
+import type { FormInstance } from 'antd'
+import type { NamePath } from 'rc-field-form/es/interface'
+import _ from 'lodash'
+import {
+  type InputObjectDataDefinition
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -42,10 +47,12 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
     )
   }
 
-  getObjectDataFormItemProps (props: SelectProps): FormItemProps {
-    return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: props.defaultValue
+  handleDefaultValue (props: InputObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    if (_.isEmpty(props.defaultValue)) {
+      return
+    }
+    if (_.isEmpty(form.getFieldValue(fieldName))) {
+      form.setFieldValue(fieldName, props.defaultValue)
     }
   }
 }

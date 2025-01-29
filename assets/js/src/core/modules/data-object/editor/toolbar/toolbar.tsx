@@ -35,6 +35,9 @@ import { LanguageSelection } from './language-selection/language-selection'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
+import {
+  useEditFormContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -43,6 +46,7 @@ export const Toolbar = (): React.JSX.Element => {
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
+  const { getModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
@@ -93,7 +97,7 @@ export const Toolbar = (): React.JSX.Element => {
     </ToolbarView>
   )
 
-  function onSaveClick (): void {
+  async function onSaveClick (): Promise<void> {
     if (dataObject?.changes === undefined) return
 
     const update: DataObjectUpdateByIdApiArg['body']['data'] = {}
@@ -114,8 +118,10 @@ export const Toolbar = (): React.JSX.Element => {
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
-    if (dataObject.changes.objectData) {
-      update.editableData = dataObject.modifiedObjectData
+    const editableData = getModifiedDataObjectAttributes()
+
+    if (Object.keys(editableData).length > 0) {
+      update.editableData = editableData
     }
 
     const saveDataObjectPromise = saveDataObject({

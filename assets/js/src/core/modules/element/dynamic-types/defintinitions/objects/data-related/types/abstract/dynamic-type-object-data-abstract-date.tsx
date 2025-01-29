@@ -14,9 +14,10 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
-import type { FormItemProps } from 'antd/es/form/FormItem'
 import dayjs from 'dayjs'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
+import type { FormInstance } from 'antd'
+import type { NamePath } from 'rc-field-form/es/interface'
 
 export type AbstractDateObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | string | null
@@ -27,7 +28,7 @@ export type AbstractDateObjectDataDefinition = AbstractObjectDataDefinition & {
   showTime?: boolean
 }
 
-const getInitialValue = (props: AbstractDateObjectDataDefinition): number | string | dayjs.Dayjs | undefined => {
+const getDefaultValue = (props: AbstractDateObjectDataDefinition): number | string | dayjs.Dayjs | undefined => {
   if (props.useCurrentDate === true) {
     return dayjs()
   }
@@ -52,10 +53,13 @@ export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjec
     )
   }
 
-  getObjectDataFormItemProps (props: AbstractDateObjectDataDefinition): FormItemProps {
-    return {
-      ...super.getObjectDataFormItemProps(props),
-      initialValue: getInitialValue(props)
+  handleDefaultValue (props: AbstractDateObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    const defaultValue = getDefaultValue(props)
+    if (defaultValue === undefined) {
+      return
+    }
+    if (form.getFieldValue(fieldName) === null) {
+      form.setFieldValue(fieldName, defaultValue)
     }
   }
 }
