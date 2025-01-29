@@ -78,14 +78,13 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
       key
     }
 
-    if (key === 9 || key === 8) {
+    if (key === 9 || key === 8 || key === 27 || key === 46) {
       return false
     }
-    if (key !== 46 && key !== 27) {
-      code.ctrl = evt.ctrlKey
-      code.alt = evt.altKey
-      code.shift = evt.shiftKey
-    }
+
+    code.ctrl = evt.ctrlKey
+    code.alt = evt.altKey
+    code.shift = evt.shiftKey
 
     form.setFieldsValue({
       [name]: renderKeyCombination(code)
