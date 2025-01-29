@@ -19,7 +19,7 @@ import { useStyles } from '@Pimcore/components/icon-or-image/icon-or-image.style
 
 interface IconOrImageProps {
   class: string
-  xy: string | ElementIcon
+  value: string | ElementIcon
   alt?: string
 }
 
@@ -27,18 +27,18 @@ export const IconOrImage = (props: IconOrImageProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderPreview = (): React.JSX.Element => {
-    if (typeof props.xy === 'string') {
+    if (typeof props.value === 'string') {
       return (
         <PimcoreImage
           alt={ props.alt }
           className={ props.class }
-          src={ props.xy }
+          src={ props.value }
         />
       )
-    } else if (typeof props.xy === 'object') {
+    } else if (typeof props.value === 'object') {
       return (
         <Icon
-          { ...props.xy }
+          { ...props.value }
           className={ styles.icon }
           options={ { width: 50, height: 50 } }
         />

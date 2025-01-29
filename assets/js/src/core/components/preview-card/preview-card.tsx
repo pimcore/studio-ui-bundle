@@ -57,7 +57,7 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
           <IconOrImage
             alt={ props.name }
             class={ classImg }
-            xy={ props.imgSrc! }
+            value={ props.imgSrc! }
           />
         </div>
         }
