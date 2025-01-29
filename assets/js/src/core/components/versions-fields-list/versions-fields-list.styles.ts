@@ -46,14 +46,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
     gridContainer: css`
       padding: ${token.paddingXS}px 0;
-    `,
-
-    gridItem: css`
-      flex: 1 1 50%;
-
-      &:only-child {
-        flex: 1 1 100%;
-      }
     `
   }
 })

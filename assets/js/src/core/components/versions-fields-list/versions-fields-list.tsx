@@ -17,6 +17,7 @@ import { map, filter, intersection, isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
+import { AssetVersionsFieldsView } from './components/asset-versions-fields-view/asset-versions-fields-view'
 import { useAssetVersionData } from './hooks/use-asset-version-data'
 import { type IVersionsFieldsList } from './types'
 import { useStyles } from './versions-fields-list.styles'
@@ -84,26 +85,11 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
             value={ isExpandedUnmodifiedFields }
           />
         )}
-        {categoriesListWithFields.map((category, index) => (
-          <div key={ index }>
-            <div><b style={ { fontSize: '15px', color: 'blue' } }>{category.key}</b></div>
-            {versionViewData.map((fieldItem, fieldIndex) =>
-              category.fieldKeys.includes(fieldItem.Field.key) && (
-                <div key={ fieldIndex }>
-                  <span><b>{fieldItem.Field.field}</b>: </span>
-                  <Flex>
-                    {versionKeysList.map((key, index) => (
-                      <div
-                        className={ styles.gridItem }
-                        key={ index }
-                      >{fieldItem[key]}</div>
-                    ))}
-                  </Flex>
-                </div>
-              )
-            )}
-          </div>
-        ))}
+        <AssetVersionsFieldsView
+          categoriesList={ categoriesListWithFields }
+          versionKeysList={ versionKeysList }
+          versionViewData={ versionViewData }
+        />
       </Flex>
     </Flex>
   )

@@ -11,14 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export interface IVersionsFieldsList {
-  data: Array<{
-    Field: { field: string, key: string }
-    [key: string]: any
-  }>
-  isComparisonView: boolean
-}
+import { createStyles } from 'antd-style'
 
-export type VersionKeysList = string[]
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    gridItem: css`
+      flex: 1 1 50%;
 
-export type CategoriesList = Array<{ key: string, fieldKeys: string[] }>
+      &:only-child {
+        flex: 1 1 100%;
+      }
+    `
+  }
+})

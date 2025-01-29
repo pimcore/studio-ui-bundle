@@ -14,10 +14,10 @@
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
 import { getCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
-import { type CategoriesList, type IVersionsFieldsList } from '../types'
+import { type CategoriesList, type IVersionsFieldsList, type VersionKeysList } from '../types'
 
 interface IUseAssetVersionDataReturn {
-  versionKeysList: string[]
+  versionKeysList: VersionKeysList
   comparisonModifiedData: IVersionsFieldsList['data']
   categoriesList: CategoriesList
 }
