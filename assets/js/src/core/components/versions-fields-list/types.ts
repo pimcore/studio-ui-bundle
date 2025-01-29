@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { type VersionCategoryName } from '@Pimcore/constants/versionConstants'
+
 export interface IVersionsFieldsList {
   data: Array<{
     Field: { field: string, key: string }
@@ -21,4 +23,4 @@ export interface IVersionsFieldsList {
 
 export type VersionKeysList = string[]
 
-export type CategoriesList = Array<{ key: string, fieldKeys: string[] }>
+export type CategoriesList = Array<{ key: VersionCategoryName, fieldKeys: string[] }>

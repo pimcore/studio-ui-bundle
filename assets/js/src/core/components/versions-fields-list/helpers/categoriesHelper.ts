@@ -12,21 +12,21 @@
 */
 
 import { isUndefined } from 'lodash'
-import { type IVersionsFieldsList } from '../types'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
+import { type IVersionsFieldsList } from '../types'
 
-export const getCategoriesList = (data: IVersionsFieldsList['data']): Array<{ key: string, fieldKeys: string[] }> => {
-  const categoryMap: Record<string, Set<string>> = {}
+export const getCategoriesList = (data: IVersionsFieldsList['data']): Array<{ key: VersionCategoryName, fieldKeys: string[] }> => {
+  const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
-  const getCategoryName = (value: string): string | undefined => {
+  const getCategoryName = (value: string): VersionCategoryName | undefined => {
     if (value.includes('.')) {
-      return value.split('.')[0]
+      return value.split('.')[0] as VersionCategoryName
     }
   }
 
   data.forEach(item => {
     const categoryNameValue = getCategoryName(item.Field.key)
-    const categoryName: string = categoryNameValue ?? VersionCategoryName.BASE_DATA
+    const categoryName: VersionCategoryName = categoryNameValue ?? VersionCategoryName.BASE_DATA
 
     if (isUndefined(categoryMap[categoryName])) {
       categoryMap[categoryName] = new Set()
@@ -36,7 +36,7 @@ export const getCategoriesList = (data: IVersionsFieldsList['data']): Array<{ ke
   })
 
   return Object.entries(categoryMap).map(([key, fieldKeysSet]) => ({
-    key,
+    key: key as VersionCategoryName,
     fieldKeys: Array.from(fieldKeysSet)
   }))
 }

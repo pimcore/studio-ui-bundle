@@ -32,6 +32,12 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
   const { styles } = useStyles()
   const { t } = useTranslation()
 
+  const renderFieldTitle = ({ key, value, categoryName }: { key: string, value: string, categoryName: string }): React.JSX.Element => {
+    return (
+      <Text className={ styles.fieldTitle }>{value}</Text>
+    )
+  }
+
   return (
     <>
       {categoriesList.map((category, index) => (
@@ -50,7 +56,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
             {versionViewData.map((fieldItem, fieldIndex) =>
               category.fieldKeys.includes(fieldItem.Field.key) && (
               <div key={ fieldIndex }>
-                <Text className={ styles.fieldTitle }>{fieldItem.Field.field}</Text>
+                {renderFieldTitle({ categoryName: category.key, key: fieldItem.Field.key, value: fieldItem.Field.field })}
                 <Flex gap="mini">
                   {versionKeysList.map((key, index) => (
                     <div
