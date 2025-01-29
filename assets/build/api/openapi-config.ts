@@ -24,6 +24,12 @@ const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
   apiFile: '../../js/src/core/app/api/pimcore/index.ts',
   apiImport: 'api',
+  endpointOverrides: [
+    {
+      pattern: 'noteGetCollection',
+      type: 'query'
+    }
+  ],
   outputFiles: {
     '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/assets?/i)

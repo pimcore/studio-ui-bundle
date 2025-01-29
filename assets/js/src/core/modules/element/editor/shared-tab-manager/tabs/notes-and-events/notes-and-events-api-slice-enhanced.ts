@@ -18,7 +18,7 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.NOTES_AND_EVENTS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
     noteGetCollection: {
-      providesTags: (result, error, args) => {
+      providesTags: (result, error, args): Tag[] => {
         const tags: Tag[] = []
 
         result?.items.forEach((note) => {
