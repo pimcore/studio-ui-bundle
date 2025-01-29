@@ -129,6 +129,8 @@ version.clear-unpublished-versions: Clear unpublished versions
 version.confirm-clear-unpublished: Are you sure you want to clear all unpublished versions?
 version.preview-notification: Preview details will be displayed once a version is selected.
 version.expand-unmodified-fields: Expand unmodified fields
+version.category.title.baseData: Base Data
+version.category.title.meta: Meta Data
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all

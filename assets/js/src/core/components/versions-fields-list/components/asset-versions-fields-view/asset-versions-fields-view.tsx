@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
@@ -29,6 +30,7 @@ interface IAssetVersionsFieldsViewProps {
 
 export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versionKeysList }: IAssetVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -38,7 +40,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
             className={ styles.categoryTitle }
             strong
           >
-            {category.key}
+            {t(`version.category.title.${category.key}`)}
           </Text>
           <Flex
             className={ styles.categoryFields }
