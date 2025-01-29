@@ -13,6 +13,7 @@
 
 import { isUndefined } from 'lodash'
 import { type IVersionsFieldsList } from '../types'
+import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 export const getCategoriesList = (data: IVersionsFieldsList['data']): Array<{ key: string, fieldKeys: string[] }> => {
   const categoryMap: Record<string, Set<string>> = {}
@@ -25,7 +26,7 @@ export const getCategoriesList = (data: IVersionsFieldsList['data']): Array<{ ke
 
   data.forEach(item => {
     const categoryNameValue = getCategoryName(item.Field.key)
-    const categoryName: string = categoryNameValue ?? 'baseData'
+    const categoryName: string = categoryNameValue ?? VersionCategoryName.BASE_DATA
 
     if (isUndefined(categoryMap[categoryName])) {
       categoryMap[categoryName] = new Set()
