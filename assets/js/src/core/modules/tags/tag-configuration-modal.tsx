@@ -27,12 +27,14 @@ export interface TagConfigurationModalProps {
   setCreationMode: (creationMode: boolean) => void
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
+  focusTag: string
 }
 
 export const TagConfigurationModal = ({
   creationMode, setCreationMode,
   tagConfigModalOpen,
-  setTagConfigModalOpen
+  setTagConfigModalOpen,
+  focusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
   const { tagsWithChildren } = useTagConfig()
   const closeModal = (): void => {
@@ -78,6 +80,7 @@ export const TagConfigurationModal = ({
           name={ t('tags-configuration.parent-tag') }
         >
           <Select
+            defaultValue={ focusTag }
             options={ tagsWithChildren.map(tag => ({ value: tag.text, label: tag.text })) }
           />
         </Form.Item>

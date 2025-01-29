@@ -35,14 +35,27 @@ export interface TreeAction {
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [creationMode, setCreationMode] = useState<boolean>(false)
+  const [focusTag, setFocusTag] = useState<string>('')
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
           { key: 'rename-tag', icon: 'edit' },
-          { key: 'delete-tag', icon: 'trash' }
-        ]
+          { key: 'delete-tag', icon: 'trash' }]
 
-  const onActionsClick = (key: string, type: string): void => {
+  const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
+
+  const setTagInFocus = (key: string): void => {
+    const tagToFocus = treeData.find(item => item.key === key)?.title as string | undefined
+    console.log('----> treeData', treeData)
+    console.log('----> tagToFocus', tagToFocus)
+
+    setFocusTag(tagToFocus ?? '')
+  }
+
+  const onActionsClick = (key: string, type: string, title: string): void => {
+    console.log('----> titlefinal', title)
+
+    setTagInFocus(key)
     switch (type) {
       case 'add-tag':
         console.log('add-tag clicked:', key)
@@ -56,8 +69,6 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
         console.log('delete-tag clicked:', key)
     }
   }
-
-  const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
 
   return (
     <Box
@@ -74,6 +85,7 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
       />
       <TagConfigurationModal
         creationMode={ creationMode }
+        focusTag={ focusTag }
         setCreationMode={ setCreationMode }
         setTagConfigModalOpen={ setTagConfigModalOpen }
         tagConfigModalOpen={ tagConfigModalOpen }
