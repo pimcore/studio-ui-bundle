@@ -42,10 +42,6 @@ export const useStyles = createStyles(({ token, css }) => {
         border-right: 0.5px;
         border-left: 0.5px;
       }
-    `,
-
-    gridContainer: css`
-      padding: ${token.paddingXS}px 0;
     `
   }
 })

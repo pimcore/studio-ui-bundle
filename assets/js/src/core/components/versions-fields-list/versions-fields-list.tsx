@@ -72,10 +72,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
           renderHeaderItem(item, index)
         ))}
       </Flex>
-      <Flex
-        className={ styles.gridContainer }
-        vertical
-      >
+      <Flex vertical>
         {isComparisonView && (
           <Switch
             labelLeft={
