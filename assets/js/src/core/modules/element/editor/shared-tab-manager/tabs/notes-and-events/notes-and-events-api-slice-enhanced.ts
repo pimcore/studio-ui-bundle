@@ -11,23 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './notes-and-events-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.NOTES_AND_EVENTS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
-    noteGetCollection: {
-      providesTags: (result, error, args) => {
-        const tags: Tag[] = []
-
-        result?.items.forEach((note) => {
-          tags.push(...providingTags.NOTES_AND_EVENTS_ID(note.id))
-        })
-
-        return tags
-      }
-    },
     noteDeleteById: {
       invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_ID(args.id)
     },
@@ -49,4 +38,4 @@ export const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './notes-and-events-api-slice.gen'
-export const { useNoteDeleteByIdMutation, useNoteElementCreateMutation, useNoteElementGetCollectionQuery, useNoteElementGetTypeCollectionQuery, useNoteGetCollectionQuery } = api
+export const { useNoteDeleteByIdMutation, useNoteElementCreateMutation, useNoteElementGetCollectionQuery, useNoteElementGetTypeCollectionQuery } = api
