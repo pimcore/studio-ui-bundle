@@ -70,7 +70,7 @@ const AssetPreviewCell = (props: PreviewContainerProps): React.JSX.Element => {
   return (
     <div className={ styles.cell }>
       {props?.getValue() !== undefined && (
-        renderPreview(props.getValue()!)
+        renderPreview(props.getValue())
       )}
     </div>
   )
