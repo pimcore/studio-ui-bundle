@@ -17,8 +17,8 @@ import { useStyle } from './preview-card.styles'
 import Meta from 'antd/es/card/Meta'
 import { Icon } from '../icon/icon'
 import { Dropdown, type DropdownProps } from '../dropdown/dropdown'
-import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { IconOrImage } from '@Pimcore/components/icon-or-image/icon-or-image'
 
 export enum SizeTypes {
   SMALL = 'small',
@@ -49,33 +49,16 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
     classDotsButton = 'dots-button-medium'
   }
 
-  const renderPreview = (props: PreviewCardProps): React.JSX.Element => {
-    if (typeof props.imgSrc === 'string') {
-      return (
-        <PimcoreImage
-          alt={ props.name }
-          className={ classImg }
-          src={ props.imgSrc }
-        />
-      )
-    } else if (typeof props.imgSrc === 'object') {
-      return (
-        <Icon
-          { ...props.imgSrc }
-          options={ { width: 50, height: 50 } }
-        />
-      )
-    }
-
-    return <></>
-  }
-
   return (
     <Card
       className={ [styles.card, classCard].join(' ') }
       cover={
         <div className={ classImgDiv }>
-          { renderPreview(props) }
+          <IconOrImage
+            alt={ props.name }
+            class={ classImg }
+            xy={ props.imgSrc! }
+          />
         </div>
         }
       onClick={ (event) => {
