@@ -1,70 +1,80 @@
 import { api } from "../../../../../../app/api/pimcore/index";
 export const addTagTypes = ["Notes"] as const;
 const injectedRtkApi = api
-    .enhanceEndpoints({
-        addTagTypes,
-    })
-    .injectEndpoints({
-        endpoints: (build) => ({
-            noteGetCollection: build.mutation<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notes`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Notes"],
-            }),
-            noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/${queryArg.id}`, method: "DELETE" }),
-                invalidatesTags: ["Notes"],
-            }),
-            noteElementGetCollection: build.query<NoteElementGetCollectionApiResponse, NoteElementGetCollectionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                        sortBy: queryArg.sortBy,
-                        sortOrder: queryArg.sortOrder,
-                        filter: queryArg.filter,
-                        fieldFilters: queryArg.fieldFilters,
-                    },
-                }),
-                providesTags: ["Notes"],
-            }),
-            noteElementCreate: build.mutation<NoteElementCreateApiResponse, NoteElementCreateApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
-                    method: "POST",
-                    body: queryArg.createNote,
-                }),
-                invalidatesTags: ["Notes"],
-            }),
-            noteElementGetTypeCollection: build.query<
-                NoteElementGetTypeCollectionApiResponse,
-                NoteElementGetTypeCollectionApiArg
-            >({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/notes/type/${queryArg.elementType}` }),
-                providesTags: ["Notes"],
-            }),
-        }),
-        overrideExisting: false,
-    });
+  .enhanceEndpoints({
+      addTagTypes,
+  })
+  .injectEndpoints({
+      endpoints: (build) => ({
+          noteGetCollection: build.query<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
+              query: (queryArg) => ({
+                  url: `/pimcore-studio/api/notes`,
+                  params: {
+                      page: queryArg.page,
+                      pageSize: queryArg.pageSize,
+                      sortBy: queryArg.sortBy,
+                      sortOrder: queryArg.sortOrder,
+                      filter: queryArg.filter,
+                      fieldFilters: queryArg.fieldFilters,
+                  },
+              }),
+              providesTags: ["Notes"],
+          }),
+          noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
+              query: (queryArg) => ({ url: `/pimcore-studio/api/notes/${queryArg.id}`, method: "DELETE" }),
+              invalidatesTags: ["Notes"],
+          }),
+          noteElementGetCollection: build.query<NoteElementGetCollectionApiResponse, NoteElementGetCollectionApiArg>({
+              query: (queryArg) => ({
+                  url: `/pimcore-studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
+                  params: {
+                      page: queryArg.page,
+                      pageSize: queryArg.pageSize,
+                      sortBy: queryArg.sortBy,
+                      sortOrder: queryArg.sortOrder,
+                      filter: queryArg.filter,
+                      fieldFilters: queryArg.fieldFilters,
+                  },
+              }),
+              providesTags: ["Notes"],
+          }),
+          noteElementCreate: build.mutation<NoteElementCreateApiResponse, NoteElementCreateApiArg>({
+              query: (queryArg) => ({
+                  url: `/pimcore-studio/api/notes/${queryArg.elementType}/${queryArg.id}`,
+                  method: "POST",
+                  body: queryArg.createNote,
+              }),
+              invalidatesTags: ["Notes"],
+          }),
+          noteElementGetTypeCollection: build.query<
+            NoteElementGetTypeCollectionApiResponse,
+            NoteElementGetTypeCollectionApiArg
+          >({
+              query: (queryArg) => ({ url: `/pimcore-studio/api/notes/type/${queryArg.elementType}` }),
+              providesTags: ["Notes"],
+          }),
+      }),
+      overrideExisting: false,
+  });
 export { injectedRtkApi as api };
 export type NoteGetCollectionApiResponse = /** status 200 Paginated notes with total count */ {
     totalItems: number;
     items: Note[];
 };
 export type NoteGetCollectionApiArg = {
-    body: {
-        page: number;
-        pageSize: number;
-        /** Sort order (asc or desc). */
-        sortOrder?: "ASC" | "DESC";
-        /** Sort by field. Only works in combination with sortOrder. */
-        sortBy?: "id" | "type" | "cId" | "cType" | "cPath" | "date" | "title" | "description" | "locked";
-        /** Filter for notes */
-        filter?: string;
-        /** Filter for specific fields, will be json decoded to an array. e.g.
-                                [{"operator":"like","value":"John","field":"name","type":"string"}] */
-        fieldFilters?: object;
-    };
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+    /** Sort by field. Only works in combination with sortOrder. */
+    sortBy?: "id" | "type" | "cId" | "cType" | "cPath" | "date" | "title" | "description" | "locked";
+    /** Sort order (asc or desc). */
+    sortOrder?: "ASC" | "DESC";
+    /** Filter for notes */
+    filter?: string;
+    /** Filter for specific fields, will be json decoded to an array. e.g.
+     [{"operator":"like","value":"John","field":"name","type":"string"}] */
+    fieldFilters?: string;
 };
 export type NoteDeleteByIdApiResponse = /** status 200 note_delete_by_id_success_description */ void;
 export type NoteDeleteByIdApiArg = {
@@ -91,7 +101,7 @@ export type NoteElementGetCollectionApiArg = {
     /** Filter for notes */
     filter?: string;
     /** Filter for specific fields, will be json decoded to an array. e.g.
-                [{"operator":"like","value":"John","field":"name","type":"string"}] */
+     [{"operator":"like","value":"John","field":"name","type":"string"}] */
     fieldFilters?: string;
 };
 export type NoteElementCreateApiResponse = /** status 200 Created note for element */ Note;
@@ -166,7 +176,7 @@ export type NoteType = {
     id: string;
 };
 export const {
-    useNoteGetCollectionMutation,
+    useNoteGetCollectionQuery,
     useNoteDeleteByIdMutation,
     useNoteElementGetCollectionQuery,
     useNoteElementCreateMutation,
