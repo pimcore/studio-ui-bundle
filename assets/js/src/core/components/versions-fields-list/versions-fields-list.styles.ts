@@ -42,6 +42,16 @@ export const useStyles = createStyles(({ token, css }) => {
         border-right: 0.5px;
         border-left: 0.5px;
       }
+    `,
+
+    content: css`
+      position: relative;
+    `,
+
+    switchContainer: css`
+      position: absolute;
+      top: 10px;
+      right: ${token.paddingXS}px;
     `
   }
 })
