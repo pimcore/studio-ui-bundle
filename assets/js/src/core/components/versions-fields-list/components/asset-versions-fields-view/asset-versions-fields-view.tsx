@@ -21,6 +21,7 @@ import {
   type VersionKeysList
 } from '@Pimcore/components/versions-fields-list/types'
 import { useStyles } from './asset-versions-fields-view.styles'
+import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 interface IAssetVersionsFieldsViewProps {
   categoriesList: CategoriesList
@@ -28,13 +29,18 @@ interface IAssetVersionsFieldsViewProps {
   versionKeysList: VersionKeysList
 }
 
+const CATEGORIES_WITHOUT_TRANSLATION = [VersionCategoryName.META]
+
 export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versionKeysList }: IAssetVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const renderFieldTitle = ({ key, value, categoryName }: { key: string, value: string, categoryName: string }): React.JSX.Element => {
+  const renderFieldTitle = ({ key, value, categoryName }: { key: string, value: string, categoryName: VersionCategoryName }): React.JSX.Element => {
+    const isShowValueWithoutTranslation = CATEGORIES_WITHOUT_TRANSLATION.includes(categoryName)
+    const textValue = isShowValueWithoutTranslation ? value : t(`version.${key}`)
+
     return (
-      <Text className={ styles.fieldTitle }>{value}</Text>
+      <Text className={ styles.fieldTitle }>{textValue}</Text>
     )
   }
 
