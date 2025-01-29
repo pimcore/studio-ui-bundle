@@ -81,9 +81,7 @@ const KeyBindingsContainer = ({ ...props }): React.JSX.Element => {
     if (key === 9 || key === 8) {
       return false
     }
-    if (key === 46 || key === 27) {
-      // code.action = 'action?'
-    } else {
+    if (key !== 46 && key !== 27) {
       code.ctrl = evt.ctrlKey
       code.alt = evt.altKey
       code.shift = evt.shiftKey
