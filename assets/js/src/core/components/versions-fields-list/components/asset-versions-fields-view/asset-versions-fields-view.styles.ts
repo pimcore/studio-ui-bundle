@@ -15,8 +15,29 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    gridItem: css`
+    categoryTitle: css`
+      display: block;
+      padding: ${token.paddingXS}px;
+      font-size: 14px;
+      font-weight: 900;
+    `,
+
+    categoryFields: css`
+      padding: ${token.paddingXS}px;
+      border: 1px solid ${token.colorBorderContainer};
+      border-radius: ${token.borderRadius}px;
+    `,
+
+    fieldTitle: css`
+      display: block;
+      margin-bottom: 4px;
+    `,
+
+    categoryFieldItem: css`
       flex: 1 1 50%;
+      padding: ${token.paddingXS}px;
+      background-color: ${token.colorBgContainerDisabled};
+      border-radius: ${token.borderRadius}px;
 
       &:only-child {
         flex: 1 1 100%;

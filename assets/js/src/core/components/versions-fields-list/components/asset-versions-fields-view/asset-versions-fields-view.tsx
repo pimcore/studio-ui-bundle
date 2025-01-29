@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
 import {
   type CategoriesList,
   type IVersionsFieldsList,
@@ -33,22 +34,35 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
     <>
       {categoriesList.map((category, index) => (
         <div key={ index }>
-          <div><b style={ { fontSize: '15px', color: 'blue' } }>{category.key}</b></div>
-          {versionViewData.map((fieldItem, fieldIndex) =>
-            category.fieldKeys.includes(fieldItem.Field.key) && (
+          <Text
+            className={ styles.categoryTitle }
+            strong
+          >
+            {category.key}
+          </Text>
+          <Flex
+            className={ styles.categoryFields }
+            gap="extra-small"
+            vertical
+          >
+            {versionViewData.map((fieldItem, fieldIndex) =>
+              category.fieldKeys.includes(fieldItem.Field.key) && (
               <div key={ fieldIndex }>
-                <span><b>{fieldItem.Field.field}</b>: </span>
-                <Flex>
+                <Text className={ styles.fieldTitle }>{fieldItem.Field.field}</Text>
+                <Flex gap="mini">
                   {versionKeysList.map((key, index) => (
                     <div
-                      className={ styles.gridItem }
+                      className={ styles.categoryFieldItem }
                       key={ index }
-                    >{fieldItem[key]}</div>
+                    >
+                      <Text>{fieldItem[key]}</Text>
+                    </div>
                   ))}
                 </Flex>
               </div>
-            )
-          )}
+              )
+            )}
+          </Flex>
         </div>
       ))}
     </>
