@@ -27,13 +27,16 @@ interface IAssetVersionsFieldsViewProps {
   categoriesList: CategoriesList
   versionViewData: IVersionsFieldsList['data']
   versionKeysList: VersionKeysList
+  modifiedFields: string[]
 }
 
 const CATEGORIES_WITHOUT_TRANSLATION = [VersionCategoryName.META]
 
-export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versionKeysList }: IAssetVersionsFieldsViewProps): React.JSX.Element => {
+export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versionKeysList, modifiedFields }: IAssetVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+
+  console.log('======>>>>> modifiedFields: ', modifiedFields)
 
   const renderFieldTitle = ({ key, value, categoryName }: { key: string, value: string, categoryName: VersionCategoryName }): React.JSX.Element => {
     const isShowValueWithoutTranslation = CATEGORIES_WITHOUT_TRANSLATION.includes(categoryName)

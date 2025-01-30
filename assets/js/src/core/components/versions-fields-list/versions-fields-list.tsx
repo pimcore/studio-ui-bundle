@@ -49,6 +49,15 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
     )
   }, [isExpandedUnmodifiedFields, categoriesList])
 
+  // List of modified fields in comparison mode
+  const modifiedFields = useMemo(() => {
+    if (isComparisonView && !isEmpty(comparisonModifiedData)) {
+      return comparisonModifiedData.map((item) => item.Field.key)
+    }
+
+    return []
+  }, [comparisonModifiedData, isComparisonView])
+
   const renderHeaderItem = (item: string, index: number): React.JSX.Element => {
     const versionNumber = item.match(/\d+/)?.[0] ?? '0'
 
@@ -87,6 +96,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
         )}
         <AssetVersionsFieldsView
           categoriesList={ categoriesListWithFields }
+          modifiedFields={ modifiedFields }
           versionKeysList={ versionKeysList }
           versionViewData={ versionViewData }
         />
