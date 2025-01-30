@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
@@ -35,8 +36,6 @@ const CATEGORIES_WITHOUT_TRANSLATION = [VersionCategoryName.META]
 export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versionKeysList, modifiedFields }: IAssetVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-
-  console.log('======>>>>> modifiedFields: ', modifiedFields)
 
   const renderFieldTitle = ({ key, value, categoryName }: { key: string, value: string, categoryName: VersionCategoryName }): React.JSX.Element => {
     const isShowValueWithoutTranslation = CATEGORIES_WITHOUT_TRANSLATION.includes(categoryName)
@@ -67,14 +66,23 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
               <div key={ fieldIndex }>
                 {renderFieldTitle({ categoryName: category.key, key: fieldItem.Field.key, value: fieldItem.Field.field })}
                 <Flex gap="mini">
-                  {versionKeysList.map((key, index) => (
-                    <div
-                      className={ styles.categoryFieldItem }
-                      key={ index }
-                    >
-                      <Text>{fieldItem[key]}</Text>
-                    </div>
-                  ))}
+                  {versionKeysList.map((key, index) => {
+                    const isModifiedField = modifiedFields.includes(fieldItem.Field.key)
+                    const isSecondItem = index === 1
+
+                    return (
+                      <div
+                        className={
+                            cn(styles.categoryFieldItem, {
+                              [styles.categoryFieldItemHighlight]: isModifiedField && isSecondItem
+                            })
+                          }
+                        key={ index }
+                      >
+                        <Text>{fieldItem[key]}</Text>
+                      </div>
+                    )
+                  })}
                 </Flex>
               </div>
               )

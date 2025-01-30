@@ -42,6 +42,10 @@ export const useStyles = createStyles(({ token, css }) => {
       &:only-child {
         flex: 1 1 100%;
       }
+    `,
+
+    categoryFieldItemHighlight: css`
+      background-color: ${token.Colors.Brand.Warning.colorWarningBg};
     `
   }
 })
