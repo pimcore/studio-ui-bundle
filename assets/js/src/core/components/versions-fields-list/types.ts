@@ -18,7 +18,6 @@ export interface IVersionsFieldsList {
     Field: { field: string, key: string }
     [key: string]: any
   }>
-  isComparisonView: boolean
 }
 
 export type VersionKeysList = string[]

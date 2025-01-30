@@ -82,10 +82,7 @@ export const SingleViewUi = ({
         />
       </Flex>
 
-      <VersionsFieldsList
-        data={ data }
-        isComparisonView={ false }
-      />
+      <VersionsFieldsList data={ data } />
     </Flex>
   )
 }

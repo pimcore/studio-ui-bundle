@@ -75,10 +75,7 @@ export const ComparisonViewUi = ({
           })}
         </Flex>
 
-        <VersionsFieldsList
-          data={ gridData }
-          isComparisonView
-        />
+        <VersionsFieldsList data={ gridData } />
       </Space>
     </div>
   )

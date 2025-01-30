@@ -24,7 +24,7 @@ import { useStyles } from './versions-fields-list.styles'
 
 interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 
-export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsListProps): React.JSX.Element => {
+export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JSX.Element => {
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
   const { versionKeysList, comparisonModifiedData, categoriesList } = useAssetVersionData(data)
@@ -32,6 +32,7 @@ export const VersionsFieldsList = ({ data, isComparisonView }: IVersionsFieldsLi
   const { t } = useTranslation()
   const { styles } = useStyles()
 
+  const isComparisonView = versionKeysList.length > 1
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
