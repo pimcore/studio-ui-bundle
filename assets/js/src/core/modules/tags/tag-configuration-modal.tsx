@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
@@ -21,14 +21,17 @@ import { Select } from '@Pimcore/components/select/select'
 import { Input } from '@Pimcore/components/input/input'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 import { Flex, Form } from 'antd'
-import { type ChangeTagParameters } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import {
+  type ChangeTagParameters,
+  type Tag
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 
 export interface TagConfigurationModalProps {
   creationMode: boolean
   setCreationMode: (creationMode: boolean) => void
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
-  focusTag: string
+  focusTag: Tag
 }
 
 export const TagConfigurationModal = ({
@@ -38,23 +41,48 @@ export const TagConfigurationModal = ({
   focusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
   const { tagsWithChildren, updateATag } = useTagConfig()
-  const [tagName, setTagName] = useState<string>(focusTag)
-  const [selectedParentTag, setSelectedParentTag] = useState<string>(focusTag)
+  const [form] = Form.useForm()
+
+  // const [changedTag, setChangedTag] = useState<Tag>({
+  //   id: focusTag?.id ?? 0,
+  //   text: focusTag?.text ?? '',
+  //   additionalAttributes: focusTag?.additionalAttributes ?? {},
+  //   parentId: focusTag?.parentId ?? null,
+  //   path: focusTag?.path ?? '',
+  //   hasChildren: focusTag?.hasChildren ?? false,
+  //   iconName: focusTag?.iconName ?? '',
+  //   children: focusTag?.children ?? []
+  // })
 
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
     setCreationMode(false)
-    setTagName('')
+    form.resetFields()
   }
 
-  const handleSubmit = async (): Promise<void> => {
-    if (tagName.trim() === '' || selectedParentTag.trim() === '') {
+  useEffect(() => {
+    if (tagConfigModalOpen) {
+      form.setFieldsValue({
+        tagName: focusTag?.text ?? '',
+        parentTag: focusTag?.parentId ?? null
+      })
+    } else {
+      form.resetFields()
+    }
+  }, [tagConfigModalOpen, focusTag])
+
+  const handleSubmit = async (values: any): Promise<void> => {
+    console.log('----> values', values)
+    console.log('----> values.tagName', values.tagName)
+    console.log('----> values.parentTag.value', values.parentTag)
+
+    if (values?.tagName.trim() === '') {
       return
     }
 
     const createTagParameter: ChangeTagParameters = {
-      parentId: selectedParentTag,
-      name: tagName
+      parentId: values.parentTag ?? null,
+      name: values.tagName
     }
 
     try {
@@ -78,7 +106,7 @@ export const TagConfigurationModal = ({
         justify={ 'flex-end' }
                >
         <Button
-          onClick={ handleSubmit }
+          onClick={ () => { form.submit() } }
           type='primary'
         >Create</Button>
       </ModalFooter> }
@@ -90,27 +118,26 @@ export const TagConfigurationModal = ({
       title={ <ModalTitle>{creationMode ? t('tag-configuration.new-tag') : t('tag-configuration.rename&move')}</ModalTitle> }
     >
       <Flex vertical>
-        <Form.Item
-          label={ t('tag-configuration.name') }
+        <Form
+          form={ form }
           layout="vertical"
-          name={ t('tag-configuration.name') }
+          onFinish={ handleSubmit }
         >
-          <Input
-            onChange={ (e) => { setTagName(e.target.value) } }
-            value={ tagName }
-          />
-        </Form.Item>
-        <Form.Item
-          label={ t('tag-configuration.parent-tag') }
-          layout="vertical"
-          name={ t('tag-configuration.parent-tag') }
-        >
-          <Select
-            onChange={ setSelectedParentTag }
-            options={ tagsWithChildren.map(tag => ({ value: tag.text.trim(), label: tag.text.trim() })) }
-            value={ focusTag }
-          />
-        </Form.Item>
+          <Form.Item
+            label={ t('tag-configuration.name') }
+            name="tagName"
+            rules={ [{ required: true, message: 'Tag name is required!' }] }
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label={ t('tag-configuration.parent-tag') }
+            layout="vertical"
+            name="parentTag"
+          >
+            <Select options={ tagsWithChildren.map(tag => ({ value: tag.id, label: tag.text.trim() })) } />
+          </Form.Item>
+        </Form>
       </Flex>
     </Modal>
   )

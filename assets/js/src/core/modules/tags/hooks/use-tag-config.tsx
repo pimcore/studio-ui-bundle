@@ -28,10 +28,13 @@ interface UseTagConfigReturn {
   tags: TagGetCollectionApiResponse | undefined
   tagsLoading: boolean
   updateATag: (tagId: number, updateTagParameters: ChangeTagParameters) => Promise<void>
+  getTagForKey: (key: string) => Tag
+  rootTagFolder: Tag
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
   const [tagsWithChildren, setTagsWithChildren] = useState<Tag[]>([])
+  const rootTagFolder = { id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }
 
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
@@ -39,6 +42,11 @@ export const useTagConfig = (): UseTagConfigReturn => {
   })
 
   const [updateTag] = useTagUpdateByIdMutation()
+
+  const getTagForKey = (key: string): Tag => key === 'root'
+    ? rootTagFolder
+    : tags?.items?.find(item => item.id.toString() === key) ?? rootTagFolder
+    // DONT DEFAULT?
 
   const updateATag = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {
     const response = (await updateTag({
@@ -67,7 +75,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
     }, [])
 
     return isRoot
-      ? [{ id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }, ...result]
+      ? [rootTagFolder, ...result]
       : result
   }
 
@@ -76,6 +84,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   return {
-    tagsWithChildren, tags, tagsLoading, updateATag
+    tagsWithChildren, tags, tagsLoading, updateATag, getTagForKey, rootTagFolder
   }
 }

@@ -21,6 +21,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Box } from '@Pimcore/components/box/box'
 import { Space } from 'antd'
 import { TagConfigurationModal } from '@Pimcore/modules/tags/tag-configuration-modal'
+import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 
 export interface TagConfigurationContainerProps {
   isLoading: boolean
@@ -33,9 +34,10 @@ export interface TreeAction {
 }
 
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
+  const { rootTagFolder, getTagForKey } = useTagConfig()
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [creationMode, setCreationMode] = useState<boolean>(false)
-  const [focusTag, setFocusTag] = useState<string>('')
+  const [focusTag, setFocusTag] = useState<Tag>(rootTagFolder)
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
@@ -45,11 +47,8 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
   const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
 
   const setTagInFocus = (key: string): void => {
-    const focusTag = key === 'root'
-      ? 'All Tags'
-      : tags.find(item => item.id.toString() === key)?.text ?? ''
-
-    setFocusTag(focusTag)
+    const newFocusTag = getTagForKey(key)
+    setFocusTag(newFocusTag)
   }
 
   const onActionsClick = (key: string, type: string): void => {
