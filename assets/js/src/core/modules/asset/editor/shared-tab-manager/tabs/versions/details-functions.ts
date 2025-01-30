@@ -130,7 +130,7 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
     const dataColumn = `${t('version.version')} ${versionData.versionCount}`
 
     Object.keys(versionData.baseDataFormatted).forEach((key) => {
-      if (key === 'dimensions' && checkIsImageVersion(versionData.dataRaw)) {
+      if (key === 'dimensions' && !checkIsImageVersion(versionData.dataRaw)) {
         return
       }
       const row = tableBaseData.find((row: any) => row[fieldColumn].key === key)
