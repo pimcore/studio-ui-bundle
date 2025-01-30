@@ -61,7 +61,7 @@ export const TagConfigurationModal = ({
   }, [tagConfigModalOpen, focusTag])
 
   const handleSubmit = async (values: any): Promise<void> => {
-    console.log('----> values', values)
+
     console.log('----> values.tagName', values.tagName)
     console.log('----> values.parentTag.value', values.parentTag)
 
