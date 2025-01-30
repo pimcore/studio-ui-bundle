@@ -43,17 +43,6 @@ export const TagConfigurationModal = ({
   const { tagsWithChildren, updateATag } = useTagConfig()
   const [form] = Form.useForm()
 
-  // const [changedTag, setChangedTag] = useState<Tag>({
-  //   id: focusTag?.id ?? 0,
-  //   text: focusTag?.text ?? '',
-  //   additionalAttributes: focusTag?.additionalAttributes ?? {},
-  //   parentId: focusTag?.parentId ?? null,
-  //   path: focusTag?.path ?? '',
-  //   hasChildren: focusTag?.hasChildren ?? false,
-  //   iconName: focusTag?.iconName ?? '',
-  //   children: focusTag?.children ?? []
-  // })
-
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
     setCreationMode(false)

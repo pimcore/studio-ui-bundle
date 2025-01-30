@@ -15,12 +15,9 @@ import {
   type ChangeTagParameters,
   type Tag,
   type TagGetCollectionApiResponse,
-  useTagGetCollectionQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-
-import {
+  useTagGetCollectionQuery,
   useTagUpdateByIdMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { useEffect, useState } from 'react'
 
 interface UseTagConfigReturn {
