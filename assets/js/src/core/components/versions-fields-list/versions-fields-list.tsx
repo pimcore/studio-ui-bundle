@@ -13,7 +13,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty } from 'lodash'
+import { map, filter, intersection, isEmpty, isNil } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
@@ -32,7 +32,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  const isComparisonView = versionKeysList.length > 1
+  const isComparisonView = !isNil(versionKeysList) && versionKeysList.length > 1
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
