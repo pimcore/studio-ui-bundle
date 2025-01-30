@@ -13,12 +13,15 @@
 
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
-import { type ReactNode, type ReactElement } from 'react'
+import React, { type ReactNode, type ReactElement } from 'react'
 import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { type FormInstance } from 'antd'
 import { type NamePath } from 'rc-field-form/es/interface'
+import {
+  FieldLabel
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -38,7 +41,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
     return {
       className: 'w-full',
-      label: props.title,
+      label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
       required: props.mandatory === true,
       hidden: props.invisible === true,
       tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? respectLineBreak(props.tooltip, false) : undefined

@@ -47,7 +47,10 @@ export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeOb
   getObjectDataFormItemProps (props: ManyToManyObjectRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
-      label: <ManyToManyRelationLabel label={ props.title } />
+      label: <ManyToManyRelationLabel
+        label={ props.title }
+        name={ props.name }
+             />
     }
   }
 }

@@ -17,6 +17,10 @@ import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import _ from 'lodash'
+import {
+  useInheritanceState
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -25,15 +29,41 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
-  const { form, updateModifiedDataObjectAttributes, commitToDraft } = useEditFormContext()
+  const { form, updateModifiedDataObjectAttributes, markDraftAsModified } = useEditFormContext()
+  const inheritanceState = useInheritanceState()
 
-  const handleValuesChange = (changedValues: Record<string, any>): void => {
+  const getChangedFieldNames = (changedValues: object, parentKey: string = ''): string[] => {
+    if (typeof changedValues !== 'object') {
+      return []
+    }
+    return Object.entries(changedValues).flatMap(([key, value]) => {
+      const newKey = parentKey !== '' ? `${parentKey}.${key}` : key
+
+      // Ensure it's a valid form field (i.e., registered)
+      if (!_.isEmpty(form.getFieldInstance(newKey.split('.')))) {
+        return [newKey]
+      }
+
+      // If value is an object, recurse further to check nested fields
+      if (typeof value === 'object') {
+        return getChangedFieldNames(value as object, newKey)
+      }
+
+      return []
+    })
+  }
+
+  const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
+    const changedFieldNames = getChangedFieldNames(changedValues)
+    if (inheritanceState?.getInheritanceState(changedFieldNames)?.inherited === true) {
+      inheritanceState?.breakInheritance(changedFieldNames)
+    }
+
     updateModifiedDataObjectAttributes(changedValues)
-    commitToDraft(true)
+    markDraftAsModified()
   }
 
   const handleSubmit = (values: any): void => {
-    commitToDraft()
     console.log(values)
   }
 

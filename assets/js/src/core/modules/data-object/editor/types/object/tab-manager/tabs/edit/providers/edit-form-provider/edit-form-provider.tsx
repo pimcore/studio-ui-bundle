@@ -16,12 +16,12 @@ import { type FormInstance } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { debounce } from 'lodash'
 
 interface EditFormContextProps {
   form: FormInstance
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
-  commitToDraft: (useDebounce?: boolean) => void
+  resetModifiedDataObjectAttributes: () => void
+  markDraftAsModified: () => void
   getModifiedDataObjectAttributes: () => Record<string, any>
 }
 
@@ -39,7 +39,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [form] = useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const { id } = useElementContext()
-  const { trackModifiedObjectData, getCurrentDraftState } = useDataObjectDraft(id)
+  const { markObjectDataAsModified } = useDataObjectDraft(id)
 
   const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>): void => {
     modifiedDataObjectAttributesRef.current = { ...modifiedDataObjectAttributesRef.current, ...changedValues }
@@ -49,36 +49,24 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     modifiedDataObjectAttributesRef.current = {}
   }
 
-  const commitToDraft = useCallback(
-    (useDebounce: boolean = false): void => {
-      const commit = (): void => {
-        if (Object.keys(modifiedDataObjectAttributesRef.current).length !== 0) {
-          trackModifiedObjectData({ ...modifiedDataObjectAttributesRef.current })
-          resetModifiedDataObjectAttributes()
-        }
-      }
-
-      if (useDebounce) {
-        debounce(commit, 300)()
-      } else {
-        commit()
-      }
+  const markDraftAsModified = useCallback(
+    (): void => {
+      markObjectDataAsModified()
     },
-    [trackModifiedObjectData]
+    [markObjectDataAsModified]
   )
 
   const getModifiedDataObjectAttributes = (): Record<string, any> => {
-    commitToDraft()
-    const draftState = getCurrentDraftState()
-    return draftState === undefined ? {} : draftState.modifiedObjectData
+    return modifiedDataObjectAttributesRef.current
   }
 
   const value = useMemo(() => ({
     form,
     updateModifiedDataObjectAttributes,
-    commitToDraft,
+    resetModifiedDataObjectAttributes,
+    markDraftAsModified,
     getModifiedDataObjectAttributes
-  }), [form, commitToDraft])
+  }), [form, markDraftAsModified])
 
   return (
     <EditFormContext.Provider value={ value }>

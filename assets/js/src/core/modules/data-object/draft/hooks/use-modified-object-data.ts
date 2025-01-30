@@ -17,26 +17,18 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 import { useAppDispatch } from '@Pimcore/app/store'
 
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
-import _ from 'lodash'
-
-export interface ModifiedObjectDataAction {
-  id: number
-  values: any
-}
 
 export interface ModifiedObjectDataDraft extends TrackableChangesDraft {
-  modifiedObjectData: Record<string, any>
+
 }
 
 interface UseModifiedObjectDataReturn {
-  trackModifiedObjectData: (state: EntityState<ModifiedObjectDataDraft, number>, action: PayloadAction<ModifiedObjectDataAction>) => void
+  markObjectDataAsModified: (state: EntityState<ModifiedObjectDataDraft, number>, action: PayloadAction<number>) => void
 }
 
 export const useModifiedObjectDataReducers = (entityAdapter: EntityAdapter<ModifiedObjectDataDraft, number>): UseModifiedObjectDataReturn => {
-  const trackModifiedObjectData = (state: EntityState<ModifiedObjectDataDraft, number>, action: PayloadAction<ModifiedObjectDataAction>): void => {
-    modifyDraft(state, action.payload.id, (draft: ModifiedObjectDataDraft): ModifiedObjectDataDraft => {
-      draft.modifiedObjectData = _.merge({}, draft.modifiedObjectData, action.payload.values)
-
+  const markObjectDataAsModified = (state: EntityState<ModifiedObjectDataDraft, number>, action: PayloadAction<number>): void => {
+    modifyDraft(state, action.payload, (draft: ModifiedObjectDataDraft): ModifiedObjectDataDraft => {
       markedAsModified(draft)
       return draft
     })
@@ -62,27 +54,28 @@ export const useModifiedObjectDataReducers = (entityAdapter: EntityAdapter<Modif
   }
 
   return {
-    trackModifiedObjectData
+    markObjectDataAsModified
   }
 }
 
 export interface UseModifiedObjectDataDraftReturn {
-  modifiedObjectData: Record<string, any>
-  trackModifiedObjectData: (values: any) => void
+  markObjectDataAsModified: () => void
 }
 
 export const useModifiedObjectDataDraft = (
   id: number,
   draft: ModifiedObjectDataDraft,
-  trackModifiedObjectDataAction: ActionCreatorWithPayload<ModifiedObjectDataAction>
+  markObjectDataAsModifiedAction: ActionCreatorWithPayload<number>
 ): UseModifiedObjectDataDraftReturn => {
   const dispatch = useAppDispatch()
 
   return {
-    modifiedObjectData: draft?.modifiedObjectData ?? {},
 
-    trackModifiedObjectData: (values: any): void => {
-      dispatch(trackModifiedObjectDataAction({ id, values }))
+    markObjectDataAsModified: (): void => {
+      if (draft?.changes?.objectData) {
+        return
+      }
+      dispatch(markObjectDataAsModifiedAction(id))
     }
   }
 }
