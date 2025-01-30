@@ -38,12 +38,13 @@ export const TagConfigurationModal = ({
   focusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
   const { tagsWithChildren, updateATag } = useTagConfig()
-  const [tagName, setTagName] = useState<string>('')
+  const [tagName, setTagName] = useState<string>(focusTag)
   const [selectedParentTag, setSelectedParentTag] = useState<string>(focusTag)
 
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
     setCreationMode(false)
+    setTagName('')
   }
 
   const handleSubmit = async (): Promise<void> => {

@@ -422,6 +422,9 @@ tree.actions.remove-user: Remove User
 tree.actions.folder: Folder
 tree.actions.user: User
 tree.actions.add-folder: Add Folder
+tree.actions.add-tag: New Tag
+tree.actions.delete-tag: Delete
+tree.actions.rename-tag: Rename & Move
 tree.actions.add-user: Add User
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
