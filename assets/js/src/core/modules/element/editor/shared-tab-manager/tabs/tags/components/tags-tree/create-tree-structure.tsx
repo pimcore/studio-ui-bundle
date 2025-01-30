@@ -26,7 +26,7 @@ export interface CreateTreeStructureProps {
   actions?: TreeAction[]
 }
 
-interface CustomTreeDataNode extends TreeDataNode {
+export interface CustomTreeDataNode extends TreeDataNode {
   actions?: TreeAction[]
 }
 export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeStructureProps): CustomTreeDataNode[] => {

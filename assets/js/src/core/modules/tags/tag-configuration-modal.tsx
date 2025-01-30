@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
@@ -21,6 +21,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { Input } from '@Pimcore/components/input/input'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 import { Flex, Form } from 'antd'
+import { type ChangeTagParameters } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 
 export interface TagConfigurationModalProps {
   creationMode: boolean
@@ -36,11 +37,34 @@ export const TagConfigurationModal = ({
   setTagConfigModalOpen,
   focusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
-  const { tagsWithChildren } = useTagConfig()
+  const { tagsWithChildren, updateATag } = useTagConfig()
+  const [tagName, setTagName] = useState<string>('')
+  const [selectedParentTag, setSelectedParentTag] = useState<string>(focusTag)
+
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
     setCreationMode(false)
   }
+
+  const handleSubmit = async (): Promise<void> => {
+    if (tagName.trim() === '' || selectedParentTag.trim() === '') {
+      return
+    }
+
+    const createTagParameter: ChangeTagParameters = {
+      parentId: selectedParentTag,
+      name: tagName
+    }
+
+    try {
+      await updateATag(15, createTagParameter)
+      closeModal()
+    } catch (error) {
+      console.error('Error updating tag:', error)
+    }
+  }
+
+  console.log(tagsWithChildren.map(tag => tag.text))
 
   return (
     <Modal
@@ -53,9 +77,7 @@ export const TagConfigurationModal = ({
         justify={ 'flex-end' }
                >
         <Button
-          onClick={ () => {
-            closeModal()
-          } }
+          onClick={ handleSubmit }
           type='primary'
         >Create</Button>
       </ModalFooter> }
@@ -68,20 +90,24 @@ export const TagConfigurationModal = ({
     >
       <Flex vertical>
         <Form.Item
-          label={ t('tags-configuration.name') }
+          label={ t('tag-configuration.name') }
           layout="vertical"
-          name={ t('tags-configuration.name') }
+          name={ t('tag-configuration.name') }
         >
-          <Input />
+          <Input
+            onChange={ (e) => { setTagName(e.target.value) } }
+            value={ tagName }
+          />
         </Form.Item>
         <Form.Item
-          label={ t('tags-configuration.parent-tag') }
+          label={ t('tag-configuration.parent-tag') }
           layout="vertical"
-          name={ t('tags-configuration.parent-tag') }
+          name={ t('tag-configuration.parent-tag') }
         >
           <Select
-            defaultValue={ focusTag }
-            options={ tagsWithChildren.map(tag => ({ value: tag.text, label: tag.text })) }
+            onChange={ setSelectedParentTag }
+            options={ tagsWithChildren.map(tag => ({ value: tag.text.trim(), label: tag.text.trim() })) }
+            value={ focusTag }
           />
         </Form.Item>
       </Flex>

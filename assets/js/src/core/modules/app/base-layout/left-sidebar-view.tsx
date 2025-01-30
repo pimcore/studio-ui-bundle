@@ -37,7 +37,7 @@ export const LeftSidebarView = (): React.JSX.Element => {
       config: {
         icon: {
           type: 'name',
-          value: 'tag-configuration'
+          value: 'tag'
         }
       }
     }

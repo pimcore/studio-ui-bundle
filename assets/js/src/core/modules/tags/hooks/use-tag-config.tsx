@@ -12,16 +12,22 @@
 */
 
 import {
+  type ChangeTagParameters,
   type Tag,
   type TagGetCollectionApiResponse,
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
+
+import {
+  useTagUpdateByIdMutation
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { useEffect, useState } from 'react'
 
 interface UseTagConfigReturn {
   tagsWithChildren: Tag[]
   tags: TagGetCollectionApiResponse | undefined
   tagsLoading: boolean
+  updateATag: (tagId: number, updateTagParameters: ChangeTagParameters) => Promise<void>
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
@@ -32,22 +38,44 @@ export const useTagConfig = (): UseTagConfigReturn => {
     pageSize: 9999
   })
 
-  const getTagsWithChildren = (tags: Tag[]): Tag[] =>
-    tags.reduce<Tag[]>((acc, tag) => {
+  const [updateTag] = useTagUpdateByIdMutation()
+
+  const updateATag = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {
+    const response = (await updateTag({
+      id: tagId,
+      updateTagParameters
+    })) as { error?: { data?: { error?: string | null } } }
+
+    if (response.error?.data?.error != null && response.error.data.error !== '') {
+      throw new Error(response.error.data.error)
+    }
+
+    if (response.error != null) {
+      throw new Error('Failed to update tag')
+    }
+  }
+
+  const getTagsWithChildren = (tags: Tag[], isRoot = true): Tag[] => {
+    const result = tags.reduce<Tag[]>((acc, tag) => {
       if (tag.hasChildren) {
         acc.push(tag)
       }
       if (Array.isArray(tag.children) && tag.children.length > 0) {
-        acc.push(...getTagsWithChildren(tag.children))
+        acc.push(...getTagsWithChildren(tag.children, false))
       }
       return acc
     }, [])
+
+    return isRoot
+      ? [{ id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }, ...result]
+      : result
+  }
 
   useEffect(() => {
     setTagsWithChildren(getTagsWithChildren(tags?.items ?? []))
   }, [tags])
 
   return {
-    tagsWithChildren, tags, tagsLoading
+    tagsWithChildren, tags, tagsLoading, updateATag
   }
 }

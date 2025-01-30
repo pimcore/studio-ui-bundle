@@ -45,16 +45,14 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
   const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
 
   const setTagInFocus = (key: string): void => {
-    const tagToFocus = treeData.find(item => item.key === key)?.title as string | undefined
-    console.log('----> treeData', treeData)
-    console.log('----> tagToFocus', tagToFocus)
+    const focusTag = key === 'root'
+      ? 'All Tags'
+      : tags.find(item => item.id.toString() === key)?.text ?? ''
 
-    setFocusTag(tagToFocus ?? '')
+    setFocusTag(focusTag)
   }
 
-  const onActionsClick = (key: string, type: string, title: string): void => {
-    console.log('----> titlefinal', title)
-
+  const onActionsClick = (key: string, type: string): void => {
     setTagInFocus(key)
     switch (type) {
       case 'add-tag':
@@ -75,7 +73,7 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
       margin={ 'small' }
     >
       <Title>Tag Configuration</Title>
-      <Space size='small' />
+      <Space size='middle'></Space>
       <TreeElement
         checkStrictly
         defaultExpandedKeys={ ['root'] }

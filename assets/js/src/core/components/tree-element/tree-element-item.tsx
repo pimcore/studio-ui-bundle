@@ -33,8 +33,6 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
       label: t(`tree.actions.${action.key}`),
       icon: <Icon value={ action.icon } />,
       onClick: () => {
-        console.log('----> DOESNT WORK', title)
-
         onActionsClick?.(action.key, title)
       }
     })
