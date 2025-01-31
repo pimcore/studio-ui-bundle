@@ -13,7 +13,7 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty, isNil } from 'lodash'
+import { map, filter, intersection, isEmpty, isNil, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
@@ -59,6 +59,8 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
     return []
   }, [comparisonModifiedData, isComparisonView])
 
+  const hasModifiedFields = !isUndefined(modifiedFields) && modifiedFields.length > 0
+
   const renderHeaderItem = (item: string, index: number): React.JSX.Element => {
     const regexpMatch = (/\d+/).exec(item)
     const versionNumber = regexpMatch?.[0] ?? '0'
@@ -87,7 +89,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
         className={ styles.content }
         vertical
       >
-        {isComparisonView && (
+        {isComparisonView && hasModifiedFields && (
           <div className={ styles.switchContainer }>
             <Switch
               labelLeft={ <Text>{t('version.expand-unmodified-fields')}</Text> }
@@ -95,6 +97,13 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
               value={ isExpandedUnmodifiedFields }
             />
           </div>
+        )}
+        {isComparisonView && !hasModifiedFields && (
+        <Flex justify="center">
+          <Text className={ styles.emptyState }>
+            {t('version.no-difference')}
+          </Text>
+        </Flex>
         )}
         <AssetVersionsFieldsView
           categoriesList={ categoriesListWithFields }

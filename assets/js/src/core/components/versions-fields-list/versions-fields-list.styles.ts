@@ -61,6 +61,12 @@ export const useStyles = createStyles(({ token, css }) => {
       min-width: 220px;
     `,
 
+    emptyState: css`
+      margin-top: 40px;
+      max-width: 200px;
+      text-align: center;
+    `,
+
     switchContainer: css`
       position: absolute;
       top: 10px;
