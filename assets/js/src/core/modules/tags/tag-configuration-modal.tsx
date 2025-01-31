@@ -25,17 +25,18 @@ import {
   type ChangeTagParameters,
   type Tag
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import { type Mode } from '@Pimcore/modules/tags/tag-configuration-container'
 
 export interface TagConfigurationModalProps {
-  creationMode: boolean
-  setCreationMode: (creationMode: boolean) => void
+  mode: Mode
+  setMode: (creationMode: Mode) => void
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
   focusTag: Tag
 }
 
 export const TagConfigurationModal = ({
-  creationMode, setCreationMode,
+  mode, setMode,
   tagConfigModalOpen,
   setTagConfigModalOpen,
   focusTag
@@ -44,7 +45,7 @@ export const TagConfigurationModal = ({
   const [form] = Form.useForm()
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
-    setCreationMode(false)
+    setMode('create')
     form.resetFields()
   }
 
@@ -83,7 +84,7 @@ export const TagConfigurationModal = ({
     <Modal
       afterClose={ () => {
         setTagConfigModalOpen(false)
-        setCreationMode(false)
+        setMode('create')
       } }
       footer={ <ModalFooter
         divider
@@ -99,7 +100,7 @@ export const TagConfigurationModal = ({
       } }
       open={ tagConfigModalOpen }
       size={ 'M' }
-      title={ <ModalTitle>{creationMode ? t('tag-configuration.new-tag') : t('tag-configuration.rename&move')}</ModalTitle> }
+      title={ <ModalTitle>{mode === 'create' ? t('tag-configuration.new-tag') : t('tag-configuration.rename&move')}</ModalTitle> }
     >
       <Flex vertical>
         <Form

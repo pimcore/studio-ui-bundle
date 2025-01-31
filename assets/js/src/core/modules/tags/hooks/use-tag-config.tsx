@@ -16,7 +16,8 @@ import {
   type Tag,
   type TagGetCollectionApiResponse,
   useTagGetCollectionQuery,
-  useTagUpdateByIdMutation
+  useTagUpdateByIdMutation,
+  useTagDeleteByIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { useEffect, useState } from 'react'
 
@@ -25,6 +26,7 @@ interface UseTagConfigReturn {
   tags: TagGetCollectionApiResponse | undefined
   tagsLoading: boolean
   updateATag: (tagId: number, updateTagParameters: ChangeTagParameters) => Promise<void>
+  deleteATag: (tagId: number) => Promise<void>
   getTagForKey: (key: string) => Tag
   rootTagFolder: Tag
 }
@@ -39,6 +41,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
   })
 
   const [updateTag] = useTagUpdateByIdMutation()
+  const [deleteTag] = useTagDeleteByIdMutation()
 
   const getTagForKey = (key: string): Tag => key === 'root'
     ? rootTagFolder
@@ -57,6 +60,18 @@ export const useTagConfig = (): UseTagConfigReturn => {
 
     if (response.error != null) {
       throw new Error('Failed to update tag')
+    }
+  }
+
+  const deleteATag = async (tagId: number): Promise<void> => {
+    const response = (await deleteTag({ id: tagId })) as { error?: { data?: { error?: string | null } } }
+
+    if (response.error?.data?.error != null && response.error.data.error !== '') {
+      throw new Error(response.error.data.error)
+    }
+
+    if (response.error != null) {
+      throw new Error('Failed to delete tag')
     }
   }
 
@@ -81,6 +96,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   return {
-    tagsWithChildren, tags, tagsLoading, updateATag, getTagForKey, rootTagFolder
+    tagsWithChildren, tags, tagsLoading, updateATag, deleteATag, getTagForKey, rootTagFolder
   }
 }

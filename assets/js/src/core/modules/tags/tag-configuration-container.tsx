@@ -23,6 +23,7 @@ import { Space } from 'antd'
 import { TagConfigurationModal } from '@Pimcore/modules/tags/tag-configuration-modal'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 
+export type Mode = 'create' | 'update' | 'delete'
 export interface TagConfigurationContainerProps {
   isLoading: boolean
   tags: Tag[]
@@ -36,7 +37,7 @@ export interface TreeAction {
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
   const { rootTagFolder, getTagForKey } = useTagConfig()
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
-  const [creationMode, setCreationMode] = useState<boolean>(false)
+  const [mode, setMode] = useState<Mode>('create')
   const [focusTag, setFocusTag] = useState<Tag>(rootTagFolder)
 
   const tagActions: TreeAction[] =
@@ -59,13 +60,15 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
     switch (type) {
       case 'add-tag':
         console.log('add-tag clicked:', key)
-        setCreationMode(true)
+        setMode('create')
         setTagConfigModalOpen(true)
         break
       case 'rename-tag':
+        setMode('update')
         setTagConfigModalOpen(true)
         break
       case 'delete-tag':
+        setMode('delete')
         console.log('delete-tag clicked:', key)
     }
   }
@@ -84,9 +87,9 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
         withCustomSwitcherIcon
       />
       <TagConfigurationModal
-        creationMode={ creationMode }
         focusTag={ focusTag }
-        setCreationMode={ setCreationMode }
+        mode={ mode }
+        setMode={ setMode }
         setTagConfigModalOpen={ setTagConfigModalOpen }
         tagConfigModalOpen={ tagConfigModalOpen }
       />
