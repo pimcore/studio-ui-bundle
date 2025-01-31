@@ -39,8 +39,6 @@ export const useStyles = createStyles(({ token, css }) => {
       background-color: ${token.Table.headerBg};
       border: 0.5px solid ${token.Table.colorBorderSecondary};
       border-top-width: 0;
-      border-top-left-radius: ${token.borderRadius}px;
-      border-top-right-radius: ${token.borderRadius}px;
       box-shadow: 0 2px 4px 0 rgba(35, 11, 100, .2);
       
       &:first-child {
