@@ -19,6 +19,8 @@ import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useStyles } from './field-label.styles'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -27,20 +29,23 @@ export interface FieldLabelProps {
 }
 
 export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): React.JSX.Element => {
+  const { styles } = useStyles()
   const inheritanceStateContext = useInheritanceState()
   const inheritanceState = inheritanceStateContext?.getInheritanceState(props.name)
   const { openDataObject } = useDataObjectHelper()
+
   return (
     <Flex
       align="center"
       gap="extra-small"
     >
       { inheritanceState?.inherited === true && (
-      <button
-        onClick={ () => { openDataObject({ config: { id: inheritanceState?.objectId } }) } }
-      >
-        <Icon value="inheritance" />
-      </button>
+        <IconButton
+          className={ styles.inheritanceButton }
+          icon={ { value: 'inheritance-active' } }
+          onClick={ () => { openDataObject({ config: { id: inheritanceState?.objectId } }) } }
+          variant="minimal"
+        />
       )}
       { inheritanceState?.inherited === 'broken' && <Icon value="inheritance-broken" /> }
       { props.additionalIcons }

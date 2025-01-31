@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, useState, useCallback, useContext } from 'react'
+import React, { useMemo, useState, useCallback, useContext, useTransition } from 'react'
 import { type NamePath } from 'antd/es/form/interface'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { type DataObjectDraft } from '@Pimcore/modules/data-object/data-object-draft-slice'
@@ -75,7 +75,8 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
   const [inheritanceStates, setInheritanceStates] = useState<Record<string, InheritanceState>>(getInitialInheritanceState(dataObject))
-  console.log('inheritanceStates', inheritanceStates)
+  const [, startTransition] = useTransition()
+
   const getInheritanceState = useCallback((name: NamePath): InheritanceState | undefined => {
     const key = Array.isArray(name) ? name.join('.') : name.toString()
     return inheritanceStates[key]
@@ -94,9 +95,11 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
       return
     }
 
-    setInheritanceState(name, {
-      objectId: id,
-      inherited: 'broken'
+    startTransition(() => {
+      setInheritanceState(name, {
+        objectId: id,
+        inherited: 'broken'
+      })
     })
   }, [])
 

@@ -17,6 +17,7 @@ import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/m
 import { useAppDispatch } from '@Pimcore/app/store'
 
 import { type TrackableChangesDraft } from '@Pimcore/modules/element/draft/hooks/use-trackable-changes'
+import { useTransition } from 'react'
 
 export interface ModifiedObjectDataDraft extends TrackableChangesDraft {
 
@@ -68,6 +69,7 @@ export const useModifiedObjectDataDraft = (
   markObjectDataAsModifiedAction: ActionCreatorWithPayload<number>
 ): UseModifiedObjectDataDraftReturn => {
   const dispatch = useAppDispatch()
+  const [, startTransition] = useTransition()
 
   return {
 
@@ -75,7 +77,9 @@ export const useModifiedObjectDataDraft = (
       if (draft?.changes?.objectData) {
         return
       }
-      dispatch(markObjectDataAsModifiedAction(id))
+      startTransition(() => {
+        dispatch(markObjectDataAsModifiedAction(id))
+      })
     }
   }
 }

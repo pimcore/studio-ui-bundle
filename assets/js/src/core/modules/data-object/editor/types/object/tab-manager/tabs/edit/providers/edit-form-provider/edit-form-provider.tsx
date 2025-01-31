@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useContext, useMemo, useRef, useCallback } from 'react'
+import React, { createContext, useContext, useMemo, useRef, useCallback, useTransition } from 'react'
 import { type FormInstance } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
@@ -40,6 +40,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const { id } = useElementContext()
   const { markObjectDataAsModified } = useDataObjectDraft(id)
+  const [, startTransition] = useTransition()
 
   const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>): void => {
     modifiedDataObjectAttributesRef.current = { ...modifiedDataObjectAttributesRef.current, ...changedValues }
@@ -51,7 +52,9 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const markDraftAsModified = useCallback(
     (): void => {
-      markObjectDataAsModified()
+      startTransition(() => {
+        markObjectDataAsModified()
+      })
     },
     [markObjectDataAsModified]
   )

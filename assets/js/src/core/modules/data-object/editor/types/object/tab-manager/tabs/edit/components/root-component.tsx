@@ -32,34 +32,39 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
   const { form, updateModifiedDataObjectAttributes, markDraftAsModified } = useEditFormContext()
   const inheritanceState = useInheritanceState()
 
-  const getChangedFieldNames = (changedValues: object, parentKey: string = ''): string[] => {
-    if (typeof changedValues !== 'object') {
-      return []
+  const getFieldName = (
+    changedValues: Record<string, unknown>, // Ensures only valid objects are passed
+    parentKey: string = ''
+  ): string | null => {
+    const keys = Object.keys(changedValues)
+    if (keys.length === 0) return null // If no keys exist
+    const key = keys[0] // Get the first key
+
+    const fullKey = parentKey !== '' ? `${parentKey}.${key}` : key // Combine with parent if needed
+    const value = changedValues[key]
+    console.log('am here', fullKey, !_.isEmpty(form.getFieldInstance(fullKey)))
+    // If the current key is a valid field, return it
+    if (!_.isEmpty(form.getFieldInstance(fullKey))) {
+      return fullKey
     }
-    return Object.entries(changedValues).flatMap(([key, value]) => {
-      const newKey = parentKey !== '' ? `${parentKey}.${key}` : key
 
-      // Ensure it's a valid form field (i.e., registered)
-      if (!_.isEmpty(form.getFieldInstance(newKey.split('.')))) {
-        return [newKey]
-      }
+    // If the value is an object, recurse deeper
+    if (_.isPlainObject(value)) {
+      return getFieldName(value as Record<string, unknown>, fullKey)
+    }
 
-      // If value is an object, recurse further to check nested fields
-      if (typeof value === 'object') {
-        return getChangedFieldNames(value as object, newKey)
-      }
-
-      return []
-    })
+    return fullKey // Stop recursion if value is not an object
   }
 
   const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
-    const changedFieldNames = getChangedFieldNames(changedValues)
-    if (inheritanceState?.getInheritanceState(changedFieldNames)?.inherited === true) {
-      inheritanceState?.breakInheritance(changedFieldNames)
+    updateModifiedDataObjectAttributes(changedValues)
+
+    const fieldName = getFieldName(changedValues)
+    console.log('changed', fieldName, changedValues)
+    if (fieldName !== null && inheritanceState?.getInheritanceState(fieldName)?.inherited === true) {
+      inheritanceState?.breakInheritance(fieldName)
     }
 
-    updateModifiedDataObjectAttributes(changedValues)
     markDraftAsModified()
   }
 
