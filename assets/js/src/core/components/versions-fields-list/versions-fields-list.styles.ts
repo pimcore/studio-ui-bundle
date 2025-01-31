@@ -16,7 +16,21 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     headerContainer: css`
+      position: sticky;
+      top: 0;
       width: 100%;
+      z-index: 2;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: -15px;
+        bottom: 0;
+        width: 100%;
+        height: 20px;
+        background-color: #fff;
+        z-index: -1;
+      }
     `,
 
     headerItem: css`
