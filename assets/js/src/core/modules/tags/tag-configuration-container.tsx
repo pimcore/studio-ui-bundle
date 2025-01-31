@@ -44,7 +44,10 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
           { key: 'rename-tag', icon: 'edit' },
           { key: 'delete-tag', icon: 'trash' }]
 
-  const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions })
+  const rootActions: TreeAction[] =
+      [{ key: 'add-tag', icon: 'new' }]
+
+  const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions, rootActions })
 
   const setTagInFocus = (key: string): void => {
     const newFocusTag = getTagForKey(key)

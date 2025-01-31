@@ -42,7 +42,6 @@ export const TagConfigurationModal = ({
 }: TagConfigurationModalProps): React.JSX.Element => {
   const { tagsWithChildren, updateATag } = useTagConfig()
   const [form] = Form.useForm()
-
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
     setCreationMode(false)
@@ -61,10 +60,6 @@ export const TagConfigurationModal = ({
   }, [tagConfigModalOpen, focusTag])
 
   const handleSubmit = async (values: any): Promise<void> => {
-
-    console.log('----> values.tagName', values.tagName)
-    console.log('----> values.parentTag.value', values.parentTag)
-
     if (values?.tagName.trim() === '') {
       return
     }

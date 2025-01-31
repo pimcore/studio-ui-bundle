@@ -24,12 +24,13 @@ export interface CreateTreeStructureProps {
   tags: NonNullable<TagGetCollectionApiResponse['items']>
   loadingNodes: Set<string>
   actions?: TreeAction[]
+  rootActions?: TreeAction[]
 }
 
 export interface CustomTreeDataNode extends TreeDataNode {
   actions?: TreeAction[]
 }
-export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeStructureProps): CustomTreeDataNode[] => {
+export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }: CreateTreeStructureProps): CustomTreeDataNode[] => {
   const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
     if (tagText === undefined || tagText === null || tagText.trim() === '') {
       return isLoading
@@ -74,6 +75,6 @@ export const createTreeStructure = ({ tags, loadingNodes, actions }: CreateTreeS
       value: 'folder'
     }),
     children: tags.length > 0 ? treeWalker(tags) : [],
-    actions
+    actions: rootActions
   }]
 }
