@@ -69,7 +69,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
   }
 
   return [{
-    key: 'root',
+    key: 0,
     title: 'All Tags',
     icon: Icon({
       value: 'folder'

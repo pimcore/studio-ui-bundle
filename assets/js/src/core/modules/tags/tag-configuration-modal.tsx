@@ -31,7 +31,7 @@ export interface TagConfigurationModalProps {
   setMode: (creationMode: Mode) => void
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
-  focusTag: Tag
+  focusTag: Tag | undefined
 }
 
 export const TagConfigurationModal = ({

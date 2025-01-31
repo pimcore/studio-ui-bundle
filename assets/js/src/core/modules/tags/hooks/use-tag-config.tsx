@@ -24,15 +24,17 @@ import { useEffect, useState } from 'react'
 interface UseTagConfigReturn {
   tagsWithChildren: Tag[]
   tags: TagGetCollectionApiResponse | undefined
+  flattenedTags: Tag[]
   tagsLoading: boolean
   updateATag: (tagId: number, updateTagParameters: ChangeTagParameters) => Promise<void>
   deleteATag: (tagId: number) => Promise<void>
-  getTagForKey: (key: string) => Tag
+  getTagForKey: (key: string) => Tag | undefined
   rootTagFolder: Tag
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
   const [tagsWithChildren, setTagsWithChildren] = useState<Tag[]>([])
+  const [flattenedTags, setFlattenedTags] = useState<Tag[]>([])
   const rootTagFolder = { id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }
 
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
@@ -43,10 +45,14 @@ export const useTagConfig = (): UseTagConfigReturn => {
   const [updateTag] = useTagUpdateByIdMutation()
   const [deleteTag] = useTagDeleteByIdMutation()
 
-  const getTagForKey = (key: string): Tag => key === 'root'
-    ? rootTagFolder
-    : tags?.items?.find(item => item.id.toString() === key) ?? rootTagFolder
-    // DONT DEFAULT?
+  const getTagForKey = (key: string): Tag | undefined => {
+    console.log('----> key', key)
+    console.log('----> tags', tags)
+
+    return key === 'root'
+      ? rootTagFolder
+      : tags?.items?.find(item => item.id.toString() === key) ?? undefined
+  }
 
   const updateATag = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {
     const response = (await updateTag({
@@ -91,11 +97,28 @@ export const useTagConfig = (): UseTagConfigReturn => {
       : result
   }
 
+  const flattenTags = (tags: Tag[]): Tag[] => {
+    const result: Tag[] = []
+
+    const traverse = (nodeList: Tag[]): void => {
+      for (const node of nodeList) {
+        result.push(node)
+        if (node.children !== null && node.children !== undefined && node.children.length > 0) {
+          traverse(node.children)
+        }
+      }
+    }
+
+    traverse(tags)
+    return result
+  }
+
   useEffect(() => {
     setTagsWithChildren(getTagsWithChildren(tags?.items ?? []))
+    setFlattenedTags(flattenTags(tags?.items ?? []))
   }, [tags])
 
   return {
-    tagsWithChildren, tags, tagsLoading, updateATag, deleteATag, getTagForKey, rootTagFolder
+    tagsWithChildren, tags, flattenedTags, tagsLoading, updateATag, deleteATag, getTagForKey, rootTagFolder
   }
 }

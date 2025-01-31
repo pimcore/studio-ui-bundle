@@ -38,10 +38,10 @@ export interface TreeAction {
 }
 
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
-  const { rootTagFolder, getTagForKey, updateATag } = useTagConfig()
+  const { rootTagFolder, getTagForKey, updateATag, flattenedTags } = useTagConfig()
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [mode, setMode] = useState<Mode>('create')
-  const [focusTag, setFocusTag] = useState<Tag>(rootTagFolder)
+  const [focusTag, setFocusTag] = useState<Tag | undefined>(rootTagFolder)
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
@@ -55,6 +55,10 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
 
   const setTagInFocus = (key: string): void => {
     const newFocusTag = getTagForKey(key)
+    if (newFocusTag === null || newFocusTag === undefined) {
+      console.error(`Tag with id ${key} not found`)
+      return
+    }
     setFocusTag(newFocusTag)
   }
 
@@ -76,18 +80,26 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
     }
   }
 
+  const getTag: (key: string) => Tag | undefined = (key: string) => {
+    return flattenedTags.find(item => item.id.toString() === key) ?? undefined
+  }
+
   const handleMove = async (id: number, parentId: number): Promise<void> => {
-    // getTagForKey and fine name
+    const maybeMovedTag: Tag | undefined = getTag(id.toString())
 
-    const createTagParameter: ChangeTagParameters = {
-      parentId,
-      name: 'test'
-    }
+    if (maybeMovedTag === null || maybeMovedTag === undefined) {
+      console.error(`Tag with id ${id} not found`)
+    } else {
+      const createTagParameter: ChangeTagParameters = {
+        parentId,
+        name: maybeMovedTag.text
+      }
 
-    try {
-      await updateATag(id, createTagParameter)
-    } catch (error) {
-      console.error('Error moving tag:', error)
+      try {
+        await updateATag(id, createTagParameter)
+      } catch (error) {
+        console.error('Error moving tag:', error)
+      }
     }
   }
 
@@ -103,11 +115,7 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
         draggable
         onActionsClick={ onActionsClick }
         onDragAndDrop={ async (params) => {
-          console.log('----> params.dragNode', params.dragNode)
           await handleMove(Number(params.dragNode.key), Number(params.node.key))
-
-          // actually move it - I thought I can do this by rtk query updating
-          alert('moveing tag')
         }
         }
         treeData={ treeData }
