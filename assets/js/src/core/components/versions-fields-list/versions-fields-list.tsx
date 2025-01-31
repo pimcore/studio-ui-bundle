@@ -60,7 +60,8 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   }, [comparisonModifiedData, isComparisonView])
 
   const renderHeaderItem = (item: string, index: number): React.JSX.Element => {
-    const versionNumber = item.match(/\d+/)?.[0] ?? '0'
+    const regexpMatch = (/\d+/).exec(item)
+    const versionNumber = regexpMatch?.[0] ?? '0'
 
     return (
       <Flex
