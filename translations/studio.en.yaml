@@ -435,7 +435,7 @@ tag-configuration.name: Name
 tag-configuration.parent-tag: Parent Tag
 tag-configuration.create: Create
 tag-configuration.save: Save
-tag-configuration.rename&move: Rename & Move Tag
+tag-configuration.rename&move: Rename Tag
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings

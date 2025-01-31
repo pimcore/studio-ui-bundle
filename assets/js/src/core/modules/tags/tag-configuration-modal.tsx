@@ -17,7 +17,6 @@ import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
-import { Select } from '@Pimcore/components/select/select'
 import { Input } from '@Pimcore/components/input/input'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 import { Flex, Form } from 'antd'
@@ -100,7 +99,7 @@ export const TagConfigurationModal = ({
       } }
       open={ tagConfigModalOpen }
       size={ 'M' }
-      title={ <ModalTitle>{mode === 'create' ? t('tag-configuration.new-tag') : t('tag-configuration.rename&move')}</ModalTitle> }
+      title={ <ModalTitle>{mode === 'create' ? t('tag-configuration.new-tag') : t('tag-configuration.rename')}</ModalTitle> }
     >
       <Flex vertical>
         <Form
@@ -115,13 +114,13 @@ export const TagConfigurationModal = ({
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label={ t('tag-configuration.parent-tag') }
-            layout="vertical"
-            name="parentTag"
-          >
-            <Select options={ tagsWithChildren.map(tag => ({ value: tag.id, label: tag.text.trim() })) } />
-          </Form.Item>
+          {/* <Form.Item */}
+          {/*  label={ t('tag-configuration.parent-tag') } */}
+          {/*  layout="vertical" */}
+          {/*  name="parentTag" */}
+          {/* > */}
+          {/*  <Select options={ tagsWithChildren.map(tag => ({ value: tag.id, label: tag.text.trim() })) } /> */}
+          {/* </Form.Item> */}
         </Form>
       </Flex>
     </Modal>

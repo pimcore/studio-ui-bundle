@@ -16,7 +16,10 @@ import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
-import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import type {
+  ChangeTagParameters,
+  Tag
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { Title } from '@Pimcore/components/title/title'
 import { Box } from '@Pimcore/components/box/box'
 import { Space } from 'antd'
@@ -35,7 +38,7 @@ export interface TreeAction {
 }
 
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
-  const { rootTagFolder, getTagForKey } = useTagConfig()
+  const { rootTagFolder, getTagForKey, updateATag } = useTagConfig()
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [mode, setMode] = useState<Mode>('create')
   const [focusTag, setFocusTag] = useState<Tag>(rootTagFolder)
@@ -73,6 +76,21 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
     }
   }
 
+  const handleMove = async (id: number, parentId: number): Promise<void> => {
+    // getTagForKey and fine name
+
+    const createTagParameter: ChangeTagParameters = {
+      parentId,
+      name: 'test'
+    }
+
+    try {
+      await updateATag(id, createTagParameter)
+    } catch (error) {
+      console.error('Error moving tag:', error)
+    }
+  }
+
   return (
     <Box
       margin={ 'small' }
@@ -82,7 +100,16 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
       <TreeElement
         checkStrictly
         defaultExpandedKeys={ ['root'] }
+        draggable
         onActionsClick={ onActionsClick }
+        onDragAndDrop={ async (params) => {
+          console.log('----> params.dragNode', params.dragNode)
+          await handleMove(Number(params.dragNode.key), Number(params.node.key))
+
+          // actually move it - I thought I can do this by rtk query updating
+          alert('moveing tag')
+        }
+        }
         treeData={ treeData }
         withCustomSwitcherIcon
       />
