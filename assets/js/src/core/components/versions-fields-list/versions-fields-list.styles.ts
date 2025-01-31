@@ -58,7 +58,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
     content: css`
       position: relative;
-      min-width: 240px;
+      min-width: 220px;
     `,
 
     switchContainer: css`
