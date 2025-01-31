@@ -49,7 +49,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
   return (
     <>
       {categoriesList.map((category, index) => (
-        <div key={ index }>
+        <div key={ `${index}-${category.key}` }>
           <Text
             className={ styles.categoryTitle }
             strong
@@ -63,7 +63,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
           >
             {versionViewData.map((fieldItem, fieldIndex) =>
               category.fieldKeys.includes(fieldItem.Field.key) && (
-              <div key={ fieldIndex }>
+              <div key={ `${fieldIndex}-${fieldItem.Field.key}` }>
                 {renderFieldTitle({ categoryName: category.key, key: fieldItem.Field.key, value: fieldItem.Field.field })}
                 <Flex gap="mini">
                   {versionKeysList.map((key, index) => {
@@ -77,7 +77,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
                               [styles.categoryFieldItemHighlight]: isModifiedField && isSecondItem
                             })
                           }
-                        key={ index }
+                        key={ `${index}-${key}` }
                       >
                         <Text>{fieldItem[key]}</Text>
                       </div>
