@@ -62,12 +62,10 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     if (isSharedGlobally !== undefined) {
       setIsSharedGlobally(changedValues.shareGlobally)
 
-      if (!isEmpty(gridConfig) && isSharedGlobally === true) {
+      if (!isEmpty(gridConfig)) {
         setGridConfig({
           ...gridConfig,
-          shareGlobal: true,
-          sharedUsers: [],
-          sharedRoles: []
+          shareGlobal: isSharedGlobally
         })
       }
     }
