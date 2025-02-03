@@ -14,10 +14,10 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
-import { type FormInstance, InputNumber } from 'antd'
-import { type InputNumberProps } from 'antd/es/input-number'
+import { type FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import _ from 'lodash'
+import { type IInputNumberProps, InputNumber } from '@Pimcore/components/input-number/input-number'
 
 export type AbstractNumericObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | null
@@ -53,8 +53,9 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
     )
   }
 
-  getObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): InputNumberProps {
+  getObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): IInputNumberProps {
     return {
+      inherited: props.inherited,
       disabled: props.noteditable === true,
       max: fixUnsigned(props.unsigned === true, props.maxValue, true) ?? undefined,
       min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,

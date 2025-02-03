@@ -13,7 +13,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { InputNumber } from 'antd'
 import _ from 'lodash'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 import { Select } from '@Pimcore/components/select/select'
@@ -23,6 +22,7 @@ import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { QuantityValueCalculatorButton } from './components/calculator/calculator-button'
 import { useStyles } from './quantity-value.styles'
 import cn from 'classnames'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
 
 export interface QuantityValueProps {
   value?: QuantityValueValue | null
@@ -34,6 +34,7 @@ export interface QuantityValueProps {
   decimalPrecision?: number | null
   autoConvert: boolean
   disabled?: boolean
+  inherited?: boolean
 }
 
 export interface QuantityValueValue {
@@ -97,6 +98,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
       <InputNumber
         className={ cn(styles.input, 'w-full') }
         disabled={ props.disabled }
+        inherited={ props.inherited }
         onChange={ onChangeNumber }
         precision={ props.decimalPrecision ?? undefined }
         style={ { maxWidth: toCssDimension(props.width, 150) } }
@@ -105,6 +107,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
       <Select
         allowClear
         disabled={ props.disabled }
+        inherited={ props.inherited }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }

@@ -13,7 +13,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { InputNumber } from 'antd'
 import _ from 'lodash'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 import { Select } from '@Pimcore/components/select/select'
@@ -22,6 +21,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { useStyles } from './quantity-value-range.styles'
 import cn from 'classnames'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
 
 export interface QuantityValueRangeProps {
   value?: QuantityValueRangeValue | null
@@ -32,6 +32,7 @@ export interface QuantityValueRangeProps {
   width?: string | null
   decimalPrecision?: number | null
   disabled?: boolean
+  inherited?: boolean
 }
 
 export interface QuantityValueRangeValue {
@@ -94,6 +95,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
         <InputNumber
           className={ cn(styles.input, 'w-full') }
           disabled={ props.disabled }
+          inherited={ props.inherited }
           onChange={ onChangeMinimum }
           precision={ props.decimalPrecision ?? undefined }
           value={ value?.minimum ?? undefined }
@@ -101,6 +103,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
         <InputNumber
           className={ cn(styles.input, 'w-full') }
           disabled={ props.disabled }
+          inherited={ props.inherited }
           onChange={ onChangeMaximum }
           precision={ props.decimalPrecision ?? undefined }
           value={ value?.maximum ?? undefined }
@@ -109,6 +112,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
       <Select
         allowClear
         disabled={ props.disabled }
+        inherited={ props.inherited }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }

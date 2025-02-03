@@ -12,18 +12,19 @@
 */
 
 import React from 'react'
-import { Input as AntInput, type InputProps } from 'antd'
+import { Input as AntInput } from 'antd'
 import cn from 'classnames'
-import { useStyles } from './input.styles'
+import { useStyles } from './input-password.styles'
+import { type PasswordProps } from 'antd/es/input'
 
-export interface IInputProps extends InputProps {
+export interface IInputPasswordProps extends PasswordProps {
   inherited?: boolean
 }
 
-export const Input = ({ inherited, className, ...restProps }: IInputProps): JSX.Element => {
+export const InputPassword = ({ inherited, className, ...restProps }: IInputPasswordProps): JSX.Element => {
   const { styles } = useStyles()
   return (
-    <AntInput
+    <AntInput.Password
       className={ cn(className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />

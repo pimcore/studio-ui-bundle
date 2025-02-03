@@ -26,6 +26,7 @@ import {
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
   tooltip?: string | null
+  inherited?: boolean
   invisible?: boolean | null
   noteditable?: boolean | null
   title?: ReactNode
