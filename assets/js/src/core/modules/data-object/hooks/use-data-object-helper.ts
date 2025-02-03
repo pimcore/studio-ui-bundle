@@ -18,6 +18,7 @@ import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -33,7 +34,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
 
   async function openDataObject (props: OpenDataObjectWidgetProps): Promise<void> {
     const { config } = props
-    const widgetId = `data-object-${config.id}`
+    const widgetId = getWidgetId('data-object', config.id)
 
     if (!isMainWidgetOpen(widgetId)) {
       dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(config.id)))
