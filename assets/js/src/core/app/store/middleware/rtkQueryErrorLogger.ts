@@ -17,6 +17,9 @@ import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.
 
 interface ErrorPayload {
   status?: number
+  data?: {
+    error: string
+  }
 }
 
 // Cannot use directly from the slice
@@ -38,6 +41,7 @@ export const rtkQueryErrorLogger: Middleware =
       if (payload?.status === 401) {
         api.dispatch({ type: 'auth/setUser', payload: initialState })
 
+        // Need to prevent further handling of the error to avoid triggering the error boundary etc.
         return
       }
     }
