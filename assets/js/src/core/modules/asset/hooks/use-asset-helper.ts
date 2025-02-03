@@ -18,6 +18,7 @@ import { type EditorContainerProps } from '../editor/editor-container'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 
 interface OpenAssetWidgetProps {
   config: EditorContainerProps
@@ -33,7 +34,7 @@ export const useAssetHelper = (): UseAssetReturn => {
 
   const openAsset = async (props: OpenAssetWidgetProps): Promise<void> => {
     const { config } = props
-    const widgetId = `asset-${config.id}`
+    const widgetId = getWidgetId('asset', config.id)
 
     if (!isMainWidgetOpen(widgetId)) {
       dispatch(api.util.invalidateTags(invalidatingTags.ASSET_DETAIL_ID(config.id)))
