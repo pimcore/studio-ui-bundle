@@ -61,24 +61,20 @@ const Component = ({ loading, children, className, type, ...props }: ButtonProps
       type={ type === 'action' ? undefined : type }
       { ...props }
     >
-      { loading !== undefined
+      { loading === true
         ? (
           <AnimatePresence>
             <motion.div
               animate={ { opacity: 1 } }
               exit={ { opacity: 0 } }
-              initial={ { opacity: loading ? 0 : 1 } }
-              key={ loading ? 'loading' : 'loaded' }
+              initial={ { opacity: 0 } }
+              key={ 'loading' }
             >
-              {loading && (
-                <Spin
-                  className='button__loading-spinner'
-                  size='small'
-                  spinning={ loading }
-                />
-              )}
-
-              {!loading && children}
+              <Spin
+                className='button__loading-spinner'
+                size='small'
+                spinning
+              />
             </motion.div>
           </AnimatePresence>
           )
