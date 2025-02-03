@@ -32,12 +32,12 @@ const Component = ({ loading, children, className, type, ...props }: ButtonProps
 
   const buttonClassNames = cn(
     'button',
-    `button--type-${type}`,
-    styles.button,
-    {
-      'ant-btn-loading': loading
-    },
-    className
+      `button--type-${type}`,
+      styles.button,
+      {
+        'ant-btn-loading': loading
+      },
+      className
   )
 
   useEffect(() => {
@@ -71,19 +71,19 @@ const Component = ({ loading, children, className, type, ...props }: ButtonProps
               key={ loading ? 'loading' : 'loaded' }
             >
               {loading && (
-              <Spin
-                className='button__loading-spinner'
-                size='small'
-                spinning={ loading }
-              />
+                <Spin
+                  className='button__loading-spinner'
+                  size='small'
+                  spinning={ loading }
+                />
               )}
 
-              {loading && children}
+              {!loading && children}
             </motion.div>
           </AnimatePresence>
           )
         : children
-    }
+        }
     </AntdButton>
   )
 }
