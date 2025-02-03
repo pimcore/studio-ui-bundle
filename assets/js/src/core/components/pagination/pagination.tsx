@@ -21,7 +21,7 @@ import { isSet } from '@Pimcore/utils/helpers'
 import { SizeChanger } from '@Pimcore/components/pagination/size-changer/size-changer'
 import { InlineTextfield } from '@Pimcore/components/pagination/inline-textfield/inline-textfield'
 
-interface PaginationProps {
+export interface PaginationProps {
   total: number
   current?: number
   defaultPageSize?: number

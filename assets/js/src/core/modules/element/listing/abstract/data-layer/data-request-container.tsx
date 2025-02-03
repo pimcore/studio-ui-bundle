@@ -28,5 +28,6 @@ export const DataRequestContainer = (): React.JSX.Element => {
   useEffect(() => {
     setData(dataQueryResult.data)
   }, [dataQueryResult.data])
+
   return <ViewComponent />
 }

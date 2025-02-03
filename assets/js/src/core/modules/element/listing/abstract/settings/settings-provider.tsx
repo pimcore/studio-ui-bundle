@@ -14,10 +14,15 @@
 import React, { createContext, type ElementType } from 'react'
 import { type BaseQueryFn, type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type useGridOptions } from '../view-layer/components/grid/hooks/use-grid-options'
+import { type useSidebarOptions } from '../view-layer/components/sidebar/hooks/use-sidebar-options'
 
 export interface UseQueryHelperReturn {
   hasRequiredArgs: () => boolean
   getArgs: () => Record<string, any>
+}
+
+export interface UseElementIdReturn {
+  getId: () => number
 }
 
 export interface SettingsContextProps {
@@ -28,6 +33,8 @@ export interface SettingsContextProps {
   useDataQueryHelper: () => UseQueryHelperReturn
   useDataQuery: (props: unknown) => TypedUseQueryHookResult<any, unknown, BaseQueryFn>
   useGridOptions: typeof useGridOptions
+  useSidebarOptions: typeof useSidebarOptions
+  useElementId: () => UseElementIdReturn
 }
 
 export const SettingsContext = createContext<SettingsContextProps | null>(null)

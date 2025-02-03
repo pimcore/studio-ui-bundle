@@ -86,7 +86,6 @@ const api = baseApi.enhanceEndpoints({
           providingTagsForGrid.push(...providingTags.ASSET_DETAIL_ID(item.id!))
         }
 
-        console.log({ providingTagsForGrid })
         return providingTagsForGrid
       }
     },

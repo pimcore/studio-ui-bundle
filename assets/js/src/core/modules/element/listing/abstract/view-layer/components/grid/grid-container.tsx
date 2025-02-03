@@ -54,6 +54,7 @@ export const GridContainer = (): React.JSX.Element => {
 
       selectedColumns.forEach((column) => {
         const rowColumn = row.columns.find((r) => r.key === column.key)
+        console.log({ rowColumn })
         newRow[column.key] = rowColumn.value
       })
 

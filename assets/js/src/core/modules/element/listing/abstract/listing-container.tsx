@@ -19,20 +19,23 @@ import { ConfigurationLayerContainer } from './configuration-layer/configuration
 import { DataLayerContainer } from './data-layer/data-layer-container'
 import { ViewLayerComponent } from './view-layer/view-layer-component'
 import { useGridOptions } from './view-layer/components/grid/hooks/use-grid-options'
+import { useSidebarOptions } from './view-layer/components/sidebar/hooks/use-sidebar-options'
 
 export interface ListingContainerProps extends Partial<SettingsContextProps> {
   useDataQuery: SettingsContextProps['useDataQuery']
   useDataQueryHelper: SettingsContextProps['useDataQueryHelper']
+  useElementId: SettingsContextProps['useElementId']
 }
 
-export interface DefaultProps extends Pick<SettingsContextProps, 'ContextComponent' | 'ConfigurationComponent' | 'DataComponent' | 'ViewComponent' | 'useGridOptions'> {}
+export interface DefaultProps extends Pick<SettingsContextProps, 'ContextComponent' | 'ConfigurationComponent' | 'DataComponent' | 'ViewComponent' | 'useGridOptions' | 'useSidebarOptions'> {}
 
 export const defaultProps: DefaultProps = {
   ContextComponent: ContextLayerComponent,
   ConfigurationComponent: ConfigurationLayerContainer,
   DataComponent: DataLayerContainer,
   ViewComponent: ViewLayerComponent,
-  useGridOptions
+  useGridOptions,
+  useSidebarOptions
 }
 
 export const ListingContainer = ({
@@ -41,8 +44,10 @@ export const ListingContainer = ({
   DataComponent = defaultProps.DataComponent,
   ViewComponent = defaultProps.ViewComponent,
   useGridOptions = defaultProps.useGridOptions,
+  useSidebarOptions = defaultProps.useSidebarOptions,
   useDataQueryHelper,
-  useDataQuery
+  useDataQuery,
+  useElementId
 }: ListingContainerProps): React.JSX.Element => {
   const settings = {
     ContextComponent,
@@ -50,8 +55,10 @@ export const ListingContainer = ({
     DataComponent,
     ViewComponent,
     useGridOptions,
+    useSidebarOptions,
     useDataQueryHelper,
-    useDataQuery
+    useDataQuery,
+    useElementId
   }
 
   return (

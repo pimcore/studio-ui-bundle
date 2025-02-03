@@ -11,22 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import { type AssetGetGridApiArg } from 'src/sdk/main'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
   const { selectedColumns } = UseSelectedColumns()
-  const columnsArg: AssetGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
+  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
     key: column.key,
     type: column.type,
     config: column.config
   }))
 
-  const getArgs = (): AssetGetGridApiArg => {
+  const getArgs = (): DataObjectGetGridApiArg => {
     return {
       body: {
         folderId: getId(),

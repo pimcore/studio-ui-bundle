@@ -19,24 +19,34 @@ import { AssetAvailableColumnsDecorator } from './decorator/asset-available-colu
 import { RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
 import { InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
 import { useInlineEditApiUpdate } from './inline-editing/hooks/use-inline-edit-api-update'
+import { useElementId } from './hooks/use-element-id'
+import { FilterDecorator } from '@Pimcore/modules/element/listing/decorators/filters/filter-decorator'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery
   useDataQueryHelper: typeof useDataQueryHelper
+  useElementId: ListingContainerProps['useElementId']
 }
 
 const defaultProps = {
-  ...InlineEditDecorator(
-    RowSelectionDecorator(
-      listingDefaultProps,
-      { rowSelectionMode: 'single' }
-    )
-    , { useInlineEditApiUpdate }),
+  ...listingDefaultProps,
   useDataQuery: useAssetGetGridQuery,
-  useDataQueryHelper
+  useDataQueryHelper,
+  useElementId
 }
 
-const props = AssetAvailableColumnsDecorator(defaultProps) as IAssetListingDefaultParams
+const props = RowSelectionDecorator(
+  AssetAvailableColumnsDecorator(
+    InlineEditDecorator(
+      FilterDecorator(
+        defaultProps
+      ),
+      { useInlineEditApiUpdate }
+    )
+  ), { rowSelectionMode: 'multiple' }
+) as IAssetListingDefaultParams
+
+console.log('AssetListingDefaultParams', props)
 
 export const ListContainerInner = (): React.JSX.Element => {
   return (

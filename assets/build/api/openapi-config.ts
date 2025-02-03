@@ -28,6 +28,10 @@ const config: ConfigFile = {
     {
       pattern: 'assetGetGrid',
       type: 'query',
+    },
+    {
+      pattern: 'dataObjectGetGrid',
+      type: 'query',
     }
   ],
   outputFiles: {

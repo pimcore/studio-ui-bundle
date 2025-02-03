@@ -15,6 +15,9 @@ import React from 'react'
 import { useData } from '../data-layer/provider/data/use-data'
 import { GridContainer } from './components/grid/grid-container'
 import { Content } from '@Pimcore/components/content/content'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from './components/toolbar/toolbar'
+import { Sidebar } from './components/sidebar/sidebar'
 
 export const ViewLayerComponent = (): React.JSX.Element => {
   const { dataQueryResult } = useData()
@@ -23,5 +26,12 @@ export const ViewLayerComponent = (): React.JSX.Element => {
     return <Content loading />
   }
 
-  return <GridContainer />
+  return (
+    <ContentLayout
+      renderSidebar={ <Sidebar /> }
+      renderToolbar={ <Toolbar /> }
+    >
+      <GridContainer />
+    </ContentLayout>
+  )
 }

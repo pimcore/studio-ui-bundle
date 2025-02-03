@@ -20,11 +20,13 @@ import {
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
 import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/object-tab-manager'
+import { TAB_LISTING } from './tab-manager/tabs/listing/listing-container'
 
 moduleSystem.registerModule({
   onInit: () => {
     const folderEditorTabManager = container.get<ObjectTabManager>(serviceIds['DataObject/Editor/FolderTabManager'])
 
+    folderEditorTabManager.register(TAB_LISTING)
     folderEditorTabManager.register(TAB_PROPERTIES)
     folderEditorTabManager.register(TAB_DEPENDENCIES)
     folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)
