@@ -89,7 +89,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
         className={ styles.content }
         vertical
       >
-        {isComparisonView && hasModifiedFields && (
+        {isComparisonView && (
           <div className={ styles.switchContainer }>
             <Switch
               labelLeft={ <Text>{t('version.expand-unmodified-fields')}</Text> }
@@ -98,7 +98,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
             />
           </div>
         )}
-        {isComparisonView && !hasModifiedFields && (
+        {isComparisonView && !hasModifiedFields && !isExpandedUnmodifiedFields && (
         <Flex justify="center">
           <Text className={ styles.emptyState }>
             {t('version.no-difference')}
