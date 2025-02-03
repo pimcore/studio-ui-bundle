@@ -61,24 +61,29 @@ const Component = ({ loading, children, className, type, ...props }: ButtonProps
       type={ type === 'action' ? undefined : type }
       { ...props }
     >
-      <AnimatePresence>
-        <motion.div
-          animate={ { opacity: 1 } }
-          exit={ { opacity: 0 } }
-          initial={ { opacity: loading === true ? 0 : 1 } }
-          key={ loading === true ? 'loading' : 'loaded' }
-        >
-          {loading === true && (
-            <Spin
-              className='button__loading-spinner'
-              size='small'
-              spinning={ loading }
-            />
-          )}
+      { loading !== undefined
+        ? (
+          <AnimatePresence>
+            <motion.div
+              animate={ { opacity: 1 } }
+              exit={ { opacity: 0 } }
+              initial={ { opacity: loading ? 0 : 1 } }
+              key={ loading ? 'loading' : 'loaded' }
+            >
+              {loading && (
+              <Spin
+                className='button__loading-spinner'
+                size='small'
+                spinning={ loading }
+              />
+              )}
 
-          {loading !== true && children}
-        </motion.div>
-      </AnimatePresence>
+              {loading && children}
+            </motion.div>
+          </AnimatePresence>
+          )
+        : children
+    }
     </AntdButton>
   )
 }
