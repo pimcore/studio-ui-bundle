@@ -12,16 +12,12 @@
 */
 
 import React from 'react'
-import i18n from '@Pimcore/app/i18n'
-import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import { Flex, Space } from 'antd'
+import { Flex } from 'antd'
 import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import {
-  EmptyState
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
+import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
+import { VersionsFieldsList } from '@Pimcore/components/versions-fields-list/versions-fields-list'
 
 interface SingleVersionViewUiProps {
   versionId: VersionIdentifiers
@@ -46,19 +42,10 @@ export const SingleViewUi = ({
   isImageVersion,
   fileName
 }: SingleVersionViewUiProps): React.JSX.Element => {
-  const columnHelper = createColumnHelper<any>()
-
-  const columns = [
-    columnHelper.accessor(i18n.t('field'), { size: 162, meta: { type: 'asset-version-preview-field-label' } }),
-    columnHelper.accessor(i18n.t('version.version') + ' ' + versionId.count, { size: 180 })
-  ]
-
   return (
-    <Space
-      align="center"
-      direction="vertical"
-      size="large"
-      style={ { maxWidth: 600 } }
+    <Flex
+      gap="small"
+      vertical
     >
       <Flex
         align="center"
@@ -95,16 +82,7 @@ export const SingleViewUi = ({
         />
       </Flex>
 
-      <Flex
-        className="w-full"
-        justify='center'
-      >
-        <Grid
-          autoWidth
-          columns={ columns }
-          data={ data }
-        />
-      </Flex>
-    </Space>
+      <VersionsFieldsList data={ data } />
+    </Flex>
   )
 }

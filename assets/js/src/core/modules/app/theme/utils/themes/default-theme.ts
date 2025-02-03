@@ -165,6 +165,11 @@ const defaultTheme = {
         Icon: {
           colorIcon: 'rgba(0, 0, 0, 0.6)'
         }
+      },
+      Brand: {
+        Warning: {
+          colorWarningBg: '#fffbe6'
+        }
       }
     },
 
