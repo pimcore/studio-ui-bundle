@@ -11,72 +11,77 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
-import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
-import { Button } from '@Pimcore/components/button/button'
+import React, { useState } from 'react'
+import cn from 'classnames'
+import { useTranslation } from 'react-i18next'
 import {
+  api,
+  useVersionCleanupForElementByTypeAndIdMutation,
   type Version,
   type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-
-import { useTranslation } from 'react-i18next'
+import { Button } from '@Pimcore/components/button/button'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
-import { createVersionAccordionItem } from './helpers/create-version-accordion-item'
 import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { createVersionAccordionItem } from './helpers/create-version-accordion-item'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import {
   type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { type VersionIdentifiers } from './types/types'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
 
 interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
-  onClickClearAll: (elementType: VersionGetCollectionForElementByTypeAndIdApiArg['elementType'], id: number) => Promise<void>
-  onClickPublish: (id: number) => Promise<void>
-  onClickDelete: (id: number) => void
-  onBlurNote: (id: number, note: string) => void
 }
 
 export const VersionsView = ({
   versions,
-  onClickDelete,
-  onClickPublish,
-  onClickClearAll,
-  onBlurNote,
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const { styles } = useStyles()
-
-  const [comparingActive, setComparingActive] = useState(false)
-  const [clearingAll, setClearingAll] = useState(false)
+  const { id } = useElementContext()
+  const [isComparingActive, setIsComparingActive] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
+
+  const dispatch = useAppDispatch()
+
+  const [cleanupVersion, { isLoading: isLoadingCleanupVersion, isError: isCleanupVersionError, error: cleanupVersionError }] = useVersionCleanupForElementByTypeAndIdMutation()
 
   const { renderModal: RenderModal, showModal, handleOk } = useModal({ type: 'warn' })
 
-  useEffect(() => {
-    setClearingAll(false)
-  }, [versions])
+  const { t } = useTranslation()
+  const { styles } = useStyles()
 
-  const clearVersions = async (): Promise<void> => {
+  const handleClearVersions = async (): Promise<void> => {
     handleOk()
-    setClearingAll(true)
 
-    await onClickClearAll(
-      versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
-      versions[0].cid
-    )
+    await cleanupVersion({
+      elementType: versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
+      id: versions[0].cid
+    })
+
+    const invalidateVersionsList = invalidatingTags.ASSET_VERSIONS(id)
+    dispatch(api.util.invalidateTags(invalidateVersionsList))
+
+    if (isCleanupVersionError) {
+      trackError(new ApiError(cleanupVersionError))
+    }
   }
 
   const handleClickCompareVersion = (): void => {
     setDetailedVersions([])
-    setComparingActive(!comparingActive)
+    setIsComparingActive(!isComparingActive)
   }
 
   const selectVersion = (vId: VersionIdentifiers): void => {
@@ -101,13 +106,17 @@ export const VersionsView = ({
       footer={
         <ModalFooter>
           <Button
-            onClick={ clearVersions }
+            onClick={ handleClearVersions }
             type={ 'primary' }
-          >{t('yes')}</Button>
+          >
+            {t('yes')}
+          </Button>
           <Button
             onClick={ handleOk }
             type={ 'default' }
-          >{t('no')}</Button>
+          >
+            {t('no')}
+          </Button>
         </ModalFooter>
           }
       title={ t('version.clear-unpublished-versions') }
@@ -120,10 +129,7 @@ export const VersionsView = ({
     createVersionAccordionItem({
       version,
       detailedVersions,
-      comparingActive,
-      onClickDelete,
-      onClickPublish,
-      onBlurNote,
+      isComparingActive,
       selectVersion,
       setDetailedVersions
     })
@@ -164,15 +170,17 @@ export const VersionsView = ({
                       justify='space-between'
                     >
                       <Button
-                        className={ comparingActive ? 'compare-button' : '' }
+                        className={ cn({ [styles.compareButton]: isComparingActive }) }
                         key={ t('version.compare-versions') }
                         onClick={ handleClickCompareVersion }
-                      >{t('version.compare-versions')}</Button>
+                      >
+                        {t('version.compare-versions')}
+                      </Button>
 
                       <IconTextButton
                         icon={ { value: 'trash' } }
                         key={ t('version.clear-unpublished') }
-                        loading={ clearingAll }
+                        loading={ isLoadingCleanupVersion }
                         onClick={ showModal }
                       >
                         {t('version.clear-unpublished')}
@@ -194,18 +202,27 @@ export const VersionsView = ({
         rightItem={ {
           size: 75,
           children: (
-            <Content padded>
-              <Flex justify='center' >
-                {!isEmptyDetailedVersionsList && comparingActive && (
+            <Content
+              centered={ isEmptyDetailedVersionsList }
+              padded
+            >
+              <Flex align="center">
+                {!isEmptyDetailedVersionsList && isComparingActive && (
                   <ComparisonViewComponent versionIds={ detailedVersions } />
                 )}
 
-                {!isEmptyDetailedVersionsList && !comparingActive && (
+                {!isEmptyDetailedVersionsList && !isComparingActive && (
                   <SingleViewComponent
                     setDetailedVersions={ setDetailedVersions }
                     versionId={ detailedVersions[0] }
                     versions={ versions }
                   />
+                )}
+
+                {isEmptyDetailedVersionsList && (
+                  <Text className={ styles.notificationMessage }>
+                      {t('version.preview-notification')}
+                  </Text>
                 )}
               </Flex>
             </Content>

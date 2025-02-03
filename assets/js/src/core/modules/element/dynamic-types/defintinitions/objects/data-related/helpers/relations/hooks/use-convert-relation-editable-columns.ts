@@ -30,7 +30,7 @@ export interface UseConvertRelationEditableColumnsResult {
 const EDITABLE_COLUMN_PREFIX = 'edit::'
 
 const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
-  if (type === 'bool') {
+  if (type === 'bool' || type === 'columnbool') {
     return {
       type: 'checkbox',
       editable: true
@@ -129,7 +129,7 @@ export const useConvertRelationEditableColumns = (
       for (const key in value.data) {
         const column = columns.find(col => col.key === key)
         if (column?.type === 'multiselect') {
-          editableData[EDITABLE_COLUMN_PREFIX + key] = _.compact(String(value.data[key]).split(','))
+          editableData[EDITABLE_COLUMN_PREFIX + key] = _.isEmpty(value.data[key]) ? [] : _.compact(String(value.data[key]).split(','))
         } else {
           editableData[EDITABLE_COLUMN_PREFIX + key] = value.data[key]
         }

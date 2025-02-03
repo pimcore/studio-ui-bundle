@@ -16,6 +16,7 @@ import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -24,24 +25,30 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
+  const { form, updateModifiedDataObjectAttributes, commitToDraft } = useEditFormContext()
+
+  const handleValuesChange = (changedValues: Record<string, any>): void => {
+    updateModifiedDataObjectAttributes(changedValues)
+    commitToDraft(true)
+  }
+
+  const handleSubmit = (values: any): void => {
+    commitToDraft()
+    console.log(values)
+  }
+
   return (
-    <ConfigProvider theme={ {
-      components: {
-        Form: {
-          itemMarginBottom: 0
-        }
-      }
-    } }
-    >
+    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
       <Form
         className={ className }
+        form={ form }
         initialValues={ data }
         layout='vertical'
-        onFinish={ onFinish }
+        onFinish={ handleSubmit }
+        onValuesChange={ handleValuesChange }
         preserve
       >
         <ObjectComponent { ...layout } />
-
         <Form.Item style={ { margin: 12 } }>
           <Button
             htmlType="submit"
@@ -51,8 +58,4 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
       </Form>
     </ConfigProvider>
   )
-
-  function onFinish (values: any): void {
-    console.log(values)
-  }
 }

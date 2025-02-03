@@ -29,13 +29,11 @@ const FlexContainer = (props: FlexContainerProps): React.JSX.Element => {
 
   const cards: ReactNode[] = []
   assets.items.forEach((asset) => {
-    if ('imageThumbnailPath' in asset && asset.imageThumbnailPath !== undefined && asset.imageThumbnailPath !== null) {
-      cards.push(
-        <PreviewCardContainer
-          asset={ asset }
-        />
-      )
-    }
+    cards.push(
+      <PreviewCardContainer
+        asset={ asset }
+      />
+    )
   })
 
   return (

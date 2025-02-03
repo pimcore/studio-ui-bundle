@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { store, useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import { api as dataObjectApi, type DataObject, type DataObjectGetByIdApiResponse } from '../data-object-api-slice-enhanced'
 import {
   addPropertyToDataObject,
@@ -28,7 +28,8 @@ import {
   setPropertiesForDataObject,
   setSchedulesForDataObject,
   updatePropertyForDataObject,
-  updateScheduleForDataObject
+  updateScheduleForDataObject,
+  trackModifiedObjectData
 } from '../data-object-draft-slice'
 import { useEffect, useState } from 'react'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -41,11 +42,16 @@ import type { ElementEditorType, TypeRegistryInterface } from '@Pimcore/modules/
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { initialTabsStateValue, useTabsDraft, type UseTabsDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-tabs'
+import {
+  useModifiedObjectDataDraft,
+  type UseModifiedObjectDataDraftReturn
+} from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
 
 export interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTabsDraftReturn,
+  UseModifiedObjectDataDraftReturn,
   UseTrackableChangesDraftReturn {
   isLoading: boolean
   isError: boolean
@@ -55,6 +61,8 @@ export interface UseDataObjectDraftReturn extends
   removeDataObjectFromState: () => void
 
   fetchDataObject: () => Promise<DataObject>
+
+  getCurrentDraftState: () => ReturnType<typeof selectDataObjectById> | undefined
 }
 
 export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
@@ -97,6 +105,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
         schedules: [],
         changes: {},
         modifiedCells: {},
+        modifiedObjectData: {},
         ...initialTabsStateValue
       }
 
@@ -150,9 +159,20 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     setActiveTabForDataObject
   )
 
+  const modifiedObjectDataActions = useModifiedObjectDataDraft(
+    id,
+    dataObject,
+    trackModifiedObjectData
+  )
+
   const editorType = dataObject?.type === undefined
     ? undefined
     : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
+
+  const getCurrentDraftState = (): ReturnType<typeof selectDataObjectById> | undefined => {
+    const state = store.getState()
+    return selectDataObjectById(state, dataObject.id)
+  }
 
   return {
     isLoading,
@@ -161,9 +181,11 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     editorType,
     removeDataObjectFromState,
     fetchDataObject,
+    getCurrentDraftState,
     ...trackableChangesActions,
     ...propertyActions,
     ...schedulesActions,
-    ...tabsActions
+    ...tabsActions,
+    ...modifiedObjectDataActions
   }
 }

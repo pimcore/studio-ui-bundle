@@ -31,17 +31,6 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/document/stream/pdf-preview` }),
                 providesTags: ["Assets"],
             }),
-            assetDownloadCsv: build.query<AssetDownloadCsvApiResponse, AssetDownloadCsvApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/assets/download/csv/${queryArg.jobRunId}` }),
-                providesTags: ["Assets"],
-            }),
-            assetDeleteCsv: build.mutation<AssetDeleteCsvApiResponse, AssetDeleteCsvApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/download/csv/${queryArg.jobRunId}`,
-                    method: "DELETE",
-                }),
-                invalidatesTags: ["Assets"],
-            }),
             assetDownloadZip: build.query<AssetDownloadZipApiResponse, AssetDownloadZipApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/download/zip/${queryArg.jobRunId}` }),
                 providesTags: ["Assets"],
@@ -199,6 +188,11 @@ const injectedRtkApi = api
                         frame: queryArg.frame,
                         cover: queryArg.cover,
                         forceResize: queryArg.forceResize,
+                        cropPercent: queryArg.cropPercent,
+                        cropWidth: queryArg.cropWidth,
+                        cropHeight: queryArg.cropHeight,
+                        cropTop: queryArg.cropTop,
+                        cropLeft: queryArg.cropLeft,
                     },
                 }),
                 providesTags: ["Assets"],
@@ -375,16 +369,6 @@ export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
 };
-export type AssetDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
-export type AssetDownloadCsvApiArg = {
-    /** JobRunId of the JobRun */
-    jobRunId: number;
-};
-export type AssetDeleteCsvApiResponse = /** status 200 Success */ void;
-export type AssetDeleteCsvApiArg = {
-    /** JobRunId of the JobRun */
-    jobRunId: number;
-};
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
     /** JobRunId of the JobRun */
@@ -412,9 +396,12 @@ export type AssetExportCsvAssetApiArg = {
         config?: {
             delimiter?: string;
             header?:
+                | "id"
+                | "custom_report_config"
+                | "custom_report_to_export"
                 | "asset_to_export"
                 | "folder_to_export"
-                | "asset_export_data"
+                | "csv_export_data"
                 | "config"
                 | "columns"
                 | "filters"
@@ -424,7 +411,10 @@ export type AssetExportCsvAssetApiArg = {
                 | "title"
                 | "name"
                 | "\r\n"
-                | "array";
+                | "array"
+                | "int"
+                | "string"
+                | "bool";
         };
     };
 };
@@ -441,9 +431,12 @@ export type AssetExportCsvFolderApiArg = {
         config?: {
             delimiter?: string;
             header?:
+                | "id"
+                | "custom_report_config"
+                | "custom_report_to_export"
                 | "asset_to_export"
                 | "folder_to_export"
-                | "asset_export_data"
+                | "csv_export_data"
                 | "config"
                 | "columns"
                 | "filters"
@@ -453,7 +446,10 @@ export type AssetExportCsvFolderApiArg = {
                 | "title"
                 | "name"
                 | "\r\n"
-                | "array";
+                | "array"
+                | "int"
+                | "string"
+                | "bool";
         };
     };
 };
@@ -648,6 +644,15 @@ export type AssetImageStreamCustomApiArg = {
     cover?: boolean;
     /** ForceResize */
     forceResize?: boolean;
+    cropPercent?: boolean;
+    /** CropWidth of downloaded image */
+    cropWidth?: number;
+    /** CropHeight of downloaded image */
+    cropHeight?: number;
+    /** CropTop of downloaded image */
+    cropTop?: number;
+    /** CropLeft of downloaded image */
+    cropLeft?: number;
 };
 export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
@@ -1150,8 +1155,6 @@ export const {
     useAssetCustomSettingsGetByIdQuery,
     useAssetGetTextDataByIdQuery,
     useAssetDocumentStreamPreviewQuery,
-    useAssetDownloadCsvQuery,
-    useAssetDeleteCsvMutation,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
     useAssetDownloadByIdQuery,

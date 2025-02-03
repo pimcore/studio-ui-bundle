@@ -25,6 +25,7 @@ import { addGeoPolyLineToolbar } from '@Pimcore/components/geo-map/toolbar/add-g
 import { addGeoPolygonToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-polygon-toolbar'
 import { addGeoBoundsToolbar } from '@Pimcore/components/geo-map/toolbar/add-geo-bounds-toolbar'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: '/bundles/pimcorestudioui/img/leaflet/marker-icon-2x.png',
@@ -63,7 +64,6 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
   const [zoom, setZoom] = useState<number | undefined>(props.zoom)
   const [value, setValue] = useState<GeoType | undefined>(props.value)
   const [key, setKey] = useState<number>(0)
-  const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const settings = useSettings()
 
@@ -133,28 +133,7 @@ const GeoMap = forwardRef<GeoMapAPI, GeoMapProps>((props, ref): React.JSX.Elemen
     setZoom(props.zoom)
   }, [props.zoom])
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    if (containerRef.current !== null) {
-      observer.observe(containerRef.current)
-    }
-
-    return () => {
-      if (containerRef.current !== null) {
-        observer.unobserve(containerRef.current)
-        observer.disconnect()
-      }
-    }
-  }, [])
+  const isVisible = useElementVisible(containerRef)
 
   useEffect(() => {
     if (!isVisible) {

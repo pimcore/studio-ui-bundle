@@ -74,6 +74,10 @@ export const useStyle = createStyles(({ token, css }) => {
         .ant-card-cover .img-container {
             height: 64px;
             width: 170px;
+            
+            .pimcore-icon {
+                color: ${token.Colors.Neutral.Icon.colorIcon};
+            }
         }
 
         .ant-image .ant-image-img.img, .ant-image .ant-image-img.img-medium {
