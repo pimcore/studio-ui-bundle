@@ -17,7 +17,6 @@ import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import _ from 'lodash'
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
@@ -29,38 +28,12 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
-  const { form, updateModifiedDataObjectAttributes, markDraftAsModified } = useEditFormContext()
+  const { form, updateModifiedDataObjectAttributes, markDraftAsModified, getChangedFieldName } = useEditFormContext()
   const inheritanceState = useInheritanceState()
-
-  const getFieldName = (
-    changedValues: Record<string, unknown>, // Ensures only valid objects are passed
-    parentKey: string = ''
-  ): string | null => {
-    const keys = Object.keys(changedValues)
-    if (keys.length === 0) return null // If no keys exist
-    const key = keys[0] // Get the first key
-
-    const fullKey = parentKey !== '' ? `${parentKey}.${key}` : key // Combine with parent if needed
-    const value = changedValues[key]
-    console.log('am here', fullKey, !_.isEmpty(form.getFieldInstance(fullKey)))
-    // If the current key is a valid field, return it
-    if (!_.isEmpty(form.getFieldInstance(fullKey))) {
-      return fullKey
-    }
-
-    // If the value is an object, recurse deeper
-    if (_.isPlainObject(value)) {
-      return getFieldName(value as Record<string, unknown>, fullKey)
-    }
-
-    return fullKey // Stop recursion if value is not an object
-  }
 
   const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
     updateModifiedDataObjectAttributes(changedValues)
-
-    const fieldName = getFieldName(changedValues)
-    console.log('changed', fieldName, changedValues)
+    const fieldName = getChangedFieldName(changedValues)
     if (fieldName !== null && inheritanceState?.getInheritanceState(fieldName)?.inherited === true) {
       inheritanceState?.breakInheritance(fieldName)
     }

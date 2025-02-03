@@ -16,6 +16,7 @@ import { type FormInstance } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import _ from 'lodash'
 
 interface EditFormContextProps {
   form: FormInstance
@@ -23,6 +24,7 @@ interface EditFormContextProps {
   resetModifiedDataObjectAttributes: () => void
   markDraftAsModified: () => void
   getModifiedDataObjectAttributes: () => Record<string, any>
+  getChangedFieldName: (changedValues: Record<string, unknown>, parentKey?: string) => string | null
 }
 
 const EditFormContext = createContext<EditFormContextProps | undefined>(undefined)
@@ -53,12 +55,37 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return modifiedDataObjectAttributesRef.current
   }
 
+  const getChangedFieldName = (
+    changedValues: Record<string, unknown>,
+    parentKey: string = ''
+  ): string | null => {
+    const keys = Object.keys(changedValues)
+    if (keys.length === 0) {
+      return null
+    }
+    const key = keys[0]
+
+    const fullKey = parentKey !== '' ? `${parentKey}.${key}` : key
+    const value = changedValues[key]
+
+    if (!_.isEmpty(form.getFieldInstance(fullKey))) {
+      return fullKey
+    }
+
+    if (_.isPlainObject(value)) {
+      return getChangedFieldName(value as Record<string, unknown>, fullKey)
+    }
+
+    return fullKey
+  }
+
   const value = useMemo(() => ({
     form,
     updateModifiedDataObjectAttributes,
     resetModifiedDataObjectAttributes,
     markDraftAsModified: markObjectDataAsModified,
-    getModifiedDataObjectAttributes
+    getModifiedDataObjectAttributes,
+    getChangedFieldName
   }), [form])
 
   return (
