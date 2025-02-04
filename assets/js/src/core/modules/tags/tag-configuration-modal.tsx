@@ -52,10 +52,10 @@ export const TagConfigurationModal = ({
   }
 
   useEffect(() => {
-    if (tagConfigModalOpen) {
+    if (tagConfigModalOpen && mode === 'update') {
       form.setFieldsValue({
-        tagName: focusTag?.text ?? '',
-        parentTag: focusTag?.parentId ?? null
+        tagName: focusTag.text ?? '',
+        parentTag: focusTag.parentId ?? null
       })
     } else {
       form.resetFields()
@@ -97,7 +97,7 @@ export const TagConfigurationModal = ({
         <Button
           onClick={ () => { form.submit() } }
           type='primary'
-        >Create</Button>
+        >{mode === 'create' ? t('tag-configuration.create') : t('tag-configuration.save')}</Button>
       </ModalFooter> }
       onCancel={ () => {
         setTagConfigModalOpen(false)

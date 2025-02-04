@@ -14,7 +14,6 @@
 import {
   type ChangeTagParameters,
   type Tag,
-  type TagGetCollectionApiResponse,
   useTagGetCollectionQuery,
   useTagUpdateByIdMutation,
   useTagDeleteByIdMutation, useTagCreateMutation, type CreateTagParameters
@@ -23,7 +22,7 @@ import { useEffect, useState } from 'react'
 
 interface UseTagConfigReturn {
   tagsWithChildren: Tag[]
-  tags: TagGetCollectionApiResponse | undefined
+  tags: Tag[]
   flattenedTags: Tag[]
   tagsLoading: boolean
   handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
@@ -160,6 +159,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   return {
-    tagsWithChildren, tags, flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tagsWithChildren, tags: tags?.items ?? [], flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }
