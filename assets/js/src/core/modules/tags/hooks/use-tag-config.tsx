@@ -28,7 +28,7 @@ interface UseTagConfigReturn {
   tagsLoading: boolean
   handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
   handleTagCreation: (name: string, parentId: number) => Promise<void>
-  deleteATag: (tagId: number) => Promise<void>
+  tagDeletion: (tagId: number) => Promise<void>
   getTag: (key: string) => Tag | undefined
   rootTagFolder: Tag
 }
@@ -110,7 +110,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
     }
   }
 
-  const deleteATag = async (tagId: number): Promise<void> => {
+  const tagDeletion = async (tagId: number): Promise<void> => {
     const response = (await deleteTag({ id: tagId })) as { error?: { data?: { error?: string | null } } }
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
@@ -160,6 +160,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   return {
-    tagsWithChildren, tags, flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, deleteATag, getTag, rootTagFolder
+    tagsWithChildren, tags, flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }

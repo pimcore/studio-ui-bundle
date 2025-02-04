@@ -34,7 +34,7 @@ export interface TagConfigurationModalProps {
   setMode: (creationMode: Mode) => void
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
-  focusTag: Tag | undefined
+  focusTag: Tag
 }
 
 export const TagConfigurationModal = ({
@@ -63,19 +63,20 @@ export const TagConfigurationModal = ({
   }, [tagConfigModalOpen, focusTag])
 
   const handleSubmit = async (values: TagValues): Promise<void> => {
-    if (values?.tagName.trim() === '' || focusTag === undefined) {
+    if (values?.tagName.trim() === '') {
       return
+      // FAIOIOIL
     }
     if (mode === 'update') {
       try {
-        await handleTagUpdate(focusTag?.id, focusTag?.parentId, values.tagName)
+        await handleTagUpdate(focusTag.id, focusTag.parentId, values.tagName)
         closeModal()
       } catch (error) {
         console.error('Error updating tag:', error)
       }
     } else if (mode === 'create') {
       try {
-        await handleTagCreation(values.tagName, focusTag?.id)
+        await handleTagCreation(values.tagName, focusTag.id)
         closeModal()
       } catch (error) {
         console.error('Error creating tag:', error)
