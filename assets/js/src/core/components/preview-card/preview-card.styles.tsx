@@ -77,6 +77,10 @@ export const useStyle = createStyles(({ token, css }) => {
             
             .pimcore-icon {
                 color: ${token.Colors.Neutral.Icon.colorIcon};
+
+                svg * {
+                    vector-effect: non-scaling-stroke;
+                }
             }
         }
 
