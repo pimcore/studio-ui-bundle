@@ -12,12 +12,13 @@
 */
 
 import React, { useContext, useEffect } from 'react'
-import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useDataObjectDraft } from '../../hooks/use-data-object-draft'
 import { DataObjectContext } from '../../data-object-provider'
-import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
 import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
@@ -25,19 +26,16 @@ import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-prop
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
-import {
-  type DataObjectUpdateByIdApiArg,
-  useDataObjectUpdateByIdMutation
-} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type DataObjectUpdateByIdApiArg, useDataObjectUpdateByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageSelection } from './language-selection/language-selection'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar/workflow-menu/workflow-menu'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
-import {
-  useEditFormContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { api } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -50,6 +48,8 @@ export const Toolbar = (): React.JSX.Element => {
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
+
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (isSuccess && isSchedulesSuccess) {
@@ -135,7 +135,11 @@ export const Toolbar = (): React.JSX.Element => {
 
     const saveSchedulesPromise = saveSchedules()
 
-    Promise.all([saveDataObjectPromise, saveSchedulesPromise]).catch((error) => {
+    Promise.all([saveDataObjectPromise, saveSchedulesPromise]).then(() => {
+      const invalidateVersionsList = invalidatingTags.ASSET_VERSIONS(id)
+
+      dispatch(api.util.invalidateTags(invalidateVersionsList))
+    }).catch((error) => {
       console.log(error)
     })
   }
