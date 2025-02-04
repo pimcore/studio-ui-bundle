@@ -68,15 +68,15 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const fullKey = parentKey !== '' ? `${parentKey}.${key}` : key
     const value = changedValues[key]
 
-    if (form.getFieldValue(fullKey) !== undefined) {
-      return fullKey
+    if (!form.isFieldTouched(fullKey.split('.'))) {
+      return parentKey
     }
 
     if (_.isPlainObject(value)) {
       return getChangedFieldName(value as Record<string, unknown>, fullKey)
     }
 
-    return null
+    return fullKey
   }
 
   const value = useMemo(() => ({

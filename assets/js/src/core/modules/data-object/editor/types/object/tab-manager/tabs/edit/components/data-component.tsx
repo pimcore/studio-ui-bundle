@@ -59,7 +59,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
     title = (
       <>
-        {title}<Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
+        {title} <Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
       </>
     )
   }
