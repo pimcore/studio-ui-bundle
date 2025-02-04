@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   HotspotImage, type HotspotImageProps
@@ -23,6 +23,7 @@ export type ImageObjectDataDefinition = AbstractObjectDataDefinition & HotspotIm
 
 export class DynamicTypeObjectDataHotspotImage extends DynamicTypeObjectDataAbstract {
   id: string = 'hotspotimage'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

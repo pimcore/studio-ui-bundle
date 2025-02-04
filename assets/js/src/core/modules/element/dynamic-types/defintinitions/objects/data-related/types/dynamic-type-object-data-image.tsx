@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Image, type ImageProps
@@ -23,6 +23,7 @@ export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageProp
 
 export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
   id: string = 'image'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

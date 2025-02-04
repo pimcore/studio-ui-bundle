@@ -13,7 +13,11 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import {
+  type AbstractObjectDataDefinition,
+  DynamicTypeObjectDataAbstract,
+  type InheritedMaskOverlay
+} from '../dynamic-type-object-data-abstract'
 
 import {
   ExternalImage
@@ -27,6 +31,7 @@ export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbstract {
   id: string = 'externalImage'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
 
   getObjectDataComponent (props: ExternalImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

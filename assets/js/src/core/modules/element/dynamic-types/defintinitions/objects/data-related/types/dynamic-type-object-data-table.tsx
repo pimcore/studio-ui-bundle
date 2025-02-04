@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Table, type TableProps
@@ -23,6 +23,7 @@ export type TableObjectDataDefinition = AbstractObjectDataDefinition & TableProp
 
 export class DynamicTypeObjectDataTable extends DynamicTypeObjectDataAbstract {
   id: string = 'table'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
 
   getObjectDataComponent (props: TableObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

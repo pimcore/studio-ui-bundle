@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { GeoPointPicker } from '@Pimcore/components/geo-point-picker/geo-point-picker'
 import {
@@ -30,6 +30,7 @@ export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract {
   id: string = 'geopoint'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
 
   getObjectDataComponent (props: GeoPointObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

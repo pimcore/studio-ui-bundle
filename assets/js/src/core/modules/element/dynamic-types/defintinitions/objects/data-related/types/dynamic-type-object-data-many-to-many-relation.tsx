@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   ManyToManyRelation, type ManyToManyRelationClassDefinitionProps
@@ -30,6 +30,7 @@ export type ManyToManyRelationObjectDataDefinition = AbstractObjectDataDefinitio
 
 export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDataAbstract {
   id: string = 'manyToManyRelation'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
 
   getObjectDataComponent (props: ManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

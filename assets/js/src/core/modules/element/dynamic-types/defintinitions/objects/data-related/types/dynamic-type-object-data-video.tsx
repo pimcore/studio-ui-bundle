@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Video, type VideoProps, type VideoType
@@ -26,6 +26,7 @@ export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProp
 
 export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
   id: string = 'video'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
 
   getObjectDataComponent (props: VideoObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

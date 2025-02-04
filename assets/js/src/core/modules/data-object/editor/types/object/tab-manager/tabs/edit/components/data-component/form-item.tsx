@@ -21,6 +21,8 @@ import {
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import cn from 'classnames'
+import { useStyles } from './form-item.styles'
 
 interface DataComponentFormItemProps {
   objectDataType: DynamicTypeObjectDataAbstract
@@ -32,14 +34,22 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const inheritanceState = useInheritanceState()
   const inheritanceStateValue = inheritanceState?.getInheritanceState(formFieldName)
   const componentProps: AbstractObjectDataDefinition = { ..._props, inherited: inheritanceStateValue?.inherited === true }
+  const formItemProps = objectDataType.getObjectDataFormItemProps(componentProps)
+  const { styles } = useStyles()
+  const className = cn(formItemProps.className, {
+    [styles.inheritedContainer]: objectDataType.inheritedMaskOverlay === 'container' && componentProps.inherited === true,
+    [styles.inheritedFormElement]: objectDataType.inheritedMaskOverlay === 'form-element' && componentProps.inherited === true
+  })
 
   return (
     <ErrorBoundary>
       <Form.Item
-        { ...objectDataType.getObjectDataFormItemProps(componentProps) }
+        { ...formItemProps }
+        className={ className }
         name={ formFieldName }
       >
-        {objectDataType.getObjectDataComponent(componentProps)}
+        { objectDataType.getObjectDataComponent(componentProps) }
+
       </Form.Item>
     </ErrorBoundary>
   )

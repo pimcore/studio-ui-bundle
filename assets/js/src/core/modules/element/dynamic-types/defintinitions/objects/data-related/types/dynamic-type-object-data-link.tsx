@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { Link } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 import _ from 'lodash'
@@ -26,6 +26,7 @@ export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
   id: string = 'link'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
 
   getObjectDataComponent (props: LinkObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

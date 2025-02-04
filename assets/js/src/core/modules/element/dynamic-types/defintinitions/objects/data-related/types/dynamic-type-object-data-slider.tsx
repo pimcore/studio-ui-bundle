@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition, type InheritedMaskOverlay } from '../dynamic-type-object-data-abstract'
 import {
   type AbstractNumericObjectDataDefinition,
   DynamicTypeObjectDataAbstractNumeric
@@ -28,6 +28,7 @@ export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
 
 export class DynamicTypeObjectDataSlider extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'slider'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
 
   getObjectDataComponent (props: SliderObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const componentProps = this.getObjectDataComponentProps(props) as SliderProps

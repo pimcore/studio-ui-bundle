@@ -13,7 +13,7 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   getGeoComponentHeight, getGeoComponentWidth
@@ -30,6 +30,7 @@ export type GeoPolyLineObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstract {
   id: string = 'geopolyline'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
 
   getObjectDataComponent (props: GeoPolyLineObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
