@@ -11,16 +11,47 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import {
-  type SingleVersionViewProps
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
+import React, { useEffect, useState } from 'react'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { api } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
+import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const SingleView = ({
   versions,
   versionId,
   setDetailedVersions
 }: SingleVersionViewProps): React.JSX.Element => {
+  const dispatch = useAppDispatch()
+
+  const { id } = useElementContext()
+
+  const [vId, setVId] = useState(versionId)
+  const [versionData, setVersionData] = useState([] as object[])
+
+  const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
+
+  useEffect(() => {
+    if (versionId.id !== vId.id) {
+      setVersionData([])
+      setVId(versionId)
+    }
+  }, [versionId])
+
+  useEffect(() => {
+    const versionPromise = dispatch(api.endpoints.versionGetById.initiate({ id: vId.id }))
+
+    Promise.resolve(versionPromise)
+      .then((response): void => {
+        console.log('------->>>>> response: ', response)
+      })
+      .catch(err => { console.log(err) })
+  }, [vId])
+
+  console.log('------->>>>> versionData: ', versionData)
+  console.log('------->>>>> layoutData: ', layoutData)
+
   return (
     <div>
       <p><strong>TODO: implement data object single version view for:</strong></p>
