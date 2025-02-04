@@ -21,6 +21,8 @@ import {
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyles } from './field-label.styles'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { useTranslation } from 'react-i18next'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -33,6 +35,7 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
   const inheritanceStateContext = useInheritanceState()
   const inheritanceState = inheritanceStateContext?.getInheritanceState(props.name)
   const { openDataObject } = useDataObjectHelper()
+  const { t } = useTranslation()
 
   return (
     <Flex
@@ -40,15 +43,21 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
       gap="extra-small"
     >
       { inheritanceState?.inherited === true && (
-        <IconButton
-          className={ styles.inheritanceButton }
-          icon={ { value: 'inheritance-active' } }
-          onClick={ () => { openDataObject({ config: { id: inheritanceState?.objectId } }) } }
-          type="action"
-          variant="minimal"
-        />
+        <Tooltip title={ t('inheritance-active', { id: inheritanceState?.objectId }) }>
+          <IconButton
+            className={ styles.inheritanceButton }
+            icon={ { value: 'inheritance-active' } }
+            onClick={ () => { openDataObject({ config: { id: inheritanceState?.objectId } }) } }
+            type="link"
+            variant="minimal"
+          />
+        </Tooltip>
       )}
-      { inheritanceState?.inherited === 'broken' && <Icon value="inheritance-broken" /> }
+      { inheritanceState?.inherited === 'broken' && (
+        <Tooltip title={ t('inheritance-broken') }>
+          <Icon value="inheritance-broken" />
+        </Tooltip>
+      ) }
       { props.additionalIcons }
       <span>{props.label}</span>
     </Flex>
