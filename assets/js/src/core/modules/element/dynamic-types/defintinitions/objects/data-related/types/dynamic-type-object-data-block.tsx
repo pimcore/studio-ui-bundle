@@ -13,14 +13,28 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import {
+  type AbstractObjectDataDefinition,
+  DynamicTypeObjectDataAbstract
+} from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
+import {
+  FieldLabel
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 
 export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
   id: string = 'block'
   isCollectionType: boolean = true
 
   getObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return <Block { ...props } />
+    return (
+      <Block
+        { ...props }
+        title={ <FieldLabel
+          label={ props.title }
+          name={ props.name }
+                /> }
+      />
+    )
   }
 }

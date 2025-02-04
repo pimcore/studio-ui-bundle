@@ -17,6 +17,8 @@ import { type CollectionContentBaseProps } from '../collection-content'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
 import { CollectionContentEmpty } from '../collection-content-empty'
 import { BaseView } from '../../../../../layout-related/views/base-view'
+import cn from 'classnames'
+import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 
 export interface CollectionContentListProps extends CollectionContentBaseProps {}
 
@@ -29,6 +31,7 @@ export const CollectionContentList = (props: CollectionContentListProps): React.
   const previousFields = usePrevious(props.fields)
   const hasFirstFieldAdded = previousFields?.length === undefined ? false : (previousFields.length) === 0 && hasFields
   const collapsed = hasFirstFieldAdded ? false : props.collapsed
+  const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: props.inherited, type: 'collection' })
 
   const itemProps = {
     ...baseItemProps,
@@ -54,7 +57,7 @@ export const CollectionContentList = (props: CollectionContentListProps): React.
       title={ props.title }
     >
       <Space
-        className='w-full'
+        className={ cn('w-full', inheritanceOverlayStyle) }
         direction="vertical"
         size={ 'small' }
       >

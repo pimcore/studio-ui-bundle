@@ -22,6 +22,7 @@ import { type NamePath } from 'rc-field-form/es/interface'
 import {
   FieldLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
+import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -32,7 +33,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   title?: ReactNode
 }
 
-export type InheritedMaskOverlay = 'container' | 'form-element' | 'manual' | false
+export type InheritedMaskOverlay = InheritanceOverlayType
 
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {

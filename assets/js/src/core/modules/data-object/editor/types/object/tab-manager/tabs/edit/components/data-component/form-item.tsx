@@ -18,11 +18,8 @@ import {
   type AbstractObjectDataDefinition,
   type DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
-import {
-  useInheritanceState
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import cn from 'classnames'
-import { useStyles } from './form-item.styles'
+import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 
 interface DataComponentFormItemProps {
   objectDataType: DynamicTypeObjectDataAbstract
@@ -31,25 +28,17 @@ interface DataComponentFormItemProps {
 }
 
 const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDataType, _props, formFieldName }: DataComponentFormItemProps) => {
-  const inheritanceState = useInheritanceState()
-  const inheritanceStateValue = inheritanceState?.getInheritanceState(formFieldName)
-  const componentProps: AbstractObjectDataDefinition = { ..._props, inherited: inheritanceStateValue?.inherited === true }
-  const formItemProps = objectDataType.getObjectDataFormItemProps(componentProps)
-  const { styles } = useStyles()
-  const className = cn(formItemProps.className, {
-    [styles.inheritedContainer]: objectDataType.inheritedMaskOverlay === 'container' && componentProps.inherited === true,
-    [styles.inheritedFormElement]: objectDataType.inheritedMaskOverlay === 'form-element' && componentProps.inherited === true,
-    [styles.inheritedManual]: objectDataType.inheritedMaskOverlay === 'manual' && componentProps.inherited === true
-  })
+  const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
+  const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
 
   return (
     <ErrorBoundary>
       <Form.Item
         { ...formItemProps }
-        className={ className }
+        className={ cn(formItemProps.className, inheritanceOverlayStyle) }
         name={ formFieldName }
       >
-        { objectDataType.getObjectDataComponent(componentProps) }
+        { objectDataType.getObjectDataComponent(_props) }
 
       </Form.Item>
     </ErrorBoundary>

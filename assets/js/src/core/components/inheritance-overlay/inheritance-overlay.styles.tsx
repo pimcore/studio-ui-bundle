@@ -55,6 +55,17 @@ export const useStyles = createStyles(({ token, css }) => {
       .studio-inherited-overlay:after {
         ${overlay};
       }
+    `,
+    inheritedCollection: css`
+      & {
+        position: relative;
+      }
+      & > * {
+        filter: opacity(0.5);
+      }
+      &:after {
+        ${overlay};
+      }
     `
   }
 })
