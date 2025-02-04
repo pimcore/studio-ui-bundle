@@ -42,10 +42,17 @@ export interface QuantityValueRangeValue {
 }
 
 export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.Element => {
-  const [value, setValue] = useState<QuantityValueRangeValue>(props.value ?? { minimum: null, maximum: null, unitId: null })
+  const [value, setValueState] = useState<QuantityValueRangeValue>(props.value ?? { minimum: null, maximum: null, unitId: null })
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const setValue = (newValue: QuantityValueRangeValue): void => {
+    if (!_.isEqual(newValue, value)) {
+      setValueState(newValue)
+      props.onChange?.(newValue.minimum === null && newValue.maximum === null && newValue.unitId === null ? null : newValue)
+    }
+  }
 
   const onChangeMinimum = (newValue: ValueType | null): void => {
     setValue({
@@ -66,12 +73,6 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
       unitId: _.isEmpty(unitId) ? null : (unitId ?? null)
     })
   }
-
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value.minimum === null && value.maximum === null && value.unitId === null ? null : value)
-    }
-  }, [value])
 
   useEffect(() => {
     const localValue = value.minimum === null && value.maximum === null && value.unitId === null ? null : value

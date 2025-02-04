@@ -43,11 +43,18 @@ export interface QuantityValueValue {
 }
 
 export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
-  const [value, setValue] = useState<QuantityValueValue>(props.value ?? { value: null, unitId: null })
+  const [value, setValueState] = useState<QuantityValueValue>(props.value ?? { value: null, unitId: null })
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { convertValue } = useQuantityValueUnits()
   const { styles } = useStyles()
+
+  const setValue = (newValue: QuantityValueValue): void => {
+    if (!_.isEqual(newValue, value)) {
+      setValueState(newValue)
+      props.onChange?.(newValue.value === null && newValue.unitId === null ? null : newValue)
+    }
+  }
 
   const onChangeNumber = (newValue: ValueType | null): void => {
     setValue({
@@ -75,12 +82,6 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
       unitId: _.isEmpty(unitId) ? null : (unitId ?? null)
     })
   }
-
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value.value === null && value.unitId === null ? null : value)
-    }
-  }, [value])
 
   useEffect(() => {
     const localValue = value.value === null && value.unitId === null ? null : value
