@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useMemo, useState } from 'react'
+import { isEmpty } from 'lodash'
 import { getFormattedDropDownMenu, useListColumns, useListGridAvailableColumns, useListGridConfig, useListSelectedConfigId } from '../../hooks/use-list'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
@@ -46,7 +47,7 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { id } = useAsset()
   const userData = useUser()
   const { selectedGridConfigId, setSelectedGridConfigId } = useListSelectedConfigId()
-  const { gridConfig } = useListGridConfig()
+  const { gridConfig, setGridConfig } = useListGridConfig()
 
   const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: id })
   const { data: roleList } = useRoleGetCollectionQuery()
@@ -131,6 +132,17 @@ export const GridConfigInner = (): React.JSX.Element => {
   function onFormFinish (values: any): void {
     const columnsToSave = prepareColumns(columns)
 
+    const isShareGlobally = values.shareGlobally === true
+
+    // for global sharing the sharedUsers and sharedRoles need to be cleared
+    if (isShareGlobally && !isEmpty(gridConfig)) {
+      setGridConfig({
+        ...gridConfig,
+        sharedUsers: [],
+        sharedRoles: []
+      })
+    }
+
     if (view === ViewState.Update && isSavedConfiguration) {
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
@@ -163,6 +175,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           description: values.description,
           setAsFavorite: values.setAsDefault,
           shareGlobal: values.shareGlobally,
+          sharedRoles: gridConfig?.sharedRoles,
+          sharedUsers: gridConfig?.sharedUsers,
           saveFilter: false,
           pageSize: 0
         }
