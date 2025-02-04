@@ -19,9 +19,9 @@ import {
   useTagDeleteByIdMutation, useTagCreateMutation, type CreateTagParameters
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { useEffect, useState } from 'react'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseTagConfigReturn {
-  tagsWithChildren: Tag[]
   tags: Tag[]
   flattenedTags: Tag[]
   tagsLoading: boolean
@@ -33,7 +33,6 @@ interface UseTagConfigReturn {
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
-  const [tagsWithChildren, setTagsWithChildren] = useState<Tag[]>([])
   const [flattenedTags, setFlattenedTags] = useState<Tag[]>([])
   const rootTagFolder = { id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }
 
@@ -46,6 +45,26 @@ export const useTagConfig = (): UseTagConfigReturn => {
   const [deleteTag] = useTagDeleteByIdMutation()
   const [createTag] = useTagCreateMutation()
 
+  const flattenTags = (tags: Tag[]): Tag[] => {
+    const result: Tag[] = []
+
+    const traverse = (nodeList: Tag[]): void => {
+      for (const node of nodeList) {
+        result.push(node)
+        if (node.children !== null && node.children !== undefined && node.children.length > 0) {
+          traverse(node.children)
+        }
+      }
+    }
+
+    traverse(tags)
+    return result
+  }
+
+  useEffect(() => {
+    setFlattenedTags(flattenTags(tags?.items ?? []))
+  }, [tags])
+
   const getTag: (key: string) => Tag | undefined = (key: string) => {
     return flattenedTags.find(item => item.id.toString() === key) ?? undefined
   }
@@ -57,11 +76,11 @@ export const useTagConfig = (): UseTagConfigReturn => {
     })) as { error?: { data?: { error?: string | null } } }
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
-      throw new Error(response.error.data.error)
+      trackError(new GeneralError(`Error updating tag: ${response.error.data.error}`))
     }
 
     if (response.error != null) {
-      throw new Error('Failed to update tag')
+      trackError(new GeneralError('Error updating tag'))
     }
   }
 
@@ -69,7 +88,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
     const maybeMovedTag: Tag | undefined = getTag(id.toString())
 
     if (maybeMovedTag === null || maybeMovedTag === undefined) {
-      console.error(`Tag with id ${id} not found`)
+      trackError(new GeneralError(`Tag with id ${id} not found`))
     } else {
       const createTagParameter: ChangeTagParameters = {
         parentId,
@@ -79,7 +98,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
       try {
         await tagUpdate(id, createTagParameter)
       } catch (error) {
-        console.error('Error moving tag:', error)
+        trackError(new GeneralError('Error moving tag'))
       }
     }
   }
@@ -88,11 +107,11 @@ export const useTagConfig = (): UseTagConfigReturn => {
     const response = (await createTag({ createTagParameters })) as { error?: { data?: { error?: string | null } } }
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
-      throw new Error(response.error.data.error)
+      trackError(new GeneralError(`Error creating tag: ${response.error.data.error}`))
     }
 
     if (response.error != null) {
-      throw new Error('Failed to delete tag')
+      trackError(new GeneralError('Error creating tag'))
     }
   }
 
@@ -113,52 +132,15 @@ export const useTagConfig = (): UseTagConfigReturn => {
     const response = (await deleteTag({ id: tagId })) as { error?: { data?: { error?: string | null } } }
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
-      throw new Error(response.error.data.error)
+      trackError(new GeneralError(`Error deleting tag: ${response.error.data.error}`))
     }
 
     if (response.error != null) {
-      throw new Error('Failed to delete tag')
+      trackError(new GeneralError('Error deleting tag'))
     }
   }
-
-  const getTagsWithChildren = (tags: Tag[], isRoot = true): Tag[] => {
-    const result = tags.reduce<Tag[]>((acc, tag) => {
-      if (tag.hasChildren) {
-        acc.push(tag)
-      }
-      if (Array.isArray(tag.children) && tag.children.length > 0) {
-        acc.push(...getTagsWithChildren(tag.children, false))
-      }
-      return acc
-    }, [])
-
-    return isRoot
-      ? [rootTagFolder, ...result]
-      : result
-  }
-
-  const flattenTags = (tags: Tag[]): Tag[] => {
-    const result: Tag[] = []
-
-    const traverse = (nodeList: Tag[]): void => {
-      for (const node of nodeList) {
-        result.push(node)
-        if (node.children !== null && node.children !== undefined && node.children.length > 0) {
-          traverse(node.children)
-        }
-      }
-    }
-
-    traverse(tags)
-    return result
-  }
-
-  useEffect(() => {
-    setTagsWithChildren(getTagsWithChildren(tags?.items ?? []))
-    setFlattenedTags(flattenTags(tags?.items ?? []))
-  }, [tags])
 
   return {
-    tagsWithChildren, tags: tags?.items ?? [], flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tags: tags?.items ?? [], flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }

@@ -24,6 +24,7 @@ import {
   type Tag
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { type Mode } from '@Pimcore/modules/tags/tag-configuration-container'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface TagValues {
   tagName: string
@@ -54,8 +55,8 @@ export const TagConfigurationModal = ({
   useEffect(() => {
     if (tagConfigModalOpen && mode === 'update') {
       form.setFieldsValue({
-        tagName: focusTag.text ?? '',
-        parentTag: focusTag.parentId ?? null
+        tagName: focusTag.text,
+        parentTag: focusTag.parentId
       })
     } else {
       form.resetFields()
@@ -63,48 +64,52 @@ export const TagConfigurationModal = ({
   }, [tagConfigModalOpen, focusTag])
 
   const handleSubmit = async (values: TagValues): Promise<void> => {
-    if (values?.tagName.trim() === '') {
-      return
-      // FAIOIOIL
-    }
+    console.log('----> values', values)
+
     if (mode === 'update') {
       try {
         await handleTagUpdate(focusTag.id, focusTag.parentId, values.tagName)
         closeModal()
       } catch (error) {
-        console.error('Error updating tag:', error)
+        trackError(new GeneralError(`Error updating tag: ${error}`))
       }
     } else if (mode === 'create') {
       try {
         await handleTagCreation(values.tagName, focusTag.id)
         closeModal()
       } catch (error) {
-        console.error('Error creating tag:', error)
+        trackError(new GeneralError(`Error creating tag: ${error}`))
       }
     }
   }
 
   return (
     <Modal
-      afterClose={ () => {
-        setTagConfigModalOpen(false)
-        setMode('create')
-      } }
       footer={ <ModalFooter
         divider
         justify={ 'flex-end' }
                >
         <Button
-          onClick={ () => { form.submit() } }
+          onClick={ async () => {
+            try {
+              const values: TagValues = await form.validateFields()
+              closeModal()
+              await handleSubmit(values)
+            } catch (error) {
+
+            }
+          } }
           type='primary'
         >{mode === 'create' ? t('tag-configuration.create') : t('tag-configuration.save')}</Button>
       </ModalFooter> }
       onCancel={ () => {
         setTagConfigModalOpen(false)
       } }
+      onClose={ closeModal }
       open={ tagConfigModalOpen }
       size={ 'M' }
-      title={ <ModalTitle>{mode === 'create' ? t('tag-configuration.new-tag') : t('tag-configuration.rename')}</ModalTitle> }
+      title={
+        <ModalTitle>{mode === 'create' ? t('tag-configuration.new-tag') : t('tag-configuration.rename')}</ModalTitle> }
     >
       <Flex vertical>
         <Form
@@ -115,7 +120,7 @@ export const TagConfigurationModal = ({
           <Form.Item
             label={ t('tag-configuration.name') }
             name="tagName"
-            rules={ [{ required: true, message: 'Tag name is required!' }] }
+            rules={ [{ required: true, message: 'Please enter a tag name' }] }
           >
             <Input />
           </Form.Item>
