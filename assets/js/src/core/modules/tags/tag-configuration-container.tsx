@@ -16,10 +16,7 @@ import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
-import type {
-  ChangeTagParameters,
-  Tag
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { Title } from '@Pimcore/components/title/title'
 import { Box } from '@Pimcore/components/box/box'
 import { Space } from 'antd'
@@ -38,7 +35,7 @@ export interface TreeAction {
 }
 
 const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContainerProps): React.JSX.Element => {
-  const { rootTagFolder, getTagForKey, updateATag, flattenedTags } = useTagConfig()
+  const { rootTagFolder, getTag, handleTagUpdate } = useTagConfig()
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [mode, setMode] = useState<Mode>('create')
   const [focusTag, setFocusTag] = useState<Tag | undefined>(rootTagFolder)
@@ -54,7 +51,7 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
   const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions, rootActions })
 
   const setTagInFocus = (key: string): void => {
-    const newFocusTag = getTagForKey(key)
+    const newFocusTag = getTag(key)
     if (newFocusTag === null || newFocusTag === undefined) {
       console.error(`Tag with id ${key} not found`)
       return
@@ -80,29 +77,6 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
     }
   }
 
-  const getTag: (key: string) => Tag | undefined = (key: string) => {
-    return flattenedTags.find(item => item.id.toString() === key) ?? undefined
-  }
-
-  const handleMove = async (id: number, parentId: number): Promise<void> => {
-    const maybeMovedTag: Tag | undefined = getTag(id.toString())
-
-    if (maybeMovedTag === null || maybeMovedTag === undefined) {
-      console.error(`Tag with id ${id} not found`)
-    } else {
-      const createTagParameter: ChangeTagParameters = {
-        parentId,
-        name: maybeMovedTag.text
-      }
-
-      try {
-        await updateATag(id, createTagParameter)
-      } catch (error) {
-        console.error('Error moving tag:', error)
-      }
-    }
-  }
-
   return (
     <Box
       margin={ 'small' }
@@ -111,11 +85,11 @@ const TagConfigurationContainer = ({ tags, isLoading }: TagConfigurationContaine
       <Space size='middle'></Space>
       <TreeElement
         checkStrictly
-        defaultExpandedKeys={ ['root'] }
+        defaultExpandedKeys={ [0] }
         draggable
         onActionsClick={ onActionsClick }
         onDragAndDrop={ async (params) => {
-          await handleMove(Number(params.dragNode.key), Number(params.node.key))
+          await handleTagUpdate(Number(params.dragNode.key), Number(params.node.key))
         }
         }
         treeData={ treeData }

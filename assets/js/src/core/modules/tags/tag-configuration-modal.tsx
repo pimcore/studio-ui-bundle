@@ -21,10 +21,13 @@ import { Input } from '@Pimcore/components/input/input'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 import { Flex, Form } from 'antd'
 import {
-  type ChangeTagParameters,
   type Tag
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { type Mode } from '@Pimcore/modules/tags/tag-configuration-container'
+
+interface TagValues {
+  tagName: string
+}
 
 export interface TagConfigurationModalProps {
   mode: Mode
@@ -40,7 +43,7 @@ export const TagConfigurationModal = ({
   setTagConfigModalOpen,
   focusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
-  const { tagsWithChildren, updateATag } = useTagConfig()
+  const { handleTagUpdate } = useTagConfig()
   const [form] = Form.useForm()
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
@@ -59,25 +62,18 @@ export const TagConfigurationModal = ({
     }
   }, [tagConfigModalOpen, focusTag])
 
-  const handleSubmit = async (values: any): Promise<void> => {
-    if (values?.tagName.trim() === '') {
+  const handleSubmit = async (values: TagValues): Promise<void> => {
+    if (values?.tagName.trim() === '' || focusTag === undefined) {
       return
     }
 
-    const createTagParameter: ChangeTagParameters = {
-      parentId: values.parentTag ?? null,
-      name: values.tagName
-    }
-
     try {
-      await updateATag(15, createTagParameter)
+      await handleTagUpdate(focusTag?.id, focusTag?.parentId, values.tagName)
       closeModal()
     } catch (error) {
       console.error('Error updating tag:', error)
     }
   }
-
-  console.log(tagsWithChildren.map(tag => tag.text))
 
   return (
     <Modal
@@ -114,13 +110,6 @@ export const TagConfigurationModal = ({
           >
             <Input />
           </Form.Item>
-          {/* <Form.Item */}
-          {/*  label={ t('tag-configuration.parent-tag') } */}
-          {/*  layout="vertical" */}
-          {/*  name="parentTag" */}
-          {/* > */}
-          {/*  <Select options={ tagsWithChildren.map(tag => ({ value: tag.id, label: tag.text.trim() })) } /> */}
-          {/* </Form.Item> */}
         </Form>
       </Flex>
     </Modal>

@@ -26,9 +26,9 @@ interface UseTagConfigReturn {
   tags: TagGetCollectionApiResponse | undefined
   flattenedTags: Tag[]
   tagsLoading: boolean
-  updateATag: (tagId: number, updateTagParameters: ChangeTagParameters) => Promise<void>
+  handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
   deleteATag: (tagId: number) => Promise<void>
-  getTagForKey: (key: string) => Tag | undefined
+  getTag: (key: string) => Tag | undefined
   rootTagFolder: Tag
 }
 
@@ -45,13 +45,8 @@ export const useTagConfig = (): UseTagConfigReturn => {
   const [updateTag] = useTagUpdateByIdMutation()
   const [deleteTag] = useTagDeleteByIdMutation()
 
-  const getTagForKey = (key: string): Tag | undefined => {
-    console.log('----> key', key)
-    console.log('----> tags', tags)
-
-    return key === 'root'
-      ? rootTagFolder
-      : tags?.items?.find(item => item.id.toString() === key) ?? undefined
+  const getTag: (key: string) => Tag | undefined = (key: string) => {
+    return flattenedTags.find(item => item.id.toString() === key) ?? undefined
   }
 
   const updateATag = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {
@@ -66,6 +61,25 @@ export const useTagConfig = (): UseTagConfigReturn => {
 
     if (response.error != null) {
       throw new Error('Failed to update tag')
+    }
+  }
+
+  const handleTagUpdate = async (id: number, parentId: number, newName?: string): Promise<void> => {
+    const maybeMovedTag: Tag | undefined = getTag(id.toString())
+
+    if (maybeMovedTag === null || maybeMovedTag === undefined) {
+      console.error(`Tag with id ${id} not found`)
+    } else {
+      const createTagParameter: ChangeTagParameters = {
+        parentId,
+        name: newName ?? maybeMovedTag.text
+      }
+
+      try {
+        await updateATag(id, createTagParameter)
+      } catch (error) {
+        console.error('Error moving tag:', error)
+      }
     }
   }
 
@@ -119,6 +133,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   return {
-    tagsWithChildren, tags, flattenedTags, tagsLoading, updateATag, deleteATag, getTagForKey, rootTagFolder
+    tagsWithChildren, tags, flattenedTags, tagsLoading, handleTagUpdate, deleteATag, getTag, rootTagFolder
   }
 }
