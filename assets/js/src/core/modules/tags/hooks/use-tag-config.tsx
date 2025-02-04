@@ -17,7 +17,7 @@ import {
   type TagGetCollectionApiResponse,
   useTagGetCollectionQuery,
   useTagUpdateByIdMutation,
-  useTagDeleteByIdMutation
+  useTagDeleteByIdMutation, useTagCreateMutation, type CreateTagParameters
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { useEffect, useState } from 'react'
 
@@ -27,6 +27,7 @@ interface UseTagConfigReturn {
   flattenedTags: Tag[]
   tagsLoading: boolean
   handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
+  handleTagCreation: (name: string, parentId: number) => Promise<void>
   deleteATag: (tagId: number) => Promise<void>
   getTag: (key: string) => Tag | undefined
   rootTagFolder: Tag
@@ -44,12 +45,13 @@ export const useTagConfig = (): UseTagConfigReturn => {
 
   const [updateTag] = useTagUpdateByIdMutation()
   const [deleteTag] = useTagDeleteByIdMutation()
+  const [createTag] = useTagCreateMutation()
 
   const getTag: (key: string) => Tag | undefined = (key: string) => {
     return flattenedTags.find(item => item.id.toString() === key) ?? undefined
   }
 
-  const updateATag = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {
+  const tagUpdate = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {
     const response = (await updateTag({
       id: tagId,
       updateTagParameters
@@ -76,10 +78,35 @@ export const useTagConfig = (): UseTagConfigReturn => {
       }
 
       try {
-        await updateATag(id, createTagParameter)
+        await tagUpdate(id, createTagParameter)
       } catch (error) {
         console.error('Error moving tag:', error)
       }
+    }
+  }
+
+  const tagCreation = async (createTagParameters: CreateTagParameters): Promise<void> => {
+    const response = (await createTag({ createTagParameters })) as { error?: { data?: { error?: string | null } } }
+
+    if (response.error?.data?.error != null && response.error.data.error !== '') {
+      throw new Error(response.error.data.error)
+    }
+
+    if (response.error != null) {
+      throw new Error('Failed to delete tag')
+    }
+  }
+
+  const handleTagCreation = async (name: string, parentId: number): Promise<void> => {
+    const createTagParameters: CreateTagParameters = {
+      parentId,
+      name
+    }
+
+    try {
+      await tagCreation(createTagParameters)
+    } catch (error) {
+      console.error('Error creating tag:', error)
     }
   }
 
@@ -133,6 +160,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   return {
-    tagsWithChildren, tags, flattenedTags, tagsLoading, handleTagUpdate, deleteATag, getTag, rootTagFolder
+    tagsWithChildren, tags, flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, deleteATag, getTag, rootTagFolder
   }
 }

@@ -43,7 +43,7 @@ export const TagConfigurationModal = ({
   setTagConfigModalOpen,
   focusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
-  const { handleTagUpdate } = useTagConfig()
+  const { handleTagUpdate, handleTagCreation } = useTagConfig()
   const [form] = Form.useForm()
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
@@ -66,12 +66,20 @@ export const TagConfigurationModal = ({
     if (values?.tagName.trim() === '' || focusTag === undefined) {
       return
     }
-
-    try {
-      await handleTagUpdate(focusTag?.id, focusTag?.parentId, values.tagName)
-      closeModal()
-    } catch (error) {
-      console.error('Error updating tag:', error)
+    if (mode === 'update') {
+      try {
+        await handleTagUpdate(focusTag?.id, focusTag?.parentId, values.tagName)
+        closeModal()
+      } catch (error) {
+        console.error('Error updating tag:', error)
+      }
+    } else if (mode === 'create') {
+      try {
+        await handleTagCreation(values.tagName, focusTag?.id)
+        closeModal()
+      } catch (error) {
+        console.error('Error creating tag:', error)
+      }
     }
   }
 

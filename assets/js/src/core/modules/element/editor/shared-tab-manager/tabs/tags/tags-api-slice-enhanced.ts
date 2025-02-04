@@ -23,6 +23,9 @@ export const api = baseApi.enhanceEndpoints({
     tagDeleteById: {
       invalidatesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
     },
+    tagCreate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
+    },
     tagGetCollection: {
       providesTags: (result, error, args) => providingTags.AVAILABLE_TAGS()
     },
@@ -45,4 +48,4 @@ export const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './tags-api-slice.gen'
-export const { useTagDeleteByIdMutation, useTagUpdateByIdMutation, useTagGetCollectionQuery, useTagAssignToElementMutation, useTagUnassignFromElementMutation, useTagGetCollectionForElementByTypeAndIdQuery, useTagBatchOperationToElementsByTypeAndIdMutation } = api
+export const { useTagCreateMutation, useTagDeleteByIdMutation, useTagUpdateByIdMutation, useTagGetCollectionQuery, useTagAssignToElementMutation, useTagUnassignFromElementMutation, useTagGetCollectionForElementByTypeAndIdQuery, useTagBatchOperationToElementsByTypeAndIdMutation } = api
