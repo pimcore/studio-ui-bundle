@@ -20,8 +20,9 @@ import {
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { getFormattedDataStructure } from '../details-functions'
+import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
 
+// TODO: fix types
 export const SingleView = ({
   versions,
   versionId,
@@ -32,7 +33,7 @@ export const SingleView = ({
   const { id } = useElementContext()
 
   const [vId, setVId] = useState(versionId)
-  const [versionData, setVersionData] = useState([] as object[])
+  const [versionData, setVersionData] = useState<object[]>([])
 
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
 
@@ -51,11 +52,13 @@ export const SingleView = ({
         const dataRaw = response.data as DataObjectVersion
         const formattedData = getFormattedDataStructure({ layout: layoutData?.children, versionData: dataRaw?.objectData })
 
-        console.log('----->>>> formattedData: ', formattedData)
-        console.log('----->>>> versionData: ', versionData)
+        // eslint-disable-next-line
+        setVersionData(versionsDataToTableData({ versions: vId, data: formattedData }))
       })
       .catch(err => { console.log(err) })
   }, [vId])
+
+  console.log('----->>>> versionData: ', versionData)
 
   return (
     <div>

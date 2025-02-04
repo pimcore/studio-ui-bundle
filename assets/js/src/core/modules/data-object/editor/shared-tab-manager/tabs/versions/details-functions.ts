@@ -40,3 +40,17 @@ export const getFormattedDataStructure = ({ layout, versionData }: any): any => 
 
   return processLayoutData({ data: layout })
 }
+
+export const versionsDataToTableData = ({ versions, data }: any): any => {
+  const dataColumn = `Version ${versions.count}`
+
+  return data.flatMap((item: any) => {
+    return [{
+      Field: {
+        categoryName: item?.categoryName,
+        ...item?.fieldData
+      },
+      [dataColumn]: item?.fieldValue
+    }]
+  })
+}
