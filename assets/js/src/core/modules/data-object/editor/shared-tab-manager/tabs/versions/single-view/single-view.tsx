@@ -11,13 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
+import {
+  api,
+  type DataObjectVersion
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { getFormattedLayoutDataStructure } from '../details-functions'
+import { getFormattedDataStructure } from '../details-functions'
 
 export const SingleView = ({
   versions,
@@ -32,10 +35,6 @@ export const SingleView = ({
   const [versionData, setVersionData] = useState([] as object[])
 
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const layoutDataStructure = useMemo(() => getFormattedLayoutDataStructure(layoutData?.children), [layoutData])
-
-  console.log('----->>>>> 1111 layoutDataStructure: ', layoutDataStructure)
 
   useEffect(() => {
     if (versionId.id !== vId.id) {
@@ -49,7 +48,11 @@ export const SingleView = ({
 
     Promise.resolve(versionPromise)
       .then((response): void => {
-        console.log('', response, versionData)
+        const dataRaw = response.data as DataObjectVersion
+        const formattedData = getFormattedDataStructure({ layout: layoutData?.children, versionData: dataRaw?.objectData })
+
+        console.log('----->>>> formattedData: ', formattedData)
+        console.log('----->>>> versionData: ', versionData)
       })
       .catch(err => { console.log(err) })
   }, [vId])
