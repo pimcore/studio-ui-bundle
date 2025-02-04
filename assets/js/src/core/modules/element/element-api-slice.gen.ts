@@ -100,7 +100,7 @@ export type DevError = {
 export type DeleteInfo = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** hasDependencies */
     hasDependencies: boolean;
@@ -114,7 +114,7 @@ export type FolderData = {
 export type Subtype = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** Element Id */
     elementId: number;

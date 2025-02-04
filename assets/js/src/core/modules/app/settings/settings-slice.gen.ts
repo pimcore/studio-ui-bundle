@@ -34,19 +34,19 @@ export type SystemSettingsGetApiResponse = /** status 200 System settings data *
 export type SystemSettingsGetApiArg = void;
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
-    embeddedMetadata: object[];
+    embeddedMetadata: any[];
     /** flag to indicate if the embedded meta data has been extracted from the asset */
     embeddedMetadataExtracted: boolean;
 };
 export type CustomSettings = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** fixed custom settings */
     fixedCustomSettings?: FixedCustomSettings | null;
     /** dynamic custom settings - can be any key-value pair */
-    dynamicCustomSettings?: object[];
+    dynamicCustomSettings?: any[];
 };
 export type Error = {
     /** Message */

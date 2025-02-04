@@ -143,22 +143,22 @@ export type CustomMetadataVersion = {
     /** Name */
     name: string;
     /** Language */
-    language?: any;
+    language?: string | null;
     /** Type */
     type: string;
     /** Data */
-    data: any;
+    data: string | null;
 };
 export type VersionDimensions = {
     /** width */
-    width?: any;
+    width?: number | null;
     /** height */
-    height?: any;
+    height?: number | null;
 };
 export type AssetVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** asset type */
     type: string;
@@ -167,80 +167,31 @@ export type AssetVersion = {
     /** creation date */
     creationDate: number;
     /** modification date */
-    modificationDate?: any;
+    modificationDate?: number | null;
     /** file size */
     fileSize: number;
     /** mime type */
     mimeType: string;
     /** Metadata */
     metadata: CustomMetadataVersion[];
-    /** dimensions */
     dimensions: VersionDimensions;
 };
-export type ElementIcon = {
-    /** Icon type */
-    type: "name" | "path";
-    /** Icon value */
-    value: string;
-};
-export type Element = {
-    /** ID */
-    id: number;
-    /** ID of parent */
-    parentId: number;
-    /** path */
-    path: string;
-    /** icon */
-    icon?: ElementIcon;
-    /** ID of owner */
-    userOwner: number;
-    /** User that modified the element */
-    userModification: number;
-    /** Locked */
-    locked: any;
-    /** Is locked */
-    isLocked: boolean;
-    /** Creation date */
-    creationDate: any;
-    /** Modification date */
-    modificationDate: any;
-};
-export type DataObjectVersion = Element & {
+export type DataObjectVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
-    /** Inheritance allowed */
-    allowInheritance?: boolean;
-    /** Variants allowed */
-    allowVariants?: boolean;
-    /** Show variants */
-    showVariants?: boolean;
-    /** Has preview */
-    hasPreview?: boolean;
-    /** Has workflow available */
-    hasWorkflowAvailable?: boolean;
-    /** Key */
-    key?: string;
-    /** Type */
-    type?: string;
-    /** Has children */
-    hasChildren?: boolean;
-    /** Full path */
-    fullPath?: string;
-    /** Custom index */
-    index?: number;
-    /** Class name */
-    className?: any;
-    /** Published */
-    published?: any;
-    /** Detail object data */
-    objectData?: object;
+    /** modification date */
+    modificationDate: number;
+    /** path */
+    path: string;
+    /** published */
+    published: boolean;
 };
 export type DocumentVersion = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** modification date */
     modificationDate: number;
@@ -251,20 +202,20 @@ export type DocumentVersion = {
 };
 export type UpdateVersion = {
     /** Public */
-    public?: any;
+    public?: boolean | null;
     /** Note */
-    note?: any;
+    note?: string | null;
 };
 export type VersionUser = {
     /** ID */
-    id?: any;
+    id?: number | null;
     /** name */
-    name?: any;
+    name?: string | null;
 };
 export type Version = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** version ID */
     id: number;
@@ -284,10 +235,9 @@ export type Version = {
     versionCount: number;
     /** autosave */
     autosave: boolean;
-    /** user */
     user: VersionUser;
     /** scheduled */
-    scheduled?: any;
+    scheduled?: number | null;
 };
 export const {
     useVersionAssetDownloadByIdQuery,
