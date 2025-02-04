@@ -26,7 +26,7 @@ export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
   id: string = 'link'
-  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
+  inheritedMaskOverlay: InheritedMaskOverlay = 'manual'
 
   getObjectDataComponent (props: LinkObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -36,6 +36,7 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
         allowedTypes={ _.compact(props.allowedTypes ?? []) }
         disabled={ props.noteditable === true }
         disabledFields={ _.compact(props.disabledFields ?? []) }
+        inherited={ props.inherited }
       />
     )
   }

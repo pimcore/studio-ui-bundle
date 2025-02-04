@@ -46,6 +46,7 @@ export interface LinkValue {
 
 export interface LinkProps {
   disabled?: boolean
+  inherited?: boolean
   value?: LinkValue | null
   onChange?: (value?: LinkValue | null) => void
   allowedTypes: string[]
@@ -115,7 +116,15 @@ export const Link = (props: LinkProps): React.JSX.Element => {
       align="center"
       gap="extra-small"
     >
-      <Tag>{ getLinkText() }</Tag>
+      { props.inherited === true
+        ? (
+          <span className="studio-inherited-overlay">
+            <Tag>{ getLinkText() }</Tag>
+          </span>
+          )
+        : (
+          <Tag>{ getLinkText() }</Tag>
+          ) }
 
       <Tooltip
         key="open"

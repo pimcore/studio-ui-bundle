@@ -38,7 +38,8 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const { styles } = useStyles()
   const className = cn(formItemProps.className, {
     [styles.inheritedContainer]: objectDataType.inheritedMaskOverlay === 'container' && componentProps.inherited === true,
-    [styles.inheritedFormElement]: objectDataType.inheritedMaskOverlay === 'form-element' && componentProps.inherited === true
+    [styles.inheritedFormElement]: objectDataType.inheritedMaskOverlay === 'form-element' && componentProps.inherited === true,
+    [styles.inheritedManual]: objectDataType.inheritedMaskOverlay === 'manual' && componentProps.inherited === true
   })
 
   return (

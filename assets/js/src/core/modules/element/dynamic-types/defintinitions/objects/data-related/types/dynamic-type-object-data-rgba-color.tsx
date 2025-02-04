@@ -14,10 +14,10 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { ColorPicker } from 'antd'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { type Color } from 'antd/es/color-picker'
 import { t } from 'i18next'
+import { ColorPicker } from '@Pimcore/components/color-picker/color-picker'
 
 export type RgbaColorObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -43,6 +43,7 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
         allowClear
         disabled={ props.noteditable === true }
         format={ 'hex' }
+        inherited={ props.inherited }
         showText={ formatColorShowText }
       />
     )

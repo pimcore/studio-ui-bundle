@@ -12,19 +12,18 @@
 */
 
 import React from 'react'
-import { Checkbox as AntCheckbox, type CheckboxProps } from 'antd'
+import { type ColorPickerProps, ColorPicker as AntColorPicker } from 'antd'
 import cn from 'classnames'
-import { useStyles } from './checkbox.styles'
+import { useStyles } from './color-picker.styles'
 
-export interface ICheckboxProps extends CheckboxProps {
+export interface IColorPickerProps extends ColorPickerProps {
   inherited?: boolean
 }
 
-export const Checkbox = ({ inherited, className, ...restProps }: ICheckboxProps): JSX.Element => {
+export const ColorPicker = ({ inherited, className, ...restProps }: IColorPickerProps): JSX.Element => {
   const { styles } = useStyles()
-
   return (
-    <AntCheckbox
+    <AntColorPicker
       className={ cn(className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />

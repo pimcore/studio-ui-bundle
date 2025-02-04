@@ -40,9 +40,19 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-form-item-control-input-content > * > * {
         opacity: 0.7;
       }
-
-
+        
       .ant-form-item-control-input-content > *:after {
+        ${overlay};
+      }
+    `,
+    inheritedManual: css`
+      .studio-inherited-overlay {
+        position: relative;
+      }
+      .studio-inherited-overlay > * {
+        filter: opacity(0.5);
+      }
+      .studio-inherited-overlay:after {
         ${overlay};
       }
     `
