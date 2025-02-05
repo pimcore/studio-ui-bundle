@@ -12,17 +12,18 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { InputNumber } from 'antd'
 import { type InputNumberProps } from 'antd/es/input-number'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { t } from 'i18next'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
 
 export interface NumericRangeValue { minimum: ValueType | null, maximum: ValueType | null }
 
 export type NumericRangeProps = InputNumberProps & {
   value?: NumericRangeValue | null
   onChange?: (value: NumericRangeValue | null) => void
+  disabled?: boolean
 }
 
 export const validateOneFieldEmpty = async (rule, value): Promise<any> => {

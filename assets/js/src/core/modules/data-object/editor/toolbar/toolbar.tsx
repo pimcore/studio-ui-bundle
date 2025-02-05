@@ -42,7 +42,7 @@ export const Toolbar = (): React.JSX.Element => {
 
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
-  const { getModifiedDataObjectAttributes } = useEditFormContext()
+  const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
 
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
@@ -59,6 +59,7 @@ export const Toolbar = (): React.JSX.Element => {
         await messageApi.success(t('save-success'))
 
         removeTrackedChanges()
+        resetModifiedDataObjectAttributes()
       }
     }
 

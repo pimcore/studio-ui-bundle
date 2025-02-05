@@ -14,7 +14,7 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-import { Input } from 'antd'
+import { InputPassword } from '@Pimcore/components/input-password/input-password'
 
 export type PasswordObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
@@ -26,9 +26,10 @@ export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract
 
   getObjectDataComponent (props: PasswordObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <Input.Password
+      <InputPassword
         autoComplete="new-password"
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         minLength={ props.minimumLength ?? undefined }
         visibilityToggle={ false }
       />

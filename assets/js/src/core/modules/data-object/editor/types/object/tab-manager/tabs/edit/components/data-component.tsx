@@ -23,6 +23,11 @@ import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defin
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 import { Text } from '@Pimcore/components/text/text'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
+import DataComponentFormItem
+  from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component/form-item'
+import {
+  useInheritanceState
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -41,6 +46,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   let formFieldName: Array<number | string> = [name]
   let title = props.title as ReactNode
   const { currentLanguage } = useLanguageSelection()
+  const inheritanceState = useInheritanceState()
   const form = Form.useFormInstance()
 
   if (hasFormList) {
@@ -57,7 +63,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
     title = (
       <>
-        {title}<Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
+        {title} <Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
       </>
     )
   }
@@ -75,11 +81,13 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   }
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
+  const inheritanceStateValue = inheritanceState?.getInheritanceState(formFieldName)
 
   const _props = {
     ...props,
     title,
-    name: formFieldName
+    name: formFieldName,
+    inherited: inheritanceStateValue?.inherited === true
   }
 
   useEffect(() => {
@@ -90,14 +98,11 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   if (!objectDataType.isCollectionType) {
     return (
-      <ErrorBoundary>
-        <Form.Item
-          { ...objectDataType.getObjectDataFormItemProps(_props) }
-          name={ formFieldName }
-        >
-          {objectDataType.getObjectDataComponent(_props)}
-        </Form.Item>
-      </ErrorBoundary>
+      <DataComponentFormItem
+        _props={ _props }
+        formFieldName={ formFieldName }
+        objectDataType={ objectDataType }
+      />
     )
   }
 

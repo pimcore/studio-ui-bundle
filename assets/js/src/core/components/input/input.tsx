@@ -13,11 +13,19 @@
 
 import React from 'react'
 import { Input as AntInput, type InputProps } from 'antd'
+import cn from 'classnames'
+import { useStyles } from './input.styles'
 
-export interface IInputProps extends InputProps {}
+export interface IInputProps extends InputProps {
+  inherited?: boolean
+}
 
-export const Input = (props: IInputProps): JSX.Element => {
+export const Input = ({ inherited, className, ...restProps }: IInputProps): JSX.Element => {
+  const { styles } = useStyles()
   return (
-    <AntInput { ...props } />
+    <AntInput
+      className={ cn(className, { [styles.inherited]: inherited }) }
+      { ...restProps }
+    />
   )
 }

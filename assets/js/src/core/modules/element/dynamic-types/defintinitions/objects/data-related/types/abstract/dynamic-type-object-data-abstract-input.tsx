@@ -14,7 +14,7 @@
 import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
-import { Input } from 'antd'
+import { Input } from '@Pimcore/components/input/input'
 
 export type InputProps = AbstractObjectDataDefinition & {
   columnLength?: number
@@ -27,6 +27,7 @@ export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObje
       <Input
         autoComplete="off"
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         maxLength={ props.columnLength ?? undefined }
         showCount={ props.showCharCount }
       />

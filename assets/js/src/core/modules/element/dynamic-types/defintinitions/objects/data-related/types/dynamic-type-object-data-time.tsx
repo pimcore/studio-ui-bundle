@@ -26,6 +26,7 @@ export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
     return (
       <DatePicker.TimePicker
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         outputFormat={ 'HH:mm' }
         outputType="dateString"
         showSecond={ false }

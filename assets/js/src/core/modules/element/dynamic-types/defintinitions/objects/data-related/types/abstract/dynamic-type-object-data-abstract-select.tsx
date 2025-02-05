@@ -38,6 +38,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
       <Select
         allowClear={ props.allowClear !== false }
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         maxCount={ props.maxItems ?? undefined }
         mode={ props.multiSelect === true ? 'multiple' : undefined }
         optionFilterProp="label"

@@ -41,7 +41,10 @@ export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjec
   getObjectDataFormItemProps (props: ReverseObjectRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
-      label: <ManyToManyRelationLabel label={ props.title } />
+      label: <ManyToManyRelationLabel
+        label={ props.title }
+        name={ props.name }
+             />
     }
   }
 }

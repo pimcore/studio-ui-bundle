@@ -12,10 +12,8 @@
 */
 
 import React from 'react'
-import { Input } from 'antd'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
-
-const { TextArea } = Input
+import { TextArea } from '@Pimcore/components/textarea/textarea'
 
 export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
   showCharCount: boolean
@@ -30,6 +28,7 @@ export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract
       <TextArea
         autoSize={ { minRows: 3 } }
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         maxLength={ props.maxLength ?? undefined }
         showCount={ props.showCharCount }
       />

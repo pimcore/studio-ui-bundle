@@ -13,7 +13,7 @@
 
 import { Checkbox, Input } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import React from 'react'
+import React, { useState } from 'react'
 // import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons-old'
 import { useStyle } from '@Pimcore/components/login-form/login-form-style'
 import { useDispatch } from 'react-redux'
@@ -40,17 +40,22 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
   const messageApi = useMessage()
   const { t } = useTranslation()
 
-  const [formState, setFormState] = React.useState<Credentials>({
+  const [formState, setFormState] = useState<Credentials>({
     username: '',
     password: ''
   })
 
-  const [login, { isLoading }] = useLoginMutation()
+  const [login] = useLoginMutation()
+  // Use manual isLoading state because the rtkQueryErrorLogger prevents this action on 401 error
+  const [isLoginLoading, setIsLoginLoading] = useState(false)
 
   const handleAuthentication = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     const loginTask = login({ credentials: formState })
 
+    setIsLoginLoading(true)
+
     loginTask.catch((error: Error) => {
+      setIsLoginLoading(false)
       trackError(new ApiError(error))
     })
 
@@ -62,9 +67,13 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
         trackError(new ApiError(response.error))
       }
 
+      setIsLoginLoading(false)
+
       const userInformation = response.data!
       dispatch(setUser(userInformation))
     } catch (e: any) {
+      setIsLoginLoading(false)
+
       await messageApi.error({
         content: e.message
       })
@@ -95,7 +104,7 @@ export const LoginForm = ({ additionalLogins }: ILoginFormProps): React.JSX.Elem
 
         <Button
           htmlType="submit"
-          loading={ isLoading }
+          loading={ isLoginLoading }
           type="primary"
         >
           {t('login-form.login')}
