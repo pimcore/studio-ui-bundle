@@ -6,9 +6,9 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            noteGetCollection: build.query<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
+            noteGetCollection: build.mutation<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/notes`, method: "POST", body: queryArg.body }),
-                providesTags: ["Notes"],
+                invalidatesTags: ["Notes"],
             }),
             noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/notes/${queryArg.id}`, method: "DELETE" }),
@@ -166,7 +166,7 @@ export type NoteType = {
     id: string;
 };
 export const {
-    useNoteGetCollectionQuery,
+    useNoteGetCollectionMutation,
     useNoteDeleteByIdMutation,
     useNoteElementGetCollectionQuery,
     useNoteElementCreateMutation,
