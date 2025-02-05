@@ -13,7 +13,8 @@
 
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
-import { getCategoriesList, getObjectCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
+import { getCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
+import { getObjectCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/objectsCategoriesHelper'
 import { type CategoriesList, type IVersionsFieldsList, type VersionKeysList } from '../types'
 import { type ElementType } from '../../../../../types/element-type.d'
 

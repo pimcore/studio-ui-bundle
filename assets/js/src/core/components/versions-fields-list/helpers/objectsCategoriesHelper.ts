@@ -15,24 +15,23 @@ import { isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IVersionsFieldsList } from '../types'
 
-export const getCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
+export const getObjectCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
   const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
-  const getCategoryName = (value: string): VersionCategoryName | undefined => {
-    if (value.includes('.')) {
-      return value.split('.')[0] as VersionCategoryName
-    }
-  }
-
   data.forEach(item => {
-    const categoryNameValue = getCategoryName(item.Field.key)
-    const categoryName: VersionCategoryName = categoryNameValue ?? VersionCategoryName.BASE_DATA
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const categoryName: VersionCategoryName = item.Field.categoryName ?? VersionCategoryName.BASE_DATA
 
     if (isUndefined(categoryMap[categoryName])) {
       categoryMap[categoryName] = new Set()
     }
 
-    categoryMap[categoryName].add(item.Field.key)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    categoryMap[categoryName].add(item.Field.name)
   })
 
   return Object.entries(categoryMap).map(([key, fieldKeysSet]) => ({
