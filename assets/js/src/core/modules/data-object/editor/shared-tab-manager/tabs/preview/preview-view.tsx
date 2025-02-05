@@ -14,7 +14,7 @@
 import React from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next'
 
 export const PreviewView = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -23,9 +23,9 @@ export const PreviewView = (): React.JSX.Element => {
   return (
     <iframe
       height="100%"
-      src={`${getPrefix()}/data-objects/preview/${id}`}
+      src={ `${getPrefix()}/data-objects/preview/${id}` }
+      title={ `${t('preview.label')}-${id}` }
       width="100%"
-      title={`${t('preview.label')}-${id}`}
     />
   )
 }
