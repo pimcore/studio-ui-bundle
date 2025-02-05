@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import {useInheritanceOverlayStyle} from "@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style";
+import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 
 export type InheritanceOverlayType = 'form-item-container' | 'form-element' | 'manual' | 'wrapper' | false
 
