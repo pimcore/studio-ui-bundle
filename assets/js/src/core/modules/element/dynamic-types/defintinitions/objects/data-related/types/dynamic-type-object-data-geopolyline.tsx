@@ -19,6 +19,7 @@ import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
 import { GeoPolyDrawer } from '@Pimcore/components/geo-poly-drawer/geo-poly-drawer'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type GeoPolyLineObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
@@ -30,6 +31,7 @@ export type GeoPolyLineObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstract {
   id: string = 'geopolyline'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: GeoPolyLineObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

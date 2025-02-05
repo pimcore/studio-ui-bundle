@@ -26,6 +26,7 @@ export class DynamicTypeObjectDataDateRange extends DynamicTypeObjectDataAbstrac
     return (
       <DatePicker.RangePicker
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         outputType={ 'dateString' }
       />
     )

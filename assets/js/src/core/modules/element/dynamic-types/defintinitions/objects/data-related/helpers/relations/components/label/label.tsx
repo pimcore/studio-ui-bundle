@@ -12,21 +12,23 @@
 */
 
 import React, { type ReactNode } from 'react'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  FieldLabel
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
+import type { FormItemProps } from 'antd'
 
 export interface ManyToManyRelationLabelProps {
   label: ReactNode
+  name: FormItemProps['name']
 }
 
 export const ManyToManyRelationLabel = (props: ManyToManyRelationLabelProps): React.JSX.Element => {
   return (
-    <Flex
-      align="center"
-      gap="extra-small"
-    >
-      <Icon value={ 'drop-target' } />
-      <span>{props.label}</span>
-    </Flex>
+    <FieldLabel
+      additionalIcons={ <Icon value={ 'drop-target' } /> }
+      label={ props.label }
+      name={ props.name }
+    />
   )
 }

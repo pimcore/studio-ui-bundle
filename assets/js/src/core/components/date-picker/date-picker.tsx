@@ -24,16 +24,21 @@ import {
 import { DateRangePicker, type DateRangePickerProps } from '@Pimcore/components/date-picker/date-range-picker'
 import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
 import _ from 'lodash'
+import { useStyles } from './date-picker.styles'
+import cn from 'classnames'
 
 export type DatePickerProps = PickerProps & {
   value?: DatePickerValueType
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
+  disabled?: boolean
+  inherited?: boolean
 }
 
 const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
   const [value, setValue] = useState<Dayjs | null>(toDayJs(props.value))
+  const { styles } = useStyles()
 
   useEffect(() => {
     const localValue = fromDayJs(value, 'timestamp')
@@ -49,6 +54,7 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
         setValue(date)
         props.onChange?.(fromDayJs(date, props.outputType, props.outputFormat))
       } }
+      rootClassName={ cn({ [styles.inherited]: props.inherited }) }
       value={ value }
     />
   )

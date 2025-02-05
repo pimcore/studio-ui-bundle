@@ -601,3 +601,5 @@ hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
 home: Home
 preview.label: Preview
+inheritance-active: "Data inherited from object ID {{id}}"
+inheritance-broken: "Data inheritance broken"

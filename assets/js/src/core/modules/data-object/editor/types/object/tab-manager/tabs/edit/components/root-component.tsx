@@ -17,6 +17,9 @@ import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
 import { type DataObjectGetLayoutByIdApiResponse } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import {
+  useInheritanceState
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -25,15 +28,20 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
-  const { form, updateModifiedDataObjectAttributes, commitToDraft } = useEditFormContext()
+  const { form, updateModifiedDataObjectAttributes, markDraftAsModified, getChangedFieldName } = useEditFormContext()
+  const inheritanceState = useInheritanceState()
 
-  const handleValuesChange = (changedValues: Record<string, any>): void => {
+  const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
     updateModifiedDataObjectAttributes(changedValues)
-    commitToDraft(true)
+    const fieldName = getChangedFieldName(changedValues)
+    if (fieldName !== null && inheritanceState?.getInheritanceState(fieldName)?.inherited === true) {
+      inheritanceState?.breakInheritance(fieldName)
+    }
+
+    markDraftAsModified()
   }
 
   const handleSubmit = (values: any): void => {
-    commitToDraft()
     console.log(values)
   }
 

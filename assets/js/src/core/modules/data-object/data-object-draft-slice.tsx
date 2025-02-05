@@ -89,7 +89,7 @@ export const {
   resetSchedulesChanges: resetSchedulesChangesForDataObject,
   setActiveTab: setActiveTabForDataObject,
 
-  trackModifiedObjectData
+  markObjectDataAsModified
 
 } = slice.actions
 export const { selectById: selectDataObjectById } = dataObjectsAdapter.getSelectors((state: RootState) => state['data-object-draft'])

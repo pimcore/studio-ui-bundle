@@ -39,6 +39,7 @@ export interface CollectionProps {
   onTabClose?: (event: CollectionOnTabCloseEvent) => void
   extra?: BaseViewProps['extra']
   extraPosition?: BaseViewProps['extraPosition']
+  inherited?: boolean
 }
 
 export interface CollectionItemProps extends Omit<CollectionProps, 'itemComponent'> {

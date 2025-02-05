@@ -18,11 +18,13 @@ import {
 import {
   ImageGallery, type ImageGalleryProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image-gallery/image-gallery'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageGalleryProps
 
 export class DynamicTypeObjectDataImageGallery extends DynamicTypeObjectDataAbstract {
   id: string = 'imageGallery'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

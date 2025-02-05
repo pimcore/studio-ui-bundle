@@ -22,10 +22,11 @@ import { useStyles } from './select.styles'
 export interface SelectProps extends AntdSelectProps {
   customArrowIcon?: string
   customIcon?: string
+  inherited?: boolean
   width?: number
 }
 
-export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, ...antdSelectProps }, ref): React.JSX.Element => {
+export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, customArrowIcon, mode, status, className, width, allowClear, inherited, ...antdSelectProps }, ref): React.JSX.Element => {
   const selectRef = useRef<RefSelectProps>(null)
 
   const [isActive, setIsActive] = useState(false)
@@ -46,7 +47,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({ customIcon, cus
     [styles.selectContainerWithClear]: allowClear === true && isSelected
   })
   const selectClassNames = cn(className, styles.select, {
-    [styles.selectWithCustomIcon]: withCustomIcon
+    [styles.selectWithCustomIcon]: withCustomIcon,
+    'ant-select--inherited': inherited
   })
   const customIconClassNames = cn(styles.customIcon, 'custom-select-icon', {
     [styles.customIconActive]: isActive || isFocus,

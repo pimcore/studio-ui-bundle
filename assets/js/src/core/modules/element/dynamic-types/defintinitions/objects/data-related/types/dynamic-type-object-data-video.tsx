@@ -19,6 +19,7 @@ import {
   Video, type VideoProps, type VideoType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/video'
 import _ from 'lodash'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProps & {
   allowedTypes?: VideoType[] | null
@@ -26,6 +27,7 @@ export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProp
 
 export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
   id: string = 'video'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: VideoObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
