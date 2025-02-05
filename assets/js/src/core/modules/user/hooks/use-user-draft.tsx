@@ -17,7 +17,6 @@ import {
   userFetched,
   removeUser,
   changeUser,
-  userUpdateWorkspaces,
   userAvailablePermissionsFetched,
   userReloaded
 } from '@Pimcore/modules/user/user-slice'
@@ -35,7 +34,6 @@ interface UseUserReturnDraft {
   removeUserFromState: () => void
   changeUserInState: (changedValues: any) => void
   updateUserKeyBinding: (name: string, code: object) => void
-  updateUserWorkspaces: (changedValues: any) => void
   reloadUser: () => void
 }
 
@@ -108,11 +106,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     dispatch(changeUser({ id: user.id, changes }))
   }
 
-  function updateUserWorkspaces (changes: any): void {
-    if (user === undefined) return
-    dispatch(userUpdateWorkspaces({ id: user.id, type: changes.type, changes: changes.changes }))
-  }
-
   function updateUserKeyBinding (name: string, code: object): void {
     const updatedKeyBindings = user.keyBindings.map((keyBinding: any) => {
       if (keyBinding.action === name) {
@@ -132,7 +125,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
     removeUserFromState,
     changeUserInState,
     reloadUser,
-    updateUserWorkspaces,
     updateUserKeyBinding
   }
 }

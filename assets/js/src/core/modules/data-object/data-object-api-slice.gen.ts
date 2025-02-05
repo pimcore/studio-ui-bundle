@@ -71,12 +71,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
+            dataObjectPreviewById: build.mutation<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
-                    params: { site: queryArg.site },
+                    url: `/pimcore-studio/api/data-objects/preview`,
+                    method: "POST",
+                    body: queryArg.previewParameter,
                 }),
-                providesTags: ["Data Objects"],
+                invalidatesTags: ["Data Objects"],
             }),
             dataObjectReplaceContent: build.mutation<
                 DataObjectReplaceContentApiResponse,
@@ -248,7 +249,7 @@ export type DataObjectReplaceContentApiArg = {
 };
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
-    items: SelectOption2[];
+    items: SelectOption[];
 };
 export type DataObjectGetSelectOptionsApiArg = {
     body: {

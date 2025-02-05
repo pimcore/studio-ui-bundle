@@ -37,7 +37,8 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
   })
 
   const renderTitle = (): React.JSX.Element => (
-    <span
+    <button
+      className={ 'ant-tree-title__btn' }
       onClick={ onSelected }
       onKeyDown={ (event) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
@@ -46,11 +47,9 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
           }
         }
       } }
-      role="button"
-      tabIndex={ 0 }
     >
       {title}
-    </span>
+    </button>
   )
 
   return items?.length > 0

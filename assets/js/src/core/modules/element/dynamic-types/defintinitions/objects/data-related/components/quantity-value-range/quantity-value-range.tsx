@@ -72,6 +72,13 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
     }
   }, [value])
 
+  useEffect(() => {
+    const localValue = value.minimum === null && value.maximum === null && value.unitId === null ? null : value
+    if (!_.isEqual(props.value, localValue)) {
+      setValue(props.value ?? { minimum: null, maximum: null, unitId: null })
+    }
+  }, [props.value])
+
   return (
     <Flex
       align="center"

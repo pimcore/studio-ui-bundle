@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect } from 'react'
+import React, { type CSSProperties, forwardRef, type MutableRefObject, useEffect, useMemo } from 'react'
 import { useStyle } from './image-preview.styles'
 import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
@@ -75,7 +75,9 @@ export const ImagePreview = forwardRef(function ImagePreview ({ src, assetId, as
     })
   }
 
-  const imageSrc = assetId !== undefined ? getAssetPreviewUrl() : src
+  const imageSrc = useMemo(() => {
+    return assetId !== undefined ? getAssetPreviewUrl() : src
+  }, [assetId, src, thumbnailDimensions, assetType, thumbnailSettings])
 
   const isVisible = useElementVisible(wrapperRef)
 

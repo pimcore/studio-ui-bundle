@@ -23,7 +23,7 @@ const MOCK_DEFAULT_DATA: IMenuProps = {
     {
       key: 'sub1',
       label: 'Navigation One',
-      icon: <Icon value='user-01' />,
+      icon: <Icon value='user' />,
       children: [
         {
           key: 'g1',
@@ -48,7 +48,7 @@ const MOCK_DEFAULT_DATA: IMenuProps = {
     {
       key: 'sub2',
       label: 'Navigation Two',
-      icon: <Icon value='user-01' />,
+      icon: <Icon value='user' />,
       children: [
         { key: '5', label: 'Option 5' },
         { key: '6', label: 'Option 6' },
@@ -68,7 +68,7 @@ const MOCK_DEFAULT_DATA: IMenuProps = {
     {
       key: 'sub4',
       label: 'Navigation Three',
-      icon: <Icon value='user-01' />,
+      icon: <Icon value='user' />,
       children: [
         { key: '9', label: 'Option 9' },
         { key: '10', label: 'Option 10' },

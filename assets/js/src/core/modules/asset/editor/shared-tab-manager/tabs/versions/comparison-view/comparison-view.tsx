@@ -83,7 +83,12 @@ export const ComparisonView = ({
   }, [versionIds])
 
   if (gridData.length === 0) {
-    return <Content loading />
+    return (
+      <Content
+        fullPage
+        loading
+      />
+    )
   }
 
   return (

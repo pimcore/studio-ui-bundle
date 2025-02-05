@@ -24,6 +24,12 @@ const config: ConfigFile = {
   schemaFile: './docs.jsonopenapi.json',
   apiFile: '../../js/src/core/app/api/pimcore/index.ts',
   apiImport: 'api',
+  endpointOverrides: [
+    {
+      pattern: 'noteGetCollection',
+      type: 'query'
+    }
+  ],
   outputFiles: {
     '../../js/src/core/modules/asset/asset-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/assets?/i)
@@ -44,6 +50,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/user/user-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/user/i)
+    },
+    '../../js/src/core/modules/user/roles/roles-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/role/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/version/i)

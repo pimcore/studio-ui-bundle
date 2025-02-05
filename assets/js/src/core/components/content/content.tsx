@@ -12,6 +12,7 @@
 */
 
 import React, { type ReactNode } from 'react'
+import cn from 'classnames'
 import { useStyles } from './content.styles'
 import { type INoContentProps, NoContent } from '../no-content/no-content'
 import { Spin } from '../spin/spin'
@@ -24,6 +25,7 @@ export interface ContentProps extends Omit<BoxProps, 'children'> {
   loading?: boolean
   none?: boolean
   centered?: boolean
+  fullPage?: boolean
   noneOptions?: INoContentProps
 }
 
@@ -36,20 +38,27 @@ export const Content = ({
   none = false,
   centered = false,
   noneOptions,
+  fullPage,
   ...props
 }: ContentProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = [styles.content, 'content', className]
+
   const showChildren = !loading && !none
   const contentCentered = centered || none || loading
 
-  if (contentCentered) {
-    classes.push('content--centered')
-  }
+  const classes = cn(
+    styles.content,
+    'content',
+    className,
+    {
+      'content--centered': contentCentered,
+      [styles.contentFullPage]: fullPage
+    }
+  )
 
   return (
     <Box
-      className={ classes.join(' ') }
+      className={ classes }
       padding={ padded ? padding : 'none' }
       { ...props }
     >
