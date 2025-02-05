@@ -54,6 +54,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const [editMode, setEditMode] = useState<Mode>('create')
   const [deleteMode, setDeleteMode] = useState<'single' | 'parent' | 'all'>('single')
   const [focusTag, setFocusTag] = useState<Tag | undefined>(rootTagFolder)
+  const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
@@ -164,13 +165,16 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           </Flex>
           <TreeElement
             checkStrictly
-            defaultExpandedKeys={ [0] }
+            defaultExpandedKeys={ expandedKeys }
             draggable
             onActionsClick={ onActionsClick }
             onDragAndDrop={ async (params) => {
               await handleTagUpdate(Number(params.dragNode.key), Number(params.node.key))
             }
                         }
+            onExpand={ (keys) => {
+              setExpandedKeys(keys)
+            } }
             treeData={ treeData }
             withCustomSwitcherIcon
           />
