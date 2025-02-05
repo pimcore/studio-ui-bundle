@@ -14,6 +14,7 @@
 import { type Reducer, combineSlices, configureStore, type CombinedSliceReducer } from '@reduxjs/toolkit'
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { api as pimcoreApi } from '@Pimcore/app/api/pimcore'
+import { rtkQueryErrorLogger } from './middleware/rtkQueryErrorLogger'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LazyloadedSlices {};
@@ -45,7 +46,7 @@ export const store = configureStore({
         ignoredActionPaths: ['execution-engine', 'meta'],
         ignoredPaths: ['execution-engine', 'meta']
       }
-    }).concat(pimcoreApi.middleware)
+    }).concat(pimcoreApi.middleware, rtkQueryErrorLogger)
 })
 
 export const injectSliceWithState = (newSlice: AnySliceLike): CombinedSliceReducer<Record<string, any>, Record<string, any>> => {
