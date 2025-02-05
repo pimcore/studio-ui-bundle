@@ -13,7 +13,6 @@
 
 import type React from 'react'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
-import {Element} from "@Pimcore/modules/element/element-helper";
 import {IElementDraft} from "@Pimcore/modules/element/hooks/use-element-draft";
 
 export interface IEditorTab {
