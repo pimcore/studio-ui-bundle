@@ -6,7 +6,7 @@ import { Input } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 
 const config: Meta = {
-  title: 'Visuals/Inheritance Overlay',
+  title: 'Components/Visuals/Inheritance Overlay',
   component: InheritanceOverlay
 }
 
@@ -36,7 +36,7 @@ export const Manual = {
     type: 'manual',
     children: (
       <div>
-        <h3>Manually place the "studio-inherited-overlay" class on the item which should contain the overlay</h3>
+        <h3>Manually place the &quot;studio-inherited-overlay&quot; class on the item which should contain the overlay</h3>
         <Card style={{ width: 300, height: 300 }}>
           <Card style={{ width: 100, height: 100 }} className="studio-inherited-overlay">
             Hello world
