@@ -25,7 +25,6 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface UseTagConfigReturn {
   tags: Tag[]
-  flattenedTags: Tag[]
   tagsLoading: boolean
   handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
   handleTagCreation: (name: string, parentId: number) => Promise<void>
@@ -108,12 +107,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
         parentId,
         name: newName ?? maybeMovedTag.text
       }
-
-      try {
-        await tagUpdate(id, createTagParameter)
-      } catch (error) {
-        trackError(new GeneralError('Error moving tag'))
-      }
+      await tagUpdate(id, createTagParameter)
     }
   }
 
@@ -144,11 +138,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
       name
     }
 
-    try {
-      await tagCreation(createTagParameters)
-    } catch (error) {
-      console.error('Error creating tag:', error)
-    }
+    await tagCreation(createTagParameters)
   }
 
   const tagDeletion = async (tagId: number): Promise<void> => {
@@ -173,6 +163,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }
 
   return {
-    tags: tags?.items ?? [], flattenedTags, setTagFilter: setFilter, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tags: tags?.items ?? [], setTagFilter: setFilter, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }

@@ -18,7 +18,6 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
 import { Title } from '@Pimcore/components/title/title'
-import { TagConfigurationModal } from '@Pimcore/modules/tags/tag-configuration-modal'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
 import { t } from 'i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
@@ -46,12 +45,9 @@ export interface TreeAction {
 
 const TagConfigurationContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { tags, tagsLoading, rootTagFolder, getTag, handleTagUpdate, tagDeletion, setTagFilter } = useTagConfig()
-  const { confirm } = useFormModal()
+  const { tags, tagsLoading, rootTagFolder, getTag, tagDeletion, setTagFilter, handleTagUpdate, handleTagCreation } = useTagConfig()
+  const { confirm, input } = useFormModal()
 
-  const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
-  const [editMode, setEditMode] = useState<Mode>('create')
-  const [focusTag, setFocusTag] = useState<Tag | undefined>(rootTagFolder)
   const [loadingTagKey, setLoadingTagKey] = useState<string | undefined>('')
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
@@ -76,7 +72,6 @@ const TagConfigurationContainer = (): React.JSX.Element => {
       trackError(new GeneralError(`Tag with Id ${key} not found`))
       return undefined
     }
-    setFocusTag(newFocusTag)
     return newFocusTag
   }
 
@@ -89,12 +84,34 @@ const TagConfigurationContainer = (): React.JSX.Element => {
 
     switch (type) {
       case 'add-tag':
-        setEditMode('create')
-        setTagConfigModalOpen(true)
+        input({
+          title: t('tag-configuration.new-tag'),
+          label: t('tag-configuration.name'),
+          rule: {
+            required: true,
+            message: 'Please enter a tag name'
+          },
+          okText: t('tag-configuration.create'),
+          onOk: async (value: string) => {
+            setLoadingTagKey(newFocusTag.id.toString())
+            await handleTagCreation(value, newFocusTag.id)
+          }
+        })
         break
       case 'rename-tag':
-        setEditMode('update')
-        setTagConfigModalOpen(true)
+        input({
+          title: t('tag-configuration.rename'),
+          label: t('tag-configuration.name'),
+          rule: {
+            required: true,
+            message: 'Please enter a tag name'
+          },
+          okText: t('tag-configuration.save'),
+          onOk: async (value: string) => {
+            setLoadingTagKey(newFocusTag.id.toString())
+            await handleTagUpdate(newFocusTag.id, newFocusTag.parentId, value)
+          }
+        })
         break
       case 'delete-tag':
         confirm({
@@ -105,9 +122,6 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           onOk: async () => {
             setLoadingTagKey(newFocusTag.id.toString())
             await tagDeletion(newFocusTag.id)
-          },
-          onCancel: () => {
-            setFocusTag(rootTagFolder)
           }
         })
         break
@@ -120,12 +134,9 @@ const TagConfigurationContainer = (): React.JSX.Element => {
       content: t('tag-configuration.warn-delete-all-tags-modal-text'),
       okText: t('tag-configuration.warn-delete-all-tags-title'),
       cancelText: t('tag-configuration.cancel'),
-      onOk: async () => {
-        setLoadingTagKey('0')
-        focusTag !== undefined && await tagDeletion(0)
-      },
-      onCancel: () => {
-        setFocusTag(rootTagFolder)
+      onOk: () => {
+        // setLoadingTagKey('0')
+        alert('need to implement backend API to delete all')
       }
     })
   }
@@ -173,9 +184,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
                 disabled={ loadingTagKey !== undefined }
                 icon={ { value: 'new' } }
                 onClick={ () => {
-                  setFocusTag(rootTagFolder)
-                  setEditMode('create')
-                  setTagConfigModalOpen(true)
+                  onActionsClick(rootTagFolder.id.toString(), 'add-tag')
                 } }
               >{t('tag-configuration.new')}</IconTextButton>
             </Flex>
@@ -194,6 +203,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             draggable
             onActionsClick={ onActionsClick }
             onDragAndDrop={ async (params) => {
+              setLoadingTagKey(params.dragNode.key.toString())
               await handleTagUpdate(Number(params.dragNode.key), Number(params.node.key))
             }
                         }
@@ -203,19 +213,6 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             treeData={ treeData }
             withCustomSwitcherIcon
           />
-          {focusTag !== undefined && (
-          <TagConfigurationModal
-            focusTag={ focusTag }
-            mode={ editMode }
-            resetFocusTag={ () => {
-              setFocusTag(rootTagFolder)
-            } }
-            setLoadingTagKey={ setLoadingTagKey }
-            setMode={ setEditMode }
-            setTagConfigModalOpen={ setTagConfigModalOpen }
-            tagConfigModalOpen={ tagConfigModalOpen }
-          />
-          )}
         </Flex>
       </Box>
     </ContentLayout>
