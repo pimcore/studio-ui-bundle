@@ -45,19 +45,32 @@ const injectedRtkApi = api
             }),
             dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/grid`,
+                    url: `/pimcore-studio/api/data-objects/grid/${queryArg.classId}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Data Object Grid"],
             }),
             dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
-                query: (queryArg) => ({ url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/${queryArg.id}/layout/${queryArg.layoutId}`,
+                }),
                 providesTags: ["Data Objects"],
             }),
             dataObjectPatchById: build.mutation<DataObjectPatchByIdApiResponse, DataObjectPatchByIdApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects`,
+                    method: "PATCH",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectPatchFolderById: build.mutation<
+                DataObjectPatchFolderByIdApiResponse,
+                DataObjectPatchFolderByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/folder`,
                     method: "PATCH",
                     body: queryArg.body,
                 }),
@@ -71,13 +84,12 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectPreviewById: build.mutation<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
+            dataObjectPreviewById: build.query<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/preview`,
-                    method: "POST",
-                    body: queryArg.previewParameter,
+                    url: `/pimcore-studio/api/data-objects/preview/${queryArg.id}`,
+                    params: { site: queryArg.site },
                 }),
-                invalidatesTags: ["Data Objects"],
+                providesTags: ["Data Objects"],
             }),
             dataObjectReplaceContent: build.mutation<
                 DataObjectReplaceContentApiResponse,
@@ -189,6 +201,8 @@ export type DataObjectGetGridApiResponse = /** status 200 Data object grid data 
     }[];
 };
 export type DataObjectGetGridApiArg = {
+    /** Identifies the class name for which the the grid should be build. */
+    classId: string;
     body: {
         folderId: number;
         columns: GridColumnRequest[];
@@ -200,6 +214,8 @@ export type DataObjectGetLayoutByIdApiResponse =
 export type DataObjectGetLayoutByIdApiArg = {
     /** Id of the data-object */
     id: number;
+    /** ID to get specific layout */
+    layoutId?: string;
 };
 export type DataObjectPatchByIdApiResponse =
     /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
@@ -220,6 +236,28 @@ export type DataObjectPatchByIdApiArg = {
             published?: any;
             editableData?: any;
         }[];
+    };
+};
+export type DataObjectPatchFolderByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple data objects */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
+export type DataObjectPatchFolderByIdApiArg = {
+    body: {
+        data: {
+            /** Folder ID */
+            folderId: number;
+            parentId?: any;
+            index?: any;
+            key?: any;
+            locked?: any;
+            childrenSortBy?: any;
+            childrenSortOrder?: any;
+            published?: any;
+            editableData?: any;
+        }[];
+        filters?: GridFilter;
     };
 };
 export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
@@ -249,7 +287,7 @@ export type DataObjectReplaceContentApiArg = {
 };
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
-    items: SelectOption[];
+    items: SelectOption2[];
 };
 export type DataObjectGetSelectOptionsApiArg = {
     body: {
@@ -469,6 +507,8 @@ export type GridColumnData = {
     locale?: any;
     /** Value */
     value?: any;
+    /** inheritance */
+    inheritance?: any;
 };
 export type GridColumnRequest = {
     /** Key */
@@ -565,6 +605,7 @@ export const {
     useDataObjectGetGridMutation,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
+    useDataObjectPatchFolderByIdMutation,
     useDataObjectFormatPathMutation,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
