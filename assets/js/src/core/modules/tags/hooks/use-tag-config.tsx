@@ -20,6 +20,8 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { useEffect, useState } from 'react'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { t } from 'i18next'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 interface UseTagConfigReturn {
   tags: Tag[]
@@ -35,6 +37,7 @@ interface UseTagConfigReturn {
 export const useTagConfig = (): UseTagConfigReturn => {
   const [flattenedTags, setFlattenedTags] = useState<Tag[]>([])
   const rootTagFolder = { id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }
+  const messageApi = useMessage()
 
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
@@ -74,6 +77,14 @@ export const useTagConfig = (): UseTagConfigReturn => {
       id: tagId,
       updateTagParameters
     })) as { error?: { data?: { error?: string | null } } }
+    if ('data' in response) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success({
+        content: t('tag-configuration.successful-update'),
+        type: 'success',
+        duration: 3
+      })
+    }
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
       trackError(new GeneralError(`Error updating tag: ${response.error.data.error}`))
@@ -106,6 +117,15 @@ export const useTagConfig = (): UseTagConfigReturn => {
   const tagCreation = async (createTagParameters: CreateTagParameters): Promise<void> => {
     const response = (await createTag({ createTagParameters })) as { error?: { data?: { error?: string | null } } }
 
+    if ('data' in response) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success({
+        content: t('tag-configuration.successful-add'),
+        type: 'success',
+        duration: 3
+      })
+    }
+
     if (response.error?.data?.error != null && response.error.data.error !== '') {
       trackError(new GeneralError(`Error creating tag: ${response.error.data.error}`))
     }
@@ -130,6 +150,15 @@ export const useTagConfig = (): UseTagConfigReturn => {
 
   const tagDeletion = async (tagId: number): Promise<void> => {
     const response = (await deleteTag({ id: tagId })) as { error?: { data?: { error?: string | null } } }
+
+    if ('data' in response) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.success({
+        content: t('tag-configuration.successful-deletion'),
+        type: 'success',
+        duration: 3
+      })
+    }
 
     if (response.error?.data?.error != null && response.error.data.error !== '') {
       trackError(new GeneralError(`Error deleting tag: ${response.error.data.error}`))

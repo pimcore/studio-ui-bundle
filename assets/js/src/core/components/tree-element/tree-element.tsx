@@ -127,9 +127,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       titleRender={ (node) => (
         <TreeElementItem
           actions={ node.actions }
-          onActionsClick={ (action, title) => {
-            onActionsClick?.(node.key, action)
-          } }
+          onActionsClick={ (action) => onActionsClick?.(node.key, action) }
           onSelected={ () => {
             setSelectedKeys([node.key])
             onSelected?.(node.key)

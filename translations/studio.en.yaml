@@ -441,6 +441,9 @@ tag-configuration.parent-tag: Parent Tag
 tag-configuration.create: Create
 tag-configuration.save: Save
 tag-configuration.rename: Rename Tag
+tag-configuration.successful-add: Tag has been added successfully
+tag-configuration.successful-update: Tag has been updated successfully
+tag-configuration.successful-deletion: Tag has been deleted successfully
 tag-configuration.warn-delete-tag-modal-title: Delete this tag
 tag-configuration.warn-delete-parent-tag-modal-title: Delete this parent tag
 tag-configuration.warn-delete-all-tags-title: Delete all tags

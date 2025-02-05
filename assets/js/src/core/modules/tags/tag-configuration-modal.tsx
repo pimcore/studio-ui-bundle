@@ -64,8 +64,6 @@ export const TagConfigurationModal = ({
   }, [tagConfigModalOpen, focusTag])
 
   const handleSubmit = async (values: TagValues): Promise<void> => {
-    console.log('----> values', values)
-
     if (mode === 'update') {
       try {
         await handleTagUpdate(focusTag.id, focusTag.parentId, values.tagName)
