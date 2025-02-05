@@ -19,13 +19,11 @@ export const PreviewView = (): React.JSX.Element => {
   const { id } = useElementContext()
 
   return (
-    <>
-      <iframe
-        height="100%"
-        src={ `${getPrefix()}/data-objects/preview/${id}` }
-        title={ 'foobar' }
-        width="100%"
-      />
-    </>
+    <iframe
+      height="100%"
+      src={ `${getPrefix()}/data-objects/preview/${id}` }
+      title={ 'foobar' }
+      width="100%"
+    />
   )
 }
