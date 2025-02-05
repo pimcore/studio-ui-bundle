@@ -46,6 +46,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   let formFieldName: Array<number | string> = [name]
   let title = props.title as ReactNode
   const { currentLanguage } = useLanguageSelection()
+  const inheritanceState = useInheritanceState()
   const form = Form.useFormInstance()
 
   if (hasFormList) {
@@ -80,8 +81,6 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   }
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
-
-  const inheritanceState = useInheritanceState()
   const inheritanceStateValue = inheritanceState?.getInheritanceState(formFieldName)
 
   const _props = {
