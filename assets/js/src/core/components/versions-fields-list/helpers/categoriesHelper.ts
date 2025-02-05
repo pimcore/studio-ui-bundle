@@ -40,3 +40,30 @@ export const getCategoriesList = (data: IVersionsFieldsList['data']): Categories
     fieldKeys: Array.from(fieldKeysSet)
   }))
 }
+
+export const getObjectCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
+  const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
+
+  console.log('========>>>>>> data: ', data)
+
+  data.forEach(item => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    const categoryName: VersionCategoryName = item.Field.categoryName ?? VersionCategoryName.BASE_DATA
+
+    if (isUndefined(categoryMap[categoryName])) {
+      categoryMap[categoryName] = new Set()
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    categoryMap[categoryName].add(item.Field.name)
+  })
+
+  return Object.entries(categoryMap).map(([key, fieldKeysSet]) => ({
+    key: key as VersionCategoryName,
+    fieldKeys: Array.from(fieldKeysSet)
+  }))
+}

@@ -13,8 +13,9 @@
 
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
-import { getCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
+import { getCategoriesList, getObjectCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
 import { type CategoriesList, type IVersionsFieldsList, type VersionKeysList } from '../types'
+import { type ElementType } from '../../../../../types/element-type.d'
 
 interface IUseAssetVersionDataReturn {
   versionKeysList: VersionKeysList
@@ -22,14 +23,16 @@ interface IUseAssetVersionDataReturn {
   categoriesList: CategoriesList
 }
 
-export const useAssetVersionData = (data: IVersionsFieldsList['data']): IUseAssetVersionDataReturn => {
+export const useAssetVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseAssetVersionDataReturn => {
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
   const comparisonModifiedData = data.filter((item) => {
     return !isEqual(item[versionKeysList[0]], item[versionKeysList[1]])
   })
 
-  const categoriesList = useMemo(() => getCategoriesList(data), [data])
+  const categoriesList = useMemo(() => {
+    return elementType === 'asset' ? getCategoriesList(data) : getObjectCategoriesList(data)
+  }, [data])
 
   return {
     versionKeysList,

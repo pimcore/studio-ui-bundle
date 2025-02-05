@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { isEmpty } from 'lodash'
 import { useAppDispatch } from '@Pimcore/app/store'
 import {
   api,
@@ -21,6 +22,8 @@ import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/sha
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
+import { Content } from '@Pimcore/components/content/content'
+import { SingleViewUi } from './single-view-ui'
 
 // TODO: fix types
 export const SingleView = ({
@@ -65,27 +68,16 @@ export const SingleView = ({
       .catch(err => { console.log(err) })
   }, [vId])
 
-  console.log('----->>>> Single VersionData: ', versionData)
+  if (isEmpty(versionData)) {
+    return (
+      <Content
+        fullPage
+        loading
+      />
+    )
+  }
 
   return (
-    <div>
-      <p><strong>TODO: implement data object single version view for:</strong></p>
-      ID: {versionId.id}
-      <hr />
-      Jump to other versions:
-      {versions.map((version) => (
-        <div key={ version.id }>
-          <p>
-            <button onClick={ () => {
-              setDetailedVersions([{
-                id: version.id,
-                count: version.versionCount
-              }])
-            } }
-            > Version: {version.versionCount}</button>
-          </p>
-        </div>
-      ))}
-    </div>
+    <SingleViewUi data={ versionData } />
   )
 }

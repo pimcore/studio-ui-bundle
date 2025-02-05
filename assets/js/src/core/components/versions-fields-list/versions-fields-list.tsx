@@ -19,15 +19,22 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { AssetVersionsFieldsView } from './components/asset-versions-fields-view/asset-versions-fields-view'
 import { useAssetVersionData } from './hooks/use-asset-version-data'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { type IVersionsFieldsList } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
 interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 
 export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JSX.Element => {
+  const { elementType } = useElementContext()
+
+  // TODO: move to constants
+  const isAssetType = elementType === 'asset'
+  const isDataObjectType = elementType === 'data-object'
+
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
-  const { versionKeysList, comparisonModifiedData, categoriesList } = useAssetVersionData(data)
+  const { versionKeysList, comparisonModifiedData, categoriesList } = useAssetVersionData(data, elementType)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -36,9 +43,10 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
+  // TODO: need to use the categoriesListWithFields for certain type
   const categoriesListWithFields = useMemo(() => {
     // get all version field keys
-    const versionFieldKeys = map(versionViewData, 'Field.key')
+    const versionFieldKeys = map(versionViewData, isAssetType ? 'Field.key' : 'Field.name')
 
     return filter(
       // map over list to update field with matching keys
@@ -105,12 +113,17 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
           </Text>
         </Flex>
         )}
-        <AssetVersionsFieldsView
-          categoriesList={ categoriesListWithFields }
-          modifiedFields={ modifiedFields }
-          versionKeysList={ versionKeysList }
-          versionViewData={ versionViewData }
-        />
+        {isAssetType && (
+          <AssetVersionsFieldsView
+            categoriesList={ categoriesListWithFields }
+            modifiedFields={ modifiedFields }
+            versionKeysList={ versionKeysList }
+            versionViewData={ versionViewData }
+          />
+        )}
+        {isDataObjectType && (
+          <div>Data Object data</div>
+        )}
       </Flex>
     </Flex>
   )
