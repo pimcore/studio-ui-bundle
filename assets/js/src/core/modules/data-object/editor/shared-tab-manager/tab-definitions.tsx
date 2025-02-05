@@ -42,6 +42,6 @@ export const TAB_PREVIEW: IEditorTab = {
   isDetachable: true,
   hidden: (element): boolean => {
     console.log(element.hasPreview)
-    return element.hasPreview! === false
+    return !(element.hasPreview!)
   }
 }
