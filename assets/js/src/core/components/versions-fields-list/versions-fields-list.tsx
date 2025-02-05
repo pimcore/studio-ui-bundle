@@ -13,14 +13,16 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty, isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { AssetVersionsFieldsView } from './components/asset-versions-fields-view/asset-versions-fields-view'
 import { useAssetVersionData } from './hooks/use-asset-version-data'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { type IVersionsFieldsList } from './types'
+import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelper'
+import { getObjectCategoriesListWithFields } from './helpers/objectsCategoriesHelper'
+import { type CategoriesList, type IVersionsFieldsList } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
 interface IVersionsFieldsListProps extends IVersionsFieldsList {}
@@ -43,21 +45,14 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
-  // TODO: need to use the categoriesListWithFields for certain type
-  const categoriesListWithFields = useMemo(() => {
-    // get all version field keys
-    const versionFieldKeys = map(versionViewData, isAssetType ? 'Field.key' : 'Field.name')
+  const categoriesListWithFields = useMemo((): CategoriesList | undefined => {
+    if (isAssetType) {
+      return getAssetCategoriesListWithFields({ versionViewData, categoriesList })
+    }
 
-    if (isEmpty(categoriesList)) return []
-
-    return filter(
-      // map over list to update field with matching keys
-      map(categoriesList, category => ({
-        ...category, // keep initial category properties
-        fieldKeys: intersection(category.fieldKeys, versionFieldKeys) // keep only matching keys
-      })),
-      category => !isEmpty(category.fieldKeys) // include only categories with non-empty fieldKeys
-    )
+    if (isDataObjectType) {
+      return getObjectCategoriesListWithFields({ versionViewData, categoriesList })
+    }
   }, [isExpandedUnmodifiedFields, categoriesList])
 
   // List of modified fields in comparison mode

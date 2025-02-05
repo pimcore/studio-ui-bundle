@@ -25,7 +25,7 @@ import { useStyles } from './asset-versions-fields-view.styles'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 interface IAssetVersionsFieldsViewProps {
-  categoriesList: CategoriesList
+  categoriesList?: CategoriesList
   versionViewData: IVersionsFieldsList['data']
   versionKeysList: VersionKeysList
   modifiedFields: string[]
@@ -48,7 +48,7 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
 
   return (
     <>
-      {categoriesList.map((category, index) => (
+      {categoriesList?.map((category, index) => (
         <div key={ `${index}-${category.key}` }>
           <Text
             className={ styles.categoryTitle }
