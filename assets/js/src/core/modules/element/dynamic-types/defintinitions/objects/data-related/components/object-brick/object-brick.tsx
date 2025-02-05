@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { isArray } from 'lodash'
 import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-data-abstract'
 import { Collection, type CollectionProps } from '../collection/collection'
 import { ObjectBrickAddButton } from './object-brick-add-button'
@@ -33,12 +34,12 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   const currentValue = Form.useWatch(props.name, form)
 
   const dropdownItems: DropdownMenuProps['items'] = props.allowedTypes.map((type) => {
-    const hasType = currentValue?.some((fieldValue) => fieldValue.type === type) ?? false
+    const hasType = (isArray(currentValue) && currentValue.some((fieldValue) => fieldValue.type === type)) ?? false
 
     return {
       key: type,
       label: type,
-      itemIcon: hasType === true ? <Icon value='close' /> : <Icon value='new' />,
+      itemIcon: hasType ? <Icon value='close' /> : <Icon value='new' />,
       onClick: () => {
         const fieldValues: ObjectBrickLayoutDefinition[] = form.getFieldValue(props.name)
         const hasType = fieldValues.some((fieldValue) => fieldValue.type === type)
