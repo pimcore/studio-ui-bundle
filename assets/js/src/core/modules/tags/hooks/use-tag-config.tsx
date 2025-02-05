@@ -32,16 +32,19 @@ interface UseTagConfigReturn {
   tagDeletion: (tagId: number) => Promise<void>
   getTag: (key: string) => Tag | undefined
   rootTagFolder: Tag
+  setTagFilter: (filter: string) => void
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
   const [flattenedTags, setFlattenedTags] = useState<Tag[]>([])
   const rootTagFolder = { id: 0, text: 'All Tags', hasChildren: false, children: [], path: '/All Tags', parentId: 0, iconName: 'folder' }
   const messageApi = useMessage()
+  const [filter, setFilter] = useState<string>('')
 
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
-    pageSize: 9999
+    pageSize: 9999,
+    filter
   })
 
   const [updateTag] = useTagUpdateByIdMutation()
@@ -170,6 +173,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }
 
   return {
-    tags: tags?.items ?? [], flattenedTags, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tags: tags?.items ?? [], flattenedTags, setTagFilter: setFilter, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }

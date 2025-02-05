@@ -35,6 +35,7 @@ import {
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 
 export type Mode = 'create' | 'update'
 
@@ -45,7 +46,7 @@ export interface TreeAction {
 
 const TagConfigurationContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { tags, rootTagFolder, getTag, handleTagUpdate, tagDeletion } = useTagConfig()
+  const { tags, tagsLoading, rootTagFolder, getTag, handleTagUpdate, tagDeletion, setTagFilter } = useTagConfig()
   const { confirm } = useFormModal()
 
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
@@ -153,16 +154,30 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           gap={ 'small' }
           vertical
         >
-          <Flex gap={ 'small' }>
-            <Title>Tag Configuration</Title>
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ () => {
-                setFocusTag(rootTagFolder)
-                setEditMode('create')
-                setTagConfigModalOpen(true)
+          <Flex
+            justify={ 'space-between' }
+          >
+            <Flex
+              gap={ 'small' }
+            >
+              <Title>Tag Configuration</Title>
+              <IconTextButton
+                icon={ { value: 'new' } }
+                onClick={ () => {
+                  setFocusTag(rootTagFolder)
+                  setEditMode('create')
+                  setTagConfigModalOpen(true)
+                } }
+              >{t('tag-configuration.new')}</IconTextButton>
+            </Flex>
+            <SearchInput
+              loading={ tagsLoading }
+              onChange={ (e) => {
+                const { value } = e.target
+                setTagFilter(value)
               } }
-            >{t('tag-configuration.new')}</IconTextButton>
+              placeholder="Search"
+            />
           </Flex>
           <TreeElement
             checkStrictly
