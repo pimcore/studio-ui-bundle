@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import { isEmpty } from 'lodash'
 import {
   type VersionComparisonViewProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
@@ -23,6 +24,8 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
+import { Content } from '@Pimcore/components/content/content'
+import { ComparisonViewUI } from './comparison-view-ui'
 
 export const ComparisonView = ({
   versionIds
@@ -66,12 +69,16 @@ export const ComparisonView = ({
       .catch(err => { console.log(err) })
   }, [versionIds])
 
-  console.log('----->>>> Compare VersionsData: ', versionsData)
+  if (isEmpty(versionsData)) {
+    return (
+      <Content
+        fullPage
+        loading
+      />
+    )
+  }
 
   return (
-    <div>
-      <p><strong>TODO: implement data object comparison view for versionIds:</strong></p>
-      {versionIds.map(v => v.id).join(', ')}
-    </div>
+    <ComparisonViewUI data={ versionsData } />
   )
 }
