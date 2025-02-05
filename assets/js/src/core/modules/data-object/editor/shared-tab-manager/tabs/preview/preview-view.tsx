@@ -14,6 +14,7 @@
 import React from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import {useTranslation} from "react-i18next";
 
 export const PreviewView = (): React.JSX.Element => {
   const { t } = useTranslation()
