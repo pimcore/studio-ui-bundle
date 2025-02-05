@@ -15,7 +15,7 @@ import { isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IVersionsFieldsList } from '../types'
 
-export const getCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
+export const getAssetCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
   const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   const getCategoryName = (value: string): VersionCategoryName | undefined => {

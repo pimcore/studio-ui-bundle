@@ -48,6 +48,8 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
     // get all version field keys
     const versionFieldKeys = map(versionViewData, isAssetType ? 'Field.key' : 'Field.name')
 
+    if (isEmpty(categoriesList)) return []
+
     return filter(
       // map over list to update field with matching keys
       map(categoriesList, category => ({

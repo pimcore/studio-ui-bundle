@@ -13,15 +13,16 @@
 
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
-import { getCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/categoriesHelper'
+import { getAssetCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/assetCategoriesHelper'
 import { getObjectCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/objectsCategoriesHelper'
 import { type CategoriesList, type IVersionsFieldsList, type VersionKeysList } from '../types'
 import { type ElementType } from '../../../../../types/element-type.d'
+import { ElementTypeName } from '@Pimcore/constants/global'
 
 interface IUseAssetVersionDataReturn {
   versionKeysList: VersionKeysList
   comparisonModifiedData: IVersionsFieldsList['data']
-  categoriesList: CategoriesList
+  categoriesList?: CategoriesList
 }
 
 export const useAssetVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseAssetVersionDataReturn => {
@@ -32,7 +33,13 @@ export const useAssetVersionData = (data: IVersionsFieldsList['data'], elementTy
   })
 
   const categoriesList = useMemo(() => {
-    return elementType === 'asset' ? getCategoriesList(data) : getObjectCategoriesList(data)
+    if (elementType === ElementTypeName.ASSET) {
+      return getAssetCategoriesList(data)
+    }
+
+    if (elementType === ElementTypeName.DATA_OBJECT) {
+      return getObjectCategoriesList(data)
+    }
   }, [data])
 
   return {
