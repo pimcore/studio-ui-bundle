@@ -32,12 +32,12 @@ const Component = ({ loading, children, className, type, ...props }: ButtonProps
 
   const buttonClassNames = cn(
     'button',
-      `button--type-${type}`,
-      styles.button,
-      {
-        'ant-btn-loading': loading
-      },
-      className
+    `button--type-${type}`,
+    styles.button,
+    {
+      'ant-btn-loading': loading
+    },
+    className
   )
 
   useEffect(() => {
