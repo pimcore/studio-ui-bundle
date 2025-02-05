@@ -16,6 +16,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 export const PreviewView = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { id } = useElementContext()
 
   return (
@@ -23,6 +24,7 @@ export const PreviewView = (): React.JSX.Element => {
       height="100%"
       src={`${getPrefix()}/data-objects/preview/${id}`}
       width="100%"
+      title={`${t('preview.label')}-${id}`}
     />
   )
 }
