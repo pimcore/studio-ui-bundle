@@ -52,16 +52,17 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
     )
   }
 
+  const isLoading = (id: string): boolean => loadingNodes.has(id)
+
   function treeWalker (tags: NonNullable<TagGetCollectionApiResponse['items']>): TreeDataNode[] {
     return tags.map((tag) => {
-      const isLoading = loadingNodes.has(tag.id.toString())
       return {
         key: tag.id.toString(),
-        title: getTitle(tag.text, isLoading),
+        title: getTitle(tag.text, isLoading(tag.id.toString())),
         icon: Icon({
           value: 'tag'
         }),
-        disableCheckbox: isLoading,
+        disableCheckbox: isLoading(tag.id.toString()),
         children: tag.hasChildren ? treeWalker(tag.children!) : [],
         actions
       }
@@ -70,7 +71,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
 
   return [{
     key: 0,
-    title: 'All Tags',
+    title: getTitle('All Tags', isLoading('0')),
     icon: Icon({
       value: 'folder'
     }),

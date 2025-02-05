@@ -72,7 +72,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }, [tags])
 
   const getTag: (key: string) => Tag | undefined = (key: string) => {
-    return flattenedTags.find(item => item.id.toString() === key) ?? undefined
+    return [rootTagFolder, ...flattenedTags].find(item => item.id.toString() === key) ?? undefined
   }
 
   const tagUpdate = async (tagId: number, updateTagParameters: ChangeTagParameters): Promise<void> => {

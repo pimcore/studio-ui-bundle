@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import {
   createTreeStructure
@@ -52,7 +52,12 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [editMode, setEditMode] = useState<Mode>('create')
   const [focusTag, setFocusTag] = useState<Tag | undefined>(rootTagFolder)
+  const [loadingTagKey, setLoadingTagKey] = useState<string | undefined>('')
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+
+  useEffect(() => {
+    setLoadingTagKey(undefined)
+  }, [tags])
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
@@ -62,10 +67,11 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const rootActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' }]
 
-  const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions, rootActions })
+  const treeData = createTreeStructure({ tags, loadingNodes: loadingTagKey !== undefined ? new Set([loadingTagKey]) : new Set(), actions: tagActions, rootActions })
 
   const setTagInFocus = (key: string): Tag | undefined => {
     const newFocusTag = getTag(key)
+
     if (newFocusTag === null || newFocusTag === undefined) {
       trackError(new GeneralError(`Tag with Id ${key} not found`))
       return undefined
@@ -97,6 +103,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           okText: newFocusTag.hasChildren ? t('tag-configuration.delete-parent-tag') : t('tag-configuration.delete-tag'),
           cancelText: t('tag-configuration.cancel'),
           onOk: async () => {
+            setLoadingTagKey(newFocusTag.id.toString())
             await tagDeletion(newFocusTag.id)
           },
           onCancel: () => {
@@ -114,7 +121,8 @@ const TagConfigurationContainer = (): React.JSX.Element => {
       okText: t('tag-configuration.warn-delete-all-tags-title'),
       cancelText: t('tag-configuration.cancel'),
       onOk: async () => {
-        focusTag !== undefined && await tagDeletion(focusTag.id)
+        setLoadingTagKey('0')
+        focusTag !== undefined && await tagDeletion(0)
       },
       onCancel: () => {
         setFocusTag(rootTagFolder)
@@ -162,6 +170,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             >
               <Title>Tag Configuration</Title>
               <IconTextButton
+                disabled={ loadingTagKey !== undefined }
                 icon={ { value: 'new' } }
                 onClick={ () => {
                   setFocusTag(rootTagFolder)
@@ -201,6 +210,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             resetFocusTag={ () => {
               setFocusTag(rootTagFolder)
             } }
+            setLoadingTagKey={ setLoadingTagKey }
             setMode={ setEditMode }
             setTagConfigModalOpen={ setTagConfigModalOpen }
             tagConfigModalOpen={ tagConfigModalOpen }

@@ -35,6 +35,7 @@ export interface TagConfigurationModalProps {
   setMode: (creationMode: Mode) => void
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
+  setLoadingTagKey: (key: string) => void
   focusTag: Tag
   resetFocusTag: () => void
 }
@@ -43,15 +44,16 @@ export const TagConfigurationModal = ({
   mode, setMode,
   tagConfigModalOpen,
   setTagConfigModalOpen,
-  focusTag, resetFocusTag
+  focusTag, resetFocusTag,
+  setLoadingTagKey
 }: TagConfigurationModalProps): React.JSX.Element => {
   const { handleTagUpdate, handleTagCreation } = useTagConfig()
   const [form] = Form.useForm()
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
-    resetFocusTag()
     setMode('create')
     form.resetFields()
+    resetFocusTag()
   }
 
   useEffect(() => {
@@ -66,6 +68,7 @@ export const TagConfigurationModal = ({
   }, [tagConfigModalOpen, focusTag])
 
   const handleSubmit = async (values: TagValues): Promise<void> => {
+    setLoadingTagKey(focusTag.id.toString())
     if (mode === 'update') {
       try {
         await handleTagUpdate(focusTag.id, focusTag.parentId, values.tagName)
