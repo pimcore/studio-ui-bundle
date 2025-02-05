@@ -11,18 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useContext, useMemo, useRef, useCallback } from 'react'
+import React, { createContext, useContext, useMemo, useRef } from 'react'
 import { type FormInstance } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { debounce } from 'lodash'
+import _ from 'lodash'
 
 interface EditFormContextProps {
   form: FormInstance
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
-  commitToDraft: (useDebounce?: boolean) => void
+  resetModifiedDataObjectAttributes: () => void
+  markDraftAsModified: () => void
   getModifiedDataObjectAttributes: () => Record<string, any>
+  getChangedFieldName: (changedValues: Record<string, unknown>, parentKey?: string) => string | null
 }
 
 const EditFormContext = createContext<EditFormContextProps | undefined>(undefined)
@@ -39,7 +41,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [form] = useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const { id } = useElementContext()
-  const { trackModifiedObjectData, getCurrentDraftState } = useDataObjectDraft(id)
+  const { markObjectDataAsModified } = useDataObjectDraft(id)
 
   const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>): void => {
     modifiedDataObjectAttributesRef.current = { ...modifiedDataObjectAttributesRef.current, ...changedValues }
@@ -49,36 +51,42 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     modifiedDataObjectAttributesRef.current = {}
   }
 
-  const commitToDraft = useCallback(
-    (useDebounce: boolean = false): void => {
-      const commit = (): void => {
-        if (Object.keys(modifiedDataObjectAttributesRef.current).length !== 0) {
-          trackModifiedObjectData({ ...modifiedDataObjectAttributesRef.current })
-          resetModifiedDataObjectAttributes()
-        }
-      }
-
-      if (useDebounce) {
-        debounce(commit, 300)()
-      } else {
-        commit()
-      }
-    },
-    [trackModifiedObjectData]
-  )
-
   const getModifiedDataObjectAttributes = (): Record<string, any> => {
-    commitToDraft()
-    const draftState = getCurrentDraftState()
-    return draftState === undefined ? {} : draftState.modifiedObjectData
+    return modifiedDataObjectAttributesRef.current
+  }
+
+  const getChangedFieldName = (
+    changedValues: Record<string, unknown>,
+    parentKey: string = ''
+  ): string | null => {
+    const keys = Object.keys(changedValues)
+    if (keys.length === 0) {
+      return null
+    }
+    const key = keys[0]
+
+    const fullKey = parentKey !== '' ? `${parentKey}.${key}` : key
+    const value = changedValues[key]
+
+    if (!form.isFieldTouched(fullKey.split('.'))) {
+      return parentKey
+    }
+
+    if (_.isPlainObject(value)) {
+      return getChangedFieldName(value as Record<string, unknown>, fullKey)
+    }
+
+    return fullKey
   }
 
   const value = useMemo(() => ({
     form,
     updateModifiedDataObjectAttributes,
-    commitToDraft,
-    getModifiedDataObjectAttributes
-  }), [form, commitToDraft])
+    resetModifiedDataObjectAttributes,
+    markDraftAsModified: markObjectDataAsModified,
+    getModifiedDataObjectAttributes,
+    getChangedFieldName
+  }), [form])
 
   return (
     <EditFormContext.Provider value={ value }>

@@ -46,6 +46,7 @@ export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjec
       <DatePicker
         allowClear
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         outputFormat={ props.respectTimezone !== false || outputType !== 'dateString' ? undefined : props.outputFormat }
         outputType={ outputType }
         showTime={ props.showTime }

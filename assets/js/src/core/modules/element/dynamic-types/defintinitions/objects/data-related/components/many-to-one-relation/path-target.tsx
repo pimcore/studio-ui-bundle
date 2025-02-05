@@ -25,6 +25,7 @@ export interface PathTargetProps {
   disabled?: boolean
   allowPathTextInput?: boolean
   onChange?: (value: ManyToOneRelationValueType) => void
+  inherited?: boolean
 }
 
 export const PathTarget = forwardRef(function PathTarget (
@@ -62,6 +63,7 @@ export const PathTarget = forwardRef(function PathTarget (
       <Input
         className={ cn(...getStateClasses()) }
         disabled={ props.disabled }
+        inherited={ props.inherited }
         onChange={ (e) => {
           const newValue: { textInput: true, fullPath: string } = {
             textInput: true,

@@ -13,13 +13,13 @@
 
 import React, { useEffect, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Input } from 'antd'
 import _ from 'lodash'
 import { useQuantityValueUnits } from '@Pimcore/modules/data-object/hooks/use-quantity-value-units'
 import { Select } from '@Pimcore/components/select/select'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './input-quantity-value.styles'
+import { Input } from '@Pimcore/components/input/input'
 
 export interface InputQuantityValueProps {
   value?: InputQuantityValueValue | null
@@ -28,6 +28,7 @@ export interface InputQuantityValueProps {
   validUnits?: string[] | null
   width?: string | null
   disabled?: boolean
+  inherited?: boolean
 }
 
 export interface InputQuantityValueValue {
@@ -79,6 +80,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
       <Input
         className={ styles.input }
         disabled={ props.disabled }
+        inherited={ props.inherited }
         onChange={ onChangeInput }
         style={ { maxWidth: toCssDimension(props.width, 150) } }
         value={ value?.value ?? undefined }
@@ -87,6 +89,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
         allowClear
         className={ styles.select }
         disabled={ props.disabled }
+        inherited={ props.inherited }
         onChange={ onChangeSelect }
         optionFilterProp="label"
         options={ getSelectOptions(props.validUnits ?? undefined) }

@@ -46,7 +46,7 @@ export const Toolbar = (): React.JSX.Element => {
   const hasChanges = dataObject?.modified === true
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
-  const { getModifiedDataObjectAttributes } = useEditFormContext()
+  const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
@@ -56,6 +56,7 @@ export const Toolbar = (): React.JSX.Element => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       messageApi.success(t('save-success'))
       removeTrackedChanges()
+      resetModifiedDataObjectAttributes()
     }
   }, [isSuccess, isSchedulesSuccess])
 

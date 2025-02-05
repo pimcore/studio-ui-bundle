@@ -33,6 +33,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
     return (
       <BooleanSelect
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
         optionFilterProp="label"
         options={ options }
       />

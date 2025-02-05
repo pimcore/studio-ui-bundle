@@ -25,6 +25,7 @@ export interface BlockProps extends AbstractObjectDataDefinition {
   disallowReorder?: boolean
   disallowAddRemove?: boolean
   maxItems?: number
+  inherited?: boolean
 }
 
 export const Block = (props: BlockProps): React.JSX.Element => {

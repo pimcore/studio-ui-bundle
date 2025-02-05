@@ -49,6 +49,7 @@ export interface ManyToOneRelationClassDefinitionProps {
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
   width?: number | string | null
+  inherited?: boolean
 }
 
 export interface ManyToOneRelationProps extends IRelationAllowedTypesDataComponent, ManyToOneRelationClassDefinitionProps {
@@ -102,6 +103,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           <PathTarget
             allowPathTextInput={ props.allowPathTextInput }
             disabled={ props.disabled }
+            inherited={ props.inherited }
             onChange={ setValue }
             value={ value }
           />
