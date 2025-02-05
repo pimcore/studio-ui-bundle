@@ -13,16 +13,21 @@
 
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '../../../registry/dynamic-type-registry-abstract'
-import { type ReactNode, type ReactElement } from 'react'
+import React, { type ReactNode, type ReactElement } from 'react'
 import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { type FormInstance } from 'antd'
 import { type NamePath } from 'rc-field-form/es/interface'
+import {
+  FieldLabel
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
+import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
   tooltip?: string | null
+  inherited?: boolean
   invisible?: boolean | null
   noteditable?: boolean | null
   title?: ReactNode
@@ -32,13 +37,14 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   isCollectionType: boolean = false
+  inheritedMaskOverlay: InheritanceOverlayType = false
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
     return {
       className: 'w-full',
-      label: props.title,
+      label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
       required: props.mandatory === true,
       hidden: props.invisible === true,
       tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? respectLineBreak(props.tooltip, false) : undefined

@@ -19,6 +19,7 @@ import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
 import { GeoBoundsDrawer } from '@Pimcore/components/geo-bounds-drawer/geo-bounds-drawer'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type GeoBoundsObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
@@ -30,6 +31,7 @@ export type GeoBoundsObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstract {
   id: string = 'geobounds'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: GeoBoundsObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

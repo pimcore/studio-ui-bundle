@@ -24,6 +24,9 @@ import { LanguageSelectionProvider } from './toolbar/language-selection/provider
 import {
   EditFormProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import {
+  InheritanceStateProvider
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
 
 export interface EditorContainerProps {
   id: number
@@ -69,19 +72,21 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   return (
     <DataObjectProvider id={ id }>
       <EditFormProvider>
-        <LanguageSelectionProvider>
-          <TabsToolbarView
-            renderTabbar={
-              <TabsContainer
-                elementEditorType={ editorType }
-              />
-              }
+        <InheritanceStateProvider>
+          <LanguageSelectionProvider>
+            <TabsToolbarView
+              renderTabbar={
+                <TabsContainer
+                  elementEditorType={ editorType }
+                />
+                }
 
-            renderToolbar={
-              <Toolbar />
-              }
-          />
-        </LanguageSelectionProvider>
+              renderToolbar={
+                <Toolbar />
+                }
+            />
+          </LanguageSelectionProvider>
+        </InheritanceStateProvider>
       </EditFormProvider>
     </DataObjectProvider>
   )

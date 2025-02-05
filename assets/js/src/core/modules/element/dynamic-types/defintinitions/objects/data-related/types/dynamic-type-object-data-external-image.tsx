@@ -13,11 +13,15 @@
 
 import React from 'react'
 
-import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
+import {
+  type AbstractObjectDataDefinition,
+  DynamicTypeObjectDataAbstract
+} from '../dynamic-type-object-data-abstract'
 
 import {
   ExternalImage
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/external-image/external-image'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
   previewWidth: number | null
@@ -27,6 +31,7 @@ export type ExternalImageObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbstract {
   id: string = 'externalImage'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: ExternalImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

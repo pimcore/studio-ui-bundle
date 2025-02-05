@@ -19,6 +19,7 @@ import { GeoPointPicker } from '@Pimcore/components/geo-point-picker/geo-point-p
 import {
   getGeoComponentHeight, getGeoComponentWidth
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/utils/geo-types'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
   width: string
@@ -30,6 +31,7 @@ export type GeoPointObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract {
   id: string = 'geopoint'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: GeoPointObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

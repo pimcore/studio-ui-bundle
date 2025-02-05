@@ -21,6 +21,8 @@ import {
   fromDayJs,
   type OutputType
 } from './utils/date-picker-utils'
+import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
+import cn from 'classnames'
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -30,6 +32,7 @@ export type DateRangePickerProps = OriginalRangePickerProps & {
   onChange?: (dates: DateRangeTargetValue | null) => void
   outputType?: OutputType
   outputFormat?: string
+  inherited?: boolean
 }
 
 const valueToDayJs = (value?: DateRangeTargetValue | unknown): DateRange | null => {
@@ -56,6 +59,7 @@ const valueFromDayJs = (value: DateRange | null, outputType?: OutputType, output
 
 export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element => {
   const [value, setValue] = React.useState<DateRange | null>(valueToDayJs(props.value))
+  const { styles } = useStyles()
 
   return (
     <OriginalDatePicker.RangePicker
@@ -64,6 +68,7 @@ export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element 
         setValue(dates)
         props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
       } }
+      rootClassName={ cn({ [styles.inherited]: props.inherited }) }
       value={ value }
     />
   )

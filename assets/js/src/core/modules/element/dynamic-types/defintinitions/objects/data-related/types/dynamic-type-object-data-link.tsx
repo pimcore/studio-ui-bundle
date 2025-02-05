@@ -17,6 +17,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { Link } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/link'
 import _ from 'lodash'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
   allowedTypes?: string[] | null
@@ -26,6 +27,7 @@ export type LinkObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
   id: string = 'link'
+  inheritedMaskOverlay: InheritanceOverlayType = 'manual'
 
   getObjectDataComponent (props: LinkObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
@@ -35,6 +37,7 @@ export class DynamicTypeObjectDataLink extends DynamicTypeObjectDataAbstract {
         allowedTypes={ _.compact(props.allowedTypes ?? []) }
         disabled={ props.noteditable === true }
         disabledFields={ _.compact(props.disabledFields ?? []) }
+        inherited={ props.inherited }
       />
     )
   }
