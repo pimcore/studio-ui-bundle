@@ -36,18 +36,20 @@ export interface TagConfigurationModalProps {
   tagConfigModalOpen: boolean
   setTagConfigModalOpen: (showBatchEditModal: boolean) => void
   focusTag: Tag
+  resetFocusTag: () => void
 }
 
 export const TagConfigurationModal = ({
   mode, setMode,
   tagConfigModalOpen,
   setTagConfigModalOpen,
-  focusTag
+  focusTag, resetFocusTag
 }: TagConfigurationModalProps): React.JSX.Element => {
   const { handleTagUpdate, handleTagCreation } = useTagConfig()
   const [form] = Form.useForm()
   const closeModal = (): void => {
     setTagConfigModalOpen(false)
+    resetFocusTag()
     setMode('create')
     form.resetFields()
   }

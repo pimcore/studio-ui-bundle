@@ -20,9 +20,6 @@ import type { Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tab
 import { Title } from '@Pimcore/components/title/title'
 import { TagConfigurationModal } from '@Pimcore/modules/tags/tag-configuration-modal'
 import { useTagConfig } from '@Pimcore/modules/tags/hooks/use-tag-config'
-import { useModal } from '@Pimcore/components/modal/useModal'
-import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -37,6 +34,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 
 export type Mode = 'create' | 'update'
 
@@ -48,11 +46,10 @@ export interface TreeAction {
 const TagConfigurationContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
   const { tags, rootTagFolder, getTag, handleTagUpdate, tagDeletion } = useTagConfig()
-  const { renderModal: WarnModal, showModal: showWarnModal, handleCancel, handleOk } = useModal({ type: 'warn' })
+  const { confirm } = useFormModal()
 
   const [tagConfigModalOpen, setTagConfigModalOpen] = useState<boolean>(false)
   const [editMode, setEditMode] = useState<Mode>('create')
-  const [deleteMode, setDeleteMode] = useState<'single' | 'parent' | 'all'>('single')
   const [focusTag, setFocusTag] = useState<Tag | undefined>(rootTagFolder)
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
@@ -66,21 +63,23 @@ const TagConfigurationContainer = (): React.JSX.Element => {
 
   const treeData = createTreeStructure({ tags, loadingNodes: new Set(), actions: tagActions, rootActions })
 
-  const setTagInFocus = (key: string): void => {
+  const setTagInFocus = (key: string): Tag | undefined => {
     const newFocusTag = getTag(key)
     if (newFocusTag === null || newFocusTag === undefined) {
       trackError(new GeneralError(`Tag with Id ${key} not found`))
-      return
+      return undefined
     }
     setFocusTag(newFocusTag)
+    return newFocusTag
   }
 
   const onActionsClick = (key: string, type: string): void => {
-    setTagInFocus(key)
-    if (focusTag === null || focusTag === undefined) {
-      trackError(new GeneralError(`Tag with Id ${key} not found`))
+    const newFocusTag = setTagInFocus(key)
+
+    if (newFocusTag === null || newFocusTag === undefined) {
       return
     }
+
     switch (type) {
       case 'add-tag':
         setEditMode('create')
@@ -91,34 +90,36 @@ const TagConfigurationContainer = (): React.JSX.Element => {
         setTagConfigModalOpen(true)
         break
       case 'delete-tag':
-        setDeleteMode(focusTag.hasChildren ? 'parent' : 'single')
-        showWarnModal()
+        confirm({
+          title: newFocusTag.hasChildren ? t('tag-configuration.warn-delete-parent-tag-modal-title') : t('tag-configuration.warn-delete-tag-modal-title'),
+          content: newFocusTag.hasChildren ? t('tag-configuration.warn-delete-parent-tag-modal-text') : t('tag-configuration.warn-delete-tag-modal-text'),
+          okText: newFocusTag.hasChildren ? t('tag-configuration.delete-parent-tag') : t('tag-configuration.delete-tag'),
+          cancelText: t('tag-configuration.cancel'),
+          onOk: async () => {
+            await tagDeletion(newFocusTag.id)
+          },
+          onCancel: () => {
+            setFocusTag(rootTagFolder)
+          }
+        })
         break
     }
   }
 
-  const handleDelete = (): void => {
-    setDeleteMode('all')
-    showWarnModal()
+  const handleDeleteAll = (): void => {
+    confirm({
+      title: t('tag-configuration.warn-delete-all-tags-title'),
+      content: t('tag-configuration.warn-delete-all-tags-modal-text'),
+      okText: t('tag-configuration.warn-delete-all-tags-title'),
+      cancelText: t('tag-configuration.cancel'),
+      onOk: async () => {
+        focusTag !== undefined && await tagDeletion(focusTag.id)
+      },
+      onCancel: () => {
+        setFocusTag(rootTagFolder)
+      }
+    })
   }
-
-  const deleteModalTitle = (hasChildren: boolean): string => deleteMode === 'all'
-    ? t('tag-configuration.warn-delete-all-tags-title')
-    : hasChildren
-      ? t('tag-configuration.warn-delete-parent-tag-modal-title')
-      : t('tag-configuration.warn-delete-tag-modal-title')
-
-  const deleteModalContent = (hasChildren: boolean): string => deleteMode === 'all'
-    ? t('tag-configuration.warn-delete-all-tags-modal-text')
-    : hasChildren
-      ? t('tag-configuration.warn-delete-parent-tag-modal-text')
-      : t('tag-configuration.warn-delete-tag-modal-text')
-
-  const deleteModalButton = (hasChildren: boolean): string => deleteMode === 'all'
-    ? t('tag-configuration.warn-delete-all-tags-title')
-    : hasChildren
-      ? t('tag-configuration.delete-parent-tag')
-      : t('tag-configuration.delete-tag')
 
   return (
     <ContentLayout
@@ -133,11 +134,11 @@ const TagConfigurationContainer = (): React.JSX.Element => {
                     invalidatingTags.AVAILABLE_TAGS()
                   )
                 )
-              }
+                            }
             />
             <IconTextButton
               icon={ { value: 'trash' } }
-              onClick={ handleDelete }
+              onClick={ handleDeleteAll }
               type="link"
             >
               {t('tag-configuration.delete-all')}
@@ -179,34 +180,16 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             withCustomSwitcherIcon
           />
           {focusTag !== undefined && (
-            <>
-              <TagConfigurationModal
-                focusTag={ focusTag }
-                mode={ editMode }
-                setMode={ setEditMode }
-                setTagConfigModalOpen={ setTagConfigModalOpen }
-                tagConfigModalOpen={ tagConfigModalOpen }
-              />
-              <WarnModal
-                footer={ <ModalFooter>
-                  <Button
-                    key="cancel"
-                    onClick={ handleCancel }
-                  >{t('tag-configuration.cancel')}</Button>
-                  <Button
-                    onClick={ async () => {
-                      handleOk()
-                      await tagDeletion(focusTag.id)
-                    } }
-                    type='primary'
-                  >{deleteModalButton(focusTag.hasChildren)}
-                  </Button>
-                </ModalFooter> }
-                title={ deleteModalTitle(focusTag.hasChildren) }
-              >
-                {deleteModalContent(focusTag.hasChildren)}
-              </WarnModal>
-            </>
+          <TagConfigurationModal
+            focusTag={ focusTag }
+            mode={ editMode }
+            resetFocusTag={ () => {
+              setFocusTag(rootTagFolder)
+            } }
+            setMode={ setEditMode }
+            setTagConfigModalOpen={ setTagConfigModalOpen }
+            tagConfigModalOpen={ tagConfigModalOpen }
+          />
           )}
         </Flex>
       </Box>
