@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useCallback } from 'react'
+import React, { useState } from 'react'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { TreeContainer } from '@Pimcore/modules/user/roles/tree/tree-container'
 import { Detail } from '@Pimcore/modules/user/roles/detail/detail'
@@ -25,7 +25,6 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 const RoleContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getRoleTree } = useRoleHelper()
-  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
     title: t('roles.tree.all'),
@@ -37,9 +36,10 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       { key: 'add-role', icon: 'add-user' }
     ]
   }
-  const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
+  const [treeData, setTreeData] = useState<TreeDataItem[]>([treeParentItem])
+  const [treeIsLoading, setTreeIsLoading] = useState<boolean>(false)
 
-  const createNodeByResponse = useCallback((items: any): TreeDataNode[] => {
+  const createNodeByResponse = (items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
       title: item.name,
       key: item.id,
@@ -59,7 +59,7 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
       children: [],
       isLeaf: item.children === false
     }))
-  }, [treeData])
+  }
 
   const updateTreeData = (key, items, add?): void => {
     setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
@@ -85,14 +85,14 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     })
   }
 
-  const reloadTree = (): void => {
-    getRoleTree({ parentId: 0 }).then((data) => {
-      updateTreeData('0', data.items)
-      const timestamp = Date.now()
-      setTreeKey('tree-' + timestamp)
-    }).catch((error) => {
-      console.error(error)
-    })
+  const reloadTree = async (): Promise<void> => {
+    setTreeIsLoading(true)
+    setTreeData([treeParentItem])
+
+    const { items } = await getRoleTree({ parentId: 0 })
+    updateTreeData('0', items)
+
+    setTreeIsLoading(false)
   }
 
   const sidebar = {
@@ -101,7 +101,8 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        key={ treeKey }
+        isLoading={ treeIsLoading }
+        key="role-tree"
         onLoadTreeData={ handleOnLoadData }
         onMoveItem={ (dragNode, dropKey) => {
           const parent = findParentByKey(treeData, dragNode.key)
@@ -142,18 +143,11 @@ const RoleContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <Detail
         key="role-detail"
-        onCloneRole={ (data) => {
-          reloadTree()
+        onCloneRole={ async (data) => {
+          await reloadTree()
         } }
-        onRemoveRole={ (id) => {
-          const parent = findParentByKey(treeData, id)
-          if (parent?.children !== undefined) {
-            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== id)
-            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
-              parent.children = updatedTreeData
-              return [...data]
-            })
-          }
+        onRemoveRole={ async (id) => {
+          await reloadTree()
         } }
       />
     ]
