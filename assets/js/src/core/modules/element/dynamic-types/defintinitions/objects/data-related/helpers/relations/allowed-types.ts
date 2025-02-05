@@ -14,6 +14,7 @@
 import { type ElementType } from 'types/element-type.d'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import _ from 'lodash'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface IRelationAllowedTypesClassDefinition {
   assetsAllowed: boolean
@@ -66,24 +67,40 @@ export const isAllowedSubType = (type: ElementType, subType: string, props: IRel
   }
 
   if (type === 'asset') {
-    return props.allowedAssetTypes?.includes(subType) ?? true
+    return isValidSubType(props.allowedAssetTypes, subType)
   }
 
   if (type === 'data-object') {
-    return props.allowedClasses?.includes(subType) ?? true
+    return isValidSubType(props.allowedClasses, subType)
   }
 
   if (type === 'document') {
-    return props.allowedDocumentTypes?.includes(subType) ?? true
+    return isValidSubType(props.allowedDocumentTypes, subType)
   }
 
   return false
+}
+
+const isValidSubType = (allowedTypes: string[] | null | undefined, subType: string): boolean => {
+  if (allowedTypes === null || allowedTypes === undefined) {
+    return true
+  }
+
+  if (allowedTypes.length === 0) {
+    return true
+  }
+
+  return allowedTypes.includes(subType)
 }
 
 export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTypesDataComponent): boolean => {
   if (info.data === null) {
     return false
   }
+  const type: ElementType | null = mapToElementType(info.type)
+  if (type === null) {
+    return false
+  }
   const subType: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
-  return isAllowedSubType(info.type as ElementType, subType, props)
+  return isAllowedSubType(type, subType, props)
 }
