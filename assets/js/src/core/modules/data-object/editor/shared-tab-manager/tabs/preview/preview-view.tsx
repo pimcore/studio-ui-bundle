@@ -21,8 +21,7 @@ export const PreviewView = (): React.JSX.Element => {
   return (
     <iframe
       height="100%"
-      src={ `${getPrefix()}/data-objects/preview/${id}` }
-      title={ 'foobar' }
+      src={`${getPrefix()}/data-objects/preview/${id}`}
       width="100%"
     />
   )
