@@ -25,7 +25,7 @@ interface IUseAssetVersionDataReturn {
   categoriesList?: CategoriesList
 }
 
-export const useAssetVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseAssetVersionDataReturn => {
+export const useVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseAssetVersionDataReturn => {
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
   const comparisonModifiedData = data.filter((item) => {

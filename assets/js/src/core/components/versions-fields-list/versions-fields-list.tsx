@@ -14,11 +14,12 @@
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isNil, isUndefined } from 'lodash'
+import { ElementTypeName } from '@Pimcore/constants/global'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { AssetVersionsFieldsView } from './components/asset-versions-fields-view/asset-versions-fields-view'
-import { useAssetVersionData } from './hooks/use-asset-version-data'
+import { useVersionData } from './hooks/use-version-data'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelper'
 import { getObjectCategoriesListWithFields } from './helpers/objectsCategoriesHelper'
@@ -30,13 +31,12 @@ interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JSX.Element => {
   const { elementType } = useElementContext()
 
-  // TODO: move to constants
-  const isAssetType = elementType === 'asset'
-  const isDataObjectType = elementType === 'data-object'
+  const isAssetType = elementType === ElementTypeName.ASSET
+  const isDataObjectType = elementType === ElementTypeName.DATA_OBJECT
 
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
-  const { versionKeysList, comparisonModifiedData, categoriesList } = useAssetVersionData(data, elementType)
+  const { versionKeysList, comparisonModifiedData, categoriesList } = useVersionData(data, elementType)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
