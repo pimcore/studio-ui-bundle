@@ -18,7 +18,7 @@ enum DATATYPE_LIST {
   DATA = 'data'
 }
 
-export const getFormattedDataStructure = ({ layout, versionData }: any): any => {
+export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: any): any => {
   const processLayoutData = ({ data, categoryName }: any): any => {
     return data?.flatMap((item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
@@ -30,7 +30,7 @@ export const getFormattedDataStructure = ({ layout, versionData }: any): any => 
         const fieldValue = get(versionData, fieldName)
 
         if (!isEmpty(fieldValue)) {
-          return [{ categoryName, fieldData: item, fieldValue }]
+          return [{ categoryName, fieldData: item, fieldValue, versionId, versionCount }]
         }
       }
 
@@ -41,16 +41,30 @@ export const getFormattedDataStructure = ({ layout, versionData }: any): any => 
   return processLayoutData({ data: layout })
 }
 
-export const versionsDataToTableData = ({ versions, data }: any): any => {
-  const dataColumn = `Version ${versions.count}`
+export const versionsDataToTableData = (data: any): any => {
+  const resultList: any[] = []
 
-  return data.flatMap((item: any) => {
-    return [{
+  const mainVersionData = data[0]
+  const compareVersionData = data[1]
+
+  mainVersionData.forEach((versionItem: any, index: number) => {
+    const field = {
       Field: {
-        categoryName: item?.categoryName,
-        ...item?.fieldData
+        categoryName: versionItem?.categoryName,
+        ...versionItem.fieldData
       },
-      [dataColumn]: item?.fieldValue
-    }]
+      [`Version ${versionItem.versionCount}`]: versionItem.fieldValue
+    }
+
+    const compareVersion = compareVersionData?.[index]
+    const hasCompareVersion = !isEmpty(compareVersion)
+
+    if (hasCompareVersion) {
+      field[`Version ${compareVersion.versionCount}`] = compareVersion.fieldValue
+    }
+
+    resultList.push(field)
   })
+
+  return resultList
 }

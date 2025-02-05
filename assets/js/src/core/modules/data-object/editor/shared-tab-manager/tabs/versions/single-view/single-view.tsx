@@ -49,16 +49,23 @@ export const SingleView = ({
 
     Promise.resolve(versionPromise)
       .then((response): void => {
+        const formattedDataList: any[] = []
+
         const dataRaw = response.data as DataObjectVersion
-        const formattedData = getFormattedDataStructure({ layout: layoutData?.children, versionData: dataRaw?.objectData })
+        formattedDataList.push(getFormattedDataStructure({
+          layout: layoutData?.children,
+          versionData: dataRaw?.objectData,
+          versionId: vId.id,
+          versionCount: vId.count
+        }))
 
         // eslint-disable-next-line
-        setVersionData(versionsDataToTableData({ versions: vId, data: formattedData }))
+        setVersionData(versionsDataToTableData(formattedDataList))
       })
       .catch(err => { console.log(err) })
   }, [vId])
 
-  console.log('----->>>> versionData: ', versionData)
+  console.log('----->>>> Single VersionData: ', versionData)
 
   return (
     <div>
