@@ -13,12 +13,13 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Video, type VideoProps, type VideoType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/video'
 import _ from 'lodash'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProps & {
   allowedTypes?: VideoType[] | null
@@ -26,7 +27,7 @@ export type VideoObjectDataDefinition = AbstractObjectDataDefinition & VideoProp
 
 export class DynamicTypeObjectDataVideo extends DynamicTypeObjectDataAbstract {
   id: string = 'video'
-  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: VideoObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

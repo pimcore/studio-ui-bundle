@@ -13,17 +13,18 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Image, type ImageProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageProps
 
 export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
   id: string = 'image'
-  inheritedMaskOverlay: InheritedMaskOverlay = 'form-element'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

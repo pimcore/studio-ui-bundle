@@ -21,8 +21,8 @@ interface UseInheritanceOverlayStyleProps {
 export const useInheritanceOverlayStyle = (props: UseInheritanceOverlayStyleProps): string | undefined => {
   const { styles } = useStyles()
 
-  if (props.type === 'container' && props.inherited === true) {
-    return styles.inheritedContainer
+  if (props.type === 'form-item-container' && props.inherited === true) {
+    return styles.inheritedFormItemContainer
   }
 
   if (props.type === 'form-element' && props.inherited === true) {
@@ -33,8 +33,8 @@ export const useInheritanceOverlayStyle = (props: UseInheritanceOverlayStyleProp
     return styles.inheritedManual
   }
 
-  if (props.type === 'collection' && props.inherited === true) {
-    return styles.inheritedCollection
+  if (props.type === 'wrapper' && props.inherited === true) {
+    return styles.inheritedWrapper
   }
 
   return undefined

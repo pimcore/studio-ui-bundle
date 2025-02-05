@@ -28,7 +28,7 @@ export const useStyles = createStyles(({ token, css }) => {
   `
 
   return {
-    inheritedContainer: css`
+    inheritedFormItemContainer: css`
       .ant-form-item-control-input-content > * {
         filter: opacity(0.5);
       }
@@ -56,7 +56,7 @@ export const useStyles = createStyles(({ token, css }) => {
         ${overlay};
       }
     `,
-    inheritedCollection: css`
+    inheritedWrapper: css`
       & {
         position: relative;
       }

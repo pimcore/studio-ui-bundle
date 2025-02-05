@@ -12,13 +12,14 @@
 */
 
 import React from 'react'
-import { type AbstractObjectDataDefinition, type InheritedMaskOverlay } from '../dynamic-type-object-data-abstract'
+import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
 import {
   type AbstractNumericObjectDataDefinition,
   DynamicTypeObjectDataAbstractNumeric
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
 import { Slider, type SliderProps } from '@Pimcore/components/slider/slider'
 import { toCssDimension } from '@Pimcore/utils/css'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
   vertical?: boolean | null
@@ -28,7 +29,7 @@ export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
 
 export class DynamicTypeObjectDataSlider extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'slider'
-  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
 
   getObjectDataComponent (props: SliderObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const componentProps = this.getObjectDataComponentProps(props) as SliderProps

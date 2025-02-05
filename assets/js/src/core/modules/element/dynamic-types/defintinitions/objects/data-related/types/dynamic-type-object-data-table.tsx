@@ -13,17 +13,18 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Table, type TableProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/table/table'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type TableObjectDataDefinition = AbstractObjectDataDefinition & TableProps
 
 export class DynamicTypeObjectDataTable extends DynamicTypeObjectDataAbstract {
   id: string = 'table'
-  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
 
   getObjectDataComponent (props: TableObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

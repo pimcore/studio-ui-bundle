@@ -14,7 +14,7 @@
 import React from 'react'
 import {useInheritanceOverlayStyle} from "@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style";
 
-export type InheritanceOverlayType = 'container' | 'form-element' | 'manual' | 'collection' | false
+export type InheritanceOverlayType = 'form-item-container' | 'form-element' | 'manual' | 'wrapper' | false
 
 export interface InheritanceOverlayProps {
   inherited?: boolean

@@ -33,13 +33,11 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   title?: ReactNode
 }
 
-export type InheritedMaskOverlay = InheritanceOverlayType
-
 @injectable()
 export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstract {
   abstract readonly id: string
   isCollectionType: boolean = false
-  inheritedMaskOverlay: InheritedMaskOverlay = false
+  inheritedMaskOverlay: InheritanceOverlayType = false
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 

@@ -13,17 +13,18 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type InheritedMaskOverlay
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   StructuredTable, type StructuredTableProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/structured-table'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type StructuredTableObjectDataDefinition = AbstractObjectDataDefinition & StructuredTableProps
 
 export class DynamicTypeObjectDataStructuredTable extends DynamicTypeObjectDataAbstract {
   id: string = 'structuredTable'
-  inheritedMaskOverlay: InheritedMaskOverlay = 'container'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
 
   getObjectDataComponent (props: StructuredTableObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

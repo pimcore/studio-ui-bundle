@@ -14,10 +14,10 @@ export default config
 
 const demoForm = <FormItem layout="vertical" label="Test Input Label"><Card style={{ width: 300, height: 300 }}><Input/></Card></FormItem>
 
-export const Container = {
+export const FormItemContainer = {
   args: {
     inherited: true,
-    type: 'container',
+    type: 'form-item-container',
     children: demoForm
   },
 }
@@ -47,10 +47,10 @@ export const Manual = {
   },
 }
 
-export const Collection = {
+export const Wrapper = {
   args: {
     inherited: true,
-    type: 'collection',
+    type: 'wrapper',
     children: <Card style={{ width: 300, height: 300 }}>Hello world</Card>
   }
 }

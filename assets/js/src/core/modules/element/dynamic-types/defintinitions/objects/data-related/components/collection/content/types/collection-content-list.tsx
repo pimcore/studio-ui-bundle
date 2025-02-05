@@ -31,7 +31,7 @@ export const CollectionContentList = (props: CollectionContentListProps): React.
   const previousFields = usePrevious(props.fields)
   const hasFirstFieldAdded = previousFields?.length === undefined ? false : (previousFields.length) === 0 && hasFields
   const collapsed = hasFirstFieldAdded ? false : props.collapsed
-  const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: props.inherited, type: 'collection' })
+  const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: props.inherited, type: 'wrapper' })
 
   const itemProps = {
     ...baseItemProps,
