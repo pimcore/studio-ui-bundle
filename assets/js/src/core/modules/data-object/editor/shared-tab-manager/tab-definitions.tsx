@@ -41,7 +41,6 @@ export const TAB_PREVIEW: IEditorTab = {
   icon: <Icon value={ 'preview' } />,
   isDetachable: true,
   hidden: (element): boolean => {
-    console.log(element.hasPreview)
     return !(element.hasPreview!)
   }
 }

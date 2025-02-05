@@ -14,13 +14,9 @@
 import React from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export const PreviewView = (): React.JSX.Element => {
   const { id } = useElementContext()
-  const { element } = useElementDraft(id, 'data-object')
-
-  console.log('element: ', element)
 
   return (
     <>
