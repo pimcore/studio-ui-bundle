@@ -11,9 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { ListingBaseView } from '@Pimcore/modules/element/listing/abstract/view-layer/base-view/listing-base-view'
 import React from 'react'
-import { ListingBaseView } from './base-view/listing-base-view'
+import { Toolbar } from '../toolbar/toolbar'
 
-export const ViewLayerComponent = (): React.JSX.Element => {
-  return <ListingBaseView />
+export const DefaultView = (): React.JSX.Element => {
+  return <ListingBaseView renderToolbar={ Toolbar } />
 }

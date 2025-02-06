@@ -23,6 +23,7 @@ import { useElementId } from './hooks/use-element-id'
 import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
 import { compose } from '@Pimcore/utils/compose'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+import { DefaultView } from './views/default-view'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery
@@ -32,6 +33,7 @@ export interface IAssetListingDefaultParams extends ListingContainerProps {
 
 const defaultProps = {
   ...listingDefaultProps,
+  ViewComponent: DefaultView,
   useDataQuery: useAssetGetGridQuery,
   useDataQueryHelper,
   useElementId
