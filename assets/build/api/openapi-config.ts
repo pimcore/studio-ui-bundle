@@ -67,7 +67,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/dependencies/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/tags/i)
+      filterEndpoints: pathMatcher(/tag/i)
     },
     '../../js/src/core/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/note/i)

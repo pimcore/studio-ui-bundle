@@ -51,7 +51,7 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const published = version.published ?? false
   const scheduledDate = !isNil(version.scheduled)
     ? formatDateTime({
-      timestamp: version.scheduled!,
+      timestamp: version.scheduled,
       dateStyle: 'short',
       timeStyle: 'short'
     })

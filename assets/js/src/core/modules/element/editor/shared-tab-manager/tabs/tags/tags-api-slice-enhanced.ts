@@ -17,6 +17,15 @@ import { api as baseApi } from './tags-api-slice.gen'
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.AVAILABLE_TAGS, tagNames.ASSET_DETAIL, tagNames.DATA_OBJECT_DETAIL],
   endpoints: {
+    tagUpdateById: {
+      invalidatesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
+    },
+    tagDeleteById: {
+      invalidatesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
+    },
+    tagCreate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
+    },
     tagGetCollection: {
       providesTags: (result, error, args) => providingTags.AVAILABLE_TAGS()
     },
@@ -39,4 +48,4 @@ export const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './tags-api-slice.gen'
-export const { useTagGetCollectionQuery, useTagAssignToElementMutation, useTagUnassignFromElementMutation, useTagGetCollectionForElementByTypeAndIdQuery, useTagBatchOperationToElementsByTypeAndIdMutation } = api
+export const { useTagCreateMutation, useTagDeleteByIdMutation, useTagUpdateByIdMutation, useTagGetCollectionQuery, useTagAssignToElementMutation, useTagUnassignFromElementMutation, useTagGetCollectionForElementByTypeAndIdQuery, useTagBatchOperationToElementsByTypeAndIdMutation } = api
