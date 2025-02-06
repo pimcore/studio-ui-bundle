@@ -53,8 +53,11 @@ export const TagsTabContainer = (): React.JSX.Element => {
     dispatch(
       api.util.invalidateTags(
         invalidatingTags.AVAILABLE_TAGS()
-      )
-    )
+      ))
+    dispatch(
+      api.util.invalidateTags(
+        invalidatingTags.ELEMENT_TAGS(elementType, id)
+      ))
   }, [])
 
   return (
