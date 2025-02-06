@@ -30,7 +30,7 @@ const EditorContainer = ({ id }: EditorContainerInnerProps): React.JSX.Element =
   if (isLoading) {
     return <Content loading />
   }
-  console.log('default layout id', getDefaultLayoutId())
+
   return (
     <LayoutSelectionProvider defaultLayout={ getDefaultLayoutId() }>
       <EditorContainerInner id={ id } />
