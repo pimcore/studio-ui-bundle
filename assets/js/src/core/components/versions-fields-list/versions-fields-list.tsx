@@ -22,7 +22,7 @@ import { AssetVersionsFieldsView } from './components/asset-versions-fields-view
 import { useVersionData } from './hooks/use-version-data'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelper'
-import { getObjectCategoriesListWithFields } from './helpers/objectBreadcrumbsHelper'
+import { getObjectBreadcrumbsListWithFields } from './helpers/objectBreadcrumbsHelper'
 import { type CategoriesList, type IVersionsFieldsList } from './types'
 import { useStyles } from './versions-fields-list.styles'
 
@@ -51,7 +51,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
     }
 
     if (isDataObjectType) {
-      return getObjectCategoriesListWithFields({ versionViewData, categoriesList: sectionsList })
+      return getObjectBreadcrumbsListWithFields({ versionViewData, breadcrumbsList: sectionsList })
     }
   }, [isExpandedUnmodifiedFields, sectionsList])
 

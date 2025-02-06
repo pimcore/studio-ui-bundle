@@ -40,18 +40,18 @@ export const getObjectBreadcrumbsList = (data: IVersionsFieldsList['data']): Cat
   }))
 }
 
-export const getObjectCategoriesListWithFields = ({ versionViewData, categoriesList }: { versionViewData: IVersionsFieldsList['data'], categoriesList?: CategoriesList }): CategoriesList => {
+export const getObjectBreadcrumbsListWithFields = ({ versionViewData, breadcrumbsList }: { versionViewData: IVersionsFieldsList['data'], breadcrumbsList?: CategoriesList }): CategoriesList => {
   // get all version field keys
   const versionFieldKeys = map(versionViewData, 'Field.name')
 
-  if (isEmpty(categoriesList)) return []
+  if (isEmpty(breadcrumbsList)) return []
 
   return filter(
     // map over list to update field with matching keys
-    map(categoriesList, category => ({
-      ...category, // keep initial category properties
-      fieldKeys: intersection(category.fieldKeys, versionFieldKeys) // keep only matching keys
+    map(breadcrumbsList, breadcrumb => ({
+      ...breadcrumb, // keep initial category properties
+      fieldKeys: intersection(breadcrumb.fieldKeys, versionFieldKeys) // keep only matching keys
     })),
-    category => !isEmpty(category.fieldKeys) // include only categories with non-empty fieldKeys
+    breadcrumb => !isEmpty(breadcrumb.fieldKeys) // include only categories with non-empty fieldKeys
   )
 }
