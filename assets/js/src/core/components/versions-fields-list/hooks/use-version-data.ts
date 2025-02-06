@@ -14,7 +14,7 @@
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
 import { getAssetCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/assetCategoriesHelper'
-import { getObjectCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/objectsCategoriesHelper'
+import { getObjectBreadcrumbsList } from '@Pimcore/components/versions-fields-list/helpers/objectBreadcrumbsHelper'
 import { type CategoriesList, type IVersionsFieldsList, type VersionKeysList } from '../types'
 import { type ElementType } from '../../../../../types/element-type.d'
 import { ElementTypeName } from '@Pimcore/constants/global'
@@ -38,7 +38,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
     }
 
     if (elementType === ElementTypeName.DATA_OBJECT) {
-      return getObjectCategoriesList(data)
+      return getObjectBreadcrumbsList(data)
     }
   }, [data])
 

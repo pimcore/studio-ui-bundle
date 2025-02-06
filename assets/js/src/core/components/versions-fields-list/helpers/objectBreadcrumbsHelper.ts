@@ -15,26 +15,26 @@ import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IVersionsFieldsList } from '../types'
 
-export const getObjectCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
-  const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
+export const getObjectBreadcrumbsList = (data: IVersionsFieldsList['data']): CategoriesList => {
+  const breadcrumbMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   data.forEach(item => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const categoryName: VersionCategoryName = item.Field.categoryName ?? VersionCategoryName.SYSTEM_DATA
+    const breadcrumbName: VersionCategoryName = item.Field.fieldBreadcrumbTitle ?? VersionCategoryName.SYSTEM_DATA
 
-    if (isUndefined(categoryMap[categoryName])) {
-      categoryMap[categoryName] = new Set()
+    if (isUndefined(breadcrumbMap[breadcrumbName])) {
+      breadcrumbMap[breadcrumbName] = new Set()
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    categoryMap[categoryName].add(item.Field.name)
+    breadcrumbMap[breadcrumbName].add(item.Field.name)
   })
 
-  return Object.entries(categoryMap).map(([key, fieldKeysSet]) => ({
+  return Object.entries(breadcrumbMap).map(([key, fieldKeysSet]) => ({
     key: key as VersionCategoryName,
     fieldKeys: Array.from(fieldKeysSet)
   }))
