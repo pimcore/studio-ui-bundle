@@ -27,18 +27,26 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     modificationDate: formatDateTime({ timestamp: versionData.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' })
   }
 
-  const processLayoutData = ({ data, categoryName }: any): any => {
+  const getBreadcrumbTitle = (value1: any, value2: any): string => {
+    return [value1, value2].filter(Boolean).join('/')
+  }
+
+  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: any): any => {
     return data?.flatMap((item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
-        return processLayoutData({ data: item?.children, categoryName: item?.name })
+        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title)
+
+        return processLayoutData({ data: item?.children, fieldBreadcrumbTitle: breadcrumbTitle })
       }
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
         const fieldValue = get(versionData?.objectData, fieldName)
 
+        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title)
+
         if (!isEmptyValue(fieldValue)) {
-          return [{ categoryName, fieldData: item, fieldValue, versionId, versionCount }]
+          return [{ fieldBreadcrumbTitle: breadcrumbTitle, fieldData: item, fieldValue, versionId, versionCount }]
         }
       }
 
