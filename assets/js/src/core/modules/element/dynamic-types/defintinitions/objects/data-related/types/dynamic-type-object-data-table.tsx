@@ -18,11 +18,13 @@ import {
 import {
   Table, type TableProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/table/table'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 
 export type TableObjectDataDefinition = AbstractObjectDataDefinition & TableProps
 
 export class DynamicTypeObjectDataTable extends DynamicTypeObjectDataAbstract {
   id: string = 'table'
+  inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
 
   getObjectDataComponent (props: TableObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

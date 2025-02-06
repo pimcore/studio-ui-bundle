@@ -50,7 +50,7 @@ export const slice = createSlice({
         userAdapter.upsertOne(state, action)
       }
     },
-    removeUser: (state, action: PayloadAction<number>): void => {
+    userRemoved: (state, action: PayloadAction<number>): void => {
       userAdapter.removeOne(state, action.payload)
     },
     changeUser: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
@@ -73,17 +73,6 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
-    userReloaded: (state, action: PayloadAction<number>): void => {
-      const id: number = action.payload
-
-      const update: Update<any, any> = {
-        id,
-        changes: { modified: false }
-      }
-      state.changedIds = state.changedIds.filter((item) => item !== id)
-
-      userAdapter.updateOne(state, update)
-    },
     userUpdated: (state, action: PayloadAction<any>): void => {
       userAdapter.upsertOne(state, { ...action })
     },
@@ -97,11 +86,10 @@ export const slice = createSlice({
 injectSliceWithState(slice)
 
 export const {
-  removeUser,
+  userRemoved,
   userOpened,
   userClosed,
   userFetched,
-  userReloaded,
   userAvailablePermissionsFetched,
   changeUser,
   userImageLoaded,

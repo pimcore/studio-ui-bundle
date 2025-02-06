@@ -11,20 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { Children, type ReactNode, isValidElement, useContext, useEffect, useMemo, useState } from 'react'
+import React, { type ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider'
 import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
-import { useStyle } from './droppable.styles'
-import { DroppableContextProvider } from './droppable-context-provider'
 import { uuid } from '@Pimcore/utils/uuid'
-import cn from 'classnames'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-
-export interface DroppableContentProps {
-  isDragActive: boolean
-  isOver: boolean
-  isValid: boolean
-}
+import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'
+import { SortableDroppable } from '@Pimcore/components/drag-and-drop/droppable/sortable-droppable'
 
 export interface DroppableProps {
   className?: string
@@ -38,7 +30,6 @@ export interface DroppableProps {
 }
 
 export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
-  const { styles } = useStyle()
   const context = useContext(DragAndDropInfoContext)
   const [isValidContext, setIsValidContext] = useState(false)
   const [id] = useState(uuid())
@@ -86,35 +77,21 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
     }
   }, [context, isOver])
 
-  const Child = Children.only(props.children)
-
-  if (!isValidElement(Child)) {
-    trackError(new GeneralError('Children must be a valid react component'))
-
-    return null
-  }
-
-  const Component = Child.type
-
   if (context.getInfo().sortable !== undefined) {
-    return Child
+    return <SortableDroppable>{ props.children }</SortableDroppable>
   }
 
-  if ('ref' in Child && Child.ref !== null) {
-    const ref = Child.ref as React.MutableRefObject<HTMLElement>
-
-    setNodeRef(ref.current)
-  }
-
-  return useMemo(() => (
-    <div className={ cn(props.className, styles[props.variant ?? 'default'], props.shape !== 'angular' ? styles.round : undefined) }>
-      <DroppableContextProvider value={ { isDragActive: isValidContext, isOver: isOver && isValidContext, isValid: isValidData && isValidContext } }>
-        <Component
-          { ...Child.props }
-          key={ id }
-          ref={ 'ref' in Child && Child.ref !== null ? Child.ref : setNodeRef }
-        />
-      </DroppableContextProvider>
-    </div>
-  ), [isOver, props.children, info, isValidContext, isValidData])
+  return (
+    <BaseDroppable
+      className={ props.className }
+      isOver={ isOver }
+      isValidContext={ isValidContext }
+      isValidData={ isValidData }
+      setNodeRef={ setNodeRef }
+      shape={ props.shape }
+      variant={ props.variant }
+    >
+      { props.children }
+    </BaseDroppable>
+  )
 }

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card } from '@Pimcore/components/card/card'
 import {
   HotspotImageFooter
@@ -37,6 +37,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import {
   hasValueData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/hotspot-image/utils/value-data'
+import _ from 'lodash'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -54,19 +55,23 @@ export interface HotspotImageProps {
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
-  const [value, setValue] = React.useState<HotspotImageValue | null>(props.value ?? null)
+  const [value, setValueState] = React.useState<HotspotImageValue | null>(props.value ?? null)
   const [markerModalOpen, setMarkerModalOpen] = useState(false)
   const [cropModalOpen, setCropModalOpen] = useState(false)
   const { confirm } = useFormModal()
 
   const { t } = useTranslation()
+
+  const setValue = (newValue: HotspotImageValue | null): void => {
+    if (!_.isEqual(newValue, value)) {
+      setValueState(newValue)
+      props.onChange?.(newValue)
+    }
+  }
+
   const emptyValue = (): void => {
     setValue(null)
   }
-
-  useEffect(() => {
-    props.onChange?.(value)
-  }, [value])
 
   const width = props.width === null || props.width === '' ? 300 : props.width
   const height = props.height === null || props.width === '' ? 150 : props.height

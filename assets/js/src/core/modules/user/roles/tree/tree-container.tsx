@@ -26,13 +26,14 @@ import { useRoleHelper } from '@Pimcore/modules/user/roles/hooks/use-roles-helpe
 
 interface ITreeContainerProps {
   treeData: TreeDataItem[]
+  isLoading: boolean
   onLoadTreeData: (node: TreeDataNode) => Promise<void>
   onUpdateTreeData: (key: any, items: any, add?: boolean) => void
   onReloadTree: () => void
   onRemoveItem: (key: any) => void
   onMoveItem: (dragNode: any, dropKey: any) => void
 }
-const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ treeData, isLoading, onUpdateTreeData, onLoadTreeData, onReloadTree, onRemoveItem, onMoveItem, ...props }: ITreeContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openRole, addNewRole, addNewFolder, removeRole, cloneRole, removeFolder, moveRoleById } = useRoleHelper()
   const { styles } = useStyle()
@@ -90,6 +91,7 @@ const TreeContainer = ({ treeData, onUpdateTreeData, onLoadTreeData, onReloadTre
     >
       <Content
         className={ classNames.join(', ') }
+        loading={ isLoading }
       >
         <Tree
           defaultExpandedKeys={ expandedKeys }

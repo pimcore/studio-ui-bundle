@@ -31,20 +31,21 @@ export const useElementHelper = (): UseElementReturn => {
   const { openAsset } = useAssetHelper()
   const { openDataObject } = useDataObjectHelper()
   async function openElement (props: OpenElementWidgetProps): Promise<void> {
-    if (props.type === 'asset') {
+    const elementType = mapToElementType(props.type)
+    if (elementType === 'asset') {
       openAsset({
         config: {
           id: props.id
         }
       })
-    } else if (props.type === 'data-object') {
+    } else if (elementType === 'data-object') {
       openDataObject({
         config: {
           id: props.id
         }
       })
     } else {
-      console.log('Opening ' + props.type + ' is not supported yet.')
+      console.log('Opening ' + elementType + ' is not supported yet.')
     }
   }
 

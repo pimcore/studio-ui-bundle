@@ -165,6 +165,31 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
           color: ${token.colorTextDisabled} !important;
         }
       }
+      
+      &.ant-select--inherited {
+        .ant-select-selector {
+        background: ${token.colorBgContainerDisabled} !important;
+        color: ${token.colorTextDisabled};
+        
+        .ant-select-selection-item-remove .anticon {
+          color: ${token.colorTextDisabled};
+        }
+
+        .ant-select-selection-item-content {
+            color: ${token.colorTextDisabled} !important;
+          }
+        }
+        
+        &.ant-select-multiple {
+          &:hover {
+            .ant-select-selection-item {
+              .ant-select-selection-item-content {
+                color: ${token.colorTextDisabled} !important;
+              }
+            }
+          }
+        }
+      }
     `,
 
     arrowIcon: css`

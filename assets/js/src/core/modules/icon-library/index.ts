@@ -114,8 +114,8 @@ import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg'
 import image from '@Pimcore/assets/icons/image.inline.svg'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg'
 import info from '@Pimcore/assets/icons/info.inline.svg'
+import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg'
-import inheritance from '@Pimcore/assets/icons/inheritance.inline.svg'
 import json from '@Pimcore/assets/icons/json.inline.svg'
 import layout from '@Pimcore/assets/icons/layout.inline.svg'
 import list from '@Pimcore/assets/icons/list.inline.svg'
@@ -594,12 +594,12 @@ moduleSystem.registerModule({
       component: info
     })
     iconLibrary.register({
-      name: 'inheritance-broken',
-      component: inheritanceBroken
+      name: 'inheritance-active',
+      component: inheritanceActive
     })
     iconLibrary.register({
-      name: 'inheritance',
-      component: inheritance
+      name: 'inheritance-broken',
+      component: inheritanceBroken
     })
     iconLibrary.register({
       name: 'json',

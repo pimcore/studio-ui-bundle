@@ -27,11 +27,11 @@ export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract {
   id: string = 'checkbox'
-
   getObjectDataComponent (props: CheckboxObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Checkbox
         disabled={ props.noteditable === true }
+        inherited={ props.inherited }
       />
     )
   }
