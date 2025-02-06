@@ -63,6 +63,22 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
+            dataObjectFormatPath: build.mutation<DataObjectFormatPathApiResponse, DataObjectFormatPathApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/format-path`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
+            dataObjectPreviewById: build.mutation<DataObjectPreviewByIdApiResponse, DataObjectPreviewByIdApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-objects/preview`,
+                    method: "POST",
+                    body: queryArg.previewParameter,
+                }),
+                invalidatesTags: ["Data Objects"],
+            }),
             dataObjectReplaceContent: build.mutation<
                 DataObjectReplaceContentApiResponse,
                 DataObjectReplaceContentApiArg
@@ -141,15 +157,15 @@ export type DataObjectUpdateByIdApiArg = {
     id: number;
     body: {
         data: {
-            parentId?: number | null;
-            index?: number | null;
-            key?: string | null;
-            locked?: string | null;
-            childrenSortBy?: string | null;
-            childrenSortOrder?: string | null;
-            published?: boolean | null;
-            editableData?: object | null;
-            properties?: UpdateDataProperty[] | null;
+            parentId?: any;
+            index?: any;
+            key?: any;
+            locked?: any;
+            childrenSortBy?: any;
+            childrenSortOrder?: any;
+            published?: any;
+            editableData?: any;
+            properties?: UpdateDataProperty[];
         };
     };
 };
@@ -195,16 +211,31 @@ export type DataObjectPatchByIdApiArg = {
         data: {
             /** Data Object ID */
             id: number;
-            parentId?: number | null;
-            index?: number | null;
-            key?: string | null;
-            locked?: string | null;
-            childrenSortBy?: string | null;
-            childrenSortOrder?: string | null;
-            published?: boolean | null;
-            editableData?: object | null;
+            parentId?: any;
+            index?: any;
+            key?: any;
+            locked?: any;
+            childrenSortBy?: any;
+            childrenSortOrder?: any;
+            published?: any;
+            editableData?: any;
         }[];
     };
+};
+export type DataObjectFormatPathApiResponse = /** status 200 Formatted path of the objects */ {
+    totalItems: number;
+    items: SelectOption[];
+};
+export type DataObjectFormatPathApiArg = {
+    body: {
+        objectId: number;
+        targets: object;
+        context: object;
+    };
+};
+export type DataObjectPreviewByIdApiResponse = unknown;
+export type DataObjectPreviewByIdApiArg = {
+    previewParameter: DataObjectPreviewParameters;
 };
 export type DataObjectReplaceContentApiResponse = /** status 200 Successfully replaced content of data object */ void;
 export type DataObjectReplaceContentApiArg = {
@@ -215,7 +246,7 @@ export type DataObjectReplaceContentApiArg = {
 };
 export type DataObjectGetSelectOptionsApiResponse = /** status 200 List of dynamic select options */ {
     totalItems: number;
-    items: SelectOption[];
+    items: SelectOption2[];
 };
 export type DataObjectGetSelectOptionsApiArg = {
     body: {
@@ -287,29 +318,30 @@ export type Element = {
     parentId: number;
     /** path */
     path: string;
+    /** icon */
     icon?: ElementIcon;
     /** ID of owner */
     userOwner: number;
     /** User that modified the element */
     userModification: number;
     /** Locked */
-    locked: string | null;
+    locked: any;
     /** Is locked */
     isLocked: boolean;
     /** Creation date */
-    creationDate: number | null;
+    creationDate: any;
     /** Modification date */
-    modificationDate: number | null;
+    modificationDate: any;
 };
 export type CustomAttributes = {
     /** Custom Icon */
     icon: ElementIcon | null;
     /** Custom Tooltip */
-    tooltip: string | null;
+    tooltip: any;
     /** AdditionalIcons */
     additionalIcons: string[];
     /** Custom Key/Filename */
-    key: string | null;
+    key: any;
     /** Additional Css Classes */
     additionalCssClasses: string[];
 };
@@ -339,16 +371,14 @@ export type DataObjectPermissions = Permissions & {
     /** Unpublish */
     unpublish?: boolean;
     /** Localized Edit */
-    localizedEdit?: string | null;
+    localizedEdit?: any;
     /** Localized View */
-    localizedView?: string | null;
-    /** Layouts */
-    layouts?: string | null;
+    localizedView?: any;
 };
 export type DataObject = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Inheritance allowed */
     allowInheritance?: boolean;
@@ -358,6 +388,7 @@ export type DataObject = Element & {
     showVariants?: boolean;
     /** Has preview */
     hasPreview?: boolean;
+    /** Custom attributes for the tree */
     customAttributes?: CustomAttributes;
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
@@ -378,6 +409,10 @@ export type DataObject = Element & {
     permissions?: DataObjectPermissions;
     /** Custom index */
     index?: number;
+    /** Sort mode of children */
+    childrenSortBy?: string;
+    /** Sort order of children */
+    childrenSortOrder?: string;
     /** Detail object data */
     objectData?: object;
     /** Inheritance object data */
@@ -388,7 +423,7 @@ export type UpdateDataProperty = {
     /** key */
     key: string;
     /** data */
-    data: any | null;
+    data: any;
     /** type */
     type: string;
     /** inheritable */
@@ -397,7 +432,7 @@ export type UpdateDataProperty = {
 export type GridColumnConfiguration = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Key */
     key: string;
@@ -412,7 +447,7 @@ export type GridColumnConfiguration = {
     /** Localizable */
     localizable: boolean;
     /** Locale */
-    locale?: string | null;
+    locale?: any;
     /** Type */
     type: string;
     /** Frontend Type */
@@ -423,24 +458,24 @@ export type GridColumnConfiguration = {
 export type GridColumnData = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Key */
     key?: string;
     /** Locale */
-    locale?: string | null;
+    locale?: any;
     /** Value */
-    value?: any | null;
+    value?: any;
 };
 export type GridColumnRequest = {
     /** Key */
     key: string;
     /** Locale */
-    locale?: string | null;
+    locale?: any;
     /** Type */
     type: string;
     /** Group */
-    group?: string | null;
+    group?: any;
     /** Config */
     config: string[];
 };
@@ -459,7 +494,7 @@ export type GridFilter = {
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Name */
     name: string;
@@ -468,13 +503,13 @@ export type Layout = {
     /** Field Type */
     fieldType: string;
     /** Type */
-    type: string | null;
+    type: any;
     /** Layout */
-    layout: string | null;
+    layout: any;
     /** Region */
-    region: string | null;
+    region: any;
     /** Title */
-    title: string | null;
+    title: any;
     /** Width */
     width: number;
     /** Height */
@@ -484,11 +519,11 @@ export type Layout = {
     /** Collapsed */
     collapsed: boolean;
     /** Body Style */
-    bodyStyle: string | null;
+    bodyStyle: any;
     /** Locked */
     locked: boolean;
     /** Children */
-    children: any[];
+    children: object[];
     /** Icon */
     icon: ElementIcon | null;
     /** Label Align */
@@ -501,7 +536,23 @@ export type Layout = {
 export type SelectOption = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
+    };
+    /** Object Reference */
+    objectReference: string;
+    /** Formated Path */
+    formatedPath: string;
+};
+export type DataObjectPreviewParameters = {
+    /** ID */
+    id: number;
+    /** Site */
+    site?: number;
+};
+export type SelectOption2 = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
     };
     /** Key */
     key: string;
@@ -517,6 +568,8 @@ export const {
     useDataObjectGetGridMutation,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
+    useDataObjectFormatPathMutation,
+    useDataObjectPreviewByIdMutation,
     useDataObjectReplaceContentMutation,
     useDataObjectGetSelectOptionsMutation,
     useDataObjectGetTreeQuery,
