@@ -22,10 +22,12 @@ import { useEffect, useState } from 'react'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { t } from 'i18next'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { get, isEmpty, isNil } from 'lodash'
 
 interface UseTagConfigReturn {
   tags: Tag[]
   tagsLoading: boolean
+  tagsFetching: boolean
   handleTagUpdate: (id: number, parentId: number, newName?: string) => Promise<void>
   handleTagCreation: (name: string, parentId: number) => Promise<void>
   tagDeletion: (tagId: number) => Promise<void>
@@ -40,7 +42,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
   const messageApi = useMessage()
   const [filter, setFilter] = useState<string>('')
 
-  const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
+  const { data: tags, isLoading: tagsLoading, isFetching: tagsFetching } = useTagGetCollectionQuery({
     page: 1,
     pageSize: 9999,
     filter
@@ -56,7 +58,7 @@ export const useTagConfig = (): UseTagConfigReturn => {
     const traverse = (nodeList: Tag[]): void => {
       for (const node of nodeList) {
         result.push(node)
-        if (node.children !== null && node.children !== undefined && node.children.length > 0) {
+        if (!isNil(node.children)) {
           traverse(node.children)
         }
       }
@@ -88,8 +90,8 @@ export const useTagConfig = (): UseTagConfigReturn => {
       })
     }
 
-    if (response.error?.data?.error != null && response.error.data.error !== '') {
-      trackError(new GeneralError(`Error updating tag: ${response.error.data.error}`))
+    if (!isEmpty(get(response, 'error.data.error'))) {
+      trackError(new GeneralError(`Error updating tag: ${get(response, 'error.data.error')}`))
     }
 
     if (response.error != null) {
@@ -123,8 +125,8 @@ export const useTagConfig = (): UseTagConfigReturn => {
       })
     }
 
-    if (response.error?.data?.error != null && response.error.data.error !== '') {
-      trackError(new GeneralError(`Error creating tag: ${response.error.data.error}`))
+    if (!isEmpty(get(response, 'error.data.error'))) {
+      trackError(new GeneralError(`Error creating tag: ${get(response, 'error.data.error')}`))
     }
 
     if (response.error != null) {
@@ -153,8 +155,8 @@ export const useTagConfig = (): UseTagConfigReturn => {
       })
     }
 
-    if (response.error?.data?.error != null && response.error.data.error !== '') {
-      trackError(new GeneralError(`Error deleting tag: ${response.error.data.error}`))
+    if (!isEmpty(get(response, 'error.data.error'))) {
+      trackError(new GeneralError(`Error deleting tag: ${get(response, 'error.data.error')}`))
     }
 
     if (response.error != null) {
@@ -163,6 +165,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }
 
   return {
-    tags: tags?.items ?? [], setTagFilter: setFilter, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tags: tags?.items ?? [], setTagFilter: setFilter, tagsLoading, tagsFetching, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
   }
 }

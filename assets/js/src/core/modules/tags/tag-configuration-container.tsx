@@ -27,7 +27,6 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import ButtonGroup from 'antd/es/button/button-group'
 import {
   api
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
@@ -45,15 +44,26 @@ export interface TreeAction {
 
 const TagConfigurationContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
-  const { tags, tagsLoading, rootTagFolder, getTag, tagDeletion, setTagFilter, handleTagUpdate, handleTagCreation } = useTagConfig()
+  const {
+    tags,
+    tagsFetching,
+    rootTagFolder,
+    getTag,
+    tagDeletion,
+    setTagFilter,
+    handleTagUpdate,
+    handleTagCreation
+  } = useTagConfig()
   const { confirm, input } = useFormModal()
 
   const [loadingTagKey, setLoadingTagKey] = useState<string | undefined>('')
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
 
   useEffect(() => {
-    setLoadingTagKey(undefined)
-  }, [tags])
+    (tagsFetching && loadingTagKey === undefined)
+      ? showRootLoading()
+      : hideRootLoading()
+  }, [tags, tagsFetching])
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
@@ -63,7 +73,20 @@ const TagConfigurationContainer = (): React.JSX.Element => {
   const rootActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' }]
 
-  const treeData = createTreeStructure({ tags, loadingNodes: loadingTagKey !== undefined ? new Set([loadingTagKey]) : new Set(), actions: tagActions, rootActions })
+  const showRootLoading = (): void => {
+    setLoadingTagKey(rootTagFolder.id.toString())
+  }
+
+  const hideRootLoading = (): void => {
+    setLoadingTagKey(undefined)
+  }
+
+  const treeData = createTreeStructure({
+    tags,
+    loadingNodes: loadingTagKey !== undefined ? new Set([loadingTagKey]) : new Set(),
+    actions: tagActions,
+    rootActions
+  })
 
   const setTagInFocus = (key: string): Tag | undefined => {
     const newFocusTag = getTag(key)
@@ -128,42 +151,22 @@ const TagConfigurationContainer = (): React.JSX.Element => {
     }
   }
 
-  const handleDeleteAll = (): void => {
-    confirm({
-      title: t('tag-configuration.warn-delete-all-tags-title'),
-      content: t('tag-configuration.warn-delete-all-tags-modal-text'),
-      okText: t('tag-configuration.warn-delete-all-tags-title'),
-      cancelText: t('tag-configuration.cancel'),
-      onOk: () => {
-        // setLoadingTagKey('0')
-        alert('need to implement backend API to delete all')
-      }
-    })
-  }
-
   return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
-          <ButtonGroup>
-            <IconButton
-              icon={ { value: 'refresh' } }
-              onClick={ () =>
-                dispatch(
-                  api.util.invalidateTags(
-                    invalidatingTags.AVAILABLE_TAGS()
-                  )
+          <IconButton
+            icon={ { value: 'refresh' } }
+            onClick={ () => {
+              showRootLoading()
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.AVAILABLE_TAGS()
                 )
-                            }
-            />
-            <IconTextButton
-              icon={ { value: 'trash' } }
-              onClick={ handleDeleteAll }
-              type="link"
-            >
-              {t('tag-configuration.delete-all')}
-            </IconTextButton>
-          </ButtonGroup>
+              )
+            }
+          }
+          />
         </Toolbar> }
     >
       <Box
@@ -189,7 +192,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
               >{t('tag-configuration.new')}</IconTextButton>
             </Flex>
             <SearchInput
-              loading={ tagsLoading }
+              loading={ tagsFetching }
               onChange={ (e) => {
                 const { value } = e.target
                 setTagFilter(value)
