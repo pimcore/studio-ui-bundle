@@ -15,10 +15,9 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
   selectUserById,
   userFetched,
-  removeUser,
+  userRemoved,
   changeUser,
-  userAvailablePermissionsFetched,
-  userReloaded
+  userAvailablePermissionsFetched
 } from '@Pimcore/modules/user/user-slice'
 import {
   api, type UserGetAvailablePermissionsApiResponse,
@@ -55,7 +54,7 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   }
 
   function reloadUser (): void {
-    dispatch(userReloaded(user.id))
+    removeUserFromState()
     getUser()
   }
 
@@ -98,7 +97,7 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
   function removeUserFromState (): void {
     if (user === undefined) return
 
-    dispatch(removeUser(user.id))
+    dispatch(userRemoved(user.id))
   }
 
   function changeUserInState (changes: any): void {
@@ -114,7 +113,6 @@ export const useUserDraft = (id: number): UseUserReturnDraft => {
       }
       return keyBinding
     })
-
     dispatch(changeUser({ id: user.id, changes: { keyBindings: updatedKeyBindings } }))
   }
 

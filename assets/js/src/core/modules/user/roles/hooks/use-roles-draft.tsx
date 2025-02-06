@@ -15,9 +15,8 @@ import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import {
   selectRoleById,
   roleFetched,
-  removeRole,
-  changeRole,
-  roleReloaded
+  roleRemoved,
+  changeRole
 } from '@Pimcore/modules/user/roles/roles-slice'
 import {
   api, type RoleGetByIdApiResponse
@@ -52,7 +51,7 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
   }
 
   function reloadRole (): void {
-    dispatch(roleReloaded(role.id))
+    removeRoleFromState()
     getRole()
   }
 
@@ -78,7 +77,7 @@ export const useRoleDraft = (id: number): IUserRoleDraft => {
   function removeRoleFromState (): void {
     if (role === undefined) return
 
-    dispatch(removeRole(role.id))
+    dispatch(roleRemoved(role.id))
   }
 
   function changeRoleInState (changes: any): void {

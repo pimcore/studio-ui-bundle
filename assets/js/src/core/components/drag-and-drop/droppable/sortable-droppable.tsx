@@ -11,14 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { DataObjectPreview } from '@Pimcore/components/data-object-preview/data-object-preview'
+import React, { type ReactNode } from 'react'
 
-export const PreviewView = (): React.JSX.Element => {
-  const { id } = useElementContext()
+export interface SortableDroppableProps {
+  children: ReactNode
+}
 
+export const SortableDroppable = (props: SortableDroppableProps): React.JSX.Element | null => {
   return (
-    <DataObjectPreview id={ id } />
+    <>
+      {props.children}
+    </>
   )
 }

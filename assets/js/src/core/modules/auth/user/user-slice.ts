@@ -16,6 +16,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
 import { type UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
+// The logic dependency is in the rtkQueryErrorLogger middleware
 const initialState: UserInformation = {
   id: 0,
   username: '',
