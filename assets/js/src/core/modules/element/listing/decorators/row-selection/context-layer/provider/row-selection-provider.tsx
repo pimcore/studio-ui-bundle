@@ -14,12 +14,20 @@
 import { type GridProps } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-grid-options'
 import React, { createContext, useMemo, useState } from 'react'
 
-export interface RowSelectionContextProps {
-  selectedRows: GridProps['selectedRows']
-  setSelectedRows: (rows: GridProps['selectedRows']) => void
+export interface SelectedRowData {
+  row: any
 }
 
-export const RowSelectionContext = createContext<RowSelectionContextProps | undefined>(undefined)
+export interface RowSelectionData {
+  selectedRows: GridProps['selectedRows']
+  setSelectedRows: (rows: GridProps['selectedRows']) => void
+  selectedRowsData: Record<number, any>
+  setSelectedRowsData: (rows: Record<number, any>) => void
+}
+
+export type RowSelectionContextProps = RowSelectionData | undefined
+
+export const RowSelectionContext = createContext<RowSelectionContextProps>(undefined)
 
 export interface RowSelectionProviderProps {
   children: React.ReactNode
@@ -27,10 +35,11 @@ export interface RowSelectionProviderProps {
 
 export const RowSelectionProvider = ({ children }: RowSelectionProviderProps): React.JSX.Element => {
   const [selectedRows, setSelectedRows] = useState<GridProps['selectedRows']>()
+  const [selectedRowsData, setSelectedRowsData] = useState<RowSelectionData['selectedRowsData']>({})
 
   return useMemo(() => (
-    <RowSelectionContext.Provider value={ { selectedRows, setSelectedRows } }>
+    <RowSelectionContext.Provider value={ { selectedRows, setSelectedRows, selectedRowsData, setSelectedRowsData } }>
       {children}
     </RowSelectionContext.Provider>
-  ), [selectedRows])
+  ), [selectedRows, selectedRowsData])
 }

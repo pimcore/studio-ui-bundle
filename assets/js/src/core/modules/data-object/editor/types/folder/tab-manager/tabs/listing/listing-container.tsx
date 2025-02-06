@@ -15,16 +15,10 @@ import { ListingContainer as ObjectListing } from '@Pimcore/modules/data-object/
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type IEditorTab } from '@Pimcore/modules/element/editor/tab-manager/interface/IEditorTab'
-import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export const ListingContainer = (): React.JSX.Element => {
   return (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/ListingRegistry'
-    ] }
-    >
-      <ObjectListing />
-    </DynamicTypeRegistryProvider>
+    <ObjectListing />
   )
 }
 

@@ -12,20 +12,21 @@
 */
 
 import { Toolbar as BaseToolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Pagination } from '@Pimcore/modules/element/listing/decorators/filters/pagination/pagination'
-import React from 'react'
+import { Pagination } from '@Pimcore/modules/element/listing/decorators/paging/pagination/pagination'
+import React, { useMemo } from 'react'
 import { Refetch } from '../refetch/refetch'
 import { Split } from '@Pimcore/components/split/split'
+import { RowSelectionTotal } from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/row-selection-total/row-reselection-total'
 
 export const Toolbar = (): React.JSX.Element => {
-  return (
+  return useMemo(() => (
     <BaseToolbar theme='secondary'>
-      <div />
+      <RowSelectionTotal />
 
       <Split size='small'>
         <Refetch />
         <Pagination />
       </Split>
     </BaseToolbar>
-  )
+  ), [])
 }

@@ -12,7 +12,7 @@
 */
 
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
-import { type ColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
+import { type AccessorColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
 import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +24,7 @@ export interface UseGridOptionsReturn {
   encodeColumnIdentifier: (column: SelectedColumn) => string
   decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn
   transformGridColumn: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>
-  transformGridColumnDefinition: (columns: Array<ColumnDef<unknown, never>>) => Array<ColumnDef<unknown, never>>
+  transformGridColumnDefinition: (columns: Array<AccessorColumnDef<unknown, never>>) => Array<AccessorColumnDef<unknown, never>>
   getGridProps: () => GridProps
 }
 
@@ -55,7 +55,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     }
   }
 
-  const transformGridColumnDefinition = (columns: Array<ColumnDef<unknown, never>>): Array<ColumnDef<unknown, never>> => {
+  const transformGridColumnDefinition = (columns: Array<AccessorColumnDef<unknown, never>>): Array<AccessorColumnDef<unknown, never>> => {
     return columns
   }
 

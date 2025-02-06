@@ -12,12 +12,14 @@
 */
 
 import { useContext } from 'react'
-import { RowSelectionContext, type RowSelectionContextProps } from './row-selection-provider'
+import { RowSelectionContext, type RowSelectionData } from './row-selection-provider'
 
-export interface UseRowSelectionReturn extends RowSelectionContextProps {}
+export interface UseRowSelectionReturn extends RowSelectionData {}
 
 export const useRowSelection = (): UseRowSelectionReturn => {
   const context = useContext(RowSelectionContext)
+
+  console.log({ context })
 
   if (context === undefined || context === null) {
     throw new Error('useRowSelection must be used within a RowSelectionProvider')

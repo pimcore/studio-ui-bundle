@@ -14,7 +14,7 @@
 import React, { useMemo } from 'react'
 import { UseSelectedColumns } from '../../../configuration-layer/provider/selected-columns/use-selected-columns'
 import { useData } from '../../../data-layer/provider/data/use-data'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { useSettings } from '../../../settings/use-settings'
 
@@ -23,15 +23,15 @@ export const GridContainer = (): React.JSX.Element => {
   const { isLoading } = dataQueryResult!
   const { selectedColumns } = UseSelectedColumns()
   const { useGridOptions } = useSettings()
-  const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
+  const { encodeColumnIdentifier, decodeColumnIdentifier, getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
   const columnHelper = createColumnHelper()
 
   const gridColumnDefinition = useMemo(() => {
-    const columns: Array<ColumnDef<unknown, never>> = []
+    const columns: Array<AccessorKeyColumnDef<unknown, never>> = []
 
     selectedColumns.forEach((column) => {
       columns.push(
-        columnHelper.accessor(column.key, transformGridColumn(column))
+        columnHelper.accessor(encodeColumnIdentifier(column), transformGridColumn(column))
       )
     })
 
@@ -52,11 +52,30 @@ export const GridContainer = (): React.JSX.Element => {
 
       const newRow: Record<string, any> = {}
 
-      selectedColumns.forEach((column) => {
-        const rowColumn = row.columns.find((r) => r.key === column.key)
-        console.log({ rowColumn })
-        newRow[column.key] = rowColumn.value
+      gridColumnDefinition.forEach((column) => {
+        if (!('accessorKey' in column)) {
+          return
+        }
+
+        const accessor: string = column.accessorKey as string
+
+        const currentSelectedColumn = decodeColumnIdentifier(accessor)
+        const rowColumn = row.columns.find((r) => r.key === currentSelectedColumn.key && r.locale === currentSelectedColumn.locale)
+
+        if (rowColumn === undefined) {
+          return
+        }
+
+        newRow[accessor] = rowColumn.value
       })
+
+      for (const column of row.columns) {
+        const isMetaColumn = ['id', 'fullpath'].includes(column.key as string)
+
+        if (isMetaColumn) {
+          newRow[column.key] = column.value
+        }
+      }
 
       memoizedData.push(newRow)
     }
@@ -64,7 +83,7 @@ export const GridContainer = (): React.JSX.Element => {
     return memoizedData
   }, [data, selectedColumns])
 
-  return (
+  return useMemo(() => (
     <Grid
       columns={ gridColumnDefinition }
       data={ gridData }
@@ -73,5 +92,5 @@ export const GridContainer = (): React.JSX.Element => {
       setRowId={ (row) => row.id }
       { ...getGridProps() }
     />
-  )
+  ), [gridColumnDefinition, gridData, isLoading, getGridProps])
 }

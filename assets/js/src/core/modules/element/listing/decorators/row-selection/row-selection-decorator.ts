@@ -14,6 +14,7 @@
 import { type AbstractDecoratorWithRequiredConfig } from '../abstract-decorator'
 import { withRowSelectionContext } from './context-layer/with-row-selection-context'
 import { WithRowSelection } from './view-layer/components/grid/hooks/use-grid-options/with-row-selection'
+import { withSelectionOverviewTab } from './view-layer/components/sidebar/hooks/with-selection-overview-tab'
 
 export interface IRowSelectionDecoratorConfig {
   rowSelectionMode: 'single' | 'multiple'
@@ -24,12 +25,13 @@ export type IRowSelectionDecorator = AbstractDecoratorWithRequiredConfig<IRowSel
 export type IRowSelectionDecoratorProps = Parameters<IRowSelectionDecorator>[0]
 
 export const RowSelectionDecorator: IRowSelectionDecorator = (props, config) => {
-  const { useGridOptions, ContextComponent, ...baseProps } = props
+  const { useGridOptions, useSidebarOptions, ContextComponent, ...baseProps } = props
 
   const newProps = {
     ...baseProps,
     ContextComponent: withRowSelectionContext(ContextComponent),
-    useGridOptions: WithRowSelection(useGridOptions, config)
+    useGridOptions: WithRowSelection(useGridOptions, config),
+    useSidebarOptions: withSelectionOverviewTab(useSidebarOptions)
   }
 
   return newProps

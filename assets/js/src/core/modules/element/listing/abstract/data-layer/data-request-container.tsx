@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useSettings } from '../settings/use-settings'
 import { useData } from './provider/data/use-data'
 
@@ -29,5 +29,7 @@ export const DataRequestContainer = (): React.JSX.Element => {
     setData(dataQueryResult.data)
   }, [dataQueryResult.data])
 
-  return <ViewComponent />
+  return useMemo(() => (
+    <ViewComponent />
+  ), [])
 }

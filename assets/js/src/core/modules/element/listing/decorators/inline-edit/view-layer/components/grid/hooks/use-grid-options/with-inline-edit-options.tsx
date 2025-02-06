@@ -15,21 +15,20 @@ import { useState } from 'react'
 import { type IInlineEditDecoratorConfig, type IInlineEditDecoratorProps } from '../../../../../inline-edit-decorator'
 import { type GridProps } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-grid-options'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 
 export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOptions'], config: IInlineEditDecoratorConfig): IInlineEditDecoratorProps['useGridOptions'] => {
   const useInlineEditExtension: IInlineEditDecoratorProps['useGridOptions'] = () => {
     const { getGridProps: baseGetGridProps, transformGridColumn: baseTransformGridColumn, ...baseMethods } = useBaseHook()
+    const { decodeColumnIdentifier } = baseMethods
     const [modifiedCells, setModifiedCells] = useState<GridProps['modifiedCells']>([])
     const { useInlineEditApiUpdate } = config
     const { updateCache, updateApiData } = useInlineEditApiUpdate()
     const { useDataQueryHelper } = useSettings()
     const { getArgs } = useDataQueryHelper()
-    const { selectedColumns } = UseSelectedColumns()
 
     const onUpdateCellData: GridProps['onUpdateCellData'] = (event): void => {
       const { rowData, columnId, value } = event
-      const column = selectedColumns.find((col) => col.key === columnId)
+      const column = decodeColumnIdentifier(columnId)
 
       if (column === undefined) {
         // @todo: log error
@@ -63,7 +62,6 @@ export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOp
 
       updateCache(update)
       updateApiData(update).finally(() => {
-        console.log('called finally')
         setModifiedCells((modifiedCells) => {
           return modifiedCells?.filter((cell) => cell.rowIndex !== rowData.id || cell.columnId !== columnId) ?? []
         })

@@ -1,0 +1,85 @@
+/**
+* Pimcore
+*
+* This source file is available under two different licenses:
+* - Pimcore Open Core License (POCL)
+* - Pimcore Commercial License (PCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+*  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
+*/
+
+import React from 'react'
+import { useRowSelection } from '../../../../../context-layer/provider/use-row-selection'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { type GridProps } from '@Pimcore/types/components/types'
+import { createColumnHelper } from '@tanstack/react-table'
+import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
+import { Flex } from '@Pimcore/components/flex/flex'
+
+export const SelectionGrid = (): React.JSX.Element => {
+  const { selectedRows, selectedRowsData, setSelectedRows } = useRowSelection()
+  const currentSelectedRows = selectedRows!
+  const columnHelper = createColumnHelper<any>()
+
+  const onRemoveItemClick = (id: string): void => {
+    const newSelectedRows = { ...selectedRows }
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete newSelectedRows[id]
+    setSelectedRows(newSelectedRows)
+  }
+
+  const columns: GridProps['columns'] = [
+    columnHelper.accessor('actions', {
+      header: '',
+      size: 50,
+      cell: (info) => (
+        <Flex
+          className='w-full'
+          justify='center'
+        >
+          <Checkbox
+            checked
+            onClick={ () => { onRemoveItemClick(info.getValue() as string) } }
+          />
+        </Flex>
+      )
+    }),
+
+    columnHelper.accessor('id', {
+      header: 'ID',
+      size: 75
+    }),
+
+    columnHelper.accessor('fullpath', {
+      header: 'Fullpath',
+      meta: {
+        autoWidth: true
+      }
+    })
+  ]
+
+  const data: GridProps['data'] = Object.keys(currentSelectedRows).map((id) => {
+    const row = selectedRowsData[id]
+
+    if (row === undefined) {
+      return {}
+    }
+
+    return {
+      id: row.id,
+      fullpath: row.fullpath,
+      actions: row.id
+    }
+  })
+
+  return (
+    <Grid
+      autoWidth
+      columns={ columns }
+      data={ data }
+    />
+  )
+}

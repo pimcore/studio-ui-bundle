@@ -15,7 +15,7 @@ import { type SelectedColumn } from '../../abstract/configuration-layer/provider
 import { type AbstractDecoratorWithRequiredConfig } from '../abstract-decorator'
 import { WithInlineEdit } from './view-layer/components/grid/hooks/use-grid-options/with-inline-edit-options'
 
-export interface updateEvent {
+export interface UpdateEvent {
   getGetRequestArgs: any
   update: {
     id: number
@@ -25,8 +25,8 @@ export interface updateEvent {
 }
 
 export interface UseInlineEditApiUpdateReturn {
-  updateCache: (event: updateEvent) => void
-  updateApiData: (event: updateEvent) => Promise<any>
+  updateCache: (event: UpdateEvent) => void
+  updateApiData: (event: UpdateEvent) => Promise<any>
 }
 
 export interface IInlineEditDecoratorConfig {

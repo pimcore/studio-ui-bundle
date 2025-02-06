@@ -14,7 +14,6 @@
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type FolderTabManager } from './tab-manager/folder-tab-manager'
-import { ListContainer } from './tab-manager/tabs/list/list-container'
 import { PreviewContainer } from './tab-manager/tabs/preview/preview-container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -26,6 +25,7 @@ import {
   TAB_TAGS,
   TAB_WORKFLOW
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-definitions'
+import { TAB_LISTING } from './tab-manager/tabs/listing/listing-container'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -38,13 +38,7 @@ moduleSystem.registerModule({
       label: 'folder.folder-editor-tabs.preview'
     })
 
-    folderEditorTabManager.register({
-      children: <ListContainer />,
-      icon: <Icon value={ 'list' } />,
-      key: 'list',
-      label: 'folder.folder-editor-tabs.view'
-    })
-
+    folderEditorTabManager.register(TAB_LISTING)
     folderEditorTabManager.register(TAB_PROPERTIES)
     folderEditorTabManager.register(TAB_DEPENDENCIES)
     folderEditorTabManager.register(TAB_NOTES_AND_EVENTS)

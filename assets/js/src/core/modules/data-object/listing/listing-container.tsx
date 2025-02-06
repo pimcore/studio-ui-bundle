@@ -15,7 +15,7 @@ import { type ListingContainerProps, defaultProps as listingDefaultProps, Listin
 import { useDataObjectGetGridQuery } from '../data-object-api-slice.gen'
 import { useDataQueryHelper } from './data-layer/hooks/use-data-query-helper'
 import { RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
-import { useElementId } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/hooks/use-element-id'
+import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
 import React from 'react'
 

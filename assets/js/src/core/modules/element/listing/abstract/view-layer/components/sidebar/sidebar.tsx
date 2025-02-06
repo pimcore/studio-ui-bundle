@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Sidebar as BaseSidebar } from '@Pimcore/components/sidebar/sidebar'
 import { useSettings } from '../../../settings/use-settings'
 
@@ -19,18 +19,16 @@ export const Sidebar = (): React.JSX.Element => {
   const { useSidebarOptions } = useSettings()
   const { getProps } = useSidebarOptions()
 
-  console.log({ props: getProps() })
-
   const hasEntries = getProps().entries.length > 0
 
-  if (!hasEntries) {
-    return <></>
-  }
-
-  return (
-    <BaseSidebar
-      sizing="large"
-      { ...getProps() }
-    />
-  )
+  return useMemo(() => (
+    <>
+      { hasEntries && (
+        <BaseSidebar
+          sizing="large"
+          { ...getProps() }
+        />
+      )}
+    </>
+  ), [hasEntries])
 }
