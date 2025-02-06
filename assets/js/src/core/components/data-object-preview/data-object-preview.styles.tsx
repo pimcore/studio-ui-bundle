@@ -11,14 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { DataObjectPreview } from '@Pimcore/components/data-object-preview/data-object-preview'
+import { createStyles } from 'antd-style'
 
-export const PreviewView = (): React.JSX.Element => {
-  const { id } = useElementContext()
-
-  return (
-    <DataObjectPreview id={ id } />
-  )
-}
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    preview: css`
+      border: none
+    `
+  }
+})
