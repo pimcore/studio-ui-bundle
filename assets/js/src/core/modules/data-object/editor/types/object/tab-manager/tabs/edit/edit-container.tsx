@@ -21,10 +21,15 @@ import { Content } from '@Pimcore/components/content/content'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useStyles } from './edit-container.styles'
 import { ObjectBrickProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/object-brick/providers/object-brick-provider'
+import {
+  useLayoutSelection
+} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
-  const { data: layoutData, isLoading } = useDataObjectGetLayoutByIdQuery({ id })
+  const { currentLayout } = useLayoutSelection()
+
+  const { data: layoutData, isLoading } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: currentLayout === null })
   const { data, isLoading: isDataLoading } = useDataObjectGetByIdQuery({ id })
   const { styles } = useStyles()
 

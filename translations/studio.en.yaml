@@ -32,6 +32,7 @@ toolbar.save-and-publish: Save & Publish
 toolbar.more: More
 toolbar.workflow: Workflow
 toolbar.new: New
+toolbar.switch-layout: Switch custom layout
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -602,3 +603,5 @@ hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this ite
 home: Home
 inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: "Data inheritance broken"
+main: Main
+main_admin: Main (Admin Mode)
