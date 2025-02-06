@@ -7,17 +7,7 @@ const injectedRtkApi = api
     .injectEndpoints({
         endpoints: (build) => ({
             noteGetCollection: build.query<NoteGetCollectionApiResponse, NoteGetCollectionApiArg>({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/notes`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                        sortBy: queryArg.sortBy,
-                        sortOrder: queryArg.sortOrder,
-                        filter: queryArg.filter,
-                        fieldFilters: queryArg.fieldFilters,
-                    },
-                }),
+                query: (queryArg) => ({ url: `/pimcore-studio/api/notes`, method: "POST", body: queryArg.body }),
                 providesTags: ["Notes"],
             }),
             noteDeleteById: build.mutation<NoteDeleteByIdApiResponse, NoteDeleteByIdApiArg>({
@@ -62,19 +52,19 @@ export type NoteGetCollectionApiResponse = /** status 200 Paginated notes with t
     items: Note[];
 };
 export type NoteGetCollectionApiArg = {
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-    /** Sort by field. Only works in combination with sortOrder. */
-    sortBy?: "id" | "type" | "cId" | "cType" | "cPath" | "date" | "title" | "description" | "locked";
-    /** Sort order (asc or desc). */
-    sortOrder?: "ASC" | "DESC";
-    /** Filter for notes */
-    filter?: string;
-    /** Filter for specific fields, will be json decoded to an array. e.g.
-                [{"operator":"like","value":"John","field":"name","type":"string"}] */
-    fieldFilters?: any;
+    body: {
+        page: number;
+        pageSize: number;
+        /** Sort order (asc or desc). */
+        sortOrder?: "ASC" | "DESC";
+        /** Sort by field. Only works in combination with sortOrder. */
+        sortBy?: "id" | "type" | "cId" | "cType" | "cPath" | "date" | "title" | "description" | "locked";
+        /** Filter for notes */
+        filter?: string;
+        /** Filter for specific fields, will be json decoded to an array. e.g.
+                                [{"operator":"like","value":"John","field":"name","type":"string"}] */
+        fieldFilters?: object;
+    };
 };
 export type NoteDeleteByIdApiResponse = /** status 200 note_delete_by_id_success_description */ void;
 export type NoteDeleteByIdApiArg = {
@@ -102,7 +92,7 @@ export type NoteElementGetCollectionApiArg = {
     filter?: string;
     /** Filter for specific fields, will be json decoded to an array. e.g.
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
-    fieldFilters?: any;
+    fieldFilters?: string;
 };
 export type NoteElementCreateApiResponse = /** status 200 Created note for element */ Note;
 export type NoteElementCreateApiArg = {
@@ -122,7 +112,7 @@ export type NoteElementGetTypeCollectionApiArg = {
 export type Note = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** id */
     id: number;
@@ -143,11 +133,11 @@ export type Note = {
     /** Locked */
     locked: boolean;
     /** Data of note */
-    data: any[];
+    data: (string | number | boolean | object)[];
     /** User ID */
-    userId?: number | null;
+    userId?: any;
     /** Username */
-    userName?: string | null;
+    userName?: any;
 };
 export type Error = {
     /** Message */
@@ -170,7 +160,7 @@ export type CreateNote = {
 export type NoteType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** id */
     id: string;

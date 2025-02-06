@@ -161,7 +161,7 @@ export type TagUnassignFromElementApiArg = {
 export type Tag = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** tag ID */
     id: number;
@@ -196,9 +196,9 @@ export type CreateTagParameters = {
 };
 export type ChangeTagParameters = {
     /** Parent id */
-    parentId?: number | null;
+    parentId?: any;
     /** Tag name */
-    name?: string | null;
+    name?: any;
 };
 export const {
     useTagGetCollectionQuery,

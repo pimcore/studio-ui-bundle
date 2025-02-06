@@ -63,7 +63,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
     (tagsFetching && loadingTagKey === undefined)
       ? showRootLoading()
       : hideRootLoading()
-  }, [tags, tagsFetching])
+  }, [tagsFetching])
 
   const tagActions: TreeAction[] =
         [{ key: 'add-tag', icon: 'new' },
@@ -74,6 +74,8 @@ const TagConfigurationContainer = (): React.JSX.Element => {
         [{ key: 'add-tag', icon: 'new' }]
 
   const showRootLoading = (): void => {
+    console.log('----> show again')
+
     setLoadingTagKey(rootTagFolder.id.toString())
   }
 

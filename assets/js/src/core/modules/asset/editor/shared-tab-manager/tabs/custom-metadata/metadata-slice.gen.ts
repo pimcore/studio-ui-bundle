@@ -33,13 +33,13 @@ export type MetadataGetCollectionApiResponse = /** status 200 Predefined metadat
 };
 export type MetadataGetCollectionApiArg = {
     body: {
-        filter?: string | null;
+        filter?: any;
     };
 };
 export type CustomMetadata = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Name */
     name: string;
@@ -48,7 +48,7 @@ export type CustomMetadata = {
     /** Type */
     type: string;
     /** Data */
-    data: any | null;
+    data: any;
 };
 export type Error = {
     /** Message */
@@ -63,26 +63,26 @@ export type DevError = {
 export type PredefinedMetadata = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Id */
     id: string;
     /** Name */
     name: string;
     /** Description */
-    description?: string | null;
+    description?: any;
     /** Type */
     type: string;
     /** Target sub type */
-    targetSubType?: string | null;
+    targetSubType?: any;
     /** Data */
-    data?: any | null;
+    data?: any;
     /** Config */
-    config?: string | null;
+    config?: any;
     /** Language */
-    language?: string | null;
+    language?: any;
     /** Group */
-    group?: string | null;
+    group?: any;
     /** Creation Date */
     creationDate: number;
     /** Modfication Date */

@@ -68,14 +68,14 @@ export type RoleCloneByIdApiArg = {
 export type RoleFolderCreateApiResponse = /** status 200 Node of the new created Folder */ TreeNode;
 export type RoleFolderCreateApiArg = {
     body: {
-        parentId: number | null;
+        parentId: any;
         name: string;
     };
 };
 export type RoleCreateApiResponse = /** status 200 Node of the new created Role. */ TreeNode;
 export type RoleCreateApiArg = {
     body: {
-        parentId: number | null;
+        parentId: any;
         name: string;
     };
 };
@@ -116,7 +116,7 @@ export type RoleGetTreeApiArg = {
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Unique Identifier */
     id: number;
@@ -164,15 +164,15 @@ export type UserWorkspace = {
 export type DetailedUserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID of the User */
     id: number;
     /** Name of Folder or Role */
-    name: string | null;
+    name: any;
     /** Classes the user is allows to see */
     classes: object;
-    parentId: number | null;
+    parentId: any;
     /** List of permissions for the user */
     permissions: object;
     /** List of document types for the role */
@@ -188,10 +188,10 @@ export type DetailedUserRole = {
 };
 export type UpdateUserRole = {
     /** Name of Folder or Role */
-    name: string | null;
+    name: any;
     /** Classes the user is allows to see */
     classes: object;
-    parentId: number | null;
+    parentId: any;
     /** List of permissions for the user */
     permissions: object;
     /** List of document types for the role */
@@ -208,7 +208,7 @@ export type UpdateUserRole = {
 export type SimpleUserRole = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID of the Role */
     id: number;

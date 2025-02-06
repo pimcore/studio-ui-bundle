@@ -124,14 +124,14 @@ export type UserCloneByIdApiArg = {
 export type UserCreateApiResponse = /** status 200 Node of the new created User. */ TreeNode;
 export type UserCreateApiArg = {
     body: {
-        parentId: number | null;
+        parentId: any;
         name: string;
     };
 };
 export type UserFolderCreateApiResponse = /** status 200 Node of the new created Folder. */ TreeNode;
 export type UserFolderCreateApiArg = {
     body: {
-        parentId: number | null;
+        parentId: any;
         name: string;
     };
 };
@@ -219,7 +219,7 @@ export type UserGetTreeApiArg = {
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Unique Identifier */
     id: number;
@@ -243,8 +243,10 @@ export type DevError = {
 export type UserInformation = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
+    /** User ID */
+    id: number;
     /** Username */
     username: string;
     /** Permissions */
@@ -305,18 +307,18 @@ export type UserObjectDependencies = {
 export type User = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID of the User */
     id: number;
     /** Name of Folder or User */
-    name?: string | null;
+    name?: any;
     /** Email of the User */
-    email?: string | null;
+    email?: any;
     /** Firstname of the User */
-    firstname?: string | null;
+    firstname?: any;
     /** Lastname of the User */
-    lastname?: string | null;
+    lastname?: any;
     /** If a User is active */
     active: boolean;
     /** If User is admin */
@@ -333,9 +335,9 @@ export type User = {
     /** Language of the User */
     language: string;
     /** Timestamp of the last login */
-    lastLogin?: number | null;
+    lastLogin?: any;
     memorizeTabs: boolean;
-    parentId: number | null;
+    parentId: any;
     /** List of permissions for the user */
     permissions: object;
     /** ID List of roles the user is assigned */
@@ -350,15 +352,16 @@ export type User = {
     dataObjectWorkspaces: UserWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
+    /** Object Dependencies */
     objectDependencies: UserObjectDependencies;
 };
 export type User2 = {
     /** Email of the User */
-    email?: string | null;
+    email?: any;
     /** Firstname of the User */
-    firstname?: string | null;
+    firstname?: any;
     /** Lastname of the User */
-    lastname?: string | null;
+    lastname?: any;
     /** If User is admin */
     admin?: boolean;
     /** If User is active */
@@ -393,7 +396,7 @@ export type User2 = {
 export type UserPermission = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** Key of the Permission */
     key: string;
@@ -403,7 +406,7 @@ export type UserPermission = {
 export type SimpleUser = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object | any[];
+        [key: string]: string | number | boolean | object;
     };
     /** ID of the User */
     id: number;
