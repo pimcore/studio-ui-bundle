@@ -22,7 +22,7 @@ import { ElementTypeName } from '@Pimcore/constants/global'
 interface IUseAssetVersionDataReturn {
   versionKeysList: VersionKeysList
   comparisonModifiedData: IVersionsFieldsList['data']
-  categoriesList?: CategoriesList
+  sectionsList?: CategoriesList
 }
 
 export const useVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseAssetVersionDataReturn => {
@@ -32,7 +32,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
     return !isEqual(item[versionKeysList[0]], item[versionKeysList[1]])
   })
 
-  const categoriesList = useMemo(() => {
+  const sectionsList = useMemo(() => {
     if (elementType === ElementTypeName.ASSET) {
       return getAssetCategoriesList(data)
     }
@@ -45,6 +45,6 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
   return {
     versionKeysList,
     comparisonModifiedData,
-    categoriesList
+    sectionsList
   }
 }

@@ -36,7 +36,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
 
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
-  const { versionKeysList, comparisonModifiedData, categoriesList } = useVersionData(data, elementType)
+  const { versionKeysList, comparisonModifiedData, sectionsList } = useVersionData(data, elementType)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -45,15 +45,15 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
-  const categoriesListWithFields = useMemo((): CategoriesList | undefined => {
+  const sectionsListWithFields = useMemo((): CategoriesList | undefined => {
     if (isAssetType) {
-      return getAssetCategoriesListWithFields({ versionViewData, categoriesList })
+      return getAssetCategoriesListWithFields({ versionViewData, categoriesList: sectionsList })
     }
 
     if (isDataObjectType) {
-      return getObjectCategoriesListWithFields({ versionViewData, categoriesList })
+      return getObjectCategoriesListWithFields({ versionViewData, categoriesList: sectionsList })
     }
-  }, [isExpandedUnmodifiedFields, categoriesList])
+  }, [isExpandedUnmodifiedFields, sectionsList])
 
   // List of modified fields in comparison mode
   const modifiedFields = useMemo(() => {
@@ -112,7 +112,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
         )}
         {isAssetType && (
           <AssetVersionsFieldsView
-            categoriesList={ categoriesListWithFields }
+            categoriesList={ sectionsListWithFields }
             modifiedFields={ modifiedFields }
             versionKeysList={ versionKeysList }
             versionViewData={ versionViewData }
