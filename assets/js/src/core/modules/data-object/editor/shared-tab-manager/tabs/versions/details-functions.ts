@@ -58,7 +58,7 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     const result: any = []
 
     Object.entries(formattedSystemData).forEach(([key, value]): void => {
-      result.push({ categoryName: 'generalSystemData', fieldData: { name: key }, fieldValue: value, versionId, versionCount })
+      result.push({ fieldBreadcrumbTitle: 'systemData', fieldData: { name: key }, fieldValue: value, versionId, versionCount })
     })
 
     return result
@@ -79,7 +79,7 @@ export const versionsDataToTableData = (data: any): any => {
   mainVersionData.forEach((versionItem: any, index: number) => {
     const field = {
       Field: {
-        categoryName: versionItem?.categoryName,
+        fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle,
         ...versionItem.fieldData
       },
       [`Version ${versionItem.versionCount}`]: versionItem.fieldValue
