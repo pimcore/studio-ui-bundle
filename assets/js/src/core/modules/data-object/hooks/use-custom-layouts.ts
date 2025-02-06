@@ -28,8 +28,8 @@ export interface UseCustomLayoutsReturn {
 }
 
 export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
-  const { dataObject } = useDataObjectDraft(id)
-  const { data, error, isLoading } = useClassCustomLayoutEditorCollectionQuery({ objectId: id }, { skip: dataObject?.type === 'folder' })
+  const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
+  const { data, error, isLoading: isCustomLayoutLoading } = useClassCustomLayoutEditorCollectionQuery({ objectId: id }, { skip: dataObject === undefined || dataObject.type === 'folder' })
   if (error !== undefined) {
     trackError(new ApiError(error))
   }
@@ -48,7 +48,7 @@ export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
 
     return defaultLayout?.id ?? null
   }
-
+  const isLoading = isDraftLoading || (isCustomLayoutLoading && dataObject?.type !== 'folder')
   return {
     layouts,
     getDefaultLayoutId,
