@@ -57,7 +57,7 @@ export const SingleView = ({
         const dataRaw = response.data as DataObjectVersion
         formattedDataList.push(getFormattedDataStructure({
           layout: layoutData?.children,
-          versionData: dataRaw?.objectData,
+          versionData: dataRaw,
           versionId: vId.id,
           versionCount: vId.count
         }))

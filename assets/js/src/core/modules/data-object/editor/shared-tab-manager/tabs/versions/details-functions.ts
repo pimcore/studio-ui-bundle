@@ -12,6 +12,8 @@
 */
 
 import { get, isEmpty } from 'lodash'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -19,6 +21,12 @@ enum DATATYPE_LIST {
 }
 
 export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: any): any => {
+  const formattedSystemData = {
+    fullPath: versionData.fullPath,
+    creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
+    modificationDate: formatDateTime({ timestamp: versionData.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' })
+  }
+
   const processLayoutData = ({ data, categoryName }: any): any => {
     return data?.flatMap((item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
@@ -27,9 +35,9 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const fieldValue = get(versionData, fieldName)
+        const fieldValue = get(versionData?.objectData, fieldName)
 
-        if (!isEmpty(fieldValue)) {
+        if (!isEmptyValue(fieldValue)) {
           return [{ categoryName, fieldData: item, fieldValue, versionId, versionCount }]
         }
       }
@@ -38,7 +46,20 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     })
   }
 
-  return processLayoutData({ data: layout })
+  const getGeneralSystemData = (): any => {
+    const result: any = []
+
+    Object.entries(formattedSystemData).forEach(([key, value]): void => {
+      result.push({ categoryName: 'generalSystemData', fieldData: { name: key }, fieldValue: value, versionId, versionCount })
+    })
+
+    return result
+  }
+
+  const layoutData = processLayoutData({ data: layout })
+  const generalSystemData = getGeneralSystemData()
+
+  return [...generalSystemData, ...layoutData]
 }
 
 export const versionsDataToTableData = (data: any): any => {

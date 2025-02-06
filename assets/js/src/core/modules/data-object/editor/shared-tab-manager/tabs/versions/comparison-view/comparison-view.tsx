@@ -57,7 +57,7 @@ export const ComparisonView = ({
 
           formattedDataList.push(getFormattedDataStructure({
             layout: layoutData?.children,
-            versionData: dataRaw?.objectData,
+            versionData: dataRaw,
             versionId: versionIds[versionIndex].id,
             versionCount: versionIds[versionIndex].count
           }))
