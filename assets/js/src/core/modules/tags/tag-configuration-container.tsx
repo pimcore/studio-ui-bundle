@@ -74,8 +74,6 @@ const TagConfigurationContainer = (): React.JSX.Element => {
         [{ key: 'add-tag', icon: 'new' }]
 
   const showRootLoading = (): void => {
-    console.log('----> show again')
-
     setLoadingTagKey(rootTagFolder.id.toString())
   }
 
