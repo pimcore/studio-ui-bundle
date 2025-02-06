@@ -12,6 +12,6 @@
 */
 
 export enum VersionCategoryName {
-  BASE_DATA = 'baseData',
+  SYSTEM_DATA = 'systemData',
   META = 'meta'
 }

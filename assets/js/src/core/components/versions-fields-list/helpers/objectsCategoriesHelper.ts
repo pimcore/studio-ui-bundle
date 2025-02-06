@@ -22,7 +22,7 @@ export const getObjectCategoriesList = (data: IVersionsFieldsList['data']): Cate
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const categoryName: VersionCategoryName = item.Field.categoryName ?? VersionCategoryName.BASE_DATA
+    const categoryName: VersionCategoryName = item.Field.categoryName ?? VersionCategoryName.SYSTEM_DATA
 
     if (isUndefined(categoryMap[categoryName])) {
       categoryMap[categoryName] = new Set()

@@ -130,6 +130,7 @@ version.confirm-clear-unpublished: Are you sure you want to clear all unpublishe
 version.preview-notification: Preview details will be displayed once a version is selected.
 version.expand-unmodified-fields: Expand all
 version.no-difference: There is no difference between the selected versions.
+version.category.title.systemData: System Data
 version.category.title.baseData: Base Data
 version.category.title.meta: Meta Data
 aria.version.delete: Delete version

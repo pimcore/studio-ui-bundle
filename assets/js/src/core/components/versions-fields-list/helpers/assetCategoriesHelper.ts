@@ -26,7 +26,7 @@ export const getAssetCategoriesList = (data: IVersionsFieldsList['data']): Categ
 
   data.forEach(item => {
     const categoryNameValue = getCategoryName(item.Field.key)
-    const categoryName: VersionCategoryName = categoryNameValue ?? VersionCategoryName.BASE_DATA
+    const categoryName: VersionCategoryName = categoryNameValue ?? VersionCategoryName.SYSTEM_DATA
 
     if (isUndefined(categoryMap[categoryName])) {
       categoryMap[categoryName] = new Set()
