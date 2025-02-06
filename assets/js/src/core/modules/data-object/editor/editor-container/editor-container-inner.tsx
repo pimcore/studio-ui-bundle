@@ -13,14 +13,14 @@
 
 import React, { useEffect } from 'react'
 import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
-import { DataObjectProvider } from '../data-object-provider'
+import { DataObjectProvider } from '../../data-object-provider'
 import { Content } from '@Pimcore/components/content/content'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
 import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
 import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
 import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
-import { LanguageSelectionProvider } from './toolbar/language-selection/provider/language-selection-provider'
+import { LanguageSelectionProvider } from '../toolbar/language-selection/provider/language-selection-provider'
 import {
   EditFormProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
@@ -28,11 +28,11 @@ import {
   InheritanceStateProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
 
-export interface EditorContainerProps {
+export interface EditorContainerInnerProps {
   id: number
 }
 
-const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
+const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Element => {
   const { id } = props
   const { isLoading, isError, dataObject, removeDataObjectFromState, editorType } = useDataObjectDraft(id)
   const isWidgetActive = useIsAcitveMainWidget()
@@ -92,4 +92,4 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   )
 }
 
-export { EditorContainer }
+export { EditorContainerInner }
