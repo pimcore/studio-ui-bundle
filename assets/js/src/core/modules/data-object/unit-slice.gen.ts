@@ -65,7 +65,7 @@ export type ConvertedQuantityValues2 = {
 export type ConvertedQuantityValues = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** Original Value */
     originalValue: any | number;
@@ -87,26 +87,26 @@ export type DevError = {
 export type QuantityValueUnit = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** ID */
-    id: any;
+    id: string | null;
     /** Abbreviation */
-    abbreviation: any;
+    abbreviation: string | null;
     /** Group */
-    group: any;
+    group: string | null;
     /** Long Name */
-    longName: any;
+    longName: string | null;
     /** Base Unit */
-    baseUnit: any;
+    baseUnit: string | null;
     /** Reference */
-    reference: any;
+    reference: string | null;
     /** Factor */
-    factor: any;
+    factor: number | null;
     /** Conversion Offset */
-    conversionOffset: any;
+    conversionOffset: number | null;
     /** Converter */
-    converter: any;
+    converter: string | null;
 };
 export const { useUnitQuantityValueConvertAllQuery, useUnitQuantityValueConvertQuery, useUnitQuantityValueListQuery } =
     injectedRtkApi;

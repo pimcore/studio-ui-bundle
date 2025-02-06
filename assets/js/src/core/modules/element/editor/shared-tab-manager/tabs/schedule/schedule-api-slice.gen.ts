@@ -88,7 +88,7 @@ export type DevError = {
 export type Schedule = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** id */
     id: number;
@@ -97,9 +97,9 @@ export type Schedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?: "publish" | "delete";
+    action?: ("publish" | "delete") | null;
     /** Version ID */
-    version?: any;
+    version?: number | null;
     /** Active */
     active: boolean;
     /** User ID */
@@ -109,13 +109,13 @@ export type Schedule = {
 };
 export type UpdateSchedule = {
     /** Id of schedule, if null a new one will be created */
-    id: any;
+    id: number | null;
     /** Date of schedule */
     date: number;
     /** Action */
-    action?: "publish" | "delete";
+    action?: ("publish" | "delete") | null;
     /** Version ID */
-    version?: any;
+    version?: number | null;
     /** Active */
     active: boolean;
 };

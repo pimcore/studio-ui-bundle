@@ -69,22 +69,22 @@ export type PropertyGetCollectionForElementByTypeAndIdApiArg = {
 export type PredefinedProperty = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** id */
     id: string;
     /** name */
     name: string;
     /** description */
-    description?: any;
+    description?: string | null;
     /** key */
     key: string;
     /** type */
     type: string;
     /** data */
-    data?: any;
+    data?: string | null;
     /** config */
-    config?: any;
+    config?: string | null;
     /** ctype */
     ctype: string;
     /** inheritable */
@@ -108,15 +108,15 @@ export type UpdatePredefinedProperty = {
     /** name */
     name: string;
     /** description */
-    description?: any;
+    description?: string | null;
     /** key */
     key: string;
     /** type */
     type: string;
     /** data */
-    data?: any;
+    data?: string | null;
     /** config */
-    config?: any;
+    config?: string | null;
     /** ctype */
     ctype: string;
     /** inheritable */
@@ -125,12 +125,12 @@ export type UpdatePredefinedProperty = {
 export type DataProperty = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** key */
     key: string;
     /** data */
-    data: any;
+    data: any | null;
     /** type */
     type: string;
     /** inheritable */
@@ -138,11 +138,11 @@ export type DataProperty = {
     /** inherited */
     inherited: boolean;
     /** config */
-    config?: any;
+    config?: string | null;
     /** predefinedName */
-    predefinedName?: any;
+    predefinedName?: string | null;
     /** description */
-    description?: any;
+    description?: string | null;
 };
 export const {
     usePropertyGetCollectionQuery,
