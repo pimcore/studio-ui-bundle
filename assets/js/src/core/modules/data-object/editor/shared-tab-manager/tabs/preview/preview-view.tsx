@@ -13,12 +13,19 @@
 
 import React from 'react'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { DataObjectPreview } from '@Pimcore/components/data-object-preview/data-object-preview'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { useTranslation } from 'react-i18next'
 
 export const PreviewView = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { id } = useElementContext()
 
   return (
-    <DataObjectPreview id={ id } />
+    <iframe
+      height="100%"
+      src={ `${getPrefix()}/data-objects/preview/${id}` }
+      title={ `${t('preview.label')}-${id}` }
+      width="100%"
+    />
   )
 }
