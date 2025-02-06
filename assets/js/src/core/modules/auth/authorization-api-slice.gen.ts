@@ -27,10 +27,8 @@ export type LogoutApiArg = void;
 export type UserInformation = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
-    /** User ID */
-    id: number;
     /** Username */
     username: string;
     /** Permissions */

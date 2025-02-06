@@ -35,7 +35,7 @@ export type ThumbnailVideoGetCollectionApiArg = void;
 export type Thumbnail = {
     /** AdditionalAttributes */
     additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
+        [key: string]: string | number | boolean | object | any[];
     };
     /** id */
     id: string;

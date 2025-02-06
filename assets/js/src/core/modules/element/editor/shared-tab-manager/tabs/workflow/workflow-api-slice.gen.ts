@@ -67,7 +67,7 @@ export type AllowedTransition = {
     /** unsavedChangesBehaviour */
     unsavedChangesBehaviour: string;
     /** notes */
-    notes: object[];
+    notes: any[];
 };
 export type GlobalAction = {
     /** name */
@@ -79,7 +79,7 @@ export type GlobalAction = {
     /** objectLayout */
     objectLayout: boolean;
     /** notes */
-    notes: object[];
+    notes: any[];
 };
 export type WorkflowDetails = {
     /** workflowName */
