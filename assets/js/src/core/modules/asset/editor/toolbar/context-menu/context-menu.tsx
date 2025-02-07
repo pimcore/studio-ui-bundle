@@ -11,10 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Popconfirm } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import ButtonGroup from 'antd/es/button/button-group'
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -28,12 +27,12 @@ import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-
 import { useClearThumbnails } from '@Pimcore/modules/asset/actions/clear-thumbnails/use-clear-thumbnails'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
+import { ReloadPopconfirm } from '@Pimcore/components/reload-popconfirm/reload-popconfirm'
 
 export const EditorToolbarContextMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(AssetContext)
   const { asset } = useAssetDraft(id)
-  const [popConfirmOpen, setPopConfirmOpen] = useState<boolean>(false)
   const { renameContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
   const { deleteContextMenuItem } = useDelete('asset', getElementActionCacheKey('asset', 'delete', asset!.id))
   const { downloadContextMenuItem } = useDownload()
@@ -58,11 +57,9 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
 
   return (
     <ButtonGroup>
-      <Popconfirm
-        onCancel={ onCancel }
-        onConfirm={ onConfirm }
-        onOpenChange={ onOpenChange }
-        open={ popConfirmOpen }
+      <ReloadPopconfirm
+        hasDataChanged={ hasDataChanged }
+        onReload={ onReload }
         title={ t('toolbar.reload.confirmation') }
       >
         <IconButton
@@ -70,7 +67,8 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
         >
           {t('toolbar.reload')}
         </IconButton>
-      </Popconfirm>
+
+      </ReloadPopconfirm>
 
       {visibleItems.length > 0 && (
         <Dropdown menu={ { items } }>
@@ -82,25 +80,11 @@ export const EditorToolbarContextMenu = (): React.JSX.Element => {
     </ButtonGroup>
   )
 
-  function onOpenChange (newOpen: boolean): void {
-    if (!newOpen) {
-      setPopConfirmOpen(false)
-      return
-    }
-
-    if (Object.keys(asset?.changes ?? {}).length > 0) {
-      setPopConfirmOpen(true)
-    } else {
-      refreshElement(asset!.id)
-    }
+  function hasDataChanged (): boolean {
+    return Object.keys(asset?.changes ?? {}).length > 0
   }
 
-  function onConfirm (): void {
-    setPopConfirmOpen(false)
-    refreshElement(asset!.id)
-  }
-
-  function onCancel (): void {
-    setPopConfirmOpen(false)
+  function onReload (): void {
+    refreshElement(id)
   }
 }
