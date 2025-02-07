@@ -25,6 +25,9 @@ import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelpe
 import { getObjectBreadcrumbsListWithFields } from './helpers/objectBreadcrumbsHelper'
 import { type CategoriesList, type IVersionsFieldsList } from './types'
 import { useStyles } from './versions-fields-list.styles'
+import {
+  ObjectVersionsFieldsView
+} from '@Pimcore/components/versions-fields-list/components/object-versions-fields-view/object-versions-fields-view'
 
 interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 
@@ -119,7 +122,12 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
           />
         )}
         {isDataObjectType && (
-          <div>Data Object data</div>
+          <ObjectVersionsFieldsView
+            breadcrumbsList={ sectionsListWithFields }
+            modifiedFields={ modifiedFields }
+            versionKeysList={ versionKeysList }
+            versionViewData={ versionViewData }
+          />
         )}
       </Flex>
     </Flex>

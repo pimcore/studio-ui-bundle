@@ -43,10 +43,8 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
         const fieldName = item.name
         const fieldValue = get(versionData?.objectData, fieldName)
 
-        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title)
-
         if (!isEmptyValue(fieldValue)) {
-          return [{ fieldBreadcrumbTitle: breadcrumbTitle, fieldData: item, fieldValue, versionId, versionCount }]
+          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue, versionId, versionCount }]
         }
       }
 
