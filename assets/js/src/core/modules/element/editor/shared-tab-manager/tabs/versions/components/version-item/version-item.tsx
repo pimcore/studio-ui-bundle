@@ -11,26 +11,26 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, {useState} from 'react'
-import {useTranslation} from 'react-i18next'
-import {isNil} from 'lodash'
-import {Flex} from '@Pimcore/components/flex/flex'
-import {Tag} from '@Pimcore/components/tag/tag'
-import {Text} from '@Pimcore/components/text/text'
-import {Space} from '@Pimcore/components/space/space'
-import {IconTextButton} from '@Pimcore/components/icon-text-button/icon-text-button'
-import {IconButton} from '@Pimcore/components/icon-button/icon-button'
-import {Icon} from '@Pimcore/components/icon/icon'
-import {Input} from '@Pimcore/components/input/input'
-import {type Version} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
-import {formatDateTime} from '@Pimcore/utils/date-time'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { isNil } from 'lodash'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Tag } from '@Pimcore/components/tag/tag'
+import { Text } from '@Pimcore/components/text/text'
+import { Space } from '@Pimcore/components/space/space'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Input } from '@Pimcore/components/input/input'
+import { type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 import {
   useVersionDeleteByIdMutation,
   useVersionPublishByIdMutation,
   useVersionUpdateByIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-import trackError, {ApiError} from '@Pimcore/modules/app/error-handler'
-import {useStyles} from './version-item.style'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useStyles } from './version-item.style'
 
 export const VersionItem = ({ version, setDetailedVersions }: { version: Version, setDetailedVersions: any }): React.JSX.Element => {
   const [inputValue, setInputValue] = useState(version?.note)
