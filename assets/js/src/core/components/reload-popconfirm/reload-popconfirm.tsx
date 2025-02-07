@@ -16,7 +16,7 @@ import { Popconfirm } from 'antd'
 
 export interface ReloadPopconfirmProps {
   title: ReactNode
-  children: ReactNode
+  children?: ReactNode
   onReload: () => void
   hasDataChanged: () => boolean
   onCancel?: () => void

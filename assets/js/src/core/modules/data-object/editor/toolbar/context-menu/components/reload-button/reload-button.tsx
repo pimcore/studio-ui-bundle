@@ -90,27 +90,31 @@ export const ReloadButton = (): React.JSX.Element => {
 
       </ReloadPopconfirm>
 
-      <ReloadPopconfirm
-        hasDataChanged={ hasDataChanged }
-        key="reload"
-        onCancel={ onCancelLayoutChange }
-        onReload={ onReloadLayout }
-        ref={ popconfirmRef }
-        title={ t('toolbar.reload.confirmation') }
-      >
-        { items.length > 1 && (
-          <Dropdown
-            key="switch-layout"
-            menu={ { items } }
+      { items.length > 1 && (
+      <>
+        <ReloadPopconfirm
+          hasDataChanged={ hasDataChanged }
+          key="reload"
+          onCancel={ onCancelLayoutChange }
+          onReload={ onReloadLayout }
+          ref={ popconfirmRef }
+          title={ t('toolbar.reload.confirmation') }
+        />
+        <Dropdown
+          key="switch-layout"
+          menu={ { items } }
+          trigger={ ['hover'] }
+        >
+
+          <IconButton
+            icon={ { value: 'chevron-down' } }
+            onClick={ (e) => { e.stopPropagation() } }
           >
-            <IconButton
-              icon={ { value: 'chevron-down' } }
-            >
-              {t('toolbar.switch-layout')}
-            </IconButton>
-          </Dropdown>
-        ) }
-      </ReloadPopconfirm>
+            {t('toolbar.switch-layout')}
+          </IconButton>
+        </Dropdown>
+      </>
+      ) }
     </>
   )
 }
