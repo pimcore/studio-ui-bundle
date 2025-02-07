@@ -22,7 +22,7 @@ export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSe
 
 export interface UseGridOptionsReturn {
   encodeColumnIdentifier: (column: SelectedColumn) => string
-  decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn
+  decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn | undefined
   transformGridColumn: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>
   transformGridColumnDefinition: (columns: Array<AccessorColumnDef<unknown, never>>) => Array<AccessorColumnDef<unknown, never>>
   getGridProps: () => GridProps
@@ -40,7 +40,13 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     })
   }
 
-  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn => {
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
+    try {
+      JSON.parse(columnIdentifier)
+    } catch (e) {
+      return undefined
+    }
+
     const { key, locale } = JSON.parse(columnIdentifier)
 
     return selectedColumns.find(column => column.key === key && column.locale === locale)!

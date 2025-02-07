@@ -52,14 +52,22 @@ export const GridContainer = (): React.JSX.Element => {
 
       const newRow: Record<string, any> = {}
 
+      newRow.id = row.id
+      newRow.isLocked = row.isLocked
+      newRow.permissions = row.permissions
+
       gridColumnDefinition.forEach((column) => {
         if (!('accessorKey' in column)) {
           return
         }
 
         const accessor: string = column.accessorKey as string
-
         const currentSelectedColumn = decodeColumnIdentifier(accessor)
+
+        if (currentSelectedColumn === undefined) {
+          return
+        }
+
         const rowColumn = row.columns.find((r) => r.key === currentSelectedColumn.key && r.locale === currentSelectedColumn.locale)
 
         if (rowColumn === undefined) {
