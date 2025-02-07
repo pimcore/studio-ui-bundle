@@ -15,7 +15,7 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import {
   type CustomLayoutsInCompactFormatToBeUsedForEGListings,
   useClassCustomLayoutEditorCollectionQuery
-} from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+} from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 
