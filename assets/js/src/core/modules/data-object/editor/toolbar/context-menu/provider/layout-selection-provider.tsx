@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useEffect, useMemo, useState } from 'react'
 
 export interface ILayoutSelectionContext {
   currentLayout: string | null
@@ -30,6 +30,12 @@ export interface LayoutSelectionProviderProps {
 
 export const LayoutSelectionProvider = ({ children, defaultLayout }: LayoutSelectionProviderProps): React.JSX.Element => {
   const [currentLayout, setCurrentLayout] = useState<string | null>(defaultLayout)
+
+  useEffect(() => {
+    if (currentLayout === null && defaultLayout !== null) {
+      setCurrentLayout(defaultLayout)
+    }
+  }, [defaultLayout])
 
   const value = useMemo(() => ({
     currentLayout,

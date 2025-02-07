@@ -30,6 +30,7 @@ import {
 
 export interface EditorContainerInnerProps {
   id: number
+  isLoading?: boolean
 }
 
 const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Element => {
@@ -61,7 +62,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
     return <div>Error</div>
   }
 
-  if (isLoading) {
+  if (isLoading || props.isLoading === true) {
     return <Content loading />
   }
 

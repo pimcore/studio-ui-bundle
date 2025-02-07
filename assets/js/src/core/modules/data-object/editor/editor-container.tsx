@@ -17,7 +17,6 @@ import {
   type EditorContainerInnerProps
 } from '@Pimcore/modules/data-object/editor/editor-container/editor-container-inner'
 import { useCustomLayouts } from '@Pimcore/modules/data-object/hooks/use-custom-layouts'
-import { Content } from '@Pimcore/components/content/content'
 import {
   LayoutSelectionProvider
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/layout-selection-provider'
@@ -27,13 +26,12 @@ export interface EditorContainerProps extends EditorContainerInnerProps {}
 const EditorContainer = ({ id }: EditorContainerInnerProps): React.JSX.Element => {
   const { getDefaultLayoutId, isLoading } = useCustomLayouts(id)
 
-  if (isLoading) {
-    return <Content loading />
-  }
-
   return (
     <LayoutSelectionProvider defaultLayout={ getDefaultLayoutId() }>
-      <EditorContainerInner id={ id } />
+      <EditorContainerInner
+        id={ id }
+        isLoading={ isLoading }
+      />
     </LayoutSelectionProvider>
   )
 }
