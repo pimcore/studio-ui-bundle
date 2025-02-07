@@ -28,6 +28,22 @@ export const LeftSidebarView = (): React.JSX.Element => {
   })
 
   addNavItem({
+    path: 'Settings/Tag Configuration',
+    className: 'item-style-modifier',
+    widgetConfig: {
+      name: 'Tag Configuration',
+      id: 'tag-configuration',
+      component: 'tag-configuration',
+      config: {
+        icon: {
+          type: 'name',
+          value: 'tag-configuration'
+        }
+      }
+    }
+  })
+
+  addNavItem({
     path: 'Tools/Glossary'
   })
 

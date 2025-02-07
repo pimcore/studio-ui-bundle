@@ -182,6 +182,7 @@ import shield from '@Pimcore/assets/icons/shield.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg'
 import style from '@Pimcore/assets/icons/style.inline.svg'
+import tagConfiguration from '@Pimcore/assets/icons/tag-configuration.inline.svg'
 import tag from '@Pimcore/assets/icons/tag.inline.svg'
 import target from '@Pimcore/assets/icons/target.inline.svg'
 import taxClass from '@Pimcore/assets/icons/tax-class.inline.svg'
@@ -863,6 +864,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'style',
       component: style
+    })
+    iconLibrary.register({
+      name: 'tag-configuration',
+      component: tagConfiguration
     })
     iconLibrary.register({
       name: 'tag',

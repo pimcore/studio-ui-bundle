@@ -20,7 +20,7 @@ export interface ITreeElementItemProps {
   title: string
   actions?: Array<{ key: string, icon: string }>
   onSelected?: () => void
-  onActionsClick?: (action: string) => void
+  onActionsClick?: (action: string, title: string) => void
 }
 const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeElementItemProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,7 +32,9 @@ const TreeElementItem = ({ title, actions, onSelected, onActionsClick }: ITreeEl
       key: action.key,
       label: t(`tree.actions.${action.key}`),
       icon: <Icon value={ action.icon } />,
-      onClick: () => { onActionsClick?.(action.key) }
+      onClick: () => {
+        onActionsClick?.(action.key, title)
+      }
     })
   })
 

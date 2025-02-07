@@ -28,7 +28,7 @@ export interface TreeDataItem extends TreeDataNode {
 interface ITreeElementProps extends TreeProps {
   treeData: TreeDataItem[]
   className?: string
-  onActionsClick?: (key: any, action: string) => void
+  onActionsClick?: (key: string, action: string) => void
   onDragAndDrop?: (params: { node: TreeDataItem, dragNode: TreeDataItem, dropPosition: number }) => void
   onSelected?: (key: any) => void
   onLoadData?: (node: any) => Promise<any>
@@ -127,7 +127,7 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
       titleRender={ (node) => (
         <TreeElementItem
           actions={ node.actions }
-          onActionsClick={ (action) => onActionsClick?.(node.key, action) }
+          onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action) }
           onSelected={ () => {
             setSelectedKeys([node.key])
             onSelected?.(node.key)

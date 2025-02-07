@@ -42,7 +42,7 @@ export const slice = createSlice({
         roleAdapter.upsertOne(state, action)
       }
     },
-    removeRole: (state, action: PayloadAction<number>): void => {
+    roleRemoved: (state, action: PayloadAction<number>): void => {
       roleAdapter.removeOne(state, action.payload)
     },
     changeRole: (state, action: PayloadAction<{ id: any, changes: any }>): void => {
@@ -56,17 +56,6 @@ export const slice = createSlice({
         id: action.payload.id,
         changes: { ...action.payload.changes, modified: true }
       }
-
-      roleAdapter.updateOne(state, update)
-    },
-    roleReloaded: (state, action: PayloadAction<number>): void => {
-      const id: number = action.payload
-
-      const update: Update<any, any> = {
-        id,
-        changes: { modified: false }
-      }
-      state.changedIds = state.changedIds.filter((role) => role !== id)
 
       roleAdapter.updateOne(state, update)
     },
@@ -85,11 +74,10 @@ export const slice = createSlice({
 injectSliceWithState(slice)
 
 export const {
-  removeRole,
+  roleRemoved,
   roleOpened,
   roleClosed,
   roleFetched,
-  roleReloaded,
   roleUpdated,
   changeRole
 } = slice.actions

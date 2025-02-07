@@ -25,7 +25,6 @@ import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 const ManagementContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { getUserTree } = useUserHelper()
-  const [treeKey, setTreeKey] = React.useState<string>('tree-' + Date.now())
 
   const treeParentItem = {
     title: t('user-management.tree.all'),
@@ -38,6 +37,7 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     ]
   }
   const [treeData, setTreeData] = React.useState<TreeDataItem[]>([treeParentItem])
+  const [treeIsLoading, setTreeIsLoading] = React.useState<boolean>(false)
 
   const createNodeByResponse = useCallback((items: any): TreeDataNode[] => {
     return items.map((item: any) => ({
@@ -84,14 +84,12 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     })
   }
 
-  const reloadTree = (): void => {
-    getUserTree({ parentId: 0 }).then((data) => {
-      updateTreeData('0', data.items)
-      const timestamp = Date.now()
-      setTreeKey('tree-' + timestamp)
-    }).catch((error) => {
-      console.error(error)
-    })
+  const reloadTree = async (): Promise<void> => {
+    setTreeIsLoading(true)
+
+    const { items } = await getUserTree({ parentId: 0 })
+    updateTreeData('0', items)
+    setTreeIsLoading(false)
   }
 
   const sidebar = {
@@ -100,7 +98,8 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     minSize: 170,
     children: [
       <TreeContainer
-        key={ treeKey }
+        isLoading={ treeIsLoading }
+        key="user-tree"
         onLoadTreeData={ handleOnLoadData }
         onMoveItem={ (dragNode, dropKey) => {
           const parent = findParentByKey(treeData, dragNode.key)
@@ -113,7 +112,9 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
             setTreeData([...treeData])
           }
         } }
-        onReloadTree={ reloadTree }
+        onReloadTree={ async () => {
+          await reloadTree()
+        } }
         onRemoveItem={ (key) => {
           const parent = findParentByKey(treeData, key)
           if (parent?.children !== undefined) {
@@ -137,18 +138,11 @@ const ManagementContainer = ({ ...props }): React.JSX.Element => {
     children: [
       <ManagementDetail
         key="user-detail"
-        onCloneUser={ (data) => {
-          reloadTree()
+        onCloneUser={ async () => {
+          await reloadTree()
         } }
-        onRemoveItem={ (id) => {
-          const parent = findParentByKey(treeData, id)
-          if (parent?.children !== undefined) {
-            const updatedTreeData = parent.children.filter((child: TreeDataNode) => child.key !== id)
-            setTreeData((data: TreeDataNode[]): TreeDataNode[] => {
-              parent.children = updatedTreeData
-              return [...data]
-            })
-          }
+        onRemoveItem={ async () => {
+          await reloadTree()
         } }
       />
     ]

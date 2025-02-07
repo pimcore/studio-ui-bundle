@@ -21,6 +21,7 @@ import {
   ComparisonView
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/comparison-view/comparison-view'
 import { SingleView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/single-view/single-view'
+import { PreviewView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/preview/preview-view'
 
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
@@ -31,4 +32,15 @@ export const TAB_VERSIONS: IEditorTab = {
             />,
   icon: <Icon value={ 'history' } />,
   isDetachable: true
+}
+
+export const TAB_PREVIEW: IEditorTab = {
+  key: 'preview',
+  label: 'preview.label',
+  children: <PreviewView />,
+  icon: <Icon value={ 'preview' } />,
+  isDetachable: true,
+  hidden: (element): boolean => {
+    return !(element.hasPreview!)
+  }
 }

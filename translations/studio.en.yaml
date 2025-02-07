@@ -427,11 +427,34 @@ tree.actions.remove-user: Remove User
 tree.actions.folder: Folder
 tree.actions.user: User
 tree.actions.add-folder: Add Folder
+tree.actions.add-tag: New Tag
+tree.actions.delete-tag: Delete
+tree.actions.rename-tag: Rename
 tree.actions.add-user: Add User
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone Role
 tree.actions.remove-role: Remove Role
 tree.actions.remove-folder: Remove Folder
+tag-configuration.new: New
+tag-configuration.new-tag: New Tag
+tag-configuration.name: Name
+tag-configuration.parent-tag: Parent Tag
+tag-configuration.create: Create
+tag-configuration.save: Save
+tag-configuration.rename: Rename Tag
+tag-configuration.successful-add: Tag has been added successfully
+tag-configuration.successful-update: Tag has been updated successfully
+tag-configuration.successful-deletion: Tag has been deleted successfully
+tag-configuration.warn-delete-tag-modal-title: Delete this tag
+tag-configuration.warn-delete-parent-tag-modal-title: Delete this parent tag
+tag-configuration.warn-delete-all-tags-title: Delete all tags
+tag-configuration.warn-delete-all-tags-modal-text: Are you sure you want to delete all tags?
+tag-configuration.warn-delete-tag-modal-text: Are you sure you want to delete this tag?
+tag-configuration.warn-delete-parent-tag-modal-text: Are you sure you want to delete this parent tag? All the tags associated with it will be deleted.
+tag-configuration.delete-tag: Delete
+tag-configuration.delete-all: Delete all
+tag-configuration.delete-parent-tag: Delete the parent tag and all children tags
+tag-configuration.cancel: Cancel
 user-management.admin: Admin
 user-management.tree.all: All Users
 user-management.settings.title: Settings
@@ -601,6 +624,7 @@ hotspots.clear-data.dnd-message: This image contains additional data like marker
 hotspots.data-cleared: Hotspots, Markers and Cropping Data cleared
 hotspots.has-hotspots-or-marker: Hotspots or markers have been added to this item
 home: Home
+preview.label: Preview
 inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: "Data inheritance broken"
 main: Main

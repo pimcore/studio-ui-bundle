@@ -13,6 +13,7 @@
 
 import type React from 'react'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 export interface IEditorTab {
   key: string
@@ -21,6 +22,6 @@ export interface IEditorTab {
   icon: React.JSX.Element
   workspacePermission?: keyof ElementPermissions | string
   userPermission?: string
-  hidden?: () => boolean
+  hidden?: (element: IElementDraft) => boolean
   isDetachable?: boolean
 }

@@ -129,14 +129,28 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { data, error }: any = await dispatch(api.endpoints.roleCloneById.initiate({ id, body: { name } }))
 
     handleNotification(t('roles.clone-item.success'), error)
-
+    dispatch(roleOpened(data.id as number))
     return data
   }
 
   async function updateRoleById (props: { id: number, item: DetailedUserRole }): Promise<{ data: RoleUpdateByIdApiResponse, error: Error }> {
     const { id, item } = props
 
-    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...item, parentId: item.parentId ?? 0 } }))
+    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({
+      id,
+      updateRole: {
+        name: item.name,
+        classes: item.classes,
+        parentId: item.parentId ?? 0,
+        permissions: item.permissions,
+        docTypes: item.docTypes,
+        websiteTranslationLanguagesEdit: item.websiteTranslationLanguagesEdit,
+        websiteTranslationLanguagesView: item.websiteTranslationLanguagesView,
+        assetWorkspaces: item.assetWorkspaces,
+        dataObjectWorkspaces: item.dataObjectWorkspaces,
+        documentWorkspaces: item.documentWorkspaces
+      }
+    }))
     handleNotification(t('roles.save-item.success'), error)
 
     dispatch(roleUpdated(id))
