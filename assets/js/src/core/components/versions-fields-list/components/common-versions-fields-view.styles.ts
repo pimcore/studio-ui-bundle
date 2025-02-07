@@ -47,6 +47,10 @@ export const useStyles = createStyles(({ token, css }) => {
       border-radius: ${token.borderRadius}px;
     `,
 
+    sectionFieldsWithoutBorder: css`
+      border-width: 0;
+    `,
+
     fieldTitle: css`
       display: block;
       margin-bottom: 4px;

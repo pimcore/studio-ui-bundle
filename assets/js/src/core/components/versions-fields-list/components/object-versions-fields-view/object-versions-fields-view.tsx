@@ -63,7 +63,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
           <div key={ `${index}-${breadcrumb.key}` }>
             {renderSectionTitle({ key: breadcrumb.key, isCommonSection })}
             <Flex
-              className={ styles.sectionFields }
+              className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: !isCommonSection }) }
               gap="extra-small"
               vertical
             >
