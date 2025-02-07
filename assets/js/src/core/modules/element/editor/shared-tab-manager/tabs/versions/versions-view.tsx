@@ -11,32 +11,31 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import cn from 'classnames'
-import {useTranslation} from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import {
   useVersionCleanupForElementByTypeAndIdMutation,
   type Version,
   type VersionGetCollectionForElementByTypeAndIdApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-import {Button} from '@Pimcore/components/button/button'
-import {useModal} from '@Pimcore/components/modal/useModal'
-import {ModalFooter} from '@Pimcore/components/modal/footer/modal-footer'
-import {IconTextButton} from '@Pimcore/components/icon-text-button/icon-text-button'
-import {Header} from '@Pimcore/components/header/header'
-import {Content} from '@Pimcore/components/content/content'
-import {SplitLayout} from '@Pimcore/components/split-layout/split-layout'
-import {AccordionTimeline} from '@Pimcore/components/accordion-timeline/accordion-timeline'
-import {Flex} from '@Pimcore/components/flex/flex'
-import {Text} from '@Pimcore/components/text/text'
-import {createVersionAccordionItem} from './helpers/create-version-accordion-item'
-import trackError, {ApiError} from '@Pimcore/modules/app/error-handler'
-import {useElementContext} from '@Pimcore/modules/element/hooks/use-element-context'
+import { Button } from '@Pimcore/components/button/button'
+import { useModal } from '@Pimcore/components/modal/useModal'
+import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Header } from '@Pimcore/components/header/header'
+import { Content } from '@Pimcore/components/content/content'
+import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
+import { AccordionTimeline } from '@Pimcore/components/accordion-timeline/accordion-timeline'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
+import { createVersionAccordionItem } from './helpers/create-version-accordion-item'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
-import {type VersionIdentifiers} from './types/types'
-import {useStyles} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
+import { type VersionIdentifiers } from './types/types'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/versions-view.style'
 
 interface VersionsViewProps extends VersionDetailViewsProps {
   versions: Version[]
@@ -47,7 +46,6 @@ export const VersionsView = ({
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
-  const { elementType, id } = useElementContext()
   const [isComparingActive, setIsComparingActive] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
 

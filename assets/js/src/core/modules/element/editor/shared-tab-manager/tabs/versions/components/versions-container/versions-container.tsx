@@ -33,6 +33,9 @@ export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewCompon
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
 
+  console.log('----> id', id)
+  console.log('----> elementType', elementType)
+
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
     id,
     elementType,
@@ -41,9 +44,12 @@ export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewCompon
   })
 
   useEffect(() => {
+    console.log('----> in useEffect')
+    console.log('Tag to invalidate:', invalidatingTags.ELEMENT_VERSIONS(elementType, id))
+
     dispatch(
       api.util.invalidateTags(
-        invalidatingTags.VERSIONS()
+        invalidatingTags.ELEMENT_VERSIONS(elementType, id)
       ))
   }, [])
 

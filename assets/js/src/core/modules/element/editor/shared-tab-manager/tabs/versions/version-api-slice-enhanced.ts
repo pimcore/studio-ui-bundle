@@ -13,7 +13,6 @@
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './version-api-slice.gen'
-import { type TagDescription } from '@reduxjs/toolkit/query'
 
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL],
@@ -30,7 +29,7 @@ export const api = baseApi.enhanceEndpoints({
           tagCollection.push(...providingTags.VERSIONS_DETAIL(version.id))
         })
 
-        return [...tagCollection, providingTags.ELEMENT_VERSIONS(args.elementType, args.id)] as ReadonlyArray<TagDescription<string>>
+        return [...tagCollection, ...providingTags.ELEMENT_VERSIONS(args.elementType, args.id)]
       }
     },
 
