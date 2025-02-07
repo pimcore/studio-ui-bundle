@@ -18,11 +18,18 @@ export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET_DETAIL],
   endpoints: {
     versionGetById: {
-      providesTags: (result, error, args) => providingTags.ASSET_VERSIONS(args.id)
+      providesTags: (result, error, args) => {
+        console.log('----> getById', args)
+
+        return providingTags.ASSET_VERSIONS(args.id)
+      }
     },
 
     versionGetCollectionForElementByTypeAndId: {
       providesTags: (result, error, args) => {
+        console.log('----> versions result', result)
+        console.log('----> versions args', args)
+
         const tagCollection: Tag[] = []
 
         result?.items.forEach((version) => {
