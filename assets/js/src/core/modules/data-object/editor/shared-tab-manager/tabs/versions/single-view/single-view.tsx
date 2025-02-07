@@ -26,11 +26,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'
 
 // TODO: fix types
-export const SingleView = ({
-  versions,
-  versionId,
-  setDetailedVersions
-}: SingleVersionViewProps): React.JSX.Element => {
+export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
   const { id } = useElementContext()

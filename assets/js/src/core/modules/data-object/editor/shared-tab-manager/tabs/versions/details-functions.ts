@@ -14,27 +14,44 @@
 import { get, isEmpty } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
   DATA = 'data'
 }
 
-export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: any): any => {
+interface IGetFormattedDataStructureProps {
+  layout?: Layout['children']
+  versionData: DataObjectVersion
+  versionId: number
+  versionCount: number
+}
+
+export interface IFormattedDataStructureData {
+  fieldBreadcrumbTitle: string
+  fieldData: Layout['children']
+  fieldValue: any
+  versionCount: number
+  versionId: number
+}
+
+export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
     modificationDate: formatDateTime({ timestamp: versionData.modificationDate ?? null, dateStyle: 'short', timeStyle: 'medium' })
   }
 
-  const getBreadcrumbTitle = (value1: any, value2: any): string => {
+  const getBreadcrumbTitle = (value1: string, value2: string): string => {
     return [value1, value2].filter(Boolean).join('/')
   }
 
-  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: any): any => {
+  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: { data?: Layout['children'], fieldBreadcrumbTitle?: string }): any => {
     return data?.flatMap((item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
-        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title)
+        const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title as string)
 
         return processLayoutData({ data: item?.children, fieldBreadcrumbTitle: breadcrumbTitle })
       }
@@ -52,11 +69,11 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     })
   }
 
-  const getGeneralSystemData = (): any => {
-    const result: any = []
+  const getGeneralSystemData = (): IFormattedDataStructureData[] => {
+    const result: IFormattedDataStructureData[] = []
 
     Object.entries(formattedSystemData).forEach(([key, value]): void => {
-      result.push({ fieldBreadcrumbTitle: 'systemData', fieldData: { name: key, fieldtype: 'input' }, fieldValue: value, versionId, versionCount })
+      result.push({ fieldBreadcrumbTitle: 'systemData', fieldData: { name: key, fieldtype: 'input' } as any, fieldValue: value, versionId, versionCount })
     })
 
     return result
