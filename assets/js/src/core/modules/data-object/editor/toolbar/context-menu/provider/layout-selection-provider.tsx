@@ -12,6 +12,7 @@
 */
 
 import React, { createContext, useEffect, useMemo, useState } from 'react'
+import { Content } from '@Pimcore/components/content/content'
 
 export interface ILayoutSelectionContext {
   currentLayout: string | null
@@ -26,9 +27,10 @@ export const LayoutSelectionContext = createContext<ILayoutSelectionContext>({
 export interface LayoutSelectionProviderProps {
   children: React.ReactNode
   defaultLayout: string | null
+  isLoading: boolean
 }
 
-export const LayoutSelectionProvider = ({ children, defaultLayout }: LayoutSelectionProviderProps): React.JSX.Element => {
+export const LayoutSelectionProvider = ({ children, defaultLayout, isLoading }: LayoutSelectionProviderProps): React.JSX.Element => {
   const [currentLayout, setCurrentLayout] = useState<string | null>(defaultLayout)
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export const LayoutSelectionProvider = ({ children, defaultLayout }: LayoutSelec
   }), [currentLayout])
   return (
     <LayoutSelectionContext.Provider value={ value }>
-      {children}
+      { isLoading ? <Content loading /> : children }
     </LayoutSelectionContext.Provider>
   )
 }
