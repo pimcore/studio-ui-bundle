@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import {
   type VersionComparisonViewProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
@@ -23,7 +23,11 @@ import {
   type DataObjectVersion
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
+import {
+  getFormattedDataStructure,
+  type IFormattedDataStructureData,
+  versionsDataToTableData
+} from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { ComparisonViewUI } from './comparison-view-ui'
 
@@ -50,20 +54,21 @@ export const ComparisonView = ({
 
     Promise.all(versionPromises)
       .then((responses): void => {
-        const formattedDataList: any[] = []
+        const formattedDataList: IFormattedDataStructureData[][] = []
 
         responses.forEach((response, versionIndex) => {
           const dataRaw = response.data as DataObjectVersion
 
-          formattedDataList.push(getFormattedDataStructure({
-            layout: layoutData?.children,
-            versionData: dataRaw,
-            versionId: versionIds[versionIndex].id,
-            versionCount: versionIds[versionIndex].count
-          }))
+          if (!isUndefined(layoutData?.children)) {
+            formattedDataList.push(getFormattedDataStructure({
+              layout: layoutData.children,
+              versionData: dataRaw,
+              versionId: versionIds[versionIndex].id,
+              versionCount: versionIds[versionIndex].count
+            }))
+          }
         })
 
-        // eslint-disable-next-line
         setVersionsData(versionsDataToTableData(formattedDataList))
       })
       .catch(err => { console.log(err) })

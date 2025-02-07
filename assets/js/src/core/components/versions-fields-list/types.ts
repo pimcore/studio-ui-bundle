@@ -23,3 +23,11 @@ export interface IVersionsFieldsList {
 export type VersionKeysList = string[]
 
 export type CategoriesList = Array<{ key: VersionCategoryName, fieldKeys: string[] }>
+
+export interface IObjectVersionField {
+  Field: {
+    fieldBreadcrumbTitle: string
+    [key: string]: any
+  }
+  [key: string]: any
+}

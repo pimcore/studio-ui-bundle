@@ -12,7 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { useAppDispatch } from '@Pimcore/app/store'
 import {
   api,
@@ -21,11 +21,10 @@ import {
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { getFormattedDataStructure, versionsDataToTableData } from '../details-functions'
+import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'
 
-// TODO: fix types
 export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
 
@@ -48,17 +47,19 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
 
     Promise.resolve(versionPromise)
       .then((response): void => {
-        const formattedDataList: any[] = []
+        const formattedDataList: IFormattedDataStructureData[][] = []
 
         const dataRaw = response.data as DataObjectVersion
-        formattedDataList.push(getFormattedDataStructure({
-          layout: layoutData?.children,
-          versionData: dataRaw,
-          versionId: vId.id,
-          versionCount: vId.count
-        }))
 
-        // eslint-disable-next-line
+        if (!isUndefined(layoutData?.children)) {
+          formattedDataList.push(getFormattedDataStructure({
+            layout: layoutData.children,
+            versionData: dataRaw,
+            versionId: vId.id,
+            versionCount: vId.count
+          }))
+        }
+
         setVersionData(versionsDataToTableData(formattedDataList))
       })
       .catch(err => { console.log(err) })

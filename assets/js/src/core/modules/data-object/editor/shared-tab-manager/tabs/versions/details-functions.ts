@@ -16,6 +16,7 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
+import { type IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -23,7 +24,7 @@ enum DATATYPE_LIST {
 }
 
 interface IGetFormattedDataStructureProps {
-  layout?: Layout['children']
+  layout: Layout['children']
   versionData: DataObjectVersion
   versionId: number
   versionCount: number
@@ -48,12 +49,12 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     return [value1, value2].filter(Boolean).join('/')
   }
 
-  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: { data?: Layout['children'], fieldBreadcrumbTitle?: string }): any => {
-    return data?.flatMap((item: any) => {
+  const processLayoutData = ({ data, fieldBreadcrumbTitle = '' }: { data: Layout['children'], fieldBreadcrumbTitle?: string }): IFormattedDataStructureData[] => {
+    return data.flatMap((item: any) => {
       if (item.datatype === DATATYPE_LIST.LAYOUT) {
         const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title as string)
 
-        return processLayoutData({ data: item?.children, fieldBreadcrumbTitle: breadcrumbTitle })
+        return processLayoutData({ data: item.children, fieldBreadcrumbTitle: breadcrumbTitle })
       }
 
       if (item.datatype === DATATYPE_LIST.DATA) {
@@ -85,13 +86,13 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
   return [...generalSystemData, ...layoutData]
 }
 
-export const versionsDataToTableData = (data: any): any => {
-  const resultList: any[] = []
+export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): IObjectVersionField[] => {
+  const resultList: IObjectVersionField[] = []
 
   const mainVersionData = data[0]
   const compareVersionData = data[1]
 
-  mainVersionData.forEach((versionItem: any, index: number) => {
+  mainVersionData.forEach((versionItem, index) => {
     const field = {
       Field: {
         fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle,
