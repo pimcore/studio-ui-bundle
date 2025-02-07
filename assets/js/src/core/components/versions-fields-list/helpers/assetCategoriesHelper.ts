@@ -13,9 +13,9 @@
 
 import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import { type CategoriesList, type IVersionsFieldsList } from '../types'
+import { type CategoriesList, type IAssetVersionsFieldsList } from '../types'
 
-export const getAssetCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
+export const getAssetCategoriesList = (data: IAssetVersionsFieldsList['data']): CategoriesList => {
   const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   const getCategoryName = (value: string): VersionCategoryName | undefined => {
@@ -41,7 +41,7 @@ export const getAssetCategoriesList = (data: IVersionsFieldsList['data']): Categ
   }))
 }
 
-export const getAssetCategoriesListWithFields = ({ versionViewData, categoriesList }: { versionViewData: IVersionsFieldsList['data'], categoriesList?: CategoriesList }): CategoriesList => {
+export const getAssetCategoriesListWithFields = ({ versionViewData, categoriesList }: { versionViewData: IAssetVersionsFieldsList['data'], categoriesList?: CategoriesList }): CategoriesList => {
   // get all version field keys
   const versionFieldKeys = map(versionViewData, 'Field.key')
 

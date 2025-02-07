@@ -13,16 +13,18 @@
 
 import { type VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
-export interface IVersionsFieldsList {
-  data: Array<{
-    Field: { field: string, key: string, name: string }
-    [key: string]: any
-  }>
-}
-
 export type VersionKeysList = string[]
 
 export type CategoriesList = Array<{ key: VersionCategoryName, fieldKeys: string[] }>
+
+export interface IAssetVersionField {
+  Field: { field: string, key: string, name: string }
+  [key: string]: any
+}
+
+export interface IAssetVersionsFieldsList {
+  data: IAssetVersionField[]
+}
 
 export interface IObjectVersionField {
   Field: {
@@ -30,4 +32,12 @@ export interface IObjectVersionField {
     [key: string]: any
   }
   [key: string]: any
+}
+
+export interface IObjectVersionsFieldsList {
+  data: IObjectVersionField[]
+}
+
+export interface IVersionsFieldsList {
+  data: IAssetVersionField[] | IObjectVersionField[]
 }

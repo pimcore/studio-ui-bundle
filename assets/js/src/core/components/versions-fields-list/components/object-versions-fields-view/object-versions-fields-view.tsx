@@ -17,17 +17,13 @@ import cn from 'classnames'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import {
-  type CategoriesList,
-  type IVersionsFieldsList,
-  type VersionKeysList
-} from '@Pimcore/components/versions-fields-list/types'
+import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/components/versions-fields-list/types'
 import { useStyles } from '../common-versions-fields-view.styles'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
-  versionViewData: IVersionsFieldsList['data']
+  versionViewData: IObjectVersionsFieldsList['data']
   versionKeysList: VersionKeysList
   modifiedFields: string[]
 }
@@ -72,12 +68,12 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
               vertical
             >
               {versionViewData.map((fieldItem, fieldIndex) => (
-                breadcrumb.fieldKeys.includes(fieldItem.Field.name) && (
+                breadcrumb.fieldKeys.includes(fieldItem.Field.name as string) && (
                   <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
                     <Text className={ styles.fieldTitle }>{fieldItem.Field.name}</Text>
                     <Flex gap="mini">
                       {versionKeysList.map((key, index) => {
-                        const isModifiedField = modifiedFields.includes(fieldItem.Field.name)
+                        const isModifiedField = modifiedFields.includes(fieldItem.Field.name as string)
                         const isSecondItem = index === 1
 
                         return (

@@ -23,7 +23,12 @@ import { useVersionData } from './hooks/use-version-data'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelper'
 import { getObjectBreadcrumbsListWithFields } from './helpers/objectBreadcrumbsHelper'
-import { type CategoriesList, type IVersionsFieldsList } from './types'
+import {
+  type CategoriesList,
+  type IAssetVersionField,
+  type IObjectVersionField,
+  type IVersionsFieldsList
+} from './types'
 import { useStyles } from './versions-fields-list.styles'
 import {
   ObjectVersionsFieldsView
@@ -50,11 +55,17 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
 
   const sectionsListWithFields = useMemo((): CategoriesList | undefined => {
     if (isAssetType) {
-      return getAssetCategoriesListWithFields({ versionViewData, categoriesList: sectionsList })
+      return getAssetCategoriesListWithFields({
+        versionViewData: versionViewData as IAssetVersionField[],
+        categoriesList: sectionsList
+      })
     }
 
     if (isDataObjectType) {
-      return getObjectBreadcrumbsListWithFields({ versionViewData, breadcrumbsList: sectionsList })
+      return getObjectBreadcrumbsListWithFields({
+        versionViewData: versionViewData as IObjectVersionField[],
+        breadcrumbsList: sectionsList
+      })
     }
   }, [isExpandedUnmodifiedFields, sectionsList])
 
@@ -124,7 +135,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
             categoriesList={ sectionsListWithFields }
             modifiedFields={ modifiedFields }
             versionKeysList={ versionKeysList }
-            versionViewData={ versionViewData }
+            versionViewData={ versionViewData as IAssetVersionField[] }
           />
         )}
         {isDataObjectType && (
@@ -132,7 +143,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
             breadcrumbsList={ sectionsListWithFields }
             modifiedFields={ modifiedFields }
             versionKeysList={ versionKeysList }
-            versionViewData={ versionViewData }
+            versionViewData={ versionViewData as IObjectVersionField[] }
           />
         )}
       </Flex>

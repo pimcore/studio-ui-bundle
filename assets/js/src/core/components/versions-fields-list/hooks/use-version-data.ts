@@ -15,13 +15,21 @@ import { useMemo } from 'react'
 import { isEqual } from 'lodash'
 import { getAssetCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/assetCategoriesHelper'
 import { getObjectBreadcrumbsList } from '@Pimcore/components/versions-fields-list/helpers/objectBreadcrumbsHelper'
-import { type CategoriesList, type IVersionsFieldsList, type VersionKeysList } from '../types'
+import {
+  type CategoriesList,
+  type IAssetVersionField,
+  type IAssetVersionsFieldsList,
+  type IObjectVersionField,
+  type IObjectVersionsFieldsList,
+  type IVersionsFieldsList,
+  type VersionKeysList
+} from '../types'
 import { type ElementType } from '../../../../../types/element-type.d'
 import { ElementTypeName } from '@Pimcore/constants/global'
 
 interface IUseAssetVersionDataReturn {
   versionKeysList: VersionKeysList
-  comparisonModifiedData: IVersionsFieldsList['data']
+  comparisonModifiedData: IAssetVersionField[] | IObjectVersionField[]
   sectionsList?: CategoriesList
 }
 
@@ -34,17 +42,17 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
 
   const sectionsList = useMemo(() => {
     if (elementType === ElementTypeName.ASSET) {
-      return getAssetCategoriesList(data)
+      return getAssetCategoriesList(data as IAssetVersionsFieldsList['data'])
     }
 
     if (elementType === ElementTypeName.DATA_OBJECT) {
-      return getObjectBreadcrumbsList(data)
+      return getObjectBreadcrumbsList(data as IObjectVersionsFieldsList['data'])
     }
   }, [data])
 
   return {
     versionKeysList,
-    comparisonModifiedData,
+    comparisonModifiedData: comparisonModifiedData as IUseAssetVersionDataReturn['comparisonModifiedData'],
     sectionsList
   }
 }

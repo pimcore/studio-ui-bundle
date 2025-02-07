@@ -13,9 +13,9 @@
 
 import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import { type CategoriesList, type IVersionsFieldsList } from '../types'
+import { type CategoriesList, type IObjectVersionsFieldsList } from '../types'
 
-export const getObjectBreadcrumbsList = (data: IVersionsFieldsList['data']): CategoriesList => {
+export const getObjectBreadcrumbsList = (data: IObjectVersionsFieldsList['data']): CategoriesList => {
   const breadcrumbMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   data.forEach(item => {
@@ -28,6 +28,7 @@ export const getObjectBreadcrumbsList = (data: IVersionsFieldsList['data']): Cat
       breadcrumbMap[breadcrumbName] = new Set()
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     breadcrumbMap[breadcrumbName].add(item.Field.name)
   })
 
@@ -37,7 +38,7 @@ export const getObjectBreadcrumbsList = (data: IVersionsFieldsList['data']): Cat
   }))
 }
 
-export const getObjectBreadcrumbsListWithFields = ({ versionViewData, breadcrumbsList }: { versionViewData: IVersionsFieldsList['data'], breadcrumbsList?: CategoriesList }): CategoriesList => {
+export const getObjectBreadcrumbsListWithFields = ({ versionViewData, breadcrumbsList }: { versionViewData: IObjectVersionsFieldsList['data'], breadcrumbsList?: CategoriesList }): CategoriesList => {
   // get all version field keys
   const versionFieldKeys = map(versionViewData, 'Field.name')
 

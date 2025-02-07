@@ -18,7 +18,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
   type CategoriesList,
-  type IVersionsFieldsList,
+  type IAssetVersionsFieldsList,
   type VersionKeysList
 } from '@Pimcore/components/versions-fields-list/types'
 import { useStyles } from '../common-versions-fields-view.styles'
@@ -26,7 +26,7 @@ import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 interface IAssetVersionsFieldsViewProps {
   categoriesList?: CategoriesList
-  versionViewData: IVersionsFieldsList['data']
+  versionViewData: IAssetVersionsFieldsList['data']
   versionKeysList: VersionKeysList
   modifiedFields: string[]
 }
