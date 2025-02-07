@@ -11,84 +11,30 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
-import { useIsAcitveMainWidget } from '@Pimcore/modules/widget-manager/hooks/use-is-active-main-widget'
-import { DataObjectProvider } from '../data-object-provider'
-import { Content } from '@Pimcore/components/content/content'
-import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import { useGlobalDataObjectContext } from '@Pimcore/modules/data-object/hooks/use-global-data-object-context'
-import { TabsContainer } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs-container'
-import { Toolbar } from '@Pimcore/modules/data-object/editor/toolbar/toolbar'
-import { TabsToolbarView } from '@Pimcore/modules/element/editor/layouts/tabs-toolbar-view'
-import { LanguageSelectionProvider } from './toolbar/language-selection/provider/language-selection-provider'
+import React from 'react'
 import {
-  EditFormProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+  EditorContainerInner,
+  type EditorContainerInnerProps
+} from '@Pimcore/modules/data-object/editor/editor-container/editor-container-inner'
+import { useCustomLayouts } from '@Pimcore/modules/data-object/hooks/use-custom-layouts'
 import {
-  InheritanceStateProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
+  LayoutSelectionProvider
+} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/layout-selection-provider'
 
-export interface EditorContainerProps {
-  id: number
-}
+export interface EditorContainerProps extends EditorContainerInnerProps {}
 
-const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
-  const { id } = props
-  const { isLoading, isError, dataObject, removeDataObjectFromState, editorType } = useDataObjectDraft(id)
-  const isWidgetActive = useIsAcitveMainWidget()
-  const { setContext, removeContext } = useGlobalDataObjectContext()
-
-  useEffect(() => {
-    return () => {
-      removeContext()
-      removeDataObjectFromState()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (isWidgetActive) {
-      setContext({ id })
-    }
-
-    return () => {
-      if (!isWidgetActive) {
-        removeContext()
-      }
-    }
-  }, [isWidgetActive])
-
-  if (isError) {
-    return <div>Error</div>
-  }
-
-  if (isLoading) {
-    return <Content loading />
-  }
-
-  if (dataObject === undefined || editorType === undefined) {
-    return <></>
-  }
+const EditorContainer = ({ id }: EditorContainerInnerProps): React.JSX.Element => {
+  const { getDefaultLayoutId, isLoading } = useCustomLayouts(id)
 
   return (
-    <DataObjectProvider id={ id }>
-      <EditFormProvider>
-        <InheritanceStateProvider>
-          <LanguageSelectionProvider>
-            <TabsToolbarView
-              renderTabbar={
-                <TabsContainer
-                  elementEditorType={ editorType }
-                />
-                }
-
-              renderToolbar={
-                <Toolbar />
-                }
-            />
-          </LanguageSelectionProvider>
-        </InheritanceStateProvider>
-      </EditFormProvider>
-    </DataObjectProvider>
+    <LayoutSelectionProvider
+      defaultLayout={ getDefaultLayoutId() }
+      isLoading={ isLoading }
+    >
+      <EditorContainerInner
+        id={ id }
+      />
+    </LayoutSelectionProvider>
   )
 }
 

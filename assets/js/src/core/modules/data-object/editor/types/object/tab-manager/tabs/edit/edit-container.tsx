@@ -21,12 +21,26 @@ import { Content } from '@Pimcore/components/content/content'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useStyles } from './edit-container.styles'
 import { ObjectBrickProvider } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/object-brick/providers/object-brick-provider'
+import {
+  useLayoutSelection
+} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
-  const { data: layoutData, isLoading } = useDataObjectGetLayoutByIdQuery({ id })
-  const { data, isLoading: isDataLoading } = useDataObjectGetByIdQuery({ id })
+  const { currentLayout } = useLayoutSelection()
+
+  const { data: layoutData, isLoading, error: layoutError } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: currentLayout === null })
+  const { data, isLoading: isDataLoading, error: dataObjectError } = useDataObjectGetByIdQuery({ id })
+
   const { styles } = useStyles()
+
+  if (dataObjectError !== undefined) {
+    trackError(new ApiError(dataObjectError))
+  }
+  if (layoutError !== undefined) {
+    trackError(new ApiError(layoutError))
+  }
 
   if (layoutData === undefined || isLoading || isDataLoading) {
     return <Content loading />

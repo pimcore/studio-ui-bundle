@@ -11,16 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import ButtonGroup from 'antd/es/button/button-group'
-import React from 'react'
+import { useContext } from 'react'
 import {
-  ReloadButton
-} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/components/reload-button/reload-button'
+  type ILayoutSelectionContext,
+  LayoutSelectionContext
+} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/layout-selection-provider'
 
-export const EditorToolbarContextMenu = (): React.JSX.Element => {
-  return (
-    <ButtonGroup>
-      <ReloadButton />
-    </ButtonGroup>
-  )
+export interface UseLanguageSelectionReturn extends ILayoutSelectionContext {}
+
+export const useLayoutSelection = (): UseLanguageSelectionReturn => {
+  return useContext(LayoutSelectionContext)
 }
