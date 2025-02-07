@@ -11,29 +11,26 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Tag } from '@Pimcore/components/tag/tag'
-import { Text } from '@Pimcore/components/text/text'
-import { Space } from '@Pimcore/components/space/space'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Input } from '@Pimcore/components/input/input'
-import { type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
-import { formatDateTime } from '@Pimcore/utils/date-time'
+import React, {useState} from 'react'
+import {useTranslation} from 'react-i18next'
+import {isNil} from 'lodash'
+import {Flex} from '@Pimcore/components/flex/flex'
+import {Tag} from '@Pimcore/components/tag/tag'
+import {Text} from '@Pimcore/components/text/text'
+import {Space} from '@Pimcore/components/space/space'
+import {IconTextButton} from '@Pimcore/components/icon-text-button/icon-text-button'
+import {IconButton} from '@Pimcore/components/icon-button/icon-button'
+import {Icon} from '@Pimcore/components/icon/icon'
+import {Input} from '@Pimcore/components/input/input'
+import {type Version} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
+import {formatDateTime} from '@Pimcore/utils/date-time'
 import {
-  api,
   useVersionDeleteByIdMutation,
-  useVersionPublishByIdMutation, useVersionUpdateByIdMutation
+  useVersionPublishByIdMutation,
+  useVersionUpdateByIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useStyles } from './version-item.style'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import trackError, {ApiError} from '@Pimcore/modules/app/error-handler'
+import {useStyles} from './version-item.style'
 
 export const VersionItem = ({ version, setDetailedVersions }: { version: Version, setDetailedVersions: any }): React.JSX.Element => {
   const [inputValue, setInputValue] = useState(version?.note)
@@ -42,9 +39,6 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
   const [publishVersion, { isLoading: isLoadingPublishVersion, isError: isPublishVersionError, error: publishVersionError }] = useVersionPublishByIdMutation()
   const [deleteVersion, { isLoading: isLoadingDeleteVersion, isError: isDeleteVersionError, error: deleteVersionError }] = useVersionDeleteByIdMutation()
 
-  const { id } = useElementContext()
-
-  const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -57,15 +51,8 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
     })
     : undefined
 
-  const invalidateCache = (): void => {
-    const invalidateVersionsList = invalidatingTags.ASSET_VERSIONS(id)
-    dispatch(api.util.invalidateTags(invalidateVersionsList))
-  }
-
   const handlePublishVersion = async (): Promise<void> => {
     await publishVersion({ id: version.id })
-
-    invalidateCache()
 
     if (isPublishVersionError) {
       trackError(new ApiError(publishVersionError))
@@ -76,7 +63,6 @@ export const VersionItem = ({ version, setDetailedVersions }: { version: Version
     await deleteVersion({ id: version.id })
 
     setDetailedVersions([])
-    invalidateCache()
 
     if (isDeleteVersionError) {
       trackError(new ApiError(deleteVersionError))

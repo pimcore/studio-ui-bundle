@@ -43,8 +43,8 @@ export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewCompon
   useEffect(() => {
     dispatch(
       api.util.invalidateTags(
-        invalidatingTags.ASSET_VERSIONS(id))
-    )
+        invalidatingTags.VERSIONS()
+      ))
   }, [])
 
   if (isLoading) {
