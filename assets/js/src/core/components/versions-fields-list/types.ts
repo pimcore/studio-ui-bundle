@@ -15,7 +15,7 @@ import { type VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 export interface IVersionsFieldsList {
   data: Array<{
-    Field: { field: string, key: string }
+    Field: { field: string, key: string, name: string }
     [key: string]: any
   }>
 }

@@ -28,9 +28,6 @@ export const getObjectBreadcrumbsList = (data: IVersionsFieldsList['data']): Cat
       breadcrumbMap[breadcrumbName] = new Set()
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     breadcrumbMap[breadcrumbName].add(item.Field.name)
   })
 

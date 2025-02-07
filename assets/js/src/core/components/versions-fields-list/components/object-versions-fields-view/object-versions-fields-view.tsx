@@ -71,7 +71,31 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
               gap="extra-small"
               vertical
             >
-              Content
+              {versionViewData.map((fieldItem, fieldIndex) => (
+                breadcrumb.fieldKeys.includes(fieldItem.Field.name) && (
+                  <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
+                    <Text className={ styles.fieldTitle }>{fieldItem.Field.name}</Text>
+                    <Flex gap="mini">
+                      {versionKeysList.map((key, index) => {
+                        const isModifiedField = modifiedFields.includes(fieldItem.Field.name)
+                        const isSecondItem = index === 1
+
+                        return (
+                          <div
+                            className={
+                                cn(styles.sectionFieldItem, {
+                                  [styles.sectionFieldItemHighlight]: isModifiedField && isSecondItem
+                                })
+                              }
+                            key={ `${index}-${key}` }
+                          >
+                            <div>{fieldItem[key]}</div>
+                          </div>
+                        )
+                      })}
+                    </Flex>
+                  </div>
+                )))}
             </Flex>
           </div>
         )

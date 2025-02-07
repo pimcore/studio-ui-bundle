@@ -61,7 +61,13 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   // List of modified fields in comparison mode
   const modifiedFields = useMemo(() => {
     if (isComparisonView && !isEmpty(comparisonModifiedData)) {
-      return comparisonModifiedData.map((item) => item.Field.key)
+      if (isAssetType) {
+        return comparisonModifiedData.map((item) => item.Field.key)
+      }
+
+      if (isDataObjectType) {
+        return comparisonModifiedData.map((item) => item.Field.name)
+      }
     }
 
     return []
