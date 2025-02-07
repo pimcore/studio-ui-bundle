@@ -20,7 +20,7 @@ const config: Meta<typeof ReloadPopconfirm> = {
   title: 'Components/Feedback/ReloadPopconfirm',
   component: ReloadPopconfirm,
   args: {
-    title: 'Are you sure you want to reload?',
+  title: 'Are you sure you want to reload?',
   },
 };
 
@@ -29,65 +29,65 @@ export default config;
 
 export const _default: StoryObj<typeof ReloadPopconfirm> = {
   render: (args) => (
-    <ReloadPopconfirm
-      {...args}
-      onReload={() => alert('Reloading automatically...')}
-      hasDataChanged={() => true}
-    >
-      <Button>Click me (auto-trigger)</Button>
-    </ReloadPopconfirm>
+  <ReloadPopconfirm
+    {...args}
+    onReload={() => alert('Reloading automatically...')}
+    hasDataChanged={() => true}
+  >
+    <Button>Click me (auto-trigger)</Button>
+  </ReloadPopconfirm>
   ),
 };
 
 
 export const WithDataChange: StoryObj<typeof ReloadPopconfirm> = {
-  render: (args) => {
-    const popconfirmRef = useRef<ReloadPopconfirmHandle>(null);
+  render: (args): React.JSX.Element => {
+  const popconfirmRef = useRef<ReloadPopconfirmHandle>(null);
 
-    const triggerPopconfirm = () => {
-      if (popconfirmRef.current) {
-        popconfirmRef.current.refresh();
-      }
-    };
+  const triggerPopconfirm = (): void => {
+    if (popconfirmRef.current !== null) {
+    popconfirmRef.current.refresh();
+    }
+  };
 
-    return (
-      <div>
-        <Button onClick={triggerPopconfirm}>Trigger ReloadPopconfirm</Button>
-        <ReloadPopconfirm
-          ref={popconfirmRef}
-          {...args}
-          onReload={() => alert('Reloading...')}
-          hasDataChanged={() => true}
-        >
-          <Button>Click me</Button>
-        </ReloadPopconfirm>
-      </div>
-    );
+  return (
+    <div>
+      <Button onClick={triggerPopconfirm}>Trigger ReloadPopconfirm</Button>
+      <ReloadPopconfirm
+        ref={popconfirmRef}
+        {...args}
+        onReload={() => alert('Reloading...')}
+        hasDataChanged={() => true}
+      >
+      <Button>Click me</Button>
+      </ReloadPopconfirm>
+    </div>
+  );
   },
 };
 
 export const WithoutDataChange: StoryObj<typeof ReloadPopconfirm> = {
-  render: (args) => {
-    const popconfirmRef = useRef<ReloadPopconfirmHandle>(null);
+  render: (args): React.JSX.Element => {
+  const popconfirmRef = useRef<ReloadPopconfirmHandle>(null);
 
-    const triggerPopconfirm = () => {
-      if (popconfirmRef.current) {
-        popconfirmRef.current.refresh();
-      }
-    };
+  const triggerPopconfirm = (): void => {
+    if (popconfirmRef.current !== null) {
+    popconfirmRef.current.refresh();
+    }
+  };
 
-    return (
-      <div>
-        <Button onClick={triggerPopconfirm}>Trigger ReloadPopconfirm</Button>
-        <ReloadPopconfirm
-          ref={popconfirmRef}
-          {...args}
-          onReload={() => alert('Reloading without confirmation...')}
-          hasDataChanged={() => false}
-        >
-          <Button>Click me</Button>
-        </ReloadPopconfirm>
-      </div>
-    );
+  return (
+    <div>
+      <Button onClick={triggerPopconfirm}>Trigger ReloadPopconfirm</Button>
+      <ReloadPopconfirm
+        ref={popconfirmRef}
+        {...args}
+        onReload={() => alert('Reloading without confirmation...')}
+        hasDataChanged={() => false}
+      >
+      <Button>Click me</Button>
+      </ReloadPopconfirm>
+    </div>
+  );
   },
 };
