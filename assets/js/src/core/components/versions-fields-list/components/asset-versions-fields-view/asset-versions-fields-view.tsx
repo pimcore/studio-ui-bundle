@@ -21,7 +21,7 @@ import {
   type IVersionsFieldsList,
   type VersionKeysList
 } from '@Pimcore/components/versions-fields-list/types'
-import { useStyles } from './asset-versions-fields-view.styles'
+import { useStyles } from '../common-versions-fields-view.styles'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 interface IAssetVersionsFieldsViewProps {
@@ -51,13 +51,13 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
       {categoriesList?.map((category, index) => (
         <div key={ `${index}-${category.key}` }>
           <Text
-            className={ styles.categoryTitle }
+            className={ styles.sectionTitle }
             strong
           >
             {t(`version.category.title.${category.key}`)}
           </Text>
           <Flex
-            className={ styles.categoryFields }
+            className={ styles.sectionFields }
             gap="extra-small"
             vertical
           >
@@ -73,8 +73,8 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
                     return (
                       <div
                         className={
-                            cn(styles.categoryFieldItem, {
-                              [styles.categoryFieldItemHighlight]: isModifiedField && isSecondItem
+                            cn(styles.sectionFieldItem, {
+                              [styles.sectionFieldItemHighlight]: isModifiedField && isSecondItem
                             })
                           }
                         key={ `${index}-${key}` }

@@ -15,14 +15,14 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    categoryTitle: css`
+    sectionTitle: css`
       display: block;
       padding: ${token.paddingXS}px;
       font-size: 14px;
       font-weight: 900;
     `,
 
-    categoryFields: css`
+    sectionFields: css`
       padding: ${token.paddingXS}px;
       border: 1px solid ${token.colorBorderContainer};
       border-radius: ${token.borderRadius}px;
@@ -33,7 +33,7 @@ export const useStyles = createStyles(({ token, css }) => {
       margin-bottom: 4px;
     `,
 
-    categoryFieldItem: css`
+    sectionFieldItem: css`
       flex: 1 1 50%;
       padding: ${token.paddingXS}px;
       background-color: ${token.colorBgContainerDisabled};
@@ -44,7 +44,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
-    categoryFieldItemHighlight: css`
+    sectionFieldItemHighlight: css`
       background-color: ${token.Colors.Brand.Warning.colorWarningBg};
     `
   }
