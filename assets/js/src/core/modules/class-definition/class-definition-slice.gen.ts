@@ -6,6 +6,13 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            classDefinitionCollection: build.query<
+                ClassDefinitionCollectionApiResponse,
+                ClassDefinitionCollectionApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/class/collection` }),
+                providesTags: ["Class Definition"],
+            }),
             classCustomLayoutCollection: build.query<
                 ClassCustomLayoutCollectionApiResponse,
                 ClassCustomLayoutCollectionApiArg
@@ -109,6 +116,11 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type ClassDefinitionCollectionApiResponse = /** status 200 List of class definitions */ {
+    totalItems: number;
+    items: ClassDefinitionListItem[];
+};
+export type ClassDefinitionCollectionApiArg = void;
 export type ClassCustomLayoutCollectionApiResponse =
     /** status 200 List of custom layouts for the given data object class in a simple and compact format for listings.
      */ {
@@ -185,17 +197,27 @@ export type ClassObjectBrickObjectLayoutApiArg = {
     /** ObjectId of the element */
     objectId: number;
 };
-export type CustomLayoutsInCompactFormatToBeUsedForEGListings = {
+export type ElementIcon = {
+    /** Icon type */
+    type: "name" | "path";
+    /** Icon value */
+    value: string;
+};
+export type ClassDefinitionListItem = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Id of custom layout */
+    /** Id of class definition */
     id: string;
-    /** Name */
+    /** Name of class definition */
     name: string;
-    /** Whether it is the default layout */
-    default: boolean;
+    /** Title */
+    title: string;
+    /** icon */
+    icon: ElementIcon;
+    /** Group */
+    group: any;
 };
 export type Error = {
     /** Message */
@@ -207,11 +229,17 @@ export type DevError = {
     /** Details */
     details: string;
 };
-export type ElementIcon = {
-    /** Icon type */
-    type: "name" | "path";
-    /** Icon value */
-    value: string;
+export type CustomLayoutsInCompactFormatToBeUsedForEGListings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Id of custom layout */
+    id: string;
+    /** Name */
+    name: string;
+    /** Whether it is the default layout */
+    default: boolean;
 };
 export type Layout = {
     /** AdditionalAttributes */
@@ -358,10 +386,8 @@ export type ClassDefinition = {
     allowVariants: boolean;
     /** Whether variants are visible in the tree */
     showVariants: boolean;
-    /** Icon */
-    icon: string;
-    /** Group */
-    group: string;
+    /** icon */
+    icon: ElementIcon;
     /** Show application logger tab */
     showAppLoggerTab: boolean;
     /** Namespace of link generator */
@@ -380,6 +406,8 @@ export type ClassDefinition = {
     blockedVarsForExport: string[];
     /** Whether the class definition can be written to */
     isWriteable: boolean;
+    /** Group */
+    group: any;
 };
 export type ObjectBrickLayoutDefinition = {
     /** AdditionalAttributes */
@@ -410,6 +438,7 @@ export type ObjectBrickLayoutDefinition = {
     children: any[];
 };
 export const {
+    useClassDefinitionCollectionQuery,
     useClassCustomLayoutCollectionQuery,
     usePimcoreStudioApiClassCustomLayoutCreateMutation,
     usePimcoreStudioApiClassCustomLayoutGetQuery,
