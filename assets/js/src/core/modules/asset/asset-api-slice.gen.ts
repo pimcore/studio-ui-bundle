@@ -1127,6 +1127,8 @@ export type GridColumnData = {
     locale?: any;
     /** Value */
     value?: any;
+    /** inheritance */
+    inheritance?: any;
 };
 export type PatchCustomMetadata = {
     /** Name */

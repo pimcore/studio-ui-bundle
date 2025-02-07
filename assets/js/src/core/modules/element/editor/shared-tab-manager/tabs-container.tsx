@@ -19,6 +19,7 @@ import { useInjection } from '@Pimcore/app/depency-injection'
 import { type ElementEditorType } from '@Pimcore/modules/element/editor/services/type-registry'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { TabManagerProvider } from '@Pimcore/modules/element/editor/shared-tab-manager/tab-manager-context'
 
 export const TabsContainer = ({ elementEditorType }: { elementEditorType: ElementEditorType }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -43,10 +44,12 @@ export const TabsContainer = ({ elementEditorType }: { elementEditorType: Elemen
   })
 
   return (
-    <EditorTabsView
-      defaultActiveKey={ '1' }
-      items={ preparedTabs }
-      showLabelIfActive
-    />
+    <TabManagerProvider tabManager={ tabManager }>
+      <EditorTabsView
+        defaultActiveKey={ '1' }
+        items={ preparedTabs }
+        showLabelIfActive
+      />
+    </TabManagerProvider>
   )
 }
