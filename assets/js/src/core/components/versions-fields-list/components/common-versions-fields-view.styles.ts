@@ -16,10 +16,25 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     sectionTitle: css`
+      position: relative;
       display: block;
       padding: ${token.paddingXS}px;
       font-size: 14px;
       font-weight: 900;
+    `,
+
+    subSectionTitle: css`
+      margin-left: 5px;
+        
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 2px;
+          width: 2px;
+          height: 22px;
+          background-color: ${token.Colors.Neutral.Fill.colorFill};
+        }
     `,
 
     sectionFields: css`

@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
@@ -36,13 +37,13 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  const renderSectionTitle = (key: string): React.JSX.Element => {
+  const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
     const isShowValueWithTranslation = SECTIONS_WITH_TRANSLATION.includes(key)
     const textValue = isShowValueWithTranslation ? t(`version.category.title.${key}`) : key
 
     return (
       <Text
-        className={ styles.sectionTitle }
+        className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
         strong
       >{textValue}</Text>
     )
@@ -50,18 +51,22 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
 
   return (
     <>
-      {breadcrumbsList?.map((breadcrumb, index) => (
-        <div key={ `${index}-${breadcrumb.key}` }>
-          {renderSectionTitle(breadcrumb.key)}
-          <Flex
-            className={ styles.sectionFields }
-            gap="extra-small"
-            vertical
-          >
-            Content
-          </Flex>
-        </div>
-      ))}
+      {breadcrumbsList?.map((breadcrumb, index) => {
+        const isCommonSection = breadcrumb.key === VersionCategoryName.SYSTEM_DATA
+
+        return (
+          <div key={ `${index}-${breadcrumb.key}` }>
+            {renderSectionTitle({ key: breadcrumb.key, isCommonSection })}
+            <Flex
+              className={ styles.sectionFields }
+              gap="extra-small"
+              vertical
+            >
+              Content
+            </Flex>
+          </div>
+        )
+      })}
     </>
   )
 }
