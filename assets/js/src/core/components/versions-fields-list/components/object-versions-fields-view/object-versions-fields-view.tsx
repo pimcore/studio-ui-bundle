@@ -14,6 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
@@ -41,11 +42,19 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     const isShowValueWithTranslation = SECTIONS_WITH_TRANSLATION.includes(key)
     const textValue = isShowValueWithTranslation ? t(`version.category.title.${key}`) : key
 
+    const titleParts = textValue.split('/')
+    const [firstTitlePart, ...remainingTitleParts] = titleParts
+
+    const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
+
     return (
       <Text
         className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: !isCommonSection }) }
         strong
-      >{textValue}</Text>
+      >
+        {firstTitlePart}
+        {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
+      </Text>
     )
   }
 

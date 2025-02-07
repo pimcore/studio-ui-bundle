@@ -37,6 +37,10 @@ export const useStyles = createStyles(({ token, css }) => {
         }
     `,
 
+    subSectionText: css`
+      font-weight: 400;
+    `,
+
     sectionFields: css`
       padding: ${token.paddingXS}px;
       border: 1px solid ${token.colorBorderContainer};
