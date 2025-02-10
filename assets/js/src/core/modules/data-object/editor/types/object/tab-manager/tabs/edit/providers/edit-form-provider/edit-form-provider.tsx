@@ -11,18 +11,21 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext, useContext, useMemo, useRef } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useRef } from 'react'
 import { type FormInstance } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import _ from 'lodash'
+import _, { debounce } from 'lodash'
+import { useSave } from '@Pimcore/modules/data-object/actions/use-save'
+import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useTranslation } from 'react-i18next'
 
 interface EditFormContextProps {
   form: FormInstance
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
   resetModifiedDataObjectAttributes: () => void
-  updateDraft: () => void
+  updateDraft: () => Promise<void>
   getModifiedDataObjectAttributes: () => Record<string, any>
   getChangedFieldName: (changedValues: Record<string, unknown>, parentKey?: string) => string | null
 }
@@ -42,6 +45,17 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const { id } = useElementContext()
   const { markObjectDataAsModified } = useDataObjectDraft(id)
+  const { save, isError } = useSave()
+
+  const messageApi = useMessage()
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    if (isError) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      messageApi.error(t('auto-save-failed'))
+    }
+  }, [isError])
 
   const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>): void => {
     modifiedDataObjectAttributesRef.current = { ...modifiedDataObjectAttributesRef.current, ...changedValues }
@@ -79,8 +93,14 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return fullKey
   }
 
-  const updateDraft = (): void => {
+  const autoSave = debounce(async () => {
+    await save(getModifiedDataObjectAttributes(), 'autoSave')
+  }, 1000)
+
+  const updateDraft = async (): Promise<void> => {
     markObjectDataAsModified()
+
+    await autoSave()
   }
 
   const value = useMemo(() => ({

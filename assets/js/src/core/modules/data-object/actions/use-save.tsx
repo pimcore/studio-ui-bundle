@@ -21,11 +21,11 @@ import type {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import { useDataObjectUpdateByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import {
-  useEditFormContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+  useSaveContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
 
 export interface UseSaveHookReturn {
-  save: (task?: 'version' | 'autoSave') => Promise<void>
+  save: (editableData: Record<string, any>, task?: 'version' | 'autoSave') => Promise<void>
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -35,9 +35,9 @@ export const useSave = (): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
-  const { getModifiedDataObjectAttributes } = useEditFormContext()
+  const { setIsAutoSaved, setIsAutoSaveLoading } = useSaveContext()
 
-  const save = async (task?: 'version' | 'autoSave'): Promise<void> => {
+  const save = async (editableData: Record<string, any>, task?: 'version' | 'autoSave'): Promise<void> => {
     if (dataObject?.changes === undefined) return
 
     const update: DataObjectUpdateByIdApiArg['body']['data'] = {}
@@ -58,8 +58,6 @@ export const useSave = (): UseSaveHookReturn => {
       update.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
-    const editableData = getModifiedDataObjectAttributes()
-
     if (Object.keys(editableData).length > 0) {
       update.editableData = editableData
     }
@@ -68,12 +66,21 @@ export const useSave = (): UseSaveHookReturn => {
       update.task = task
     }
 
+    if (task === 'autoSave') {
+      setIsAutoSaveLoading(true)
+    }
+
     await saveDataObject({
       id,
       body: {
         data: {
           ...update
         }
+      }
+    }).then(() => {
+      setIsAutoSaved(task === 'autoSave')
+      if (task === 'autoSave') {
+        setIsAutoSaveLoading(false)
       }
     })
   }

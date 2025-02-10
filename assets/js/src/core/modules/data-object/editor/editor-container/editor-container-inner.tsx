@@ -27,6 +27,9 @@ import {
 import {
   InheritanceStateProvider
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
+import {
+  SaveProvider
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -71,23 +74,25 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
 
   return (
     <DataObjectProvider id={ id }>
-      <EditFormProvider>
-        <InheritanceStateProvider>
-          <LanguageSelectionProvider>
-            <TabsToolbarView
-              renderTabbar={
-                <TabsContainer
-                  elementEditorType={ editorType }
-                />
-                }
+      <SaveProvider>
+        <EditFormProvider>
+          <InheritanceStateProvider>
+            <LanguageSelectionProvider>
+              <TabsToolbarView
+                renderTabbar={
+                  <TabsContainer
+                    elementEditorType={ editorType }
+                  />
+                  }
 
-              renderToolbar={
-                <Toolbar />
-                }
-            />
-          </LanguageSelectionProvider>
-        </InheritanceStateProvider>
-      </EditFormProvider>
+                renderToolbar={
+                  <Toolbar />
+                  }
+              />
+            </LanguageSelectionProvider>
+          </InheritanceStateProvider>
+        </EditFormProvider>
+      </SaveProvider>
     </DataObjectProvider>
   )
 }

@@ -33,6 +33,12 @@ import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { useSave } from '@Pimcore/modules/data-object/actions/use-save'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  useSaveContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -40,11 +46,13 @@ export const Toolbar = (): React.JSX.Element => {
   const { dataObject, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
   const { save: saveDataObject, isLoading, isSuccess, isError } = useSave()
+  const { isAutoSaved, isAutoSaveLoading } = useSaveContext()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
   const { resetModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
+  const { getModifiedDataObjectAttributes } = useEditFormContext()
 
   useEffect(() => {
     if (isSuccess && isSchedulesSuccess) {
@@ -74,11 +82,25 @@ export const Toolbar = (): React.JSX.Element => {
         </Flex>
 
         <Flex
+          align="center"
           gap={ 'extra-small' }
           style={ { height: '32px' } }
           vertical={ false }
         >
           <EditorToolbarWorkflowMenu />
+          { isAutoSaveLoading && (
+            <Tooltip title={ t('auto-save.loading-tooltip') }>
+              <Spin
+                size='small'
+                spinning
+              />
+            </Tooltip>
+          )}
+          { !isAutoSaveLoading && isAutoSaved && (
+            <Tooltip title={ t('auto-save.tooltip') }>
+              <Icon value="auto-save" />
+            </Tooltip>
+          )}
           <Button
             disabled={ !hasChanges || isLoading || isSchedulesLoading }
             loading={ isLoading || isSchedulesLoading }
@@ -96,7 +118,7 @@ export const Toolbar = (): React.JSX.Element => {
   async function onSaveClick (): Promise<void> {
     if (dataObject?.changes === undefined) return
 
-    Promise.all([saveDataObject(), saveSchedules()]).catch((error) => {
+    Promise.all([saveDataObject(getModifiedDataObjectAttributes()), saveSchedules()]).catch((error) => {
       console.log(error)
     })
   }
