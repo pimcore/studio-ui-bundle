@@ -17,9 +17,10 @@ import cn from 'classnames'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { DataComponent } from '../data-component/data-component'
+import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/components/versions-fields-list/types'
 import { useStyles } from '../common-versions-fields-view.styles'
-import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
@@ -85,7 +86,14 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                               }
                             key={ `${index}-${key}` }
                           >
-                            <div>{fieldItem[key]}</div>
+                            Value: {fieldItem[key]}
+                            <DataComponent
+                              datatype={ 'data' }
+                              fieldType={ fieldItem.Field.fieldtype }
+                              name={ fieldItem.Field.name }
+                              value={ fieldItem[key] }
+                              { ...fieldItem.Field }
+                            />
                           </div>
                         )
                       })}
