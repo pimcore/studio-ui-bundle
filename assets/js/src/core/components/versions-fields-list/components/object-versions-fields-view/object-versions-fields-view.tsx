@@ -86,7 +86,6 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                               }
                             key={ `${index}-${key}` }
                           >
-                            Value: {fieldItem[key]}
                             <DataComponent
                               datatype={ 'data' }
                               fieldType={ fieldItem.Field.fieldtype }
