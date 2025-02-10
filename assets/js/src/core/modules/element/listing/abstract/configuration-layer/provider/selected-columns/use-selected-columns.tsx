@@ -16,7 +16,7 @@ import { SelectedColumnsContext, type SelectedColumnsContextProps } from './sele
 
 export interface UseSelectedColumnsReturn extends SelectedColumnsContextProps {};
 
-export const UseSelectedColumns = (): UseSelectedColumnsReturn => {
+export const useSelectedColumns = (): UseSelectedColumnsReturn => {
   const context = useContext(SelectedColumnsContext)
 
   return context

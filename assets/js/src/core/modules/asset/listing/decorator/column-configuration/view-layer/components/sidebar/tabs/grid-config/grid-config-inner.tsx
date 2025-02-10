@@ -33,7 +33,7 @@ import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 
@@ -45,12 +45,12 @@ enum ViewState {
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { getAvailableColumnsDropdown } = useAvailableColumns()
-  const { selectedColumns, setSelectedColumns } = UseSelectedColumns()
+  const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { columns, setColumns, addColumn } = useTabGridConfig()
   const { getId } = useElementId()
   const userData = useUser()
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
-  const { gridConfig, setGridConfig } = useGridConfig()!
+  const { gridConfig, setGridConfig } = useGridConfig()
 
   const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery({ folderId: getId() })
   const { data: roleList } = useRoleGetCollectionQuery()
@@ -68,8 +68,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [form] = useForm()
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
-
-  console.log({ gridConfig, isSavedConfiguration })
 
   const savedGridConfigurations: DropdownMenuProps['items'] = useMemo(() => {
     if (data !== undefined) {
@@ -92,7 +90,6 @@ export const GridConfigInner = (): React.JSX.Element => {
   }, [selectedColumns])
 
   const onColumnClick = (column: AvailableColumn): void => {
-    console.log({ column, columns })
     addColumn(column)
   }
 

@@ -30,7 +30,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
-import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 
 export interface CsvModalProps {
   open: boolean
@@ -47,7 +47,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [fetchCreateFolderCsv] = useAssetExportCsvFolderMutation()
   const { selectedRows } = useRowSelection()
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
-  const { selectedColumns } = UseSelectedColumns()
+  const { selectedColumns } = useSelectedColumns()
   // const { filterOptions } = useListFilterOptions()
   const initialFormValues: CSVFormValues = {
     delimiter: ';',

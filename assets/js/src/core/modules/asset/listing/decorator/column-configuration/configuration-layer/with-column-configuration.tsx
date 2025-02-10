@@ -14,7 +14,7 @@
 import React, { useEffect } from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useAssetGetAvailableGridColumnsQuery, useAssetGetGridConfigurationByFolderIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { Content } from '@Pimcore/components/content/content'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -30,7 +30,7 @@ export const withColumnConfiguration = (Component: AbstractDecoratorProps['Confi
     const { getId } = useElementId()
     const { id: configId } = useSelectedGridConfigId()
     const { isLoading: isInitialConfigLoading, data: initialConfigurationData } = useAssetGetGridConfigurationByFolderIdQuery({ folderId: getId(), configurationId: configId })
-    const { setSelectedColumns } = UseSelectedColumns()
+    const { setSelectedColumns } = useSelectedColumns()
     const { setAvailableColumns } = useAvailableColumns()
     const { setGridConfig } = useGridConfig()
     const isConfigLoading = isLoading || isInitialConfigLoading

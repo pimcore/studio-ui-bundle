@@ -26,6 +26,7 @@ import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/de
 import { DefaultView } from './views/default-view'
 import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
+import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery
@@ -43,6 +44,7 @@ const defaultProps = {
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 const props = compose<AbstractDecoratorProps>(
+  SortingDecorator,
   PagingDecorator,
   ColumnConfigurationDecorator,
   [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],

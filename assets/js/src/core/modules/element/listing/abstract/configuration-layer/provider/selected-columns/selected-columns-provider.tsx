@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import { uuid } from '@Pimcore/utils/uuid'
 import React, { createContext, useMemo, useState } from 'react'
 
 export interface SelectedColumn {
@@ -31,11 +32,15 @@ export interface SelectedColumn {
 export interface SelectedColumnsContextProps {
   selectedColumns: SelectedColumn[]
   setSelectedColumns: (columns: SelectedColumn[]) => void
+  encodeColumnIdentifier: (column: SelectedColumn) => string
+  decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn | undefined
 }
 
 export const SelectedColumnsContext = createContext<SelectedColumnsContextProps>({
   selectedColumns: [],
-  setSelectedColumns: () => {}
+  setSelectedColumns: () => {},
+  encodeColumnIdentifier: () => '',
+  decodeColumnIdentifier: () => undefined
 })
 
 export interface SelectedColumnsProviderProps {
@@ -45,8 +50,28 @@ export interface SelectedColumnsProviderProps {
 export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
 
+  const encodeColumnIdentifier = (column: SelectedColumn): string => {
+    return JSON.stringify({
+      uuid: uuid(),
+      key: column.key,
+      locale: column.locale
+    })
+  }
+
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
+    try {
+      JSON.parse(columnIdentifier)
+    } catch (e) {
+      return undefined
+    }
+
+    const { key, locale } = JSON.parse(columnIdentifier)
+
+    return selectedColumns.find(column => column.key === key && column.locale === locale)!
+  }
+
   return useMemo(() => (
-    <SelectedColumnsContext.Provider value={ { selectedColumns, setSelectedColumns } }>
+    <SelectedColumnsContext.Provider value={ { selectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } }>
       {children}
     </SelectedColumnsContext.Provider>
   ), [selectedColumns])

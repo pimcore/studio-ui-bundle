@@ -14,43 +14,20 @@
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { type AccessorColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
-import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useTranslation } from 'react-i18next'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
 export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting'>
 
 export interface UseGridOptionsReturn {
-  encodeColumnIdentifier: (column: SelectedColumn) => string
-  decodeColumnIdentifier: (columnIdentifier: string) => SelectedColumn | undefined
   transformGridColumn: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>
   transformGridColumnDefinition: (columns: Array<AccessorColumnDef<unknown, never>>) => Array<AccessorColumnDef<unknown, never>>
   getGridProps: () => GridProps
 }
 
 export const useGridOptions = (): UseGridOptionsReturn => {
-  const { selectedColumns } = UseSelectedColumns()
   const { t } = useTranslation()
   const { hasType } = useDynamicTypeResolver()
-
-  const encodeColumnIdentifier = (column: SelectedColumn): string => {
-    return JSON.stringify({
-      key: column.key,
-      locale: column.locale
-    })
-  }
-
-  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
-    try {
-      JSON.parse(columnIdentifier)
-    } catch (e) {
-      return undefined
-    }
-
-    const { key, locale } = JSON.parse(columnIdentifier)
-
-    return selectedColumns.find(column => column.key === key && column.locale === locale)!
-  }
 
   const transformGridColumn = (column: SelectedColumn): IdentifiedColumnDef<unknown, never> => {
     return {
@@ -70,8 +47,6 @@ export const useGridOptions = (): UseGridOptionsReturn => {
   }
 
   return {
-    encodeColumnIdentifier,
-    decodeColumnIdentifier,
     transformGridColumn,
     transformGridColumnDefinition,
     getGridProps

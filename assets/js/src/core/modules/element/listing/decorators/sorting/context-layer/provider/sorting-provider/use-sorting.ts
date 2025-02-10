@@ -12,15 +12,15 @@
 */
 
 import { useContext } from 'react'
-import { RowSelectionContext, type RowSelectionData } from './row-selection-provider'
+import { SortingContext, type SortingData } from './sorting-provider'
 
-export interface UseRowSelectionReturn extends RowSelectionData {}
+export interface UseSortingReturn extends SortingData {}
 
-export const useRowSelection = (): UseRowSelectionReturn => {
-  const context = useContext(RowSelectionContext)
+export const useSorting = (): UseSortingReturn => {
+  const context = useContext(SortingContext)
 
-  if (context === undefined || context === null) {
-    throw new Error('useRowSelection must be used within a RowSelectionProvider')
+  if (context === undefined) {
+    throw new Error('useSorting must be used within a SortingProvider')
   }
 
   return context

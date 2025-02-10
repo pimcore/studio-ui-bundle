@@ -29,7 +29,6 @@ export const useGridConfig = (): IUseGridConfigHookReturn => {
   }
 
   function addColumn (column: AvailableColumn): void {
-    console.log({ column, columns })
     setColumns([...columns, column])
   }
 

@@ -13,7 +13,7 @@
 
 import React, { useEffect } from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import { UseSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDataObjectGetAvailableGridColumnsQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -24,7 +24,7 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
     const { useElementId } = useSettings()
     const { getId } = useElementId()
     const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: 'CAR' })
-    const { selectedColumns, setSelectedColumns } = UseSelectedColumns()
+    const { selectedColumns, setSelectedColumns } = useSelectedColumns()
     const isConfigLoading = isLoading
 
     useEffect(() => {

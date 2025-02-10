@@ -12,7 +12,7 @@
 */
 
 import React, { useMemo } from 'react'
-import { UseSelectedColumns } from '../../../configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSelectedColumns } from '../../../configuration-layer/provider/selected-columns/use-selected-columns'
 import { useData } from '../../../data-layer/provider/data/use-data'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -21,9 +21,9 @@ import { useSettings } from '../../../settings/use-settings'
 export const GridContainer = (): React.JSX.Element => {
   const { data, dataQueryResult } = useData()
   const { isLoading } = dataQueryResult!
-  const { selectedColumns } = UseSelectedColumns()
+  const { selectedColumns, encodeColumnIdentifier, decodeColumnIdentifier } = useSelectedColumns()
   const { useGridOptions } = useSettings()
-  const { encodeColumnIdentifier, decodeColumnIdentifier, getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
+  const { getGridProps, transformGridColumn, transformGridColumnDefinition } = useGridOptions()
   const columnHelper = createColumnHelper()
 
   const gridColumnDefinition = useMemo(() => {

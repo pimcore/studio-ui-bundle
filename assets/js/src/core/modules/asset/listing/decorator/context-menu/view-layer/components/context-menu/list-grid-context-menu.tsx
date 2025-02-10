@@ -34,8 +34,6 @@ export const ListGridContextMenu = (props: ListGridContextMenuProps): React.JSX.
     downloadGridContextMenuItem(row)
   ].filter(Boolean) as DropdownMenuProps['items']
 
-  console.log({ items, row }, openGridContextMenuItem(row))
-
   return (
     <Dropdown
       key={ row.id }
