@@ -55,6 +55,14 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
+  const renderFieldTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+    const textValue = isCommonSection ? t(`version.${key}`) : key
+
+    return (
+      <Text className={ styles.fieldTitle }>{textValue}</Text>
+    )
+  }
+
   return (
     <>
       {breadcrumbsList?.map((breadcrumb, index) => {
@@ -71,7 +79,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
               {versionViewData.map((fieldItem, fieldIndex) => (
                 breadcrumb.fieldKeys.includes(fieldItem.Field.name as string) && (
                   <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
-                    <Text className={ styles.fieldTitle }>{fieldItem.Field.name}</Text>
+                    {renderFieldTitle({ key: fieldItem.Field.name, isCommonSection })}
                     <Flex gap="mini">
                       {versionKeysList.map((key, index) => {
                         const isModifiedField = modifiedFields.includes(fieldItem.Field.name as string)

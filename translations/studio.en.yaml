@@ -120,6 +120,7 @@ version.creationDate: Creation Date
 version.modificationDate: Modification Date
 version.fileSize: File Size
 version.mimeType: Mime Type
+version.fullPath: Path
 version.additionalAttributes: Additional Attributes
 version.image: Image
 version.no-versions-to-show: There are no versions to show.
