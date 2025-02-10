@@ -19,16 +19,12 @@ export const getObjectBreadcrumbsList = (data: IObjectVersionsFieldsList['data']
   const breadcrumbMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   data.forEach(item => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const breadcrumbName: VersionCategoryName = item.Field.fieldBreadcrumbTitle ?? VersionCategoryName.SYSTEM_DATA
+    const breadcrumbName = item.Field.fieldBreadcrumbTitle ?? VersionCategoryName.SYSTEM_DATA
 
     if (isUndefined(breadcrumbMap[breadcrumbName])) {
       breadcrumbMap[breadcrumbName] = new Set()
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     breadcrumbMap[breadcrumbName].add(item.Field.name)
   })
 
