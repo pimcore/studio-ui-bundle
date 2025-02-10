@@ -68,7 +68,19 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     sectionFieldItemHighlight: css`
-      background-color: ${token.Colors.Brand.Warning.colorWarningBg};
+      background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+    `,
+
+    objectSectionFieldItem: css`
+      flex: 1 1 50%;
+      background-color: ${token.colorBgContainerDisabled};
+      border-radius: ${token.borderRadius}px;
+      border: none !important;
+      color: ${token.colorText} !important;
+
+      &:only-child {
+        flex: 1 1 100%;
+      }
     `
   }
 })
