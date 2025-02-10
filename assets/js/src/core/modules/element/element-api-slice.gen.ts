@@ -27,15 +27,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Elements"],
             }),
-            elementGetContextPermissions: build.query<
-                ElementGetContextPermissionsApiResponse,
-                ElementGetContextPermissionsApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/context-permissions/`,
-                }),
-                providesTags: ["Elements"],
-            }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/path`,
@@ -79,14 +70,6 @@ export type ElementFolderCreateApiArg = {
     elementType: "asset" | "document" | "data-object";
     folderData: FolderData;
 };
-export type ElementGetContextPermissionsApiResponse = /** status 200 Context permission list */
-    | AssetContextPermissions
-    | DataObjectContextPermissions
-    | DocumentContextPermissions;
-export type ElementGetContextPermissionsApiArg = {
-    /** Filter elements by matching element type. */
-    elementType: "asset" | "document" | "data-object";
-};
 export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
     id: number;
@@ -128,152 +111,6 @@ export type FolderData = {
     /** Folder Name */
     folderName: string;
 };
-export type AssetContextPermissions = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Hide Add Menu */
-    hideAdd: boolean;
-    /** Add Import From Server */
-    addImportFromServer: boolean;
-    /** Add Upload */
-    addUpload: boolean;
-    /** Add Upload Compatibility */
-    addUploadCompatibility: boolean;
-    /** Add Upload From URL */
-    addUploadFromURL: boolean;
-    /** Add Upload Zip */
-    addUploadZip: boolean;
-    /** Add Folder */
-    addFolder: boolean;
-    /** Copy */
-    copy: boolean;
-    /** Cut */
-    cut: boolean;
-    /** Delete */
-    delete: boolean;
-    /** Lock */
-    lock: boolean;
-    /** Lock And Propagate */
-    lockAndPropagate: boolean;
-    /** Paste */
-    paste: boolean;
-    /** Paste Cut */
-    pasteCut: boolean;
-    /** Reload */
-    reload: boolean;
-    /** Rename */
-    rename: boolean;
-    /** SearchAndMove */
-    searchAndMove: boolean;
-    /** Unlock */
-    unlock: boolean;
-    /** Unlock And Propagate */
-    unlockAndPropagate: boolean;
-};
-export type DataObjectContextPermissions = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Add */
-    add?: boolean;
-    /** Add Folder */
-    addFolder?: boolean;
-    /** Change Children SortBy */
-    changeChildrenSortBy?: boolean;
-    /** Copy */
-    copy?: boolean;
-    /** Cut */
-    cut?: boolean;
-    /** Delete */
-    delete?: boolean;
-    /** Import CSV */
-    importCSV?: boolean;
-    /** Lock */
-    lock?: boolean;
-    /** Lock and Propagate */
-    lockAndPropagate?: boolean;
-    /** Paste */
-    paste?: boolean;
-    /** Publish */
-    publish?: boolean;
-    /** Reload */
-    reload?: boolean;
-    /** Rename */
-    rename?: boolean;
-    /** Search and Move */
-    searchAndMove?: boolean;
-    /** Unlock */
-    unlock?: boolean;
-    /** Unlock and Propagate */
-    unlockAndPropagate?: boolean;
-    /** Unpublish */
-    unpublish?: boolean;
-};
-export type DocumentContextPermissions = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** Add */
-    add: boolean;
-    /** Add E-Mail */
-    addEmail: boolean;
-    /** Add Folder */
-    addFolder: boolean;
-    /** Add Hardlink */
-    addHardlink: boolean;
-    /** Add Headless Document */
-    addHeadlessDocument: boolean;
-    /** Add Link */
-    addLink: boolean;
-    /** Add Newsletter */
-    addNewsletter: boolean;
-    /** Add Print Page */
-    addPrintPage: boolean;
-    /** Add Snippet */
-    addSnippet: boolean;
-    /** Convert */
-    convert: boolean;
-    /** Copy */
-    copy: boolean;
-    /** Cut */
-    cut: boolean;
-    /** Delete */
-    delete: boolean;
-    /** Edit Site */
-    editSite: boolean;
-    /** Lock */
-    lock: boolean;
-    /** Lock and Propagate */
-    lockAndPropagate: boolean;
-    /** Open */
-    open: boolean;
-    /** Paste */
-    paste: boolean;
-    /** Paste Cut */
-    pasteCut: boolean;
-    /** Publish */
-    publish: boolean;
-    /** Reload */
-    reload: boolean;
-    /** Remove Site */
-    removeSite: boolean;
-    /** Rename */
-    rename: boolean;
-    /** Search and Move */
-    searchAndMove: boolean;
-    /** Unlock */
-    unlock: boolean;
-    /** Unlock and Propagate */
-    unlockAndPropagate: boolean;
-    /** Unpublish */
-    unpublish: boolean;
-    /** Use As Site */
-    useAsSite: boolean;
-};
 export type Subtype = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -290,7 +127,6 @@ export const {
     useElementDeleteMutation,
     useElementGetDeleteInfoQuery,
     useElementFolderCreateMutation,
-    useElementGetContextPermissionsQuery,
     useElementGetIdByPathQuery,
     useElementGetSubtypeQuery,
 } = injectedRtkApi;

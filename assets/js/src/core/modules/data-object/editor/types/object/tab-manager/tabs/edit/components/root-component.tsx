@@ -28,7 +28,7 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
-  const { form, updateModifiedDataObjectAttributes, markDraftAsModified, getChangedFieldName } = useEditFormContext()
+  const { form, updateModifiedDataObjectAttributes, updateDraft, getChangedFieldName } = useEditFormContext()
   const inheritanceState = useInheritanceState()
 
   const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
@@ -38,7 +38,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
       inheritanceState?.breakInheritance(fieldName)
     }
 
-    markDraftAsModified()
+    updateDraft()
   }
 
   const handleSubmit = (values: any): void => {

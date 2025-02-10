@@ -20,15 +20,9 @@ import { DataObjectContext } from '../../data-object-provider'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
-import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
-import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
-import {
-  type DataObjectUpdateByIdApiArg,
-  useDataObjectUpdateByIdMutation
-} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageSelection } from './language-selection/language-selection'
@@ -38,15 +32,16 @@ import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { useSave } from '@Pimcore/modules/data-object/actions/use-save'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
-  const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
+  const { save: saveDataObject, isLoading, isSuccess, isError } = useSave()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
-  const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
+  const { resetModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
@@ -101,42 +96,7 @@ export const Toolbar = (): React.JSX.Element => {
   async function onSaveClick (): Promise<void> {
     if (dataObject?.changes === undefined) return
 
-    const update: DataObjectUpdateByIdApiArg['body']['data'] = {}
-    if (dataObject.changes.properties) {
-      const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
-        const { rowId, ...propertyApi } = property
-
-        if (typeof propertyApi.data === 'object') {
-          return {
-            ...propertyApi,
-            data: propertyApi?.data?.id ?? null
-          }
-        }
-
-        return propertyApi
-      })
-
-      update.properties = propertyUpdate?.filter((property) => !property.inherited)
-    }
-
-    const editableData = getModifiedDataObjectAttributes()
-
-    if (Object.keys(editableData).length > 0) {
-      update.editableData = editableData
-    }
-
-    const saveDataObjectPromise = saveDataObject({
-      id,
-      body: {
-        data: {
-          ...update
-        }
-      }
-    })
-
-    const saveSchedulesPromise = saveSchedules()
-
-    Promise.all([saveDataObjectPromise, saveSchedulesPromise]).catch((error) => {
+    Promise.all([saveDataObject(), saveSchedules()]).catch((error) => {
       console.log(error)
     })
   }

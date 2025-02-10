@@ -22,7 +22,7 @@ interface EditFormContextProps {
   form: FormInstance
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
   resetModifiedDataObjectAttributes: () => void
-  markDraftAsModified: () => void
+  updateDraft: () => void
   getModifiedDataObjectAttributes: () => Record<string, any>
   getChangedFieldName: (changedValues: Record<string, unknown>, parentKey?: string) => string | null
 }
@@ -79,11 +79,15 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return fullKey
   }
 
+  const updateDraft = (): void => {
+    markObjectDataAsModified()
+  }
+
   const value = useMemo(() => ({
     form,
     updateModifiedDataObjectAttributes,
     resetModifiedDataObjectAttributes,
-    markDraftAsModified: markObjectDataAsModified,
+    updateDraft,
     getModifiedDataObjectAttributes,
     getChangedFieldName
   }), [form])
