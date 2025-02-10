@@ -21,9 +21,12 @@ import {
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { type IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
 import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'
+
+interface IVersionData extends IObjectVersionField {}
 
 export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Element => {
   const dispatch = useAppDispatch()
@@ -31,7 +34,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
   const { id } = useElementContext()
 
   const [vId, setVId] = useState(versionId)
-  const [versionData, setVersionData] = useState<object[]>([])
+  const [versionData, setVersionData] = useState<IVersionData[]>([])
 
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
 

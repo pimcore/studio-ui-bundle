@@ -14,9 +14,10 @@
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { VersionsFieldsList } from '@Pimcore/components/versions-fields-list/versions-fields-list'
+import type { IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
 
 interface IComparisonViewUIProps {
-  data: any
+  data: IObjectVersionField[]
 }
 
 export const ComparisonViewUI = ({ data }: IComparisonViewUIProps): React.JSX.Element => {

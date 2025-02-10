@@ -30,11 +30,14 @@ import {
 } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { ComparisonViewUI } from './comparison-view-ui'
+import type { IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
+
+interface IVersionData extends IObjectVersionField {}
 
 export const ComparisonView = ({
   versionIds
 }: VersionComparisonViewProps): React.JSX.Element => {
-  const [versionsData, setVersionsData] = useState<object[]>([])
+  const [versionsData, setVersionsData] = useState<IVersionData[]>([])
 
   const dispatch = useAppDispatch()
 
