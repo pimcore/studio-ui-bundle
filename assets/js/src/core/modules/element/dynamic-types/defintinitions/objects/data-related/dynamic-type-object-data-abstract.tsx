@@ -41,6 +41,10 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
+  getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
+    return this.getObjectDataComponent(props)
+  }
+
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
     return {
       className: 'w-full',

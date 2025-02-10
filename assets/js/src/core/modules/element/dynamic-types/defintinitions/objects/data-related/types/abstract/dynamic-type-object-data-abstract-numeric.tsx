@@ -45,6 +45,17 @@ const fixUnsigned = (unsigned: boolean, value: number | null, max: boolean): num
 }
 
 export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeObjectDataAbstract {
+  getObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): IInputNumberProps {
+    return {
+      inherited: props.inherited,
+      disabled: props.noteditable === true,
+      max: fixUnsigned(props.unsigned === true, props.maxValue, true) ?? undefined,
+      min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,
+      precision: props.integer === true ? 0 : (props.decimalPrecision ?? undefined),
+      step: props.increment ?? undefined
+    }
+  }
+
   getObjectDataComponent (props: AbstractNumericObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <InputNumber
@@ -53,7 +64,7 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
     )
   }
 
-  getObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): IInputNumberProps {
+  getVersionObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): IInputNumberProps {
     return {
       inherited: props.inherited,
       disabled: props.noteditable === true,
@@ -64,6 +75,14 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
       step: props.increment ?? undefined,
       className: props.className
     }
+  }
+
+  getVersionObjectDataComponent (props: AbstractNumericObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return (
+      <InputNumber
+        { ...this.getVersionObjectDataComponentProps(props) }
+      />
+    )
   }
 
   handleDefaultValue (props: AbstractNumericObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {

@@ -50,7 +50,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   return (
     <ErrorBoundary>
-      {objectDataType.getObjectDataComponent(_props)}
+      {objectDataType.getVersionObjectDataComponent(_props)}
     </ErrorBoundary>
   )
 }
