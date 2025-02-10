@@ -78,7 +78,10 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                         const isSecondItem = index === 1
 
                         return (
-                          <div key={ `${index}-${key}` }>
+                          <div
+                            className={ styles.objectSectionFieldItemWrapper }
+                            key={ `${index}-${key}` }
+                          >
                             <DataComponent
                               className={
                                   cn(styles.objectSectionFieldItem, {

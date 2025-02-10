@@ -59,8 +59,10 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
       disabled: props.noteditable === true,
       max: fixUnsigned(props.unsigned === true, props.maxValue, true) ?? undefined,
       min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,
+      defaultValue: props.value,
       precision: props.integer === true ? 0 : (props.decimalPrecision ?? undefined),
-      step: props.increment ?? undefined
+      step: props.increment ?? undefined,
+      className: props.className
     }
   }
 
