@@ -12,15 +12,15 @@
 */
 
 import { useContext } from 'react'
-import { PagingContext, type PagingData } from './paging-provider'
+import { TagFilterContext, type TagFilterData } from './tag-filter-provider'
 
-export type UsePagingReturn = PagingData
+export type UseTagFilterReturn = TagFilterData
 
-export const usePaging = (): UsePagingReturn => {
-  const context = useContext(PagingContext)
+export const useTagFilter = (): UseTagFilterReturn => {
+  const context = useContext(TagFilterContext)
 
   if (context === undefined) {
-    throw new Error('usePaging must be used within a PagingProvider')
+    throw new Error('useTagFilter must be used within a TagFilterProvider')
   }
 
   return context

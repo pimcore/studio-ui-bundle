@@ -11,17 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext } from 'react'
-import { PagingContext, type PagingData } from './paging-provider'
+import React from 'react'
+import { TagFiltersContainerInner } from './tag-filters-container-inner'
+import { TagFiltersProvider } from './provider/tag-filters/tag-filters-provider'
 
-export type UsePagingReturn = PagingData
-
-export const usePaging = (): UsePagingReturn => {
-  const context = useContext(PagingContext)
-
-  if (context === undefined) {
-    throw new Error('usePaging must be used within a PagingProvider')
-  }
-
-  return context
+export const TagFiltersContainer = (): React.JSX.Element => {
+  return (
+    <TagFiltersProvider>
+      <TagFiltersContainerInner />
+    </TagFiltersProvider>
+  )
 }
