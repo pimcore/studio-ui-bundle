@@ -42,7 +42,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
-    return this.getObjectDataComponent(props)
+    return this.getObjectDataComponent({ ...props, noteditable: true })
   }
 
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {

@@ -43,14 +43,9 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
-  const _props = {
-    ...props,
-    noteditable: true
-  }
-
   return (
     <ErrorBoundary>
-      {objectDataType.getVersionObjectDataComponent(_props)}
+      {objectDataType.getVersionObjectDataComponent(props)}
     </ErrorBoundary>
   )
 }
