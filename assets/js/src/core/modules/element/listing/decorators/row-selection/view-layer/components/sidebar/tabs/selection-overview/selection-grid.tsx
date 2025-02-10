@@ -16,8 +16,8 @@ import { useRowSelection } from '../../../../../context-layer/provider/use-row-s
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type GridProps } from '@Pimcore/types/components/types'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export const SelectionGrid = (): React.JSX.Element => {
   const { selectedRows, selectedRowsData, setSelectedRows } = useRowSelection()
@@ -32,22 +32,6 @@ export const SelectionGrid = (): React.JSX.Element => {
   }
 
   const columns: GridProps['columns'] = [
-    columnHelper.accessor('actions', {
-      header: '',
-      size: 50,
-      cell: (info) => (
-        <Flex
-          className='w-full'
-          justify='center'
-        >
-          <Checkbox
-            checked
-            onClick={ () => { onRemoveItemClick(info.getValue() as string) } }
-          />
-        </Flex>
-      )
-    }),
-
     columnHelper.accessor('id', {
       header: 'ID',
       size: 75
@@ -58,6 +42,23 @@ export const SelectionGrid = (): React.JSX.Element => {
       meta: {
         autoWidth: true
       }
+    }),
+
+    columnHelper.accessor('actions', {
+      header: '',
+      size: 50,
+      cell: (info) => (
+        <Flex
+          align='center'
+          className='w-full'
+          justify='center'
+        >
+          <IconButton
+            icon={ { value: 'close' } }
+            onClick={ () => { onRemoveItemClick(info.getValue() as string) } }
+          />
+        </Flex>
+      )
     })
   ]
 

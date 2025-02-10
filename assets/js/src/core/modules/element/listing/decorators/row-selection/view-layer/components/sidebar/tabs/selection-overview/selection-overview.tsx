@@ -13,24 +13,15 @@
 
 import { Content } from '@Pimcore/components/content/content'
 import React from 'react'
-import { useRowSelection } from '../../../../../context-layer/provider/use-row-selection'
 import { Title } from '@Pimcore/components/title/title'
 import { SelectionGrid } from './selection-grid'
 
 export const SelectionOverview = (): React.JSX.Element => {
-  const { selectedRows } = useRowSelection()
-
   return (
     <Content padded>
       <Title>Selected Elements</Title>
 
-      {selectedRows === undefined && (
-        <div>No elements selected</div>
-      )}
-
-      {selectedRows !== undefined && (
-        <SelectionGrid />
-      )}
+      <SelectionGrid />
     </Content>
   )
 }

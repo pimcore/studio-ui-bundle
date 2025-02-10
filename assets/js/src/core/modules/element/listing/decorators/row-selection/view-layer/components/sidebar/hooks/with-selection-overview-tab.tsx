@@ -30,7 +30,6 @@ export const withSelectionOverviewTab = (useBaseHook: AbstractDecoratorProps['us
           {
             component: <SelectionOverview />,
             key: 'selection-overview',
-            // @todo check icon
             icon: <Icon value="checkbox" />
           }
         ]
