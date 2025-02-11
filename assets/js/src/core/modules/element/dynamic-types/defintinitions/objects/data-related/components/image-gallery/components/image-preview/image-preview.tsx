@@ -170,7 +170,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
           bordered
           dropdownItems={ [
             {
-              disabled,
+              hidden: disabled,
               key: 'add',
               label: t('add'),
               icon: <Icon value={ 'new' } />,
@@ -181,7 +181,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
-              disabled,
+              hidden: disabled,
               key: 'delete',
               label: t('delete'),
               icon: <Icon value={ 'trash' } />,
@@ -200,7 +200,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
-              label: t('hotspots.edit'),
+              label: t(disabled === true ? 'hotspots.show' : 'hotspots.edit'),
               key: 'hotspots-edit',
               icon: <Icon value={ 'new-marker' } />,
               onClick: async () => {
@@ -208,7 +208,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
-              disabled: !hasValueData(index) || disabled === true,
+              hidden: !hasValueData(index) || disabled === true,
               label: t('hotspots.clear-data'),
               key: 'clear-data',
               icon: <Icon value={ 'remove-marker' } />,
@@ -227,7 +227,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
               }
             },
             {
-              disabled,
+              hidden: disabled,
               label: t('empty'),
               key: 'empty',
               icon: <Icon value={ 'trash' } />,

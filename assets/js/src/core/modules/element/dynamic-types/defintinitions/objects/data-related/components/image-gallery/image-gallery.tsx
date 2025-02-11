@@ -21,7 +21,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image-gallery/components/image-target/image-target'
 import { Card } from '@Pimcore/components/card/card'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import _ from 'lodash'
+import { isEmpty, isEqual } from 'lodash'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
@@ -63,7 +63,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
   const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
 
   const setValue = (newValue: ImageGalleryValue): void => {
-    if (!_.isEqual(newValue, value)) {
+    if (!isEqual(newValue, value)) {
       setValueState(newValue)
       const changedValue = newValue.filter(item => item.image !== null)
       props.onChange?.(changedValue.length > 0 ? changedValue : null)
@@ -72,22 +72,27 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
 
   return (
     <Card
-      footer={ <Tooltip
-        key="empty"
-        title={ t('empty') }
-               >
-        <IconButton
-          disabled={ _.isEmpty(props.value) || props.disabled }
-          icon={ { value: 'trash' } }
-          onClick={ () => { setValue([]) } }
-        />
-      </Tooltip> }
+      footer={ props.disabled === true
+        ? undefined
+        : (
+          <Tooltip
+            key="empty"
+            title={ t('empty') }
+          >
+            <IconButton
+              disabled={ isEmpty(props.value) }
+              icon={ { value: 'trash' } }
+              onClick={ () => { setValue([]) } }
+            />
+          </Tooltip>
+          ) }
     >
       <Flex
         gap="small"
         wrap
       >
         <SortableContext
+          disabled={ props.disabled }
           items={ value.map((item, index) => ({ id: String(index) })) }
           strategy={ rectSortingStrategy }
         >
@@ -104,7 +109,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
             />
           )) }
         </SortableContext>
-        { (props.disabled !== true || _.isEmpty(value)) && (
+        { (props.disabled !== true || isEmpty(value)) && (
           <ImageGalleryImageTarget
             disabled={ props.disabled }
             index={ value.length }
