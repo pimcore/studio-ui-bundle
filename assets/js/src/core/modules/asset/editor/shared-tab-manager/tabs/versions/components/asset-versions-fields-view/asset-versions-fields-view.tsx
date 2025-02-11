@@ -21,8 +21,8 @@ import {
   type IAssetVersionsFieldsList,
   type VersionKeysList
 } from '@Pimcore/components/versions-fields-list/types'
-import { useStyles } from '@Pimcore/components/versions-fields-list/components/common-versions-fields-view.styles'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
+import { useStyles } from '@Pimcore/components/versions-fields-list/styles/common-versions-fields-view.styles'
 
 interface IAssetVersionsFieldsViewProps {
   categoriesList?: CategoriesList
