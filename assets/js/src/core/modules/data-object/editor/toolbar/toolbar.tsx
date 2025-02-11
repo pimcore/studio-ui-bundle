@@ -55,20 +55,35 @@ export const Toolbar = (): React.JSX.Element => {
   const { getModifiedDataObjectAttributes } = useEditFormContext()
 
   useEffect(() => {
-    if (isSuccess && isSchedulesSuccess) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success(t('save-success'))
-      removeTrackedChanges()
-      resetModifiedDataObjectAttributes()
+    const handleSuccessEvent = async (): Promise<void> => {
+      if (isSuccess && isSchedulesSuccess) {
+        await messageApi.success(t('save-success'))
+
+        removeTrackedChanges()
+        resetModifiedDataObjectAttributes()
+      }
     }
+
+    handleSuccessEvent().catch((error) => { console.error(error) })
   }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {
-    if (isError || isSchedulesError) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error(t('save-failed'))
+    const handleFailedEvent = async (): Promise<void> => {
+      if (isError || isSchedulesError) {
+        await messageApi.error(t('save-failed'))
+      }
     }
+
+    handleFailedEvent().catch((error) => { console.error(error) })
   }, [isError, isSchedulesError])
+
+  async function handleSaveClick (): Promise<void> {
+    if (dataObject?.changes === undefined) return
+
+    Promise.all([saveDataObject(getModifiedDataObjectAttributes()), saveSchedules()]).catch((error) => {
+      console.log(error)
+    })
+  }
 
   return (
     <ToolbarView>
@@ -104,7 +119,7 @@ export const Toolbar = (): React.JSX.Element => {
           <Button
             disabled={ !hasChanges || isLoading || isSchedulesLoading }
             loading={ isLoading || isSchedulesLoading }
-            onClick={ onSaveClick }
+            onClick={ handleSaveClick }
             type="primary"
           >
             {t('toolbar.save-and-publish')}
@@ -114,12 +129,4 @@ export const Toolbar = (): React.JSX.Element => {
       </WorkFlowProvider>
     </ToolbarView>
   )
-
-  async function onSaveClick (): Promise<void> {
-    if (dataObject?.changes === undefined) return
-
-    Promise.all([saveDataObject(getModifiedDataObjectAttributes()), saveSchedules()]).catch((error) => {
-      console.log(error)
-    })
-  }
 }
