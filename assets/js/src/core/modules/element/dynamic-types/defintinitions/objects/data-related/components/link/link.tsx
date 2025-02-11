@@ -138,16 +138,31 @@ export const Link = (props: LinkProps): React.JSX.Element => {
         />
       </Tooltip>
 
-      <Tooltip
-        key="edit"
-        title={ t('edit') }
-      >
-        <IconButton
-          icon={ { value: 'edit' } }
-          onClick={ showModal }
-          type="default"
-        />
-      </Tooltip>
+      { props.disabled !== true
+        ? (
+          <Tooltip
+            key="edit"
+            title={ t('edit') }
+          >
+            <IconButton
+              icon={ { value: 'edit' } }
+              onClick={ showModal }
+              type="default"
+            />
+          </Tooltip>
+          )
+        : (
+          <Tooltip
+            key="details"
+            title={ t('details') }
+          >
+            <IconButton
+              icon={ { value: 'info-circle' } }
+              onClick={ showModal }
+              type="default"
+            />
+          </Tooltip>
+          ) }
 
       <LinkModal
         allowedTargets={ props.allowedTargets }

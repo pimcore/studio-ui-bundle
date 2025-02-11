@@ -636,3 +636,4 @@ auto-save.tooltip: This version is auto saved.
 auto-save.loading-tooltip: Auto save in progress
 detached-tab.draft-tooltip: The current version is a draft.
 detached-tab.draft-tooltip-addon:  You can publish in the associated element/object main/mother tab.
+details: Details
