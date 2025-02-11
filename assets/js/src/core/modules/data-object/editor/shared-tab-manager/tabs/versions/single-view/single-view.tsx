@@ -21,6 +21,7 @@ import {
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
@@ -36,7 +37,8 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState<IVersionData[]>([])
 
-  const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
+  const { currentLayout } = useLayoutSelection()
+  const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: currentLayout === null })
 
   useEffect(() => {
     if (versionId.id !== vId.id) {
