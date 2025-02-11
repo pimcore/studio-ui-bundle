@@ -43,13 +43,13 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Data Object Grid"],
             }),
-            dataObjectGetGrid: build.mutation<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
+            dataObjectGetGrid: build.query<DataObjectGetGridApiResponse, DataObjectGetGridApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-objects/grid/${queryArg.classId}`,
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Object Grid"],
+                providesTags: ["Data Object Grid"],
             }),
             dataObjectGetLayoutById: build.query<DataObjectGetLayoutByIdApiResponse, DataObjectGetLayoutByIdApiArg>({
                 query: (queryArg) => ({
@@ -604,7 +604,7 @@ export const {
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
     useDataObjectGetAvailableGridColumnsQuery,
-    useDataObjectGetGridMutation,
+    useDataObjectGetGridQuery,
     useDataObjectGetLayoutByIdQuery,
     useDataObjectPatchByIdMutation,
     useDataObjectPatchFolderByIdMutation,

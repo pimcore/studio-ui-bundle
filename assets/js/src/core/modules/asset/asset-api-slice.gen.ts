@@ -156,9 +156,9 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Asset Grid"],
             }),
-            assetGetGrid: build.mutation<AssetGetGridApiResponse, AssetGetGridApiArg>({
+            assetGetGrid: build.query<AssetGetGridApiResponse, AssetGetGridApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/grid`, method: "POST", body: queryArg.body }),
-                invalidatesTags: ["Asset Grid"],
+                providesTags: ["Asset Grid"],
             }),
             assetImageDownloadCustom: build.query<AssetImageDownloadCustomApiResponse, AssetImageDownloadCustomApiArg>({
                 query: (queryArg) => ({
@@ -1173,7 +1173,7 @@ export const {
     useAssetSaveGridConfigurationMutation,
     useAssetSetGridConfigurationAsFavoriteMutation,
     useAssetUpdateGridConfigurationMutation,
-    useAssetGetGridMutation,
+    useAssetGetGridQuery,
     useAssetImageDownloadCustomQuery,
     useAssetImageStreamCustomQuery,
     useAssetImageDownloadByFormatQuery,

@@ -16,9 +16,7 @@ import { Input } from 'antd'
 import {
   type AbstractBatchEditDefinition
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/dynamic-type-batch-edit-abstract'
-import {
-  useBatchEdit
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
+import { useBatchEdit } from '@Pimcore/modules/asset/listing/batch-actions/batch-edit-modal/hooks/use-batch-edit'
 export interface DynamicTypeBatchEditTextProps extends AbstractBatchEditDefinition {}
 
 export const DynamicTypeBatchEditTextComponent = ({ batchEdit }: DynamicTypeBatchEditTextProps): React.JSX.Element => {

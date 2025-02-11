@@ -62,8 +62,32 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
     },
 
+    assetPatchById: {
+      invalidatesTags: (result, error, args) => {
+        const invalidatingTagsForPatch: Tag[] = []
+
+        for (const asset of args.body.data) {
+          invalidatingTagsForPatch.push(...invalidatingTags.ASSET_DETAIL_ID(asset.id))
+        }
+
+        return invalidatingTagsForPatch
+      }
+    },
+
     assetGetGrid: {
-      invalidatesTags: []
+      providesTags: (result, error, args) => {
+        const providingTagsForGrid: Tag[] = []
+
+        if (result === undefined) {
+          return []
+        }
+
+        for (const item of result.items) {
+          providingTagsForGrid.push(...providingTags.ASSET_DETAIL_ID(item.id!))
+        }
+
+        return providingTagsForGrid
+      }
     },
 
     assetGetGridConfigurationByFolderId: {
@@ -103,7 +127,7 @@ export const {
   useAssetCustomMetadataGetByIdQuery,
   useAssetCustomSettingsGetByIdQuery,
   useAssetGetTextDataByIdQuery,
-  useAssetGetGridMutation,
+  useAssetGetGridQuery,
   useAssetPatchByIdMutation,
   useAssetExportZipAssetMutation,
   useAssetExportZipFolderMutation,
@@ -114,7 +138,8 @@ export const {
   useAssetSetGridConfigurationAsFavoriteMutation,
   useAssetUpdateGridConfigurationMutation,
   useAssetDeleteGridConfigurationByConfigurationIdMutation,
-  useAssetGetGridConfigurationByFolderIdQuery
+  useAssetGetGridConfigurationByFolderIdQuery,
+  useAssetGetAvailableGridColumnsQuery
 } = api
 
 export { api }

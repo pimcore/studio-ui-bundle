@@ -16,7 +16,7 @@ import React, { isValidElement, useState } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
-interface SidebarProps {
+export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'default'

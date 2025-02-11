@@ -13,20 +13,18 @@
 
 import React, { useEffect, useState } from 'react'
 import { Input } from 'antd'
-import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
 export interface DynamicTypeFieldFilterTextProps extends AbstractFieldFilterDefinition {}
 
-export const DynamicTypeFieldFilterTextComponent = ({ column }: DynamicTypeFieldFilterTextProps): React.JSX.Element => {
-  const { addOrUpdateFieldFilter, getFieldFilter } = useFilters()
-  const fieldFilter = getFieldFilter(column)
-  const value = (fieldFilter?.filterValue ?? '') as string
-  const [_value, setValue] = useState(value)
+export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
+  const { data, setData } = useDynamicFilter()
+  const [_value, setValue] = useState(data)
 
   useEffect(() => {
-    setValue(value)
-  }, [value])
+    setValue(data)
+  }, [data])
 
   return (
     <Input
@@ -38,6 +36,6 @@ export const DynamicTypeFieldFilterTextComponent = ({ column }: DynamicTypeField
   )
 
   function onBlur (): void {
-    addOrUpdateFieldFilter(column, _value)
+    setData(_value)
   }
 }

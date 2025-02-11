@@ -13,24 +13,21 @@
 
 import React, { useEffect, useState } from 'react'
 import { InputNumber } from 'antd'
-import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
 export interface DynamicTypeFieldFilterNumberProps extends AbstractFieldFilterDefinition {}
 
-export const DynamicTypeFieldFilterNumberComponent = ({ column }: DynamicTypeFieldFilterNumberProps): React.JSX.Element => {
-  const { addOrUpdateFieldFilter, getFieldFilter } = useFilters()
-
-  const fieldFilter = getFieldFilter(column)
-  const value = ((fieldFilter?.filterValue) != null) ? Number(fieldFilter.filterValue) : null
-
-  const [_value, setValue] = useState<number | null>(value)
+export const DynamicTypeFieldFilterNumberComponent = (props: DynamicTypeFieldFilterNumberProps): React.JSX.Element => {
+  const { data, setData } = useDynamicFilter()
+  const currentData: number | null = data ?? null
+  const [_value, setValue] = useState<number | null>(currentData)
 
   useEffect(() => {
-    setValue(value)
-  }, [value])
+    setValue(currentData)
+  }, [currentData])
 
-  const handleBlur = (): void => { addOrUpdateFieldFilter(column, _value) }
+  const handleBlur = (): void => { setData(_value) }
 
   const handleChange = (inputValue: number): void => { setValue(inputValue) }
 

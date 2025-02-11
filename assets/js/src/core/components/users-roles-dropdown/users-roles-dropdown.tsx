@@ -14,7 +14,6 @@
 import React, { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
-import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Select } from '@Pimcore/components/select/select'
 import { Text } from '@Pimcore/components/text/text'
@@ -26,6 +25,7 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
+import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 
 interface IUsersRolesDropdownProps {
   roleList?: RoleGetCollectionApiResponse
@@ -41,7 +41,7 @@ interface IRenderSelectProps {
 }
 
 export const UsersRolesDropdown = ({ userList, roleList, handleClose }: IUsersRolesDropdownProps): React.JSX.Element => {
-  const { gridConfig, setGridConfig } = useListGridConfig()
+  const { gridConfig, setGridConfig } = useGridConfig()
   const userData = useUser()
 
   const initialSharedUsers = gridConfig?.sharedUsers as number[]

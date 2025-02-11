@@ -13,7 +13,6 @@
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useMemo, useState } from 'react'
-import { GridToolbarContainer } from '../list/toolbar/grid-toolbar-container'
 import { FlexContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/flex-container'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -44,10 +43,14 @@ const PreviewContainer = (): React.JSX.Element => {
     setPageSize(pageSize)
   }
 
+  console.log({ total, onPagerChange })
+
   return useMemo(() => (
     <ContentLayout
       renderToolbar={
-        <GridToolbarContainer
+        <>
+          {/* @todo toolbar should not be shared with the grid...
+          <GridToolbarContainer
           pager={ data !== undefined && data.totalItems > 0
             ? {
                 current: currentPage,
@@ -56,7 +59,8 @@ const PreviewContainer = (): React.JSX.Element => {
                 onChange: onPagerChange
               }
             : undefined }
-        />
+          /> */}
+        </>
       }
     >
       <Content
