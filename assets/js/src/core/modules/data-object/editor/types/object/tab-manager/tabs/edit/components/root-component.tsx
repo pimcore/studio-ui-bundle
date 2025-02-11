@@ -39,7 +39,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
       inheritanceState?.breakInheritance(fieldName)
     }
 
-    updateDraft().catch((error) => console.error(error))
+    updateDraft().catch((error) => { console.error(error) })
   }
 
   const handleSubmit = (values: any): void => {
