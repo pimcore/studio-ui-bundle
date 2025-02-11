@@ -19,8 +19,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { DataComponent } from '../data-component/data-component'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/components/versions-fields-list/types'
-import { useStyles } from '@Pimcore/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList

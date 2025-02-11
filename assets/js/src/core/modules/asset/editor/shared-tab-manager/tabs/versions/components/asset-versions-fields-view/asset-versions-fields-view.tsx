@@ -20,9 +20,9 @@ import {
   type CategoriesList,
   type IAssetVersionsFieldsList,
   type VersionKeysList
-} from '@Pimcore/components/versions-fields-list/types'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import { useStyles } from '@Pimcore/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 
 interface IAssetVersionsFieldsViewProps {
   categoriesList?: CategoriesList

@@ -16,7 +16,7 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
-import { type IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
+import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',

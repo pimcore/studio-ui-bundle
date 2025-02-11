@@ -13,8 +13,8 @@
 
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
-import { getAssetCategoriesList } from '@Pimcore/components/versions-fields-list/helpers/assetCategoriesHelper'
-import { getObjectBreadcrumbsList } from '@Pimcore/components/versions-fields-list/helpers/objectBreadcrumbsHelper'
+import { getAssetCategoriesList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/assetCategoriesHelper'
+import { getObjectBreadcrumbsList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/objectBreadcrumbsHelper'
 import {
   type CategoriesList,
   type IAssetVersionField,
@@ -24,7 +24,7 @@ import {
   type IVersionsFieldsList,
   type VersionKeysList
 } from '../types'
-import { type ElementType } from '../../../../../types/element-type.d'
+import { type ElementType } from '../../../../../../../../../../../types/element-type.d'
 import { ElementTypeName } from '@Pimcore/constants/global'
 
 interface IUseVersionDataReturn {

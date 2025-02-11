@@ -21,7 +21,7 @@ import {
 import { type SingleVersionViewProps } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { type IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
+import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'

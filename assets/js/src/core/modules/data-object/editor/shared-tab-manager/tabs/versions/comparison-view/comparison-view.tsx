@@ -30,7 +30,7 @@ import {
 } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { ComparisonViewUI } from './comparison-view-ui'
-import type { IObjectVersionField } from '@Pimcore/components/versions-fields-list/types'
+import type { IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 
 interface IVersionData extends IObjectVersionField {}
 
