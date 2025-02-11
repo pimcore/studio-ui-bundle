@@ -28,12 +28,13 @@ import {
   type IFormattedDataStructureData,
   versionsDataToTableData
 } from '../details-functions'
-import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { Content } from '@Pimcore/components/content/content'
 import { ComparisonViewUI } from './comparison-view-ui'
 import type { IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 
 interface IVersionData extends IObjectVersionField {}
+
+const DEFAULT_LAYOUT = '0'
 
 export const ComparisonView = ({
   versionIds
@@ -43,8 +44,7 @@ export const ComparisonView = ({
   const dispatch = useAppDispatch()
 
   const { id } = useElementContext()
-  const { currentLayout } = useLayoutSelection()
-  const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: currentLayout === null })
+  const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id, layoutId: DEFAULT_LAYOUT })
 
   useEffect(() => {
     const versionPromises: Array<Promise<any>> = []
