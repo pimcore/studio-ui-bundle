@@ -20,15 +20,9 @@ import { DataObjectContext } from '../../data-object-provider'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
-import { type DataProperty as DataPropertyApi } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
-import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
-import {
-  type DataObjectUpdateByIdApiArg,
-  useDataObjectUpdateByIdMutation
-} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { TAB_EDIT } from '../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageSelection } from './language-selection/language-selection'
@@ -38,34 +32,58 @@ import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { useSave } from '@Pimcore/modules/data-object/actions/use-save'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Icon } from '@Pimcore/components/icon/icon'
+import {
+  useSaveContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
+import { Spin } from '@Pimcore/components/spin/spin'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
   const hasChanges = dataObject?.modified === true
-  const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
+  const { save: saveDataObject, isLoading, isSuccess, isError } = useSave()
+  const { isAutoSaved, isAutoSaveLoading } = useSaveContext()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
-  const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
+  const { resetModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
+  const { getModifiedDataObjectAttributes } = useEditFormContext()
 
   useEffect(() => {
-    if (isSuccess && isSchedulesSuccess) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success(t('save-success'))
-      removeTrackedChanges()
-      resetModifiedDataObjectAttributes()
+    const handleSuccessEvent = async (): Promise<void> => {
+      if (isSuccess && isSchedulesSuccess) {
+        await messageApi.success(t('save-success'))
+
+        removeTrackedChanges()
+        resetModifiedDataObjectAttributes()
+      }
     }
+
+    handleSuccessEvent().catch((error) => { console.error(error) })
   }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {
-    if (isError || isSchedulesError) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error(t('save-failed'))
+    const handleFailedEvent = async (): Promise<void> => {
+      if (isError || isSchedulesError) {
+        await messageApi.error(t('save-failed'))
+      }
     }
+
+    handleFailedEvent().catch((error) => { console.error(error) })
   }, [isError, isSchedulesError])
+
+  async function handleSaveClick (): Promise<void> {
+    if (dataObject?.changes === undefined) return
+
+    Promise.all([saveDataObject(getModifiedDataObjectAttributes()), saveSchedules()]).catch((error) => {
+      console.error(error)
+    })
+  }
 
   return (
     <ToolbarView>
@@ -79,15 +97,26 @@ export const Toolbar = (): React.JSX.Element => {
         </Flex>
 
         <Flex
+          align="center"
           gap={ 'extra-small' }
           style={ { height: '32px' } }
           vertical={ false }
         >
           <EditorToolbarWorkflowMenu />
+          { isAutoSaveLoading && (
+            <Tooltip title={ t('auto-save.loading-tooltip') }>
+              <Spin type='classic' />
+            </Tooltip>
+          )}
+          { !isAutoSaveLoading && isAutoSaved && (
+            <Tooltip title={ t('auto-save.tooltip') }>
+              <Icon value="auto-save" />
+            </Tooltip>
+          )}
           <Button
             disabled={ !hasChanges || isLoading || isSchedulesLoading }
             loading={ isLoading || isSchedulesLoading }
-            onClick={ onSaveClick }
+            onClick={ handleSaveClick }
             type="primary"
           >
             {t('toolbar.save-and-publish')}
@@ -97,47 +126,4 @@ export const Toolbar = (): React.JSX.Element => {
       </WorkFlowProvider>
     </ToolbarView>
   )
-
-  async function onSaveClick (): Promise<void> {
-    if (dataObject?.changes === undefined) return
-
-    const update: DataObjectUpdateByIdApiArg['body']['data'] = {}
-    if (dataObject.changes.properties) {
-      const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
-        const { rowId, ...propertyApi } = property
-
-        if (typeof propertyApi.data === 'object') {
-          return {
-            ...propertyApi,
-            data: propertyApi?.data?.id ?? null
-          }
-        }
-
-        return propertyApi
-      })
-
-      update.properties = propertyUpdate?.filter((property) => !property.inherited)
-    }
-
-    const editableData = getModifiedDataObjectAttributes()
-
-    if (Object.keys(editableData).length > 0) {
-      update.editableData = editableData
-    }
-
-    const saveDataObjectPromise = saveDataObject({
-      id,
-      body: {
-        data: {
-          ...update
-        }
-      }
-    })
-
-    const saveSchedulesPromise = saveSchedules()
-
-    Promise.all([saveDataObjectPromise, saveSchedulesPromise]).catch((error) => {
-      console.log(error)
-    })
-  }
 }

@@ -19,12 +19,13 @@ import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
 export interface ToolbarProps {
   children: React.ReactNode
   justify?: FlexProps['justify']
+  align?: FlexProps['align']
   theme?: 'primary' | 'secondary'
   position?: 'top' | 'bottom'
   size?: 'small' | 'default'
 }
 
-export const Toolbar = ({ children, size = 'default', justify = 'space-between', theme = 'primary', position = 'bottom', ...props }: ToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ children, size = 'default', justify = 'space-between', align, theme = 'primary', position = 'bottom', ...props }: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [
     styles.toolbar,
@@ -38,6 +39,7 @@ export const Toolbar = ({ children, size = 'default', justify = 'space-between',
     <div className={ classes }>
       <HorizontalScroll>
         <Flex
+          align={ align }
           className='w-full'
           gap={ 16 }
           justify={ justify }

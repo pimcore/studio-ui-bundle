@@ -31,7 +31,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectUpdateById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
+      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
     },
 
     dataObjectAdd: {
