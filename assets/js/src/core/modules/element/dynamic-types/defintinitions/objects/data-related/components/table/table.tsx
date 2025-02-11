@@ -78,69 +78,70 @@ export const Table = (props: TableProps): React.JSX.Element => {
 
   const items: ReactElement[] = []
 
-  if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
-    items.push(
-      <IconTextButton
-        icon={ { value: 'new-row' } }
-        onClick={ newRow }
-        type="default"
-      >
-        {t('table.new-row')}
-      </IconTextButton>
-    )
-  }
+  if (props.disabled !== true) {
+    if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
+      items.push(
+        <IconTextButton
+          icon={ { value: 'new-row' } }
+          onClick={ newRow }
+          type="default"
+        >
+          {t('table.new-row')}
+        </IconTextButton>
+      )
+    }
 
-  if (!columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0))) {
-    items.push(
-      <IconTextButton
-        icon={ { value: 'new-column' } }
-        onClick={ newColumn }
-        type="default"
-      >
-        { t('table.new-column') }
-      </IconTextButton>
-    )
-  }
+    if (!columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0))) {
+      items.push(
+        <IconTextButton
+          icon={ { value: 'new-column' } }
+          onClick={ newColumn }
+          type="default"
+        >
+          {t('table.new-column')}
+        </IconTextButton>
+      )
+    }
 
-  if (props.rowsFixed !== true || rows > (props.rows ?? 0)) {
-    items.push(
-      <IconTextButton
-        disabled={ activeCell === undefined }
-        icon={ { value: 'delete-row' } }
-        onClick={ deleteRow }
-        type="default"
-      >
-        { t('table.delete-row') }
-      </IconTextButton>
-    )
-  }
+    if (props.rowsFixed !== true || rows > (props.rows ?? 0)) {
+      items.push(
+        <IconTextButton
+          disabled={ activeCell === undefined }
+          icon={ { value: 'delete-row' } }
+          onClick={ deleteRow }
+          type="default"
+        >
+          {t('table.delete-row')}
+        </IconTextButton>
+      )
+    }
 
-  if (!columnConfigActivated && (props.colsFixed !== true || cols > (props.cols ?? 0))) {
-    items.push(
-      <IconTextButton
-        disabled={ activeCell === undefined }
-        icon={ { value: 'delete-column' } }
-        onClick={ deleteColumn }
-        type="default"
-      >
-        { t('table.delete-column') }
-      </IconTextButton>
-    )
-  }
+    if (!columnConfigActivated && (props.colsFixed !== true || cols > (props.cols ?? 0))) {
+      items.push(
+        <IconTextButton
+          disabled={ activeCell === undefined }
+          icon={ { value: 'delete-column' } }
+          onClick={ deleteColumn }
+          type="default"
+        >
+          {t('table.delete-column')}
+        </IconTextButton>
+      )
+    }
 
-  if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
-    items.push(
-      <IconTextButton
-        disabled={ activeCell === undefined }
-        icon={ { value: 'content-duplicate' } }
-        onClick={ duplicateRow }
-        type="default"
-      >
-        { t('table.duplicate-row') }
-      </IconTextButton>
-    )
+    if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
+      items.push(
+        <IconTextButton
+          disabled={ activeCell === undefined }
+          icon={ { value: 'content-duplicate' } }
+          onClick={ duplicateRow }
+          type="default"
+        >
+          {t('table.duplicate-row')}
+        </IconTextButton>
+      )
+    }
   }
-
   items.push(
     <Tooltip title={ t('table.copy') }>
       <IconButton
@@ -197,7 +198,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
   }
 
   return (
-    <>
+    <div>
       <Content
         style={ {
           width: toCssDimension(props.width === 320 ? undefined : props.width), // the default table width does not make sense in studio, 100% width is better
@@ -219,6 +220,6 @@ export const Table = (props: TableProps): React.JSX.Element => {
       <Box padding="extra-small">
         <ButtonGroup items={ items } />
       </Box>
-    </>
+    </div>
   )
 }
