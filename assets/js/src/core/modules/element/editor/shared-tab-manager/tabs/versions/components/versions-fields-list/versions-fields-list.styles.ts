@@ -71,6 +71,7 @@ export const useStyles = createStyles(({ token, css }) => {
       position: absolute;
       top: 10px;
       right: ${token.paddingXS}px;
+      z-index: 1;
     `
   }
 })

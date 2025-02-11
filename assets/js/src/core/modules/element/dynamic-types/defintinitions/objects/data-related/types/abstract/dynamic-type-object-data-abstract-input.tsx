@@ -30,6 +30,7 @@ export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObje
         inherited={ props.inherited }
         maxLength={ props.columnLength ?? undefined }
         showCount={ props.showCharCount }
+        value={ props.value }
       />
     )
   }

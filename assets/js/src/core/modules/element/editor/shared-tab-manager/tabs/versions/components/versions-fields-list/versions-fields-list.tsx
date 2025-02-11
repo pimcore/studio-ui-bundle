@@ -13,21 +13,36 @@
 
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, filter, intersection, isEmpty, isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
+import { ElementTypeName } from '@Pimcore/constants/global'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { AssetVersionsFieldsView } from './components/asset-versions-fields-view/asset-versions-fields-view'
-import { useAssetVersionData } from './hooks/use-asset-version-data'
-import { type IVersionsFieldsList } from './types'
+import { AssetVersionsFieldsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/asset-versions-fields-view/asset-versions-fields-view'
+import { ObjectVersionsFieldsView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/object-versions-fields-view/object-versions-fields-view'
+import { useVersionData } from './hooks/use-version-data'
+import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelper'
+import { getObjectBreadcrumbsListWithFields } from './helpers/objectBreadcrumbsHelper'
+import {
+  type CategoriesList,
+  type IAssetVersionField,
+  type IObjectVersionField,
+  type IVersionsFieldsList
+} from './types'
 import { useStyles } from './versions-fields-list.styles'
 
 interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 
 export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JSX.Element => {
+  const { elementType } = useElementContext()
+
+  const isAssetType = elementType === ElementTypeName.ASSET
+  const isDataObjectType = elementType === ElementTypeName.DATA_OBJECT
+
   const [isExpandedUnmodifiedFields, setIsExpandedUnmodifiedFields] = useState(false)
 
-  const { versionKeysList, comparisonModifiedData, categoriesList } = useAssetVersionData(data)
+  const { versionKeysList, comparisonModifiedData, sectionsList } = useVersionData(data, elementType)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -36,24 +51,32 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
   const comparisonViewData = isExpandedUnmodifiedFields ? data : comparisonModifiedData
   const versionViewData = !isComparisonView ? data : comparisonViewData
 
-  const categoriesListWithFields = useMemo(() => {
-    // get all version field keys
-    const versionFieldKeys = map(versionViewData, 'Field.key')
+  const sectionsListWithFields = useMemo((): CategoriesList | undefined => {
+    if (isAssetType) {
+      return getAssetCategoriesListWithFields({
+        versionViewData: versionViewData as IAssetVersionField[],
+        categoriesList: sectionsList
+      })
+    }
 
-    return filter(
-      // map over list to update field with matching keys
-      map(categoriesList, category => ({
-        ...category, // keep initial category properties
-        fieldKeys: intersection(category.fieldKeys, versionFieldKeys) // keep only matching keys
-      })),
-      category => !isEmpty(category.fieldKeys) // include only categories with non-empty fieldKeys
-    )
-  }, [isExpandedUnmodifiedFields, categoriesList])
+    if (isDataObjectType) {
+      return getObjectBreadcrumbsListWithFields({
+        versionViewData: versionViewData as IObjectVersionField[],
+        breadcrumbsList: sectionsList
+      })
+    }
+  }, [isExpandedUnmodifiedFields, sectionsList])
 
   // List of modified fields in comparison mode
   const modifiedFields = useMemo(() => {
     if (isComparisonView && !isEmpty(comparisonModifiedData)) {
-      return comparisonModifiedData.map((item) => item.Field.key)
+      if (isAssetType) {
+        return comparisonModifiedData.map((item) => item.Field.key)
+      }
+
+      if (isDataObjectType) {
+        return comparisonModifiedData.map((item) => item.Field.name)
+      }
     }
 
     return []
@@ -105,12 +128,22 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
           </Text>
         </Flex>
         )}
-        <AssetVersionsFieldsView
-          categoriesList={ categoriesListWithFields }
-          modifiedFields={ modifiedFields }
-          versionKeysList={ versionKeysList }
-          versionViewData={ versionViewData }
-        />
+        {isAssetType && (
+          <AssetVersionsFieldsView
+            categoriesList={ sectionsListWithFields }
+            modifiedFields={ modifiedFields }
+            versionKeysList={ versionKeysList }
+            versionViewData={ versionViewData as IAssetVersionField[] }
+          />
+        )}
+        {isDataObjectType && (
+          <ObjectVersionsFieldsView
+            breadcrumbsList={ sectionsListWithFields }
+            modifiedFields={ modifiedFields }
+            versionKeysList={ versionKeysList }
+            versionViewData={ versionViewData as IObjectVersionField[] }
+          />
+        )}
       </Flex>
     </Flex>
   )

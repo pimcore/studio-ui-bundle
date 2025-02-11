@@ -20,7 +20,7 @@ import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tab
 import {
   type VersionComparisonViewProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
-import { VersionsFieldsList } from '@Pimcore/components/versions-fields-list/versions-fields-list'
+import { VersionsFieldsList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/versions-fields-list'
 
 interface ComparisonViewUiProps {
   versions: AssetVersionData[]

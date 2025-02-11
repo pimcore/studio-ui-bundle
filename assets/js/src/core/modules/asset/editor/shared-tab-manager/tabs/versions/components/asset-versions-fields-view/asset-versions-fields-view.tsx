@@ -18,15 +18,15 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import {
   type CategoriesList,
-  type IVersionsFieldsList,
+  type IAssetVersionsFieldsList,
   type VersionKeysList
-} from '@Pimcore/components/versions-fields-list/types'
-import { useStyles } from './asset-versions-fields-view.styles'
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 
 interface IAssetVersionsFieldsViewProps {
-  categoriesList: CategoriesList
-  versionViewData: IVersionsFieldsList['data']
+  categoriesList?: CategoriesList
+  versionViewData: IAssetVersionsFieldsList['data']
   versionKeysList: VersionKeysList
   modifiedFields: string[]
 }
@@ -48,16 +48,16 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
 
   return (
     <>
-      {categoriesList.map((category, index) => (
+      {categoriesList?.map((category, index) => (
         <div key={ `${index}-${category.key}` }>
           <Text
-            className={ styles.categoryTitle }
+            className={ styles.sectionTitle }
             strong
           >
             {t(`version.category.title.${category.key}`)}
           </Text>
           <Flex
-            className={ styles.categoryFields }
+            className={ styles.sectionFields }
             gap="extra-small"
             vertical
           >
@@ -73,8 +73,8 @@ export const AssetVersionsFieldsView = ({ categoriesList, versionViewData, versi
                     return (
                       <div
                         className={
-                            cn(styles.categoryFieldItem, {
-                              [styles.categoryFieldItemHighlight]: isModifiedField && isSecondItem
+                            cn(styles.sectionFieldItem, {
+                              [styles.sectionFieldItemHighlight]: isModifiedField && isSecondItem
                             })
                           }
                         key={ `${index}-${key}` }

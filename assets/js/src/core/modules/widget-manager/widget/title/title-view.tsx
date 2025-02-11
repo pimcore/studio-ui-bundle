@@ -26,8 +26,6 @@ const TitleView = (props: TitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { title, icon, className } = props
 
-  console.log(icon)
-
   return (
     <div className={ [styles.WidgetTitle, className, 'foobar'].join(' ') }>
       <Icon

@@ -17,7 +17,7 @@ import { Flex } from 'antd'
 import { type VersionIdentifiers } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { EmptyState } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/empty-state/empty-state'
-import { VersionsFieldsList } from '@Pimcore/components/versions-fields-list/versions-fields-list'
+import { VersionsFieldsList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/versions-fields-list'
 
 interface SingleVersionViewUiProps {
   versionId: VersionIdentifiers

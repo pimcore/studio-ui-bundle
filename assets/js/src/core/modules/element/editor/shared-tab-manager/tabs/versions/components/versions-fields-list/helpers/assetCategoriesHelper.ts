@@ -11,11 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { isUndefined } from 'lodash'
+import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import { type CategoriesList, type IVersionsFieldsList } from '../types'
+import { type CategoriesList, type IAssetVersionsFieldsList } from '../types'
 
-export const getCategoriesList = (data: IVersionsFieldsList['data']): CategoriesList => {
+export const getAssetCategoriesList = (data: IAssetVersionsFieldsList['data']): CategoriesList => {
   const categoryMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   const getCategoryName = (value: string): VersionCategoryName | undefined => {
@@ -26,7 +26,7 @@ export const getCategoriesList = (data: IVersionsFieldsList['data']): Categories
 
   data.forEach(item => {
     const categoryNameValue = getCategoryName(item.Field.key)
-    const categoryName: VersionCategoryName = categoryNameValue ?? VersionCategoryName.BASE_DATA
+    const categoryName: VersionCategoryName = categoryNameValue ?? VersionCategoryName.SYSTEM_DATA
 
     if (isUndefined(categoryMap[categoryName])) {
       categoryMap[categoryName] = new Set()
@@ -39,4 +39,20 @@ export const getCategoriesList = (data: IVersionsFieldsList['data']): Categories
     key: key as VersionCategoryName,
     fieldKeys: Array.from(fieldKeysSet)
   }))
+}
+
+export const getAssetCategoriesListWithFields = ({ versionViewData, categoriesList }: { versionViewData: IAssetVersionsFieldsList['data'], categoriesList?: CategoriesList }): CategoriesList => {
+  // get all version field keys
+  const versionFieldKeys = map(versionViewData, 'Field.key')
+
+  if (isEmpty(categoriesList)) return []
+
+  return filter(
+    // map over list to update field with matching keys
+    map(categoriesList, category => ({
+      ...category, // keep initial category properties
+      fieldKeys: intersection(category.fieldKeys, versionFieldKeys) // keep only matching keys
+    })),
+    category => !isEmpty(category.fieldKeys) // include only categories with non-empty fieldKeys
+  )
 }
