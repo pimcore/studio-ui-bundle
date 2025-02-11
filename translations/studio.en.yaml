@@ -188,6 +188,7 @@ listing.actions.zip-download: ZIP Download
 listing.actions.export: Export
 listing.actions.csv-export: CSV Export
 listing.actions.batch-edit: Batch edit
+listing.selection.total: "{{total}} selected"
 data-type.input: Input
 data-type.textarea: Textarea
 data-type.date: Date

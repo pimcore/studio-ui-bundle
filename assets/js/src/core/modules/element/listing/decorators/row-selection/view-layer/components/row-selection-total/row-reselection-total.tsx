@@ -14,9 +14,11 @@
 import { Checkbox, type ICheckboxProps } from '@Pimcore/components/checkbox/checkbox'
 import React from 'react'
 import { useRowSelectionOptional } from '../../../context-layer/provider/use-row-selection-optional'
+import { useTranslation } from 'react-i18next'
 
 export const RowSelectionTotal = (): React.JSX.Element => {
   const context = useRowSelectionOptional()
+  const { t } = useTranslation()
 
   if (context === undefined) {
     return <div />
@@ -46,7 +48,7 @@ export const RowSelectionTotal = (): React.JSX.Element => {
           checked={ total > 0 }
           onClick={ onClick }
         >
-          {total} selected
+          {t('listing.selection.total', { total })}
         </Checkbox>
       )}
     </>

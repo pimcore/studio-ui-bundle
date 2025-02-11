@@ -31,6 +31,7 @@ import { useTranslation } from 'react-i18next'
 import { appConfig } from '@Pimcore/app/config/app-config'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export interface CsvModalProps {
   open: boolean
@@ -48,7 +49,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { selectedRows } = useRowSelection()
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const { selectedColumns } = useSelectedColumns()
-  // const { filterOptions } = useListFilterOptions()
+  const { useDataQueryHelper } = useSettings()
+  const { getArgs } = useDataQueryHelper()
   const initialFormValues: CSVFormValues = {
     delimiter: ';',
     header: 'name'
@@ -120,11 +122,10 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             header
           },
           filters: {
+            ...getArgs().body.filters ?? {},
             page: 1,
             pageSize: appConfig.maxPageSize,
             includeDescendants: true
-            // @todo revisit after filter decorator implementation
-            // ...filterOptions
           }
         }
       })
