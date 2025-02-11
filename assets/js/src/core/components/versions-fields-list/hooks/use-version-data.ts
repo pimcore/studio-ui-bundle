@@ -27,13 +27,13 @@ import {
 import { type ElementType } from '../../../../../types/element-type.d'
 import { ElementTypeName } from '@Pimcore/constants/global'
 
-interface IUseAssetVersionDataReturn {
+interface IUseVersionDataReturn {
   versionKeysList: VersionKeysList
   comparisonModifiedData: IAssetVersionField[] | IObjectVersionField[]
   sectionsList?: CategoriesList
 }
 
-export const useVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseAssetVersionDataReturn => {
+export const useVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseVersionDataReturn => {
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
   const comparisonModifiedData = data.filter((item) => {
@@ -52,7 +52,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
 
   return {
     versionKeysList,
-    comparisonModifiedData: comparisonModifiedData as IUseAssetVersionDataReturn['comparisonModifiedData'],
+    comparisonModifiedData: comparisonModifiedData as IUseVersionDataReturn['comparisonModifiedData'],
     sectionsList
   }
 }
