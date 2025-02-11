@@ -61,7 +61,7 @@ export const HotspotImagePreview = forwardRef(function HotspotImagePreview (
   }
 
   const onCropChange = (crop: CropSettings | null): void => {
-    const newValue = { ...value, crop }
+    const newValue: HotspotImageValue = { ...value, crop: crop ?? {} }
     onChange?.(newValue)
   }
 

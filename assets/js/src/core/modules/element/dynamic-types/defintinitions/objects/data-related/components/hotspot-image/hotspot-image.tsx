@@ -41,9 +41,9 @@ import _ from 'lodash'
 
 export interface HotspotImageValue {
   image: ImageValue | null
-  hotspots?: Hotspot[] | null
-  marker?: Marker[] | null
-  crop?: CropSettings | null
+  hotspots: Hotspot[]
+  marker: Marker[]
+  crop: CropSettings
 }
 
 export interface HotspotImageProps {
@@ -77,10 +77,10 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const height = props.height === null || props.width === '' ? 150 : props.height
 
   const setImage = (image: ImageValue, replaceValueData: boolean): void => {
-    let newValue: HotspotImageValue = value === null ? { image: null } : { ...value }
+    let newValue: HotspotImageValue = value === null ? { image: null, hotspots: [], marker: [], crop: {} } : { ...value }
 
     if (replaceValueData) {
-      newValue = { image }
+      newValue = { image, hotspots: [], marker: [], crop: {} }
     } else {
       newValue = { ...newValue, image }
     }
@@ -146,7 +146,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
               <AssetTarget
                 dndIcon={ props.disabled !== true }
                 height={ height }
-                title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty') }
+                title={ t(props.disabled !== true ? 'image.dnd-target' : 'empty-image') }
                 width={ width }
               />
               ) }

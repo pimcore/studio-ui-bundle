@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { isPlainObject } from 'lodash'
 
 export interface UrlSlugEntry {
   slug: string
@@ -37,7 +38,7 @@ export interface UrlSlugProps {
 
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   const initialValue = props.value ?? [{ slug: '', siteId: 0 }]
-  if (!initialValue.some(entry => entry.siteId === 0)) {
+  if (isPlainObject(initialValue) && !initialValue.some(entry => entry.siteId === 0)) {
     initialValue.unshift({ slug: '', siteId: 0 })
   }
   const [value, setValue] = useState<UrlSlugEntry[]>(initialValue)
@@ -87,14 +88,15 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
     onClick: () => { setValue([...value, { slug: '', siteId: site.id }]) }
   }))
 
+  const sortedValue = [...value].sort((a, b) => a.siteId === 0 ? -1 : 0)
+
   return (
     <List
       bordered
-      dataSource={ value }
-      loadMore={ remainingSites.length > 0 && (
+      dataSource={ sortedValue }
+      loadMore={ remainingSites.length > 0 && props.disabled !== true && (
       <List.Item>
         <Dropdown
-          disabled={ props.disabled }
           menu={ { items: remainingSitesMenuItems } }
           trigger={ ['click'] }
         >

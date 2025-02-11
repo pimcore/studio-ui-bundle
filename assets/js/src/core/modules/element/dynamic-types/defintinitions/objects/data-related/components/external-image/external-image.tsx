@@ -37,7 +37,6 @@ export interface ExternalImageProps {
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ExternalImageValue | null>(props.value ?? null)
   const { t } = useTranslation()
-
   const onChange = (value?: string): void => {
     const newUrl = value !== '' && value !== undefined ? value : null
     setValue(newUrl === null ? null : { url: newUrl })
@@ -48,7 +47,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   }, [value])
 
   const previewWidth = Math.max(props.previewWidth ?? 300, 70)
-  const previewHeight = Math.max(props.previewHeight ?? 300, 70)
+  const previewHeight = Math.max(props.previewHeight ?? 150, 70)
 
   return (
     <>
@@ -74,7 +73,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
           : (
             <AssetTarget
               height={ previewHeight }
-              title={ t('external-image.preview-placeholder') }
+              title={ t(props.disabled === true ? 'empty-image' : 'external-image.preview-placeholder') }
               width={ previewWidth }
             />
             )}

@@ -11,13 +11,12 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { type ReactElement, useEffect, useState } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import {
   type VideoType,
   type VideoValue
 } from './video'
-import _ from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { Form } from '@Pimcore/components/form/form'
@@ -30,6 +29,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { ManyToOneRelation } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/many-to-one-relation/many-to-one-relation'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { parseVideoIdFromUrl } from '@Pimcore/utils/video-url-parser'
+import { isEmpty } from 'lodash'
 
 interface VideoFooterProps {
   emptyValue?: () => void
@@ -125,30 +125,53 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     })
   }
 
+  const buttons: ReactElement[] = []
+
+  if (props.disabled !== true) {
+    buttons.push((
+      <Tooltip
+        key="empty"
+        title={ t('empty') }
+      >
+        <IconButton
+          disabled={ isEmpty(props.value) || props.disabled }
+          icon={ { value: 'trash' } }
+          onClick={ props.emptyValue }
+        />
+      </Tooltip>
+    ))
+
+    buttons.push((
+      <Tooltip
+        key="edit"
+        title={ t('edit') }
+      >
+        <IconButton
+          icon={ { value: 'edit' } }
+          onClick={ showModal }
+        />
+      </Tooltip>
+    ))
+  }
+
+  if (props.disabled === true) {
+    buttons.push((
+      <Tooltip
+        key="details"
+        title={ t('details') }
+      >
+        <IconButton
+          icon={ { value: 'info-circle' } }
+          onClick={ showModal }
+        />
+      </Tooltip>
+    ))
+  }
+
   return (
     <>
       <ButtonGroup
-        items={ [
-          <Tooltip
-            key="empty"
-            title={ t('empty') }
-          >
-            <IconButton
-              disabled={ _.isEmpty(props.value) || props.disabled }
-              icon={ { value: 'trash' } }
-              onClick={ props.emptyValue }
-            />
-          </Tooltip>,
-          <Tooltip
-            key="edit"
-            title={ t('edit') }
-          >
-            <IconButton
-              icon={ { value: 'edit' } }
-              onClick={ showModal }
-            />
-          </Tooltip>
-        ] }
+        items={ buttons }
         noSpacing
       />
       <WindowModal

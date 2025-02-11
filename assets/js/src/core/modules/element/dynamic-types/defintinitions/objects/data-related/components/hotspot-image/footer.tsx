@@ -11,10 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { type HotspotImageValue } from './hotspot-image'
-import _ from 'lodash'
+import { isEmpty, isNumber } from 'lodash'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
@@ -45,80 +45,90 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
       ...props.value!,
       hotspots: [],
       marker: [],
-      crop: null
+      crop: {}
     })
 
     await messageApi.success(t('hotspots.data-cleared'))
   }
 
+  const buttons: ReactElement[] = [
+    <Tooltip
+      key="open"
+      title={ t('open') }
+    >
+      <IconButton
+        disabled={ isEmpty(props.value) }
+        icon={ { value: 'open-folder' } }
+        onClick={ () => {
+          if (typeof props.value?.image?.id === 'number') {
+            openAsset({ config: { id: props.value.image.id } })
+          }
+        } }
+      />
+    </Tooltip>
+  ]
+
+  if (props.disabled !== true) {
+    buttons.push(
+      <Tooltip
+        key="empty"
+        title={ t('empty') }
+      >
+        <IconButton
+          disabled={ isEmpty(props.value) || props.disabled }
+          icon={ { value: 'trash' } }
+          onClick={ props.emptyValue }
+        />
+      </Tooltip>
+    )
+  }
+
+  if (isNumber(props.value?.image?.id)) {
+    buttons.push(
+      <Dropdown
+        key="more"
+        menu={ {
+          items: [
+            {
+              label: t('crop'),
+              key: 'crop',
+              icon: <Icon value={ 'crop' } />,
+              onClick: async () => {
+                props.setCropModalOpen(true)
+              }
+            },
+            {
+              label: t(props.disabled === true ? 'hotspots.show' : 'hotspots.edit'),
+              key: 'hotspots-edit',
+              icon: <Icon value={ 'new-marker' } />,
+              onClick: async () => {
+                props.setMarkerModalOpen(true)
+              }
+            },
+            {
+              hidden: props.disabled === true || !hasValueData(props.value),
+              label: t('hotspots.clear-data'),
+              key: 'clear-data',
+              icon: <Icon value={ 'remove-marker' } />,
+              onClick: clearValueData
+            }
+          ]
+        } }
+        placement='topLeft'
+        trigger={ ['click'] }
+      >
+        <IconButton
+          icon={ { value: 'more' } }
+          onClick={ (e) => { e.stopPropagation() } }
+          size="small"
+        />
+      </Dropdown>
+    )
+  }
+
   return (
     <ButtonGroup
-      items={ [
-        <Tooltip
-          key="empty"
-          title={ t('empty') }
-        >
-          <IconButton
-            disabled={ _.isEmpty(props.value) || props.disabled }
-            icon={ { value: 'trash' } }
-            onClick={ props.emptyValue }
-          />
-        </Tooltip>,
-        <Tooltip
-          key="open"
-          title={ t('open') }
-        >
-          <IconButton
-            disabled={ _.isEmpty(props.value) }
-            icon={ { value: 'open-folder' } }
-            onClick={ () => {
-              if (typeof props.value?.image?.id === 'number') {
-                openAsset({ config: { id: props.value.image.id } })
-              }
-            } }
-          />
-        </Tooltip>,
-        <Dropdown
-          key="more"
-          menu={ {
-            items: [
-              {
-                disabled: !_.isNumber(props.value?.image?.id),
-                label: t('crop'),
-                key: 'crop',
-                icon: <Icon value={ 'crop' } />,
-                onClick: async () => {
-                  props.setCropModalOpen(true)
-                }
-              },
-              {
-                disabled: !_.isNumber(props.value?.image?.id),
-                label: t('hotspots.edit'),
-                key: 'hotspots-edit',
-                icon: <Icon value={ 'new-marker' } />,
-                onClick: async () => {
-                  props.setMarkerModalOpen(true)
-                }
-              },
-              {
-                disabled: !hasValueData(props.value) || props.disabled === true,
-                label: t('hotspots.clear-data'),
-                key: 'clear-data',
-                icon: <Icon value={ 'remove-marker' } />,
-                onClick: clearValueData
-              }
-            ]
-          } }
-          placement='topLeft'
-          trigger={ ['click'] }
-        >
-          <IconButton
-            icon={ { value: 'more' } }
-            onClick={ (e) => { e.stopPropagation() } }
-            size="small"
-          />
-        </Dropdown>
-      ] }
+      items={ buttons }
       noSpacing
     />
   )

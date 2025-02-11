@@ -112,9 +112,11 @@ const Component = ({ loading, children, footer, fitContent, className, theme = '
       extra={ props.extra !== undefined && props.extra !== null ? renderExtraContent() : null }
       title={ props.title !== undefined && props.title !== null ? renderTitle() : null }
     >
+      {children !== undefined && (
       <Box padding={ contentPadding }>
         {children}
       </Box>
+      )}
 
       {footer !== undefined && (
       <div className="card-footer">

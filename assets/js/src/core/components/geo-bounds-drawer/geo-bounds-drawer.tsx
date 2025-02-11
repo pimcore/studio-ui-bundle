@@ -45,28 +45,31 @@ export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Ele
   return (
     <GeoMapCard
       disabled={ props.disabled }
-      footer={ <GeoBoundsDrawerFooter
-        disabled={ props.disabled }
-        onChange={ onChangeFooter }
-        onSearch={ (geoPoint?: GeoPoint) => {
-          setFooterValue(undefined)
-          setMapValue(undefined)
+      footer={ props.disabled === true
+        ? undefined
+        : (
+          <GeoBoundsDrawerFooter
+            onChange={ onChangeFooter }
+            onSearch={ (geoPoint?: GeoPoint) => {
+              setFooterValue(undefined)
+              setMapValue(undefined)
 
-          const geoMapAPI = geoMapRef.current
-          geoMapAPI?.setValue(undefined)
-          if (geoPoint === undefined) {
-            geoMapAPI?.reset()
-          } else {
-            geoMapAPI?.setLat(geoPoint.latitude)
-            geoMapAPI?.setLng(geoPoint.longitude)
-            geoMapAPI?.setZoom(15)
-          }
+              const geoMapAPI = geoMapRef.current
+              geoMapAPI?.setValue(undefined)
+              if (geoPoint === undefined) {
+                geoMapAPI?.reset()
+              } else {
+                geoMapAPI?.setLat(geoPoint.latitude)
+                geoMapAPI?.setLng(geoPoint.longitude)
+                geoMapAPI?.setZoom(15)
+              }
 
-          geoMapAPI?.forceRerender()
-          props.onChange?.(undefined)
-        } }
-        value={ footerValue }
-               /> }
+              geoMapAPI?.forceRerender()
+              props.onChange?.(undefined)
+            } }
+            value={ footerValue }
+          />
+          ) }
       height={ props.height }
       lat={ props.lat }
       lng={ props.lng }
