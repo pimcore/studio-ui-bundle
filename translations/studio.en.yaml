@@ -581,6 +581,7 @@ navigation.clear-cache: Clear Full Page Cache
 navigation.custom-reports: Custom Reports
 navigation.perspectives: Perspectives
 external-image.preview-placeholder: Add an external image
+external-image.preview-empty-image: No image defined
 image.dnd-target: Drop an image here
 fallback: Fallback
 url-slug.add-site: Add Site

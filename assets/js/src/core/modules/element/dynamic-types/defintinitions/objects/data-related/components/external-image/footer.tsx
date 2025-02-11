@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Input, Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { isEmpty } from 'lodash'
 
 interface ExternalImageFooterProps {
   value?: string
@@ -44,6 +45,36 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
 
   const inputWidth = toCssDimension(props.inputWidth)
 
+  const buttons: ReactElement[] = [
+    (
+      <Tooltip
+        key="external-image-open-url"
+        title={ t('open') }
+      >
+        <IconButton
+          disabled={ openUrlDisabled }
+          icon={ { value: 'open-folder' } }
+          onClick={ openUrl }
+        />
+      </Tooltip>
+    )
+  ]
+
+  if (props.disabled !== true) {
+    buttons.push((
+      <Tooltip
+        key="external-image-delete"
+        title={ t('set-to-null') }
+      >
+        <IconButton
+          disabled={ isEmpty(props.value) }
+          icon={ { value: 'trash' } }
+          onClick={ emptyValue }
+        />
+      </Tooltip>
+    ))
+  }
+
   return (
     <Flex
       className="w-full"
@@ -56,28 +87,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
         value={ props.value }
       />
       <ButtonGroup
-        items={ [
-          <Tooltip
-            key="external-image-open-url"
-            title={ t('open') }
-          >
-            <IconButton
-              disabled={ openUrlDisabled }
-              icon={ { value: 'open-folder' } }
-              onClick={ openUrl }
-            />
-          </Tooltip>,
-          <Tooltip
-            key="external-image-delete"
-            title={ t('set-to-null') }
-          >
-            <IconButton
-              disabled={ props.disabled }
-              icon={ { value: 'trash' } }
-              onClick={ emptyValue }
-            />
-          </Tooltip>
-        ] }
+        items={ buttons }
         noSpacing
       />
 
