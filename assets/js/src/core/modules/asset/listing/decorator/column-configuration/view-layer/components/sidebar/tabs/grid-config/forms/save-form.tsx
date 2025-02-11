@@ -22,11 +22,11 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { UsersRolesDropdown } from '@Pimcore/components/users-roles-dropdown/users-roles-dropdown'
 import { TagList, type TagListProps } from '@Pimcore/components/tag-list/tag-list'
 import { type TagProps } from '@Pimcore/components/tag/tag'
-import { useListGridConfig } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { type RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import { type UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './save-form.styles'
 import { isEmpty } from 'lodash'
+import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 
 export interface SaveFormProps extends FormProps {
   roleList?: RoleGetCollectionApiResponse
@@ -45,7 +45,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
   const [isSharedGlobally, setIsSharedGlobally] = useState(props.initialValues?.shareGlobally ?? defaultValues.shareGlobally)
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
 
-  const { gridConfig, setGridConfig } = useListGridConfig()
+  const { gridConfig, setGridConfig } = useGridConfig()
 
   const { t } = useTranslation()
   const { styles } = useStyles()

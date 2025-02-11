@@ -12,10 +12,8 @@
 */
 
 import React from 'react'
-import {
-  type BatchEdit
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { type BatchEdit } from './batch-edit-provider'
 
 export interface DefaultBatchEditProps {
   batchEdit: BatchEdit

@@ -21,15 +21,11 @@ import { useAsset } from '@Pimcore/modules/asset/hooks/use-asset'
 import { CsvModal } from './csv-modal/csv-modal'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import {
-  BatchEditProvider
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
-import {
-  BatchEditModal
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
+import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()

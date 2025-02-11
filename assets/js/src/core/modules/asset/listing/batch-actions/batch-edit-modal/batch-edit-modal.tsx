@@ -15,19 +15,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
-import {
-  getFormattedDropDownMenu,
-  useListGridAvailableColumns,
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/hooks/use-list'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
-import {
-  useBatchEdit
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/hooks/use-batch-edit'
-import {
-  BatchEditListContainer
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-list-container'
 import {
   type GridColumnConfiguration,
   useAssetPatchByIdMutation
@@ -42,6 +32,9 @@ import { eventBus } from '@Pimcore/lib/event-bus'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useBatchEdit } from './hooks/use-batch-edit'
+import { BatchEditListContainer } from './batch-edit-list-container'
 
 export interface BatchEditModalProps {
   batchEditModalOpen: boolean
@@ -49,7 +42,7 @@ export interface BatchEditModalProps {
 }
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
-  const { editableColumnsDropDownMenu } = useListGridAvailableColumns()
+  const { getAvailableColumnsDropdown } = useAvailableColumns()
   const assetContext = useContext(AssetContext)
   const [patchAsset] = useAssetPatchByIdMutation()
   const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits, assetPatchForUpdate } = useBatchEdit()
@@ -113,7 +106,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         justify={ 'space-between' }
                >
         <Dropdown menu={ {
-          items: getFormattedDropDownMenu(editableColumnsDropDownMenu, onColumnClick)
+          items: getAvailableColumnsDropdown(onColumnClick).menu.items
         } }
         >
           <IconTextButton

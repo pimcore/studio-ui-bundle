@@ -12,12 +12,9 @@
 */
 
 import { useContext } from 'react'
-import {
-  type BatchContext, type BatchEdit,
-  BatchEditContext
-} from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-provider'
 import { type AssetPatchByIdApiArg, type PatchCustomMetadata } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
+import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (key: string, type: string, frontendType: string | undefined, locale: string | null, localizable: boolean, value: string) => void
