@@ -40,7 +40,7 @@ export const useSave = (): UseSaveHookReturn => {
   const save = async (editableData: Record<string, any>, task?: 'version' | 'autoSave'): Promise<void> => {
     if (dataObject?.changes === undefined) return
 
-    const update: DataObjectUpdateByIdApiArg['body']['data'] = {}
+    const updatedData: DataObjectUpdateByIdApiArg['body']['data'] = {}
     if (dataObject.changes.properties) {
       const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
         const { rowId, ...propertyApi } = property
@@ -55,15 +55,15 @@ export const useSave = (): UseSaveHookReturn => {
         return propertyApi
       })
 
-      update.properties = propertyUpdate?.filter((property) => !property.inherited)
+      updatedData.properties = propertyUpdate?.filter((property) => !property.inherited)
     }
 
     if (Object.keys(editableData).length > 0) {
-      update.editableData = editableData
+      updatedData.editableData = editableData
     }
 
     if (task !== undefined) {
-      update.task = task
+      updatedData.task = task
     }
 
     if (task === 'autoSave') {
@@ -74,7 +74,7 @@ export const useSave = (): UseSaveHookReturn => {
       id,
       body: {
         data: {
-          ...update
+          ...updatedData
         }
       }
     }).then(() => {

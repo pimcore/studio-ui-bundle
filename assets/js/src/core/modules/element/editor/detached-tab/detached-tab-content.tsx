@@ -24,6 +24,7 @@ import { type GlobalElementContext } from '@Pimcore/modules/element/hooks/use-gl
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ElementToolbar } from '@Pimcore/components/element-toolbar/element-toolbar'
+import DraftIndicator from '@Pimcore/modules/data-object/editor/detached-tab/draft-indicator'
 
 export interface DetachedTabContentProps {
   context: GlobalElementContext
@@ -65,6 +66,7 @@ export default function DetachedTabContent ({ context, tabKey }: DetachedTabCont
     <ContentLayout
       renderTopBar={
         <Toolbar
+          align="center"
           position='top'
           size='small'
           theme='secondary'
@@ -73,6 +75,7 @@ export default function DetachedTabContent ({ context, tabKey }: DetachedTabCont
             elementType={ context.type }
             id={ context.config.id }
           />
+          { context.type === 'data-object' && <DraftIndicator id={ context.config.id } /> }
         </Toolbar>
       }
     >
