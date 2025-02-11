@@ -29,14 +29,13 @@ import {
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  // @todo add this again when the filter decorator is implemented
-  // const { filterOptions } = useListFilterOptions()
-  // const { pageSize } = useListPageSize()
-  // const { page } = usePaging()
   const { id } = useAsset()
+  const { useDataQueryHelper } = useSettings()
+  const { getArgs } = useDataQueryHelper()
 
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
@@ -132,20 +131,10 @@ export const BatchActions = (): React.JSX.Element => {
             folders: [id],
             filters: {
               includeDescendants: true,
-              // paging is a required prop for the api,
-              //  but should be ignored to export the whole filtered result
+              ...getArgs().body.filters ?? {},
               page: 1,
               pageSize: 999999999990
             }
-            /* // @todo add this again when the filter decorator is implemented
-            ...(!isEmpty(filterOptions) && {
-              filters: {
-                // @todo check if we can use this without pagination
-                page,
-                pageSize,
-                ...filterOptions
-              }
-            }) */
           }
         }
       })

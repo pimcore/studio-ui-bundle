@@ -50,7 +50,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
       sortable: true,
       meta: column,
 
-      children: <Tag>{t(`asset.listing.column.${column.key}`)}</Tag>,
+      children: <Tag>{t(`listing.column.${column.key}`)}</Tag>,
 
       renderRightToolbar: (
         <Space size='mini'>

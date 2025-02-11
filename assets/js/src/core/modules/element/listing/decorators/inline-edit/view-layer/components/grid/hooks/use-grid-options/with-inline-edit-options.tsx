@@ -31,10 +31,7 @@ export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOp
       const { rowData, columnId, value } = event
       const column = decodeColumnIdentifier(columnId)
 
-      console.log({ columnId, column })
-
       if (column === undefined) {
-        // @todo: log error
         return
       }
 

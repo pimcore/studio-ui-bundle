@@ -161,25 +161,25 @@ dependencies.required-by: Required by
 dependencies.columns.subtype: Subtype
 dependencies.columns.path: Path
 dependencies.columns.open: Open
-asset.listing.groups.system: System
-asset.listing.groups.default_metadata: Default Metadata
-asset.listing.groups.predefined_metadata: Predefined Metadata
-asset.listing.column.preview: Preview
-asset.listing.column.id: ID
-asset.listing.column.type: Type
-asset.listing.column.filename: Filename
-asset.listing.column.fullpath: Full path
-asset.listing.column.modificationDate: Modification date
-asset.listing.column.creationDate: Creation date
-asset.listing.column.size: Size
-asset.listing.column.title: Title
-asset.listing.column.alt: Alt
-asset.listing.column.copyright: Copyright
-asset.listing.column.author: Author
-asset.listing.column.authorLink: Author Link
-asset.listing.column.license: License
-asset.listing.column.licensePath: License Path
-asset.listing.column.source: Source
+listing.groups.system: System
+listing.groups.default_metadata: Default Metadata
+listing.groups.predefined_metadata: Predefined Metadata
+listing.column.preview: Preview
+listing.column.id: ID
+listing.column.type: Type
+listing.column.filename: Filename
+listing.column.fullpath: Full path
+listing.column.modificationDate: Modification date
+listing.column.creationDate: Creation date
+listing.column.size: Size
+listing.column.title: Title
+listing.column.alt: Alt
+listing.column.copyright: Copyright
+listing.column.author: Author
+listing.column.authorLink: Author Link
+listing.column.license: License
+listing.column.licensePath: License Path
+listing.column.source: Source
 listing.grid-config.title: Grid config
 listing.add-column: Add a column
 listing.actions: Apply to selection
