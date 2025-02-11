@@ -81,13 +81,19 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-input-number {
         width: 100%;
       }
+      
+      & > :first-child {
+        background-color: ${token.colorBgContainerDisabled};
+        border-radius: ${token.borderRadius}px;
+        border: none !important;
+        color: ${token.colorText} !important;
+      }
     `,
 
-    objectSectionFieldItem: css`
-      background-color: ${token.colorBgContainerDisabled};
-      border-radius: ${token.borderRadius}px;
-      border: none !important;
-      color: ${token.colorText} !important;
+    objectSectionFieldItemWrapperHighlight: css`
+      & > :first-child {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
     `
   }
 })

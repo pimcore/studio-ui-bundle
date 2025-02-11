@@ -67,13 +67,12 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
   getVersionObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): IInputNumberProps {
     return {
       inherited: props.inherited,
-      disabled: props.noteditable === true,
+      disabled: true,
       max: fixUnsigned(props.unsigned === true, props.maxValue, true) ?? undefined,
       min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,
       defaultValue: props.value,
       precision: props.integer === true ? 0 : (props.decimalPrecision ?? undefined),
-      step: props.increment ?? undefined,
-      className: props.className
+      step: props.increment ?? undefined
     }
   }
 
