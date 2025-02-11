@@ -46,22 +46,20 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
   const inputWidth = toCssDimension(props.inputWidth)
 
   const buttons: ReactElement[] = [
-    (
-      <Tooltip
-        key="external-image-open-url"
-        title={ t('open') }
-      >
-        <IconButton
-          disabled={ openUrlDisabled }
-          icon={ { value: 'open-folder' } }
-          onClick={ openUrl }
-        />
-      </Tooltip>
-    )
+    <Tooltip
+      key="external-image-open-url"
+      title={ t('open') }
+    >
+      <IconButton
+        disabled={ openUrlDisabled }
+        icon={ { value: 'open-folder' } }
+        onClick={ openUrl }
+      />
+    </Tooltip>
   ]
 
   if (props.disabled !== true) {
-    buttons.push((
+    buttons.push(
       <Tooltip
         key="external-image-delete"
         title={ t('set-to-null') }
@@ -72,7 +70,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
           onClick={ emptyValue }
         />
       </Tooltip>
-    ))
+    )
   }
 
   return (
