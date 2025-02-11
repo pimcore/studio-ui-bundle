@@ -51,10 +51,8 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
       disabled: props.noteditable === true,
       max: fixUnsigned(props.unsigned === true, props.maxValue, true) ?? undefined,
       min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,
-      defaultValue: props.value,
       precision: props.integer === true ? 0 : (props.decimalPrecision ?? undefined),
-      step: props.increment ?? undefined,
-      className: props.className
+      step: props.increment ?? undefined
     }
   }
 
@@ -62,6 +60,27 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
     return (
       <InputNumber
         { ...this.getObjectDataComponentProps(props) }
+      />
+    )
+  }
+
+  getVersionObjectDataComponentProps (props: AbstractNumericObjectDataDefinition): IInputNumberProps {
+    return {
+      inherited: props.inherited,
+      disabled: props.noteditable === true,
+      max: fixUnsigned(props.unsigned === true, props.maxValue, true) ?? undefined,
+      min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,
+      defaultValue: props.value,
+      precision: props.integer === true ? 0 : (props.decimalPrecision ?? undefined),
+      step: props.increment ?? undefined,
+      className: props.className
+    }
+  }
+
+  getVersionObjectDataComponent (props: AbstractNumericObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return (
+      <InputNumber
+        { ...this.getVersionObjectDataComponentProps(props) }
       />
     )
   }
