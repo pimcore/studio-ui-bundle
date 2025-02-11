@@ -28,6 +28,7 @@ import { ActionColumnDecorator } from './decorator/action-column/action-column-d
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { TagFilterDecorator } from './decorator/tag-filter/tag-filter-decorator'
+import { GeneralFiltersDecorator } from './decorator/general-filters/general-filters-decorator'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery
@@ -52,7 +53,8 @@ const props = compose<AbstractDecoratorProps>(
   [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
   ActionColumnDecorator,
   ContextMenuDecorator,
-  TagFilterDecorator
+  TagFilterDecorator,
+  GeneralFiltersDecorator
 )(defaultProps) as IAssetListingDefaultParams
 
 export const ListingContainer = (): React.JSX.Element => {

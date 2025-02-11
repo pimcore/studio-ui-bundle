@@ -28,10 +28,10 @@ import {
   BatchEditModal
 } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/toolbar/tools/batch-edit-modal/batch-edit-modal'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
-import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
+import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 
 export const BatchActions = (): React.JSX.Element => {
-  const { selectedRows } = useRowSelection()
+  const rowSelection = useRowSelectionOptional()
   // @todo add this again when the filter decorator is implemented
   // const { filterOptions } = useListFilterOptions()
   // const { pageSize } = useListPageSize()
@@ -53,6 +53,12 @@ export const BatchActions = (): React.JSX.Element => {
       setJobTitle(`${data.filename}`)
     }
   }, [data])
+
+  if (rowSelection === undefined) {
+    return <></>
+  }
+
+  const { selectedRows } = rowSelection
 
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false

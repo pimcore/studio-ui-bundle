@@ -17,7 +17,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { DateRangePicker, type DateRangeTargetValue } from '@Pimcore/components/date-picker/date-range-picker'
 import type { AbstractFieldFilterDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/field-filters/dynamic-type-field-filter-abstract'
-import { useFilters } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/list/sidebar/filters/hooks/use-filters'
+import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
 enum DatePickerSettingValue {
   ON = 'on',
@@ -46,12 +46,12 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 
 export interface DynamicTypeFieldFilterDatetimeProps extends AbstractFieldFilterDefinition {}
 
-export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
+export const DynamicTypeFieldFilterDatetimeComponent = (props: DynamicTypeFieldFilterDatetimeProps): React.JSX.Element => {
   const [settingValue, setSettingValue] = useState<DatePickerSettingValue>(DatePickerSettingValue.ON)
 
-  const { getFieldFilter, addOrUpdateFieldFilter } = useFilters()
+  const { data, setData } = useDynamicFilter()
 
-  const fieldFilter = getFieldFilter(column) as FieldFilterDatetime
+  const fieldFilter = data as FieldFilterDatetime
 
   const getDateValue = (datetimeType: DatePickerSettingValue): null | number | number[] => {
     const currentFilterValue = fieldFilter?.filterValue
@@ -85,20 +85,20 @@ export const DynamicTypeFieldFilterDatetimeComponent = ({ column }: DynamicTypeF
 
   useEffect(() => {
     setSettingValue(DatePickerSettingValue.ON)
-  }, [column])
+  }, [data])
 
   const handleChangeDateOnValue = (date: number): void => {
     setDateOnValue(date)
     setDateBetweenValue(null)
 
-    addOrUpdateFieldFilter(column, { on: date })
+    setData({ on: date })
   }
 
   const handleChangeDateBetweenValue = (dates: DateRangeTargetValue): void => {
     setDateBetweenValue(dates)
     setDateOnValue(null)
 
-    addOrUpdateFieldFilter(column, { from: dates?.[0], to: dates?.[1] })
+    setData({ from: dates?.[0], to: dates?.[1] })
   }
 
   return (

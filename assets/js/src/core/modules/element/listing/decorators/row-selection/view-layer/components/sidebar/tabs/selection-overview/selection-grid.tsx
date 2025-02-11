@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useRowSelection } from '../../../../../context-layer/provider/use-row-selection'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type GridProps } from '@Pimcore/types/components/types'
@@ -31,7 +31,7 @@ export const SelectionGrid = (): React.JSX.Element => {
     setSelectedRows(newSelectedRows)
   }
 
-  const columns: GridProps['columns'] = [
+  const columns: GridProps['columns'] = useMemo(() => ([
     columnHelper.accessor('id', {
       header: 'ID',
       size: 75
@@ -60,9 +60,9 @@ export const SelectionGrid = (): React.JSX.Element => {
         </Flex>
       )
     })
-  ]
+  ]), [selectedRowsData])
 
-  const data: GridProps['data'] = Object.keys(currentSelectedRows).map((id) => {
+  const data: GridProps['data'] = useMemo(() => (Object.keys(currentSelectedRows ?? {}).map((id) => {
     const row = selectedRowsData[id]
 
     if (row === undefined) {
@@ -74,13 +74,13 @@ export const SelectionGrid = (): React.JSX.Element => {
       fullpath: row.fullpath,
       actions: row.id
     }
-  })
+  })), [currentSelectedRows, selectedRowsData])
 
-  return (
+  return useMemo(() => (
     <Grid
       autoWidth
       columns={ columns }
       data={ data }
     />
-  )
+  ), [data])
 }
