@@ -105,10 +105,7 @@ export const Toolbar = (): React.JSX.Element => {
           <EditorToolbarWorkflowMenu />
           { isAutoSaveLoading && (
             <Tooltip title={ t('auto-save.loading-tooltip') }>
-              <Spin
-                size='small'
-                spinning
-              />
+              <Spin type='classic' />
             </Tooltip>
           )}
           { !isAutoSaveLoading && isAutoSaved && (
