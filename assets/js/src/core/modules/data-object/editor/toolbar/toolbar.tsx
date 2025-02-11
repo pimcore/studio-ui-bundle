@@ -81,7 +81,7 @@ export const Toolbar = (): React.JSX.Element => {
     if (dataObject?.changes === undefined) return
 
     Promise.all([saveDataObject(getModifiedDataObjectAttributes()), saveSchedules()]).catch((error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 
