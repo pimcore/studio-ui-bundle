@@ -22,20 +22,24 @@ export const api = baseApi.enhanceEndpoints({
         const tags: Tag[] = []
 
         result?.items.forEach((note) => {
-          tags.push(...providingTags.NOTES_AND_EVENTS_ID(note.id))
+          tags.push(...providingTags.NOTES_AND_EVENTS_DETAIL(note.id))
         })
 
         return tags
       }
     },
     noteDeleteById: {
-      invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_ID(args.id)
+      invalidatesTags: (result, error, args) => invalidatingTags.NOTES_AND_EVENTS_DETAIL(args.id)
     },
     noteElementGetCollection: {
       providesTags: (result, error, args) => {
-        const tags = providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)
+        const tags: Tag[] = []
 
-        return tags.filter((tag) => tag !== undefined)
+        result?.items.forEach((note) => {
+          tags.push(...providingTags.NOTES_AND_EVENTS_DETAIL(note.id))
+        })
+
+        return [...tags, ...providingTags.ELEMENT_NOTES_AND_EVENTS(args.elementType, args.id)]
       }
     },
     noteElementCreate: {

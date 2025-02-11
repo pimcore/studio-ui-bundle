@@ -15,7 +15,7 @@ import { type ElementType } from 'types/element-type.d'
 
 export type Tag = string | {
   type: string
-  id: number
+  id: number | string
 }
 
 export const tagNames = {
@@ -65,14 +65,16 @@ export const providingTags = {
   DATA_OBJECT_DETAIL_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_DETAIL, id }],
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, { type: tagNames.DATA_OBJECT_TREE, id }],
-  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.PROPERTIES],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.DEPENDENCIES],
-  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }, tagNames.SCHEDULES],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.WORKFLOW],
+  PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }, tagNames.PROPERTIES],
+  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.PROPERTIES, id, elementType }, tagNames.PROPERTIES],
+  SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
+  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.SCHEDULES, id, elementType }, tagNames.SCHEDULES],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
-  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [{ type: tagNames.VERSIONS, id, elementType }, tagNames.VERSIONS],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
-  NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
+  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.VERSIONS, id, elementType }, tagNames.VERSIONS],
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id, elementType }, tagNames.NOTES_AND_EVENTS],
+  NOTES_AND_EVENTS_DETAIL: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.ELEMENT_TAGS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ROLE: () => [tagNames.ROLE]
@@ -85,7 +87,6 @@ export const invalidatingTags = {
   ASSET_DETAIL_ID: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
-  VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_DETAIL: (folderId?: number, configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }],
   ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }],
@@ -94,14 +95,16 @@ export const invalidatingTags = {
   DATA_OBJECT_DETAIL_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_DETAIL, id }],
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
-  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
-  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
-  NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [tagNames.NOTES_AND_EVENTS],
+  NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id, elementType }],
+  PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
+  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [{ type: tagNames.PROPERTIES, id, elementType }],
+  SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
+  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }],
+  VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [{ type: tagNames.VERSIONS, id, elementType }],
-  VERSIONS: () => [tagNames.VERSIONS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [{ type: tagNames.ELEMENT_TAGS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ROLE: () => [tagNames.ROLE]
