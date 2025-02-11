@@ -19,6 +19,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { AssetVersionsFieldsView } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/versions/components/asset-versions-fields-view/asset-versions-fields-view'
+import { ObjectVersionsFieldsView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/object-versions-fields-view/object-versions-fields-view'
 import { useVersionData } from './hooks/use-version-data'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { getAssetCategoriesListWithFields } from './helpers/assetCategoriesHelper'
@@ -30,9 +31,6 @@ import {
   type IVersionsFieldsList
 } from './types'
 import { useStyles } from './versions-fields-list.styles'
-import {
-  ObjectVersionsFieldsView
-} from '@Pimcore/components/versions-fields-list/components/object-versions-fields-view/object-versions-fields-view'
 
 interface IVersionsFieldsListProps extends IVersionsFieldsList {}
 

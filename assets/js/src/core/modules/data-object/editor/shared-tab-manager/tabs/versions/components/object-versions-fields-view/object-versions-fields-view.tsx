@@ -20,7 +20,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { DataComponent } from '../data-component/data-component'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/components/versions-fields-list/types'
-import { useStyles } from '../common-versions-fields-view.styles'
+import { useStyles } from '@Pimcore/components/versions-fields-list/components/common-versions-fields-view.styles'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
