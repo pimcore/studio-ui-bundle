@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   useVersionGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
@@ -21,37 +21,19 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import {
   type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
-import {
-  api
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 
 interface VersionTabContainerProps extends VersionDetailViewsProps {}
 
 export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewComponent }: VersionTabContainerProps): React.JSX.Element => {
   const { id, elementType } = useElementContext()
-  const dispatch = useAppDispatch()
-
-  console.log('----> id', id)
-  console.log('----> elementType', elementType)
 
   const { isLoading, data } = useVersionGetCollectionForElementByTypeAndIdQuery({
     id,
     elementType,
     page: 1,
     pageSize: 9999
-  })
-
-  useEffect(() => {
-    console.log('----> in useEffect')
-    console.log('Tag to invalidate:', invalidatingTags.ELEMENT_VERSIONS(elementType, id))
-
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.ELEMENT_VERSIONS(elementType, id)
-      ))
-  }, [])
+  },
+  { refetchOnMountOrArgChange: true })
 
   if (isLoading) {
     return <Content loading />
