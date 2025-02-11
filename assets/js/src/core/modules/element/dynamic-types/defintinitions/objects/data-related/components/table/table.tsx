@@ -149,7 +149,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
         onClick={ () => modal.textarea({
           title: t('table.copy'),
           initialValue: getCopyData(value),
-          okText: t('copy'),
+          okText: t('table.copy'),
           onOk: (value: string) => {
             void navigator.clipboard.writeText(value)
           }
