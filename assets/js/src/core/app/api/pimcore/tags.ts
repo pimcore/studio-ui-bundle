@@ -12,7 +12,6 @@
 */
 
 import { type ElementType } from 'types/element-type.d'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export type Tag = string | {
   type: string
@@ -48,7 +47,6 @@ export const providingTags = {
   ASSET_DETAIL_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_DETAIL, id }],
   ASSET_TREE: () => [tagNames.ASSET, tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [tagNames.ASSET, tagNames.ASSET_TREE, { type: tagNames.ASSET_TREE, id }],
-  ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, tagNames.VERSIONS],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [
     tagNames.ASSET,
@@ -72,6 +70,7 @@ export const providingTags = {
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }, tagNames.SCHEDULES],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.WORKFLOW],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
+  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [{ type: tagNames.VERSIONS, id, elementType }, tagNames.VERSIONS],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_ID: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.ELEMENT_TAGS, id }],
@@ -86,7 +85,7 @@ export const invalidatingTags = {
   ASSET_DETAIL_ID: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
-  ASSET_VERSIONS: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
+  VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_DETAIL: (folderId?: number, configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: `${folderId}-${configurationId}` }],
   ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }],
@@ -100,20 +99,21 @@ export const invalidatingTags = {
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }],
   ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
   NOTES_AND_EVENTS_ID: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
-  VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [tagNames.NOTES_AND_EVENTS],
+  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [{ type: tagNames.VERSIONS, id, elementType }],
+  VERSIONS: () => [tagNames.VERSIONS],
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [{ type: tagNames.ELEMENT_TAGS, id }],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
   ROLE: () => [tagNames.ROLE]
 }
 
-const getElementDetailTag = (elementType: ElementType, id: number): Tag | undefined => {
+const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
   switch (elementType) {
     case 'asset':
       return { type: tagNames.ASSET_DETAIL, id }
     case 'data-object':
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
+    case 'document':
+      return { type: tagNames.DATA_OBJECT_DETAIL, id }
   }
-
-  trackError(new GeneralError(`Unknown element type: ${elementType}`))
 }

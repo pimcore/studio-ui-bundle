@@ -15,7 +15,6 @@ import React, { useState } from 'react'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import {
-  api,
   useVersionCleanupForElementByTypeAndIdMutation,
   type Version,
   type VersionGetCollectionForElementByTypeAndIdApiArg
@@ -32,9 +31,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { createVersionAccordionItem } from './helpers/create-version-accordion-item'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import {
   type VersionDetailViewsProps
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/types/types'
@@ -50,11 +46,8 @@ export const VersionsView = ({
   SingleViewComponent,
   ComparisonViewComponent
 }: VersionsViewProps): React.JSX.Element => {
-  const { id } = useElementContext()
   const [isComparingActive, setIsComparingActive] = useState(false)
   const [detailedVersions, setDetailedVersions] = useState([] as VersionIdentifiers[])
-
-  const dispatch = useAppDispatch()
 
   const [cleanupVersion, { isLoading: isLoadingCleanupVersion, isError: isCleanupVersionError, error: cleanupVersionError }] = useVersionCleanupForElementByTypeAndIdMutation()
 
@@ -70,9 +63,6 @@ export const VersionsView = ({
       elementType: versions[0].ctype as VersionGetCollectionForElementByTypeAndIdApiArg['elementType'],
       id: versions[0].cid
     })
-
-    const invalidateVersionsList = invalidatingTags.ASSET_VERSIONS(id)
-    dispatch(api.util.invalidateTags(invalidateVersionsList))
 
     if (isCleanupVersionError) {
       trackError(new ApiError(cleanupVersionError))
