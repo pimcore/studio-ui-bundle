@@ -28,6 +28,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   const getArgs = (): DataObjectGetGridApiArg => {
     return {
+      classId: 'CAR',
       body: {
         folderId: getId(),
         columns: columnsArg

@@ -18,6 +18,7 @@ import { RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorato
 import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
 import React from 'react'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -36,8 +37,10 @@ const props = RowSelectionDecorator(ColumnConfigurationDecorator(defaultProps), 
 
 export const ListingContainer = (): React.JSX.Element => {
   return (
-    <BaseListing
-      { ...props }
-    />
+    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/ListingRegistry'] }>
+      <BaseListing
+        { ...props }
+      />
+    </DynamicTypeRegistryProvider>
   )
 }
