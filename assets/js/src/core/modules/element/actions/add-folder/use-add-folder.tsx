@@ -11,17 +11,19 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { type ElementType } from 'types/element-type.d'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
@@ -84,7 +86,11 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
     })
 
     try {
-      await elementFolderCreateMutationTask
+      const response = await elementFolderCreateMutationTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+      }
 
       refreshTree(parentId)
 

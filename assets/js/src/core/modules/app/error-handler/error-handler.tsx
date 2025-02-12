@@ -11,30 +11,37 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React from 'react'
 import { isUndefined } from 'lodash'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
-import { GeneralError } from '@Pimcore/modules/app/error-handler/index'
+import { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler/index'
+import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/api-error-view-ui'
+import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
 interface IErrorContentProvider {
-  getContent: () => string
+  getContent: () => IErrorGetContent['data']
 }
-
-type ErrorHandler = (data: string) => void
+type ErrorHandler = (data: React.JSX.Element | string) => void
 
 const isGeneralError = (error: any): boolean => error instanceof GeneralError
+const isApiError = (error: any): boolean => error instanceof ApiError
 
 const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never | void => {
   const errorContent = data.getContent()
 
+  const getErrorContentValue = (): React.JSX.Element | string => {
+    return isApiError(data) ? <ApiErrorViewUI errorContent={ errorContent } /> : (errorContent as string)
+  }
+
   if (!isUndefined(handler)) {
-    handler(errorContent)
+    handler(getErrorContentValue())
   } else {
-    // Default handler
-    ErrorModalService.showError(errorContent)
+    // default handler
+    ErrorModalService.showError(getErrorContentValue())
   }
 
   if (isGeneralError(data)) {
-    throw new Error(errorContent)
+    throw new Error(errorContent as string)
   }
 }
 

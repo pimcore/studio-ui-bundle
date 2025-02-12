@@ -14,16 +14,19 @@
 import { isEmpty, isString } from 'lodash'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import type { SerializedError } from '@reduxjs/toolkit'
+import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
+import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
 type ApiErrorData = FetchBaseQueryError | SerializedError
 
 interface IApiErrorDetails {
   detail?: string
+  errorKey?: string
   message?: string
   error?: string
 }
 
-const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
+export const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
 class ApiError extends Error {
   private readonly errorData: ApiErrorData
@@ -34,14 +37,21 @@ class ApiError extends Error {
     this.errorData = errorData
   }
 
-  public getContent (): string {
+  public getContent (): IErrorGetContent['data'] {
     if (!isEmpty(this.errorData)) {
       if (!isEmpty((this.errorData as Error)?.message)) {
         return (this.errorData as Error).message
       }
 
-      if ('data' in this.errorData && !isEmpty((this.errorData.data as IApiErrorDetails)?.message)) {
-        return (this.errorData.data as IApiErrorDetails).message!
+      if ('data' in this.errorData) {
+        const errorKey = (this.errorData.data as IApiErrorDetails)?.errorKey
+        const errorMessage = (this.errorData.data as IApiErrorDetails)?.message
+
+        if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR) {
+          return { errorKey: errorKey! }
+        }
+
+        if (!isEmpty(errorMessage)) { return errorMessage! }
       }
 
       if ('data' in this.errorData && !isEmpty((this.errorData.data as IApiErrorDetails)?.error)) {
