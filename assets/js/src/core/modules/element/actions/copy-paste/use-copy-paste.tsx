@@ -183,7 +183,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.copy'),
       key: 'copy',
       icon: <Icon value={ 'copy' } />,
-      hidden: !checkElementPermission(node.permissions!, 'view') || node.isLocked,
+      hidden: !checkElementPermission(node.permissions, 'view') || node.isLocked,
       onClick: () => {
         copy(node)
         onFinish?.()
@@ -208,7 +208,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.cut'),
       key: 'cut',
       icon: <Icon value={ 'cut' } />,
-      hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
+      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         cut(node)
         onFinish?.()
@@ -233,7 +233,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.paste'),
       key: 'paste',
       icon: <Icon value={ 'paste' } />,
-      hidden: (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions!, 'create'),
+      hidden: (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
       onClick: async () => {
         await paste(node.id)
         onFinish?.()
