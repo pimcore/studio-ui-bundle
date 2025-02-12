@@ -1,0 +1,9 @@
+{
+  "entrypoints": {
+    "vendor": {
+      "js": [
+        "/bundles/pimcorestudioui/build/dd08252a-9538-4308-af3c-e5a6ee48b631/vendor.js"
+      ]
+    }
+  }
+}
