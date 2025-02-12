@@ -12,7 +12,11 @@
 */
 
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { isUndefined } from 'lodash'
 
-export const checkElementPermission = (permissions: ElementPermissions, permission: keyof ElementPermissions): boolean => {
+export const checkElementPermission = (permissions: ElementPermissions | undefined, permission: keyof ElementPermissions): boolean => {
+  if (isUndefined(permissions)) {
+    return false
+  }
   return permissions[permission] === true
 }

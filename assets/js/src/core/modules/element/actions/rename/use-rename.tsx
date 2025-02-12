@@ -69,7 +69,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       label: t('element.rename'),
       key: 'rename',
       icon: <Icon value={ 'rename' } />,
-      hidden: !checkElementPermission(node.permissions!, 'rename') || node.isLocked,
+      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const parentId = node.parentId ?? undefined
         rename(node.id, getElementKey(node, elementType), parentId, onFinish)

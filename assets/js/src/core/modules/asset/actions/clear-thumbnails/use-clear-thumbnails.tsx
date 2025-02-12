@@ -46,7 +46,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
       label: t('asset.tree.context-menu.clear-thumbnails'),
       key: 'clear-image-thumbnails',
       icon: <Icon value={ 'remove-image-thumbnail' } />,
-      hidden: node.type !== 'image' || !checkElementPermission(node.permissions!, 'publish'),
+      hidden: node.type !== 'image' || !checkElementPermission(node.permissions, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
     }
   }
@@ -56,7 +56,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
       label: t('asset.tree.context-menu.clear-thumbnails'),
       key: 'clear-video-thumbnails',
       icon: <Icon value={ 'remove-video-thumbnail' } />,
-      hidden: node.type !== 'video' || !checkElementPermission(node.permissions!, 'publish'),
+      hidden: node.type !== 'video' || !checkElementPermission(node.permissions, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
     }
   }
@@ -66,7 +66,7 @@ export const useClearThumbnails = (): UseClearThumbnailsHookReturn => {
       label: t('asset.tree.context-menu.clear-thumbnails'),
       key: 'clear-pdf-thumbnails',
       icon: <Icon value={ 'remove-pdf-thumbnail' } />,
-      hidden: node.mimeType !== 'application/pdf' || !checkElementPermission(node.permissions!, 'publish'),
+      hidden: node.mimeType !== 'application/pdf' || !checkElementPermission(node.permissions, 'publish'),
       onClick: async () => { await handleClearThumbnails(node, onFinish) }
     }
   }

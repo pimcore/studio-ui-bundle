@@ -28,10 +28,14 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
-  const { form, updateModifiedDataObjectAttributes, updateDraft, getChangedFieldName } = useEditFormContext()
+  const { form, updateModifiedDataObjectAttributes, updateDraft, getChangedFieldName, disabled } = useEditFormContext()
   const inheritanceState = useInheritanceState()
 
   const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
+    if (disabled) {
+      return
+    }
+
     updateModifiedDataObjectAttributes(changedValues)
 
     const fieldName = getChangedFieldName(changedValues)

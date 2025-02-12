@@ -30,7 +30,7 @@ export const EditContainer = (): React.JSX.Element => {
   const { id } = useElementContext()
   const { currentLayout } = useLayoutSelection()
 
-  const { data: layoutData, isLoading, error: layoutError } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: currentLayout === null })
+  const { data: layoutData, isLoading, error: layoutError } = useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined })
   const { data, isLoading: isDataLoading, error: dataObjectError } = useDataObjectGetByIdQuery({ id })
 
   const { styles } = useStyles()
