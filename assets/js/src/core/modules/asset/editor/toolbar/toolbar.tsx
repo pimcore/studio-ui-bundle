@@ -37,6 +37,7 @@ import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/asset/editor/toolbar
 import { Flex } from '@Pimcore/components/flex/flex'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -79,14 +80,16 @@ export const Toolbar = (): React.JSX.Element => {
           vertical={ false }
         >
           <EditorToolbarWorkflowMenu />
-          <Button
-            disabled={ !hasChanges || isLoading || isSchedulesLoading }
-            loading={ isLoading || isSchedulesLoading }
-            onClick={ onSaveClick }
-            type="primary"
-          >
-            {t('toolbar.save-and-publish')}
-          </Button>
+          { checkElementPermission(asset?.permissions, 'publish') && (
+            <Button
+              disabled={ !hasChanges || isLoading || isSchedulesLoading }
+              loading={ isLoading || isSchedulesLoading }
+              onClick={ onSaveClick }
+              type="primary"
+            >
+              {t('toolbar.save-and-publish')}
+            </Button>
+          ) }
         </Flex>
         <WorkflowLogModal />
       </WorkFlowProvider>
