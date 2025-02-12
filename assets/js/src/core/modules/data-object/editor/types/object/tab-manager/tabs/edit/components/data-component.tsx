@@ -28,6 +28,9 @@ import DataComponentFormItem
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import {
+  useEditFormContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -48,6 +51,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const { currentLanguage } = useLanguageSelection()
   const inheritanceState = useInheritanceState()
   const form = Form.useFormInstance()
+  const { disabled } = useEditFormContext()
 
   if (hasFormList) {
     formFieldName = [...formList.getComputedFieldName(), name]
@@ -87,7 +91,8 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     ...props,
     title,
     name: formFieldName,
-    inherited: inheritanceStateValue?.inherited === true
+    inherited: inheritanceStateValue?.inherited === true,
+    noteditable: Boolean(props.noteditable) || disabled
   }
 
   useEffect(() => {
