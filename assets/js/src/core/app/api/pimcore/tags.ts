@@ -16,6 +16,7 @@ import { type ElementType } from 'types/element-type.d'
 export type Tag = string | {
   type: string
   id: number | string
+  elementType?: ElementType
 }
 
 export const tagNames = {
@@ -36,7 +37,7 @@ export const tagNames = {
   DEPENDENCIES: 'DEPENDENCIES',
   NOTES_AND_EVENTS: 'NOTES_AND_EVENTS',
   AVAILABLE_TAGS: 'AVAILABLE_TAGS',
-  ELEMENT_TAGS: 'ELEMENT_TAGS',
+  ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE'
 }
 
@@ -65,18 +66,18 @@ export const providingTags = {
   DATA_OBJECT_DETAIL_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_DETAIL, id }],
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, { type: tagNames.DATA_OBJECT_TREE, id }],
-  ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.DEPENDENCIES, id, elementType }, tagNames.DEPENDENCIES],
-  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.WORKFLOW, id, elementType }, tagNames.WORKFLOW],
+  ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
+  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }, tagNames.PROPERTIES],
-  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.PROPERTIES, id, elementType }, tagNames.PROPERTIES],
+  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
-  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.SCHEDULES, id, elementType }, tagNames.SCHEDULES],
+  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }, tagNames.VERSIONS],
-  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.VERSIONS, id, elementType }, tagNames.VERSIONS],
+  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [tagNames.NOTES_AND_EVENTS, { type: tagNames.NOTES_AND_EVENTS, id }],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.NOTES_AND_EVENTS, id, elementType }, tagNames.NOTES_AND_EVENTS],
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
-  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), { type: tagNames.ELEMENT_TAGS, id }, tagNames.ELEMENT_TAGS],
+  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE]
 }
 
@@ -95,20 +96,22 @@ export const invalidatingTags = {
   DATA_OBJECT_DETAIL_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_DETAIL, id }],
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
-  ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [{ type: tagNames.DEPENDENCIES, id, elementType }],
-  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [{ type: tagNames.WORKFLOW, id, elementType }],
+  ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
+  ELEMENT_WORKFLOW: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.WORKFLOW, elementType, id)],
   PROPERTY_DETAIL: (id: string) => [{ type: tagNames.PROPERTIES, id }],
-  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [{ type: tagNames.PROPERTIES, id, elementType }],
+  ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
-  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [{ type: tagNames.SCHEDULES, id, elementType }],
+  ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
-  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [{ type: tagNames.VERSIONS, id, elementType }],
+  ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
-  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id, elementType }],
+  ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   AVAILABLE_TAGS: () => [tagNames.AVAILABLE_TAGS],
-  ELEMENT_TAGS: (elementType: ElementType, id: number) => [{ type: tagNames.ELEMENT_TAGS, id }],
+  ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE]
 }
+
+const getElementSpecificTag = (tagType: string, elementType: ElementType, id: number): Tag => ({ type: tagType, id, elementType })
 
 const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
   switch (elementType) {
