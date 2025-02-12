@@ -24,6 +24,7 @@ import {
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const dispatch = useAppDispatch()
