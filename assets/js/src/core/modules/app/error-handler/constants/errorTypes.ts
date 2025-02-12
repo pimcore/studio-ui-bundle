@@ -11,6 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* In this file, we're keeping the unused data as documentation of what we have exactly. */
+
 export enum ErrorTypes {
   API_ERROR = 'API_ERROR',
   GENERAL_ERROR = 'GENERAL_ERROR'
