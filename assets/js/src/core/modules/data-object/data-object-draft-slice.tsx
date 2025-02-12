@@ -30,6 +30,7 @@ import {
   type ModifiedObjectDataDraft,
   useModifiedObjectDataReducers
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
+import { useDraftDataReducers } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
 
 export interface DataObjectDraft extends DataObject, PropertiesDraft, SchedulesDraft, TrackableChangesDraft, TabsDraft, ModifiedObjectDataDraft {
 }
@@ -63,7 +64,9 @@ export const slice = createSlice({
     ...usePropertiesReducers(dataObjectsAdapter),
     ...useSchedulesReducers(dataObjectsAdapter),
     ...useTabsReducers(dataObjectsAdapter),
-    ...useModifiedObjectDataReducers(dataObjectsAdapter)
+    ...useModifiedObjectDataReducers(dataObjectsAdapter),
+    ...useModifiedObjectDataReducers(dataObjectsAdapter),
+    ...useDraftDataReducers(dataObjectsAdapter)
   }
 })
 
@@ -89,7 +92,8 @@ export const {
   resetSchedulesChanges: resetSchedulesChangesForDataObject,
   setActiveTab: setActiveTabForDataObject,
 
-  markObjectDataAsModified
+  markObjectDataAsModified,
+  setDraftData
 
 } = slice.actions
 export const { selectById: selectDataObjectById } = dataObjectsAdapter.getSelectors((state: RootState) => state['data-object-draft'])

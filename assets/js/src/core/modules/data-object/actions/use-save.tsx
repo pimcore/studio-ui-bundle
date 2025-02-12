@@ -33,7 +33,7 @@ export interface UseSaveHookReturn {
 
 export const useSave = (): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
-  const { dataObject, properties } = useDataObjectDraft(id)
+  const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
   const { setIsAutoSaved, setIsAutoSaveLoading } = useSaveContext()
 
@@ -77,11 +77,12 @@ export const useSave = (): UseSaveHookReturn => {
           ...updatedData
         }
       }
-    }).then(() => {
+    }).then((response) => {
       setIsAutoSaved(task === 'autoSave')
       if (task === 'autoSave') {
         setIsAutoSaveLoading(false)
       }
+      setDraftData(response.data?.draftData ?? null)
     })
   }
 

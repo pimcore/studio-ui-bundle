@@ -635,6 +635,11 @@ inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: "Data inheritance broken"
 main: Main
 main_admin: Main (Admin Mode)
+draft-alert: The current version is a draft. You can delete the draft to restore the previous version.
+draft-alert-auto-save: The current version is a auto saved draft. You can delete the draft to restore the previous version.
+delete-draft: Delete draft
+delete-draft-auto-save: Delete auto saved draft
+delete-draft-confirmation: Are you sure you want to delete the draft?
 auto-save.tooltip: This version is auto saved.
 auto-save.loading-tooltip: Auto save in progress
 detached-tab.draft-tooltip: The current version is a draft.

@@ -20,6 +20,9 @@ import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/ob
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import {
+  DraftAlert
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -61,6 +64,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
         onValuesChange={ handleValuesChange }
         preserve
       >
+        <DraftAlert />
         <ObjectComponent { ...layout } />
         <Form.Item style={ { margin: 12 } }>
           <Button

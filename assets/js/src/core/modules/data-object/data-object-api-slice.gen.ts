@@ -418,6 +418,14 @@ export type DataObjectPermissions = Permissions & {
     /** Localized View */
     localizedView?: any;
 };
+export type DataObjectDraftData = {
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
+};
 export type DataObject = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -460,6 +468,7 @@ export type DataObject = Element & {
     objectData?: object;
     /** Inheritance object data */
     inheritanceData?: object;
+    draftData?: DataObjectDraftData | null;
 };
 export type DataObjectFolder = DataObject;
 export type UpdateDataProperty = {

@@ -29,7 +29,8 @@ import {
   setSchedulesForDataObject,
   updatePropertyForDataObject,
   updateScheduleForDataObject,
-  markObjectDataAsModified
+  markObjectDataAsModified,
+  setDraftData
 } from '../data-object-draft-slice'
 import { useEffect, useState } from 'react'
 import { usePropertiesDraft, type UsePropertiesDraftReturn } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -46,12 +47,14 @@ import {
   useModifiedObjectDataDraft,
   type UseModifiedObjectDataDraftReturn
 } from '@Pimcore/modules/data-object/draft/hooks/use-modified-object-data'
+import { useDraftDataDraft, type UseDraftDataReturn } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
 
 export interface UseDataObjectDraftReturn extends
   UsePropertiesDraftReturn,
   UseSchedulesDraftReturn,
   UseTabsDraftReturn,
   UseModifiedObjectDataDraftReturn,
+  UseDraftDataReturn,
   UseTrackableChangesDraftReturn {
   isLoading: boolean
   isError: boolean
@@ -163,6 +166,11 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     markObjectDataAsModified
   )
 
+  const draftDataActions = useDraftDataDraft(
+    id,
+    setDraftData
+  )
+
   const editorType = dataObject?.type === undefined
     ? undefined
     : (typeRegistry.get(dataObject.type) ?? typeRegistry.get('object'))
@@ -178,6 +186,7 @@ export const useDataObjectDraft = (id: number): UseDataObjectDraftReturn => {
     ...propertyActions,
     ...schedulesActions,
     ...tabsActions,
-    ...modifiedObjectDataActions
+    ...modifiedObjectDataActions,
+    ...draftDataActions
   }
 }
