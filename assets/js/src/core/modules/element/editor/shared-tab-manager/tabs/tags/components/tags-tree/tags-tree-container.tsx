@@ -39,7 +39,7 @@ export const TagsTreeContainer = (props: TagsTreeContainerProps): React.JSX.Elem
     page: 1,
     pageSize: 9999,
     filter
-  })
+  }, { refetchOnMountOrArgChange: true })
 
   if (tagsLoading || props.isLoading!) {
     return <Content loading />
