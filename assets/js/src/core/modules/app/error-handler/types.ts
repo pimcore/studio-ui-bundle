@@ -11,20 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
-
-class GeneralError extends Error {
-  private readonly errorData: string
-
-  constructor (message: string) {
-    super()
-
-    this.errorData = message
-  }
-
-  public getContent (): IErrorGetContent['data'] {
-    return this.errorData
-  }
+export interface IErrorGetContent {
+  data: string | { errorKey: string }
 }
-
-export default GeneralError

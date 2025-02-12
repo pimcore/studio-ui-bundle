@@ -1,6 +1,12 @@
 common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
+error.error_element_exists: Element already exists
+error.error_folder_exists: Folder already exists
+error.error_invalid_argument: Invalid argument
+error.error_widget_name_missing: Widget name have to be provided
+error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
+error.error_validation_failed: Validation failed
 asset.sidebar.details: Details
 asset.asset-tree.title: Asset Tree
 asset.asset-tree.search: Search in {{folderName}}

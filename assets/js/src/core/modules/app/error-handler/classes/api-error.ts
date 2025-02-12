@@ -11,19 +11,22 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { isEmpty, isString } from 'lodash'
+import { isEmpty, isString, isUndefined } from 'lodash'
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import type { SerializedError } from '@reduxjs/toolkit'
+import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
+import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
 type ApiErrorData = FetchBaseQueryError | SerializedError
 
 interface IApiErrorDetails {
   detail?: string
+  errorKey?: string
   message?: string
   error?: string
 }
 
-const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
+export const DEFAULT_ERROR_CONTENT = 'Something went wrong.'
 
 class ApiError extends Error {
   private readonly errorData: ApiErrorData
@@ -34,18 +37,30 @@ class ApiError extends Error {
     this.errorData = errorData
   }
 
-  public getContent (): string {
+  private handleApiErrorDetails (errorData: IApiErrorDetails): IErrorGetContent['data'] | undefined {
+    const errorKey = errorData?.errorKey
+    const errorMessage = errorData?.message
+    const errorValue = errorData?.error
+
+    if (!isEmpty(errorKey) && errorKey !== ErrorKeyTypes.GENERIC_ERROR) {
+      return { errorKey: errorKey! }
+    }
+
+    if (!isEmpty(errorMessage)) { return errorMessage! }
+
+    if (!isEmpty(errorValue)) { return errorValue! }
+  }
+
+  public getContent (): IErrorGetContent['data'] {
     if (!isEmpty(this.errorData)) {
       if (!isEmpty((this.errorData as Error)?.message)) {
         return (this.errorData as Error).message
       }
 
-      if ('data' in this.errorData && !isEmpty((this.errorData.data as IApiErrorDetails)?.message)) {
-        return (this.errorData.data as IApiErrorDetails).message!
-      }
+      if ('data' in this.errorData) {
+        const apiErrorDetails = this.handleApiErrorDetails(this.errorData.data as IApiErrorDetails)
 
-      if ('data' in this.errorData && !isEmpty((this.errorData.data as IApiErrorDetails)?.error)) {
-        return (this.errorData.data as IApiErrorDetails).error!
+        if (!isUndefined(apiErrorDetails)) return apiErrorDetails
       }
 
       if ('error' in this.errorData && isString(this.errorData.error)) {
