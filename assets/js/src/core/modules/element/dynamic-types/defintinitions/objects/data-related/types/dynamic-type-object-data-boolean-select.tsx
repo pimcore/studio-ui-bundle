@@ -36,6 +36,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
         inherited={ props.inherited }
         optionFilterProp="label"
         options={ options }
+        value={ props.value }
       />
     )
   }
