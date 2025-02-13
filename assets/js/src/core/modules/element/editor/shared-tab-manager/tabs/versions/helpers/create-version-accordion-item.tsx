@@ -44,6 +44,7 @@ export const createVersionAccordionItem = ({
 
   const selected = detailedVersions.some((v => v.id === version.id))
   const published = version.published ?? false
+  const autosaved = version.autosave
   const selectable = isComparingActive
 
   const themeBySelection = selected ? 'theme-primary' : 'theme-default'
@@ -107,18 +108,29 @@ export const createVersionAccordionItem = ({
   const Extra = (): React.JSX.Element => {
     const { t } = useTranslation()
 
-    if (!published) {
-      return <></>
+    if (published) {
+      return (
+        <Tag
+          color={ 'success' }
+          iconName={ 'published' }
+        >
+          {t('version.published')}
+        </Tag>
+      )
     }
 
-    return (
-      <Tag
-        color={ 'success' }
-        iconName={ 'published' }
-      >
-        {t('version.published')}
-      </Tag>
-    )
+    if (autosaved) {
+      return (
+        <Tag
+          color={ 'blue' }
+          iconName={ 'auto-save' }
+        >
+          {t('version.autosaved')}
+        </Tag>
+      )
+    }
+
+    return <></>
   }
 
   return {
