@@ -41,6 +41,7 @@ export class DynamicTypeObjectDataGeoPolyLine extends DynamicTypeObjectDataAbstr
         lat={ props.lat }
         lng={ props.lng }
         mode={ 'geoPolyLine' }
+        value={ props.value }
         width={ getGeoComponentWidth(props.width) }
         zoom={ props.zoom }
       />
