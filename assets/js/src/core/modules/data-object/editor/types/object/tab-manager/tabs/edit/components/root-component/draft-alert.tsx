@@ -17,28 +17,19 @@ import { Box } from '@Pimcore/components/box/box'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
-import {
-  useVersionDeleteByIdMutation
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { isNil } from 'lodash'
-import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
-import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import {
   IS_AUTO_SAVE_DRAFT_CREATED
 } from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
+import { useDeleteDraft } from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
 
 export const DraftAlert = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const [deleteVersion, { isLoading, isError, error }] = useVersionDeleteByIdMutation()
+  const { deleteDraft, isLoading, buttonText } = useDeleteDraft()
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
-  const { refreshElement } = useElementRefresh('data-object')
-
-  if (isError) {
-    throw new ApiError(error)
-  }
 
   if (isNil(dataObject)) {
     return <></>
@@ -50,13 +41,6 @@ export const DraftAlert = (): React.JSX.Element => {
     return <></>
   }
 
-  const deleteDraft = async (): Promise<void> => {
-    await deleteVersion({ id: draftData.id })
-      .then(() => {
-        refreshElement(dataObject.id)
-      })
-  }
-
   const deleteDraftButton = (
     <Button
       danger
@@ -65,7 +49,7 @@ export const DraftAlert = (): React.JSX.Element => {
       onClick={ deleteDraft }
       size="small"
     >
-      { t(draftData.isAutoSave ? 'delete-draft-auto-save' : 'delete-draft') }
+      { buttonText }
     </Button>
   )
 

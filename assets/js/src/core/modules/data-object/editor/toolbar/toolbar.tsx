@@ -32,7 +32,7 @@ import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import { useSave } from '@Pimcore/modules/data-object/actions/use-save'
+import { useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Icon } from '@Pimcore/components/icon/icon'
 import {
