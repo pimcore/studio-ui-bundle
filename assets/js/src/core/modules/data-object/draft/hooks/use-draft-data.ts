@@ -18,6 +18,9 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { useTransition } from 'react'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type DataObjectDraft } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import { isNil } from 'lodash'
+
+export const IS_AUTO_SAVE_DRAFT_CREATED = 'isAutoSaveDraftCreated'
 
 interface UseDraftDataReducersReturn {
   setDraftData: (state: EntityState<DataObjectDraft, number>, action: PayloadAction<{ id: number, draftData: any }>) => void
@@ -26,6 +29,9 @@ interface UseDraftDataReducersReturn {
 export const useDraftDataReducers = (entityAdapter: EntityAdapter<DataObjectDraft, number>): UseDraftDataReducersReturn => {
   const setDraftData = (state: EntityState<DataObjectDraft, number>, action: PayloadAction<{ id: number, draftData: DataObject['draftData'] }>): void => {
     modifyDraft(state, action.payload.id, (draft: DataObjectDraft): DataObjectDraft => {
+      if (isNil(draft.draftData) && action.payload.draftData?.isAutoSave === true) {
+        draft.changes[IS_AUTO_SAVE_DRAFT_CREATED] = true
+      }
       draft.draftData = action.payload.draftData
       return draft
     })

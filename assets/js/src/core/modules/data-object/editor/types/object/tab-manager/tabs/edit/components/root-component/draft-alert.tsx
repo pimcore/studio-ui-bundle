@@ -25,6 +25,9 @@ import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-prov
 import { isNil } from 'lodash'
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
+import {
+  IS_AUTO_SAVE_DRAFT_CREATED
+} from '@Pimcore/modules/data-object/draft/hooks/use-draft-data'
 
 export const DraftAlert = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -43,7 +46,7 @@ export const DraftAlert = (): React.JSX.Element => {
 
   const draftData = dataObject?.draftData
 
-  if (isNil(draftData)) {
+  if (isNil(draftData) || dataObject.changes[IS_AUTO_SAVE_DRAFT_CREATED]) {
     return <></>
   }
 
