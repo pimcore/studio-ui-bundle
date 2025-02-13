@@ -24,12 +24,6 @@ export const useStyles = createStyles(({ css, token }) => {
             color: ${token.colorTextLabel};
             border-color: ${token.Tag.colorBorder};
         }
-
-        &.ant-tag-geekblue {
-          background-color: ${token.Colors.Base.Geekblue['2']};
-          color: ${token.Colors.Base.Geekblue['6']};
-          border-color: ${token.Colors.Base.Geekblue['3']};
-        }
         
         &.theme-transparent {
           background-color: ${token.colorFillTertiary};
