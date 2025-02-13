@@ -40,6 +40,7 @@ export class DynamicTypeObjectDataExternalImage extends DynamicTypeObjectDataAbs
         inputWidth={ props.inputWidth }
         previewHeight={ props.previewHeight }
         previewWidth={ props.previewWidth }
+        value={ props.value }
       />
     )
   }
