@@ -18,16 +18,12 @@ import { Box } from '@Pimcore/components/box/box'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import {
-  api
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
-import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
+import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
+import { Table } from '@Pimcore/modules/notes-and-events/table/table'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
-  const dispatch = useAppDispatch()
+  const { notesAndEvents } = useNotesAndEvents()
 
   return (
     <ContentLayout
@@ -35,14 +31,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
         <Toolbar theme="secondary">
           <IconButton
             icon={ { value: 'refresh' } }
-            onClick={ () => {
-              dispatch(
-                api.util.invalidateTags(
-                  invalidatingTags.AVAILABLE_TAGS()
-                )
-              )
-            }
-          }
+            onClick={ () => {} }
           />
         </Toolbar> }
     >
@@ -71,6 +60,9 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             />
           </Flex>
         </Flex>
+        <Table
+          notesAndEvents={ notesAndEvents }
+        />
       </Box>
     </ContentLayout>
   )

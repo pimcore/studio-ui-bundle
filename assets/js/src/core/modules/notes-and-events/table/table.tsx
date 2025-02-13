@@ -11,9 +11,6 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import {
-  type DataProperty as DataPropertyApi
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import React, { useEffect, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -21,49 +18,42 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { usePropertyGetCollectionForElementByTypeAndIdQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { verifyUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/verify-cell-update'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { Text } from '@Pimcore/components/text/text'
-import { Box } from '@Pimcore/components/box/box'
 import { uuid } from '@Pimcore/utils/uuid'
+import { type Note } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { type DataNote, useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 
 interface ITableProps {
-  propertiesTableTab: string
-  showDuplicatePropertyModal: () => void
-  showMandatoryModal: () => void
+  notesAndEvents: Note[]
 }
 
-type DataPropertyWithActions = DataProperty & {
+type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
 }
 
 export const Table = ({
-  propertiesTableTab,
-  showDuplicatePropertyModal,
-  showMandatoryModal
+  notesAndEvents
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement, mapToElementType } = useElementHelper()
   const { styles } = useStyles()
+  const { notesAndEventsLoading } = useNotesAndEvents()
+
   const { id, elementType } = useElementContext()
-  const { element, properties, setProperties, updateProperty, removeProperty, setModifiedCells } = useElementDraft(id, elementType)
-  const arePropertiesAvailable = properties !== undefined && properties.length > 0
+  const { element, setModifiedCells } = useElementDraft(id, elementType)
+  const areNotesAndEventsAvailable = notesAndEvents !== undefined && notesAndEvents.length > 0
 
-  const { data, isLoading } = usePropertyGetCollectionForElementByTypeAndIdQuery({
-    elementType,
-    id
-  })
-
-  const [gridDataOwn, setGridDataOwn] = useState<DataProperty[]>([])
-  const [gridDataInherited, setGridDataInherited] = useState<DataProperty[]>([])
-  const modifiedCellsType = 'properties'
+  const [gridDataOwn, setGridDataOwn] = useState<DataNote[]>([])
+  const [notes, setNotes] = useState<DataNote[]>([])
+  const modifiedCellsType = 'notes-and-events'
   const modifiedCells = element?.modifiedCells[modifiedCellsType] ?? []
 
-  const enrichProperties = (data: DataPropertyApi[]): DataProperty[] => {
+  console.log('----> notes', notes)
+
+  const enrichNotesAndEvents = (data: Note[]): DataNote[] => {
     return data.map((item) => {
       return {
         ...item,
@@ -73,22 +63,16 @@ export const Table = ({
   }
 
   useEffect(() => {
-    if (data !== undefined && element?.changes.properties === undefined && Array.isArray(data.items)) {
-      setProperties(enrichProperties(data?.items))
+    if (notesAndEvents !== undefined && element?.changes.properties === undefined && Array.isArray(notesAndEvents)) {
+      setNotes(enrichNotesAndEvents(notesAndEvents))
     }
-  }, [data])
+  }, [notesAndEvents])
 
   useEffect(() => {
-    if (arePropertiesAvailable) {
-      setGridDataOwn(properties.filter((item) => {
-        return !item.inherited
-      }))
-
-      setGridDataInherited(properties.filter((item) => {
-        return item.inherited
-      }))
+    if (areNotesAndEventsAvailable) {
+      setGridDataOwn(enrichNotesAndEvents(notesAndEvents))
     }
-  }, [properties])
+  }, [notesAndEvents])
 
   useEffect(() => {
     if (modifiedCells.length > 0 && element?.changes.properties === undefined) {
@@ -96,56 +80,64 @@ export const Table = ({
     }
   }, [element, modifiedCells])
 
-  const columnHelper = createColumnHelper<DataPropertyWithActions>()
-  const createColumns = (tableType: 'own' | 'inherited'): any => [
+  const columnHelper = createColumnHelper<DataNoteWithActions>()
+  const createColumns = (): any => [
     columnHelper.accessor('type', {
-      header: t('properties.columns.type'),
+      header: t('notes-and-events.columns.type'),
       meta: {
-        type: 'property-icon'
+        editable: false
       },
       size: 40
     }),
-    columnHelper.accessor('key', {
-      header: t('properties.columns.key'),
+    columnHelper.accessor('title', {
+      header: t('notes-and-events.columns.element'),
       meta: {
         editable: true
       },
       size: 200
     }),
-    columnHelper.accessor('predefinedName', {
-      header: t('properties.columns.name'),
+    columnHelper.accessor('title', {
+      header: t('notes-and-events.columns.title'),
       size: 200
     }),
     columnHelper.accessor('description', {
-      header: t('properties.columns.description'),
+      header: t('notes-and-events.columns.description'),
       size: 200
     }),
     columnHelper.accessor('data', {
-      header: t('properties.columns.data'),
+      header: t('notes-and-events.columns.fields'),
       meta: {
-        type: 'property-value',
-        editable: tableType === 'own',
+        editable: false,
         autoWidth: true
       },
       size: 300
     }),
-    columnHelper.accessor('inheritable', {
-      header: t('properties.columns.inheritable'),
+    columnHelper.accessor('title', {
+      header: t('notes-and-events.columns.user'),
       size: 70,
       meta: {
-        type: 'checkbox',
-        editable: tableType === 'own',
+        editable: false,
+        config: {
+          align: 'center'
+        }
+      }
+    }),
+    columnHelper.accessor('date', {
+      header: t('notes-and-events.columns.date'),
+      size: 70,
+      meta: {
+        editable: false,
         config: {
           align: 'center'
         }
       }
     }),
     columnHelper.accessor('actions', {
-      header: t('properties.columns.actions'),
+      header: t('notes-and-events.columns.actions'),
       size: 70,
       cell: (info) => {
         return (
-          <div className={ 'properties-table--actions-column' }>
+          <div className={ 'global-notes-table--actions-column' }>
             {
               ['document', 'asset', 'object'].includes(info.row.original.type) &&
                 info.row.original.data !== null &&
@@ -157,47 +149,18 @@ export const Table = ({
 
                     !isUndefined(typeValue) && await openElement({
                       type: typeValue,
-                      id: info.row.original.data.id
+                      id: 339
                     })
                   } }
                   type="link"
                 />
               )
             }
-
-            {tableType === 'own' && (
-              <IconButton
-                icon={ { value: 'trash' } }
-                onClick={ () => {
-                  removeProperty(info.row.original)
-                } }
-                type="link"
-              />
-            )}
           </div>
         )
       }
     })
   ]
-  const ownTableColumns = [
-    ...createColumns('own')
-  ]
-  const allTableColumns = [
-    ...createColumns('inherited')
-  ]
-
-  const onUpdateCellData = ({ rowIndex, columnId, value, rowData }): void => {
-    const updatedProperties = [...(properties ?? [])]
-    const propertyIndex = updatedProperties.findIndex((property) => property.key === rowData.key && !property.inherited)
-    const updatedProperty = { ...updatedProperties.at(propertyIndex)!, [columnId]: value }
-    updatedProperties[propertyIndex] = updatedProperty
-    const hasDuplicate = updatedProperties.filter(property => property.key === updatedProperty.key && !property.inherited).length > 1
-
-    if (verifyUpdate(value, columnId, 'key', hasDuplicate, showMandatoryModal, showDuplicatePropertyModal)) {
-      updateProperty(rowData.key as string, updatedProperty)
-      setModifiedCells(modifiedCellsType, [...modifiedCells, { rowIndex: rowData.rowId, columnId }])
-    }
-  }
 
   return (
     <div className={ styles.table }>
@@ -206,29 +169,14 @@ export const Table = ({
           {(
             <Grid
               autoWidth
-              columns={ ownTableColumns }
+              columns={ createColumns() }
               data={ gridDataOwn }
-              isLoading={ isLoading }
+              isLoading={ notesAndEventsLoading }
               modifiedCells={ modifiedCells }
-              onUpdateCellData={ onUpdateCellData }
+              onUpdateCellData={ () => { alert('') } }
               resizable
               setRowId={ (row: DataProperty) => row.rowId }
             />
-          )}
-
-          {propertiesTableTab === 'all' && (
-            <>
-              <Box padding={ { y: 'small' } }>
-                <Text strong>{t('properties.inherited.properties')}
-                </Text>
-              </Box>
-              <Grid
-                autoWidth
-                columns={ allTableColumns }
-                data={ gridDataInherited }
-                resizable
-              />
-            </>
           )}
         </>
       )}
