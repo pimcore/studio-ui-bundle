@@ -19,12 +19,9 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
-import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { Table } from '@Pimcore/modules/notes-and-events/table/table'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
-  const { notesAndEvents } = useNotesAndEvents()
-
   return (
     <ContentLayout
       renderToolbar={
@@ -60,9 +57,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             />
           </Flex>
         </Flex>
-        <Table
-          notesAndEvents={ notesAndEvents }
-        />
+        <Table />
       </Box>
     </ContentLayout>
   )

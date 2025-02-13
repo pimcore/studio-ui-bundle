@@ -11,13 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   type Note,
   useNoteGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 
 export type DataNote = Note & {
+  element: string
   rowId: string
 }
 
@@ -29,7 +30,9 @@ interface UseGlobalNotesAndEventsReturn {
 export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
   const [filter, setFilter] = useState<string>('')
 
-  setFilter('')
+  useEffect(() => {
+    setFilter('')
+  }, [])
 
   const { data: notesAndEvents, isLoading } = useNoteGetCollectionQuery({
     body: {
