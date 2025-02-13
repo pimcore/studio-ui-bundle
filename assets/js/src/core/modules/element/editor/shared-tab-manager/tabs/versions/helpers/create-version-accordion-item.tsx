@@ -122,7 +122,7 @@ export const createVersionAccordionItem = ({
     if (autosaved) {
       return (
         <Tag
-          color={ 'blue' }
+          color={ 'geekblue' }
           iconName={ 'auto-save' }
         >
           {t('version.autosaved')}
