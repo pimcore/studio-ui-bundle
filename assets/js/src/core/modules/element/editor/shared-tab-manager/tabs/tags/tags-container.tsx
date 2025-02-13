@@ -41,7 +41,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
-  }, { refetchOnMountOrArgChange: true })
+  })
 
   return (
     <SplitLayout

@@ -47,7 +47,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
-  }, { refetchOnMountOrArgChange: true })
+  })
 
   useEffect(() => {
     if (data !== undefined && element?.changes.schedules === undefined && Array.isArray(data.items)) {
