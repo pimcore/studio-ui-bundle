@@ -44,7 +44,7 @@ export const createVersionAccordionItem = ({
 
   const selected = detailedVersions.some((v => v.id === version.id))
   const published = version.published ?? false
-  const autosaved = version.autosave
+  const autosaved = version.autosave ?? false
   const selectable = isComparingActive
 
   const themeBySelection = selected ? 'theme-primary' : 'theme-default'
