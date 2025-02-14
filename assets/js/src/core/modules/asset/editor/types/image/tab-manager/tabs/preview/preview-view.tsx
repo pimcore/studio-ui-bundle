@@ -54,9 +54,7 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
 
       <Flex className={ styles.imageContainer }>
         <FocalPoint>
-          <PimcoreImage
-            src={ imageSrc }
-          />
+          <PimcoreImage src={ imageSrc } />
         </FocalPoint>
       </Flex>
 
