@@ -32,6 +32,7 @@ export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract
       <Checkbox
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
+        value={ props.value }
       />
     )
   }
