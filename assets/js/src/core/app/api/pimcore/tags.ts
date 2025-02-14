@@ -85,7 +85,7 @@ export const invalidatingTags = {
   ELEMENT: () => [tagNames.ELEMENT],
   ASSET: () => [tagNames.ASSET],
   ASSET_DETAIL: () => [tagNames.ASSET_DETAIL],
-  ASSET_DETAIL_ID: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }],
+  ASSET_DETAIL_ID: (id: number) => [{ type: tagNames.ASSET_DETAIL, id }, elementUnspecificDataTag],
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
@@ -93,7 +93,7 @@ export const invalidatingTags = {
   ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST, id: folderId }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT_DETAIL],
-  DATA_OBJECT_DETAIL_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_DETAIL, id }],
+  DATA_OBJECT_DETAIL_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_DETAIL, id }, elementUnspecificDataTag],
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
   ELEMENT_DEPENDENCIES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.DEPENDENCIES, elementType, id)],
@@ -110,6 +110,8 @@ export const invalidatingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE]
 }
+
+const elementUnspecificDataTag = tagNames.AVAILABLE_TAGS
 
 const getElementSpecificTag = (tagType: string, elementType: ElementType, id: number): Tag => ({ type: tagType, id, elementType })
 
