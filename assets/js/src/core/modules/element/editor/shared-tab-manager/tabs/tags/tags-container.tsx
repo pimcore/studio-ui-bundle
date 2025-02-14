@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Dropdown } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
@@ -31,34 +31,17 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import {
   useTagGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-import {
-  api
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id, elementType } = useElementContext()
   const { element } = useElementDraft(id, elementType)
   const { applyTagsToChildren, removeAndApplyTagsToChildren } = useShortcutActions()
-  const dispatch = useAppDispatch()
 
   const { data, isLoading } = useTagGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
-
-  useEffect(() => {
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.AVAILABLE_TAGS()
-      ))
-    dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.ELEMENT_TAGS(elementType, id)
-      ))
-  }, [])
 
   return (
     <SplitLayout

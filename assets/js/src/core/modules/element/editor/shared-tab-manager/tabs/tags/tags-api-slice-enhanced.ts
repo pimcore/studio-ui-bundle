@@ -26,6 +26,9 @@ export const api = baseApi.enhanceEndpoints({
     tagCreate: {
       invalidatesTags: (result, error, args) => invalidatingTags.AVAILABLE_TAGS()
     },
+    tagGetById: {
+      providesTags: (result, error, args) => providingTags.AVAILABLE_TAGS()
+    },
     tagGetCollection: {
       providesTags: (result, error, args) => providingTags.AVAILABLE_TAGS()
     },
