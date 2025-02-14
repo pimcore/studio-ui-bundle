@@ -31,6 +31,7 @@ export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         minLength={ props.minimumLength ?? undefined }
+        value={ props.value }
         visibilityToggle={ false }
       />
     )

@@ -72,7 +72,8 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
       min: fixUnsigned(props.unsigned === true, props.minValue, false) ?? undefined,
       defaultValue: props.value,
       precision: props.integer === true ? 0 : (props.decimalPrecision ?? undefined),
-      step: props.increment ?? undefined
+      step: props.increment ?? undefined,
+      value: props.value
     }
   }
 

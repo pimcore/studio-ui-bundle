@@ -28,6 +28,7 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
     return (
       <Consent
         disabled={ props.noteditable === true }
+        value={ props.value }
       />
     )
   }
