@@ -18,7 +18,9 @@ import { Button } from '@Pimcore/components/button/button'
 import { useDataObjectDraft } from '../../hooks/use-data-object-draft'
 import { DataObjectContext } from '../../data-object-provider'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import {
+  useSaveSchedules
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -32,7 +34,7 @@ import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow
 import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import { useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Icon } from '@Pimcore/components/icon/icon'
 import {
@@ -45,15 +47,16 @@ export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject, activeTab, removeTrackedChanges } = useDataObjectDraft(id)
-  const hasChanges = dataObject?.modified === true
   const { save: saveDataObject, isLoading, isSuccess, isError } = useSave()
-  const { isAutoSaved, isAutoSaveLoading } = useSaveContext()
+  const { isAutoSaveLoading, runningTask } = useSaveContext()
   const { saveSchedules, isLoading: isSchedulesLoading, isSuccess: isSchedulesSuccess, isError: isSchedulesError } = useSaveSchedules('data-object', id, false)
   const { resetModifiedDataObjectAttributes } = useEditFormContext()
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuDataObject')
   const { getModifiedDataObjectAttributes } = useEditFormContext()
+
+  const isAutoSaved = dataObject?.draftData?.isAutoSave === true
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -78,10 +81,9 @@ export const Toolbar = (): React.JSX.Element => {
     handleFailedEvent().catch((error) => { console.error(error) })
   }, [isError, isSchedulesError])
 
-  async function handleSaveClick (): Promise<void> {
+  async function handleSaveClick (task: SaveTaskType): Promise<void> {
     if (dataObject?.changes === undefined) return
-
-    Promise.all([saveDataObject(getModifiedDataObjectAttributes()), saveSchedules()]).catch((error) => {
+    Promise.all([saveDataObject(getModifiedDataObjectAttributes(), task), saveSchedules()]).catch((error) => {
       console.error(error)
     })
   }
@@ -114,11 +116,21 @@ export const Toolbar = (): React.JSX.Element => {
               <Icon value="auto-save" />
             </Tooltip>
           )}
+          { checkElementPermission(dataObject?.permissions, 'save') && (
+            <Button
+              disabled={ isLoading || isSchedulesLoading }
+              loading={ runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading) }
+              onClick={ async () => { await handleSaveClick(SaveTaskType.Version) } }
+              type="default"
+            >
+              {t('toolbar.save-draft')}
+            </Button>
+          )}
           { checkElementPermission(dataObject?.permissions, 'publish') && (
             <Button
-              disabled={ !hasChanges || isLoading || isSchedulesLoading }
-              loading={ isLoading || isSchedulesLoading }
-              onClick={ handleSaveClick }
+              disabled={ isLoading || isSchedulesLoading }
+              loading={ runningTask === SaveTaskType.Publish && (isLoading || isSchedulesLoading) }
+              onClick={ async () => { await handleSaveClick(SaveTaskType.Publish) } }
               type="primary"
             >
               {t('toolbar.save-and-publish')}

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import type { DataObjectUpdateByIdApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -23,9 +23,16 @@ import { useDataObjectUpdateByIdMutation } from '@Pimcore/modules/data-object/da
 import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
+import { isNil } from 'lodash'
+
+export enum SaveTaskType {
+  Version = 'version',
+  AutoSave = 'autoSave',
+  Publish = 'publish'
+}
 
 export interface UseSaveHookReturn {
-  save: (editableData: Record<string, any>, task?: 'version' | 'autoSave') => Promise<void>
+  save: (editableData: Record<string, any>, task?: SaveTaskType) => Promise<void>
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -35,10 +42,42 @@ export const useSave = (): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
-  const { setIsAutoSaved, setIsAutoSaveLoading } = useSaveContext()
+  const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
 
-  const save = async (editableData: Record<string, any>, task?: 'version' | 'autoSave'): Promise<void> => {
+  const executeQueuedTask = async (): Promise<void> => {
+    if (!isNil(queuedTask)) {
+      const executeTask = { ...queuedTask }
+      setQueuedTask(undefined)
+      await save(executeTask.editableData, executeTask.task)
+    }
+  }
+
+  useEffect(() => {
+    if (isNil(runningTask)) {
+      executeQueuedTask().catch((error) => { console.error(error) })
+    }
+  }, [runningTask, queuedTask])
+
+  const save = async (editableData: Record<string, any>, task?: SaveTaskType): Promise<void> => {
     if (dataObject?.changes === undefined) return
+
+    if (!isNil(runningTaskRef?.current)) {
+      if (task === SaveTaskType.AutoSave) {
+        return
+      }
+
+      if (runningTaskRef?.current !== SaveTaskType.AutoSave) {
+        return
+      }
+
+      setQueuedTask({
+        task,
+        editableData
+      })
+      return
+    }
+
+    setRunningTask(task)
 
     const updatedData: DataObjectUpdateByIdApiArg['body']['data'] = {}
     if (dataObject.changes.properties) {
@@ -63,11 +102,7 @@ export const useSave = (): UseSaveHookReturn => {
     }
 
     if (task !== undefined) {
-      updatedData.task = task
-    }
-
-    if (task === 'autoSave') {
-      setIsAutoSaveLoading(true)
+      updatedData.task = task === 'publish' ? undefined : task
     }
 
     await saveDataObject({
@@ -78,17 +113,14 @@ export const useSave = (): UseSaveHookReturn => {
         }
       }
     }).then((response) => {
-      setIsAutoSaved(task === 'autoSave')
-      if (task === 'autoSave') {
-        setIsAutoSaveLoading(false)
-      }
+      setRunningTask(undefined)
       setDraftData(response.data?.draftData ?? null)
     })
   }
 
   return {
     save,
-    isLoading,
+    isLoading: isLoading || !isNil(queuedTask),
     isSuccess,
     isError
   }

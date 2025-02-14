@@ -30,7 +30,10 @@ export const useDraftDataReducers = (entityAdapter: EntityAdapter<DataObjectDraf
   const setDraftData = (state: EntityState<DataObjectDraft, number>, action: PayloadAction<{ id: number, draftData: DataObject['draftData'] }>): void => {
     modifyDraft(state, action.payload.id, (draft: DataObjectDraft): DataObjectDraft => {
       if (isNil(draft.draftData) && action.payload.draftData?.isAutoSave === true) {
-        draft.changes[IS_AUTO_SAVE_DRAFT_CREATED] = true
+        draft.changes = {
+          ...draft.changes,
+          [IS_AUTO_SAVE_DRAFT_CREATED]: true
+        }
       }
       draft.draftData = action.payload.draftData
       return draft
