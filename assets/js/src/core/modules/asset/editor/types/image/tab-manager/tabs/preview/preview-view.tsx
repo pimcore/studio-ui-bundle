@@ -11,8 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React, { useEffect, useState } from 'react'
 import { PimcoreImage } from '@Pimcore/components/pimcore-image/pimcore-image'
-import React from 'react'
 import { useStyle } from './preview-view.styles'
 import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 import { ZoomContext } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/preview-container'
@@ -23,17 +23,40 @@ interface PreviewViewProps {
   src: string
 }
 
+const IMAGE_SAVE_SUCCESS_MESSAGE = '[MiniPaint] Image successfully saved!'
+
 const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
-  const { styles } = useStyle()
   const { src } = props
+
+  const [imageSrc, setImageSrc] = useState(src)
+
+  const { styles } = useStyle()
   const { zoom, setZoom } = React.useContext(ZoomContext)
+
+  useEffect(() => {
+    // Event handler to handle the message event
+    const handleMessage = (event: any): void => {
+      if (event.data === IMAGE_SAVE_SUCCESS_MESSAGE) {
+        // Update the image source by adding a query parameter to force reloading of the image
+        setImageSrc(`${src}?hash=${new Date().getTime()}`)
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [])
 
   return (
     <div className={ styles.preview }>
 
       <Flex className={ styles.imageContainer }>
         <FocalPoint>
-          <PimcoreImage src={ src } />
+          <PimcoreImage
+            src={ imageSrc }
+          />
         </FocalPoint>
       </Flex>
 

@@ -166,6 +166,11 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ data: { dataUri } })
+            }).then((response) => {
+                if (response.ok) {
+                    // Post a message to the Preview Asset Tab indicating that the image was saved
+                    window.parent.postMessage('[MiniPaint] Image successfully saved!', 'https://studionightly.pimcore.app');
+                }
             });
 
             return false;
