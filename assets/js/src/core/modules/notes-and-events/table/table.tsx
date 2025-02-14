@@ -23,6 +23,8 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { uuid } from '@Pimcore/utils/uuid'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { isUndefined } from 'lodash'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
@@ -32,6 +34,7 @@ export const Table = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { notesAndEvents, notesAndEventsLoading } = useNotesAndEvents()
+  const { openElement, mapToElementType } = useElementHelper()
 
   const [notes, setNotes] = useState<DataNote[]>([])
 
@@ -62,6 +65,19 @@ export const Table = (): React.JSX.Element => {
     columnHelper.accessor('type', {
       header: t('notes-and-events.columns.type'),
       size: 70
+    }),
+    columnHelper.accessor(row => ({ path: row.cPath, elementType: row.cType, id: row.cId }), {
+      id: 'element',
+      header: t('notes-and-events.columns.element'),
+      size: 200,
+      cell: (info) => {
+        const { path, id } = info.getValue()
+        return (
+          <div
+            key={ id }
+          > {path} </div>
+        )
+      }
     }),
     columnHelper.accessor('cPath', {
       header: t('notes-and-events.columns.element'),
@@ -99,6 +115,10 @@ export const Table = (): React.JSX.Element => {
       header: t('notes-and-events.columns.actions'),
       size: 70,
       cell: (info) => {
+        const row: { path: string, elementType: string, id: number } = info.row.getValue('element')
+        const elementType = mapToElementType(row.elementType)
+        const elementId = row.id
+
         return (
           <Flex
             align='center'
@@ -108,14 +128,18 @@ export const Table = (): React.JSX.Element => {
             <IconButton
               icon={ { value: 'open-folder' } }
               onClick={ async () => {
-                alert('open')
+                !isUndefined(elementType) &&
+                                await openElement({
+                                  type: elementType,
+                                  id: elementId
+                                })
               } }
               type="link"
             />
             <IconButton
               icon={ { value: 'show-details' } }
               onClick={ async () => {
-                alert('show details')
+                alert('open')
               } }
               type="link"
             />
