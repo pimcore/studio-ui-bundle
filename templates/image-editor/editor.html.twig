@@ -160,6 +160,10 @@
             const dataUri = tempCanvas.toDataURL('image/{{ imageFileExtension == "png" ? "png" : "jpeg" }}');
             const url = '{{ path('pimcore_studio_api_update_asset', {id: asset.getId()}) }}';
 
+            const isDev = window.location.origin.includes('localhost')
+            const devTargetOrigin = window.location.origin
+            const prodTargetOrigin = 'https://studionightly.pimcore.app'
+
             fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -169,7 +173,7 @@
             }).then((response) => {
                 if (response.ok) {
                     // Post a message to the Preview Asset Tab indicating that the image was saved
-                    window.parent.postMessage('[MiniPaint] Image successfully saved!', 'https://studionightly.pimcore.app');
+                    window.parent.postMessage('[MiniPaint] Image successfully saved!', isDev ? devTargetOrigin : prodTargetOrigin);
                 }
             });
 
