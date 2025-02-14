@@ -22,32 +22,20 @@ import {
   type Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { uuid } from '@Pimcore/utils/uuid'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
 }
 
 export const Table = (): React.JSX.Element => {
-  console.log('----> here')
-
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { notesAndEvents, notesAndEventsLoading } = useNotesAndEvents()
 
-  console.log('----> notesAndEvents', notesAndEvents)
-  console.log('----> notesAndEventsLoading', notesAndEventsLoading)
-
-  // const areNotesAndEventsAvailable = notesAndEvents !== undefined && notesAndEvents.length > 0
-
   const [notes, setNotes] = useState<DataNote[]>([])
 
-  console.log('----> notes', notes)
-  // const modifiedCellsType = 'notes-and-events'
-  const modifiedCells = []
-
   useEffect(() => {
-    console.log('----> too often?')
-
     if (notesAndEvents !== undefined && Array.isArray(notesAndEvents)) {
       setNotes(enrichNotesAndEvents(notesAndEvents))
     }
@@ -57,7 +45,7 @@ export const Table = (): React.JSX.Element => {
     return data.map((item) => {
       return {
         ...item,
-        element: `${item.cType} + ${item.cPath}`,
+        fields: item.data.length,
         rowId: uuid()
       }
     })
@@ -68,28 +56,19 @@ export const Table = (): React.JSX.Element => {
       setNotes(enrichNotesAndEvents(notesAndEvents))
     }
   }, [notesAndEvents])
-  //
-  // useEffect(() => {
-  //   if (areNotesAndEventsAvailable) {
-  //     setGridDataOwn(enrichNotesAndEvents(notesAndEvents))
-  //   }
-  // }, [notesAndEvents])
 
   const columnHelper = createColumnHelper<DataNoteWithActions>()
   const createColumns = (): any => [
     columnHelper.accessor('type', {
       header: t('notes-and-events.columns.type'),
-      meta: {
-        editable: false
-      },
-      size: 40
+      size: 70
     }),
-    columnHelper.accessor('element', {
+    columnHelper.accessor('cPath', {
       header: t('notes-and-events.columns.element'),
+      size: 200,
       meta: {
-        editable: true
-      },
-      size: 200
+        type: 'element-cell'
+      }
     }),
     columnHelper.accessor('title', {
       header: t('notes-and-events.columns.title'),
@@ -97,34 +76,23 @@ export const Table = (): React.JSX.Element => {
     }),
     columnHelper.accessor('description', {
       header: t('notes-and-events.columns.description'),
-      size: 200
-    }),
-    columnHelper.accessor('additionalAttributes', {
-      header: t('notes-and-events.columns.fields'),
       meta: {
-        editable: false,
         autoWidth: true
-      },
-      size: 300
+      }
+    }),
+    columnHelper.accessor('fields', {
+      header: t('notes-and-events.columns.fields'),
+      size: 70
     }),
     columnHelper.accessor('userName', {
       header: t('notes-and-events.columns.user'),
-      size: 70,
-      meta: {
-        editable: false,
-        config: {
-          align: 'center'
-        }
-      }
+      size: 70
     }),
     columnHelper.accessor('date', {
       header: t('notes-and-events.columns.date'),
       size: 70,
       meta: {
-        editable: false,
-        config: {
-          align: 'center'
-        }
+        type: 'date'
       }
     }),
     columnHelper.accessor('actions', {
@@ -132,23 +100,26 @@ export const Table = (): React.JSX.Element => {
       size: 70,
       cell: (info) => {
         return (
-          <div className={ 'global-notes-table--actions-column' }>
-            {
-              (
-                <IconButton
-                  icon={ { value: 'group' } }
-                  onClick={ async () => {
-                    // !isUndefined(typeValue) && await openElement({
-                    //   type: typeValue,
-                    //   id: 339
-                    // })
-                    alert('HI')
-                  } }
-                  type="link"
-                />
-              )
-            }
-          </div>
+          <Flex
+            align='center'
+            className='w-full'
+            justify='center'
+          >
+            <IconButton
+              icon={ { value: 'open-folder' } }
+              onClick={ async () => {
+                alert('open')
+              } }
+              type="link"
+            />
+            <IconButton
+              icon={ { value: 'show-details' } }
+              onClick={ async () => {
+                alert('show details')
+              } }
+              type="link"
+            />
+          </Flex>
         )
       }
     })
@@ -163,8 +134,7 @@ export const Table = (): React.JSX.Element => {
         columns={ tableData }
         data={ notes }
         isLoading={ notesAndEventsLoading }
-        modifiedCells={ modifiedCells }
-        onUpdateCellData={ () => { alert('') } }
+        modifiedCells={ [] }
         resizable
         setRowId={ (row: DataNote) => row.rowId }
       />

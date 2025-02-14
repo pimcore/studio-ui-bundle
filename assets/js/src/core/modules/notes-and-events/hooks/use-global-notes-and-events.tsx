@@ -18,8 +18,8 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 
 export type DataNote = Note & {
-  element: string
   rowId: string
+  fields: number
 }
 
 interface UseGlobalNotesAndEventsReturn {
