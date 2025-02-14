@@ -44,10 +44,15 @@ export const useStyles = createStyles(({ token, css }) => {
         color: ${themeToken.colorTextDescription};
       }
 
-      .tag-icon {
-        position: relative;
-        right: 3px;
-        bottom: 1px;
+      .ant-tag {
+        display: flex;
+        align-items: center;
+      }
+
+      .ant-tag-geekblue {
+        background-color: ${token.Colors.Base.Geekblue['2']} !important;
+        color: ${token.Colors.Base.Geekblue['6']} !important;
+        border-color: ${token.Colors.Base.Geekblue['3']} !important;
       }
     `,
 

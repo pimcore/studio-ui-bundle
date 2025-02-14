@@ -170,6 +170,13 @@ const defaultTheme = {
         Warning: {
           colorWarningBg: '#fffbe6'
         }
+      },
+      Base: {
+        Geekblue: {
+          2: '#d6e4ff',
+          3: '#adc6ff',
+          6: '#2f54eb'
+        }
       }
     },
 
