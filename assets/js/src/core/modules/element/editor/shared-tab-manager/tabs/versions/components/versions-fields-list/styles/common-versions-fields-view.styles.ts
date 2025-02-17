@@ -76,24 +76,23 @@ export const useStyles = createStyles(({ token, css }) => {
       max-width: 460px;
       width: 100%;
       
-      & > :first-child {
+      .ant-input-disabled,
+      .ant-input-number,
+      .ant-picker {
         border-radius: ${token.borderRadius}px;
         border: none !important;
         color: ${token.colorText} !important;
       }
       
       .ant-input,
+      .ant-select,
       .ant-input-number,
       .ant-picker {
         width: 100%;
         max-width: 100% !important;
-        border: none !important;
-        color: ${token.colorText} !important;
       }
       
       .ant-select {
-        width: 100%;
-        
         .ant-select-selector {
           background: ${token.colorBgContainerDisabled} !important;
           border: none !important;
