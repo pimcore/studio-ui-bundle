@@ -73,20 +73,36 @@ export const useStyles = createStyles(({ token, css }) => {
 
     objectSectionFieldItemWrapper: css`
       flex: 1 1 50%;
+      max-width: 460px;
+      width: 100%;
 
       &:only-child {
         flex: 1 1 100%;
       }
-
-      .ant-input-number {
-        width: 100%;
-      }
       
       & > :first-child {
-        background-color: ${token.colorBgContainerDisabled};
         border-radius: ${token.borderRadius}px;
         border: none !important;
         color: ${token.colorText} !important;
+      }
+      
+      .ant-input {
+        width: 100%;
+        border: none !important;
+        color: ${token.colorText} !important;
+      }
+      
+      .ant-select {
+        width: 100%;
+        
+        .ant-select-selector {
+          background: ${token.colorBgContainerDisabled} !important;
+          border: none !important;
+        }
+        
+        .ant-select-selection-item {
+          color: ${token.colorText} !important;
+        }
       }
     `,
 
