@@ -50,7 +50,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     isError: isSchedulesError
   } = useSaveSchedules('data-object', id, false)
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
-  const { deleteDraft, isLoading: isDeleteLoading, buttonText } = useDeleteDraft()
+  const { deleteDraft, isLoading: isDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
   const messageApi = useMessage()
 
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
@@ -90,50 +90,137 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     })
   }
 
-  const draftButtons: ReactElement[] = []
+  const getDraftButtons = (): ReactElement[] => {
+    const draftButtons: ReactElement[] = []
 
-  const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDeleteLoading
+    const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDeleteLoading
 
-  if (checkElementPermission(dataObject?.permissions, 'save')) {
-    draftButtons.push(
-      <Button
-        disabled={ isLoading || isSchedulesLoading || isDraftLoading }
-        key="save-draft"
-        loading={ runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading) }
-        onClick={ async () => {
-          await handleSaveClick(SaveTaskType.Version)
-        } }
-        type="default"
-      >
-        {t('toolbar.save-draft')}
-      </Button>
-    )
+    if (checkElementPermission(dataObject?.permissions, 'save')) {
+      if (dataObject?.published === true) {
+        draftButtons.push(
+          <Button
+            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+            key="save-draft"
+            loading={ runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading) }
+            onClick={ async () => {
+              await handleSaveClick(SaveTaskType.Version)
+            } }
+            type="default"
+          >
+            {t('toolbar.save-draft')}
+          </Button>
+        )
 
-    if (!isNil(dataObject?.draftData)) {
-      draftButtons.push(
+        if (!isNil(dataObject?.draftData)) {
+          draftButtons.push(
+            <Dropdown
+              key="dropdown"
+              menu={ {
+                items: [
+                  {
+                    disabled: isLoading,
+                    label: deleteDraftButtonText,
+                    key: 'delete-draft',
+                    onClick: deleteDraft
+                  }
+                ]
+              } }
+            >
+              <IconButton
+                disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+                icon={ { value: 'chevron-down' } }
+                loading={ isDeleteLoading }
+                type="default"
+              />
+            </Dropdown>
+          )
+        }
+      } else if (!isNil(dataObject?.draftData)) {
+        draftButtons.push(
+          <Button
+            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+            key="save-draft"
+            loading={ isDeleteLoading }
+            onClick={ deleteDraft }
+            type="default"
+          >
+            {deleteDraftButtonText}
+          </Button>
+        )
+      }
+    }
+
+    return draftButtons
+  }
+
+  const getSaveButtons = (): ReactElement[] => {
+    const saveButtons: ReactElement[] = []
+
+    const saveLoading = (runningTask === SaveTaskType.Publish || runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading)
+    const saveDisabled = isLoading || isSchedulesLoading
+
+    if (dataObject?.published === true && checkElementPermission(dataObject?.permissions, 'publish')) {
+      saveButtons.push(
+        <Button
+          disabled={ saveDisabled }
+          loading={ saveLoading }
+          onClick={ async () => {
+            await handleSaveClick(SaveTaskType.Publish)
+          } }
+          type="primary"
+        >
+          {t('toolbar.save-and-publish')}
+        </Button>
+      )
+    }
+
+    if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
+      saveButtons.push(
+        <Button
+          disabled={ saveDisabled }
+          loading={ saveLoading }
+          onClick={ async () => {
+            await handleSaveClick(SaveTaskType.Save)
+          } }
+          type="primary"
+        >
+          {t('toolbar.save')}
+        </Button>
+      )
+    }
+
+    if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'publish')) {
+      saveButtons.push(
         <Dropdown
           key="dropdown"
           menu={ {
             items: [
               {
-                disabled: isLoading,
-                label: buttonText,
-                key: 'delete-draft',
-                onClick: deleteDraft
+                disabled: saveDisabled,
+                label: t('toolbar.save-and-publish'),
+                key: 'publish',
+                onClick: async () => {
+                  await handleSaveClick(SaveTaskType.Publish)
+                }
               }
             ]
           } }
         >
           <IconButton
-            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+            disabled={ saveDisabled }
             icon={ { value: 'chevron-down' } }
-            loading={ isDeleteLoading }
-            type="default"
+            type="primary"
           />
         </Dropdown>
       )
     }
+
+    return saveButtons
   }
+
+  const draftButtons = getDraftButtons()
+
+  const saveButtons = getSaveButtons()
 
   return (
     <>
@@ -153,18 +240,13 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           noSpacing
         />
       )}
-      {checkElementPermission(dataObject?.permissions, 'publish') && (
-        <Button
-          disabled={ isLoading || isSchedulesLoading }
-          loading={ runningTask === SaveTaskType.Publish && (isLoading || isSchedulesLoading) }
-          onClick={ async () => {
-            await handleSaveClick(SaveTaskType.Publish)
-          } }
-          type="primary"
-        >
-          {t('toolbar.save-and-publish')}
-        </Button>
+      {saveButtons.length > 0 && (
+      <ButtonGroup
+        items={ saveButtons }
+        noSpacing
+      />
       )}
+
     </>
   )
 }

@@ -29,6 +29,7 @@ folder.folder-editor-tabs.view: List
 toolbar.reload.confirmation: Are you sure you want to reload this tab? All unsaved changes will be lost.
 toolbar.reload: Reload
 toolbar.save-and-publish: Save & Publish
+toolbar.save: Save
 toolbar.save-draft: Save draft
 toolbar.more: More
 toolbar.workflow: Workflow

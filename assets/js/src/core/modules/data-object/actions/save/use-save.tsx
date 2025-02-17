@@ -28,7 +28,8 @@ import { isNil } from 'lodash'
 export enum SaveTaskType {
   Version = 'version',
   AutoSave = 'autoSave',
-  Publish = 'publish'
+  Publish = 'publish',
+  Save = 'save'
 }
 
 export interface UseSaveHookReturn {
@@ -101,8 +102,12 @@ export const useSave = (): UseSaveHookReturn => {
       updatedData.editableData = editableData
     }
 
-    if (task !== undefined) {
-      updatedData.task = task === 'publish' ? undefined : task
+    if (task === SaveTaskType.AutoSave || task === SaveTaskType.Version) {
+      updatedData.task = task
+    }
+
+    if (task === SaveTaskType.Publish) {
+      updatedData.published = 1
     }
 
     await saveDataObject({
