@@ -72,18 +72,12 @@ export const Table = (): React.JSX.Element => {
       size: 200,
       cell: (info) => {
         const { path, id } = info.getValue()
+
         return (
           <div
             key={ id }
-          > {path} </div>
+          > {decodeURIComponent(path)} </div>
         )
-      }
-    }),
-    columnHelper.accessor('cPath', {
-      header: t('notes-and-events.columns.element'),
-      size: 200,
-      meta: {
-        type: 'element-cell'
       }
     }),
     columnHelper.accessor('title', {
