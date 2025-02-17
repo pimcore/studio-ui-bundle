@@ -34,7 +34,7 @@ export interface RowSelectionProviderProps {
 }
 
 export const RowSelectionProvider = ({ children }: RowSelectionProviderProps): React.JSX.Element => {
-  const [selectedRows, setSelectedRows] = useState<GridProps['selectedRows']>()
+  const [selectedRows, setSelectedRows] = useState<GridProps['selectedRows']>({})
   const [selectedRowsData, setSelectedRowsData] = useState<RowSelectionData['selectedRowsData']>({})
 
   return useMemo(() => (

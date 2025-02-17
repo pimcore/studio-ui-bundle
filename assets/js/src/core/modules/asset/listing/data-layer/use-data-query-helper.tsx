@@ -14,12 +14,15 @@
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AssetGetGridApiArg } from 'src/sdk/main'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
   const { selectedColumns } = useSelectedColumns()
+  const { availableColumns } = useAvailableColumns()
+
   const columnsArg: AssetGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
     key: column.key,
     type: column.type,
@@ -27,24 +30,20 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     config: column.config
   }))
 
-  const hasIdColumn = selectedColumns.some(column => column.key === 'id')
-  const hasFullpathColumn = selectedColumns.some(column => column.key === 'fullpath')
+  const systemColumns = availableColumns.filter(column => column.group === 'system')
 
-  if (!hasIdColumn) {
-    columnsArg.push({
-      key: 'id',
-      type: 'system.id',
-      config: []
-    })
-  }
+  systemColumns.forEach(column => {
+    const hasColumn = columnsArg.some(selectedColumn => selectedColumn.key === column.key)
 
-  if (!hasFullpathColumn) {
-    columnsArg.push({
-      key: 'fullpath',
-      type: 'system.string',
-      config: []
-    })
-  }
+    if (!hasColumn) {
+      columnsArg.push({
+        key: column.key,
+        type: column.type,
+        locale: column.locale,
+        config: []
+      })
+    }
+  })
 
   const getArgs = (): AssetGetGridApiArg => {
     return {

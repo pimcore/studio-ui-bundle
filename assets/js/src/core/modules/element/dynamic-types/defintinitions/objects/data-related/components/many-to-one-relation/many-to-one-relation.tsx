@@ -28,6 +28,8 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -158,6 +160,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Tooltip>
       ) }
+
+      <ElementSelectorButton elementSelectorConfig={ {
+        selectionType: SelectionType.Single,
+        onFinish: (data) => { console.log('single selection', { data }) }
+      } }
+      />
     </Flex>
   )
 }

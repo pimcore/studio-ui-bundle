@@ -31,11 +31,11 @@ import { Content } from '@Pimcore/components/content/content'
 import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
 import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
-import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 enum ViewState {
   Edit = 'edit',
@@ -44,6 +44,7 @@ enum ViewState {
 }
 
 export const GridConfigInner = (): React.JSX.Element => {
+  const { useElementId } = useSettings()
   const { getAvailableColumnsDropdown } = useAvailableColumns()
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { columns, setColumns, addColumn } = useTabGridConfig()
