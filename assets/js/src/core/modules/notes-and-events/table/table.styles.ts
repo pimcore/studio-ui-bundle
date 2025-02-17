@@ -37,6 +37,18 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: ${token.paddingXS}px;
         margin: 0;
       }
-    `
+    `,
+    link: css`
+      gap: 8px;
+      width: 100%;
+      
+      .ant-tag {
+      margin-left: 5px;
+        height: fit-content;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        cursor: pointer;
+      }`
   }
 })

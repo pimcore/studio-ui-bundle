@@ -26,6 +26,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { isUndefined } from 'lodash'
 import { NoteModal } from '@Pimcore/modules/notes-and-events/table/note-modal'
+import { Tag } from '@Pimcore/components/tag/tag'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
@@ -62,6 +63,15 @@ export const Table = (): React.JSX.Element => {
     }
   }, [notesAndEvents])
 
+  const openCorrectElement = async (eType: string, eId: number): Promise<void> => {
+    const elementType = mapToElementType(eType)
+    !isUndefined(elementType) &&
+      await openElement({
+        type: elementType,
+        id: eId
+      })
+  }
+
   const columnHelper = createColumnHelper<DataNoteWithActions>()
   const createColumns = (): any => [
     columnHelper.accessor('type', {
@@ -73,12 +83,21 @@ export const Table = (): React.JSX.Element => {
       header: t('notes-and-events.columns.element'),
       size: 200,
       cell: (info) => {
-        const { path, id } = info.getValue()
+        const { path, elementType, id } = info.getValue()
 
         return (
-          <div
+          <Flex
+            className={ styles.link }
+            justify={ 'center' }
             key={ id }
-          > {decodeURIComponent(path)} </div>
+          >
+            <Tag
+              bordered={ false }
+              color="processing"
+              onClick={ async () => { await openCorrectElement(elementType, id) } }
+            >{decodeURIComponent(path)}
+            </Tag>
+          </Flex>
         )
       }
     }),
@@ -149,11 +168,11 @@ export const Table = (): React.JSX.Element => {
 
   return (
     <div className={ styles.table }>
-      {!isUndefined(noteDetail) && (
-      <NoteModal
-        noteDetail={ noteDetail }
-        setNoteDetail={ setNoteDetail }
-      />
+      {noteDetail !== undefined && (
+        <NoteModal
+          noteDetail={ noteDetail }
+          setNoteDetail={ setNoteDetail }
+        />
       )}
       <Grid
         autoWidth
