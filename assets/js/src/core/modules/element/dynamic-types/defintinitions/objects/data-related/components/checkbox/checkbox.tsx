@@ -46,7 +46,10 @@ export const Checkbox = (props: CheckboxProps): React.JSX.Element => {
   const showClearButton = value !== null && dataObject?.allowInheritance === true && props.disabled !== true
 
   return (
-    <Flex gap="extra-small">
+    <Flex
+      className={ props.className }
+      gap="extra-small"
+    >
       <DefaultCheckbox
         { ...props }
         checked={ value ?? false }
