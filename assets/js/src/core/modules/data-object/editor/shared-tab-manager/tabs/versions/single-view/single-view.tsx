@@ -61,12 +61,12 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
             versionId: vId.id,
             versionCount: vId.count
           }))
-        }
 
-        setVersionData(versionsDataToTableData(formattedDataList))
+          setVersionData(versionsDataToTableData(formattedDataList))
+        }
       })
       .catch(err => { console.log(err) })
-  }, [vId])
+  }, [vId, layoutData])
 
   if (isEmpty(versionData)) {
     return (

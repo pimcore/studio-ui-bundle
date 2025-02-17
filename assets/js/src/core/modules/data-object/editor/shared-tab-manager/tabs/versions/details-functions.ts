@@ -74,7 +74,7 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
     const result: IFormattedDataStructureData[] = []
 
     Object.entries(formattedSystemData).forEach(([key, value]): void => {
-      result.push({ fieldBreadcrumbTitle: 'systemData', fieldData: { name: key, fieldtype: 'input' } as any, fieldValue: value, versionId, versionCount })
+      result.push({ fieldBreadcrumbTitle: 'systemData', fieldData: { title: key, fieldtype: 'input' } as any, fieldValue: value, versionId, versionCount })
     })
 
     return result

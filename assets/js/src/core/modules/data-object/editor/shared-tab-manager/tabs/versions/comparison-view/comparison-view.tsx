@@ -69,13 +69,13 @@ export const ComparisonView = ({
               versionId: versionIds[versionIndex].id,
               versionCount: versionIds[versionIndex].count
             }))
+
+            setVersionsData(versionsDataToTableData(formattedDataList))
           }
         })
-
-        setVersionsData(versionsDataToTableData(formattedDataList))
       })
       .catch(err => { console.log(err) })
-  }, [versionIds])
+  }, [versionIds, layoutData])
 
   if (isEmpty(versionsData)) {
     return (

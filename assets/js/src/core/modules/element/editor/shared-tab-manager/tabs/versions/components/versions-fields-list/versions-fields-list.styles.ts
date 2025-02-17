@@ -19,7 +19,7 @@ export const useStyles = createStyles(({ token, css }) => {
       position: sticky;
       top: 0;
       width: 100%;
-      z-index: 2;
+      z-index: 999999999;
       
       &::before {
         content: '';

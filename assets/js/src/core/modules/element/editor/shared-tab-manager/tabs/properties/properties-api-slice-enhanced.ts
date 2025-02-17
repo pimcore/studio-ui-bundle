@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './properties-api-slice.gen'
 
 export const api = baseApi.enhanceEndpoints({
@@ -19,10 +19,31 @@ export const api = baseApi.enhanceEndpoints({
   endpoints: {
     propertyGetCollectionForElementByTypeAndId: {
       providesTags: (result, error, args) => {
-        const tags = providingTags.ELEMENT_PROPERTIES(args.elementType, args.id)
+        const propertyCollection: Tag[] = []
 
-        return tags.filter((tag) => tag !== undefined)
+        result?.items?.forEach((property) => {
+          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.key))
+        })
+
+        return [...propertyCollection, ...providingTags.ELEMENT_PROPERTIES(args.elementType, args.id)]
       }
+    },
+    propertyGetCollection: {
+      providesTags: (result, error, args) => {
+        const propertyCollection: Tag[] = []
+
+        result?.items?.forEach((property) => {
+          propertyCollection.push(...providingTags.PROPERTY_DETAIL(property.key))
+        })
+
+        return propertyCollection
+      }
+    },
+    propertyUpdate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.PROPERTY_DETAIL(args.id)
+    },
+    propertyDelete: {
+      invalidatesTags: (result, error, args) => invalidatingTags.PROPERTY_DETAIL(args.id)
     }
   }
 })

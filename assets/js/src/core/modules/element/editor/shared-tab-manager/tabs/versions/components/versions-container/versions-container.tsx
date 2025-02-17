@@ -32,8 +32,7 @@ export const VersionsTabContainer = ({ SingleViewComponent, ComparisonViewCompon
     elementType,
     page: 1,
     pageSize: 9999
-  },
-  { refetchOnMountOrArgChange: true })
+  })
 
   if (isLoading) {
     return <Content loading />

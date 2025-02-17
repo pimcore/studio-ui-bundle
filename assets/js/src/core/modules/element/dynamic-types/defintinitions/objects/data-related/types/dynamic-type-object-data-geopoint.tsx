@@ -40,6 +40,7 @@ export class DynamicTypeObjectDataGeoPoint extends DynamicTypeObjectDataAbstract
         height={ getGeoComponentHeight(props.height) }
         lat={ props.lat }
         lng={ props.lng }
+        value={ props.value }
         width={ getGeoComponentWidth(props.width) }
         zoom={ props.zoom }
       />

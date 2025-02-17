@@ -50,6 +50,7 @@ export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjec
         outputFormat={ props.respectTimezone !== false || outputType !== 'dateString' ? undefined : props.outputFormat }
         outputType={ outputType }
         showTime={ props.showTime }
+        value={ props.value }
       />
     )
   }

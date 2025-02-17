@@ -20,6 +20,7 @@ import _, { debounce } from 'lodash'
 import { useSave } from '@Pimcore/modules/data-object/actions/use-save'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 interface EditFormContextProps {
   form: FormInstance
@@ -28,6 +29,7 @@ interface EditFormContextProps {
   updateDraft: () => Promise<void>
   getModifiedDataObjectAttributes: () => Record<string, any>
   getChangedFieldName: (changedValues: Record<string, unknown>, parentKey?: string) => string | null
+  disabled: boolean
 }
 
 const EditFormContext = createContext<EditFormContextProps | undefined>(undefined)
@@ -44,7 +46,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [form] = useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const { id } = useElementContext()
-  const { markObjectDataAsModified } = useDataObjectDraft(id)
+  const { dataObject, markObjectDataAsModified } = useDataObjectDraft(id)
   const { save, isError } = useSave()
 
   const messageApi = useMessage()
@@ -68,6 +70,8 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const getModifiedDataObjectAttributes = (): Record<string, any> => {
     return modifiedDataObjectAttributesRef.current
   }
+
+  const disabled = !checkElementPermission(dataObject?.permissions, 'publish') && !checkElementPermission(dataObject?.permissions, 'save')
 
   const getChangedFieldName = (
     changedValues: Record<string, unknown>,
@@ -109,8 +113,9 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     resetModifiedDataObjectAttributes,
     updateDraft,
     getModifiedDataObjectAttributes,
-    getChangedFieldName
-  }), [form])
+    getChangedFieldName,
+    disabled
+  }), [form, disabled])
 
   return (
     <EditFormContext.Provider value={ value }>

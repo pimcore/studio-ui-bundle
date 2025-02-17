@@ -41,6 +41,7 @@ export class DynamicTypeObjectDataGeoPolygon extends DynamicTypeObjectDataAbstra
         lat={ props.lat }
         lng={ props.lng }
         mode={ 'geoPolygon' }
+        value={ props.value }
         width={ getGeoComponentWidth(props.width) }
         zoom={ props.zoom }
       />

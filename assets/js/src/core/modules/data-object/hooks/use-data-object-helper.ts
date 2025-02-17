@@ -44,7 +44,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
 
     if (
       data === undefined ||
-      !checkElementPermission(data.permissions!, 'view')) {
+      !checkElementPermission(data.permissions, 'view')) {
       return
     }
 

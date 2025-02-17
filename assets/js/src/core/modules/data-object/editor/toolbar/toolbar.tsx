@@ -39,6 +39,7 @@ import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -113,14 +114,16 @@ export const Toolbar = (): React.JSX.Element => {
               <Icon value="auto-save" />
             </Tooltip>
           )}
-          <Button
-            disabled={ !hasChanges || isLoading || isSchedulesLoading }
-            loading={ isLoading || isSchedulesLoading }
-            onClick={ handleSaveClick }
-            type="primary"
-          >
-            {t('toolbar.save-and-publish')}
-          </Button>
+          { checkElementPermission(dataObject?.permissions, 'publish') && (
+            <Button
+              disabled={ !hasChanges || isLoading || isSchedulesLoading }
+              loading={ isLoading || isSchedulesLoading }
+              onClick={ handleSaveClick }
+              type="primary"
+            >
+              {t('toolbar.save-and-publish')}
+            </Button>
+          )}
         </Flex>
         <WorkflowLogModal />
       </WorkFlowProvider>

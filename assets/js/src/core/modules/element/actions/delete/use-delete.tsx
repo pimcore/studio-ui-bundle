@@ -84,7 +84,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       label: t('element.delete'),
       key: 'delete',
       icon: <Icon value={ 'trash' } />,
-      hidden: !checkElementPermission(node.permissions!, 'delete') || node.isLocked,
+      hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = node.id
         const parentId = node.parentId ?? undefined
