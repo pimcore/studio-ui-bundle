@@ -80,22 +80,22 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-input-number,
       .ant-picker {
         border-radius: ${token.borderRadius}px;
-        border: none !important;
+        border-color: transparent !important;
         color: ${token.colorText} !important;
       }
       
       .ant-input,
-      .ant-select,
+      .ant-select.ant-select-disabled,
       .ant-input-number,
       .ant-picker {
         width: 100%;
         max-width: 100% !important;
       }
       
-      .ant-select {
+      .ant-select.ant-select-disabled {
         .ant-select-selector {
           background: ${token.colorBgContainerDisabled} !important;
-          border: none !important;
+          border-color: transparent !important;
         }
         
         .ant-select-selection-item {
@@ -114,8 +114,16 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     objectSectionFieldItemWrapperHighlight: css`
-      & > :first-child {
+      .ant-input {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+        border-color: ${token.colorBorder} !important;
+      }
+
+      .ant-select.ant-select-disabled {
+        .ant-select-selector {
+          background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+          border-color: ${token.colorBorder} !important;
+        }
       }
     `
   }
