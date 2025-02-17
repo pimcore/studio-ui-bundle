@@ -17,7 +17,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './table.styles'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { type DataNote, useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
+import { type DataNote } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import {
   type Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
@@ -32,10 +32,14 @@ type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
 }
 
-export const Table = (): React.JSX.Element => {
+export interface TableProps {
+  notesAndEvents: Note[]
+  notesAndEventsLoading: boolean
+}
+
+export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { notesAndEvents, notesAndEventsLoading } = useNotesAndEvents()
   const { openElement, mapToElementType } = useElementHelper()
 
   const [notes, setNotes] = useState<DataNote[]>([])
@@ -56,12 +60,6 @@ export const Table = (): React.JSX.Element => {
       }
     })
   }
-
-  useEffect(() => {
-    if (notesAndEvents !== undefined && Array.isArray(notesAndEvents)) {
-      setNotes(enrichNotesAndEvents(notesAndEvents))
-    }
-  }, [notesAndEvents])
 
   const openCorrectElement = async (eType: string, eId: number): Promise<void> => {
     const elementType = mapToElementType(eType)
@@ -87,8 +85,8 @@ export const Table = (): React.JSX.Element => {
 
         return (
           <Flex
+            align={ 'center' }
             className={ styles.link }
-            justify={ 'center' }
             key={ id }
           >
             <Tag

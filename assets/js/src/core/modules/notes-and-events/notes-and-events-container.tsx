@@ -17,20 +17,41 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Table } from '@Pimcore/modules/notes-and-events/table/table'
+import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
+import { useTranslation } from 'react-i18next'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
+  const { t } = useTranslation()
+  const { totalItems, notesAndEvents, notesAndEventsLoading, page, setPage, setPageSize } = useNotesAndEvents()
+
+  console.log('----> notesAndEventssss', notesAndEvents)
+
   return (
     <ContentLayout
-      renderToolbar={
-        <Toolbar theme="secondary">
-          <IconButton
-            icon={ { value: 'refresh' } }
-            onClick={ () => {} }
-          />
-        </Toolbar> }
+      renderToolbar={ notesAndEvents.length !== 0
+        ? (
+          <Toolbar
+            justify='flex-end'
+            theme='secondary'
+          >
+            <>
+              <Pagination
+                current={ page }
+                onChange={ (page, pageSize) => {
+                  setPage(page)
+                  setPageSize(pageSize)
+                } }
+                showSizeChanger
+                showTotal={ (total) => t('pagination.show-total', { total }) }
+                total={ totalItems }
+              />
+            </>
+          </Toolbar>
+          )
+        : undefined }
     >
       <Box
         margin={ 'small' }
@@ -57,7 +78,10 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             />
           </Flex>
         </Flex>
-        <Table />
+        <Table
+          notesAndEvents={ notesAndEvents }
+          notesAndEventsLoading={ notesAndEventsLoading }
+        />
       </Box>
     </ContentLayout>
   )

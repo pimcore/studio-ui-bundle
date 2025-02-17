@@ -37,6 +37,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
       >
         <div>{label}</div>
         <TextArea
+          disabled
           value={ content }
           { ...(oneLiner ? { autoSize: { maxRows: 1, minRows: 1 } } : { size: 'small' }) }
         />
@@ -65,7 +66,10 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
           margin={ 'small' }
         >
           <div>Date</div>
-          <DatePicker value={ noteDetail.date } />
+          <DatePicker
+            disabled
+            value={ noteDetail.date }
+          />
         </Box>
       </>
     </Modal>
