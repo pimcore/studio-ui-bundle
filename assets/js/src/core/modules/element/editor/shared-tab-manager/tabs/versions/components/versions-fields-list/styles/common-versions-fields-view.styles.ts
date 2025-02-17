@@ -75,10 +75,6 @@ export const useStyles = createStyles(({ token, css }) => {
       flex: 1 1 50%;
       max-width: 460px;
       width: 100%;
-
-      &:only-child {
-        flex: 1 1 100%;
-      }
       
       & > :first-child {
         border-radius: ${token.borderRadius}px;
@@ -86,8 +82,10 @@ export const useStyles = createStyles(({ token, css }) => {
         color: ${token.colorText} !important;
       }
       
-      .ant-input {
+      .ant-input,
+      .ant-input-number {
         width: 100%;
+        max-width: 100% !important;
         border: none !important;
         color: ${token.colorText} !important;
       }
