@@ -135,9 +135,9 @@ export type Note = {
     /** Data of note */
     data: (string | number | boolean | object)[];
     /** User ID */
-    userId?: any;
+    userId?: number;
     /** Username */
-    userName?: any;
+    userName?: string;
 };
 export type Error = {
     /** Message */

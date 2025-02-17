@@ -25,6 +25,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { isUndefined } from 'lodash'
+import { NoteModal } from '@Pimcore/modules/notes-and-events/table/note-modal'
 
 type DataNoteWithActions = DataNote & {
   actions: React.ReactNode
@@ -37,6 +38,7 @@ export const Table = (): React.JSX.Element => {
   const { openElement, mapToElementType } = useElementHelper()
 
   const [notes, setNotes] = useState<DataNote[]>([])
+  const [noteDetail, setNoteDetail] = useState<DataNote | undefined>(undefined)
 
   useEffect(() => {
     if (notesAndEvents !== undefined && Array.isArray(notesAndEvents)) {
@@ -133,7 +135,7 @@ export const Table = (): React.JSX.Element => {
             <IconButton
               icon={ { value: 'show-details' } }
               onClick={ async () => {
-                alert('open')
+                setNoteDetail(info.row.original)
               } }
               type="link"
             />
@@ -147,6 +149,12 @@ export const Table = (): React.JSX.Element => {
 
   return (
     <div className={ styles.table }>
+      {!isUndefined(noteDetail) && (
+      <NoteModal
+        noteDetail={ noteDetail }
+        setNoteDetail={ setNoteDetail }
+      />
+      )}
       <Grid
         autoWidth
         columns={ tableData }
