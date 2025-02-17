@@ -79,7 +79,9 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-input,
       .ant-input-number,
       .ant-picker,
-      .ant-color-picker-trigger {
+      .ant-color-picker-trigger,
+      .ant-checkbox-wrapper,
+      .consent-wrapper {
         border-radius: ${token.borderRadius}px;
         border-color: transparent !important;
         color: ${token.colorText} !important;
@@ -89,7 +91,9 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-select.ant-select-disabled,
       .ant-input-number,
       .ant-picker,
-      .ant-color-picker-trigger {
+      .ant-color-picker-trigger,
+      .ant-checkbox-wrapper,
+      .consent-wrapper {
         width: 100%;
         max-width: 100% !important;
       }
@@ -121,13 +125,29 @@ export const useStyles = createStyles(({ token, css }) => {
           color: ${token.colorText} !important;
         }
       }
+      
+      .ant-checkbox-wrapper {
+        padding: ${token.paddingXXS}px;
+        background: ${token.colorBgContainerDisabled} !important;
+      }
+      
+      .consent-wrapper {
+        background: ${token.colorBgContainerDisabled} !important;
+        
+        .ant-checkbox-wrapper {
+          width: initial !important;
+          background: none !important;
+        }
+      }
     `,
 
     objectSectionFieldItemWrapperHighlight: css`
       .ant-input,
       .ant-input-number,
       .ant-picker,
-      .ant-color-picker-trigger {
+      .ant-color-picker-trigger,
+      .ant-checkbox-wrapper,
+      .consent-wrapper {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         border-color: ${token.colorBorder} !important;
       }
