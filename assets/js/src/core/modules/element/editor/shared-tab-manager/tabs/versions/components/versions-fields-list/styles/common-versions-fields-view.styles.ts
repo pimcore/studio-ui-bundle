@@ -83,7 +83,8 @@ export const useStyles = createStyles(({ token, css }) => {
       }
       
       .ant-input,
-      .ant-input-number {
+      .ant-input-number,
+      .ant-picker {
         width: 100%;
         max-width: 100% !important;
         border: none !important;
@@ -100,6 +101,15 @@ export const useStyles = createStyles(({ token, css }) => {
         
         .ant-select-selection-item {
           color: ${token.colorText} !important;
+        }
+      }
+      
+      .ant-picker {
+        input {
+          color: ${token.colorText} !important;
+        }
+        .ant-picker-suffix {
+          display: none;
         }
       }
     `,
