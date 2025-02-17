@@ -114,7 +114,9 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     objectSectionFieldItemWrapperHighlight: css`
-      .ant-input {
+      .ant-input,
+      .ant-input-number,
+      .ant-picker {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         border-color: ${token.colorBorder} !important;
       }
