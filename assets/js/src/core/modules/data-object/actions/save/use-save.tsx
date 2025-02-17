@@ -32,7 +32,7 @@ export enum SaveTaskType {
 }
 
 export interface UseSaveHookReturn {
-  save: (editableData: Record<string, any>, task?: SaveTaskType) => Promise<void>
+  save: (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void) => Promise<void>
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -58,7 +58,7 @@ export const useSave = (): UseSaveHookReturn => {
     }
   }, [runningTask, queuedTask])
 
-  const save = async (editableData: Record<string, any>, task?: SaveTaskType): Promise<void> => {
+  const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
     if (dataObject?.changes === undefined) return
 
     if (!isNil(runningTaskRef?.current)) {
@@ -113,8 +113,9 @@ export const useSave = (): UseSaveHookReturn => {
         }
       }
     }).then((response) => {
-      setRunningTask(undefined)
       setDraftData(response.data?.draftData ?? null)
+      onFinish?.()
+      setRunningTask(undefined)
     })
   }
 

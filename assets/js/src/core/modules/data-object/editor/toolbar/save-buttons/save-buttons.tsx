@@ -58,10 +58,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
       if (isSuccess && isSchedulesSuccess) {
-        await messageApi.success(t('save-success'))
-
         removeTrackedChanges()
-        resetModifiedDataObjectAttributes()
+        await messageApi.success(t('save-success'))
       }
     }
 
@@ -84,7 +82,10 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   async function handleSaveClick (task: SaveTaskType): Promise<void> {
     if (dataObject?.changes === undefined) return
-    Promise.all([saveDataObject(getModifiedDataObjectAttributes(), task), saveSchedules()]).catch((error) => {
+    Promise.all([
+      saveDataObject(getModifiedDataObjectAttributes(), task, () => { resetModifiedDataObjectAttributes() }),
+      saveSchedules()
+    ]).catch((error) => {
       console.error(error)
     })
   }
@@ -115,7 +116,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           menu={ {
             items: [
               {
-                disabled: isDraftLoading,
+                disabled: isLoading,
                 label: buttonText,
                 key: 'delete-draft',
                 onClick: deleteDraft
@@ -124,7 +125,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           } }
         >
           <IconButton
-            disabled={ isDraftLoading }
+            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
             icon={ { value: 'chevron-down' } }
             loading={ isDeleteLoading }
             type="default"

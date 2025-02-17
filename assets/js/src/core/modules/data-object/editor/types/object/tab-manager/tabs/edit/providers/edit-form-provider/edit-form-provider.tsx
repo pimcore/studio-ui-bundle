@@ -16,7 +16,7 @@ import { type FormInstance } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import _, { debounce } from 'lodash'
+import _, { debounce, isEmpty } from 'lodash'
 import { SaveTaskType, useSave } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
@@ -98,8 +98,12 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   const autoSave = debounce(async () => {
-    await save(getModifiedDataObjectAttributes(), SaveTaskType.AutoSave)
-  }, 1000)
+    const modifiedAttributes = getModifiedDataObjectAttributes()
+
+    if (!isEmpty(modifiedAttributes)) {
+      await save(modifiedAttributes, SaveTaskType.AutoSave)
+    }
+  }, 800)
 
   const updateDraft = async (): Promise<void> => {
     markObjectDataAsModified()
