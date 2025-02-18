@@ -31,6 +31,7 @@ import {
 import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { useFieldWidth } from '../providers/field-width/use-field-width'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -52,6 +53,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const inheritanceState = useInheritanceState()
   const form = Form.useFormInstance()
   const { disabled } = useEditFormContext()
+  const fieldWidth = useFieldWidth()
 
   if (hasFormList) {
     formFieldName = [...formList.getComputedFieldName(), name]
@@ -90,6 +92,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const _props = {
     ...props,
     title,
+    defaultFieldWidth: fieldWidth,
     name: formFieldName,
     inherited: inheritanceStateValue?.inherited === true,
     noteditable: Boolean(props.noteditable) || disabled

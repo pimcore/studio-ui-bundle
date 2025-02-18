@@ -23,6 +23,7 @@ import { QuantityValueCalculatorButton } from './components/calculator/calculato
 import { useStyles } from './quantity-value.styles'
 import cn from 'classnames'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 
 export interface QuantityValueProps {
   value?: QuantityValueValue | null
@@ -48,6 +49,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { convertValue } = useQuantityValueUnits()
   const { styles } = useStyles()
+  const fieldWidth = useFieldWidth()
 
   const setValue = (newValue: QuantityValueValue): void => {
     if (!_.isEqual(newValue, value)) {
@@ -102,7 +104,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
         inherited={ props.inherited }
         onChange={ onChangeNumber }
         precision={ props.decimalPrecision ?? undefined }
-        style={ { maxWidth: toCssDimension(props.width, 150) } }
+        style={ { maxWidth: toCssDimension(props.width, fieldWidth.small) } }
         value={ value?.value ?? undefined }
       />
       <Select
@@ -114,7 +116,7 @@ export const QuantityValue = (props: QuantityValueProps): React.JSX.Element => {
         options={ getSelectOptions(props.validUnits ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         showSearch
-        style={ { minWidth: toCssDimension(props.unitWidth, 100) } }
+        style={ { minWidth: toCssDimension(props.unitWidth, 150) } }
         value={ value?.unitId ?? undefined }
       />
 

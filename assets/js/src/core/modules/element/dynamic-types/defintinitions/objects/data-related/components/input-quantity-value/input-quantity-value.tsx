@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './input-quantity-value.styles'
 import { Input } from '@Pimcore/components/input/input'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 
 export interface InputQuantityValueProps {
   value?: InputQuantityValueValue | null
@@ -41,6 +42,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const fieldWidth = useFieldWidth()
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = e.target.value
@@ -82,7 +84,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
         disabled={ props.disabled }
         inherited={ props.inherited }
         onChange={ onChangeInput }
-        style={ { maxWidth: toCssDimension(props.width, 150) } }
+        style={ { maxWidth: toCssDimension(props.width, fieldWidth.small) } }
         value={ value?.value ?? undefined }
       />
       <Select
@@ -95,6 +97,7 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
         options={ getSelectOptions(props.validUnits ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         showSearch
+        style={ { minWidth: toCssDimension(150) } }
         value={ value?.unitId ?? undefined }
       />
     </Flex>
