@@ -172,7 +172,8 @@ export type DataObjectUpdateByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "version" | "autoSave";
+            useDraftData?: any;
+            task?: "version" | "autoSave" | "publish" | "save";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -231,7 +232,7 @@ export type DataObjectPatchByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "version" | "autoSave";
+            task?: "version" | "autoSave" | "publish" | "save";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -418,6 +419,14 @@ export type DataObjectPermissions = Permissions & {
     /** Localized View */
     localizedView?: any;
 };
+export type DataObjectDraftData = {
+    /** ID */
+    id: number;
+    /** Modification date */
+    modificationDate: number;
+    /** Is auto save */
+    isAutoSave: boolean;
+};
 export type DataObject = Element & {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -460,6 +469,7 @@ export type DataObject = Element & {
     objectData?: object;
     /** Inheritance object data */
     inheritanceData?: object;
+    draftData?: DataObjectDraftData | null;
 };
 export type DataObjectFolder = DataObject;
 export type UpdateDataProperty = {

@@ -38,7 +38,7 @@ export const OpenElementCell = (props: AbstractGridCellDefinition): React.JSX.El
 
     return (
       <Button
-        icon={ <Icon value={ 'group' } /> }
+        icon={ <Icon value={ 'open-folder' } /> }
         onClick={ onClick }
         onKeyDown={ onKeyEnterExecuteClick }
         type={ 'link' }
