@@ -23,7 +23,7 @@ import { useDataObjectUpdateByIdMutation } from '@Pimcore/modules/data-object/da
 import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -102,12 +102,8 @@ export const useSave = (): UseSaveHookReturn => {
       updatedData.editableData = editableData
     }
 
-    if (task === SaveTaskType.AutoSave || task === SaveTaskType.Version) {
+    if (!isUndefined(task)) {
       updatedData.task = task
-    }
-
-    if (task === SaveTaskType.Publish) {
-      updatedData.published = 1
     }
 
     await saveDataObject({

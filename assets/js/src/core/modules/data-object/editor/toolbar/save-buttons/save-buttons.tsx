@@ -40,7 +40,7 @@ import { isNil } from 'lodash'
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
-  const { dataObject, removeTrackedChanges } = useDataObjectDraft(id)
+  const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError } = useSave()
   const { isAutoSaveLoading, runningTask } = useSaveContext()
   const {
@@ -80,10 +80,13 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     })
   }, [isError, isSchedulesError])
 
-  async function handleSaveClick (task: SaveTaskType): Promise<void> {
+  async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (dataObject?.changes === undefined) return
     Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, () => { resetModifiedDataObjectAttributes() }),
+      saveDataObject(getModifiedDataObjectAttributes(), task, () => {
+        resetModifiedDataObjectAttributes()
+        onFinish?.()
+      }),
       saveSchedules()
     ]).catch((error) => {
       console.error(error)
@@ -200,7 +203,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
                 label: t('toolbar.save-and-publish'),
                 key: 'publish',
                 onClick: async () => {
-                  await handleSaveClick(SaveTaskType.Publish)
+                  await handleSaveClick(SaveTaskType.Publish, () => {
+                    publishDraft()
+                  })
                 }
               }
             ]
