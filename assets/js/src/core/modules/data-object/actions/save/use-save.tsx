@@ -39,7 +39,7 @@ export interface UseSaveHookReturn {
   isError: boolean
 }
 
-export const useSave = (): UseSaveHookReturn => {
+export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
@@ -105,6 +105,8 @@ export const useSave = (): UseSaveHookReturn => {
     if (!isUndefined(task)) {
       updatedData.task = task
     }
+
+    updatedData.useDraftData = useDraftData
 
     await saveDataObject({
       id,

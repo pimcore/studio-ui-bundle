@@ -172,6 +172,7 @@ export type DataObjectUpdateByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
+            useDraftData?: any;
             task?: "version" | "autoSave" | "publish" | "save";
             locked?: any;
             childrenSortBy?: any;
