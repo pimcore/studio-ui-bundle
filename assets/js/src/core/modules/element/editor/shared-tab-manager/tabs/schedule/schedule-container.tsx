@@ -35,6 +35,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Space } from '@Pimcore/components/space/space'
 import { Box } from '@Pimcore/components/box/box'
+import trackError from '@Pimcore/modules/app/error-handler'
+import ApiError from '../../../../../app/error-handler/classes/api-error'
 
 export const ScheduleTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -44,7 +46,7 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
   const { element, schedules, setSchedules, addSchedule, removeSchedule } = useElementDraft(id, elementType)
   const { saveSchedules, isLoading: isSaveLoading } = useSaveSchedules(elementType, id)
 
-  const { data, isLoading, isError } = useScheduleGetCollectionForElementByTypeAndIdQuery({
+  const { data, isLoading, isError, error } = useScheduleGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id
   })
@@ -74,12 +76,13 @@ export const ScheduleTabContainer = (): React.JSX.Element => {
     }
   }, [schedules])
 
-  if (isLoading || data === undefined) {
-    return <Content loading />
+  if (isError) {
+    trackError(new ApiError(error))
+    return <div>Error</div>
   }
 
-  if (isError) {
-    return <div>Error</div>
+  if (isLoading || data === undefined) {
+    return <Content loading />
   }
 
   function filterSchedules (schedules: Schedule[]): Schedule[] {

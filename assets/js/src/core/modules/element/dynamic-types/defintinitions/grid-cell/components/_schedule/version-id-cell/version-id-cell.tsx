@@ -20,15 +20,22 @@ import { SelectCell, type SelectCellConfig } from '@Pimcore/modules/element/dyna
 import { useStyles } from './version-id-cell.styles'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import trackError from '@Pimcore/modules/app/error-handler'
+import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 
 export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
   const { id, elementType } = useElementContext()
-  const { data, isLoading } = useVersionGetCollectionForElementByTypeAndIdQuery({
+  const { data, isLoading, isError, error } = useVersionGetCollectionForElementByTypeAndIdQuery({
     elementType,
     id,
     page: 1,
     pageSize: 9999
   })
+
+  if (isError) {
+    trackError(new ApiError(error))
+  }
+
   let selectOptions: Version[] = []
   if (!isLoading && data !== undefined) {
     selectOptions = data.items
