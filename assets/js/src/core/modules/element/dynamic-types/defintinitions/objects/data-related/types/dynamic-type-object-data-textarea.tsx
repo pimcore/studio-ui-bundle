@@ -31,6 +31,7 @@ export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract
         inherited={ props.inherited }
         maxLength={ props.maxLength ?? undefined }
         showCount={ props.showCharCount }
+        value={ props.value }
       />
     )
   }

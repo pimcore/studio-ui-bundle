@@ -28,6 +28,7 @@ export class DynamicTypeObjectDataDateRange extends DynamicTypeObjectDataAbstrac
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         outputType={ 'dateString' }
+        value={ props.value }
       />
     )
   }

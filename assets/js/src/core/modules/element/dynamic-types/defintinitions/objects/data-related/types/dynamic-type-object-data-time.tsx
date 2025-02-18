@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
         outputFormat={ 'HH:mm' }
         outputType="dateString"
         showSecond={ false }
+        value={ props.value }
       />
     )
   }

@@ -16,7 +16,6 @@ import {
   NotesAndEventsTabView
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
 import {
-  api,
   useNoteDeleteByIdMutation,
   useNoteElementGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
@@ -24,8 +23,6 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
 export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -33,9 +30,6 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-
-  const dispatch = useAppDispatch()
-
   const [deleteNote] = useNoteDeleteByIdMutation()
 
   const { isLoading, data } = useNoteElementGetCollectionQuery({
@@ -47,11 +41,6 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
 
   async function onClickTrash (id: number): Promise<void> {
     await deleteNote({ id })
-
-    const invalidateTagsList = invalidatingTags.ELEMENT_NOTES_AND_EVENTS(elementType, id)
-    const filteredInvalidateTags = invalidateTagsList.filter((tag) => tag !== undefined)
-
-    dispatch(api.util.invalidateTags(filteredInvalidateTags))
   }
 
   if (isLoading) {

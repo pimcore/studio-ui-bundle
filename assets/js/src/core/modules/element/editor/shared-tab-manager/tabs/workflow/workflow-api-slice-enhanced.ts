@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './workflow-api-slice.gen'
 import { type ElementType } from 'types/element-type.d'
 
@@ -28,7 +28,7 @@ const api = baseApi.enhanceEndpoints({
     },
     workflowActionSubmit: {
       invalidatesTags: (result, error, args) => {
-        const tags = providingTags.ELEMENT_WORKFLOW(args.submitAction.elementType as ElementType, args.submitAction.elementId)
+        const tags = invalidatingTags.ELEMENT_WORKFLOW(args.submitAction.elementType as ElementType, args.submitAction.elementId)
 
         return tags.filter((tag) => tag !== undefined)
       }

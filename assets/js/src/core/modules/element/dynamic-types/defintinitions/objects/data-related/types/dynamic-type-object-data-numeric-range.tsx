@@ -37,6 +37,16 @@ export class DynamicTypeObjectDataNumericRange extends DynamicTypeObjectDataAbst
     )
   }
 
+  getVersionObjectDataComponent (props: AbstractNumericObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    const componentProps = this.getVersionObjectDataComponentProps(props) as NumericRangeProps
+
+    return (
+      <NumericRange
+        { ...componentProps }
+      />
+    )
+  }
+
   getObjectDataFormItemProps (props: AbstractNumericObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),

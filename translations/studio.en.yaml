@@ -117,6 +117,7 @@ version.versions: Versions
 version.version: Version
 version.publish: Publish
 version.published: Published
+version.autosaved: Auto saved
 version.schedule-for: Scheduled for
 version.note: Note
 version.note.add: Add a note

@@ -26,8 +26,23 @@ type ErrorHandler = (data: React.JSX.Element | string) => void
 const isGeneralError = (error: any): boolean => error instanceof GeneralError
 const isApiError = (error: any): boolean => error instanceof ApiError
 
+// Create a set to keep shown error content and avoid duplicates
+const shownErrors = new Set<IErrorGetContent['data']>()
+
 const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never | void => {
   const errorContent = data.getContent()
+
+  if (shownErrors.has(errorContent)) {
+    return
+  } else {
+    shownErrors.add(errorContent)
+  }
+
+  // Set a timeout to clear the shownErrors after the current execution cycle
+  setTimeout(() => {
+    // Clear the shownErrors after handling the error to allow future errors to be shown
+    shownErrors.clear()
+  }, 0)
 
   const getErrorContentValue = (): React.JSX.Element | string => {
     return isApiError(data) ? <ApiErrorViewUI errorContent={ errorContent } /> : (errorContent as string)

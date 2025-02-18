@@ -44,6 +44,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         optionFilterProp="label"
         options={ options }
         showSearch
+        value={ props.value }
       />
     )
   }
