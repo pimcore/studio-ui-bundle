@@ -164,6 +164,10 @@ export const useStyles = createStyles(({ token, css }) => {
           border-color: ${token.colorBorder} !important;
         }
       }
+      
+      .ant-table-content table {
+        border-color: ${token.Colors.Brand.Warning.colorWarningBorder} !important;
+      }
     `
   }
 })
