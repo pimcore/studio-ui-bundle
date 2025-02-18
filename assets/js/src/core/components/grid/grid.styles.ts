@@ -121,6 +121,12 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-table-row-selected td {
         background-color: ${token.controlItemBgActive};
       }
+    `,
+
+    disabledGrid: css`
+      .ant-table-cell {
+        background-color: ${token.colorBgContainerDisabled};
+      }
     `
   }
 }, { hashPriority: 'low' })

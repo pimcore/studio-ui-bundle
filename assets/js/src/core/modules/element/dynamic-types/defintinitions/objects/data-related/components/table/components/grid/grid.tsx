@@ -81,6 +81,7 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
     <Grid
       columns={ columns }
       data={ dataRows }
+      disabled={ props.disabled }
       hideColumnHeaders={ !props.columnConfigActivated || props.columnConfig === undefined }
       highlightActiveCell={ props.disabled !== true }
       onActiveCellChange={ props.onActiveCellChange }
