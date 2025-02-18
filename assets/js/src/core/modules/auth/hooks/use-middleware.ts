@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { routes } from '@Pimcore/app/router/router'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export const useMiddleware = (): void => {
   const navigate = useNavigate()

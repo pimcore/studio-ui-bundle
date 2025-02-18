@@ -12,7 +12,7 @@
 */
 
 import { type AbstractDecoratorWithRequiredConfig } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { withGlobalRowSelection } from './configuration-layer/with-global-row-selection'
 
 export interface IGlobalRowSelectionConfig {

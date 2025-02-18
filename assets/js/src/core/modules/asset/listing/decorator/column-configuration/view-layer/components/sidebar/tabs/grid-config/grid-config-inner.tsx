@@ -116,6 +116,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
       body: {
+        folderId: getId(),
         columns: prepareColumns(columns),
         name: gridConfig.name,
         description: gridConfig.description,
@@ -158,6 +159,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
+          folderId: getId(),
           columns: columnsToSave,
           name: values.name,
           description: values.description,
@@ -179,9 +181,10 @@ export const GridConfigInner = (): React.JSX.Element => {
 
     if (view === ViewState.Save) {
       fetchSaveGridConfig({
+        folderId: getId(),
         body: {
-          columns: columnsToSave,
           folderId: getId(),
+          columns: columnsToSave,
           name: values.name,
           description: values.description,
           setAsFavorite: values.setAsDefault,

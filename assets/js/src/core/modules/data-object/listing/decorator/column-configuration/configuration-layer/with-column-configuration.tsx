@@ -18,13 +18,22 @@ import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listi
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDataObjectGetAvailableGridColumnsQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { Content } from '@Pimcore/components/content/content'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useClassDefinitionSelection } from '../../class-definition-selection/context-layer/provider/use-class-definition-selection'
 
 export const WithColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const availableColumnsConfigurationComponent = (): React.JSX.Element => {
     const { useElementId } = useSettings()
     const { getId } = useElementId()
-    const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: 'CAR' })
+    const { selectedClassDefinition } = useClassDefinitionSelection()
+
+    if (selectedClassDefinition === undefined) {
+      throw new Error('Can\'t load available columns without a selected class definition')
+    }
+
+    const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition.id })
     const { selectedColumns, setSelectedColumns } = useSelectedColumns()
+    const { setAvailableColumns } = useAvailableColumns()
     const isConfigLoading = isLoading
 
     useEffect(() => {
@@ -35,7 +44,8 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
       const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
 
       for (const column of data.columns!) {
-        if (column.group !== 'system') {
+        // @todo Skip filename due to backend bug for now.
+        if (column.group !== 'system' || column.key === 'filename') {
           continue
         }
 
@@ -55,6 +65,7 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
       }
 
       setSelectedColumns(selectedColumns)
+      setAvailableColumns(data.columns!)
     }, [data])
 
     if (isConfigLoading || selectedColumns.length === 0) {

@@ -48,7 +48,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
     TagFilterDecorator,
     GeneralFiltersDecorator,
     SortingDecorator,
-    [GlobalRowSelectionDecorator, { rowSelectionMode: 'multiple', elementType: 'asset' } as IGlobalRowSelectionConfig]
+    [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'asset' } as IGlobalRowSelectionConfig]
   )(defaultProps), [config])
   /* eslint-enable @typescript-eslint/consistent-type-assertions */
 

@@ -19,7 +19,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { baseUrl } from '@Pimcore/app/router/router'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useTranslation } from 'react-i18next'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {

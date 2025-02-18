@@ -14,6 +14,8 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { ElementSelector } from '../../element-selector'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { uuid } from '@Pimcore/utils/uuid'
+import { type IRelationAllowedTypesClassDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
 
 export interface ElementSelectorFinishEvent {
   data: any
@@ -27,13 +29,19 @@ export interface ElementSelectorConfig {
     document: boolean
     object: boolean
   }
-}
+  config?: {
+    assets?: {
+      allowedTypes?: IRelationAllowedTypesClassDefinition['assetTypes']
+    }
 
-export interface ElementSelectorData {
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
-  config: ElementSelectorConfig
-  setConfig: (config: ElementSelectorConfig) => void
+    documents?: {
+      allowedTypes?: IRelationAllowedTypesClassDefinition['documentTypes']
+    }
+
+    objects?: {
+      allowedTypes?: IRelationAllowedTypesClassDefinition['classes']
+    }
+  }
 }
 
 export const defaultElementSelectorConfig: ElementSelectorConfig = {
@@ -42,7 +50,27 @@ export const defaultElementSelectorConfig: ElementSelectorConfig = {
     asset: true,
     document: true,
     object: true
+  },
+  config: {
+    assets: {
+      allowedTypes: undefined
+    },
+    documents: {
+      allowedTypes: undefined
+    },
+    objects: {
+      allowedTypes: undefined
+    }
   }
+}
+
+export interface ElementSelectorData {
+  isOpen: boolean
+  setIsOpen: (open: boolean) => void
+  config: ElementSelectorConfig
+  setConfig: (config: ElementSelectorConfig) => void
+  renderKey: string
+  setRenderKey: (key: string) => void
 }
 
 export type ElementSelectorContextProps = ElementSelectorData | undefined
@@ -56,11 +84,12 @@ export interface ElementSelectorProviderProps {
 export const ElementSelectorProvider = ({ children }: ElementSelectorProviderProps): React.JSX.Element => {
   const [isOpen, setIsOpen] = useState(false)
   const [config, setConfig] = useState<ElementSelectorConfig>(defaultElementSelectorConfig)
+  const [renderKey, setRenderKey] = useState(uuid())
 
   return useMemo(() => {
     return (
-      <ElementSelectorContext.Provider value={ { isOpen, setIsOpen, config, setConfig } }>
-        <ElementSelector />
+      <ElementSelectorContext.Provider value={ { renderKey, setRenderKey, isOpen, setIsOpen, config, setConfig } }>
+        <ElementSelector key={ renderKey } />
 
         {children}
       </ElementSelectorContext.Provider>

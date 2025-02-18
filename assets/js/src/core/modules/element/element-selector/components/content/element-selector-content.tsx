@@ -11,41 +11,54 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useElementSelectorHelper } from '../../provider/element-selector/use-element-selector-helper'
 import { AssetSelectorListing } from '@Pimcore/modules/asset/element-selector/asset-selector-listing'
 import { Button } from '@Pimcore/components/button/button'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { useGlobalRowSelection } from '../../provider/global-row-selection/use-global-row-selection'
+import { DataObjectSelectorListing } from '@Pimcore/modules/data-object/element-selector/data-object-selector-listing'
+import { useAreaControl } from '../../provider/area-control/use-area-control'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const ElementSelectorContent = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
   const { onFinish, areas } = helper.config
   const { getSelectedData } = useGlobalRowSelection()
+  const { activeArea, setActiveArea } = useAreaControl()
 
   const tabItems: ITabsProps['items'] = []
 
   if (areas?.asset === true) {
     tabItems.push({
-      key: 'assets',
+      key: elementTypes.asset,
       label: 'Assets',
-      children: <AssetSelectorListing />
+      forceRender: true,
+      children: <div style={ { height: '500px' } }>
+        <AssetSelectorListing />
+      </div>
     })
   }
 
   if (areas?.object === true) {
     tabItems.push({
-      key: 'objects',
+      key: elementTypes.dataObject,
       label: 'Objects',
-      children: '@todo'
+      forceRender: true,
+      children: <div style={ { height: '500px' } }>
+        <DataObjectSelectorListing />
+      </div>
     })
   }
 
   if (areas?.document === true) {
     tabItems.push({
-      key: 'documents',
+      key: elementTypes.document,
       label: 'Documents',
-      children: '@todo'
+      forceRender: true,
+      children: <div style={ { height: '500px' } }>
+        @todo
+      </div>
     })
   }
 
@@ -58,12 +71,18 @@ export const ElementSelectorContent = (): React.JSX.Element => {
   }
 
   // @todo translations
-  return (
+  return useMemo(() => (
     <>
       { tabItems.length === 0 && <p>No areas configured</p> }
       { tabItems.length === 1 && tabItems[0].children }
-      { tabItems.length > 1 && <Tabs items={ tabItems } /> }
+      { tabItems.length > 1 && (
+      <Tabs
+        activeKey={ activeArea }
+        items={ tabItems }
+        onChange={ setActiveArea }
+      />
+      ) }
       <Button onClick={ onButtonFinishClick } >Finish</Button>
     </>
-  )
+  ), [tabItems, activeArea])
 }

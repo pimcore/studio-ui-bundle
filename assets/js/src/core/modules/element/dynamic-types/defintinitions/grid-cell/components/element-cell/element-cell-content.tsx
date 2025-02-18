@@ -18,7 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyle } from './element-cell.styles'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export const ElementCellContent = forwardRef(function ElementCellContent (props: DefaultCellProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { styles } = useStyle()

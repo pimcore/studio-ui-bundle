@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { DynamicFilterProvider, type DynamicFilterProviderProps } from './provider/dynamic-filter-provider'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 
@@ -27,9 +27,9 @@ export const DynamicFilter = (props: DynamicFilterProps): React.JSX.Element => {
     return <>Dynamic Field Filter not supported</>
   }
 
-  return (
+  return useMemo(() => (
     <DynamicFilterProvider { ...props }>
       { ComponentRenderer({}) }
     </DynamicFilterProvider>
-  )
+  ), [props])
 }

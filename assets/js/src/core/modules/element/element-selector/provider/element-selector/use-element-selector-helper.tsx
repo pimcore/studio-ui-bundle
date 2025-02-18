@@ -13,6 +13,7 @@
 
 import { useContext } from 'react'
 import { ElementSelectorContext, type ElementSelectorData } from './element-selector-provider'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export interface UseElementSelectorHelperReturn extends ElementSelectorData {
   open: () => void
@@ -28,6 +29,7 @@ export const useElementSelectorHelper = (): UseElementSelectorHelperReturn => {
 
   const open: UseElementSelectorHelperReturn['open'] = () => {
     context.setIsOpen(true)
+    context.setRenderKey(uuid())
   }
 
   const close: UseElementSelectorHelperReturn['close'] = () => {

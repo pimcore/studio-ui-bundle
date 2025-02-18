@@ -14,7 +14,7 @@
 import React, { useEffect } from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { PathTarget } from './path-target'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'

@@ -14,7 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'

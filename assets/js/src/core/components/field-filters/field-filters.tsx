@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { type IDynamicFilter } from '../dynamic-filter/provider/dynamic-filter-provider'
 import { StackList, type StackListProps } from '../stack-list/stack-list'
 import { DynamicFilter } from '../dynamic-filter/dynamic-filter'
@@ -77,7 +77,7 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
     }
   })
 
-  return (
+  return useMemo(() => (
     <StackList items={ items } />
-  )
+  ), [items])
 }

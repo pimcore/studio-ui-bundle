@@ -16,7 +16,7 @@ import {
   type UpdateSchedule,
   useScheduleUpdateForElementByTypeAndIdMutation
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { type Schedule } from '@Pimcore/modules/element/draft/hooks/use-schedules'

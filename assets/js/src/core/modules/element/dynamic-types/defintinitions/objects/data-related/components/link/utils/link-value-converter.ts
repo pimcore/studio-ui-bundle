@@ -17,7 +17,7 @@ import {
 import {
   type LinkValue
 } from '../link'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface InternalLinkValue {

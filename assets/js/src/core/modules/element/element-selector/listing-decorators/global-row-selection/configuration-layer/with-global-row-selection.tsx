@@ -15,26 +15,89 @@ import React, { useEffect, useMemo } from 'react'
 import { type IGlobalRowSelectionConfig, type IGlobalRowSelectionDecoratorProps } from '../global-row-selection-decorator'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useGlobalRowSelection } from '../../../provider/global-row-selection/use-global-row-selection'
+import { useAreaControl } from '../../../provider/area-control/use-area-control'
 
 export const withGlobalRowSelection = (Component: IGlobalRowSelectionDecoratorProps['ConfigurationComponent'], config: IGlobalRowSelectionConfig): IGlobalRowSelectionDecoratorProps['ConfigurationComponent'] => {
   const GlobalRowSelectionComponent = (): React.JSX.Element => {
-    const { selectedRows, selectedRowsData } = useRowSelection()
-    const { setAssets, setAssetsData, setDocuments, setDocumentsData, setObjects, setObjectsData } = useGlobalRowSelection()
+    const { selectedRows, setSelectedRows, selectedRowsData } = useRowSelection()
+    const { activeArea } = useAreaControl()
+    const { assets, documents, objects, setAssets, setAssetsData, setDocuments, setDocumentsData, setObjects, setObjectsData } = useGlobalRowSelection()
 
     useEffect(() => {
-      if (config.elementType === 'asset') {
-        setAssets(selectedRows)
-        setAssetsData(selectedRowsData)
+      if (config.rowSelectionMode === 'single') {
+        if (activeArea === config.elementType) {
+          return
+        }
+
+        if (config.elementType === 'asset') {
+          setSelectedRows(assets)
+        }
+
+        if (config.elementType === 'document') {
+          setSelectedRows(documents)
+        }
+
+        if (config.elementType === 'data-object') {
+          setSelectedRows(objects)
+        }
+      }
+    }, [assets, documents, objects])
+
+    useEffect(() => {
+      if (activeArea !== config.elementType) {
+        return
       }
 
-      if (config.elementType === 'document') {
-        setDocuments(selectedRows)
-        setDocumentsData(selectedRowsData)
+      if (config.rowSelectionMode === 'single') {
+        if (config.elementType === 'asset') {
+          setAssets(selectedRows)
+          setAssetsData(selectedRowsData)
+
+          setObjects({})
+          setObjectsData({})
+
+          setDocuments({})
+          setDocumentsData({})
+        }
+
+        if (config.elementType === 'document') {
+          setDocuments(selectedRows)
+          setDocumentsData(selectedRowsData)
+
+          setObjects({})
+          setObjectsData({})
+
+          setAssets({})
+          setAssetsData({})
+        }
+
+        if (config.elementType === 'data-object') {
+          setObjects(selectedRows)
+          setObjectsData(selectedRowsData)
+
+          setAssets({})
+          setAssetsData({})
+
+          setDocuments({})
+          setDocumentsData({})
+        }
       }
 
-      if (config.elementType === 'data-object') {
-        setObjects(selectedRows)
-        setObjectsData(selectedRowsData)
+      if (config.rowSelectionMode === 'multiple') {
+        if (config.elementType === 'asset') {
+          setAssets(selectedRows)
+          setAssetsData(selectedRowsData)
+        }
+
+        if (config.elementType === 'document') {
+          setDocuments(selectedRows)
+          setDocumentsData(selectedRowsData)
+        }
+
+        if (config.elementType === 'data-object') {
+          setObjects(selectedRows)
+          setObjectsData(selectedRowsData)
+        }
       }
     }, [selectedRows, selectedRowsData])
 

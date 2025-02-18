@@ -16,6 +16,7 @@ import { useElementSelectorHelper } from './provider/element-selector/use-elemen
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ElementSelectorContent } from './components/content/element-selector-content'
 import { GlobalRowSelectionProvider } from './provider/global-row-selection/global-row-selection-provider'
+import { AreaControlProvider } from './provider/area-control/area-control-provider'
 
 export const ElementSelector = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
@@ -28,9 +29,11 @@ export const ElementSelector = (): React.JSX.Element => {
       size='XL'
       title={ null }
     >
-      <GlobalRowSelectionProvider>
-        <ElementSelectorContent />
-      </GlobalRowSelectionProvider>
+      <AreaControlProvider>
+        <GlobalRowSelectionProvider>
+          <ElementSelectorContent />
+        </GlobalRowSelectionProvider>
+      </AreaControlProvider>
     </Modal>
   )
 }
