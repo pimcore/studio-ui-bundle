@@ -15,7 +15,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { isUndefined } from 'lodash'
+import { isString, isUndefined } from 'lodash'
 import type { DataNote } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { Box } from '@Pimcore/components/box/box'
@@ -59,7 +59,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
         {displayTextArea(noteDetail.title, t('notes-and-events.columns.title'))}
         {displayTextArea(noteDetail.description, t('notes-and-events.columns.description'), false)}
         {displayTextArea(noteDetail.fields.toString(), t('notes-and-events.columns.details'))}
-        {!isUndefined(noteDetail.userName) && displayTextArea(noteDetail.userName, t('notes-and-events.columns.user'))}
+        {isString(noteDetail.userName) && displayTextArea(noteDetail.userName, t('notes-and-events.columns.user'))}
         <Box
           margin={ 'small' }
         >
