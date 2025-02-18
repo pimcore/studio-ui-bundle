@@ -73,7 +73,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
     objectSectionFieldItemWrapper: css`
       flex: 1 1 50%;
-      max-width: 460px;
+      max-width: 900px;
       width: 100%;
       
       .ant-input,
