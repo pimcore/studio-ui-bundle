@@ -50,7 +50,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     isError: isSchedulesError
   } = useSaveSchedules('data-object', id, false)
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
-  const { deleteDraft, isLoading: isDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
+  const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
   const messageApi = useMessage()
 
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
@@ -93,14 +93,14 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     })
   }
 
-  const getDraftButtons = (): ReactElement[] => {
-    const draftButtons: ReactElement[] = []
+  const getSecondaryButtons = (): ReactElement[] => {
+    const secondaryButtons: ReactElement[] = []
 
-    const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDeleteLoading
+    const isDraftLoading = (runningTask === SaveTaskType.Version && (isLoading || isSchedulesLoading)) || isDraftDeleteLoading
 
     if (checkElementPermission(dataObject?.permissions, 'save')) {
       if (dataObject?.published === true) {
-        draftButtons.push(
+        secondaryButtons.push(
           <Button
             disabled={ isLoading || isSchedulesLoading || isDraftLoading }
             key="save-draft"
@@ -113,60 +113,67 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             {t('toolbar.save-draft')}
           </Button>
         )
+      }
 
-        if (!isNil(dataObject?.draftData)) {
-          draftButtons.push(
-            <Dropdown
-              key="dropdown"
-              menu={ {
-                items: [
-                  {
-                    disabled: isLoading,
-                    label: deleteDraftButtonText,
-                    key: 'delete-draft',
-                    onClick: deleteDraft
-                  }
-                ]
-              } }
-            >
-              <IconButton
-                disabled={ isLoading || isSchedulesLoading || isDraftLoading }
-                icon={ { value: 'chevron-down' } }
-                loading={ isDeleteLoading }
-                type="default"
-              />
-            </Dropdown>
-          )
-        }
-      } else if (!isNil(dataObject?.draftData)) {
-        draftButtons.push(
+      const saveDisabled = isLoading || isSchedulesLoading || isDraftLoading
+
+      if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
+        secondaryButtons.push(
           <Button
-            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+            disabled={ saveDisabled }
             key="save-draft"
-            loading={ isDeleteLoading }
-            onClick={ deleteDraft }
+            loading={ runningTask === SaveTaskType.Publish && (isLoading || isSchedulesLoading) }
+            onClick={ async () => {
+              await handleSaveClick(SaveTaskType.Publish, () => {
+                publishDraft()
+              })
+            } }
             type="default"
           >
-            {deleteDraftButtonText}
+            {t('toolbar.save-and-publish')}
           </Button>
+        )
+      }
+
+      if (!isNil(dataObject?.draftData)) {
+        secondaryButtons.push(
+          <Dropdown
+            key="dropdown"
+            menu={ {
+              items: [
+                {
+                  disabled: isLoading,
+                  label: deleteDraftButtonText,
+                  key: 'delete-draft',
+                  onClick: deleteDraft
+                }
+              ]
+            } }
+          >
+            <IconButton
+              disabled={ isLoading || isSchedulesLoading || isDraftLoading }
+              icon={ { value: 'chevron-down' } }
+              loading={ isDraftDeleteLoading }
+              type="default"
+            />
+          </Dropdown>
         )
       }
     }
 
-    return draftButtons
+    return secondaryButtons
   }
 
-  const getSaveButtons = (): ReactElement[] => {
-    const saveButtons: ReactElement[] = []
+  const getPrimaryButtons = (): ReactElement[] => {
+    const primaryButtons: ReactElement[] = []
 
-    const saveLoading = (runningTask === SaveTaskType.Publish || runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading)
-    const saveDisabled = isLoading || isSchedulesLoading
+    const saveDisabled = isLoading || isSchedulesLoading || isDraftDeleteLoading
 
     if (dataObject?.published === true && checkElementPermission(dataObject?.permissions, 'publish')) {
-      saveButtons.push(
+      primaryButtons.push(
         <Button
           disabled={ saveDisabled }
-          loading={ saveLoading }
+          loading={ (runningTask === SaveTaskType.Publish) && (isLoading || isSchedulesLoading) }
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Publish)
           } }
@@ -178,54 +185,26 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     }
 
     if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
-      saveButtons.push(
+      primaryButtons.push(
         <Button
           disabled={ saveDisabled }
-          loading={ saveLoading }
+          loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Save)
           } }
           type="primary"
         >
-          {t('toolbar.save')}
+          {t('toolbar.save-draft')}
         </Button>
       )
     }
 
-    if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'publish')) {
-      saveButtons.push(
-        <Dropdown
-          key="dropdown"
-          menu={ {
-            items: [
-              {
-                disabled: saveDisabled,
-                label: t('toolbar.save-and-publish'),
-                key: 'publish',
-                onClick: async () => {
-                  await handleSaveClick(SaveTaskType.Publish, () => {
-                    publishDraft()
-                  })
-                }
-              }
-            ]
-          } }
-        >
-          <IconButton
-            disabled={ saveDisabled }
-            icon={ { value: 'chevron-down' } }
-            type="primary"
-          />
-        </Dropdown>
-      )
-    }
-
-    return saveButtons
+    return primaryButtons
   }
 
-  const draftButtons = getDraftButtons()
+  const secondaryButtons = getSecondaryButtons()
 
-  const saveButtons = getSaveButtons()
+  const primaryButtons = getPrimaryButtons()
 
   return (
     <>
@@ -239,17 +218,17 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           <Icon value="auto-save" />
         </Tooltip>
       )}
-      {draftButtons.length > 0 && (
+      {secondaryButtons.length > 0 && (
         <ButtonGroup
-          items={ draftButtons }
+          items={ secondaryButtons }
           noSpacing
         />
       )}
-      {saveButtons.length > 0 && (
-      <ButtonGroup
-        items={ saveButtons }
-        noSpacing
-      />
+      {primaryButtons.length > 0 && (
+        <ButtonGroup
+          items={ primaryButtons }
+          noSpacing
+        />
       )}
 
     </>
