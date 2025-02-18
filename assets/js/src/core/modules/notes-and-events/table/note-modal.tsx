@@ -28,8 +28,6 @@ export interface NoteModalProps {
 export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  console.log('----> noteDetail', noteDetail)
-
   const displayTextArea = (content: string, label: string, oneLiner: boolean = true): React.JSX.Element => {
     return (
       <Box
@@ -57,11 +55,11 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
       title={ t('notes-and-events-modal.detail-information') }
     >
       <>
-        {displayTextArea(noteDetail.type, 'Type')}
-        {displayTextArea(noteDetail.title, 'Title')}
-        {displayTextArea(noteDetail.description, 'Description', false)}
-        {displayTextArea(noteDetail.fields.toString(), 'Fields')}
-        {/* {noteDetail.userName && displayTextArea(noteDetail.userName, 'User')} */}
+        {displayTextArea(noteDetail.type, t('notes-and-events.columns.type'))}
+        {displayTextArea(noteDetail.title, t('notes-and-events.columns.title'))}
+        {displayTextArea(noteDetail.description, t('notes-and-events.columns.description'), false)}
+        {displayTextArea(noteDetail.fields.toString(), t('notes-and-events.columns.details'))}
+        {!isUndefined(noteDetail.userName) && displayTextArea(noteDetail.userName, t('notes-and-events.columns.user'))}
         <Box
           margin={ 'small' }
         >

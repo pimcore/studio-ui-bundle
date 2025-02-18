@@ -74,7 +74,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
   const createColumns = (): any => [
     columnHelper.accessor('type', {
       header: t('notes-and-events.columns.type'),
-      size: 70
+      size: 80
     }),
     columnHelper.accessor(row => ({ path: row.cPath, elementType: row.cType, id: row.cId }), {
       id: 'element',
@@ -110,7 +110,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
       }
     }),
     columnHelper.accessor('fields', {
-      header: t('notes-and-events.columns.fields'),
+      header: t('notes-and-events.columns.details'),
       size: 70
     }),
     columnHelper.accessor('userName', {

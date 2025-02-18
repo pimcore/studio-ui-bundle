@@ -22,12 +22,11 @@ import { Table } from '@Pimcore/modules/notes-and-events/table/table'
 import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
+import { Content } from '@Pimcore/components/content/content'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { totalItems, notesAndEvents, notesAndEventsLoading, page, setPage, setPageSize } = useNotesAndEvents()
-
-  console.log('----> notesAndEventssss', notesAndEvents)
 
   return (
     <ContentLayout
@@ -53,36 +52,40 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
           )
         : undefined }
     >
-      <Box
-        margin={ 'small' }
-      >
-        <Flex
-          gap={ 'small' }
-          vertical
-        >
-          <Flex
-            justify={ 'space-between' }
+      {notesAndEventsLoading
+        ? <Content none />
+        : (
+          <Box
+            margin={ 'small' }
           >
             <Flex
-              gap={ 'small' }
+              gap={ 'medium' }
+              vertical
             >
-              <Title>Notes & Events</Title>
+              <Flex
+                justify={ 'space-between' }
+              >
+                <Flex
+                  gap={ 'small' }
+                >
+                  <Title>Notes & Events</Title>
+                </Flex>
+                <SearchInput
+                  loading={ false }
+                  onChange={ (e) => {
+                    const { value } = e.target
+                    alert(`search is changing ${value}`)
+                  } }
+                  placeholder="Search"
+                />
+              </Flex>
             </Flex>
-            <SearchInput
-              loading={ false }
-              onChange={ (e) => {
-                const { value } = e.target
-                alert(`search is changing ${value}`)
-              } }
-              placeholder="Search"
+            <Table
+              notesAndEvents={ notesAndEvents }
+              notesAndEventsLoading={ notesAndEventsLoading }
             />
-          </Flex>
-        </Flex>
-        <Table
-          notesAndEvents={ notesAndEvents }
-          notesAndEventsLoading={ notesAndEventsLoading }
-        />
-      </Box>
+          </Box>
+          )}
     </ContentLayout>
   )
 }

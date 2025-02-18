@@ -216,7 +216,7 @@ notes-and-events.columns.type: Type
 notes-and-events.columns.element: Element
 notes-and-events.columns.title: Title
 notes-and-events.columns.description: Description
-notes-and-events.columns.fields: Fields
+notes-and-events.columns.details: Details
 notes-and-events.columns.user: User
 notes-and-events.columns.date: Date
 notes-and-events.columns.actions: Actions
