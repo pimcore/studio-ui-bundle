@@ -44,6 +44,16 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Object Grid"],
             }),
+            dataObjectGetGridConfiguration: build.query<
+                DataObjectGetGridConfigurationApiResponse,
+                DataObjectGetGridConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configuration/${queryArg.folderId}/${queryArg.classId}`,
+                    params: { configurationId: queryArg.configurationId },
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
             dataObjectListSavedGridConfigurations: build.query<
                 DataObjectListSavedGridConfigurationsApiResponse,
                 DataObjectListSavedGridConfigurationsApiArg
@@ -223,7 +233,8 @@ export type DataObjectUpdateByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "version" | "autoSave";
+            useDraftData?: any;
+            task?: "autoSave" | "publish" | "save" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -238,6 +249,16 @@ export type DataObjectDeleteGridConfigurationByConfigurationIdApiResponse =
 export type DataObjectDeleteGridConfigurationByConfigurationIdApiArg = {
     /** ConfigurationId of the element */
     configurationId: number;
+};
+export type DataObjectGetGridConfigurationApiResponse =
+    /** status 200 data_object_get_grid_configuration_success_response */ GridDetailedConfiguration;
+export type DataObjectGetGridConfigurationApiArg = {
+    /** FolderId of the element */
+    folderId: number;
+    /** Class Id of the data object */
+    classId: string;
+    /** Configuration ID */
+    configurationId?: number;
 };
 export type DataObjectListSavedGridConfigurationsApiResponse =
     /** status 200 List of saved grid configurations for data objects */ {
@@ -343,7 +364,7 @@ export type DataObjectPatchByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "version" | "autoSave";
+            task?: "autoSave" | "publish" | "save" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -779,6 +800,7 @@ export const {
     useDataObjectGetByIdQuery,
     useDataObjectUpdateByIdMutation,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
+    useDataObjectGetGridConfigurationQuery,
     useDataObjectListSavedGridConfigurationsQuery,
     useDataObjectSaveGridConfigurationMutation,
     useDataObjectSetGridConfigurationAsFavoriteMutation,
