@@ -22,6 +22,7 @@ import _ from 'lodash'
 import {
   type InputObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-input'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -29,6 +30,7 @@ export type SelectProps = AbstractObjectDataDefinition & {
   options: Array<{ key: string, value: string | number }> | null
   multiSelect?: boolean
   maxItems?: number | null
+  width?: number | string | null
 }
 
 export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObjectDataAbstract {
@@ -44,6 +46,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         optionFilterProp="label"
         options={ options }
         showSearch
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
         value={ props.value }
       />
     )

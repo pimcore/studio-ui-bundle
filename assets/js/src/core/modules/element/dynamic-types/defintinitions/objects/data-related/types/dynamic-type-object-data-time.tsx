@@ -16,6 +16,7 @@ import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type TimeObjectDataDefinition = AbstractObjectDataDefinition
 
@@ -25,11 +26,13 @@ export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
   getObjectDataComponent (props: TimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <DatePicker.TimePicker
+        className="w-full"
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         outputFormat={ 'HH:mm' }
         outputType="dateString"
         showSecond={ false }
+        style={ { maxWidth: toCssDimension(props.defaultFieldWidth.small) } }
         value={ props.value }
       />
     )

@@ -21,6 +21,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { isPlainObject } from 'lodash'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 
 export interface UrlSlugEntry {
   slug: string
@@ -45,6 +46,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
   const [errors, setErrors] = useState<boolean[]>([])
   const { t } = useTranslation()
   const { getSiteById, getRemainingSites } = useSites()
+  const fieldWidth = useFieldWidth()
   const { Text } = Typography
 
   useEffect(() => {
@@ -148,7 +150,7 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
         </List.Item>
       ) }
       size="small"
-      style={ { maxWidth: toCssDimension(props.width) } }
+      style={ { maxWidth: toCssDimension(props.width, fieldWidth.large) } }
     />
   )
 }

@@ -19,6 +19,7 @@ import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import _ from 'lodash'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 
 export interface CalculatedValueProps {
   value?: string | null
@@ -27,6 +28,8 @@ export interface CalculatedValueProps {
 }
 
 export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element => {
+  const fieldWidth = useFieldWidth()
+
   const getElementTypeComponent = (): React.JSX.Element => {
     if (props.elementType === 'textarea') {
       return (
@@ -67,9 +70,19 @@ export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element 
     }
   }
 
+  const getDefaultFieldWidth = (): number => {
+    if (props.elementType === 'numeric') {
+      return fieldWidth.medium
+    }
+    if (props.elementType === 'date') {
+      return fieldWidth.small
+    }
+    return fieldWidth.large
+  }
+
   return (
     <div
-      style={ { maxWidth: toCssDimension(props.width) } }
+      style={ { maxWidth: toCssDimension(props.width, getDefaultFieldWidth()) } }
     >
       {getElementTypeComponent() }
     </div>
