@@ -20,6 +20,7 @@ import { useGlobalRowSelection } from '../../provider/global-row-selection/use-g
 import { DataObjectSelectorListing } from '@Pimcore/modules/data-object/element-selector/data-object-selector-listing'
 import { useAreaControl } from '../../provider/area-control/use-area-control'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { getFinishedEventSelectedItems } from '../../utils/selected-items'
 
 export const ElementSelectorContent = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
@@ -64,7 +65,7 @@ export const ElementSelectorContent = (): React.JSX.Element => {
 
   const onButtonFinishClick = (): void => {
     if (onFinish !== undefined) {
-      onFinish({ data: getSelectedData() })
+      onFinish({ items: getFinishedEventSelectedItems(getSelectedData()) })
     }
 
     helper.close()

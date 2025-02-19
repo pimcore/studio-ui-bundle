@@ -15,6 +15,7 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import _ from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type ElementSelectorConfig } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export interface IRelationAllowedTypesClassDefinition {
   assetsAllowed: boolean
@@ -103,4 +104,12 @@ export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTyp
   }
   const subType: string = info.data.className !== undefined && !_.isEmpty(info.data.className) ? info.data.className : info.data.type
   return isAllowedSubType(type, subType, props)
+}
+
+export const createElementSelectorArea = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['areas'] => {
+  return {
+    asset: config.assetsAllowed ?? false,
+    document: config.documentsAllowed ?? false,
+    object: config.dataObjectsAllowed ?? false
+  }
 }

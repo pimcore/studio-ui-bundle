@@ -15,10 +15,21 @@ import React, { createContext, useMemo, useState } from 'react'
 import { ElementSelector } from '../../element-selector'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { uuid } from '@Pimcore/utils/uuid'
-import { type IRelationAllowedTypesClassDefinition } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import { type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+
+export interface SelectedItem {
+  elementType: ElementType
+  data: {
+    id: number
+    type?: string
+    fullpath: string
+    [key: string]: any
+  }
+}
 
 export interface ElementSelectorFinishEvent {
-  data: any
+  items: SelectedItem[]
 }
 
 export interface ElementSelectorConfig {
@@ -31,15 +42,15 @@ export interface ElementSelectorConfig {
   }
   config?: {
     assets?: {
-      allowedTypes?: IRelationAllowedTypesClassDefinition['assetTypes']
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedAssetTypes']
     }
 
     documents?: {
-      allowedTypes?: IRelationAllowedTypesClassDefinition['documentTypes']
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedDocumentTypes']
     }
 
     objects?: {
-      allowedTypes?: IRelationAllowedTypesClassDefinition['classes']
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedClasses']
     }
   }
 }

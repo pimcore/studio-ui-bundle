@@ -11,26 +11,28 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useEffect } from 'react'
-import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { PathTarget } from './path-target'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
-import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import {
+  createElementSelectorArea,
   dndIsValidData,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
+import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Tooltip } from 'antd'
+import { isEmpty } from 'lodash'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
-import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
-import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
-import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { PathTarget } from './path-target'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -165,7 +167,17 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
       <ElementSelectorButton elementSelectorConfig={ {
         selectionType: SelectionType.Single,
-        onFinish: (data) => { console.log('single selection', { data }) }
+        areas: createElementSelectorArea(props),
+        onFinish: (event) => {
+          if (!isEmpty(event.items)) {
+            setValue({
+              type: event.items[0].elementType,
+              subtype: event.items[0].data.type,
+              id: event.items[0].data.id,
+              fullPath: event.items[0].data.fullpath
+            })
+          }
+        }
       } }
       />
     </Flex>
