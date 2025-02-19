@@ -23,7 +23,18 @@ interface PreviewViewProps {
   src: string
 }
 
-const IMAGE_SAVE_SUCCESS_MESSAGE = '[MiniPaint] Image successfully saved!'
+interface IPostMessageEvent {
+  data: {
+    type: string
+    status: 'success'
+    message: string
+  }
+}
+
+const POST_MESSAGE_SUCCESS = {
+  type: 'MiniPaint',
+  message: 'Image successfully saved!'
+}
 
 const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   const { src } = props
@@ -34,10 +45,11 @@ const PreviewView = (props: PreviewViewProps): React.JSX.Element => {
   const { zoom, setZoom } = React.useContext(ZoomContext)
 
   useEffect(() => {
-    // Event handler to handle the message event
-    const handleMessage = (event: any): void => {
-      if (event.data === IMAGE_SAVE_SUCCESS_MESSAGE) {
-        // Update the image source by adding a query parameter to force reloading of the image
+    const handleMessage = (event: IPostMessageEvent): void => {
+      const { type, message } = event.data
+
+      if (type === POST_MESSAGE_SUCCESS.type && message === POST_MESSAGE_SUCCESS.message) {
+        // Update the image to force a reload
         setImageSrc(`${src}?hash=${new Date().getTime()}`)
       }
     }

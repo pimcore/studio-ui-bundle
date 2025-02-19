@@ -172,8 +172,12 @@
                 body: JSON.stringify({ data: { dataUri } })
             }).then((response) => {
                 if (response.ok) {
-                    // Post a message to the Preview Asset Tab indicating that the image was saved
-                    window.parent.postMessage('[MiniPaint] Image successfully saved!', isDev ? devTargetOrigin : prodTargetOrigin);
+                    // Post a message to the Preview Asset Tab
+                    window.parent.postMessage({
+                        type: 'MiniPaint',
+                        status: 'success',
+                        message: 'Image successfully saved!'
+                    }, isDev ? devTargetOrigin : prodTargetOrigin);
                 }
             });
 
