@@ -40,7 +40,7 @@ export interface TreeNodeProps {
   ref?: MutableRefObject<HTMLDivElement>
 }
 
-const defaultProps: TreeNodeProps = {
+export const defaultProps: TreeNodeProps = {
   id: Math.random().toString(16).slice(2),
   internalKey: '',
   icon: {

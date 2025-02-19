@@ -43,7 +43,7 @@ export interface TreePagerProps {
 
 export interface TreeContextMenuProps {
   children: React.ReactNode
-  node: TreeNodeProps
+  node?: TreeNodeProps
 }
 
 export interface TreeProps {
@@ -186,7 +186,7 @@ const ElementTree = (
       )}
 
       {isLoading === false && items.length !== 0 && (
-        ContextMenu !== undefined && rightClickedNode !== undefined
+        ContextMenu !== undefined
           ? (
             <ContextMenu node={ rightClickedNode }>
               {treeContent}
