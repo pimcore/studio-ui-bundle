@@ -546,6 +546,8 @@ export type AssetGetSavedGridConfigurationsApiArg = {
 export type AssetSaveGridConfigurationApiResponse =
     /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
+    /** FolderId of the folder */
+    folderId: number;
     body: {
         folderId: number;
         pageSize: number;
@@ -574,6 +576,7 @@ export type AssetUpdateGridConfigurationApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
     body: {
+        folderId: number;
         pageSize: number;
         name: string;
         description: string;

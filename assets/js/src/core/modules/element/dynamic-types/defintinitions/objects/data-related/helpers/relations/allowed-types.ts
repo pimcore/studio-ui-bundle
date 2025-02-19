@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import _ from 'lodash'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'

@@ -17,7 +17,7 @@ import {
   useDataObjectPatchByIdMutation
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice.gen'

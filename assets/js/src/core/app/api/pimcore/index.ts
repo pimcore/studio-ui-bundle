@@ -13,7 +13,10 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+const baseQuery = fetchBaseQuery({ baseUrl: '/' })
+export type BaseQuery = typeof baseQuery
+
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  baseQuery,
   endpoints: () => ({})
 })

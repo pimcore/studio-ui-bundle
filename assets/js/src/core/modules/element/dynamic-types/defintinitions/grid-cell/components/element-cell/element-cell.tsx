@@ -18,7 +18,7 @@ import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-
 import { ElementCellContent } from './element-cell-content'
 import { useStyle } from './element-cell.styles'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface ElementCellConfig {
   allowedTypes: ElementType[] | ((props: DefaultCellProps) => ElementType[])
