@@ -179,6 +179,7 @@ import settings from '@Pimcore/assets/icons/settings.inline.svg'
 import share from '@Pimcore/assets/icons/share.inline.svg'
 import sharedUsers from '@Pimcore/assets/icons/shared-users.inline.svg'
 import shield from '@Pimcore/assets/icons/shield.inline.svg'
+import showDetails from '@Pimcore/assets/icons/show-details.inline.svg'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg'
 import splitView from '@Pimcore/assets/icons/split-view.inline.svg'
 import style from '@Pimcore/assets/icons/style.inline.svg'
@@ -852,6 +853,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'shield',
       component: shield
+    })
+    iconLibrary.register({
+      name: 'show-details',
+      component: showDetails
     })
     iconLibrary.register({
       name: 'spinner',

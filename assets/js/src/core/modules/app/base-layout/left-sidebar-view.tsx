@@ -28,6 +28,22 @@ export const LeftSidebarView = (): React.JSX.Element => {
   })
 
   addNavItem({
+    path: 'Tools/Notes & Events',
+    className: 'item-style-modifier',
+    widgetConfig: {
+      name: 'Notes & Events',
+      id: 'notes-and-events',
+      component: 'notes-and-events',
+      config: {
+        icon: {
+          type: 'name',
+          value: 'notes-events'
+        }
+      }
+    }
+  })
+
+  addNavItem({
     path: 'Settings/Tag Configuration',
     className: 'item-style-modifier',
     widgetConfig: {
