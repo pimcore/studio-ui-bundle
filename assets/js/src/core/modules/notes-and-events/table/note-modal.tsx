@@ -63,7 +63,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
         <Box
           margin={ 'small' }
         >
-          <div>Date</div>
+          <div>{t('notes-and-events.columns.date')}</div>
           <DatePicker
             disabled
             value={ noteDetail.date }

@@ -68,7 +68,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
                 <Flex
                   gap={ 'small' }
                 >
-                  <Title>Notes & Events</Title>
+                  <Title>{t('notes-and-events.label')}</Title>
                 </Flex>
                 <SearchInput
                   loading={ false }

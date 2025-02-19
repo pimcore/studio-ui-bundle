@@ -51,23 +51,21 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
     }
   }, [notesAndEvents])
 
-  const enrichNotesAndEvents = (data: Note[]): DataNote[] => {
-    return data.map((item) => {
-      return {
-        ...item,
-        fields: item.data.length,
-        rowId: uuid()
-      }
+  const enrichNotesAndEvents = (data: Note[]): DataNote[] =>
+    data.map((item) => ({
+      ...item,
+      fields: item.data.length,
+      rowId: uuid()
     })
-  }
+    )
 
   const openCorrectElement = async (eType: string, eId: number): Promise<void> => {
     const elementType = mapToElementType(eType)
     !isUndefined(elementType) &&
-      await openElement({
-        type: elementType,
-        id: eId
-      })
+        await openElement({
+          type: elementType,
+          id: eId
+        })
   }
 
   const columnHelper = createColumnHelper<DataNoteWithActions>()
@@ -92,7 +90,9 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
             <Tag
               bordered={ false }
               color="processing"
-              onClick={ async () => { await openCorrectElement(elementType, id) } }
+              onClick={ async () => {
+                await openCorrectElement(elementType, id)
+              } }
             >{decodeURIComponent(path)}
             </Tag>
           </Flex>
