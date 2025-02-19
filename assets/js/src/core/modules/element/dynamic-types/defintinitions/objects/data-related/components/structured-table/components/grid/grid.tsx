@@ -89,6 +89,7 @@ export const StructuredTableGrid = (props: StructuredTableGridProps): React.JSX.
     <Grid
       columns={ columns }
       data={ rows }
+      disabled={ props.disabled }
       onUpdateCellData={ (data) => {
         const newValue = {
           ...props.value,

@@ -1,0 +1,12 @@
+{
+  "entrypoints": {
+    "core-dll": {
+      "css": [
+        "/bundles/pimcorestudioui/build/1eaccf0e-5323-4b5d-89e8-8fa16ce7fec9/core-dll.css"
+      ],
+      "js": [
+        "/bundles/pimcorestudioui/build/1eaccf0e-5323-4b5d-89e8-8fa16ce7fec9/core-dll.js"
+      ]
+    }
+  }
+}
