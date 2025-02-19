@@ -22,7 +22,9 @@ export const getFinishedEventSelectedItems = (eventData: any): SelectedItem[] =>
     items.forEach(item => {
       selectedItems.push({
         elementType,
-        data: item
+        data: {
+          ...item
+        }
       })
     })
   }

@@ -24,12 +24,15 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { createElementSelectorArea, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
+import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 
-export interface ManyToManyRelationToolbarProps {
+export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
   onSearch: (value: string) => void
   allowClear: boolean
   enableUpload: boolean
+  addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   assetUploadPath?: string | null
   uploadMaxItems?: number
@@ -45,7 +48,20 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
   buttons.push(
     <ElementSelectorButton elementSelectorConfig={ {
       selectionType: SelectionType.Multiple,
-      onFinish: (data) => { console.log('multi selection', { data }) }
+      areas: createElementSelectorArea(props),
+      onFinish: (event) => {
+        console.log(event)
+        const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
+          id: item.data.id,
+          type: item.elementType,
+          subtype: item.data.subtype,
+          fullPath: item.data.fullpath,
+          isPublished: item.data.published ?? null
+        }))
+        if (items.length > 0) {
+          props.addItems(items)
+        }
+      }
     } }
     />
   )

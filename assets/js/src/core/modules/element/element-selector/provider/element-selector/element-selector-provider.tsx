@@ -24,6 +24,7 @@ export interface SelectedItem {
     id: number
     type?: string
     fullpath: string
+    published?: boolean | null
     [key: string]: any
   }
 }
