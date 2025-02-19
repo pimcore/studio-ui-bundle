@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import type { ElementType } from '../../../../../../types/element-type.d'
+import type { ElementType } from '../../../../types/enums/element/element-type'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 

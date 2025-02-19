@@ -13,12 +13,14 @@
 
 import { type AbstractDecorator } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { WithColumnConfiguration } from './configuration-layer/with-column-configuration'
+import { WithAvailableColumnsContext } from './context-layer/with-available-columns-context'
 
 export const ColumnConfigurationDecorator: AbstractDecorator = (props) => {
-  const { ConfigurationComponent, ...baseProps } = props
+  const { ConfigurationComponent, ContextComponent, ...baseProps } = props
 
   return {
     ...baseProps,
-    ConfigurationComponent: WithColumnConfiguration(ConfigurationComponent)
+    ConfigurationComponent: WithColumnConfiguration(ConfigurationComponent),
+    ContextComponent: WithAvailableColumnsContext(ContextComponent)
   }
 }

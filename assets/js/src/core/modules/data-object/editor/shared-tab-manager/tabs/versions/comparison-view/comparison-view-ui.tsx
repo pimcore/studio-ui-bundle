@@ -23,6 +23,7 @@ interface IComparisonViewUIProps {
 export const ComparisonViewUI = ({ data }: IComparisonViewUIProps): React.JSX.Element => {
   return (
     <Flex
+      flex={ 1 }
       gap="small"
       vertical
     >

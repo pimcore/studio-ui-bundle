@@ -75,7 +75,7 @@ export const VersionsFieldsList = ({ data }: IVersionsFieldsListProps): React.JS
       }
 
       if (isDataObjectType) {
-        return comparisonModifiedData.map((item) => item.Field.name)
+        return comparisonModifiedData.map((item) => item.Field.title)
       }
     }
 

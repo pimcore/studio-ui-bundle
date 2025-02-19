@@ -32,4 +32,14 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
       />
     )
   }
+
+  getVersionObjectDataComponent (props: ConsentObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return (
+      <Consent
+        className="consent-wrapper"
+        disabled
+        value={ props.value }
+      />
+    )
+  }
 }

@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useContext } from 'react'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'

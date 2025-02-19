@@ -22,6 +22,8 @@ import { useTranslation } from 'react-i18next'
 import { UploadModalButton } from '@Pimcore/components/modal/upload-modal/upload-modal-button'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
+import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 
 export interface ManyToManyRelationToolbarProps {
   empty: () => void
@@ -39,6 +41,14 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
   const { t } = useTranslation()
 
   const buttons: React.JSX.Element[] = []
+
+  buttons.push(
+    <ElementSelectorButton elementSelectorConfig={ {
+      selectionType: SelectionType.Multiple,
+      onFinish: (data) => { console.log('multi selection', { data }) }
+    } }
+    />
+  )
 
   if (props.allowClear) {
     buttons.push(

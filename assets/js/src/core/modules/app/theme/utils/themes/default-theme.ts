@@ -168,7 +168,8 @@ const defaultTheme = {
       },
       Brand: {
         Warning: {
-          colorWarningBg: '#fffbe6'
+          colorWarningBg: '#fffbe6',
+          colorWarningBorder: '#ffe58f'
         }
       },
       Base: {

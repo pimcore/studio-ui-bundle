@@ -11,4 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export type ElementType = 'asset' | 'document' | 'data-object'
+import { type UseElementIdReturn } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
+
+export const useRootElementId = (): UseElementIdReturn => {
+  // @todo do not hard code the root id
+  const getId: UseElementIdReturn['getId'] = () => 1
+
+  return {
+    getId
+  }
+}

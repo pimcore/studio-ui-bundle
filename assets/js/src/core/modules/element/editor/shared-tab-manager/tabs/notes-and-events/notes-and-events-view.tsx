@@ -19,7 +19,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { AddNoteModal } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/modal/add-note-modal'
-import { type ElementType } from '../../../../../../../../types/element-type.d'
+import { type ElementType } from '../../../../../../types/enums/element/element-type'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'

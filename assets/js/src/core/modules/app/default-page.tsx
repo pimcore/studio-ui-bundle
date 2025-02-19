@@ -15,6 +15,8 @@ import React from 'react'
 import { Background } from '@Pimcore/components/background/background'
 import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
 import { useMiddleware } from '@Pimcore/modules/auth/hooks/use-middleware'
+import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
+import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
 
 export const DefaultPage = (): React.JSX.Element => {
   useMiddleware()
@@ -29,7 +31,11 @@ export const DefaultPage = (): React.JSX.Element => {
       onDrop={ preventDrop }
     >
       <Background />
-      <BaseLayoutView />
+      <ClassDefinitionsProvider>
+        <ElementSelectorProvider>
+          <BaseLayoutView />
+        </ElementSelectorProvider>
+      </ClassDefinitionsProvider>
     </div>
   )
 }

@@ -14,7 +14,7 @@
 import React, { useEffect } from 'react'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { PathTarget } from './path-target'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -29,6 +29,8 @@ import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -160,6 +162,12 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         </Tooltip>
       ) }
+
+      <ElementSelectorButton elementSelectorConfig={ {
+        selectionType: SelectionType.Single,
+        onFinish: (data) => { console.log('single selection', { data }) }
+      } }
+      />
     </Flex>
   )
 }

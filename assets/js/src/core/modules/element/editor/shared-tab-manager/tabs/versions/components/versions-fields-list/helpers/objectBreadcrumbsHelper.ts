@@ -15,11 +15,17 @@ import { map, filter, intersection, isEmpty, isUndefined } from 'lodash'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList } from '../types'
 
+const IGNORED_FIELDS = ['reverseObjectRelation']
+
 export const getObjectBreadcrumbsList = (data: IObjectVersionsFieldsList['data']): CategoriesList => {
   const breadcrumbMap: Partial<Record<VersionCategoryName, Set<string>>> = {}
 
   data.forEach(item => {
     const breadcrumbName = item.Field.fieldBreadcrumbTitle ?? VersionCategoryName.SYSTEM_DATA
+
+    if (IGNORED_FIELDS.includes(item.Field.fieldtype as string)) {
+      return
+    }
 
     if (isUndefined(breadcrumbMap[breadcrumbName])) {
       breadcrumbMap[breadcrumbName] = new Set()

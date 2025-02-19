@@ -15,7 +15,7 @@ import { store, useAppDispatch } from '@Pimcore/app/store'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type TagDescription } from '@reduxjs/toolkit/query'
-import { type ElementType } from '../../../../../types/element-type.d'
+import { type ElementType } from '../../../types/enums/element/element-type'
 import { type Element } from '../element-helper'
 
 interface UseCacheUpdateHookReturn {

@@ -73,26 +73,100 @@ export const useStyles = createStyles(({ token, css }) => {
 
     objectSectionFieldItemWrapper: css`
       flex: 1 1 50%;
-
-      &:only-child {
-        flex: 1 1 100%;
-      }
-
-      .ant-input-number {
-        width: 100%;
+      max-width: 900px;
+      width: 100%;
+      
+      .ant-input,
+      .ant-input-number,
+      .ant-picker,
+      .ant-color-picker-trigger {
+        border-radius: ${token.borderRadius}px;
+        border-color: transparent !important;
+        color: ${token.colorText} !important;
       }
       
-      & > :first-child {
-        background-color: ${token.colorBgContainerDisabled};
-        border-radius: ${token.borderRadius}px;
-        border: none !important;
-        color: ${token.colorText} !important;
+      .ant-input,
+      .ant-select.ant-select-disabled,
+      .ant-input-number,
+      .ant-picker,
+      .ant-color-picker-trigger,
+      .checkbox-wrapper,
+      .consent-wrapper {
+        width: 100%;
+        max-width: 100% !important;
+      }
+      
+      .ant-select.ant-select-disabled {
+        .ant-select-selector {
+          background: ${token.colorBgContainerDisabled} !important;
+          border-color: transparent !important;
+        }
+        
+        .ant-select-selection-item {
+          color: ${token.colorText} !important;
+        }
+      }
+      
+      .ant-picker {
+        input {
+          color: ${token.colorText} !important;
+        }
+        .ant-picker-suffix {
+          display: none;
+        }
+      }
+      
+      .ant-color-picker-trigger {
+        justify-content: flex-start;
+
+        .ant-color-picker-trigger-text {
+          color: ${token.colorText} !important;
+        }
+      }
+      
+      .checkbox-wrapper {
+        .ant-checkbox-wrapper {
+          padding: ${token.paddingXXS}px;
+          background-color: ${token.colorBgContainerDisabled} !important;
+        }
+      }
+      
+      .consent-wrapper {
+        padding: ${token.paddingXXS}px;
+        background-color: ${token.colorBgContainerDisabled} !important;
+        
+        .ant-checkbox-wrapper {
+          width: initial !important;
+          background: none !important;
+        }
+      }
+      
+      .checkbox-wrapper,
+      .consent-wrapper {
+        border: 1px solid transparent;
       }
     `,
 
     objectSectionFieldItemWrapperHighlight: css`
-      & > :first-child {
+      .ant-input,
+      .ant-input-number,
+      .ant-picker,
+      .ant-color-picker-trigger,
+      .checkbox-wrapper .ant-checkbox-wrapper,
+      .consent-wrapper {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+        border-color: ${token.colorBorder} !important;
+      }
+
+      .ant-select.ant-select-disabled {
+        .ant-select-selector {
+          background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+          border-color: ${token.colorBorder} !important;
+        }
+      }
+      
+      .ant-table-content table {
+        border-color: ${token.Colors.Brand.Warning.colorWarningBorder} !important;
       }
     `
   }

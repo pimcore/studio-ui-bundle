@@ -63,6 +63,7 @@ export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element 
     } else {
       return (
         <Input
+          disabled
           readOnly
           value={ props.value ?? '' }
         />

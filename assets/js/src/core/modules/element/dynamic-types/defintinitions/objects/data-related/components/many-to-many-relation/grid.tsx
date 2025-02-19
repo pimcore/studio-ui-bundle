@@ -211,6 +211,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
             autoWidth
             columns={ columns }
             data={ getDataArray() }
+            disabled={ props.disabled }
             onUpdateCellData={ props.onUpdateCellData }
             resizable
           />

@@ -60,4 +60,5 @@ export interface GridProps {
   highlightActiveCell?: boolean
   onActiveCellChange?: (activeCell?: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
+  disabled?: boolean
 }

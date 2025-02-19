@@ -14,11 +14,17 @@
 import { type ListingContainerProps, defaultProps as listingDefaultProps, ListingContainer as BaseListing } from '@Pimcore/modules/element/listing/abstract/listing-container'
 import { useDataObjectGetGridQuery } from '../data-object-api-slice.gen'
 import { useDataQueryHelper } from './data-layer/hooks/use-data-query-helper'
-import { RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
+import { type IRowSelectionDecoratorConfig, RowSelectionDecorator } from '@Pimcore/modules/element/listing/decorators/row-selection/row-selection-decorator'
 import { useElementId } from '@Pimcore/modules/asset/listing/hooks/use-element-id'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
 import React from 'react'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { compose } from '@Pimcore/utils/compose'
+import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
+import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
+import { DefaultView } from './views/default-view'
+import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from './decorator/class-definition-selection/class-definition-selection-decorator'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -28,12 +34,21 @@ export interface IObjectListingDefaultParams extends ListingContainerProps {
 
 const defaultProps = {
   ...listingDefaultProps,
+  ViewComponent: DefaultView,
   useDataQuery: useDataObjectGetGridQuery,
   useDataQueryHelper,
   useElementId
 }
 
-const props = RowSelectionDecorator(ColumnConfigurationDecorator(defaultProps), { rowSelectionMode: 'multiple' }) as IObjectListingDefaultParams
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
+const props = compose<AbstractDecoratorProps>(
+  SortingDecorator,
+  PagingDecorator,
+  ColumnConfigurationDecorator,
+  [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
+  [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig]
+)(defaultProps)
+/* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const ListingContainer = (): React.JSX.Element => {
   return (

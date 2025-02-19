@@ -15,7 +15,7 @@ import type { Meta } from '@storybook/react'
 import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
 import { BreadcrumbSkeleton } from '@Pimcore/components/breadcrumb/breadcrumb.skeleton'
 import React from 'react'
-import { type ElementType } from 'types/element-type.d'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 const config: Meta = {
   title: 'Components/Controls/Breadcrumb',
