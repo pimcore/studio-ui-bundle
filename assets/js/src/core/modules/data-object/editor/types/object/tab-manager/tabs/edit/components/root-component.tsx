@@ -23,6 +23,7 @@ import {
 import {
   DraftAlert
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
+import { FieldWidthProvider } from '../providers/field-width/field-width-provider'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -55,24 +56,26 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
 
   return (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
-      <Form
-        className={ className }
-        form={ form }
-        initialValues={ data }
-        layout='vertical'
-        onFinish={ handleSubmit }
-        onValuesChange={ handleValuesChange }
-        preserve
-      >
-        <DraftAlert />
-        <ObjectComponent { ...layout } />
-        <Form.Item style={ { margin: 12 } }>
-          <Button
-            htmlType="submit"
-            type="primary"
-          >Test submission</Button>
-        </Form.Item>
-      </Form>
+      <FieldWidthProvider>
+        <Form
+          className={ className }
+          form={ form }
+          initialValues={ data }
+          layout='vertical'
+          onFinish={ handleSubmit }
+          onValuesChange={ handleValuesChange }
+          preserve
+        >
+          <DraftAlert />
+          <ObjectComponent { ...layout } />
+          <Form.Item style={ { margin: 12 } }>
+            <Button
+              htmlType="submit"
+              type="primary"
+            >Test submission</Button>
+          </Form.Item>
+        </Form>
+      </FieldWidthProvider>
     </ConfigProvider>
   )
 }

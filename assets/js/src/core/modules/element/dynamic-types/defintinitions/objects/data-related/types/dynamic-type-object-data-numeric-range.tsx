@@ -23,6 +23,8 @@ import {
   type AbstractNumericObjectDataDefinition,
   DynamicTypeObjectDataAbstractNumeric
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
+import { toCssDimension } from '@Pimcore/utils/css'
+import classNames from 'classnames'
 
 export class DynamicTypeObjectDataNumericRange extends DynamicTypeObjectDataAbstractNumeric {
   id: string = 'numericRange'
@@ -33,6 +35,9 @@ export class DynamicTypeObjectDataNumericRange extends DynamicTypeObjectDataAbst
     return (
       <NumericRange
         { ...componentProps }
+        className={ classNames('w-full', props.className) }
+        inputClassName="w-full"
+        width={ toCssDimension(props.width, props.defaultFieldWidth.small * 2 + 8) }
       />
     )
   }
@@ -43,6 +48,9 @@ export class DynamicTypeObjectDataNumericRange extends DynamicTypeObjectDataAbst
     return (
       <NumericRange
         { ...componentProps }
+        className={ classNames('w-full', props.className) }
+        inputClassName="w-full"
+        width={ toCssDimension(props.width, props.defaultFieldWidth.small * 2 + 8) }
       />
     )
   }

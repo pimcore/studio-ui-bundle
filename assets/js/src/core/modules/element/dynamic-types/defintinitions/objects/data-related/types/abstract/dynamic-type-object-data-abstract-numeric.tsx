@@ -18,6 +18,8 @@ import { type FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import _ from 'lodash'
 import { type IInputNumberProps, InputNumber } from '@Pimcore/components/input-number/input-number'
+import { toCssDimension } from '@Pimcore/utils/css'
+import cn from 'classnames'
 
 export type AbstractNumericObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | null
@@ -27,6 +29,7 @@ export type AbstractNumericObjectDataDefinition = AbstractObjectDataDefinition &
   unsigned?: boolean
   decimalPrecision: number | null
   increment?: number | null
+  width?: number | string | null
 }
 
 const fixUnsigned = (unsigned: boolean, value: number | null, max: boolean): number | null => {
@@ -60,6 +63,8 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
     return (
       <InputNumber
         { ...this.getObjectDataComponentProps(props) }
+        className={ cn('w-full', props.className) }
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.small) } }
       />
     )
   }

@@ -15,10 +15,11 @@ import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { InputPassword } from '@Pimcore/components/input-password/input-password'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type PasswordObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
-
+  width?: number | string | null
 }
 
 export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract {
@@ -31,6 +32,7 @@ export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         minLength={ props.minimumLength ?? undefined }
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
         value={ props.value }
         visibilityToggle={ false }
       />

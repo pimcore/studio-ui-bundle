@@ -28,6 +28,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 
@@ -66,6 +67,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   const { openElement } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
+  const fieldWidth = useFieldWidth()
 
   useEffect(() => {
     props.onChange?.(value)
@@ -86,7 +88,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
     <Flex
       gap="extra-small"
       style={ {
-        maxWidth: toCssDimension(props.width)
+        maxWidth: toCssDimension(props.width, fieldWidth.large)
       } }
     >
       <div style={ { flex: 1 } }>
