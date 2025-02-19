@@ -38,7 +38,6 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
   const { size = SizeTypes.SMALL } = props
   const { styles } = useStyle()
   const dropdownMenuRef = useRef<MenuRef>(null)
-  const [isHovering, setIsHovering] = React.useState(false)
 
   let classCard: string = ''
   let classImg: string = 'img'
@@ -53,7 +52,6 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
 
   return (
     <Tooltip
-      open={ isHovering }
       placement={ 'right' }
       title={ props.name }
     >
@@ -76,8 +74,6 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
             props.onClick?.(event)
           }
         } }
-        onMouseEnter={ () => { setIsHovering(true) } }
-        onMouseLeave={ () => { setIsHovering(false) } }
       >
         <Dropdown
           menu={ {
