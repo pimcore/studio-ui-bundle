@@ -28,14 +28,15 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Tag } from 'antd'
 import { Space } from '@Pimcore/components/space/space'
 import i18n from 'i18next'
-import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
+import {
+  NoteAndEventDetails
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/note-and-events-details'
 
 interface NotesAndEventsTabViewProps {
   notes: Note[]
@@ -61,32 +62,6 @@ export const NotesAndEventsTabView = ({
     label: React.JSX.Element
     key: string
   }> = notes.map((note) => {
-    let showDetails = false
-
-    interface NoteDataEntry { name: string | null, type: string | null, value?: string | React.JSX.Element | null }
-    const formatedData: NoteDataEntry[] = []
-
-    if (Array.isArray(note.data) && note.data.length > 0) {
-      showDetails = true
-
-      note.data.forEach((noteData) => {
-        if (typeof noteData !== 'object') {
-          return
-        }
-        const tempData: NoteDataEntry = { name: (noteData as NoteDataEntry).name, type: (noteData as NoteDataEntry).type, value: '' }
-        if (typeof noteData !== 'object' || !('data' in noteData)) {
-          return
-        }
-
-        if (typeof noteData.data === 'object') {
-          tempData.value = noteData.data !== null && ('path' in noteData.data) ? String(noteData.data.path) : ''
-        } else {
-          tempData.value = respectLineBreak(noteData.data as string)
-        }
-        formatedData.push(tempData)
-      })
-    }
-
     const extra = (): React.JSX.Element => {
       const type = note.type !== '' ? t(`notes-and-events.${kebabCase(note.type)}`) : undefined
 
@@ -102,7 +77,6 @@ export const NotesAndEventsTabView = ({
             icon={ { value: 'trash' } }
             onClick={ (e) => {
               e.stopPropagation()
-
               onClickTrash(note.id)
             } }
             theme='primary'
@@ -111,32 +85,11 @@ export const NotesAndEventsTabView = ({
       )
     }
 
-    const columnHelper = createColumnHelper<any>()
-
-    const columns = [
-      columnHelper.accessor('name', { header: i18n.t('notes-and-events.name') }),
-      columnHelper.accessor('type', { header: i18n.t('notes-and-events.type'), size: 120 }),
-      columnHelper.accessor('value', { header: i18n.t('notes-and-events.value'), size: 310, meta: { autoWidth: true } })
-    ]
-
     const children = (): React.JSX.Element => {
       return (
-        <><span
-          className={ 'panel-body__description ' + (showDetails ? 'panel-body__description-padding' : '') }
-          >
+        <>
           <Paragraph>{respectLineBreak(note.description)}</Paragraph>
-        </span>
-          {showDetails && (
-          <div>
-            <span className={ 'panel-body__details' }>{i18n.t('notes-and-events.details')}</span>
-            <Grid
-              autoWidth
-              columns={ columns }
-              data={ formatedData }
-              resizable
-            />
-          </div>
-          )}
+          <NoteAndEventDetails note={ note } />
         </>
       )
     }
