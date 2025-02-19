@@ -12,13 +12,16 @@
 */
 
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import React, { forwardRef, type Ref, type ReactElement } from 'react'
+import React, { forwardRef, type ReactElement, type Ref } from 'react'
 import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { type Asset } from '../../../asset-api-slice-enhanced'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { usePermissionChecker } from '@Pimcore/modules/element/tree/node/with-droppable/hooks/use-permission-checker'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
+  const { isAllowedToDrop } = usePermissionChecker()
+
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('asset')
 
@@ -39,6 +42,10 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const droppedAsset: Asset = info.data
 
+      if (!isAllowedToDrop(currentAsset)) {
+        return
+      }
+
       move({
         currentElement: { id: droppedAsset.id, parentId: droppedAsset.parentId },
         targetElement: { id: currentAsset.id, parentId: currentAsset.parentId }
@@ -56,6 +63,10 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (context) => {
+      if (isAllowedToDrop(currentAsset)) {
+        return true
+      }
+
       if (currentAsset.type === 'folder') {
         return true
       }
