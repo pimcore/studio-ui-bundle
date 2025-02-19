@@ -106,7 +106,7 @@ export const dndIsValidData = (info: DragAndDropInfo, props: IRelationAllowedTyp
   return isAllowedSubType(type, subType, props)
 }
 
-export const createElementSelectorArea = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['areas'] => {
+export const createElementSelectorAreas = (config: IRelationAllowedTypesDataComponent): ElementSelectorConfig['areas'] => {
   return {
     asset: config.assetsAllowed ?? false,
     document: config.documentsAllowed ?? false,

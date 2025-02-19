@@ -24,7 +24,7 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
-import { createElementSelectorArea, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
+import { createElementSelectorAreas, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
@@ -48,9 +48,19 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
   buttons.push(
     <ElementSelectorButton elementSelectorConfig={ {
       selectionType: SelectionType.Multiple,
-      areas: createElementSelectorArea(props),
+      areas: createElementSelectorAreas(props),
+      config: {
+        assets: {
+          allowedTypes: props.allowedAssetTypes
+        },
+        documents: {
+          allowedTypes: props.allowedAssetTypes
+        },
+        objects: {
+          allowedTypes: props.allowedClasses
+        }
+      },
       onFinish: (event) => {
-        console.log(event)
         const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
           id: item.data.id,
           type: item.elementType,

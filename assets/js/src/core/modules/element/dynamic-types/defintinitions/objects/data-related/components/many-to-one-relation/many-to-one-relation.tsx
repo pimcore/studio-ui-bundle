@@ -19,7 +19,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import {
-  createElementSelectorArea,
+  createElementSelectorAreas,
   dndIsValidData,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/relations/allowed-types'
@@ -167,7 +167,18 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
       <ElementSelectorButton elementSelectorConfig={ {
         selectionType: SelectionType.Single,
-        areas: createElementSelectorArea(props),
+        areas: createElementSelectorAreas(props),
+        config: {
+          assets: {
+            allowedTypes: props.allowedAssetTypes
+          },
+          documents: {
+            allowedTypes: props.allowedAssetTypes
+          },
+          objects: {
+            allowedTypes: props.allowedClasses
+          }
+        },
         onFinish: (event) => {
           if (!isEmpty(event.items)) {
             setValue({
