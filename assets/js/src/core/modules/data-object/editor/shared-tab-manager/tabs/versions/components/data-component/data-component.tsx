@@ -12,7 +12,6 @@
 */
 
 import React from 'react'
-import { isUndefined } from 'lodash'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -20,12 +19,7 @@ import { Alert } from 'antd'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
-import {
-  useLocalizedFields
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
-// import {
-//   useLanguageSelection
-// } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -39,7 +33,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const fieldWidth = useFieldWidth()
-  const localizedFields = useLocalizedFields()
+  const { currentLanguage } = useLanguageSelection()
 
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
@@ -52,14 +46,17 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     )
   }
 
-  let prop1 = props
+  let updatedProps = props
 
-  // need to add the logic
-  if (!isUndefined(localizedFields)) {
-    prop1 = {
+  if (currentFieldType === 'localizedfields') {
+    const children = props.children.map(child => ({
+      ...child,
+      value: (props.value[child.name])[currentLanguage]
+    }))
+
+    updatedProps = {
       ...props,
-      name: 'Test1',
-      value: 'Test2'
+      children
     }
   }
 
@@ -67,7 +64,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   return (
     <ErrorBoundary>
-      {objectDataType.getVersionObjectDataComponent({ ...prop1, defaultFieldWidth: fieldWidth })}
+      {objectDataType.getVersionObjectDataComponent({ ...updatedProps, defaultFieldWidth: fieldWidth })}
     </ErrorBoundary>
   )
 }
