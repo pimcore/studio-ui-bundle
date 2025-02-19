@@ -91,7 +91,7 @@ export const NotesAndEventsTabView = ({
       return (
         <>
           <Paragraph>{respectLineBreak(note.description)}</Paragraph>
-          {note.data.length >= 0 && <NoteAndEventDetails note={ note } />}
+          {note.data.length > 0 && <NoteAndEventDetails note={ note } />}
         </>
       )
     }

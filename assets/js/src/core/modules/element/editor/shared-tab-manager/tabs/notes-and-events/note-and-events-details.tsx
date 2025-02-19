@@ -15,10 +15,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper } from '@tanstack/react-table'
-import { respectLineBreak } from '@Pimcore/utils/helpers'
 import type {
   Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
+import { respectLineBreak } from '@Pimcore/utils/helpers'
+import { isNull } from 'lodash'
+import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface NoteAndEventDetailsProps {
   note: Note
@@ -41,14 +44,7 @@ export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.J
     const tempData: NoteDataEntry = {
       name: (noteData as NoteDataEntry).name,
       type: (noteData as NoteDataEntry).type,
-      value: ''
-    }
-    if (typeof noteData.data === 'object' && noteData.data !== null && ('path' in noteData.data)) {
-      tempData.value = String(noteData.data.path)
-    } else if (typeof noteData.data === 'string') {
-      tempData.value = noteData.data
-    } else {
-      tempData.value = respectLineBreak(noteData.data as string)
+      value: noteData.data
     }
     formatedData.push(tempData)
   }
@@ -57,20 +53,54 @@ export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.J
     transformData(noteData)
   })
 
-  const columnHelper = createColumnHelper<any>()
+  const formatValueFieldBasedOnType = (value: any, type: string): string | React.JSX.Element | undefined => {
+    switch (type) {
+      case 'asset':
+      case 'document':
+      case 'object':
+        if ('path' in value) {
+          return String(value.path)
+        }
+        return JSON.stringify(value)
+      case 'date':
+        return <FormattedDate timestamp={ value.unix() } />
+      default:
+        if (typeof value === 'string') return respectLineBreak(value, false)
+        else return JSON.stringify(value)
+    }
+  }
 
-  const columns = [
+  const columnHelper = createColumnHelper<NoteDataEntry>()
+
+  const createColumns = (): any => [
     columnHelper.accessor('name', { header: t('notes-and-events.name') }),
     columnHelper.accessor('type', { header: t('notes-and-events.type'), size: 120 }),
-    columnHelper.accessor('value', { header: t('notes-and-events.value'), size: 310, meta: { autoWidth: true } })
+    columnHelper.accessor(row => ({ value: row.value, type: row.type }), {
+      header: t('notes-and-events.value'),
+      size: 310,
+      cell: (info) => {
+        const { value, type } = info.getValue()
+        const displayValue = !isNull(type) && formatValueFieldBasedOnType(value, type)
+        return (
+          <Flex
+            align={ 'center' }
+            style={ { marginLeft: '7px' } }
+          >
+            {displayValue}
+          </Flex>
+        )
+      }
+    })
   ]
+
+  const tableData = createColumns()
 
   return (
     <div>
       <span className={ 'panel-body__details' }>{t('notes-and-events.details')}</span>
       <Grid
         autoWidth
-        columns={ columns }
+        columns={ tableData }
         data={ formatedData }
         resizable
       />

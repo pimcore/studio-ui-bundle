@@ -63,7 +63,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
         {displayTextArea(noteDetail.type, t('notes-and-events.columns.type'))}
         {displayTextArea(noteDetail.title, t('notes-and-events.columns.title'))}
         {displayTextArea(noteDetail.description, t('notes-and-events.columns.description'), false)}
-        {noteDetail.data.length >= 0 && (
+        {noteDetail.data.length > 0 && (
           <Box margin={ 'small' }>
             <NoteAndEventDetails note={ noteDetail } />
           </Box>
