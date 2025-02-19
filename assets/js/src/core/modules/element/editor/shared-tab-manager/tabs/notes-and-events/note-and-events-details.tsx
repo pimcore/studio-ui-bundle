@@ -24,43 +24,38 @@ interface NoteAndEventDetailsProps {
   note: Note
 }
 
+interface NoteDataEntry {
+  name: string | null
+  type: string | null
+  value?: string | React.JSX.Element | null
+}
+
 export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  let showDetails = false
-
-  interface NoteDataEntry {
-    name: string | null
-    type: string | null
-    value?: string | React.JSX.Element | null
-  }
-
   const formatedData: NoteDataEntry[] = []
-
-  if (Array.isArray(note.data) && note.data.length > 0) {
-    showDetails = true
-
-    note.data.forEach((noteData) => {
-      if (typeof noteData !== 'object') {
-        return
-      }
-      const tempData: NoteDataEntry = {
-        name: (noteData as NoteDataEntry).name,
-        type: (noteData as NoteDataEntry).type,
-        value: ''
-      }
-      if (typeof noteData !== 'object' || !('data' in noteData)) {
-        return
-      }
-
-      if (typeof noteData.data === 'object') {
-        tempData.value = noteData.data !== null && ('path' in noteData.data) ? String(noteData.data.path) : ''
-      } else {
-        tempData.value = respectLineBreak(noteData.data as string)
-      }
-      formatedData.push(tempData)
-    })
+  const transformData = (noteData: any): void => {
+    if (typeof noteData !== 'object' || !('data' in noteData)) {
+      return
+    }
+    const tempData: NoteDataEntry = {
+      name: (noteData as NoteDataEntry).name,
+      type: (noteData as NoteDataEntry).type,
+      value: ''
+    }
+    if (typeof noteData.data === 'object' && noteData.data !== null && ('path' in noteData.data)) {
+      tempData.value = String(noteData.data.path)
+    } else if (typeof noteData.data === 'string') {
+      tempData.value = noteData.data
+    } else {
+      tempData.value = respectLineBreak(noteData.data as string)
+    }
+    formatedData.push(tempData)
   }
+
+  note.data.forEach((noteData) => {
+    transformData(noteData)
+  })
 
   const columnHelper = createColumnHelper<any>()
 
@@ -71,18 +66,14 @@ export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.J
   ]
 
   return (
-    <>
-      {showDetails && (
-      <div>
-        <span className={ 'panel-body__details' }>{t('notes-and-events.details')}</span>
-        <Grid
-          autoWidth
-          columns={ columns }
-          data={ formatedData }
-          resizable
-        />
-      </div>
-      )}
-    </>
+    <div>
+      <span className={ 'panel-body__details' }>{t('notes-and-events.details')}</span>
+      <Grid
+        autoWidth
+        columns={ columns }
+        data={ formatedData }
+        resizable
+      />
+    </div>
   )
 }
