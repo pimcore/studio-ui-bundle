@@ -23,4 +23,13 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
   getObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
     return <LocalizedFields { ...props } />
   }
+
+  getVersionObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
+    return (
+      <LocalizedFields
+        { ...props }
+        isVersionObjectDataComponent
+      />
+    )
+  }
 }

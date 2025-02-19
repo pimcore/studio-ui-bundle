@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -19,20 +20,28 @@ import { Alert } from 'antd'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import {
+  useLocalizedFields
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
+// import {
+//   useLanguageSelection
+// } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
   fieldType?: string
+  fieldtype?: string
   [p: string]: any
 }
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
-  const { fieldType } = props
+  const { fieldType, fieldtype } = props
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const fieldWidth = useFieldWidth()
+  const localizedFields = useLocalizedFields()
 
-  const currentFieldType = fieldType ?? 'unknown'
+  const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
   if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
     return (
@@ -43,11 +52,22 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     )
   }
 
+  let prop1 = props
+
+  // need to add the logic
+  if (!isUndefined(localizedFields)) {
+    prop1 = {
+      ...props,
+      name: 'Test1',
+      value: 'Test2'
+    }
+  }
+
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
   return (
     <ErrorBoundary>
-      {objectDataType.getVersionObjectDataComponent({ ...props, defaultFieldWidth: fieldWidth })}
+      {objectDataType.getVersionObjectDataComponent({ ...prop1, defaultFieldWidth: fieldWidth })}
     </ErrorBoundary>
   )
 }

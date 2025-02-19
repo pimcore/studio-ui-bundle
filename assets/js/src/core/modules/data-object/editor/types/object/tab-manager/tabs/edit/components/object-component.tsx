@@ -14,6 +14,7 @@
 import React from 'react'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
+import { DataComponent as VersionDataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 import { type FormItemProps } from 'antd'
 
 export interface ObjectComponentProps {
@@ -21,15 +22,22 @@ export interface ObjectComponentProps {
   className?: string
   dataType?: string
   datatype?: string
+  isVersionObjectDataComponent?: boolean
   [p: string]: any
 }
 
 export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element => {
-  const { dataType, datatype } = props
+  const { dataType, datatype, isVersionObjectDataComponent } = props
 
   const currentDataType = dataType ?? datatype
 
   if (currentDataType === 'data') {
+    if (isVersionObjectDataComponent === true) {
+      return (
+        <VersionDataComponent { ...props as any } />
+      )
+    }
+
     return <DataComponent { ...props as DataComponentProps } />
   }
 
