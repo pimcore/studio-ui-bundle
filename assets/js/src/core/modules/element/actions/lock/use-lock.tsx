@@ -19,6 +19,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { type Element } from '@Pimcore/modules/element/element-helper'
+import { store } from '@Pimcore/app/store'
+import { selectCurrentUser, type userSliceName } from '@Pimcore/modules/auth/user/user-slice'
+import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -36,6 +39,8 @@ export interface UseLockHookReturn {
 }
 
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
+  const state = store.getState()
+  const user = selectCurrentUser(state as { [userSliceName]: UserInformation })
   const { t } = useTranslation()
   const { elementPatch } = useElementApi(elementType)
 
@@ -73,7 +78,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.lock'),
       key: 'lock',
       icon: <Icon value={ 'lock' } />,
-      hidden: node.isLocked,
+      hidden: node.isLocked || !user.isAdmin,
       onClick: async () => {
         await lock(parseInt(node.id))
       }
@@ -85,7 +90,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.lock'),
       key: 'lock',
       icon: <Icon value={ 'lock' } />,
-      hidden: node.isLocked,
+      hidden: node.isLocked || !user.isAdmin,
       onClick: async () => {
         await lock(node.id)
         onFinish?.()
@@ -98,7 +103,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.lock-and-propagate-to-children'),
       key: 'lock-and-propagate-to-children',
       icon: <Icon value={ 'file-locked' } />,
-      hidden: node.isLocked,
+      hidden: node.isLocked || !user.isAdmin,
       onClick: async () => {
         await lockAndPropagate(parseInt(node.id))
       }
@@ -110,7 +115,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.lock-and-propagate-to-children'),
       key: 'lock-and-propagate-to-children',
       icon: <Icon value={ 'file-locked' } />,
-      hidden: node.isLocked,
+      hidden: node.isLocked || !user.isAdmin,
       onClick: async () => {
         await lockAndPropagate(node.id)
         onFinish?.()
@@ -123,7 +128,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.unlock'),
       key: 'unlock',
       icon: <Icon value={ 'unlocked' } />,
-      hidden: !node.isLocked,
+      hidden: !node.isLocked || !user.isAdmin,
       onClick: async () => {
         await unlock(parseInt(node.id))
       }
@@ -135,7 +140,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.unlock'),
       key: 'unlock',
       icon: <Icon value={ 'unlocked' } />,
-      hidden: !node.isLocked,
+      hidden: !node.isLocked || !user.isAdmin,
       onClick: async () => {
         await unlock(node.id)
         onFinish?.()
@@ -148,7 +153,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.unlock-and-propagate-to-children'),
       key: 'unlock-and-propagate-to-children',
       icon: <Icon value={ 'unlocked' } />,
-      hidden: !node.isLocked,
+      hidden: !node.isLocked || !user.isAdmin,
       onClick: async () => {
         await unlockAndPropagate(parseInt(node.id))
       }
@@ -160,7 +165,7 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
       label: t('element.unlock-and-propagate-to-children'),
       key: 'unlock-and-propagate-to-children',
       icon: <Icon value={ 'unlocked' } />,
-      hidden: !node.isLocked,
+      hidden: !node.isLocked || !user.isAdmin,
       onClick: async () => {
         await unlockAndPropagate(node.id)
         onFinish?.()
