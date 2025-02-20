@@ -36,6 +36,7 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
   addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   assetUploadPath?: string | null
+  disabled?: boolean
   uploadMaxItems?: number
   uploadShowMaxItemsError?: boolean
 }
@@ -46,45 +47,47 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   const buttons: React.JSX.Element[] = []
 
-  buttons.push(
-    <ElementSelectorButton
-      elementSelectorConfig={ {
-        selectionType: SelectionType.Multiple,
-        areas: createElementSelectorAreas(props),
-        config: {
-          assets: {
-            allowedTypes: props.allowedAssetTypes
-          },
-          documents: {
-            allowedTypes: props.allowedAssetTypes
-          },
-          objects: {
-            allowedTypes: props.allowedClasses
-          }
-        },
-        onFinish: (event) => {
-          const getSubType = (item: SelectedItem): string | null => {
-            if (item.elementType === 'data-object') {
-              return item.data.classname ?? 'folder'
+  if (props.disabled !== true) {
+    buttons.push(
+      <ElementSelectorButton
+        elementSelectorConfig={ {
+          selectionType: SelectionType.Multiple,
+          areas: createElementSelectorAreas(props),
+          config: {
+            assets: {
+              allowedTypes: props.allowedAssetTypes
+            },
+            documents: {
+              allowedTypes: props.allowedAssetTypes
+            },
+            objects: {
+              allowedTypes: props.allowedClasses
             }
-            return item.data.type ?? null
-          }
+          },
+          onFinish: (event) => {
+            const getSubType = (item: SelectedItem): string | null => {
+              if (item.elementType === 'data-object') {
+                return item.data.classname ?? 'folder'
+              }
+              return item.data.type ?? null
+            }
 
-          const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
-            id: item.data.id,
-            type: item.elementType,
-            subtype: getSubType(item),
-            fullPath: item.data.fullpath,
-            isPublished: item.data.published ?? null
-          }))
-          if (items.length > 0) {
-            props.addItems(items)
+            const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
+              id: item.data.id,
+              type: item.elementType,
+              subtype: getSubType(item),
+              fullPath: item.data.fullpath,
+              isPublished: item.data.published ?? null
+            }))
+            if (items.length > 0) {
+              props.addItems(items)
+            }
           }
-        }
-      } }
-      type="default"
-    />
-  )
+        } }
+        type="default"
+      />
+    )
+  }
 
   if (props.allowClear) {
     buttons.push(
