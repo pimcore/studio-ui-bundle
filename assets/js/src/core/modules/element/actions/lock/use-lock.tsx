@@ -11,18 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
-import { Icon } from '@Pimcore/components/icon/icon'
+import {type ElementType} from '@Pimcore/types/enums/element/element-type'
+import type {TreeNodeProps} from '@Pimcore/components/element-tree/node/tree-node'
+import type {ItemType} from '@Pimcore/components/dropdown/dropdown'
+import {Icon} from '@Pimcore/components/icon/icon'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
-import { type Element } from '@Pimcore/modules/element/element-helper'
-import { store } from '@Pimcore/app/store'
-import { selectCurrentUser, type userSliceName } from '@Pimcore/modules/auth/user/user-slice'
-import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import {useTranslation} from 'react-i18next'
+import {useElementApi} from '@Pimcore/modules/element/hooks/use-element-api'
+import {type Element} from '@Pimcore/modules/element/element-helper'
+import {useUser} from '@Pimcore/modules/auth/hooks/use-user'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
