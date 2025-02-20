@@ -46,33 +46,35 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
   const buttons: React.JSX.Element[] = []
 
   buttons.push(
-    <ElementSelectorButton elementSelectorConfig={ {
-      selectionType: SelectionType.Multiple,
-      areas: createElementSelectorAreas(props),
-      config: {
-        assets: {
-          allowedTypes: props.allowedAssetTypes
+    <ElementSelectorButton
+      elementSelectorConfig={ {
+        selectionType: SelectionType.Multiple,
+        areas: createElementSelectorAreas(props),
+        config: {
+          assets: {
+            allowedTypes: props.allowedAssetTypes
+          },
+          documents: {
+            allowedTypes: props.allowedAssetTypes
+          },
+          objects: {
+            allowedTypes: props.allowedClasses
+          }
         },
-        documents: {
-          allowedTypes: props.allowedAssetTypes
-        },
-        objects: {
-          allowedTypes: props.allowedClasses
+        onFinish: (event) => {
+          const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
+            id: item.data.id,
+            type: item.elementType,
+            subtype: item.data.subtype,
+            fullPath: item.data.fullpath,
+            isPublished: item.data.published ?? null
+          }))
+          if (items.length > 0) {
+            props.addItems(items)
+          }
         }
-      },
-      onFinish: (event) => {
-        const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
-          id: item.data.id,
-          type: item.elementType,
-          subtype: item.data.subtype,
-          fullPath: item.data.fullpath,
-          isPublished: item.data.published ?? null
-        }))
-        if (items.length > 0) {
-          props.addItems(items)
-        }
-      }
-    } }
+      } }
+      type="default"
     />
   )
 

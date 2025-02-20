@@ -56,6 +56,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
         disabled={ props.disabled }
         emptyValue={ emptyValue }
         key="image-footer"
+        setValue={ setValue }
         value={ value }
                /> }
     >

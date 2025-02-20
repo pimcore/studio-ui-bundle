@@ -165,31 +165,33 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         </Tooltip>
       ) }
 
-      <ElementSelectorButton elementSelectorConfig={ {
-        selectionType: SelectionType.Single,
-        areas: createElementSelectorAreas(props),
-        config: {
-          assets: {
-            allowedTypes: props.allowedAssetTypes
+      <ElementSelectorButton
+        elementSelectorConfig={ {
+          selectionType: SelectionType.Single,
+          areas: createElementSelectorAreas(props),
+          config: {
+            assets: {
+              allowedTypes: props.allowedAssetTypes
+            },
+            documents: {
+              allowedTypes: props.allowedAssetTypes
+            },
+            objects: {
+              allowedTypes: props.allowedClasses
+            }
           },
-          documents: {
-            allowedTypes: props.allowedAssetTypes
-          },
-          objects: {
-            allowedTypes: props.allowedClasses
+          onFinish: (event) => {
+            if (!isEmpty(event.items)) {
+              setValue({
+                type: event.items[0].elementType,
+                subtype: event.items[0].data.type,
+                id: event.items[0].data.id,
+                fullPath: event.items[0].data.fullpath
+              })
+            }
           }
-        },
-        onFinish: (event) => {
-          if (!isEmpty(event.items)) {
-            setValue({
-              type: event.items[0].elementType,
-              subtype: event.items[0].data.type,
-              id: event.items[0].data.id,
-              fullPath: event.items[0].data.fullpath
-            })
-          }
-        }
-      } }
+        } }
+        type="default"
       />
     </Flex>
   )
