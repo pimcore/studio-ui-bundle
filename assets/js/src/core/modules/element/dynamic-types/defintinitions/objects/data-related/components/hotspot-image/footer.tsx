@@ -25,6 +25,10 @@ import {
   hasValueData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/hotspot-image/utils/value-data'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type ImageValue } from '../image/image'
 
 interface HotspotImageFooterProps {
   emptyValue?: () => void
@@ -33,6 +37,7 @@ interface HotspotImageFooterProps {
   setValue: (value: HotspotImageValue | null) => void
   setCropModalOpen: (open: boolean) => void
   setMarkerModalOpen: (open: boolean) => void
+  replaceImage: (newImage: ImageValue) => void
 }
 
 export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.Element => {
@@ -69,6 +74,31 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
   ]
 
   if (props.disabled !== true) {
+    buttons.push(
+      <ElementSelectorButton elementSelectorConfig={ {
+        selectionType: SelectionType.Single,
+        areas: {
+          asset: true,
+          object: false,
+          document: false
+        },
+        config: {
+          assets: {
+            allowedTypes: ['image']
+          }
+        },
+        onFinish: (event) => {
+          if (!isEmpty(event.items)) {
+            props.replaceImage({
+              type: elementTypes.asset,
+              id: event.items[0].data.id
+            })
+          }
+        }
+      } }
+      />
+    )
+
     buttons.push(
       <Tooltip
         key="empty"
