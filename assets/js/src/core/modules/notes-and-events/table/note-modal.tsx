@@ -15,6 +15,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { Text } from '@Pimcore/components/text/text'
 import { isString, isUndefined } from 'lodash'
 import type { DataNote } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -36,7 +37,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
       <Box
         margin={ 'small' }
       >
-        <div>{label}</div>
+        <Text>{label}</Text>
         <TextArea
           disabled
           value={ content }

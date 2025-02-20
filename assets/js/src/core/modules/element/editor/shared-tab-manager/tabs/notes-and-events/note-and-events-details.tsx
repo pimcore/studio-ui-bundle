@@ -19,9 +19,13 @@ import type {
   Note
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice.gen'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
-import { isNull } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { FormattedDate } from '@Pimcore/components/formatted-date/formatted-date'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Tag } from '@Pimcore/components/tag/tag'
+import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
+import { Breadcrumb } from '@Pimcore/components/breadcrumb/breadcrumb'
+import { useStyle } from './notes-and-events-details.styles'
 
 interface NoteAndEventDetailsProps {
   note: Note
@@ -35,7 +39,8 @@ interface NoteDataEntry {
 
 export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.JSX.Element => {
   const { t } = useTranslation()
-
+  const { styles } = useStyle()
+  const { mapToElementType, openElement } = useElementHelper()
   const formatedData: NoteDataEntry[] = []
   const transformData = (noteData: any): void => {
     if (typeof noteData !== 'object' || !('data' in noteData)) {
@@ -59,11 +64,31 @@ export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.J
       case 'document':
       case 'object':
         if ('path' in value) {
-          return String(value.path)
+          const { path, id } = value
+          const eType = mapToElementType(type)
+
+          return !isUndefined(eType)
+            ? (
+              <Tag
+                bordered={ false }
+                color="blue"
+                onClick={ async () => {
+                  await openElement({ id: Number(id), type: eType })
+                } }
+              >
+                <Breadcrumb
+                  editorTabsWidth={ 1500 }
+                  elementType={ eType }
+                  pageSize={ 'L' }
+                  path={ String(path) }
+                />
+              </Tag>
+              )
+            : <></>
         }
         return JSON.stringify(value)
       case 'date':
-        return <FormattedDate timestamp={ value.unix() } />
+        return <FormattedDate timestamp={ value } />
       default:
         if (typeof value === 'string') return respectLineBreak(value, false)
         else return JSON.stringify(value)
@@ -84,7 +109,7 @@ export const NoteAndEventDetails = ({ note }: NoteAndEventDetailsProps): React.J
         return (
           <Flex
             align={ 'center' }
-            style={ { marginLeft: '7px' } }
+            className={ styles.valueCell }
           >
             {displayValue}
           </Flex>
