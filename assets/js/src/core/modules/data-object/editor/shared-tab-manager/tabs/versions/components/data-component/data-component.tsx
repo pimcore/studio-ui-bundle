@@ -20,6 +20,8 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { Text } from '@Pimcore/components/text/text'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -34,6 +36,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const fieldWidth = useFieldWidth()
   const { currentLanguage } = useLanguageSelection()
+  const { styles } = useStyles()
 
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
@@ -51,6 +54,11 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   if (currentFieldType === 'localizedfields') {
     const children = props.children.map(child => ({
       ...child,
+      title: (
+        <span className={ styles.fieldTitle }>
+          {child.title} <Text type='secondary'>| {currentLanguage.toUpperCase()}</Text>
+        </span>
+      ),
       value: (props.value[child.name])[currentLanguage]
     }))
 

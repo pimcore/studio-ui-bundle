@@ -56,6 +56,8 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
   }
 
   const renderFieldTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+    if (isEmptyValue(key)) return <></>
+
     const textValue = isCommonSection ? t(`version.${key}`) : key
 
     return (

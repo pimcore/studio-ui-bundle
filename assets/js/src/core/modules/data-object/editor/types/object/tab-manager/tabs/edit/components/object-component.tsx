@@ -11,7 +11,8 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { type ReactNode } from 'react'
+import { isUndefined } from 'lodash'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
 import { DataComponent as VersionDataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
@@ -23,6 +24,7 @@ export interface ObjectComponentProps {
   dataType?: string
   datatype?: string
   isVersionObjectDataComponent?: boolean
+  title?: ReactNode
   [p: string]: any
 }
 
@@ -34,7 +36,9 @@ export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element 
   if (currentDataType === 'data') {
     if (isVersionObjectDataComponent === true) {
       return (
-        <VersionDataComponent { ...props as any } />
+        <>
+          {!isUndefined(props.title) && props.title }
+          <VersionDataComponent { ...props as any } /></>
       )
     }
 
