@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty } from 'lodash'
+import { get, isEmpty, every, isObject, isArray } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -38,6 +38,22 @@ export interface IFormattedDataStructureData {
   versionId: number
 }
 
+const checkIsFieldValueEmpty = (fieldValue: string | object): boolean => {
+  const isEmptyObject = (value: object): boolean => {
+    if (isObject(value) && !isArray(value)) {
+      return every(value, isEmptyObject)
+    }
+
+    return isEmpty(value)
+  }
+
+  if (isObject(fieldValue)) {
+    return every(fieldValue, isEmptyObject)
+  }
+
+  return isEmptyValue(fieldValue)
+}
+
 export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
@@ -59,9 +75,9 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const fieldValue = get(versionData?.objectData, fieldName)
+        const fieldValue: string | object = get(versionData?.objectData, fieldName)
 
-        if (!isEmptyValue(fieldValue)) {
+        if (!checkIsFieldValueEmpty(fieldValue)) {
           return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue, versionId, versionCount }]
         }
       }
