@@ -17,7 +17,7 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { isAllowedToDrop } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
+import { isAllowedToMove } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
@@ -40,7 +40,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const onDrop: DroppableProps['onDrop'] = (info) => {
       const droppedObject: DataObject = info.data
 
-      if (!isAllowedToDrop(currentObject)) {
+      if (!isAllowedToMove(currentObject)) {
         return
       }
 
@@ -53,7 +53,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      if (isAllowedToDrop(currentObject)) {
+      if (isAllowedToMove(currentObject)) {
         return true
       }
 

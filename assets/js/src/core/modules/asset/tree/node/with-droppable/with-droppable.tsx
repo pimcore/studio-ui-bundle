@@ -17,7 +17,7 @@ import { Droppable, type DroppableProps } from '@Pimcore/components/drag-and-dro
 import { type Asset } from '../../../asset-api-slice-enhanced'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import {isAllowedToMove} from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
+import { isAllowedToMove } from '@Pimcore/modules/element/tree/node/with-droppable/permission-helper'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
