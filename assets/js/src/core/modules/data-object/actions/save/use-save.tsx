@@ -24,6 +24,8 @@ import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
 import { isNil, isUndefined } from 'lodash'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { type SerializedError } from '@reduxjs/toolkit'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -37,12 +39,13 @@ export interface UseSaveHookReturn {
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
+  error: FetchBaseQueryError | SerializedError | undefined
 }
 
 export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
-  const [saveDataObject, { isLoading, isSuccess, isError }] = useDataObjectUpdateByIdMutation()
+  const [saveDataObject, { isLoading, isSuccess, isError, error }] = useDataObjectUpdateByIdMutation()
   const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
 
   const executeQueuedTask = async (): Promise<void> => {
@@ -116,8 +119,10 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
         }
       }
     }).then((response) => {
-      setDraftData(response.data?.draftData ?? null)
-      onFinish?.()
+      if (response.error === undefined) {
+        setDraftData(response.data?.draftData ?? null)
+        onFinish?.()
+      }
       setRunningTask(undefined)
     })
   }
@@ -126,6 +131,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
     save,
     isLoading: isLoading || !isNil(queuedTask),
     isSuccess,
-    isError
+    isError,
+    error
   }
 }
