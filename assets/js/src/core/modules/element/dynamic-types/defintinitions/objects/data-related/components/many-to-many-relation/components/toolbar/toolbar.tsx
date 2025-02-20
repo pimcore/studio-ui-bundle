@@ -26,6 +26,7 @@ import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
 import { createElementSelectorAreas, type IRelationAllowedTypesDataComponent } from '../../../../helpers/relations/allowed-types'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
+import { type SelectedItem } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -62,10 +63,17 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
           }
         },
         onFinish: (event) => {
+          const getSubType = (item: SelectedItem): string | null => {
+            if (item.elementType === 'data-object') {
+              return item.data.classname ?? 'folder'
+            }
+            return item.data.type ?? null
+          }
+
           const items: ManyToManyRelationValueItem[] = event.items.map((item) => ({
             id: item.data.id,
             type: item.elementType,
-            subtype: item.data.subtype,
+            subtype: getSubType(item),
             fullPath: item.data.fullpath,
             isPublished: item.data.published ?? null
           }))
