@@ -34,6 +34,8 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
           invalidatingTags.ASSET_DETAIL_ID(id)
         )
       )
+
+      dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_FOLDER_PREVIEW()))
     } else if (elementType === 'data-object') {
       dispatch(removeDataObject(id))
       dispatch(

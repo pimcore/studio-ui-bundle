@@ -47,8 +47,11 @@ const api = baseApi.enhanceEndpoints({
         providingTagsForTree = [
           ...providingTagsForTree,
           ...providingTags.ASSET_TREE(),
+          ...args.path !== undefined ? providingTags.ASSET_FOLDER_PREVIEW() : [],
           ...args.parentId !== undefined ? providingTags.ASSET_TREE_ID(args.parentId) : []
         ]
+
+        console.log('tags:', { result, providingTagsForTree })
 
         return providingTagsForTree
       }
