@@ -19,6 +19,7 @@ import { Icon } from '../icon/icon'
 import { Dropdown, type DropdownProps } from '../dropdown/dropdown'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { IconOrImage } from '@Pimcore/components/icon-or-image/icon-or-image'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export enum SizeTypes {
   SMALL = 'small',
@@ -50,46 +51,51 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
   }
 
   return (
-    <Card
-      className={ [styles.card, classCard].join(' ') }
-      cover={
-        <div className={ classImgDiv }>
-          <IconOrImage
-            alt={ props.name }
-            class={ classImg }
-            value={ props.imgSrc! }
-          />
-        </div>
-        }
-      onClick={ (event) => {
-        if (
-          dropdownMenuRef.current === null ||
-          dropdownMenuRef.current.menu?.list.contains(event.target as Node) === false
-        ) {
-          props.onClick?.(event)
-        }
-      } }
+    <Tooltip
+      placement={ 'right' }
+      title={ props.name }
     >
-      <Dropdown
-        menu={ {
-          items: props.dropdownItems
+      <Card
+        className={ [styles.card, classCard].join(' ') }
+        cover={
+          <div className={ classImgDiv }>
+            <IconOrImage
+              alt={ props.name }
+              class={ classImg }
+              value={ props.imgSrc! }
+            />
+          </div>
+          }
+        onClick={ (event) => {
+          if (
+            dropdownMenuRef.current === null ||
+            dropdownMenuRef.current.menu?.list.contains(event.target as Node) === false
+          ) {
+            props.onClick?.(event)
+          }
         } }
-        menuRef={ dropdownMenuRef }
-        placement='bottomLeft'
       >
-        <Button
-          className={ classDotsButton }
-          icon={ <Icon
-            className='dropdown-menu__icon'
-            value="more"
-                 /> }
-          onClick={ (e) => { e.stopPropagation() } }
-          size="small"
+        <Dropdown
+          menu={ {
+            items: props.dropdownItems
+          } }
+          menuRef={ dropdownMenuRef }
+          placement='bottomLeft'
+        >
+          <Button
+            className={ classDotsButton }
+            icon={ <Icon
+              className='dropdown-menu__icon'
+              value="more"
+                   /> }
+            onClick={ (e) => { e.stopPropagation() } }
+            size="small"
+          />
+        </Dropdown>
+        <Meta
+          title={ props.name }
         />
-      </Dropdown>
-      <Meta
-        title={ props.name }
-      />
-    </Card>
+      </Card>
+    </Tooltip>
   )
 }
