@@ -22,6 +22,7 @@ import { type Element } from '@Pimcore/modules/element/element-helper'
 import { store } from '@Pimcore/app/store'
 import { selectCurrentUser, type userSliceName } from '@Pimcore/modules/auth/user/user-slice'
 import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -39,10 +40,9 @@ export interface UseLockHookReturn {
 }
 
 export const useLock = (elementType: ElementType): UseLockHookReturn => {
-  const state = store.getState()
-  const user = selectCurrentUser(state as { [userSliceName]: UserInformation })
   const { t } = useTranslation()
   const { elementPatch } = useElementApi(elementType)
+  const user = useUser()
 
   const lock = async (id: number): Promise<void> => {
     await patchLock(id, 'self')
