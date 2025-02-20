@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty, every, isObject, isArray } from 'lodash'
+import { get, isEmpty, every, isObject, isArray, omitBy } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -38,20 +38,36 @@ export interface IFormattedDataStructureData {
   versionId: number
 }
 
-const checkIsFieldValueEmpty = (fieldValue: string | object): boolean => {
-  const isEmptyObject = (value: object): boolean => {
-    if (isObject(value) && !isArray(value)) {
-      return every(value, isEmptyObject)
-    }
-
-    return isEmpty(value)
+const isEmptyObject = (value: object): boolean => {
+  if (isObject(value) && !isArray(value)) {
+    return every(value, isEmptyObject)
   }
 
+  return isEmpty(value)
+}
+
+export const omitEmptyFields = (data: Record<string, any>): object => {
+  return omitBy(data, (value) => isObject(value) && every(value, isEmptyObject))
+}
+
+const isFieldValueEmpty = (fieldValue: string | object): boolean => {
   if (isObject(fieldValue)) {
     return every(fieldValue, isEmptyObject)
   }
 
   return isEmptyValue(fieldValue)
+}
+
+export const formattedObjectData = (fieldValue: object, item: any): object => {
+  return item?.children?.reduce((accumulator: any, child: any) => {
+    const value = get(fieldValue, child.name)
+
+    if (!isFieldValueEmpty(value as object)) {
+      accumulator[child.name] = value
+    }
+
+    return accumulator
+  }, {})
 }
 
 export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
@@ -75,10 +91,13 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const fieldValue: string | object = get(versionData?.objectData, fieldName)
 
-        if (!checkIsFieldValueEmpty(fieldValue)) {
-          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue, versionId, versionCount }]
+        const getFieldValue: string | object = get(versionData?.objectData, fieldName)
+        const fieldValue = isObject(getFieldValue) ? formattedObjectData(getFieldValue, item) : getFieldValue
+        const resultFieldValue = isObject(fieldValue) ? omitEmptyFields(fieldValue) : fieldValue
+
+        if (!isFieldValueEmpty(resultFieldValue)) {
+          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: resultFieldValue, versionId, versionCount }]
         }
       }
 

@@ -53,15 +53,17 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   let updatedProps = props
 
   if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
-    const children = props?.children?.map(child => ({
-      ...child,
-      title: (
-        <span className={ styles.fieldTitle }>
-          {child?.title} <Text type='secondary'>| {currentLanguage.toUpperCase()}</Text>
-        </span>
-      ),
-      value: (props?.value[child?.name])[currentLanguage]
-    }))
+    const children = props?.children
+      ?.filter(child => props?.value?.[child?.name])
+      ?.map(child => ({
+        ...child,
+        title: (
+          <span className={ styles.fieldTitle }>
+            {child?.title} <Text type='secondary'>| {currentLanguage.toUpperCase()}</Text>
+          </span>
+        ),
+        value: (props?.value[child?.name])?.[currentLanguage]
+      }))
 
     updatedProps = {
       ...props,
