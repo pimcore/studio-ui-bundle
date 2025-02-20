@@ -17,6 +17,9 @@ import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import type { ImageGalleryValueItem } from '../../image-gallery'
 import { useTranslation } from 'react-i18next'
+import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { isEmpty } from 'lodash'
 
 interface ImageGalleryImageTargetProps {
   index: number
@@ -27,6 +30,26 @@ interface ImageGalleryImageTargetProps {
 
 export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: ImageGalleryImageTargetProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { open: openElementSelector } = useElementSelector({
+    selectionType: SelectionType.Single,
+    areas: {
+      asset: true,
+      object: false,
+      document: false
+    },
+    config: {
+      assets: {
+        allowedTypes: ['image']
+      }
+    },
+    onFinish: (event) => {
+      if (!isEmpty(event.items)) {
+        const newValue = [...value]
+        newValue[index] = { image: { type: 'asset', id: event.items[0].data.id }, hotspots: [], marker: [], crop: {} }
+        setValue(newValue)
+      }
+    }
+  })
 
   return (
     <Droppable
@@ -44,12 +67,12 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled }: Im
         height={ 100 }
         onRemove={ value[index] === undefined
           ? undefined
-          : (event) => {
-              event.stopPropagation()
+          : () => {
               const newValue = [...value]
               newValue.splice(index, 1)
               setValue(newValue)
             } }
+        onSearch={ openElementSelector }
         title={ t(disabled !== true ? 'image.dnd-target' : 'empty') }
         width={ 200 }
       />
