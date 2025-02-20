@@ -19,7 +19,10 @@ import {
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
-import _ from 'lodash'
+import { isEmpty, isNil } from 'lodash'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { theme } from 'antd'
 
 export interface ExternalImageValue {
   url: string
@@ -37,6 +40,10 @@ export interface ExternalImageProps {
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ExternalImageValue | null>(props.value ?? null)
   const { t } = useTranslation()
+  const fieldWidth = useFieldWidth()
+  const { useToken } = theme
+  const { token } = useToken()
+
   const onChange = (value?: string): void => {
     const newUrl = value !== '' && value !== undefined ? value : null
     setValue(newUrl === null ? null : { url: newUrl })
@@ -48,6 +55,7 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
 
   const previewWidth = Math.max(props.previewWidth ?? 300, 70)
   const previewHeight = Math.max(props.previewHeight ?? 150, 70)
+  const containerWidth = isNil(props.inputWidth) && (previewWidth < fieldWidth.large) ? fieldWidth.large : Math.max(previewWidth, props.inputWidth ?? 0) + 2 + token.paddingSM * 2
 
   return (
     <>
@@ -61,8 +69,9 @@ export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
           onChange={ onChange }
           value={ value?.url ?? undefined }
                  /> }
+        style={ { maxWidth: toCssDimension(containerWidth) } }
       >
-        { value !== null && !_.isEmpty(value.url)
+        { value !== null && !isEmpty(value.url)
           ? (
             <ImagePreview
               height={ previewHeight }
