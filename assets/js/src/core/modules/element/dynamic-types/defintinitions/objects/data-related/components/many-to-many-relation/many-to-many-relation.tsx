@@ -120,6 +120,7 @@ export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.El
           addItems={ addItems }
           allowClear={ props.allowToClearRelation && props.disabled !== true }
           assetUploadPath={ props.assetUploadPath }
+          disabled={ props.disabled }
           empty={ () => { setValue(null) } }
           enableUpload={ props.assetsAllowed === true && props.disabled !== true }
           onSearch={ onSearch }
