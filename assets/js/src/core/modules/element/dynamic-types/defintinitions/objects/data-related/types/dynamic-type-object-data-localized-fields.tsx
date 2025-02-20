@@ -15,9 +15,12 @@ import React from 'react'
 
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
+import {
+  DynamicTypesList
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataAbstract {
-  id: string = 'localizedfields'
+  id: string = DynamicTypesList.LOCALIZED_FIELDS
   isCollectionType: boolean = true
 
   getObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {

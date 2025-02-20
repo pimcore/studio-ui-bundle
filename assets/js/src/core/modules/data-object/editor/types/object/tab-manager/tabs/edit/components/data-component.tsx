@@ -32,6 +32,9 @@ import {
   useEditFormContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import { useFieldWidth } from '../providers/field-width/use-field-width'
+import {
+  DynamicTypesList
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -61,7 +64,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   if (hasLocalizedFields) {
     // @todo should handle multiple locales
-    formFieldName = ['localizedfields', name, localizedFields.locales[0]]
+    formFieldName = [DynamicTypesList.LOCALIZED_FIELDS, name, localizedFields.locales[0]]
 
     if (hasFormList) {
       formFieldName = [...formList.getComputedFieldName(), ...formFieldName]

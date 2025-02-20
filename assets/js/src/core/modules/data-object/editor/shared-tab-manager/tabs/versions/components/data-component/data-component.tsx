@@ -22,6 +22,9 @@ import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 import { Text } from '@Pimcore/components/text/text'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import {
+  DynamicTypesList
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -51,7 +54,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   let updatedProps = props
 
-  if (currentFieldType === 'localizedfields') {
+  if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
     const children = props.children.map(child => ({
       ...child,
       title: (

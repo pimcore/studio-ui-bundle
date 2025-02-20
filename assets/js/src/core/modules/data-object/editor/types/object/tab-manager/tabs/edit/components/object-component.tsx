@@ -37,8 +37,9 @@ export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element 
     if (isVersionObjectDataComponent === true) {
       return (
         <>
-          {!isUndefined(props.title) && props.title }
-          <VersionDataComponent { ...props as any } /></>
+          {!isUndefined(props.title) && props.title}
+          <VersionDataComponent { ...props as DataComponentProps } />
+        </>
       )
     }
 
