@@ -17,8 +17,7 @@ import { FieldWidthContext, type IFieldWidthContext } from './field-width-provid
 export const useFieldWidth = (): IFieldWidthContext => {
   const context = useContext(FieldWidthContext)
   if (context === undefined) {
-    // throw new Error('useFieldWidth must be used within a FieldWidthProvider')
-    return { small: 150, medium: 200, large: 500 }
+    throw new Error('useFieldWidth must be used within a FieldWidthProvider')
   }
   return context
 }

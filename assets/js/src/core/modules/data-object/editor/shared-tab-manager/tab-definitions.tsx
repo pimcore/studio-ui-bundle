@@ -22,14 +22,20 @@ import {
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/comparison-view/comparison-view'
 import { SingleView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/single-view/single-view'
 import { PreviewView } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/preview/preview-view'
+import {
+  FieldWidthProvider
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 
 export const TAB_VERSIONS: IEditorTab = {
   key: 'versions',
   label: 'version.label',
-  children: <VersionsTabContainer
-    ComparisonViewComponent={ ComparisonView }
-    SingleViewComponent={ SingleView }
-            />,
+  children: (
+    <FieldWidthProvider>
+      <VersionsTabContainer
+        ComparisonViewComponent={ ComparisonView }
+        SingleViewComponent={ SingleView }
+      />
+    </FieldWidthProvider>),
   icon: <Icon value={ 'history' } />,
   isDetachable: true
 }
