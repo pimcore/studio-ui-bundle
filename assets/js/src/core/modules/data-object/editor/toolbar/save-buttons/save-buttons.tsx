@@ -36,18 +36,20 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDeleteDraft } from '@Pimcore/modules/data-object/actions/delete-draft/use-delete-draft'
 import { isNil } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
-  const { save: saveDataObject, isLoading, isSuccess, isError } = useSave()
+  const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
   const { isAutoSaveLoading, runningTask } = useSaveContext()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
     isSuccess: isSchedulesSuccess,
-    isError: isSchedulesError
+    isError: isSchedulesError,
+    error: schedulesError
   } = useSaveSchedules('data-object', id, false)
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft()
@@ -69,16 +71,12 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {
-    const handleFailedEvent = async (): Promise<void> => {
-      if (isError || isSchedulesError) {
-        await messageApi.error(t('save-failed'))
-      }
+    if (isError && !isNil(error)) {
+      trackError(new ApiError(error))
+    } else if (isSchedulesError && !isNil(schedulesError)) {
+      trackError(new ApiError(schedulesError))
     }
-
-    handleFailedEvent().catch((error) => {
-      console.error(error)
-    })
-  }, [isError, isSchedulesError])
+  }, [isError, isSchedulesError, error, schedulesError])
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (dataObject?.changes === undefined) return
