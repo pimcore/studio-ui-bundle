@@ -152,6 +152,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     } else if (parentId !== undefined) {
       refreshTree(parentId)
       refreshElement(parentId)
+      refreshElement(id)
     }
 
     const widgetId = getWidgetId(elementType, id)

@@ -105,7 +105,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
           label: t('element.lock'),
           key: 'advanced-lock',
           icon: <Icon value={ 'lock' } />,
-          hidden: !checkElementPermission(node.permissions, 'publish') || node.isLocked,
+          hidden: !checkElementPermission(node.permissions, 'publish'),
           children: [
             lockTreeContextMenuItem(node),
             lockAndPropagateTreeContextMenuItem(node),
