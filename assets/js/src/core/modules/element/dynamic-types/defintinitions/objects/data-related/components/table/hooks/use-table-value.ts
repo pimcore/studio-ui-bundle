@@ -23,6 +23,7 @@ interface UseTableValueProps {
   onChange?: (value: TableValue | null) => void
   columnConfigActivated: boolean
   columnConfig?: Array<{ key: string, label: string }>
+  emptyValue: TableValue | null
 }
 
 interface UseTableValueReturn {
@@ -73,10 +74,8 @@ export const useTableValue = (props: UseTableValueProps): UseTableValueReturn =>
   rows = Math.max(rows, 1)
 
   const emptyValue = (): void => {
-    if (value !== null) {
-      setValue([])
-      setKey(key + 1) // force re-render
-    }
+    setValue(props.emptyValue ?? [])
+    setKey(key + 1) // force re-render
   }
 
   const createEmptyRow = (): Record<string, string> | string[] => {

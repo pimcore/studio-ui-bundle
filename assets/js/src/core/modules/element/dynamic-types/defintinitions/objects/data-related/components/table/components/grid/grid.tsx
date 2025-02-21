@@ -76,7 +76,7 @@ export const TableGrid = (props: TableGridProps): React.JSX.Element => {
     }
     dataRows.push(rowValues)
   }
-  console.log('columns', columns)
+
   return (
     <Grid
       columns={ columns }
