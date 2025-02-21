@@ -44,12 +44,15 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
     const resultV1 = {}
     const resultV2 = {}
 
-    const allFieldKeys = new Set([...Object.keys(v1), ...Object.keys(v2)])
+    const allFieldKeys = new Set([
+      ...Object.keys(v1),
+      ...(!isEmpty(v2) ? Object.keys(v2) : [])
+    ])
 
     allFieldKeys.forEach(key => {
-      if (JSON.stringify(v1[key]) !== JSON.stringify(v2[key])) {
-        if (!isEmpty(v1[key])) resultV1[key] = v1[key]
-        if (!isEmpty(v2[key])) resultV2[key] = v2[key]
+      if (JSON.stringify(v1?.[key]) !== JSON.stringify(v2?.[key])) {
+        if (!isEmpty(v1?.[key])) resultV1[key] = v1[key]
+        if (!isEmpty(v2?.[key])) resultV2[key] = v2[key]
       }
     })
 

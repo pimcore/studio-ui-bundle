@@ -125,26 +125,43 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
   const resultList: IObjectVersionField[] = []
 
   const mainVersionData = data[0]
-  const compareVersionData = data[1]
+  const compareVersionData = data[1] ?? []
 
-  mainVersionData.forEach((versionItem, index) => {
-    const field = {
-      Field: {
-        fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle,
-        ...versionItem.fieldData
-      },
-      [`Version ${versionItem.versionCount}`]: versionItem.fieldValue
-    }
+  const maxLength = Math.max(mainVersionData?.length, compareVersionData?.length)
 
-    const compareVersion = compareVersionData?.[index]
+  for (let index = 0; index < maxLength; index++) {
+    const versionItem = mainVersionData[index]
+    const compareVersion = compareVersionData[index]
     const hasCompareVersion = !isEmpty(compareVersion)
 
-    if (hasCompareVersion) {
-      field[`Version ${compareVersion.versionCount}`] = compareVersion.fieldValue
+    let field = {}
+
+    if (!isEmpty(versionItem)) {
+      field = {
+        Field: {
+          fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle,
+          ...versionItem?.fieldData
+        },
+        [`Version ${versionItem?.versionCount}`]: versionItem?.fieldValue
+      }
     }
 
-    resultList.push(field)
-  })
+    if (isEmpty(versionItem) && hasCompareVersion) {
+      field = {
+        Field: {
+          fieldBreadcrumbTitle: compareVersion?.fieldBreadcrumbTitle,
+          ...compareVersion?.fieldData
+        },
+        [`Version ${compareVersion?.versionCount}`]: null
+      }
+    }
+
+    if (hasCompareVersion) {
+      field[`Version ${compareVersion.versionCount}`] = compareVersion.fieldValue ?? null
+    }
+
+    resultList.push(field as IObjectVersionField)
+  }
 
   return resultList
 }
