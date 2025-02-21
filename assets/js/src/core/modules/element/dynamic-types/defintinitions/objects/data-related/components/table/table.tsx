@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactElement, useEffect } from 'react'
+import React, { type ReactElement, useEffect, useMemo } from 'react'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -59,9 +59,11 @@ export const Table = (props: TableProps): React.JSX.Element => {
 
   const columnConfigActivated = props.colsFixed === true ? props.columnConfigActivated ?? false : false
 
+  const fieldDefinitionData = useMemo(() => parseFieldDefinitionData(props.data), [props.data])
+
   const getInitialValue = (): TableValue | null => {
     if (isNil(props.value) || isEmpty(props.value)) {
-      return parseFieldDefinitionData(props.data)
+      return fieldDefinitionData
     }
     return props.value
   }
@@ -88,7 +90,7 @@ export const Table = (props: TableProps): React.JSX.Element => {
     rows: props.rows,
     columnConfig: props.columnConfig,
     columnConfigActivated,
-    emptyValue: parseFieldDefinitionData(props.data)
+    emptyValue: fieldDefinitionData
   })
 
   useEffect(() => {
