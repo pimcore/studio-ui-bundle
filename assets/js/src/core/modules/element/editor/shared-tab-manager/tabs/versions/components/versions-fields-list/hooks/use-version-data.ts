@@ -12,7 +12,7 @@
 */
 
 import { useMemo } from 'react'
-import { isEqual } from 'lodash'
+import { isEqual, isEmpty } from 'lodash'
 import { getAssetCategoriesList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/assetCategoriesHelper'
 import { getObjectBreadcrumbsList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/objectBreadcrumbsHelper'
 import {
@@ -26,6 +26,7 @@ import {
 } from '../types'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTypeName } from '@Pimcore/constants/global'
+import { COMPLEX_DATA_OBJECT_TYPES, type DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 interface IUseVersionDataReturn {
   versionKeysList: VersionKeysList
@@ -36,10 +37,43 @@ interface IUseVersionDataReturn {
 export const useVersionData = (data: IVersionsFieldsList['data'], elementType: ElementType): IUseVersionDataReturn => {
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
-  const comparisonModifiedData = data.filter((item) => {
-    // need to implement deep equal
-    return !isEqual(item[versionKeysList[0]], item[versionKeysList[1]])
-  })
+  const compareComplexVersions = (v1: object, v2: object): {
+    resultV1: object
+    resultV2: object
+  } => {
+    const resultV1 = {}
+    const resultV2 = {}
+
+    const allFieldKeys = new Set([...Object.keys(v1), ...Object.keys(v2)])
+
+    allFieldKeys.forEach(key => {
+      if (JSON.stringify(v1[key]) !== JSON.stringify(v2[key])) {
+        if (!isEmpty(v1[key])) resultV1[key] = v1[key]
+        if (!isEmpty(v2[key])) resultV2[key] = v2[key]
+      }
+    })
+
+    return { resultV1, resultV2 }
+  }
+
+  const comparisonModifiedData = data
+    .filter(item => !isEqual(item[versionKeysList[0]], item[versionKeysList[1]]))
+    .map((item: IObjectVersionField) => {
+      if (COMPLEX_DATA_OBJECT_TYPES.includes(item.Field.fieldtype as DynamicTypesList)) {
+        const v1: object = item[versionKeysList[0]]
+        const v2: object = item[versionKeysList[1]]
+
+        const { resultV1, resultV2 } = compareComplexVersions(v1, v2)
+
+        return {
+          ...item,
+          [versionKeysList[0]]: resultV1,
+          [versionKeysList[1]]: resultV2
+        }
+      }
+
+      return item
+    })
 
   const sectionsList = useMemo(() => {
     if (elementType === ElementTypeName.ASSET) {
