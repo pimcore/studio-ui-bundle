@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface ImageValue {
   type: 'asset'
@@ -46,8 +47,9 @@ export const Image = (props: ImageProps): React.JSX.Element => {
     props.onChange?.(value)
   }, [value])
 
-  const width = props.width === null || props.width === '' ? 300 : props.width
-  const height = props.height === null || props.width === '' ? 150 : props.height
+  const width = toCssDimension(props.width, 300)
+  const height = toCssDimension(props.height, 150)
+
   return (
     <Card
       className="max-w-full"
@@ -70,8 +72,8 @@ export const Image = (props: ImageProps): React.JSX.Element => {
           ? (
             <ImagePreview
               assetId={ value.id }
-              height={ height }
-              width={ width }
+              height={ height! }
+              width={ width! }
             />
             )
           : (
