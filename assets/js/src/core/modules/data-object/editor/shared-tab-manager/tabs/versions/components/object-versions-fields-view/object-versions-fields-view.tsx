@@ -21,6 +21,7 @@ import { DataComponent } from '../data-component/data-component'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { isEmpty, isObject, uniq } from 'lodash'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
@@ -91,6 +92,19 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                           const isModifiedField = modifiedFields.includes(fieldItem.Field.title as string)
                           const isSecondItem = index === 1
 
+                          // need to rename it
+                          const modifiedList: string[] = []
+
+                          if (fieldItem.Field.fieldtype === 'localizedfields') {
+                            versionKeysList.map((key) => {
+                              if (!isEmpty(fieldItem[key]) && isObject(fieldItem[key])) {
+                                modifiedList.push(...Object.keys(fieldItem[key]))
+                              }
+
+                              return null
+                            })
+                          }
+
                           return (
                             <div
                               className={ cn(styles.objectSectionFieldItemWrapper, {
@@ -101,6 +115,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                               <DataComponent
                                 datatype={ 'data' }
                                 fieldType={ fieldItem.Field.fieldtype }
+                                modifiedList={ uniq(modifiedList) }
                                 name={ fieldItem.Field.name }
                                 value={ fieldItem[key] }
                                 { ...fieldItem.Field }

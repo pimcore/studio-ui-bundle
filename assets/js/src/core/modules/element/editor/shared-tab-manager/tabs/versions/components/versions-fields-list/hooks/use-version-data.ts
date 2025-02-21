@@ -37,6 +37,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
   const comparisonModifiedData = data.filter((item) => {
+    // need to implement deep equal
     return !isEqual(item[versionKeysList[0]], item[versionKeysList[1]])
   })
 

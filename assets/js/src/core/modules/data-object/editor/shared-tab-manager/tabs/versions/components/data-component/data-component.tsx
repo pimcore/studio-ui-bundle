@@ -23,6 +23,7 @@ import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
+import { isUndefined } from 'lodash'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -52,9 +53,10 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   let updatedProps = props
 
+  // need to refactor it
   if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
     const children = props?.children
-      ?.filter(child => props?.value?.[child?.name])
+      ?.filter(child => props?.modifiedList?.includes(child?.name))
       ?.map(child => ({
         ...child,
         title: (
@@ -62,7 +64,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
             {child?.title} <Text type='secondary'>| {currentLanguage.toUpperCase()}</Text>
           </span>
         ),
-        value: (props?.value[child?.name])?.[currentLanguage]
+        value: !isUndefined(props?.value) ? (props?.value[child?.name])?.[currentLanguage] : null
       }))
 
     updatedProps = {
