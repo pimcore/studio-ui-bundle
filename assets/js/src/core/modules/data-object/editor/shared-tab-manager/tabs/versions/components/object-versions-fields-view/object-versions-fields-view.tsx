@@ -89,7 +89,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                       {renderFieldTitle({ key: fieldItem.Field.title, isCommonSection })}
                       <Flex gap="mini">
                         {versionKeysList.map((key, index) => {
-                          const isModifiedField = modifiedFields.includes(fieldItem.Field.title as string)
+                          const isModifiedField = fieldItem?.isModifiedValue === true
                           const isSecondItem = index === 1
 
                           // need to rename it

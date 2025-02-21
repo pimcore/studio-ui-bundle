@@ -62,6 +62,11 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
   const comparisonModifiedData = data
     .filter(item => !isEqual(item[versionKeysList[0]], item[versionKeysList[1]]))
     .map((item: IObjectVersionField) => {
+      const updatedItem = {
+        isModifiedValue: true,
+        ...item
+      }
+
       if (COMPLEX_DATA_OBJECT_TYPES.includes(item.Field.fieldtype as DynamicTypesList)) {
         const v1: object = item[versionKeysList[0]]
         const v2: object = item[versionKeysList[1]]
@@ -69,13 +74,15 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
         const { resultV1, resultV2 } = compareComplexVersions(v1, v2)
 
         return {
-          ...item,
+          ...updatedItem,
           [versionKeysList[0]]: resultV1,
           [versionKeysList[1]]: resultV2
         }
       }
 
-      return item
+      return {
+        ...updatedItem
+      }
     })
 
   const sectionsList = useMemo(() => {

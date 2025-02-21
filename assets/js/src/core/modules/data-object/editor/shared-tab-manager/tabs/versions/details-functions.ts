@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty, every, isObject, isArray, omitBy } from 'lodash'
+import { get, isEmpty, every, isObject, isArray, omitBy, isEqual } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -150,6 +150,10 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
     if (hasCompareVersion) {
       field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
+
+      if (!isEqual(versionItem.fieldValue, compareVersionItem.fieldValue)) {
+        field.isModifiedValue = true
+      }
     }
 
     resultList.push(field)
