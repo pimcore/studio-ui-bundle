@@ -32,7 +32,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   type ImageValue
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
-import _ from 'lodash'
+import { isEmpty } from 'lodash'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import {
   CropModal
@@ -40,6 +40,9 @@ import {
 import {
   type CropSettings
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
+import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -57,6 +60,27 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   const [cropModalOpen, setCropModalOpen] = useState(false)
   const messageApi = useMessage()
   const { confirm } = useFormModal()
+  const { open: openElementSelector } = useElementSelector({
+    selectionType: SelectionType.Single,
+    areas: {
+      asset: true,
+      object: false,
+      document: false
+    },
+    config: {
+      assets: {
+        allowedTypes: ['image']
+      }
+    },
+    onFinish: (event) => {
+      if (!isEmpty(event.items)) {
+        replaceImage({
+          type: elementTypes.asset,
+          id: event.items[0].data.id
+        })
+      }
+    }
+  })
 
   const hotspots = toIHotspots(item.hotspots ?? [], item.marker ?? [])
 
@@ -97,11 +121,30 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
   }
 
   const hasHotspotData = (index: number): boolean => {
-    return !_.isEmpty(value[index].hotspots) || !_.isEmpty(value[index].marker)
+    return !isEmpty(value[index].hotspots) || !isEmpty(value[index].marker)
   }
 
   const hasValueData = (index: number): boolean => {
-    return hasHotspotData(index) || !_.isEmpty(value[index].crop)
+    return hasHotspotData(index) || !isEmpty(value[index].crop)
+  }
+
+  const replaceImage = (newImage: ImageValue): void => {
+    if (hasValueData(index)) {
+      confirm({
+        title: t('hotspots.clear-data'),
+        content: t('hotspots.clear-data.dnd-message'),
+        okText: t('yes'),
+        cancelText: t('no'),
+        onOk: () => {
+          setImage(index, newImage, true)
+        },
+        onCancel: () => {
+          setImage(index, newImage, false)
+        }
+      })
+    } else {
+      setImage(index, newImage, true)
+    }
   }
 
   const setImage = (index: number, image: ImageValue, replaceValueData: boolean): void => {
@@ -136,22 +179,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
         } }
         onDrop={ (info: DragAndDropInfo) => {
           const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
-          if (hasValueData(index)) {
-            confirm({
-              title: t('hotspots.clear-data'),
-              content: t('hotspots.clear-data.dnd-message'),
-              okText: t('yes'),
-              cancelText: t('no'),
-              onOk: () => {
-                setImage(index, newImage, true)
-              },
-              onCancel: () => {
-                setImage(index, newImage, false)
-              }
-            })
-          } else {
-            setImage(index, newImage, true)
-          }
+          replaceImage(newImage)
         } }
         onSort={ (info: DragAndDropInfo, dragId: UniqueIdentifier, dropId: UniqueIdentifier) => {
           const newValue = [...value]
@@ -228,6 +256,16 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
             },
             {
               hidden: disabled,
+              key: 'search',
+              label: t('search'),
+              icon: <Icon value={ 'search' } />,
+              onClick: () => {
+                openElementSelector()
+              }
+
+            },
+            {
+              hidden: disabled,
               label: t('empty'),
               key: 'empty',
               icon: <Icon value={ 'trash' } />,
@@ -245,7 +283,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setValue, disable
       </Droppable>
       { cropModalOpen && (
         <CropModal
-          crop={ _.isEmpty(item.crop) ? null : item.crop }
+          crop={ isEmpty(item.crop) ? null : item.crop }
           disabled={ disabled }
           imageId={ item.image!.id }
           onChange={ onCropChange }

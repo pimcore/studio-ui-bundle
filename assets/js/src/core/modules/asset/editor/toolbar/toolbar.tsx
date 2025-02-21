@@ -38,38 +38,47 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { WorkFlowProvider } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-provider'
 import { WorkflowLogModal } from '@Pimcore/modules/asset/editor/toolbar/workflow-log-modal/workflow-log-modal'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { isNil } from 'lodash'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export const Toolbar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useElementContext()
 
   const { asset, properties, removeTrackedChanges, customMetadata, imageSettings } = useAssetDraft(id)
-  const hasChanges = asset?.modified === true
-  const [saveAsset, { isLoading, isSuccess, isError }] = useAssetUpdateByIdMutation()
+
+  const [saveAsset, { isLoading, isSuccess, isError, error }] = useAssetUpdateByIdMutation()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
     isSuccess: isSchedulesSuccess,
-    isError: isSchedulesError
+    isError: isSchedulesError,
+    error: schedulesError
   } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
   const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
   const ContextMenu = componentRegistry.get('editorToolbarContextMenuAsset')
 
   useEffect(() => {
-    if (isSuccess && isSchedulesSuccess) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.success(t('save-success'))
-      removeTrackedChanges()
+    const handleSuccessEvent = async (): Promise<void> => {
+      if (isSuccess && isSchedulesSuccess) {
+        removeTrackedChanges()
+        await messageApi.success(t('save-success'))
+      }
     }
+
+    handleSuccessEvent().catch((error) => {
+      console.error(error)
+    })
   }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {
-    if (isError || isSchedulesError) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      messageApi.error(t('save-failed'))
+    if (isError && !isNil(error)) {
+      trackError(new ApiError(error))
+    } else if (isSchedulesError && !isNil(schedulesError)) {
+      trackError(new ApiError(schedulesError))
     }
-  }, [isError, isSchedulesError])
+  }, [isError, isSchedulesError, error, schedulesError])
 
   return (
     <ToolbarView>
@@ -82,7 +91,7 @@ export const Toolbar = (): React.JSX.Element => {
           <EditorToolbarWorkflowMenu />
           { checkElementPermission(asset?.permissions, 'publish') && (
             <Button
-              disabled={ !hasChanges || isLoading || isSchedulesLoading }
+              disabled={ isLoading || isSchedulesLoading }
               loading={ isLoading || isSchedulesLoading }
               onClick={ onSaveClick }
               type="primary"

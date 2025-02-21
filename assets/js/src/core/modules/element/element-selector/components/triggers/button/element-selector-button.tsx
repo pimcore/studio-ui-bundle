@@ -33,7 +33,6 @@ export const ElementSelectorButton = (props: ElementSelectorButtonProps): React.
       { ...baseProps }
       icon={ { value: 'search' } }
       onClick={ onClick }
-      type='default'
     />
   )
 }
