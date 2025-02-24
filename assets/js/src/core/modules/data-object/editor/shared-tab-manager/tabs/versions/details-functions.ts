@@ -131,6 +131,8 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
   const mainVersionData = data[0]
   const compareVersionData = data[1] ?? []
 
+  const isComparisonMode = !isEmpty(compareVersionData)
+
   const maxLength = Math.max(mainVersionData?.length, compareVersionData?.length)
 
   for (let index = 0; index < maxLength; index++) {
@@ -158,7 +160,7 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    if (COMPLEX_DATA_OBJECT_TYPES.includes(versionItem.fieldData.fieldtype as DynamicTypesList)) {
+    if (COMPLEX_DATA_OBJECT_TYPES.includes(versionItem?.fieldData?.fieldtype as DynamicTypesList)) {
       const allFieldKeys = new Set([
         ...Object.keys(versionItem?.fieldValue as object),
         ...(!isEmpty(compareVersionItem?.fieldValue as object) ? Object.keys(compareVersionItem?.fieldValue as object) : [])
@@ -180,25 +182,23 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
         list2.push({ key, localesList: uniqMergedResult })
 
         if (JSON.stringify(versionItem?.fieldValue?.[key]) !== JSON.stringify(compareVersionItem?.fieldValue?.[key])) {
-          if (hasCompareVersion) {
-            if (!isEmpty(compareVersionItem?.fieldValue?.[key])) {
-              uniqMergedResult?.forEach((item: string) => {
-                if (versionItem.fieldValue?.[key]?.[item] !== compareVersionItem.fieldValue?.[key]?.[item]) {
-                  const existingItem = list.find(entry => entry.key === key)
+          if (isComparisonMode) {
+            uniqMergedResult?.forEach((item: string) => {
+              if (versionItem?.fieldValue?.[key]?.[item] !== compareVersionItem?.fieldValue?.[key]?.[item]) {
+                const existingItem = list.find(entry => entry.key === key)
 
-                  if (!isEmpty(existingItem)) {
-                    existingItem?.localesList.push(item)
-                  } else {
-                    list.push({ key, localesList: [item] })
-                  }
+                if (!isEmpty(existingItem)) {
+                  existingItem?.localesList.push(item)
+                } else {
+                  list.push({ key, localesList: [item] })
                 }
-              })
+              }
+            })
 
-              field.isModifiedValue = true
-            }
+            field.isModifiedValue = true
           }
 
-          if (!hasCompareVersion) {
+          if (!isComparisonMode) {
             isSingleVersion = true
           }
         }
@@ -208,7 +208,7 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
       field.listAllFieldsWithoutNull = list2
       field.isSingleVersion = isSingleVersion
     } else {
-      if (hasCompareVersion) {
+      if (isComparisonMode) {
         if (!isEqual(versionItem?.fieldValue, compareVersionItem?.fieldValue)) {
           field.isModifiedValue = true
         }

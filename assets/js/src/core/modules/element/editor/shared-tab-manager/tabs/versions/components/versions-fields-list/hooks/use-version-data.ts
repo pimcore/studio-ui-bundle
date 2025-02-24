@@ -45,7 +45,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
     const resultV2 = {}
 
     const allFieldKeys = new Set([
-      ...Object.keys(v1),
+      ...(!isEmpty(v1) ? Object.keys(v1) : []),
       ...(!isEmpty(v2) ? Object.keys(v2) : [])
     ])
 
