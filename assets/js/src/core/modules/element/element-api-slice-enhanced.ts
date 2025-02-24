@@ -27,10 +27,18 @@ const api = baseApi.enhanceEndpoints({
 
         if (args.elementType === 'asset') {
           tags.push(...invalidatingTags.ASSET_DETAIL_ID(args.parentId))
+
+          if (args.parentId === 1) {
+            tags.push(...invalidatingTags.ASSET_TREE_ID(args.parentId))
+          }
         }
 
         if (args.elementType === 'data-object') {
           tags.push(...invalidatingTags.DATA_OBJECT_DETAIL_ID(args.parentId))
+
+          if (args.parentId === 1) {
+            tags.push(...invalidatingTags.DATA_OBJECT_TREE_ID(args.parentId))
+          }
         }
 
         return tags
