@@ -128,7 +128,7 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): IObjectVersionField[] => {
   const resultList: IObjectVersionField[] = []
 
-  const mainVersionData = data[0]
+  const mainVersionData = data[0] ?? []
   const compareVersionData = data[1] ?? []
 
   const isComparisonMode = !isEmpty(compareVersionData)
@@ -144,7 +144,7 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
     const field: IObjectVersionField = {
       Field: {
         fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle ?? compareVersionItem?.fieldBreadcrumbTitle,
-        ...versionItem?.fieldData ?? compareVersionItem?.fieldData
+        ...(versionItem?.fieldData ?? compareVersionItem?.fieldData)
       }
     }
 
@@ -160,9 +160,9 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    if (COMPLEX_DATA_OBJECT_TYPES.includes(versionItem?.fieldData?.fieldtype as DynamicTypesList)) {
+    if (COMPLEX_DATA_OBJECT_TYPES.includes((versionItem ?? compareVersionItem)?.fieldData?.fieldtype as DynamicTypesList)) {
       const allFieldKeys = new Set([
-        ...Object.keys(versionItem?.fieldValue as object),
+        ...(!isEmpty(versionItem?.fieldValue as object) ? Object.keys(versionItem?.fieldValue as object) : []),
         ...(!isEmpty(compareVersionItem?.fieldValue as object) ? Object.keys(compareVersionItem?.fieldValue as object) : [])
       ])
 
@@ -173,7 +173,7 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
       allFieldKeys.forEach(key => {
         const getNonNullValues = (obj: object): any => Object.keys(obj).filter(key => obj[key] !== null)
 
-        const result1 = isObject(versionItem.fieldValue?.[key]) ? getNonNullValues((versionItem.fieldValue?.[key])) : []
+        const result1 = isObject(versionItem?.fieldValue?.[key]) ? getNonNullValues((versionItem?.fieldValue?.[key])) : []
         const result2 = isObject(compareVersionItem?.fieldValue?.[key]) ? getNonNullValues((compareVersionItem?.fieldValue?.[key])) : []
 
         const mergedResult = [...result1, ...result2]
