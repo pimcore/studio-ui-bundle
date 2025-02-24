@@ -30,16 +30,13 @@ interface UseGlobalNotesAndEventsReturn {
   setPage: (page: number) => void
   pageSize: number
   setPageSize: (pageSize: number) => void
+  setFilter: (filter: string) => void
 }
 
 export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
   const [filter, setFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
-
-  useEffect(() => {
-    setFilter('')
-  }, [])
 
   const queryArgs = useMemo(() => ({ body: { page, pageSize, filter } }), [page, pageSize, filter])
 
@@ -52,6 +49,7 @@ export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
     page,
     setPage,
     pageSize,
-    setPageSize
+    setPageSize,
+    setFilter
   }
 }

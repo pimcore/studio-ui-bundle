@@ -26,7 +26,7 @@ import { Content } from '@Pimcore/components/content/content'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { totalItems, notesAndEvents, notesAndEventsLoading, page, setPage, setPageSize } = useNotesAndEvents()
+  const { totalItems, notesAndEvents, notesAndEventsLoading, page, setPage, setPageSize, setFilter } = useNotesAndEvents()
 
   return (
     <ContentLayout
