@@ -20,6 +20,7 @@ import {
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/use-tree-filter'
 
 interface DataObjectTreeAdditionalTreeProps {
   pager?: number
@@ -38,8 +39,9 @@ interface NodeApiHookReturnType {
 
 export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
   const [additionalQueryParams, setAdditionalQueryParams] = useState<DataObjectTreeAdditionalTreeProps>()
+  const { treeFilterArgs } = useTreeFilter()
   const { maxItemsPerNode } = useContext(TreeContext)
-  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...additionalQueryParams })
+  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...treeFilterArgs, ...additionalQueryParams })
 
   function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
     return transformApiDataToNodes(node, data, maxItemsPerNode)

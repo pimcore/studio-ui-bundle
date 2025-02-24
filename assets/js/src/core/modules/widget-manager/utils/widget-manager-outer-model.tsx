@@ -11,9 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type IJsonModel } from 'flexlayout-react'
+import { store } from '@Pimcore/app/store'
+import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
+import { type ElementTreeWidget, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 
 export const getInitialModelJson = (): IJsonModel => {
+  const activePerspective = selectActivePerspective(store.getState())
+  console.log('activepersp', activePerspective, store.getState())
+
   return {
     global: {
       tabEnableRename: false,
@@ -51,7 +57,7 @@ export const getInitialModelJson = (): IJsonModel => {
           weight: 50,
           height: 0,
           selected: 0,
-          children: []
+          children: getWidgetsBottom(activePerspective)
         }
       ]
     },
@@ -62,51 +68,56 @@ export const getInitialModelJson = (): IJsonModel => {
         location: 'left',
         size: 315,
         selected: 0,
-        children: [
-          {
-            type: 'tab',
-            name: 'asset.asset-tree.title',
-            component: 'asset-tree',
-            enableClose: false,
-            config: {
-              icon: {
-                value: 'asset'
-              }
-            }
-          },
-          {
-            type: 'tab',
-            name: 'data-object.data-object-tree.title',
-            component: 'data-object-tree',
-            enableClose: false,
-            config: {
-              icon: {
-                value: 'data-object'
-              }
-            }
-          }
-        ]
+        children: getWidgetsLeft(activePerspective)
       },
 
       {
         type: 'border',
         location: 'right',
         size: 315,
-        children: [
-          {
-            type: 'tab',
-            name: 'asset.asset-tree.title',
-            component: 'asset-tree',
-            enableClose: false,
-            config: {
-              id: 288,
-              icon: {
-                value: 'camera'
-              }
-            }
-          }
-        ]
+        children: getWidgetsRight(activePerspective)
       }
     ]
   }
+}
+
+const getWidgetsLeft = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
+  if (activePerspective === null) {
+    return []
+  }
+  return widgetsToModelJson(activePerspective.widgetsLeft as ElementTreeWidget[] | undefined)
+}
+
+const getWidgetsRight = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
+  if (activePerspective === null) {
+    return []
+  }
+  return widgetsToModelJson(activePerspective.widgetsRight as ElementTreeWidget[] | undefined)
+}
+
+const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
+  if (activePerspective === null) {
+    return []
+  }
+  return widgetsToModelJson(activePerspective.widgetsBottom as ElementTreeWidget[] | undefined)
+}
+
+const widgetsToModelJson = (widgets?: ElementTreeWidget[]): IJsonTabNode[] => {
+  const result: IJsonTabNode[] = []
+
+  widgets?.forEach((widget) => {
+    // skip document trees until we have a documents implementation
+    if (widget.widgetType === 'element_tree' && widget.elementType === 'document') {
+      return
+    }
+    result.push({
+      type: 'tab',
+      name: widget.name,
+      component: widget.widgetType,
+      enableClose: false,
+      config: widget
+    })
+  })
+
+  return result
 }

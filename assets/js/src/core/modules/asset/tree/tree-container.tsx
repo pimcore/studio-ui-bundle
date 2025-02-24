@@ -29,6 +29,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/use-tree-filter'
 
 export interface TreeContainerProps {
   id: number
@@ -48,9 +49,10 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
 
 const TreeContainer = ({ id = 1 }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
-  const { isLoading, data: rootNodeData } = useAssetGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true })
+  const { treeFilterArgs, pageSize } = useTreeFilter()
+  const { isLoading, data: rootNodeData } = useAssetGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true, ...treeFilterArgs })
   const { asset_tree_paging_limit: assetTreePagingLimit } = useSettings()
-  const pagingLimit: number | undefined = assetTreePagingLimit
+  const pagingLimit: number | undefined = pageSize ?? assetTreePagingLimit
   const { t } = useTranslation()
 
   if (isLoading || rootNodeData === undefined) {

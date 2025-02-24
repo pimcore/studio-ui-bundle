@@ -29,6 +29,7 @@ import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 import { withActionStates } from './node/with-action-states'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/use-tree-filter'
 
 export interface TreeContainerProps {
   id: number
@@ -48,9 +49,10 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
 
 const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
+  const { treeFilterArgs, pageSize } = useTreeFilter()
   const { object_tree_paging_limit: dataObjectTreePagingLimit } = useSettings()
-  const pagingLimit: number | undefined = dataObjectTreePagingLimit
-  const { isLoading, data: rootNodeData } = useDataObjectGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true })
+  const pagingLimit: number | undefined = pageSize ?? dataObjectTreePagingLimit
+  const { isLoading, data: rootNodeData } = useDataObjectGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true, ...treeFilterArgs })
   const { t } = useTranslation()
 
   if (isLoading || rootNodeData === undefined) {
@@ -93,7 +95,7 @@ const TreeContainer = ({ id = 1, ...props }: TreeContainerProps): React.JSX.Elem
   return (
     <ElementTree
       contextMenu={ DataObjectTreeContextMenu }
-      maxItemsPerNode={ dataObjectTreePagingLimit }
+      maxItemsPerNode={ pagingLimit }
       nodeApiHook={ useNodeApiHook }
       nodeId={ id }
       onSelect={ onSelect }
