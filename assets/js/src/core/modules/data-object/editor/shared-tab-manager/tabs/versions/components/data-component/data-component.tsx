@@ -57,8 +57,10 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     const filteredChildren = props?.children?.filter(child => props?.modifiedList?.includes(child?.name))
     const currentList = props.isExpandedUnmodifiedFields === true ? props?.listAllFieldsWithoutNull : props?.listModifiedFields
 
+    const getCurrentList = props?.isSingleVersion === true ? props?.listAllFieldsWithoutNull : currentList
+
     filteredChildren?.forEach(child => {
-      currentList?.forEach(item => {
+      getCurrentList?.forEach(item => {
         if (item?.key === child?.name) {
           item?.localesList?.forEach(locale => {
             const isValueInLocalesList: boolean = props?.listModifiedFields.some((modifiedItem) => (

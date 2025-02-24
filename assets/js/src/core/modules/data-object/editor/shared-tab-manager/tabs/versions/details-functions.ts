@@ -137,9 +137,6 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
     const versionItem = mainVersionData[index]
     const compareVersionItem = compareVersionData[index]
 
-    console.log('------>>>>>> versionItem: ', versionItem)
-    console.log('------>>>>>> compareVersionItem: ', compareVersionItem)
-
     const hasCompareVersion = !isEmpty(compareVersionItem)
 
     const field: IObjectVersionField = {
@@ -169,40 +166,50 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
       const list: Array<{ key: string, localesList: string[] }> = []
       const list2: Array<{ key: string, localesList: string[] }> = []
+      let isSingleVersion = false
 
       allFieldKeys.forEach(key => {
+        const getNonNullValues = (obj: object): any => Object.keys(obj).filter(key => obj[key] !== null)
+
+        const result1 = isObject(versionItem.fieldValue?.[key]) ? getNonNullValues((versionItem.fieldValue?.[key])) : []
+        const result2 = isObject(compareVersionItem?.fieldValue?.[key]) ? getNonNullValues((compareVersionItem?.fieldValue?.[key])) : []
+
+        const mergedResult = [...result1, ...result2]
+        const uniqMergedResult = uniq(mergedResult)
+
+        list2.push({ key, localesList: uniqMergedResult })
+
         if (JSON.stringify(versionItem?.fieldValue?.[key]) !== JSON.stringify(compareVersionItem?.fieldValue?.[key])) {
-          if (!isEmpty(compareVersionItem?.fieldValue?.[key])) {
-            const getNonNullValues = (obj: object): any => Object.keys(obj).filter(key => obj[key] !== null)
+          if (hasCompareVersion) {
+            if (!isEmpty(compareVersionItem?.fieldValue?.[key])) {
+              uniqMergedResult?.forEach((item: string) => {
+                if (versionItem.fieldValue?.[key]?.[item] !== compareVersionItem.fieldValue?.[key]?.[item]) {
+                  const existingItem = list.find(entry => entry.key === key)
 
-            const result1 = isObject(versionItem.fieldValue?.[key]) ? getNonNullValues((versionItem.fieldValue?.[key])) : []
-            const result2 = isObject(compareVersionItem.fieldValue?.[key]) ? getNonNullValues((compareVersionItem.fieldValue?.[key])) : []
-
-            const mergedResult = [...result1, ...result2]
-
-            uniq(mergedResult)?.forEach((item: string) => {
-              if (versionItem.fieldValue?.[key]?.[item] !== compareVersionItem.fieldValue?.[key]?.[item]) {
-                const existingItem = list.find(entry => entry.key === key)
-
-                if (!isEmpty(existingItem)) {
-                  existingItem?.localesList.push(...existingItem.localesList, item)
-                } else {
-                  list.push({ key, localesList: [item] })
+                  if (!isEmpty(existingItem)) {
+                    existingItem?.localesList.push(item)
+                  } else {
+                    list.push({ key, localesList: [item] })
+                  }
                 }
-              }
-            })
+              })
 
-            list2.push({ key, localesList: uniq(mergedResult) })
-            field.isModifiedValue = true
+              field.isModifiedValue = true
+            }
+          }
+
+          if (!hasCompareVersion) {
+            isSingleVersion = true
           }
         }
       })
 
       field.listModifiedFields = list
       field.listAllFieldsWithoutNull = list2
+      field.isSingleVersion = isSingleVersion
     } else {
       if (hasCompareVersion) {
-        if (!isEqual(versionItem.fieldValue, compareVersionItem.fieldValue)) {
+        if (!isEqual(versionItem?.fieldValue, compareVersionItem?.fieldValue)) {
           field.isModifiedValue = true
         }
       }

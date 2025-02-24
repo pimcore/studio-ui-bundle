@@ -118,6 +118,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                                 datatype={ 'data' }
                                 fieldType={ fieldItem.Field.fieldtype }
                                 isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
+                                isSingleVersion={ fieldItem?.isSingleVersion }
                                 listAllFieldsWithoutNull={ fieldItem?.listAllFieldsWithoutNull }
                                 listModifiedFields={ fieldItem?.listModifiedFields }
                                 modifiedList={ uniq(modifiedList) }
