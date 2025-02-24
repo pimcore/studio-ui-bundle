@@ -21,13 +21,14 @@ export const OpenDocumentModal = (): React.JSX.Element => {
   const { input } = useFormModal()
 
   input({
-    title: t('tag-configuration.rename'),
-    label: t('tag-configuration.name'),
+    title: t('open-document-modal.title'),
+    label: t('pen-document-modal.label'),
     rule: {
       required: true,
-      message: 'Please enter a tag name'
+      message: t('open-document-modal.required-message')
     },
-    okText: t('tag-configuration.save'),
+    okText: t('open-document-modal.ok-button'),
+    cancelText: t('open-document-modal.cancel-button'),
     onOk: () => { log('ok') }
   })
 

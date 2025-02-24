@@ -21,13 +21,14 @@ export const OpenAssetModal = (): React.JSX.Element => {
   const { input } = useFormModal()
 
   input({
-    title: t('tag-configuration.rename'),
-    label: t('tag-configuration.name'),
+    title: t('open-asset-modal.title'),
+    label: t('open-asset-modal.label'),
     rule: {
       required: true,
-      message: 'Please enter a tag name'
+      message: t('message: open-asset-modal.required-message')
     },
-    okText: t('tag-configuration.save'),
+    okText: t('open-asset-modal.ok-button'),
+    cancelText: t('open-document-modal.cancel-button'),
     onOk: () => { log('ok') }
   })
 

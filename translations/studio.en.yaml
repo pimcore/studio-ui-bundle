@@ -214,7 +214,16 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
-open-document-modal: 
+open-asset-modal.title: Open Asset
+open-asset-modal.label: Please enter the ID or Path (e.g. /images/logo.jpg) of the asset
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Cancel
+open-asset-modal.required-message: Please enter an ID or Path
+open-document-modal.title: Open Document
+open-document-modal.label: Please enter the ID, Path or URL (also including http://) of the document
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Cancel
+open-document-modal.required-message: Please enter an ID, Path or URL
 notes-and-events-modal.detail-information: Detail Information
 notes-and-events.columns.type: Type
 notes-and-events.columns.element: Element
