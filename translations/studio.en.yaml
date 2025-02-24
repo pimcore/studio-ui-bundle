@@ -214,6 +214,7 @@ data-type.document: Document
 data-type.asset: Asset
 data-type.object: Object
 data-type.checkbox: Checkbox
+open-document-modal: 
 notes-and-events-modal.detail-information: Detail Information
 notes-and-events.columns.type: Type
 notes-and-events.columns.element: Element

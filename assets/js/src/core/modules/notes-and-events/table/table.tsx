@@ -25,7 +25,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { isUndefined } from 'lodash'
-import { NoteModal } from '@Pimcore/modules/notes-and-events/table/note-modal'
+import { NoteModal } from '@Pimcore/modules/notes-and-events/note-modal'
 import { Tag } from '@Pimcore/components/tag/tag'
 
 type DataNoteWithActions = DataNote & {
