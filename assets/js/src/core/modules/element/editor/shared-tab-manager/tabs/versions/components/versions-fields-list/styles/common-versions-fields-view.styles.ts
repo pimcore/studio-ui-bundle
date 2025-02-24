@@ -148,7 +148,7 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     objectSectionFieldItemWrapperHighlight: css`
-      .ant-input,
+      .ant-input:not(.test-test-test),
       .ant-input-number,
       .ant-picker,
       .ant-color-picker-trigger,

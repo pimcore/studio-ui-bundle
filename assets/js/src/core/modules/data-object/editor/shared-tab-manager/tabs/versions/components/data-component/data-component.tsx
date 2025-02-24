@@ -55,15 +55,20 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
     const children: object[] = []
     const filteredChildren = props?.children?.filter(child => props?.modifiedList?.includes(child?.name))
+    const currentList = props.isExpandedUnmodifiedFields === true ? props?.listAllFieldsWithoutNull : props?.listModifiedFields
 
     filteredChildren?.forEach(child => {
-      props?.listModifiedFields?.forEach(item => {
+      currentList?.forEach(item => {
         if (item?.key === child?.name) {
           item?.localesList?.forEach(locale => {
+            const isValueInLocalesList: boolean = props?.listModifiedFields.some((modifiedItem) => (
+              modifiedItem.key === item?.key && modifiedItem.localesList.includes(locale))
+            )
+
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             children.push({
               ...child,
-              className: props?.listModifiedFields?.includes(child?.name) === false ? 'test-test-test' : undefined,
+              className: isValueInLocalesList ? undefined : 'test-test-test',
               title: (
                 <span className={ styles.fieldTitle }>
                   {child?.title} <Text type='secondary'>| {locale?.toUpperCase()}</Text>

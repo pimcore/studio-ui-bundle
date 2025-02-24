@@ -164,6 +164,7 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
         ])
 
         const list: Array<{ key: string, localesList: string[] }> = []
+        const list2: Array<{ key: string, localesList: string[] }> = []
 
         allFieldKeys.forEach(key => {
           if (JSON.stringify(versionItem.fieldValue?.[key]) !== JSON.stringify(compareVersionItem.fieldValue?.[key])) {
@@ -187,12 +188,14 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
                 }
               })
 
+              list2.push({ key, localesList: uniq(mergedResult) })
               field.isModifiedValue = true
             }
           }
         })
 
         field.listModifiedFields = list
+        field.listAllFieldsWithoutNull = list2
       } else {
         if (!isEqual(versionItem.fieldValue, compareVersionItem.fieldValue)) {
           field.isModifiedValue = true
