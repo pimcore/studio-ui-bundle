@@ -89,7 +89,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
           >
             <Tag
               bordered={ false }
-              color="processing"
+              color="blue"
               onClick={ async () => {
                 await openCorrectElement(elementType, id)
               } }
