@@ -16,11 +16,10 @@ import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice.gen'
+import { useElementFolderCreateMutation } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -35,7 +34,6 @@ export interface UseAddFolderHookReturn {
 export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
-  const { refreshTree } = useRefreshTree(elementType)
   const [elementFolderCreateMutation] = useElementFolderCreateMutation()
 
   const addFolder = (parentId: number, onFinish?: () => void): void => {
@@ -91,8 +89,6 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
       if (!isUndefined(response.error)) {
         trackError(new ApiError(response.error))
       }
-
-      refreshTree(parentId)
 
       onFinish?.()
     } catch (error) {

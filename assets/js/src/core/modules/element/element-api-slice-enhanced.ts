@@ -13,5 +13,30 @@
 
 import { type AssetPermissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObjectPermissions } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { api as baseApi } from './element-api-slice.gen'
+import { invalidatingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 
 export type ElementPermissions = AssetPermissions & DataObjectPermissions
+
+const api = baseApi.enhanceEndpoints({
+  addTagTypes: [tagNames.ASSET_DETAIL],
+  endpoints: {
+    elementFolderCreate: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_DETAIL_ID(args.parentId)
+    }
+  }
+})
+
+export type * from './element-api-slice.gen'
+
+export const {
+  useElementDeleteMutation,
+  useElementGetDeleteInfoQuery,
+  useElementFolderCreateMutation,
+  useElementGetContextPermissionsQuery,
+  useElementGetIdByPathQuery,
+  useElementGetSubtypeQuery,
+  useElementResolveBySearchTermQuery
+} = api
+
+export { api }
