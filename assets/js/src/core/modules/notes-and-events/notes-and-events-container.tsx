@@ -25,7 +25,7 @@ import { Box } from '@Pimcore/components/box/box'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { totalItems, notesAndEvents, notesAndEventsLoading, page, setPage, setPageSize, setFilter } = useNotesAndEvents()
+  const { totalItems, notesAndEvents, isLoading, isFetching, page, setPage, setPageSize, setFilter } = useNotesAndEvents()
 
   return (
     <ContentLayout
@@ -60,10 +60,10 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
         >
           <Title>{t('notes-and-events.label')}</Title>
           <SearchInput
-            loading={ false }
+            loading={ isFetching }
             onChange={ (e) => {
               const { value } = e.target
-              alert(`search is changing ${value}`)
+              setFilter(value)
             } }
             placeholder="Search"
           />
@@ -71,7 +71,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             }
     >
       <Content
-        loading={ notesAndEventsLoading }
+        loading={ isLoading }
         none={ notesAndEvents.length === 0 }
       >
         <Box
@@ -82,7 +82,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
         >
           <Table
             notesAndEvents={ notesAndEvents }
-            notesAndEventsLoading={ notesAndEventsLoading }
+            notesAndEventsFetching={ isFetching }
           />
         </Box>
       </Content>

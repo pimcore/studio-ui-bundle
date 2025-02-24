@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   type Note,
   useNoteGetCollectionQuery
@@ -25,7 +25,8 @@ export type DataNote = Note & {
 interface UseGlobalNotesAndEventsReturn {
   totalItems: number
   notesAndEvents: Note[]
-  notesAndEventsLoading: boolean
+  isLoading: boolean
+  isFetching: boolean
   page: number
   setPage: (page: number) => void
   pageSize: number
@@ -40,12 +41,13 @@ export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
 
   const queryArgs = useMemo(() => ({ body: { page, pageSize, filter } }), [page, pageSize, filter])
 
-  const { data: notesAndEvents, isLoading } = useNoteGetCollectionQuery(queryArgs)
+  const { data: notesAndEvents, isLoading, isFetching } = useNoteGetCollectionQuery(queryArgs)
 
   return {
     totalItems: notesAndEvents?.totalItems ?? 0,
     notesAndEvents: notesAndEvents?.items ?? [],
-    notesAndEventsLoading: isLoading,
+    isLoading,
+    isFetching,
     page,
     setPage,
     pageSize,
