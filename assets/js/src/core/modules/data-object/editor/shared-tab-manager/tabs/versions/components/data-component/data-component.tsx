@@ -20,7 +20,6 @@ import { Text } from '@Pimcore/components/text/text'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
-import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
 import { isUndefined } from 'lodash'
@@ -37,7 +36,6 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const fieldWidth = useFieldWidth()
-  const { currentLanguage } = useLanguageSelection()
   const { styles } = useStyles()
 
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
@@ -55,17 +53,30 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   // need to refactor it
   if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
-    const children = props?.children
-      ?.filter(child => props?.modifiedList?.includes(child?.name))
-      ?.map(child => ({
-        ...child,
-        title: (
-          <span className={ styles.fieldTitle }>
-            {child?.title} <Text type='secondary'>| {currentLanguage.toUpperCase()}</Text>
-          </span>
-        ),
-        value: !isUndefined(props?.value) ? (props?.value[child?.name])?.[currentLanguage] : null
-      }))
+    const children: object[] = []
+    const filteredChildren = props?.children?.filter(child => props?.modifiedList?.includes(child?.name))
+
+    filteredChildren?.forEach(child => {
+      props?.listModifiedFields?.forEach(item => {
+        if (item?.key === child?.name) {
+          item?.localesList?.forEach(locale => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            children.push({
+              ...child,
+              className: props?.listModifiedFields?.includes(child?.name) === false ? 'test-test-test' : undefined,
+              title: (
+                <span className={ styles.fieldTitle }>
+                  {child?.title} <Text type='secondary'>| {locale?.toUpperCase()}</Text>
+                </span>
+              ),
+              value: !isUndefined(props?.value) ? (props?.value[child?.name])?.[locale] : null
+            })
+          })
+        }
+      })
+
+      return null
+    })
 
     updatedProps = {
       ...props,

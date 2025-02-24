@@ -11,12 +11,16 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty, every, isObject, isArray, omitBy, isEqual } from 'lodash'
+import { get, isEmpty, every, isObject, isArray, omitBy, isEqual, uniq } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
+import {
+  COMPLEX_DATA_OBJECT_TYPES,
+  type DynamicTypesList
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -151,8 +155,48 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
     if (hasCompareVersion) {
       field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
 
-      if (!isEqual(versionItem.fieldValue, compareVersionItem.fieldValue)) {
-        field.isModifiedValue = true
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (COMPLEX_DATA_OBJECT_TYPES.includes(versionItem.fieldData.fieldtype as DynamicTypesList)) {
+        const allFieldKeys = new Set([
+          ...Object.keys(versionItem?.fieldValue as object),
+          ...(!isEmpty(compareVersionItem?.fieldValue as object) ? Object.keys(compareVersionItem?.fieldValue as object) : [])
+        ])
+
+        const list: Array<{ key: string, localesList: string[] }> = []
+
+        allFieldKeys.forEach(key => {
+          if (JSON.stringify(versionItem.fieldValue?.[key]) !== JSON.stringify(compareVersionItem.fieldValue?.[key])) {
+            if (!isEmpty(compareVersionItem.fieldValue?.[key])) {
+              const getNonNullValues = (obj: object): any => Object.keys(obj).filter(key => obj[key] !== null)
+
+              const result1 = isObject(versionItem.fieldValue?.[key]) ? getNonNullValues((versionItem.fieldValue?.[key])) : []
+              const result2 = isObject(compareVersionItem.fieldValue?.[key]) ? getNonNullValues((compareVersionItem.fieldValue?.[key])) : []
+
+              const mergedResult = [...result1, ...result2]
+
+              uniq(mergedResult)?.forEach((item: string) => {
+                if (versionItem.fieldValue?.[key]?.[item] !== compareVersionItem.fieldValue?.[key]?.[item]) {
+                  const existingItem = list.find(entry => entry.key === key)
+
+                  if (!isEmpty(existingItem)) {
+                    existingItem?.localesList.push(...existingItem.localesList, item)
+                  } else {
+                    list.push({ key, localesList: [item] })
+                  }
+                }
+              })
+
+              field.isModifiedValue = true
+            }
+          }
+        })
+
+        field.listModifiedFields = list
+      } else {
+        if (!isEqual(versionItem.fieldValue, compareVersionItem.fieldValue)) {
+          field.isModifiedValue = true
+        }
       }
     }
 

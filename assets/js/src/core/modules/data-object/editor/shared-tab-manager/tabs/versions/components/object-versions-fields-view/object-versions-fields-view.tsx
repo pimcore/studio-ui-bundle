@@ -66,6 +66,8 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
+  console.log('----->>>>> versionViewData: ', versionViewData)
+
   return (
     <>
       {breadcrumbsList?.map((breadcrumb, index) => {
@@ -115,6 +117,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                               <DataComponent
                                 datatype={ 'data' }
                                 fieldType={ fieldItem.Field.fieldtype }
+                                listModifiedFields={ fieldItem?.listModifiedFields }
                                 modifiedList={ uniq(modifiedList) }
                                 name={ fieldItem.Field.name }
                                 value={ fieldItem[key] }
