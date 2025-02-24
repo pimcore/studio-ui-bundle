@@ -51,13 +51,14 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          theme='secondary'
-        >
-          <Box margin={ {
+          margin={ {
             x: 'mini',
             y: 'none'
-          } }
-          ><Title>{t('notes-and-events.label')}</Title></Box>
+          }
+          }
+          theme='secondary'
+        >
+          <Title>{t('notes-and-events.label')}</Title>
           <SearchInput
             loading={ false }
             onChange={ (e) => {

@@ -15,6 +15,7 @@ import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
 import { Flex, type FlexProps } from 'antd'
 import React from 'react'
 import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
+import { getSizingClasses, type SizeDefinition } from '@Pimcore/components/box/box'
 
 export interface ToolbarProps {
   children: React.ReactNode
@@ -23,9 +24,11 @@ export interface ToolbarProps {
   theme?: 'primary' | 'secondary'
   position?: 'top' | 'bottom'
   size?: 'small' | 'default'
+  padding?: SizeDefinition
+  margin?: SizeDefinition
 }
 
-export const Toolbar = ({ children, size = 'default', justify = 'space-between', align, theme = 'primary', position = 'bottom', ...props }: ToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ children, size = 'default', justify = 'space-between', align, theme = 'primary', position = 'bottom', padding, margin, ...props }: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [
     styles.toolbar,
@@ -33,10 +36,13 @@ export const Toolbar = ({ children, size = 'default', justify = 'space-between',
     `toolbar--theme-${theme}`,
     `toolbar--position-${position}`,
     `toolbar--size-${size}`
-  ].join(' ')
+  ]
+
+  const paddingClasses: string[] = getSizingClasses('p', padding)
+  const marginClasses: string[] = getSizingClasses('m', margin)
 
   return (
-    <div className={ classes }>
+    <div className={ `${classes.join(' ')} ${paddingClasses.join(' ')} ${marginClasses.join(' ')}` }>
       <HorizontalScroll>
         <Flex
           align={ align }
