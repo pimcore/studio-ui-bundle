@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => void
@@ -48,7 +49,7 @@ export const useDownload = (): UseDownloadReturn => {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download' } />,
-      hidden: node.type === 'folder',
+      hidden: node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node, onFinish) }
     }
   }
@@ -58,7 +59,7 @@ export const useDownload = (): UseDownloadReturn => {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download' } />,
-      hidden: node.type === 'folder',
+      hidden: node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node) }
     }
   }
