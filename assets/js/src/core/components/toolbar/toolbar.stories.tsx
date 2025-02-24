@@ -22,7 +22,6 @@ import { _default as breadcrumbStory } from '../breadcrumb/breadcrumb.stories'
 import {Flex} from "@Pimcore/components/flex/flex";
 import {Title} from "@Pimcore/components/title/title";
 import {IconTextButton} from "@Pimcore/components/icon-text-button/icon-text-button";
-import {t} from "i18next";
 import {SearchInput} from "@Pimcore/components/search-input/search-input";
 
 const config: Meta = {

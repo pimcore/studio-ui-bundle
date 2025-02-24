@@ -16,7 +16,7 @@ import cn from 'classnames'
 import { useStyles } from './content.styles'
 import { type INoContentProps, NoContent } from '../no-content/no-content'
 import { Spin } from '../spin/spin'
-import { Box, type BoxProps, type SizeDefinition } from '../box/box'
+import { Box, type BoxProps } from '../box/box'
 
 export interface ContentProps extends Omit<BoxProps, 'children'> {
   className?: string
@@ -27,15 +27,13 @@ export interface ContentProps extends Omit<BoxProps, 'children'> {
   centered?: boolean
   fullPage?: boolean
   noneOptions?: INoContentProps
-  padding?: SizeDefinition
-  margin?: SizeDefinition
 }
 
 export const Content = ({
   children,
   padded = false,
   padding = { top: 'small', x: 'extra-small', bottom: 'extra-small' },
-  margin,
+  margin = 'none',
   className,
   loading = false,
   none = false,
@@ -62,7 +60,6 @@ export const Content = ({
   return (
     <Box
       className={ classes }
-      margin={ margin ?? 'none' }
       padding={ padded ? padding : 'none' }
       { ...props }
     >
