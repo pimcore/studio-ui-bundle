@@ -48,7 +48,6 @@ export const providingTags = {
   ASSET_DETAIL_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_DETAIL, id }],
   ASSET_TREE: () => [tagNames.ASSET, tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [tagNames.ASSET, { type: tagNames.ASSET_TREE, id }],
-  ASSET_TREE_ID_WITH_DETAIL: (id: string) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_LIST: (folderId: number) => [
     tagNames.ASSET,
