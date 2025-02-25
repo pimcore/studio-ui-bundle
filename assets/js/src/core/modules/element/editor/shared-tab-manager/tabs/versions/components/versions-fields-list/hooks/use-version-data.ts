@@ -68,15 +68,18 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
       }
 
       if (item.Field.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
-        const v1: object = item[versionKeysList[0]]
-        const v2: object = item[versionKeysList[1]]
+        const mainVersionValue: object = item[versionKeysList[0]]
+        const comparisonVersionValue: object = item[versionKeysList[1]]
 
-        const { resultV1, resultV2 } = compareComplexVersions(v1, v2)
+        const {
+          resultV1: mainVersionModifiedValue,
+          resultV2: comparisonVersionModifiedValue
+        } = compareComplexVersions(mainVersionValue, comparisonVersionValue)
 
         return {
           ...updatedItem,
-          [versionKeysList[0]]: resultV1,
-          [versionKeysList[1]]: resultV2
+          [versionKeysList[0]]: mainVersionModifiedValue,
+          [versionKeysList[1]]: comparisonVersionModifiedValue
         }
       }
 
