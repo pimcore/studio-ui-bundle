@@ -43,7 +43,10 @@ export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, 
         />
         )}
         { elementType === elementTypes.dataObject && (
-        <DataObjectTreeContainer id={ rootFolderId ?? 1 } />
+        <DataObjectTreeContainer
+          id={ rootFolderId ?? 1 }
+          showRoot={ showRoot }
+        />
         )}
       </TreeFilterProvider>
     </TreePermissionProvider>
