@@ -23,12 +23,12 @@ const config: Meta = {
     const [form] = Form.useForm()
 
     const onFieldsChange = (changedFields, allFields): void => {
-      console.log({changedFields, allFields})
+      console.log({ changedFields, allFields })
     }
 
     const onValuesChange = (changedValues, allValues): void => {
-      console.log({changedValues, allValues})
-    };
+      console.log({ changedValues, allValues })
+    }
 
     const reset = (): void => {
       form.resetFields()
@@ -38,32 +38,34 @@ const config: Meta = {
       form.setFieldValue('Input', 'test')
 
       form.setFieldValue('myKeyedList', {
-        "key1": {
-          "KeyedInput": Math.random()
+        key1: {
+          KeyedInput: Math.random()
         },
-        "key2": {
-          "KeyedInput": Math.random()
+        key2: {
+          KeyedInput: Math.random()
         },
-        "key4": {}
+        key4: {}
       })
     }
 
     return (
-      <Form 
-        form={form} 
-        layout='vertical' 
-        onFieldsChange={ onFieldsChange }
-        onValuesChange={ onValuesChange }
-        onFinish={ (values) => console.log(values) } initialValues={{
-        "myKeyedList": {
-          "key1": {
-            "KeyedInput": "Key 1"
-          },
-          "key2": {
-            "KeyedInput": "Key 2"
+      <Form
+        form={ form }
+        initialValues={ {
+          myKeyedList: {
+            key1: {
+              KeyedInput: 'Key 1'
+            },
+            key2: {
+              KeyedInput: 'Key 2'
+            }
           }
-        },
-      }}>
+        } }
+        layout='vertical'
+        onFieldsChange={ onFieldsChange }
+        onFinish={ (values) => { console.log(values) } }
+        onValuesChange={ onValuesChange }
+      >
         <Form.Item
           label="Input"
           name="Input"
@@ -92,13 +94,14 @@ const config: Meta = {
           label="Select"
           name="Select"
           rules={ [{ required: true, message: 'Please input!' }] }
-          
+
         >
-          <Select options={[
+          <Select options={ [
             { label: 'Option 1', value: '1' },
             { label: 'Option 2', value: '2' },
             { label: 'Option 3', value: '3' }
-          ]} />
+          ] }
+          />
         </Form.Item>
 
         <Form.Item
@@ -152,7 +155,7 @@ const config: Meta = {
                 <Form.Item
                   key={ key }
                   label="List Input"
-                  name={[name, 'ListInput']}
+                  name={ [name, 'ListInput'] }
                   rules={ [{ required: true, message: 'Please input!' }] }
                 >
                   <Input />
@@ -161,7 +164,7 @@ const config: Meta = {
 
               <Form.Item>
                 <Button
-                  onClick={ () => add() }
+                  onClick={ () => { add() } }
                 >
                   Add
                 </Button>
@@ -170,7 +173,7 @@ const config: Meta = {
           )}
         </Form.List>
 
-        <Form.Item name={'myKeyedList'} >
+        <Form.Item name={ 'myKeyedList' } >
           <Form.KeyedList name='myKeyedList'>
             <Form.KeyedList.Iterator>
               <Form.Item
@@ -185,7 +188,7 @@ const config: Meta = {
         </Form.Item>
 
         <Form.Item>
-        <Button onClick={ setKeyedListToRandomValues }>
+          <Button onClick={ setKeyedListToRandomValues }>
             modify form values
           </Button>
 
