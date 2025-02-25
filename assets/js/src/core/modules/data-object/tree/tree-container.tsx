@@ -91,7 +91,13 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       ...transformedRootNode,
       ...defaultRootNodeProps,
       label: rootNodeId === '1' ? t('home') : transformedRootNode.label,
-      icon: rootNodeId === '1' ? defaultRootNodeProps.icon : transformedRootNode.icon
+      icon: rootNodeId === '1' ? defaultRootNodeProps.icon : transformedRootNode.icon,
+      permissions: {
+        ...transformedRootNode.permissions,
+        delete: false,
+        rename: false,
+        unpublish: false
+      }
     }
   }
 
