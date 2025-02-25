@@ -114,11 +114,6 @@ Encore
     options.allowedHosts = 'all'
   })
 
-  .enableEslintPlugin({
-    extensions: ['js', 'jsx', 'ts', 'tsx'],
-    fix: true
-  })
-
   .addAliases({
     '@Pimcore': path.resolve(__dirname, 'js', 'src', 'core'),
     '@test-utils': path.resolve(__dirname, 'js', 'test-utils')
@@ -175,6 +170,10 @@ if (Encore.isDevServer()) {
     .setOutputPath('../public/core-dll/')
     .setPublicPath('/core-dll')
     .addPlugin(new ReactRefreshPlugin())
+    .enableEslintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      fix: true
+    })
 }
 
 let config = Encore.getWebpackConfig()
@@ -194,10 +193,6 @@ config = {
       ...config.output,
       library: 'studio_core'
   }
-}
-
-for (const rule of config.module.rules) {
-  console.log(rule.test, rule.use)
 }
 
 module.exports = config
