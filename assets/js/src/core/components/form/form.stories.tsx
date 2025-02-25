@@ -22,19 +22,19 @@ const config: Meta = {
   component: () => {
     const [form] = Form.useForm()
 
-    const onFieldsChange = (changedFields, allFields) => {
+    const onFieldsChange = (changedFields, allFields): void => {
       console.log({changedFields, allFields})
     }
 
-    const onValuesChange = (changedValues, allValues) => {
+    const onValuesChange = (changedValues, allValues): void => {
       console.log({changedValues, allValues})
     };
 
-    const reset = () => {
+    const reset = (): void => {
       form.resetFields()
     }
 
-    const setKeyedListToRandomValues = () => {
+    const setKeyedListToRandomValues = (): void => {
       form.setFieldValue('Input', 'test')
 
       form.setFieldValue('myKeyedList', {
