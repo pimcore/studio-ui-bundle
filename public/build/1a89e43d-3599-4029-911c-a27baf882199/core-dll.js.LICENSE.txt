@@ -26,7 +26,7 @@
  *
  */
 
-/*! @license DOMPurify 3.2.4 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.2.4/LICENSE */
+/*! @license DOMPurify 3.2.1 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.2.1/LICENSE */
 
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
@@ -83,16 +83,16 @@
 
 /**
  * @license React
- * use-sync-external-store-with-selector.production.js
+ * use-sync-external-store-with-selector.production.min.js
  *
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 /**
- * @remix-run/router v1.22.0
+ * @remix-run/router v1.21.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -103,7 +103,7 @@
  */
 
 /**
- * React Router DOM v6.29.0
+ * React Router DOM v6.28.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -114,7 +114,7 @@
  */
 
 /**
- * React Router v6.29.0
+ * React Router v6.28.0
  *
  * Copyright (c) Remix Software Inc.
  *
