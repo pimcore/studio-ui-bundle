@@ -92,13 +92,13 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
+        const getFieldValueByName: string | object = get(versionData?.objectData, fieldName)
 
-        const getFieldValue: string | object = get(versionData?.objectData, fieldName)
-        const fieldValue = isObject(getFieldValue) ? formattedObjectData(getFieldValue, item) : getFieldValue
-        const resultFieldValue = isObject(fieldValue) ? omitEmptyFields(fieldValue) : fieldValue
+        const fieldValue = isObject(getFieldValueByName) ? formattedObjectData(getFieldValueByName, item) : getFieldValueByName
+        const formattedFieldValue = isObject(fieldValue) ? omitEmptyFields(fieldValue) : fieldValue
 
-        if (!isFieldValueEmpty(resultFieldValue)) {
-          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: resultFieldValue, versionId, versionCount }]
+        if (!isFieldValueEmpty(formattedFieldValue)) {
+          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: formattedFieldValue, versionId, versionCount }]
         }
       }
 
@@ -117,6 +117,7 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
   }
 
   const layoutData = processLayoutData({ data: layout })
+  console.log('------->>>>> layoutData: ', layoutData)
   const generalSystemData = getGeneralSystemData()
 
   return [...generalSystemData, ...layoutData]
