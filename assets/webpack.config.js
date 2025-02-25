@@ -17,6 +17,7 @@ const path = require('path')
 const webpack = require('webpack')
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const uuid = require('uuid');
 const buildId = uuid.v4();
 const fs = require('fs');
@@ -139,6 +140,8 @@ Encore
        */
     `
   }))
+
+  .addPlugin(new ForkTsCheckerWebpackPlugin())
 
 if (!Encore.isDevServer()) {
   // only needed for CDN's or sub-directory deploy

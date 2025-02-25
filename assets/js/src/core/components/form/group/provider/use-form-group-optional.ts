@@ -11,16 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode } from 'react'
+import { useContext } from 'react'
+import { FormGroupContext, type FormGroupContextProps } from './form-group-provider'
 
-export interface SortableDroppableProps {
-  children: ReactNode
-}
+export type useFormGroupOptionalReturn = FormGroupContextProps
 
-export const SortableDroppable = (props: SortableDroppableProps): React.JSX.Element | null => {
-  return (
-    <>
-      {props.children}
-    </>
-  )
+export const useFormGroupOptional = (): useFormGroupOptionalReturn => {
+  const context = useContext(FormGroupContext)
+
+  return context
 }

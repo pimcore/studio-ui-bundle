@@ -15,10 +15,14 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { Text } from '@Pimcore/components/text/text'
 import { isString, isUndefined } from 'lodash'
 import type { DataNote } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { Box } from '@Pimcore/components/box/box'
+import {
+  NoteAndEventDetails
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/note-and-events-details'
 
 export interface NoteModalProps {
   noteDetail: DataNote
@@ -33,7 +37,7 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
       <Box
         margin={ 'small' }
       >
-        <div>{label}</div>
+        <Text>{label}</Text>
         <TextArea
           disabled
           value={ content }
@@ -49,7 +53,9 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
       onCancel={ (): void => {
         setNoteDetail(undefined)
       } }
-      onClose={ () => { setNoteDetail(undefined) } }
+      onClose={ () => {
+        setNoteDetail(undefined)
+      } }
       open={ !isUndefined(noteDetail) }
       size={ 'L' }
       title={ t('notes-and-events-modal.detail-information') }
@@ -58,7 +64,11 @@ export const NoteModal = ({ noteDetail, setNoteDetail }: NoteModalProps): React.
         {displayTextArea(noteDetail.type, t('notes-and-events.columns.type'))}
         {displayTextArea(noteDetail.title, t('notes-and-events.columns.title'))}
         {displayTextArea(noteDetail.description, t('notes-and-events.columns.description'), false)}
-        {displayTextArea(noteDetail.fields.toString(), t('notes-and-events.columns.details'))}
+        {noteDetail.data.length > 0 && (
+          <Box margin={ 'small' }>
+            <NoteAndEventDetails note={ noteDetail } />
+          </Box>
+        )}
         {isString(noteDetail.userName) && displayTextArea(noteDetail.userName, t('notes-and-events.columns.user'))}
         <Box
           margin={ 'small' }

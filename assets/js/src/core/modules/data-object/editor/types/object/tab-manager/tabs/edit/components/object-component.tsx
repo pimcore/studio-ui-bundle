@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode } from 'react'
+import React, { useMemo, type ReactNode } from 'react'
 import { isUndefined } from 'lodash'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
@@ -33,22 +33,32 @@ export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element 
 
   const currentDataType = dataType ?? datatype
 
-  if (currentDataType === 'data') {
-    if (isVersionObjectDataComponent === true) {
-      return (
-        <>
-          {!isUndefined(props.title) && props.title}
-          <VersionDataComponent { ...props as DataComponentProps } />
-        </>
-      )
+  const renderNode = useMemo(() => {
+    if (currentDataType === 'data') {
+      if (isVersionObjectDataComponent === true) {
+        return (
+          <>
+            {!isUndefined(props.title) && props.title}
+            <VersionDataComponent { ...props as DataComponentProps } />
+          </>
+        )
+      }
+
+      return <DataComponent { ...props as DataComponentProps } />
     }
 
-    return <DataComponent { ...props as DataComponentProps } />
+    if (currentDataType === 'layout') {
+      return <LayoutComponent { ...props as LayoutComponentProps } />
+    }
+  }, [currentDataType])
+
+  if (renderNode === undefined) {
+    throw new Error(`Unknown datatype: ${currentDataType}`)
   }
 
-  if (currentDataType === 'layout') {
-    return <LayoutComponent { ...props as LayoutComponentProps } />
-  }
-
-  throw new Error(`Unknown datatype: ${currentDataType}`)
+  return (
+    <>
+      { renderNode }
+    </>
+  )
 }

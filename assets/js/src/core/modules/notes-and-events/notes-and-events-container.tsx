@@ -13,8 +13,6 @@
 
 import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Box } from '@Pimcore/components/box/box'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
@@ -23,10 +21,11 @@ import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-g
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
+import { Box } from '@Pimcore/components/box/box'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { totalItems, notesAndEvents, notesAndEventsLoading, page, setPage, setPageSize } = useNotesAndEvents()
+  const { totalItems, notesAndEvents, isLoading, isFetching, page, setPage, setPageSize, setFilter } = useNotesAndEvents()
 
   return (
     <ContentLayout
@@ -36,56 +35,57 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             justify='flex-end'
             theme='secondary'
           >
-            <>
-              <Pagination
-                current={ page }
-                onChange={ (page, pageSize) => {
-                  setPage(page)
-                  setPageSize(pageSize)
-                } }
-                showSizeChanger
-                showTotal={ (total) => t('pagination.show-total', { total }) }
-                total={ totalItems }
-              />
-            </>
+            <Pagination
+              current={ page }
+              onChange={ (page, pageSize) => {
+                setPage(page)
+                setPageSize(pageSize)
+              } }
+              showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
+              total={ totalItems }
+            />
           </Toolbar>
           )
         : undefined }
+      renderTopBar={
+        <Toolbar
+          justify='space-between'
+          margin={ {
+            x: 'mini',
+            y: 'none'
+          }
+          }
+          theme='secondary'
+        >
+          <Title>{t('notes-and-events.label')}</Title>
+          <SearchInput
+            loading={ isFetching }
+            onChange={ (e) => {
+              const { value } = e.target
+              setFilter(value)
+            } }
+            placeholder="Search"
+          />
+        </Toolbar>
+            }
     >
-      {notesAndEventsLoading
-        ? <Content none />
-        : (
-          <Box
-            margin={ 'small' }
-          >
-            <Flex
-              gap={ 'medium' }
-              vertical
-            >
-              <Flex
-                justify={ 'space-between' }
-              >
-                <Flex
-                  gap={ 'small' }
-                >
-                  <Title>{t('notes-and-events.label')}</Title>
-                </Flex>
-                <SearchInput
-                  loading={ false }
-                  onChange={ (e) => {
-                    const { value } = e.target
-                    alert(`search is changing ${value}`)
-                  } }
-                  placeholder="Search"
-                />
-              </Flex>
-            </Flex>
-            <Table
-              notesAndEvents={ notesAndEvents }
-              notesAndEventsLoading={ notesAndEventsLoading }
-            />
-          </Box>
-          )}
+      <Content
+        loading={ isLoading }
+        none={ notesAndEvents.length === 0 }
+      >
+        <Box
+          margin={ {
+            x: 'extra-small',
+            y: 'none'
+          } }
+        >
+          <Table
+            notesAndEvents={ notesAndEvents }
+            notesAndEventsFetching={ isFetching }
+          />
+        </Box>
+      </Content>
     </ContentLayout>
   )
 }
