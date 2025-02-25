@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { createContext } from 'react'
+import React, { createContext, useMemo } from 'react'
 import { useClassObjectBrickObjectLayoutQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
@@ -27,9 +27,9 @@ export const ObjectBrickProvider = ({ children }: IObjectBrickProviderProps): Re
   const { id } = useElementContext()
   const objectBrickResult = useClassObjectBrickObjectLayoutQuery({ objectId: id })
 
-  return (
+  return useMemo(() => (
     <ObjectBrickContext.Provider value={ objectBrickResult }>
       { children }
     </ObjectBrickContext.Provider>
-  )
+  ), [objectBrickResult, children])
 }
