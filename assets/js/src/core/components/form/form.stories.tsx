@@ -17,12 +17,53 @@ import { Form } from './form'
 import { DatePicker, Input, InputNumber, Select } from 'antd'
 import { Button } from '../button/button'
 
-// @todo Component needs refactoring because it contains business logic
 const config: Meta = {
   title: 'Components/Controls/Form',
   component: () => {
+    const [form] = Form.useForm()
+
+    const onFieldsChange = (changedFields, allFields) => {
+      console.log({changedFields, allFields})
+    }
+
+    const onValuesChange = (changedValues, allValues) => {
+      console.log({changedValues, allValues})
+    };
+
+    const reset = () => {
+      form.resetFields()
+    }
+
+    const setKeyedListToRandomValues = () => {
+      form.setFieldValue('Input', 'test')
+
+      form.setFieldValue('myKeyedList', {
+        "key1": {
+          "KeyedInput": Math.random()
+        },
+        "key2": {
+          "KeyedInput": Math.random()
+        },
+        "key4": {}
+      })
+    }
+
     return (
-      <Form layout='vertical'>
+      <Form 
+        form={form} 
+        layout='vertical' 
+        onFieldsChange={ onFieldsChange }
+        onValuesChange={ onValuesChange }
+        onFinish={ (values) => console.log(values) } initialValues={{
+        "myKeyedList": {
+          "key1": {
+            "KeyedInput": "Key 1"
+          },
+          "key2": {
+            "KeyedInput": "Key 2"
+          }
+        },
+      }}>
         <Form.Item
           label="Input"
           name="Input"
@@ -51,8 +92,13 @@ const config: Meta = {
           label="Select"
           name="Select"
           rules={ [{ required: true, message: 'Please input!' }] }
+          
         >
-          <Select />
+          <Select options={[
+            { label: 'Option 1', value: '1' },
+            { label: 'Option 2', value: '2' },
+            { label: 'Option 3', value: '3' }
+          ]} />
         </Form.Item>
 
         <Form.Item
@@ -63,7 +109,90 @@ const config: Meta = {
           <DatePicker />
         </Form.Item>
 
+        <Form.Group name='myGroup'>
+          <Form.Item
+            label="Group Input 1"
+            name="GroupInput1"
+            rules={ [{ required: true, message: 'Please input!' }] }
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            label="Group Input 2"
+            name="GroupInput2"
+            rules={ [{ required: true, message: 'Please input!' }] }
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Group name='mySubGroup'>
+            <Form.Item
+              label="Sub Group Input 1"
+              name="SubGroupInput1"
+              rules={ [{ required: true, message: 'Please input!' }] }
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Sub Group Input 2"
+              name="SubGroupInput2"
+              rules={ [{ required: true, message: 'Please input!' }] }
+            >
+              <Input />
+            </Form.Item>
+          </Form.Group>
+        </Form.Group>
+
+        <Form.List name='myList' >
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Form.Item
+                  key={ key }
+                  label="List Input"
+                  name={[name, 'ListInput']}
+                  rules={ [{ required: true, message: 'Please input!' }] }
+                >
+                  <Input />
+                </Form.Item>
+              ))}
+
+              <Form.Item>
+                <Button
+                  onClick={ () => add() }
+                >
+                  Add
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+
+        <Form.Item name={'myKeyedList'} >
+          <Form.KeyedList name='myKeyedList'>
+            <Form.KeyedList.Iterator>
+              <Form.Item
+                label="Keyed Input"
+                name="KeyedInput"
+                rules={ [{ required: true, message: 'Please input!' }] }
+              >
+                <Input />
+              </Form.Item>
+            </Form.KeyedList.Iterator>
+          </Form.KeyedList>
+        </Form.Item>
+
         <Form.Item>
+        <Button onClick={ setKeyedListToRandomValues }>
+            modify form values
+          </Button>
+
+          <Button onClick={ reset }>
+            Reset
+          </Button>
+
           <Button
             htmlType="submit"
             type="primary"

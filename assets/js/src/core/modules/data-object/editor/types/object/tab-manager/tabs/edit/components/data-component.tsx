@@ -19,9 +19,6 @@ import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dyn
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { Alert } from 'antd'
 import { useFormList } from '../providers/form-list-provider/use-form-list'
-import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
-import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
-import { Text } from '@Pimcore/components/text/text'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import DataComponentFormItem
   from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component/form-item'
@@ -41,35 +38,17 @@ export interface DataComponentProps extends ObjectComponentProps {
 
 export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
-  const localizedFields = useLocalizedFields()
   const { name, fieldType, fieldtype } = props
   const formList = useFormList()
   const hasFormList = formList !== undefined
-  const hasLocalizedFields = localizedFields !== undefined
   let formFieldName: Array<number | string> = [name]
-  let title = props.title as ReactNode
-  const { currentLanguage } = useLanguageSelection()
+  const title = props.title as ReactNode
   const inheritanceState = useInheritanceState()
   const form = Form.useFormInstance()
   const { disabled } = useEditFormContext()
 
   if (hasFormList) {
     formFieldName = [...formList.getComputedFieldName(), name]
-  }
-
-  if (hasLocalizedFields) {
-    // @todo should handle multiple locales
-    formFieldName = ['localizedfields', name, localizedFields.locales[0]]
-
-    if (hasFormList) {
-      formFieldName = [...formList.getComputedFieldName(), ...formFieldName]
-    }
-
-    title = (
-      <>
-        {title} <Text type='secondary'>({currentLanguage.toUpperCase()})</Text>
-      </>
-    )
   }
 
   // @todo unify to one fieldType after api is updated completely

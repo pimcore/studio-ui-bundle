@@ -12,29 +12,21 @@
 */
 
 import React from 'react'
-import { FormListProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/form-list-provider/form-list-provider'
-import { type FormListFieldData, type FormListOperation } from 'antd'
 import { Content } from '@Pimcore/components/content/content'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import { Form } from '@Pimcore/components/form/form'
-import { type CollectionItemProps } from '../collection/collection'
-import { type ObjectBrickProps } from './object-brick'
 import { useObjectBrick } from './providers/use-object-brick'
 import { Box } from '@Pimcore/components/box/box'
 
-export interface ObjectBrickItemProps extends CollectionItemProps {
-  field: FormListFieldData
-  operation: FormListOperation
-  allowedTypes: ObjectBrickProps['allowedTypes']
+export interface ObjectBrickItemProps {
+  type: string
 }
 
-export const ObjectBrickItem = ({ field, operation, name, border, ...props }: ObjectBrickItemProps): React.JSX.Element => {
-  const form = Form.useFormInstance()
+export const ObjectBrickItem = (props: ObjectBrickItemProps): React.JSX.Element => {
   const objectBrick = useObjectBrick()
-  const value = form.getFieldValue([name, field.name])
+  const { type } = props
 
   // @todo handle this cases as errors
-  if (value === null || objectBrick === null) {
+  if (type === null || objectBrick === null) {
     return <></>
   }
 
@@ -44,29 +36,22 @@ export const ObjectBrickItem = ({ field, operation, name, border, ...props }: Ob
     return <Content loading />
   }
 
-  const objectBrickType: string = value?.type
-  const layoutDefinition = data.items.find(item => item.key === objectBrickType)
+  const layoutDefinition = data.items.find(item => item.key === type)
 
   if (layoutDefinition === undefined) {
-    return <></>
+    throw new Error(`Object brick layout definition for type ${type} not found`)
   }
 
   return (
-    <FormListProvider
-      field={ field }
-      fieldSuffix='data'
-      operation={ operation }
-    >
-      <Box padding={ { x: 'small', y: 'small', top: 'none' } }>
-        {layoutDefinition.children.map((child, index) => {
-          return (
-            <ObjectComponent
-              key={ index }
-              { ...child }
-            />
-          )
-        })}
-      </Box>
-    </FormListProvider>
+    <Box padding={ { x: 'small', y: 'small', top: 'none' } }>
+      {layoutDefinition.children.map((child, index) => {
+        return (
+          <ObjectComponent
+            key={ index }
+            { ...child }
+          />
+        )
+      })}
+    </Box>
   )
 }
