@@ -54,7 +54,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   // need to refactor it
   if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
     const children: object[] = []
-    const filteredChildren = props?.children?.filter(child => props?.modifiedList?.includes(child?.name))
+    const filteredChildren = props?.children?.filter(child => props?.localizedFieldKeys?.includes(child?.name))
     const currentList = props.isExpandedUnmodifiedFields === true ? props?.listAllFieldsWithoutNull : props?.listModifiedFields
 
     const getCurrentList = props?.isSingleVersion === true ? props?.listAllFieldsWithoutNull : currentList

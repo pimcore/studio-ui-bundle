@@ -14,14 +14,20 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
+import { isEmpty, isObject, uniq } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { DataComponent } from '../data-component/data-component'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
-import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
+import {
+  type CategoriesList,
+  type IObjectVersionField,
+  type IObjectVersionsFieldsList,
+  type VersionKeysList
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
-import { isEmpty, isObject, uniq } from 'lodash'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 interface IObjectVersionsFieldsViewProps {
   breadcrumbsList?: CategoriesList
@@ -35,6 +41,20 @@ const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
 export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+
+  const getLocalizedFieldKeys = (fieldItem: IObjectVersionField): string[] => {
+    const localizedFieldKeys: string[] = []
+
+    if (fieldItem.Field.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
+      versionKeysList.forEach((key) => {
+        if (!isEmpty(fieldItem[key]) && isObject(fieldItem[key])) {
+          localizedFieldKeys.push(...Object.keys(fieldItem[key]))
+        }
+      })
+    }
+
+    return uniq(localizedFieldKeys)
+  }
 
   const renderSectionTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
     const isShowValueWithTranslation = SECTIONS_WITH_TRANSLATION.includes(key)
@@ -66,8 +86,6 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
-  console.log('----->>>>> versionViewData: ', versionViewData)
-
   return (
     <>
       {breadcrumbsList?.map((breadcrumb, index) => {
@@ -94,18 +112,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                           const isModifiedField = fieldItem?.isModifiedValue === true
                           const isSecondItem = index === 1
 
-                          // need to rename it
-                          const modifiedList: string[] = []
-
-                          if (fieldItem.Field.fieldtype === 'localizedfields') {
-                            versionKeysList.map((key) => {
-                              if (!isEmpty(fieldItem[key]) && isObject(fieldItem[key])) {
-                                modifiedList.push(...Object.keys(fieldItem[key]))
-                              }
-
-                              return null
-                            })
-                          }
+                          const localizedFieldKeys = getLocalizedFieldKeys(fieldItem)
 
                           return (
                             <div
@@ -121,7 +128,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                                 isSingleVersion={ fieldItem?.isSingleVersion }
                                 listAllFieldsWithoutNull={ fieldItem?.listAllFieldsWithoutNull }
                                 listModifiedFields={ fieldItem?.listModifiedFields }
-                                modifiedList={ uniq(modifiedList) }
+                                localizedFieldKeys={ localizedFieldKeys }
                                 name={ fieldItem.Field.name }
                                 value={ fieldItem[key] }
                                 { ...fieldItem.Field }
