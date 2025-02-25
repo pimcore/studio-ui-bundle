@@ -26,8 +26,9 @@ export interface TreeWidgetProps {
   pql?: string | null
   pageSize?: number | null
   contextPermissions: Record<string, boolean>
+  showRoot?: boolean
 }
-export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, contextPermissions }: TreeWidgetProps): React.JSX.Element => {
+export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
   return (
     <TreePermissionProvider permissions={ { ...contextPermissions } }>
       <TreeFilterProvider
@@ -36,7 +37,10 @@ export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, 
         pqlQuery={ pql ?? undefined }
       >
         { elementType === elementTypes.asset && (
-        <AssetTreeContainer id={ rootFolderId ?? 1 } />
+        <AssetTreeContainer
+          id={ rootFolderId ?? 1 }
+          showRoot={ showRoot }
+        />
         )}
         { elementType === elementTypes.dataObject && (
         <DataObjectTreeContainer id={ rootFolderId ?? 1 } />
