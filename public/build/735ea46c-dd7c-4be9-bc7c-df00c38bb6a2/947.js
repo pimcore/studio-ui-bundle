@@ -1,0 +1,2 @@
+/*! For license information please see 947.js.LICENSE.txt */
+"use strict";(self.webpackChunkstudio_core=self.webpackChunkstudio_core||[]).push([[947],{90947:(e,s,c)=>{c.r(s),c.d(s,{Pimcore:()=>t});var i=c(47587),r=c(76649),n=c(7478),t={container:i.container,serviceIds:n.serviceIds,pluginSystem:r.pluginSystem}}}]);
