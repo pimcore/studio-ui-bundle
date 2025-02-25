@@ -47,12 +47,9 @@ const api = baseApi.enhanceEndpoints({
         providingTagsForTree = [
           ...providingTagsForTree,
           ...providingTags.ASSET_TREE(),
+          ...args.parentId !== undefined ? providingTags.ASSET_DETAIL_ID(args.parentId) : [],
           ...args.parentId !== undefined ? providingTags.ASSET_TREE_ID(args.parentId) : []
         ]
-
-        if (args.parentId !== undefined) {
-          providingTagsForTree.push(...providingTags.ASSET_DETAIL_ID(args.parentId))
-        }
 
         return providingTagsForTree
       }
