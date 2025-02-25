@@ -19,7 +19,6 @@ import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 
 export interface TreeWidgetProps {
-  rootFolder?: string
   rootFolderId?: number
   elementType: ElementType
   classes?: string[]
