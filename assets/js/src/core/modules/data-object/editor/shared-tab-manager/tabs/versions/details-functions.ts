@@ -198,12 +198,8 @@ export const versionsDataToTableData = ({ data, isComparisonMode = false, isSing
       field.listModifiedFields = modifiedFieldsList
       field.listAllFieldsWithoutNull = allFieldsList
       field.isSingleVersion = isSingleMode
-    } else {
-      if (isComparisonMode) {
-        if (!isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
-          field.isModifiedValue = true
-        }
-      }
+    } else if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
+      field.isModifiedValue = true
     }
 
     resultList.push(field)
