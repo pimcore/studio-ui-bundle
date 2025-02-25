@@ -85,21 +85,21 @@ const getWidgetsLeft = (activePerspective: PerspectiveConfigDetail | null): IJso
   if (activePerspective === null) {
     return []
   }
-  return widgetsToModelJson(activePerspective.widgetsLeft as ElementTreeWidget[] | undefined)
+  return widgetsToModelJson(activePerspective.widgetsLeft)
 }
 
 const getWidgetsRight = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
   if (activePerspective === null) {
     return []
   }
-  return widgetsToModelJson(activePerspective.widgetsRight as ElementTreeWidget[] | undefined)
+  return widgetsToModelJson(activePerspective.widgetsRight)
 }
 
 const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
   if (activePerspective === null) {
     return []
   }
-  return widgetsToModelJson(activePerspective.widgetsBottom as ElementTreeWidget[] | undefined)
+  return widgetsToModelJson(activePerspective.widgetsBottom)
 }
 
 const widgetsToModelJson = (widgets?: ElementTreeWidget[]): IJsonTabNode[] => {
