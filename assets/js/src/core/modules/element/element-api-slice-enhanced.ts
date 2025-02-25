@@ -13,5 +13,18 @@
 
 import { type AssetPermissions } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObjectPermissions } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import {
+  api
+} from '@Pimcore/modules/element/element-api-slice.gen'
 
 export type ElementPermissions = AssetPermissions & DataObjectPermissions
+
+export const {
+  useElementDeleteMutation,
+  useElementGetDeleteInfoQuery,
+  useElementFolderCreateMutation,
+  useElementGetContextPermissionsQuery,
+  useElementGetIdByPathQuery,
+  useElementGetSubtypeQuery,
+  useElementResolveBySearchTermQuery
+} = api

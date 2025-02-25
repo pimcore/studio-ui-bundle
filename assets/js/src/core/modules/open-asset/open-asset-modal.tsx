@@ -13,12 +13,15 @@
 
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import log from 'eslint-plugin-react/lib/util/log'
 import React from 'react'
+import { openAssetHelper } from '@Pimcore/modules/open-asset/hooks/open-asset-helper'
 
 export const OpenAssetModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { input } = useFormModal()
+  const { openElementByPathOrId } = openAssetHelper()
+
+  console.log('----> foo')
 
   input({
     title: t('open-asset-modal.title'),
@@ -29,7 +32,10 @@ export const OpenAssetModal = (): React.JSX.Element => {
     },
     okText: t('open-asset-modal.ok-button'),
     cancelText: t('open-document-modal.cancel-button'),
-    onOk: () => { log('ok') }
+    onOk: async (value: string) => {
+      console.log('----> value: string', value)
+      await openElementByPathOrId(value)
+    }
   })
 
   return <div>test</div>
