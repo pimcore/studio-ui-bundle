@@ -17,10 +17,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
-import {
-  COMPLEX_DATA_OBJECT_TYPES,
-  type DynamicTypesList
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -160,7 +157,7 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    if (COMPLEX_DATA_OBJECT_TYPES.includes((versionItem ?? compareVersionItem)?.fieldData?.fieldtype as DynamicTypesList)) {
+    if ((versionItem ?? compareVersionItem)?.fieldData?.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
       const allFieldKeys = new Set([
         ...(!isEmpty(versionItem?.fieldValue as object) ? Object.keys(versionItem?.fieldValue as object) : []),
         ...(!isEmpty(compareVersionItem?.fieldValue as object) ? Object.keys(compareVersionItem?.fieldValue as object) : [])

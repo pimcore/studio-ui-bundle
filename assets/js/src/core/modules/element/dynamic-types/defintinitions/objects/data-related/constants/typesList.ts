@@ -14,5 +14,3 @@
 export enum DynamicTypesList {
   LOCALIZED_FIELDS = 'localizedfields'
 }
-
-export const COMPLEX_DATA_OBJECT_TYPES = [DynamicTypesList.LOCALIZED_FIELDS]

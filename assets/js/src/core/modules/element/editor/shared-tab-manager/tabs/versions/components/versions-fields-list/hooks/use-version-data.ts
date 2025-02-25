@@ -12,7 +12,7 @@
 */
 
 import { useMemo } from 'react'
-import { isEqual, isEmpty } from 'lodash'
+import { isEmpty, isEqual } from 'lodash'
 import { getAssetCategoriesList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/assetCategoriesHelper'
 import { getObjectBreadcrumbsList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/objectBreadcrumbsHelper'
 import {
@@ -26,7 +26,7 @@ import {
 } from '../types'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { ElementTypeName } from '@Pimcore/constants/global'
-import { COMPLEX_DATA_OBJECT_TYPES, type DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 
 interface IUseVersionDataReturn {
   versionKeysList: VersionKeysList
@@ -67,7 +67,7 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
         ...item
       }
 
-      if (COMPLEX_DATA_OBJECT_TYPES.includes(item.Field.fieldtype as DynamicTypesList)) {
+      if (item.Field.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
         const v1: object = item[versionKeysList[0]]
         const v2: object = item[versionKeysList[1]]
 
