@@ -23,6 +23,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyles } from './field-label.styles'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
+import { useItemOptional } from '@Pimcore/components/form/item/provider/item/use-item'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -32,8 +33,9 @@ export interface FieldLabelProps {
 
 export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const itemContext = useItemOptional()
   const inheritanceStateContext = useInheritanceState()
-  const inheritanceState = inheritanceStateContext?.getInheritanceState(props.name)
+  const inheritanceState = inheritanceStateContext?.getInheritanceState(itemContext?.name ?? props.name)
   const { openDataObject } = useDataObjectHelper()
   const { t } = useTranslation()
 

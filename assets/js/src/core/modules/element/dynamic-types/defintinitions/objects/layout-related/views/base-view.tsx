@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { isEmpty } from 'lodash'
 import { AccordionView, type AccordionViewProps } from './accordion-view'
 import { CardView, type CardViewProps } from './card-view'
@@ -24,36 +24,38 @@ export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
 
-  if (!isPaddedLayout) {
-    return (
-      <>
-        {props.children}
-      </>
-    )
-  }
+  return useMemo(() => {
+    if (!isPaddedLayout) {
+      return (
+        <>
+          {props.children}
+        </>
+      )
+    }
 
-  if (props.collapsible === true) {
+    if (props.collapsible === true) {
+      return (
+        <AccordionView
+          bordered={ props.border }
+          collapsed={ props.collapsed }
+          collapsible
+          contentPadding={ props.contentPadding }
+          extra={ props.extra }
+          theme={ theme }
+          title={ props.title }
+        >{props.children}</AccordionView>
+      )
+    }
+
     return (
-      <AccordionView
+      <CardView
         bordered={ props.border }
-        collapsed={ props.collapsed }
-        collapsible
         contentPadding={ props.contentPadding }
         extra={ props.extra }
+        extraPosition={ props.extraPosition }
         theme={ theme }
         title={ props.title }
-      >{props.children}</AccordionView>
+      >{props.children}</CardView>
     )
-  }
-
-  return (
-    <CardView
-      bordered={ props.border }
-      contentPadding={ props.contentPadding }
-      extra={ props.extra }
-      extraPosition={ props.extraPosition }
-      theme={ theme }
-      title={ props.title }
-    >{props.children}</CardView>
-  )
+  }, [props, isPaddedLayout])
 }

@@ -257,9 +257,9 @@ component.no-content.no-content-available: No content available
 notes-and-events.label: Notes & Events
 notes-and-events.notes-and-events: Notes & Events
 notes-and-events.details: Details
-notes-and-events.name: name
-notes-and-events.type: type
-notes-and-events.value: value
+notes-and-events.name: Name
+notes-and-events.type: Type
+notes-and-events.value: Value
 notes-and-events.new-note: New Note
 notes-and-events.content: content
 notes-and-events.seo: seo

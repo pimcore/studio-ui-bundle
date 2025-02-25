@@ -15,6 +15,7 @@ import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
 import { Flex, type FlexProps } from 'antd'
 import React from 'react'
 import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
+import { Box, type BoxProps } from '@Pimcore/components/box/box'
 
 export interface ToolbarProps {
   children: React.ReactNode
@@ -23,20 +24,36 @@ export interface ToolbarProps {
   theme?: 'primary' | 'secondary'
   position?: 'top' | 'bottom'
   size?: 'small' | 'default'
+  padding?: BoxProps['padding']
+  margin?: BoxProps['margin']
 }
 
-export const Toolbar = ({ children, size = 'default', justify = 'space-between', align, theme = 'primary', position = 'bottom', ...props }: ToolbarProps): React.JSX.Element => {
+export const Toolbar = ({
+  children,
+  size = 'default',
+  justify = 'space-between',
+  align,
+  theme = 'primary',
+  position = 'bottom',
+  padding,
+  margin,
+  ...props
+}: ToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [
     styles.toolbar,
     'toolbar',
-    `toolbar--theme-${theme}`,
-    `toolbar--position-${position}`,
-    `toolbar--size-${size}`
+        `toolbar--theme-${theme}`,
+        `toolbar--position-${position}`,
+        `toolbar--size-${size}`
   ].join(' ')
 
   return (
-    <div className={ classes }>
+    <Box
+      className={ classes }
+      margin={ margin }
+      padding={ padding }
+    >
       <HorizontalScroll>
         <Flex
           align={ align }
@@ -48,7 +65,6 @@ export const Toolbar = ({ children, size = 'default', justify = 'space-between',
           {children}
         </Flex>
       </HorizontalScroll>
-    </div>
-
+    </Box>
   )
 }

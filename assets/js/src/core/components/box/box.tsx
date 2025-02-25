@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useStyles } from './box.styles'
 
 export type Sizings = 'none' | 'mini' | 'extra-small' | 'small' | 'normal' | 'medium' | 'large' | 'extra-large' | 'maxi'
@@ -77,12 +77,12 @@ export const Box = ({ children, padding, margin, className, component = 'div', i
   const marginClasses: string[] = getSizingClasses('m', margin)
   const ComponentType = component
 
-  return (
+  return useMemo(() => (
     <ComponentType
       className={ `${classes.join(' ')} ${paddingClasses.join(' ')} ${marginClasses.join(' ')}` }
       { ...props }
     >
       {children}
     </ComponentType>
-  )
+  ), [children, padding, margin, className, component, inline])
 }

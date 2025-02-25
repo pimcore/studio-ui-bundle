@@ -34,10 +34,10 @@ type DataNoteWithActions = DataNote & {
 
 export interface TableProps {
   notesAndEvents: Note[]
-  notesAndEventsLoading: boolean
+  notesAndEventsFetching: boolean
 }
 
-export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): React.JSX.Element => {
+export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement, mapToElementType } = useElementHelper()
@@ -89,7 +89,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
           >
             <Tag
               bordered={ false }
-              color="processing"
+              color="blue"
               onClick={ async () => {
                 await openCorrectElement(elementType, id)
               } }
@@ -176,7 +176,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
         autoWidth
         columns={ tableData }
         data={ notes }
-        isLoading={ notesAndEventsLoading }
+        isLoading={ notesAndEventsFetching }
         modifiedCells={ [] }
         resizable
         setRowId={ (row: DataNote) => row.rowId }
