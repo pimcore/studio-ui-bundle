@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -22,7 +23,6 @@ import { type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/t
 import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
-import { isUndefined } from 'lodash'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -51,38 +51,38 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
   let updatedProps = props
 
-  // need to refactor it
   if (currentFieldType === DynamicTypesList.LOCALIZED_FIELDS) {
-    const children: object[] = []
+    const children: any[] = []
     const filteredChildren = props?.children?.filter(child => props?.localizedFieldKeys?.includes(child?.name))
-    const currentList = props.isExpandedUnmodifiedFields === true ? props?.listAllFieldsWithoutNull : props?.listModifiedFields
 
-    const getCurrentList = props?.isSingleVersion === true ? props?.listAllFieldsWithoutNull : currentList
+    const comparisonCurrentList = props.isExpandedUnmodifiedFields === true ? props?.listAllFieldsWithoutNull : props?.listModifiedFields
+    const getCurrentListByVersionMode = props?.isSingleVersion === true ? props?.listAllFieldsWithoutNull : comparisonCurrentList
 
-    filteredChildren?.forEach(child => {
-      getCurrentList?.forEach(item => {
-        if (item?.key === child?.name) {
-          item?.localesList?.forEach(locale => {
-            const isValueInLocalesList: boolean = props?.listModifiedFields.some((modifiedItem) => (
-              modifiedItem.key === item?.key && modifiedItem.localesList.includes(locale))
-            )
+    const renderChildren = ({ child, item }: any): void => {
+      item?.localesList?.forEach(locale => {
+        const isValueInLocalesList: boolean = props?.listModifiedFields.some((modifiedItem) => (
+          modifiedItem.key === item?.key && modifiedItem.localesList.includes(locale))
+        )
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            children.push({
-              ...child,
-              className: isValueInLocalesList ? undefined : 'test-test-test',
-              title: (
-                <span className={ styles.fieldTitle }>
-                  {child?.title} <Text type='secondary'>| {locale?.toUpperCase()}</Text>
-                </span>
-              ),
-              value: !isUndefined(props?.value) ? (props?.value[child?.name])?.[locale] : null
-            })
-          })
+        children.push({
+          ...child,
+          className: isValueInLocalesList ? undefined : 'test-test-test',
+          title: (
+            <span className={ styles.fieldTitle }>
+              {child?.title} <Text type='secondary'>| {locale?.toUpperCase()}</Text>
+            </span>
+          ),
+          value: !isUndefined(props?.value) ? (props?.value[child?.name])?.[locale] : null
+        })
+      })
+    }
+
+    filteredChildren?.forEach(currentChild => {
+      getCurrentListByVersionMode?.forEach(currentVersionItem => {
+        if (currentChild?.name === currentVersionItem?.key) {
+          renderChildren({ child: currentChild, item: currentVersionItem })
         }
       })
-
-      return null
     })
 
     updatedProps = {
