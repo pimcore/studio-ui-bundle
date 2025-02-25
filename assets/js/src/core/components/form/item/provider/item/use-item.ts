@@ -25,3 +25,7 @@ export const useItem = (): UseItemReturn => {
 
   return context
 }
+
+export const useItemOptional = (): UseItemReturn | undefined => {
+  return useContext(ItemContext)
+}

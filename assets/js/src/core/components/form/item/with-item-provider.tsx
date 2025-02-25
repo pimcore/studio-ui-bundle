@@ -16,7 +16,6 @@ import React, { useMemo } from 'react'
 import { ItemProvider } from './provider/item/item-provider'
 
 export const withItemProvider = (Component: typeof Form.Item): typeof Form.Item => {
-  // @todo check for a more specific typing for props
   const FormItemWithItemProvider = (props: FormItemProps): React.JSX.Element => {
     return useMemo(() => (
       <ItemProvider item={ props }>
