@@ -128,34 +128,6 @@ export const LeftSidebarView = (): React.JSX.Element => {
     icon: 'shield'
   })
 
-  addNavItem({
-    path: 'Open Document',
-    icon: 'document',
-    widgetConfig: {
-      component: 'open-document',
-      config: {
-        icon: {
-          type: 'name',
-          value: 'open-document'
-        }
-      }
-    }
-  })
-
-  addNavItem({
-    path: 'Open Asset',
-    icon: 'asset',
-    widgetConfig: {
-      component: 'open-asset',
-      config: {
-        icon: {
-          type: 'name',
-          value: 'open-asset'
-        }
-      }
-    }
-  })
-
   return (
     <div className={ styles.leftSidebar }>
       <Avatar

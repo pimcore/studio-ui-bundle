@@ -37,7 +37,7 @@ export const openAssetHelper = (): OpenAssetHelperReturn => {
 
   useEffect(() => {
     if (element?.id) {
-      openElement(element.id)
+      await openElement(element.id)
     }
   }, [element, openElement])
 
