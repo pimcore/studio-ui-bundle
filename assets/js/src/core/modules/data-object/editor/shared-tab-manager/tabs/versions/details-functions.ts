@@ -156,9 +156,7 @@ export const versionsDataToTableData = ({ data, isComparisonMode = false, isSing
       field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    if ((mainVersionItem ?? compareVersionItem)?.fieldData?.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
+    const handleLocalizedFields = (): void => {
       const allFieldKeys = new Set([
         ...(!isEmpty(mainVersionItem?.fieldValue as object) ? Object.keys(mainVersionItem?.fieldValue as object) : []),
         ...(!isEmpty(compareVersionItem?.fieldValue as object) ? Object.keys(compareVersionItem?.fieldValue as object) : [])
@@ -198,6 +196,12 @@ export const versionsDataToTableData = ({ data, isComparisonMode = false, isSing
       field.listModifiedFields = modifiedFieldsList
       field.listAllFieldsWithoutNull = allFieldsList
       field.isSingleVersion = isSingleMode
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    if ((mainVersionItem ?? compareVersionItem)?.fieldData?.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
+      handleLocalizedFields()
     } else if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
       field.isModifiedValue = true
     }
