@@ -18,7 +18,6 @@ import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
-  console.log('activepersp', activePerspective, store.getState())
 
   return {
     global: {
