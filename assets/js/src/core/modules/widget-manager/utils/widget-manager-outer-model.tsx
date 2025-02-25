@@ -13,8 +13,9 @@
 
 import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
-import { type ElementTreeWidget, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
+import { isNil } from 'lodash'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
@@ -66,7 +67,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'left',
         size: 315,
-        selected: 0,
+        selected: getWidgetIndex(activePerspective?.widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
         children: getWidgetsLeft(activePerspective)
       },
 
@@ -74,6 +75,7 @@ export const getInitialModelJson = (): IJsonModel => {
         type: 'border',
         location: 'right',
         size: 315,
+        selected: getWidgetIndex(activePerspective?.widgetsRight, activePerspective?.expandedRight as string | undefined | null),
         children: getWidgetsRight(activePerspective)
       }
     ]
@@ -101,12 +103,19 @@ const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null): IJ
   return widgetsToModelJson(activePerspective.widgetsBottom)
 }
 
-const widgetsToModelJson = (widgets?: ElementTreeWidget[]): IJsonTabNode[] => {
+const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): number | undefined => {
+  if (isNil(widgets) || isNil(widgetId)) {
+    return undefined
+  }
+  return widgets.findIndex(widget => widget.id === widgetId)
+}
+
+const widgetsToModelJson = (widgets?: WidgetConfig[]): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
   widgets?.forEach((widget) => {
     // skip document trees until we have a documents implementation
-    if (widget.widgetType === 'element_tree' && widget.elementType === 'document') {
+    if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document') {
       return
     }
     result.push({
