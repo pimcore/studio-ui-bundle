@@ -31,6 +31,7 @@ import {
 import { useFormGroupOptional } from '@Pimcore/components/form/group/provider/use-form-group-optional'
 import { useLocalizedFields } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/provider/localized-fields-provider/use-localized-fields'
 import { isArray } from 'lodash'
+import { useFieldWidth } from '../providers/field-width/use-field-width'
 
 export interface DataComponentProps extends ObjectComponentProps {
   datatype: 'data'
@@ -49,6 +50,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
   const inheritanceState = useInheritanceState()
   const form = Form.useFormInstance()
   const { disabled } = useEditFormContext()
+  const fieldWidth = useFieldWidth()
   let virtualFieldName: Array<number | string> = [name]
   const groupContext = useFormGroupOptional()
   const localizedContext = useLocalizedFields()
@@ -65,8 +67,6 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     formFieldName = [...formList.getComputedFieldName(), name]
   }
 
-  console.log({ virtualFieldName })
-
   // @todo unify to one fieldType after api is updated completely
   const currentFieldType = fieldType ?? fieldtype ?? 'unknown'
 
@@ -79,14 +79,13 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
     )
   }
 
-  console.log({ formFieldName })
-
   const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
   const inheritanceStateValue = inheritanceState?.getInheritanceState(virtualFieldName)
 
   const _props = {
     ...props,
     title,
+    defaultFieldWidth: fieldWidth,
     name: formFieldName,
     inherited: inheritanceStateValue?.inherited === true,
     noteditable: Boolean(props.noteditable) || disabled

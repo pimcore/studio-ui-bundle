@@ -17,12 +17,14 @@ import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-dat
 import {
   DynamicTypeObjectDataAbstractSelect, type SelectProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-select'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export abstract class DynamicTypeObjectDataAbstractMultiSelect extends DynamicTypeObjectDataAbstractSelect {
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
       ...props,
-      multiSelect: true
+      multiSelect: true,
+      width: toCssDimension(props.width, props.defaultFieldWidth.large)
     })
   }
 }

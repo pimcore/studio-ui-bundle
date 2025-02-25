@@ -18,12 +18,13 @@ import cn from 'classnames'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { ImagePreviewDropdown } from '../image-preview/components/dropdown/dropdown'
+import { type DropdownProps } from '../dropdown/dropdown'
 
 interface AssetTargetProps {
-  onRemove?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onRemove?: () => void
+  onSearch?: () => void
   title: string
   className?: string
   width?: number | string
@@ -32,10 +33,30 @@ interface AssetTargetProps {
   uploadIcon?: boolean
 }
 
-export const AssetTarget = forwardRef(function AssetTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove }: AssetTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
+export const AssetTarget = forwardRef(function AssetTarget ({ title, className, width = 200, height = 200, dndIcon, uploadIcon, onRemove, onSearch }: AssetTargetProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
   const { t } = useTranslation()
+
+  const dropdownItems: DropdownProps['menu']['items'] = []
+
+  if (onRemove !== undefined) {
+    dropdownItems.push({
+      icon: <Icon value="trash" />,
+      key: 'remove',
+      label: t('remove'),
+      onClick: onRemove
+    })
+  }
+
+  if (onSearch !== undefined) {
+    dropdownItems.push({
+      icon: <Icon value="search" />,
+      key: 'search',
+      label: t('search'),
+      onClick: onSearch
+    })
+  }
 
   return (
     <div
@@ -78,18 +99,8 @@ export const AssetTarget = forwardRef(function AssetTarget ({ title, className, 
         <div className="image-target-title">{ title }</div>
       </Flex>
 
-      { onRemove !== undefined && (
-        <Tooltip title={ t('remove') }>
-          <IconButton
-            className={ styles.closeButton }
-            icon={ {
-              value: 'close'
-            } }
-            onClick={ onRemove }
-            size="small"
-          />
-        </Tooltip>
-      )}
+      <ImagePreviewDropdown dropdownItems={ dropdownItems } />
+
     </div>
   )
 })

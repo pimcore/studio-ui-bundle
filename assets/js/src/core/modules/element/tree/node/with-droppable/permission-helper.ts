@@ -11,16 +11,10 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactNode } from 'react'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 
-export interface SortableDroppableProps {
-  children: ReactNode
-}
-
-export const SortableDroppable = (props: SortableDroppableProps): React.JSX.Element | null => {
-  return (
-    <>
-      {props.children}
-    </>
-  )
+export const isAllowedToMove = (element: Element): boolean => {
+  return checkElementPermission(element.permissions, 'create') &&
+    checkElementPermission(element.permissions, 'settings')
 }

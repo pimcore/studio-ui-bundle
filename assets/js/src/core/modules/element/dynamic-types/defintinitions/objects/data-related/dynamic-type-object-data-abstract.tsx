@@ -23,6 +23,7 @@ import {
   FieldLabel
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -31,6 +32,7 @@ export interface AbstractObjectDataDefinition extends DataComponentProps {
   invisible?: boolean | null
   noteditable?: boolean | null
   title?: ReactNode
+  defaultFieldWidth: IFieldWidthContext
 }
 
 @injectable()

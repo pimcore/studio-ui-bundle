@@ -13,10 +13,12 @@
 
 import React, { useEffect, useState } from 'react'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface BooleanSelectProps extends SelectProps {
   value?: boolean | null
   className?: string
+  maxWidth?: string
   onChange?: (value?: boolean | null) => void
 }
 
@@ -61,6 +63,7 @@ export const BooleanSelect = (props: BooleanSelectProps): React.JSX.Element => {
     <Select
       { ...props }
       onChange={ onChange }
+      style={ { maxWidth: toCssDimension(props.maxWidth) } }
       value={ mapValue(value) }
     />
   )

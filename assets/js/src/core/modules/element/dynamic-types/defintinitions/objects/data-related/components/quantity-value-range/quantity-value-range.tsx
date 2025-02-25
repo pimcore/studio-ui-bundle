@@ -22,6 +22,8 @@ import { type ValueType } from '@rc-component/mini-decimal/es/interface'
 import { useStyles } from './quantity-value-range.styles'
 import cn from 'classnames'
 import { InputNumber } from '@Pimcore/components/input-number/input-number'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
+import { theme } from 'antd'
 
 export interface QuantityValueRangeProps {
   value?: QuantityValueRangeValue | null
@@ -29,7 +31,7 @@ export interface QuantityValueRangeProps {
   onChange?: (value: QuantityValueRangeValue | null) => void
   validUnits?: string[] | null
   unitWidth?: string | null
-  width?: string | null
+  Width?: string | null
   decimalPrecision?: number | null
   disabled?: boolean
   inherited?: boolean
@@ -41,11 +43,15 @@ export interface QuantityValueRangeValue {
   unitId: string | null
 }
 
+const { useToken } = theme
+
 export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.Element => {
   const [value, setValueState] = useState<QuantityValueRangeValue>(props.value ?? { minimum: null, maximum: null, unitId: null })
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const fieldWidth = useFieldWidth()
+  const { token } = useToken()
 
   const setValue = (newValue: QuantityValueRangeValue): void => {
     if (!_.isEqual(newValue, value)) {
@@ -91,7 +97,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
         align="center"
         className="w-full"
         gap="small"
-        style={ { maxWidth: toCssDimension(props.width, 310) } }
+        style={ { maxWidth: toCssDimension(props.Width, fieldWidth.small * 2 + Number(token.sizeSM)) } }
       >
         <InputNumber
           className={ cn(styles.input, 'w-full') }
@@ -119,7 +125,7 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
         options={ getSelectOptions(props.validUnits ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         showSearch
-        style={ { minWidth: toCssDimension(props.unitWidth, 100) } }
+        style={ { minWidth: toCssDimension(props.unitWidth, 150) } }
         value={ value?.unitId ?? undefined }
       />
     </Flex>

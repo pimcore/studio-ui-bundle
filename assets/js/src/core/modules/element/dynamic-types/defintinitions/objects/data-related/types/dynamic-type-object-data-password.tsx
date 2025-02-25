@@ -15,11 +15,16 @@ import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { InputPassword } from '@Pimcore/components/input-password/input-password'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { type FormInstance } from 'antd'
+import { type NamePath } from 'antd/es/form/interface'
 
 export type PasswordObjectDataDefinition = AbstractObjectDataDefinition & {
   minimumLength: number | null
-
+  width?: number | string | null
 }
+
+const PASSWORD_PLACEHOLDER = '********'
 
 export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract {
   id: string = 'password'
@@ -31,9 +36,14 @@ export class DynamicTypeObjectDataPassword extends DynamicTypeObjectDataAbstract
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         minLength={ props.minimumLength ?? undefined }
-        value={ props.value }
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
+        value={ PASSWORD_PLACEHOLDER }
         visibilityToggle={ false }
       />
     )
+  }
+
+  handleDefaultValue (props: PasswordObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
+    form.setFieldValue(fieldName, PASSWORD_PLACEHOLDER)
   }
 }

@@ -15,10 +15,12 @@ import React from 'react'
 
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
 import { Input } from '@Pimcore/components/input/input'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type InputProps = AbstractObjectDataDefinition & {
   columnLength?: number
   showCharCount?: boolean
+  width?: number | string | null
 }
 
 export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObjectDataAbstract {
@@ -30,6 +32,7 @@ export abstract class DynamicTypeObjectDataAbstractInput extends DynamicTypeObje
         inherited={ props.inherited }
         maxLength={ props.columnLength ?? undefined }
         showCount={ props.showCharCount }
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.large) } }
         value={ props.value }
       />
     )

@@ -45,6 +45,7 @@ export class DynamicTypeObjectDataRgbaColor extends DynamicTypeObjectDataAbstrac
         format={ 'hex' }
         inherited={ props.inherited }
         showText={ formatColorShowText }
+        value={ props.value }
       />
     )
   }

@@ -18,6 +18,7 @@ import dayjs from 'dayjs'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type AbstractDateObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | string | null
@@ -45,11 +46,13 @@ export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjec
     return (
       <DatePicker
         allowClear
+        className="w-full"
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         outputFormat={ props.respectTimezone !== false || outputType !== 'dateString' ? undefined : props.outputFormat }
         outputType={ outputType }
         showTime={ props.showTime }
+        style={ { maxWidth: toCssDimension(props.defaultFieldWidth.small) } }
         value={ props.value }
       />
     )

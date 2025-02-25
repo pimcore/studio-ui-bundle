@@ -11,15 +11,15 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
-import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
+import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { Slider, type SliderProps } from '@Pimcore/components/slider/slider'
 import {
   type AbstractNumericObjectDataDefinition,
   DynamicTypeObjectDataAbstractNumeric
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/abstract/dynamic-type-object-data-abstract-numeric'
-import { Slider, type SliderProps } from '@Pimcore/components/slider/slider'
 import { toCssDimension } from '@Pimcore/utils/css'
-import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import React from 'react'
+import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
 
 export type SliderObjectDataDefinition = AbstractNumericObjectDataDefinition & {
   vertical?: boolean | null
@@ -36,10 +36,11 @@ export class DynamicTypeObjectDataSlider extends DynamicTypeObjectDataAbstractNu
 
     return (
       <Slider
-        style={ { width: toCssDimension(props.width, 'calc(100% - 3px)'), height: toCssDimension(props.height, props.vertical === true ? 100 : undefined) } }
         { ...componentProps }
         allowClear
+        className="w-full"
         showValue
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.large), height: toCssDimension(props.height, props.vertical === true ? 100 : undefined) } }
         vertical={ props.vertical ?? undefined }
       />
     )

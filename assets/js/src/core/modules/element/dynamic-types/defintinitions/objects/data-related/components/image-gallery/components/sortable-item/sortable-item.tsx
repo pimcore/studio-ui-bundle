@@ -58,7 +58,6 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, dis
       ref={ setNodeRef }
       { ...attributes }
       { ...listeners }
-      key={ index }
       style={ active?.data.current?.sortable !== undefined ? style : undefined }
     >
       { item.image !== null

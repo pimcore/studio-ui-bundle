@@ -24,6 +24,7 @@ import { t } from 'i18next'
 import {
   BooleanSelect
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/boolean-select/boolean-select'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbstractSelect {
   id: string = 'booleanSelect'
@@ -34,6 +35,7 @@ export class DynamicTypeObjectDataBooleanSelect extends DynamicTypeObjectDataAbs
       <BooleanSelect
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
+        maxWidth={ toCssDimension(props.width, props.defaultFieldWidth.medium) }
         optionFilterProp="label"
         options={ options }
         value={ props.value }

@@ -38,6 +38,7 @@ import {
   hasValueData
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/hotspot-image/utils/value-data'
 import _ from 'lodash'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -73,8 +74,27 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     setValue(null)
   }
 
-  const width = props.width === null || props.width === '' ? 300 : props.width
-  const height = props.height === null || props.width === '' ? 150 : props.height
+  const width = toCssDimension(props.width, 300)
+  const height = toCssDimension(props.height, 150)
+
+  const replaceImage = (newImage: ImageValue): void => {
+    if (hasValueData(value)) {
+      confirm({
+        title: t('hotspots.clear-data'),
+        content: t('hotspots.clear-data.dnd-message'),
+        okText: t('yes'),
+        cancelText: t('no'),
+        onOk: () => {
+          setImage(newImage, true)
+        },
+        onCancel: () => {
+          setImage(newImage, false)
+        }
+      })
+    } else {
+      setImage(newImage, true)
+    }
+  }
 
   const setImage = (image: ImageValue, replaceValueData: boolean): void => {
     let newValue: HotspotImageValue = value === null ? { image: null, hotspots: [], marker: [], crop: {} } : { ...value }
@@ -96,6 +116,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         disabled={ props.disabled }
         emptyValue={ emptyValue }
         key="image-footer"
+        replaceImage={ replaceImage }
         setCropModalOpen={ setCropModalOpen }
         setMarkerModalOpen={ setMarkerModalOpen }
         setValue={ setValue }
@@ -107,22 +128,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
         isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'image' }
         onDrop={ (info: DragAndDropInfo) => {
           const newImage: ImageValue = { type: 'asset', id: info.data.id as number }
-          if (hasValueData(value)) {
-            confirm({
-              title: t('hotspots.clear-data'),
-              content: t('hotspots.clear-data.dnd-message'),
-              okText: t('yes'),
-              cancelText: t('no'),
-              onOk: () => {
-                setImage(newImage, true)
-              },
-              onCancel: () => {
-                setImage(newImage, false)
-              }
-            })
-          } else {
-            setImage(newImage, true)
-          }
+          replaceImage(newImage)
         } }
         variant="outline"
       >
@@ -133,13 +139,13 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
                 assetId={ value.image.id }
                 cropModalOpen={ cropModalOpen }
                 disabled={ props.disabled }
-                height={ height }
+                height={ height! }
                 markerModalOpen={ markerModalOpen }
                 onChange={ setValue }
                 setCropModalOpen={ setCropModalOpen }
                 setMarkerModalOpen={ setMarkerModalOpen }
                 value={ value }
-                width={ width }
+                width={ width! }
               />
               )
             : (

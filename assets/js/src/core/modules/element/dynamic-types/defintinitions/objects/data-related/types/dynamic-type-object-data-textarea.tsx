@@ -14,10 +14,12 @@
 import React from 'react'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type TextareaObjectDataDefinition = AbstractObjectDataDefinition & {
   showCharCount: boolean
   maxLength: number | null
+  width?: number | string | null
 }
 
 export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract {
@@ -31,6 +33,7 @@ export class DynamicTypeObjectDataTextarea extends DynamicTypeObjectDataAbstract
         inherited={ props.inherited }
         maxLength={ props.maxLength ?? undefined }
         showCount={ props.showCharCount }
+        style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.large) } }
         value={ props.value }
       />
     )
