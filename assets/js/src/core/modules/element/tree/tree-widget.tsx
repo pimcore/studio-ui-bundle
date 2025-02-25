@@ -15,40 +15,19 @@ import { TreeContainer as AssetTreeContainer } from '@Pimcore/modules/asset/tree
 import { TreeContainer as DataObjectTreeContainer } from '@Pimcore/modules/data-object/tree/tree-container'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import React from 'react'
-import { useElementGetIdByPathQuery } from '@Pimcore/modules/element/element-api-slice.gen'
-import { Box } from '@Pimcore/components/box/box'
-import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 
 export interface TreeWidgetProps {
-  rootFolder: string
+  rootFolder?: string
+  rootFolderId?: number
   elementType: ElementType
   classes?: string[]
   pql?: string | null
   pageSize?: number | null
   contextPermissions: Record<string, boolean>
 }
-export const TreeWidget = ({ elementType, rootFolder, classes, pql, pageSize, contextPermissions }: TreeWidgetProps): React.JSX.Element => {
-  const { data, isLoading, isError, error } = useElementGetIdByPathQuery({
-    elementType,
-    elementPath: rootFolder
-  }, { skip: rootFolder === '' || rootFolder === '/' })
-
-  if (isError) {
-    trackError(new ApiError(error))
-  }
-
-  if (isLoading) {
-    return (
-      <Box padding={ 'small' }>
-        <Skeleton />
-      </Box>
-    )
-  }
-
-  const rootFolderId = data?.id ?? 1
+export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, contextPermissions }: TreeWidgetProps): React.JSX.Element => {
   return (
     <TreePermissionProvider permissions={ { ...contextPermissions } }>
       <TreeFilterProvider
@@ -57,10 +36,10 @@ export const TreeWidget = ({ elementType, rootFolder, classes, pql, pageSize, co
         pqlQuery={ pql ?? undefined }
       >
         { elementType === elementTypes.asset && (
-        <AssetTreeContainer id={ rootFolderId } />
+        <AssetTreeContainer id={ rootFolderId ?? 1 } />
         )}
         { elementType === elementTypes.dataObject && (
-        <DataObjectTreeContainer id={ rootFolderId } />
+        <DataObjectTreeContainer id={ rootFolderId ?? 1 } />
         )}
       </TreeFilterProvider>
     </TreePermissionProvider>
