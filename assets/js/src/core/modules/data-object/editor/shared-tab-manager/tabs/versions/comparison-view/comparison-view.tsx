@@ -70,7 +70,7 @@ export const ComparisonView = ({
               versionCount: versionIds[versionIndex].count
             }))
 
-            setVersionsData(versionsDataToTableData(formattedDataList))
+            setVersionsData(versionsDataToTableData({ data: formattedDataList, isComparisonMode: true }))
           }
         })
       })

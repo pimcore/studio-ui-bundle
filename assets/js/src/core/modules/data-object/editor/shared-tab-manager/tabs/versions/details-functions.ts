@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty, every, isObject, isArray, omitBy, isEqual, uniq } from 'lodash'
+import { get, isEmpty, every, isObject, isArray, omitBy, isEqual, uniq, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -117,37 +117,33 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
   }
 
   const layoutData = processLayoutData({ data: layout })
-  console.log('------->>>>> layoutData: ', layoutData)
   const generalSystemData = getGeneralSystemData()
 
   return [...generalSystemData, ...layoutData]
 }
 
-export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): IObjectVersionField[] => {
+export const versionsDataToTableData = ({ data, isComparisonMode = false, isSingleMode = false }: { data: IFormattedDataStructureData[][], isComparisonMode?: boolean, isSingleMode?: boolean }): IObjectVersionField[] => {
   const resultList: IObjectVersionField[] = []
 
   const mainVersionData = data[0] ?? []
   const compareVersionData = data[1] ?? []
+  const maxVersionDataLength = Math.max(mainVersionData.length, compareVersionData.length)
 
-  const isComparisonMode = !isEmpty(compareVersionData)
-
-  const maxLength = Math.max(mainVersionData?.length, compareVersionData?.length)
-
-  for (let index = 0; index < maxLength; index++) {
-    const versionItem = mainVersionData[index]
+  for (let index = 0; index < maxVersionDataLength; index++) {
+    const mainVersionItem = mainVersionData[index]
     const compareVersionItem = compareVersionData[index]
 
-    const hasCompareVersion = !isEmpty(compareVersionItem)
+    const hasCompareVersion = !isUndefined(compareVersionItem)
 
     const field: IObjectVersionField = {
       Field: {
-        fieldBreadcrumbTitle: versionItem?.fieldBreadcrumbTitle ?? compareVersionItem?.fieldBreadcrumbTitle,
-        ...(versionItem?.fieldData ?? compareVersionItem?.fieldData)
+        fieldBreadcrumbTitle: mainVersionItem?.fieldBreadcrumbTitle ?? compareVersionItem?.fieldBreadcrumbTitle,
+        ...(mainVersionItem?.fieldData ?? compareVersionItem?.fieldData)
       }
     }
 
-    if (!isEmpty(versionItem)) {
-      field[`Version ${versionItem.versionCount}`] = versionItem.fieldValue
+    if (!isEmpty(mainVersionItem)) {
+      field[`Version ${mainVersionItem.versionCount}`] = mainVersionItem.fieldValue
     } else if (hasCompareVersion) {
       field[`Version ${compareVersionItem.versionCount}`] = null
     }
@@ -158,20 +154,19 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    if ((versionItem ?? compareVersionItem)?.fieldData?.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
+    if ((mainVersionItem ?? compareVersionItem)?.fieldData?.fieldtype === DynamicTypesList.LOCALIZED_FIELDS) {
       const allFieldKeys = new Set([
-        ...(!isEmpty(versionItem?.fieldValue as object) ? Object.keys(versionItem?.fieldValue as object) : []),
+        ...(!isEmpty(mainVersionItem?.fieldValue as object) ? Object.keys(mainVersionItem?.fieldValue as object) : []),
         ...(!isEmpty(compareVersionItem?.fieldValue as object) ? Object.keys(compareVersionItem?.fieldValue as object) : [])
       ])
 
       const list: Array<{ key: string, localesList: string[] }> = []
       const list2: Array<{ key: string, localesList: string[] }> = []
-      let isSingleVersion = false
 
       allFieldKeys.forEach(key => {
         const getNonNullValues = (obj: object): any => Object.keys(obj).filter(key => obj[key] !== null)
 
-        const result1 = isObject(versionItem?.fieldValue?.[key]) ? getNonNullValues((versionItem?.fieldValue?.[key])) : []
+        const result1 = isObject(mainVersionItem?.fieldValue?.[key]) ? getNonNullValues((mainVersionItem?.fieldValue?.[key])) : []
         const result2 = isObject(compareVersionItem?.fieldValue?.[key]) ? getNonNullValues((compareVersionItem?.fieldValue?.[key])) : []
 
         const mergedResult = [...result1, ...result2]
@@ -179,10 +174,10 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
         list2.push({ key, localesList: uniqMergedResult })
 
-        if (JSON.stringify(versionItem?.fieldValue?.[key]) !== JSON.stringify(compareVersionItem?.fieldValue?.[key])) {
+        if (JSON.stringify(mainVersionItem?.fieldValue?.[key]) !== JSON.stringify(compareVersionItem?.fieldValue?.[key])) {
           if (isComparisonMode) {
             uniqMergedResult?.forEach((item: string) => {
-              if (versionItem?.fieldValue?.[key]?.[item] !== compareVersionItem?.fieldValue?.[key]?.[item]) {
+              if (mainVersionItem?.fieldValue?.[key]?.[item] !== compareVersionItem?.fieldValue?.[key]?.[item]) {
                 const existingItem = list.find(entry => entry.key === key)
 
                 if (!isEmpty(existingItem)) {
@@ -195,19 +190,15 @@ export const versionsDataToTableData = (data: IFormattedDataStructureData[][]): 
 
             field.isModifiedValue = true
           }
-
-          if (!isComparisonMode) {
-            isSingleVersion = true
-          }
         }
       })
 
       field.listModifiedFields = list
       field.listAllFieldsWithoutNull = list2
-      field.isSingleVersion = isSingleVersion
+      field.isSingleVersion = isSingleMode
     } else {
       if (isComparisonMode) {
-        if (!isEqual(versionItem?.fieldValue, compareVersionItem?.fieldValue)) {
+        if (!isEqual(mainVersionItem?.fieldValue, compareVersionItem?.fieldValue)) {
           field.isModifiedValue = true
         }
       }
