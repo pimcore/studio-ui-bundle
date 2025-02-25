@@ -27,6 +27,17 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Perspectives"],
             }),
+            perspectiveUpdateConfigById: build.mutation<
+                PerspectiveUpdateConfigByIdApiResponse,
+                PerspectiveUpdateConfigByIdApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/perspectives/configuration/${queryArg.perspectiveId}`,
+                    method: "PUT",
+                    body: queryArg.savePerspectiveConfig,
+                }),
+                invalidatesTags: ["Perspectives"],
+            }),
             perspectiveDelete: build.mutation<PerspectiveDeleteApiResponse, PerspectiveDeleteApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/perspectives/configuration/${queryArg.perspectiveId}`,
@@ -101,6 +112,13 @@ export type PerspectiveGetConfigByIdApiResponse =
 export type PerspectiveGetConfigByIdApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
+};
+export type PerspectiveUpdateConfigByIdApiResponse =
+    /** status 200 Successfully updated perspective configuration */ void;
+export type PerspectiveUpdateConfigByIdApiArg = {
+    /** Update perspective by matching Id */
+    perspectiveId: string;
+    savePerspectiveConfig: CreatePerspectiveConfig;
 };
 export type PerspectiveDeleteApiResponse = /** status 200 Successfully deleted perspective */ void;
 export type PerspectiveDeleteApiArg = {
@@ -363,6 +381,8 @@ export type ElementTreeWidget = WidgetConfig & {
     elementType?: string;
     /** Root Folder */
     rootFolder?: string;
+    /** Root Folder ID */
+    rootFolderId?: number;
     /** Show Root */
     showRoot?: boolean;
     /** Classes */
@@ -376,13 +396,29 @@ export type ElementTreeWidget = WidgetConfig & {
 };
 export type PerspectiveConfigDetail = PerspectiveConfig & {
     /** Context Permissions */
-    isWriteable?: object;
+    contextPermissions?: object;
     /** Widgets Left */
     widgetsLeft?: ElementTreeWidget[];
     /** Widgets Right */
     widgetsRight?: ElementTreeWidget[];
     /** Widgets Bottom */
     widgetsBottom?: ElementTreeWidget[];
+    /** Left Expanded Widget */
+    expandedLeft?: any;
+    /** Right Expanded Widget */
+    expandedRight?: any;
+};
+export type CreatePerspectiveConfig = AddPerspectiveConfig & {
+    /** Icon */
+    icon?: ElementIcon;
+    /** Context Permissions */
+    contextPermissions?: object;
+    /** Widgets Left */
+    widgetsLeft?: object;
+    /** Widgets Right */
+    widgetsRight?: object;
+    /** Widgets Bottom */
+    widgetsBottom?: object;
     /** Left Expanded Widget */
     expandedLeft?: any;
     /** Right Expanded Widget */
@@ -400,6 +436,7 @@ export const {
     usePerspectiveCreateMutation,
     usePerspectiveGetConfigCollectionQuery,
     usePerspectiveGetConfigByIdQuery,
+    usePerspectiveUpdateConfigByIdMutation,
     usePerspectiveDeleteMutation,
     usePerspectiveWidgetCreateMutation,
     usePerspectiveWidgetGetConfigCollectionQuery,
