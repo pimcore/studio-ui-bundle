@@ -66,7 +66,7 @@ export const DataComponent = (props: DataComponentProps): React.JSX.Element => {
 
         children.push({
           ...child,
-          className: isValueInLocalesList ? undefined : 'test-test-test',
+          className: isValueInLocalesList ? undefined : 'withoutHighlighting',
           title: (
             <span className={ styles.fieldTitle }>
               {child?.title} <Text type='secondary'>| {locale?.toUpperCase()}</Text>
