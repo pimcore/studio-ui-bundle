@@ -24,6 +24,8 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../tree/provider/tree-permission-provider/tree-permission-enum'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
@@ -37,6 +39,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
   const modal = useFormModal()
   const { refreshTree } = useRefreshTree(elementType)
   const [elementFolderCreateMutation] = useElementFolderCreateMutation()
+  const { isTreeActionAllowed } = useTreePermission()
 
   const addFolder = (parentId: number, onFinish?: () => void): void => {
     modal.input({
@@ -55,7 +58,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
       label: t('element.new-folder'),
       key: 'add-folder',
       icon: <Icon value={ 'add-folder' } />,
-      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
+      hidden: !isTreeActionAllowed(TreePermission.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
         addFolder(parentId)

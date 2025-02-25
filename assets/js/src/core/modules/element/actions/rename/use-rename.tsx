@@ -24,6 +24,8 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../tree/provider/tree-permission-provider/tree-permission-enum'
 
 export interface UseRenameHookReturn {
   rename: (parentId: number, currentLabel: string) => void
@@ -39,6 +41,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
   const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { elementPatch, getElementById } = useElementApi(elementType, cacheKey)
+  const { isTreeActionAllowed } = useTreePermission()
 
   const rename = (
     id: number,
@@ -111,7 +114,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       label: t('element.rename'),
       key: 'rename',
       icon: <Icon value={ 'rename' } />,
-      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Rename) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined

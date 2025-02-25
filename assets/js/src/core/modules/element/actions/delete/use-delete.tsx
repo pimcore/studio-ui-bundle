@@ -32,6 +32,8 @@ import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/us
 import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-element/use-element-refresh'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../tree/provider/tree-permission-provider/tree-permission-enum'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -51,6 +53,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { refreshElement } = useElementRefresh(elementType)
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const [elementDelete] = useElementDeleteMutation({ fixedCacheKey: cacheKey })
+  const { isTreeActionAllowed } = useTreePermission()
 
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
     modal.confirm({
@@ -70,7 +73,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       label: t('element.delete'),
       key: 'delete',
       icon: <Icon value={ 'trash' } />,
-      hidden: !checkElementPermission(node.permissions, 'delete') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined

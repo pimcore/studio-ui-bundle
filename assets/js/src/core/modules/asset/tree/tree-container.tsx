@@ -29,7 +29,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
-import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/use-tree-filter'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 
 export interface TreeContainerProps {
   id: number

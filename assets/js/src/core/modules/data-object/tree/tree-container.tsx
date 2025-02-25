@@ -29,7 +29,7 @@ import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 import { withActionStates } from './node/with-action-states'
-import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/use-tree-filter'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 
 export interface TreeContainerProps {
   id: number

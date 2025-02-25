@@ -19,7 +19,8 @@ import { useElementGetIdByPathQuery } from '@Pimcore/modules/element/element-api
 import { Box } from '@Pimcore/components/box/box'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { TreeFilterProvider } from './provider/tree-filter-provider'
+import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
+import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 
 export interface TreeWidgetProps {
   rootFolder: string
@@ -27,8 +28,9 @@ export interface TreeWidgetProps {
   classes?: string[]
   pql?: string | null
   pageSize?: number | null
+  contextPermissions: Record<string, boolean>
 }
-export const TreeWidget = ({ elementType, rootFolder, classes, pql, pageSize }: TreeWidgetProps): React.JSX.Element => {
+export const TreeWidget = ({ elementType, rootFolder, classes, pql, pageSize, contextPermissions }: TreeWidgetProps): React.JSX.Element => {
   const { data, isLoading, isError, error } = useElementGetIdByPathQuery({
     elementType,
     elementPath: rootFolder
@@ -48,17 +50,19 @@ export const TreeWidget = ({ elementType, rootFolder, classes, pql, pageSize }: 
 
   const rootFolderId = data?.id ?? 1
   return (
-    <TreeFilterProvider
-      classIds={ classes }
-      pageSize={ pageSize ?? undefined }
-      pqlQuery={ pql ?? undefined }
-    >
-      { elementType === elementTypes.asset && (
+    <TreePermissionProvider permissions={ { ...contextPermissions } }>
+      <TreeFilterProvider
+        classIds={ classes }
+        pageSize={ pageSize ?? undefined }
+        pqlQuery={ pql ?? undefined }
+      >
+        { elementType === elementTypes.asset && (
         <AssetTreeContainer id={ rootFolderId } />
-      )}
-      { elementType === elementTypes.dataObject && (
+        )}
+        { elementType === elementTypes.dataObject && (
         <DataObjectTreeContainer id={ rootFolderId } />
-      )}
-    </TreeFilterProvider>
+        )}
+      </TreeFilterProvider>
+    </TreePermissionProvider>
   )
 }
