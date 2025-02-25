@@ -375,6 +375,8 @@ export type ElementTreeWidget = WidgetConfig & {
     isWriteable?: boolean;
 };
 export type PerspectiveConfigDetail = PerspectiveConfig & {
+    /** Context Permissions */
+    isWriteable?: object;
     /** Widgets Left */
     widgetsLeft?: ElementTreeWidget[];
     /** Widgets Right */
