@@ -87,7 +87,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }
 
   async function initActivePerspective (): Promise<any> {
-    const perspectiveFetcher = dispatch(perspectivesApi.endpoints.perspectiveGetConfigById.initiate({ perspectiveId: 'studio_default_perspective' }))
+    const perspectiveFetcher = dispatch(perspectivesApi.endpoints.perspectiveGetConfigById.initiate({ perspectiveId: 'my_custom' }))
 
     perspectiveFetcher
       .then(({ data, isSuccess, isError, error }) => {

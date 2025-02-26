@@ -11,38 +11,23 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { NotesAndEventsContainer } from '@Pimcore/modules/notes-and-events/notes-and-events-container'
-import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
+import { type MainNavRegistry } from './services/main-nav-registry'
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools/Notes & Events',
-      className: 'item-style-modifier',
-      widgetConfig: {
-        name: 'Notes & Events',
-        id: 'notes-and-events',
-        component: 'notes-and-events',
-        config: {
-          icon: {
-            type: 'name',
-            value: 'notes-events'
-          }
-        }
-      }
+      path: 'Settings',
+      icon: 'menu'
     })
 
-    const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
-
-    widgetRegistryService.registerWidget({
-      name: 'notes-and-events',
-      component: NotesAndEventsContainer
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Tools',
+      icon: 'accessory'
     })
   }
 })

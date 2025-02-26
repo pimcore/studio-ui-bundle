@@ -13,7 +13,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStlyes = createStyles(({
+export const useStyles = createStyles(({
   token,
   css
 }) => {

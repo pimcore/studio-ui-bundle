@@ -20,14 +20,14 @@ import { useMainNav } from './hooks/use-main-nav'
 import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import type { IMainNavItem } from '@Pimcore/modules/app/nav/main-nav-slice'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
+import { type IMainNavItem } from './services/main-nav-registry'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
-  const { getNavItems } = useMainNav()
+  const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
@@ -45,6 +45,13 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
+    const isVisible = (item.children !== undefined && item.children.length > 0) ||
+      (item.widgetConfig !== undefined)
+
+    if (!isVisible) {
+      return <></>
+    }
+
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -139,7 +146,7 @@ export const MainNav = (): React.JSX.Element => {
                 <Divider className={ 'main-nav__divider' } />
 
                 <ul className={ 'main-nav__list main-nav__list--level-0' }>
-                  {getNavItems.map((item, index) => (
+                  {navItems.map((item, index) => (
                     renderNavItem(item, `${index}`)
                   ))}
                 </ul>
