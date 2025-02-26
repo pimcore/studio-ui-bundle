@@ -24,6 +24,8 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import { isEmpty } from 'lodash'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -42,6 +44,22 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   inheritedMaskOverlay: InheritanceOverlayType = false
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
+
+  processVersionFieldData (props: {
+    item: any
+    fieldBreadcrumbTitle: string
+    fieldValueByName: string | object
+    versionId: number
+    versionCount: number
+  }): IFormattedDataStructureData[] {
+    const { fieldBreadcrumbTitle, item, fieldValueByName, versionId, versionCount } = props
+
+    if (!isEmpty(fieldValueByName)) {
+      return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]
+    }
+
+    return []
+  }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
     return this.getObjectDataComponent({ ...props, noteditable: true })

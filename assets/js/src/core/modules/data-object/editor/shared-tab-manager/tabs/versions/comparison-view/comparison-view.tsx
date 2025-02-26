@@ -31,6 +31,11 @@ import {
 import { Content } from '@Pimcore/components/content/content'
 import { ComparisonViewUI } from './comparison-view-ui'
 import type { IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import type {
+  DynamicTypeObjectDataRegistry
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -42,6 +47,7 @@ export const ComparisonView = ({
   const dispatch = useAppDispatch()
 
   const { id } = useElementContext()
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { data: layoutData } = useDataObjectGetLayoutByIdQuery({ id })
 
   useEffect(() => {
@@ -67,7 +73,8 @@ export const ComparisonView = ({
               layout: layoutData.children,
               versionData: dataRaw,
               versionId: versionIds[versionIndex].id,
-              versionCount: versionIds[versionIndex].count
+              versionCount: versionIds[versionIndex].count,
+              objectDataRegistry
             }))
 
             setVersionsData(versionsDataToTableData({ data: formattedDataList, isComparisonMode: true }))

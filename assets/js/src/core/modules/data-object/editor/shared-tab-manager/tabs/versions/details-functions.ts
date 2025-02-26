@@ -18,6 +18,7 @@ import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -29,6 +30,7 @@ interface IGetFormattedDataStructureProps {
   versionData: DataObjectVersion
   versionId: number
   versionCount: number
+  objectDataRegistry: DynamicTypeObjectDataRegistry
 }
 
 export interface IFormattedDataStructureData {
@@ -73,7 +75,7 @@ export const formattedObjectData = (fieldValue: object, item: any): object => {
   }, {})
 }
 
-export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
+export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
     creationDate: formatDateTime({ timestamp: versionData.creationDate ?? null, dateStyle: 'short', timeStyle: 'medium' }),
@@ -94,14 +96,11 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
 
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
-        const getFieldValueByName: string | object = get(versionData?.objectData, fieldName)
+        const fieldValueByName: string | object = get(versionData?.objectData, fieldName)
 
-        const fieldValue = isObject(getFieldValueByName) ? formattedObjectData(getFieldValueByName, item) : getFieldValueByName
-        const formattedFieldValue = isObject(fieldValue) ? omitEmptyFields(fieldValue) : fieldValue
+        const objectDataType = objectDataRegistry.getDynamicType(item.fieldtype as string)
 
-        if (!isFieldValueEmpty(formattedFieldValue)) {
-          return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: formattedFieldValue, versionId, versionCount }]
-        }
+        return objectDataType.processVersionFieldData({ item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
       }
 
       return []

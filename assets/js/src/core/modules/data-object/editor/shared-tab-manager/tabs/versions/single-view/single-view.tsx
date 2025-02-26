@@ -25,6 +25,11 @@ import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared
 import { getFormattedDataStructure, type IFormattedDataStructureData, versionsDataToTableData } from '../details-functions'
 import { Content } from '@Pimcore/components/content/content'
 import { SingleViewUi } from './single-view-ui'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import type {
+  DynamicTypeObjectDataRegistry
+} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 interface IVersionData extends IObjectVersionField {}
 
@@ -32,6 +37,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
   const dispatch = useAppDispatch()
 
   const { id } = useElementContext()
+  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
   const [vId, setVId] = useState(versionId)
   const [versionData, setVersionData] = useState<IVersionData[]>([])
@@ -59,7 +65,8 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
             layout: layoutData.children,
             versionData: dataRaw,
             versionId: vId.id,
-            versionCount: vId.count
+            versionCount: vId.count,
+            objectDataRegistry
           }))
 
           setVersionData(versionsDataToTableData({ data: formattedDataList, isSingleMode: true }))

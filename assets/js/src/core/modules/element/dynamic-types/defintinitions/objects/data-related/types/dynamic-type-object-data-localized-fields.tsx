@@ -12,12 +12,11 @@
 */
 
 import React from 'react'
-
+import { get, isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
-import {
-  DynamicTypesList
-} from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
+import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 
 export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataAbstract {
   id: string = DynamicTypesList.LOCALIZED_FIELDS
@@ -25,6 +24,34 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
 
   getObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
     return <LocalizedFields { ...props } />
+  }
+
+  processVersionFieldData (props: {
+    item: any
+    fieldBreadcrumbTitle: string
+    fieldValueByName: object
+    versionId: number
+    versionCount: number
+  }): IFormattedDataStructureData[] {
+    const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
+
+    return item?.children?.flatMap((item: any) => {
+      const fieldValue: object = get(fieldValueByName, item.name)
+
+      return Object.entries(fieldValue).map(([key, value]) => {
+        if (!isEmpty(value)) {
+          return {
+            fieldBreadcrumbTitle,
+            fieldData: { ...item, locale: key },
+            fieldValue: value,
+            versionId,
+            versionCount
+          }
+        }
+
+        return null
+      }).filter((item) => !isEmpty(item))
+    })
   }
 
   getVersionObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
