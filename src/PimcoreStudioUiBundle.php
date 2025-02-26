@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle;
 
-use Pimcore\Bundle\StudioUiBundle\DependencyInjection\PimcoreStudioUiExtension;
 use function dirname;
+use Pimcore\Bundle\StudioUiBundle\DependencyInjection\PimcoreStudioUiExtension;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
