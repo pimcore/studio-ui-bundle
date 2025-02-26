@@ -44,7 +44,9 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
         children: [],
         icon: isCurrentItem ? item.icon : undefined,
         widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
-        className: isCurrentItem ? item.className : undefined
+        className: isCurrentItem ? item.className : undefined,
+        perspectivePermission: isCurrentItem ? item.perspectivePermission : undefined,
+        perspectivePermissionHide: isCurrentItem ? item.perspectivePermissionHide : undefined
       }
       currentLevel.push(existingItem)
     } else if (index === levels.length - 1) {
@@ -75,10 +77,6 @@ export const useMainNav = (): IUseMainNavReturn => {
       }
 
       if (item.perspectivePermission !== undefined && !isAllowedInPerspective(item.perspectivePermission)) {
-        return
-      }
-
-      if (item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)) {
         return
       }
 

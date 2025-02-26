@@ -23,6 +23,7 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { type IMainNavItem } from './services/main-nav-registry'
+import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -48,7 +49,9 @@ export const MainNav = (): React.JSX.Element => {
     const isVisible = (item.children !== undefined && item.children.length > 0) ||
       (item.widgetConfig !== undefined)
 
-    if (!isVisible) {
+    const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
+
+    if (!isVisible || isHiddenInPerspective) {
       return <></>
     }
 
