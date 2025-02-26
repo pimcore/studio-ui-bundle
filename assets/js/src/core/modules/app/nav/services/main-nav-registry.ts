@@ -22,6 +22,7 @@ export interface IMainNavItem {
   label?: string
   children?: IMainNavItem[]
   permission?: string
+  onClick?: () => void
   widgetConfig?: WidgetManagerTabConfig
   className?: string
 }

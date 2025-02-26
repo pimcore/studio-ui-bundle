@@ -62,6 +62,9 @@ export const MainNav = (): React.JSX.Element => {
           onClick={ () => {
             if (item.children !== undefined && item.children.length > 0) {
               handleOpenState(index)
+            } else if (item.onClick !== undefined) {
+              item.onClick()
+              setIsOpen(false)
             } else if (item.widgetConfig !== undefined) {
               openMainWidget(item.widgetConfig)
               setIsOpen(false)
