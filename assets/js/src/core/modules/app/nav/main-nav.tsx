@@ -23,6 +23,8 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import type { IMainNavItem } from '@Pimcore/modules/app/nav/main-nav-slice'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
+import { OpenAsset } from '@Pimcore/modules/open-element/open-asset'
+import { OpenDocument } from '@Pimcore/modules/open-element/open-document'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -117,7 +119,6 @@ export const MainNav = (): React.JSX.Element => {
           initial={ { opacity: isOpen ? 0 : 1 } }
           key={ isOpen ? 'open' : 'closed' }
         >
-
           {isOpen
             ? (
               <div
@@ -132,6 +133,8 @@ export const MainNav = (): React.JSX.Element => {
                       >{t('navigation.document-types')}</IconTextButton></li>
                     <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
                     <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
+                    <li><OpenAsset /></li>
+                    <li><OpenDocument /></li>
                   </ul>
                   <Button type={ 'default' }>Customise</Button>
                 </div>

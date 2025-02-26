@@ -15,22 +15,32 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import log from 'eslint-plugin-react/lib/util/log'
 import React from 'react'
+import { Button } from '@Pimcore/components/button/button'
 
-export const OpenDocumentModal = (): React.JSX.Element => {
+export const OpenDocument = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { input } = useFormModal()
 
-  input({
-    title: t('open-document-modal.title'),
-    label: t('pen-document-modal.label'),
-    rule: {
-      required: true,
-      message: t('open-document-modal.required-message')
-    },
-    okText: t('open-document-modal.ok-button'),
-    cancelText: t('open-document-modal.cancel-button'),
-    onOk: () => { log('ok') }
-  })
+  const handleClick = (): void => {
+    input({
+      title: t('open-document-modal.title'),
+      label: t('pen-document-modal.label'),
+      rule: {
+        required: true,
+        message: t('open-document-modal.required-message')
+      },
+      okText: t('open-document-modal.ok-button'),
+      cancelText: t('open-document-modal.cancel-button'),
+      onOk: () => {
+        log('ok')
+      }
+    })
+  }
 
-  return <div>test</div>
+  return (
+    <Button
+      onClick={ handleClick }
+      type={ 'link' }
+    > {t('open-document.button')}</Button>
+  )
 }
