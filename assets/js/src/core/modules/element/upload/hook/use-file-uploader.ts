@@ -34,7 +34,7 @@ interface UseFileUploaderReturn {
 
 let zipUploadFirstRun: string[] = []
 
-export const UseFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUploaderReturn => {
+export const useFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
   const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!

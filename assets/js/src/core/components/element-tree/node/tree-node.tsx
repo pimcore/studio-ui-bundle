@@ -17,7 +17,7 @@ import { useStyles } from './tree-node.styles'
 import { type INodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
-import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
@@ -92,7 +92,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
   const [selectedIds, setSelectedIds] = selectedIdsState!
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
-  const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
+  const { uploadFile: uploadFileProcessor } = useFileUploader({ parentId: id })
 
   useEffect(() => {
     return () => {

@@ -15,7 +15,7 @@ import { Button } from 'antd'
 import React, { useEffect } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
-import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
@@ -36,7 +36,7 @@ import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
-  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = UseFileUploader({ parentId: node?.id })
+  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = useFileUploader({ parentId: node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 
