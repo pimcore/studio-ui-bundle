@@ -17,13 +17,20 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle;
 
+use Pimcore\Bundle\StudioUiBundle\DependencyInjection\PimcoreStudioUiExtension;
 use function dirname;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiInterface;
 use Pimcore\Bundle\StudioUiBundle\Extension\Bundle\PimcoreBundleStudioUiOptionalEntrypointsInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 class PimcoreStudioUiBundle extends AbstractPimcoreBundle implements PimcoreBundleStudioUiInterface, PimcoreBundleStudioUiOptionalEntrypointsInterface
 {
+    public function getContainerExtension(): ExtensionInterface
+    {
+        return new PimcoreStudioUiExtension();
+    }
+
     public function getPath(): string
     {
         return dirname(__DIR__);
