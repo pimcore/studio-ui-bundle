@@ -62,7 +62,7 @@ export interface ImageGalleryValueItem {
 const addKeys = (value: ImageGalleryValue): ImageGalleryValue => {
   return value.map((item, index) => {
     if (item.key === undefined) {
-      item.key = uuid()
+      return { ...item, key: uuid() }
     }
     return item
   })
