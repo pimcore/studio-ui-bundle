@@ -17,6 +17,7 @@ import { type IMainNavItem, type MainNavRegistry } from '../services/main-nav-re
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 
 interface IUseMainNavReturn {
   navItems: IMainNavItem[]
@@ -70,6 +71,14 @@ export const useMainNav = (): IUseMainNavReturn => {
 
     mainNavRegistryService.getMainNavItems().forEach(item => {
       if (item.permission !== undefined && !isAllowed(item.permission)) {
+        return
+      }
+
+      if (item.perspectivePermission !== undefined && !isAllowedInPerspective(item.perspectivePermission)) {
+        return
+      }
+
+      if (item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)) {
         return
       }
 

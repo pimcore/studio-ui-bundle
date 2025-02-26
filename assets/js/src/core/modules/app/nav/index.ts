@@ -15,6 +15,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from './services/main-nav-registry'
+import { NavPermissionEnum } from '@Pimcore/modules/perspectives/enums/nav-permission-enum'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -22,12 +23,14 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings',
-      icon: 'menu'
+      icon: 'menu',
+      perspectivePermissionHide: NavPermissionEnum.SettingsHidden
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools',
-      icon: 'accessory'
+      icon: 'accessory',
+      perspectivePermissionHide: NavPermissionEnum.ToolsHidden
     })
   }
 })
