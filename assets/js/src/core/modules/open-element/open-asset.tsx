@@ -14,15 +14,13 @@
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import React from 'react'
-import { openAssetHelper } from '@Pimcore/modules/open-element/hooks/open-asset-helper'
+import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
 import { Button } from '@Pimcore/components/button/button'
 
 export const OpenAsset = (): React.JSX.Element => {
-  const { openElementByPathOrId } = openAssetHelper()
+  const { openElementByPathOrId } = openElementHelper()
   const { t } = useTranslation()
   const { input } = useFormModal()
-
-  console.log('----> foo')
 
   const handleClick = (): void => {
     input({
@@ -35,8 +33,7 @@ export const OpenAsset = (): React.JSX.Element => {
       okText: t('open-asset-modal.ok-button'),
       cancelText: t('open-document-modal.cancel-button'),
       onOk: async (value: string) => {
-        console.log('----> value: string', value)
-        await openElementByPathOrId(value)
+        await openElementByPathOrId(value, 'asset')
       }
     })
   }
