@@ -77,7 +77,7 @@ export const ComparisonView = ({
               objectDataRegistry
             }))
 
-            setVersionsData(versionsDataToTableData({ data: formattedDataList, isComparisonMode: true }))
+            setVersionsData(versionsDataToTableData({ data: formattedDataList }))
           }
         })
       })

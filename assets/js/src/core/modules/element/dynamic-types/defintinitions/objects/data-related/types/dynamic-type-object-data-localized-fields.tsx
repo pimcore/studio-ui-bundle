@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { get, isEmpty } from 'lodash'
+import { get } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
@@ -39,18 +39,14 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
       const fieldValue: object = get(fieldValueByName, item.name)
 
       return Object.entries(fieldValue).map(([key, value]) => {
-        if (!isEmpty(value)) {
-          return {
-            fieldBreadcrumbTitle,
-            fieldData: { ...item, locale: key },
-            fieldValue: value,
-            versionId,
-            versionCount
-          }
+        return {
+          fieldBreadcrumbTitle,
+          fieldData: { ...item, locale: key },
+          fieldValue: value,
+          versionId,
+          versionCount
         }
-
-        return null
-      }).filter((item) => !isEmpty(item))
+      })
     })
   }
 

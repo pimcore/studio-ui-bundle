@@ -25,7 +25,6 @@ import {
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { type IFormattedDataStructureData } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
-import { isEmpty } from 'lodash'
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -54,11 +53,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   }): IFormattedDataStructureData[] {
     const { fieldBreadcrumbTitle, item, fieldValueByName, versionId, versionCount } = props
 
-    if (!isEmpty(fieldValueByName)) {
-      return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]
-    }
-
-    return []
+    return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, versionId, versionCount }]
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {

@@ -69,7 +69,7 @@ export const SingleView = ({ versionId }: SingleVersionViewProps): React.JSX.Ele
             objectDataRegistry
           }))
 
-          setVersionData(versionsDataToTableData({ data: formattedDataList, isSingleMode: true }))
+          setVersionData(versionsDataToTableData({ data: formattedDataList }))
         }
       })
       .catch(err => { console.log(err) })
