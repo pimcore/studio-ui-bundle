@@ -49,13 +49,4 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
       })
     })
   }
-
-  getVersionObjectDataComponent (props: LocalizedFieldsProps): React.ReactElement<LocalizedFieldsProps> {
-    return (
-      <LocalizedFields
-        { ...props }
-        isVersionObjectDataComponent
-      />
-    )
-  }
 }

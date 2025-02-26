@@ -11,11 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useMemo, type ReactNode } from 'react'
-import { isUndefined } from 'lodash'
+import React, { useMemo } from 'react'
 import { LayoutComponent, type LayoutComponentProps } from './layout-component'
 import { DataComponent, type DataComponentProps } from './data-component'
-import { DataComponent as VersionDataComponent } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 import { type FormItemProps } from 'antd'
 
 export interface ObjectComponentProps {
@@ -23,27 +21,16 @@ export interface ObjectComponentProps {
   className?: string
   dataType?: string
   datatype?: string
-  isVersionObjectDataComponent?: boolean
-  title?: ReactNode
   [p: string]: any
 }
 
 export const ObjectComponent = (props: ObjectComponentProps): React.JSX.Element => {
-  const { dataType, datatype, isVersionObjectDataComponent } = props
+  const { dataType, datatype } = props
 
   const currentDataType = dataType ?? datatype
 
   const renderNode = useMemo(() => {
     if (currentDataType === 'data') {
-      if (isVersionObjectDataComponent === true) {
-        return (
-          <>
-            {!isUndefined(props.title) && props.title}
-            <VersionDataComponent { ...props as DataComponentProps } />
-          </>
-        )
-      }
-
       return <DataComponent { ...props as DataComponentProps } />
     }
 

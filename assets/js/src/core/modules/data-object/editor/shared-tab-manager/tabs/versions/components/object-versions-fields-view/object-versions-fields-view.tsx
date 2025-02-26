@@ -14,6 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
+import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -54,13 +55,15 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
-  const renderFieldTitle = ({ key, isCommonSection }: { key: string, isCommonSection: boolean }): React.JSX.Element => {
+  const renderFieldTitle = ({ key, locale, isCommonSection }: { key: string, locale: string, isCommonSection: boolean }): React.JSX.Element => {
     if (isEmptyValue(key)) return <></>
 
     const textValue = isCommonSection ? t(`version.${key}`) : key
 
     return (
-      <Text className={ styles.fieldTitle }>{textValue}</Text>
+      <Text className={ styles.fieldTitle }>
+        {textValue} {!isEmpty(locale) && <Text type="secondary">| {locale.toUpperCase()}</Text>}
+      </Text>
     )
   }
 
@@ -84,7 +87,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                 return (
                   isBreadcrumbKeyMatch && isFieldInBreadcrumbList && (
                     <div key={ `${fieldIndex}-${fieldItem.Field.name}` }>
-                      {renderFieldTitle({ key: fieldItem.Field.title, isCommonSection })}
+                      {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, isCommonSection })}
                       <Flex gap="mini">
                         {versionKeysList.map((key, index) => {
                           const isModifiedField = fieldItem?.isModifiedValue === true

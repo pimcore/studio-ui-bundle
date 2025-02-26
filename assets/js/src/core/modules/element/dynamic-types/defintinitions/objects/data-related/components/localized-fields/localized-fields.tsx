@@ -22,10 +22,9 @@ import { Form } from '@Pimcore/components/form/form'
 
 export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
-  isVersionObjectDataComponent?: boolean
 }
 
-export const LocalizedFields = ({ children, isVersionObjectDataComponent }: LocalizedFieldsProps): React.JSX.Element => {
+export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage } = useLanguageSelection()
 
   return (
@@ -38,7 +37,6 @@ export const LocalizedFields = ({ children, isVersionObjectDataComponent }: Loca
         >
           {children?.map((child, index) => (
             <ObjectComponent
-              isVersionObjectDataComponent={ isVersionObjectDataComponent }
               key={ index }
               { ...child }
             />
