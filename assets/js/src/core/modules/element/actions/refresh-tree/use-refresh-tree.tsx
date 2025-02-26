@@ -57,7 +57,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
       label: t('element.tree.refresh'),
       key: 'refresh',
       icon: <Icon value={ 'refresh' } />,
-      hidden: !isTreeActionAllowed(TreePermission.Reload),
+      hidden: !isTreeActionAllowed(TreePermission.Refresh),
       onClick: () => {
         refreshTree(parseInt(node.id))
       }

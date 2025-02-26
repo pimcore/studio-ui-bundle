@@ -21,7 +21,7 @@ export enum TreePermission {
   LockAndPropagate = 'lockAndPropagate',
   Paste = 'paste',
   Publish = 'publish',
-  Reload = 'reload',
+  Refresh = 'refresh',
   Rename = 'rename',
   SearchAndMove = 'searchAndMove',
   Unlock = 'unlock',
@@ -32,8 +32,9 @@ export enum TreePermission {
   HideAdd = 'hideAdd',
   AddUpload = 'addUpload',
   AddUploadZip = 'addUploadZip',
-  // Download = 'Download', // todo
-  // UploadNewVersion = 'UploadNewVersion', // todo
+  Download = 'download',
+  DownloadZip = 'downloadZip',
+  UploadNewVersion = 'uploadNewVersion',
 
   // Data object specific
   ChangeChildrenSortBy = 'changeChildrenSortBy',
