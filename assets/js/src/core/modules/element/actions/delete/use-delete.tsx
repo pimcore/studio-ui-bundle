@@ -33,7 +33,7 @@ import { useElementRefresh } from '@Pimcore/modules/element/actions/refresh-elem
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
-import { TreePermission } from '../../tree/provider/tree-permission-provider/tree-permission-enum'
+import { TreeAction } from '../../tree/provider/tree-permission-provider/tree-action-enum'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number) => void
@@ -73,7 +73,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       label: t('element.delete'),
       key: 'delete',
       icon: <Icon value={ 'trash' } />,
-      hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreeAction.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined

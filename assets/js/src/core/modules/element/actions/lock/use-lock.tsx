@@ -21,7 +21,7 @@ import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
-import { TreePermission } from '../../tree/provider/tree-permission-provider/tree-permission-enum'
+import { TreeAction } from '../../tree/provider/tree-permission-provider/tree-action-enum'
 
 export interface UseLockHookReturn {
   lock: (id: number) => Promise<void>
@@ -175,19 +175,19 @@ export const useLock = (elementType: ElementType): UseLockHookReturn => {
   }
 
   const isLockHidden = (node: Element | TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Lock) || node.isLocked || !user.isAdmin
+    return !isTreeActionAllowed(TreeAction.Lock) || node.isLocked || !user.isAdmin
   }
 
   const isLockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.LockAndPropagate) || node.isLocked || !user.isAdmin
+    return !isTreeActionAllowed(TreeAction.LockAndPropagate) || node.isLocked || !user.isAdmin
   }
 
   const isUnlockHidden = (node: Element | TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.Unlock) || !node.isLocked || !user.isAdmin
+    return !isTreeActionAllowed(TreeAction.Unlock) || !node.isLocked || !user.isAdmin
   }
 
   const isUnlockPropagateHidden = (node: Element | TreeNodeProps): boolean => {
-    return !isTreeActionAllowed(TreePermission.UnlockAndPropagate) || !node.isLocked || !user.isAdmin
+    return !isTreeActionAllowed(TreeAction.UnlockAndPropagate) || !node.isLocked || !user.isAdmin
   }
 
   const isLockMenuHidden = (node: Element | TreeNodeProps): boolean => {

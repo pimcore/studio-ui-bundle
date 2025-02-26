@@ -22,7 +22,7 @@ import { saveFileLocal } from '@Pimcore/utils/files'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
-import { TreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/tree-permission-enum'
+import { TreeAction } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/tree-action-enum'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => void
@@ -62,7 +62,7 @@ export const useDownload = (): UseDownloadReturn => {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download' } />,
-      hidden: !isTreeActionAllowed(TreePermission.Download) || node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
+      hidden: !isTreeActionAllowed(TreeAction.Download) || node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node) }
     }
   }

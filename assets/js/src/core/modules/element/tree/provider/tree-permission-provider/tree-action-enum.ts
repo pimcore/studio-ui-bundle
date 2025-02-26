@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-export enum TreePermission {
+export enum TreeAction {
   Add = 'add',
   AddFolder = 'addFolder',
   Copy = 'copy',
