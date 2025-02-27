@@ -12,11 +12,11 @@
 */
 
 import React, { createContext, useMemo } from 'react'
-import { type TreeAction } from './tree-action-enum'
+import { type TreePermission } from '../../../../perspectives/enums/tree-permission'
 
 export interface ITreePermissionContext {
   permissions: {
-    [key in TreeAction]?: boolean
+    [key in TreePermission]?: boolean
   } & Record<string, boolean>
 }
 

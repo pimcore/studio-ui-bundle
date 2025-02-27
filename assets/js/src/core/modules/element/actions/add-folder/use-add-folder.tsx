@@ -25,7 +25,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
-import { TreeAction } from '../../tree/provider/tree-permission-provider/tree-action-enum'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
 
 export interface UseAddFolderHookReturn {
   addFolder: (parentId: number) => void
@@ -58,7 +58,7 @@ export const useAddFolder = (elementType: ElementType): UseAddFolderHookReturn =
       label: t('element.new-folder'),
       key: 'add-folder',
       icon: <Icon value={ 'add-folder' } />,
-      hidden: !isTreeActionAllowed(TreeAction.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
+      hidden: !isTreeActionAllowed(TreePermission.AddFolder) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'create'),
       onClick: () => {
         const parentId = parseInt(node.id)
         addFolder(parentId)

@@ -17,7 +17,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { NotesAndEventsContainer } from '@Pimcore/modules/notes-and-events/notes-and-events-container'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
-import { NavPermissionEnum } from '../perspectives/enums/nav-permission-enum'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -26,7 +26,7 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Tools/Notes & Events',
       className: 'item-style-modifier',
-      perspectivePermission: NavPermissionEnum.NotesAndEvents,
+      perspectivePermission: NavPermission.NotesAndEvents,
       widgetConfig: {
         name: 'Notes & Events',
         id: 'notes-and-events',

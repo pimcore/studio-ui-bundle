@@ -27,7 +27,7 @@ import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/us
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { TreeAction } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/tree-action-enum'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
@@ -60,8 +60,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     }
   }, [node])
 
-  const isUploadMenuHidden = isTreeActionAllowed(TreeAction.HideAdd) ||
-    (!isTreeActionAllowed(TreeAction.AddUpload) && !isTreeActionAllowed(TreeAction.AddUploadZip)) ||
+  const isUploadMenuHidden = isTreeActionAllowed(TreePermission.HideAdd) ||
+    (!isTreeActionAllowed(TreePermission.AddUpload) && !isTreeActionAllowed(TreePermission.AddUploadZip)) ||
     !checkElementPermission(node.permissions, 'create') ||
     node?.type !== 'folder'
 
@@ -76,7 +76,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
           icon: <Icon value={ 'upload-cloud' } />,
           label: t('element.tree.context-menu.add-assets.upload-files'),
           key: 'add-upload',
-          hidden: !isTreeActionAllowed(TreeAction.AddUpload),
+          hidden: !isTreeActionAllowed(TreePermission.AddUpload),
           onClick: () => {
             if (uploadFileRef.current !== null) {
               uploadFileRef.current?.click()
@@ -87,7 +87,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
           icon: <Icon value={ 'upload-zip' } />,
           label: t('element.tree.context-menu.add-assets.upload-zip'),
           key: 'add-upload-zip',
-          hidden: !isTreeActionAllowed(TreeAction.AddUploadZip),
+          hidden: !isTreeActionAllowed(TreePermission.AddUploadZip),
           onClick: () => {
             if (uploadZipRef.current !== null) {
               uploadZipRef.current?.click()

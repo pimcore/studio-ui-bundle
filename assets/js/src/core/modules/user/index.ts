@@ -19,7 +19,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
-import { NavPermissionEnum } from '../perspectives/enums/nav-permission-enum'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 // import '@Pimcore/modules/asset/tree'
 
 moduleSystem.registerModule({
@@ -29,13 +29,13 @@ moduleSystem.registerModule({
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/User & Roles',
       label: 'User & Roles',
-      perspectivePermissionHide: NavPermissionEnum.UsersHidden
+      perspectivePermissionHide: NavPermission.UsersHidden
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/User & Roles/Users',
       className: 'item-style-modifier',
-      perspectivePermission: NavPermissionEnum.Users,
+      perspectivePermission: NavPermission.Users,
       widgetConfig: {
         name: 'Users',
         id: 'user-management',
@@ -51,7 +51,7 @@ moduleSystem.registerModule({
 
     mainNavRegistryService.registerMainNavItem({
       path: 'Settings/User & Roles/Roles',
-      perspectivePermission: NavPermissionEnum.Roles,
+      perspectivePermission: NavPermission.Roles,
       widgetConfig: {
         name: 'Roles',
         id: 'role-management',

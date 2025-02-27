@@ -22,7 +22,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useCacheUpdate } from '@Pimcore/modules/element/hooks/use-cache-update'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
-import { TreeAction } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/tree-action-enum'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 
 export interface UseUploadNewVersionReturn {
   uploadNewVersion: (id: number, accept?: string) => void
@@ -111,7 +111,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       label: t('asset.tree.context-menu.upload-new-version'),
       key: 'upload-new-version',
       icon: <Icon value={ 'upload-cloud' } />,
-      hidden: !isTreeActionAllowed(TreeAction.UploadNewVersion) ||
+      hidden: !isTreeActionAllowed(TreePermission.UploadNewVersion) ||
         node.type === 'folder' ||
         !checkElementPermission(node.permissions, 'list') ||
         !checkElementPermission(node.permissions, 'view') ||

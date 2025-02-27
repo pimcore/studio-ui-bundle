@@ -23,7 +23,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
-import { TreeAction } from '../../tree/provider/tree-permission-provider/tree-action-enum'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
 
 export interface UseRefreshTreeHookReturn {
   refreshTree: (parentId: number) => void
@@ -57,7 +57,7 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
       label: t('element.tree.refresh'),
       key: 'refresh',
       icon: <Icon value={ 'refresh' } />,
-      hidden: !isTreeActionAllowed(TreeAction.Refresh),
+      hidden: !isTreeActionAllowed(TreePermission.Refresh),
       onClick: () => {
         refreshTree(parseInt(node.id))
       }
