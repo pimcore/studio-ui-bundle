@@ -11,29 +11,20 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useTranslation } from 'react-i18next'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import React from 'react'
-import { Button } from '@Pimcore/components/button/button'
-import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
+import {useTranslation} from 'react-i18next'
+import {useFormModal} from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import {openElementHelper} from '@Pimcore/modules/open-element/hooks/open-element-helper'
 import {ElementType} from "@Pimcore/types/enums/element/element-type";
 
 interface OpenDocumentProp {
   elementType: ElementType
 }
 
-export const OpenElement = ({elementType}: OpenDocumentProp): React.JSX.Element => {
+export const OpenElement = ({elementType}: OpenDocumentProp): void => {
   const { openElementByPathOrId } = openElementHelper()
   const { t } = useTranslation()
   const { input } = useFormModal()
 
-  const buttonTexts = {
-    'data-object': t('open-data-object.button'),
-    'asset': t('open-asset.button'),
-    'document': t('open-document.button'),
-  };
-
-  const handleClick = (): void => {
     const modalTexts = {
       'data-object': {
         title: t('open-data-object-modal.title'),
@@ -73,13 +64,4 @@ export const OpenElement = ({elementType}: OpenDocumentProp): React.JSX.Element 
         await openElementByPathOrId(value, elementType);
       },
     });
-  };
-
-
-  return (
-    <Button
-      onClick={ handleClick }
-      type={ 'link' }
-    > {buttonTexts[elementType]}</Button>
-  )
 }
