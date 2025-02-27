@@ -32,6 +32,8 @@ export const MainNav = (): React.JSX.Element => {
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
+  console.log('----> navItemsLL', navItems)
+
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
     if (key.includes('-')) {
@@ -47,7 +49,7 @@ export const MainNav = (): React.JSX.Element => {
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const isVisible = (item.children !== undefined && item.children.length > 0) ||
-      (item.widgetConfig !== undefined)
+      (item.widgetConfig !== undefined) || (item.onClick !== undefined)
 
     const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
 

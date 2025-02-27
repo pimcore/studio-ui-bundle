@@ -32,5 +32,11 @@ moduleSystem.registerModule({
       icon: 'accessory',
       perspectivePermissionHide: NavPermission.ToolsHidden
     })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'File',
+      icon: 'document',
+      perspectivePermissionHide: NavPermission.FileHidden
+    })
   }
 })

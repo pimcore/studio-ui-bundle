@@ -34,6 +34,10 @@ export class MainNavRegistry {
   private readonly items: IMainNavItem[] = []
 
   registerMainNavItem (item: IMainNavItem): void {
+    console.log('----> item', item)
+
+    console.log('----> this.items', this.items)
+
     this.items.push(item)
   }
 
