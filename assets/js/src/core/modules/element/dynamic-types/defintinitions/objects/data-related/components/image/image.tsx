@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect } from 'react'
+import cn from 'classnames'
 import { Card } from '@Pimcore/components/card/card'
 import {
   ImageFooter
@@ -22,6 +23,7 @@ import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { useStyles } from './image.styles'
 
 export interface ImageValue {
   type: 'asset'
@@ -40,6 +42,8 @@ export interface ImageProps {
 export const Image = (props: ImageProps): React.JSX.Element => {
   const [value, setValue] = React.useState<ImageValue | null>(props.value ?? null)
   const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const emptyValue = (): void => {
     setValue(null)
   }
@@ -53,7 +57,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
 
   return (
     <Card
-      className="max-w-full"
+      className={ cn('max-w-full', styles.image, props.className) }
       fitContent
       footer={ <ImageFooter
         disabled={ props.disabled }

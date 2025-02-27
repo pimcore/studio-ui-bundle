@@ -100,7 +100,8 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                             >
                               <DataComponent
                                 className={ cn(styles.objectSectionFieldItem, 'versionFieldItem', {
-                                  [styles.objectSectionFieldItemHighlight]: isModifiedField && isSecondItem
+                                  [styles.objectSectionFieldItemHighlight]: isModifiedField && isSecondItem,
+                                  versionFieldItemHighlight: isModifiedField && isSecondItem
                                 }) }
                                 datatype={ 'data' }
                                 fieldType={ fieldItem.Field.fieldtype }

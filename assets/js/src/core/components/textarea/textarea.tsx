@@ -22,9 +22,10 @@ export interface ITextAreaProps extends TextAreaProps {
 
 export const TextArea = ({ inherited, className, ...restProps }: ITextAreaProps): JSX.Element => {
   const { styles } = useStyles()
+
   return (
     <AntTextArea
-      className={ cn(className, { [styles.inherited]: inherited }) }
+      className={ cn(styles.textarea, className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />
   )

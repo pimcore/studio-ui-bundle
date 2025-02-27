@@ -83,20 +83,8 @@ export const useStyles = createStyles(({ token, css }) => {
       max-width: 100% !important;
       border-radius: ${token.borderRadius}px !important;
       border-color: transparent !important;
-      background: ${token.colorBgContainerDisabled} !important;
       color: ${token.colorText} !important;
       
-      // .ant-input,
-      // .ant-input-number,
-      // .ant-picker,
-      // .ant-color-picker-trigger {
-      //   border-radius: ${token.borderRadius}px;
-      //   border-color: transparent !important;
-      //   color: ${token.colorText} !important;
-      // }
-      
-      //.ant-input,
-      //.ant-select.ant-select-disabled,
       //.ant-input-number,
       //.ant-picker,
       //.ant-color-picker-trigger,
@@ -105,17 +93,6 @@ export const useStyles = createStyles(({ token, css }) => {
       //  width: 100%;
       //  max-width: 100% !important;
       //}
-      
-      // .ant-select.ant-select-disabled {
-      //   .ant-select-selector {
-      //     background: ${token.colorBgContainerDisabled} !important;
-      //     border-color: transparent !important;
-      //   }
-      //  
-      //   .ant-select-selection-item {
-      //     color: ${token.colorText} !important;
-      //   }
-      // }
       
       // .ant-picker {
       //   input {
@@ -151,7 +128,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
     objectSectionFieldItemHighlight: css`
       &.versionFieldItem {
-        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
         border-color: ${token.colorBorder} !important;
       }
     `
