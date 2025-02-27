@@ -62,6 +62,7 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   value?: ManyToOneRelationValueType
   onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
+  className?: string
 }
 
 export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Element => {

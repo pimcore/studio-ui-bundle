@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
@@ -26,7 +27,7 @@ export class DynamicTypeObjectDataDateRange extends DynamicTypeObjectDataAbstrac
   getObjectDataComponent (props: DateRangeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <DatePicker.RangePicker
-        className="w-full"
+        className={ cn('w-full', props.className) }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         outputType={ 'dateString' }

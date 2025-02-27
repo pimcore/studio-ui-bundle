@@ -22,6 +22,7 @@ export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
   value?: GeoPoints | null
   mode: 'geoPolyLine' | 'geoPolygon'
   disabled?: boolean
+  className?: string
 }
 
 export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {

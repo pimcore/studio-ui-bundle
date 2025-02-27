@@ -36,7 +36,10 @@ export class DynamicTypeObjectDataCalculatedValue extends DynamicTypeObjectDataA
 
   getObjectDataComponent (props: CalculatedValueObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
-      <CalculatedValue { ...props } />
+      <CalculatedValue
+        { ...props }
+        className={ props.className }
+      />
     )
   }
 

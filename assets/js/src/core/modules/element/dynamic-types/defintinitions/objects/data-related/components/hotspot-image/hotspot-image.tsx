@@ -53,6 +53,7 @@ export interface HotspotImageProps {
   disabled?: boolean
   value?: HotspotImageValue | null
   onChange?: (value: HotspotImageValue | null) => void
+  className?: string
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {

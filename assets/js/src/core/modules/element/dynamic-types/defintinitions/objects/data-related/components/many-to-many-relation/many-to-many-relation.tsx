@@ -56,6 +56,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
   hint?: React.ReactNode | null
   allowMultipleAssignments?: boolean
+  className?: string
 }
 
 export const ManyToManyRelation = (props: ManyToManyRelationProps): React.JSX.Element => {

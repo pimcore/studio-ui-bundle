@@ -39,6 +39,7 @@ export interface TableProps {
   width?: number | string | null
   height?: number | string | null
   data?: string | null // default data from class definition
+  className?: string
 }
 
 const parseFieldDefinitionData = (data?: string | null): TableValue | null => {

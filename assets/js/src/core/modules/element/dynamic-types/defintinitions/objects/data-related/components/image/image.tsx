@@ -34,6 +34,7 @@ export interface ImageProps {
   disabled?: boolean
   value?: ImageValue | null
   onChange?: (value: ImageValue | null) => void
+  className?: string
 }
 
 export const Image = (props: ImageProps): React.JSX.Element => {

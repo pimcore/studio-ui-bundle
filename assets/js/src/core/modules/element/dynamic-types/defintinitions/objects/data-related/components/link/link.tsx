@@ -52,6 +52,7 @@ export interface LinkProps {
   allowedTypes: string[]
   allowedTargets: string[]
   disabledFields: string[]
+  className?: string
 }
 
 export const Link = (props: LinkProps): React.JSX.Element => {

@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { LocalizedFields, type LocalizedFieldsProps } from '../components/localized-fields/localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/constants/typesList'
@@ -35,17 +35,25 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
   }): IFormattedDataStructureData[] {
     const { item, fieldValueByName, fieldBreadcrumbTitle, versionId, versionCount } = props
 
+    const getFieldData = ({ fieldData, fieldValue }: { fieldData: any, fieldValue: any }): IFormattedDataStructureData => {
+      return {
+        fieldBreadcrumbTitle,
+        versionId,
+        versionCount,
+        fieldData,
+        fieldValue
+      }
+    }
+
     return item?.children?.flatMap((item: any) => {
       const fieldValue: object = get(fieldValueByName, item.name)
 
+      if (isEmpty(fieldValue)) {
+        return getFieldData({ fieldData: { ...item }, fieldValue })
+      }
+
       return Object.entries(fieldValue).map(([key, value]) => {
-        return {
-          fieldBreadcrumbTitle,
-          fieldData: { ...item, locale: key },
-          fieldValue: value,
-          versionId,
-          versionCount
-        }
+        return getFieldData({ fieldData: { ...item, locale: key }, fieldValue: value })
       })
     })
   }

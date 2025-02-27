@@ -31,6 +31,7 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
   getObjectDataComponent (props: EncryptedFieldObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <DataComponent
+        className={ props.className }
         datatype="data"
         fieldType={ props.delegateDatatype }
         name={ props.name }

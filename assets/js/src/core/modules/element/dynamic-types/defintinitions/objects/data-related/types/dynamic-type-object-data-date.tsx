@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstractDate
   getObjectDataComponent (props: DateObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return super.getObjectDataComponent({
       ...props,
+      className: props.className,
       respectTimezone: props.columnType === 'bigint(20)',
       outputType: 'dateString',
       outputFormat: 'YYYY-MM-DD'

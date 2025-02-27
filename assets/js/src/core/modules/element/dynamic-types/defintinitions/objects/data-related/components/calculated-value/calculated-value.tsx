@@ -25,6 +25,7 @@ export interface CalculatedValueProps {
   value?: string | null
   elementType: string
   width?: number | string | null
+  className?: string
 }
 
 export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element => {

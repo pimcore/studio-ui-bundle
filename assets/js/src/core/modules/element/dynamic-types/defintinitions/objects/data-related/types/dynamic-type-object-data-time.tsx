@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import {
   type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
@@ -26,7 +27,7 @@ export class DynamicTypeObjectDataTime extends DynamicTypeObjectDataAbstract {
   getObjectDataComponent (props: TimeObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <DatePicker.TimePicker
-        className="w-full"
+        className={ cn('w-full', props.className) }
         disabled={ props.noteditable === true }
         inherited={ props.inherited }
         outputFormat={ 'HH:mm' }

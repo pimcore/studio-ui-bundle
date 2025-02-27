@@ -69,6 +69,7 @@ export interface VideoProps {
   value?: VideoValue | null
   onChange?: (value: VideoValue | null) => void
   allowedVideoTypes?: VideoType[]
+  className?: string
 }
 
 export const Video = (props: VideoProps): React.JSX.Element => {

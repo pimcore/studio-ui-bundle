@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import {
   Consent
@@ -36,7 +37,7 @@ export class DynamicTypeObjectDataConsent extends DynamicTypeObjectDataAbstract 
   getVersionObjectDataComponent (props: ConsentObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Consent
-        className="consent-wrapper"
+        className={ cn('consent-wrapper', props.className) }
         disabled
         value={ props.value }
       />

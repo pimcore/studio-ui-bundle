@@ -34,6 +34,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     return (
       <AdvancedManyToManyObjectRelation
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

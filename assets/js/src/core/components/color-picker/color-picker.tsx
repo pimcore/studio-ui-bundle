@@ -22,9 +22,10 @@ export interface IColorPickerProps extends ColorPickerProps {
 
 export const ColorPicker = ({ inherited, className, ...restProps }: IColorPickerProps): JSX.Element => {
   const { styles } = useStyles()
+
   return (
     <AntColorPicker
-      className={ cn(className, { [styles.inherited]: inherited }) }
+      className={ cn(styles.colorPicker, className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />
   )

@@ -35,6 +35,7 @@ export interface UrlSlugProps {
   width?: number | string | null
   value?: UrlSlugEntry[] | null
   onChange?: (value?: UrlSlugEntry[] | null) => void
+  className?: string
 }
 
 export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {

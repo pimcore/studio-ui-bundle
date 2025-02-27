@@ -21,6 +21,7 @@ export interface GeoPolyDrawerProps extends GeoMapCardBaseProps {
   onChange?: (value: GeoBounds | undefined) => void
   value?: GeoBounds | null
   disabled?: boolean
+  className?: string
 }
 
 export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Element => {

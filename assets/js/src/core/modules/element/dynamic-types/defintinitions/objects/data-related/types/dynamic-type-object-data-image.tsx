@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
     return (
       <Image
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

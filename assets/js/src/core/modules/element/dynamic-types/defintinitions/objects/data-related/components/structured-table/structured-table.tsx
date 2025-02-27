@@ -33,6 +33,7 @@ export interface StructuredTableProps {
   onChange?: (value: StructuredTableValue | null) => void
   width?: number | string | null
   height?: number | string | null
+  className?: string
 }
 
 export interface StructuredTableRow {

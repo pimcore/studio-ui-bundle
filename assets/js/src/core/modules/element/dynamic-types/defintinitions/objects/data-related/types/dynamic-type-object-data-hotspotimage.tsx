@@ -30,6 +30,7 @@ export class DynamicTypeObjectDataHotspotImage extends DynamicTypeObjectDataAbst
     return (
       <HotspotImage
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

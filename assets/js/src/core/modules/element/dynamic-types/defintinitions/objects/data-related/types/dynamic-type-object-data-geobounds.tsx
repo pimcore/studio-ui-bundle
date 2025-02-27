@@ -36,6 +36,7 @@ export class DynamicTypeObjectDataGeoBounds extends DynamicTypeObjectDataAbstrac
   getObjectDataComponent (props: GeoBoundsObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <GeoBoundsDrawer
+        className={ props.className }
         disabled={ props.noteditable === true }
         height={ getGeoComponentHeight(props.height) }
         lat={ props.lat }

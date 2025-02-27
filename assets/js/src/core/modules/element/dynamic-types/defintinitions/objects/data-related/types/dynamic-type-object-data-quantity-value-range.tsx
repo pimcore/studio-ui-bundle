@@ -37,6 +37,7 @@ export class DynamicTypeObjectDataQuantityValueRange extends DynamicTypeObjectDa
     return (
       <QuantityValueRange
         { ...props }
+        className={ props.className }
         disabled={ props.noteditable === true }
       />
     )

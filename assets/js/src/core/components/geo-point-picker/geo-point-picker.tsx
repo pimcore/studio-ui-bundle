@@ -26,6 +26,7 @@ export interface GeoPointPickerProps {
   lng?: number
   zoom?: number
   disabled?: boolean
+  className?: string
 }
 
 export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Element => {

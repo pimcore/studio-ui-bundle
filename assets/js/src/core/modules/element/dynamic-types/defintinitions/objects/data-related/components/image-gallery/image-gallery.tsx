@@ -47,6 +47,7 @@ export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
   onChange?: (value: ImageGalleryValue | null) => void
   disabled?: boolean
+  className?: string
 }
 
 export type ImageGalleryValue = ImageGalleryValueItem[]

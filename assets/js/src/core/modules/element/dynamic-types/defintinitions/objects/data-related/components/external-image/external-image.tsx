@@ -35,6 +35,7 @@ export interface ExternalImageProps {
   disabled?: boolean
   value?: ExternalImageValue | null
   onChange?: (value: ExternalImageValue | null) => void
+  className?: string
 }
 
 export const ExternalImage = (props: ExternalImageProps): React.JSX.Element => {
