@@ -20,16 +20,15 @@ import { useMainNav } from './hooks/use-main-nav'
 import { Button } from '@Pimcore/components/button/button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import type { IMainNavItem } from '@Pimcore/modules/app/nav/main-nav-slice'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
-import { OpenAsset } from '@Pimcore/modules/open-element/open-asset'
-import { OpenDocument } from '@Pimcore/modules/open-element/open-document'
+import { type IMainNavItem } from './services/main-nav-registry'
+import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStlyes()
-  const { getNavItems } = useMainNav()
+  const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
 
@@ -47,6 +46,15 @@ export const MainNav = (): React.JSX.Element => {
   }
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
+    const isVisible = (item.children !== undefined && item.children.length > 0) ||
+      (item.widgetConfig !== undefined)
+
+    const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
+
+    if (!isVisible || isHiddenInPerspective) {
+      return <></>
+    }
+
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
@@ -57,6 +65,9 @@ export const MainNav = (): React.JSX.Element => {
           onClick={ () => {
             if (item.children !== undefined && item.children.length > 0) {
               handleOpenState(index)
+            } else if (item.onClick !== undefined) {
+              item.onClick()
+              setIsOpen(false)
             } else if (item.widgetConfig !== undefined) {
               openMainWidget(item.widgetConfig)
               setIsOpen(false)
@@ -119,6 +130,7 @@ export const MainNav = (): React.JSX.Element => {
           initial={ { opacity: isOpen ? 0 : 1 } }
           key={ isOpen ? 'open' : 'closed' }
         >
+
           {isOpen
             ? (
               <div
@@ -133,8 +145,6 @@ export const MainNav = (): React.JSX.Element => {
                       >{t('navigation.document-types')}</IconTextButton></li>
                     <li><Button type={ 'link' }>{t('navigation.clear-cache')}</Button></li>
                     <li><Button type={ 'link' }>{t('navigation.custom-reports')}</Button></li>
-                    <li><OpenAsset /></li>
-                    <li><OpenDocument /></li>
                   </ul>
                   <Button type={ 'default' }>Customise</Button>
                 </div>
@@ -142,7 +152,7 @@ export const MainNav = (): React.JSX.Element => {
                 <Divider className={ 'main-nav__divider' } />
 
                 <ul className={ 'main-nav__list main-nav__list--level-0' }>
-                  {getNavItems.map((item, index) => (
+                  {navItems.map((item, index) => (
                     renderNavItem(item, `${index}`)
                   ))}
                 </ul>

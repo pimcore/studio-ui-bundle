@@ -15,12 +15,20 @@ import React from 'react'
 
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ObjectBrick, type ObjectBrickProps } from '../components/object-brick/object-brick'
+import { type FormItemProps } from 'antd'
 
 export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstract {
   id: string = 'objectbricks'
-  isCollectionType: boolean = true
+  isCollectionType: boolean = false
 
   getObjectDataComponent (props: ObjectBrickProps): React.ReactElement<ObjectBrickProps> {
     return <ObjectBrick { ...props } />
+  }
+
+  getObjectDataFormItemProps (props: ObjectBrickProps): FormItemProps {
+    return {
+      ...super.getObjectDataFormItemProps(props),
+      label: null
+    }
   }
 }
