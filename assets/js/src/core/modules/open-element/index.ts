@@ -16,7 +16,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
 import { NavPermission } from '../perspectives/enums/nav-permission'
-import { OpenElement } from '@Pimcore/modules/open-element/hooks/open-element'
+import { OpenElement } from '@Pimcore/modules/open-element/open-element'
+import React from 'react'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -26,21 +27,21 @@ moduleSystem.registerModule({
       path: 'File/Open Asset',
       label: 'Open Asset',
       perspectivePermission: NavPermission.OpenAsset,
-      onClick: () => { OpenElement({ elementType: 'asset' }) }
+      button: () => React.createElement(OpenElement, { elementType: 'asset' })
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'File/Open Document',
       label: 'Open Document',
       perspectivePermission: NavPermission.OpenDocument,
-      onClick: () => { OpenElement({ elementType: 'document' }) }
+      button: () => React.createElement(OpenElement, { elementType: 'document' })
     })
 
     mainNavRegistryService.registerMainNavItem({
       path: 'File/Open Data Object',
       label: 'Open Data Object',
       perspectivePermission: NavPermission.OpenObject,
-      onClick: () => { OpenElement({ elementType: 'data-object' }) }
+      button: () => React.createElement(OpenElement, { elementType: 'data-object' })
     })
   }
 })

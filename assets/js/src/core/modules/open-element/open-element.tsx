@@ -15,15 +15,23 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { Button } from '@Pimcore/components/button/button'
+import React from 'react'
 
 interface OpenDocumentProp {
   elementType: ElementType
 }
 
-export const useOpenElement = ({ elementType }: OpenDocumentProp): void => {
+export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Element => {
   const { openElementByPathOrId } = openElementHelper()
   const { t } = useTranslation()
   const { input } = useFormModal()
+
+  const buttonTexts = {
+    'data-object': t('open-data-object.button'),
+    asset: t('open-asset.button'),
+    document: t('open-document.button')
+  }
 
   const modalTexts = {
     'data-object': {
@@ -50,18 +58,28 @@ export const useOpenElement = ({ elementType }: OpenDocumentProp): void => {
   }
 
   const texts = modalTexts[elementType]
+  const handleClick = (): void => {
+    input({
+      title: texts.title,
+      label: texts.label,
+      rule: {
+        required: true,
+        message: texts.requiredMessage
+      },
+      okText: texts.okText,
+      cancelText: texts.cancelText,
+      onOk: async (value: string) => {
+        await openElementByPathOrId(value, elementType)
+      }
+    })
+  }
 
-  input({
-    title: texts.title,
-    label: texts.label,
-    rule: {
-      required: true,
-      message: texts.requiredMessage
-    },
-    okText: texts.okText,
-    cancelText: texts.cancelText,
-    onOk: async (value: string) => {
-      await openElementByPathOrId(value, elementType)
-    }
-  })
+  return (
+    <Button
+      onClick={ handleClick }
+      type={ 'link' }
+    >
+      {buttonTexts[elementType]}
+    </Button>
+  )
 }

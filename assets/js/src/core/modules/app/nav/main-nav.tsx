@@ -24,6 +24,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
 import { type IMainNavItem } from './services/main-nav-registry'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
+import { isUndefined } from 'lodash'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -31,8 +32,6 @@ export const MainNav = (): React.JSX.Element => {
   const { navItems } = useMainNav()
   const { openMainWidget } = useWidgetManager()
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
-
-  console.log('----> navItemsLL', navItems)
 
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
@@ -49,7 +48,7 @@ export const MainNav = (): React.JSX.Element => {
 
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const isVisible = (item.children !== undefined && item.children.length > 0) ||
-      (item.widgetConfig !== undefined) || (item.onClick !== undefined)
+            (item.widgetConfig !== undefined) || (item.onClick !== undefined) || (item.button !== undefined)
 
     const isHiddenInPerspective = item.perspectivePermissionHide !== undefined && isAllowedInPerspective(item.perspectivePermissionHide)
 
@@ -62,32 +61,40 @@ export const MainNav = (): React.JSX.Element => {
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
         key={ item.id }
       >
-        <button
-          className={ 'main-nav__list-btn' }
-          onClick={ () => {
-            if (item.children !== undefined && item.children.length > 0) {
-              handleOpenState(index)
-            } else if (item.onClick !== undefined) {
-              item.onClick()
-              setIsOpen(false)
-            } else if (item.widgetConfig !== undefined) {
-              openMainWidget(item.widgetConfig)
-              setIsOpen(false)
-            }
-          } }
-        >
-          {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
-          {item.label}
+        {!isUndefined(item.button)
+          ? (
+            <div>
+              {item.button()}
+            </div>
+            )
+          : (
+            <button
+              className={ 'main-nav__list-btn' }
+              onClick={ () => {
+                if (item.children !== undefined && item.children.length > 0) {
+                  handleOpenState(index)
+                } else if (item.onClick !== undefined) {
+                  item.onClick()
+                  setIsOpen(false)
+                } else if (item.widgetConfig !== undefined) {
+                  openMainWidget(item.widgetConfig)
+                  setIsOpen(false)
+                }
+              } }
+            >
+              {item.icon !== undefined ? (<Icon value={ item.icon } />) : null}
+              {item.label}
 
-          {item.children !== undefined && item.children.length > 0
-            ? (
-              <Icon
-                className={ 'main-nav__list-btn-icon' }
-                value={ 'chevron-right' }
-              />
-              )
-            : null}
-        </button>
+              {item.children !== undefined && item.children.length > 0
+                ? (
+                  <Icon
+                    className={ 'main-nav__list-btn-icon' }
+                    value={ 'chevron-right' }
+                  />
+                  )
+                : null}
+            </button>
+            )}
 
         {item.children !== undefined && item.children.length > 0
           ? (
@@ -121,7 +128,9 @@ export const MainNav = (): React.JSX.Element => {
     <div ref={ elRef }>
       <IconButton
         icon={ { value: 'menu' } }
-        onClick={ () => { setIsOpen(!isOpen) } }
+        onClick={ () => {
+          setIsOpen(!isOpen)
+        } }
         type={ 'text' }
       />
 

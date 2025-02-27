@@ -45,6 +45,7 @@ const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void =
         icon: isCurrentItem ? item.icon : undefined,
         widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
         onClick: isCurrentItem ? item.onClick : undefined,
+        button: isCurrentItem ? item.button : undefined,
         className: isCurrentItem ? item.className : undefined,
         perspectivePermission: isCurrentItem ? item.perspectivePermission : undefined,
         perspectivePermissionHide: isCurrentItem ? item.perspectivePermissionHide : undefined
