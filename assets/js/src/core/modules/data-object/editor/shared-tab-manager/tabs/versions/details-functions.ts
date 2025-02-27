@@ -11,12 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { get, isEmpty, isEqual, isUndefined } from 'lodash'
+import { every, get, isArray, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-registry'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 enum DATATYPE_LIST {
   LAYOUT = 'layout',
@@ -37,6 +38,22 @@ export interface IFormattedDataStructureData {
   fieldValue: any
   versionCount: number
   versionId: number
+}
+
+const isEmptyObject = (value: object): boolean => {
+  if (isObject(value) && !isArray(value)) {
+    return every(value, isEmptyObject)
+  }
+
+  return isEmpty(value)
+}
+
+const isFieldValueEmpty = (fieldValue: any): boolean => {
+  if (isObject(fieldValue)) {
+    return every(fieldValue, isEmptyObject)
+  }
+
+  return isEmptyValue(fieldValue)
 }
 
 export const getFormattedDataStructure = ({ layout, versionData, versionId, versionCount, objectDataRegistry }: IGetFormattedDataStructureProps): IFormattedDataStructureData[] => {
@@ -61,8 +78,13 @@ export const getFormattedDataStructure = ({ layout, versionData, versionId, vers
       if (item.datatype === DATATYPE_LIST.DATA) {
         const fieldName = item.name
         const fieldValueByName: string | object = get(versionData?.objectData, fieldName)
+        const currentFieldType: string = item.fieldtype
 
-        const objectDataType = objectDataRegistry.getDynamicType(item.fieldtype as string)
+        if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
+          return []
+        }
+
+        const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
 
         return objectDataType.processVersionFieldData({ item, fieldBreadcrumbTitle, fieldValueByName, versionId, versionCount })
       }
@@ -98,7 +120,7 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
     const mainVersionItem = mainVersionData[index]
     const compareVersionItem = compareVersionData[index]
 
-    const isEmptyField = isEmpty(mainVersionItem?.fieldValue) && isEmpty(compareVersionItem?.fieldValue)
+    const isEmptyField = isFieldValueEmpty(mainVersionItem?.fieldValue) && isFieldValueEmpty(compareVersionItem?.fieldValue)
 
     if (isEmptyField) { continue }
 
