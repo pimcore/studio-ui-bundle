@@ -32,6 +32,7 @@ import { withActionStates } from './node/with-action-states'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 
 export interface TreeContainerProps {
+  treeId: string
   id: number
   showRoot?: boolean
 }
@@ -48,7 +49,7 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
   isRoot: true
 }
 
-const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ id = 1, showRoot = true, treeId }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
   const { pageSize } = useTreeFilter()
   const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
@@ -123,6 +124,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
+      treeId={ treeId }
     />
   )
 }

@@ -19,6 +19,7 @@ import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 
 export interface TreeWidgetProps {
+  id: string
   rootFolderId?: number
   elementType: ElementType
   classes?: string[]
@@ -27,7 +28,7 @@ export interface TreeWidgetProps {
   contextPermissions: Record<string, boolean>
   showRoot?: boolean
 }
-export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
+export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
   return (
     <TreePermissionProvider permissions={ { ...contextPermissions } }>
       <TreeFilterProvider
@@ -39,12 +40,14 @@ export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, 
         <AssetTreeContainer
           id={ rootFolderId ?? 1 }
           showRoot={ showRoot }
+          treeId={ id }
         />
         )}
         { elementType === elementTypes.dataObject && (
         <DataObjectTreeContainer
           id={ rootFolderId ?? 1 }
           showRoot={ showRoot }
+          treeId={ id }
         />
         )}
       </TreeFilterProvider>

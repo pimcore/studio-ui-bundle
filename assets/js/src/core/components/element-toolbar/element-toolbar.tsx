@@ -21,6 +21,8 @@ import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draf
 import { baseUrl } from '@Pimcore/app/router/router'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useTranslation } from 'react-i18next'
+import { IconButton } from '../icon-button/icon-button'
+import { useLocateInTree } from '@Pimcore/modules/element/actions/locate-in-tree/use-locate-in-tree'
 
 export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: number, elementType: ElementType, editorTabsWidth?: number }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -29,6 +31,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const { element } = useElementDraft(id, elementType)
   const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
+  const { locateInTree } = useLocateInTree(elementType)
 
   useLayoutEffect(() => {
     if (editorTabsWidth == null) return
@@ -116,7 +119,10 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
         </Dropdown>
       </div>
 
-      <Icon value={ 'target' } />
+      <IconButton
+        icon={ { value: 'target' } }
+        onClick={ () => { locateInTree(element.id) } }
+      />
     </div>
   )
 }

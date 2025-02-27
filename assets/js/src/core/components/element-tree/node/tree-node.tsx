@@ -20,6 +20,7 @@ import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { useNodeState } from '../hooks/use-node-state'
 
 export interface TreeNodeProps {
   id: string
@@ -89,7 +90,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const [isExpanded, setIsExpanded] = React.useState(children.length !== 0)
+  const { isExpanded, setExpanded } = useNodeState(id, { isExpanded: children.length !== 0 })
   const [selectedIds, setSelectedIds] = selectedIdsState!
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
@@ -162,11 +163,11 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   }
 
   function expandItem (): void {
-    setIsExpanded(true)
+    setExpanded(true)
   }
 
   function collapseItem (): void {
-    setIsExpanded(false)
+    setExpanded(false)
   }
 
   function gotoNextNode (event: KeyboardEvent): void {
@@ -240,7 +241,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
         {isRoot !== true && (
           <TreeExpander
             node={ treeNodeProps }
-            state={ [isExpanded, setIsExpanded] }
+            state={ [isExpanded, setExpanded] }
           />
         )}
 
