@@ -25,6 +25,8 @@ import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/j
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
+import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '../../../perspectives/enums/tree-permission'
 
 export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
@@ -55,6 +57,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const [assetClone] = useAssetCloneMutation()
   const { elementPatch } = useElementApi(elementType)
   const { t } = useTranslation()
+  const { isTreeActionAllowed } = useTreePermission()
   const { addJob } = useJobs()
 
   const copy = (node: TreeNodeProps | Element): void => {
@@ -171,7 +174,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.copy'),
       key: 'copy',
       icon: <Icon value={ 'copy' } />,
-      hidden: !checkElementPermission(node.permissions, 'view') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Copy) || !checkElementPermission(node.permissions, 'view') || node.isLocked,
       onClick: () => {
         copy(node)
       }
@@ -196,7 +199,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.cut'),
       key: 'cut',
       icon: <Icon value={ 'cut' } />,
-      hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
+      hidden: !isTreeActionAllowed(TreePermission.Cut) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         cut(node)
       }
@@ -221,7 +224,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.paste'),
       key: 'paste',
       icon: <Icon value={ 'paste' } />,
-      hidden: (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
+      hidden: !isTreeActionAllowed(TreePermission.Paste) || (storedNode === undefined || nodeTask !== 'copy') || !checkElementPermission(node.permissions, 'create'),
       onClick: async () => {
         await paste(parseInt(node.id))
       }
@@ -246,7 +249,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       label: t('element.tree.paste-cut'),
       key: 'paste-cut',
       icon: <Icon value={ 'paste' } />,
-      hidden: (storedNode === undefined || nodeTask !== 'cut'),
+      hidden: !isTreeActionAllowed(TreePermission.Paste) || (storedNode === undefined || nodeTask !== 'cut'),
       onClick: async () => {
         await pasteCut(parentId)
       }

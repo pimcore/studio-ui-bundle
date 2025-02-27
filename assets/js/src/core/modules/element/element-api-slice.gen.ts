@@ -36,6 +36,12 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementGetTreeLocation: build.query<ElementGetTreeLocationApiResponse, ElementGetTreeLocationApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/location/${queryArg.id}/${queryArg.perspectiveId}`,
+                }),
+                providesTags: ["Elements"],
+            }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/path`,
@@ -96,6 +102,15 @@ export type ElementGetContextPermissionsApiResponse = /** status 200 Context per
 export type ElementGetContextPermissionsApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
+};
+export type ElementGetTreeLocationApiResponse = /** status 200 Location data of the element */ ElementLocationData;
+export type ElementGetTreeLocationApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Get perspective by matching Id */
+    perspectiveId: string;
 };
 export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
@@ -300,6 +315,24 @@ export type DocumentContextPermissions = SaveDocumentContextPermissions & {
         [key: string]: string | number | boolean | object;
     };
 };
+export type TreeLevelData = {
+    /** Parent ID */
+    parentId?: number;
+    /** Element ID */
+    elementId: number;
+    /** Page Number */
+    pageNumber: number;
+};
+export type ElementLocationData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Widget Id */
+    widgetId: string;
+    /** Tree level data */
+    treeLevelData: TreeLevelData[];
+};
 export type Subtype = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -317,6 +350,7 @@ export const {
     useElementGetDeleteInfoQuery,
     useElementFolderCreateMutation,
     useElementGetContextPermissionsQuery,
+    useElementGetTreeLocationQuery,
     useElementGetIdByPathQuery,
     useElementGetSubtypeQuery,
     useElementResolveBySearchTermQuery,

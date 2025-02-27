@@ -250,6 +250,7 @@ const injectedRtkApi = api
                         pageSize: queryArg.pageSize,
                         parentId: queryArg.parentId,
                         idSearchTerm: queryArg.idSearchTerm,
+                        pqlQuery: queryArg.pqlQuery,
                         excludeFolders: queryArg.excludeFolders,
                         path: queryArg.path,
                         pathIncludeParent: queryArg.pathIncludeParent,
@@ -735,6 +736,8 @@ export type AssetGetTreeApiArg = {
     parentId?: number;
     /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
+    /** Pql query filter */
+    pqlQuery?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
     /** Filter by path. */
