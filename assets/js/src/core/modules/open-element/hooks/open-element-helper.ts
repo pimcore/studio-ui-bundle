@@ -15,7 +15,8 @@ import { useLazyElementGetIdByPathQuery } from '@Pimcore/modules/element/element
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { type ElementGetIdByPathApiResponse } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { get } from 'lodash'
 interface OpenAssetHelperReturn {
   openElementByPathOrId: (value: string | number | undefined, elementType: ElementType) => Promise<void>
   isLoading: boolean
@@ -25,13 +26,12 @@ export const openElementHelper = (): OpenAssetHelperReturn => {
   const { openElement } = useElementHelper()
 
   const [fetchElementId, { isLoading }] = useLazyElementGetIdByPathQuery()
-
   const handleFetchAndOpen = async (path: string, elementType: ElementType): Promise<void> => {
     try {
       const result: ElementGetIdByPathApiResponse = await fetchElementId({ elementType, elementPath: path }).unwrap()
       await openElement({ id: result.id, type: elementType })
     } catch (error) {
-      console.error('Failed to fetch element:', error)
+      trackError(new GeneralError(`Error fetching element ${elementType} by path ${path}: ${get(error, 'data.message')}`))
     }
   }
 
@@ -46,7 +46,7 @@ export const openElementHelper = (): OpenAssetHelperReturn => {
         await handleFetchAndOpen(value, elementType)
       }
     } catch (error) {
-      console.error('Error opening element:', error)
+      trackError(new GeneralError(`Error opening element ${elementType} with ${value}: ${get(error, 'message')}`))
     }
   }
 

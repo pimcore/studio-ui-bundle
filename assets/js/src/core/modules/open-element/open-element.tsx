@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { openElementHelper } from '@Pimcore/modules/open-element/hooks/open-element-helper'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 
 interface OpenDocumentProp {
@@ -75,11 +74,11 @@ export const OpenElement = ({ elementType }: OpenDocumentProp): React.JSX.Elemen
   }
 
   return (
-    <Button
+    <button
+      className={ 'main-nav__list-btn' }
       onClick={ handleClick }
-      type={ 'link' }
     >
       {buttonTexts[elementType]}
-    </Button>
+    </button>
   )
 }
