@@ -81,22 +81,24 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
       cell: (info) => {
         const { path, elementType, id } = info.getValue()
 
-        return (
-          <Flex
-            align={ 'center' }
-            className={ styles.link }
-            key={ id }
-          >
-            <Tag
-              bordered={ false }
-              color="blue"
-              onClick={ async () => {
-                await openCorrectElement(elementType, id)
-              } }
-            >{decodeURIComponent(path)}
-            </Tag>
-          </Flex>
-        )
+        return (!isUndefined(path) && path !== '')
+          ? (
+            <Flex
+              align={ 'center' }
+              className={ styles.link }
+              key={ id }
+            >
+              <Tag
+                bordered={ false }
+                color="blue"
+                onClick={ async () => {
+                  await openCorrectElement(elementType, id)
+                } }
+              >{decodeURIComponent(path)}
+              </Tag>
+            </Flex>
+            )
+          : <div></div>
       }
     }),
     columnHelper.accessor('title', {
