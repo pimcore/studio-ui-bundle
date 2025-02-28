@@ -12,7 +12,8 @@
 */
 
 import React from 'react'
-import Search, { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
+import { type SearchProps as AntSearchProps } from 'antd/es/input/Search'
+import { Input } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './search-input.styles'
@@ -36,7 +37,7 @@ export const SearchInput = ({ className, withoutAddon = true, withPrefix = true,
   )
 
   return (
-    <Search
+    <Input.Search
       allowClear={ (withClear) && {
         clearIcon: (
           <Icon

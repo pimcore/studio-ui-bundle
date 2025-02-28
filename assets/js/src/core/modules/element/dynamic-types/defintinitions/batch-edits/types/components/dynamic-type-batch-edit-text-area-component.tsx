@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react'
 import {
   type AbstractBatchEditDefinition
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/dynamic-type-batch-edit-abstract'
-import TextArea from 'antd/es/input/TextArea'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { useBatchEdit } from '@Pimcore/modules/asset/listing/batch-actions/batch-edit-modal/hooks/use-batch-edit'
 export interface DynamicTypeBatchEditTextAreaProps extends AbstractBatchEditDefinition {}
 

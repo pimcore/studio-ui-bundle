@@ -12,7 +12,7 @@
 */
 
 import React from 'react'
-import Search from 'antd/es/input/Search'
+import { Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ERROR_ADDRESS_NOT_FOUND, geoCode } from '@Pimcore/components/geo-map/utils/geocode'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
@@ -53,7 +53,7 @@ export const AddressSearchField = (props: AddressSearchFieldProps): React.JSX.El
   }
 
   return (
-    <Search
+    <Input.Search
       className="address-search-field"
       disabled={ props.disabled }
       onSearch={ onSearch }

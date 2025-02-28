@@ -15,7 +15,7 @@ import React, { useContext, useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type InputRef } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import Input from 'antd/es/input/Input'
+import { Input } from 'antd'
 import {
   CustomMetadataTable
 } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/components/table/table'
