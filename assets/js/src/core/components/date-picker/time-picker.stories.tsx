@@ -14,7 +14,6 @@
 import React, { useState } from 'react'
 import { type Meta, type StoryObj } from '@storybook/react'
 import { Form } from '@Pimcore/components/form/form'
-import FormItem from 'antd/es/form/FormItem'
 import { type DatePickerValueType, formatDatePickerDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picker/time-picker'
 
@@ -39,12 +38,12 @@ const ExampleForm = (props: TimePickerProps): React.JSX.Element => {
 
   return (
     <Form>
-      <FormItem>
+      <Form.Item>
         <TimePicker
           { ...props }
           onChange={ handleDateChange }
         />
-      </FormItem>
+      </Form.Item>
       <div>
         <strong>Selected Date:</strong>
         <pre>{date !== null && date !== undefined ? formatDatePickerDate(date as DatePickerValueType) : 'null'}</pre>
