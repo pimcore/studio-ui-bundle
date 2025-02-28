@@ -26,6 +26,7 @@ export const useStyles = createStyles(({ token, css }) => {
         flex: 1;
         overflow: auto;
         contain: layout size;
+        position: relative;
       }
 
       .widget__title {

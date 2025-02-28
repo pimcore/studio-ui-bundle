@@ -16,8 +16,9 @@ import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { isNil, isNull, isUndefined } from 'lodash'
-import { locateInTree as locateInTreeAction, setSelectedNodeIds } from '@Pimcore/components/element-tree/element-tree-slice'
+import { locateInTree as locateInTreeAction, setNodeScrollTo, setSelectedNodeIds } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number) => void
@@ -26,6 +27,7 @@ export interface UseLocateInTreeHookReturn {
 export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookReturn => {
   const dispatch = useAppDispatch()
   const activePerspective = selectActivePerspective(store.getState())
+  const { switchToWidget } = useWidgetManager()
 
   const locateInTree = (elementId: number): void => {
     if (isNull(activePerspective)) {
@@ -36,7 +38,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
       id: elementId,
       elementType,
       perspectiveId: activePerspective.id
-    }))
+    }, { forceRefetch: true }))
       .then((result) => {
         if (!isUndefined(result.error)) {
           trackError(new ApiError(result.error))
@@ -44,6 +46,8 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
         }
 
         if (!isNil(result.data) && !isNil(result.data.treeLevelData)) {
+          switchToWidget(result.data.widgetId)
+
           dispatch(locateInTreeAction({
             treeId: result.data.widgetId,
             treeLevelData: result.data.treeLevelData
@@ -51,6 +55,11 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
           dispatch(setSelectedNodeIds({
             treeId: result.data.widgetId,
             selectedNodeIds: [String(elementId)]
+          }))
+          dispatch(setNodeScrollTo({
+            treeId: result.data.widgetId,
+            nodeId: String(elementId),
+            scrollTo: true
           }))
         }
       })

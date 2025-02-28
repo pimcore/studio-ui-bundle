@@ -21,6 +21,8 @@ import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-u
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useNodeState } from '../hooks/use-node-state'
+import { isNil } from 'lodash'
+import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 
 export interface TreeNodeProps {
   id: string
@@ -89,7 +91,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const { isExpanded, setExpanded, isSelected, setSelectedIds } = useNodeState(id, { isExpanded: children.length !== 0 })
+  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useNodeState(id, { isExpanded: children.length !== 0 })
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 
@@ -101,6 +103,17 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (isScrollTo) {
+      const nodeElement = nodesRefs?.current[internalKey]?.el
+
+      if (!isNil(nodeElement)) {
+        scrollToNodeElement(nodeElement)
+        setScrollTo(false)
+      }
+    }
+  }, [isScrollTo, nodesRefs, internalKey, setScrollTo])
 
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]

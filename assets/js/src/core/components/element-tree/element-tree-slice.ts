@@ -20,6 +20,7 @@ export interface InternalNodeState {
   isExpanded?: boolean
   isLoading: boolean
   isSelected: boolean
+  isScrollTo: boolean
   page: number
   searchTerm?: string
 }
@@ -31,7 +32,8 @@ type TreesState = Record<string, TreeNodesState>
 export const initialNodeState: InternalNodeState = {
   isLoading: false,
   page: 1,
-  isSelected: false
+  isSelected: false,
+  isScrollTo: false
 }
 
 const initialState: TreesState = {}
@@ -93,6 +95,13 @@ const slice = createSlice({
         state[payload.treeId][nodeId].isSelected = true
       })
     },
+    setNodeScrollTo: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string, scrollTo: boolean }>
+    ) => {
+      initializeNodeState(state, payload.treeId, payload.nodeId)
+      state[payload.treeId][payload.nodeId].isScrollTo = payload.scrollTo
+    },
     locateInTree: (
       state,
       { payload }: PayloadAction<{ treeId: string, treeLevelData: TreeLevelData[] }>
@@ -117,6 +126,6 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, locateInTree } = slice.actions
+export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, locateInTree } = slice.actions
 
 export const selectNodeState = (state: RootState, treeId: string, nodeId: string): InternalNodeState | undefined => state.trees[treeId]?.[nodeId]
