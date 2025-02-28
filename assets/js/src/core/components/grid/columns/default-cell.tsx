@@ -90,7 +90,7 @@ export const DefaultCell = ({ ...props }: DefaultCellProps): React.JSX.Element =
         </EditableCellContextProvider>
       </div>
     )
-  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable, props.active])
+  }, [isInEditMode, props.getValue(), row, row.getIsSelected(), isEditable, props.active, props.modified])
 
   function getCssClasses (): string[] {
     const classes: string[] = []
