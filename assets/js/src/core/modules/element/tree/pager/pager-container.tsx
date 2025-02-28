@@ -14,19 +14,12 @@
 import { TreeContext, type TreePagerProps } from '@Pimcore/components/element-tree/element-tree'
 import { useNodeState } from '@Pimcore/components/element-tree/hooks/use-node-state'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 
 const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
   const { page, setPage } = useNodeState(props.node.id)
   const { maxItemsPerNode } = useContext(TreeContext)
   const total = props.total
-
-  useEffect(() => {
-    const totalPages = Math.ceil(total / maxItemsPerNode!)
-    if (page > totalPages) {
-      setPage(1)
-    }
-  }, [total, maxItemsPerNode, page, setPage])
 
   function onChange (page: number): void {
     setPage(page)

@@ -27,6 +27,7 @@ import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
+import { useNodeState } from './hooks/use-node-state'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -100,6 +101,7 @@ const ElementTree = (
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
+  const { page, setPage } = useNodeState(String(nodeId))
   const { apiHookResult, dataTransformer } = nodeApiHook({
     id: nodeId,
     level: -1
@@ -147,6 +149,10 @@ const ElementTree = (
   if (hasRootNode) {
     preparedRootNode!.children = items
     preparedRootNode!.hasChildren = false
+  }
+
+  if (items.length === 0 && page > 1) {
+    setPage(1)
   }
 
   const TreeNode = renderNode
