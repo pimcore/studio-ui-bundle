@@ -31,7 +31,7 @@ export const openElementHelper = (): OpenAssetHelperReturn => {
       const result: ElementGetIdByPathApiResponse = await fetchElementId({ elementType, elementPath: path }).unwrap()
       await openElement({ id: result.id, type: elementType })
     } catch (error) {
-      trackError(new GeneralError(`Error fetching element ${elementType} by path ${path}: ${get(error, 'data.message')}`))
+      trackError(new GeneralError(`Error fetching element: ${get(error, 'data.message')}`))
     }
   }
 
