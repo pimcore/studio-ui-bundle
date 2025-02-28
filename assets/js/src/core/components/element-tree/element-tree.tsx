@@ -105,7 +105,7 @@ const ElementTree = (
   const { apiHookResult, dataTransformer } = nodeApiHook({
     id: nodeId,
     level: -1
-  })
+  }, maxItemsPerNode)
   const { isLoading, isError, data } = apiHookResult
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {

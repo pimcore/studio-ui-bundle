@@ -19,6 +19,7 @@ import { isNil, isNull, isUndefined } from 'lodash'
 import { locateInTree as locateInTreeAction, setNodeScrollTo, setSelectedNodeIds } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 
 export interface UseLocateInTreeHookReturn {
   locateInTree: (elementId: number) => void
@@ -28,6 +29,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
   const dispatch = useAppDispatch()
   const activePerspective = selectActivePerspective(store.getState())
   const { switchToWidget } = useWidgetManager()
+  const { refreshTree } = useRefreshTree(elementType)
 
   const locateInTree = (elementId: number): void => {
     if (isNull(activePerspective)) {
@@ -47,6 +49,9 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
 
         if (!isNil(result.data) && !isNil(result.data.treeLevelData)) {
           switchToWidget(result.data.widgetId)
+          result.data.treeLevelData.forEach((treeLevelDataItem) => {
+            refreshTree(treeLevelDataItem.parentId ?? 1)
+          })
 
           dispatch(locateInTreeAction({
             treeId: result.data.widgetId,

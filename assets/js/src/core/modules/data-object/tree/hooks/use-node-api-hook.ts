@@ -38,12 +38,12 @@ interface NodeApiHookReturnType {
   mergeAdditionalQueryParams: Dispatch<SetStateAction<DataObjectTreeAdditionalTreeProps | undefined>>
 }
 
-export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
+export const useNodeApiHook = (node: TreeNodeProps, pageSize?: number): NodeApiHookReturnType => {
   const [additionalQueryParams, setAdditionalQueryParams] = useState<DataObjectTreeAdditionalTreeProps>()
   const { treeFilterArgs } = useTreeFilter()
   const { maxItemsPerNode } = useContext(TreeContext)
   const { page, searchTerm } = useNodeState(node.id)
-  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page, idSearchTerm: searchTerm, ...treeFilterArgs, ...additionalQueryParams })
+  const apiHookResult = useDataObjectGetTreeQuery({ parentId: parseInt(node.id), pageSize: pageSize ?? maxItemsPerNode!, page, idSearchTerm: searchTerm, ...treeFilterArgs, ...additionalQueryParams })
 
   function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
     return transformApiDataToNodes(node, data, maxItemsPerNode)

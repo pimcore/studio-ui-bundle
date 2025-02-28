@@ -37,11 +37,11 @@ interface NodeApiHookReturnType {
   mergeAdditionalQueryParams: Dispatch<SetStateAction<AssetTreeAdditionalTreeProps | undefined>>
 }
 
-export const useNodeApiHook = (node: TreeNodeProps): NodeApiHookReturnType => {
+export const useNodeApiHook = (node: TreeNodeProps, pageSize?: number): NodeApiHookReturnType => {
   const [additionalQueryParams, setAdditionalQueryParams] = useState<AssetTreeAdditionalTreeProps>()
   const { maxItemsPerNode } = useContext(TreeContext)
   const { treeFilterArgs } = useTreeFilter()
-  const apiHookResult = useAssetGetTreeQuery({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: 1, ...treeFilterArgs, ...additionalQueryParams })
+  const apiHookResult = useAssetGetTreeQuery({ parentId: parseInt(node.id), pageSize: pageSize ?? maxItemsPerNode!, page: 1, ...treeFilterArgs, ...additionalQueryParams })
 
   function dataTransformer (data: AssetGetTreeApiResponse): DataTransformerReturnType {
     return transformApiDataToNodes(node, data, maxItemsPerNode)
