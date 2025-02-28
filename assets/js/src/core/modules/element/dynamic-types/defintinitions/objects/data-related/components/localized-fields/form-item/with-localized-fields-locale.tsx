@@ -42,7 +42,7 @@ export const withLocalizedFieldsLocale = (Component: typeof Form.Item): typeof F
           name={ newName }
         />
       )
-    }, [context])
+    }, [context, props])
   }
 
   const NewFormItem = FormItemWithLocalizedFieldsLocale as typeof Form.Item

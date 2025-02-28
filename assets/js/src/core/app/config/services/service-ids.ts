@@ -22,6 +22,9 @@ export const dynamicTypeRegistriesServiceIds = {
 }
 
 export const serviceIds = {
+  // Main nav
+  mainNavRegistry: 'MainNavRegistry',
+
   // Widget manager
   widgetManager: 'WidgetManagerService',
 

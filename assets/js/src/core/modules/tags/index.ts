@@ -16,9 +16,30 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { TagConfigurationContainer } from '@Pimcore/modules/tags/tag-configuration-container'
+import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 
 moduleSystem.registerModule({
   onInit: () => {
+    const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Settings/Tag Configuration',
+      className: 'item-style-modifier',
+      perspectivePermission: NavPermission.TagConfiguration,
+      widgetConfig: {
+        name: 'Tag Configuration',
+        id: 'tag-configuration',
+        component: 'tag-configuration',
+        config: {
+          icon: {
+            type: 'name',
+            value: 'tag-configuration'
+          }
+        }
+      }
+    })
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget({

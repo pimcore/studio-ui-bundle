@@ -22,6 +22,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 
 export interface ICreateZipDownloadProps {
   jobTitle: string
@@ -54,6 +56,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
   const [fetchAssets] = useAssetExportZipAssetMutation()
   const { addJob } = useJobs()
   const { t } = useTranslation()
+  const { isTreeActionAllowed } = useTreePermission()
 
   const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
     addJob(createJob({
@@ -101,7 +104,7 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
       label: t('asset.tree.context-menu.download-as-zip'),
       key: 'download-as-zip',
       icon: <Icon value={ 'download-zip' } />,
-      hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
+      hidden: !isTreeActionAllowed(TreePermission.DownloadZip) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({
           jobTitle: node.label,

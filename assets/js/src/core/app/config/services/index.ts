@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { container } from '@Pimcore/app/depency-injection'
 import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
@@ -144,6 +145,10 @@ import {
 import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { DynamicTypeObjectDataObjectBrick } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-object-brick'
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
+import { MainNavRegistry } from '@Pimcore/modules/app/nav/services/main-nav-registry'
+
+// Main nav
+container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()

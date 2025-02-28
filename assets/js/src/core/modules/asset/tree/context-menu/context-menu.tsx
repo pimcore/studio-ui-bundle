@@ -11,27 +11,29 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Button } from 'antd'
-import React, { useEffect } from 'react'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { useTranslation } from 'react-i18next'
-import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
-import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
-import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
-import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
-import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
-import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
-import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
-import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useUploadNewVersion } from '@Pimcore/modules/asset/actions/upload-new-version/upload-new-version'
+import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
+import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
+import { useLock } from '@Pimcore/modules/element/actions/lock/use-lock'
+import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
+import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { getElementActionCacheKey } from '@Pimcore/modules/element/element-helper'
-import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
+import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { Button } from 'antd'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -48,8 +50,9 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { refreshTreeContextMenuItem } = useRefreshTree('asset')
   const { downloadTreeContextMenuItem } = useDownload()
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('asset')
-  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem } = useLock('asset')
+  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('asset')
   const { uploadNewVersionTreeContextMenuItem } = useUploadNewVersion()
+  const { isTreeActionAllowed } = useTreePermission()
 
   useEffect(() => {
     if (node !== undefined) {
@@ -57,17 +60,23 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
     }
   }, [node])
 
+  const isUploadMenuHidden = isTreeActionAllowed(TreePermission.HideAdd) ||
+    (!isTreeActionAllowed(TreePermission.AddUpload) && !isTreeActionAllowed(TreePermission.AddUploadZip)) ||
+    !checkElementPermission(node.permissions, 'create') ||
+    node?.type !== 'folder'
+
   const items: DropdownMenuProps['items'] = [
     {
       label: t('element.tree.context-menu.new-assets'),
-      key: '1',
+      key: 'new-assets',
       icon: <Icon value={ 'asset' } />,
-      hidden: !checkElementPermission(node.permissions, 'create') || node?.type !== 'folder',
+      hidden: isUploadMenuHidden,
       children: [
         {
           icon: <Icon value={ 'upload-cloud' } />,
           label: t('element.tree.context-menu.add-assets.upload-files'),
-          key: '1-1',
+          key: 'add-upload',
+          hidden: !isTreeActionAllowed(TreePermission.AddUpload),
           onClick: () => {
             if (uploadFileRef.current !== null) {
               uploadFileRef.current?.click()
@@ -77,7 +86,8 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
         {
           icon: <Icon value={ 'upload-zip' } />,
           label: t('element.tree.context-menu.add-assets.upload-zip'),
-          key: '1-2',
+          key: 'add-upload-zip',
+          hidden: !isTreeActionAllowed(TreePermission.AddUploadZip),
           onClick: () => {
             if (uploadZipRef.current !== null) {
               uploadZipRef.current?.click()
@@ -100,12 +110,13 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon value={ 'more' } />,
+      hidden: isLockMenuHidden(node),
       children: [
         {
           label: t('element.lock'),
           key: 'advanced-lock',
           icon: <Icon value={ 'lock' } />,
-          hidden: !checkElementPermission(node.permissions, 'publish') || node.isLocked,
+          hidden: isLockMenuHidden(node),
           children: [
             lockTreeContextMenuItem(node),
             lockAndPropagateTreeContextMenuItem(node),
