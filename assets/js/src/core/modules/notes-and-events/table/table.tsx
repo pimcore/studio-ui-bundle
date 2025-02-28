@@ -134,32 +134,34 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
         const elementType = mapToElementType(row.elementType)
         const elementId = row.id
 
-        return (
-          <Flex
-            align='center'
-            className='w-full'
-            justify='center'
-          >
-            <IconButton
-              icon={ { value: 'open-folder' } }
-              onClick={ async () => {
-                !isUndefined(elementType) &&
-                                await openElement({
-                                  type: elementType,
-                                  id: elementId
-                                })
-              } }
-              type="link"
-            />
-            <IconButton
-              icon={ { value: 'show-details' } }
-              onClick={ async () => {
-                setNoteDetail(info.row.original)
-              } }
-              type="link"
-            />
-          </Flex>
-        )
+        return (!isUndefined(row.path) && row.path !== '')
+          ? (
+            <Flex
+              align='center'
+              className='w-full'
+              justify='center'
+            >
+              <IconButton
+                icon={ { value: 'open-folder' } }
+                onClick={ async () => {
+                  !isUndefined(elementType) &&
+                                    await openElement({
+                                      type: elementType,
+                                      id: elementId
+                                    })
+                } }
+                type="link"
+              />
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
+          : <></>
       }
     })
   ]
