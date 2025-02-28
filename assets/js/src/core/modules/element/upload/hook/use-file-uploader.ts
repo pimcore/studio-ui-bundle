@@ -12,9 +12,6 @@
 */
 
 import type { UploadFile } from 'antd/es/upload/interface'
-import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useContext } from 'react'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
@@ -24,7 +21,7 @@ import { type UploadChangeParam } from '@Pimcore/components/upload/upload'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 interface UseFileUploaderProps {
-  parentId?: string
+  nodeId?: string
 }
 
 interface UseFileUploaderReturn {
@@ -34,26 +31,28 @@ interface UseFileUploaderReturn {
 
 let zipUploadFirstRun: string[] = []
 
-export const useFileUploader = ({ parentId }: UseFileUploaderProps): UseFileUploaderReturn => {
+export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
-  const dispatch = useAppDispatch()
   const uploadContext = useContext(UploadContext)!
 
-  const uploadFile = async ({ fileList, file }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
-    if (parentId === undefined) {
+  const uploadFile = async ({ fileList }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+    if (nodeId === undefined) {
       trackError(new GeneralError('Parent ID is required'))
     }
 
+    console.log('uploading node set: ', nodeId)
+
     const fileStates = fileList.map((file) => file.status)
-    const allFullFilled = fileStates.every(item => item === 'done')
+    const allFullFilled = fileStates.every(item => item !== 'uploading')
+    const filesFailed = fileList.map(file => file.status === 'error')
 
     uploadContext.setUploadFileList(fileList)
-    uploadContext.setUploadingNode(parentId!)
+    uploadContext.setUploadingNode(nodeId!)
 
     if (allFullFilled) {
-      dispatch(assetApi.util.invalidateTags(invalidatingTags.ASSET_TREE_ID(parseInt(parentId!))))
-      uploadContext.setUploadFileList([])
-      uploadContext.setUploadingNode(null)
+      if (filesFailed.length <= 0) {
+        uploadContext.finishUpload()
+      }
     }
   }
 

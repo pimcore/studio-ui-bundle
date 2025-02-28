@@ -36,7 +36,7 @@ import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const node = props.node ?? defaultProps
-  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = useFileUploader({ parentId: node?.id })
+  const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = useFileUploader({ nodeId: node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
 

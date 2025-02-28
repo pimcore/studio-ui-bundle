@@ -39,6 +39,7 @@ export const transformApiDataToNodes = (node: TreeNodeProps, data: DataObjectGet
       },
       permissions: dataObjectNode.permissions ?? [] as DataObjectPermissions,
       level: node.level + 1,
+      elementType: 'data-object',
       ...(() => {
         if (node.level === -1) {
           return { internalKey: `${dataObjectNode.id}` }

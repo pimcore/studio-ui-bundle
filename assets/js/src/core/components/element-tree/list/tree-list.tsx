@@ -16,9 +16,10 @@ import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../element-tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
-import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
+// import { UploadProgress } from '@Pimcore/components/upload/upload-progress/upload-progress'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './../skeleton/skeleton'
+import { UploadProgress } from '@Pimcore/components/upload/upload-progress/upload-progress'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -34,6 +35,8 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { isLoading, isFetching, isError, data } = apiHookResult
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
 
+  console.debug(uploadFileList)
+
   if (isLoading === true) {
     return (
       <Skeleton style={ { paddingLeft: token.paddingSM + (node.level + 1.5) * 24 } } />
@@ -45,6 +48,8 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   }
 
   const { nodes: children, total } = dataTransformer(data)
+
+  /* saved: uploadFileList.length > 0 && item.parentId === uploadingNode */
 
   return (
     <>
@@ -63,12 +68,27 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {uploadFileList.length > 0 && node.id === uploadingNode && (
+        {/* eslint-disable-next-line @typescript-eslint/no-confusing-void-expression */}
+        {/* console.log(node.id, ' === ', uploadingNode) */}
+        {/* uploadFileList.length > 0 && node.id === uploadingNode && (
           <div
             className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
             style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
           >
-            <UploadList
+            <UploadProgress
+              items={ uploadFileList }
+              locale={ { uploading: 'uploading' } }
+              showRemoveIcon={ false }
+            />
+          </div>
+        ) */}
+
+        {(Boolean(children.some(item => item.parentId === uploadingNode))) && (
+          <div
+            className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
+            style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
+          >
+            <UploadProgress
               items={ uploadFileList }
               locale={ { uploading: 'uploading' } }
               showRemoveIcon={ false }
@@ -76,12 +96,16 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
           </div>
         )}
 
-        {uploadFileList.length === 0 && children?.map((item, index) => (
-          <RenderNode
-            internalKey={ `${node.internalKey}-${index}` }
-            key={ item.id }
-            { ...item }
-          />
+        {children?.map((item, index) => (
+          <>
+            {item.parentId !== uploadingNode && (
+            <RenderNode
+              internalKey={ `${node.internalKey}-${index}` }
+              key={ item.id }
+              { ...item }
+            />
+            )}
+          </>
         ))}
       </div>
 

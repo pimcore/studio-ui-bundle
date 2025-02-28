@@ -11,31 +11,27 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type UploadListProps } from 'antd/es/upload'
+import { type UploadListProps as AntUploadListProps } from 'antd/es/upload'
+import AntUploadList from 'antd/es/upload/UploadList'
 import React from 'react'
-import { Progress } from 'antd'
-import { useStyles } from './upload-list.styles'
+import { useStyles } from '@Pimcore/components/upload/upload-list/upload-list.styles'
 
-export const UploadList = (props: UploadListProps): React.JSX.Element => {
+interface UploadListProps {
+  items: AntUploadListProps['items']
+}
+
+export const UploadList = ({ items = [] }: UploadListProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const items = props.items!
-  const totalCount = items.length
-  const doneCount = items.filter(file => file.status === 'done').length
 
   return (
     <div className={ styles.uploadList }>
-      <Progress
-        { ...props.progress }
-        aria-label={ 'upload progress' }
-        percent={ (doneCount / totalCount) * 100 }
-        showInfo={ false }
-        size={ [-1, 2] }
-        type="line"
+      <AntUploadList
+        items={ items }
+        locale={ {
+          removeFile: 'remove File'
+        } }
+        showRemoveIcon={ false }
       />
-
-      <span>
-        {doneCount}/{totalCount} files uploaded
-      </span>
     </div>
   )
 }

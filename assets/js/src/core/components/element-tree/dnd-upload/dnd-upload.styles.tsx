@@ -15,16 +15,20 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    uploadList: css`
-      .ant-upload-list-item {
-          display: flex;
-          align-items: center;
-          gap: ${token.paddingXS}px;
-          
-          &.ant-upload-list-item-error {
-              color: ${token.colorError};
-          }
-      }
+    dragger: css`
+        .ant-upload {
+            padding: 0 !important;
+            background: none;
+            border-color: transparent;
+            
+            &:hover {
+                border-color: transparent !important;
+            }
+            
+            &.ant-upload-drag-hover {
+                border-color: ${token.colorLinkHover} !important;
+            }
+        }
     `
   }
 })

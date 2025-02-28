@@ -39,6 +39,7 @@ export const transformApiDataToNodes = (node: TreeNodeProps, data: AssetGetTreeA
       },
       permissions: assetNode.permissions ?? [] as AssetPermissions,
       level: node.level + 1,
+      elementType: 'asset',
       ...(() => {
         if (node.level === -1) {
           return { internalKey: `${assetNode.id}` }

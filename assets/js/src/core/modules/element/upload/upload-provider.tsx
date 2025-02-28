@@ -13,25 +13,54 @@
 
 import React, { createContext, type ReactNode, useMemo, useState } from 'react'
 import { type UploadFile } from 'antd/es/upload/interface'
+import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { UploadProgress } from '@Pimcore/components/upload/upload-progress/upload-progress'
 
 export interface UploadContextProps {
   uploadFileList: UploadFile[]
   setUploadFileList: (uploadFileList: UploadFile[]) => void
   uploadingNode: string | null
   setUploadingNode: (nodeId: string | null) => void
+  finishUpload: () => void
+  displayComponent: React.FC
 }
 
 export const UploadContext = createContext<UploadContextProps | undefined>(undefined)
 
 export const UploadProvider = ({ children }: { children: ReactNode }): React.JSX.Element => {
+  const dispatch = useAppDispatch()
   const [uploadFileList, setUploadFileList] = useState<UploadFile[]>([])
   const [uploadingNode, setUploadingNode] = useState<string | null>(null)
+
+  const finishUpload = (): void => {
+    dispatch(
+      assetApi.util.invalidateTags(
+        invalidatingTags.ASSET_TREE_ID(parseInt(uploadingNode!))
+      )
+    )
+    setUploadFileList([])
+    setUploadingNode(null)
+  }
+
+  const DisplayComponent = (): React.JSX.Element => {
+    return (
+      <UploadProgress
+        items={ uploadFileList }
+        locale={ { uploading: 'uploading' } }
+        showRemoveIcon={ false }
+      />
+    )
+  }
 
   const contextValue = useMemo(() => ({
     uploadFileList,
     setUploadFileList,
     uploadingNode,
-    setUploadingNode
+    setUploadingNode,
+    finishUpload,
+    displayComponent: DisplayComponent
   }), [uploadFileList, uploadingNode])
 
   return (

@@ -24,6 +24,7 @@ asset.asset-editor-tabs.list.columns.modificationDate: Modification Date
 asset.tree.context-menu.upload-new-version: Upload new version
 asset.upload: Upload
 asset.upload.label: Select file
+asset.upload.files.processed: Processed {{processedItems}} of {{totalItems}} files
 asset.upload.validation: 'Please add a file'
 data-object.data-object-tree.title: Data Object Tree
 data-object.data-object-tree.search: Search in {{folderName}}
