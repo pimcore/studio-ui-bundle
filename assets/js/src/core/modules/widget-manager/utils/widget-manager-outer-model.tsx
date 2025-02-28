@@ -138,7 +138,7 @@ const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<st
       name: widget.name,
       component: widget.widgetType,
       enableClose: false,
-      config: widget
+      config: { ...widget, id: widgetId }
     })
   })
 
