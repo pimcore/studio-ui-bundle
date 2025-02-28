@@ -16,7 +16,7 @@ import { api } from '@Pimcore/modules/element/element-api-slice.gen'
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { isNil, isNull, isUndefined } from 'lodash'
-import { locateInTree as locateInTreeAction } from '@Pimcore/components/element-tree/element-tree-slice'
+import { locateInTree as locateInTreeAction, setSelectedNodeIds } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UseLocateInTreeHookReturn {
@@ -47,6 +47,10 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
           dispatch(locateInTreeAction({
             treeId: result.data.widgetId,
             treeLevelData: result.data.treeLevelData
+          }))
+          dispatch(setSelectedNodeIds({
+            treeId: result.data.widgetId,
+            selectedNodeIds: [String(elementId)]
           }))
         }
       })

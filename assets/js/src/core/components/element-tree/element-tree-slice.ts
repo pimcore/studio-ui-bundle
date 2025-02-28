@@ -19,6 +19,7 @@ import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.g
 export interface InternalNodeState {
   isExpanded?: boolean
   isLoading: boolean
+  isSelected: boolean
   page: number
   searchTerm?: string
 }
@@ -29,10 +30,20 @@ type TreesState = Record<string, TreeNodesState>
 
 export const initialNodeState: InternalNodeState = {
   isLoading: false,
-  page: 1
+  page: 1,
+  isSelected: false
 }
 
 const initialState: TreesState = {}
+
+const initializeNodeState = (state: TreesState, treeId: string, nodeId: string): void => {
+  if (isUndefined(state[treeId])) {
+    state[treeId] = {}
+  }
+  if (isUndefined(state[treeId][nodeId])) {
+    state[treeId][nodeId] = { ...initialNodeState }
+  }
+}
 
 const slice = createSlice({
   name: 'trees',
@@ -42,49 +53,45 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, loading: boolean }>
     ) => {
-      if (isUndefined(state[payload.treeId])) {
-        state[payload.treeId] = {}
-      }
-      if (isUndefined(state[payload.treeId][payload.nodeId])) {
-        state[payload.treeId][payload.nodeId] = { ...initialNodeState }
-      }
+      initializeNodeState(state, payload.treeId, payload.nodeId)
       state[payload.treeId][payload.nodeId].isLoading = payload.loading
     },
     setNodeExpanded: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, expanded: boolean }>
     ) => {
-      if (isUndefined(state[payload.treeId])) {
-        state[payload.treeId] = {}
-      }
-      if (isUndefined(state[payload.treeId][payload.nodeId])) {
-        state[payload.treeId][payload.nodeId] = { ...initialNodeState }
-      }
+      initializeNodeState(state, payload.treeId, payload.nodeId)
       state[payload.treeId][payload.nodeId].isExpanded = payload.expanded
     },
     setNodePage: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, page: number }>
     ) => {
-      if (isUndefined(state[payload.treeId])) {
-        state[payload.treeId] = {}
-      }
-      if (isUndefined(state[payload.treeId][payload.nodeId])) {
-        state[payload.treeId][payload.nodeId] = { ...initialNodeState }
-      }
+      initializeNodeState(state, payload.treeId, payload.nodeId)
       state[payload.treeId][payload.nodeId].page = payload.page
     },
     setNodeSearchTerm: (
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, searchTerm: string }>
     ) => {
+      initializeNodeState(state, payload.treeId, payload.nodeId)
+      state[payload.treeId][payload.nodeId].searchTerm = payload.searchTerm
+    },
+    setSelectedNodeIds: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, selectedNodeIds: string[] }>
+    ) => {
       if (isUndefined(state[payload.treeId])) {
         state[payload.treeId] = {}
       }
-      if (isUndefined(state[payload.treeId][payload.nodeId])) {
-        state[payload.treeId][payload.nodeId] = { ...initialNodeState }
-      }
-      state[payload.treeId][payload.nodeId].searchTerm = payload.searchTerm
+      Object.keys(state[payload.treeId]).forEach(nodeId => {
+        initializeNodeState(state, payload.treeId, nodeId)
+        state[payload.treeId][nodeId].isSelected = payload.selectedNodeIds.includes(nodeId)
+      })
+      payload.selectedNodeIds.forEach(nodeId => {
+        initializeNodeState(state, payload.treeId, nodeId)
+        state[payload.treeId][nodeId].isSelected = true
+      })
     },
     locateInTree: (
       state,
@@ -97,11 +104,10 @@ const slice = createSlice({
         if (isUndefined(parentId)) {
           return
         }
-        if (isUndefined(state[payload.treeId][parentId])) {
-          state[payload.treeId][parentId] = { ...initialNodeState }
-        }
+        initializeNodeState(state, payload.treeId, String(parentId))
         state[payload.treeId][parentId].isExpanded = true
         state[payload.treeId][parentId].page = pageNumber
+        state[payload.treeId][parentId].searchTerm = undefined
       })
     }
   }
@@ -111,6 +117,6 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, locateInTree } = slice.actions
+export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, locateInTree } = slice.actions
 
 export const selectNodeState = (state: RootState, treeId: string, nodeId: string): InternalNodeState | undefined => state.trees[treeId]?.[nodeId]

@@ -24,10 +24,10 @@ export type SearchContainerProps = TreeSearchProps & {
 }
 
 const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
-  const { mergeAdditionalQueryParams, total } = props
+  const { total } = props
   const [searchActive, setSearchActive] = useState(false)
   const { maxItemsPerNode } = useContext(TreeContext)
-  const { searchTerm, setSearchTerm, setPage } = useNodeState(props.node.id)
+  const { setSearchTerm, setPage } = useNodeState(props.node.id)
 
   useEffect(() => {
     if (!isUndefined(maxItemsPerNode)) {
@@ -39,9 +39,6 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
     setSearchTerm(searchTerm === '' ? undefined : searchTerm)
     setPage(1)
   }
-  mergeAdditionalQueryParams!({
-    idSearchTerm: searchTerm
-  })
 
   if (!searchActive) {
     return <></>

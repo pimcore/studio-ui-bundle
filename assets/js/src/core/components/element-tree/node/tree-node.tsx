@@ -86,12 +86,10 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     renderNodeContent: RenderNodeContent,
     onSelect,
     onRightClick,
-    selectedIdsState,
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const { isExpanded, setExpanded } = useNodeState(id, { isExpanded: children.length !== 0 })
-  const [selectedIds, setSelectedIds] = selectedIdsState!
+  const { isExpanded, setExpanded, isSelected, setSelectedIds } = useNodeState(id, { isExpanded: children.length !== 0 })
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 
@@ -107,7 +105,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
 
-    if (selectedIds.includes(id)) {
+    if (isSelected) {
       classes.push('tree-node--selected')
     }
 

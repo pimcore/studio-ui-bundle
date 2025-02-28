@@ -22,12 +22,11 @@ const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
   const total = props.total
 
   useEffect(() => {
-    // todo setPage(1)
-  }, [props.total])
-
-  useEffect(() => {
-    props.mergeAdditionalQueryParams({ page })
-  }, [page])
+    const totalPages = Math.ceil(total / maxItemsPerNode!)
+    if (page > totalPages) {
+      setPage(1)
+    }
+  }, [total, maxItemsPerNode, page, setPage])
 
   function onChange (page: number): void {
     setPage(page)

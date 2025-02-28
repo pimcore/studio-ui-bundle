@@ -12,7 +12,7 @@
 */
 
 import { type RootState, useAppDispatch } from '@Pimcore/app/store'
-import { initialNodeState, type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm } from '../element-tree-slice'
+import { initialNodeState, type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds } from '../element-tree-slice'
 import { useContext } from 'react'
 import { TreeContext } from '../element-tree'
 import { useSelector } from 'react-redux'
@@ -27,6 +27,7 @@ export const useNodeState = (nodeId: string, initialState?: { isExpanded?: boole
   setExpanded: (expanded: boolean) => void
   setPage: (page: number) => void
   setSearchTerm: (searchTerm?: string) => void
+  setSelectedIds: (selectedNodeIds: string[]) => void
 } => {
   const dispatch = useAppDispatch()
   const { treeId } = useContext(TreeContext)
@@ -53,12 +54,17 @@ export const useNodeState = (nodeId: string, initialState?: { isExpanded?: boole
     dispatch(setNodeSearchTerm({ treeId, nodeId, searchTerm }))
   }
 
+  const setSelectedIds = (selectedNodeIds: string[]): void => {
+    dispatch(setSelectedNodeIds({ treeId, selectedNodeIds }))
+  }
+
   return {
     ...nodeState,
     isExpanded: nodeState.isExpanded ?? false,
     setLoading,
     setExpanded,
     setPage,
-    setSearchTerm
+    setSearchTerm,
+    setSelectedIds
   }
 }

@@ -70,7 +70,6 @@ export interface INodeRef {
 }
 
 export interface ITreeContext extends TreeProps {
-  selectedIdsState?: [string[], (ids: string[]) => void]
   nodesRefs?: MutableRefObject<Record<string, INodeRef>>
   nodeOrder?: () => string[]
 }
@@ -99,7 +98,6 @@ const ElementTree = (
     ...props
   }: TreeProps
 ): React.JSX.Element => {
-  const selectedIdsState = useState<string[]>([])
   const { styles } = useStyles()
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
@@ -135,7 +133,7 @@ const ElementTree = (
     setRightClickedNode(node)
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
 
   if (isError !== false) {
     return (<div>{'Error'}</div>)
