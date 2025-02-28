@@ -21,6 +21,7 @@ import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/query/react'
 import { type Dispatch, type SetStateAction, useContext, useState } from 'react'
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
+import { useNodeState } from '@Pimcore/components/element-tree/hooks/use-node-state'
 
 interface AssetTreeAdditionalTreeProps {
   pager?: number
@@ -41,7 +42,8 @@ export const useNodeApiHook = (node: TreeNodeProps, pageSize?: number): NodeApiH
   const [additionalQueryParams, setAdditionalQueryParams] = useState<AssetTreeAdditionalTreeProps>()
   const { maxItemsPerNode } = useContext(TreeContext)
   const { treeFilterArgs } = useTreeFilter()
-  const apiHookResult = useAssetGetTreeQuery({ parentId: parseInt(node.id), pageSize: pageSize ?? maxItemsPerNode!, page: 1, ...treeFilterArgs, ...additionalQueryParams })
+  const { page, searchTerm } = useNodeState(node.id)
+  const apiHookResult = useAssetGetTreeQuery({ parentId: parseInt(node.id), pageSize: pageSize ?? maxItemsPerNode!, page, idSearchTerm: searchTerm, ...treeFilterArgs, ...additionalQueryParams })
 
   function dataTransformer (data: AssetGetTreeApiResponse): DataTransformerReturnType {
     return transformApiDataToNodes(node, data, maxItemsPerNode)

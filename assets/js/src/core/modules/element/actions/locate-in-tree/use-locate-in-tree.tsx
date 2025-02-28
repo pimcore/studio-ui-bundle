@@ -22,7 +22,7 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { useRefreshTree } from '../refresh-tree/use-refresh-tree'
 
 export interface UseLocateInTreeHookReturn {
-  locateInTree: (elementId: number) => void
+  locateInTree: (elementId: number, onFinished?: () => void) => void
 }
 
 export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookReturn => {
@@ -31,7 +31,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
   const { switchToWidget } = useWidgetManager()
   const { refreshTree } = useRefreshTree(elementType)
 
-  const locateInTree = (elementId: number): void => {
+  const locateInTree = (elementId: number, onFinished?: () => void): void => {
     if (isNull(activePerspective)) {
       return
     }
@@ -66,6 +66,7 @@ export const useLocateInTree = (elementType: ElementType): UseLocateInTreeHookRe
             nodeId: String(elementId),
             scrollTo: true
           }))
+          onFinished?.()
         }
       })
       .catch((error) => {

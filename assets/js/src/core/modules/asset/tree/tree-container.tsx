@@ -32,7 +32,6 @@ import { withDroppableStyling } from './node/with-droppable/with-droppable-styli
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 
 export interface TreeContainerProps {
-  treeId: string
   id: number
   showRoot?: boolean
 }
@@ -49,7 +48,7 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
   isRoot: true
 }
 
-const TreeContainer = ({ id = 1, showRoot = true, treeId }: TreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
   const { pageSize } = useTreeFilter()
   const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
@@ -123,7 +122,6 @@ const TreeContainer = ({ id = 1, showRoot = true, treeId }: TreeContainerProps):
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
-      treeId={ treeId }
     />
   )
 }

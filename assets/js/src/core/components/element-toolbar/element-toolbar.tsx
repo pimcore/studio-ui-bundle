@@ -31,6 +31,7 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
   const { element } = useElementDraft(id, elementType)
   const deeplinkUrl = `${window.location.origin}${baseUrl}${elementType}/${id}`
   const [editorTabsBlockSize, setEditorTabsBlockSize] = useState<'S' | 'L' | null>(null)
+  const [locateInTreeLoading, setLocateInTreeLoading] = useState<boolean>(false)
   const { locateInTree } = useLocateInTree(elementType)
 
   useLayoutEffect(() => {
@@ -121,7 +122,11 @@ export const ElementToolbar = ({ id, elementType, editorTabsWidth }: { id: numbe
 
       <IconButton
         icon={ { value: 'target' } }
-        onClick={ () => { locateInTree(element.id) } }
+        loading={ locateInTreeLoading }
+        onClick={ () => {
+          setLocateInTreeLoading(true)
+          locateInTree(element.id, () => { setLocateInTreeLoading(false) })
+        } }
       />
     </div>
   )

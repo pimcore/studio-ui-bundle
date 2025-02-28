@@ -13,9 +13,8 @@
 
 import { type RootState, useAppDispatch } from '@Pimcore/app/store'
 import { initialNodeState, type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo } from '../element-tree-slice'
-import { useContext } from 'react'
-import { TreeContext } from '../element-tree'
 import { useSelector } from 'react-redux'
+import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 
 export type NodeState = InternalNodeState & {
   isExpanded: boolean
@@ -31,7 +30,7 @@ export const useNodeState = (nodeId: string, initialState?: { isExpanded?: boole
   setScrollTo: (scrollTo: boolean) => void
 } => {
   const dispatch = useAppDispatch()
-  const { treeId } = useContext(TreeContext)
+  const { treeId } = useTreeId()
 
   const nodeState = {
     ...initialNodeState,

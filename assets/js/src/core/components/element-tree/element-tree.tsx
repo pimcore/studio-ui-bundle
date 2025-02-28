@@ -47,7 +47,6 @@ export interface TreeContextMenuProps {
 }
 
 export interface TreeProps {
-  treeId: string
   nodeId: number
   nodeApiHook: any
   maxItemsPerNode?: number
@@ -75,7 +74,6 @@ export interface ITreeContext extends TreeProps {
 }
 
 export const defaultProps: TreeProps = {
-  treeId: '',
   nodeId: 1,
   nodeApiHook: () => {},
   maxItemsPerNode: 30,
