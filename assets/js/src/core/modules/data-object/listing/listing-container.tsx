@@ -25,6 +25,8 @@ import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/pag
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { DefaultView } from './views/default-view'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from './decorator/class-definition-selection/class-definition-selection-decorator'
+import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
+import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inline-edit-api-update'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -45,6 +47,7 @@ const props = compose<AbstractDecoratorProps>(
   SortingDecorator,
   PagingDecorator,
   ColumnConfigurationDecorator,
+  [InlineEditDecorator, { useInlineEditApiUpdate } as IInlineEditDecoratorConfig],
   [RowSelectionDecorator, { rowSelectionMode: 'multiple' } as IRowSelectionDecoratorConfig],
   [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig]
 )(defaultProps)
@@ -52,7 +55,12 @@ const props = compose<AbstractDecoratorProps>(
 
 export const ListingContainer = (): React.JSX.Element => {
   return (
-    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/ListingRegistry'] }>
+    <DynamicTypeRegistryProvider
+      serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/ListingRegistry'
+      ] }
+    >
       <BaseListing
         { ...props }
       />

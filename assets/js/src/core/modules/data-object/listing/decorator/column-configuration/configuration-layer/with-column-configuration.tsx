@@ -45,7 +45,7 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
 
       for (const column of data.columns!) {
         // @todo Skip filename due to backend bug for now.
-        if (column.group !== 'system' || column.key === 'filename') {
+        if (column.key === 'filename') {
           continue
         }
 
