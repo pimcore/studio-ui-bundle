@@ -130,6 +130,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             message: 'Please enter a tag name'
           },
           okText: t('tag-configuration.save'),
+          initialValue: newFocusTag.text,
           onOk: async (value: string) => {
             setLoadingTagKey(newFocusTag.id.toString())
             await handleTagUpdate(newFocusTag.id, newFocusTag.parentId, value)
@@ -189,11 +190,12 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           </Flex>
           <SearchInput
             loading={ tagsFetching }
-            onChange={ (e) => {
-              const { value } = e.target
+            onSearch={ (value) => {
               setTagFilter(value)
             } }
             placeholder="Search"
+            withPrefix={ false }
+            withoutAddon={ false }
           />
         </Toolbar>
         }
