@@ -52,6 +52,10 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: 0;
       }
 
+      &.tabs--no-tab-bar-margin.ant-tabs-top>.ant-tabs-nav+.ant-tabs-content-holder {
+        padding-top: 0;
+      }
+
       &.ant-tabs-line .ant-tabs-nav .ant-tabs-tab {
         border-radius: 0;
         background: none;

@@ -17,6 +17,7 @@ import { DragAndDropContextProvider } from '@Pimcore/components/drag-and-drop/co
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
+import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -28,7 +29,9 @@ export const GlobalProvider = ({ children }: GlobalProviderProps): React.JSX.Ele
       <ThemeProvider>
         <Provider store={ store }>
           <DragAndDropContextProvider>
-            {children}
+            <ElementSelectorProvider>
+              {children}
+            </ElementSelectorProvider>
           </DragAndDropContextProvider>
         </Provider>
       </ThemeProvider>

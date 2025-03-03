@@ -14,18 +14,16 @@
 import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useClassDefinitionSelection } from '../context-layer/provider/use-class-definition-selection'
-import { ClassDefinitionSelect } from '../components/class-definition-select/class-definition-select'
-import { Content } from '@Pimcore/components/content/content'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const ClassDefinitionSelectionConfigurationComponent = (): React.JSX.Element => {
+    const { ViewComponent } = useSettings();
     const { selectedClassDefinition } = useClassDefinitionSelection()
 
     if (selectedClassDefinition === undefined) {
       return (
-        <Content padded>
-          <ClassDefinitionSelect />
-        </Content>
+        <ViewComponent />
       )
     }
 

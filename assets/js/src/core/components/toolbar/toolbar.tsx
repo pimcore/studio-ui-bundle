@@ -22,6 +22,7 @@ export interface ToolbarProps {
   justify?: FlexProps['justify']
   align?: FlexProps['align']
   theme?: 'primary' | 'secondary'
+  borderStyle?: 'default' | 'primary'
   position?: 'top' | 'bottom'
   size?: 'small' | 'default'
   padding?: BoxProps['padding']
@@ -35,6 +36,7 @@ export const Toolbar = ({
   align,
   theme = 'primary',
   position = 'bottom',
+  borderStyle = 'default',
   padding,
   margin,
   ...props
@@ -45,7 +47,8 @@ export const Toolbar = ({
     'toolbar',
         `toolbar--theme-${theme}`,
         `toolbar--position-${position}`,
-        `toolbar--size-${size}`
+        `toolbar--size-${size}`,
+        `toolbar--border-${borderStyle}`
   ].join(' ')
 
   return (
