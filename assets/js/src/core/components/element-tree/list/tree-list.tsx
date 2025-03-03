@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { type TreeNodeProps } from '../node/tree-node'
 import { TreeContext } from '../element-tree'
 import { theme } from 'antd'
@@ -19,6 +19,7 @@ import { useStyles } from './tree-list.styles'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './../skeleton/skeleton'
+import { useNodeState } from '../hooks/use-node-state'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -33,6 +34,11 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
   const { isLoading, isFetching, isError, data } = apiHookResult
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
+  const { setLoading } = useNodeState(node.id)
+
+  useEffect(() => {
+    setLoading(isFetching === true && isLoading !== true)
+  }, [isFetching, isLoading])
 
   if (isLoading === true) {
     return (
