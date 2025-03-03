@@ -19,8 +19,8 @@ import { useDataObjectPatchByIdMutation } from '../../data-object-api-slice.gen'
 export const withActionStates = (Component: typeof TreeNode): typeof TreeNode => {
   const ActionStates = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const originalLoadingState = props.isLoading ?? false
-    const [, { isLoading }] = useDataObjectPatchByIdMutation({ fixedCacheKey: `OBJECT_ACTION_RENAME_ID_${props.id}` })
-    const [, { isLoading: isDeleteLoading }] = useElementDeleteMutation({ fixedCacheKey: `OBJECT_ACTION_DELETE_ID_${props.id}` })
+    const [, { isLoading }] = useDataObjectPatchByIdMutation({ fixedCacheKey: `DATA-OBJECT_ACTION_RENAME_ID_${props.id}` })
+    const [, { isLoading: isDeleteLoading }] = useElementDeleteMutation({ fixedCacheKey: `DATA-OBJECT_ACTION_DELETE_ID_${props.id}` })
 
     return (
       <Component
