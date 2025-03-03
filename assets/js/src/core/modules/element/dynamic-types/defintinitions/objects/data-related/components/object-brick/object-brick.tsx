@@ -27,6 +27,7 @@ export interface ObjectBrickProps extends AbstractObjectDataDefinition {
 export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   return (
     <Form.KeyedList
+      breakInheritanceOnUpdate
       name={ props.name }
       onChange={ props.onChange }
       value={ props.value }
