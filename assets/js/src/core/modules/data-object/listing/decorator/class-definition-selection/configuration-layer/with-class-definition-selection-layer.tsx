@@ -18,7 +18,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 
 export const withClassDefinitionSelectionLayer = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const ClassDefinitionSelectionConfigurationComponent = (): React.JSX.Element => {
-    const { ViewComponent } = useSettings();
+    const { ViewComponent } = useSettings()
     const { selectedClassDefinition } = useClassDefinitionSelection()
 
     if (selectedClassDefinition === undefined) {
