@@ -13,7 +13,7 @@
 
 import { injectSliceWithState } from '@Pimcore/app/store/index'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode, type TabNode } from 'flexlayout-react'
+import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -76,7 +76,7 @@ export const slice = createSlice({
       }
 
       if (node !== undefined) {
-        const parent = node.getParent() as BorderNode | TabNode | undefined
+        const parent = node.getParent()
 
         if (parent !== undefined && ((parent instanceof BorderNode && parent.getSelectedNode() !== node) || !(parent instanceof BorderNode))) {
           model.doAction(Actions.selectTab(node.getId()))
