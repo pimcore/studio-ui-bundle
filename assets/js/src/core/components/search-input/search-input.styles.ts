@@ -16,8 +16,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     search: css`
-   
-   max-width: 300px;
+    max-width: 300px;
    
       .ant-input-prefix {
         margin-inline-end: ${token.marginXS}px;

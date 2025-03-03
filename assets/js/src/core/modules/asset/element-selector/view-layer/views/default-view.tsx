@@ -12,27 +12,32 @@
 */
 
 import React, { useMemo } from 'react'
+import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
 import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
-import { useClassDefinitionSelection } from '../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { ClassDefinitionSelect } from '../decorator/class-definition-selection/components/class-definition-select/class-definition-select'
-import { Toolbar } from '../toolbar/toolbar'
+import { TopBar } from '../../top-bar/top-bar'
+import { Toolbar } from '../../toolbar/toolbar'
 
 export const DefaultView = (): React.JSX.Element => {
   const { dataQueryResult } = useData()
-  const { selectedClassDefinition } = useClassDefinitionSelection()
 
   return useMemo(() => (
-    <ContentLayout
-      renderSidebar={ dataQueryResult !== undefined ? <Sidebar /> : undefined }
-      renderToolbar={ dataQueryResult !== undefined ? <Toolbar /> : undefined }
-      renderTopBar={ <ClassDefinitionSelect /> }
-    >
-      {selectedClassDefinition !== undefined && dataQueryResult !== undefined && (
-        <GridContainer />
+    <>
+      { dataQueryResult === undefined && <Content loading /> }
+      { dataQueryResult !== undefined && (
+        <ContentLayout
+          renderToolbar={ <Toolbar /> }
+          renderTopBar={ <TopBar /> }
+        >
+          <ContentLayout
+            renderSidebar={ <Sidebar /> }
+          >
+            <GridContainer />
+          </ContentLayout>
+        </ContentLayout>
       )}
-    </ContentLayout>
+    </>
   ), [dataQueryResult])
 }

@@ -11,14 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type DirectChildrenFilterData } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/direct-children-filter/direct-children-filter-provider'
-import { useDirectChildrenFilter } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/direct-children-filter/use-direct-children-filter'
-import { type FieldFiltersData } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/field-filters/field-filters-provider'
-import { useFieldFilters } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/field-filters/use-field-filters'
-import { type PqlFilterData } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
-import { usePqlFilter } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/pql-filter/use-pql-filter'
-import { type SearchTermFilterData } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/search-term-filter/search-term-filter-provider'
-import { useSearchTermFilter } from '@Pimcore/modules/asset/listing/decorator/general-filters/context-layer/provider/search-term-filter/use-search-term-filter'
+import { type DirectChildrenFilterData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/direct-children-filter/direct-children-filter-provider'
+import { useDirectChildrenFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/direct-children-filter/use-direct-children-filter'
+import { type FieldFiltersData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { useFieldFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/use-field-filters'
+import { type PqlFilterData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
+import { usePqlFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
+import { type SearchTermFilterData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/search-term-filter/search-term-filter-provider'
+import { useSearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/search-term-filter/use-search-term-filter'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 
 export interface FilterProviderData {

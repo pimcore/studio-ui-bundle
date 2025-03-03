@@ -18,7 +18,6 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
 import React, { useState } from 'react'
 import { FieldFiltersContainer } from './field-filters/field-filters-container'
@@ -33,6 +32,8 @@ import { usePqlFilter } from '../../../../../context-layer/provider/pql-filter/u
 import { useFieldFilters } from '../../../../../context-layer/provider/field-filters/use-field-filters'
 import { useDirectChildrenFilter } from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
 import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
+import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
+import { SearchTermFilter } from '../../../search/search-term-filter'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
@@ -41,6 +42,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { setOnlyDirectChildren: setListingOnlyDirectChildren } = useDirectChildrenFilter()
   const { setPqlQuery: setListingPqlQuery } = usePqlFilter()
   const { setSearchTerm: setListingSearchTerm } = useSearchTermFilter()
+  const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
 
   const {
     fieldFilters,
@@ -57,7 +59,11 @@ export const FilterContainerInner = (): React.JSX.Element => {
     setListingFieldFilters(fieldFilters)
     setListingOnlyDirectChildren(onlyDirectChildren)
     setListingPqlQuery(pqlQuery)
-    setListingSearchTerm(searchTerm)
+
+    if (handleSearchTermInSidebar) {
+      setListingSearchTerm(searchTerm)
+    }
+
     setPage(1)
   }
 
@@ -65,7 +71,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
     setFieldFilters([])
     setOnlyDirectChildren(false)
     setPqlQuery('')
-    setSearchTerm('')
+
+    if (handleSearchTermInSidebar) {
+      setSearchTerm('')
+    }
   }
 
   return (
@@ -120,12 +129,9 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   direction='vertical'
                   style={ { width: '100%' } }
                 >
-                  <SearchInput
-                    onBlur={ (e) => { setSearchTerm(e.target.value) } }
-                    onChange={ (e) => { setSearchTerm(e.target.value) } }
-                    placeholder='Search'
-                    value={ searchTerm }
-                  />
+                  {handleSearchTermInSidebar && (
+                    <SearchTermFilter />
+                  )}
 
                   <Checkbox
                     checked={ onlyDirectChildren }

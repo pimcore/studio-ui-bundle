@@ -33,10 +33,12 @@ export const ClassDefinitionSelect = (): React.JSX.Element => {
   // @todo translation
   return (
     <Select
+      className='w-full'
       onChange={ onChange }
       options={ options }
       placeholder="Select a class definition"
-      value={ selectedClassDefinition }
+      showSearch
+      value={ selectedClassDefinition?.name }
     />
   )
 }

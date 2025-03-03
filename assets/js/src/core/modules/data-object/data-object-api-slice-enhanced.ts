@@ -31,6 +31,10 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => args.parentId !== undefined ? providingTags.DATA_OBJECT_TREE_ID(args.parentId) : providingTags.DATA_OBJECT_TREE()
     },
 
+    dataObjectGetGrid: {
+      keepUnusedDataFor: 5
+    },
+
     dataObjectUpdateById: {
       invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
     },
