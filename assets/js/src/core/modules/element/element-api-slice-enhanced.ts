@@ -25,7 +25,7 @@ export const {
   useElementFolderCreateMutation,
   useElementGetContextPermissionsQuery,
   useElementGetIdByPathQuery,
-  useLazyElementGetIdByPathQuery,
   useElementGetSubtypeQuery,
-  useElementResolveBySearchTermQuery
+  useElementResolveBySearchTermQuery,
+  useLazyElementResolveBySearchTermQuery
 } = api

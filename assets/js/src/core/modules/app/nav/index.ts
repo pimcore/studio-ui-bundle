@@ -22,6 +22,12 @@ moduleSystem.registerModule({
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
+      path: 'File',
+      icon: 'document',
+      perspectivePermissionHide: NavPermission.FileHidden
+    })
+
+    mainNavRegistryService.registerMainNavItem({
       path: 'Settings',
       icon: 'menu',
       perspectivePermissionHide: NavPermission.SettingsHidden
@@ -31,12 +37,6 @@ moduleSystem.registerModule({
       path: 'Tools',
       icon: 'accessory',
       perspectivePermissionHide: NavPermission.ToolsHidden
-    })
-
-    mainNavRegistryService.registerMainNavItem({
-      path: 'File',
-      icon: 'document',
-      perspectivePermissionHide: NavPermission.FileHidden
     })
   }
 })
