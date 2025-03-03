@@ -17,8 +17,10 @@ import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/ele
 import React from 'react'
 import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
+import { TreeIdProvider } from './provider/tree-id-provider/tree-id-provider'
 
 export interface TreeWidgetProps {
+  id: string
   rootFolderId?: number
   elementType: ElementType
   classes?: string[]
@@ -27,27 +29,29 @@ export interface TreeWidgetProps {
   contextPermissions: Record<string, boolean>
   showRoot?: boolean
 }
-export const TreeWidget = ({ elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
+export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
   return (
-    <TreePermissionProvider permissions={ { ...contextPermissions } }>
-      <TreeFilterProvider
-        classIds={ classes }
-        pageSize={ pageSize ?? undefined }
-        pqlQuery={ pql ?? undefined }
-      >
-        { elementType === elementTypes.asset && (
-        <AssetTreeContainer
-          id={ rootFolderId ?? 1 }
-          showRoot={ showRoot }
-        />
-        )}
-        { elementType === elementTypes.dataObject && (
-        <DataObjectTreeContainer
-          id={ rootFolderId ?? 1 }
-          showRoot={ showRoot }
-        />
-        )}
-      </TreeFilterProvider>
-    </TreePermissionProvider>
+    <TreeIdProvider treeId={ id }>
+      <TreePermissionProvider permissions={ { ...contextPermissions } }>
+        <TreeFilterProvider
+          classIds={ classes }
+          pageSize={ pageSize ?? undefined }
+          pqlQuery={ pql ?? undefined }
+        >
+          { elementType === elementTypes.asset && (
+          <AssetTreeContainer
+            id={ rootFolderId ?? 1 }
+            showRoot={ showRoot }
+          />
+          )}
+          { elementType === elementTypes.dataObject && (
+          <DataObjectTreeContainer
+            id={ rootFolderId ?? 1 }
+            showRoot={ showRoot }
+          />
+          )}
+        </TreeFilterProvider>
+      </TreePermissionProvider>
+    </TreeIdProvider>
   )
 }

@@ -14,12 +14,19 @@
 import { store } from '@Pimcore/app/store'
 import { selectActivePerspective } from '@Pimcore/modules/perspectives/active-perspective-slice'
 import { type WidgetConfig, type PerspectiveConfigDetail } from '@Pimcore/modules/perspectives/perspectives-slice.gen'
+import { uuid } from '@Pimcore/utils/uuid'
 import { type IJsonTabNode, type IJsonModel } from 'flexlayout-react'
 import { t } from 'i18next'
 import { isNil } from 'lodash'
 
 export const getInitialModelJson = (): IJsonModel => {
   const activePerspective = selectActivePerspective(store.getState())
+
+  const usedIds = new Set<string>()
+
+  const widgetsLeft = getWidgetsLeft(activePerspective, usedIds)
+  const widgetsRight = getWidgetsRight(activePerspective, usedIds)
+  const widgetsBottom = getWidgetsBottom(activePerspective, usedIds)
 
   return {
     global: {
@@ -56,9 +63,9 @@ export const getInitialModelJson = (): IJsonModel => {
           id: 'bottom_tabset',
           enableDeleteWhenEmpty: false,
           weight: 50,
-          height: 0,
+          minHeight: 0,
           selected: 0,
-          children: getWidgetsBottom(activePerspective)
+          children: widgetsBottom
         }
       ]
     },
@@ -69,7 +76,7 @@ export const getInitialModelJson = (): IJsonModel => {
         location: 'left',
         size: 315,
         selected: getWidgetIndex(activePerspective?.widgetsLeft, activePerspective?.expandedLeft as string | undefined | null),
-        children: getWidgetsLeft(activePerspective)
+        children: widgetsLeft
       },
 
       {
@@ -77,31 +84,31 @@ export const getInitialModelJson = (): IJsonModel => {
         location: 'right',
         size: 315,
         selected: getWidgetIndex(activePerspective?.widgetsRight, activePerspective?.expandedRight as string | undefined | null),
-        children: getWidgetsRight(activePerspective)
+        children: widgetsRight
       }
     ]
   }
 }
 
-const getWidgetsLeft = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
+const getWidgetsLeft = (activePerspective: PerspectiveConfigDetail | null, usedIds: Set<string>): IJsonTabNode[] => {
   if (activePerspective === null) {
     return []
   }
-  return widgetsToModelJson(activePerspective.widgetsLeft)
+  return widgetsToModelJson(activePerspective.widgetsLeft, usedIds)
 }
 
-const getWidgetsRight = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
+const getWidgetsRight = (activePerspective: PerspectiveConfigDetail | null, usedIds: Set<string>): IJsonTabNode[] => {
   if (activePerspective === null) {
     return []
   }
-  return widgetsToModelJson(activePerspective.widgetsRight)
+  return widgetsToModelJson(activePerspective.widgetsRight, usedIds)
 }
 
-const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null): IJsonTabNode[] => {
+const getWidgetsBottom = (activePerspective: PerspectiveConfigDetail | null, usedIds: Set<string>): IJsonTabNode[] => {
   if (activePerspective === null) {
     return []
   }
-  return widgetsToModelJson(activePerspective.widgetsBottom)
+  return widgetsToModelJson(activePerspective.widgetsBottom, usedIds)
 }
 
 const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): number | undefined => {
@@ -111,7 +118,7 @@ const getWidgetIndex = (widgets?: WidgetConfig[], widgetId?: string | null): num
   return widgets.findIndex(widget => widget.id === widgetId)
 }
 
-const widgetsToModelJson = (widgets?: WidgetConfig[]): IJsonTabNode[] => {
+const widgetsToModelJson = (widgets: WidgetConfig[] | undefined, usedIds: Set<string>): IJsonTabNode[] => {
   const result: IJsonTabNode[] = []
 
   widgets?.forEach((widget) => {
@@ -119,12 +126,20 @@ const widgetsToModelJson = (widgets?: WidgetConfig[]): IJsonTabNode[] => {
     if (widget.widgetType === 'element_tree' && 'elementType' in widget && widget.elementType === 'document') {
       return
     }
+
+    let widgetId = widget.id
+    while (usedIds.has(widgetId)) {
+      widgetId = `${uuid()}_${widget.id}`
+    }
+    usedIds.add(widgetId)
+
     result.push({
+      id: widgetId,
       type: 'tab',
       name: t(widget.name),
       component: widget.widgetType,
       enableClose: false,
-      config: widget
+      config: { ...widget, id: widgetId }
     })
   })
 
