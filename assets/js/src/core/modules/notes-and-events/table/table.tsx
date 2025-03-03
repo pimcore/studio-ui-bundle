@@ -139,7 +139,6 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
             <Flex
               align='center'
               className='w-full'
-              justify='center'
             >
               <IconButton
                 icon={ { value: 'open-folder' } }
@@ -161,7 +160,20 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
               />
             </Flex>
             )
-          : <></>
+          : (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
       }
     })
   ]
