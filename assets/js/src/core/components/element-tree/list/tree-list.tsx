@@ -35,8 +35,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { isLoading, isFetching, isError, data } = apiHookResult
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
 
-  console.debug(uploadFileList)
-
   if (isLoading === true) {
     return (
       <Skeleton style={ { paddingLeft: token.paddingSM + (node.level + 1.5) * 24 } } />
