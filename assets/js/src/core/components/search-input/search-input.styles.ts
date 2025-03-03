@@ -22,6 +22,11 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-input-prefix {
         margin-inline-end: ${token.marginXS}px;
       }
+     
+
+.ant-input-search-button:not(.ant-btn-primary) {
+  border-color: ${token.Button.defaultGhostBorderColor}; 
+}
       
       .ant-input-clear-icon {
         display: flex;
@@ -38,7 +43,6 @@ export const useStyles = createStyles(({ css, token }) => {
         border-radius: ${token.borderRadius}px !important;
       }
     `,
-
     searchIcon: css`
       color: ${token.colorTextPlaceholder};
     `,

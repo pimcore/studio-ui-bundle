@@ -87,7 +87,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
             Apply
           </Button>
         </Toolbar>
-       }
+            }
     >
       <Content padded>
         <Flex
@@ -99,7 +99,9 @@ export const FilterContainerInner = (): React.JSX.Element => {
             <Text>Advanced Mode</Text>
             <Switch
               checked={ isAdvancedMode }
-              onChange={ () => { setIsAdvancedMode(!isAdvancedMode) } }
+              onChange={ () => {
+                setIsAdvancedMode(!isAdvancedMode)
+              } }
             />
           </Flex>
         </Flex>
@@ -107,8 +109,12 @@ export const FilterContainerInner = (): React.JSX.Element => {
         {isAdvancedMode
           ? (
             <PQLQueryInput
-              handleBlur={ (e) => { setPqlQuery(e.target.value) } }
-              handleChange={ (e) => { setPqlQuery(e.target.value) } }
+              handleBlur={ (e) => {
+                setPqlQuery(e.target.value)
+              } }
+              handleChange={ (e) => {
+                setPqlQuery(e.target.value)
+              } }
               isShowError={ false }
               value={ pqlQuery }
             />
@@ -121,15 +127,23 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   style={ { width: '100%' } }
                 >
                   <SearchInput
-                    onBlur={ (e) => { setSearchTerm(e.target.value) } }
-                    onChange={ (e) => { setSearchTerm(e.target.value) } }
+                    onBlur={ (e) => {
+                      setSearchTerm(e.target.value)
+                    } }
+                    onChange={ (e) => {
+                      setSearchTerm(e.target.value)
+                    } }
                     placeholder='Search'
                     value={ searchTerm }
+                    withPrefix
+                    withoutAddon
                   />
 
                   <Checkbox
                     checked={ onlyDirectChildren }
-                    onChange={ (e) => { setOnlyDirectChildren(e.target.checked) } }
+                    onChange={ (e) => {
+                      setOnlyDirectChildren(e.target.checked)
+                    } }
                   >
                     only direct children
                   </Checkbox>

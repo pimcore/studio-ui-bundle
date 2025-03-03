@@ -25,7 +25,7 @@ interface ISearchInputProps extends AntSearchProps {
   withClear?: boolean
 }
 
-export const SearchInput = ({ className, withoutAddon = true, withPrefix = true, withClear = true, ...props }: ISearchInputProps): React.JSX.Element => {
+export const SearchInput = ({ className, withoutAddon = false, withPrefix = false, withClear = true, ...props }: ISearchInputProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const searchClassNames = cn(
