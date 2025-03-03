@@ -37,7 +37,7 @@ export const SizeChanger = ({
     }
 
     options.push({
-      value: pageSizeOption.toString(),
+      value: pageSizeOption,
       label: pageSizeOption.toString() + ' / ' + label
     })
   }
@@ -48,7 +48,7 @@ export const SizeChanger = ({
 
   return (
     <Select
-      defaultValue={ defaultSize.toString() }
+      defaultValue={ defaultSize }
       onChange={ handleChange }
       options={ options }
     />

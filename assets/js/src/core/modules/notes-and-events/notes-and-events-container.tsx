@@ -25,7 +25,16 @@ import { Box } from '@Pimcore/components/box/box'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { totalItems, notesAndEvents, isLoading, isFetching, page, setPage, setPageSize, setFilter } = useNotesAndEvents()
+  const {
+    totalItems,
+    notesAndEvents,
+    isLoading,
+    isFetching,
+    page,
+    setPage,
+    setPageSize,
+    setFilter
+  } = useNotesAndEvents()
 
   return (
     <ContentLayout
@@ -55,17 +64,18 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             x: 'mini',
             y: 'none'
           }
-          }
+                    }
           theme='secondary'
         >
           <Title>{t('notes-and-events.label')}</Title>
           <SearchInput
             loading={ isFetching }
-            onChange={ (e) => {
-              const { value } = e.target
+            onSearch={ (value) => {
               setFilter(value)
             } }
             placeholder="Search"
+            withPrefix={ false }
+            withoutAddon={ false }
           />
         </Toolbar>
             }
