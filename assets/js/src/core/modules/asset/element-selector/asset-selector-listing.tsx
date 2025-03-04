@@ -54,6 +54,7 @@ export const AssetSelectorListing = (): React.JSX.Element => {
 
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ [
+      'DynamicTypes/GridCellRegistry',
       'DynamicTypes/MetadataRegistry',
       'DynamicTypes/ListingRegistry',
       'DynamicTypes/BatchEditRegistry'
