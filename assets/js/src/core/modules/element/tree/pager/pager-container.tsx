@@ -12,12 +12,12 @@
 */
 
 import { TreeContext, type TreePagerProps } from '@Pimcore/components/element-tree/element-tree'
-import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import React, { useContext } from 'react'
 
 const PagerContainer = (props: TreePagerProps): React.JSX.Element => {
-  const { page, setPage } = useElementTree(props.node.id)
+  const { page, setPage } = useElementTreeNode(props.node.id)
   const { maxItemsPerNode } = useContext(TreeContext)
   const total = props.total
 

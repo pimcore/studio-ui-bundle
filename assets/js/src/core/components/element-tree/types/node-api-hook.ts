@@ -1,7 +1,7 @@
 import { TreeNode } from "../element-tree-slice"
 import { DataObjectGetTreeApiResponse } from "@Pimcore/modules/data-object/data-object-api-slice.gen"
 import { AssetGetTreeApiResponse } from "src/sdk/main"
-import { NodeState } from "../hooks/use-element-tree"
+import { NodeState } from "../hooks/use-element-tree-node"
 
 export type NodeApiHook = (node: DataTransformerSourceNode, pageSize?: number) => NodeApiHookReturnType
 

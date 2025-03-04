@@ -26,7 +26,7 @@ import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
-import { useElementTree } from './hooks/use-element-tree'
+import { useElementTreeNode } from './hooks/use-element-tree-node'
 import { type TreeNode } from './element-tree-slice'
 import { type NodeApiHook } from './types/node-api-hook'
 import { useNodeApiHook } from '@Pimcore/modules/asset/tree/hooks/use-node-api-hook'
@@ -101,7 +101,7 @@ const ElementTree = (
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
-  const { page, setPage, getChildren, isLoading, isExpanded, setExpanded } = useElementTree(String(nodeId), nodeApiHook)
+  const { page, setPage, getChildren, isLoading, isExpanded, setExpanded } = useElementTreeNode(String(nodeId), nodeApiHook)
   console.log('node state', page, getChildren(), isLoading)
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {

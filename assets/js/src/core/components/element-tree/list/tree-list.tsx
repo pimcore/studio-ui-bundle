@@ -19,7 +19,7 @@ import { useStyles } from './tree-list.styles'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './../skeleton/skeleton'
-import { useElementTree } from '../hooks/use-element-tree'
+import { useElementTreeNode } from '../hooks/use-element-tree-node'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -32,7 +32,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode } = useContext(TreeContext)
   const { uploadFileList, uploadingNode } = useContext(UploadContext)!
-  const { isLoading, isFetching, getChildren, total } = useElementTree(node.id)
+  const { isLoading, isFetching, getChildren, total } = useElementTreeNode(node.id)
 
   if (isLoading === true) {
     return (

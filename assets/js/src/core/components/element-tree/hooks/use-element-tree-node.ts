@@ -20,11 +20,9 @@ import { type NodeApiHook } from '../types/node-api-hook'
 import { useContext } from 'react'
 import { TreeContext } from '../element-tree'
 
-export type NodeState = InternalNodeState & {
-  isExpanded: boolean
-}
+export type NodeState = InternalNodeState
 
-export const useElementTree = (nodeId: string, nodeApiHookArg?: NodeApiHook): NodeState & {
+export const useElementTreeNode = (nodeId: string, nodeApiHookArg?: NodeApiHook): NodeState & {
   isExpanded: boolean
   setLoading: (loading: boolean) => void
   setFetching: (isFetching: boolean) => void

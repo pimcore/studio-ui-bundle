@@ -15,7 +15,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Input } from 'antd'
 import { isUndefined } from 'lodash'
 import { TreeContext, type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
-import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
 const { Search } = Input
 
@@ -27,7 +27,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   const { total } = props
   const [searchActive, setSearchActive] = useState(false)
   const { maxItemsPerNode } = useContext(TreeContext)
-  const { setSearchTerm, setPage } = useElementTree(props.node.id)
+  const { setSearchTerm, setPage } = useElementTreeNode(props.node.id)
 
   useEffect(() => {
     if (!isUndefined(maxItemsPerNode)) {

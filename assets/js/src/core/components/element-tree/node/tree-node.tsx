@@ -20,7 +20,7 @@ import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useElementTree } from '../hooks/use-element-tree'
+import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 
@@ -91,7 +91,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTree(id)
+  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 

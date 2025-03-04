@@ -22,7 +22,7 @@ import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filte
 import { type DataTransformerSourceNode, type DataTransformerReturnType, type NodeApiHookReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 import { useAppDispatch } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
 export const useNodeApiHook = (node: DataTransformerSourceNode, pageSize?: number): NodeApiHookReturnType => {
   const { maxItemsPerNode } = useContext(TreeContext)
