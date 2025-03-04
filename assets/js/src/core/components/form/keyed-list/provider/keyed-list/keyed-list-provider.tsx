@@ -19,7 +19,7 @@ export interface KeyedListData {
   operations: {
     add: (key: string, value?: any) => void
     remove: (key: string) => void
-    update: (name: NamePath, value: any) => void
+    update: (name: NamePath, value: any, isInitialValue: boolean) => void
     getValue: (name: NamePath) => any
   }
   onChange?: (value: KeyedListData['values']) => void

@@ -72,7 +72,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, b
     setValue(() => newValue)
   }
 
-  const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue) => {
+  const update: KeyedListData['operations']['update'] = (subFieldname, newSubValue, isInitialValue) => {
     const currentName: string[] = isArray(name) ? name : [name]
     const currentSubFieldname: string[] = isArray(subFieldname) ? subFieldname : [subFieldname]
 
@@ -84,7 +84,7 @@ const KeyedList = ({ name, children, value: baseValue, onChange: baseOnChange, b
       }
     }
 
-    if (breakInheritanceOnUpdate) {
+    if (breakInheritanceOnUpdate && !isInitialValue) {
       if (inheritanceState?.getInheritanceState(currentSubFieldname)?.inherited === true) {
         inheritanceState?.breakInheritance(currentSubFieldname)
       }
