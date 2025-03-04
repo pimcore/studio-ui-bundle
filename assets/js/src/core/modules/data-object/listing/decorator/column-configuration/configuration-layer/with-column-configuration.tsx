@@ -17,13 +17,12 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDataObjectGetAvailableGridColumnsQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
-import { Content } from '@Pimcore/components/content/content'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useClassDefinitionSelection } from '../../class-definition-selection/context-layer/provider/use-class-definition-selection'
 
 export const WithColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const availableColumnsConfigurationComponent = (): React.JSX.Element => {
-    const { useElementId } = useSettings()
+    const { useElementId, ViewComponent } = useSettings()
     const { getId } = useElementId()
     const { selectedClassDefinition } = useClassDefinitionSelection()
 
@@ -45,7 +44,7 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
 
       for (const column of data.columns!) {
         // @todo Skip filename due to backend bug for now.
-        if (column.group !== 'system' || column.key === 'filename') {
+        if (column.key === 'filename') {
           continue
         }
 
@@ -69,7 +68,7 @@ export const WithColumnConfiguration = (Component: AbstractDecoratorProps['Confi
     }, [data])
 
     if (isConfigLoading || selectedColumns.length === 0) {
-      return <Content loading />
+      return <ViewComponent />
     }
 
     return (

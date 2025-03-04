@@ -25,7 +25,7 @@ export interface PaginationProps {
   total: number
   current?: number
   defaultPageSize?: number
-  pageSizeOptions?: number[] | string[]
+  pageSizeOptions?: number[]
   showSizeChanger?: boolean
   amountOfVisiblePages?: number
   hideOnSinglePage?: boolean
@@ -48,8 +48,8 @@ export const Pagination = ({
 
   const hashId = useCssComponentHash('pagination')
 
-  const [currentPage, setCurrentPage] = useState(current)
-  const [pageSize, setPageSize] = useState(defaultPageSize)
+  const [currentPage, setCurrentPage] = useState<number>(current)
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize)
 
   useEffect(() => {
     if (isSet(onChange)) {
@@ -76,7 +76,7 @@ export const Pagination = ({
   const getPageNumberItems = (pageNumberRange: number[]): React.JSX.Element[] => {
     return pageNumberRange.map((pageNumber) => {
       return PageNumberNode(
-        pageNumber.toString(),
+        pageNumber,
         getClassNameForPageNumber(pageNumber, currentPage),
         (e) => {
           onClickPageNumber(pageNumber)
@@ -256,15 +256,15 @@ function getRightPageNumberRange (
 }
 
 function PageNumberNode (
-  pageNumber: string,
+  pageNumber: number,
   className: string,
   onClick: (e) => void
 ): React.JSX.Element {
   return (
     <li
-      className={ `ant-pagination-item ant-pagination-item-${pageNumber} ${className}` }
+      className={ `ant-pagination-item ant-pagination-item-${pageNumber.toString()} ${className}` }
       key={ pageNumber }
-      title={ pageNumber }
+      title={ pageNumber.toString() }
     >
       <Button
         className={ 'page-number-node' }

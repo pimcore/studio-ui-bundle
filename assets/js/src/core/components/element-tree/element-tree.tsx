@@ -27,6 +27,7 @@ import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
+import { useNodeState } from './hooks/use-node-state'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -69,7 +70,6 @@ export interface INodeRef {
 }
 
 export interface ITreeContext extends TreeProps {
-  selectedIdsState?: [string[], (ids: string[]) => void]
   nodesRefs?: MutableRefObject<Record<string, INodeRef>>
   nodeOrder?: () => string[]
 }
@@ -97,15 +97,15 @@ const ElementTree = (
     ...props
   }: TreeProps
 ): React.JSX.Element => {
-  const selectedIdsState = useState<string[]>([])
   const { styles } = useStyles()
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
+  const { page, setPage } = useNodeState(String(nodeId))
   const { apiHookResult, dataTransformer } = nodeApiHook({
     id: nodeId,
     level: -1
-  })
+  }, maxItemsPerNode)
   const { isLoading, isError, data } = apiHookResult
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
@@ -133,7 +133,7 @@ const ElementTree = (
     setRightClickedNode(node)
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, selectedIdsState, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
 
   if (isError !== false) {
     return (<div>{'Error'}</div>)
@@ -149,6 +149,10 @@ const ElementTree = (
   if (hasRootNode) {
     preparedRootNode!.children = items
     preparedRootNode!.hasChildren = false
+  }
+
+  if (items.length === 0 && page > 1) {
+    setPage(1)
   }
 
   const TreeNode = renderNode

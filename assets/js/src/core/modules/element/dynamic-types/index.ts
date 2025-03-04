@@ -131,6 +131,7 @@ import { type DynamicTypeListingRegistry } from '@Pimcore/modules/element/dynami
 import { type DynamicTypeListingAssetLink } from '@Pimcore/modules/element/dynamic-types/defintinitions/listing/types/dynamic-type-listing-asset-link'
 import { type DynamicTypeObjectDataFieldCollection } from './defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { type DynamicTypeObjectDataObjectBrick } from './defintinitions/objects/data-related/types/dynamic-type-object-data-object-brick'
+import { type DynamicTypeGridCellDataObjectAdapter } from './defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 
 moduleSystem.registerModule({
   onInit () {
@@ -180,6 +181,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDocument>(serviceIds['DynamicTypes/GridCell/Document']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellLanguageSelect>(serviceIds['DynamicTypes/GridCell/LanguageSelect']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellTranslate>(serviceIds['DynamicTypes/GridCell/Translate']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdapter>(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 

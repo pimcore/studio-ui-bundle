@@ -15,6 +15,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Input } from 'antd'
 import { isUndefined } from 'lodash'
 import { TreeContext, type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
+import { useNodeState } from '@Pimcore/components/element-tree/hooks/use-node-state'
 
 const { Search } = Input
 
@@ -23,9 +24,10 @@ export type SearchContainerProps = TreeSearchProps & {
 }
 
 const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
-  const { mergeAdditionalQueryParams, total } = props
+  const { total } = props
   const [searchActive, setSearchActive] = useState(false)
   const { maxItemsPerNode } = useContext(TreeContext)
+  const { setSearchTerm, setPage } = useNodeState(props.node.id)
 
   useEffect(() => {
     if (!isUndefined(maxItemsPerNode)) {
@@ -34,10 +36,8 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   }, [total])
 
   function onSearch (searchTerm: string): void {
-    mergeAdditionalQueryParams!({
-      idSearchTerm: searchTerm,
-      page: 1
-    })
+    setSearchTerm(searchTerm === '' ? undefined : searchTerm)
+    setPage(1)
   }
 
   if (!searchActive) {

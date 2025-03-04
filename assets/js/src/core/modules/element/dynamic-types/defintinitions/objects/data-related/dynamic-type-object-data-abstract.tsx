@@ -24,6 +24,20 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/label/field-label'
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
+import { DefaultPreview } from './components/grid-cells/image/default-preview'
+
+export type EditMode = 'default' | 'edit-modal'
+
+export interface DefaultGridCellDefinition {
+  mode: 'default'
+  type: string
+}
+
+export interface WithEditModalGridCellDefinition {
+  mode: 'edit-modal'
+  previewComponent: ReactElement
+  editComponent: ReactElement
+}
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
   mandatory?: boolean | null
@@ -40,6 +54,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   abstract readonly id: string
   isCollectionType: boolean = false
   inheritedMaskOverlay: InheritanceOverlayType = false
+  gridCellEditMode: EditMode = 'default'
 
   abstract getObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition>
 
@@ -54,6 +69,25 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
       required: props.mandatory === true,
       hidden: props.invisible === true,
       tooltip: typeof props.tooltip === 'string' && props.tooltip.length > 0 ? respectLineBreak(props.tooltip, false) : undefined
+    }
+  }
+
+  getGridCellPreviewComponent (): ReactElement {
+    return <DefaultPreview />
+  }
+
+  getGridCellDefinition (): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
+    if (this.gridCellEditMode === 'edit-modal') {
+      return {
+        mode: this.gridCellEditMode,
+        previewComponent: this.getGridCellPreviewComponent(),
+        editComponent: <>edit</>
+      }
+    }
+
+    return {
+      mode: this.gridCellEditMode,
+      type: this.id
     }
   }
 

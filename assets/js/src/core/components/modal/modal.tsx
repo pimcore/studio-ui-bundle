@@ -34,7 +34,7 @@ export const Modal = ({ iconName, size = 'M', className, title, children, ...pro
   const classes = [styles.modal, className].filter(Boolean)
 
   const sizeBasedWidth = {
-    XL: 1000,
+    XL: 'max(1200px, 85%)',
     L: 700,
     M: 530
   }[size]

@@ -36,7 +36,7 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
   const { deleteTreeContextMenuItem } = useDelete('data-object')
   const { refreshTreeContextMenuItem } = useRefreshTree('data-object')
   const { copyTreeContextMenuItem, cutTreeContextMenuItem, pasteTreeContextMenuItem, pasteCutContextMenuItem } = useCopyPaste('data-object')
-  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem } = useLock('data-object')
+  const { lockTreeContextMenuItem, lockAndPropagateTreeContextMenuItem, unlockTreeContextMenuItem, unlockAndPropagateTreeContextMenuItem, isLockMenuHidden } = useLock('data-object')
 
   const items: DropdownMenuProps['items'] = [
     addFolderTreeContextMenuItem(node),
@@ -51,11 +51,13 @@ export const DataObjectTreeContextMenu = (props: DataObjectTreeContextMenuProps)
       label: t('element.tree.context-menu.advanced'),
       key: 'advanced',
       icon: <Icon value={ 'more' } />,
+      hidden: isLockMenuHidden(node),
       children: [
         {
           label: t('element.lock'),
           key: 'advanced-lock',
           icon: <Icon value={ 'lock' } />,
+          hidden: isLockMenuHidden(node),
           children: [
             lockTreeContextMenuItem(node),
             lockAndPropagateTreeContextMenuItem(node),

@@ -18,10 +18,53 @@ import { RoleContainer } from '@Pimcore/modules/user/roles/container'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
+import { NavPermission } from '../perspectives/enums/nav-permission'
 // import '@Pimcore/modules/asset/tree'
 
 moduleSystem.registerModule({
   onInit: () => {
+    const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Settings/User & Roles',
+      label: 'User & Roles',
+      perspectivePermissionHide: NavPermission.UsersHidden
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Settings/User & Roles/Users',
+      className: 'item-style-modifier',
+      perspectivePermission: NavPermission.Users,
+      widgetConfig: {
+        name: 'Users',
+        id: 'user-management',
+        component: 'user-management',
+        config: {
+          icon: {
+            type: 'name',
+            value: 'user'
+          }
+        }
+      }
+    })
+
+    mainNavRegistryService.registerMainNavItem({
+      path: 'Settings/User & Roles/Roles',
+      perspectivePermission: NavPermission.Roles,
+      widgetConfig: {
+        name: 'Roles',
+        id: 'role-management',
+        component: 'role-management',
+        config: {
+          icon: {
+            type: 'name',
+            value: 'user'
+          }
+        }
+      }
+    })
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     widgetRegistryService.registerWidget({

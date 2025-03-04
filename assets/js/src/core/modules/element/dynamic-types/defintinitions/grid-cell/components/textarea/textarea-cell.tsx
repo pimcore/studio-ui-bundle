@@ -14,7 +14,8 @@
 import React, { useEffect, useState } from 'react'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { useStyle } from './textarea-cell.styles'
-import TextArea, { type TextAreaRef } from 'antd/es/input/TextArea'
+import { type TextAreaRef } from 'antd/es/input/TextArea'
+import { Input } from 'antd'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 
@@ -53,7 +54,7 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
     }
 
     return (
-      <TextArea
+      <Input.TextArea
         autoSize={ { minRows: 2 } }
         onBlur={ onBlur }
         onChange={ onChange }
