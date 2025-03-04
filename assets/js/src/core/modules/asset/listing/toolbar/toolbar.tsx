@@ -18,15 +18,14 @@ import { Split } from '@Pimcore/components/split/split'
 import { RowSelectionTotal } from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/row-selection-total/row-reselection-total'
 import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/components/refetch/refetch'
 import { BatchActions } from '../batch-actions/batch-actions'
-import { Space } from '@Pimcore/components/space/space'
 
 export const Toolbar = (): React.JSX.Element => {
   return useMemo(() => (
     <BaseToolbar theme='secondary'>
-      <Space size="extra-small">
+      <Split size="mini">
         <RowSelectionTotal />
         <BatchActions />
-      </Space>
+      </Split>
 
       <Split size='small'>
         <Refetch />
