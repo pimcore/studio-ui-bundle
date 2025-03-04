@@ -12,8 +12,7 @@
 */
 
 import type { UploadFile } from 'antd/es/upload/interface'
-import { useContext } from 'react'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
@@ -33,7 +32,7 @@ let zipUploadFirstRun: string[] = []
 
 export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUploaderReturn => {
   const { addJob } = useJobs()
-  const uploadContext = useContext(UploadContext)!
+  const uploadContext = useUploadContext()
 
   const uploadFile = async ({ fileList }: UploadChangeParam<UploadFile<any>>): Promise<void> => {
     if (nodeId === undefined) {

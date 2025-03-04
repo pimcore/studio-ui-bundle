@@ -17,9 +17,7 @@ import { TreeContext } from '../element-tree'
 import { theme } from 'antd'
 import { useStyles } from './tree-list.styles'
 // import { UploadProgress } from '@Pimcore/components/upload/upload-progress/upload-progress'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './../skeleton/skeleton'
-import { UploadProgress } from '@Pimcore/components/upload/upload-progress/upload-progress'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -33,7 +31,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { renderFilter: RenderFilter, renderPager: RenderPager, renderNode: RenderNode, nodeApiHook } = useContext(TreeContext)
   const { apiHookResult, dataTransformer, mergeAdditionalQueryParams } = nodeApiHook(node)
   const { isLoading, isFetching, isError, data } = apiHookResult
-  const { uploadFileList, uploadingNode } = useContext(UploadContext)!
 
   if (isLoading === true) {
     return (
@@ -64,29 +61,12 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {(Boolean(children.some(item => item.parentId === uploadingNode))) && (
-          <div
-            className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
-            style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
-          >
-            <UploadProgress
-              items={ uploadFileList }
-              locale={ { uploading: 'uploading' } }
-              showRemoveIcon={ false }
-            />
-          </div>
-        )}
-
         {children?.map((item, index) => (
-          <>
-            {item.parentId !== uploadingNode && (
-            <RenderNode
-              internalKey={ `${node.internalKey}-${index}` }
-              key={ item.id }
-              { ...item }
-            />
-            )}
-          </>
+          <RenderNode
+            internalKey={ `${node.internalKey}-${index}` }
+            key={ item.id }
+            { ...item }
+          />
         ))}
       </div>
 

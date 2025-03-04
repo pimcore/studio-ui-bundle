@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { Upload, type UploadProps } from '@Pimcore/components/upload/upload'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
+import { useUploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/element-tree'
 import { useAddFolder } from '@Pimcore/modules/element/actions/add-folder/use-add-folder'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
@@ -39,8 +39,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
   const { uploadFile: uploadFileProcessor, uploadZip: uploadZipProcessor } = useFileUploader({ nodeId: node?.id })
   const uploadFileRef = React.useRef<HTMLButtonElement>(null)
   const uploadZipRef = React.useRef<HTMLButtonElement>(null)
-
-  const uploadContext = React.useContext(UploadContext)!
+  const { setUploadingNode } = useUploadContext()
   const { createZipDownloadTreeContextMenuItem } = useZipDownload({ type: 'folder' })
   const { addFolderTreeContextMenuItem } = useAddFolder('asset')
   const { renameTreeContextMenuItem } = useRename('asset', getElementActionCacheKey('asset', 'rename', parseInt(node.id)))
@@ -53,7 +52,7 @@ export const AssetTreeContextMenu = (props: TreeContextMenuProps): React.JSX.Ele
 
   useEffect(() => {
     if (node !== undefined) {
-      uploadContext.setUploadingNode(node.id)
+      setUploadingNode(node.id)
     }
   }, [node])
 
