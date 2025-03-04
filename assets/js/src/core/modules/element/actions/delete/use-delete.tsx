@@ -18,7 +18,6 @@ import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { createJob as createDeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/factory'
 import { defaultTopics, topics } from '@Pimcore/modules/execution-engine/topics'
 import { type AssetDeleteZipApiArg } from '@Pimcore/modules/asset/asset-api-slice.gen'
@@ -47,7 +46,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { t } = useTranslation()
   const modal = useFormModal()
   const { addJob } = useJobs()
-  const { refreshTree } = useRefreshTree(elementType)
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
   const { refreshElement } = useElementRefresh(elementType)
@@ -153,7 +151,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         parentFolder: String(parentId)
       }))
     } else if (parentId !== undefined) {
-      refreshTree(parentId)
       refreshElement(parentId)
     }
 

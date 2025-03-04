@@ -18,7 +18,6 @@ import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRefreshTree } from '@Pimcore/modules/element/actions/refresh-tree/use-refresh-tree'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { createJob as createCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/factory'
@@ -53,7 +52,6 @@ export interface MoveProps {
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
   const [storedNode, setStoredNode] = useState<TreeNodeProps | Element | undefined>()
   const [nodeTask, setNodeTask] = useState<'copy' | 'cut' | undefined>()
-  const { refreshTree } = useRefreshTree(elementType)
   const [assetClone] = useAssetCloneMutation()
   const { elementPatch } = useElementApi(elementType)
   const { t } = useTranslation()
@@ -83,10 +81,10 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      refreshTree(targetElement.parentId)
-      refreshTree(currentElement.parentId)
-      refreshTree(targetElement.id)
-      refreshTree(currentElement.id)
+      // todo refreshTree(targetElement.parentId)
+      // refreshTree(currentElement.parentId)
+      // refreshTree(targetElement.id)
+      // refreshTree(currentElement.id)
     } catch (error) {
       console.error('Error moving element', error)
     }
@@ -128,9 +126,9 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
           },
           parentFolder: String(parentId)
         }))
-      } else if (parentId !== undefined) {
-        refreshTree(parentId)
-      }
+      } // else if (parentId !== undefined) {
+      // todo refreshTree(parentId)
+      // }
     } catch (error) {
       console.error('Error cloning element', error)
     }
@@ -155,15 +153,15 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
         }
       })
 
-      if (storedNode.parentId !== undefined) {
-        const parentId = typeof storedNode.parentId === 'number'
-          ? storedNode.parentId
-          : parseInt(storedNode.parentId)
+      //  if (storedNode.parentId !== undefined) {
+      //    const parentId = typeof storedNode.parentId === 'number'
+      //      ? storedNode.parentId
+      //      : parseInt(storedNode.parentId)
 
-        refreshTree(parentId)
-      }
+      // todo refreshTree(parentId)
+      //  }
 
-      refreshTree(parentId)
+      // todo  refreshTree(parentId)
     } catch (error) {
       console.error('Error cloning element', error)
     }

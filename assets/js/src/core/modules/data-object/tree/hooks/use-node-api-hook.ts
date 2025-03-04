@@ -11,11 +11,9 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
 import {
   api
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { useContext } from 'react'
 import { transformApiDataToNodes } from '../utils/transform-api-data-to-node'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 import { type DataTransformerSourceNode, type DataTransformerReturnType, type NodeApiHookReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
@@ -24,12 +22,11 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
 export const useNodeApiHook = (): NodeApiHookReturnType => {
-  const { maxItemsPerNode } = useContext(TreeContext)
-  const { treeFilterArgs } = useTreeFilter()
+  const { pageSize, treeFilterArgs } = useTreeFilter()
   const dispatch = useAppDispatch()
 
   async function fetchApiHookResult (node: DataTransformerSourceNode, nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {
-    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs }))
+    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate({ parentId: parseInt(node.id), pageSize, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs }, { forceRefetch: true }))
 
     return await treeFetcher
       .then(({ data, isSuccess, isError, error }) => {
@@ -39,7 +36,7 @@ export const useNodeApiHook = (): NodeApiHookReturnType => {
         }
 
         if (isSuccess) {
-          return transformApiDataToNodes(node, data, maxItemsPerNode)
+          return transformApiDataToNodes(node, data, pageSize)
         }
 
         return undefined

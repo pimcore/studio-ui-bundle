@@ -20,7 +20,6 @@ import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { AssetTreeContextMenu } from '@Pimcore/modules/asset/tree/context-menu/context-menu'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { type ElementIcon, useAssetGetTreeQuery } from '../asset-api-slice-enhanced'
 import { transformApiDataToNodes } from './utils/transform-api-data-to-node'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
@@ -52,11 +51,9 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
-  const { pageSize } = useTreeFilter()
+  const { pageSize: pagingLimit } = useTreeFilter()
   const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
   const { isLoading, data: rootNodeData } = useAssetGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery }, { skip: !showRoot })
-  const { asset_tree_paging_limit: assetTreePagingLimit } = useSettings()
-  const pagingLimit: number | undefined = pageSize ?? assetTreePagingLimit
   const { t } = useTranslation()
 
   if (showRoot && (isLoading || rootNodeData === undefined)) {
@@ -110,7 +107,6 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     <NodeApiHookProvider nodeApiHook={ useNodeApiHook }>
       <ElementTree
         contextMenu={ AssetTreeContextMenu }
-        maxItemsPerNode={ pagingLimit }
         nodeId={ id }
         onSelect={ onSelect }
         renderFilter={ SearchContainer }

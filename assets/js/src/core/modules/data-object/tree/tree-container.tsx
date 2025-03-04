@@ -20,7 +20,6 @@ import { withDraggable } from './node/with-draggable'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
 import { DataObjectTreeContextMenu } from '@Pimcore/modules/data-object/tree/context-menu/context-menu'
 import { PagerContainer } from '@Pimcore/modules/element/tree/pager/pager-container'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useTranslation } from 'react-i18next'
 import { type ElementIcon, useDataObjectGetTreeQuery } from '../data-object-api-slice.gen'
 import { transformApiDataToNodes } from './utils/transform-api-data-to-node'
@@ -52,11 +51,9 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openDataObject } = useDataObjectHelper()
-  const { pageSize } = useTreeFilter()
+  const { pageSize: pagingLimit } = useTreeFilter()
   const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
   const { isLoading, data: rootNodeData } = useDataObjectGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery }, { skip: !showRoot })
-  const { object_tree_paging_limit: dataObjectTreePagingLimit } = useSettings()
-  const pagingLimit: number | undefined = pageSize ?? dataObjectTreePagingLimit
   const { t } = useTranslation()
 
   if (showRoot && (isLoading || rootNodeData === undefined)) {
@@ -111,7 +108,6 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     <NodeApiHookProvider nodeApiHook={ useNodeApiHook }>
       <ElementTree
         contextMenu={ DataObjectTreeContextMenu }
-        maxItemsPerNode={ pagingLimit }
         nodeId={ id }
         onSelect={ onSelect }
         renderFilter={ SearchContainer }

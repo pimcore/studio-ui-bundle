@@ -47,7 +47,6 @@ export interface TreeContextMenuProps {
 
 export interface TreeProps {
   nodeId: number
-  maxItemsPerNode?: number
   rootNode?: TreeNode
 
   renderNode: typeof TreeNodeComponent
@@ -73,7 +72,6 @@ export interface ITreeContext extends TreeProps {
 
 export const defaultProps: TreeProps = {
   nodeId: 1,
-  maxItemsPerNode: 30,
   renderNodeContent: TreeNodeContent,
   renderNode: TreeNodeComponent
 }
@@ -84,7 +82,6 @@ export const TreeContext = createContext<ITreeContext>({
 
 const ElementTree = (
   {
-    maxItemsPerNode = defaultProps.maxItemsPerNode,
     renderNode = defaultProps.renderNode,
     renderNodeContent = defaultProps.renderNodeContent,
     contextMenu: ContextMenu,
@@ -124,7 +121,7 @@ const ElementTree = (
     setRightClickedNode(node)
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, maxItemsPerNode, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, maxItemsPerNode, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
 
   // todo if (isError !== false) {
   //   return (<div>{'Error'}</div>)

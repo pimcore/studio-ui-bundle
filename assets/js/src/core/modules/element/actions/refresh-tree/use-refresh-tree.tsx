@@ -22,7 +22,6 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
 
 export interface UseRefreshTreeHookReturn {
-  refreshTree: (parentId: number, forceLoading?: boolean) => void
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
 }
 
@@ -48,7 +47,6 @@ export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookRetu
   }
 
   return {
-    refreshTree,
     refreshTreeContextMenuItem
   }
 }

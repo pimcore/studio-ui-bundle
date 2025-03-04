@@ -18,6 +18,7 @@ import React from 'react'
 import { TreeFilterProvider } from './provider/tree-filter-provider/tree-filter-provider'
 import { TreePermissionProvider } from './provider/tree-permission-provider/tree-permission-provider'
 import { TreeIdProvider } from './provider/tree-id-provider/tree-id-provider'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export interface TreeWidgetProps {
   id: string
@@ -30,12 +31,16 @@ export interface TreeWidgetProps {
   showRoot?: boolean
 }
 export const TreeWidget = ({ id, elementType, rootFolderId, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
+  const { asset_tree_paging_limit: pageSizeAsset, object_tree_paging_limit: pageSizeObject } = useSettings()
+
+  const usedPageSize = pageSize ?? (elementType === elementTypes.asset ? pageSizeAsset : pageSizeObject)
+
   return (
     <TreeIdProvider treeId={ id }>
       <TreePermissionProvider permissions={ { ...contextPermissions } }>
         <TreeFilterProvider
           classIds={ classes }
-          pageSize={ pageSize ?? undefined }
+          pageSize={ usedPageSize }
           pqlQuery={ pql ?? undefined }
         >
           { elementType === elementTypes.asset && (
