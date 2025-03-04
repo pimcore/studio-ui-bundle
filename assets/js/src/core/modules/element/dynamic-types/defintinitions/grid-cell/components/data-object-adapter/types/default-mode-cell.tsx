@@ -52,7 +52,7 @@ export const DefaultModeCell = (props: DefaultModeCellProps): React.JSX.Element 
             ...props.cellProps.column.columnDef.meta,
             type,
             config: {
-              ...props?.cellProps?.column?.columnDef?.meta?.config?.dataObjectConfig ?? {}
+              ...props?.cellProps?.column?.columnDef?.meta?.config?.dataObjectConfig?.fieldDefinition ?? {}
             }
           }
         }

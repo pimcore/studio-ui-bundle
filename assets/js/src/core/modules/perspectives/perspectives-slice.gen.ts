@@ -225,16 +225,16 @@ export type WidgetConfig = {
 export type SaveAssetContextPermissions = {
     /** Hide Add Menu */
     hideAdd: boolean;
-    /** Add Import From Server */
-    addImportFromServer: boolean;
     /** Add Upload */
     addUpload: boolean;
-    /** Add Upload Compatibility */
-    addUploadCompatibility: boolean;
-    /** Add Upload From URL */
-    addUploadFromURL: boolean;
+    /** Upload New Version */
+    uploadNewVersion: boolean;
     /** Add Upload Zip */
     addUploadZip: boolean;
+    /** Download */
+    download: boolean;
+    /** Download Zip */
+    downloadZip: boolean;
     /** Add Folder */
     addFolder: boolean;
     /** Copy */
@@ -251,8 +251,8 @@ export type SaveAssetContextPermissions = {
     paste: boolean;
     /** Paste Cut */
     pasteCut: boolean;
-    /** Reload */
-    reload: boolean;
+    /** Refresh */
+    refresh: boolean;
     /** Rename */
     rename: boolean;
     /** SearchAndMove */
@@ -281,8 +281,6 @@ export type SaveDataObjectContextPermissions = {
     cut: boolean;
     /** Delete */
     delete: boolean;
-    /** Import CSV */
-    importCSV: boolean;
     /** Lock */
     lock: boolean;
     /** Lock and Propagate */
@@ -291,8 +289,8 @@ export type SaveDataObjectContextPermissions = {
     paste: boolean;
     /** Publish */
     publish: boolean;
-    /** Reload */
-    reload: boolean;
+    /** Refresh */
+    refresh: boolean;
     /** Rename */
     rename: boolean;
     /** Search and Move */
@@ -351,8 +349,8 @@ export type SaveDocumentContextPermissions = {
     pasteCut: boolean;
     /** Publish */
     publish: boolean;
-    /** Reload */
-    reload: boolean;
+    /** Refresh */
+    refresh: boolean;
     /** Remove Site */
     removeSite: boolean;
     /** Rename */

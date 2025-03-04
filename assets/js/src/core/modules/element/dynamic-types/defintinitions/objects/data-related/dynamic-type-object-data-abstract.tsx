@@ -72,16 +72,20 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     }
   }
 
-  getGridCellPreviewComponent (): ReactElement {
+  getGridCellPreviewComponent (props: AbstractObjectDataDefinition): ReactElement {
     return <DefaultPreview />
   }
 
-  getGridCellDefinition (): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
+  getGridCellEditComponent (props: AbstractObjectDataDefinition): ReactElement {
+    return this.getObjectDataComponent(props)
+  }
+
+  getGridCellDefinition (props: AbstractObjectDataDefinition): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
     if (this.gridCellEditMode === 'edit-modal') {
       return {
         mode: this.gridCellEditMode,
-        previewComponent: this.getGridCellPreviewComponent(),
-        editComponent: <>edit</>
+        previewComponent: this.getGridCellPreviewComponent(props),
+        editComponent: this.getGridCellEditComponent(props)
       }
     }
 
