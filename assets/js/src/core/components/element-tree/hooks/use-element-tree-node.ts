@@ -12,17 +12,14 @@
 */
 
 import { type RootState, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, selectNodesByParentId, type TreeNode, setFetchTriggered, updateNodesByParentId, setNodeFetching } from '../element-tree-slice'
+import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, selectNodesByParentId, type TreeNode, setNodeFetching } from '../element-tree-slice'
 import { useSelector } from 'react-redux'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
-import { isUndefined } from 'lodash'
-import { type NodeApiHook } from '../types/node-api-hook'
-import { useContext } from 'react'
-import { TreeContext } from '../element-tree'
+import { useElementTree } from './use-element-tree'
 
 export type NodeState = InternalNodeState
 
-export const useElementTreeNode = (nodeId: string, nodeApiHookArg?: NodeApiHook): NodeState & {
+export const useElementTreeNode = (nodeId: string): NodeState & {
   isExpanded: boolean
   setLoading: (loading: boolean) => void
   setFetching: (isFetching: boolean) => void
@@ -31,18 +28,12 @@ export const useElementTreeNode = (nodeId: string, nodeApiHookArg?: NodeApiHook)
   setSearchTerm: (searchTerm?: string) => void
   setSelectedIds: (selectedNodeIds: string[]) => void
   setScrollTo: (scrollTo: boolean) => void
-  refreshChildren: () => void
   getChildren: () => TreeNode[]
 } => {
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId()
-  const { nodeApiHook } = useContext(TreeContext)
-  const usedNodeApiHook = nodeApiHookArg ?? nodeApiHook
+  const { refreshChildren } = useElementTree()
 
-  const { fetchApiHookResult } = usedNodeApiHook({
-    id: nodeId,
-    internalKey: nodeId
-  })
   const nodeState = useSelector((state: RootState) => selectNodeState(state, treeId, nodeId))
 
   const resultInternalNodeState: InternalNodeState = nodeState ?? {
@@ -57,30 +48,6 @@ export const useElementTreeNode = (nodeId: string, nodeApiHookArg?: NodeApiHook)
     ...resultInternalNodeState,
     isExpanded: resultInternalNodeState.isExpanded,
     page: resultInternalNodeState.page ?? 1
-  }
-
-  const refreshChildren = (): void => {
-    dispatch(setFetchTriggered({ treeId, nodeId, fetchTriggered: true }))
-
-    if (isUndefined(usedNodeApiHook)) {
-      throw new Error('nodeApiHook is required to refresh children')
-    }
-    if (nodeState?.isFetching === true) {
-      return
-    }
-
-    if (isUndefined(nodeState?.isLoading)) {
-      setLoading(true)
-    }
-    setFetching(true)
-
-    fetchApiHookResult(resultNodeState).then((apiHookResult) => {
-      if (!isUndefined(apiHookResult)) {
-        dispatch(updateNodesByParentId({ treeId, parentId: nodeId, nodes: apiHookResult.nodes, total: apiHookResult.total }))
-      }
-      setLoading(false)
-      setFetching(false)
-    }).catch((error) => { console.error(error) })
   }
 
   const setLoading = (loading: boolean): void => {
@@ -114,7 +81,7 @@ export const useElementTreeNode = (nodeId: string, nodeApiHookArg?: NodeApiHook)
   const internalNodes = useSelector((state: RootState) => selectNodesByParentId(state, treeId, nodeId))
   const getChildren = (): TreeNode[] => {
     if (!resultNodeState.isFetchTriggered && resultNodeState.isExpanded) {
-      refreshChildren()
+      refreshChildren(nodeId, false)
     }
     const children: TreeNode[] = []
     internalNodes.forEach((node) => {
@@ -135,7 +102,6 @@ export const useElementTreeNode = (nodeId: string, nodeApiHookArg?: NodeApiHook)
     setSearchTerm,
     setSelectedIds,
     setScrollTo,
-    refreshChildren,
     getChildren
   }
 }

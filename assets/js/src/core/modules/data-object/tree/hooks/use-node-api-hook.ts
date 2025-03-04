@@ -13,7 +13,6 @@
 
 import { TreeContext } from '@Pimcore/components/element-tree/element-tree'
 import {
-  type DataObjectGetTreeApiResponse,
   api
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useContext } from 'react'
@@ -24,17 +23,13 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type NodeState } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 
-export const useNodeApiHook = (node: DataTransformerSourceNode, pageSize?: number): NodeApiHookReturnType => {
+export const useNodeApiHook = (): NodeApiHookReturnType => {
   const { maxItemsPerNode } = useContext(TreeContext)
   const { treeFilterArgs } = useTreeFilter()
   const dispatch = useAppDispatch()
 
-  function dataTransformer (data: DataObjectGetTreeApiResponse): DataTransformerReturnType {
-    return transformApiDataToNodes(node, data, maxItemsPerNode)
-  }
-
-  async function fetchApiHookResult (nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {
-    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate({ parentId: parseInt(node.id), pageSize: pageSize ?? maxItemsPerNode!, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs }))
+  async function fetchApiHookResult (node: DataTransformerSourceNode, nodeState: NodeState): Promise<DataTransformerReturnType | undefined> {
+    const treeFetcher = dispatch(api.endpoints.dataObjectGetTree.initiate({ parentId: parseInt(node.id), pageSize: maxItemsPerNode!, page: nodeState.page, idSearchTerm: nodeState.searchTerm, ...treeFilterArgs }))
 
     return await treeFetcher
       .then(({ data, isSuccess, isError, error }) => {
@@ -44,7 +39,7 @@ export const useNodeApiHook = (node: DataTransformerSourceNode, pageSize?: numbe
         }
 
         if (isSuccess) {
-          return dataTransformer(data)
+          return transformApiDataToNodes(node, data, maxItemsPerNode)
         }
 
         return undefined
@@ -52,5 +47,5 @@ export const useNodeApiHook = (node: DataTransformerSourceNode, pageSize?: numbe
       .catch(() => undefined)
   }
 
-  return { fetchApiHookResult, dataTransformer } as const
+  return { fetchApiHookResult } as const
 }

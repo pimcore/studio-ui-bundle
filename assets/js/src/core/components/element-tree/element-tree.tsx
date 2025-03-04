@@ -28,8 +28,6 @@ import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
 import { useElementTreeNode } from './hooks/use-element-tree-node'
 import { type TreeNode } from './element-tree-slice'
-import { type NodeApiHook } from './types/node-api-hook'
-import { useNodeApiHook } from '@Pimcore/modules/asset/tree/hooks/use-node-api-hook'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -49,7 +47,6 @@ export interface TreeContextMenuProps {
 
 export interface TreeProps {
   nodeId: number
-  nodeApiHook: NodeApiHook
   maxItemsPerNode?: number
   rootNode?: TreeNode
 
@@ -78,8 +75,7 @@ export const defaultProps: TreeProps = {
   nodeId: 1,
   maxItemsPerNode: 30,
   renderNodeContent: TreeNodeContent,
-  renderNode: TreeNodeComponent,
-  nodeApiHook: useNodeApiHook
+  renderNode: TreeNodeComponent
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -89,7 +85,6 @@ export const TreeContext = createContext<ITreeContext>({
 const ElementTree = (
   {
     maxItemsPerNode = defaultProps.maxItemsPerNode,
-    nodeApiHook = defaultProps.nodeApiHook,
     renderNode = defaultProps.renderNode,
     renderNodeContent = defaultProps.renderNodeContent,
     contextMenu: ContextMenu,
@@ -101,8 +96,8 @@ const ElementTree = (
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
-  const { page, setPage, getChildren, isLoading, isExpanded, setExpanded } = useElementTreeNode(String(nodeId), nodeApiHook)
-  console.log('node state', page, getChildren(), isLoading)
+  const { page, setPage, getChildren, isLoading, isExpanded, setExpanded } = useElementTreeNode(String(nodeId))
+
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
     return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
@@ -129,7 +124,7 @@ const ElementTree = (
     setRightClickedNode(node)
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, maxItemsPerNode, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, maxItemsPerNode, renderNode, renderNodeContent, onRightClick])
 
   // todo if (isError !== false) {
   //   return (<div>{'Error'}</div>)

@@ -31,6 +31,7 @@ import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { NodeApiHookProvider } from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
 
 export interface TreeContainerProps {
   id: number
@@ -106,18 +107,19 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   return (
-    <ElementTree
-      contextMenu={ AssetTreeContextMenu }
-      maxItemsPerNode={ pagingLimit }
-      nodeApiHook={ useNodeApiHook }
-      nodeId={ id }
-      onSelect={ onSelect }
-      renderFilter={ SearchContainer }
-      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent)))) }
-      renderNodeContent={ defaultProps.renderNodeContent }
-      renderPager={ PagerContainer }
-      rootNode={ rootNode }
-    />
+    <NodeApiHookProvider nodeApiHook={ useNodeApiHook }>
+      <ElementTree
+        contextMenu={ AssetTreeContextMenu }
+        maxItemsPerNode={ pagingLimit }
+        nodeId={ id }
+        onSelect={ onSelect }
+        renderFilter={ SearchContainer }
+        renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent)))) }
+        renderNodeContent={ defaultProps.renderNodeContent }
+        renderPager={ PagerContainer }
+        rootNode={ rootNode }
+      />
+    </NodeApiHookProvider>
   )
 }
 
