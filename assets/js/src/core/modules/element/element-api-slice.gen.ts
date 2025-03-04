@@ -36,6 +36,12 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementGetTreeLocation: build.query<ElementGetTreeLocationApiResponse, ElementGetTreeLocationApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/location/${queryArg.id}/${queryArg.perspectiveId}`,
+                }),
+                providesTags: ["Elements"],
+            }),
             elementGetIdByPath: build.query<ElementGetIdByPathApiResponse, ElementGetIdByPathApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/path`,
@@ -97,6 +103,15 @@ export type ElementGetContextPermissionsApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
+export type ElementGetTreeLocationApiResponse = /** status 200 Location data of the element */ ElementLocationData;
+export type ElementGetTreeLocationApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Get perspective by matching Id */
+    perspectiveId: string;
+};
 export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
     /** ID of the element */
     id: number;
@@ -151,16 +166,16 @@ export type FolderData = {
 export type SaveAssetContextPermissions = {
     /** Hide Add Menu */
     hideAdd: boolean;
-    /** Add Import From Server */
-    addImportFromServer: boolean;
     /** Add Upload */
     addUpload: boolean;
-    /** Add Upload Compatibility */
-    addUploadCompatibility: boolean;
-    /** Add Upload From URL */
-    addUploadFromURL: boolean;
+    /** Upload New Version */
+    uploadNewVersion: boolean;
     /** Add Upload Zip */
     addUploadZip: boolean;
+    /** Download */
+    download: boolean;
+    /** Download Zip */
+    downloadZip: boolean;
     /** Add Folder */
     addFolder: boolean;
     /** Copy */
@@ -177,8 +192,8 @@ export type SaveAssetContextPermissions = {
     paste: boolean;
     /** Paste Cut */
     pasteCut: boolean;
-    /** Reload */
-    reload: boolean;
+    /** Refresh */
+    refresh: boolean;
     /** Rename */
     rename: boolean;
     /** SearchAndMove */
@@ -207,8 +222,6 @@ export type SaveDataObjectContextPermissions = {
     cut: boolean;
     /** Delete */
     delete: boolean;
-    /** Import CSV */
-    importCSV: boolean;
     /** Lock */
     lock: boolean;
     /** Lock and Propagate */
@@ -217,8 +230,8 @@ export type SaveDataObjectContextPermissions = {
     paste: boolean;
     /** Publish */
     publish: boolean;
-    /** Reload */
-    reload: boolean;
+    /** Refresh */
+    refresh: boolean;
     /** Rename */
     rename: boolean;
     /** Search and Move */
@@ -277,8 +290,8 @@ export type SaveDocumentContextPermissions = {
     pasteCut: boolean;
     /** Publish */
     publish: boolean;
-    /** Reload */
-    reload: boolean;
+    /** Refresh */
+    refresh: boolean;
     /** Remove Site */
     removeSite: boolean;
     /** Rename */
@@ -300,6 +313,24 @@ export type DocumentContextPermissions = SaveDocumentContextPermissions & {
         [key: string]: string | number | boolean | object;
     };
 };
+export type TreeLevelData = {
+    /** Parent ID */
+    parentId?: number;
+    /** Element ID */
+    elementId: number;
+    /** Page Number */
+    pageNumber: number;
+};
+export type ElementLocationData = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Widget Id */
+    widgetId: string;
+    /** Tree level data */
+    treeLevelData: TreeLevelData[];
+};
 export type Subtype = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -317,6 +348,7 @@ export const {
     useElementGetDeleteInfoQuery,
     useElementFolderCreateMutation,
     useElementGetContextPermissionsQuery,
+    useElementGetTreeLocationQuery,
     useElementGetIdByPathQuery,
     useElementGetSubtypeQuery,
     useElementResolveBySearchTermQuery,

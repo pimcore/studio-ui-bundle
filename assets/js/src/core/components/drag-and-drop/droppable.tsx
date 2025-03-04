@@ -16,7 +16,6 @@ import { type DragAndDropInfo, DragAndDropInfoContext } from './context-provider
 import { type UniqueIdentifier, useDroppable } from '@dnd-kit/core'
 import { uuid } from '@Pimcore/utils/uuid'
 import { BaseDroppable } from '@Pimcore/components/drag-and-drop/droppable/base-droppable'
-import { SortableDroppable } from '@Pimcore/components/drag-and-drop/droppable/sortable-droppable'
 
 export interface DroppableProps {
   className?: string
@@ -42,7 +41,8 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
   }
 
   const { isOver, setNodeRef } = useDroppable({
-    id
+    id,
+    disabled: context.getInfo().sortable !== undefined
   })
 
   if (isValidContext && isOver && !isValidData) {
@@ -76,10 +76,6 @@ export const Droppable = (props: DroppableProps): React.JSX.Element | null => {
       context.callbackRegistry!.current.unregister(id)
     }
   }, [context, isOver])
-
-  if (context.getInfo().sortable !== undefined) {
-    return <SortableDroppable>{ props.children }</SortableDroppable>
-  }
 
   return (
     <BaseDroppable

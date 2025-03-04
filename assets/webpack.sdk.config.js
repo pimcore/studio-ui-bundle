@@ -15,6 +15,7 @@
 const Encore = require('@symfony/webpack-encore')
 const path = require('path')
 const webpack = require('webpack')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
@@ -95,10 +96,6 @@ Encore
 
   // uncomment if you're having problems with a jQuery plugin
   // .autoProvidejQuery()
-  .enableEslintPlugin({
-    extensions: ['js', 'jsx', 'ts', 'tsx'],
-    fix: true
-  })
 
   .addAliases({
     '@Pimcore': path.resolve(__dirname, 'js', 'src', 'core'),
@@ -141,6 +138,8 @@ Encore
        */
     `
   }))
+
+  .addPlugin(new ForkTsCheckerWebpackPlugin())
 
   .configureSplitChunks
 

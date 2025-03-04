@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React, { type ReactElement, useEffect } from 'react'
+import React, { type ReactElement, useEffect, useMemo } from 'react'
 import { TableGrid } from './components/grid/grid'
 import { Box } from '@Pimcore/components/box/box'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -24,6 +24,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Content } from '@Pimcore/components/content/content'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { isEmpty, isNil } from 'lodash'
 
 export interface TableProps {
   rows: number | null
@@ -37,6 +38,18 @@ export interface TableProps {
   columnConfig?: Array<{ key: string, label: string }>
   width?: number | string | null
   height?: number | string | null
+  data?: string | null // default data from class definition
+}
+
+const parseFieldDefinitionData = (data?: string | null): TableValue | null => {
+  if (isNil(data) || data === '') {
+    return null
+  }
+
+  const dataRows = data.split('\n')
+  const dataGrid: TableValue = dataRows.map(row => row.split('|'))
+
+  return dataGrid
 }
 
 export const Table = (props: TableProps): React.JSX.Element => {
@@ -45,6 +58,15 @@ export const Table = (props: TableProps): React.JSX.Element => {
   const { confirm } = modal
 
   const columnConfigActivated = props.colsFixed === true ? props.columnConfigActivated ?? false : false
+
+  const fieldDefinitionData = useMemo(() => parseFieldDefinitionData(props.data), [props.data])
+
+  const getInitialValue = (): TableValue | null => {
+    if (isNil(props.value) || isEmpty(props.value)) {
+      return fieldDefinitionData
+    }
+    return props.value
+  }
 
   const {
     value,
@@ -62,12 +84,13 @@ export const Table = (props: TableProps): React.JSX.Element => {
     rows,
     cols
   } = useTableValue({
-    initialValue: props.value ?? null,
+    initialValue: getInitialValue(),
     onChange: props.onChange,
     cols: props.cols,
     rows: props.rows,
     columnConfig: props.columnConfig,
-    columnConfigActivated
+    columnConfigActivated,
+    emptyValue: fieldDefinitionData
   })
 
   useEffect(() => {

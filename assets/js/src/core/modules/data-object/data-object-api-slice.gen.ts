@@ -181,11 +181,13 @@ const injectedRtkApi = api
                         pageSize: queryArg.pageSize,
                         parentId: queryArg.parentId,
                         idSearchTerm: queryArg.idSearchTerm,
+                        pqlQuery: queryArg.pqlQuery,
                         excludeFolders: queryArg.excludeFolders,
                         path: queryArg.path,
                         pathIncludeParent: queryArg.pathIncludeParent,
                         pathIncludeDescendants: queryArg.pathIncludeDescendants,
                         className: queryArg.className,
+                        classIds: queryArg.classIds,
                     },
                 }),
                 providesTags: ["Data Objects"],
@@ -234,7 +236,7 @@ export type DataObjectUpdateByIdApiArg = {
             index?: any;
             key?: any;
             useDraftData?: any;
-            task?: "autoSave" | "publish" | "save" | "version";
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -364,7 +366,7 @@ export type DataObjectPatchByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "autoSave" | "publish" | "save" | "version";
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -446,6 +448,8 @@ export type DataObjectGetTreeApiArg = {
     parentId?: number;
     /** Filter assets/data-objects by matching ids. As a wildcard * can be used */
     idSearchTerm?: string;
+    /** Pql query filter */
+    pqlQuery?: string;
     /** Filter folders from result. */
     excludeFolders?: boolean;
     /** Filter by path. */
@@ -454,8 +458,10 @@ export type DataObjectGetTreeApiArg = {
     pathIncludeParent?: boolean;
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
-    /** Filter by class. */
+    /** When provided, the search is executed on the specific data object class index. */
     className?: string;
+    /** Filter results based on the provided class IDs. */
+    classIds?: string;
 };
 export type Error = {
     /** Message */

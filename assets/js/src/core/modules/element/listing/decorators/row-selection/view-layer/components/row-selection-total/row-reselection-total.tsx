@@ -21,7 +21,7 @@ export const RowSelectionTotal = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   if (context === undefined) {
-    return <div />
+    return <></>
   }
 
   const { selectedRows, setSelectedRows } = context
@@ -42,7 +42,7 @@ export const RowSelectionTotal = (): React.JSX.Element => {
   // @todo translation
   return (
     <>
-      {total === 0 && (<div />)}
+      {total === 0 && (<></>)}
       {total > 0 && (
         <Checkbox
           checked={ total > 0 }

@@ -11,6 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+/* eslint-disable max-lines */
 import { container } from '@Pimcore/app/depency-injection'
 import { FolderTabManager } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/folder-tab-manager'
 import { IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
@@ -143,6 +144,11 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/batch-edits/types/text/dynamic-type-batch-edit-text-area'
 import { DynamicTypeObjectDataFieldCollection } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-field-collection'
 import { DynamicTypeObjectDataObjectBrick } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/types/dynamic-type-object-data-object-brick'
+import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/defintinitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
+import { MainNavRegistry } from '@Pimcore/modules/app/nav/services/main-nav-registry'
+
+// Main nav
+container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope()
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
@@ -209,6 +215,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/Object']).to(DynamicTypeGridCel
 container.bind(serviceIds['DynamicTypes/GridCell/Document']).to(DynamicTypeGridCellDocument).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/LanguageSelect']).to(DynamicTypeGridCellLanguageSelect).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Translate']).to(DynamicTypeGridCellTranslate).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/DataObjectAdapter']).to(DynamicTypeGridCellDataObjectAdapter).inSingletonScope()
 
 // dynamic types listing
 container.bind(serviceIds['DynamicTypes/ListingRegistry']).to(DynamicTypeListingRegistry).inSingletonScope()

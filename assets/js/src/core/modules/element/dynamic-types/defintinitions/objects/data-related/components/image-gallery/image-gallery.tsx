@@ -41,6 +41,7 @@ import {
 import {
   type CropSettings
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/helpers/hotspot-image/types/crop-types'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -55,17 +56,35 @@ export interface ImageGalleryValueItem {
   hotspots: Hotspot[]
   marker: Marker[]
   crop: CropSettings
+  key?: string
+}
+
+const addKeys = (value: ImageGalleryValue): ImageGalleryValue => {
+  return value.map((item, index) => {
+    if (item.key === undefined) {
+      item.key = uuid()
+    }
+    return item
+  })
+}
+
+const removeKeys = (items: ImageGalleryValue): ImageGalleryValue => {
+  return items.map((item) => {
+    const { key, ...rest } = item
+    return rest
+  })
 }
 
 export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
-  const [value, setValueState] = useState<ImageGalleryValue>(props.value ?? [])
+  const [value, setValueState] = useState<ImageGalleryValue>(addKeys(props.value ?? []))
   const { t } = useTranslation()
   const hotspotMarkersModalContainerRef = useRef<HotspotMarkersModalContainerRef>(null)
-
   const setValue = (newValue: ImageGalleryValue): void => {
-    if (!isEqual(newValue, value)) {
-      setValueState(newValue)
-      const changedValue = newValue.filter(item => item.image !== null)
+    const updatedValue = addKeys(newValue)
+
+    if (!isEqual(updatedValue, value)) {
+      setValueState(updatedValue)
+      const changedValue = removeKeys(updatedValue.filter(item => item.image !== null))
       props.onChange?.(changedValue.length > 0 ? changedValue : null)
     }
   }
@@ -103,7 +122,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
               id={ String(index) }
               index={ index }
               item={ item }
-              key={ index + (item.image === null ? '_drop-target' : JSON.stringify(item)) }
+              key={ item.key }
               setValue={ setValue }
               value={ value }
             />

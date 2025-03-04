@@ -28,7 +28,7 @@ import { ActionColumnDecorator } from './decorator/action-column/action-column-d
 import { ContextMenuDecorator } from './decorator/context-menu/context-menu-decorator'
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { TagFilterDecorator } from './decorator/tag-filter/tag-filter-decorator'
-import { GeneralFiltersDecorator } from './decorator/general-filters/general-filters-decorator'
+import { GeneralFiltersDecorator } from '../../element/listing/decorators/general-filters/general-filters-decorator'
 
 export interface IAssetListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useAssetGetGridQuery

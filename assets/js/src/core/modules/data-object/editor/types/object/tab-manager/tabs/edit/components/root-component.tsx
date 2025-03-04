@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { Button, ConfigProvider } from 'antd'
@@ -54,7 +54,7 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
     console.log(values)
   }
 
-  return (
+  return useMemo(() => (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 0 } } } }>
       <FieldWidthProvider>
         <Form
@@ -77,5 +77,5 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
         </Form>
       </FieldWidthProvider>
     </ConfigProvider>
-  )
+  ), [layout, data, className])
 }

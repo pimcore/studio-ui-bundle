@@ -14,17 +14,14 @@
 import React, { useMemo } from 'react'
 import { useElementSelectorHelper } from '../../provider/element-selector/use-element-selector-helper'
 import { AssetSelectorListing } from '@Pimcore/modules/asset/element-selector/asset-selector-listing'
-import { Button } from '@Pimcore/components/button/button'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
-import { useGlobalRowSelection } from '../../provider/global-row-selection/use-global-row-selection'
 import { DataObjectSelectorListing } from '@Pimcore/modules/data-object/element-selector/data-object-selector-listing'
 import { useAreaControl } from '../../provider/area-control/use-area-control'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const ElementSelectorContent = (): React.JSX.Element => {
   const helper = useElementSelectorHelper()
-  const { onFinish, areas } = helper.config
-  const { getSelectedData } = useGlobalRowSelection()
+  const { areas } = helper.config
   const { activeArea, setActiveArea } = useAreaControl()
 
   const tabItems: ITabsProps['items'] = []
@@ -34,7 +31,7 @@ export const ElementSelectorContent = (): React.JSX.Element => {
       key: elementTypes.asset,
       label: 'Assets',
       forceRender: true,
-      children: <div style={ { height: '500px' } }>
+      children: <div style={ { height: '65vh' } }>
         <AssetSelectorListing />
       </div>
     })
@@ -45,7 +42,7 @@ export const ElementSelectorContent = (): React.JSX.Element => {
       key: elementTypes.dataObject,
       label: 'Objects',
       forceRender: true,
-      children: <div style={ { height: '500px' } }>
+      children: <div style={ { height: '65vh' } }>
         <DataObjectSelectorListing />
       </div>
     })
@@ -56,18 +53,10 @@ export const ElementSelectorContent = (): React.JSX.Element => {
       key: elementTypes.document,
       label: 'Documents',
       forceRender: true,
-      children: <div style={ { height: '500px' } }>
+      children: <div style={ { height: '65vh' } }>
         @todo
       </div>
     })
-  }
-
-  const onButtonFinishClick = (): void => {
-    if (onFinish !== undefined) {
-      onFinish({ data: getSelectedData() })
-    }
-
-    helper.close()
   }
 
   // @todo translations
@@ -79,10 +68,11 @@ export const ElementSelectorContent = (): React.JSX.Element => {
       <Tabs
         activeKey={ activeArea }
         items={ tabItems }
+        noPadding
+        noTabBarMargin
         onChange={ setActiveArea }
       />
       ) }
-      <Button onClick={ onButtonFinishClick } >Finish</Button>
     </>
   ), [tabItems, activeArea])
 }

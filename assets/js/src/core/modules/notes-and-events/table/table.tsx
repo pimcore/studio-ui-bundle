@@ -34,10 +34,10 @@ type DataNoteWithActions = DataNote & {
 
 export interface TableProps {
   notesAndEvents: Note[]
-  notesAndEventsLoading: boolean
+  notesAndEventsFetching: boolean
 }
 
-export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): React.JSX.Element => {
+export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { openElement, mapToElementType } = useElementHelper()
@@ -81,22 +81,24 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
       cell: (info) => {
         const { path, elementType, id } = info.getValue()
 
-        return (
-          <Flex
-            align={ 'center' }
-            className={ styles.link }
-            key={ id }
-          >
-            <Tag
-              bordered={ false }
-              color="processing"
-              onClick={ async () => {
-                await openCorrectElement(elementType, id)
-              } }
-            >{decodeURIComponent(path)}
-            </Tag>
-          </Flex>
-        )
+        return (!isUndefined(path) && path !== '')
+          ? (
+            <Flex
+              align={ 'center' }
+              className={ styles.link }
+              key={ id }
+            >
+              <Tag
+                bordered={ false }
+                color="blue"
+                onClick={ async () => {
+                  await openCorrectElement(elementType, id)
+                } }
+              >{decodeURIComponent(path)}
+              </Tag>
+            </Flex>
+            )
+          : <div></div>
       }
     }),
     columnHelper.accessor('title', {
@@ -132,32 +134,46 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
         const elementType = mapToElementType(row.elementType)
         const elementId = row.id
 
-        return (
-          <Flex
-            align='center'
-            className='w-full'
-            justify='center'
-          >
-            <IconButton
-              icon={ { value: 'open-folder' } }
-              onClick={ async () => {
-                !isUndefined(elementType) &&
-                                await openElement({
-                                  type: elementType,
-                                  id: elementId
-                                })
-              } }
-              type="link"
-            />
-            <IconButton
-              icon={ { value: 'show-details' } }
-              onClick={ async () => {
-                setNoteDetail(info.row.original)
-              } }
-              type="link"
-            />
-          </Flex>
-        )
+        return (!isUndefined(row.path) && row.path !== '')
+          ? (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'open-folder' } }
+                onClick={ async () => {
+                  !isUndefined(elementType) &&
+                                    await openElement({
+                                      type: elementType,
+                                      id: elementId
+                                    })
+                } }
+                type="link"
+              />
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
+          : (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
       }
     })
   ]
@@ -176,7 +192,7 @@ export const Table = ({ notesAndEvents, notesAndEventsLoading }: TableProps): Re
         autoWidth
         columns={ tableData }
         data={ notes }
-        isLoading={ notesAndEventsLoading }
+        isLoading={ notesAndEventsFetching }
         modifiedCells={ [] }
         resizable
         setRowId={ (row: DataNote) => row.rowId }

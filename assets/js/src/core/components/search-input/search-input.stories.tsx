@@ -26,6 +26,13 @@ export const _default = {
   }
 }
 
+export const SearchWithButton = {
+  args: {
+    withoutAddon: false,
+    withPrefix: false,
+    placeholder: 'Search'
+  }
+}
 export const Filled = {
   args: {
     value: 'Filled value'

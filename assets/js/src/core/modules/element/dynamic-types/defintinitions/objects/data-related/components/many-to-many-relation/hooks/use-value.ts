@@ -30,6 +30,7 @@ interface UseValueReturn {
   onDrop: (info: DragAndDropInfo) => void
   deleteItem: (rowIndex: number) => void
   onSearch: (searchTerm: string) => void
+  addItems: (items: ManyToManyRelationValueItem[]) => void
   addAssets: (assets: Asset[]) => Promise<void>
   maxRemainingItems?: number
 }
@@ -151,6 +152,7 @@ export const useValue = (
     onDrop,
     deleteItem,
     onSearch,
+    addItems,
     addAssets,
     maxRemainingItems
   }

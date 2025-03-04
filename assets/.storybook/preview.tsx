@@ -11,7 +11,7 @@
  *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
  */
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import '../js/src/core/bootstrap';
 import type { Preview } from "@storybook/react";
 import "../css/globals.css";

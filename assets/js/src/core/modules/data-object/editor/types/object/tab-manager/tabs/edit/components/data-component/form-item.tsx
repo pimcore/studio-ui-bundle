@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import {
@@ -31,7 +31,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
 
-  return (
+  return useMemo(() => (
     <ErrorBoundary>
       <Form.Item
         { ...formItemProps }
@@ -39,10 +39,9 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
         name={ formFieldName }
       >
         { objectDataType.getObjectDataComponent(_props) }
-
       </Form.Item>
     </ErrorBoundary>
-  )
+  ), [formItemProps, inheritanceOverlayStyle])
 }
 
 export default DataComponentFormItem

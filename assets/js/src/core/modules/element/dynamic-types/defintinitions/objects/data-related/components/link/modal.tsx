@@ -14,7 +14,6 @@
 import React, { useEffect } from 'react'
 import { Form } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
-import FormItem from 'antd/es/form/FormItem'
 import { Input } from '@Pimcore/components/input/input'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { useTranslation } from 'react-i18next'
@@ -105,15 +104,15 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
         size='small'
       >
         { !props.disabledFields.includes('text') && (
-          <FormItem
+          <Form.Item
             label={ t('link.text') }
             name="text"
           >
             <Input disabled={ props.disabled } />
-          </FormItem>
+          </Form.Item>
         ) }
 
-        <FormItem
+        <Form.Item
           label={ t('link.path') }
           name="path"
         >
@@ -124,7 +123,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
             disabled={ props.disabled }
             documentsAllowed={ isTypeAllowed('document') }
           />
-        </FormItem>
+        </Form.Item>
         { !['target', 'parameters', 'anchor', 'title'].every(field => props.disabledFields.includes(field)) && (
           <Card
             theme="card-with-highlight"
@@ -136,7 +135,7 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
               size='small'
             >
               { !props.disabledFields.includes('target') && (
-                <FormItem
+                <Form.Item
                   label={ t('link.target') }
                   name="target"
                 >
@@ -145,34 +144,34 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
                     disabled={ props.disabled }
                     options={ getTargetOptions() }
                   />
-                </FormItem>
+                </Form.Item>
               ) }
 
               { !props.disabledFields.includes('parameters') && (
-                <FormItem
+                <Form.Item
                   label={ t('link.parameters') }
                   name="parameters"
                 >
                   <Input disabled={ props.disabled } />
-                </FormItem>
+                </Form.Item>
               ) }
 
               { !props.disabledFields.includes('anchor') && (
-                <FormItem
+                <Form.Item
                   label={ t('link.anchor') }
                   name="anchor"
                 >
                   <Input disabled={ props.disabled } />
-                </FormItem>
+                </Form.Item>
               ) }
 
               { !props.disabledFields.includes('title') && (
-                <FormItem
+                <Form.Item
                   label={ t('link.title') }
                   name="title"
                 >
                   <Input disabled={ props.disabled } />
-                </FormItem>
+                </Form.Item>
               ) }
             </Space>
           </Card>
@@ -192,39 +191,39 @@ export const LinkModal = (props: LinkModalProps): React.JSX.Element => {
         size='small'
       >
         { !props.disabledFields.includes('accesskey') && (
-          <FormItem
+          <Form.Item
             label={ t('link.accesskey') }
             name="accesskey"
           >
             <Input disabled={ props.disabled } />
-          </FormItem>
+          </Form.Item>
         ) }
 
         { !props.disabledFields.includes('rel') && (
-          <FormItem
+          <Form.Item
             label={ t('link.rel') }
             name="rel"
           >
             <Input disabled={ props.disabled } />
-          </FormItem>
+          </Form.Item>
         ) }
 
         { !props.disabledFields.includes('tabindex') && (
-          <FormItem
+          <Form.Item
             label={ t('link.tabindex') }
             name="tabindex"
           >
             <Input disabled={ props.disabled } />
-          </FormItem>
+          </Form.Item>
         ) }
 
         { !props.disabledFields.includes('class') && (
-          <FormItem
+          <Form.Item
             label={ t('link.class') }
             name="class"
           >
             <Input disabled={ props.disabled } />
-          </FormItem>
+          </Form.Item>
         ) }
       </Space>
     )

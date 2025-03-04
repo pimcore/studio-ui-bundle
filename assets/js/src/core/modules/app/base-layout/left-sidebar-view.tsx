@@ -11,122 +11,14 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { Avatar } from 'antd'
-import React from 'react'
-import { useStlyes } from './left-sidebar-view.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { MainNav } from '@Pimcore/modules/app/nav/main-nav'
-import { useMainNav } from '@Pimcore/modules/app/nav/hooks/use-main-nav'
+import { Avatar } from 'antd'
+import React from 'react'
+import { useStyles } from './left-sidebar-view.styles'
 
 export const LeftSidebarView = (): React.JSX.Element => {
-  const { styles } = useStlyes()
-  const { addNavItem } = useMainNav()
-
-  addNavItem({
-    path: 'Settings/Document Types',
-    permission: 'documents'
-  })
-
-  addNavItem({
-    path: 'Tools/Notes & Events',
-    className: 'item-style-modifier',
-    widgetConfig: {
-      name: 'Notes & Events',
-      id: 'notes-and-events',
-      component: 'notes-and-events',
-      config: {
-        icon: {
-          type: 'name',
-          value: 'notes-events'
-        }
-      }
-    }
-  })
-
-  addNavItem({
-    path: 'Settings/Tag Configuration',
-    className: 'item-style-modifier',
-    widgetConfig: {
-      name: 'Tag Configuration',
-      id: 'tag-configuration',
-      component: 'tag-configuration',
-      config: {
-        icon: {
-          type: 'name',
-          value: 'tag-configuration'
-        }
-      }
-    }
-  })
-
-  addNavItem({
-    path: 'Tools/Glossary'
-  })
-
-  addNavItem({
-    path: 'Settings/User & Roles/Users',
-    className: 'item-style-modifier',
-    widgetConfig: {
-      name: 'Users',
-      id: 'user-management',
-      component: 'user-management',
-      config: {
-        icon: {
-          type: 'name',
-          value: 'user'
-        }
-      }
-    }
-  })
-
-  addNavItem({
-    path: 'Settings/User & Roles/Roles',
-    widgetConfig: {
-      name: 'Roles',
-      id: 'role-management',
-      component: 'role-management',
-      config: {
-        icon: {
-          type: 'name',
-          value: 'user'
-        }
-      }
-    }
-  })
-
-  addNavItem({
-    path: 'Settings/User & Roles/Open ID Connect Config/Configuration'
-  })
-
-  addNavItem({
-    path: 'Settings',
-    icon: 'menu'
-  })
-
-  addNavItem({
-    path: 'Tools',
-    icon: 'accessory'
-  })
-
-  addNavItem({
-    path: 'Marketing',
-    icon: 'marketing'
-  })
-
-  addNavItem({
-    path: 'Customers',
-    icon: 'customers'
-  })
-
-  addNavItem({
-    path: 'Cache',
-    icon: 'cache'
-  })
-
-  addNavItem({
-    path: 'System Related',
-    icon: 'shield'
-  })
+  const { styles } = useStyles()
 
   return (
     <div className={ styles.leftSidebar }>

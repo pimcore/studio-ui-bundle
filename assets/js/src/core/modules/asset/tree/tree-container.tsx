@@ -29,9 +29,11 @@ import { Box } from '@Pimcore/components/box/box'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
+import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
 
 export interface TreeContainerProps {
   id: number
+  showRoot?: boolean
 }
 
 export interface IDefaultRootNodeProps {
@@ -46,14 +48,16 @@ const defaultRootNodeProps: IDefaultRootNodeProps = {
   isRoot: true
 }
 
-const TreeContainer = ({ id = 1 }: TreeContainerProps): React.JSX.Element => {
+const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
-  const { isLoading, data: rootNodeData } = useAssetGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: true })
+  const { pageSize } = useTreeFilter()
+  const rootNodePqlQuery = id === 1 ? undefined : 'id = ' + id
+  const { isLoading, data: rootNodeData } = useAssetGetTreeQuery({ pageSize: 1, page: 1, excludeFolders: false, pathIncludeParent: true, pathIncludeDescendants: false, pqlQuery: rootNodePqlQuery }, { skip: !showRoot })
   const { asset_tree_paging_limit: assetTreePagingLimit } = useSettings()
-  const pagingLimit: number | undefined = assetTreePagingLimit
+  const pagingLimit: number | undefined = pageSize ?? assetTreePagingLimit
   const { t } = useTranslation()
 
-  if (isLoading || rootNodeData === undefined) {
+  if (showRoot && (isLoading || rootNodeData === undefined)) {
     return (
       <Box padding={ 'small' }>
         <Skeleton />
@@ -61,26 +65,42 @@ const TreeContainer = ({ id = 1 }: TreeContainerProps): React.JSX.Element => {
     )
   }
 
-  const transformedNodes = transformApiDataToNodes(
-    {
-      children: [],
-      icon: { type: 'name', value: 'home-root-folder' },
-      id: '0',
-      internalKey: '0',
-      label: '',
-      level: -1,
-      isLocked: false,
-      permissions: {}
-    },
-    rootNodeData,
-    pagingLimit
-  )
+  const createRootNode = (): TreeNodeProps | undefined => {
+    if (!showRoot || rootNodeData === undefined) {
+      return undefined
+    }
 
-  const rootNode: TreeNodeProps = {
-    ...transformedNodes.nodes[0],
-    ...defaultRootNodeProps,
-    label: t('home')
+    const transformedNodes = transformApiDataToNodes(
+      {
+        children: [],
+        icon: { type: 'name', value: 'home-root-folder' },
+        id: '0',
+        internalKey: '0',
+        label: '',
+        level: -1,
+        isLocked: false,
+        permissions: {}
+      },
+      rootNodeData,
+      pagingLimit
+    )
+    const transformedRootNode = transformedNodes.nodes[0]
+    const rootNodeId = transformedRootNode.id
+
+    return {
+      ...transformedRootNode,
+      ...defaultRootNodeProps,
+      label: rootNodeId === '1' ? t('home') : transformedRootNode.label,
+      icon: rootNodeId === '1' ? defaultRootNodeProps.icon : transformedRootNode.icon,
+      permissions: {
+        ...transformedRootNode.permissions,
+        delete: false,
+        rename: false
+      }
+    }
   }
+
+  const rootNode: TreeNodeProps | undefined = createRootNode()
 
   async function onSelect (node: TreeNodeProps): Promise<void> {
     openAsset({

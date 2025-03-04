@@ -23,6 +23,7 @@ import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-
 import {
   VideoPreview
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/preview'
+import { toCssDimension } from '@Pimcore/utils/css'
 
 export type VideoValue = AssetVideoValue | YoutubeVideoValue | VimeoVideoValue | DailymotionVideoValue
 
@@ -81,8 +82,8 @@ export const Video = (props: VideoProps): React.JSX.Element => {
     props.onChange?.(value)
   }, [value])
 
-  const width = props.width === null || props.width === '' ? 300 : props.width
-  const height = props.height === null || props.width === '' ? 245 : props.height
+  const width = toCssDimension(props.width, 300)
+  const height = toCssDimension(props.height, 245)
   return (
     <Card
       className="max-w-full"
@@ -117,9 +118,9 @@ export const Video = (props: VideoProps): React.JSX.Element => {
           value !== null && value?.data !== null
             ? (
               <VideoPreview
-                height={ height }
+                height={ height! }
                 value={ value }
-                width={ width }
+                width={ width! }
               />
               )
             : (

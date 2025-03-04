@@ -20,6 +20,9 @@ import { useTranslation } from 'react-i18next'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { saveFileLocal } from '@Pimcore/utils/files'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
+import { useTreePermission } from '@Pimcore/modules/element/tree/provider/tree-permission-provider/use-tree-permission'
+import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 
 export interface UseDownloadReturn {
   download: (id: string, label?: string) => void
@@ -30,6 +33,7 @@ export interface UseDownloadReturn {
 
 export const useDownload = (): UseDownloadReturn => {
   const { t } = useTranslation()
+  const { isTreeActionAllowed } = useTreePermission()
 
   const download = (id: string, label?: string): void => {
     const downloadUrl = `${getPrefix()}/assets/${id}/download`
@@ -48,7 +52,7 @@ export const useDownload = (): UseDownloadReturn => {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download' } />,
-      hidden: node.type === 'folder',
+      hidden: node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node, onFinish) }
     }
   }
@@ -58,7 +62,7 @@ export const useDownload = (): UseDownloadReturn => {
       label: t('asset.tree.context-menu.download'),
       key: 'download',
       icon: <Icon value={ 'download' } />,
-      hidden: node.type === 'folder',
+      hidden: !isTreeActionAllowed(TreePermission.Download) || node.type === 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => { handleDownload(node) }
     }
   }

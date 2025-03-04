@@ -19,6 +19,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { isEmpty } from 'lodash'
+import { useFieldWidth } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/use-field-width'
 
 interface ExternalImageFooterProps {
   value?: string
@@ -29,6 +30,8 @@ interface ExternalImageFooterProps {
 
 export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const fieldWidth = useFieldWidth()
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     props.onChange(e.target.value)
   }
@@ -81,7 +84,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
       <Input
         disabled={ props.disabled }
         onChange={ onChange }
-        style={ { maxWidth: inputWidth, width: inputWidth } }
+        style={ { maxWidth: toCssDimension(inputWidth, fieldWidth.large), width: toCssDimension(inputWidth, fieldWidth.large) } }
         value={ props.value }
       />
       <ButtonGroup

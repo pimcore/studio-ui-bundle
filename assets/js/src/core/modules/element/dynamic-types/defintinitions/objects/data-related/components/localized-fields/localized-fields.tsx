@@ -18,6 +18,7 @@ import { type AbstractObjectLayoutDefinition } from '../../../layout-related/dyn
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Space } from '@Pimcore/components/space/space'
 import { useLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/provider/use-language-selection'
+import { Form } from '@Pimcore/components/form/form'
 
 export interface LocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: AbstractObjectDataDefinition | AbstractObjectLayoutDefinition
@@ -28,18 +29,20 @@ export const LocalizedFields = ({ children }: LocalizedFieldsProps): React.JSX.E
 
   return (
     <LocalizedFieldsProvider locales={ [currentLanguage] }>
-      <Space
-        className="w-full"
-        direction='vertical'
-        size='small'
-      >
-        {children?.map((child, index) => (
-          <ObjectComponent
-            key={ index }
-            { ...child }
-          />
-        ))}
-      </Space>
+      <Form.Group name={ 'localizedfields' } >
+        <Space
+          className="w-full"
+          direction='vertical'
+          size='small'
+        >
+          {children?.map((child, index) => (
+            <ObjectComponent
+              key={ index }
+              { ...child }
+            />
+          ))}
+        </Space>
+      </Form.Group>
     </LocalizedFieldsProvider>
   )
 }
