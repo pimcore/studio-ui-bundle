@@ -25,6 +25,7 @@ asset.tree.context-menu.upload-new-version: Upload new version
 asset.upload: Upload
 asset.upload.label: Select file
 asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} files are uploading ..."
+asset.upload.files.uploaded: "{{successItems}} files are uploaded"
 asset.upload.files.completed: Completed!
 asset.upload.files.completed-actions: Completed actions
 asset.upload.validation: 'Please add a file'

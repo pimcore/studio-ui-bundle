@@ -36,7 +36,7 @@ export const UploadList = ({ items = [] }: UploadListProps): React.JSX.Element =
       {successItems >= 0 && (
         <Flex className={ 'success_items' }>
           <Icon value={ 'checkmark' } />
-          <span>{ successItems } files are uploaded!</span>
+          <span>{t('asset.upload.files.uploaded', { successItems })}</span>
         </Flex>
       )}
 
