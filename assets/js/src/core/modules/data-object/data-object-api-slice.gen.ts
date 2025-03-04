@@ -236,7 +236,7 @@ export type DataObjectUpdateByIdApiArg = {
             index?: any;
             key?: any;
             useDraftData?: any;
-            task?: "autoSave" | "publish" | "save" | "version";
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;
@@ -366,7 +366,7 @@ export type DataObjectPatchByIdApiArg = {
             parentId?: any;
             index?: any;
             key?: any;
-            task?: "autoSave" | "publish" | "save" | "version";
+            task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
             locked?: any;
             childrenSortBy?: any;
             childrenSortOrder?: any;

@@ -20,6 +20,7 @@ import { Alert } from 'antd'
 import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-related/dynamic-type-object-data-registry'
 import { DefaultModeCell } from './types/default-mode-cell'
 import { EditModalCell } from './types/edit-modal-mode-cell'
+import { type AbstractObjectDataDefinition } from '../../../objects/data-related/dynamic-type-object-data-abstract'
 
 export interface DataObjectAdapterCellProps extends DefaultCellProps {}
 
@@ -43,8 +44,12 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
     )
   }
 
+  const fieldDefinition = config?.fieldDefinition ?? {}
+
   const dynType = objectDataRegistry.getDynamicType(type)
-  const cellDefinition = dynType.getGridCellDefinition()
+  const cellDefinition = dynType.getGridCellDefinition({
+    ...fieldDefinition
+  } as unknown as AbstractObjectDataDefinition)
 
   if (cellDefinition.mode === 'default') {
     return (
