@@ -14,7 +14,10 @@
 import { type UploadListProps as AntUploadListProps } from 'antd/es/upload'
 import AntUploadList from 'antd/es/upload/UploadList'
 import React from 'react'
-import { useStyles } from '@Pimcore/components/upload/upload-list/upload-list.styles'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { useStyles } from './upload-list.styles'
+import { useTranslation } from 'react-i18next'
 
 interface UploadListProps {
   items: AntUploadListProps['items']
@@ -22,14 +25,25 @@ interface UploadListProps {
 
 export const UploadList = ({ items = [] }: UploadListProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { t } = useTranslation()
+  const successItems = items?.filter(item => item.status === 'done').length ?? 0
+  const failedItems = items?.filter(item => item.status === 'error')
 
   return (
     <div className={ styles.uploadList }>
+      <p>{t('asset.upload.files.completed-actions')}</p>
+
+      {successItems >= 0 && (
+        <Flex className={ 'success_items' }>
+          <Icon value={ 'checkmark' } />
+          <span>{ successItems } files are uploaded!</span>
+        </Flex>
+      )}
+
       <AntUploadList
-        items={ items }
-        locale={ {
-          removeFile: 'remove File'
-        } }
+        iconRender={ () => <Icon value={ 'alert' } /> }
+        items={ failedItems }
+        locale={ {} }
         showRemoveIcon={ false }
       />
     </div>

@@ -12,12 +12,10 @@
 */
 
 import { type UploadListProps } from 'antd/es/upload'
-import React, { useContext } from 'react'
+import React from 'react'
 import { Progress } from 'antd'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from '@Pimcore/components/upload/upload-progress/upload-progress.styles'
-import { UploadContext } from '@Pimcore/modules/element/upload/upload-provider'
 import { useTranslation } from 'react-i18next'
 import { UploadList } from '@Pimcore/components/upload/upload-list/upload-list'
 
@@ -27,26 +25,22 @@ export const UploadProgress = (props: UploadListProps): React.JSX.Element => {
   const items = props.items!
   const totalItems = items.length
   const processedItems = items.filter(file => file.status !== 'uploading').length
-  const failedItems = items.filter(file => file.status === 'error')
-  const { finishUpload } = useContext(UploadContext)!
 
   return (
-    <div className={ styles.uploadList }>
+    <div className={ styles.uploadProgress }>
       <Flex
-        className={ 'w-full' }
-        justify={ 'end' }
-      >
-        <IconButton
-          icon={ { value: 'close' } }
-          onClick={ finishUpload }
-        />
-      </Flex>
-
-      <Flex
-        align={ 'center' }
+        align={ 'start' }
         className={ 'w-full' }
         vertical
       >
+        <span className={ 'progress-label' }>
+          {
+            processedItems !== totalItems
+              ? t('asset.upload.files.uploading', { processedItems, totalItems })
+              : t('asset.upload.files.completed')
+          }
+        </span>
+
         <Progress
           { ...props.progress }
           aria-label={ 'upload progress' }
@@ -55,13 +49,9 @@ export const UploadProgress = (props: UploadListProps): React.JSX.Element => {
           size={ [-1, 2] }
           type="line"
         />
-
-        <span>
-          {t('asset.upload.files.processed', { processedItems, totalItems })}
-        </span>
       </Flex>
 
-      <UploadList items={ failedItems } />
+      <UploadList items={ items } />
     </div>
   )
 }

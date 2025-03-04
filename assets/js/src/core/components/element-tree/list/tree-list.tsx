@@ -47,8 +47,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
 
   const { nodes: children, total } = dataTransformer(data)
 
-  /* saved: uploadFileList.length > 0 && item.parentId === uploadingNode */
-
   return (
     <>
       {RenderFilter !== undefined && (
@@ -66,21 +64,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       )}
 
       <div className='tree-list'>
-        {/* eslint-disable-next-line @typescript-eslint/no-confusing-void-expression */}
-        {/* console.log(node.id, ' === ', uploadingNode) */}
-        {/* uploadFileList.length > 0 && node.id === uploadingNode && (
-          <div
-            className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }
-            style={ { paddingLeft: token.paddingSM + (node.level + 1) * 24 } }
-          >
-            <UploadProgress
-              items={ uploadFileList }
-              locale={ { uploading: 'uploading' } }
-              showRemoveIcon={ false }
-            />
-          </div>
-        ) */}
-
         {(Boolean(children.some(item => item.parentId === uploadingNode))) && (
           <div
             className={ ['tree-list__upload', styles['tree-list__search']].join(' ') }

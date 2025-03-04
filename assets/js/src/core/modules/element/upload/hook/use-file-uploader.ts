@@ -40,7 +40,7 @@ export const useFileUploader = ({ nodeId }: UseFileUploaderProps): UseFileUpload
       trackError(new GeneralError('Parent ID is required'))
     }
 
-    console.log('uploading node set: ', nodeId)
+    uploadContext.setIsOpen(true)
 
     const fileStates = fileList.map((file) => file.status)
     const allFullFilled = fileStates.every(item => item !== 'uploading')
