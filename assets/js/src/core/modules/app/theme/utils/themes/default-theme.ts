@@ -112,7 +112,7 @@ const defaultTheme = {
       colorIconHover: 'rgba(0, 0, 0, 0.88)',
       colorPrimary: '#722ed1',
       colorText: 'rgba(0, 0, 0, 0.88)',
-      colorTextDescription: '#722ed1',
+      colorTextDescription: 'rgba(0, 0, 0, 0.6)',
       colorTextDisabled: 'rgba(0, 0, 0, 0.25)',
       colorTextPlaceholder: 'rgba(0, 0, 0, 0.25)',
       colorTextQuaternary: 'rgba(0, 0, 0, 0.25)',

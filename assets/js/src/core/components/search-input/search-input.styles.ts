@@ -16,21 +16,27 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     search: css`
+    max-width: 300px;
    
-   max-width: 300px;
-   
-      .ant-input-prefix {
-        margin-inline-end: ${token.marginXS}px;
-      }
+    .ant-input-prefix {
+    margin-inline-end: ${token.marginXS}px;
+    }
      
-
-.ant-input-search-button:not(.ant-btn-primary) {
-  border-color: ${token.Button.defaultGhostBorderColor}; 
-}
-      
-      .ant-input-clear-icon {
-        display: flex;
+     :where(.css-dev-only-do-not-override-pboz35).ant-input-search 
+  > .ant-input-group 
+  > .ant-input-group-addon:last-child 
+  .ant-input-search-button:not(.ant-btn-primary):not(:hover):not(:active) {
+      border-color: ${token.Button.defaultGhostBorderColor}; 
+      color: ${token.colorPrimary};
       }
+      
+     .ant-input-clear-icon {
+      display: flex;
+      }
+    `,
+
+    fullWidth: css`
+    max-width: 100%;
     `,
 
     searchWithoutAddon: css`

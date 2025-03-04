@@ -16,6 +16,8 @@ import { useUserHelper } from '@Pimcore/modules/user/hooks/use-user-helper'
 import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { UserOutlined } from '@ant-design/icons'
+import { useStyles } from '@Pimcore/components/search-input/search-input.styles'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 interface ITreeAutocompleteProps {
   loading?: boolean
@@ -27,6 +29,7 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
   const [searchOptions, setSearchOptions] = useState<Array<{ value: string }>>([])
   const [searchValue, setSearchValue] = useState<string>('')
   const { Text } = Typography
+  const { styles } = useStyles()
 
   const onSearch = (value: string): void => {
     setSearchValue(value)
@@ -47,8 +50,8 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
               />
             </Col>
             <Col flex="auto">
-              <div>{ item.username }</div>
-              <Text strong>{t('user-management.search.id')}: </Text> { item.id }
+              <div>{item.username}</div>
+              <Text strong>{t('user-management.search.id')}: </Text> {item.id}
             </Col>
           </Row>
         )
@@ -70,8 +73,23 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
       value={ searchValue }
     >
       <Input.Search
-        allowClear
+        allowClear={ {
+          clearIcon: (
+            <Icon
+              className={ styles.closeIcon }
+              value='close'
+            />
+          )
+        } }
+        className={ styles.searchWithoutAddon }
         placeholder={ t('user-management.search') }
+        prefix={
+          <Icon
+            className={ styles.searchIcon }
+            options={ { width: 12, height: 12 } }
+            value='search'
+          />
+        }
       />
     </AutoComplete>
   )

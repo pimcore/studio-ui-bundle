@@ -31,7 +31,9 @@ import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/co
 import { useFilter } from './provider/filter-provider/use-filter'
 import { usePqlFilter } from '../../../../../context-layer/provider/pql-filter/use-pql-filter'
 import { useFieldFilters } from '../../../../../context-layer/provider/field-filters/use-field-filters'
-import { useDirectChildrenFilter } from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
+import {
+  useDirectChildrenFilter
+} from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
 import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
 
 export const FilterContainerInner = (): React.JSX.Element => {
@@ -127,6 +129,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   style={ { width: '100%' } }
                 >
                   <SearchInput
+                    fullWidth
                     onBlur={ (e) => {
                       setSearchTerm(e.target.value)
                     } }
