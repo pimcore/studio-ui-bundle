@@ -25,6 +25,7 @@ import {
 import { type InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { type IFieldWidthContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/field-width/field-width-provider'
 import { DefaultPreview } from './components/grid-cells/image/default-preview'
+import { type AbstractGridCellDefinition } from '../../grid-cell/dynamic-type-grid-cell-abstract'
 
 export type EditMode = 'default' | 'edit-modal'
 
@@ -37,6 +38,11 @@ export interface WithEditModalGridCellDefinition {
   mode: 'edit-modal'
   previewComponent: ReactElement
   editComponent: ReactElement
+}
+
+export interface GetGridCellDefinitionProps {
+  cellProps: AbstractGridCellDefinition
+  objectProps: AbstractObjectDataDefinition
 }
 
 export interface AbstractObjectDataDefinition extends DataComponentProps {
@@ -72,15 +78,15 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     }
   }
 
-  getGridCellPreviewComponent (props: AbstractObjectDataDefinition): ReactElement {
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): ReactElement {
     return <DefaultPreview />
   }
 
-  getGridCellEditComponent (props: AbstractObjectDataDefinition): ReactElement {
-    return this.getObjectDataComponent(props)
+  getGridCellEditComponent (props: GetGridCellDefinitionProps): ReactElement {
+    return this.getObjectDataComponent(props.objectProps)
   }
 
-  getGridCellDefinition (props: AbstractObjectDataDefinition): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
+  getGridCellDefinition (props: GetGridCellDefinitionProps): DefaultGridCellDefinition | WithEditModalGridCellDefinition {
     if (this.gridCellEditMode === 'edit-modal') {
       return {
         mode: this.gridCellEditMode,
