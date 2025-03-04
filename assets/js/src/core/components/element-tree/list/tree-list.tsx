@@ -39,7 +39,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       <Skeleton style={ { paddingLeft: token.paddingSM + (node.level + 1.5) * 24 } } />
     )
   }
-  console.log('tree list?')
   // todo if (isError === true) {
   //  return <>{'Error'}</>
   // }
