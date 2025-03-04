@@ -12,7 +12,6 @@
 */
 
 import React, { useMemo } from 'react'
-import { DefaultView } from '../listing/views/default-view'
 import { ListingContainer, defaultProps as listingDefaultProps } from '@Pimcore/modules/element/listing/abstract/listing-container'
 import { compose } from '@Pimcore/utils/compose'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
@@ -27,6 +26,8 @@ import { useDataObjectGetGridQuery } from '../data-object-api-slice.gen'
 import { useDataQueryHelper } from '../listing/data-layer/hooks/use-data-query-helper'
 import { useRootElementId } from '@Pimcore/modules/asset/listing/hooks/use-root-element-id'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '../listing/decorator/class-definition-selection/class-definition-selection-decorator'
+import { DefaultView } from './view-layer/views/default-view'
+import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -46,12 +47,14 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'data-object' } as IGlobalRowSelectionConfig],
-    [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig]
+    [ClassDefinitionSelectionDecorator, { showConfigLayer: true } as ClassDefinitionSelectionDecoratorConfig],
+    [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig]
   )(defaultProps), [config])
   /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
   return useMemo(() => (
     <DynamicTypeRegistryProvider serviceIds={ [
+      'DynamicTypes/GridCellRegistry',
       'DynamicTypes/ListingRegistry'
     ] }
     >
