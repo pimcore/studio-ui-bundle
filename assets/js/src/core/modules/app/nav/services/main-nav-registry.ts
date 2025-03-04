@@ -13,6 +13,7 @@
 
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { injectable } from 'inversify'
+import type React from 'react'
 
 export interface IMainNavItem {
   path: string
@@ -25,6 +26,7 @@ export interface IMainNavItem {
   perspectivePermission?: string
   perspectivePermissionHide?: string
   onClick?: () => void
+  button?: () => React.JSX.Element
   widgetConfig?: WidgetManagerTabConfig
   className?: string
 }

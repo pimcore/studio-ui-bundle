@@ -14,29 +14,34 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { type MainNavRegistry } from './services/main-nav-registry'
-import { NavPermission } from '@Pimcore/modules/perspectives/enums/nav-permission'
+import { type MainNavRegistry } from '../app/nav/services/main-nav-registry'
+import { NavPermission } from '../perspectives/enums/nav-permission'
+import { OpenElement } from '@Pimcore/modules/open-element/open-element'
+import React from 'react'
 
 moduleSystem.registerModule({
   onInit: () => {
     const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'File',
-      icon: 'document',
-      perspectivePermissionHide: NavPermission.FileHidden
+      path: 'File/Open Asset',
+      label: 'Open Asset',
+      perspectivePermission: NavPermission.OpenAsset,
+      button: () => React.createElement(OpenElement, { elementType: 'asset' })
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Settings',
-      icon: 'menu',
-      perspectivePermissionHide: NavPermission.SettingsHidden
+      path: 'File/Open Document',
+      label: 'Open Document',
+      perspectivePermission: NavPermission.OpenDocument,
+      button: () => React.createElement(OpenElement, { elementType: 'document' })
     })
 
     mainNavRegistryService.registerMainNavItem({
-      path: 'Tools',
-      icon: 'accessory',
-      perspectivePermissionHide: NavPermission.ToolsHidden
+      path: 'File/Open Data Object',
+      label: 'Open Data Object',
+      perspectivePermission: NavPermission.OpenObject,
+      button: () => React.createElement(OpenElement, { elementType: 'data-object' })
     })
   }
 })
