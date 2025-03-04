@@ -20,7 +20,7 @@ import { TreeExpander } from '../expander/tree-expander'
 import { UseFileUploader } from '@Pimcore/modules/element/upload/hook/use-file-uploader'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { useNodeState } from '../hooks/use-node-state'
+import { useElementTree } from '../hooks/use-element-tree'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 
@@ -29,7 +29,7 @@ export interface TreeNodeProps {
   icon: ElementIcon
   label: string
   internalKey: string
-  children: TreeNodeProps[]
+  children?: TreeNodeProps[]
   level: number
   permissions: ElementPermissions
   isLocked: boolean
@@ -82,7 +82,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   ...props
 }: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { token } = useToken()
-  const { children, metaData } = props
+  const { metaData } = props
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
@@ -91,7 +91,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs,
     nodeOrder
   } = useContext(TreeContext)
-  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useNodeState(id, { isExpanded: children.length !== 0 })
+  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTree(id)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
   const { uploadFile: uploadFileProcessor } = UseFileUploader({ parentId: id })
 

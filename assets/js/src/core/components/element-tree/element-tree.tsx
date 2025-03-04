@@ -13,7 +13,6 @@
 
 import React, {
   createContext,
-  type Dispatch,
   type ElementType,
   type MutableRefObject,
   useCallback,
@@ -21,24 +20,25 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { TreeNode, type TreeNodeProps } from './node/tree-node'
+import { TreeNode as TreeNodeComponent, type TreeNodeProps } from './node/tree-node'
 import { TreeNodeContent, type TreeNodeContentProps } from './node/content/tree-node-content'
 import { useStyles } from './element-tree.styles'
 import { UploadProvider } from '@Pimcore/modules/element/upload/upload-provider'
 import { Skeleton } from './skeleton/skeleton'
 import { Box } from '../box/box'
-import { useNodeState } from './hooks/use-node-state'
+import { useElementTree } from './hooks/use-element-tree'
+import { type TreeNode } from './element-tree-slice'
+import { type NodeApiHook } from './types/node-api-hook'
+import { useNodeApiHook } from '@Pimcore/modules/asset/tree/hooks/use-node-api-hook'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
   isLoading?: boolean
-  mergeAdditionalQueryParams?: Dispatch<unknown>
   total: number
 }
 
 export interface TreePagerProps {
   node: TreeNodeProps
-  mergeAdditionalQueryParams: Dispatch<unknown>
   total: number
 }
 
@@ -49,19 +49,19 @@ export interface TreeContextMenuProps {
 
 export interface TreeProps {
   nodeId: number
-  nodeApiHook: any
+  nodeApiHook: NodeApiHook
   maxItemsPerNode?: number
-  rootNode?: TreeNodeProps
+  rootNode?: TreeNode
 
-  renderNode: typeof TreeNode
+  renderNode: typeof TreeNodeComponent
   renderNodeContent: ElementType<TreeNodeContentProps>
   contextMenu?: ElementType<TreeContextMenuProps>
   renderFilter?: ElementType<TreeSearchProps>
   renderPager?: ElementType<TreePagerProps>
 
-  onLoad?: (node: TreeNodeProps) => Promise<void>
-  onSelect?: (node: TreeNodeProps) => void
-  onRightClick?: (event: React.MouseEvent, node: TreeNodeProps) => void
+  onLoad?: (node: TreeNode) => Promise<void>
+  onSelect?: (node: TreeNode) => void
+  onRightClick?: (event: React.MouseEvent, node: TreeNode) => void
 }
 
 export interface INodeRef {
@@ -76,10 +76,10 @@ export interface ITreeContext extends TreeProps {
 
 export const defaultProps: TreeProps = {
   nodeId: 1,
-  nodeApiHook: () => {},
   maxItemsPerNode: 30,
   renderNodeContent: TreeNodeContent,
-  renderNode: TreeNode
+  renderNode: TreeNodeComponent,
+  nodeApiHook: useNodeApiHook
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -101,12 +101,8 @@ const ElementTree = (
   const { nodeId } = props
   const hasRootNode = rootNode !== undefined && parseInt(rootNode.id) === nodeId
   const preparedRootNode = rootNode
-  const { page, setPage } = useNodeState(String(nodeId))
-  const { apiHookResult, dataTransformer } = nodeApiHook({
-    id: nodeId,
-    level: -1
-  }, maxItemsPerNode)
-  const { isLoading, isError, data } = apiHookResult
+  const { page, setPage, getChildren, isLoading, isExpanded, setExpanded } = useElementTree(String(nodeId), nodeApiHook)
+  console.log('node state', page, getChildren(), isLoading)
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
     return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
@@ -135,20 +131,17 @@ const ElementTree = (
 
   const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, maxItemsPerNode, nodeApiHook, renderNode, renderNodeContent, onRightClick])
 
-  if (isError !== false) {
-    return (<div>{'Error'}</div>)
-  }
+  // todo if (isError !== false) {
+  //   return (<div>{'Error'}</div>)
+  // }
 
-  let items: TreeNodeProps[] = []
-
-  if (isLoading === false && data !== undefined) {
-    const { nodes } = dataTransformer(data)
-    items = nodes
-  }
+  const items: TreeNode[] = getChildren()
 
   if (hasRootNode) {
-    preparedRootNode!.children = items
     preparedRootNode!.hasChildren = false
+    if (!isExpanded) {
+      setExpanded(true)
+    }
   }
 
   if (items.length === 0 && page > 1) {
@@ -160,8 +153,9 @@ const ElementTree = (
     <div className={ ['tree', styles.tree].join(' ') }>
       <TreeContext.Provider value={ treeContextValue }>
         {hasRootNode && (
-          <TreeNode
+          <TreeNodeComponent
             key={ preparedRootNode!.id }
+            level={ -1 }
             { ...preparedRootNode! }
           />
         )}
@@ -173,6 +167,7 @@ const ElementTree = (
                 key={ item.id }
                 { ...item }
                 internalKey={ `${index}` }
+                level={ 0 }
               />
             ))}
           </>
@@ -189,7 +184,7 @@ const ElementTree = (
         </Box>
       )}
 
-      {isLoading === false && items.length !== 0 && (
+      {isLoading !== true && items.length !== 0 && (
         ContextMenu !== undefined
           ? (
             <ContextMenu node={ rightClickedNode }>

@@ -14,7 +14,7 @@
 import { defaultProps, ElementTree } from '@Pimcore/components/element-tree/element-tree'
 import React from 'react'
 import { useNodeApiHook } from './hooks/use-node-api-hook'
-import { TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+import { TreeNode as TreeNodeComponent } from '@Pimcore/components/element-tree/node/tree-node'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
@@ -30,6 +30,7 @@ import { withDroppable } from './node/with-droppable/with-droppable'
 import { withDroppableStyling } from './node/with-droppable/with-droppable-styling'
 import { withActionStates } from './node/with-action-states'
 import { useTreeFilter } from '@Pimcore/modules/element/tree/provider/tree-filter-provider/use-tree-filter'
+import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 
 export interface TreeContainerProps {
   id: number
@@ -65,21 +66,15 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     )
   }
 
-  const createRootNode = (): TreeNodeProps | undefined => {
+  const createRootNode = (): TreeNode | undefined => {
     if (!showRoot || rootNodeData === undefined) {
       return undefined
     }
 
     const transformedNodes = transformApiDataToNodes(
       {
-        children: [],
-        icon: { type: 'name', value: 'home-root-folder' },
         id: '0',
-        internalKey: '0',
-        label: '',
-        level: -1,
-        isLocked: false,
-        permissions: {}
+        internalKey: '0'
       },
       rootNodeData,
       pagingLimit
@@ -101,9 +96,9 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     }
   }
 
-  const rootNode: TreeNodeProps | undefined = createRootNode()
+  const rootNode: TreeNode | undefined = createRootNode()
 
-  async function onSelect (node: TreeNodeProps): Promise<void> {
+  async function onSelect (node: TreeNode): Promise<void> {
     openDataObject({
       config: {
         id: parseInt(node.id)
@@ -119,7 +114,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       nodeId={ id }
       onSelect={ onSelect }
       renderFilter={ SearchContainer }
-      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNode)))) }
+      renderNode={ withDroppable(withDroppableStyling(withActionStates(withDraggable(TreeNodeComponent)))) }
       renderNodeContent={ defaultProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }

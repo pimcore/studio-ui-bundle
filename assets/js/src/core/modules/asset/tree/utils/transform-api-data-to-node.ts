@@ -11,17 +11,13 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { type AssetGetTreeApiResponse, type AssetPermissions } from '../../asset-api-slice.gen'
 import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 
-export interface DataTransformerReturnType {
-  nodes: TreeNodeProps[]
-  total: number
-}
-
-export const transformApiDataToNodes = (node: TreeNodeProps, data: AssetGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
-  const nodes: TreeNodeProps[] = []
+export const transformApiDataToNodes = (node: DataTransformerSourceNode, data: AssetGetTreeApiResponse, maxItemsPerNode: number | undefined): DataTransformerReturnType => {
+  const nodes: TreeNode[] = []
 
   const assetData = data.items
   assetData.forEach((assetNode) => {
@@ -31,21 +27,13 @@ export const transformApiDataToNodes = (node: TreeNodeProps, data: AssetGetTreeA
       label: assetNode.filename!,
       type: assetNode.type,
       parentId: assetNode.parentId.toString(),
-      children: [],
       hasChildren: assetNode.hasChildren,
       isLocked: assetNode.isLocked,
       metaData: {
         asset: assetNode
       },
       permissions: assetNode.permissions ?? [] as AssetPermissions,
-      level: node.level + 1,
-      ...(() => {
-        if (node.level === -1) {
-          return { internalKey: `${assetNode.id}` }
-        }
-
-        return { internalKey: `${node.internalKey}-${assetNode.id}` }
-      })()
+      internalKey: `${node.internalKey}-${assetNode.id}`
     })
   })
 
