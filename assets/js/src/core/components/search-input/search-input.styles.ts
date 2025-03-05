@@ -21,7 +21,7 @@ export const useStyles = createStyles(({ css, token }) => {
     margin-inline-end: ${token.marginXS}px;
     }
      
-     :where(.css-dev-only-do-not-override-pboz35).ant-input-search 
+     :where([class*="css-dev-only-do-not-override-"]).ant-input-search 
   > .ant-input-group 
   > .ant-input-group-addon:last-child 
   .ant-input-search-button:not(.ant-btn-primary):not(:hover):not(:active) {
