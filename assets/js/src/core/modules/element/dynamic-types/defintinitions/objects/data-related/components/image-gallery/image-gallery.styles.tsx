@@ -15,7 +15,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    image: css`
+    imageGallery: css`
       &.versionFieldItem {
         border-color: ${token.colorBorderSecondary} !important;
       }

@@ -24,6 +24,8 @@ import {
   VideoPreview
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/video/preview'
 import { toCssDimension } from '@Pimcore/utils/css'
+import cn from 'classnames'
+import { useStyles } from './video.styles'
 
 export type VideoValue = AssetVideoValue | YoutubeVideoValue | VimeoVideoValue | DailymotionVideoValue
 
@@ -75,6 +77,8 @@ export interface VideoProps {
 export const Video = (props: VideoProps): React.JSX.Element => {
   const [value, setValue] = React.useState<VideoValue | null>(props.value ?? null)
   const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const emptyValue = (): void => {
     setValue(null)
   }
@@ -87,7 +91,7 @@ export const Video = (props: VideoProps): React.JSX.Element => {
   const height = toCssDimension(props.height, 245)
   return (
     <Card
-      className="max-w-full"
+      className={ cn('max-w-full', styles.video, props.className) }
       fitContent
       footer={ <VideoFooter
         allowedVideoTypes={ props.allowedVideoTypes }

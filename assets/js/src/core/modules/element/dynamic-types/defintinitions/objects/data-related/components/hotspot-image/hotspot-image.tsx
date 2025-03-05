@@ -12,6 +12,7 @@
 */
 
 import React, { useState } from 'react'
+import cn from 'classnames'
 import { Card } from '@Pimcore/components/card/card'
 import {
   HotspotImageFooter
@@ -39,6 +40,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/hotspot-image/utils/value-data'
 import _ from 'lodash'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { useStyles } from './hotspot-image.styles'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -63,6 +65,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const { confirm } = useFormModal()
 
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const setValue = (newValue: HotspotImageValue | null): void => {
     if (!_.isEqual(newValue, value)) {
@@ -111,7 +114,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
 
   return (
     <Card
-      className="max-w-full"
+      className={ cn('max-w-full', styles.image, props.className) }
       fitContent
       footer={ <HotspotImageFooter
         disabled={ props.disabled }
