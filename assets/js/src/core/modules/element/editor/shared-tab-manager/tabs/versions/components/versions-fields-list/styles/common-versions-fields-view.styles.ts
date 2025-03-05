@@ -85,22 +85,12 @@ export const useStyles = createStyles(({ token, css }) => {
       border-color: transparent !important;
       color: ${token.colorText} !important;
       
-      //.ant-picker,
       //.ant-color-picker-trigger,
       //.checkbox-wrapper,
       //.consent-wrapper {
       //  width: 100%;
       //  max-width: 100% !important;
       //}
-      
-      // .ant-picker {
-      //   input {
-      //     color: ${token.colorText} !important;
-      //   }
-      //   .ant-picker-suffix {
-      //     display: none;
-      //   }
-      // }
       
       // .checkbox-wrapper {
       //   .ant-checkbox-wrapper {

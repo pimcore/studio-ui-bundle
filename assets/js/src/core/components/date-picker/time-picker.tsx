@@ -52,7 +52,7 @@ export const TimePicker = (props: TimePickerProps): React.JSX.Element => {
       onChange={ (date: Dayjs | null) => {
         setValue(date)
       } }
-      rootClassName={ cn({ [styles.inherited]: props.inherited }) }
+      rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }
       value={ value }
     />
   )
