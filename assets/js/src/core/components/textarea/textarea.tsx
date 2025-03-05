@@ -12,7 +12,8 @@
 */
 
 import React from 'react'
-import AntTextArea, { type TextAreaProps } from 'antd/es/input/TextArea'
+import { type TextAreaProps } from 'antd/es/input/TextArea'
+import { Input } from 'antd'
 import cn from 'classnames'
 import { useStyles } from './textarea.styles'
 
@@ -24,7 +25,7 @@ export const TextArea = ({ inherited, className, ...restProps }: ITextAreaProps)
   const { styles } = useStyles()
 
   return (
-    <AntTextArea
+    <Input.TextArea
       className={ cn(styles.textarea, className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />

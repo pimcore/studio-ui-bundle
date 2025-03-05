@@ -25,7 +25,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { isUndefined } from 'lodash'
-import { NoteModal } from '@Pimcore/modules/notes-and-events/table/note-modal'
+import { NoteModal } from '@Pimcore/modules/notes-and-events/note-modal'
 import { Tag } from '@Pimcore/components/tag/tag'
 
 type DataNoteWithActions = DataNote & {
@@ -81,22 +81,24 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
       cell: (info) => {
         const { path, elementType, id } = info.getValue()
 
-        return (
-          <Flex
-            align={ 'center' }
-            className={ styles.link }
-            key={ id }
-          >
-            <Tag
-              bordered={ false }
-              color="blue"
-              onClick={ async () => {
-                await openCorrectElement(elementType, id)
-              } }
-            >{decodeURIComponent(path)}
-            </Tag>
-          </Flex>
-        )
+        return (!isUndefined(path) && path !== '')
+          ? (
+            <Flex
+              align={ 'center' }
+              className={ styles.link }
+              key={ id }
+            >
+              <Tag
+                bordered={ false }
+                color="blue"
+                onClick={ async () => {
+                  await openCorrectElement(elementType, id)
+                } }
+              >{decodeURIComponent(path)}
+              </Tag>
+            </Flex>
+            )
+          : <div></div>
       }
     }),
     columnHelper.accessor('title', {
@@ -132,32 +134,46 @@ export const Table = ({ notesAndEvents, notesAndEventsFetching }: TableProps): R
         const elementType = mapToElementType(row.elementType)
         const elementId = row.id
 
-        return (
-          <Flex
-            align='center'
-            className='w-full'
-            justify='center'
-          >
-            <IconButton
-              icon={ { value: 'open-folder' } }
-              onClick={ async () => {
-                !isUndefined(elementType) &&
-                                await openElement({
-                                  type: elementType,
-                                  id: elementId
-                                })
-              } }
-              type="link"
-            />
-            <IconButton
-              icon={ { value: 'show-details' } }
-              onClick={ async () => {
-                setNoteDetail(info.row.original)
-              } }
-              type="link"
-            />
-          </Flex>
-        )
+        return (!isUndefined(row.path) && row.path !== '')
+          ? (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'open-folder' } }
+                onClick={ async () => {
+                  !isUndefined(elementType) &&
+                                    await openElement({
+                                      type: elementType,
+                                      id: elementId
+                                    })
+                } }
+                type="link"
+              />
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
+          : (
+            <Flex
+              align='center'
+              className='w-full'
+            >
+              <IconButton
+                icon={ { value: 'show-details' } }
+                onClick={ async () => {
+                  setNoteDetail(info.row.original)
+                } }
+                type="link"
+              />
+            </Flex>
+            )
       }
     })
   ]

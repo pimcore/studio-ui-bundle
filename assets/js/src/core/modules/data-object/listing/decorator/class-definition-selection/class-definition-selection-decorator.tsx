@@ -32,6 +32,6 @@ export const ClassDefinitionSelectionDecorator: AbstractDecorator<ClassDefinitio
   return {
     ...baseProps,
     ContextComponent: withClassDefinitionSelectionContext(ContextComponent, config),
-    ConfigurationComponent: config.showConfigLayer === true ? withClassDefinitionSelectionLayer(ConfigurationComponent) : ConfigurationComponent
+    ConfigurationComponent: withClassDefinitionSelectionLayer(ConfigurationComponent)
   }
 }

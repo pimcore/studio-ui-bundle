@@ -11,38 +11,88 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
-import {
-  addNavItem as addNavItemAction,
-  type IMainNavItem
-} from '@Pimcore/modules/app/nav/main-nav-slice'
+import { container } from '@Pimcore/app/depency-injection'
+import { useMemo } from 'react'
+import { type IMainNavItem, type MainNavRegistry } from '../services/main-nav-registry'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
 
 interface IUseMainNavReturn {
-  addNavItem: (item: IMainNavItem) => void
-  getNavItems: IMainNavItem[]
+  navItems: IMainNavItem[]
+}
+
+const addNavItemToItemList = (items: IMainNavItem[], item: IMainNavItem): void => {
+  const levels = item.path.split('/')
+  if (levels.length > 4) {
+    console.warn('MainNav: Maximum depth of 4 levels is allowed, Item will be ignored', item)
+    return
+  }
+
+  let currentLevel = items
+  levels.forEach((level: string, index) => {
+    let existingItem = currentLevel.find(i => i.id === level)
+    const isCurrentItem = index === levels.length - 1
+
+    if (existingItem === undefined) {
+      existingItem = {
+        order: isCurrentItem ? item.order : 100,
+        id: level,
+        label: item.label ?? level,
+        path: levels.slice(0, index + 1).join('/'),
+        children: [],
+        icon: isCurrentItem ? item.icon : undefined,
+        widgetConfig: isCurrentItem ? item.widgetConfig : undefined,
+        onClick: isCurrentItem ? item.onClick : undefined,
+        button: isCurrentItem ? item.button : undefined,
+        className: isCurrentItem ? item.className : undefined,
+        perspectivePermission: isCurrentItem ? item.perspectivePermission : undefined,
+        perspectivePermissionHide: isCurrentItem ? item.perspectivePermissionHide : undefined
+      }
+      currentLevel.push(existingItem)
+    } else if (index === levels.length - 1) {
+      Object.assign(existingItem, {
+        icon: item.icon,
+        order: item.order ?? 100,
+        className: item.className
+      })
+    }
+
+    currentLevel = existingItem.children ?? []
+    currentLevel.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+  })
+
+  items.sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
 }
 
 export const useMainNav = (): IUseMainNavReturn => {
-  const dispatch = useAppDispatch()
+  const mainNavRegistryService = container.get<MainNavRegistry>(serviceIds.mainNavRegistry)
+  const user = useUser()
 
-  function addNavItem (item: IMainNavItem): void {
-    let userIsAllowed = true
-    if (item.permission !== undefined) {
-      userIsAllowed = isAllowed(item.permission)
-    }
+  const createNavItems = (): IMainNavItem[] => {
+    const items: IMainNavItem[] = []
 
-    if (!userIsAllowed) {
-      return
-    }
+    mainNavRegistryService.getMainNavItems().forEach(item => {
+      if (item.permission !== undefined && !isAllowed(item.permission)) {
+        return
+      }
 
-    dispatch(addNavItemAction(item))
+      if (item.perspectivePermission !== undefined && !isAllowedInPerspective(item.perspectivePermission)) {
+        return
+      }
+
+      addNavItemToItemList(items, item)
+    })
+
+    return items
   }
 
-  const getNavItems = useAppSelector(state => state['main-nav'].items)
+  const navItems = useMemo(() => {
+    return createNavItems()
+  }, [mainNavRegistryService.getMainNavItems(), user])
 
   return {
-    addNavItem,
-    getNavItems
+    navItems
   }
 }

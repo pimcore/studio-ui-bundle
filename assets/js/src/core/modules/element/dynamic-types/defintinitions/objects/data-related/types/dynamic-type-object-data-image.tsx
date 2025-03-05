@@ -13,18 +13,42 @@
 
 import React from 'react'
 import {
-  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract
+  type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract,
+  type EditMode,
+  type GetGridCellDefinitionProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/dynamic-type-object-data-abstract'
 import {
   Image, type ImageProps
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/image/image'
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
+import { ImagePreview } from '@Pimcore/components/image-preview/image-preview'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageProps
 
 export class DynamicTypeObjectDataImage extends DynamicTypeObjectDataAbstract {
   id: string = 'image'
   inheritedMaskOverlay: InheritanceOverlayType = 'form-element'
+  gridCellEditMode: EditMode = 'edit-modal'
+
+  getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
+    const value = props.cellProps.getValue()
+
+    return (
+      <Flex
+        className='w-full'
+        justify='center'
+      >
+        { value !== null && value !== undefined && (
+          <ImagePreview
+            assetId={ value.id }
+            height={ 100 }
+            width={ 100 }
+          />
+        )}
+      </Flex>
+    )
+  }
 
   getObjectDataComponent (props: ImageObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (

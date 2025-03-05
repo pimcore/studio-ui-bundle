@@ -29,6 +29,8 @@ export const cssContainerWidget: UseCssContainerProps = {
   name: 'widget'
 }
 
+export const WIDGET_CONTENT_CLASS = 'widget__content'
+
 const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
   const { styleDefinition } = useCssContainer(cssContainerWidget)
   const { styles } = useStyles()
@@ -45,7 +47,7 @@ const WidgetView = (props: WidgetViewProps): React.JSX.Element => {
         />
       )}
 
-      <div className='widget__content'>
+      <div className={ WIDGET_CONTENT_CLASS }>
         {children}
       </div>
     </div>

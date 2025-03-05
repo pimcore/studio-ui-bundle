@@ -20,6 +20,7 @@ import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-ty
 export const ListingContainer = (): React.JSX.Element => {
   return (
     <DynamicTypeRegistryProvider serviceIds={ [
+      'DynamicTypes/GridCellRegistry',
       'DynamicTypes/MetadataRegistry',
       'DynamicTypes/ListingRegistry',
       'DynamicTypes/BatchEditRegistry'
