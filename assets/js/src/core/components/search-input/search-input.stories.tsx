@@ -38,7 +38,7 @@ export const SearchFullWidth = {
     withoutAddon: true,
     withPrefix: true,
     value: 'Filled value',
-    fullWidth: true
+    maxWidth: '100%'
   }
 }
 
