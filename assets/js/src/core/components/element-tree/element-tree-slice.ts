@@ -62,7 +62,7 @@ export const initialNodeState: InternalNodeState = {
 
 const initialState: TreesState = {}
 
-const initializeNodeState = (state: TreesState, treeId: string, nodeId: string): InternalNodeState => {
+const initializeNodeState = (state: TreesState | Record<string, InternalNodeState>, treeId: string, nodeId: string): InternalNodeState => {
   if (isUndefined(state[treeId])) {
     state[treeId] = {}
   }
@@ -70,6 +70,17 @@ const initializeNodeState = (state: TreesState, treeId: string, nodeId: string):
     state[treeId][nodeId] = { ...initialNodeState }
   }
   return state[treeId][nodeId]
+}
+
+const removeDescendants = (nodes: Record<string, InternalNodeState>, parentId: string): Record<string, InternalNodeState> => {
+  const descendants = Object.keys(nodes).filter(nodeId => nodes[nodeId].treeNodeProps?.parentId === parentId)
+  let updatedNodes = { ...nodes }
+  descendants.forEach(descendantId => {
+    updatedNodes = removeDescendants(updatedNodes, descendantId)
+    const { [descendantId]: _, ...rest } = updatedNodes
+    updatedNodes = rest
+  })
+  return updatedNodes
 }
 
 const slice = createSlice({
@@ -152,16 +163,7 @@ const slice = createSlice({
       }
       const currentNodes = state[payload.treeId]
 
-      // Create a set of new node IDs
-      const newNodeIds = new Set(payload.nodes.map(node => String(node.id)))
-
-      // Create a new state object without the removed nodes
-      const updatedNodes = Object.keys(currentNodes).reduce<Record<string, any>>((acc, nodeId) => {
-        if (currentNodes[nodeId].treeNodeProps?.parentId !== payload.parentId || newNodeIds.has(nodeId)) {
-          acc[nodeId] = currentNodes[nodeId] // Keep the node if it's not being removed
-        }
-        return acc
-      }, {})
+      const updatedNodes = removeDescendants(currentNodes, payload.parentId)
 
       // Add or update the new nodes
       payload.nodes.forEach(node => {
