@@ -85,7 +85,6 @@ export const useStyles = createStyles(({ token, css }) => {
       border-color: transparent !important;
       color: ${token.colorText} !important;
       
-      //.ant-input-number,
       //.ant-picker,
       //.ant-color-picker-trigger,
       //.checkbox-wrapper,

@@ -25,7 +25,7 @@ export const InputNumber = ({ inherited, className, ...restProps }: IInputNumber
 
   return (
     <AntInputNumber
-      className={ cn(className, { [styles.inherited]: inherited }) }
+      className={ cn(styles.inputNumber, className, { [styles.inherited]: inherited }) }
       { ...restProps }
     />
   )
