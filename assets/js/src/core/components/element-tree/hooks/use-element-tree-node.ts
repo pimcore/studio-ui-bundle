@@ -12,7 +12,7 @@
 */
 
 import { type RootState, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, selectNodesByParentId, type TreeNode, setNodeFetching } from '../element-tree-slice'
+import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, selectNodesByParentId, type TreeNode, setNodeFetching, setFetchTriggered } from '../element-tree-slice'
 import { useSelector } from 'react-redux'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 import { useElementTree } from './use-element-tree'
@@ -81,6 +81,7 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
   const internalNodes = useSelector((state: RootState) => selectNodesByParentId(state, treeId, nodeId))
   const getChildren = (): TreeNode[] => {
     if (!resultNodeState.isFetchTriggered && resultNodeState.isExpanded) {
+      dispatch(setFetchTriggered({ treeId, nodeId, fetchTriggered: true }))
       refreshChildren(nodeId, false)
     }
     const children: TreeNode[] = []

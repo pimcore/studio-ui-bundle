@@ -13,7 +13,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Input } from 'antd'
-import { isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { type TreeSearchProps } from '@Pimcore/components/element-tree/element-tree'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { useTreeFilter } from '../provider/tree-filter-provider/use-tree-filter'
@@ -25,10 +25,10 @@ export type SearchContainerProps = TreeSearchProps & {
 }
 
 const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
+  const { searchTerm, setSearchTerm, setPage } = useElementTreeNode(props.node.id)
   const { total } = props
-  const [searchActive, setSearchActive] = useState(false)
+  const [searchActive, setSearchActive] = useState(!isEmpty(searchTerm))
   const { pageSize } = useTreeFilter()
-  const { setSearchTerm, setPage } = useElementTreeNode(props.node.id)
 
   useEffect(() => {
     if (!isUndefined(pageSize)) {
@@ -48,6 +48,7 @@ const SearchContainer = (props: SearchContainerProps): React.JSX.Element => {
   return (
     <Search
       aria-label={ props.label }
+      defaultValue={ searchTerm }
       loading={ props.isLoading }
       onSearch={ onSearch }
       placeholder={ props.label }

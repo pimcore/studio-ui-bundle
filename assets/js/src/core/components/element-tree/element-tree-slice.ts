@@ -14,6 +14,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@Pimcore/app/store'
 import { isUndefined } from 'lodash'
+import { createSelector } from 'reselect'
 import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.gen'
 import { type ElementIcon } from 'src/sdk/main'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
@@ -61,13 +62,14 @@ export const initialNodeState: InternalNodeState = {
 
 const initialState: TreesState = {}
 
-const initializeNodeState = (state: TreesState, treeId: string, nodeId: string): void => {
+const initializeNodeState = (state: TreesState, treeId: string, nodeId: string): InternalNodeState => {
   if (isUndefined(state[treeId])) {
     state[treeId] = {}
   }
   if (isUndefined(state[treeId][nodeId])) {
     state[treeId][nodeId] = { ...initialNodeState }
   }
+  return state[treeId][nodeId]
 }
 
 const slice = createSlice({
@@ -142,9 +144,7 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<{ treeId: string, parentId: string, nodes: TreeNode[], total: number }>
     ) => {
-      if (isUndefined(state[payload.treeId])) {
-        state[payload.treeId] = {}
-      }
+      initializeNodeState(state, payload.treeId, payload.parentId)
 
       state[payload.treeId][payload.parentId] = {
         ...state[payload.treeId][payload.parentId],
@@ -166,7 +166,7 @@ const slice = createSlice({
       // Add or update the new nodes
       payload.nodes.forEach(node => {
         const nodeId = String(node.id)
-        initializeNodeState(updatedNodes, payload.treeId, nodeId)
+        updatedNodes[nodeId] = initializeNodeState(updatedNodes, payload.treeId, nodeId)
         updatedNodes[nodeId] = {
           ...updatedNodes[nodeId],
           treeNodeProps: node
@@ -209,10 +209,20 @@ injectSliceWithState(slice)
 
 export const { setNodeLoading, setNodeExpanded, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setNodeFetching } = slice.actions
 
-export const selectNodeState = (state: RootState, treeId: string, nodeId: string): InternalNodeState | undefined => state.trees[treeId]?.[nodeId]
+export const selectNodeState = createSelector(
+  (state: RootState) => state.trees,
+  (state: RootState, treeId: string) => treeId,
+  (state: RootState, treeId: string, nodeId: string) => nodeId,
+  (trees, treeId, nodeId) => trees[treeId]?.[nodeId]
+)
 
-export const selectNodesByParentId = (state: RootState, treeId: string, parentId: string): InternalNodeState[] => {
-  const tree: Record<string, InternalNodeState> = state.trees[treeId] ?? {}
-  const treeNodes: InternalNodeState[] = Object.values(tree)
-  return treeNodes.filter((node: InternalNodeState) => String(node.treeNodeProps?.parentId) === parentId)
-}
+export const selectNodesByParentId = createSelector(
+  (state: RootState) => state.trees,
+  (state: RootState, treeId: string) => treeId,
+  (state: RootState, treeId: string, parentId: string) => parentId,
+  (trees, treeId, parentId) => {
+    const tree: Record<string, InternalNodeState> = trees[treeId] ?? {}
+    const treeNodes: InternalNodeState[] = Object.values(tree)
+    return treeNodes.filter((node: InternalNodeState) => String(node.treeNodeProps?.parentId) === parentId)
+  }
+)

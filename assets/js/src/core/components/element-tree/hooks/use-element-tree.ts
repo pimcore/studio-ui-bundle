@@ -12,7 +12,7 @@
 */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, setFetchTriggered, updateNodesByParentId, setNodeFetching } from '../element-tree-slice'
+import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching } from '../element-tree-slice'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 import { isUndefined } from 'lodash'
 import { type DataTransformerSourceNode } from '../types/node-api-hook'
@@ -58,8 +58,6 @@ export const useElementTree = (): UseElementTreeReturnType => {
   }
 
   const refreshChildren = (nodeId: string, forceLoading: boolean): void => {
-    dispatch(setFetchTriggered({ treeId, nodeId, fetchTriggered: true }))
-
     const nodeState = getNodeState(nodeId)
     if (nodeState?.isFetching) {
       return
