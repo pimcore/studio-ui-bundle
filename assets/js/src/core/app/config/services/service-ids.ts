@@ -77,6 +77,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/OpenElement': 'DynamicTypes/GridCell/OpenElement',
   'DynamicTypes/GridCell/AssetPreview': 'DynamicTypes/GridCell/AssetPreview',
   'DynamicTypes/GridCell/AssetActions': 'DynamicTypes/GridCell/AssetActions',
+  'DynamicTypes/GridCell/DataObjectActions': 'DynamicTypes/GridCell/DataObjectActions',
   'DynamicTypes/GridCell/DependencyTypeIcon': 'DynamicTypes/GridCell/DependencyTypeIcon',
   'DynamicTypes/GridCell/AssetCustomMetadataIcon': 'DynamicTypes/GridCell/AssetCustomMetadataIcon',
   'DynamicTypes/GridCell/AssetCustomMetadataValue': 'DynamicTypes/GridCell/AssetCustomMetadataValue',

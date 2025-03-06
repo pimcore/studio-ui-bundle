@@ -28,6 +28,7 @@ import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecorat
 import { type IInlineEditDecoratorConfig, InlineEditDecorator } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
 import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inline-edit-api-update'
 import { GeneralFiltersDecorator } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
+import { ActionColumnDecorator } from './decorator/action-column/action-column-decorator'
 
 export interface IObjectListingDefaultParams extends ListingContainerProps {
   useDataQuery: typeof useDataObjectGetGridQuery
@@ -45,6 +46,7 @@ const defaultProps = {
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 const props = compose<AbstractDecoratorProps>(
+  ActionColumnDecorator,
   SortingDecorator,
   PagingDecorator,
   ColumnConfigurationDecorator,
