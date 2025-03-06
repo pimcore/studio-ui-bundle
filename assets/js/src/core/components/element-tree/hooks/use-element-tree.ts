@@ -14,28 +14,30 @@
 import { store, useAppDispatch } from '@Pimcore/app/store'
 import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching } from '../element-tree-slice'
 import { isUndefined } from 'lodash'
-import { type DataTransformerSourceNode } from '../types/node-api-hook'
+import { type DataTransformerReturnType, type DataTransformerSourceNode } from '../types/node-api-hook'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
+import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 
 export type NodeState = InternalNodeState
 
 export interface UseElementTreeReturnType {
-  setLoading: (treeId: string, nodeId: string, loading: boolean) => void
-  setFetching: (treeId: string, nodeId: string, isFetching: boolean) => void
-  setExpanded: (treeId: string, nodeId: string, expanded: boolean) => void
-  setPage: (treeId: string, nodeId: string, page: number) => void
-  setSearchTerm: (treeId: string, nodeId: string, searchTerm?: string) => void
-  setSelectedIds: (treeId: string, selectedNodeIds: string[]) => void
-  setScrollTo: (treeId: string, nodeId: string, scrollTo: boolean) => void
-  refreshChildren: (treeId: string, nodeId: string, forceLoading: boolean) => void
+  setLoading: (nodeId: string, loading: boolean) => void
+  setFetching: (nodeId: string, isFetching: boolean) => void
+  setExpanded: (nodeId: string, expanded: boolean) => void
+  setPage: (nodeId: string, page: number) => void
+  setSearchTerm: (nodeId: string, searchTerm?: string) => void
+  setSelectedIds: (selectedNodeIds: string[]) => void
+  setScrollTo: (nodeId: string, scrollTo: boolean) => void
+  refreshChildren: (nodeId: string, forceLoading: boolean) => void
 }
 
 export const useElementTree = (): UseElementTreeReturnType => {
   const dispatch = useAppDispatch()
   const { nodeApiHook } = useNodeApiHook()
   const { fetchApiHookResult } = nodeApiHook()
+  const { treeId } = useTreeId()
 
-  const getNodeState = (treeId: string, nodeId: string): NodeState => {
+  const getNodeState = (nodeId: string): NodeState => {
     const nodeState = selectNodeState(store.getState(), treeId, nodeId)
 
     const resultInternalNodeState: InternalNodeState = nodeState ?? {
@@ -55,8 +57,8 @@ export const useElementTree = (): UseElementTreeReturnType => {
     return resultNodeState
   }
 
-  const refreshChildren = (treeId: string, nodeId: string, forceLoading: boolean): void => {
-    const nodeState = getNodeState(treeId, nodeId)
+  const doRefreshChildren = async (nodeId: string, forceLoading: boolean): Promise<DataTransformerReturnType | undefined> => {
+    const nodeState = getNodeState(nodeId)
     if (nodeState?.isFetching) {
       return
     }
@@ -66,49 +68,54 @@ export const useElementTree = (): UseElementTreeReturnType => {
     }
 
     if (isUndefined(nodeState?.isLoading) || forceLoading) {
-      setLoading(treeId, nodeId, true)
+      setLoading(nodeId, true)
     }
-    setFetching(treeId, nodeId, true)
+    setFetching(nodeId, true)
 
     const node: DataTransformerSourceNode = {
       id: nodeId,
       internalKey: nodeId
     }
 
-    fetchApiHookResult(node, nodeState).then((apiHookResult) => {
-      if (!isUndefined(apiHookResult)) {
-        dispatch(updateNodesByParentId({ treeId, parentId: nodeId, nodes: apiHookResult.nodes, total: apiHookResult.total }))
-      }
-      setLoading(treeId, nodeId, false)
-      setFetching(treeId, nodeId, false)
-    }).catch((error) => { console.error(error) })
+    return await fetchApiHookResult(node, nodeState)
   }
 
-  const setLoading = (treeId: string, nodeId: string, loading: boolean): void => {
+  const refreshChildren = (nodeId: string, forceLoading: boolean): void => {
+    doRefreshChildren(nodeId, forceLoading)
+      .then((apiHookResult) => {
+        if (!isUndefined(apiHookResult)) {
+          dispatch(updateNodesByParentId({ treeId, parentId: nodeId, nodes: apiHookResult.nodes, total: apiHookResult.total }))
+        }
+        setLoading(nodeId, false)
+        setFetching(nodeId, false)
+      }).catch((error) => { console.error(error) })
+  }
+
+  const setLoading = (nodeId: string, loading: boolean): void => {
     dispatch(setNodeLoading({ treeId, nodeId, loading }))
   }
 
-  const setFetching = (treeId: string, nodeId: string, isFetching: boolean): void => {
+  const setFetching = (nodeId: string, isFetching: boolean): void => {
     dispatch(setNodeFetching({ treeId, nodeId, isFetching }))
   }
 
-  const setExpanded = (treeId: string, nodeId: string, expanded: boolean): void => {
+  const setExpanded = (nodeId: string, expanded: boolean): void => {
     dispatch(setNodeExpanded({ treeId, nodeId, expanded }))
   }
 
-  const setPage = (treeId: string, nodeId: string, page: number): void => {
+  const setPage = (nodeId: string, page: number): void => {
     dispatch(setNodePage({ treeId, nodeId, page }))
   }
 
-  const setSearchTerm = (treeId: string, nodeId: string, searchTerm: string): void => {
+  const setSearchTerm = (nodeId: string, searchTerm: string): void => {
     dispatch(setNodeSearchTerm({ treeId, nodeId, searchTerm }))
   }
 
-  const setSelectedIds = (treeId: string, selectedNodeIds: string[]): void => {
+  const setSelectedIds = (selectedNodeIds: string[]): void => {
     dispatch(setSelectedNodeIds({ treeId, selectedNodeIds }))
   }
 
-  const setScrollTo = (treeId: string, nodeId: string, scrollTo: boolean): void => {
+  const setScrollTo = (nodeId: string, scrollTo: boolean): void => {
     dispatch(setNodeScrollTo({ treeId, nodeId, scrollTo }))
   }
 

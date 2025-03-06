@@ -54,7 +54,7 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
   const getChildren = (): TreeNode[] => {
     if (!resultNodeState.isFetchTriggered && resultNodeState.isExpanded) {
       dispatch(setFetchTriggered({ treeId, nodeId, fetchTriggered: true }))
-      refreshChildren(treeId, nodeId, false)
+      refreshChildren(nodeId, false)
     }
     const children: TreeNode[] = []
     internalNodes.forEach((node) => {
@@ -68,13 +68,13 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
 
   return {
     ...resultNodeState,
-    setLoading: (loading: boolean) => { setLoading(treeId, nodeId, loading) },
-    setFetching: (isFetching: boolean) => { setFetching(treeId, nodeId, isFetching) },
-    setExpanded: (expanded: boolean) => { setExpanded(treeId, nodeId, expanded) },
-    setPage: (page: number) => { setPage(treeId, nodeId, page) },
-    setSearchTerm: (searchTerm: string) => { setSearchTerm(treeId, nodeId, searchTerm) },
-    setSelectedIds: (selectedNodeIds: string[]) => { setSelectedIds(treeId, selectedNodeIds) },
-    setScrollTo: (scrollTo: boolean) => { setScrollTo(treeId, nodeId, scrollTo) },
+    setLoading: (loading: boolean) => { setLoading(nodeId, loading) },
+    setFetching: (isFetching: boolean) => { setFetching(nodeId, isFetching) },
+    setExpanded: (expanded: boolean) => { setExpanded(nodeId, expanded) },
+    setPage: (page: number) => { setPage(nodeId, page) },
+    setSearchTerm: (searchTerm: string) => { setSearchTerm(nodeId, searchTerm) },
+    setSelectedIds: (selectedNodeIds: string[]) => { setSelectedIds(selectedNodeIds) },
+    setScrollTo: (scrollTo: boolean) => { setScrollTo(nodeId, scrollTo) },
     getChildren
   }
 }
