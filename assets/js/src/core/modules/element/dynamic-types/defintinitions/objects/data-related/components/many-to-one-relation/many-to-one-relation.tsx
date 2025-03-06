@@ -11,6 +11,11 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Tooltip } from 'antd'
+import { isEmpty } from 'lodash'
+import cn from 'classnames'
 import type { DragAndDropInfo } from '@Pimcore/components/drag-and-drop/context-provider'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { SelectionType } from '@Pimcore/components/dropdown/selection/selection-provider'
@@ -28,10 +33,6 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { Tooltip } from 'antd'
-import { isEmpty } from 'lodash'
-import React, { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { PathTarget } from './path-target'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
@@ -89,6 +90,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   return (
     <Flex
+      className={ cn(props.className) }
       gap="extra-small"
       style={ {
         maxWidth: toCssDimension(props.width, fieldWidth.large)

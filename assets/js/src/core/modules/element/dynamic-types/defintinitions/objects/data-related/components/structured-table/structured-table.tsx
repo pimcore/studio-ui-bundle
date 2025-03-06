@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import {
   StructuredTableGrid
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/structured-table/components/grid/grid'
@@ -104,6 +105,7 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
   return (
     <>
       <Content
+        className={ cn(props.className) }
         style={ {
           width: toCssDimension(props.width),
           height: toCssDimension(props.height)
