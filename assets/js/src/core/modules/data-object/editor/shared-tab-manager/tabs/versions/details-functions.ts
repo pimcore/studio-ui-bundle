@@ -11,7 +11,7 @@
 *  @license    https://github.com/pimcore/studio-ui-bundle/blob/1.x/LICENSE.md POCL and PCL
 */
 
-import { every, get, isArray, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
+import { every, get, isEmpty, isEqual, isObject, isUndefined } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import type { DataObjectVersion } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
@@ -40,17 +40,9 @@ export interface IFormattedDataStructureData {
   versionId: number
 }
 
-const isEmptyObject = (value: object): boolean => {
-  if (isObject(value) && !isArray(value)) {
-    return every(value, isEmptyObject)
-  }
-
-  return isEmpty(value)
-}
-
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {
-    return every(fieldValue, isEmptyObject)
+    return every(fieldValue, isEmpty)
   }
 
   return isEmptyValue(fieldValue)

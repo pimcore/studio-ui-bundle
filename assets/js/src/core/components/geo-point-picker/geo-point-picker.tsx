@@ -49,6 +49,7 @@ export const GeoPointPicker = ({ ...props }: GeoPointPickerProps): React.JSX.Ele
 
   return (
     <GeoMapCard
+      className={ props?.className }
       disabled={ props.disabled }
       footer={ <GeoPointPickerFooter
         disabled={ props.disabled }

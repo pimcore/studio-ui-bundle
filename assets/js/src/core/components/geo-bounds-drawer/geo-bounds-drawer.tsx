@@ -45,6 +45,7 @@ export const GeoBoundsDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Ele
 
   return (
     <GeoMapCard
+      className={ props?.className }
       disabled={ props.disabled }
       footer={ props.disabled === true
         ? undefined

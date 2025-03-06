@@ -46,6 +46,7 @@ export const GeoPolyDrawer = ({ ...props }: GeoPolyDrawerProps): React.JSX.Eleme
 
   return (
     <GeoMapCard
+      className={ props.className }
       disabled={ props.disabled }
       footer={ props.disabled === true
         ? undefined
