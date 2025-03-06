@@ -12,6 +12,7 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -25,6 +26,7 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import {
   convertType
 } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/link/utils/link-value-converter'
+import { useStyles } from './link.styles'
 
 export interface LinkValue {
   text: string
@@ -57,8 +59,10 @@ export interface LinkProps {
 
 export const Link = (props: LinkProps): React.JSX.Element => {
   const [value, setValue] = useState<LinkValue | null>(props.value ?? null)
-  const { t } = useTranslation()
   const [isModalVisible, setIsModalVisible] = useState(false)
+
+  const { t } = useTranslation()
+  const { styles } = useStyles()
   const { openElement } = useElementHelper()
 
   useEffect(() => {
@@ -115,6 +119,7 @@ export const Link = (props: LinkProps): React.JSX.Element => {
   return (
     <Flex
       align="center"
+      className={ cn(styles.link, props.className) }
       gap="extra-small"
     >
       { props.inherited === true
