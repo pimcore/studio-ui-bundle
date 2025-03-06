@@ -85,20 +85,11 @@ export const useStyles = createStyles(({ token, css }) => {
       border-color: transparent !important;
       color: ${token.colorText} !important;
       
-      //.ant-color-picker-trigger,
-      //.checkbox-wrapper,
       //.consent-wrapper {
       //  width: 100%;
       //  max-width: 100% !important;
       //}
       
-      // .checkbox-wrapper {
-      //   .ant-checkbox-wrapper {
-      //     padding: ${token.paddingXXS}px;
-      //     background-color: ${token.colorBgContainerDisabled} !important;
-      //   }
-      // }
-      //
       // .consent-wrapper {
       //   padding: ${token.paddingXXS}px;
       //   background-color: ${token.colorBgContainerDisabled} !important;
@@ -109,7 +100,6 @@ export const useStyles = createStyles(({ token, css }) => {
       //   }
       // }
       
-      //.checkbox-wrapper,
       //.consent-wrapper {
       //  border: 1px solid transparent;
       //}

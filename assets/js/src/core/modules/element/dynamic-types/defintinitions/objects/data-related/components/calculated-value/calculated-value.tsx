@@ -12,6 +12,7 @@
 */
 
 import React from 'react'
+import cn from 'classnames'
 import { Input } from '@Pimcore/components/input/input'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
@@ -36,6 +37,7 @@ export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element 
       return (
         <TextArea
           autoSize
+          className={ props.className }
           readOnly
           value={ props.value ?? '' }
         />
@@ -43,7 +45,7 @@ export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element 
     } else if (props.elementType === 'numeric') {
       return (
         <InputNumber
-          className="w-full"
+          className={ cn('w-full', props.className) }
           readOnly
           value={ props.value ?? undefined }
         />
@@ -51,6 +53,7 @@ export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element 
     } else if (props.elementType === 'date') {
       return (
         <DatePicker
+          className={ props.className }
           disabled
           value={ props.value ?? undefined }
         />
@@ -64,6 +67,7 @@ export const CalculatedValue = (props: CalculatedValueProps): React.JSX.Element 
     } else {
       return (
         <Input
+          className={ props.className }
           disabled
           readOnly
           value={ props.value ?? '' }

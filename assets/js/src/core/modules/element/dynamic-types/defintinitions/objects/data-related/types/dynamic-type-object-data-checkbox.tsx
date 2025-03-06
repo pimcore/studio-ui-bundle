@@ -38,17 +38,6 @@ export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract
     )
   }
 
-  getVersionObjectDataComponent (props: CheckboxObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return (
-      <Checkbox
-        className="checkbox-wrapper"
-        disabled
-        inherited={ props.inherited }
-        value={ props.value }
-      />
-    )
-  }
-
   handleDefaultValue (props: CheckboxObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
     if (typeof props.defaultValue !== 'boolean' && typeof props.defaultValue !== 'number') {
       return

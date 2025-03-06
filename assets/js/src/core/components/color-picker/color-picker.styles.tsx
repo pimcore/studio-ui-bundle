@@ -21,6 +21,10 @@ export const useStyles = createStyles(({ token, css }) => {
           color: ${token.colorText} !important;
         }
       }
+
+      &.versionFieldItemHighlight {
+        background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
     `,
 
     inherited: css`
