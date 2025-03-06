@@ -12,7 +12,7 @@
 */
 
 import { type RootState, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, selectNodesByParentId, type TreeNode, setNodeFetching, setFetchTriggered } from '../element-tree-slice'
+import { type InternalNodeState, selectNodeState, selectNodesByParentId, type TreeNode, setFetchTriggered } from '../element-tree-slice'
 import { useSelector } from 'react-redux'
 import { useTreeId } from '@Pimcore/modules/element/tree/provider/tree-id-provider/use-tree-id'
 import { useElementTree } from './use-element-tree'
@@ -32,7 +32,7 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
 } => {
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId()
-  const { refreshChildren } = useElementTree()
+  const { refreshChildren, setLoading, setFetching, setExpanded, setPage, setSearchTerm, setSelectedIds, setScrollTo } = useElementTree()
 
   const nodeState = useSelector((state: RootState) => selectNodeState(state, treeId, nodeId))
 
@@ -50,39 +50,11 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
     page: resultInternalNodeState.page ?? 1
   }
 
-  const setLoading = (loading: boolean): void => {
-    dispatch(setNodeLoading({ treeId, nodeId, loading }))
-  }
-
-  const setFetching = (isFetching: boolean): void => {
-    dispatch(setNodeFetching({ treeId, nodeId, isFetching }))
-  }
-
-  const setExpanded = (expanded: boolean): void => {
-    dispatch(setNodeExpanded({ treeId, nodeId, expanded }))
-  }
-
-  const setPage = (page: number): void => {
-    dispatch(setNodePage({ treeId, nodeId, page }))
-  }
-
-  const setSearchTerm = (searchTerm: string): void => {
-    dispatch(setNodeSearchTerm({ treeId, nodeId, searchTerm }))
-  }
-
-  const setSelectedIds = (selectedNodeIds: string[]): void => {
-    dispatch(setSelectedNodeIds({ treeId, selectedNodeIds }))
-  }
-
-  const setScrollTo = (scrollTo: boolean): void => {
-    dispatch(setNodeScrollTo({ treeId, nodeId, scrollTo }))
-  }
-
   const internalNodes = useSelector((state: RootState) => selectNodesByParentId(state, treeId, nodeId))
   const getChildren = (): TreeNode[] => {
     if (!resultNodeState.isFetchTriggered && resultNodeState.isExpanded) {
       dispatch(setFetchTriggered({ treeId, nodeId, fetchTriggered: true }))
-      refreshChildren(nodeId, false)
+      refreshChildren(treeId, nodeId, false)
     }
     const children: TreeNode[] = []
     internalNodes.forEach((node) => {
@@ -96,13 +68,13 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
 
   return {
     ...resultNodeState,
-    setLoading,
-    setFetching,
-    setExpanded,
-    setPage,
-    setSearchTerm,
-    setSelectedIds,
-    setScrollTo,
+    setLoading: (loading: boolean) => { setLoading(treeId, nodeId, loading) },
+    setFetching: (isFetching: boolean) => { setFetching(treeId, nodeId, isFetching) },
+    setExpanded: (expanded: boolean) => { setExpanded(treeId, nodeId, expanded) },
+    setPage: (page: number) => { setPage(treeId, nodeId, page) },
+    setSearchTerm: (searchTerm: string) => { setSearchTerm(treeId, nodeId, searchTerm) },
+    setSelectedIds: (selectedNodeIds: string[]) => { setSelectedIds(treeId, selectedNodeIds) },
+    setScrollTo: (scrollTo: boolean) => { setScrollTo(treeId, nodeId, scrollTo) },
     getChildren
   }
 }

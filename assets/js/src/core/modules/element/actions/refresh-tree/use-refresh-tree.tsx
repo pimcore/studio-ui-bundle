@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { useTreePermission } from '../../tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { useTreeId } from '../../tree/provider/tree-id-provider/use-tree-id'
 
 export interface UseRefreshTreeHookReturn {
   refreshTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -28,10 +29,11 @@ export interface UseRefreshTreeHookReturn {
 export const useRefreshTree = (elementType: ElementType): UseRefreshTreeHookReturn => {
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
+  const { treeId } = useTreeId()
   const { refreshChildren } = useElementTree()
 
   const refreshTree = (parentId: number, forceLoading?: boolean): void => {
-    refreshChildren(String(parentId), forceLoading ?? true)
+    refreshChildren(treeId, String(parentId), forceLoading ?? true)
   }
 
   const refreshTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
