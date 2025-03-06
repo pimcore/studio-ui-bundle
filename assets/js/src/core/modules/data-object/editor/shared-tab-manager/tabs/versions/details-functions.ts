@@ -42,7 +42,7 @@ export interface IFormattedDataStructureData {
 
 const isFieldValueEmpty = (fieldValue: any): boolean => {
   if (isObject(fieldValue)) {
-    return every(fieldValue, isEmpty)
+    return every(fieldValue, isEmptyValue)
   }
 
   return isEmptyValue(fieldValue)
