@@ -84,25 +84,6 @@ export const useStyles = createStyles(({ token, css }) => {
       border-radius: ${token.borderRadius}px !important;
       border-color: transparent !important;
       color: ${token.colorText} !important;
-      
-      //.consent-wrapper {
-      //  width: 100%;
-      //  max-width: 100% !important;
-      //}
-      
-      // .consent-wrapper {
-      //   padding: ${token.paddingXXS}px;
-      //   background-color: ${token.colorBgContainerDisabled} !important;
-      //  
-      //   .ant-checkbox-wrapper {
-      //     width: initial !important;
-      //     background: none !important;
-      //   }
-      // }
-      
-      //.consent-wrapper {
-      //  border: 1px solid transparent;
-      //}
     `,
 
     objectSectionFieldItemHighlight: css`

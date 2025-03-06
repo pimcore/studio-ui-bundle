@@ -12,9 +12,11 @@
 */
 
 import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Checkbox } from 'antd'
 import { type CheckboxChangeEvent } from 'antd/es/checkbox'
+import { useStyles } from './consent.styles'
 
 export interface ConsentProps {
   value?: ConsentValue | null
@@ -31,6 +33,7 @@ export interface ConsentValue {
 
 export const Consent = (props: ConsentProps): React.JSX.Element => {
   const [value, setValue] = useState<ConsentValue | null>(props.value ?? null)
+  const { styles } = useStyles()
 
   const noteContent = value !== null ? (value.noteContent ?? '') : ''
 
@@ -49,7 +52,7 @@ export const Consent = (props: ConsentProps): React.JSX.Element => {
   return (
     <Flex
       align="center"
-      className={ props.className }
+      className={ cn(styles.consent, props.className) }
       gap="small"
     >
       <Checkbox
