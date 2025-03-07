@@ -31,7 +31,6 @@ export const SearchInput = ({ className, withoutAddon = false, withPrefix = fals
 
   const searchClassNames = cn(
     styles.search,
-    'search-bar',
     {
       [styles.searchWithoutAddon]: withoutAddon
     },
