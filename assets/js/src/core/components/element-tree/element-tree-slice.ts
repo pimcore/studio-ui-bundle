@@ -46,6 +46,7 @@ export interface InternalNodeState {
   searchTerm?: string
   treeNodeProps?: TreeNode
   total?: number
+  order?: number
 }
 
 type TreeNodesState = Record<string, InternalNodeState>
@@ -223,12 +224,14 @@ const slice = createSlice({
       const updatedNodes = removeDescendants(currentNodes, payload.parentId)
 
       // Add or update the new nodes
+      let order = 0
       payload.nodes.forEach(node => {
         const nodeId = String(node.id)
         updatedNodes[nodeId] = initializeNodeState(state, payload.treeId, nodeId)
         updatedNodes[nodeId] = {
           ...updatedNodes[nodeId],
-          treeNodeProps: node
+          treeNodeProps: node,
+          order: order++
         }
       })
 
@@ -314,7 +317,9 @@ export const selectNodesByParentId = createSelector(
   (trees, treeId, parentId) => {
     const tree: TreeNodesState = trees[treeId]?.nodes ?? {}
     const treeNodes: InternalNodeState[] = Object.values(tree)
-    return treeNodes.filter((node: InternalNodeState) => String(node.treeNodeProps?.parentId) === parentId)
+    return treeNodes
+      .filter((node: InternalNodeState) => String(node.treeNodeProps?.parentId) === parentId)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
   }
 )
 
